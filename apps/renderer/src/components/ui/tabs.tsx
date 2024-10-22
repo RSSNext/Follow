@@ -1,10 +1,9 @@
+import { cn } from "@follow/utils/utils"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
 import { m } from "framer-motion"
 import * as React from "react"
-
-import { cn } from "~/lib/utils"
 
 const TabsIdContext = React.createContext<string | null>(null)
 

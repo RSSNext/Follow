@@ -1,3 +1,5 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DotLottie } from "@lottiefiles/dotlottie-react"
@@ -11,8 +13,6 @@ import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
 import { Logo } from "~/components/icons/logo"
-import { Button } from "~/components/ui/button"
-import { styledButtonVariant } from "~/components/ui/button/variants"
 import {
   Form,
   FormControl,

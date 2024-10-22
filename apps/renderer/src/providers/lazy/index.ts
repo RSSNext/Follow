@@ -21,15 +21,10 @@ const LazyExtensionExposeProvider = lazy(() =>
     default: res.ExtensionExposeProvider,
   })),
 )
-const LazyFeatureFlagDebugger = lazy(() =>
-  import("../../modules/ab/providers").then((res) => ({
-    default: res.FeatureFlagDebugger,
-  })),
-)
+
 export {
   LazyContextMenuProvider,
   LazyExtensionExposeProvider,
-  LazyFeatureFlagDebugger,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
 }

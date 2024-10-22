@@ -1,7 +1,6 @@
+import { FeedViewType } from "@follow/constants"
 import { createContext as createReactContext } from "react"
 import { createContext } from "use-context-selector"
-
-import { FeedViewType } from "~/lib/enum"
 
 export interface EntryContentContext {
   entryId: string

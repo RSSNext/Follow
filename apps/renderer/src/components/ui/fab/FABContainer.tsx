@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/utils"
 import clsx from "clsx"
 import { typescriptHappyForwardRef } from "foxact/typescript-happy-forward-ref"
 import type { HTMLMotionProps } from "framer-motion"
@@ -10,7 +11,6 @@ import { useId } from "react"
 import { m } from "~/components/common/Motion"
 import { useTypeScriptHappyCallback } from "~/hooks/common"
 import { jotaiStore } from "~/lib/jotai"
-import { cn } from "~/lib/utils"
 
 import { RootPortal } from "../portal"
 

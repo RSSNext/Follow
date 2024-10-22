@@ -1,3 +1,5 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -7,7 +9,6 @@ import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
 import { Avatar, AvatarImage } from "~/components/ui/avatar"
-import { Button } from "~/components/ui/button"
 import {
   Form,
   FormControl,
@@ -20,7 +21,6 @@ import {
 import { Input } from "~/components/ui/input"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
-import { cn } from "~/lib/utils"
 
 const formSchema = z.object({
   handle: z.string().max(50),

@@ -1,8 +1,8 @@
+import { getColorScheme, stringToHue } from "@follow/utils/color"
+import { cn, getUrlIcon } from "@follow/utils/utils"
 import { useEffect, useMemo, useState } from "react"
 
-import { getColorScheme, stringToHue } from "~/lib/color"
 import { getImageProxyUrl } from "~/lib/img-proxy"
-import { cn, getUrlIcon } from "~/lib/utils"
 
 import { PlatformIcon } from "./ui/platform-icon"
 /**

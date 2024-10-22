@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { useMutation } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { Trans, useTranslation } from "react-i18next"
@@ -5,7 +6,6 @@ import { toast } from "sonner"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Divider } from "~/components/ui/divider"
 import { LoadingCircle } from "~/components/ui/loading"

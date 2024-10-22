@@ -1,3 +1,7 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
+import { Chain } from "@follow/utils/chain"
+import { cn } from "@follow/utils/utils"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useSingleton } from "foxact/use-singleton"
@@ -7,13 +11,9 @@ import type { FC } from "react"
 import { useEffect } from "react"
 import { Trans } from "react-i18next"
 
-import { Button } from "~/components/ui/button"
-import { styledButtonVariant } from "~/components/ui/button/variants"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
-import { Chain } from "~/lib/chain"
-import { cn } from "~/lib/utils"
 import achievementAnimationUri from "~/lottie/achievement.lottie?url"
 
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href

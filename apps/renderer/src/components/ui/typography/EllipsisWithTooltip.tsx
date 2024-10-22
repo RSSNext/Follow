@@ -1,7 +1,6 @@
+import { cn } from "@follow/utils/utils"
 import type { PropsWithChildren } from "react"
 import { useEffect, useState } from "react"
-
-import { cn } from "~/lib/utils"
 
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 

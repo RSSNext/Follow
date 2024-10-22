@@ -1,7 +1,7 @@
+import { FeedViewType } from "@follow/constants"
 import { useLayoutEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
-import { FeedViewType } from "~/lib/enum"
 import { FeedForm } from "~/modules/discover/feed-form"
 
 export function Component() {

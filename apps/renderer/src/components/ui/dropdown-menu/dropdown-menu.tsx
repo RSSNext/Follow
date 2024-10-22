@@ -1,8 +1,8 @@
+import { cn } from "@follow/utils/utils"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
 
 import { useHotkeyScope, useTypeScriptHappyCallback } from "~/hooks/common"
-import { cn } from "~/lib/utils"
 
 import { RootPortal } from "../portal"
 

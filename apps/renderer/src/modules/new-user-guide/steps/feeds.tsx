@@ -1,13 +1,13 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 
 import { getTrendingAggregates } from "~/api/trending"
 import { FeedIcon } from "~/components/feed-icon"
 import { PhUsersBold } from "~/components/icons/users"
-import { Button } from "~/components/ui/button"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { useFollow } from "~/hooks/biz/useFollow"
-import { cn } from "~/lib/utils"
 
 export function TrendingFeeds() {
   const { data } = useQuery({

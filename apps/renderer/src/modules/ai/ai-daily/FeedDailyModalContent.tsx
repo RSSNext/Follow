@@ -1,5 +1,6 @@
+import { FeedViewType } from "@follow/constants"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { FeedViewType } from "~/lib/enum"
 
 import { DayOf } from "./constants"
 import { DailyReportModalContent, DailyReportTitle } from "./daily"

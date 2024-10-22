@@ -1,3 +1,6 @@
+import { getElementTop } from "@follow/utils/dom"
+import { springScrollToElement } from "@follow/utils/scroller"
+import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { throttle } from "lodash-es"
@@ -15,9 +18,6 @@ import { useEventCallback } from "usehooks-ts"
 
 import { getViewport, useViewport } from "~/atoms/hooks/viewport"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { getElementTop } from "~/lib/dom"
-import { springScrollToElement } from "~/lib/scroller"
-import { cn } from "~/lib/utils"
 import {
   useGetWrappedElementPosition,
   useWrappedElementPosition,

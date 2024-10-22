@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -5,7 +6,6 @@ import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSession } from "~/queries/auth"
 

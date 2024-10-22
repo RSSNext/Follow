@@ -1,9 +1,9 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { nextFrame } from "@follow/utils/dom"
 import { useAtomValue } from "jotai"
 import { useCallback, useLayoutEffect } from "react"
 
 import { tipcClient } from "~/lib/client"
-import { nextFrame } from "~/lib/dom"
 import { jotaiStore } from "~/lib/jotai"
 
 import type { ColorMode } from "./internal/for-theme"

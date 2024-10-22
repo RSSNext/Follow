@@ -1,10 +1,10 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
-import { Button } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal"

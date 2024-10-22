@@ -1,11 +1,11 @@
+import type { FeedViewType } from "@follow/constants"
+import { cn } from "@follow/utils/utils"
 import type { FC, ReactNode } from "react"
 import { memo } from "react"
 
 import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
-import type { FeedViewType } from "~/lib/enum"
-import { cn } from "~/lib/utils"
 import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"

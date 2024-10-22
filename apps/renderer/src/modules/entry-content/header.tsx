@@ -1,4 +1,7 @@
+import { ActionButton } from "@follow/components/ui/button/index.js"
+import { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
@@ -11,15 +14,12 @@ import {
   ReadabilityStatus,
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
-import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
 import { views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { tipcClient } from "~/lib/client"
-import { FeedViewType } from "~/lib/enum"
 import { parseHtml } from "~/lib/parse-html"
-import { cn } from "~/lib/utils"
 import type { CombinedEntryModel } from "~/models"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"

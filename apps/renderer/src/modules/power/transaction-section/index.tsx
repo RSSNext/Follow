@@ -1,3 +1,4 @@
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -5,7 +6,6 @@ import { useServerConfigs } from "~/atoms/server-configs"
 import { useWhoami } from "~/atoms/user"
 import { Logo } from "~/components/icons/logo"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { MotionButtonBase } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
 import {
   Table,

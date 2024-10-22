@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import type { Params } from "react-router-dom"
 import { useParams, useSearchParams } from "react-router-dom"
 
@@ -10,7 +11,6 @@ import {
   ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
 } from "~/constants"
-import { FeedViewType } from "~/lib/enum"
 
 // '0', '1', '2', '3', '4', '5',
 const FeedViewTypeValues = (() => {

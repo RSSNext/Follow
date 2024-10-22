@@ -1,3 +1,7 @@
+import { ActionButton } from "@follow/components/ui/button/index.js"
+import { UserRole } from "@follow/constants"
+import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { repository } from "@pkg"
 import type { FC } from "react"
 import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"
@@ -7,9 +11,6 @@ import { useNavigate } from "react-router-dom"
 import { useUserRole } from "~/atoms/user"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useMeasure } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
-import { UserRole } from "~/lib/enum"
-import { cn } from "~/lib/utils"
 import type { WalletModel } from "~/models"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
@@ -18,7 +19,6 @@ import { Balance } from "~/modules/wallet/balance"
 import { useSession } from "~/queries/auth"
 import { useWallet } from "~/queries/wallet"
 
-import { ActionButton } from "../../components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,

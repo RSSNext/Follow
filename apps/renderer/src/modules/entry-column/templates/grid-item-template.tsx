@@ -1,10 +1,10 @@
+import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
 
 import { FeedIcon } from "~/components/feed-icon"
 import { TitleMarquee } from "~/components/ui/marquee"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useAsRead } from "~/hooks/biz/useAsRead"
-import { cn } from "~/lib/utils"
 import { EntryTranslation } from "~/modules/entry-column/translation"
 import { useEntry } from "~/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "~/store/feed"

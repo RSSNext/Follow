@@ -1,3 +1,5 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { Fragment } from "react/jsx-runtime"
@@ -5,7 +7,6 @@ import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
 
-import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader } from "~/components/ui/card"
 import {
   Form,
@@ -18,7 +19,6 @@ import {
 import { Input } from "~/components/ui/input"
 import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
-import { cn } from "~/lib/utils"
 import { Queries } from "~/queries"
 
 import { FollowSummary } from "../../components/feed-summary"

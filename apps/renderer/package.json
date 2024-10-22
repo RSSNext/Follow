@@ -113,7 +113,13 @@
   },
   "devDependencies": {
     "@babel/generator": "7.25.7",
+    "@follow/components": "workspace:*",
+    "@follow/constants": "workspace:*",
+    "@follow/hooks": "workspace:*",
+    "@follow/models": "workspace:*",
+    "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
+    "@follow/utils": "workspace:*",
     "@hono/node-server": "1.13.2",
     "@types/katex": "0.16.7",
     "@types/lodash-es": "4.17.12",

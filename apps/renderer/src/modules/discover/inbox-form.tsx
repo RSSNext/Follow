@@ -1,4 +1,7 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { FeedViewType } from "@follow/constants"
 import { env } from "@follow/shared/env"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -8,7 +11,6 @@ import { z } from "zod"
 
 import { FollowSummary } from "~/components/feed-summary"
 import { Logo } from "~/components/icons/logo"
-import { Button } from "~/components/ui/button"
 import { Card, CardHeader } from "~/components/ui/card"
 import {
   Form,
@@ -20,9 +22,7 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { apiClient } from "~/lib/api-fetch"
-import { FeedViewType } from "~/lib/enum"
 import { createErrorToaster } from "~/lib/error-parser"
-import { cn } from "~/lib/utils"
 import type { InboxModel } from "~/models"
 import { useInbox } from "~/queries/inboxes"
 import { useInboxById } from "~/store/inbox"

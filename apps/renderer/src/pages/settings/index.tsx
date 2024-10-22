@@ -1,6 +1,5 @@
+import { nextFrame } from "@follow/utils/dom"
 import { useLayoutEffect } from "react"
-
-import { nextFrame } from "~/lib/dom"
 
 export const Component = () => {
   useLayoutEffect(() => {

@@ -1,3 +1,6 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import type { FeedViewType } from "@follow/constants"
+import { nextFrame } from "@follow/utils/dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { omit } from "lodash-es"
 import type { FC } from "react"
@@ -9,7 +12,6 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
-import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Form, FormItem, FormLabel } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
@@ -23,8 +25,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
-import { nextFrame } from "~/lib/dom"
-import type { FeedViewType } from "~/lib/enum"
 import {
   MissingOptionalParamError,
   parseFullPathParams,

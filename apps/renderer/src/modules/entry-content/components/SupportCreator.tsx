@@ -1,6 +1,6 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { useTranslation } from "react-i18next"
 
-import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useEntry } from "~/store/entry"

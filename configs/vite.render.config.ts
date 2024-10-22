@@ -24,7 +24,6 @@ export const viteRenderBaseConfig = {
       "@pkg": resolve("package.json"),
       "@locales": resolve("locales"),
       "@follow/electron-main": resolve("apps/main/src"),
-      "@constants": resolve("constants"),
     },
   },
   base: "/",

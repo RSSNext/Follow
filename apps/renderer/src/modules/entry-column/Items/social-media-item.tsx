@@ -1,9 +1,9 @@
+import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Slot } from "@radix-ui/react-slot"
 import { atom } from "jotai"
 import { useLayoutEffect, useRef } from "react"
 
 import { FeedIcon } from "~/components/feed-icon"
-import { ActionButton } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"

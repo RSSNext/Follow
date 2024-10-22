@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/utils"
 import { m, useMotionTemplate, useMotionValue } from "framer-motion"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
@@ -6,7 +7,6 @@ import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
 import { softBouncePreset } from "~/components/ui/constants/spring"
 import { tipcClient } from "~/lib/client"
-import { cn } from "~/lib/utils"
 import { handlers } from "~/tipc"
 
 export const AutoUpdater = () => {

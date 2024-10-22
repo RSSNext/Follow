@@ -1,6 +1,5 @@
+import { cn } from "@follow/utils/utils"
 import { useContext } from "react"
-
-import { cn } from "~/lib/utils"
 
 import { Media } from "../../media"
 import { MarkdownRenderActionContext } from "../context"

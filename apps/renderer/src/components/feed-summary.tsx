@@ -1,8 +1,8 @@
 import { env } from "@follow/shared/env"
+import { cn } from "@follow/utils/utils"
 
 import { FeedIcon } from "~/components/feed-icon"
 import { UrlBuilder } from "~/lib/url-builder"
-import { cn } from "~/lib/utils"
 import type { FeedOrListRespModel } from "~/models"
 
 import { FeedCertification } from "./feed-certification"

@@ -1,16 +1,16 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { nextFrame } from "@follow/utils/dom"
 import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { RadioGroup } from "~/components/ui/radio-group"
 import { RadioCard } from "~/components/ui/radio-group/RadioCard"
 import { useI18n } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useWallet, useWalletTipMutation } from "~/queries/wallet"
 

@@ -1,7 +1,9 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { stopPropagation } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Button } from "~/components/ui/button"
 import { Card, CardHeader } from "~/components/ui/card"
 import { Collapse, CollapseControlled } from "~/components/ui/collapse"
 import { Divider } from "~/components/ui/divider"
@@ -25,8 +27,6 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { ViewSelectContent } from "~/components/view-select-content"
-import { stopPropagation } from "~/lib/dom"
-import { cn } from "~/lib/utils"
 import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
 
 const TransitionOptions: {

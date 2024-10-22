@@ -1,7 +1,7 @@
+import { cn } from "@follow/utils/utils"
 import * as React from "react"
 
 import { useMeasure } from "~/hooks/common"
-import { cn } from "~/lib/utils"
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 

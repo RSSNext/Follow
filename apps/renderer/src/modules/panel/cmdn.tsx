@@ -1,4 +1,6 @@
+import type { FeedViewType } from "@follow/constants"
 import { useSubscribeElectronEvent } from "@follow/shared/event"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useLayoutEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -12,8 +14,6 @@ import { useModalStack } from "~/components/ui/modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { HotKeyScopeMap } from "~/constants"
 import { tipcClient } from "~/lib/client"
-import type { FeedViewType } from "~/lib/enum"
-import { cn } from "~/lib/utils"
 
 import { FeedForm } from "../discover/feed-form"
 

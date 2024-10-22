@@ -1,6 +1,6 @@
-import type { EntryModel } from "~/models"
+import { isTwitterUrl, isXUrl } from "@follow/utils/link-parser"
 
-import { isTwitterUrl, isXUrl } from "./link-parser"
+import type { EntryModel } from "~/models"
 
 export const parseSocialMedia = (entry: EntryModel) => {
   const { authorUrl, url, guid } = entry

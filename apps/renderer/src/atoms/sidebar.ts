@@ -1,7 +1,7 @@
+import { FeedViewType } from "@follow/constants"
 import { atom } from "jotai"
 
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
-import { FeedViewType } from "~/lib/enum"
 import { createAtomHooks } from "~/lib/jotai"
 
 const defaultFeedView = FeedViewType.Articles

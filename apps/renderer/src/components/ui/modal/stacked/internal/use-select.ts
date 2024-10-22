@@ -1,6 +1,5 @@
+import { nextFrame } from "@follow/utils/dom"
 import { useCallback, useRef } from "react"
-
-import { nextFrame } from "~/lib/dom"
 
 /**
  * @internal

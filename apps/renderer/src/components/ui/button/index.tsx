@@ -1,12 +1,11 @@
+import { stopPropagation } from "@follow/utils/dom"
+import { cn, getOS } from "@follow/utils/utils"
 import type { VariantProps } from "class-variance-authority"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import * as React from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
-
-import { stopPropagation } from "~/lib/dom"
-import { cn, getOS } from "~/lib/utils"
 
 import { KbdCombined } from "../kbd/Kbd"
 import { LoadingCircle } from "../loading"

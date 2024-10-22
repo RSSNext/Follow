@@ -1,8 +1,8 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"

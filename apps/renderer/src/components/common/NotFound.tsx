@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { captureException } from "@sentry/react"
 import { useEffect } from "react"
 import type { Location } from "react-router-dom"
@@ -6,7 +7,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { isElectronBuild } from "~/constants"
 
 import { Logo } from "../icons/logo"
-import { Button } from "../ui/button"
 import { PoweredByFooter } from "./PoweredByFooter"
 
 class AccessNotFoundError extends Error {

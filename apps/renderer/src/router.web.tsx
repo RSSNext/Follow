@@ -1,10 +1,10 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { buildGlobRoutes } from "@follow/utils/route-builder"
 import { wrapCreateBrowserRouter } from "@sentry/react"
 import { createBrowserRouter, createHashRouter } from "react-router-dom"
 
 import { ErrorElement } from "./components/common/ErrorElement"
 import { NotFound } from "./components/common/NotFound"
-import { buildGlobRoutes } from "./lib/route-builder"
 
 const globTree = import.meta.glob("./pages/**/*.tsx")
 const tree = buildGlobRoutes(globTree)

@@ -1,3 +1,4 @@
+import { Chain } from "@follow/utils/chain"
 import i18next from "i18next"
 import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
@@ -8,7 +9,6 @@ import { defaultNS, ns } from "./@types/constants"
 import { defaultResources } from "./@types/default-resource"
 import { getGeneralSettings } from "./atoms/settings/general"
 import { isDev } from "./constants"
-import { Chain } from "./lib/chain"
 import { jotaiStore } from "./lib/jotai"
 import { getStorageNS } from "./lib/ns"
 

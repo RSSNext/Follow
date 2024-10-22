@@ -1,9 +1,10 @@
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { MotionButtonBase } from "~/components/ui/button"
 import {
   Table,
   TableBody,
@@ -14,7 +15,6 @@ import {
 } from "~/components/ui/table"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { Balance } from "~/modules/wallet/balance"

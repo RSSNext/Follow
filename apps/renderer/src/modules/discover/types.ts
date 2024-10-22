@@ -1,4 +1,4 @@
-import type { FeedViewType } from "~/lib/enum"
+import type { FeedViewType } from "@follow/constants"
 
 export type RSSHubRouteType = Record<string, RSSHubRouteDeclaration>
 export interface RSSHubRouteDeclaration {

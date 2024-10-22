@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { Fragment } from "react/jsx-runtime"
 import { useParams } from "react-router-dom"
 
@@ -6,7 +7,6 @@ import { PoweredByFooter } from "~/components/common/PoweredByFooter"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { Button } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
 import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useAuthQuery, useI18n, useTitle } from "~/hooks/common"

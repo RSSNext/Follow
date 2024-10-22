@@ -1,5 +1,7 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
+import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
@@ -15,7 +17,6 @@ import {
 } from "~/atoms/settings/general"
 import { createSetting } from "~/atoms/settings/helper"
 import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
-import { Button } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import {
@@ -29,7 +30,6 @@ import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initAnalytics } from "~/initialize/analytics"
 import { tipcClient } from "~/lib/client"
-import { cn } from "~/lib/utils"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 import { SettingDescription, SettingInput } from "../control"

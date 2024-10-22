@@ -1,8 +1,8 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { TooltipTrigger } from "@radix-ui/react-tooltip"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { Button } from "~/components/ui/button"
 import { Tooltip, TooltipContent } from "~/components/ui/tooltip"
 import { useClaimCheck, useClaimWalletDailyRewardMutation } from "~/queries/wallet"
 

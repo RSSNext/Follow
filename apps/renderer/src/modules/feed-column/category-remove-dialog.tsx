@@ -1,9 +1,9 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
 import { subscriptionActions } from "~/store/subscription"
 
-import { Button } from "../../components/ui/button"
 import { useCurrentModal } from "../../components/ui/modal"
 
 export function CategoryRemoveDialogContent({ feedIdList }: { feedIdList: string[] }) {

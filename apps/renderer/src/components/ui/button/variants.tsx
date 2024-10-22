@@ -1,6 +1,5 @@
+import { cn } from "@follow/utils/utils"
 import { cva } from "class-variance-authority"
-
-import { cn } from "~/lib/utils"
 
 // Design
 // @see https://x.com/uiuxadrian/status/1822947443186504176

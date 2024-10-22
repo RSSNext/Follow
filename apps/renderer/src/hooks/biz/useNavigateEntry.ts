@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import { isUndefined } from "lodash-es"
 
 import { getReadonlyRoute, getStableRouterNavigate } from "~/atoms/route"
@@ -10,7 +11,6 @@ import {
   ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
 } from "~/constants"
-import { FeedViewType } from "~/lib/enum"
 
 export type NavigateEntryOptions = Partial<{
   feedId: string | null

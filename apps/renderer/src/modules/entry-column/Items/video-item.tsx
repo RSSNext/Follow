@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { cn } from "@follow/utils/utils"
 import { useHover } from "@use-gesture/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
@@ -13,7 +14,6 @@ import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { urlToIframe } from "~/lib/url-to-iframe"
-import { cn } from "~/lib/utils"
 import { useEntry } from "~/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"

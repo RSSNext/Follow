@@ -1,7 +1,7 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
-import { Button } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { createErrorToaster } from "~/lib/error-parser"

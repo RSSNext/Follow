@@ -1,3 +1,4 @@
+import { nextFrame } from "@follow/utils/dom"
 import { useSingleton } from "foxact/use-singleton"
 import { throttle } from "lodash-es"
 import type { RenderComponentProps } from "masonic"
@@ -12,7 +13,6 @@ import { MediaContainerWidthProvider } from "~/components/ui/media"
 import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRefValue } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
 import { getEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 

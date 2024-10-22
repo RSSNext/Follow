@@ -1,8 +1,8 @@
+import { cn } from "@follow/utils/utils"
 import { useEffect } from "react"
 
 import { CollapseGroup } from "~/components/ui/collapse"
 import { useCollapseGroupItemState } from "~/components/ui/collapse/hooks"
-import { cn } from "~/lib/utils"
 import { setEntryContentPlaceholderLogoShow } from "~/modules/entry-content/atoms"
 
 import { DayOf } from "./constants"

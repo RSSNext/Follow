@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import {
   HoverCard,
   HoverCardContent,
@@ -16,7 +17,6 @@ import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/compon
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
-import { FeedViewType } from "~/lib/enum"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { useAppLayoutGridContainerWidth } from "~/providers/app-grid-layout-container-provider"
 import { Queries } from "~/queries"

@@ -3,6 +3,7 @@
  * @copyright AFFiNE, Follow
  */
 import { useSubscribeElectronEvent } from "@follow/shared/event"
+import { nextFrame } from "@follow/utils/dom"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
@@ -12,7 +13,6 @@ import { softSpringPreset } from "~/components/ui/constants/spring"
 import { RootPortal } from "~/components/ui/portal"
 import { useInputComposition, useRefValue } from "~/hooks/common"
 import { tipcClient } from "~/lib/client"
-import { nextFrame } from "~/lib/dom"
 import { observeResize } from "~/lib/observe-resize"
 
 const CmdFImpl: FC<{

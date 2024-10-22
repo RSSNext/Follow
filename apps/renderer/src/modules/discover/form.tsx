@@ -1,3 +1,5 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import type { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useSingleton } from "foxact/use-singleton"
@@ -10,7 +12,6 @@ import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
-import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card"
 import {
   Form,
@@ -27,7 +28,6 @@ import { Radio } from "~/components/ui/radio-group"
 import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedViewType } from "~/lib/enum"
 
 import { FollowSummary } from "../../components/feed-summary"
 import { FeedForm } from "./feed-form"

@@ -1,22 +1,17 @@
+import { FeedViewType } from "@follow/constants"
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
-import { parse } from "tldts"
 
 import { getServerConfigs } from "~/atoms/server-configs"
 import type { MediaModel } from "~/models"
 import type { RSSHubRoute } from "~/modules/discover/types"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
-import { FeedViewType } from "./enum"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
-}
-
-export function clamp(value, min, max) {
-  return Math.max(Math.min(max, value), min)
 }
 
 export function getEntriesParams({
@@ -183,31 +178,6 @@ export const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(r
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
 
-/**
- * @deprecated
- */
-export const pluralize = (
-  noun: string,
-  count: number,
-  postfix: string | ((noun: string, rule: Intl.LDMLPluralRule) => string) = "s",
-) => {
-  let rule: Intl.LDMLPluralRule
-  // Check Support
-  if (typeof Intl === "undefined" || !Intl.PluralRules) {
-    if (count === 1) {
-      rule = "one"
-    } else {
-      rule = "other"
-    }
-  }
-  rule = new Intl.PluralRules("en", { type: "ordinal" }).select(count)
-
-  if (typeof postfix === "string") {
-    return `${noun}${count === 1 ? "" : postfix}`
-  }
-  return postfix(noun, rule)
-}
-
 export const omitObjectUndefinedValue = (obj: Record<string, any>) => {
   const newObj = {}
   for (const key in obj) {
@@ -255,29 +225,6 @@ export const sortByAlphabet = (a: string, b: string) => {
   }
 
   return a.localeCompare(b, "zh-CN")
-}
-
-export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
-  let src: string
-  let fallbackUrl = ""
-
-  try {
-    const { host } = new URL(url)
-    const pureDomain = parse(host).domainWithoutSuffix
-    fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
-      ?.slice(0, 2)
-      .toUpperCase()}`
-    src = `https://unavatar.webp.se/${host}?fallback=${fallback || false}`
-  } catch {
-    const pureDomain = parse(url).domainWithoutSuffix
-    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
-  }
-  const ret = {
-    src,
-    fallbackUrl,
-  }
-
-  return ret
 }
 
 export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0
