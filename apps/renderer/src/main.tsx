@@ -1,3 +1,5 @@
+import "@follow/components/tailwind"
+import "@follow/components/dayjs"
 import "./styles/main.css"
 
 import { IN_ELECTRON } from "@follow/shared/constants"

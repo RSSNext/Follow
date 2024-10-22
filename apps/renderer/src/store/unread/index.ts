@@ -3,7 +3,7 @@ import type { FeedViewType } from "@follow/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedUnreadService } from "~/services"
 
-import { createZustandStore } from "../utils/helper"
+import { createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
 
 interface UnreadState {
   data: Record<string, number>
@@ -108,3 +108,7 @@ class FeedUnreadActions {
 }
 
 export const feedUnreadActions = new FeedUnreadActions()
+
+if (import.meta.env.DEV) {
+  reloadWhenHotUpdate(import.meta.hot)
+}

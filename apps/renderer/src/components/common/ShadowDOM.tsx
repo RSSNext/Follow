@@ -1,3 +1,4 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { createContext, createElement, useContext, useLayoutEffect, useMemo, useState } from "react"
@@ -6,8 +7,6 @@ import root from "react-shadow"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { useIsDark } from "~/hooks/common"
-
-import { MemoedDangerousHTMLStyle } from "./MemoedDangerousHTMLStyle"
 
 const ShadowDOMContext = createContext(false)
 

@@ -1,3 +1,4 @@
+import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -13,7 +14,6 @@ import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
-import { useViewport } from "~/atoms/hooks/viewport"
 import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,

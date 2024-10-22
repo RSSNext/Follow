@@ -1,3 +1,4 @@
+import { getReadonlyRoute } from "@follow/components/atoms/route.js"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { springScrollTo } from "@follow/utils/scroller"
 import { cn, getOS } from "@follow/utils/utils"
@@ -5,7 +6,6 @@ import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Outlet, useNavigate } from "react-router-dom"
 
-import { getReadonlyRoute } from "~/atoms/route"
 import { getSidebarActiveView, setSidebarActiveView } from "~/atoms/sidebar"
 import { FABContainer, FABPortable } from "~/components/ui/fab"
 import { ScrollArea } from "~/components/ui/scroll-area"

@@ -19,6 +19,7 @@
     "build:macos": "electron-vite build && electron-forge make --arch=universal --platform=darwin",
     "build:web": "rm -rf out/web && vite build",
     "bump": "vv",
+    "depcheck": "npx depcheck --quiet",
     "dev": "electron-vite dev",
     "dev:debug": "export DEBUG=true && vite --debug",
     "dev:server": "pnpm run --filter=server dev",

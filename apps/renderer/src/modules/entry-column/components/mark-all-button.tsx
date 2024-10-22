@@ -1,3 +1,4 @@
+import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { ActionButton, Button, IconButton } from "@follow/components/ui/button/index.js"
 import { cn, getOS } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
@@ -8,7 +9,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
-import { useViewport } from "~/atoms/hooks/viewport"
 import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { RootPortal } from "~/components/ui/portal"
 import { HotKeyScopeMap, isElectronBuild } from "~/constants"

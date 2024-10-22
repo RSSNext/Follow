@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { capitalizeFirstLetter } from "@follow/utils/utils"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 import { parse } from "tldts"
@@ -7,7 +8,6 @@ import { whoami } from "~/atoms/user"
 import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import { capitalizeFirstLetter } from "~/lib/utils"
 import type { FeedModel, InboxModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
 import { SubscriptionService } from "~/services"
 
@@ -16,7 +16,12 @@ import { feedActions, getFeedById } from "../feed"
 import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
-import { createImmerSetter, createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import {
+  createImmerSetter,
+  createZustandStore,
+  doMutationAndTransaction,
+  reloadWhenHotUpdate,
+} from "../utils/helper"
 import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
@@ -493,3 +498,7 @@ export const isListSubscription = (feedId?: FeedId) => {
 
 export const subscriptionCategoryExist = (name: string) =>
   subscriptionCategoryExistSelector(name)(get())
+
+if (import.meta.env.DEV) {
+  reloadWhenHotUpdate(import.meta.hot)
+}

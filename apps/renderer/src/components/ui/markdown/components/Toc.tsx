@@ -1,3 +1,4 @@
+import { getViewport, useViewport } from "@follow/components/hooks/useViewport.js"
 import { getElementTop } from "@follow/utils/dom"
 import { springScrollToElement } from "@follow/utils/scroller"
 import { cn } from "@follow/utils/utils"
@@ -16,7 +17,6 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { getViewport, useViewport } from "~/atoms/hooks/viewport"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import {
   useGetWrappedElementPosition,

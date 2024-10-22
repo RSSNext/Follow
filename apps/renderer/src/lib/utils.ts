@@ -49,9 +49,6 @@ export function getEntriesParams({
   }
 }
 
-export const capitalizeFirstLetter = (string: string) =>
-  string.charAt(0).toUpperCase() + string.slice(1)
-
 const rsshubCategoryMap: Partial<Record<string, FeedViewType>> = {
   design: FeedViewType.Pictures,
   forecast: FeedViewType.Notifications,
