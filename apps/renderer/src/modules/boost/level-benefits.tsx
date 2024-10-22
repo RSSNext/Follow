@@ -4,32 +4,34 @@ const benefits = [
   {
     level: "Lv1",
     benefits: [
-      { icon: "i-mgc-trophy-cute-re", text: "Booster achievement" },
       {
         icon: "i-mgc-certificate-cute-fi",
-        text: "Unique boost badge",
+        text: "Unique boost badge for feed",
       },
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" },
-      { icon: "i-mgc-star-cute-re", text: "Support for feed authors" },
+      { icon: "i-mgc-star-cute-re", text: "Show support for feed authors" },
+      { icon: "i-mgc-trophy-cute-re", text: "Booster achievement", comingSoon: true },
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
     ],
   },
   {
     level: "Lv2",
-    benefits: [{ icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" }],
+    benefits: [
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
+    ],
   },
   {
     level: "Lv3",
     benefits: [
       { icon: "i-mgc-eye-2-cute-re", text: "More developer attention" },
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" },
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
     ],
   },
   {
     level: "Lv4",
     benefits: [
-      { icon: "i-mgc-magic-2-cute-re", text: "AI summary for feed" },
       { icon: "i-mgc-eye-2-cute-re", text: "More developer attention" },
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" },
+      { icon: "i-mgc-magic-2-cute-re", text: "AI summary for feed", comingSoon: true },
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
     ],
   },
 ]
@@ -56,7 +58,7 @@ const BoostLevel = ({
   benefits,
 }: {
   level: string
-  benefits: { icon?: string; text: string }[]
+  benefits: { icon?: string; text: string; comingSoon?: boolean }[]
 }) => {
   return (
     <li>
@@ -67,10 +69,13 @@ const BoostLevel = ({
           <span className="grow border-t border-gray-300 dark:border-gray-700" />
         </h3>
         <ul className="ml-4 list-inside list-disc space-y-1">
-          {benefits.map((privilege) => (
-            <li key={privilege.text} className="flex items-center text-sm">
-              <i className={cn("mr-2 shrink-0", privilege.icon)} />
-              {privilege.text}
+          {benefits.map((benefit) => (
+            <li key={benefit.text} className="flex items-center text-sm">
+              <i className={cn("mr-2 shrink-0", benefit.icon)} />
+              <span className={cn({ "line-through": benefit.comingSoon })}>{benefit.text}</span>
+              {benefit.comingSoon && (
+                <span className="ml-2 text-xs text-gray-500">(Coming Soon)</span>
+              )}
             </li>
           ))}
         </ul>
