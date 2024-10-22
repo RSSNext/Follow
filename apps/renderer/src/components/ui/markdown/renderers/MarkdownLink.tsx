@@ -1,7 +1,12 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
 import { useContext } from "react"
 
 import type { LinkProps } from "../../link"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../../tooltip"
 import { MarkdownRenderActionContext } from "../context"
 
 export const MarkdownLink = (props: LinkProps) => {

@@ -1,12 +1,11 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { createErrorToaster } from "~/lib/error-parser"
-
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../tooltip"
 
 export interface UseAsyncFetcher<T> {
   data: Nullable<T>

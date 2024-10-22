@@ -1,3 +1,10 @@
+import {
+  SimpleIconsEagle,
+  SimpleIconsInstapaper,
+  SimpleIconsObsidian,
+  SimpleIconsOmnivore,
+  SimpleIconsReadwise,
+} from "@follow/components/ui/platform-icon/icons.js"
 import { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { nextFrame } from "@follow/utils/dom"
@@ -25,13 +32,6 @@ import {
 } from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
-import {
-  SimpleIconsEagle,
-  SimpleIconsInstapaper,
-  SimpleIconsObsidian,
-  SimpleIconsOmnivore,
-  SimpleIconsReadwise,
-} from "~/components/ui/platform-icon/icons"
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import StarAnimationUri from "~/lottie/star.lottie?url"

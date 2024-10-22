@@ -1,14 +1,20 @@
+import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { Avatar, AvatarImage } from "~/components/ui/avatar"
-import { Divider } from "~/components/ui/divider"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -17,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"

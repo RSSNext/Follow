@@ -1,4 +1,14 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.jsx"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -7,16 +17,6 @@ import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
 
-import { Card, CardContent, CardHeader } from "~/components/ui/card"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { Queries } from "~/queries"

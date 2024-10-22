@@ -1,5 +1,13 @@
 /* eslint-disable @eslint-react/hooks-extra/ensure-custom-hooks-using-other-hooks */
 import { Button } from "@follow/components/ui/button/index.js"
+import { Input } from "@follow/components/ui/input/index.js"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@follow/components/ui/select/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { getStorageNS } from "@follow/utils/ns"
@@ -9,15 +17,7 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
-import { Input } from "~/components/ui/input"
 import { useModalStack } from "~/components/ui/modal"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
 import { tipcClient } from "~/lib/client"
 
 const FALLBACK_FONT = "Default (UI Font)"

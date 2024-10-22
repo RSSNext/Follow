@@ -1,4 +1,5 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import type { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, sortByAlphabet } from "@follow/utils/utils"
@@ -10,7 +11,6 @@ import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
 import { LoadingCircle } from "~/components/ui/loading"
-import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"

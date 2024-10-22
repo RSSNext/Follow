@@ -1,3 +1,4 @@
+import { Input } from "@follow/components/ui/input/index.js"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react"
@@ -5,7 +6,6 @@ import { AnimatePresence, m } from "framer-motion"
 import Fuse from "fuse.js"
 import { forwardRef, Fragment, useCallback, useEffect, useState } from "react"
 
-import { Input } from "../input"
 import { useCorrectZIndex } from "../modal"
 
 export type Suggestion = {

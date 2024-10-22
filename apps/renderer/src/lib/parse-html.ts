@@ -1,3 +1,4 @@
+import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
 import type { Element, Parent, Text } from "hast"
 import type { Schema } from "hast-util-sanitize"
 import type { Components } from "hast-util-to-jsx-runtime"
@@ -16,7 +17,6 @@ import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
 import { ShadowDOM } from "~/components/common/ShadowDOM"
-import { Checkbox } from "~/components/ui/checkbox"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { LazyKateX } from "~/components/ui/katex/lazy"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"

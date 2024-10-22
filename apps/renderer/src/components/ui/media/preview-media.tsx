@@ -1,4 +1,5 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import type { MediaModel } from "@follow/shared/hono"
 import { stopPropagation } from "@follow/utils/dom"
@@ -20,7 +21,6 @@ import { EntryContent } from "~/modules/entry-content"
 
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
-import { RootPortal } from "../portal"
 import { VideoPlayer } from "./VideoPlayer"
 
 const Wrapper: Component<{

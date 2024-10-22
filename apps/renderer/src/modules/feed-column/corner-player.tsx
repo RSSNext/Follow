@@ -1,3 +1,4 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import * as Slider from "@radix-ui/react-slider"
@@ -18,7 +19,6 @@ import {
 import { FeedIcon } from "~/components/feed-icon"
 import { microReboundPreset } from "~/components/ui/constants/spring"
 import { VolumeSlider } from "~/components/ui/media/VolumeSlider"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { HotKeyScopeMap } from "~/constants"
 import type { NavigateEntryOptions } from "~/hooks/biz/useNavigateEntry"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"

@@ -1,22 +1,21 @@
 import { Button } from "@follow/components/ui/button/index.js"
-import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
-import { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
-
-import { Card, CardHeader } from "~/components/ui/card"
-import { Collapse, CollapseControlled } from "~/components/ui/collapse"
-import { Divider } from "~/components/ui/divider"
-import { Input } from "~/components/ui/input"
-import { Radio } from "~/components/ui/radio-group"
-import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
+import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { Input } from "@follow/components/ui/input/index.js"
+import { Radio, RadioGroup } from "@follow/components/ui/radio-group/index.js"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select"
+} from "@follow/components/ui/select/index.jsx"
+import { stopPropagation } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+
+import { Collapse, CollapseControlled } from "~/components/ui/collapse"
 import { Switch } from "~/components/ui/switch"
 import {
   Table,

@@ -1,3 +1,10 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
@@ -10,8 +17,6 @@ import { getMainContainerElement } from "~/atoms/dom"
 import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import { OouiUserAnonymous } from "~/components/icons/OouiUserAnonymous"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"

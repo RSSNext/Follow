@@ -1,3 +1,4 @@
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/EllipsisWithTooltip.js"
 import { env } from "@follow/shared/env"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
@@ -6,7 +7,6 @@ import { FeedIcon } from "~/components/feed-icon"
 import type { FeedOrListRespModel } from "~/models"
 
 import { FeedCertification } from "./feed-certification"
-import { EllipsisHorizontalTextWithTooltip } from "./ui/typography"
 
 export function FollowSummary({
   feed,

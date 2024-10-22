@@ -1,4 +1,5 @@
 import { getViewport, useViewport } from "@follow/components/hooks/useViewport.js"
+import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import { getElementTop } from "@follow/utils/dom"
 import { springScrollToElement } from "@follow/utils/scroller"
 import { cn } from "@follow/utils/utils"
@@ -24,7 +25,6 @@ import {
   useWrappedElementSize,
 } from "~/providers/wrapped-element-provider"
 
-import { useScrollViewElement } from "../../scroll-area/hooks"
 import { MarkdownRenderContainerRefContext } from "../context"
 import type { TocItemProps } from "./TocItem"
 import { TocItem } from "./TocItem"

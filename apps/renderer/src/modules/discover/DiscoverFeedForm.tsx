@@ -1,4 +1,14 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Form, FormItem, FormLabel } from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@follow/components/ui/select/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -14,18 +24,8 @@ import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Form, FormItem, FormLabel } from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import {
   MissingOptionalParamError,
   parseFullPathParams,

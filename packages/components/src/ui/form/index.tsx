@@ -5,7 +5,7 @@ import * as React from "react"
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
 import { Controller, FormProvider, useFormContext } from "react-hook-form"
 
-import { Label } from "~/components/ui/label"
+import { Label } from "../label"
 
 const Form = FormProvider
 
@@ -24,7 +24,7 @@ const FormField = <
 >({
   ...props
 }: ControllerProps<TFieldValues, TName>) => (
-  <FormFieldContext.Provider value={{ name: props.name }}>
+  <FormFieldContext.Provider value={React.useMemo(() => ({ name: props.name }), [props.name])}>
     <Controller {...props} />
   </FormFieldContext.Provider>
 )

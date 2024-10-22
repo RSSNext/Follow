@@ -1,8 +1,8 @@
+import { TitleMarquee } from "@follow/components/ui/marquee/index.jsx"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
 
 import { FeedIcon } from "~/components/feed-icon"
-import { TitleMarquee } from "~/components/ui/marquee"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { EntryTranslation } from "~/modules/entry-column/translation"

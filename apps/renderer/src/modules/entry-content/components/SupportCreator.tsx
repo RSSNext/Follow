@@ -1,7 +1,7 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
 import { useTranslation } from "react-i18next"
 
-import { Divider } from "~/components/ui/divider"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"

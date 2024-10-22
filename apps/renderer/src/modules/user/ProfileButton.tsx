@@ -1,4 +1,5 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { UserRole } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -9,6 +10,14 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { useUserRole } from "~/atoms/user"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu/dropdown-menu"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useMeasure } from "~/hooks/common"
 import type { WalletModel } from "~/models"
@@ -19,15 +28,6 @@ import { Balance } from "~/modules/wallet/balance"
 import { useSession } from "~/queries/auth"
 import { useWallet } from "~/queries/wallet"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu/dropdown-menu"
-import { RootPortal } from "../../components/ui/portal"
 import { useActivationModal } from "../activation"
 import { ActivityPoints } from "../wallet/activity-points"
 import { Level } from "../wallet/level"

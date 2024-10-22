@@ -1,16 +1,22 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
 import { useMutation } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Divider } from "~/components/ui/divider"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -19,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"

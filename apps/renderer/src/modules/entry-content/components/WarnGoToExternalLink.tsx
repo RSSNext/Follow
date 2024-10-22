@@ -1,4 +1,6 @@
 import { IconButton } from "@follow/components/ui/button/index.js"
+import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
+import { Popover, PopoverContent, PopoverTrigger } from "@follow/components/ui/popover/index.jsx"
 import { getStorageNS } from "@follow/utils/ns"
 import { Label } from "@radix-ui/react-label"
 import { PopoverPortal } from "@radix-ui/react-popover"
@@ -6,8 +8,6 @@ import { atomWithStorage } from "jotai/utils"
 import { forwardRef, Fragment, useState } from "react"
 
 import { useGeneralSettingKey, useGeneralSettingValue } from "~/atoms/settings/general"
-import { Checkbox } from "~/components/ui/checkbox"
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { jotaiStore } from "~/lib/jotai"
 import { withSettingEnabled } from "~/modules/settings/helper/withSettingEnable"
 

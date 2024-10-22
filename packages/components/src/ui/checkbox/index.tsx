@@ -2,7 +2,7 @@ import { cn } from "@follow/utils/utils"
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
 import * as React from "react"
 
-const Checkbox = React.forwardRef<
+export const Checkbox = React.forwardRef<
   HTMLInputElement,
   React.ComponentPropsWithoutRef<"input"> & {
     onCheckedChange?: (checked: boolean) => void
@@ -20,5 +20,3 @@ const Checkbox = React.forwardRef<
   />
 ))
 Checkbox.displayName = CheckboxPrimitive.Root.displayName
-
-export { Checkbox }

@@ -1,7 +1,7 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"

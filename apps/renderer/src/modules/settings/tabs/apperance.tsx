@@ -1,3 +1,10 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@follow/components/ui/select/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
@@ -10,13 +17,6 @@ import {
   useUISettingSelector,
   useUISettingValue,
 } from "~/atoms/settings/ui"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
 import { isElectronBuild } from "~/constants"
 import { useIsDark, useSetTheme, useThemeAtomValue } from "~/hooks/common"
 

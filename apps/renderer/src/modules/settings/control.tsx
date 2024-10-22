@@ -1,12 +1,12 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import { Label } from "@follow/components/ui/label/index.jsx"
+import { SegmentGroup, SegmentItem } from "@follow/components/ui/segment/index.jsx"
 import { cn } from "@follow/utils/utils"
 import type { ChangeEventHandler, ReactNode } from "react"
 import { useId, useState } from "react"
 
-import { Checkbox } from "~/components/ui/checkbox"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import { SegmentGroup, SegmentItem } from "~/components/ui/segment"
 import { Switch } from "~/components/ui/switch"
 
 export const SettingCheckbox: Component<{

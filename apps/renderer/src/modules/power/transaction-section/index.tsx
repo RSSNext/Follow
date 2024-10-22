@@ -1,4 +1,12 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn } from "@follow/utils/utils"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -6,7 +14,6 @@ import { useTranslation } from "react-i18next"
 import { useServerConfigs } from "~/atoms/server-configs"
 import { useWhoami } from "~/atoms/user"
 import { Logo } from "~/components/icons/logo"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { RelativeTime } from "~/components/ui/datetime"
 import {
   Table,
@@ -17,8 +24,6 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getBlockchainExplorerUrl } from "~/lib/utils"
 import { TransactionTypes } from "~/models/types"

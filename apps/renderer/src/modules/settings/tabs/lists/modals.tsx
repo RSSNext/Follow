@@ -1,4 +1,17 @@
+import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { isBizId } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,20 +26,7 @@ import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import type { Suggestion } from "~/components/ui/auto-completion"
 import { Autocomplete } from "~/components/ui/auto-completion"
-import { Avatar, AvatarImage } from "~/components/ui/avatar"
-import { Divider } from "~/components/ui/divider"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { useCurrentModal } from "~/components/ui/modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,

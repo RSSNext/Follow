@@ -1,9 +1,9 @@
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import { tooltipStyle } from "@follow/components/ui/tooltip/styles.js"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 
 import { HTML } from "~/components/ui/markdown/HTML"
-import { ScrollArea } from "~/components/ui/scroll-area"
-import { tooltipStyle } from "~/components/ui/tooltip/styles"
 import { useMeasure } from "~/hooks/common"
 
 export const EntryTranslation: Component<{

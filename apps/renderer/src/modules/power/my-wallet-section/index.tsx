@@ -1,13 +1,18 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
 import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { apiClient } from "~/lib/api-fetch"
 import { getBlockchainExplorerUrl } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"

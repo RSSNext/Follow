@@ -1,3 +1,4 @@
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -7,7 +8,6 @@ import { memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { ScrollArea } from "~/components/ui/scroll-area"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"

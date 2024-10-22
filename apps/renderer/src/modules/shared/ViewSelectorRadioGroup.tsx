@@ -1,7 +1,7 @@
+import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.jsx"
 import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
-import { Card, CardContent, CardHeader } from "~/components/ui/card"
 import { views } from "~/constants"
 import { useI18n } from "~/hooks/common"
 import type { EntryModelSimple, FeedModel } from "~/models"

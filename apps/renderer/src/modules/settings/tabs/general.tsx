@@ -1,4 +1,11 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@follow/components/ui/select/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { cn } from "@follow/utils/utils"
@@ -19,13 +26,6 @@ import { createSetting } from "~/atoms/settings/helper"
 import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initAnalytics } from "~/initialize/analytics"

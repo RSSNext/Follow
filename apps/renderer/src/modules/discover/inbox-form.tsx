@@ -1,4 +1,14 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
 import { FeedViewType } from "@follow/constants"
 import { env } from "@follow/shared/env"
 import { cn } from "@follow/utils/utils"
@@ -11,16 +21,6 @@ import { z } from "zod"
 
 import { FollowSummary } from "~/components/feed-summary"
 import { Logo } from "~/components/icons/logo"
-import { Card, CardHeader } from "~/components/ui/card"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
 import type { InboxModel } from "~/models"

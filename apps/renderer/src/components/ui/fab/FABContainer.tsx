@@ -1,3 +1,4 @@
+import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { cn } from "@follow/utils/utils"
 import clsx from "clsx"
 import { typescriptHappyForwardRef } from "foxact/typescript-happy-forward-ref"
@@ -11,8 +12,6 @@ import { useId } from "react"
 import { m } from "~/components/common/Motion"
 import { useTypeScriptHappyCallback } from "~/hooks/common"
 import { jotaiStore } from "~/lib/jotai"
-
-import { RootPortal } from "../portal"
 
 const fabContainerElementAtom = atom(null as HTMLDivElement | null)
 

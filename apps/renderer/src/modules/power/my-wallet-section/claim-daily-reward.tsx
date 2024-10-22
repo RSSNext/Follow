@@ -1,9 +1,9 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Tooltip, TooltipContent } from "@follow/components/ui/tooltip/index.jsx"
 import { TooltipTrigger } from "@radix-ui/react-tooltip"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { Tooltip, TooltipContent } from "~/components/ui/tooltip"
 import { useClaimCheck, useClaimWalletDailyRewardMutation } from "~/queries/wallet"
 
 export const ClaimDailyReward = () => {

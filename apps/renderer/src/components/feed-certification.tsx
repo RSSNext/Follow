@@ -1,9 +1,14 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import type { FeedOrListRespModel } from "~/models"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"

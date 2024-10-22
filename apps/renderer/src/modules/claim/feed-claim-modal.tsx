@@ -1,11 +1,11 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
 import type { FC } from "react"
 import { useEffect } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { FollowSummary } from "~/components/feed-summary"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
-import { Card, CardHeader } from "~/components/ui/card"
 import { CopyButton, ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { useShikiDefaultTheme } from "~/components/ui/code-highlighter/shiki/hooks"
 import { LoadingCircle } from "~/components/ui/loading"

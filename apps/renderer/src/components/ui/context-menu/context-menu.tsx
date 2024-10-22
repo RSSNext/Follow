@@ -1,8 +1,7 @@
+import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { cn } from "@follow/utils/utils"
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu"
 import * as React from "react"
-
-import { RootPortal } from "../portal"
 
 const ContextMenu = ContextMenuPrimitive.Root
 
@@ -156,4 +155,4 @@ export {
   ContextMenuTrigger,
 }
 
-export { RootPortal as ContextMenuPortal } from "../portal"
+export { RootPortal as ContextMenuPortal } from "@follow/components/ui/portal/index.jsx"

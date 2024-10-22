@@ -1,4 +1,5 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -20,7 +21,6 @@ import { useDebounceCallback } from "usehooks-ts"
 
 import { SafeFragment } from "~/components/common/Fragment"
 import { RelativeDay } from "~/components/ui/datetime"
-import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { IconScaleTransition } from "~/components/ux/transition/icon"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { isListSubscription } from "~/store/subscription"

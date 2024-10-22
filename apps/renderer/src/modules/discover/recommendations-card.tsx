@@ -1,8 +1,8 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/card/index.jsx"
 import type { FC } from "react"
 import { memo } from "react"
 
 import { FeedIcon } from "~/components/feed-icon"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
 import { RecommendationContent } from "./recommendation-content"

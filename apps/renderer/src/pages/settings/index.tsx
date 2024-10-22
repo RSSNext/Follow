@@ -3,7 +3,7 @@ import { useLayoutEffect } from "react"
 
 export const Component = () => {
   useLayoutEffect(() => {
-    nextFrame(() => router.navigate("/settings/general"))
+    nextFrame(() => window.router.navigate("/settings/general"))
   }, [])
   return null
 }
