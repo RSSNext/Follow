@@ -44,6 +44,9 @@ export async function readability(url: string) {
 
   const reader = new Readability(document, {
     debug: isDev,
+    // keep classes to set the right code language
+    // https://github.com/RSSNext/Follow/issues/1058
+    keepClasses: true,
   })
   return reader.parse()
 }

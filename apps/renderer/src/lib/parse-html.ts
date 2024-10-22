@@ -96,7 +96,10 @@ export const parseHtml = (
 
   const tree = pipeline.parse(content)
 
-  rehypeUrlToAnchor(tree)
+  // NOTE: disable for now, it introduces some issues
+  // 1. It may convert parts beyond the actual link into links
+  // 2. It cannot correctly handle the situation in the code block
+  // rehypeUrlToAnchor(tree)
 
   // console.log("tree", tree)
 
@@ -317,7 +320,7 @@ const Style: Components["style"] = ({ node, ...props }) => {
   return null
 }
 
-function rehypeUrlToAnchor(tree: Node) {
+function _rehypeUrlToAnchor(tree: Node) {
   // https://chatgpt.com/share/37e0ceec-5c9e-4086-b9d6-5afc1af13bb0
   visit(tree, "text", (node: Text, index, parent: Node) => {
     const urlRegex = /https?:\/\/\S+/g
