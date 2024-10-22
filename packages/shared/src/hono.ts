@@ -5785,6 +5785,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     inboxId: string;
+                    read?: boolean | undefined;
                     limit?: number | undefined;
                     publishedAfter?: string | undefined;
                     publishedBefore?: string | undefined;
