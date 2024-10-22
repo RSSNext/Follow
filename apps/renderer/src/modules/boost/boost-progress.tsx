@@ -1,3 +1,5 @@
+import { cn } from "~/lib/utils"
+
 export const BoostProgress = ({
   level,
   boostCount,
@@ -13,10 +15,14 @@ export const BoostProgress = ({
     <div className="flex w-full flex-col px-2">
       <div className="relative w-full pt-12">
         <span
-          className="absolute bottom-0 mb-10 flex h-8 w-12 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-white px-3.5 py-2 text-sm font-bold text-gray-800 transition-all duration-500 ease-out after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 after:bg-white"
+          className={cn(
+            "absolute bottom-0 mb-10 flex h-8 w-12 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-bold text-white transition-all duration-500 ease-out after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 ",
+            "bg-orange-500 after:bg-orange-500",
+          )}
           style={{ left: `${percentage}%` }}
         >
-          🌟 {boostCount}
+          <i className="i-mgc-train-cute-fi mr-2 shrink-0" />
+          {boostCount}
         </span>
         <div className="relative flex h-6 w-full overflow-hidden rounded-3xl bg-gray-200 dark:bg-gray-800">
           <div
