@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import type { ModalActionsInternal } from "~/components/ui/modal"
 import { useCurrentModal } from "~/components/ui/modal"
 import { getFetchErrorMessage } from "~/lib/error-parser"
 import { cn } from "~/lib/utils"
@@ -33,7 +34,7 @@ export const ActivationModalContent = ({
 }: {
   className?: string
   hideDescription?: boolean
-}) => {
+} & Partial<ModalActionsInternal>) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })

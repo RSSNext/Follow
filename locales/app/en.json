@@ -240,6 +240,7 @@
   "search.placeholder": "Search...",
   "search.result_count_local_mode": "(Local mode)",
   "search.tooltip.local_search": "This search covers locally available data. Try a Refetch to include the latest data.",
+  "shortcuts.guide.title": "Shortcuts Guideline",
   "sidebar.add_more_feeds": "Add more feeds",
   "sidebar.category_remove_dialog.cancel": "Cancel",
   "sidebar.category_remove_dialog.continue": "Continue",
