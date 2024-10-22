@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next"
 
+import { FeedIcon } from "~/components/feed-icon"
 import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
+import { useBoostModal } from "~/modules/boost/hooks"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
@@ -18,24 +20,37 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
     feedId: entry?.feedId,
     entryId,
   })
+  const openBoostModal = useBoostModal()
 
-  if (!feed || !feed.ownerUserId || feed.type !== "feed") return null
+  if (!feed || feed.type !== "feed") return null
 
   return (
     <>
       <Divider />
 
       <div className="my-16 flex flex-col items-center gap-8">
-        <UserAvatar
-          className="w-40 flex-col gap-3 p-0"
-          avatarClassName="size-12"
-          userId={feed.ownerUserId}
-          enableModal
-        />
-        <Button className="text-base" onClick={() => openTipModal()}>
-          <i className="i-mgc-power-outline mr-1.5 text-lg" />
-          {t("entry_content.support_creator")}
-        </Button>
+        {feed.ownerUserId ? (
+          <UserAvatar
+            className="w-40 flex-col gap-3 p-0"
+            avatarClassName="size-12"
+            userId={feed.ownerUserId}
+            enableModal
+          />
+        ) : (
+          <FeedIcon className="w-40 flex-col gap-3 p-0" size={46} feed={feed} fallback />
+        )}
+
+        <div className="flex items-center gap-4">
+          <Button className="text-base" onClick={() => openTipModal()}>
+            <i className="i-mgc-power-outline mr-1.5 text-lg" />
+            {t("entry_content.support_creator")}
+          </Button>
+          <Button variant="outline" className="text-base" onClick={() => openBoostModal(feed.id)}>
+            <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
+            {t("boost.boost_feed")}
+          </Button>
+        </div>
+
         {!!feed.tipUsers?.length && (
           <>
             <div className="text-sm text-zinc-500">
