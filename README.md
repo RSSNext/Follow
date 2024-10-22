@@ -91,6 +91,7 @@ If you have access, you are welcome to use the following methods to download and
 - You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
 - If you are using Arch Linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
 - If you are using Nix, you can install package [follow](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/fo/follow/package.nix) that maintained by [iosmanthus](https://github.com/iosmanthus).
+- If you are using macOS with [Homebrew](https://brew.sh), you can install package [follow](https://formulae.brew.sh/cask/follow) or [follow@nightly](https://formulae.brew.sh/cask/follow@nightly) that maintained by [realSunyz](https://github.com/realSunyz).
 
 ## Contributing
 
