@@ -25,8 +25,8 @@ export type TransactionModel = ExtractBizResponse<
 
 export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"]
 
-export type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
 export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
+export type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
 
 export type InboxModel = ExtractBizResponse<typeof apiClient.inboxes.$get>["data"]
 
@@ -101,10 +101,12 @@ export type ActionsInput = {
     value?: string
   }[]
   result: {
+    disabled?: boolean
     translation?: string
     summary?: boolean
     readability?: boolean
     silence?: boolean
+    sourceContent?: boolean
     newEntryNotification?: boolean
     rewriteRules?: {
       from: string
@@ -120,3 +122,7 @@ export type ActionsInput = {
 }[]
 
 export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const
+
+export type WalletModel = ExtractBizResponse<typeof apiClient.wallets.$get>["data"][number]
+
+export type ServerConfigs = ExtractBizResponse<typeof apiClient.status.configs.$get>["data"]

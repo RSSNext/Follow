@@ -5,7 +5,6 @@ import { FeedIcon } from "~/components/feed-icon"
 import { RelativeTime } from "~/components/ui/datetime"
 import { useAuthQuery } from "~/hooks/common"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
 import { Queries } from "~/queries"
 import { useEntry, useEntryReadHistory } from "~/store/entry"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
@@ -28,18 +27,19 @@ const safeUrl = (url: string, baseUrl: string) => {
 export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   const user = useWhoami()
   const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId) as FeedModel
+  const feed = useFeedById(entry?.feedId)
   const entryHistory = useEntryReadHistory(entryId)
 
   const populatedFullHref = useMemo(() => {
+    if (feed?.type === "inbox") return entry?.entries.authorUrl
     const href = entry?.entries.url
     if (!href) return "#"
 
     if (href.startsWith("http")) return href
-    const feedSiteUrl = feed?.siteUrl
+    const feedSiteUrl = feed?.type === "feed" ? feed.siteUrl : null
     if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
     return href
-  }, [entry?.entries.url, feed?.siteUrl])
+  }, [entry?.entries.authorUrl, entry?.entries.url, feed])
 
   const translation = useAuthQuery(
     Queries.ai.translation({
@@ -64,7 +64,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
       <FeedIcon fallback feed={feed} entry={entry.entries} size={50} />
       <div className="leading-6">
         <div className="flex items-center gap-1 text-base font-semibold">
-          <span>{entry.entries.author || feed.title}</span>
+          <span>{entry.entries.author || feed?.title}</span>
         </div>
         <div className="text-zinc-500">
           <RelativeTime date={entry.entries.publishedAt} />
@@ -85,7 +85,9 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
           useOverlay
         />
       </div>
-      <div className="mt-2 text-[13px] font-medium text-zinc-500">{getPreferredTitle(feed)}</div>
+      <div className="mt-2 text-[13px] font-medium text-zinc-500">
+        {getPreferredTitle(feed, entry.entries)}
+      </div>
       <div className="flex items-center gap-2 text-[13px] text-zinc-500">
         {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
 

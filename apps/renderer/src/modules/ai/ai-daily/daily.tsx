@@ -12,7 +12,7 @@ import { Collapse } from "~/components/ui/collapse"
 import { RelativeTime } from "~/components/ui/datetime"
 import type { LinkProps } from "~/components/ui/link"
 import { LoadingCircle } from "~/components/ui/loading"
-import { Markdown } from "~/components/ui/markdown"
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { MarkdownLink } from "~/components/ui/markdown/renderers"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
@@ -34,8 +34,8 @@ import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 
-import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
+import { useParseDailyDate } from "./useParseDailyDate"
 
 export const DailyItem = ({ view, day }: DailyItemProps) => {
   const { title, startDate, endDate } = useParseDailyDate(day)
@@ -184,34 +184,39 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   view,
 }) => {
   const content = useQueryData({ endDate, startDate, view })
+
   const RelatedEntryLink = useState(() => createRelatedEntryLink("toast"))[0]
   const { t } = useTranslation()
+  if (!content.data && !content.isLoading)
+    return (
+      <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
+        <EmptyIcon />
+        <p>{t("ai_daily.no_found")}</p>
+      </div>
+    )
   return (
-    <div className="center flex-col">
-      {content.isLoading ? (
-        <LoadingCircle
-          size="large"
-          className="center pointer-events-none absolute inset-0 mt-8 text-center"
-        />
-      ) : content.data ? (
-        <Markdown
-          components={{
-            a: RelatedEntryLink as Components["a"],
-          }}
-          className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
-        >
-          {content.data}
-        </Markdown>
-      ) : (
-        <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
-          <EmptyIcon />
-          <p>{t("ai_daily.no_found")}</p>
-        </div>
-      )}
+    <div className="center grow flex-col">
+      <div className="flex grow flex-col">
+        {content.isLoading ? (
+          <LoadingCircle
+            size="large"
+            className="center pointer-events-none absolute inset-0 mt-8 text-center"
+          />
+        ) : content.data ? (
+          <Markdown
+            components={{
+              a: RelatedEntryLink as Components["a"],
+            }}
+            className="prose-sm mt-4 h-0 grow overflow-auto px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+          >
+            {content.data}
+          </Markdown>
+        ) : null}
+      </div>
 
       {!!content.data && (
         <FlatMarkAllReadButton
-          className="ml-auto"
+          className="ml-auto shrink-0"
           filter={{
             startTime: startDate,
             endTime: endDate,

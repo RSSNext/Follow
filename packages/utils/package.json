@@ -1,0 +1,32 @@
+{
+  "name": "@follow/utils",
+  "type": "module",
+  "private": true,
+  "author": "Follow Team",
+  "license": "MIT",
+  "homepage": "https://github.com/RSSNext",
+  "repository": {
+    "url": "https://github.com/RSSNext/follow",
+    "type": "git"
+  },
+  "exports": {
+    ".": {
+      "require": "./src/index.ts",
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./*": {
+      "require": "./src/*.ts",
+      "import": "./src/*.ts",
+      "types": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@follow/shared": "workspace:*",
+    "clsx": "2.1.1",
+    "lodash-es": "4.17.21",
+    "tailwind-merge": "2.5.4",
+    "tldts": "6.1.51"
+  }
+}

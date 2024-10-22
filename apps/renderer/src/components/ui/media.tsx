@@ -267,16 +267,11 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
   <div className={className} style={props.style}>
     <div
       className={cn(
-        !(props.width || props.height) && "size-full",
+        "size-full",
         "center rounded bg-zinc-100 dark:bg-neutral-900",
         "not-prose !flex max-h-full flex-col space-y-1 p-4 @container",
-
         mediaContainerClassName,
       )}
-      style={{
-        height: props.height ? `${props.height}px` : "",
-        width: props.width ? `${props.width}px` : "100%",
-      }}
     >
       <div className="hidden @sm:hidden @md:contents">
         <i className="i-mgc-close-cute-re text-xl text-red-500" />
@@ -308,7 +303,7 @@ const AspectRatio = ({
   style?: React.CSSProperties
   [key: string]: any
 }) => {
-  const scaleFactor = containerWidth && width ? Math.min(1, containerWidth / width) : 1
+  const scaleFactor = containerWidth && width ? containerWidth / width : 1
 
   const scaledWidth = width ? width * scaleFactor : undefined
   const scaledHeight = height ? height * scaleFactor : undefined

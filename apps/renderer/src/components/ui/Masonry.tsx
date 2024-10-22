@@ -1,7 +1,8 @@
+// @copy internal masonic hooks
 import { clearRequestTimeout, requestTimeout } from "@essentials/request-timeout"
 import { useWindowSize } from "@react-hook/window-size"
 import { useForceUpdate } from "framer-motion"
-import { throttle } from "lodash-es"
+import { isEqual, throttle } from "lodash-es"
 import type { ContainerPosition, MasonryProps, MasonryScrollerProps, Positioner } from "masonic"
 import { createResizeObserver, useMasonry, usePositioner, useScrollToIndex } from "masonic"
 import * as React from "react"
@@ -188,10 +189,14 @@ function useContainerPosition(
 
   React.useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
-      setContainerPosition((prev) => ({
-        ...prev,
-        width: elementRef.current?.offsetWidth || 0,
-      }))
+      setContainerPosition((prev) => {
+        const next = {
+          ...prev,
+          width: elementRef.current?.offsetWidth || 0,
+        }
+        if (isEqual(next, prev)) return prev
+        return next
+      })
     })
     resizeObserver.observe(elementRef.current as HTMLElement)
     return () => {

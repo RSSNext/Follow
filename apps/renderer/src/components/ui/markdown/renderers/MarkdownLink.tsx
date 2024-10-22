@@ -1,16 +1,17 @@
-import { FeedViewType } from "~/lib/enum"
-import { useEntryContentContext } from "~/modules/entry-content/hooks"
+import { useContext } from "react"
 
 import type { LinkProps } from "../../link"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../../tooltip"
-import { ensureAndRenderTimeStamp, usePopulatedFullUrl } from "../utils"
+import { MarkdownRenderActionContext } from "../context"
 
 export const MarkdownLink = (props: LinkProps) => {
-  const { view, feedId } = useEntryContentContext()
+  const { transformUrl, isAudio, ensureAndRenderTimeStamp } = useContext(
+    MarkdownRenderActionContext,
+  )
 
-  const populatedFullHref = usePopulatedFullUrl(feedId, props.href)
+  const populatedFullHref = transformUrl(props.href)
 
-  const parseTimeStamp = view === FeedViewType.Audios
+  const parseTimeStamp = isAudio(populatedFullHref)
   if (parseTimeStamp) {
     const childrenText = props.children
 

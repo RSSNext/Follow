@@ -1,0 +1,57 @@
+{
+  "name": "@follow/server",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
+    "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
+    "start": "tsx index.ts"
+  },
+  "dependencies": {
+    "@fastify/middie": "9.0.2",
+    "@fastify/request-context": "6.0.1",
+    "@fontsource/sn-pro": "5.1.0",
+    "@openpanel/web": "1.0.1",
+    "@radix-ui/react-avatar": "1.1.1",
+    "@resvg/resvg-js": "2.6.2",
+    "@sentry/react": "8.34.0",
+    "@tanstack/react-query": "5.59.14",
+    "blurhash": "2.0.5",
+    "click-to-react-component": "1.1.0",
+    "dayjs": "1.11.13",
+    "fastify": "5.0.0",
+    "framer-motion": "11.11.9",
+    "i18next": "^23.16.0",
+    "jotai": "2.10.1",
+    "kose-font": "1.0.0",
+    "linkedom": "^0.18.5",
+    "ofetch": "1.4.1",
+    "rc-modal-sheet": "0.3.2",
+    "react": "^18.3.1",
+    "react-blurhash": "^0.3.0",
+    "react-hotkeys-hook": "4.5.1",
+    "react-i18next": "^15.0.3",
+    "react-photo-view": "1.2.6",
+    "react-router-dom": "6.27.0",
+    "satori": "0.11.2",
+    "sonner": "^1.5.0",
+    "swr": "2.2.5",
+    "uniqolor": "1.1.1",
+    "use-context-selector": "2.0.0"
+  },
+  "devDependencies": {
+    "@follow/components": "workspace:*",
+    "@follow/constants": "workspace:*",
+    "@follow/hooks": "workspace:*",
+    "@follow/models": "workspace:*",
+    "@follow/shared": "workspace:*",
+    "@follow/types": "workspace:*",
+    "@follow/utils": "workspace:*",
+    "daisyui": "4.12.13",
+    "lightningcss": "1.27.0",
+    "tsup": "8.3.0",
+    "tsx": "4.19.1",
+    "vite": "5.4.9"
+  }
+}

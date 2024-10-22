@@ -18,12 +18,13 @@ import { useIsOnline } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
-import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
+import { useAIDailyReportModal } from "~/modules/ai/ai-daily/useAIDailyReportModal"
 import { EntryHeader } from "~/modules/entry-content/header"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
+import { TimelineTabs } from "./TimelineTabs"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -46,7 +47,7 @@ export const EntryListHeader: FC<{
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
-      <div className="mt-1 h-6 min-w-0 break-all text-lg font-bold leading-tight">
+      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
         </EllipsisHorizontalTextWithTooltip>
@@ -67,16 +68,14 @@ export const EntryListHeader: FC<{
   const feed = useFeedById(feedId)
   const isList = !!listId
 
-  const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
-
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        titleStyleBasedView[view],
+        "flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
+        view !== FeedViewType.Articles && view !== FeedViewType.Pictures && "mb-2",
       )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
@@ -105,8 +104,8 @@ export const EntryListHeader: FC<{
             {view === FeedViewType.Pictures && <FilterNoImageButton />}
           </AppendTaildingDivider>
 
-          {isOnline ? (
-            feed?.ownerUserId === user?.id &&
+          {isOnline &&
+            (feed?.ownerUserId === user?.id &&
             isBizId(routerParams.feedId!) &&
             feed?.type === "feed" ? (
               <ActionButton
@@ -133,8 +132,7 @@ export const EntryListHeader: FC<{
                   isRefreshing={isRefreshing}
                 />
               </ActionButton>
-            )
-          ) : null}
+            ))}
           {!isList && (
             <>
               <ActionButton
@@ -158,6 +156,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
+      <TimelineTabs />
     </div>
   )
 }
@@ -171,7 +170,7 @@ const DailyReportButton: FC = () => {
       <ActionButton
         onClick={() => {
           present()
-          window.posthog?.capture("Daily Report Modal", {
+          window.analytics?.capture("Daily Report Modal", {
             click: 1,
           })
         }}
@@ -216,7 +215,7 @@ const SwitchToMasonryButton = () => {
       <ActionButton
         onClick={() => {
           setUISetting("pictureViewMasonry", !isMasonry)
-          window.posthog?.capture("Switch to Masonry", {
+          window.analytics?.capture("Switch to Masonry", {
             masonry: !isMasonry ? 1 : 0,
             click: 1,
           })
@@ -250,7 +249,7 @@ const WideModeButton = () => {
           setUISetting("wideMode", !isWideMode)
           // TODO: Remove this after useMeasure can get bounds in time
           window.dispatchEvent(new Event("resize"))
-          window.posthog?.capture("Switch to Wide Mode", {
+          window.analytics?.capture("Switch to Wide Mode", {
             wideMode: !isWideMode ? 1 : 0,
             click: 1,
           })

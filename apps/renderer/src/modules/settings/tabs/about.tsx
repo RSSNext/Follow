@@ -94,23 +94,19 @@ export const SettingAbout = () => {
         <h2 className="text-base font-semibold">{t("about.socialMedia")}</h2>
         <div className="mt-2 flex flex-wrap gap-2">
           {SocialMediaLinks.map((link) => (
-            <span
+            <a
+              href={link.url}
               key={link.url}
               className={styledButtonVariant({
                 variant: "outline",
-                className: "flex-1",
+                className: "flex-1 gap-1",
               })}
+              target="_blank"
+              rel="noreferrer"
             >
-              <a
-                href={link.url}
-                className="center flex w-full gap-1"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <i className={link.icon} />
-                {link.label}
-              </a>
-            </span>
+              <i className={link.icon} />
+              {link.label}
+            </a>
           ))}
         </div>
       </section>

@@ -168,7 +168,6 @@
   "wallet.create.button": "إنشاء محفظة",
   "wallet.create.description": "قم بإنشاء محفظة مجانية لتلقي <PowerIcon /> <strong>الطاقة</strong>، التي يمكن استخدامها لمكافأة المبدعين وأيضًا الحصول على مكافآت لمساهماتك في المحتوى.",
   "wallet.power.dailyClaim": "يمكنك الحصول على {{amount}} من الطاقة المجانية يوميًا، التي يمكن استخدامها لإكراميات لمقالات RSS على Follow.",
-  "wallet.power.description": "الطاقة هي <Link>رمز ERC-20</Link> على بلوكتشين {{blockchainName}}.",
   "wallet.sidebar_title": "الطاقة",
   "wallet.transactions.amount": "المبلغ",
   "wallet.transactions.date": "التاريخ",

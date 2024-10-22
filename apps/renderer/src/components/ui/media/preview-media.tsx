@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
+import { useWindowSize } from "usehooks-ts"
 
 import { m } from "~/components/common/Motion"
 import { COPY_MAP } from "~/constants"
@@ -48,7 +49,7 @@ const Wrapper: Component<{
           {children}
           <RootPortal to={entryId ? null : undefined}>
             <div
-              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
+              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
               onClick={stopPropagation}
             >
               {showActions && (
@@ -293,43 +294,51 @@ const FallbackableImage: FC<
 
   const height = Number.parseInt(props.height as string)
   const width = Number.parseInt(props.width as string)
+
+  const { height: windowHeight, width: windowWidth } = useWindowSize()
+
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
-      {isLoading && !isAllError && (
-        // FIXME: optimize this if image load, the placeholder background will flash
-        <div className="center absolute inset-0 size-full">
-          {blurhash ? (
-            <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
-              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            </div>
-          ) : (
-            <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-          )}
-        </div>
-      )}
       {!isAllError && (
-        <img
-          data-blurhash={blurhash}
-          src={currentSrc}
-          onLoad={() => setIsLoading(false)}
-          onError={handleError}
-          height={props.height}
-          width={props.width}
-          {...props}
-          className={cn(
-            blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
-            props.className,
-          )}
-          style={
-            Number.isNaN(height) || Number.isNaN(width) || height === 0 || width === 0
-              ? props.style
-              : {
-                  maxHeight: `min(100%, ${height}px)`,
-                  maxWidth: `min(100%, ${width}px)`,
-                  ...props.style,
-                }
-          }
-        />
+        <div
+          className={cn("relative", width < height && "h-full")}
+          style={{
+            // px-20 pb-8 pt-10
+            width:
+              width && height && width > height
+                ? Math.min((windowHeight - 32 - 40) * (width / height), width)
+                : undefined,
+            maxWidth: width > height ? windowWidth - 80 - 80 - 400 : undefined,
+          }}
+        >
+          <img
+            data-blurhash={blurhash}
+            src={currentSrc}
+            onLoad={() => setIsLoading(false)}
+            onError={handleError}
+            height={props.height}
+            width={props.width}
+            {...props}
+            className={cn(
+              "transition-opacity duration-700",
+              isLoading ? "opacity-0" : "opacity-100",
+              props.className,
+            )}
+            style={props.style}
+          />
+          <div
+            className={cn(
+              "center absolute inset-0 size-full transition-opacity duration-700",
+              isLoading ? "opacity-100" : "opacity-0",
+            )}
+          >
+            {blurhash ? (
+              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
+            ) : (
+              <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+            )}
+          </div>
+        </div>
       )}
       {isAllError && (
         <div

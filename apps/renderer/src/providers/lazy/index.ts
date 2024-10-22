@@ -33,3 +33,10 @@ export {
   LazyLottieRenderContainer,
   LazyModalStackProvider,
 }
+
+const LazyExternalJumpInProvider = lazy(() =>
+  import("../external-jump-in-provider").then((res) => ({
+    default: res.ExternalJumpInProvider,
+  })),
+)
+export { LazyExternalJumpInProvider }

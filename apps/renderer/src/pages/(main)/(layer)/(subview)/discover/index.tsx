@@ -2,7 +2,11 @@ import { createElement } from "react"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
+import { useUserRole } from "~/atoms/user"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { UserRole } from "~/lib/enum"
+import { cn } from "~/lib/utils"
+import { useActivationModal } from "~/modules/activation"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
 import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
@@ -17,7 +21,7 @@ import { useSubViewTitle } from "../hooks"
 const tabs: {
   name: I18nKeys
   value: string
-  disabled?: boolean
+  disableForTrial?: boolean
 }[] = [
   {
     name: "words.search",
@@ -34,6 +38,7 @@ const tabs: {
   {
     name: "words.inbox",
     value: "inbox",
+    disableForTrial: true,
   },
   {
     name: "words.rss3",
@@ -58,6 +63,17 @@ export function Component() {
   const { t } = useTranslation()
   useSubViewTitle("words.discover")
 
+  const presentActivationModal = useActivationModal()
+  const role = useUserRole()
+
+  const currentTabs = tabs.map((tab) => {
+    const disabled = tab.disableForTrial && role === UserRole.Trial
+    return {
+      ...tab,
+      disabled,
+    }
+  })
+
   return (
     <div className="flex flex-col items-center gap-8">
       <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
@@ -71,19 +87,30 @@ export function Component() {
         }}
       >
         <TabsList className="relative w-full">
-          {tabs.map((tab) => (
-            <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
+          {currentTabs.map((tab) => (
+            <TabsTrigger
+              key={tab.name}
+              value={tab.value}
+              className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
+              onClick={() => {
+                if (tab.disabled) {
+                  presentActivationModal()
+                }
+              }}
+            >
               {t(tab.name)}
             </TabsTrigger>
           ))}
 
-          <Trend className="relative bottom-0 left-1.5" />
+          <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" />
         </TabsList>
-        {tabs.map((tab) => (
+        {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
-            {createElement(TabComponent[tab.value] || TabComponent.default, {
-              type: tab.value,
-            })}
+            <div className={tab.value === "inbox" ? "" : "center flex flex-col"}>
+              {createElement(TabComponent[tab.value] || TabComponent.default, {
+                type: tab.value,
+              })}
+            </div>
           </TabsContent>
         ))}
       </Tabs>

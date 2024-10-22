@@ -20,6 +20,7 @@
     "@lottiefiles/dotlottie-react": "0.9.1",
     "@microflash/remark-callout-directives": "4.3.1",
     "@mozilla/readability": "^0.5.0",
+    "@openpanel/web": "1.0.1",
     "@radix-ui/react-avatar": "1.1.1",
     "@radix-ui/react-checkbox": "1.1.2",
     "@radix-ui/react-context-menu": "2.2.2",
@@ -55,6 +56,7 @@
     "dexie": "4.0.8",
     "dnum": "^2.14.0",
     "electron-log": "5.2.0",
+    "firebase": "10.14.1",
     "foxact": "0.2.39",
     "framer-motion": "11.11.9",
     "franc-min": "6.2.0",
@@ -73,7 +75,6 @@
     "nanoid": "5.0.7",
     "ofetch": "1.4.1",
     "path-to-regexp": "8.2.0",
-    "posthog-js": "1.169.0",
     "re-resizable": "6.10.0",
     "react-blurhash": "^0.3.0",
     "react-error-boundary": "4.0.13",
@@ -112,6 +113,7 @@
   },
   "devDependencies": {
     "@babel/generator": "7.25.7",
+    "@follow/types": "workspace:*",
     "@hono/node-server": "1.13.2",
     "@types/katex": "0.16.7",
     "@types/lodash-es": "4.17.12",
@@ -119,6 +121,7 @@
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "fake-indexeddb": "6.0.0",
+    "happy-dom": "15.7.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

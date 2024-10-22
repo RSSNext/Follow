@@ -1,9 +1,12 @@
 import { browserDB } from "~/database"
+import type { CleanerType } from "~/database/schemas/cleaner"
 import { appLog } from "~/lib/log"
 
 import { EntryService } from "./entry"
 import { FeedService } from "./feed"
 import { FeedUnreadService } from "./feed-unread"
+import { InboxService } from "./inbox"
+import { ListService } from "./list"
 import { SubscriptionService } from "./subscription"
 
 const cleanerModel = browserDB.cleaner
@@ -35,7 +38,7 @@ class CleanerServiceStatic {
   /**
    * Mark the which data recently used
    */
-  reset(list: { type: "feed" | "entry"; id: string }[]) {
+  reset(list: { type: CleanerType; id: string }[]) {
     const now = Date.now()
     return cleanerModel.bulkPut(
       list.map((item) => ({
@@ -59,6 +62,8 @@ class CleanerServiceStatic {
     }
     const deleteEntries = [] as string[]
     const deleteFeeds = [] as string[]
+    const deleteLists = [] as string[]
+    const deleteInboxes = [] as string[]
     for (const item of data) {
       switch (item.type) {
         case "feed": {
@@ -67,6 +72,15 @@ class CleanerServiceStatic {
         }
         case "entry": {
           deleteEntries.push(item.refId)
+          break
+        }
+        case "list": {
+          deleteLists.push(item.refId)
+          // TODO delete entries related to the list
+          break
+        }
+        case "inbox": {
+          deleteInboxes.push(item.refId)
           break
         }
       }
@@ -78,6 +92,8 @@ class CleanerServiceStatic {
       EntryService.deleteEntries(deleteEntries),
       EntryService.deleteEntriesByFeedIds(deleteFeeds),
       cleanerModel.bulkDelete(data.map((d) => d.refId)),
+      ListService.bulkDelete(deleteLists),
+      InboxService.bulkDelete(deleteInboxes),
     ])
   }
 

@@ -99,7 +99,7 @@ export function ListItem({
           )}
         >
           <EllipsisHorizontalTextWithTooltip className="truncate">
-            {getPreferredTitle(feed)}
+            {getPreferredTitle(feed, entry.entries)}
           </EllipsisHorizontalTextWithTooltip>
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
@@ -149,6 +149,7 @@ export function ListItem({
         )}
       </div>
 
+      {/* TODO remove This only share page needed */}
       {feedId && !isFollowed && (
         <Button
           onClick={(e) => {

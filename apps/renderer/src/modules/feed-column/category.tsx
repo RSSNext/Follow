@@ -102,7 +102,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
-  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
     e.stopPropagation()
     if (!isCategoryEditing) {
       setCategoryActive()
@@ -256,7 +256,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
             )
           }}
         >
-          <div className="flex w-full min-w-0 items-center">
+          <div className="flex w-full min-w-0 items-center" onDoubleClick={toggleCategoryOpenState}>
             <button
               type="button"
               onClick={toggleCategoryOpenState}
