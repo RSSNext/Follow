@@ -11,6 +11,7 @@ import { boosts, useBoostFeedMutation } from "~/queries/boosts"
 import { useWallet } from "~/queries/wallet"
 
 import { BoostProgress } from "./boost-progress"
+import { BoostingContributors } from "./boosting-contributors"
 import { LevelBenefits } from "./level-benefits"
 import { RadioCards } from "./radio-cards"
 
@@ -87,6 +88,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
         </Button>
       )}
 
+      <BoostingContributors feedId={feedId} />
       <LevelBenefits />
     </div>
   )
