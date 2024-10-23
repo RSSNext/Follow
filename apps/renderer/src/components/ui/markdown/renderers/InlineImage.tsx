@@ -23,7 +23,6 @@ export const MarkdownInlineImage = (
       src={populatedUrl}
       mediaContainerClassName={cn("inline max-w-full rounded-md")}
       popper
-      className="inline"
       showFallback
       inline
     />
