@@ -52,14 +52,14 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             tableName: "achievements";
             dataType: "string";
             columnType: "PgText";
-            data: "received" | "checking" | "completed" | "incomplete";
+            data: "received" | "checking" | "completed" | "incomplete" | "audit";
             driverParam: string;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: ["checking", "completed", "incomplete", "received"];
+            enumValues: ["checking", "completed", "incomplete", "audit", "received"];
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
@@ -165,7 +165,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
 declare const achievementsOpenAPISchema: zod.ZodObject<{
     id: zod.ZodString;
     userId: zod.ZodString;
-    type: zod.ZodEnum<["checking", "completed", "incomplete", "received"]>;
+    type: zod.ZodEnum<["checking", "completed", "incomplete", "audit", "received"]>;
     actionId: zod.ZodNumber;
     progress: zod.ZodNumber;
     progressMax: zod.ZodNumber;
@@ -173,7 +173,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     doneAt: zod.ZodNullable<zod.ZodString>;
     tx: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    type: "received" | "checking" | "completed" | "incomplete";
+    type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
     userId: string;
     actionId: number;
@@ -183,7 +183,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     doneAt: string | null;
     tx: string | null;
 }, {
-    type: "received" | "checking" | "completed" | "incomplete";
+    type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
     userId: string;
     actionId: number;
@@ -4487,6 +4487,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     INVITATION_PRICE: number;
                     DAILY_POWER_SUPPLY: number;
                     IS_RSS3_TESTNET: boolean;
+                    PRODUCT_HUNT_VOTE_URL: string;
                 };
             };
             outputFormat: "json" | "text";
@@ -6717,7 +6718,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: number;
                 data: {
-                    type: "received" | "checking" | "completed" | "incomplete";
+                    type: "received" | "checking" | "completed" | "incomplete" | "audit";
                     id: string;
                     userId: string;
                     actionId: number;
@@ -6764,6 +6765,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     actionId: number;
                     result: boolean;
                 };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/achievement/audit": {
+        $post: {
+            input: {
+                json: {
+                    actionId: number;
+                    payload?: any;
+                };
+            };
+            output: {
+                code: number;
             };
             outputFormat: "json" | "text";
             status: 200;

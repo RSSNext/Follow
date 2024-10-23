@@ -39,6 +39,8 @@
   "8003": "Feed already added to list",
   "9000": "Achievement not completed",
   "9001": "Achievement already received",
+  "9002": "Achievement is under audit",
+  "9003": "Achievement audit not needed",
   "10000": "Inbox not found",
   "10001": "Inbox already exists",
   "10002": "Inbox limit exceeded",

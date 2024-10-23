@@ -1,15 +1,20 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { SingletonRefObject } from "foxact/use-singleton"
 import { useSingleton } from "foxact/use-singleton"
+import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
-import { useEffect } from "react"
-import { Trans } from "react-i18next"
+import { useEffect, useId, useMemo, useRef } from "react"
+import { Trans, useTranslation } from "react-i18next"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { Button } from "~/components/ui/button"
 import { styledButtonVariant } from "~/components/ui/button/variants"
+import { Input } from "~/components/ui/input"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
@@ -19,6 +24,14 @@ import achievementAnimationUri from "~/lottie/achievement.lottie?url"
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
 enum AchievementsActionIdMap {
   FIRST_CLAIM_FEED = 0,
+  FIRST_CREATE_LIST = 1,
+  LIST_SUBSCRIBE_50 = 2,
+  LIST_SUBSCRIBE_100 = 3,
+  LIST_SUBSCRIBE_500 = 4,
+  PRODUCT_HUNT_VOTE = 5,
+  // TODO
+  // FOLLOW_SPECIAL_FEED = 6,
+  ALPHA_TESTER = 7,
 }
 
 const achievementActionIdCopyMap: Record<
@@ -29,20 +42,46 @@ const achievementActionIdCopyMap: Record<
     title: "achievement.first_claim_feed",
     description: "achievement.first_claim_feed_description",
   },
+  [AchievementsActionIdMap.FIRST_CREATE_LIST]: {
+    title: "achievement.first_create_list",
+    description: "achievement.first_create_list_description",
+  },
+  [AchievementsActionIdMap.LIST_SUBSCRIBE_50]: {
+    title: "achievement.list_subscribe_50",
+    description: "achievement.list_subscribe_50_description",
+  },
+  [AchievementsActionIdMap.LIST_SUBSCRIBE_100]: {
+    title: "achievement.list_subscribe_100",
+    description: "achievement.list_subscribe_100_description",
+  },
+  [AchievementsActionIdMap.LIST_SUBSCRIBE_500]: {
+    title: "achievement.list_subscribe_500",
+    description: "achievement.list_subscribe_500_description",
+  },
+  [AchievementsActionIdMap.PRODUCT_HUNT_VOTE]: {
+    title: "achievement.product_hunt_vote",
+    description: "achievement.product_hunt_vote_description",
+  },
+  // [AchievementsActionIdMap.FOLLOW_SPECIAL_FEED]: {
+  //   title: "achievement.follow_special_feed",
+  //   description: "achievement.follow_special_feed_description",
+  // },
+  [AchievementsActionIdMap.ALPHA_TESTER]: {
+    title: "achievement.alpha_tester",
+    description: "achievement.alpha_tester_description",
+  },
 }
-
+const _achievementType = apiClient.achievement.$get({
+  query: {
+    type: "all",
+  },
+})
+type Achievement = Awaited<typeof _achievementType>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
-  const queryClient = useQueryClient()
 
   const defaultAchievements = useSingleton(buildDefaultAchievements)
 
-  const _achievementType = apiClient.achievement.$get({
-    query: {
-      type: "all",
-    },
-  })
-  type Achievement = Awaited<typeof _achievementType>["data"]
   const {
     data: achievements,
     isLoading,
@@ -66,6 +105,7 @@ export const AchievementModalContent: FC = () => {
   })
 
   useEffect(() => {
+    if (isLoading) return
     if (!achievements) return
     let shouldPolling = false
     const pollingChain = new Chain()
@@ -85,31 +125,19 @@ export const AchievementModalContent: FC = () => {
     return () => {
       pollingChain.abort()
     }
-  }, [achievements, refetch])
+  }, [achievements, isLoading, refetch])
 
-  const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
-    mutationFn: async (actionId: number) => {
-      return apiClient.achievement.$put({
-        json: {
-          actionId,
-        },
-      })
-    },
-  })
   const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
-  const { mutateAsync: checkAchievement, isPending: checkPending } = useMutation({
-    mutationFn: async (actionId: number) => {
-      return apiClient.achievement.check.$post({
-        json: {
-          actionId,
-        },
-      })
-    },
-    onSuccess: () => {
-      refetch()
-    },
-  })
+
   const t = useI18n()
+
+  const sortedAchievements = useMemo(() => {
+    return achievements?.sort((a, b) => {
+      if (a.type === "received") return 1
+      if (b.type === "received") return -1
+      return 0
+    })
+  }, [achievements])
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
@@ -143,7 +171,7 @@ export const AchievementModalContent: FC = () => {
             <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
           </div>
         ) : (
-          achievements?.map((achievement) => {
+          sortedAchievements?.map((achievement) => {
             const copy = achievementActionIdCopyMap[achievement.actionId]
             if (!copy) return null
 
@@ -156,7 +184,7 @@ export const AchievementModalContent: FC = () => {
                     {achievement.power && (
                       <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
                         <span className="font-medium opacity-80">{achievement.power}</span>
-                        <i className="i-mgc-power text-sm text-accent" />
+                        <i className="i-mgc-power scale-95 text-sm text-accent" />
                       </span>
                     )}
                   </div>
@@ -164,7 +192,6 @@ export const AchievementModalContent: FC = () => {
                     {t(copy.description)}
                   </div>
                 </div>
-
                 {achievement.type === "checking" && (
                   <div
                     className={styledButtonVariant({
@@ -176,47 +203,9 @@ export const AchievementModalContent: FC = () => {
                     <span className="select-none opacity-0">{t("words.mint")}</span>
                   </div>
                 )}
-
                 {achievement.type === "incomplete" && (
-                  <button
-                    type="button"
-                    className={styledButtonVariant({
-                      variant: "ghost",
-                      className: "relative hover:bg-transparent group cursor-pointer",
-                    })}
-                    onClick={() => {
-                      checkAchievement(achievement.actionId)
-                    }}
-                  >
-                    <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
-                      <i
-                        className={cn(
-                          "i-mgc-refresh-2-cute-re size-5 text-accent",
-                          checkPending && "animate-spin",
-                        )}
-                      />
-                    </div>
-                    <div className="duration-200 group-hover:opacity-30">
-                      <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
-                        <small className="shrink-0 text-xs leading-tight text-muted-foreground">
-                          {achievement.progress} / {achievement.progressMax}
-                        </small>
-                        <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
-                          <span
-                            className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
-                            style={{
-                              width: `calc(${Math.min(
-                                (achievement.progress / achievement.progressMax) * 100,
-                                100,
-                              )}% + 0.75rem)`,
-                            }}
-                          />
-                        </span>
-                      </span>
-                    </div>
-                  </button>
+                  <IncompleteButton achievement={achievement} refetch={refetch} />
                 )}
-
                 {achievement.type === "received" && (
                   <div
                     className={styledButtonVariant({
@@ -229,37 +218,23 @@ export const AchievementModalContent: FC = () => {
                     {t("achievement.all_done")}
                   </div>
                 )}
-                {achievement.type === "completed" && (
-                  <Button
-                    isLoading={isMinting}
-                    variant="primary"
-                    onClick={async () => {
-                      const res = await mintAchievement(achievement.actionId)
 
-                      const currentData = jotaiStore.get(achievementsDataAtom.current)
-                      if (!currentData) return
-                      let shouldInvalidate = false
-                      const newData = currentData.map((item) => {
-                        if (item.id === achievement.id && res.data.result) {
-                          shouldInvalidate = true
-                          return {
-                            ...item,
-                            done: true,
-                            doneAt: new Date().toISOString(),
-                            type: "received",
-                          } as const
-                        }
-                        return item
-                      })
-                      jotaiStore.set(achievementsDataAtom.current, newData)
-
-                      if (shouldInvalidate) {
-                        queryClient.invalidateQueries({ queryKey: ["achievements"] })
-                      }
-                    }}
+                {achievement.type === "audit" && (
+                  <div
+                    className={styledButtonVariant({
+                      variant: "outline",
+                      className:
+                        "relative cursor-not-allowed !bg-zinc-100/50 gap-1 border-zinc-200 text-zinc-800 dark:text-foreground dark:!bg-zinc-100/5 dark:border-zinc-200/20",
+                    })}
                   >
-                    {t("words.mint")}
-                  </Button>
+                    Validating...
+                  </div>
+                )}
+                {achievement.type === "completed" && (
+                  <MintButton
+                    achievementsDataAtom={achievementsDataAtom}
+                    achievement={achievement}
+                  />
                 )}
               </li>
             )
@@ -271,13 +246,216 @@ export const AchievementModalContent: FC = () => {
 }
 
 const buildDefaultAchievements = () => {
-  return [
-    {
+  return Object.keys(achievementActionIdCopyMap).map((key) => {
+    return {
       id: nanoid(),
-      actionId: AchievementsActionIdMap.FIRST_CLAIM_FEED,
+      actionId: Number(key),
       type: "checking",
-      progress: 0,
-      progressMax: 0,
+    }
+  })
+}
+
+const MintButton: FC<{
+  achievementsDataAtom: SingletonRefObject<PrimitiveAtom<Achievement | undefined>>
+  achievement: Achievement[number]
+}> = ({ achievementsDataAtom, achievement }) => {
+  const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
+    mutationFn: async (actionId: number) => {
+      return apiClient.achievement.$put({
+        json: {
+          actionId,
+        },
+      })
     },
-  ]
+  })
+
+  const jotaiStore = useStore()
+  const queryClient = useQueryClient()
+  const { t } = useTranslation()
+  return (
+    <Button
+      isLoading={isMinting}
+      variant="primary"
+      onClick={async () => {
+        const res = await mintAchievement(achievement.actionId)
+
+        const currentData = jotaiStore.get(achievementsDataAtom.current)
+        if (!currentData) return
+        let shouldInvalidate = false
+        const newData = currentData.map((item) => {
+          if (item.id === achievement.id && res.data.result) {
+            shouldInvalidate = true
+            return {
+              ...item,
+              done: true,
+              doneAt: new Date().toISOString(),
+              type: "received",
+            } as const
+          }
+          return item
+        })
+        jotaiStore.set(achievementsDataAtom.current, newData)
+
+        if (shouldInvalidate) {
+          queryClient.invalidateQueries({ queryKey: ["achievements"] })
+        }
+      }}
+    >
+      {t("words.mint")}
+    </Button>
+  )
+}
+
+const IncompleteButton: FC<{
+  achievement: Achievement[number]
+  refetch: () => void
+}> = ({ achievement, refetch }) => {
+  const { mutateAsync: checkAchievement, isPending: checkPending } = useMutation({
+    mutationFn: async (actionId: number) => {
+      return apiClient.achievement.check.$post({
+        json: {
+          actionId,
+        },
+      })
+    },
+    onSuccess: () => {
+      refetch()
+    },
+  })
+
+  const { present } = useModalStack()
+  const Content = useMemo(() => {
+    switch (achievement.actionId) {
+      case AchievementsActionIdMap.PRODUCT_HUNT_VOTE: {
+        return (
+          <Button
+            onClick={() => {
+              present({
+                title: "Validate Your Vote",
+                content: () => <VoteValidateModalContent refetch={refetch} />,
+              })
+            }}
+          >
+            Validate
+          </Button>
+        )
+      }
+      default: {
+        return (
+          <>
+            <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
+              <i
+                className={cn(
+                  "i-mgc-refresh-2-cute-re size-5 text-accent",
+                  checkPending && "animate-spin",
+                )}
+              />
+            </div>
+            <div className="duration-200 group-hover:opacity-30">
+              <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
+                <small className="shrink-0 text-xs leading-tight text-muted-foreground">
+                  {achievement.progress} / {achievement.progressMax}
+                </small>
+                <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
+                  <span
+                    className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
+                    style={{
+                      width: `calc(${Math.min(
+                        (achievement.progress / achievement.progressMax) * 100,
+                        100,
+                      )}% + 0.75rem)`,
+                    }}
+                  />
+                </span>
+              </span>
+            </div>
+          </>
+        )
+      }
+    }
+  }, [
+    achievement.actionId,
+    achievement.progress,
+    achievement.progressMax,
+    checkPending,
+    present,
+    refetch,
+  ])
+
+  return (
+    <button
+      type="button"
+      className={styledButtonVariant({
+        variant: "ghost",
+        className: "relative hover:bg-transparent group cursor-pointer",
+      })}
+      onClick={() => {
+        checkAchievement(achievement.actionId)
+      }}
+    >
+      {Content}
+    </button>
+  )
+}
+const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
+  const ref = useRef<HTMLInputElement>(null)
+  const { dismiss } = useCurrentModal()
+  const { present } = useModalStack()
+  const { mutateAsync: audit, isPending } = useMutation({
+    mutationFn: (username: string) => {
+      return apiClient.achievement.audit.$post({
+        json: {
+          actionId: AchievementsActionIdMap.PRODUCT_HUNT_VOTE,
+          payload: {
+            username,
+          },
+        },
+      })
+    },
+    onSuccess: () => {
+      dismiss()
+
+      refetch()
+      present({
+        title: "Thank you!",
+        content: () => <div>Thank you for your vote. Please wait for our verification.</div>,
+        clickOutsideToDismiss: true,
+      })
+    },
+  })
+  const { PRODUCT_HUNT_VOTE_URL } = useServerConfigs() || {}
+  const id = useId()
+
+  return (
+    <form
+      className="flex flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault()
+        if (!ref.current?.value) return
+        audit(ref.current.value)
+      }}
+    >
+      <label htmlFor={id}>
+        Please vote for {APP_NAME} on{" "}
+        <a
+          href={PRODUCT_HUNT_VOTE_URL}
+          className="follow-link--underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Product Hunk!
+        </a>{" "}
+        Then fill in your username here.
+      </label>
+      <div>
+        <Input ref={ref} autoFocus id={id} placeholder="Your Product Hunt username" />
+      </div>
+
+      <div className="mt-2 flex justify-end">
+        <Button isLoading={isPending} type="submit">
+          Validate
+        </Button>
+      </div>
+    </form>
+  )
 }
