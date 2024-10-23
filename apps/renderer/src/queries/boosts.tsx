@@ -15,11 +15,19 @@ export const boosts = {
       })
       return res.data
     }),
+  getBoosters: ({ feedId }: { feedId: string }) =>
+    defineQuery(["boosters", feedId], async () => {
+      const res = await apiClient.boosts.boosters.$get({
+        query: {
+          feedId,
+        },
+      })
+      return res.data
+    }),
 }
 
 export const useBoostFeedMutation = () =>
   useMutation({
-    mutationKey: ["boostFeed"],
     mutationFn: (data: Parameters<typeof apiClient.boosts.$post>[0]["json"]) =>
       apiClient.boosts.$post({ json: data }),
     onError(err) {
@@ -27,6 +35,7 @@ export const useBoostFeedMutation = () =>
     },
     onSuccess(_, variables) {
       boosts.getStatus({ feedId: variables.feedId }).invalidate()
+      boosts.getBoosters({ feedId: variables.feedId }).invalidate()
       window.analytics?.capture("boost_sent", {
         amount: variables.amount,
         feedId: variables.feedId,
