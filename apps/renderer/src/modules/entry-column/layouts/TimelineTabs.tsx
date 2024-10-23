@@ -3,9 +3,11 @@ import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { InboxItem, ListItem } from "~/modules/feed-column/item"
 import { useSubscriptionStore } from "~/store/subscription"
+import * as React from "react"
 
 export const TimelineTabs = () => {
   const routerParams = useRouteParams()
+  const listRef = React.useRef<HTMLDivElement>(null)
   const { view, listId, inboxId } = routerParams
 
   const listsData = useSubscriptionStore((state) =>
@@ -20,9 +22,17 @@ export const TimelineTabs = () => {
 
   const navigate = useNavigateEntry()
   if (!hasData) return null
+
+  if (!listRef.current) return
+  const list = listRef.current
+  list.addEventListener("wheel", (e) => {
+    e.preventDefault()
+    list.scrollLeft += e.deltaY
+  })
+  
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-1 overflow-x-auto scrollbar-none"
+      className="-ml-3 -mr-4 mt-1 overflow-x-auto scrollbar-none flex"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {
@@ -34,7 +44,7 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList className="h-10 border-b-0">
+      <TabsList ref={listRef as any} className="h-10 border-b-0 overflow-hidden justify-start">
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>
