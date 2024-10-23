@@ -5,7 +5,7 @@ import { useSingleton } from "foxact/use-singleton"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
-import type { FC } from "react"
+import type { FC, ReactNode } from "react"
 import { useEffect, useId, useMemo, useRef } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
@@ -15,6 +15,7 @@ import { styledButtonVariant } from "~/components/ui/button/variants"
 import { Input } from "~/components/ui/input"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
@@ -324,63 +325,66 @@ const IncompleteButton: FC<{
   })
 
   const { present } = useModalStack()
-  const Content = useMemo(() => {
-    switch (achievement.actionId) {
-      case AchievementsActionIdMap.PRODUCT_HUNT_VOTE: {
-        return (
-          <Button
-            onClick={() => {
-              present({
-                title: "Validate Your Vote",
-                content: () => <VoteValidateModalContent refetch={refetch} />,
-              })
-            }}
-          >
-            Validate
-          </Button>
-        )
-      }
-      default: {
-        return (
-          <>
-            <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
-              <i
-                className={cn(
-                  "i-mgc-refresh-2-cute-re size-5 text-accent",
-                  checkPending && "animate-spin",
-                )}
-              />
-            </div>
-            <div className="duration-200 group-hover:opacity-30">
-              <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
-                <small className="shrink-0 text-xs leading-tight text-muted-foreground">
-                  {achievement.progress} / {achievement.progressMax}
-                </small>
-                <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
-                  <span
-                    className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
-                    style={{
-                      width: `calc(${Math.min(
-                        (achievement.progress / achievement.progressMax) * 100,
-                        100,
-                      )}% + 0.75rem)`,
-                    }}
-                  />
-                </span>
-              </span>
-            </div>
-          </>
-        )
-      }
+  let Content: ReactNode
+
+  const { PRODUCT_HUNT_VOTE_URL } = useServerConfigs() || {}
+
+  switch (achievement.actionId) {
+    case AchievementsActionIdMap.PRODUCT_HUNT_VOTE: {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              disabled={!PRODUCT_HUNT_VOTE_URL}
+              onClick={() => {
+                present({
+                  title: "Validate Your Vote",
+                  content: () => <VoteValidateModalContent refetch={refetch} />,
+                })
+              }}
+            >
+              Validate
+            </Button>
+          </TooltipTrigger>
+          {!PRODUCT_HUNT_VOTE_URL && (
+            <TooltipContent>Product Hunk Vote is not ready, We'll see.</TooltipContent>
+          )}
+        </Tooltip>
+      )
     }
-  }, [
-    achievement.actionId,
-    achievement.progress,
-    achievement.progressMax,
-    checkPending,
-    present,
-    refetch,
-  ])
+    default: {
+      Content = (
+        <>
+          <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
+            <i
+              className={cn(
+                "i-mgc-refresh-2-cute-re size-5 text-accent",
+                checkPending && "animate-spin",
+              )}
+            />
+          </div>
+          <div className="duration-200 group-hover:opacity-30">
+            <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
+              <small className="shrink-0 text-xs leading-tight text-muted-foreground">
+                {achievement.progress} / {achievement.progressMax}
+              </small>
+              <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
+                <span
+                  className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
+                  style={{
+                    width: `calc(${Math.min(
+                      (achievement.progress / achievement.progressMax) * 100,
+                      100,
+                    )}% + 0.75rem)`,
+                  }}
+                />
+              </span>
+            </span>
+          </div>
+        </>
+      )
+    }
+  }
 
   return (
     <button
@@ -426,6 +430,15 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
   const { PRODUCT_HUNT_VOTE_URL } = useServerConfigs() || {}
   const id = useId()
 
+  const openOnceRef = useRef(false)
+  useEffect(() => {
+    if (openOnceRef.current) return
+    if (PRODUCT_HUNT_VOTE_URL) {
+      window.open(PRODUCT_HUNT_VOTE_URL, "_blank")
+      openOnceRef.current = true
+    }
+  }, [PRODUCT_HUNT_VOTE_URL])
+
   return (
     <form
       className="flex flex-col gap-2"
@@ -435,7 +448,7 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
         audit(ref.current.value)
       }}
     >
-      <label htmlFor={id}>
+      <label className="text-sm" htmlFor={id}>
         Please vote for {APP_NAME} on{" "}
         <a
           href={PRODUCT_HUNT_VOTE_URL}
