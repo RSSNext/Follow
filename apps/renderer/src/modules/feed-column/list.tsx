@@ -217,6 +217,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         )}
         <Selecto
           container={feedsArea.current}
+          rootContainer={document.body}
           selectableTargets={["[data-feed-id]"]}
           continueSelect
           onSelect={(e) => {

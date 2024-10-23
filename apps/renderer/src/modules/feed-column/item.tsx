@@ -51,6 +51,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         //   return prev.concat(feedId)
         // })
         return
+      } else {
+        setSelectedFeedIds([])
       }
 
       e.stopPropagation()
