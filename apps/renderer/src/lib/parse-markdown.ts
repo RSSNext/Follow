@@ -17,7 +17,7 @@ import remarkRehype from "remark-rehype"
 import { unified } from "unified"
 import { VFile } from "vfile"
 
-import { MarkdownLink } from "~/components/ui/markdown/renderers"
+import { MarkdownLink } from "~/components/ui/markdown/renderers/MarkdownLink"
 
 export interface RemarkOptions {
   components: Partial<Components>

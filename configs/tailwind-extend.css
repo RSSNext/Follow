@@ -246,7 +246,11 @@
 
     transition: all 500ms ease;
 
-    @apply border-0 no-underline;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    @apply decoration-accent/30 hover:no-underline;
+    @apply border-0;
 
     background-position: left 1.1em;
 
@@ -261,10 +265,6 @@
         -0.05em 0 theme(colors.background);
 
       transition: all 250ms ease;
-    }
-
-    &.no-shadow {
-      text-shadow: none;
     }
   }
 }
