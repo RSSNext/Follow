@@ -1,5 +1,7 @@
 import { cn } from "@follow/utils/utils"
 
+import { useI18n } from "~/hooks/common"
+
 export const BoostProgress = ({
   level,
   boostCount,
@@ -14,6 +16,7 @@ export const BoostProgress = ({
     expiresAt: string
   } | null
 }) => {
+  const t = useI18n()
   const percentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
   const nextLevel = level + 1
   return (
@@ -46,12 +49,14 @@ export const BoostProgress = ({
         <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
       </div>
       <small className="center mt-1 gap-1">
-        {remainingBoostsToLevelUp} more boost will unlock the next level of benefits!
+        {t("boost.remaining_boosts_to_level_up", { remainingBoostsToLevelUp })}
       </small>
       {lastValidBoost && (
         <small className="center mt-1 gap-1">
-          You can't add more boost points right now, but feel free to keep boosting. Your current
-          boost will expire on {new Date(lastValidBoost.expiresAt).toLocaleDateString()}.
+          {t("boost.expired_description", {
+            expiredDate: new Date(lastValidBoost.expiresAt),
+            interpolation: { escapeValue: false },
+          })}
         </small>
       )}
     </div>

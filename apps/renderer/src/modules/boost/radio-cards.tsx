@@ -1,5 +1,6 @@
 import { RadioCard } from "@follow/components/ui/radio-group/RadioCard.js"
 import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.js"
+import dayjs from "dayjs"
 import { m } from "framer-motion"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
@@ -48,7 +49,9 @@ export const RadioCards = ({
             value={(item.value * monthlyBoostCost).toString()}
             label={
               <div>
-                <h3 className="pr-3 font-medium leading-none">{item.name}</h3>
+                <h3 className="pr-3 font-medium leading-none">
+                  {dayjs.duration(item.value, "months").humanize()}
+                </h3>
                 <p className="mt-1 flex items-center justify-center gap-1 text-sm text-theme-vibrancyFg">
                   {item.value * monthlyBoostCost}
                   <i className="i-mgc-power text-accent" />
