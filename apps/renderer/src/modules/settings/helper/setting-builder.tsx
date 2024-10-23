@@ -4,8 +4,8 @@ import type { FC, ReactNode } from "react"
 import * as React from "react"
 import { isValidElement } from "react"
 
-import { SettingActionItem, SettingDescription, SettingInput, SettingSwitch } from "./control"
-import { SettingItemGroup, SettingSectionTitle } from "./section"
+import { SettingActionItem, SettingDescription, SettingInput, SettingSwitch } from "../control"
+import { SettingItemGroup, SettingSectionTitle } from "../section"
 
 type SharedSettingItem = {
   disabled?: boolean

@@ -9,9 +9,9 @@ import {
 import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
-import { createSetting } from "~/atoms/settings/helper"
 import { setIntegrationSetting, useIntegrationSettingValue } from "~/atoms/settings/integration"
 
+import { createSetting } from "../helper/builder"
 import { useSetSettingCanSync } from "../modal/hooks"
 
 const { defineSettingItem, SettingBuilder } = createSetting(

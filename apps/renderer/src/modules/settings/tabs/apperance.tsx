@@ -11,7 +11,6 @@ import { getOS } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
-import { createDefineSettingItem } from "~/atoms/settings/helper"
 import {
   setUISetting,
   useUISettingKey,
@@ -21,8 +20,9 @@ import {
 import { isElectronBuild } from "~/constants"
 
 import { SettingTabbedSegment } from "../control"
+import { createDefineSettingItem } from "../helper/builder"
+import { createSettingBuilder } from "../helper/setting-builder"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
-import { createSettingBuilder } from "../setting-builder"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
 const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)

@@ -23,7 +23,6 @@ import {
   useGeneralSettingSelector,
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
-import { createSetting } from "~/atoms/settings/helper"
 import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
@@ -33,6 +32,7 @@ import { tipcClient } from "~/lib/client"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 import { SettingDescription, SettingInput } from "../control"
+import { createSetting } from "../helper/builder"
 import { SettingItemGroup } from "../section"
 
 const { defineSettingItem, SettingBuilder } = createSetting(
