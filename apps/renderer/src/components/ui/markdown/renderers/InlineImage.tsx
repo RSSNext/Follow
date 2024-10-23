@@ -25,6 +25,7 @@ export const MarkdownInlineImage = (
       popper
       className="inline"
       showFallback
+      inline
     />
   )
 }
