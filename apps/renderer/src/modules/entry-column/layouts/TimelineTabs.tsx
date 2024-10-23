@@ -44,7 +44,7 @@ export const TimelineTabs = () => {
               listId={s.listId!}
               view={view}
               iconSize={16}
-              className="h-5 !bg-transparent p-0 leading-none"
+              className="h-5 !bg-transparent p-0"
             />
           </TabsTrigger>
         ))}
@@ -54,7 +54,7 @@ export const TimelineTabs = () => {
               inboxId={s.inboxId!}
               view={view}
               iconSize={16}
-              className="h-5 !bg-transparent p-0 leading-none"
+              className="h-5 !bg-transparent p-0"
             />
           </TabsTrigger>
         ))}
