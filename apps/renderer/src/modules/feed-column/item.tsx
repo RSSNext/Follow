@@ -42,13 +42,13 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      if (e.metaKey) {
-        setSelectedFeedIds((prev) => {
-          if (prev.includes(feedId)) {
-            return prev.filter((id) => id !== feedId)
-          }
-          return prev.concat(feedId)
-        })
+      if (e.metaKey || e.ctrlKey || e.shiftKey) {
+        // setSelectedFeedIds((prev) => {
+        //   if (prev.includes(feedId)) {
+        //     return prev.filter((id) => id !== feedId)
+        //   }
+        //   return prev.concat(feedId)
+        // })
         return
       }
 

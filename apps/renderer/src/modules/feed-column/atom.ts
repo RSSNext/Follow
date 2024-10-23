@@ -39,7 +39,7 @@ export const [
   ,
   useSelectedFeedIds,
   ,
-  ,
+  useSetSelectedFeedIds,
   getSelectedFeedIds,
   setSelectedFeedIds,
   useSelectedFeedIdsSelector,

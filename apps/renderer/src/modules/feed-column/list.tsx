@@ -1,8 +1,9 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useMemo, useState } from "react"
+import { memo, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import Selecto from "react-selecto"
 
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
@@ -21,7 +22,13 @@ import {
 } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
-import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
+import {
+  getFeedListSort,
+  setFeedListSortBy,
+  setFeedListSortOrder,
+  useFeedListSort,
+  useSetSelectedFeedIds,
+} from "./atom"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
@@ -132,6 +139,9 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const hasListData = Object.keys(listsData).length > 0
   const hasInboxData = Object.keys(inboxesData).length > 0
 
+  const feedsArea = useRef<HTMLDivElement>(null)
+  const setSelectedFeedIds = useSetSelectedFeedIds()
+
   return (
     <div className={cn(className, "font-medium")}>
       <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
@@ -205,34 +215,58 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <SortByAlphabeticalInbox view={view} data={inboxesData} />
           </>
         )}
-        {(hasListData || hasInboxData) && (
-          <div
-            className={cn(
-              "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
-              Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
-            )}
-          >
-            {t("words.feeds")}
-          </div>
-        )}
-        {hasData ? (
-          <SortableFeedList
-            view={view}
-            data={feedsData}
-            categoryOpenStateData={categoryOpenStateData}
-          />
-        ) : (
-          <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
-            <Link
-              to="/discover"
-              className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
-              onClick={stopPropagation}
+        <Selecto
+          container={feedsArea.current}
+          selectableTargets={["[data-feed-id]"]}
+          continueSelect
+          onSelect={(e) => {
+            const allChanged = [...e.added, ...e.removed]
+            setSelectedFeedIds((prev) => {
+              const added = allChanged
+                .map((el) => el.dataset.feedId)
+                .filter((id) => id !== undefined)
+                .filter((id) => !prev.includes(id))
+              const removed = new Set(
+                allChanged
+                  .map((el) => el.dataset.feedId)
+                  .filter((id) => id !== undefined)
+                  .filter((id) => prev.includes(id)),
+              )
+              return [...prev.filter((id) => !removed.has(id)), ...added]
+            })
+          }}
+          hitRate={10}
+        />
+        <div ref={feedsArea}>
+          {(hasListData || hasInboxData) && (
+            <div
+              className={cn(
+                "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+              )}
             >
-              <i className="i-mgc-add-cute-re text-3xl" />
-              <span className="text-base">{t("sidebar.add_more_feeds")}</span>
-            </Link>
-          </div>
-        )}
+              {t("words.feeds")}
+            </div>
+          )}
+          {hasData ? (
+            <SortableFeedList
+              view={view}
+              data={feedsData}
+              categoryOpenStateData={categoryOpenStateData}
+            />
+          ) : (
+            <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
+              <Link
+                to="/discover"
+                className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
+                onClick={stopPropagation}
+              >
+                <i className="i-mgc-add-cute-re text-3xl" />
+                <span className="text-base">{t("sidebar.add_more_feeds")}</span>
+              </Link>
+            </div>
+          )}
+        </div>
       </ScrollArea.ScrollArea>
     </div>
   )
