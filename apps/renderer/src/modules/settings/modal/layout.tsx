@@ -5,7 +5,7 @@ import type { BoundingBox } from "framer-motion"
 import { useDragControls } from "framer-motion"
 import { Resizable } from "re-resizable"
 import type { PointerEventHandler, PropsWithChildren } from "react"
-import { Suspense, useCallback, useEffect, useRef } from "react"
+import { memo, Suspense, useCallback, useEffect, useRef } from "react"
 
 import { useUISettingSelector } from "~/atoms/settings/ui"
 import { m } from "~/components/common/Motion"
@@ -129,15 +129,7 @@ export function SettingModalLayout(
                   {APP_NAME}
                 </div>
                 <nav className="flex grow flex-col">
-                  {availableSettings.map((t) => (
-                    <SettingItemButton
-                      key={t.path}
-                      tab={tab}
-                      setTab={setTab}
-                      item={t}
-                      path={t.path}
-                    />
-                  ))}
+                  <SidebarItems />
                 </nav>
 
                 <div className="relative -mb-5 h-8 shrink-0">
@@ -157,7 +149,7 @@ export function SettingModalLayout(
   )
 }
 
-const SettingItemButton = (props: {
+const SettingItemButtonImpl = (props: {
   tab: string
   setTab: (tab: string) => void
   item: SettingPageConfig
@@ -180,7 +172,7 @@ const SettingItemButton = (props: {
         disabled && "cursor-not-allowed opacity-50",
       )}
       type="button"
-      onClick={() => {
+      onClick={useCallback(() => {
         setTab(path)
         if (disabled) {
           switch (why) {
@@ -193,9 +185,23 @@ const SettingItemButton = (props: {
             }
           }
         }
-      }}
+      }, [disabled, why, presentActivationModal, setTab, path])}
     >
       <SettingsSidebarTitle path={path} className="text-[0.94rem] font-medium" />
     </button>
   )
 }
+
+const SettingItemButton = memo(SettingItemButtonImpl)
+
+const SidebarItems = memo(
+  () => {
+    const setTab = useSetSettingTab()
+    const tab = useSettingTab()
+    const availableSettings = useAvailableSettings()
+    return availableSettings.map((t) => (
+      <SettingItemButton key={t.path} tab={tab} setTab={setTab} item={t} path={t.path} />
+    ))
+  },
+  () => true,
+)

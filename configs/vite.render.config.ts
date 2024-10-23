@@ -30,7 +30,9 @@ export const viteRenderBaseConfig = {
   base: "/",
 
   plugins: [
-    react(),
+    react({
+      // jsxImportSource: "@welldone-software/why-did-you-render", // <-----
+    }),
     circularImportRefreshPlugin(),
 
     sentryVitePlugin({
