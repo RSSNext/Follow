@@ -1,11 +1,14 @@
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { toastFetchError } from "~/lib/error-parser"
 
-export const boosts = {
+import { updateFeedBoostStatus } from "./hooks"
+
+const query = {
   getStatus: ({ feedId }: { feedId: string }) =>
     defineQuery(["boostFeed", feedId], async () => {
       const res = await apiClient.boosts.$get({
@@ -26,20 +29,33 @@ export const boosts = {
     }),
 }
 
-export const useBoostFeedMutation = () =>
-  useMutation({
+export const useBoostStatusQuery = (feedId: string) =>
+  useAuthQuery(query.getStatus({ feedId }), {
+    staleTime: 1000 * 60 * 5,
+  })
+
+export const useFeedBoostersQuery = (feedId: string) =>
+  useAuthQuery(query.getBoosters({ feedId }), {
+    staleTime: 1000 * 60 * 5,
+  })
+
+export const useBoostFeedMutation = () => {
+  const t = useI18n()
+  return useMutation({
     mutationFn: (data: Parameters<typeof apiClient.boosts.$post>[0]["json"]) =>
       apiClient.boosts.$post({ json: data }),
     onError(err) {
       toastFetchError(err)
     },
     onSuccess(_, variables) {
-      boosts.getStatus({ feedId: variables.feedId }).invalidate()
-      boosts.getBoosters({ feedId: variables.feedId }).invalidate()
+      query.getStatus({ feedId: variables.feedId }).invalidate()
+      query.getBoosters({ feedId: variables.feedId }).invalidate()
+      updateFeedBoostStatus(variables.feedId, true)
       window.analytics?.capture("boost_sent", {
         amount: variables.amount,
         feedId: variables.feedId,
       })
-      toast("🎉 Boosted.")
+      toast(t("boost.boost_success"))
     },
   })
+}

@@ -6,8 +6,8 @@ import { useCallback, useState } from "react"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
-import { useAuthQuery, useI18n } from "~/hooks/common"
-import { boosts, useBoostFeedMutation } from "~/queries/boosts"
+import { useI18n } from "~/hooks/common"
+import { useBoostFeedMutation, useBoostStatusQuery } from "~/modules/boost/query"
 import { useWallet } from "~/queries/wallet"
 
 import { BoostProgress } from "./boost-progress"
@@ -27,7 +27,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   const amountBigInt = from(amount, 18)[0]
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
-  const { data: boostStatus, isLoading } = useAuthQuery(boosts.getStatus({ feedId }))
+  const { data: boostStatus, isLoading } = useBoostStatusQuery(feedId)
   const boostFeedMutation = useBoostFeedMutation()
   const { dismiss } = useCurrentModal()
 

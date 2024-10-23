@@ -2,11 +2,11 @@ import { atom } from "jotai"
 import { useCallback } from "react"
 
 import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
-import { useAuthQuery, useI18n } from "~/hooks/common"
+import { useI18n } from "~/hooks/common"
 import { createAtomHooks } from "~/lib/jotai"
-import { boosts } from "~/queries/boosts"
 
 import { BoostModalContent } from "./modal"
+import { useBoostStatusQuery } from "./query"
 
 export const useBoostModal = () => {
   const t = useI18n()
@@ -14,7 +14,7 @@ export const useBoostModal = () => {
 
   return useCallback(
     (feedId: string) => {
-      const useDataFetcher = () => useAuthQuery(boosts.getStatus({ feedId }))
+      const useDataFetcher = () => useBoostStatusQuery(feedId)
 
       type ResponseType = Awaited<ReturnType<ReturnType<typeof useDataFetcher>["fn"]>>
 
