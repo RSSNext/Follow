@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.0.1-alpha.21](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.19...v0.0.1-alpha.21) (2024-10-12)
+## [0.0.1-alpha.22](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.21...v0.0.1-alpha.22) (2024-10-23)
 
 
 ### Bug Fixes
@@ -59,6 +59,7 @@
 * allow prod and dev builds running in the same time ([#479](https://github.com/RSSNext/follow/issues/479)) ([7140751](https://github.com/RSSNext/follow/commit/7140751bc2c068782b6e9e9255754629d89152c9))
 * allow toggle switch by clicking label ([#185](https://github.com/RSSNext/follow/issues/185)) ([5d98eb4](https://github.com/RSSNext/follow/commit/5d98eb42303e4ba6bbe0bfd37d8a17b31f66658a))
 * alpha typo ([961a75c](https://github.com/RSSNext/follow/commit/961a75cd46227c7bb11bae3743b970b2884ccc44))
+* app icon incorrect in Windows Control Panel ([#899](https://github.com/RSSNext/follow/issues/899)) ([719f1da](https://github.com/RSSNext/follow/commit/719f1dae0e9762218b9e3c24b0aec2ced7f382be))
 * app width limit to 1024px ([09d7765](https://github.com/RSSNext/follow/commit/09d77657a07f81d69f80c3eea1620efe1ddb9da9))
 * audio player async logic and auto pause logic ([ba40b44](https://github.com/RSSNext/follow/commit/ba40b44ce91bb8acd118b9c6d846ed8d5b9b022c))
 * audioCover animation and estimatedMins style ([#523](https://github.com/RSSNext/follow/issues/523)) ([11ff31b](https://github.com/RSSNext/follow/commit/11ff31bd40af1884a1760d0d1ca5b9a726f13620))
@@ -213,6 +214,7 @@
 * hide peek modal toc ([9c66b33](https://github.com/RSSNext/follow/commit/9c66b33887126287d9f6f5a39f85f76818e28f1f))
 * hide tip when feed owned by me ([dfb3c6d](https://github.com/RSSNext/follow/commit/dfb3c6d377041f524c9da80c03639e6fea304202))
 * hono.ts ([fd03caa](https://github.com/RSSNext/follow/commit/fd03caac22f9e035734d369351134ed63da93439))
+* hotfix vercel cache and modify chunk name to avoid cache ([#904](https://github.com/RSSNext/follow/issues/904)) ([570506c](https://github.com/RSSNext/follow/commit/570506cde7c382112202830370283cc6ed069878))
 * i18n dispatcher ([c038c79](https://github.com/RSSNext/follow/commit/c038c791af14418ee641af08e689a619b99a1735))
 * i18n key and dark mode in wide mode and transition other ux fix ([6697ff5](https://github.com/RSSNext/follow/commit/6697ff58b30a1f4838fdca3820c725457ec483d4))
 * i18n persist ([18e0353](https://github.com/RSSNext/follow/commit/18e035394b8d1a77f8454f47e0049359e69d750a))
@@ -329,6 +331,7 @@
 * posthog tracker ([f4790da](https://github.com/RSSNext/follow/commit/f4790da8b1f27937b47b27d127497742684e9cc1))
 * power balance align center ([972ff76](https://github.com/RSSNext/follow/commit/972ff7675e75014270764ba8b69372ae0d7dd3a8))
 * power icon color ([a765cd2](https://github.com/RSSNext/follow/commit/a765cd2853ff4fdc267db94600725e5c7dabbaae))
+* power page z-index ([#910](https://github.com/RSSNext/follow/issues/910)) ([795dccb](https://github.com/RSSNext/follow/commit/795dccbfc5320e7371f88a0e8740611a562c7e95))
 * prevent translation popup from being obscured by time display ([#631](https://github.com/RSSNext/follow/issues/631)) ([ea6fbc2](https://github.com/RSSNext/follow/commit/ea6fbc27e6d29d59c4419422a6a12c81d56c2c98))
 * preview image and video size ([e4e4700](https://github.com/RSSNext/follow/commit/e4e47006ee55aa59db5fdb76f565a5ec929f3d95))
 * preview image fallback ([7410ca2](https://github.com/RSSNext/follow/commit/7410ca229afdb6fafb01f5ebe370d01dc33a4500))
@@ -562,6 +565,7 @@
 * add more words i18n ([#785](https://github.com/RSSNext/follow/issues/785)) ([892ceb2](https://github.com/RSSNext/follow/commit/892ceb2269ec553049c86a8b295c0a08e5649b04))
 * add object-cover to feed icon, add zh-HK and zh-TW errors lang ([#508](https://github.com/RSSNext/follow/issues/508)) ([9351a8f](https://github.com/RSSNext/follow/commit/9351a8fe735977ae02320370f9aa6a83854d7adf))
 * add og image, fixed [#242](https://github.com/RSSNext/follow/issues/242) ([5d4e958](https://github.com/RSSNext/follow/commit/5d4e9586569e4afe212138d2001ed9007ce9950b))
+* add Openpanel integration ([#1014](https://github.com/RSSNext/follow/issues/1014)) ([727ba56](https://github.com/RSSNext/follow/commit/727ba56d856998f7aeea3cac9bc842b46cbc798e))
 * add overflow tooltip for feed title ([a89ad8b](https://github.com/RSSNext/follow/commit/a89ad8be84384c1851587d02f6b21ce64ad24bdb))
 * add player download src ([fc50751](https://github.com/RSSNext/follow/commit/fc5075139f2f82a66c703349a719927c35b11b09))
 * add preview image bottom indicator ([bbc1591](https://github.com/RSSNext/follow/commit/bbc15913e8a1afd148c4c70a8056c64d46587791))
@@ -633,6 +637,7 @@
 * follow feed by feed id ([30d1851](https://github.com/RSSNext/follow/commit/30d1851e3aefcc2da06981537627ccd415bb082c))
 * followed status for external follow button ([3a7ed50](https://github.com/RSSNext/follow/commit/3a7ed50c55071fb3065ba082fceef3a70214d798))
 * force lists to be sorted by alphabetical ([c3b9fc9](https://github.com/RSSNext/follow/commit/c3b9fc9e7510f777a129063a2e09ae33658b3813))
+* force update to the beta channel ([166bb74](https://github.com/RSSNext/follow/commit/166bb74e6d25f57d7f33ed67917ab9282f6de366))
 * guess code language ([03ba85a](https://github.com/RSSNext/follow/commit/03ba85a37302d41f3403d629849b1b4d3db915ba))
 * hoverable translation design, fixes [#268](https://github.com/RSSNext/follow/issues/268) ([3ff11dc](https://github.com/RSSNext/follow/commit/3ff11dce35061de2b784621519eee79f87a93993))
 * i18n for biz error ([c26bc52](https://github.com/RSSNext/follow/commit/c26bc5298bac31840de1c3c051ad1f91021a016f))
