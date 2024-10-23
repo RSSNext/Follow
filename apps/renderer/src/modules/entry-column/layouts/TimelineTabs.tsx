@@ -1,5 +1,3 @@
-import * as React from "react"
-
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
@@ -24,12 +22,10 @@ export const TimelineTabs = () => {
   const navigate = useNavigateEntry()
   if (!hasData) return null
 
-  if (!listRef.current) return
-  const list = listRef.current
-  list.addEventListener("wheel", (e) => {
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault()
-    list.scrollLeft += e.deltaY
-  })
+    listRef.current!.scrollLeft += e.deltaY
+  }
 
   return (
     <Tabs
@@ -45,7 +41,11 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList ref={listRef as any} className="h-10 justify-start overflow-hidden border-b-0">
+      <TabsList
+        ref={listRef as any}
+        className="h-10 justify-start overflow-hidden border-b-0"
+        onWheel={handleWheel}
+      >
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>
