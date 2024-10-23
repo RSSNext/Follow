@@ -2,12 +2,18 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useAuthQuery } from "~/hooks/common"
-import { isASCII } from "~/lib/utils"
+import { cn, isASCII } from "~/lib/utils"
 import { Queries } from "~/queries"
 
 import { RecommendationCard } from "./recommendations-card"
 
-export function Recommendations() {
+export function Recommendations({
+  hideTitle,
+  className,
+}: {
+  hideTitle?: boolean
+  className?: string
+}) {
   const rsshubPopular = useAuthQuery(
     Queries.discover.rsshubCategory({
       category: "popular",
@@ -56,10 +62,10 @@ export function Recommendations() {
   }
 
   return (
-    <div className="mt-8">
-      <div className="text-center text-lg font-bold">{t("discover.popular")}</div>
+    <div className={cn(!hideTitle && "mt-8")}>
+      {!hideTitle && <div className="text-center text-lg font-bold">{t("discover.popular")}</div>}
 
-      <div className="mt-4 grid grid-cols-3 gap-4 px-3">
+      <div className={cn("mt-4 grid grid-cols-3 gap-4 px-3", className)}>
         {keys.map((key) => (
           <RecommendationCard key={key} data={data[key]} routePrefix={key} />
         ))}

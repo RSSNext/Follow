@@ -1,4 +1,3 @@
-import { WEB_URL } from "@follow/shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -17,6 +16,7 @@ import { nextFrame } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -24,6 +24,7 @@ import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
+import { BoostCertification } from "../boost/boost-certification"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
@@ -82,7 +83,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         )}
         onClick={handleNavigate}
         onDoubleClick={() => {
-          window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
+          window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
         onContextMenu={(e) => {
           setIsContextMenuOpen(true)
@@ -122,6 +123,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
           <FeedIcon fallback feed={feed} size={16} />
           <div className="truncate">{getPreferredTitle(feed)}</div>
           {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
+          {isFeed && <BoostCertification feed={feed} className="text-[15px]" />}
           {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
@@ -168,7 +170,8 @@ export const FeedItem = memo(FeedItemImpl)
 const ListItemImpl: Component<{
   listId: string
   view: FeedViewType
-}> = ({ view, listId, className }) => {
+  iconSize?: number
+}> = ({ view, listId, className, iconSize = 28 }) => {
   const list = useListById(listId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
@@ -215,7 +218,7 @@ const ListItemImpl: Component<{
       )}
       onClick={handleNavigate}
       onDoubleClick={() => {
-        window.open(`${WEB_URL}/list/${listId}?view=${view}`, "_blank")
+        window.open(UrlBuilder.shareList(listId, view), "_blank")
       }}
       onContextMenu={(e) => {
         setIsContextMenuOpen(true)
@@ -224,7 +227,7 @@ const ListItemImpl: Component<{
       }}
     >
       <div className={"flex min-w-0 items-center"}>
-        <FeedIcon fallback feed={list} size={28} />
+        <FeedIcon fallback feed={list} size={iconSize} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
           {getPreferredTitle(list)}
         </EllipsisHorizontalTextWithTooltip>
@@ -250,7 +253,8 @@ export const ListItem = memo(ListItemImpl)
 const InboxItemImpl: Component<{
   inboxId: string
   view: FeedViewType
-}> = ({ view, inboxId, className }) => {
+  iconSize?: number
+}> = ({ view, inboxId, className, iconSize = 16 }) => {
   const inbox = useInboxById(inboxId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.inboxId === inboxId)
@@ -293,7 +297,7 @@ const InboxItemImpl: Component<{
       }}
     >
       <div className={"flex min-w-0 items-center"}>
-        <FeedIcon fallback feed={inbox} size={16} />
+        <FeedIcon fallback feed={inbox} size={iconSize} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
           {getPreferredTitle(inbox)}
         </EllipsisHorizontalTextWithTooltip>

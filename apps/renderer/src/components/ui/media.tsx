@@ -19,8 +19,8 @@ type BaseProps = {
   mediaContainerClassName?: string
   showFallback?: boolean
   thumbnail?: boolean
-
   blurhash?: string
+  inline?: boolean
 }
 export type MediaProps = BaseProps &
   (
@@ -52,8 +52,18 @@ const MediaImpl: FC<MediaProps> = ({
   thumbnail,
   ...props
 }) => {
-  const { src, style, type, previewImageUrl, showFallback, blurhash, height, width, ...rest } =
-    props
+  const {
+    src,
+    style,
+    type,
+    previewImageUrl,
+    showFallback,
+    blurhash,
+    height,
+    width,
+    inline,
+    ...rest
+  } = props
 
   const ctxMediaInfo = useContext(MediaInfoRecordContext)
   const ctxHeight = ctxMediaInfo[src!]?.height
@@ -242,6 +252,7 @@ const MediaImpl: FC<MediaProps> = ({
           width={Number.parseInt(props.width as string)}
           height={Number.parseInt(props.height as string)}
           containerWidth={containerWidth}
+          noScale={inline}
         >
           <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded">
             {blurhash ? (
@@ -267,16 +278,11 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
   <div className={className} style={props.style}>
     <div
       className={cn(
-        !(props.width || props.height) && "size-full",
+        "size-full",
         "center rounded bg-zinc-100 dark:bg-neutral-900",
         "not-prose !flex max-h-full flex-col space-y-1 p-4 @container",
-
         mediaContainerClassName,
       )}
-      style={{
-        height: props.height ? `${props.height}px` : "",
-        width: props.width ? `${props.width}px` : "100%",
-      }}
     >
       <div className="hidden @sm:hidden @md:contents">
         <i className="i-mgc-close-cute-re text-xl text-red-500" />
@@ -299,6 +305,7 @@ const AspectRatio = ({
   containerWidth,
   children,
   style,
+  noScale,
   ...props
 }: {
   width: number
@@ -306,9 +313,10 @@ const AspectRatio = ({
   containerWidth?: number
   children: React.ReactNode
   style?: React.CSSProperties
+  noScale?: boolean
   [key: string]: any
 }) => {
-  const scaleFactor = containerWidth && width ? Math.min(1, containerWidth / width) : 1
+  const scaleFactor = noScale ? 1 : containerWidth && width ? containerWidth / width : 1
 
   const scaledWidth = width ? width * scaleFactor : undefined
   const scaledHeight = height ? height * scaleFactor : undefined

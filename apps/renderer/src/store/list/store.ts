@@ -54,7 +54,7 @@ class ListActionStatic {
       return ListService.upsert(patchedData as ListModel)
     })
   }
-  async addFeedToFeedList(listId: string, feed: FeedModel) {
+  addFeedToFeedList(listId: string, feed: FeedModel) {
     const list = get().lists[listId]
     if (!list) return
     feedActions.upsertMany([feed])
@@ -64,7 +64,7 @@ class ListActionStatic {
     })
   }
 
-  async removeFeedFromFeedList(listId: string, feedId: string) {
+  removeFeedFromFeedList(listId: string, feedId: string) {
     const list = get().lists[listId] as ListModel
     if (!list) return
 
@@ -73,7 +73,7 @@ class ListActionStatic {
     })
   }
 
-  async deleteList(listId: string) {
+  deleteList(listId: string) {
     set((state) => {
       delete state.lists[listId]
       return state
@@ -89,7 +89,7 @@ class ListActionStatic {
     return res.data
   }
 
-  async clear() {
+  clear() {
     set((state) => {
       state.lists = {}
     })

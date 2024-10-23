@@ -83,7 +83,8 @@ const useInboxesGroupedData = (view: FeedViewType) => {
     const groupFolder = {} as Record<string, string[]>
 
     for (const subscription of inboxes) {
-      groupFolder[subscription.feedId] = [subscription.feedId]
+      if (!subscription.inboxId) continue
+      groupFolder[subscription.inboxId] = [subscription.inboxId]
     }
 
     return groupFolder
@@ -138,6 +139,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           className="font-bold"
           onClick={(e) => {
             e.stopPropagation()
+            if (!document.hasFocus()) return
             if (view !== undefined) {
               navigateEntry({
                 entryId: null,

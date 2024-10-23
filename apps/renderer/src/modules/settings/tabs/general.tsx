@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { useProxyValue, useSetProxy } from "~/hooks/common/useProxySetting"
+import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initAnalytics } from "~/initialize/analytics"
 import { tipcClient } from "~/lib/client"
@@ -217,7 +217,13 @@ export const VoiceSelector = () => {
   )
 }
 
-export const LanguageSelector = () => {
+export const LanguageSelector = ({
+  containerClassName,
+  contentClassName,
+}: {
+  containerClassName?: string
+  contentClassName?: string
+}) => {
   const { t } = useTranslation("settings")
   const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
@@ -229,7 +235,7 @@ export const LanguageSelector = () => {
   const [loadingLanguageLockMap] = useAtom(langLoadingLockMapAtom)
 
   return (
-    <div className="mb-3 mt-4 flex items-center justify-between">
+    <div className={cn("mb-3 mt-4 flex items-center justify-between", containerClassName)}>
       <span className="shrink-0 text-sm font-medium">{t("general.language")}</span>
       <Select
         defaultValue={finalRenderLanguage}
@@ -246,7 +252,7 @@ export const LanguageSelector = () => {
           <SelectValue />
           {loadingLanguageLockMap[finalRenderLanguage] && <LoadingCircle size="small" />}
         </SelectTrigger>
-        <SelectContent position="item-aligned">
+        <SelectContent position="item-aligned" className={contentClassName}>
           {currentSupportedLanguages.map((lang) => {
             const percent = I18N_COMPLETENESS_MAP[lang]
 

@@ -1,11 +1,19 @@
 import { FeedViewType } from "~/lib/enum"
 
-import { ArticleItem, ArticleItemSkeleton } from "./article-item"
-import { AudioItem, AudioItemSkeleton } from "./audio-item"
-import { NotificationItem, NotificationItemSkeleton } from "./notification-item"
-import { PictureItem, PictureItemSkeleton } from "./picture-item"
-import { SocialMediaItem, SocialMediaItemSkeleton } from "./social-media-item"
-import { VideoItem, VideoItemSkeleton } from "./video-item"
+import { ArticleItem, ArticleItemSkeleton, ArticleItemStateLess } from "./article-item"
+import { AudioItem, AudioItemSkeleton, AudioItemStateLess } from "./audio-item"
+import {
+  NotificationItem,
+  NotificationItemSkeleton,
+  NotificationItemStateLess,
+} from "./notification-item"
+import { PictureItem, PictureItemSkeleton, PictureItemStateLess } from "./picture-item"
+import {
+  SocialMediaItem,
+  SocialMediaItemSkeleton,
+  SocialMediaItemStateLess,
+} from "./social-media-item"
+import { VideoItem, VideoItemSkeleton, VideoItemStateLess } from "./video-item"
 
 const ItemMap = {
   [FeedViewType.Articles]: ArticleItem,
@@ -17,6 +25,19 @@ const ItemMap = {
 }
 export const getItemComponentByView = (view: FeedViewType) => {
   return ItemMap[view] || ArticleItem
+}
+
+const StatelessItemMap = {
+  [FeedViewType.Articles]: ArticleItemStateLess,
+  [FeedViewType.SocialMedia]: SocialMediaItemStateLess,
+  [FeedViewType.Pictures]: PictureItemStateLess,
+  [FeedViewType.Videos]: VideoItemStateLess,
+  [FeedViewType.Audios]: AudioItemStateLess,
+  [FeedViewType.Notifications]: NotificationItemStateLess,
+}
+
+export const getStatelessItemComponentByView = (view: FeedViewType) => {
+  return StatelessItemMap[view] || ArticleItemStateLess
 }
 
 const SkeletonItemMap = {

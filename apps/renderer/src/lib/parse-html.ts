@@ -15,11 +15,14 @@ import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
+import { MemoedDangerousHTMLStyle } from "~/components/common/MemoedDangerousHTMLStyle"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { Checkbox } from "~/components/ui/checkbox"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
+import { LazyKateX } from "~/components/ui/katex/lazy"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
 import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
+import { useIsInParagraphContext } from "~/components/ui/markdown/renderers/ctx"
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
 import { MarkdownInlineImage } from "~/components/ui/markdown/renderers/InlineImage"
 import { Media } from "~/components/ui/media"
@@ -68,6 +71,7 @@ export const parseHtml = (
   const { renderInlineStyle = false, noMedia = false } = options || {}
 
   const rehypeSchema: Schema = { ...defaultSchema }
+  rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "math"]
 
   if (noMedia) {
     rehypeSchema.tagNames = rehypeSchema.tagNames?.filter(
@@ -93,7 +97,10 @@ export const parseHtml = (
 
   const tree = pipeline.parse(content)
 
-  rehypeUrlToAnchor(tree)
+  // NOTE: disable for now, it introduces some issues
+  // 1. It may convert parts beyond the actual link into links
+  // 2. It cannot correctly handle the situation in the code block
+  // rehypeUrlToAnchor(tree)
 
   // console.log("tree", tree)
 
@@ -148,6 +155,8 @@ export const parseHtml = (
             markInlineImage(node)
             return createElement("span", props, props.children)
           },
+          // @ts-expect-error
+          math: Math,
           hr: ({ node, ...props }) =>
             createElement("hr", {
               ...props,
@@ -181,6 +190,7 @@ export const parseHtml = (
                 ? propsChildren.find((i) => i.type === "code")
                 : propsChildren
 
+              // Don't process not code block
               if (!children) return createElement("pre", props, props.children)
 
               if (
@@ -190,8 +200,8 @@ export const parseHtml = (
               ) {
                 language = children.props.className.replace("language-", "")
               }
-              const code = "props" in children && children.props.children
-              if (!code) createElement("pre", props, props.children)
+              const code = ("props" in children && children.props.children) || children
+              if (!code) return null
 
               try {
                 codeString = extractCodeFromHtml(renderToString(code))
@@ -241,9 +251,14 @@ const Img: Components["img"] = ({ node, ...props }) => {
   )
 }
 
-function extractCodeFromHtml(htmlString: string) {
+export function extractCodeFromHtml(htmlString: string) {
   const tempDiv = document.createElement("div")
   tempDiv.innerHTML = htmlString
+
+  const hasPre = tempDiv.querySelector("pre")
+  if (!hasPre) {
+    tempDiv.innerHTML = `<pre><code>${htmlString}</code></pre>`
+  }
 
   // 1. line break via <div />
   const divElements = tempDiv.querySelectorAll("div")
@@ -272,6 +287,14 @@ function extractCodeFromHtml(htmlString: string) {
       if (spanAsLineBreak) break
     }
   }
+
+  if (!spanAsLineBreak) {
+    const usingBr = tempDiv.querySelector("br")
+    if (usingBr) {
+      spanAsLineBreak = true
+    }
+  }
+
   if (spanElements.length > 0) {
     for (const node of tempDiv.children) {
       if (spanAsLineBreak) {
@@ -290,15 +313,17 @@ function extractCodeFromHtml(htmlString: string) {
 const Style: Components["style"] = ({ node, ...props }) => {
   const isShadowDOM = ShadowDOM.useIsShadowDOM()
 
-  if (isShadowDOM) {
-    return createElement("style", {
-      ...props,
-    })
+  if (isShadowDOM && typeof props.children === "string") {
+    return createElement(
+      MemoedDangerousHTMLStyle,
+      null,
+      props.children.replaceAll(/html|body/g, "#shadow-html"),
+    )
   }
   return null
 }
 
-function rehypeUrlToAnchor(tree: Node) {
+function _rehypeUrlToAnchor(tree: Node) {
   // https://chatgpt.com/share/37e0ceec-5c9e-4086-b9d6-5afc1af13bb0
   visit(tree, "text", (node: Text, index, parent: Node) => {
     const urlRegex = /https?:\/\/\S+/g
@@ -343,5 +368,18 @@ function rehypeUrlToAnchor(tree: Node) {
     }
 
     ;(parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
+  })
+}
+
+const Math = ({ node }) => {
+  const annotation = node.children.at(-1)
+
+  const isInParagraph = useIsInParagraphContext()
+  if (!annotation) return null
+  const latex = annotation.value
+
+  return createElement(LazyKateX, {
+    children: latex,
+    mode: isInParagraph ? "inline" : "display",
   })
 }

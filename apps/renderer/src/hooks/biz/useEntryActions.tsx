@@ -25,6 +25,8 @@ import { mountLottie } from "~/components/ui/lottie-container"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
+  SimpleIconsObsidian,
+  SimpleIconsOmnivore,
   SimpleIconsReadwise,
 } from "~/components/ui/platform-icon/icons"
 import { shortcuts } from "~/constants/shortcuts"
@@ -125,6 +127,21 @@ export const useUnread = () =>
       }),
   })
 
+export const useDeleteInboxEntry = () => {
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (entryId: string) => {
+      await entryActions.deleteInboxEntry(entryId)
+    },
+    onSuccess: () => {
+      toast.success(t("entry_actions.deleted"))
+    },
+    onError: () => {
+      toast.error(t("entry_actions.failed_to_delete"))
+    },
+  })
+}
+
 export const useEntryActions = ({
   view,
   entry,
@@ -137,6 +154,7 @@ export const useEntryActions = ({
   const { t } = useTranslation()
 
   const feed = useFeedById(entry?.feedId)
+  const isInbox = feed?.type === "inbox"
 
   const populatedEntry = useMemo(() => {
     if (!entry) return null
@@ -166,6 +184,37 @@ export const useEntryActions = ({
   const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
   const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
   const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
+  const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
+  const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
+  const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
+  const enableObsidian = useIntegrationSettingKey("enableObsidian")
+  const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
+  const isObsidianEnabled = enableObsidian && !!obsidianVaultPath
+
+  const saveToObsidian = useMutation({
+    mutationKey: ["save-to-obsidian"],
+    mutationFn: async (data: {
+      url: string
+      title: string
+      content: string
+      author: string
+      publishedAt: string
+      vaultPath: string
+    }) => {
+      return await tipcClient?.saveToObsidian(data)
+    },
+    onSuccess: (data) => {
+      if (data?.success) {
+        toast.success(t("entry_actions.saved_to_obsidian"), {
+          duration: 3000,
+        })
+      } else {
+        toast.error(`${t("entry_actions.failed_to_save_to_obsidian")}: ${data?.error}`, {
+          duration: 3000,
+        })
+      }
+    },
+  })
 
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -181,6 +230,8 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
+
+  const deleteInboxEntry = useDeleteInboxEntry()
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -308,11 +359,87 @@ export const useEntryActions = ({
         },
       },
       {
+        name: t("entry_actions.save_to_omnivore"),
+        icon: <SimpleIconsOmnivore />,
+        key: "saveToomnivore",
+        hide: !enableOmnivore || !omnivoreToken || !omnivoreEndpoint || !populatedEntry.entries.url,
+        onClick: async () => {
+          const saveUrlQuery = `
+  mutation SaveUrl($input: SaveUrlInput!) {
+    saveUrl(input: $input) {
+      ... on SaveSuccess {
+        url
+        clientRequestId
+      }
+      ... on SaveError {
+        errorCodes
+        message
+      }
+    }
+  }
+`
+
+          try {
+            const data = await ofetch(omnivoreEndpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: omnivoreToken,
+              },
+              body: {
+                query: saveUrlQuery,
+                variables: {
+                  input: {
+                    url: populatedEntry.entries.url,
+                    source: "Follow",
+                    clientRequestId: globalThis.crypto.randomUUID(),
+                    publishedAt: new Date(populatedEntry.entries.publishedAt),
+                  },
+                },
+              },
+            })
+            toast.success(
+              <>
+                {t("entry_actions.saved_to_omnivore")},{" "}
+                <a target="_blank" className="underline" href={data.data.saveUrl.url}>
+                  view
+                </a>
+              </>,
+              {
+                duration: 3000,
+              },
+            )
+          } catch {
+            toast.error(t("entry_actions.failed_to_save_to_omnivore"), {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: t("entry_actions.save_to_obsidian"),
+        icon: <SimpleIconsObsidian />,
+        key: "saveToObsidian",
+        hide: !isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON,
+        onClick: () => {
+          if (!isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON) return
+
+          saveToObsidian.mutate({
+            url: populatedEntry.entries.url,
+            title: populatedEntry.entries.title || "",
+            content: populatedEntry.entries.content || "",
+            author: populatedEntry.entries.author || "",
+            publishedAt: populatedEntry.entries.publishedAt || "",
+            vaultPath: obsidianVaultPath,
+          })
+        },
+      },
+      {
         key: "tip",
         shortcut: shortcuts.entry.tip.key,
         name: t("entry_actions.tip"),
         className: "i-mgc-power-outline",
-        hide: feed?.ownerUserId === whoami()?.id,
+        hide: isInbox || feed?.ownerUserId === whoami()?.id,
         onClick: () => {
           nextFrame(openTipModal)
         },
@@ -344,6 +471,15 @@ export const useEntryActions = ({
         hide: !populatedEntry.collections,
         onClick: () => {
           uncollect.mutate()
+        },
+      },
+      {
+        key: "delete",
+        name: t("entry_actions.delete"),
+        hide: !isInbox,
+        className: "i-mgc-delete-2-cute-re",
+        onClick: () => {
+          deleteInboxEntry.mutate(populatedEntry.entries.id)
         },
       },
       {
@@ -471,9 +607,16 @@ export const useEntryActions = ({
     enableInstapaper,
     instapaperPassword,
     instapaperUsername,
+    enableOmnivore,
+    omnivoreToken,
+    omnivoreEndpoint,
+    isObsidianEnabled,
+    isInbox,
     feed?.ownerUserId,
     type,
     showSourceContent,
+    obsidianVaultPath,
+    saveToObsidian,
     openTipModal,
     collect,
     uncollect,

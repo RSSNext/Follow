@@ -20,6 +20,7 @@ import {
 import { Input } from "~/components/ui/input"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
+import { cn } from "~/lib/utils"
 
 const formSchema = z.object({
   handle: z.string().max(50),
@@ -27,7 +28,13 @@ const formSchema = z.object({
   image: z.string().url(),
 })
 
-export const ProfileSettingForm = () => {
+export const ProfileSettingForm = ({
+  className,
+  buttonClassName,
+}: {
+  className?: string
+  buttonClassName?: string
+}) => {
   const { t } = useTranslation("settings")
   const user = useWhoami()
 
@@ -64,7 +71,7 @@ export const ProfileSettingForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("mt-4 space-y-4", className)}>
         <FormField
           control={form.control}
           name="handle"
@@ -117,7 +124,7 @@ export const ProfileSettingForm = () => {
           )}
         />
 
-        <div className="text-right">
+        <div className={cn("text-right", buttonClassName)}>
           <Button type="submit" isLoading={updateMutation.isPending}>
             {t("profile.submit")}
           </Button>

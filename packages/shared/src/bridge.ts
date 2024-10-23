@@ -23,6 +23,7 @@ interface RenderGlobalContext {
   /// Actions
   follow: (options?: { isList: boolean; id?: string; url?: string }) => void
   profile: (id: string, variant?: "drawer" | "dialog") => void
+  rsshubRoute: (route: string) => void
 
   // user data
   clearIfLoginOtherAccount: (newUserId: string) => void

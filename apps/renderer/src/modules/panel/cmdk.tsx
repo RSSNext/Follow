@@ -11,6 +11,7 @@ import { LoadMoreIndicator } from "~/components/common/LoadMoreIndicator"
 import { FeedIcon } from "~/components/feed-icon"
 import { EmptyIcon } from "~/components/icons/empty"
 import { Logo } from "~/components/icons/logo"
+import { useModalStack } from "~/components/ui/modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Select,
@@ -58,6 +59,8 @@ export const SearchCmdK: React.FC = () => {
   const dialogRef = React.useRef<HTMLDivElement>(null)
   const scrollViewRef = React.useRef<HTMLDivElement>(null)
 
+  const { getTopModalStack } = useModalStack()
+
   React.useEffect(() => {
     const $input = inputRef.current
     if (open && $input) {
@@ -71,7 +74,7 @@ export const SearchCmdK: React.FC = () => {
     (e) => {
       const $input = inputRef.current
 
-      if (e.key === "Escape" && !isCompositionRef.current) {
+      if (e.key === "Escape" && !isCompositionRef.current && !getTopModalStack()) {
         setAppSearchOpen(false)
         return
       }
@@ -82,7 +85,7 @@ export const SearchCmdK: React.FC = () => {
         $input?.focus()
       }
     },
-    [isCompositionRef],
+    [getTopModalStack, isCompositionRef],
   )
   const [isPending, startTransition] = React.useTransition()
   const handleSearch = React.useCallback(
@@ -136,7 +139,6 @@ export const SearchCmdK: React.FC = () => {
           "flex min-h-[50vh] flex-col bg-zinc-50/85 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/90 md:rounded-xl",
           "border-0 border-zinc-300 dark:border-zinc-700 md:border",
           "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-          "z-10",
         )}
       >
         <Command.Input
@@ -252,7 +254,7 @@ const SearchItem = memo(function Item({
       className={clsx(
         "relative flex w-full justify-between px-1 text-[0.9rem]",
         `before:absolute before:inset-0 before:rounded-md before:content-[""]`,
-        "before:z-0 hover:before:bg-zinc-200/60 dark:hover:before:bg-zinc-800/80",
+        "hover:before:bg-zinc-200/60 dark:hover:before:bg-zinc-800/80",
         "data-[selected=true]:before:bg-zinc-200/60 data-[selected=true]:dark:before:bg-zinc-800/80",
         "min-w-0 max-w-full",
         styles["content-visually"],
@@ -267,7 +269,7 @@ const SearchItem = memo(function Item({
         })
       }}
     >
-      <div className="relative z-10 flex w-full items-center justify-between px-1 py-2">
+      <div className="relative flex w-full items-center justify-between px-1 py-2">
         {feed && <FeedIcon className="mr-2 size-5 shrink-0 rounded" feed={feed} />}
         <span className="block min-w-0 flex-1 shrink-0 truncate">{title}</span>
         <span className="block min-w-0 shrink-0 grow-0 text-xs font-medium text-zinc-800 opacity-60 dark:text-slate-200/80">

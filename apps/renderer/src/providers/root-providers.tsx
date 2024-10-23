@@ -18,11 +18,13 @@ import { InvalidateQueryProvider } from "./invalidate-query-provider"
 import {
   LazyContextMenuProvider,
   LazyExtensionExposeProvider,
+  LazyExternalJumpInProvider,
   LazyFeatureFlagDebugger,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
   // specific import should add `index` postfix
 } from "./lazy/index"
+import { ServerConfigsProvider } from "./server-configs-provider"
 import { SettingSync } from "./setting-sync"
 import { StableRouterProvider } from "./stable-router-provider"
 import { UserProvider } from "./user-provider"
@@ -44,6 +46,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <EventProvider />
 
               <UserProvider />
+              <ServerConfigsProvider />
 
               <StableRouterProvider />
               <SettingSync />
@@ -56,6 +59,8 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
                 <LazyModalStackProvider />
                 <LazyContextMenuProvider />
                 <LazyLottieRenderContainer />
+                <LazyExternalJumpInProvider />
+
                 <LazyFeatureFlagDebugger />
               </Suspense>
               <Toaster />

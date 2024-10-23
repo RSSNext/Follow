@@ -1,3 +1,4 @@
+import type { Variant } from "framer-motion"
 import { m, useAnimationControls } from "framer-motion"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { useEffect, useState } from "react"
@@ -11,7 +12,7 @@ import { Collapse } from "~/components/ui/collapse"
 import { RelativeTime } from "~/components/ui/datetime"
 import type { LinkProps } from "~/components/ui/link"
 import { LoadingCircle } from "~/components/ui/loading"
-import { Markdown } from "~/components/ui/markdown"
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { MarkdownLink } from "~/components/ui/markdown/renderers"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
@@ -33,8 +34,8 @@ import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 
-import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
+import { useParseDailyDate } from "./useParseDailyDate"
 
 export const DailyItem = ({ view, day }: DailyItemProps) => {
   const { title, startDate, endDate } = useParseDailyDate(day)
@@ -183,34 +184,39 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   view,
 }) => {
   const content = useQueryData({ endDate, startDate, view })
+
   const RelatedEntryLink = useState(() => createRelatedEntryLink("toast"))[0]
   const { t } = useTranslation()
+  if (!content.data && !content.isLoading)
+    return (
+      <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
+        <EmptyIcon />
+        <p>{t("ai_daily.no_found")}</p>
+      </div>
+    )
   return (
-    <div className="center flex-col">
-      {content.isLoading ? (
-        <LoadingCircle
-          size="large"
-          className="center pointer-events-none absolute inset-0 mt-8 text-center"
-        />
-      ) : content.data ? (
-        <Markdown
-          components={{
-            a: RelatedEntryLink as Components["a"],
-          }}
-          className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
-        >
-          {content.data}
-        </Markdown>
-      ) : (
-        <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
-          <EmptyIcon />
-          <p>{t("ai_daily.no_found")}</p>
-        </div>
-      )}
+    <div className="center grow flex-col">
+      <div className="flex grow flex-col">
+        {content.isLoading ? (
+          <LoadingCircle
+            size="large"
+            className="center pointer-events-none absolute inset-0 mt-8 text-center"
+          />
+        ) : content.data ? (
+          <Markdown
+            components={{
+              a: RelatedEntryLink as Components["a"],
+            }}
+            className="prose-sm mt-4 h-0 grow overflow-auto px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+          >
+            {content.data}
+          </Markdown>
+        ) : null}
+      </div>
 
       {!!content.data && (
         <FlatMarkAllReadButton
-          className="ml-auto"
+          className="ml-auto shrink-0"
           filter={{
             startTime: startDate,
             endTime: endDate,
@@ -276,7 +282,7 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
 const EntryToastPreview = ({ entryId }: { entryId: string }) => {
   useAuthQuery(Queries.entries.byId(entryId))
 
-  const variants = {
+  const variants: Record<string, Variant> = {
     enter: {
       x: 0,
       opacity: 1,
@@ -306,89 +312,88 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
   if (!isDisplay) return null
 
   return (
-    <>
-      <m.div
-        tabIndex={-1}
-        initial="initial"
-        animate={controller}
-        onPointerDown={stopPropagation}
-        onPointerDownCapture={stopPropagation}
-        variants={variants}
-        transition={{
-          type: "spring",
-          mass: 0.4,
-          tension: 120,
-          friction: 1.4,
-        }}
-        exit="exit"
-        layout="size"
-        className={cn(
-          "shadow-perfect relative flex flex-col items-center rounded-xl border bg-theme-background p-8",
-          "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
-        )}
-      >
-        <div className="flex w-full gap-3">
-          <FeedIcon
-            fallback
-            className="mask-squircle mask"
-            feed={feed}
-            entry={entry.entries}
-            size={36}
-          />
-          <div className="flex min-w-0 grow flex-col">
-            <div className="w-[calc(100%-10rem)] space-x-1">
-              <span className="font-semibold">{entry.entries.author}</span>
-              <span className="text-zinc-500">·</span>
-              <span className="text-zinc-500">
-                <RelativeTime date={entry.entries.publishedAt} />
-              </span>
-            </div>
+    <m.div
+      tabIndex={-1}
+      initial="initial"
+      animate={controller}
+      onPointerDown={stopPropagation}
+      onPointerDownCapture={stopPropagation}
+      variants={variants}
+      onWheel={stopPropagation}
+      transition={{
+        type: "spring",
+        mass: 0.4,
+        tension: 120,
+        friction: 1.4,
+      }}
+      exit="exit"
+      layout="size"
+      className={cn(
+        "shadow-perfect relative flex flex-col items-center rounded-xl border bg-theme-background p-8",
+        "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
+      )}
+    >
+      <div className="flex w-full gap-3">
+        <FeedIcon
+          fallback
+          className="mask-squircle mask"
+          feed={feed}
+          entry={entry.entries}
+          size={36}
+        />
+        <div className="flex min-w-0 grow flex-col">
+          <div className="w-[calc(100%-10rem)] space-x-1">
+            <span className="font-semibold">{entry.entries.author}</span>
+            <span className="text-zinc-500">·</span>
+            <span className="text-zinc-500">
+              <RelativeTime date={entry.entries.publishedAt} />
+            </span>
+          </div>
+          <div
+            className={cn(
+              "relative mt-0.5 whitespace-pre-line text-base",
+              !!entry.collections && "pr-5",
+            )}
+          >
             <div
               className={cn(
-                "relative mt-0.5 whitespace-pre-line text-base",
-                !!entry.collections && "pr-5",
+                "rounded-xl p-3 align-middle text-[15px]",
+                "rounded-tl-none bg-zinc-600/5 dark:bg-zinc-500/20",
+                "mt-1 -translate-x-3",
               )}
             >
-              <div
-                className={cn(
-                  "rounded-xl p-3 align-middle text-[15px]",
-                  "rounded-tl-none bg-zinc-600/5 dark:bg-zinc-500/20",
-                  "mt-1 -translate-x-3",
-                )}
-              >
-                {entry.entries.description}
+              {entry.entries.description}
 
-                {!!entry.entries.media?.length && (
-                  <div className="mt-1 flex w-full gap-2 overflow-x-auto">
-                    {entry.entries.media.map((media, i, mediaList) => (
-                      <Media
-                        key={media.url}
-                        src={media.url}
-                        type={media.type}
-                        previewImageUrl={media.preview_image_url}
-                        className="size-28 shrink-0 cursor-zoom-in"
-                        loading="lazy"
-                        proxy={{
-                          width: 224,
-                          height: 224,
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          previewMedia(mediaList, i)
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-              {!!entry.collections && <StarIcon />}
+              {!!entry.entries.media?.length && (
+                <div className="mt-1 flex w-full gap-2 overflow-x-auto">
+                  {entry.entries.media.map((media, i, mediaList) => (
+                    <Media
+                      key={media.url}
+                      src={media.url}
+                      type={media.type}
+                      previewImageUrl={media.preview_image_url}
+                      className="size-28 shrink-0 cursor-zoom-in"
+                      loading="lazy"
+                      proxy={{
+                        width: 224,
+                        height: 224,
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        previewMedia(mediaList, i)
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-
-            {/* End right column */}
+            {!!entry.collections && <StarIcon />}
           </div>
+
+          {/* End right column */}
         </div>
-      </m.div>
-    </>
+      </div>
+    </m.div>
   )
 }
 

@@ -81,6 +81,12 @@ export const SettingAppearance = () => {
             label: t("appearance.reader_render_inline_style.label"),
             description: t("appearance.reader_render_inline_style.description"),
           }),
+
+          defineItem("hideRecentReader", {
+            label: t("appearance.hide_recent_reader.label"),
+            description: t("appearance.hide_recent_reader.description"),
+          }),
+
           {
             type: "title",
             value: t("appearance.misc"),
@@ -148,7 +154,7 @@ const textSizeMap = {
   large: 20,
 }
 
-const TextSize = () => {
+export const TextSize = () => {
   const { t } = useTranslation("settings")
   const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
@@ -177,7 +183,7 @@ const TextSize = () => {
   )
 }
 
-const AppThemeSegment = () => {
+export const AppThemeSegment = () => {
   const { t } = useTranslation("settings")
   const theme = useThemeAtomValue()
   const setTheme = useSetTheme()

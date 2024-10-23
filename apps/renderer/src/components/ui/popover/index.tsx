@@ -3,6 +3,7 @@ import * as React from "react"
 
 import { cn } from "~/lib/utils"
 
+import { RootPortal } from "../portal"
 import styles from "./index.module.css"
 
 const Popover = PopoverPrimitive.Root
@@ -15,7 +16,7 @@ const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal>
+  <RootPortal>
     <PopoverPrimitive.Content
       ref={ref}
       align={align}
@@ -28,7 +29,7 @@ const PopoverContent = React.forwardRef<
       )}
       {...props}
     />
-  </PopoverPrimitive.Portal>
+  </RootPortal>
 ))
 PopoverContent.displayName = PopoverPrimitive.Content.displayName
 

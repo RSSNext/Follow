@@ -14,10 +14,10 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { enableShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
-import { HTML } from "~/components/ui/markdown"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "~/components/ui/portal"
@@ -44,6 +44,7 @@ import { useFeedById } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
+import { EntryContentHTMLRenderer } from "../renderer/html"
 import {
   getTranslationCache,
   setEntryContentScrollToTop,
@@ -56,7 +57,6 @@ import { SourceContentPanel } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
-import { EntryContentProvider } from "./provider"
 
 export interface EntryContentClassNames {
   header?: string
@@ -215,13 +215,10 @@ export const EntryContentRender: Component<{
     })
   }
 
+  const isInbox = feed?.type === "inbox"
+
   return (
-    <EntryContentProvider
-      entryId={entry.entries.id}
-      feedId={entry.feedId}
-      audioSrc={entry.entries?.attachments?.[0].url}
-      view={view}
-    >
+    <>
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
@@ -265,9 +262,12 @@ export const EntryContentRender: Component<{
                   )}
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
-                      <ShadowDOM>
-                        <HTML
-                          translate={translate}
+                      <ShadowDOM injectHostStyles={!isInbox}>
+                        <EntryContentHTMLRenderer
+                          view={view}
+                          feedId={feed?.id}
+                          entryId={entryId}
+                          handleTranslate={translate}
                           mediaInfo={mediaInfo}
                           noMedia={noMedia}
                           accessory={contentAccessories}
@@ -277,10 +277,10 @@ export const EntryContentRender: Component<{
                           renderInlineStyle={readerRenderInlineStyle}
                         >
                           {content}
-                        </HTML>
+                        </EntryContentHTMLRenderer>
                       </ShadowDOM>
                     ) : (
-                      <ReadabilityContent entryId={entryId} />
+                      <ReadabilityContent entryId={entryId} feedId={feed.id} />
                     )}
                   </ErrorBoundary>
                 </div>
@@ -289,13 +289,12 @@ export const EntryContentRender: Component<{
               {entry.settings?.readability && (
                 <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
               )}
+              {entry.settings?.sourceContent && <ViewSourceContentAutoToggleEffect />}
 
               {!content && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
-                    <EntryContentLoading
-                      icon={feed?.type === "inbox" ? undefined : feed?.siteUrl!}
-                    />
+                    <EntryContentLoading icon={!isInbox ? feed?.siteUrl! : undefined} />
                   ) : error ? (
                     <div className="center flex min-w-0 flex-col gap-2">
                       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
@@ -306,18 +305,22 @@ export const EntryContentRender: Component<{
                       </pre>
                     </div>
                   ) : (
-                    <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
+                    <NoContent
+                      id={entry.entries.id}
+                      url={entry.entries.url ?? ""}
+                      sourceContent={entry.settings?.sourceContent}
+                    />
                   )}
                 </div>
               )}
 
-              {feed?.ownerUserId && <SupportCreator entryId={entryId} />}
+              <SupportCreator entryId={entryId} />
             </article>
           </div>
         </ScrollArea.ScrollArea>
         <SourceContentPanel src={entry.entries.url} />
       </div>
-    </EntryContentProvider>
+    </>
   )
 }
 
@@ -358,9 +361,10 @@ const TitleMetaHandler: Component<{
   return null
 }
 
-const ReadabilityContent = ({ entryId }: { entryId: string }) => {
+const ReadabilityContent = ({ entryId, feedId }: { entryId: string; feedId: string }) => {
   const { t } = useTranslation()
   const result = useEntryReadabilityContent(entryId)
+  const view = useRouteParamsSelector((route) => route.view)
 
   return (
     <div className="grow">
@@ -376,12 +380,15 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
 
-      <HTML
+      <EntryContentHTMLRenderer
+        view={view}
+        feedId={feedId}
+        entryId={entryId}
         as="article"
         className="prose dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
       >
         {result?.content ?? ""}
-      </HTML>
+      </EntryContentHTMLRenderer>
     </div>
   )
 }
@@ -389,7 +396,8 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
 const NoContent: FC<{
   id: string
   url: string
-}> = ({ id, url }) => {
+  sourceContent?: boolean
+}> = ({ id, url, sourceContent }) => {
   const status = useEntryInReadabilityStatus(id)
   const { t } = useTranslation("app")
 
@@ -407,10 +415,23 @@ const NoContent: FC<{
             <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
-        {url && IN_ELECTRON && <ReadabilityAutoToggleEffect url={url} id={id} />}
+        {!sourceContent && url && IN_ELECTRON && <ReadabilityAutoToggleEffect url={url} id={id} />}
       </div>
     </div>
   )
+}
+
+const ViewSourceContentAutoToggleEffect = () => {
+  const onceRef = useRef(false)
+
+  useEffect(() => {
+    if (!onceRef.current) {
+      onceRef.current = true
+      enableShowSourceContent()
+    }
+  }, [])
+
+  return null
 }
 
 const ReadabilityAutoToggleEffect = ({ url, id }: { url: string; id: string }) => {
@@ -478,7 +499,6 @@ const ContainerToc: FC = memo(() => {
               "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
 
-              "@[500px]:-translate-x-12",
               "@[700px]:-translate-x-12 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
             )}
           />

@@ -13,8 +13,7 @@ import { useCurrentModal } from "~/components/ui/modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { useAuthQuery } from "~/hooks/common"
 import type { FeedModel } from "~/models"
-import { Queries } from "~/queries"
-import { useClaimFeedMutation } from "~/queries/feed"
+import { feed as feedQuery, useClaimFeedMutation } from "~/queries/feed"
 import { useFeedById } from "~/store/feed"
 
 export const FeedClaimModalContent: FC<{
@@ -26,7 +25,7 @@ export const FeedClaimModalContent: FC<{
     data: claimMessage,
     isLoading,
     error,
-  } = useAuthQuery(Queries.feed.claimMessage({ feedId }), {
+  } = useAuthQuery(feedQuery.claimMessage({ feedId }), {
     enabled: !!feed,
   })
   const { setClickOutSideToDismiss } = useCurrentModal()

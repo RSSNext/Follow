@@ -13,8 +13,8 @@ import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Form, FormItem, FormLabel } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { Markdown } from "~/components/ui/markdown"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import { Markdown } from "~/components/ui/markdown/Markdown"
+import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal"
 import {
   Select,
   SelectContent,
@@ -226,12 +226,13 @@ export const DiscoverFeedForm = ({
   )
 
   const formElRef = useRef<HTMLFormElement>(null)
-
+  const isTop = useIsTopModal()
   useLayoutEffect(() => {
+    if (!isTop) return
     const $form = formElRef.current
     if (!$form) return
     $form.querySelectorAll("input")[0]?.focus()
-  }, [formElRef])
+  }, [formElRef, isTop])
 
   const modal = useCurrentModal()
 

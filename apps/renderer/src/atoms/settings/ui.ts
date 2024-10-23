@@ -29,6 +29,7 @@ export const createDefaultSettings = (): UISettings => ({
   codeHighlightThemeLight: "github-light",
   codeHighlightThemeDark: "github-dark",
   guessCodeLanguage: true,
+  hideRecentReader: false,
 
   // View
   pictureViewMasonry: true,

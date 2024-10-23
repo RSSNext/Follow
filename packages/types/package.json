@@ -1,0 +1,8 @@
+{
+  "name": "@follow/types",
+  "version": "0.0.1",
+  "exports": {
+    "./react": "./react-global.d.ts",
+    "./global": "./global.d.ts"
+  }
+}

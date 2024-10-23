@@ -1,11 +1,32 @@
+import { FeedIcon } from "~/components/feed-icon"
+import { RelativeTime } from "~/components/ui/datetime"
 import { Skeleton } from "~/components/ui/skeleton"
 import { ListItem } from "~/modules/entry-column/templates/list-item-template"
 
-import type { UniversalItemProps } from "../types"
+import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
 export function NotificationItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   return (
     <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} withFollow />
+  )
+}
+
+export function NotificationItemStateLess({ entry, feed }: EntryItemStatelessProps) {
+  return (
+    <div className="relative mx-auto w-full max-w-lg">
+      <div className="group relative flex py-4 pl-3 pr-2">
+        <FeedIcon feed={feed} fallback />
+
+        <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
+          <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">
+            <span>{feed.title}</span>
+            <span>·</span>
+            <span>{!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}</span>
+          </div>
+          <div className="relative my-0.5 break-words">{entry.title}</div>
+        </div>
+      </div>
+    </div>
   )
 }
 

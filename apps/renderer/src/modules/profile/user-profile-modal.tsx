@@ -1,4 +1,3 @@
-import { env } from "@follow/shared/env"
 import { AnimatePresence, useAnimationControls } from "framer-motion"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -14,22 +13,22 @@ import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
+import { useFollow } from "~/hooks/biz/useFollow"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame, stopPropagation } from "~/lib/dom"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getStorageNS } from "~/lib/ns"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import type { SubscriptionModel } from "~/models"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 import { useSubscriptionStore } from "~/store/subscription"
 import { useUserById } from "~/store/user"
-
-import { FeedForm } from "../discover/feed-form"
 
 const itemVariantAtom = atomWithStorage(
   getStorageNS("item-variant"),
@@ -220,9 +219,8 @@ export const UserProfileModalContent: FC<{
           <ActionButton
             tooltip={t("user_profile.share")}
             onClick={() => {
-              window.open(
-                `${env.VITE_WEB_URL}/profile/${user.data?.handle ? `@${user.data.handle}` : user.data?.id}`,
-              )
+              if (!user.data) return
+              window.open(UrlBuilder.profile(user.data.handle ?? user.data.id))
             }}
           >
             <i className="i-mgc-share-3-cute-re" />
@@ -250,11 +248,12 @@ export const UserProfileModalContent: FC<{
                     asChild
                     src={replaceImgUrlIfNeed(userInfo.avatar || undefined)}
                   >
-                    <m.img layout />
+                    <m.img layout transition={{ duration: 0.35 }} />
                   </AvatarImage>
                   <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                 </m.span>
               </Avatar>
+
               <m.div
                 layout
                 transition={{ duration: 0.35 }}
@@ -376,7 +375,7 @@ const SubscriptionItem: FC<{
 }> = ({ subscription, variant }) => {
   const t = useI18n()
   const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
-  const { present } = useModalStack()
+  const follow = useFollow()
   const isLoose = variant === "loose"
   if (!("feeds" in subscription)) return null
   return (
@@ -413,21 +412,14 @@ const SubscriptionItem: FC<{
 
               const defaultView = subscription.view
 
-              present({
-                title: `${isFollowed ? `${t.common("words.edit")} ` : ""}${APP_NAME} - ${subscription.feeds.title}`,
-                clickOutsideToDismiss: true,
-                content: ({ dismiss }) => (
-                  <FeedForm
-                    asWidget
-                    id={subscription.feedId}
-                    url={subscription.feeds.url}
-                    defaultValues={{
-                      view: defaultView.toString(),
-                      category: subscription.category,
-                    }}
-                    onSuccess={dismiss}
-                  />
-                ),
+              follow({
+                id: subscription.feedId,
+                url: subscription.feeds.url,
+                isList: false,
+                defaultValues: {
+                  view: defaultView.toString(),
+                  category: subscription.category,
+                },
               })
             }}
           >

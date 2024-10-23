@@ -1,10 +1,15 @@
 {
   "1": "Previous operation is not completed",
+  "2": "CSRF Token mismatch",
   "1000": "Unauthorized",
   "1001": "create session failed",
   "1002": "Invalid parameter",
   "1003": "Invalid invitation",
   "1004": "No permission",
+  "1100": "Trial user max feed subscription exceeded",
+  "1101": "Trial user max list subscription exceeded",
+  "1102": "Trial user max inbox subscription exceeded",
+  "1103": "Trial user no permission",
   "2000": "Only admins can refresh feeds",
   "2001": "Feed not found",
   "2002": "feedId or url required",
@@ -18,6 +23,8 @@
   "4002": "Insufficient balance",
   "4003": "Feed insufficient withdrawable balance",
   "4004": "Target user wallet error",
+  "4005": "Daily power calculation in progress",
+  "4006": "Invalid boost amount",
   "5000": "Invitation limit exceeded. Please try again in a few days.",
   "5001": "Invitation already exists.",
   "5002": "Invitation code already used.",
@@ -33,7 +40,11 @@
   "8003": "Feed already added to list",
   "9000": "Achievement not completed",
   "9001": "Achievement already received",
+  "9002": "Achievement is under audit",
+  "9003": "Achievement audit not needed",
   "10000": "Inbox not found",
   "10001": "Inbox already exists",
-  "10002": "Inbox limit exceeded"
+  "10002": "Inbox limit exceeded",
+  "10003": "Inbox permission denied",
+  "11000": "RSSHub route not found"
 }

@@ -1,0 +1,20 @@
+{
+  "name": "@follow/atoms",
+  "version": "0.0.1",
+  "exports": {
+    "./atoms/*": {
+      "import": "./src/atoms/*",
+      "types": "./src/atoms/*"
+    },
+    "./helper/*": {
+      "import": "./src/helper/*",
+      "types": "./src/helper/*"
+    }
+  },
+  "dependencies": {
+    "@follow/hooks": "workspace:*",
+    "@follow/types": "workspace:*",
+    "@follow/utils": "workspace:*",
+    "jotai": "2.10.1"
+  }
+}

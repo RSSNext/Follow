@@ -5,7 +5,7 @@ import type { ExternalToast } from "sonner"
 import { toast } from "sonner"
 
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Markdown } from "~/components/ui/markdown"
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { cn } from "~/lib/utils"
 
 export const getFetchErrorMessage = (error: Error) => {
@@ -37,13 +37,16 @@ export const toastFetchError = (
 ) => {
   let message = ""
   let _reason = ""
+
   if (error instanceof FetchError) {
     try {
       const json = JSON.parse(error.response?._data)
 
       const { reason, code, message: _message } = json
-      const i18nKey = `errors:${code}` as any
-      const i18nMessage = t(i18nKey) === i18nKey ? message : t(i18nKey)
+      message = _message
+
+      const tValue = t(`errors:${code}` as any)
+      const i18nMessage = tValue === code.toString() ? message : tValue
 
       message = i18nMessage
 

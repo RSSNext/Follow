@@ -1,8 +1,9 @@
+import { useContext } from "react"
+
 import { cn } from "~/lib/utils"
-import { useEntryContentContext } from "~/modules/entry-content/hooks"
 
 import { Media } from "../../media"
-import { usePopulatedFullUrl } from "../utils"
+import { MarkdownRenderActionContext } from "../context"
 
 export const MarkdownInlineImage = (
   props: React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -12,17 +13,18 @@ export const MarkdownInlineImage = (
     }
   },
 ) => {
-  const { feedId } = useEntryContentContext()
-  const populatedUrl = usePopulatedFullUrl(feedId, props.src)
+  const { transformUrl } = useContext(MarkdownRenderActionContext)
+  const populatedUrl = transformUrl(props.src)
   return (
     <Media
       type="photo"
       {...props}
+      loading="lazy"
       src={populatedUrl}
       mediaContainerClassName={cn("inline max-w-full rounded-md")}
       popper
-      className="inline"
       showFallback
+      inline
     />
   )
 }

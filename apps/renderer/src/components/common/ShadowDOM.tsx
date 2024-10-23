@@ -1,38 +1,15 @@
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
-import {
-  createContext,
-  createElement,
-  memo,
-  useContext,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react"
+import { createContext, createElement, useContext, useLayoutEffect, useMemo, useState } from "react"
 import root from "react-shadow"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { useIsDark } from "~/hooks/common"
 
-const ShadowDOMContext = createContext(false)
+import { MemoedDangerousHTMLStyle } from "./MemoedDangerousHTMLStyle"
 
-const MemoedDangerousHTMLStyle: FC<
-  {
-    children: string
-  } & React.DetailedHTMLProps<React.StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement> &
-    Record<string, unknown>
-> = memo(({ children, ...rest }) => (
-  <style
-    {...rest}
-    dangerouslySetInnerHTML={useMemo(
-      () => ({
-        __html: children,
-      }),
-      [children],
-    )}
-  />
-))
+const ShadowDOMContext = createContext(false)
 
 const weakMapElementKey = new WeakMap<HTMLStyleElement | HTMLLinkElement, string>()
 const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
@@ -76,14 +53,21 @@ const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
 
   return reactNodes
 }
-export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
+export const ShadowDOM: FC<
+  PropsWithChildren<React.HTMLProps<HTMLElement>> & {
+    injectHostStyles?: boolean
+  }
+> & {
   useIsShadowDOM: () => boolean
 } = (props) => {
-  const { ...rest } = props
+  const { injectHostStyles = true, ...rest } = props
 
-  const [stylesElements, setStylesElements] = useState<ReactNode[]>(cloneStylesElement)
+  const [stylesElements, setStylesElements] = useState<ReactNode[]>(() =>
+    injectHostStyles ? cloneStylesElement() : [],
+  )
 
   useLayoutEffect(() => {
+    if (!injectHostStyles) return
     const mutationObserver = new MutationObserver((e) => {
       const event = e[0]
 
@@ -97,7 +81,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
     return () => {
       mutationObserver.disconnect()
     }
-  }, [])
+  }, [injectHostStyles])
 
   const dark = useIsDark()
 
@@ -121,7 +105,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
         >
-          {stylesElements}
+          {injectHostStyles ? stylesElements : null}
           {props.children}
         </div>
       </ShadowDOMContext.Provider>

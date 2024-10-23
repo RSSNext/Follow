@@ -1,4 +1,4 @@
-import { IN_ELECTRON, WEB_URL } from "@follow/shared/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -7,7 +7,9 @@ import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { UrlBuilder } from "~/lib/url-builder"
 import { isBizId } from "~/lib/utils"
+import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
@@ -38,6 +40,7 @@ export const useFeedActions = ({
 }) => {
   const { t } = useTranslation()
   const feed = useFeedById(feedId)
+  const isInbox = feed?.type === "inbox"
   const subscription = useSubscriptionByFeedId(feedId)
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
@@ -50,6 +53,7 @@ export const useFeedActions = ({
 
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
+  const openBoostModal = useBoostModal()
 
   const listByView = useOwnedList(view!)
 
@@ -85,12 +89,20 @@ export const useFeedActions = ({
           ]
         : []),
       {
+        type: "text" as const,
+        label: t("words.boost"),
+        click: () => {
+          openBoostModal(feedId)
+        },
+      },
+      {
         type: "separator" as const,
         disabled: isEntryList,
       },
       {
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
+        disabled: isInbox,
         submenu: [
           ...listByView.map((list) => {
             const isIncluded = list.feedIds.includes(feedId)
@@ -113,9 +125,7 @@ export const useFeedActions = ({
               },
             }
           }),
-          {
-            type: "separator",
-          },
+          listByView.length > 0 && { type: "separator" as const },
           {
             label: t("sidebar.feed_actions.create_list"),
             type: "text" as const,
@@ -137,6 +147,7 @@ export const useFeedActions = ({
         type: "text" as const,
         label: isEntryList ? t("sidebar.feed_actions.edit_feed") : t("sidebar.feed_actions.edit"),
         shortcut: "E",
+        disabled: isInbox,
         click: () => {
           present({
             title: t("sidebar.feed_actions.edit_feed"),
@@ -150,13 +161,14 @@ export const useFeedActions = ({
           ? t("sidebar.feed_actions.unfollow_feed")
           : t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
+        disabled: isInbox,
         click: () => deleteSubscription.mutate(subscription),
       },
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.navigate_to_feed"),
         shortcut: "Meta+G",
-        disabled: !isEntryList || getRouteParams().feedId === feedId,
+        disabled: isInbox || !isEntryList || getRouteParams().feedId === feedId,
         click: () => {
           navigateEntry({ feedId })
         },
@@ -172,7 +184,7 @@ export const useFeedActions = ({
         }),
         disabled: isEntryList,
         shortcut: "O",
-        click: () => window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
+        click: () => window.open(UrlBuilder.shareFeed(feedId, view), "_blank"),
       },
       {
         type: "text" as const,
@@ -220,9 +232,11 @@ export const useFeedActions = ({
     feed,
     t,
     isEntryList,
+    isInbox,
     listByView,
     feedId,
     claimFeed,
+    openBoostModal,
     addFeedToListMutation,
     removeFeedFromListMutation,
     present,
@@ -295,7 +309,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         }),
         disabled: false,
         shortcut: "O",
-        click: () => window.open(`${WEB_URL}/list/${listId}?view=${view}`, "_blank"),
+        click: () => window.open(UrlBuilder.shareList(listId, view), "_blank"),
       },
 
       {
@@ -308,8 +322,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         disabled: false,
         shortcut: "Meta+C",
         click: () => {
-          const url = `${WEB_URL}/list/${listId}?view=${view}`
-          navigator.clipboard.writeText(url)
+          navigator.clipboard.writeText(UrlBuilder.shareList(listId, view))
         },
       },
       {
