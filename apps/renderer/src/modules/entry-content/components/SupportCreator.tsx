@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next"
 
+import { useWhoami } from "~/atoms/user"
 import { FeedIcon } from "~/components/feed-icon"
 import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
@@ -22,6 +23,7 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
   })
   const openBoostModal = useBoostModal()
 
+  const isMyOwnedFeed = feed?.ownerUserId === useWhoami()?.id
   if (!feed || feed.type !== "feed") return null
 
   return (
@@ -41,11 +43,17 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
         )}
 
         <div className="flex items-center gap-4">
-          <Button className="text-base" onClick={() => openTipModal()}>
-            <i className="i-mgc-power-outline mr-1.5 text-lg" />
-            {t("entry_content.support_creator")}
-          </Button>
-          <Button variant="outline" className="text-base" onClick={() => openBoostModal(feed.id)}>
+          {!isMyOwnedFeed && (
+            <Button className="text-base" onClick={() => openTipModal()}>
+              <i className="i-mgc-power-outline mr-1.5 text-lg" />
+              {t("entry_content.support_creator")}
+            </Button>
+          )}
+          <Button
+            variant={!isMyOwnedFeed ? "outline" : "primary"}
+            className="text-base"
+            onClick={() => openBoostModal(feed.id)}
+          >
             <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
             {t("boost.boost_feed")}
           </Button>
