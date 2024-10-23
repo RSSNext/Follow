@@ -3,7 +3,9 @@ import type { Element, Parent, Text } from "hast"
 import type { Schema } from "hast-util-sanitize"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
+import { toMdast } from "hast-util-to-mdast"
 import { toText } from "hast-util-to-text"
+import { toMarkdown } from "mdast-util-to-markdown"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 import { renderToString } from "react-dom/server"
@@ -16,6 +18,7 @@ import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
+import { MemoedDangerousHTMLStyle } from "~/components/common/MemoedDangerousHTMLStyle"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { LazyKateX } from "~/components/ui/katex/lazy"
@@ -234,6 +237,7 @@ export const parseHtml = (
         },
       }),
     toText: () => toText(hastTree),
+    toMarkdown: () => toMarkdown(toMdast(hastTree)),
   }
 }
 
@@ -312,10 +316,12 @@ export function extractCodeFromHtml(htmlString: string) {
 const Style: Components["style"] = ({ node, ...props }) => {
   const isShadowDOM = ShadowDOM.useIsShadowDOM()
 
-  if (isShadowDOM) {
-    return createElement("style", {
-      ...props,
-    })
+  if (isShadowDOM && typeof props.children === "string") {
+    return createElement(
+      MemoedDangerousHTMLStyle,
+      null,
+      props.children.replaceAll(/html|body/g, "#shadow-html"),
+    )
   }
   return null
 }

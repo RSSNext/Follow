@@ -301,14 +301,14 @@ const FallbackableImage: FC<
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
         <div
-          className={cn("relative", width < height && "h-full")}
+          className={cn("relative", width <= height && "h-full")}
           style={{
             // px-20 pb-8 pt-10
             width:
               width && height && width > height
-                ? Math.min((windowHeight - 32 - 40) * (width / height), width)
+                ? `${Math.min((windowHeight - 32 - 40) * (width / height), width)}px`
                 : undefined,
-            maxWidth: width > height ? windowWidth - 80 - 80 - 400 : undefined,
+            maxWidth: width > height ? `${windowWidth - 80 - 80 - 400}px` : undefined,
           }}
         >
           <img

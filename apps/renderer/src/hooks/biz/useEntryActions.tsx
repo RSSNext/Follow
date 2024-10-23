@@ -34,6 +34,7 @@ import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
+import { parseHtml } from "~/lib/parse-html"
 import StarAnimationUri from "~/lottie/star.lottie?url"
 import type { CombinedEntryModel } from "~/models"
 import { useTipModal } from "~/modules/wallet/hooks"
@@ -427,7 +428,7 @@ export const useEntryActions = ({
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
             title: populatedEntry.entries.title || "",
-            content: populatedEntry.entries.content || "",
+            content: parseHtml(populatedEntry.entries.content || "").toMarkdown(),
             author: populatedEntry.entries.author || "",
             publishedAt: populatedEntry.entries.publishedAt || "",
             vaultPath: obsidianVaultPath,
@@ -615,11 +616,12 @@ export const useEntryActions = ({
     feed?.ownerUserId,
     type,
     showSourceContent,
-    obsidianVaultPath,
     saveToObsidian,
+    obsidianVaultPath,
     openTipModal,
     collect,
     uncollect,
+    deleteInboxEntry,
     showSourceContentModal,
     read,
     unread,

@@ -34,14 +34,13 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
 
   const apiClient = createApiClient()
 
-  const hostFromReq = req.headers.host
-  const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https"
+  const upstreamOrigin = req.requestContext.get("upstreamOrigin")
 
   const url = req.originalUrl
 
   switch (true) {
     case url.startsWith("/share/feeds"): {
-      const parsedUrl = new URL(url, `https://${hostFromReq}`)
+      const parsedUrl = new URL(url, upstreamOrigin)
       const feedId = parsedUrl.pathname.split("/")[3]
 
       const feed = await apiClient.feeds.$get({ query: { id: feedId } })
@@ -52,7 +51,7 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
           type: "openGraph",
           title: title || "",
           description: description || "",
-          image: `${protocol}://${hostFromReq}/og/feed/${feedId}`,
+          image: `${upstreamOrigin}/og/feed/${feedId}`,
         },
         {
           type: "title",
@@ -68,7 +67,7 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
       break
     }
     case url.startsWith("/share/lists"): {
-      const parsedUrl = new URL(url, `https://${hostFromReq}`)
+      const parsedUrl = new URL(url, upstreamOrigin)
       const listId = parsedUrl.pathname.split("/")[3]
 
       const list = await apiClient.lists.$get({ query: { listId } })
@@ -79,7 +78,7 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
           type: "openGraph",
           title: title || "",
           description: description || "",
-          image: `${protocol}://${hostFromReq}/og/list/${listId}`,
+          image: `${upstreamOrigin}/og/list/${listId}`,
         },
         {
           type: "title",
@@ -95,7 +94,7 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
       break
     }
     case url.startsWith("/share/users"): {
-      const parsedUrl = new URL(url, `https://${hostFromReq}`)
+      const parsedUrl = new URL(url, upstreamOrigin)
       const userId = parsedUrl.pathname.split("/")[3]
 
       const handle = isBizId(userId || "")
@@ -120,7 +119,7 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
         {
           type: "openGraph",
           title: name || "",
-          image: `${protocol}://${hostFromReq}/og/user/${userId}`,
+          image: `${upstreamOrigin}/og/user/${userId}`,
         },
         {
           type: "hydrate",

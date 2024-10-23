@@ -216,6 +216,8 @@ export const EntryContentRender: Component<{
     })
   }
 
+  const isInbox = feed?.type === "inbox"
+
   return (
     <>
       <EntryHeader
@@ -261,7 +263,7 @@ export const EntryContentRender: Component<{
                   )}
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
-                      <ShadowDOM>
+                      <ShadowDOM injectHostStyles={!isInbox}>
                         <EntryContentHTMLRenderer
                           view={view}
                           feedId={feed?.id}
@@ -293,9 +295,7 @@ export const EntryContentRender: Component<{
               {!content && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
-                    <EntryContentLoading
-                      icon={feed?.type === "inbox" ? undefined : feed?.siteUrl!}
-                    />
+                    <EntryContentLoading icon={!isInbox ? feed?.siteUrl! : undefined} />
                   ) : error ? (
                     <div className="center flex min-w-0 flex-col gap-2">
                       <i className="i-mgc-close-cute-re text-3xl text-red-500" />

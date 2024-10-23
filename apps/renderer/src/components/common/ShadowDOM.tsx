@@ -52,14 +52,21 @@ const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
 
   return reactNodes
 }
-export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
+export const ShadowDOM: FC<
+  PropsWithChildren<React.HTMLProps<HTMLElement>> & {
+    injectHostStyles?: boolean
+  }
+> & {
   useIsShadowDOM: () => boolean
 } = (props) => {
-  const { ...rest } = props
+  const { injectHostStyles = true, ...rest } = props
 
-  const [stylesElements, setStylesElements] = useState<ReactNode[]>(cloneStylesElement)
+  const [stylesElements, setStylesElements] = useState<ReactNode[]>(() =>
+    injectHostStyles ? cloneStylesElement() : [],
+  )
 
   useLayoutEffect(() => {
+    if (!injectHostStyles) return
     const mutationObserver = new MutationObserver((e) => {
       const event = e[0]
 
@@ -73,7 +80,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
     return () => {
       mutationObserver.disconnect()
     }
-  }, [])
+  }, [injectHostStyles])
 
   const dark = useIsDark()
 
@@ -97,7 +104,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
         >
-          {stylesElements}
+          {injectHostStyles ? stylesElements : null}
           {props.children}
         </div>
       </ShadowDOMContext.Provider>
