@@ -84,7 +84,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
           onClick={handleBoost}
         >
           <i className="i-mgc-rocket-cute-fi mr-2 shrink-0" />
-          Boost
+          {t("words.boost")}
         </Button>
       )}
 

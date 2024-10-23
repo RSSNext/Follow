@@ -1,12 +1,13 @@
 import { useCallback } from "react"
 
 import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
-import { useAuthQuery } from "~/hooks/common"
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { boosts } from "~/queries/boosts"
 
 import { BoostModalContent } from "./modal"
 
 export const useBoostModal = () => {
+  const t = useI18n()
   const present = useAsyncModal()
 
   return useCallback(
@@ -17,12 +18,12 @@ export const useBoostModal = () => {
 
       present<ResponseType>({
         id: "boost",
-        title: "Boost",
+        title: t("words.boost"),
         content: () => <BoostModalContent feedId={feedId} />,
         overlay: true,
         useDataFetcher,
       })
     },
-    [present],
+    [present, t],
   )
 }

@@ -90,7 +90,7 @@ export const useFeedActions = ({
         : []),
       {
         type: "text" as const,
-        label: "Boost",
+        label: t("words.boost"),
         click: () => {
           openBoostModal(feedId)
         },
@@ -232,9 +232,11 @@ export const useFeedActions = ({
     feed,
     t,
     isEntryList,
+    isInbox,
     listByView,
     feedId,
     claimFeed,
+    openBoostModal,
     addFeedToListMutation,
     removeFeedFromListMutation,
     present,
