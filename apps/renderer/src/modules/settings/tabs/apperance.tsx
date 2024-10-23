@@ -81,6 +81,12 @@ export const SettingAppearance = () => {
             label: t("appearance.reader_render_inline_style.label"),
             description: t("appearance.reader_render_inline_style.description"),
           }),
+
+          defineItem("hideRecentReader", {
+            label: t("appearance.hide_recent_reader.label"),
+            description: t("appearance.hide_recent_reader.description"),
+          }),
+
           {
             type: "title",
             value: t("appearance.misc"),
