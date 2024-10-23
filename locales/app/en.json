@@ -1,5 +1,7 @@
 {
   "achievement.all_done": "All done!",
+  "achievement.alpha_tester": "Alpha Tester",
+  "achievement.alpha_tester_description": "You are an alpha tester of Follow",
   "achievement.first_claim_feed": "Feed Owner",
   "achievement.first_claim_feed_description": "You own your feed on Follow",
   "achievement.first_create_list": "List Creator",

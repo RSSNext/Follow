@@ -31,6 +31,7 @@ enum AchievementsActionIdMap {
   PRODUCT_HUNT_VOTE = 5,
   // TODO
   // FOLLOW_SPECIAL_FEED = 6,
+  ALPHA_TESTER = 7,
 }
 
 const achievementActionIdCopyMap: Record<
@@ -65,6 +66,10 @@ const achievementActionIdCopyMap: Record<
   //   title: "achievement.follow_special_feed",
   //   description: "achievement.follow_special_feed_description",
   // },
+  [AchievementsActionIdMap.ALPHA_TESTER]: {
+    title: "achievement.alpha_tester",
+    description: "achievement.alpha_tester_description",
+  },
 }
 const _achievementType = apiClient.achievement.$get({
   query: {
@@ -128,8 +133,8 @@ export const AchievementModalContent: FC = () => {
 
   const sortedAchievements = useMemo(() => {
     return achievements?.sort((a, b) => {
-      if (a.type === "received") return -1
-      if (b.type === "received") return 1
+      if (a.type === "received") return 1
+      if (b.type === "received") return -1
       return 0
     })
   }, [achievements])
@@ -241,15 +246,13 @@ export const AchievementModalContent: FC = () => {
 }
 
 const buildDefaultAchievements = () => {
-  return [
-    {
+  return Object.keys(achievementActionIdCopyMap).map((key) => {
+    return {
       id: nanoid(),
-      actionId: AchievementsActionIdMap.FIRST_CLAIM_FEED,
+      actionId: Number(key),
       type: "checking",
-      progress: 0,
-      progressMax: 0,
-    },
-  ]
+    }
+  })
 }
 
 const MintButton: FC<{
