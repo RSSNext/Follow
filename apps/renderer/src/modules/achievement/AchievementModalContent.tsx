@@ -1,11 +1,13 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { SingletonRefObject } from "foxact/use-singleton"
 import { useSingleton } from "foxact/use-singleton"
+import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
 import { useEffect, useId, useMemo, useRef } from "react"
-import { Trans } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { Button } from "~/components/ui/button"
@@ -72,7 +74,6 @@ const _achievementType = apiClient.achievement.$get({
 type Achievement = Awaited<typeof _achievementType>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
-  const queryClient = useQueryClient()
 
   const defaultAchievements = useSingleton(buildDefaultAchievements)
 
@@ -121,15 +122,6 @@ export const AchievementModalContent: FC = () => {
     }
   }, [achievements, isLoading, refetch])
 
-  const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
-    mutationFn: async (actionId: number) => {
-      return apiClient.achievement.$put({
-        json: {
-          actionId,
-        },
-      })
-    },
-  })
   const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
 
   const t = useI18n()
@@ -234,36 +226,10 @@ export const AchievementModalContent: FC = () => {
                   </div>
                 )}
                 {achievement.type === "completed" && (
-                  <Button
-                    isLoading={isMinting}
-                    variant="primary"
-                    onClick={async () => {
-                      const res = await mintAchievement(achievement.actionId)
-
-                      const currentData = jotaiStore.get(achievementsDataAtom.current)
-                      if (!currentData) return
-                      let shouldInvalidate = false
-                      const newData = currentData.map((item) => {
-                        if (item.id === achievement.id && res.data.result) {
-                          shouldInvalidate = true
-                          return {
-                            ...item,
-                            done: true,
-                            doneAt: new Date().toISOString(),
-                            type: "received",
-                          } as const
-                        }
-                        return item
-                      })
-                      jotaiStore.set(achievementsDataAtom.current, newData)
-
-                      if (shouldInvalidate) {
-                        queryClient.invalidateQueries({ queryKey: ["achievements"] })
-                      }
-                    }}
-                  >
-                    {t("words.mint")}
-                  </Button>
+                  <MintButton
+                    achievementsDataAtom={achievementsDataAtom}
+                    achievement={achievement}
+                  />
                 )}
               </li>
             )
@@ -284,6 +250,57 @@ const buildDefaultAchievements = () => {
       progressMax: 0,
     },
   ]
+}
+
+const MintButton: FC<{
+  achievementsDataAtom: SingletonRefObject<PrimitiveAtom<Achievement | undefined>>
+  achievement: Achievement[number]
+}> = ({ achievementsDataAtom, achievement }) => {
+  const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
+    mutationFn: async (actionId: number) => {
+      return apiClient.achievement.$put({
+        json: {
+          actionId,
+        },
+      })
+    },
+  })
+
+  const jotaiStore = useStore()
+  const queryClient = useQueryClient()
+  const { t } = useTranslation()
+  return (
+    <Button
+      isLoading={isMinting}
+      variant="primary"
+      onClick={async () => {
+        const res = await mintAchievement(achievement.actionId)
+
+        const currentData = jotaiStore.get(achievementsDataAtom.current)
+        if (!currentData) return
+        let shouldInvalidate = false
+        const newData = currentData.map((item) => {
+          if (item.id === achievement.id && res.data.result) {
+            shouldInvalidate = true
+            return {
+              ...item,
+              done: true,
+              doneAt: new Date().toISOString(),
+              type: "received",
+            } as const
+          }
+          return item
+        })
+        jotaiStore.set(achievementsDataAtom.current, newData)
+
+        if (shouldInvalidate) {
+          queryClient.invalidateQueries({ queryKey: ["achievements"] })
+        }
+      }}
+    >
+      {t("words.mint")}
+    </Button>
+  )
 }
 
 const IncompleteButton: FC<{
