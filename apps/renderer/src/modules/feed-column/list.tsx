@@ -140,6 +140,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const hasInboxData = Object.keys(inboxesData).length > 0
 
   const feedsArea = useRef<HTMLDivElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const selectoRef = useRef<Selecto>(null)
   const setSelectedFeedIds = useSetSelectedFeedIds()
 
   return (
@@ -178,7 +180,16 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         </div>
       </div>
 
-      <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
+      <ScrollArea.ScrollArea
+        ref={scrollerRef}
+        onScroll={() => {
+          selectoRef.current?.checkScroll()
+        }}
+        mask={false}
+        flex
+        viewportClassName="!px-3"
+        rootClassName="h-full"
+      >
         <div
           data-active={feedId === FEED_COLLECTION_LIST}
           className={cn(
@@ -216,10 +227,23 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           </>
         )}
         <Selecto
+          ref={selectoRef}
           container={feedsArea.current}
           rootContainer={document.body}
           selectableTargets={["[data-feed-id]"]}
           continueSelect
+          hitRate={30}
+          scrollOptions={{
+            container: scrollerRef.current as HTMLElement,
+            throttleTime: 30,
+            threshold: 0,
+          }}
+          onDragStart={(e) => {
+            if (e.inputEvent.target.nodeName === "BUTTON") {
+              return false
+            }
+            return true
+          }}
           onSelect={(e) => {
             const allChanged = [...e.added, ...e.removed]
             setSelectedFeedIds((prev) => {
@@ -236,7 +260,9 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
               return [...prev.filter((id) => !removed.has(id)), ...added]
             })
           }}
-          hitRate={10}
+          onScroll={(e) => {
+            scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
+          }}
         />
         <div ref={feedsArea}>
           {(hasListData || hasInboxData) && (
