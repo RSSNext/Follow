@@ -1,7 +1,5 @@
-// credits: migrated from https://github.com/toeverything/AFFiNE/blob/canary/packages/frontend/electron/src/main/updater/custom-github-provider.ts
+// credits: migrated from https://github.com/toeverything/AFFiNE/blob/a802dc4fd6aa720f7a7a995816c78c0b24c514f5/packages/frontend/electron/src/main/updater/custom-github-provider.ts
 
-import fs from "node:fs"
-import path from "node:path"
 import { URL } from "node:url"
 
 import type {
@@ -11,7 +9,6 @@ import type {
   XElement,
 } from "builder-util-runtime"
 import { HttpError, newError, parseXml } from "builder-util-runtime"
-import { app } from "electron"
 import type { AppUpdater, ResolvedUpdateFileInfo, UpdateInfo } from "electron-updater"
 import { CancellationToken } from "electron-updater"
 import { BaseGitHubProvider } from "electron-updater/out/providers/GitHubProvider"
@@ -20,6 +17,7 @@ import { parseUpdateInfo, resolveFiles } from "electron-updater/out/providers/Pr
 import * as semver from "semver"
 
 import { isWindows } from "../env"
+import { isSquirrelBuild } from "./utils"
 
 interface GithubUpdateInfo extends UpdateInfo {
   tag: string
@@ -37,13 +35,6 @@ interface GithubRelease {
 }
 
 const hrefRegExp = /\/tag\/([^/]+)$/
-
-function isSquirrelBuild() {
-  // if it is squirrel build, there will be 'squirrel.exe'
-  // otherwise it is in nsis web mode
-  const files = fs.readdirSync(path.dirname(app.getPath("exe")))
-  return files.some((it) => it.includes("squirrel.exe"))
-}
 
 export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
   constructor(

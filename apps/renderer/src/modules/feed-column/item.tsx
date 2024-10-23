@@ -24,6 +24,7 @@ import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
+import { BoostCertification } from "../boost/boost-certification"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
@@ -122,6 +123,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
           <FeedIcon fallback feed={feed} size={16} />
           <div className="truncate">{getPreferredTitle(feed)}</div>
           {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
+          {isFeed && <BoostCertification feed={feed} className="text-[15px]" />}
           {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
