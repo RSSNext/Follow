@@ -7,7 +7,7 @@ import { parse } from "tldts"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
+export { clsx } from "clsx"
 export type OS = "macOS" | "iOS" | "Windows" | "Android" | "Linux" | ""
 
 declare const window: {

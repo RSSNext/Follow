@@ -1,4 +1,4 @@
-import { LoadingCircle } from "@follow/components/ui/loading"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
 import type { VariantProps } from "class-variance-authority"

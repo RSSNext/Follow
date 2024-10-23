@@ -17,12 +17,14 @@ export const useSyncThemeWebApp = () => {
   }, [colorMode, systemIsDark])
 }
 
+export const internal_useSetTheme = () =>
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useCallback((theme: ColorMode) => jotaiStore.set(themeAtom, theme), [])
 export const useSetTheme = () =>
   useCallback((colorMode: ColorMode) => {
     jotaiStore.set(themeAtom, colorMode)
   }, [])
-
-function disableTransition(disableTransitionExclude: string[] = []) {
+export function disableTransition(disableTransitionExclude: string[] = []) {
   const css = document.createElement("style")
   css.append(
     document.createTextNode(

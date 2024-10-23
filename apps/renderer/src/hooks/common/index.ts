@@ -1,6 +1,5 @@
 export * from "./useAnyPointDown"
 export * from "./useBizQuery"
-export * from "./useDark"
 export * from "./useI18n"
 export * from "./useInputComposition"
 export * from "./useInterval"

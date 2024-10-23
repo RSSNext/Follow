@@ -1,6 +1,6 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.js"
 import { m } from "framer-motion"
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { softSpringPreset } from "~/components/ui/constants/spring"
 import { useAuthQuery } from "~/hooks/common"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"

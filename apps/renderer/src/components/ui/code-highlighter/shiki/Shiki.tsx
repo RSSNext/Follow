@@ -1,3 +1,4 @@
+import { useIsDark } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
@@ -11,7 +12,6 @@ import type {
 
 import { useUISettingKey, useUISettingSelector } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
-import { useIsDark } from "~/hooks/common"
 import { tipcClient } from "~/lib/client"
 
 import { getLanguageColor, getLanguageIcon } from "../constants"

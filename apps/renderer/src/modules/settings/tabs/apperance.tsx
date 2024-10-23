@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
+import { useIsDark, useSetTheme, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
@@ -18,7 +19,6 @@ import {
   useUISettingValue,
 } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
-import { useIsDark, useSetTheme, useThemeAtomValue } from "~/hooks/common"
 
 import { SettingTabbedSegment } from "../control"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"

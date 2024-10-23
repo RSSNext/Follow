@@ -1,8 +1,8 @@
+import { RadioCard } from "@follow/components/ui/radio-group/RadioCard.js"
+import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.js"
 import { m } from "framer-motion"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
-import { RadioGroup } from "~/components/ui/radio-group"
-import { RadioCard } from "~/components/ui/radio-group/RadioCard"
 
 const radios = [
   {
