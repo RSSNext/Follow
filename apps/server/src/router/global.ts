@@ -39,7 +39,8 @@ const prodHandler = (app: FastifyInstance) => {
 
     const isInVercelReverseProxy = req.headers["x-middleware-subrequest"]
 
-    if (isInVercelReverseProxy) {
+    const upstreamEnv = req.requestContext.get("upstreamEnv")
+    if (isInVercelReverseProxy || upstreamEnv === "prod") {
       // Add asset prefix
       // Map all link and script to /assets
       // <script type="module" crossorigin src="/assets/index-kQ31_hj7.js"></script>
@@ -60,9 +61,7 @@ const prodHandler = (app: FastifyInstance) => {
 
         // override client side api url
 
-        const upstreamHost = req.headers["x-forwarded-host"] || req.headers.host
-        const protocol = req.headers["x-forwarded-proto"] || "https"
-        const upstreamOrigin = `${protocol}://${upstreamHost}`
+        const upstreamOrigin = req.requestContext.get("upstreamOrigin")
 
         const injectScript = (apiUrl: string) => {
           const template = `function injectEnv(env2) {

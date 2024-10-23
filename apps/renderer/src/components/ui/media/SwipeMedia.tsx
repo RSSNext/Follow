@@ -98,6 +98,7 @@ export function SwipeMedia({
                     onPreview?.(uniqMedia, i)
                   }}
                   showFallback={true}
+                  fitContent
                 />
               </SwiperSlide>
             ))}
@@ -135,6 +136,7 @@ export function SwipeMedia({
           height={uniqMedia[0].height}
           width={uniqMedia[0].width}
           blurhash={uniqMedia[0].blurhash}
+          fitContent
         />
       ) : (
         <div className="relative flex aspect-video w-full items-center overflow-hidden rounded-t-2xl border-b">

@@ -21,6 +21,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
 import { cn } from "~/lib/utils"
 import achievementAnimationUri from "~/lottie/achievement.lottie?url"
+import type { ExtractBizResponse } from "~/models"
 
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
 enum AchievementsActionIdMap {
@@ -72,12 +73,8 @@ const achievementActionIdCopyMap: Record<
     description: "achievement.alpha_tester_description",
   },
 }
-const _achievementType = apiClient.achievement.$get({
-  query: {
-    type: "all",
-  },
-})
-type Achievement = Awaited<typeof _achievementType>["data"]
+
+type Achievement = ExtractBizResponse<typeof apiClient.achievement.$get>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
 

@@ -15,6 +15,7 @@ import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
+import { MemoedDangerousHTMLStyle } from "~/components/common/MemoedDangerousHTMLStyle"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { Checkbox } from "~/components/ui/checkbox"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
@@ -312,10 +313,12 @@ export function extractCodeFromHtml(htmlString: string) {
 const Style: Components["style"] = ({ node, ...props }) => {
   const isShadowDOM = ShadowDOM.useIsShadowDOM()
 
-  if (isShadowDOM) {
-    return createElement("style", {
-      ...props,
-    })
+  if (isShadowDOM && typeof props.children === "string") {
+    return createElement(
+      MemoedDangerousHTMLStyle,
+      null,
+      props.children.replaceAll(/html|body/g, "#shadow-html"),
+    )
   }
   return null
 }
