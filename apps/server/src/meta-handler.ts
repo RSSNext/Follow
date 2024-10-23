@@ -34,7 +34,7 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
 
   const apiClient = createApiClient()
 
-  const hostFromReq = req.headers.host
+  const hostFromReq = req.headers["x-forwarded-host"] || req.headers.host
   const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https"
 
   const url = req.originalUrl
