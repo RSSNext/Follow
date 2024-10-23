@@ -143,22 +143,6 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        tx: drizzle_orm_pg_core.PgColumn<{
-            name: "tx";
-            tableName: "achievements";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -171,7 +155,6 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     progressMax: zod.ZodNumber;
     done: zod.ZodBoolean;
     doneAt: zod.ZodNullable<zod.ZodString>;
-    tx: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
@@ -181,7 +164,6 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     progressMax: number;
     done: boolean;
     doneAt: string | null;
-    tx: string | null;
 }, {
     type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
@@ -191,7 +173,6 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     progressMax: number;
     done: boolean;
     doneAt: string | null;
-    tx: string | null;
 }>;
 
 declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
@@ -4461,8 +4442,111 @@ declare const levelsRelations: drizzle_orm.Relations<"levels", {
     wallet: drizzle_orm.One<"wallets", true>;
     user: drizzle_orm.One<"user", true>;
 }>;
+declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "boosts";
+    schema: undefined;
+    columns: {
+        hash: drizzle_orm_pg_core.PgColumn<{
+            name: "hash";
+            tableName: "boosts";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        expiresAt: drizzle_orm_pg_core.PgColumn<{
+            name: "expires_at";
+            tableName: "boosts";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    boosts: {
+        $get: {
+            input: {
+                query: {
+                    feedId: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    level: number;
+                    monthlyBoostCost: number;
+                    boostCount: number;
+                    remainingBoostsToLevelUp: number;
+                    lastValidBoost: {
+                        hash: string | null;
+                        expiresAt: string;
+                    } | null;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $post: {
+            input: {
+                json: {
+                    feedId: string;
+                    amount: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
+                    expiresAt: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "boosts/boosters": {
+        $get: {
+            input: {
+                query: {
+                    feedId: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    name: string | null;
+                    id: string;
+                    emailVerified: string | null;
+                    image: string | null;
+                    handle: string | null;
+                    createdAt: string;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/status/configs": {
         $get: {
             input: {};
@@ -5245,6 +5329,16 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     };
                     feedId: string;
                     isPrivate: boolean;
+                    boost: {
+                        boosters: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[];
+                    };
                 } | {
                     title: string | null;
                     userId: string;
@@ -6726,7 +6820,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     progressMax: number;
                     done: boolean;
                     doneAt: string | null;
-                    tx: string | null;
                     power: string;
                 }[];
                 done: number;
@@ -6788,4 +6881,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
