@@ -143,6 +143,22 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        tx: drizzle_orm_pg_core.PgColumn<{
+            name: "tx";
+            tableName: "achievements";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -155,6 +171,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     progressMax: zod.ZodNumber;
     done: zod.ZodBoolean;
     doneAt: zod.ZodNullable<zod.ZodString>;
+    tx: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
@@ -164,6 +181,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     progressMax: number;
     done: boolean;
     doneAt: string | null;
+    tx: string | null;
 }, {
     type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
@@ -173,6 +191,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     progressMax: number;
     done: boolean;
     doneAt: string | null;
+    tx: string | null;
 }>;
 
 declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
@@ -5447,6 +5466,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     url?: string | undefined;
+                    feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
                     listId?: string | undefined;
                 };
@@ -6820,6 +6840,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     progressMax: number;
                     done: boolean;
                     doneAt: string | null;
+                    tx: string | null;
                     power: string;
                 }[];
                 done: number;
