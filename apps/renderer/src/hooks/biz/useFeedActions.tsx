@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
@@ -52,6 +53,7 @@ export const useFeedActions = ({
 
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
+  const openBoostModal = useBoostModal()
 
   const listByView = useOwnedList(view!)
 
@@ -86,6 +88,13 @@ export const useFeedActions = ({
             },
           ]
         : []),
+      {
+        type: "text" as const,
+        label: t("words.boost"),
+        click: () => {
+          openBoostModal(feedId)
+        },
+      },
       {
         type: "separator" as const,
         disabled: isEntryList,
@@ -223,9 +232,11 @@ export const useFeedActions = ({
     feed,
     t,
     isEntryList,
+    isInbox,
     listByView,
     feedId,
     claimFeed,
+    openBoostModal,
     addFeedToListMutation,
     removeFeedFromListMutation,
     present,

@@ -9,6 +9,7 @@ import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedModel, InboxModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
+import { updateFeedBoostStatus } from "~/modules/boost/hooks"
 import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"
@@ -177,6 +178,10 @@ class SubscriptionActions {
         lists.push(subscription.lists)
       } else if ("inboxes" in subscription) {
         inboxes.push(subscription.inboxes)
+      }
+
+      if ("boost" in subscription) {
+        updateFeedBoostStatus(subscription.feedId, subscription.boost.boosters.length > 0)
       }
     }
     this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))

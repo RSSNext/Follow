@@ -314,7 +314,7 @@ export const EntryContentRender: Component<{
                 </div>
               )}
 
-              {feed?.ownerUserId && <SupportCreator entryId={entryId} />}
+              <SupportCreator entryId={entryId} />
             </article>
           </div>
         </ScrollArea.ScrollArea>
