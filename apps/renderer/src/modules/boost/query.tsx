@@ -34,9 +34,10 @@ export const useBoostStatusQuery = (feedId: string) =>
     staleTime: 1000 * 60 * 5,
   })
 
-export const useFeedBoostersQuery = (feedId: string) =>
-  useAuthQuery(query.getBoosters({ feedId }), {
+export const useFeedBoostersQuery = (feedId?: string) =>
+  useAuthQuery(query.getBoosters({ feedId: feedId ?? "" }), {
     staleTime: 1000 * 60 * 5,
+    enabled: feedId !== undefined,
   })
 
 export const useBoostFeedMutation = () => {
