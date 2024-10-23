@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -22,7 +23,6 @@ import { z } from "zod"
 
 import { FollowSummary } from "~/components/feed-summary"
 import { Logo } from "~/components/icons/logo"
-import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { Switch } from "~/components/ui/switch"
 import { useI18n } from "~/hooks/common"

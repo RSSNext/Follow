@@ -1,11 +1,6 @@
 import { Divider } from "@follow/components/ui/divider/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { UrlBuilder } from "@follow/utils/url-builder"
-import { useTranslation } from "react-i18next"
-
-import { FeedIcon } from "~/components/feed-icon"
-import { LoadingCircle } from "~/components/ui/loading"
 import {
   Table,
   TableBody,
@@ -13,7 +8,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
+} from "@follow/components/ui/table/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { UrlBuilder } from "@follow/utils/url-builder"
+import { useTranslation } from "react-i18next"
+
+import { FeedIcon } from "~/components/feed-icon"
 import { useAuthQuery } from "~/hooks/common"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"

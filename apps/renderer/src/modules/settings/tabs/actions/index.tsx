@@ -1,10 +1,10 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { LoadingWithIcon } from "~/components/ui/loading"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"

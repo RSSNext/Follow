@@ -1,4 +1,6 @@
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { Card, CardContent } from "@follow/components/ui/card/index.jsx"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import {
   Tooltip,
@@ -16,11 +18,9 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { FeedIcon } from "~/components/feed-icon"
 import { EmptyIcon } from "~/components/icons/empty"
-import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
 import { Collapse } from "~/components/ui/collapse"
 import { RelativeTime } from "~/components/ui/datetime"
 import type { LinkProps } from "~/components/ui/link"
-import { LoadingCircle } from "~/components/ui/loading"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { MarkdownLink } from "~/components/ui/markdown/renderers"
 import { Media } from "~/components/ui/media"

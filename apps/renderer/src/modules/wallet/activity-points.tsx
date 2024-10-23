@@ -1,6 +1,5 @@
+import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { cn } from "@follow/utils/utils"
-
-import { Skeleton } from "~/components/ui/skeleton"
 
 export const ActivityPoints = ({
   points,

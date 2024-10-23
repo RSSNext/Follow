@@ -1,5 +1,6 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
+import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import {
   Tooltip,
   TooltipContent,
@@ -12,7 +13,6 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { LoadingWithIcon } from "~/components/ui/loading"
 import { apiClient } from "~/lib/api-fetch"
 import { getBlockchainExplorerUrl } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"

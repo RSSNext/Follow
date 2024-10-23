@@ -1,4 +1,5 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import {
   Select,
   SelectContent,
@@ -24,7 +25,6 @@ import {
 } from "~/atoms/settings/general"
 import { createSetting } from "~/atoms/settings/helper"
 import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
-import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"

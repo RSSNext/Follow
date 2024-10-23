@@ -1,4 +1,5 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
@@ -6,7 +7,6 @@ import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { FollowIcon } from "~/components/icons/follow"
-import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
 import type { LoginRuntime } from "~/lib/auth"

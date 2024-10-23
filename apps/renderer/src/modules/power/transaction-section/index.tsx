@@ -1,6 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@follow/components/ui/table/index.jsx"
+import {
   Tooltip,
   TooltipContent,
   TooltipPortal,
@@ -15,14 +23,6 @@ import { useServerConfigs } from "~/atoms/server-configs"
 import { useWhoami } from "~/atoms/user"
 import { Logo } from "~/components/icons/logo"
 import { RelativeTime } from "~/components/ui/datetime"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table"
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getBlockchainExplorerUrl } from "~/lib/utils"

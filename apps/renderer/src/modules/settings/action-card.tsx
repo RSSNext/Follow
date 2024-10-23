@@ -10,13 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
-import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
-import { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
-
-import { Collapse, CollapseControlled } from "~/components/ui/collapse"
-import { Switch } from "~/components/ui/switch"
 import {
   Table,
   TableBody,
@@ -24,7 +17,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
+} from "@follow/components/ui/table/index.jsx"
+import { stopPropagation } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+
+import { Collapse, CollapseControlled } from "~/components/ui/collapse"
+import { Switch } from "~/components/ui/switch"
 import { ViewSelectContent } from "~/components/view-select-content"
 import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
 

@@ -1,10 +1,10 @@
+import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { from } from "dnum"
 import { AnimatePresence, m } from "framer-motion"
 import { useCallback, useState } from "react"
 
 import { Button } from "~/components/ui/button"
 import { softSpringPreset } from "~/components/ui/constants/spring"
-import { LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { boosts, useBoostFeedMutation } from "~/queries/boosts"

@@ -1,7 +1,6 @@
 import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { LoadingCircle, LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { getUrlIcon } from "@follow/utils/utils"
-
-import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
 
 export const EntryContentLoading = (props: { icon?: string }) => {
   if (!props.icon) {

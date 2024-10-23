@@ -1,3 +1,4 @@
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import type { FC } from "react"
@@ -6,7 +7,6 @@ import { useSearchParams } from "react-router-dom"
 
 import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
-import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import type { FeedModel } from "~/models"
 import { getItemComponentByView } from "~/modules/entry-column/Items"
