@@ -134,7 +134,8 @@
     "tag": false,
     "changelog": true,
     "allowed_branches": [
-      "dev"
+      "dev",
+      "feature/updater-beta"
     ]
   },
   "productName": "Follow"
