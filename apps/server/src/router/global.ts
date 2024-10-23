@@ -33,45 +33,38 @@ const devHandler = (app: FastifyInstance) => {
   })
 }
 const prodHandler = (app: FastifyInstance) => {
-  app.get("/share/test-vercel-header", (req, reply) => {
-    reply.send({
-      headers: req.headers,
-      host: req.headers.host,
-    })
-  })
   app.get("*", async (req, reply) => {
     let template = require("../../.generated/index.template").default
     template = await safeInjectMetaToTemplate(template, req, reply)
 
-    // const isInVercelReverseProxy = req.headers["x-middleware-subrequest"]
-
-    // if (isInVercelReverseProxy) {
-    // Add asset prefix
-    // Map all link and script to /assets
-    // <script type="module" crossorigin src="/assets/index-kQ31_hj7.js"></script>
-    // <link rel="stylesheet" crossorigin href="/assets/index-BORNdGZP.css">
-    const prefix = "/external-dist"
-    const { document } = parseHTML(template)
-    for (const script of document.querySelectorAll("script")) {
-      script.src = `${prefix}${script.src}`
-    }
-    for (const link of document.querySelectorAll("link")) {
-      link.href = `${prefix}${link.href}`
-    }
+    const isInVercelReverseProxy = req.headers["x-middleware-subrequest"]
 
     const upstreamEnv = req.requestContext.get("upstreamEnv")
+    if (isInVercelReverseProxy || upstreamEnv === "prod") {
+      // Add asset prefix
+      // Map all link and script to /assets
+      // <script type="module" crossorigin src="/assets/index-kQ31_hj7.js"></script>
+      // <link rel="stylesheet" crossorigin href="/assets/index-BORNdGZP.css">
+      const prefix = "/external-dist"
+      const { document } = parseHTML(template)
+      for (const script of document.querySelectorAll("script")) {
+        script.src = `${prefix}${script.src}`
+      }
+      for (const link of document.querySelectorAll("link")) {
+        link.href = `${prefix}${link.href}`
+      }
 
-    if (upstreamEnv) {
-      document.head.prepend(document.createComment(`upstreamEnv: ${upstreamEnv}`))
+      const upstreamEnv = req.requestContext.get("upstreamEnv")
 
-      // override client side api url
+      if (upstreamEnv) {
+        document.head.prepend(document.createComment(`upstreamEnv: ${upstreamEnv}`))
 
-      const upstreamHost = req.headers["x-forwarded-host"] || req.headers.host
-      const protocol = req.headers["x-forwarded-proto"] || "https"
-      const upstreamOrigin = `${protocol}://${upstreamHost}`
+        // override client side api url
 
-      const injectScript = (apiUrl: string) => {
-        const template = `function injectEnv(env2) {
+        const upstreamOrigin = req.requestContext.get("upstreamOrigin")
+
+        const injectScript = (apiUrl: string) => {
+          const template = `function injectEnv(env2) {
     for (const key in env2) {
       if (env2[key] === void 0) continue;
       globalThis["__followEnv"] ??= {};
@@ -79,20 +72,20 @@ const prodHandler = (app: FastifyInstance) => {
     }
   }
 injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_WEB_URL":"${upstreamOrigin}"})`
-        const $script = document.createElement("script")
-        $script.innerHTML = template
-        document.head.prepend($script)
+          const $script = document.createElement("script")
+          $script.innerHTML = template
+          document.head.prepend($script)
+        }
+        if (upstreamEnv === "dev" && env.VITE_EXTERNAL_DEV_API_URL) {
+          injectScript(env.VITE_EXTERNAL_DEV_API_URL)
+        }
+        if (upstreamEnv === "prod" && env.VITE_EXTERNAL_PROD_API_URL) {
+          injectScript(env.VITE_EXTERNAL_PROD_API_URL)
+        }
       }
-      if (upstreamEnv === "dev" && env.VITE_EXTERNAL_DEV_API_URL) {
-        injectScript(env.VITE_EXTERNAL_DEV_API_URL)
-      }
-      if (upstreamEnv === "prod" && env.VITE_EXTERNAL_PROD_API_URL) {
-        injectScript(env.VITE_EXTERNAL_PROD_API_URL)
-      }
-    }
 
-    template = document.toString()
-    // }
+      template = document.toString()
+    }
 
     reply.type("text/html")
     reply.send(template)
