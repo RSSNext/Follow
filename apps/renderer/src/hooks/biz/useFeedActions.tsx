@@ -179,7 +179,14 @@ export const useFeedActions = ({
           : t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
         disabled: isInbox,
-        click: () => deleteSubscription.mutate(subscription),
+        supportMultipleSelection: true,
+        click: () => {
+          if (isMultipleSelection) {
+            deleteSubscription.mutate({ feedIdList: feedIds })
+            return
+          }
+          deleteSubscription.mutate({ subscription })
+        },
       },
       {
         type: "text" as const,
@@ -306,7 +313,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         type: "text" as const,
         label: t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
-        click: () => deleteSubscription(subscription),
+        click: () => deleteSubscription({ subscription }),
       },
       {
         type: "text" as const,

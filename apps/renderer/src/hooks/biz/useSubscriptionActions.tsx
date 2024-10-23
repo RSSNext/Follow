@@ -18,7 +18,19 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
   const { t } = useTranslation()
 
   return useMutation({
-    mutationFn: async (subscription: SubscriptionFlatModel) =>
+    mutationFn: async ({
+      subscription,
+      feedIdList,
+    }: {
+      subscription?: SubscriptionFlatModel
+      feedIdList?: string[]
+    }) => {
+      if (feedIdList) {
+        return subscriptionActions.unfollowMany(feedIdList)
+      }
+
+      if (!subscription) return
+
       subscriptionActions.unfollow(subscription.feedId).then((feed) => {
         subscriptionQuery.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
@@ -57,13 +69,14 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
             onClick: undo,
           },
         })
-      }),
+      })
+    },
 
     onSuccess: (_) => {
       onSuccess?.()
     },
     onMutate(variables) {
-      if (getRouteParams().feedId === variables.feedId) {
+      if (getRouteParams().feedId === variables.subscription?.feedId) {
         navigateEntry({
           feedId: null,
           entryId: null,
