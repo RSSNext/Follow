@@ -29,6 +29,7 @@
   "app.toggle_sidebar": "Toggle Sidebar",
   "beta_access": "Beta Access",
   "boost.boost_feed": "Boost Feed",
+  "boost.boost_success": "🎉 Boost successful!",
   "boost.feed_being_boosted": "Feed being boosted",
   "discover.any_url_or_keyword": "Any URL or Keyword",
   "discover.default_option": " (default)",
