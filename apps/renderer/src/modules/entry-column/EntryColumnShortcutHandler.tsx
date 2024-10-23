@@ -1,3 +1,4 @@
+import { useRefValue } from "@follow/hooks"
 import type { FC } from "react"
 import { memo, useLayoutEffect, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -8,7 +9,6 @@ import { HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteEntryId } from "~/hooks/biz/useRouteParams"
-import { useRefValue } from "~/hooks/common"
 
 export const EntryColumnShortcutHandler: FC<{
   refetch: () => void

@@ -1,11 +1,12 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
+import { useIsOnline } from "@follow/hooks"
 import { useEffect, useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
 import { PhCloudCheck } from "~/components/icons/PhCloudCheck"
 import { PhCloudWarning } from "~/components/icons/PhCloudWarning"
 import { PhCloudX } from "~/components/icons/PhCloudX"
-import { useAuthQuery, useIsOnline } from "~/hooks/common"
+import { useAuthQuery } from "~/hooks/common"
 import { settings } from "~/queries/settings"
 
 import { useSettingContextSelector } from "../modal/hooks"

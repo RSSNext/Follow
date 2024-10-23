@@ -3,6 +3,7 @@
  * @copyright AFFiNE, Follow
  */
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
+import { useInputComposition, useRefValue } from "@follow/hooks"
 import { useSubscribeElectronEvent } from "@follow/shared/event"
 import { nextFrame } from "@follow/utils/dom"
 import { AnimatePresence, m } from "framer-motion"
@@ -11,7 +12,6 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { useDebounceCallback, useEventCallback } from "usehooks-ts"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
-import { useInputComposition, useRefValue } from "~/hooks/common"
 import { tipcClient } from "~/lib/client"
 import { observeResize } from "~/lib/observe-resize"
 

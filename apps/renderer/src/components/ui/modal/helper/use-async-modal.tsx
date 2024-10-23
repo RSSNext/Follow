@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useSingleton } from "foxact/use-singleton"
 import type { FC } from "react"
 import { createContext, createElement, useContext } from "react"
@@ -9,7 +10,6 @@ import { useModalStack } from "~/components/ui/modal"
 import type { UseAsyncFetcher } from "~/components/ui/modal/helper/async-loading"
 import { AsyncModalContent } from "~/components/ui/modal/helper/async-loading"
 import { NoopChildren } from "~/components/ui/modal/stacked/custom-modal"
-import { useTypeScriptHappyCallback } from "~/hooks/common"
 
 export type AsyncModalOptions<T> = {
   id: string

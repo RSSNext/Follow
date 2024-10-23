@@ -1,6 +1,7 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { UserRole } from "@follow/constants"
+import { useMeasure } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { repository } from "@pkg"
@@ -19,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu/dropdown-menu"
 import { useSignOut } from "~/hooks/biz/useSignOut"
-import { useMeasure } from "~/hooks/common"
 import type { WalletModel } from "~/models"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"

@@ -1,10 +1,10 @@
+import { useRefValue } from "@follow/hooks"
 import { EventBus } from "@follow/utils/event-bus"
 import { getStorageNS } from "@follow/utils/ns"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 
-import { useRefValue } from "~/hooks/common"
 import { createAtomHooks } from "~/lib/jotai"
 import type { SettingItem } from "~/modules/settings/setting-builder"
 import { createSettingBuilder } from "~/modules/settings/setting-builder"
