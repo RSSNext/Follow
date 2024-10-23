@@ -1,3 +1,5 @@
+import * as React from "react"
+
 import { FeedViewType } from "./enums"
 import type { t } from "./internal/i18n"
 
