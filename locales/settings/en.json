@@ -266,6 +266,7 @@
   "wallet.transactions.to": "To",
   "wallet.transactions.tx": "Tx",
   "wallet.transactions.type": "Type",
+  "wallet.transactions.types.airdrop": "Airdrop",
   "wallet.transactions.types.all": "All",
   "wallet.transactions.types.burn": "Burn",
   "wallet.transactions.types.mint": "Mint",

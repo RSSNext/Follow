@@ -34,7 +34,9 @@ export const openInFollowApp = (
 
     window.addEventListener("blur", handleBlur)
 
-    window.location.href = `${DEEPLINK_SCHEME}://${deeplink}`
+    const deeplinkUrl = `${DEEPLINK_SCHEME}${deeplink}`
+    console.info("Open deeplink:", deeplinkUrl)
+    window.location.href = deeplinkUrl
 
     setTimeout(() => {
       cleanup()

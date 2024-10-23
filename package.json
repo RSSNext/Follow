@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.0.1-alpha.21",
+  "version": "0.1.0-beta.0",
   "private": true,
   "packageManager": "pnpm@9.11.0",
   "description": "Next generation information browser",
@@ -26,6 +26,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
+    "hotfix": "vv -c bump.hotfix.config.js",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "polyfill-optimize": "pnpx nolyfill install",

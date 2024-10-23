@@ -4,10 +4,15 @@ export const BoostProgress = ({
   level,
   boostCount,
   remainingBoostsToLevelUp,
+  lastValidBoost,
 }: {
   level: number
   boostCount: number
   remainingBoostsToLevelUp: number
+  lastValidBoost: {
+    hash: string | null
+    expiresAt: string
+  } | null
 }) => {
   const percentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
   const nextLevel = level + 1
@@ -41,8 +46,14 @@ export const BoostProgress = ({
         <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
       </div>
       <small className="center mt-1 gap-1">
-        {remainingBoostsToLevelUp} more boost will unlock the next level of privilege.
+        {remainingBoostsToLevelUp} more boost will unlock the next level of benefits!
       </small>
+      {lastValidBoost && (
+        <small className="center mt-1 gap-1">
+          You can't add more boost points right now, but feel free to keep boosting. Your current
+          boost will expire on {new Date(lastValidBoost.expiresAt).toLocaleDateString()}.
+        </small>
+      )}
     </div>
   )
 }
