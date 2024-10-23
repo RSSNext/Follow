@@ -1,9 +1,10 @@
+import * as React from "react"
+
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { InboxItem, ListItem } from "~/modules/feed-column/item"
 import { useSubscriptionStore } from "~/store/subscription"
-import * as React from "react"
 
 export const TimelineTabs = () => {
   const routerParams = useRouteParams()
@@ -29,10 +30,10 @@ export const TimelineTabs = () => {
     e.preventDefault()
     list.scrollLeft += e.deltaY
   })
-  
+
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-1 overflow-x-auto scrollbar-none flex"
+      className="-ml-3 -mr-4 mt-1 flex overflow-x-auto scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {
@@ -44,7 +45,7 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList ref={listRef as any} className="h-10 border-b-0 overflow-hidden justify-start">
+      <TabsList ref={listRef as any} className="h-10 justify-start overflow-hidden border-b-0">
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>
