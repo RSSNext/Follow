@@ -1,9 +1,11 @@
+import { m } from "framer-motion"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
+import { stopPropagation } from "~/lib/dom"
 import { createErrorToaster } from "~/lib/error-parser"
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../tooltip"
@@ -20,6 +22,20 @@ interface AsyncModalContentProps<T> {
   loadingComponent?: React.ReactNode
 }
 
+function useCountdown(durationInSeconds: number): boolean {
+  const [isFinished, setIsFinished] = React.useState(false)
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsFinished(true)
+    }, durationInSeconds * 1000)
+
+    return () => clearTimeout(timer)
+  }, [durationInSeconds])
+
+  return isFinished
+}
+
 export function AsyncModalContent<T>({
   queryResult,
   renderContent,
@@ -28,6 +44,7 @@ export function AsyncModalContent<T>({
   const { data, isLoading, error, refetch } = queryResult
   const { dismiss } = useCurrentModal()
 
+  const shouldShowCloseButton = useCountdown(2)
   React.useEffect(() => {
     if (error) {
       createErrorToaster()(error)
@@ -38,16 +55,23 @@ export function AsyncModalContent<T>({
   if (isLoading || !data) {
     return (
       loadingComponent || (
-        <div className="center absolute inset-0 flex-col gap-4">
+        <div className="center absolute inset-0 flex-col gap-8">
           <LoadingCircle size="large" />
-          <div className="flex items-center gap-3">
+          <m.div
+            exit={{
+              opacity: 0,
+            }}
+            className="flex items-center gap-3"
+            onFocusCapture={stopPropagation}
+          >
             {!!error && (
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <Button
                     onClick={() => refetch()}
                     variant="outline"
                     buttonClassName="p-2 rounded-full"
+                    layout
                   >
                     <i className="i-mgc-refresh-2-cute-re" />
                   </Button>
@@ -55,15 +79,22 @@ export function AsyncModalContent<T>({
                 <TooltipContent>{t("retry")}</TooltipContent>
               </Tooltip>
             )}
-            <Tooltip>
-              <TooltipTrigger>
-                <Button onClick={dismiss} variant="outline" buttonClassName="p-2 rounded-full">
-                  <i className="i-mgc-close-cute-re" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t("close")}</TooltipContent>
-            </Tooltip>
-          </div>
+            {(shouldShowCloseButton || !!error) && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={dismiss}
+                    variant="outline"
+                    buttonClassName="p-2 rounded-full"
+                    layout
+                  >
+                    <i className="i-mgc-close-cute-re" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{t("close")}</TooltipContent>
+              </Tooltip>
+            )}
+          </m.div>
         </div>
       )
     )
