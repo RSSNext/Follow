@@ -7,19 +7,15 @@ import { softSpringPreset } from "~/components/ui/constants/spring"
 
 const radios = [
   {
-    name: "1 Month",
     value: 1,
   },
   {
-    name: "3 Months",
     value: 3,
   },
   {
-    name: "6 Months",
     value: 6,
   },
   {
-    name: "1 Year",
     value: 12,
   },
 ]
@@ -44,7 +40,7 @@ export const RadioCards = ({
       >
         {radios.map((item) => (
           <RadioCard
-            key={item.name}
+            key={item.value}
             wrapperClassName="justify-center"
             value={(item.value * monthlyBoostCost).toString()}
             label={
