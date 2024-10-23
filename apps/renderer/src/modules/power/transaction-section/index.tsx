@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
+import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
 import {
   Tooltip,
   TooltipContent,
@@ -23,7 +24,6 @@ import { useServerConfigs } from "~/atoms/server-configs"
 import { useWhoami } from "~/atoms/user"
 import { Logo } from "~/components/icons/logo"
 import { RelativeTime } from "~/components/ui/datetime"
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getBlockchainExplorerUrl } from "~/lib/utils"
 import { TransactionTypes } from "~/models/types"

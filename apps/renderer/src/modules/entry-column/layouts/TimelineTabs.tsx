@@ -1,4 +1,5 @@
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
+
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { InboxItem, ListItem } from "~/modules/feed-column/item"

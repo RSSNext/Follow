@@ -1,6 +1,5 @@
 import { Button } from "@follow/components/ui/button/index.js"
-import { Tooltip, TooltipContent } from "@follow/components/ui/tooltip/index.jsx"
-import { TooltipTrigger } from "@radix-ui/react-tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"

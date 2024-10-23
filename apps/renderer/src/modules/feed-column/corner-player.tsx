@@ -2,7 +2,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/t
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import * as Slider from "@radix-ui/react-slider"
-import type { TooltipContentProps } from "@radix-ui/react-tooltip"
 import dayjs from "dayjs"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useMemo, useState } from "react"
@@ -326,7 +325,7 @@ const ActionIcon = ({
   onClick?: () => void
   label: React.ReactNode
   labelDelayDuration?: number
-  tooltipAlign?: TooltipContentProps["align"]
+  tooltipAlign?: "center" | "end" | "start"
   children?: React.ReactNode
 }) => (
   <Tooltip delayDuration={labelDelayDuration}>

@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
+import { Switch } from "@follow/components/ui/switch/index.jsx"
 import {
   Table,
   TableBody,
@@ -24,7 +25,6 @@ import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Collapse, CollapseControlled } from "~/components/ui/collapse"
-import { Switch } from "~/components/ui/switch"
 import { ViewSelectContent } from "~/components/view-select-content"
 import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
 

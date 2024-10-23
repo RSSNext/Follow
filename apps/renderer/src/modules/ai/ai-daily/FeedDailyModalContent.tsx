@@ -1,6 +1,5 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
 import { FeedViewType } from "@follow/constants"
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
 import { DayOf } from "./constants"
 import { DailyReportModalContent, DailyReportTitle } from "./daily"
