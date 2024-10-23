@@ -114,7 +114,7 @@ const TabsTrigger = React.forwardRef<HTMLDivElement, TabsTriggerProps>(
           <m.span
             layoutId={layoutId}
             style={{
-              originY: '0px',
+              originY: "0px",
             }}
             className={cn(
               "absolute",
