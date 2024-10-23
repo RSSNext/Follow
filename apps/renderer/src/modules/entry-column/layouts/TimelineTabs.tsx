@@ -1,3 +1,5 @@
+import * as React from "react"
+
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
