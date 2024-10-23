@@ -259,7 +259,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           </>
         )}
 
-        <div ref={feedsArea}>
+        <div ref={feedsArea} className="space-y-px">
           {(hasListData || hasInboxData) && (
             <div
               className={cn(
