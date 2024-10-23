@@ -1,8 +1,11 @@
-import { useEffect, useRef } from "react"
+import type { FC } from "react"
+import { createElement, useEffect, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
 import { nextFrame } from "~/lib/dom"
 import { createErrorToaster } from "~/lib/error-parser"
+
+import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 
 export const parseError = (error: unknown): { message?: string; stack?: string } => {
   if (error instanceof Error) {
@@ -41,4 +44,17 @@ export const useResetErrorWhenRouteChange = (resetError: () => void) => {
       onceRef.current = true
     }
   }, [location.pathname])
+}
+
+export const withErrorGrand = <T extends Error, S extends new (...args: any[]) => T>(
+  error: S,
+  Component: FC<AppErrorFallbackProps>,
+): FC<AppErrorFallbackProps> => {
+  return (props: AppErrorFallbackProps) => {
+    if (!(props.error instanceof error)) {
+      throw error
+    }
+
+    return createElement(Component, props)
+  }
 }

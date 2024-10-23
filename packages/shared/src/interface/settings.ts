@@ -29,6 +29,7 @@ export interface UISettings {
   codeHighlightThemeLight: string
   codeHighlightThemeDark: string
   guessCodeLanguage: boolean
+  hideRecentReader: boolean
 
   // view
   pictureViewMasonry: boolean

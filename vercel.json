@@ -9,6 +9,18 @@
       "destination": "/__debug_proxy.html"
     },
     {
+      "source": "/share/:path*",
+      "destination": "https://follow-external-ssr.vercel.app/share/:path*"
+    },
+    {
+      "source": "/og/:path*",
+      "destination": "https://follow-external-ssr.vercel.app/og/:path*"
+    },
+    {
+      "source": "/external-dist/:path*",
+      "destination": "https://follow-external-ssr.vercel.app/:path*"
+    },
+    {
       "source": "/((?!assets|vendor|locales/).*)",
       "destination": "/index.html"
     }

@@ -111,6 +111,7 @@ class EntryActions {
             publishedAfter: pageParam,
             limit,
             inboxId: `${inboxId}`,
+            read,
           },
         })
       : await apiClient.entries.$post({

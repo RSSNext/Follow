@@ -1,4 +1,3 @@
-import { env } from "@follow/shared/env"
 import { AnimatePresence, useAnimationControls } from "framer-motion"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -24,6 +23,7 @@ import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame, stopPropagation } from "~/lib/dom"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getStorageNS } from "~/lib/ns"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import type { SubscriptionModel } from "~/models"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
@@ -219,9 +219,8 @@ export const UserProfileModalContent: FC<{
           <ActionButton
             tooltip={t("user_profile.share")}
             onClick={() => {
-              window.open(
-                `${env.VITE_WEB_URL}/profile/${user.data?.handle ? `@${user.data.handle}` : user.data?.id}`,
-              )
+              if (!user.data) return
+              window.open(UrlBuilder.profile(user.data.handle ?? user.data.id))
             }}
           >
             <i className="i-mgc-share-3-cute-re" />

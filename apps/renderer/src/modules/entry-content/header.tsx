@@ -11,6 +11,7 @@ import {
   ReadabilityStatus,
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
 import { views } from "~/constants"
@@ -50,7 +51,9 @@ function EntryHeaderImpl({
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()
 
-  const shouldShowMeta = !isAtTop && !!entryTitleMeta?.title
+  const hideRecentReader = useUISettingKey("hideRecentReader")
+
+  const shouldShowMeta = (hideRecentReader || !isAtTop) && !!entryTitleMeta?.title
 
   if (!entry?.entries) return null
 
@@ -62,16 +65,18 @@ function EntryHeaderImpl({
         className,
       )}
     >
-      <div
-        className={cn(
-          "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
-          "visible z-[11]",
-          views[view].wideMode && "static",
-          shouldShowMeta && "hidden",
-        )}
-      >
-        <EntryReadHistory entryId={entryId} />
-      </div>
+      {!hideRecentReader && (
+        <div
+          className={cn(
+            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
+            "visible z-[11]",
+            views[view].wideMode && "static",
+            shouldShowMeta && "hidden",
+          )}
+        >
+          <EntryReadHistory entryId={entryId} />
+        </div>
+      )}
       <div className="relative z-10 flex w-full items-center justify-between gap-3">
         <div className="flex min-w-0 shrink grow">
           <AnimatePresence>
