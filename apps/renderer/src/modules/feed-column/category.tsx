@@ -302,7 +302,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         {open && (
           <m.div
             ref={itemsRef}
-            className="overflow-hidden"
+            className="space-y-px overflow-hidden"
             initial={
               !!showCollapse && {
                 height: 0,

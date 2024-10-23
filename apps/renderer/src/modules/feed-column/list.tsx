@@ -179,6 +179,38 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
       </div>
+      <Selecto
+        ref={selectoRef}
+        rootContainer={document.body}
+        dragContainer={feedsArea.current}
+        selectableTargets={["[data-feed-id]"]}
+        continueSelect
+        hitRate={20}
+        onSelect={(e) => {
+          const allChanged = [...e.added, ...e.removed]
+          setSelectedFeedIds((prev) => {
+            const added = allChanged
+              .map((el) => el.dataset.feedId)
+              .filter((id) => id !== undefined)
+              .filter((id) => !prev.includes(id))
+            const removed = new Set(
+              allChanged
+                .map((el) => el.dataset.feedId)
+                .filter((id) => id !== undefined)
+                .filter((id) => prev.includes(id)),
+            )
+            return [...prev.filter((id) => !removed.has(id)), ...added]
+          })
+        }}
+        scrollOptions={{
+          container: scrollerRef.current as HTMLElement,
+          throttleTime: 30,
+          threshold: 0,
+        }}
+        onScroll={(e) => {
+          scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
+        }}
+      />
 
       <ScrollArea.ScrollArea
         ref={scrollerRef}
@@ -226,44 +258,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <SortByAlphabeticalInbox view={view} data={inboxesData} />
           </>
         )}
-        <Selecto
-          ref={selectoRef}
-          container={feedsArea.current}
-          rootContainer={document.body}
-          selectableTargets={["[data-feed-id]"]}
-          continueSelect
-          hitRate={30}
-          scrollOptions={{
-            container: scrollerRef.current as HTMLElement,
-            throttleTime: 30,
-            threshold: 0,
-          }}
-          onDragStart={(e) => {
-            if (e.inputEvent.target.nodeName === "BUTTON") {
-              return false
-            }
-            return true
-          }}
-          onSelect={(e) => {
-            const allChanged = [...e.added, ...e.removed]
-            setSelectedFeedIds((prev) => {
-              const added = allChanged
-                .map((el) => el.dataset.feedId)
-                .filter((id) => id !== undefined)
-                .filter((id) => !prev.includes(id))
-              const removed = new Set(
-                allChanged
-                  .map((el) => el.dataset.feedId)
-                  .filter((id) => id !== undefined)
-                  .filter((id) => prev.includes(id)),
-              )
-              return [...prev.filter((id) => !removed.has(id)), ...added]
-            })
-          }}
-          onScroll={(e) => {
-            scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
-          }}
-        />
+
         <div ref={feedsArea}>
           {(hasListData || hasInboxData) && (
             <div
