@@ -1,3 +1,4 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
 import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
 import type { Element, Parent, Text } from "hast"
 import type { Schema } from "hast-util-sanitize"
@@ -18,7 +19,6 @@ import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
-import { MemoedDangerousHTMLStyle } from "~/components/common/MemoedDangerousHTMLStyle"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { LazyKateX } from "~/components/ui/katex/lazy"
