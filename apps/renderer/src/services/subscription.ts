@@ -63,6 +63,10 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> imp
     }
   }
 
+  async removeSubscriptionMany(userId: string, feedIdList: string[]) {
+    return this.table.bulkDelete(feedIdList.map((feedId) => this.uniqueId(userId, feedId)))
+  }
+
   async renameCategory(userId: string, feedIdList: string[], category: string) {
     return this.table
       .where("userId")

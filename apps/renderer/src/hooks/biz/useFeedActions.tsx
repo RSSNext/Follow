@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
@@ -29,12 +30,32 @@ import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 import { useDeleteSubscription } from "./useSubscriptionActions"
 
+const ConfirmDestroyModalContent = ({ onConfirm }: { onConfirm: () => void }) => {
+  const { t } = useTranslation()
+
+  return (
+    <div className="w-[540px]">
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t("sidebar.feed_actions.unfollow_feed_many_warning")}
+      </div>
+      <div className="flex justify-end">
+        <Button className="bg-red-600" onClick={onConfirm}>
+          {t("words.confirm")}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 export const useFeedActions = ({
   feedId,
+  feedIds,
   view,
   type,
 }: {
   feedId: string
+  feedIds?: string[]
   view?: number
   type?: "feedList" | "entryList"
 }) => {
@@ -57,6 +78,8 @@ export const useFeedActions = ({
 
   const listByView = useOwnedList(view!)
 
+  const isMultipleSelection = feedIds && feedIds.length > 0
+
   const items = useMemo(() => {
     if (!feed) return []
 
@@ -66,7 +89,11 @@ export const useFeedActions = ({
         label: t("sidebar.feed_actions.mark_all_as_read"),
         shortcut: "Meta+Shift+A",
         disabled: isEntryList,
-        click: () => subscriptionActions.markReadByFeedIds({ feedIds: [feedId] }),
+        click: () =>
+          subscriptionActions.markReadByFeedIds({
+            feedIds: isMultipleSelection ? feedIds : [feedId],
+          }),
+        supportMultipleSelection: true,
       },
       !feed.ownerUserId &&
         !!isBizId(feed.id) &&
@@ -103,6 +130,7 @@ export const useFeedActions = ({
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
         disabled: isInbox,
+        supportMultipleSelection: true,
         submenu: [
           ...listByView.map((list) => {
             const isIncluded = list.feedIds.includes(feedId)
@@ -111,6 +139,14 @@ export const useFeedActions = ({
               type: "text" as const,
               checked: isIncluded,
               click() {
+                if (isMultipleSelection) {
+                  addFeedToListMutation({
+                    feedIds,
+                    listId: list.id,
+                  })
+                  return
+                }
+
                 if (!isIncluded) {
                   addFeedToListMutation({
                     feedId,
@@ -157,12 +193,31 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: isEntryList
-          ? t("sidebar.feed_actions.unfollow_feed")
-          : t("sidebar.feed_actions.unfollow"),
+        label: isMultipleSelection
+          ? t("sidebar.feed_actions.unfollow_feed_many")
+          : isEntryList
+            ? t("sidebar.feed_actions.unfollow_feed")
+            : t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
         disabled: isInbox,
-        click: () => deleteSubscription.mutate(subscription),
+        supportMultipleSelection: true,
+        click: () => {
+          if (isMultipleSelection) {
+            present({
+              title: t("sidebar.feed_actions.unfollow_feed_many_confirm"),
+              content: ({ dismiss }) => (
+                <ConfirmDestroyModalContent
+                  onConfirm={() => {
+                    deleteSubscription.mutate({ feedIdList: feedIds })
+                    dismiss()
+                  }}
+                />
+              ),
+            })
+            return
+          }
+          deleteSubscription.mutate({ subscription })
+        },
       },
       {
         type: "text" as const,
@@ -235,6 +290,8 @@ export const useFeedActions = ({
     isInbox,
     listByView,
     feedId,
+    isMultipleSelection,
+    feedIds,
     claimFeed,
     openBoostModal,
     addFeedToListMutation,
@@ -287,7 +344,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         type: "text" as const,
         label: t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
-        click: () => deleteSubscription(subscription),
+        click: () => deleteSubscription({ subscription }),
       },
       {
         type: "text" as const,

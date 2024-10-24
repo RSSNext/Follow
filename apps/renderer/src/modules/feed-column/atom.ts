@@ -1,4 +1,5 @@
 import { getStorageNS } from "@follow/utils/ns"
+import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
 import { createAtomHooks } from "~/lib/jotai"
@@ -33,3 +34,13 @@ export const setFeedListSortOrder = (order: FeedListSortOrder) => {
     order,
   })
 }
+
+export const [
+  ,
+  useSelectedFeedIds,
+  ,
+  useSetSelectedFeedIds,
+  getSelectedFeedIds,
+  setSelectedFeedIds,
+  useSelectedFeedIdsSelector,
+] = createAtomHooks(atom<string[]>([]))

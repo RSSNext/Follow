@@ -159,7 +159,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         <div
           data-active={isActive || isContextMenuOpen}
           className={cn(
-            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
+            "my-px flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
             feedColumnStyles.item,
           )}
           onClick={(e) => {
@@ -303,7 +303,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         {open && (
           <m.div
             ref={itemsRef}
-            className="overflow-hidden"
+            className="space-y-px overflow-hidden"
             initial={
               !!showCollapse && {
                 height: 0,
