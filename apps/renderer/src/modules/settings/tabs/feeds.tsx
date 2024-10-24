@@ -13,8 +13,8 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { useTranslation } from "react-i18next"
 
-import { FeedIcon } from "~/components/feed-icon"
 import { useAuthQuery } from "~/hooks/common"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
 

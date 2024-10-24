@@ -1,3 +1,5 @@
+import { FollowIcon } from "@follow/components/icons/follow.jsx"
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { cn } from "@follow/utils/utils"
 import type { MotionValue } from "framer-motion"
 import { useMotionValueEvent, useScroll } from "framer-motion"
@@ -7,8 +9,6 @@ import { useTranslation } from "react-i18next"
 import { Link, Outlet } from "react-router-dom"
 
 import { whoami } from "~/atoms/user"
-import { FollowIcon } from "~/components/icons/follow"
-import { Logo } from "~/components/icons/logo"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 

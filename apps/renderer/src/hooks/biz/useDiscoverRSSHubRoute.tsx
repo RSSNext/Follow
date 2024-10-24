@@ -1,8 +1,8 @@
 import { useEventCallback } from "usehooks-ts"
 
-import { FeedIcon } from "~/components/feed-icon"
 import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
 import { RecommendationContent } from "~/modules/discover/recommendation-content"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { discover } from "~/queries/discover"
 
 import { useAuthQuery } from "../common"

@@ -1,3 +1,4 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
 import {
@@ -22,7 +23,6 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
-import { Logo } from "~/components/icons/logo"
 import { SocialMediaLinks } from "~/constants/social"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { tipcClient } from "~/lib/client"

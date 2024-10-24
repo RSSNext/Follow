@@ -1,3 +1,4 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import {
@@ -22,7 +23,6 @@ import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { useWhoami } from "~/atoms/user"
-import { Logo } from "~/components/icons/logo"
 import { RelativeTime } from "~/components/ui/datetime"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getBlockchainExplorerUrl } from "~/lib/utils"

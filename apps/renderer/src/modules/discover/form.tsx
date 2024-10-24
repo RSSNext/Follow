@@ -29,7 +29,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { apiClient } from "~/lib/api-fetch"
 
-import { FollowSummary } from "../../components/feed-summary"
+import { FollowSummary } from "../feed/feed-summary"
 import { FeedForm } from "./feed-form"
 
 const formSchema = z.object({

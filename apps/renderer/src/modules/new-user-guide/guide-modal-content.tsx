@@ -1,3 +1,4 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
@@ -6,7 +7,6 @@ import { createElement, useCallback, useMemo, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import RSSHubIcon from "~/assets/rsshub-icon.png"
-import { Logo } from "~/components/icons/logo"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { mountLottie } from "~/components/ui/lottie-container"
 import { Markdown } from "~/components/ui/markdown/Markdown"

@@ -1,3 +1,4 @@
+import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useTitle } from "@follow/hooks"
@@ -6,11 +7,10 @@ import { useParams } from "react-router-dom"
 import { toast } from "sonner"
 
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
-import { FeedCertification } from "~/components/feed-certification"
-import { FeedIcon } from "~/components/feed-icon"
-import { FollowIcon } from "~/components/icons/follow"
 import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import type { ListModel } from "~/models"
+import { FeedCertification } from "~/modules/feed/feed-certification"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useList } from "~/queries/lists"
 import { useFeedById } from "~/store/feed/hooks"
 

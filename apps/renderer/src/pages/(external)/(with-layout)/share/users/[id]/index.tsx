@@ -1,3 +1,4 @@
+import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
@@ -9,13 +10,12 @@ import { useParams } from "react-router-dom"
 
 import { useWhoami } from "~/atoms/user"
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
-import { FeedIcon } from "~/components/feed-icon"
-import { FollowIcon } from "~/components/icons/follow"
 import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 
 export function Component() {

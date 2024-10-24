@@ -1,4 +1,5 @@
 import type { User } from "@auth/core/types"
+import { PhUsersBold } from "@follow/components/icons/users.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
@@ -13,12 +14,11 @@ import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 
 import { getTrendingAggregates } from "~/api/trending"
-import { FeedIcon } from "~/components/feed-icon"
-import { PhUsersBold } from "~/components/icons/users"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
 import { useFollow } from "~/hooks/biz/useFollow"
 import type { FeedModel, Models } from "~/models"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 

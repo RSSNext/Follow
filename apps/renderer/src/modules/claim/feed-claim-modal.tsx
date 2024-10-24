@@ -7,12 +7,12 @@ import type { FC } from "react"
 import { useEffect } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
-import { FollowSummary } from "~/components/feed-summary"
 import { CopyButton, ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { useShikiDefaultTheme } from "~/components/ui/code-highlighter/shiki/hooks"
 import { useCurrentModal } from "~/components/ui/modal"
 import { useAuthQuery } from "~/hooks/common"
 import type { FeedModel } from "~/models"
+import { FollowSummary } from "~/modules/feed/feed-summary"
 import { feed as feedQuery, useClaimFeedMutation } from "~/queries/feed"
 import { useFeedById } from "~/store/feed"
 

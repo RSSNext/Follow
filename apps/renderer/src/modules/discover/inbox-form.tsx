@@ -1,3 +1,4 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
 import {
@@ -19,11 +20,10 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { FollowSummary } from "~/components/feed-summary"
-import { Logo } from "~/components/icons/logo"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
 import type { InboxModel } from "~/models"
+import { FollowSummary } from "~/modules/feed/feed-summary"
 import { useInbox } from "~/queries/inboxes"
 import { useInboxById } from "~/store/inbox"
 import { subscriptionActions } from "~/store/subscription"

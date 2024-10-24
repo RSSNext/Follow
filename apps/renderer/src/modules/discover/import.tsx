@@ -21,7 +21,7 @@ import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { Queries } from "~/queries"
 
-import { FollowSummary } from "../../components/feed-summary"
+import { FollowSummary } from "../feed/feed-summary"
 
 type FeedResponseList = {
   id: string

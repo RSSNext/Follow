@@ -1,3 +1,4 @@
+import { OouiUserAnonymous } from "@follow/components/icons/OouiUserAnonymous.jsx"
 import {
   Tooltip,
   TooltipContent,
@@ -15,14 +16,13 @@ import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { getMainContainerElement } from "~/atoms/dom"
-import { FeedCertification } from "~/components/feed-certification"
-import { FeedIcon } from "~/components/feed-icon"
-import { OouiUserAnonymous } from "~/components/icons/OouiUserAnonymous"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
+import { FeedCertification } from "~/modules/feed/feed-certification"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"

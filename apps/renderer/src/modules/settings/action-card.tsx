@@ -25,8 +25,8 @@ import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Collapse, CollapseControlled } from "~/components/ui/collapse"
-import { ViewSelectContent } from "~/components/view-select-content"
 import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
+import { ViewSelectContent } from "~/modules/feed/view-select-content"
 
 const TransitionOptions: {
   name: string

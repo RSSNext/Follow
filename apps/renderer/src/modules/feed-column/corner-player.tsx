@@ -15,12 +15,12 @@ import {
   useAudioPlayerAtomSelector,
   useAudioPlayerAtomValue,
 } from "~/atoms/player"
-import { FeedIcon } from "~/components/feed-icon"
 import { microReboundPreset } from "~/components/ui/constants/spring"
 import { VolumeSlider } from "~/components/ui/media/VolumeSlider"
 import { HotKeyScopeMap } from "~/constants"
 import type { NavigateEntryOptions } from "~/hooks/biz/useNavigateEntry"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useListById } from "~/store/list"
