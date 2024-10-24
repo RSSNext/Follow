@@ -26,7 +26,9 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
       feedIdList?: string[]
     }) => {
       if (feedIdList) {
-        return subscriptionActions.unfollowMany(feedIdList)
+        await subscriptionActions.unfollowMany(feedIdList)
+        toast.success(t("notify.unfollow_feed_many"))
+        return
       }
 
       if (!subscription) return

@@ -4,6 +4,7 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { whoami } from "~/atoms/user"
+import { Button } from "~/components/ui/button"
 import { useModalStack } from "~/components/ui/modal"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
@@ -28,6 +29,24 @@ import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscripti
 import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 import { useDeleteSubscription } from "./useSubscriptionActions"
+
+const ConfirmDestroyModalContent = ({ onConfirm }: { onConfirm: () => void }) => {
+  const { t } = useTranslation()
+
+  return (
+    <div className="w-[540px]">
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t("sidebar.feed_actions.unfollow_feed_many_warning")}
+      </div>
+      <div className="flex justify-end">
+        <Button className="bg-red-600" onClick={onConfirm}>
+          {t("words.confirm")}
+        </Button>
+      </div>
+    </div>
+  )
+}
 
 export const useFeedActions = ({
   feedId,
@@ -174,15 +193,27 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: isEntryList
-          ? t("sidebar.feed_actions.unfollow_feed")
-          : t("sidebar.feed_actions.unfollow"),
+        label: isMultipleSelection
+          ? t("sidebar.feed_actions.unfollow_feed_many")
+          : isEntryList
+            ? t("sidebar.feed_actions.unfollow_feed")
+            : t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
         disabled: isInbox,
         supportMultipleSelection: true,
         click: () => {
           if (isMultipleSelection) {
-            deleteSubscription.mutate({ feedIdList: feedIds })
+            present({
+              title: t("sidebar.feed_actions.unfollow_feed_many_confirm"),
+              content: ({ dismiss }) => (
+                <ConfirmDestroyModalContent
+                  onConfirm={() => {
+                    deleteSubscription.mutate({ feedIdList: feedIds })
+                    dismiss()
+                  }}
+                />
+              ),
+            })
             return
           }
           deleteSubscription.mutate({ subscription })
