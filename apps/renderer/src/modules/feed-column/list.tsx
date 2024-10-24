@@ -181,6 +181,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         </div>
       </div>
       <Selecto
+        className="!border-theme-accent-400 !bg-theme-accent-400/60"
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={feedsArea.current}
