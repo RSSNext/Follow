@@ -24,7 +24,6 @@ import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
-import { TimelineTabs } from "./TimelineTabs"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -69,13 +68,14 @@ export const EntryListHeader: FC<{
   const isList = !!listId
 
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        view !== FeedViewType.Pictures && "mb-2",
+        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
+        titleStyleBasedView[view],
       )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
@@ -156,7 +156,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
-      <TimelineTabs />
+      {/* <TimelineTabs /> */}
     </div>
   )
 }
