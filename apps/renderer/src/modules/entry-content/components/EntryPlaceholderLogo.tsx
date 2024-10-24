@@ -1,6 +1,7 @@
-import { Logo } from "~/components/icons/logo"
-import { stopPropagation } from "~/lib/dom"
-import { cn } from "~/lib/utils"
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { stopPropagation } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
+
 import { useFeedHeaderTitle } from "~/store/feed"
 
 import { useEntryContentPlaceholderLogoShow } from "../atoms"

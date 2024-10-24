@@ -1,8 +1,9 @@
+import { useTitle } from "@follow/hooks"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import type { ReactNode } from "react"
 import { useEffect } from "react"
 
-import { useI18n, useTitle } from "~/hooks/common"
+import { useI18n } from "~/hooks/common"
 
 const titleAtom = atom<string | ReactNode | null>(null)
 

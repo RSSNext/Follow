@@ -1,7 +1,12 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
 import { env } from "@follow/shared/env"
 
 import { useUserRole } from "~/atoms/user"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 
 export const EnvironmentIndicator = () => {
   const role = useUserRole()

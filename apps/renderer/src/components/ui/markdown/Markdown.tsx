@@ -1,8 +1,8 @@
+import { cn } from "@follow/utils/utils"
 import { useMemo, useState } from "react"
 
 import type { RemarkOptions } from "~/lib/parse-markdown"
 import { parseMarkdown } from "~/lib/parse-markdown"
-import { cn } from "~/lib/utils"
 
 import { MarkdownRenderContainerRefContext } from "./context"
 

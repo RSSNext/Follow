@@ -1,9 +1,8 @@
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { cn } from "@follow/utils/utils"
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
-
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
-import { cn } from "~/lib/utils"
 
 import { settings } from "./constants"
 import { IsInSettingIndependentWindowContext } from "./context"

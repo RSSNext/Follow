@@ -1,9 +1,10 @@
+import type { InboxModel } from "@follow/models/types"
+
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { InboxModel } from "~/models"
 import { InboxService } from "~/services/inbox"
 
-import { createImmerSetter, createZustandStore } from "../utils/helper"
+import { createImmerSetter, createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
 import type { InboxState } from "./types"
 
 export const useInboxStore = createZustandStore<InboxState>("inbox")(() => ({
@@ -69,3 +70,7 @@ class InboxActionStatic {
 }
 
 export const inboxActions = new InboxActionStatic()
+
+if (import.meta.env.DEV) {
+  reloadWhenHotUpdate(import.meta.hot)
+}

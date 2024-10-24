@@ -1,3 +1,4 @@
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { repository } from "@pkg"
 import i18next from "i18next"
 import type { FC } from "react"
@@ -5,7 +6,6 @@ import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from
 import { Trans } from "react-i18next"
 
 import { ModalClose } from "~/components/ui/modal/stacked/components"
-import { ScrollArea } from "~/components/ui/scroll-area"
 import { SettingsTitle } from "~/modules/settings/title"
 
 import { settings } from "../constants"

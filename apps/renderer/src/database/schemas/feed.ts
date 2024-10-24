@@ -1,4 +1,4 @@
-import type { FeedModel } from "~/models"
+import type { FeedModel } from "@follow/models/types"
 
 export type DB_FeedUnread = {
   id: string

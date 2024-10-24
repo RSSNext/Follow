@@ -1,3 +1,4 @@
+// @copy internal masonic hooks
 import { clearRequestTimeout, requestTimeout } from "@essentials/request-timeout"
 import { useWindowSize } from "@react-hook/window-size"
 import { useForceUpdate } from "framer-motion"
@@ -6,8 +7,7 @@ import type { ContainerPosition, MasonryProps, MasonryScrollerProps, Positioner 
 import { createResizeObserver, useMasonry, usePositioner, useScrollToIndex } from "masonic"
 import * as React from "react"
 
-import { useScrollViewElement } from "../scroll-area/hooks"
-
+import { useScrollViewElement } from "../scroll-area/hooks.js"
 /**
  * A "batteries included" masonry grid which includes all of the implementation details below. This component is the
  * easiest way to get off and running in your app, before switching to more advanced implementations, if necessary.

@@ -1,24 +1,24 @@
 import type { User } from "@auth/core/types"
+import { PhUsersBold } from "@follow/components/icons/users.jsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { ActionButton, Button } from "@follow/components/ui/button/index.js"
+import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import type { FeedModel, Models } from "@follow/models"
+import { stopPropagation } from "@follow/utils/dom"
+import { UrlBuilder } from "@follow/utils/url-builder"
+import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 
 import { getTrendingAggregates } from "~/api/trending"
-import { FeedIcon } from "~/components/feed-icon"
-import { PhUsersBold } from "~/components/icons/users"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { ActionButton, Button } from "~/components/ui/button"
-import { LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFollow } from "~/hooks/biz/useFollow"
-import { stopPropagation } from "~/lib/dom"
-import { UrlBuilder } from "~/lib/url-builder"
-import { cn } from "~/lib/utils"
-import type { FeedModel, Models } from "~/models"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 
@@ -121,7 +121,7 @@ const TrendingLists: FC<{
                 <div className="flex items-end gap-2">
                   <div className={cn("truncate text-base font-medium")}>{item.title}</div>
 
-                  <UserCount count={item.subscriberCount} />
+                  {!!item.subscriberCount && <UserCount count={item.subscriberCount} />}
                 </div>
                 {!!item.description && (
                   <div className={"line-clamp-2 text-xs"}>{item.description}</div>

@@ -13,6 +13,12 @@ import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
 import { clearDataIfLoginOtherAccount } from "~/store/utils/clear"
 
+declare module "@follow/components/providers/stable-router-provider.js" {
+  interface CustomRoute {
+    showSettings: (path?: string) => void
+  }
+}
+
 export const ExtensionExposeProvider = () => {
   const { present } = useModalStack()
   const showSettings = useSettingModal()
@@ -50,7 +56,6 @@ export const ExtensionExposeProvider = () => {
   useEffect(() => {
     registerGlobalContext({
       follow,
-
       profile(id, variant) {
         presentUserProfile(id, variant)
       },

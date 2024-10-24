@@ -1,9 +1,9 @@
+import { views } from "@follow/constants"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { views } from "~/constants"
 import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"

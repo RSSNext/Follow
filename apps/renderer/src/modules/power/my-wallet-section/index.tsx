@@ -1,14 +1,20 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Divider } from "~/components/ui/divider"
-import { LoadingWithIcon } from "~/components/ui/loading"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { apiClient } from "~/lib/api-fetch"
-import { cn, getBlockchainExplorerUrl } from "~/lib/utils"
+import { getBlockchainExplorerUrl } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { ActivityPoints } from "~/modules/wallet/activity-points"
 import { Balance } from "~/modules/wallet/balance"

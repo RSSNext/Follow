@@ -1,3 +1,14 @@
+import { ActionButton, Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@follow/components/ui/table/index.jsx"
+import { FeedViewType, UserRole } from "@follow/constants"
 import { env } from "@follow/shared/env"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
@@ -6,20 +17,9 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useUserRole } from "~/atoms/user"
 import { CustomSafeError } from "~/components/errors/helper"
-import { ActionButton, Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table"
 import { MAX_TRIAL_USER_INBOX_SUBSCRIPTION } from "~/constants/limit"
-import { FeedViewType, UserRole } from "~/lib/enum"
 import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
 import { inboxActions } from "~/store/inbox"

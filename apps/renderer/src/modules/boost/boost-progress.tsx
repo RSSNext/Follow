@@ -1,4 +1,4 @@
-import { cn } from "~/lib/utils"
+import { cn } from "@follow/utils/utils"
 
 export const BoostProgress = ({
   level,

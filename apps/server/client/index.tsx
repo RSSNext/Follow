@@ -1,6 +1,6 @@
 import "@follow/components/tailwind"
-import "./styles/index.css"
 import "@follow/components/dayjs"
+import "./styles/index.css"
 
 // @ts-expect-error
 import { ClickToComponent } from "click-to-react-component"

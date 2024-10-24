@@ -54,6 +54,7 @@ export default defineConfig({
           main: resolve("./apps/renderer/index.html"),
         },
       },
+      minify: true,
     },
     define: {
       ...viteRenderBaseConfig.define,

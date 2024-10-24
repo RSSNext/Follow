@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { captureException } from "@sentry/react"
 import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
@@ -7,7 +8,6 @@ import { attachOpenInEditor } from "~/lib/dev"
 import { getNewIssueUrl } from "~/lib/issues"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
-import { Button } from "../ui/button"
 import { PoweredByFooter } from "./PoweredByFooter"
 
 export function ErrorElement() {

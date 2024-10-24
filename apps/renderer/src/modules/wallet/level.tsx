@@ -1,4 +1,6 @@
-import { cn, getLevelMultiplier } from "~/lib/utils"
+import { cn } from "@follow/utils/utils"
+
+import { getLevelMultiplier } from "~/lib/utils"
 
 export const Level = ({
   level,

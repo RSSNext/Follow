@@ -1,16 +1,15 @@
+import { Chain } from "@follow/utils/chain"
+import { EventBus } from "@follow/utils/event-bus"
+import { getStorageNS } from "@follow/utils/ns"
 import i18next from "i18next"
 import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
-
-import { EventBus } from "~/lib/event-bus"
 
 import { defaultNS, ns } from "./@types/constants"
 import { defaultResources } from "./@types/default-resource"
 import { getGeneralSettings } from "./atoms/settings/general"
 import { isDev } from "./constants"
-import { Chain } from "./lib/chain"
 import { jotaiStore } from "./lib/jotai"
-import { getStorageNS } from "./lib/ns"
 
 export const i18nAtom = atom(i18next)
 
@@ -89,7 +88,7 @@ if (import.meta.hot) {
   )
 }
 
-declare module "~/lib/event-bus" {
+declare module "@follow/utils/event-bus" {
   interface CustomEvent {
     I18N_UPDATE: string
   }

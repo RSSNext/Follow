@@ -1,5 +1,6 @@
-import { views } from "~/constants"
-import type { SupportedLanguages } from "~/models"
+import { views } from "@follow/constants"
+import type { SupportedLanguages } from "@follow/models/types"
+
 import type { FlatEntryModel } from "~/store/entry"
 
 import { apiClient } from "./api-fetch"

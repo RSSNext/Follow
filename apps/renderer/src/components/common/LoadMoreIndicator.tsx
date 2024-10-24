@@ -1,6 +1,5 @@
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useInView } from "react-intersection-observer"
-
-import { LoadingCircle } from "../ui/loading"
 
 export const LoadMoreIndicator: Component<{
   onLoading: () => void

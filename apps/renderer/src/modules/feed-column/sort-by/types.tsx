@@ -1,4 +1,4 @@
-import type { FeedViewType } from "~/lib/enum"
+import type { FeedViewType } from "@follow/constants"
 
 export type FeedListProps = {
   view: number

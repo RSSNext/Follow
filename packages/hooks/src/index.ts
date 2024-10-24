@@ -1,3 +1,4 @@
+export type { HTMLMediaState } from "./factory/createHTMLMediaHook"
 export * from "./useAnyPointDown"
 export * from "./useDark"
 export * from "./useInputComposition"

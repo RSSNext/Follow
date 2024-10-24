@@ -1,11 +1,17 @@
+import type {
+  CombinedEntryModel,
+  EntryModel,
+  FeedModel,
+  FeedOrListRespModel,
+} from "@follow/models/types"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
+import { omitObjectUndefinedValue } from "@follow/utils/utils"
 import { produce } from "immer"
 import { isNil, merge, omit } from "lodash-es"
 
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import { getEntriesParams, omitObjectUndefinedValue } from "~/lib/utils"
-import type { CombinedEntryModel, EntryModel, FeedModel, FeedOrListRespModel } from "~/models"
+import { getEntriesParams } from "~/lib/utils"
 import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
@@ -13,7 +19,7 @@ import { imageActions } from "../image"
 import { inboxActions } from "../inbox"
 import { getSubscriptionByFeedId } from "../subscription"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createZustandStore, doMutationAndTransaction, reloadWhenHotUpdate } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
@@ -473,3 +479,7 @@ class EntryActions {
 export const entryActions = new EntryActions()
 
 export const getEntry = (entryId: string) => useEntryStore.getState().flatMapEntries[entryId]
+
+if (import.meta.env.DEV) {
+  reloadWhenHotUpdate(import.meta.hot)
+}

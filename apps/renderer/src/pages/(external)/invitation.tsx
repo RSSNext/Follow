@@ -1,3 +1,16 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DotLottie } from "@lottiefiles/dotlottie-react"
@@ -10,19 +23,6 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
-import { Logo } from "~/components/icons/logo"
-import { Button } from "~/components/ui/button"
-import { styledButtonVariant } from "~/components/ui/button/variants"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { SocialMediaLinks } from "~/constants/social"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { tipcClient } from "~/lib/client"

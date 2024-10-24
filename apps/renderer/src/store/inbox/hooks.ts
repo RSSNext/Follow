@@ -1,4 +1,4 @@
-import type { InboxModel } from "~/models"
+import type { InboxModel } from "@follow/models/types"
 
 import { useInboxStore } from "./store"
 

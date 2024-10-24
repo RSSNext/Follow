@@ -1,5 +1,6 @@
+import { cn } from "@follow/utils/utils"
+
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { cn } from "~/lib/utils"
 
 export const UnreadNumber = ({
   unread,

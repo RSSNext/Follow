@@ -1,9 +1,7 @@
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { cn } from "@follow/utils/utils"
 import type { FC, MouseEvent } from "react"
 import { memo, useCallback, useRef } from "react"
-
-import { cn } from "~/lib/utils"
-
-import { EllipsisHorizontalTextWithTooltip } from "../../typography"
 
 export interface ITocItem {
   depth: number

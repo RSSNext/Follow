@@ -1,8 +1,6 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
+import { cn } from "@follow/utils/utils"
 import { format } from "dnum"
-
-import { cn } from "~/lib/utils"
-
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/tooltip"
 
 export const Balance = ({
   children,

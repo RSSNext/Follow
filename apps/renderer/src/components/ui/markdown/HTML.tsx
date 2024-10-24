@@ -1,7 +1,7 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import katexStyle from "katex/dist/katex.min.css?raw"
 import { createElement, Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 
-import { MemoedDangerousHTMLStyle } from "~/components/common/MemoedDangerousHTMLStyle"
 import { parseHtml } from "~/lib/parse-html"
 import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 

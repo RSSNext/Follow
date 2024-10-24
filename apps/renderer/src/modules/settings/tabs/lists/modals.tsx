@@ -1,18 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
-import { useMemo, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { toast } from "sonner"
-import { z } from "zod"
-
-import { FeedCertification } from "~/components/feed-certification"
-import { FeedIcon } from "~/components/feed-icon"
-import type { Suggestion } from "~/components/ui/auto-completion"
-import { Autocomplete } from "~/components/ui/auto-completion"
-import { Avatar, AvatarImage } from "~/components/ui/avatar"
-import { Button } from "~/components/ui/button"
-import { Divider } from "~/components/ui/divider"
+import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
 import {
   Form,
   FormControl,
@@ -21,10 +9,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
-import { useCurrentModal } from "~/components/ui/modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import {
   Table,
   TableBody,
@@ -32,13 +19,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
-import { views } from "~/constants"
+} from "@follow/components/ui/table/index.jsx"
+import { views } from "@follow/constants"
+import type { FeedModel } from "@follow/models/types"
+import { UrlBuilder } from "@follow/utils/url-builder"
+import { isBizId } from "@follow/utils/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import { useMemo, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
+import { z } from "zod"
+
+import type { Suggestion } from "~/components/ui/auto-completion"
+import { Autocomplete } from "~/components/ui/auto-completion"
+import { useCurrentModal } from "~/components/ui/modal"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
-import { UrlBuilder } from "~/lib/url-builder"
-import { isBizId } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import { FeedCertification } from "~/modules/feed/feed-certification"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Queries } from "~/queries"
 import {

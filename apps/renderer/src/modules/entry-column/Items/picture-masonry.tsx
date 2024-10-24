@@ -1,3 +1,8 @@
+import { Masonry } from "@follow/components/ui/masonry/index.js"
+import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
+import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
+import { useRefValue } from "@follow/hooks"
+import { nextFrame } from "@follow/utils/dom"
 import { useSingleton } from "foxact/use-singleton"
 import { throttle } from "lodash-es"
 import type { RenderComponentProps } from "masonic"
@@ -7,12 +12,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { Masonry } from "~/components/ui/Masonry"
 import { MediaContainerWidthProvider } from "~/components/ui/media"
-import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
-import { Skeleton } from "~/components/ui/skeleton"
-import { useRefValue } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
 import { getEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 

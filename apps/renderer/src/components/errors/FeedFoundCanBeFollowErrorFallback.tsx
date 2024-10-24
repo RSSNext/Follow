@@ -1,15 +1,15 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import type { FeedModel } from "@follow/models/types"
+import { nextFrame } from "@follow/utils/dom"
 import type { FC } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
-import { nextFrame } from "~/lib/dom"
-import type { FeedModel } from "~/models"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { entries } from "~/queries/entries"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
-import { Button } from "../ui/button"
 import { useModalStack } from "../ui/modal"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
 import { FeedPreview } from "./previews/FeedPreview"

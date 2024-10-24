@@ -11,5 +11,6 @@ export default resolveConfig({
 
     "./apps/renderer/index.html",
     "./apps/web/index.html",
+    "./packages/**/*.{ts,tsx}",
   ],
 })

@@ -1,28 +1,28 @@
-import { IN_ELECTRON } from "@follow/shared/constants"
-import { useTranslation } from "react-i18next"
-import { bundledThemesInfo } from "shiki/themes"
-
-import { createDefineSettingItem } from "~/atoms/settings/helper"
-import {
-  setUISetting,
-  useUISettingKey,
-  useUISettingSelector,
-  useUISettingValue,
-} from "~/atoms/settings/ui"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select"
+} from "@follow/components/ui/select/index.jsx"
+import { useIsDark, useSetTheme, useThemeAtomValue } from "@follow/hooks"
+import { IN_ELECTRON } from "@follow/shared/constants"
+import { getOS } from "@follow/utils/utils"
+import { useTranslation } from "react-i18next"
+import { bundledThemesInfo } from "shiki/themes"
+
+import {
+  setUISetting,
+  useUISettingKey,
+  useUISettingSelector,
+  useUISettingValue,
+} from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
-import { useIsDark, useSetTheme, useThemeAtomValue } from "~/hooks/common"
-import { getOS } from "~/lib/utils"
 
 import { SettingTabbedSegment } from "../control"
+import { createDefineSettingItem } from "../helper/builder"
+import { createSettingBuilder } from "../helper/setting-builder"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
-import { createSettingBuilder } from "../setting-builder"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
 const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)

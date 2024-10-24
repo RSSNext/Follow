@@ -1,3 +1,10 @@
+import type {
+  CombinedEntryModel,
+  FeedModel,
+  FeedOrListModel,
+  FeedOrListRespModel,
+  UserModel,
+} from "@follow/models/types"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 import { nanoid } from "nanoid"
@@ -5,18 +12,11 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type {
-  CombinedEntryModel,
-  FeedModel,
-  FeedOrListModel,
-  FeedOrListRespModel,
-  UserModel,
-} from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
 import { userActions } from "../user"
-import { createZustandStore } from "../utils/helper"
+import { createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -150,4 +150,8 @@ export const getPreferredTitle = (
 
   const subscription = getSubscriptionByFeedId(feed.id)
   return subscription?.title || feed.title
+}
+
+if (import.meta.env.DEV) {
+  reloadWhenHotUpdate(import.meta.hot)
 }

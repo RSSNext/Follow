@@ -1,6 +1,6 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { Trans, useTranslation } from "react-i18next"
 
-import { Button } from "~/components/ui/button"
 import { useCreateWalletMutation } from "~/queries/wallet"
 
 export const CreateWallet = () => {

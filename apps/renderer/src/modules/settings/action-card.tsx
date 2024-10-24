@@ -1,21 +1,16 @@
-import { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
-
-import { Button } from "~/components/ui/button"
-import { Card, CardHeader } from "~/components/ui/card"
-import { Collapse, CollapseControlled } from "~/components/ui/collapse"
-import { Divider } from "~/components/ui/divider"
-import { Input } from "~/components/ui/input"
-import { Radio } from "~/components/ui/radio-group"
-import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
+import { Button } from "@follow/components/ui/button/index.js"
+import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { Input } from "@follow/components/ui/input/index.js"
+import { Radio, RadioGroup } from "@follow/components/ui/radio-group/index.js"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select"
-import { Switch } from "~/components/ui/switch"
+} from "@follow/components/ui/select/index.jsx"
+import { Switch } from "@follow/components/ui/switch/index.jsx"
 import {
   Table,
   TableBody,
@@ -23,11 +18,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
-import { ViewSelectContent } from "~/components/view-select-content"
-import { stopPropagation } from "~/lib/dom"
-import { cn } from "~/lib/utils"
-import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
+} from "@follow/components/ui/table/index.jsx"
+import type {
+  ActionFeedField,
+  ActionOperation,
+  ActionsInput,
+  SupportedLanguages,
+} from "@follow/models/types"
+import { stopPropagation } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+
+import { Collapse, CollapseControlled } from "~/components/ui/collapse"
+import { ViewSelectContent } from "~/modules/feed/view-select-content"
 
 const TransitionOptions: {
   name: string

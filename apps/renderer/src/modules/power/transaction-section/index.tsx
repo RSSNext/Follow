@@ -1,12 +1,6 @@
-import { useState } from "react"
-import { useTranslation } from "react-i18next"
-
-import { useServerConfigs } from "~/atoms/server-configs"
-import { useWhoami } from "~/atoms/user"
-import { Logo } from "~/components/icons/logo"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { MotionButtonBase } from "~/components/ui/button"
-import { RelativeTime } from "~/components/ui/datetime"
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import {
   Table,
   TableBody,
@@ -14,13 +8,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
+} from "@follow/components/ui/table/index.jsx"
+import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { TransactionTypes } from "@follow/models/types"
+import { cn } from "@follow/utils/utils"
+import { useState } from "react"
+import { useTranslation } from "react-i18next"
+
+import { useServerConfigs } from "~/atoms/server-configs"
+import { useWhoami } from "~/atoms/user"
+import { RelativeTime } from "~/components/ui/datetime"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn, getBlockchainExplorerUrl } from "~/lib/utils"
-import { TransactionTypes } from "~/models/types"
+import { getBlockchainExplorerUrl } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { Balance } from "~/modules/wallet/balance"

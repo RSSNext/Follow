@@ -1,12 +1,12 @@
+import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { createContext, memo, useContext, useMemo, useState } from "react"
 import { Blurhash, BlurhashCanvas } from "react-blurhash"
 import { useEventCallback } from "usehooks-ts"
 
-import { nextFrame } from "~/lib/dom"
 import { getImageProxyUrl } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
 import { saveImageDimensionsToDb } from "~/store/image/db"
 
 import { usePreviewMedia } from "./media/hooks"

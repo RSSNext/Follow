@@ -1,12 +1,18 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { Button } from "~/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { useCurrentModal } from "~/components/ui/modal"
 import { apiClient } from "~/lib/api-fetch"
 import { Queries } from "~/queries"

@@ -1,8 +1,8 @@
+import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useState } from "react"
 
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { RootPortal } from "~/components/ui/portal"
 
 import { GuideModalContent } from "./guide-modal-content"
 

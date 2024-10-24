@@ -1,7 +1,7 @@
+import { getStorageNS } from "@follow/utils/ns"
 import { atomWithStorage } from "jotai/utils"
 
 import { createAtomHooks } from "~/lib/jotai"
-import { getStorageNS } from "~/lib/ns"
 
 type CornerPlayerAtomValue = {
   show: boolean

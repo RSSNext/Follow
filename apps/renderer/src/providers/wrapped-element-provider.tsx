@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import { cn } from "@follow/utils/utils"
 import { createContextState } from "foxact/create-context-state"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { PrimitiveAtom } from "jotai"
@@ -7,7 +8,6 @@ import { createContext, memo, useCallback, useContext, useEffect, useRef } from 
 
 import { ProviderComposer } from "~/components/common/ProviderComposer"
 import { jotaiStore } from "~/lib/jotai"
-import { cn } from "~/lib/utils"
 
 const [WrappedElementProviderInternal, useWrappedElement, useSetWrappedElement] =
   createContextState<HTMLDivElement | null>(undefined as any)

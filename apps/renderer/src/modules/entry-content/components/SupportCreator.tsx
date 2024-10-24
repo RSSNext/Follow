@@ -1,10 +1,10 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
-import { FeedIcon } from "~/components/feed-icon"
-import { Button } from "~/components/ui/button"
-import { Divider } from "~/components/ui/divider"
 import { useBoostModal } from "~/modules/boost/hooks"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"

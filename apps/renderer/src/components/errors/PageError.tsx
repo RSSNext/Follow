@@ -1,10 +1,10 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import type { FC } from "react"
 
 import { attachOpenInEditor } from "~/lib/dev"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { FeedbackIssue } from "../common/ErrorElement"
-import { Button } from "../ui/button"
 import { parseError, useResetErrorWhenRouteChange } from "./helper"
 
 const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {

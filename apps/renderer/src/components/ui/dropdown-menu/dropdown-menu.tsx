@@ -1,10 +1,10 @@
+import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { cn } from "@follow/utils/utils"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
 
-import { useHotkeyScope, useTypeScriptHappyCallback } from "~/hooks/common"
-import { cn } from "~/lib/utils"
-
-import { RootPortal } from "../portal"
+import { useHotkeyScope } from "~/hooks/common"
 
 const DropdownMenu: typeof DropdownMenuPrimitive.Root = (props) => {
   const [open, setOpen] = React.useState(!!props.open)

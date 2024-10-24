@@ -1,6 +1,7 @@
+import type { FeedViewType } from "@follow/constants"
+
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
-import type { FeedViewType } from "~/lib/enum"
 import { subscriptionActions } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 

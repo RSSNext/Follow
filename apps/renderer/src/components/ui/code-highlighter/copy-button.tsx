@@ -1,11 +1,10 @@
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { cn } from "@follow/utils/utils"
 import type { Variants } from "framer-motion"
 import { AnimatePresence } from "framer-motion"
 import { useCallback, useRef, useState } from "react"
 
 import { m } from "~/components/common/Motion"
-import { cn } from "~/lib/utils"
-
-import { MotionButtonBase } from "../button"
 
 const copyIconVariants: Variants = {
   initial: {
