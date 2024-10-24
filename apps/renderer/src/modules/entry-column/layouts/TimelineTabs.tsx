@@ -8,7 +8,6 @@ import { useSubscriptionStore } from "~/store/subscription"
 
 export const TimelineTabs = () => {
   const routerParams = useRouteParams()
-  const listRef = React.useRef<HTMLDivElement>(null)
   const { view, listId, inboxId } = routerParams
 
   const listsData = useSubscriptionStore((state) =>
@@ -26,7 +25,7 @@ export const TimelineTabs = () => {
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault()
-    listRef.current!.scrollLeft += e.deltaY
+    e.currentTarget.scrollLeft += e.deltaY
   }
 
   return (
@@ -43,11 +42,7 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList
-        ref={listRef as any}
-        className="h-10 justify-start overflow-hidden border-b-0"
-        onWheel={handleWheel}
-      >
+      <TabsList className="h-10 justify-start overflow-hidden border-b-0" onWheel={handleWheel}>
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>
