@@ -29,7 +29,10 @@ const useFontDataElectron = () => {
     queryKey: ["systemFonts"],
   })
 
-  return [{ label: FALLBACK_FONT, value: "inherit" }].concat(
+  return [
+    { label: FALLBACK_FONT, value: "inherit" },
+    { label: "System UI", value: "system-ui" },
+  ].concat(
     (data || []).map((font) => ({
       label: font,
       value: font,
