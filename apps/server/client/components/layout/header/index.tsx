@@ -1,6 +1,6 @@
 import { siteConfig } from "@client/configs"
 import { openInFollowApp } from "@client/lib/helper"
-import { Logo } from "@follow/components/icons/logo.jsx.jsx"
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import { Kbd } from "@follow/components/ui/kbd/Kbd.jsx"
 import { cn } from "@follow/utils/utils"
