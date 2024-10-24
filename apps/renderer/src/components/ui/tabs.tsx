@@ -113,6 +113,9 @@ const TabsTrigger = React.forwardRef<HTMLDivElement, TabsTriggerProps>(
         {isSelect && (
           <m.span
             layoutId={layoutId}
+            style={{
+              originY: "0px",
+            }}
             className={cn(
               "absolute",
               variant === "rounded"

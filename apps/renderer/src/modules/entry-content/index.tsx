@@ -286,7 +286,7 @@ export const EntryContentRender: Component<{
                 </div>
               </WrappedElementProvider>
 
-              {entry.settings?.readability && (
+              {entry.settings?.readability && IN_ELECTRON && (
                 <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
               )}
               {entry.settings?.sourceContent && <ViewSourceContentAutoToggleEffect />}

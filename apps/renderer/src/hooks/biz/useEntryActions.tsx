@@ -33,6 +33,7 @@ import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { nextFrame } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
+import { parseHtml } from "~/lib/parse-html"
 import { getOS } from "~/lib/utils"
 import StarAnimationUri from "~/lottie/star.lottie?url"
 import type { CombinedEntryModel } from "~/models"
@@ -427,7 +428,7 @@ export const useEntryActions = ({
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
             title: populatedEntry.entries.title || "",
-            content: populatedEntry.entries.content || "",
+            content: parseHtml(populatedEntry.entries.content || "").toMarkdown(),
             author: populatedEntry.entries.author || "",
             publishedAt: populatedEntry.entries.publishedAt || "",
             vaultPath: obsidianVaultPath,
