@@ -105,9 +105,12 @@ export const useEntriesByView = ({
 
   const remoteEntryIds = useMemo(
     () =>
-      query.data?.pages
-        ?.map((page) => page.data?.map((entry) => entry.entries.id))
-        .flat() as string[],
+      // FIXME The back end should not return duplicate data, and the front end the unique id here.
+      [
+        ...new Set(
+          query.data?.pages?.map((page) => page.data?.map((entry) => entry.entries.id)).flat(),
+        ).values(),
+      ] as string[],
     [query.data?.pages],
   )
 
