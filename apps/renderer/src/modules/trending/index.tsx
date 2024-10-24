@@ -121,7 +121,7 @@ const TrendingLists: FC<{
                 <div className="flex items-end gap-2">
                   <div className={cn("truncate text-base font-medium")}>{item.title}</div>
 
-                  <UserCount count={item.subscriberCount} />
+                  {!!item.subscriberCount && <UserCount count={item.subscriberCount} />}
                 </div>
                 {!!item.description && (
                   <div className={"line-clamp-2 text-xs"}>{item.description}</div>
