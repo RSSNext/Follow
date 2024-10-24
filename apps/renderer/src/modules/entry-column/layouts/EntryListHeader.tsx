@@ -75,7 +75,7 @@ export const EntryListHeader: FC<{
       ref={containerRef}
       className={cn(
         "flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        view !== FeedViewType.Articles && view !== FeedViewType.Pictures && "mb-2",
+        view !== FeedViewType.Pictures && "mb-2",
       )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
