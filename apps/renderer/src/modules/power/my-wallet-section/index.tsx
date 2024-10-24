@@ -149,11 +149,7 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
           values={{ blockchainName: "VSL" }}
           components={{
             Balance: (
-              <Balance
-                className="align-sub"
-                withSuffix
-                value={BigInt(myWallet.todayDailyPower || 0n)}
-              >
+              <Balance withSuffix value={BigInt(myWallet.todayDailyPower || 0n)}>
                 {BigInt(myWallet.todayDailyPower || 0n)}
               </Balance>
             ),
