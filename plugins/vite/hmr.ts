@@ -1,3 +1,5 @@
+import path from "node:path"
+
 import { red, yellow } from "kolorist"
 import type { HmrContext, Plugin } from "vite"
 
@@ -21,10 +23,9 @@ function isNodeWithinCircularImports(
         importer,
         ...[...currentChain].reverse(),
         ...nodeChain.slice(importerIndex, -1).reverse(),
-      ]
-      console.warn(
-        yellow(`Circular imports detected: ${importChain.map((m) => m.file).join(" -> ")}`),
-      )
+      ].map((m) => path.relative(process.cwd(), m.file))
+
+      console.warn(yellow(`Circular imports detected: ${importChain.join("\n↳  ")}`))
       return true
     }
 
