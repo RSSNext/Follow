@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
@@ -7,7 +8,6 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { whoami } from "~/atoms/user"
-import { Button } from "~/components/ui/button"
 import { useModalStack } from "~/components/ui/modal"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { useBoostModal } from "~/modules/boost/hooks"
