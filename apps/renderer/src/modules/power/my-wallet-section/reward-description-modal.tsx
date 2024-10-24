@@ -68,11 +68,7 @@ export const useRewardDescriptionModal = () => {
         </div>
       ),
       title: t("wallet.rewardDescription.title"),
-      overlay: true,
-      overlayOptions: {
-        blur: true,
-        className: "bg-black/80",
-      },
+
       clickOutsideToDismiss: true,
     })
   }, [serverConfigs, present, t])

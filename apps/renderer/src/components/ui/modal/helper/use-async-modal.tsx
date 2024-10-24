@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { useSingleton } from "foxact/use-singleton"
+import { useOnce, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FC } from "react"
 import { createContext, createElement, useContext } from "react"
 import { useEventCallback } from "usehooks-ts"
@@ -20,6 +19,7 @@ export type AsyncModalOptions<T> = {
 
   // Modal options
   overlay?: boolean
+  clickOutsideToDismiss?: boolean
 }
 const AsyncModalContext = createContext<AsyncModalOptions<any>>(null!)
 export const useAsyncModal = () => {
@@ -63,13 +63,14 @@ const Presentable: FC<{
   const { present, dismissTop } = useModalStack()
   const ctx = useContext(AsyncModalContext)
 
-  useSingleton(() => {
+  useOnce(() => {
     dismissTop()
     present({
       id: `presentable-${ctx.id}`,
       content: (props) => createElement(ctx.content, { data, ...props }),
       title: typeof ctx.title === "function" ? ctx.title(data) : ctx.title,
       icon: ctx.icon?.(data),
+      clickOutsideToDismiss: ctx.clickOutsideToDismiss,
     })
   })
   return null

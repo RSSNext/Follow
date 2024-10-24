@@ -24,6 +24,7 @@ export const useBoostModal = () => {
         content: () => <BoostModalContent feedId={feedId} />,
         overlay: true,
         useDataFetcher,
+        clickOutsideToDismiss: true,
       })
     },
     [present, t],
