@@ -18,7 +18,7 @@
   "achievement.product_hunt_vote": "Product Hunt Upvoter",
   "achievement.product_hunt_vote_description": "You supported Follow on Product Hunt",
   "activation.activate": "Activate",
-  "activation.description": "During the public beta phase, current feature is limited for inactive users.",
+  "activation.description": "During the public testing phase, you need an invitation code to use this feature.",
   "activation.title": "Invitation Code",
   "ai_daily.header": "AI Daily Report",
   "ai_daily.no_found": "No AI news found for this period.",
