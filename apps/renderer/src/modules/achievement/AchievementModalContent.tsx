@@ -3,6 +3,7 @@ import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
 import { Input } from "@follow/components/ui/input/Input.js"
 import { LoadingCircle, LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
+import type { ExtractBizResponse } from "@follow/models/types"
 import { Chain } from "@follow/utils/chain"
 import { cn } from "@follow/utils/utils"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
@@ -21,7 +22,6 @@ import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import achievementAnimationUri from "~/lottie/achievement.lottie?url"
-import type { ExtractBizResponse } from "~/models"
 
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
 enum AchievementsActionIdMap {

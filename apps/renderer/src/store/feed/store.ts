@@ -1,3 +1,10 @@
+import type {
+  CombinedEntryModel,
+  FeedModel,
+  FeedOrListModel,
+  FeedOrListRespModel,
+  UserModel,
+} from "@follow/models/types"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 import { nanoid } from "nanoid"
@@ -5,13 +12,6 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type {
-  CombinedEntryModel,
-  FeedModel,
-  FeedOrListModel,
-  FeedOrListRespModel,
-  UserModel,
-} from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"

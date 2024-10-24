@@ -1,10 +1,10 @@
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import type { FeedViewType } from "@follow/constants"
+import { views } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import type { FC, ReactNode } from "react"
 import { memo } from "react"
 
-import { views } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"

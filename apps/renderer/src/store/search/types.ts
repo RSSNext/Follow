@@ -1,4 +1,4 @@
-import type { EntryModel, FeedOrListRespModel } from "~/models"
+import type { EntryModel, FeedOrListRespModel } from "@follow/models/types"
 
 import type { SubscriptionFlatModel } from "../subscription"
 

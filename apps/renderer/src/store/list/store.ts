@@ -1,6 +1,7 @@
+import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "@follow/models/types"
+
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "~/models"
 import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"

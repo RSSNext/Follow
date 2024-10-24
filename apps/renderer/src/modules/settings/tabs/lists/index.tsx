@@ -17,13 +17,13 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
+import { views } from "@follow/constants"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import { useModalStack } from "~/components/ui/modal"
-import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Balance } from "~/modules/wallet/balance"

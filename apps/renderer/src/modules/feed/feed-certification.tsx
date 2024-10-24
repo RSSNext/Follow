@@ -5,12 +5,12 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
+import type { FeedOrListRespModel } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import type { FeedOrListRespModel } from "~/models"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
 export const FeedCertification = ({

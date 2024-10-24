@@ -1,8 +1,7 @@
 import { SelectContent, SelectItem } from "@follow/components/ui/select/index.jsx"
+import { views } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
-
-import { views } from "~/constants"
 
 export const ViewSelectContent = () => {
   const { t } = useTranslation()

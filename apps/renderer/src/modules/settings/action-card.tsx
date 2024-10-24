@@ -19,13 +19,18 @@ import {
   TableHeader,
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
+import type {
+  ActionFeedField,
+  ActionOperation,
+  ActionsInput,
+  SupportedLanguages,
+} from "@follow/models/types"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Collapse, CollapseControlled } from "~/components/ui/collapse"
-import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
 import { ViewSelectContent } from "~/modules/feed/view-select-content"
 
 const TransitionOptions: {

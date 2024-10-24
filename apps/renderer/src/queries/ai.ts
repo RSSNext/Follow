@@ -1,7 +1,8 @@
+import type { SupportedLanguages } from "@follow/models/types"
+
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { translate } from "~/lib/translate"
-import type { SupportedLanguages } from "~/models"
 import type { FlatEntryModel } from "~/store/entry"
 
 export const ai = {

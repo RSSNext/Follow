@@ -1,11 +1,11 @@
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
+import { views } from "@follow/constants"
 import { cn, isSafari } from "@follow/utils/utils"
 import { useMemo, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
 import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
-import { views } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { EntryColumn } from "~/modules/entry-column"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"

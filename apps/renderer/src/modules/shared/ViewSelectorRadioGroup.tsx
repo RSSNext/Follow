@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.jsx"
+import { views } from "@follow/constants"
+import type { EntryModelSimple, FeedModel } from "@follow/models"
 import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
-import { views } from "~/constants"
 import { useI18n } from "~/hooks/common"
-import type { EntryModelSimple, FeedModel } from "~/models"
 
 import { EntryItemStateless } from "../entry-column/item"
 

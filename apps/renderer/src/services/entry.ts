@@ -1,6 +1,7 @@
+import type { EntryModel } from "@follow/models/types"
+
 import { browserDB } from "~/database"
 import { appLog } from "~/lib/log"
-import type { EntryModel } from "~/models/types"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions, useEntryStore } from "~/store/entry"
 

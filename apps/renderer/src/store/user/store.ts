@@ -1,6 +1,5 @@
+import type { UserModel } from "@follow/models/types"
 import { produce } from "immer"
-
-import type { UserModel } from "~/models"
 
 import { createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
 

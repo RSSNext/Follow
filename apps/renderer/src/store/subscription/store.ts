@@ -1,4 +1,10 @@
 import { FeedViewType } from "@follow/constants"
+import type {
+  FeedModel,
+  InboxModel,
+  ListModelPoplutedFeeds,
+  SubscriptionModel,
+} from "@follow/models/types"
 import { capitalizeFirstLetter } from "@follow/utils/utils"
 import { produce } from "immer"
 import { omit } from "lodash-es"
@@ -8,7 +14,6 @@ import { whoami } from "~/atoms/user"
 import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedModel, InboxModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
 import { updateFeedBoostStatus } from "~/modules/boost/hooks"
 import { SubscriptionService } from "~/services"
 

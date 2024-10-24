@@ -1,9 +1,8 @@
-import { env } from "@follow/shared/env"
 import type { AppType, languageSchema, users } from "@follow/shared/hono"
-import { hc } from "hono/client"
+import type { hc } from "hono/client"
 import type { z } from "zod"
 
-const _apiClient = hc<AppType>(env.VITE_EXTERNAL_API_URL || env.VITE_API_URL, {})
+declare const _apiClient: ReturnType<typeof hc<AppType>>
 
 export type UserModel = Omit<
   Omit<Omit<typeof users.$inferSelect, "emailVerified">, "email">,
@@ -27,10 +26,10 @@ export type TransactionModel = ExtractBizResponse<
 
 export type FeedModel = ExtractBizResponse<typeof _apiClient.feeds.$get>["data"]["feed"]
 
+export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
 export type ListModelPoplutedFeeds = ExtractBizResponse<
   typeof _apiClient.lists.$get
 >["data"]["list"]
-export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
 
 export type InboxModel = ExtractBizResponse<typeof _apiClient.inboxes.$get>["data"]
 
@@ -53,6 +52,10 @@ export type CombinedEntryModel = EntriesResponse[number] & {
   }
 }
 export type EntryModel = CombinedEntryModel["entries"]
+export type EntryModelSimple = Exclude<
+  ExtractBizResponse<typeof _apiClient.feeds.$get>["data"]["entries"],
+  undefined
+>[number]
 export type DiscoverResponse = Array<
   Exclude<ExtractBizResponse<typeof _apiClient.discover.$post>["data"], undefined>[number]
 >
@@ -101,10 +104,12 @@ export type ActionsInput = {
     value?: string
   }[]
   result: {
+    disabled?: boolean
     translation?: string
     summary?: boolean
     readability?: boolean
     silence?: boolean
+    sourceContent?: boolean
     newEntryNotification?: boolean
     rewriteRules?: {
       from: string
@@ -119,4 +124,8 @@ export type ActionsInput = {
   }
 }[]
 
-export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const
+export const TransactionTypes = ["mint", "purchase", "tip", "withdraw", "airdrop"] as const
+
+export type WalletModel = ExtractBizResponse<typeof _apiClient.wallets.$get>["data"][number]
+
+export type ServerConfigs = ExtractBizResponse<typeof _apiClient.status.configs.$get>["data"]

@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
+import type { MediaModel } from "@follow/models/types"
 
 import { getServerConfigs } from "~/atoms/server-configs"
-import type { MediaModel } from "~/models"
 import type { RSSHubRoute } from "~/modules/discover/types"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"

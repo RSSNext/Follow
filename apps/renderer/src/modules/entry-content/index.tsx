@@ -4,6 +4,7 @@ import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
+import type { ActiveEntryId, FeedModel, InboxModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -34,7 +35,6 @@ import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAuthQuery } from "~/hooks/common"
 import { getNewIssueUrl } from "~/lib/issues"
 import { LanguageMap } from "~/lib/translate"
-import type { ActiveEntryId, FeedModel, InboxModel } from "~/models"
 import {
   useIsSoFWrappedElement,
   useWrappedElement,

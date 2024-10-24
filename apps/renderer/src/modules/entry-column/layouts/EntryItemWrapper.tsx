@@ -1,4 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
+import { views } from "@follow/constants"
 import { useAnyPointDown } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
 import type { FC, PropsWithChildren } from "react"
@@ -7,7 +8,6 @@ import { useTranslation } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { views } from "~/constants/tabs"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
