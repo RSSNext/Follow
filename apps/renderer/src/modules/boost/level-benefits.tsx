@@ -8,7 +8,7 @@ const benefits = [
         icon: "i-mgc-certificate-cute-fi",
         text: "Unique boost badge for feed",
       },
-      { icon: "i-mgc-star-cute-re", text: "Show support for feed authors" },
+      { icon: "i-mgc-star-cute-re", text: "Support feed owner" },
       { icon: "i-mgc-trophy-cute-re", text: "Booster achievement", comingSoon: true },
       { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
     ],
