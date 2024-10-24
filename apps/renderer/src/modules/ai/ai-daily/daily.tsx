@@ -365,6 +365,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
                 "rounded-xl p-3 align-middle text-[15px]",
                 "rounded-tl-none bg-zinc-600/5 dark:bg-zinc-500/20",
                 "mt-1 -translate-x-3",
+                "break-words",
               )}
             >
               {entry.entries.description}
