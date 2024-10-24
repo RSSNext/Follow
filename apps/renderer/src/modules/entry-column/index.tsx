@@ -5,7 +5,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
-import { cn, isBizId } from "@follow/utils/utils"
+import { clsx, cn, isBizId } from "@follow/utils/utils"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type {
@@ -130,7 +130,7 @@ function EntryColumnImpl() {
             />
           )
         }
-      }, [isFetchingNextPage, view, unreadOnly, isArchived, entries]),
+      }, [isFetchingNextPage, showArchivedButton, t, view, entries.data?.pages]),
       ScrollSeekPlaceholder: useCallback(() => <EntryItemSkeleton view={view} count={1} />, [view]),
     },
     scrollSeekConfiguration,
@@ -209,7 +209,7 @@ function EntryColumnImpl() {
           scrollbarClassName={cn("mt-3", !views[view].wideMode ? "w-[5px] p-0" : "")}
           mask={false}
           ref={scrollRef}
-          rootClassName="h-full"
+          rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}
           viewportClassName="[&>div]:grow flex"
         >
           {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (

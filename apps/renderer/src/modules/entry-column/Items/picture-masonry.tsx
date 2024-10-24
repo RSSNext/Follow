@@ -230,7 +230,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   }, [scrollElement, renderMarkRead, scrollMarkRead, dataRef])
 
   return (
-    <div ref={containerRef} className="p-4">
+    <div ref={containerRef} className="px-4 pt-2">
       {isInitDim && isInitLayout && (
         <MasonryItemWidthContext.Provider value={currentItemWidth}>
           <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
