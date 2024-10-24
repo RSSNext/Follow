@@ -20,9 +20,15 @@ export const TimelineTabs = () => {
 
   const navigate = useNavigateEntry()
   if (!hasData) return null
+
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.currentTarget.scrollLeft += e.deltaY
+  }
+
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-1 overflow-x-auto scrollbar-none"
+      className="-ml-3 -mr-4 mt-1 flex overflow-x-auto scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {
@@ -34,7 +40,7 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList className="h-10 border-b-0">
+      <TabsList className="h-10 justify-start overflow-hidden border-b-0" onWheel={handleWheel}>
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>
@@ -44,7 +50,7 @@ export const TimelineTabs = () => {
               listId={s.listId!}
               view={view}
               iconSize={16}
-              className="h-5 !bg-transparent p-0 leading-none"
+              className="h-5 !bg-transparent p-0"
             />
           </TabsTrigger>
         ))}
@@ -54,7 +60,7 @@ export const TimelineTabs = () => {
               inboxId={s.inboxId!}
               view={view}
               iconSize={16}
-              className="h-5 !bg-transparent p-0 leading-none"
+              className="h-5 !bg-transparent p-0"
             />
           </TabsTrigger>
         ))}
