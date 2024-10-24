@@ -646,9 +646,6 @@ importers:
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
-      '@radix-ui/react-avatar':
-        specifier: 1.1.1
-        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@resvg/resvg-js':
         specifier: 2.6.2
         version: 2.6.2
@@ -670,9 +667,6 @@ importers:
       fastify:
         specifier: 5.0.0
         version: 5.0.0
-      foxact:
-        specifier: 0.2.39
-        version: 0.2.39(react@18.3.1)
       framer-motion:
         specifier: 11.11.9
         version: 11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -688,12 +682,6 @@ importers:
       linkedom:
         specifier: ^0.18.5
         version: 0.18.5
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
-      masonic:
-        specifier: 4.0.1
-        version: 4.0.1(react@18.3.1)
       ofetch:
         specifier: 1.4.1
         version: 1.4.1
@@ -706,9 +694,6 @@ importers:
       react-blurhash:
         specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
       react-hotkeys-hook:
         specifier: 4.5.1
         version: 4.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -758,12 +743,27 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      '@radix-ui/react-avatar':
+        specifier: 1.1.1
+        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       daisyui:
         specifier: 4.12.13
         version: 4.12.13(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.4.47)
+      foxact:
+        specifier: 0.2.39
+        version: 0.2.39(react@18.3.1)
       lightningcss:
         specifier: 1.27.0
         version: 1.27.0
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      masonic:
+        specifier: 4.0.1
+        version: 4.0.1(react@18.3.1)
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
       tsup:
         specifier: 8.3.0
         version: 8.3.0(jiti@2.3.3)(postcss@8.4.47)(tsx@4.19.1)(typescript@5.6.3)(yaml@2.6.0)
