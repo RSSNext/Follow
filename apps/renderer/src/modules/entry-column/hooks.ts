@@ -216,7 +216,7 @@ export const useEntriesByView = ({
     refetch: useCallback(() => {
       query.refetch()
       feedUnreadActions.fetchUnreadByView(view)
-    }, [query]),
+    }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries[view].length,
