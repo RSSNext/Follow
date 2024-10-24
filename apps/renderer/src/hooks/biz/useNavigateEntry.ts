@@ -1,6 +1,7 @@
+import { getReadonlyRoute, getStableRouterNavigate } from "@follow/components/atoms/route.js"
+import { FeedViewType } from "@follow/constants"
 import { isUndefined } from "lodash-es"
 
-import { getReadonlyRoute, getStableRouterNavigate } from "~/atoms/route"
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
 import {
@@ -10,7 +11,6 @@ import {
   ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
 } from "~/constants"
-import { FeedViewType } from "~/lib/enum"
 
 export type NavigateEntryOptions = Partial<{
   feedId: string | null

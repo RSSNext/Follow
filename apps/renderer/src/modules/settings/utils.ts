@@ -1,4 +1,4 @@
-import type { UserRole } from "~/lib/enum"
+import type { UserRole } from "@follow/constants"
 
 export interface SettingPageContext {
   role: Nullable<UserRole>

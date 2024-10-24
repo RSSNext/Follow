@@ -1,7 +1,8 @@
-import { FeedIcon } from "~/components/feed-icon"
+import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
+
 import { RelativeTime } from "~/components/ui/datetime"
-import { Skeleton } from "~/components/ui/skeleton"
 import { ListItem } from "~/modules/entry-column/templates/list-item-template"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 

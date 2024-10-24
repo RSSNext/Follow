@@ -1,8 +1,8 @@
+import { cn, isASCII } from "@follow/utils/utils"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useAuthQuery } from "~/hooks/common"
-import { cn, isASCII } from "~/lib/utils"
 import { Queries } from "~/queries"
 
 import { RecommendationCard } from "./recommendations-card"

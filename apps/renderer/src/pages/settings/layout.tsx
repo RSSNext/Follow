@@ -1,11 +1,11 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { preventDefault } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { Outlet, useLocation } from "react-router-dom"
 
-import { Logo } from "~/components/icons/logo"
 import { WindowUnderBlur } from "~/components/ui/background"
 import { isElectronBuild } from "~/constants"
-import { preventDefault } from "~/lib/dom"
-import { cn } from "~/lib/utils"
 import { useActivationModal } from "~/modules/activation"
 import { IsInSettingIndependentWindowContext } from "~/modules/settings/context"
 import {

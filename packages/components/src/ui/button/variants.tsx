@@ -60,7 +60,7 @@ export const styledButtonVariant = cva(
         text: cn(
           "font-semibold text-accent",
           "hover:contrast-[1.10] active:contrast-125",
-          "focus:text-accent focus:outline-none",
+          tw`focus:text-accent focus:outline-none p-0 inline align-baseline`,
         ),
         ghost: cn("px-1.5 font-semibold", "hover:bg-theme-button-hover"),
       },

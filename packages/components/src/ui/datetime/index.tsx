@@ -19,7 +19,7 @@ const formatTime = (
   return dayjs.duration(dayjs(date).diff(dayjs(), "minute"), "minute").humanize()
 }
 
-const getUpdateInterval = (date: string | Date, relativeBeforeDay?: number) => {
+export const getUpdateInterval = (date: string | Date, relativeBeforeDay?: number) => {
   if (!relativeBeforeDay) return null
   const diffInSeconds = Math.abs(dayjs(date).diff(new Date(), "second"))
   if (diffInSeconds <= 60) {

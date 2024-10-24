@@ -378,4 +378,20 @@
       transform: rotateY(180deg);
     }
   }
+
+  @keyframes rocketAnimation {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translate(2px, -1px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .animate-rocket {
+    animation: rocketAnimation 1s infinite ease-out;
+  }
 }

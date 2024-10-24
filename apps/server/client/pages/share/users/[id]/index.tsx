@@ -2,7 +2,6 @@ import { useWhoami } from "@client/atoms/user"
 import { MainContainer } from "@client/components/layout/main"
 import { openInFollowApp } from "@client/lib/helper"
 import { useUserQuery, useUserSubscriptionsQuery } from "@client/query/users"
-import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
@@ -120,7 +119,6 @@ export const Component = () => {
               ))
             )}
           </div>
-          <PoweredByFooter className="pb-12" />
         </Fragment>
       )}
     </MainContainer>

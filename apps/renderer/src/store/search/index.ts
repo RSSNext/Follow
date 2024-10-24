@@ -1,11 +1,11 @@
+import type { EntryModel } from "@follow/models/types"
+import { getStorageNS } from "@follow/utils/ns"
 import type { IFuseOptions } from "fuse.js"
 import Fuse from "fuse.js"
 import { useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
 import { jotaiStore } from "~/lib/jotai"
-import { getStorageNS } from "~/lib/ns"
-import type { EntryModel } from "~/models"
 import { EntryService, FeedService, SubscriptionService } from "~/services"
 
 import type { SubscriptionFlatModel } from "../subscription"

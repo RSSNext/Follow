@@ -7,9 +7,10 @@ function useDarkWebApp() {
   const mode = useAtomValue(themeAtom)
   return mode === "dark" || (mode === "system" && systemIsDark)
 }
-/**
- * Only for web app
- */
+
 export const useIsDark = useDarkWebApp
 
 export const useThemeAtomValue = () => useAtomValue(themeAtom)
+
+export type { ColorMode } from "./internal/for-theme"
+export { useDarkQuery } from "./internal/for-theme"

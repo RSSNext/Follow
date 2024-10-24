@@ -1,7 +1,7 @@
+import { nextFrame } from "@follow/utils/dom"
 import { useContext } from "react"
 
 import { AudioPlayer } from "~/atoms/player"
-import { nextFrame } from "~/lib/dom"
 import { useEntry } from "~/store/entry"
 
 import { EntryInfoContext } from "../context"

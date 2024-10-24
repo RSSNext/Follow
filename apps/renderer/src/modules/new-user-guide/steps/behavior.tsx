@@ -1,8 +1,8 @@
+import { Radio, RadioGroup } from "@follow/components/ui/radio-group/index.js"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting } from "~/atoms/settings/general"
-import { Radio, RadioGroup } from "~/components/ui/radio-group"
 
 type Behavior = "radical" | "balanced" | "conservative"
 

@@ -1,8 +1,9 @@
+import { sleep } from "@follow/utils/utils"
+
 import { initializeDefaultGeneralSettings } from "~/atoms/settings/general"
 import { initializeDefaultIntegrationSettings } from "~/atoms/settings/integration"
 import { initializeDefaultUISettings } from "~/atoms/settings/ui"
 import { appLog } from "~/lib/log"
-import { sleep } from "~/lib/utils"
 import { EntryService, FeedService, FeedUnreadService, SubscriptionService } from "~/services"
 import { InboxService } from "~/services/inbox"
 import type { Hydable } from "~/services/interface"

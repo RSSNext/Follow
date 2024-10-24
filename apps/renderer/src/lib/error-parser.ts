@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/utils"
 import { t } from "i18next"
 import { FetchError } from "ofetch"
 import { createElement } from "react"
@@ -6,7 +7,6 @@ import { toast } from "sonner"
 
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Markdown } from "~/components/ui/markdown/Markdown"
-import { cn } from "~/lib/utils"
 
 export const getFetchErrorMessage = (error: Error) => {
   if (error instanceof FetchError) {

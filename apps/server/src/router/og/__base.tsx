@@ -102,7 +102,14 @@ export const getBackgroundGradient = (seed?: Nullable<string>) => {
   const adjustedAccentLight = adjustColorTowardsTarget(bgAccentLight, targetColor, factor)
   const adjustedAccentUltraLight = adjustColorTowardsTarget(bgAccentUltraLight, targetColor, factor)
 
-  return [adjustedAccent, adjustedAccentLight, adjustedAccentUltraLight]
+  return [
+    adjustedAccent,
+    adjustedAccentLight,
+    adjustedAccentUltraLight,
+    bgAccent,
+    bgAccentLight,
+    bgAccentUltraLight,
+  ]
 }
 
 function FollowIcon() {
@@ -158,7 +165,7 @@ export const OGAvatar: React.FC<{ base64?: Nullable<string>; title: string }> = 
   base64,
   title,
 }) => {
-  const [bgAccent, bgAccentLight, bgAccentUltraLight] = getBackgroundGradient(title)
+  const [, , , bgAccent, bgAccentLight, bgAccentUltraLight] = getBackgroundGradient(title)
   return (
     <>
       {base64 ? (

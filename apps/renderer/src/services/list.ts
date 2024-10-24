@@ -1,7 +1,7 @@
+import type { ListModel } from "@follow/models/types"
 import { omit } from "lodash-es"
 
 import { browserDB } from "~/database"
-import type { ListModel } from "~/models/types"
 import { listActions } from "~/store/list"
 
 import { BaseService } from "./base"

@@ -54,8 +54,10 @@
     "masonic": "4.0.1",
     "react-blurhash": "^0.3.0",
     "react-fast-marquee": "1.6.5",
+    "react-hook-form": "7.53.0",
     "react-i18next": "^15.0.3",
     "sonner": "^1.5.0",
+    "use-context-selector": "2.0.0",
     "usehooks-ts": "3.1.0"
   }
 }

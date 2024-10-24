@@ -1,5 +1,6 @@
+import type { InboxModel } from "@follow/models/types"
+
 import { browserDB } from "~/database"
-import type { InboxModel } from "~/models/types"
 import { inboxActions } from "~/store/inbox"
 
 import { BaseService } from "./base"

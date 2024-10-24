@@ -1,4 +1,5 @@
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
+
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { InboxItem, ListItem } from "~/modules/feed-column/item"
@@ -28,7 +29,7 @@ export const TimelineTabs = () => {
 
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-1 flex overflow-x-auto scrollbar-none"
+      className="-ml-3 -mr-4 mt-3 flex overflow-x-auto scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {
@@ -40,7 +41,7 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList className="h-10 justify-start overflow-hidden border-b-0" onWheel={handleWheel}>
+      <TabsList className="justify-start overflow-hidden border-b-0" onWheel={handleWheel}>
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>

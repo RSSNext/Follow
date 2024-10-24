@@ -1,19 +1,21 @@
-import { setNavigate, setRoute } from "@follow/components/atoms/route"
+import { setNavigate, setRoute } from "@follow/components/atoms/route.js"
 import { useLayoutEffect } from "react"
 import type { NavigateFunction } from "react-router-dom"
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CustomRoute {}
+export interface GlobalRoute extends CustomRoute {
+  navigate: NavigateFunction
+}
 declare global {
-  export const router: {
-    navigate: NavigateFunction
-  }
   interface Window {
-    router: typeof router
+    router: GlobalRoute
   }
 }
 window.router = {
   navigate() {},
-}
+} as any
 
 /**
  * Why this.

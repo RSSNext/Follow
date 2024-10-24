@@ -1,15 +1,6 @@
-import { env } from "@follow/shared/env"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { toast } from "sonner"
-import { z } from "zod"
-
-import { FollowSummary } from "~/components/feed-summary"
-import { Logo } from "~/components/icons/logo"
-import { Button } from "~/components/ui/button"
-import { Card, CardHeader } from "~/components/ui/card"
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
 import {
   Form,
   FormControl,
@@ -17,13 +8,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import { FeedViewType } from "@follow/constants"
+import type { InboxModel } from "@follow/models/types"
+import { env } from "@follow/shared/env"
+import { cn } from "@follow/utils/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
+import { z } from "zod"
+
 import { apiClient } from "~/lib/api-fetch"
-import { FeedViewType } from "~/lib/enum"
 import { createErrorToaster } from "~/lib/error-parser"
-import { cn } from "~/lib/utils"
-import type { InboxModel } from "~/models"
+import { FollowSummary } from "~/modules/feed/feed-summary"
 import { useInbox } from "~/queries/inboxes"
 import { useInboxById } from "~/store/inbox"
 import { subscriptionActions } from "~/store/subscription"

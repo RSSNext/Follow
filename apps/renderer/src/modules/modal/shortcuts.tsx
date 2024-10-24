@@ -1,17 +1,17 @@
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import { cn } from "@follow/utils/utils"
 import clsx from "clsx"
 import { m, useDragControls } from "framer-motion"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { MotionButtonBase } from "~/components/ui/button"
 import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
 import { shortcuts, shortcutsType } from "~/constants/shortcuts"
 import { useSwitchHotKeyScope } from "~/hooks/common"
-import { cn } from "~/lib/utils"
 
 const ShortcutModalContent = () => {
   const { dismiss } = useCurrentModal()

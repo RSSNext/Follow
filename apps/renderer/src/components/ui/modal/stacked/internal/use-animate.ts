@@ -1,7 +1,6 @@
+import { nextFrame } from "@follow/utils/dom"
 import { useAnimationControls } from "framer-motion"
 import { useCallback, useEffect } from "react"
-
-import { nextFrame } from "~/lib/dom"
 
 import { modalMontionConfig } from "../constants"
 

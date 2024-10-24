@@ -1,6 +1,6 @@
+import { Divider } from "@follow/components/ui/divider/index.js"
 import { useTranslation } from "react-i18next"
 
-import { Divider } from "~/components/ui/divider"
 import { MyWalletSection } from "~/modules/power/my-wallet-section"
 import { PowerRanking } from "~/modules/power/ranking"
 import { TransactionsSection } from "~/modules/power/transaction-section"

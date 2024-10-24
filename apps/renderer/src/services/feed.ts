@@ -1,5 +1,6 @@
+import type { FeedModel, FeedOrListModel } from "@follow/models/types"
+
 import { browserDB } from "~/database"
-import type { FeedModel, FeedOrListModel } from "~/models/types"
 import { feedActions } from "~/store/feed"
 
 import { BaseService } from "./base"

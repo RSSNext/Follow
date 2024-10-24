@@ -1,4 +1,4 @@
-import { useIsDark } from "~/hooks/common"
+import { useIsDark } from "@follow/hooks"
 
 export const useShikiDefaultTheme = () => {
   const isDark = useIsDark()

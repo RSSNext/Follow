@@ -1,7 +1,7 @@
+import { sleep } from "@follow/utils/utils"
 import { beforeAll, beforeEach, describe, expect, test } from "vitest"
 
 import { browserDB } from "~/database"
-import { sleep } from "~/lib/utils"
 import { entryActions } from "~/store/entry/store"
 
 import mockEntiresData from "./__mock__data__/entries.json"

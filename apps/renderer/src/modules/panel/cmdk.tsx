@@ -1,3 +1,17 @@
+import { EmptyIcon } from "@follow/components/icons/empty.jsx"
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@follow/components/ui/select/index.jsx"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
+import type { FeedViewType } from "@follow/constants"
+import { useInputComposition } from "@follow/hooks"
+import { cn } from "@follow/utils/utils"
 import clsx from "clsx"
 import { Command } from "cmdk"
 import type { FC } from "react"
@@ -8,24 +22,11 @@ import { useTranslation } from "react-i18next"
 import { setAppSearchOpen, useAppSearchOpen } from "~/atoms/app"
 import { ExPromise } from "~/components/common/ExPromise"
 import { LoadMoreIndicator } from "~/components/common/LoadMoreIndicator"
-import { FeedIcon } from "~/components/feed-icon"
-import { EmptyIcon } from "~/components/icons/empty"
-import { Logo } from "~/components/icons/logo"
 import { useModalStack } from "~/components/ui/modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { ROUTE_ENTRY_PENDING } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { useI18n, useInputComposition } from "~/hooks/common"
-import type { FeedViewType } from "~/lib/enum"
-import { cn } from "~/lib/utils"
+import { useI18n } from "~/hooks/common"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { getFeedById } from "~/store/feed"
 import { searchActions, useSearchStore, useSearchType } from "~/store/search"
 import { SearchType } from "~/store/search/constants"

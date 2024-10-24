@@ -1,4 +1,5 @@
-import { ScrollArea } from "~/components/ui/scroll-area"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+
 import { useAuthQuery } from "~/hooks/common"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { Queries } from "~/queries"

@@ -1,3 +1,10 @@
+import { ActionButton } from "@follow/components/ui/button/index.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { UserRole } from "@follow/constants"
+import { useMeasure } from "@follow/hooks"
+import type { WalletModel } from "@follow/models/types"
+import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { repository } from "@pkg"
 import type { FC } from "react"
 import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"
@@ -5,20 +12,6 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { useUserRole } from "~/atoms/user"
-import { useSignOut } from "~/hooks/biz/useSignOut"
-import { useMeasure } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
-import { UserRole } from "~/lib/enum"
-import { cn } from "~/lib/utils"
-import type { WalletModel } from "~/models"
-import { useAchievementModal } from "~/modules/achievement/hooks"
-import { usePresentUserProfileModal } from "~/modules/profile/hooks"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
-import { Balance } from "~/modules/wallet/balance"
-import { useSession } from "~/queries/auth"
-import { useWallet } from "~/queries/wallet"
-
-import { ActionButton } from "../../components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,8 +19,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu/dropdown-menu"
-import { RootPortal } from "../../components/ui/portal"
+} from "~/components/ui/dropdown-menu/dropdown-menu"
+import { useSignOut } from "~/hooks/biz/useSignOut"
+import { useAchievementModal } from "~/modules/achievement/hooks"
+import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { Balance } from "~/modules/wallet/balance"
+import { useSession } from "~/queries/auth"
+import { useWallet } from "~/queries/wallet"
+
 import { useActivationModal } from "../activation"
 import { ActivityPoints } from "../wallet/activity-points"
 import { Level } from "../wallet/level"

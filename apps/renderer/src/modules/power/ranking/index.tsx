@@ -1,9 +1,5 @@
-import { Fragment } from "react"
-import { useTranslation } from "react-i18next"
-
-import { useWhoami } from "~/atoms/user"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { MotionButtonBase } from "~/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import {
   Table,
   TableBody,
@@ -11,10 +7,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
+} from "@follow/components/ui/table/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { cn } from "@follow/utils/utils"
+import { Fragment } from "react"
+import { useTranslation } from "react-i18next"
+
+import { useWhoami } from "~/atoms/user"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { Balance } from "~/modules/wallet/balance"

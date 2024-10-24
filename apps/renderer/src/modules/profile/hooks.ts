@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from "@follow/utils/utils"
 import { createElement, lazy, useCallback } from "react"
 import { parse } from "tldts"
 
@@ -6,7 +7,6 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
-import { capitalizeFirstLetter } from "~/lib/utils"
 
 const LazyUserProfileModalContent = lazy(() =>
   import("./user-profile-modal").then((mod) => ({ default: mod.UserProfileModalContent })),

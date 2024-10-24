@@ -1,8 +1,8 @@
+import type { FeedViewType } from "@follow/constants"
+import type { ListModel } from "@follow/models/types"
 import { useMemo } from "react"
 
 import { useWhoami } from "~/atoms/user"
-import type { FeedViewType } from "~/lib/enum"
-import type { ListModel } from "~/models"
 
 import { useListStore } from "./store"
 

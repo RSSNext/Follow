@@ -1,8 +1,6 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
+import { cn } from "@follow/utils/utils"
 import { format } from "dnum"
-
-import { cn } from "~/lib/utils"
-
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/tooltip"
 
 export const Balance = ({
   children,
@@ -25,10 +23,12 @@ export const Balance = ({
   const formattedFull = format(n, { digits: 18, trailingZeros: true })
 
   const Content = (
-    <div className={cn("inline-flex items-center gap-1 tabular-nums", className)}>
-      {withSuffix && <i className="i-mgc-power align-text-bottom text-accent" />}
+    <span className={cn("tabular-nums", className)}>
+      {withSuffix && (
+        <i className="i-mgc-power mr-1 translate-y-[-3px] align-text-bottom text-accent" />
+      )}
       <span>{formatted}</span>
-    </div>
+    </span>
   )
 
   if (!withTooltip) return Content

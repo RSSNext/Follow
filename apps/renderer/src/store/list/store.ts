@@ -1,10 +1,11 @@
+import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "@follow/models/types"
+
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "~/models"
 import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"
-import { createImmerSetter, createZustandStore } from "../utils/helper"
+import { createImmerSetter, createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
 import type { ListState } from "./types"
 
 export const useListStore = createZustandStore<ListState>("list")(() => ({
@@ -97,3 +98,7 @@ class ListActionStatic {
 }
 
 export const listActions = new ListActionStatic()
+
+if (import.meta.env.DEV) {
+  reloadWhenHotUpdate(import.meta.hot)
+}

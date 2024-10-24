@@ -4,6 +4,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "peerDependencies": {
+    "react": "^18.3.1"
+  },
   "dependencies": {
     "@follow/types": "workspace:*"
   }

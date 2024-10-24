@@ -1,14 +1,13 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
+import { stopPropagation } from "@follow/utils/dom"
 import { m } from "framer-motion"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
-import { Button } from "~/components/ui/button"
-import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
-import { stopPropagation } from "~/lib/dom"
 import { createErrorToaster } from "~/lib/error-parser"
-
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../tooltip"
 
 export interface UseAsyncFetcher<T> {
   data: Nullable<T>

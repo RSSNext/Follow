@@ -1,3 +1,5 @@
+import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import type { ReactNode } from "react"
 import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -17,10 +19,8 @@ import {
 import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "~/lib/native-menu"
-import { cn } from "~/lib/utils"
 
 export const ContextMenuProvider: Component = ({ children }) => (
   <>

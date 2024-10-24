@@ -1,6 +1,5 @@
+import { cn } from "@follow/utils/utils"
 import type { JSX } from "react"
-
-import { cn } from "~/lib/utils"
 
 export const Paper: Component<{
   as?: keyof JSX.IntrinsicElements | Component

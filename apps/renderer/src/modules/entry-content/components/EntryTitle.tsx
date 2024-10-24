@@ -1,10 +1,10 @@
+import { cn } from "@follow/utils/utils"
 import { useMemo } from "react"
 
 import { useWhoami } from "~/atoms/user"
-import { FeedIcon } from "~/components/feed-icon"
 import { RelativeTime } from "~/components/ui/datetime"
 import { useAuthQuery } from "~/hooks/common"
-import { cn } from "~/lib/utils"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Queries } from "~/queries"
 import { useEntry, useEntryReadHistory } from "~/store/entry"
 import { getPreferredTitle, useFeedById } from "~/store/feed"

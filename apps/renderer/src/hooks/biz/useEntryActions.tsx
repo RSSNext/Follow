@@ -1,4 +1,15 @@
+import {
+  SimpleIconsEagle,
+  SimpleIconsInstapaper,
+  SimpleIconsObsidian,
+  SimpleIconsOmnivore,
+  SimpleIconsReadwise,
+} from "@follow/components/ui/platform-icon/icons.js"
+import { FeedViewType } from "@follow/constants"
+import type { CombinedEntryModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { nextFrame } from "@follow/utils/dom"
+import { getOS } from "@follow/utils/utils"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -22,21 +33,10 @@ import {
 } from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
-import {
-  SimpleIconsEagle,
-  SimpleIconsInstapaper,
-  SimpleIconsObsidian,
-  SimpleIconsOmnivore,
-  SimpleIconsReadwise,
-} from "~/components/ui/platform-icon/icons"
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
-import { nextFrame } from "~/lib/dom"
-import { FeedViewType } from "~/lib/enum"
 import { parseHtml } from "~/lib/parse-html"
-import { getOS } from "~/lib/utils"
 import StarAnimationUri from "~/lottie/star.lottie?url"
-import type { CombinedEntryModel } from "~/models"
 import { useTipModal } from "~/modules/wallet/hooks"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
@@ -616,11 +616,12 @@ export const useEntryActions = ({
     feed?.ownerUserId,
     type,
     showSourceContent,
-    obsidianVaultPath,
     saveToObsidian,
+    obsidianVaultPath,
     openTipModal,
     collect,
     uncollect,
+    deleteInboxEntry,
     showSourceContentModal,
     read,
     unread,

@@ -1,3 +1,13 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { FeedViewType } from "@follow/constants"
 import {
   HoverCard,
   HoverCardContent,
@@ -10,13 +20,8 @@ import { memo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { ScrollArea } from "~/components/ui/scroll-area"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
-import { FeedViewType } from "~/lib/enum"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { useAppLayoutGridContainerWidth } from "~/providers/app-grid-layout-container-provider"
 import { Queries } from "~/queries"

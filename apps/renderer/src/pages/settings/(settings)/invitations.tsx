@@ -1,4 +1,5 @@
-import { UserRole } from "~/lib/enum"
+import { UserRole } from "@follow/constants"
+
 import { SettingInvitations } from "~/modules/settings/tabs/invitations"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData, DisableWhy } from "~/modules/settings/utils"

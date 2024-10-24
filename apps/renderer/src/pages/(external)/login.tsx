@@ -1,10 +1,10 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
 import { SessionProvider, signIn, useSession } from "@hono/auth-js/react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import { Logo } from "~/components/icons/logo"
-import { Button } from "~/components/ui/button"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { LOGIN_CALLBACK_URL, loginHandler } from "~/lib/auth"
 import { UserAvatar } from "~/modules/user/UserAvatar"

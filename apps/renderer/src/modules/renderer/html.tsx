@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import { useMemo } from "react"
 
 import {
@@ -7,7 +8,6 @@ import {
 import type { HTMLProps } from "~/components/ui/markdown/HTML"
 import { HTML } from "~/components/ui/markdown/HTML"
 import type { MarkdownImage, MarkdownRenderActions } from "~/components/ui/markdown/types"
-import { FeedViewType } from "~/lib/enum"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedByIdSelector } from "~/store/feed/hooks"
 

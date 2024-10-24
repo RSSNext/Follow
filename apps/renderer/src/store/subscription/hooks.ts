@@ -1,5 +1,6 @@
+import { FeedViewType } from "@follow/constants"
+
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
-import { FeedViewType } from "~/lib/enum"
 
 import { subscriptionCategoryExistSelector, useSubscriptionStore } from "../subscription"
 

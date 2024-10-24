@@ -1,12 +1,13 @@
+import { views } from "@follow/constants"
+import type { FeedOrListRespModel, InboxModel, ListModel } from "@follow/models/types"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useShallow } from "zustand/react/shallow"
 
-import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "~/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedOrListRespModel, InboxModel, ListModel } from "~/models"
 
 import { useInboxStore } from "../inbox"
 import { listActions, useListStore } from "../list"

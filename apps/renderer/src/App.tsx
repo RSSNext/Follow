@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { cn, getOS } from "@follow/utils/utils"
 import { useEffect, useLayoutEffect } from "react"
 import { Outlet } from "react-router-dom"
 
@@ -9,7 +10,6 @@ import { useUISettingKey } from "./atoms/settings/ui"
 import { navigateEntry } from "./hooks/biz/useNavigateEntry"
 import { applyAfterReadyCallbacks } from "./initialize/queue"
 import { appLog } from "./lib/log"
-import { cn, getOS } from "./lib/utils"
 import { Titlebar } from "./modules/app/Titlebar"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"

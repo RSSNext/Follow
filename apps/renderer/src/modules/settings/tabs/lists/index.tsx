@@ -1,12 +1,8 @@
-import { useMutation } from "@tanstack/react-query"
-import { toast } from "sonner"
-
-import { Avatar, AvatarImage } from "~/components/ui/avatar"
-import { Button } from "~/components/ui/button"
-import { Divider } from "~/components/ui/divider"
-import { LoadingCircle } from "~/components/ui/loading"
-import { useModalStack } from "~/components/ui/modal"
-import { ScrollArea } from "~/components/ui/scroll-area"
+import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import {
   Table,
   TableBody,
@@ -14,13 +10,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { views } from "~/constants"
+} from "@follow/components/ui/table/index.jsx"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { views } from "@follow/constants"
+import { UrlBuilder } from "@follow/utils/url-builder"
+import { cn } from "@follow/utils/utils"
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
+
+import { useModalStack } from "~/components/ui/modal"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
-import { UrlBuilder } from "~/lib/url-builder"
-import { cn } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
 import { listActions } from "~/store/list"
