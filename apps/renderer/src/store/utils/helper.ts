@@ -137,11 +137,3 @@ export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
       }),
     )
 }
-
-export const reloadWhenHotUpdate = (hot: any) => {
-  if (hot) {
-    hot.accept(() => {
-      window.location.reload()
-    })
-  }
-}

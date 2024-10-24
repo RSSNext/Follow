@@ -22,12 +22,7 @@ import { feedActions, getFeedById } from "../feed"
 import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
-import {
-  createImmerSetter,
-  createZustandStore,
-  doMutationAndTransaction,
-  reloadWhenHotUpdate,
-} from "../utils/helper"
+import { createImmerSetter, createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
@@ -508,7 +503,3 @@ export const isListSubscription = (feedId?: FeedId) => {
 
 export const subscriptionCategoryExist = (name: string) =>
   subscriptionCategoryExistSelector(name)(get())
-
-if (import.meta.env.DEV) {
-  reloadWhenHotUpdate(import.meta.hot)
-}

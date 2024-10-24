@@ -1,7 +1,7 @@
 import type { UserModel } from "@follow/models/types"
 import { produce } from "immer"
 
-import { createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
+import { createZustandStore } from "../utils/helper"
 
 interface UserStoreState {
   users: Record<string, UserModel>
@@ -48,7 +48,3 @@ class UserActions {
 }
 
 export const userActions = new UserActions()
-
-if (import.meta.env.DEV) {
-  reloadWhenHotUpdate(import.meta.hot)
-}

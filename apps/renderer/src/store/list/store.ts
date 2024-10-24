@@ -5,7 +5,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"
-import { createImmerSetter, createZustandStore, reloadWhenHotUpdate } from "../utils/helper"
+import { createImmerSetter, createZustandStore } from "../utils/helper"
 import type { ListState } from "./types"
 
 export const useListStore = createZustandStore<ListState>("list")(() => ({
@@ -98,7 +98,3 @@ class ListActionStatic {
 }
 
 export const listActions = new ListActionStatic()
-
-if (import.meta.env.DEV) {
-  reloadWhenHotUpdate(import.meta.hot)
-}

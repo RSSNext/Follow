@@ -19,7 +19,7 @@ import { imageActions } from "../image"
 import { inboxActions } from "../inbox"
 import { getSubscriptionByFeedId } from "../subscription"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, doMutationAndTransaction, reloadWhenHotUpdate } from "../utils/helper"
+import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
@@ -479,7 +479,3 @@ class EntryActions {
 export const entryActions = new EntryActions()
 
 export const getEntry = (entryId: string) => useEntryStore.getState().flatMapEntries[entryId]
-
-if (import.meta.env.DEV) {
-  reloadWhenHotUpdate(import.meta.hot)
-}
