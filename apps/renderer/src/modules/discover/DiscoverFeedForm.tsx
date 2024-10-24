@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
-import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -296,7 +295,7 @@ export const DiscoverFeedForm = ({
                 />
               )}
               {!!parameters && (
-                <Markdown className="text-xs text-theme-foreground/50">
+                <Markdown className="w-full max-w-full text-xs text-theme-foreground/50">
                   {parameters.description}
                 </Markdown>
               )}
@@ -313,11 +312,9 @@ export const DiscoverFeedForm = ({
                   placeholder={value.default}
                 />
                 {!!value.description && (
-                  <EllipsisHorizontalTextWithTooltip>
-                    <Markdown className="text-xs text-theme-foreground/50">
-                      {value.description}
-                    </Markdown>
-                  </EllipsisHorizontalTextWithTooltip>
+                  <Markdown className="w-full max-w-full text-xs text-theme-foreground/5">
+                    {value.description}
+                  </Markdown>
                 )}
               </FormItem>
             ))}
