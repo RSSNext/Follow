@@ -1,11 +1,12 @@
 import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
+import { forwardRef } from "react"
 
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { InboxItem, ListItem } from "~/modules/feed-column/item"
 import { useSubscriptionStore } from "~/store/subscription"
 
-export const TimelineTabs = () => {
+export const TimelineTabs = forwardRef<HTMLDivElement>((_props, ref) => {
   const routerParams = useRouteParams()
   const { view, listId, inboxId } = routerParams
 
@@ -29,6 +30,7 @@ export const TimelineTabs = () => {
 
   return (
     <Tabs
+      ref={ref}
       className="-ml-3 -mr-4 mt-1 flex overflow-x-auto scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
@@ -68,4 +70,4 @@ export const TimelineTabs = () => {
       </TabsList>
     </Tabs>
   )
-}
+})

@@ -69,13 +69,16 @@ export const EntryListHeader: FC<{
   const isList = !!listId
 
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const timelineTabsRef = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
       ref={containerRef}
       className={cn(
         "flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        view !== FeedViewType.Pictures && "mb-2",
+        timelineTabsRef.current
+          ? view !== FeedViewType.Articles && view !== FeedViewType.Pictures && "mb-2"
+          : "mb-2",
       )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
@@ -156,7 +159,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
-      <TimelineTabs />
+      <TimelineTabs ref={timelineTabsRef} />
     </div>
   )
 }
