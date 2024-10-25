@@ -9,7 +9,6 @@ import { useMotionValueEvent, useScroll } from "framer-motion"
 import * as React from "react"
 import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import { Link } from "react-router-dom"
 
 const useMotionValueToState = (value: MotionValue<number>) => {
   const [state, setState] = useState(value.get())
@@ -72,10 +71,10 @@ export const Header = () => {
       <Container>
         <nav className="relative flex justify-between">
           <div className="flex items-center md:gap-x-12">
-            <Link className="flex items-center gap-4" to="/">
+            <a className="flex items-center gap-4" href="/">
               <Logo className="h-8 w-auto" />
               <p className="font-default text-xl font-semibold">{APP_NAME}</p>
-            </Link>
+            </a>
           </div>
           <div className="flex items-center gap-4">
             <Button
