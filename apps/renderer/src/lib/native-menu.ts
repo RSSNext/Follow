@@ -17,6 +17,7 @@ type BaseMenuItemText = MenuItemWithHide<{
   shortcut?: string
   disabled?: boolean
   checked?: boolean
+  supportMultipleSelection?: boolean
 }>
 
 type BaseMenuItemSeparator = MenuItemWithHide<{

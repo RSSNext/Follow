@@ -17,7 +17,7 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { tipcClient } from "~/lib/client"
 
 const FALLBACK_FONT = "Default (UI Font)"

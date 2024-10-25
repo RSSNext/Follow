@@ -18,7 +18,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { apiClient } from "~/lib/api-fetch"
 import { Balance } from "~/modules/wallet/balance"
 import { useWallet, wallet as walletActions } from "~/queries/wallet"

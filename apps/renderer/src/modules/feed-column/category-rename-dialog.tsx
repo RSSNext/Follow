@@ -13,7 +13,7 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { apiClient } from "~/lib/api-fetch"
 import { Queries } from "~/queries"
 

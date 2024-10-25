@@ -7,8 +7,8 @@ import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useCurrentModal } from "~/components/ui/modal"
 import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import type { LoginRuntime } from "~/lib/auth"
 import { loginHandler } from "~/lib/auth"
 
@@ -70,6 +70,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             onClick={() => {
               loginHandler("github", runtime)
               setLoadingLockSet("github")
+              window.analytics?.capture("login", {
+                type: "github",
+              })
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === "github"}>
@@ -87,6 +90,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             onClick={() => {
               loginHandler("google", runtime)
               setLoadingLockSet("google")
+              window.analytics?.capture("login", {
+                type: "google",
+              })
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === "google"}>

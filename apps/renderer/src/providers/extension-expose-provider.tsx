@@ -6,7 +6,7 @@ import { toast } from "sonner"
 
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"

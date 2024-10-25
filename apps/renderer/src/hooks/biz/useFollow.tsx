@@ -5,7 +5,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useUserRole } from "~/atoms/user"
 import { CustomSafeError } from "~/components/errors/helper"
-import { useModalStack } from "~/components/ui/modal/stacked"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { MAX_TRIAL_USER_FEED_SUBSCRIPTION } from "~/constants/limit"
 import { useActivationModal } from "~/modules/activation"
 import type { FeedFormDataValuesType } from "~/modules/discover/feed-form"

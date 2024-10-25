@@ -5,9 +5,10 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useMemo, useState } from "react"
+import { memo, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import Selecto from "react-selecto"
 
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST } from "~/constants"
@@ -22,7 +23,13 @@ import {
 } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
-import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
+import {
+  getFeedListSort,
+  setFeedListSortBy,
+  setFeedListSortOrder,
+  useFeedListSort,
+  useSetSelectedFeedIds,
+} from "./atom"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
@@ -133,6 +140,11 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const hasListData = Object.keys(listsData).length > 0
   const hasInboxData = Object.keys(inboxesData).length > 0
 
+  const feedsArea = useRef<HTMLDivElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const selectoRef = useRef<Selecto>(null)
+  const setSelectedFeedIds = useSetSelectedFeedIds()
+
   return (
     <div className={cn(className, "font-medium")}>
       <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
@@ -168,8 +180,50 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
       </div>
+      <Selecto
+        className="!border-theme-accent-400 !bg-theme-accent-400/60"
+        ref={selectoRef}
+        rootContainer={document.body}
+        dragContainer={feedsArea.current}
+        selectableTargets={["[data-feed-id]"]}
+        continueSelect
+        hitRate={20}
+        onSelect={(e) => {
+          const allChanged = [...e.added, ...e.removed]
+          setSelectedFeedIds((prev) => {
+            const added = allChanged
+              .map((el) => el.dataset.feedId)
+              .filter((id) => id !== undefined)
+              .filter((id) => !prev.includes(id))
+            const removed = new Set(
+              allChanged
+                .map((el) => el.dataset.feedId)
+                .filter((id) => id !== undefined)
+                .filter((id) => prev.includes(id)),
+            )
+            return [...prev.filter((id) => !removed.has(id)), ...added]
+          })
+        }}
+        scrollOptions={{
+          container: scrollerRef.current as HTMLElement,
+          throttleTime: 30,
+          threshold: 0,
+        }}
+        onScroll={(e) => {
+          scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
+        }}
+      />
 
-      <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
+      <ScrollArea.ScrollArea
+        ref={scrollerRef}
+        onScroll={() => {
+          selectoRef.current?.checkScroll()
+        }}
+        mask={false}
+        flex
+        viewportClassName="!px-3"
+        rootClassName="h-full"
+      >
         <div
           data-active={feedId === FEED_COLLECTION_LIST}
           className={cn(
@@ -206,34 +260,37 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <SortByAlphabeticalInbox view={view} data={inboxesData} />
           </>
         )}
-        {(hasListData || hasInboxData) && (
-          <div
-            className={cn(
-              "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
-              Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
-            )}
-          >
-            {t("words.feeds")}
-          </div>
-        )}
-        {hasData ? (
-          <SortableFeedList
-            view={view}
-            data={feedsData}
-            categoryOpenStateData={categoryOpenStateData}
-          />
-        ) : (
-          <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
-            <Link
-              to="/discover"
-              className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
-              onClick={stopPropagation}
+
+        <div ref={feedsArea} className="space-y-px">
+          {(hasListData || hasInboxData) && (
+            <div
+              className={cn(
+                "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+              )}
             >
-              <i className="i-mgc-add-cute-re text-3xl" />
-              <span className="text-base">{t("sidebar.add_more_feeds")}</span>
-            </Link>
-          </div>
-        )}
+              {t("words.feeds")}
+            </div>
+          )}
+          {hasData ? (
+            <SortableFeedList
+              view={view}
+              data={feedsData}
+              categoryOpenStateData={categoryOpenStateData}
+            />
+          ) : (
+            <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
+              <Link
+                to="/discover"
+                className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
+                onClick={stopPropagation}
+              >
+                <i className="i-mgc-add-cute-re text-3xl" />
+                <span className="text-base">{t("sidebar.add_more_feeds")}</span>
+              </Link>
+            </div>
+          )}
+        </div>
       </ScrollArea.ScrollArea>
     </div>
   )

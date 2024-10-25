@@ -25,7 +25,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { Autocomplete } from "~/components/ui/auto-completion"
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { tipcClient } from "~/lib/client"

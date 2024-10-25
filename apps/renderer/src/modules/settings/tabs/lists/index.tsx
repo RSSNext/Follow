@@ -23,7 +23,7 @@ import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Balance } from "~/modules/wallet/balance"

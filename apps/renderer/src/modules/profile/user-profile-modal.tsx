@@ -19,7 +19,7 @@ import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { m } from "~/components/common/Motion"
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"

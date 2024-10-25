@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { m } from "~/components/common/Motion"
 
 import { microReboundPreset } from "../../constants/spring"
-import { useModalStack } from "../stacked"
+import { useModalStack } from "../stacked/hooks"
 
 const InPeekModal = createContext(false)
 export const useInPeekModal = () => useContext(InPeekModal)

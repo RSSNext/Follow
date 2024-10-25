@@ -6,7 +6,7 @@ import { m } from "framer-motion"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { createErrorToaster } from "~/lib/error-parser"
 
 export interface UseAsyncFetcher<T> {

@@ -20,7 +20,7 @@ import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { EntryContent } from "~/modules/entry-content"
 
 import { microReboundPreset } from "../constants/spring"
-import { useCurrentModal } from "../modal"
+import { useCurrentModal } from "../modal/stacked/hooks"
 import { VideoPlayer } from "./VideoPlayer"
 
 const Wrapper: Component<{

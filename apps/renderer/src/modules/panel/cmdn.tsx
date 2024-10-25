@@ -10,8 +10,8 @@ import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
 import { m } from "~/components/common/Motion"
-import { useModalStack } from "~/components/ui/modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { HotKeyScopeMap } from "~/constants"
 import { tipcClient } from "~/lib/client"
 

@@ -6,7 +6,7 @@ import { AnimatePresence, m } from "framer-motion"
 import Fuse from "fuse.js"
 import { forwardRef, Fragment, useCallback, useEffect, useState } from "react"
 
-import { useCorrectZIndex } from "../modal"
+import { useCorrectZIndex } from "../modal/stacked/hooks"
 
 export type Suggestion = {
   name: string

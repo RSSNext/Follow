@@ -8,8 +8,8 @@ import { useTranslation } from "react-i18next"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { KbdCombined } from "~/components/ui/kbd/Kbd"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts, shortcutsType } from "~/constants/shortcuts"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 

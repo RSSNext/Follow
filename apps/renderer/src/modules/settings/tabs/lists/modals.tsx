@@ -34,7 +34,7 @@ import { z } from "zod"
 
 import type { Suggestion } from "~/components/ui/auto-completion"
 import { Autocomplete } from "~/components/ui/auto-completion"
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
 import { FeedCertification } from "~/modules/feed/feed-certification"

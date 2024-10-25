@@ -4185,6 +4185,22 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        tax: drizzle_orm_pg_core.PgColumn<{
+            name: "tax";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
             name: "created_at";
             tableName: "transactions";
@@ -4229,6 +4245,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toListId: zod.ZodNullable<zod.ZodString>;
     toEntryId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
+    tax: zod.ZodString;
     createdAt: zod.ZodString;
     comment: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
@@ -4241,6 +4258,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
+    tax: string;
     comment: string | null;
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
@@ -4252,6 +4270,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
+    tax: string;
     comment: string | null;
 }>;
 declare const transactionsRelations: drizzle_orm.Relations<"transactions", {
@@ -5137,6 +5156,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
+                    tax: string;
                     comment: string | null;
                     fromUser?: {
                         name: string | null;
