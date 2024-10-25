@@ -27,6 +27,7 @@ export const Component = () => {
   const isMe = user.data?.id === me?.id
 
   const { t } = useTranslation("common")
+
   return (
     <MainContainer className="items-center">
       {user.isLoading ? (
@@ -40,12 +41,25 @@ export const Component = () => {
             />
             <AvatarFallback>{user.data?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col items-center">
+          <div className="mb-8 flex flex-col items-center">
             <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
               <h1>{user.data?.name}</h1>
             </div>
             {user.data?.handle && (
-              <div className="mb-8 text-sm text-zinc-500">@{user.data.handle}</div>
+              <div className="mb-1 text-sm text-zinc-500">@{user.data.handle}</div>
+            )}
+            {user.data?.id && <div className="mb-2 text-sm text-zinc-500">{user.data.id}</div>}
+            {user.data?.id && (
+              <Button
+                onClick={() => {
+                  openInFollowApp(`add?url=rsshub://follow/profile/${user.data?.id}`, () => {
+                    window.location.href = `rsshub://follow/profile/${user.data?.id}`
+                  })
+                }}
+              >
+                <FollowIcon className="mr-1 size-3" />
+                {APP_NAME}
+              </Button>
             )}
           </div>
           <div

@@ -60,15 +60,18 @@ export const UserProfileModalContent: FC<{
         avatar: user.data.image,
         name: user.data.name,
         handle: user.data.handle,
+        id: user.data.id,
       }
     : storeUser
       ? {
           avatar: storeUser.image,
           name: storeUser.name,
           handle: storeUser.handle,
+          id: storeUser.id,
         }
       : null
 
+  const follow = useFollow()
   const subscriptions = useUserSubscriptionsQuery(user.data?.id)
   const modal = useCurrentModal()
   const controller = useAnimationControls()
@@ -270,16 +273,36 @@ export const UserProfileModalContent: FC<{
                 >
                   <m.h1 layout>{userInfo.name}</m.h1>
                 </m.div>
-
                 <m.div
                   className={cn(
-                    "mb-0 text-sm text-zinc-500",
+                    "mb-0.5 text-xs text-zinc-500",
+                    userInfo?.id ? "visible" : "hidden select-none",
+                  )}
+                  layout
+                >
+                  uid: {userInfo.id}
+                </m.div>
+                <m.div
+                  className={cn(
+                    "text-sm text-zinc-500",
                     userInfo.handle ? "visible" : "hidden select-none",
                   )}
                   layout
                 >
                   @{userInfo.handle}
                 </m.div>
+                <Button
+                  buttonClassName="mt-2"
+                  onClick={() => {
+                    follow({
+                      url: `rsshub://follow/profile/${userInfo.id}`,
+                      isList: false,
+                    })
+                  }}
+                >
+                  <FollowIcon className="mr-1 size-3" />
+                  {APP_NAME}
+                </Button>
               </m.div>
             </div>
             <ScrollArea.ScrollArea
