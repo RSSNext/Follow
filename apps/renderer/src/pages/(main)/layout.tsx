@@ -89,7 +89,7 @@ const errorTypes = [
 
 const useAppUpgraded = () => {
   useOnce(() => {
-    if (!window.__app_is_upgraded__) {
+    if (window.__app_is_upgraded__) {
       setTimeout(() => {
         toast.success(
           <div>

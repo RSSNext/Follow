@@ -48,7 +48,7 @@ export const styledButtonVariant = cva(
           "hover:contrast-[1.10] active:contrast-125",
           "font-semibold",
           "disabled:bg-theme-disabled disabled:dark:text-zinc-50",
-          "text-zinc-100 dark:text-zinc-200/90",
+          "text-zinc-100",
           "focus:border-accent/80 focus:outline-none focus:ring-2",
         ),
 
