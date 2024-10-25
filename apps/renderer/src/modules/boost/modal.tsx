@@ -6,8 +6,8 @@ import { useCallback, useState } from "react"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
-import { useAuthQuery, useI18n } from "~/hooks/common"
-import { boosts, useBoostFeedMutation } from "~/queries/boosts"
+import { useI18n } from "~/hooks/common"
+import { useBoostFeedMutation, useBoostStatusQuery } from "~/modules/boost/query"
 import { useWallet } from "~/queries/wallet"
 
 import { BoostProgress } from "./boost-progress"
@@ -27,7 +27,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   const amountBigInt = from(amount, 18)[0]
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
-  const { data: boostStatus, isLoading } = useAuthQuery(boosts.getStatus({ feedId }))
+  const { data: boostStatus, isLoading } = useBoostStatusQuery(feedId)
   const boostFeedMutation = useBoostFeedMutation()
   const { dismiss } = useCurrentModal()
 
@@ -47,11 +47,13 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   return (
     <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
       <div className="relative flex w-full grow flex-col items-center gap-3">
-        <div className="mt-4 text-xl font-bold">🚀 Boost Feed</div>
+        <div className="mt-4 text-xl font-bold">
+          <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
+          {t("boost.boost_feed")}
+        </div>
 
         <small className="center mt-1 gap-1 text-theme-vibrancyFg">
-          Enhance feed to unlock additional benefits, and those who subscribe will be grateful for
-          the benefits!
+          {t("boost.boost_feed_description")}
         </small>
 
         <BoostProgress {...boostStatus} />
@@ -70,7 +72,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
       {boostFeedMutation.isSuccess ? (
         <>
           <m.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={softSpringPreset}>
-            Thank you for your support!
+            {t("boost.boost_success_thanks")}
           </m.p>
           <Button variant="primary" onClick={() => dismiss()}>
             {t.common("close")}

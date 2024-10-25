@@ -1,15 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.js"
 import { m } from "framer-motion"
 
-import { softSpringPreset } from "~/components/ui/constants/spring"
-import { useAuthQuery } from "~/hooks/common"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { boosts } from "~/queries/boosts"
+import { useFeedBoostersQuery } from "~/modules/boost/query"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 
 export const BoostingContributors = ({ feedId }: { feedId: string }) => {
-  const { data: boosters, isLoading } = useAuthQuery(boosts.getBoosters({ feedId }))
+  const { data: boosters, isLoading } = useFeedBoostersQuery(feedId)
   const presentUserProfile = usePresentUserProfileModal("drawer")
   if (isLoading || !boosters || boosters.length === 0) return
 
@@ -19,7 +17,7 @@ export const BoostingContributors = ({ feedId }: { feedId: string }) => {
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
-      transition={softSpringPreset}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <h2 className="mb-4 text-2xl font-bold">Boosting Contributors</h2>
       <ul className="space-y-4">

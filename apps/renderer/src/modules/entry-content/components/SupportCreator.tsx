@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
 import { useBoostModal } from "~/modules/boost/hooks"
+import { useFeedBoostersQuery } from "~/modules/boost/query"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useEntry } from "~/store/entry"
@@ -15,6 +16,7 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
   const { t } = useTranslation()
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId)
+  const { data: feedBoosters } = useFeedBoostersQuery(entry?.feedId)
 
   const openTipModal = useTipModal({
     userId: feed?.ownerUserId ?? undefined,
@@ -25,6 +27,9 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
 
   const isMyOwnedFeed = feed?.ownerUserId === useWhoami()?.id
   if (!feed || feed.type !== "feed") return null
+
+  const supportAmount =
+    (feed && feed.tipUsers ? feed.tipUsers.length : 0) + (feedBoosters ? feedBoosters.length : 0)
 
   return (
     <>
@@ -59,13 +64,26 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
           </Button>
         </div>
 
-        {!!feed.tipUsers?.length && (
+        {supportAmount > 0 && (
           <>
             <div className="text-sm text-zinc-500">
-              {t("entry_content.support_amount", { amount: feed.tipUsers.length })}
+              {t("entry_content.support_amount", { amount: supportAmount })}
             </div>
             <div className="flex w-fit max-w-80 flex-wrap gap-4">
               {feed.tipUsers?.map((user) => (
+                <div key={user.id} className="size-8">
+                  <UserAvatar
+                    className="h-auto p-0"
+                    avatarClassName="size-8"
+                    userId={user?.id}
+                    enableModal={true}
+                    hideName={true}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex w-fit max-w-80 flex-wrap gap-4">
+              {feedBoosters?.map((user) => (
                 <div key={user.id} className="size-8">
                   <UserAvatar
                     className="h-auto p-0"
