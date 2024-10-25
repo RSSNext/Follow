@@ -123,7 +123,7 @@ function bootstrap() {
   app.on("before-quit", () => {
     // store window pos when before app quit
     const window = getMainWindow()
-    if (!window) return
+    if (!window || window.isDestroyed()) return
     const bounds = window.getBounds()
 
     store.set(windowStateStoreKey, {
