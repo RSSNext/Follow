@@ -162,8 +162,7 @@ const BalanceRenderer = ({
   amount: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["powerToken"]
   tax: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["tax"]
 }) => {
-  // tax free or 100% tax
-  const showTax = tax !== "0" && tax !== amount
+  const hideTax = sign === "-" || tax === "0"
   return (
     <div
       className={cn("flex items-center", {
@@ -173,7 +172,7 @@ const BalanceRenderer = ({
     >
       {sign}
       <Balance className="mr-1">{amount}</Balance>
-      {showTax && (
+      {!hideTax && (
         <span className="text-xs text-gray-500">
           (-<Balance>{tax}</Balance>)
         </span>
