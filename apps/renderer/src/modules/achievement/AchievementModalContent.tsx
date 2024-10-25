@@ -138,7 +138,7 @@ export const AchievementModalContent: FC = () => {
   }, [achievements])
 
   return (
-    <div className="relative flex w-full grow flex-col items-center">
+    <div className="relative flex w-full grow flex-col items-center overflow-auto">
       <DotLottieReact
         className="mt-12 size-[100px]"
         autoplay
@@ -163,7 +163,7 @@ export const AchievementModalContent: FC = () => {
         />
       </small>
 
-      <ul className="mt-10 flex w-full grow flex-col gap-2">
+      <ul className="mt-10 flex w-full grow flex-col gap-2 overflow-y-auto">
         {isLoading ? (
           <div className="center pointer-events-none grow -translate-y-16">
             <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
