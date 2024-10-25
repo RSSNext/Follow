@@ -11,12 +11,13 @@ class EventBusEvent extends Event {
     super(EventBusEvent.type)
   }
 }
-class EventBusStatic {
-  dispatch<T extends keyof EventBusMap>(event: T, data: EventBusMap[T]) {
-    window.dispatchEvent(new EventBusEvent(event, data))
+type AnyObject = Record<string, any>
+class EventBusStatic<E extends AnyObject> {
+  dispatch<T extends keyof E>(event: T, data: E[T]) {
+    window.dispatchEvent(new EventBusEvent(event as string, data))
   }
 
-  subscribe<T extends keyof EventBusMap>(event: T, callback: (data: EventBusMap[T]) => void) {
+  subscribe<T extends keyof E>(event: T, callback: (data: E[T]) => void) {
     const handler = (e: any) => {
       if (e instanceof EventBusEvent && e._type === event) {
         callback(e.data)
@@ -24,7 +25,7 @@ class EventBusStatic {
     }
     window.addEventListener(EventBusEvent.type, handler)
 
-    return this.unsubscribe.bind(this, event, handler)
+    return this.unsubscribe.bind(this, event as string, handler)
   }
 
   unsubscribe(event: string, handler: (e: any) => void) {
@@ -32,4 +33,5 @@ class EventBusStatic {
   }
 }
 
-export const EventBus = new EventBusStatic()
+export const EventBus = new EventBusStatic<EventBusMap>()
+export const createEventBus = <E extends AnyObject>() => new EventBusStatic<E>()

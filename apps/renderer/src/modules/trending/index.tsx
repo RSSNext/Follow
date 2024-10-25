@@ -295,7 +295,7 @@ const TrendingEntries = ({ data }: { data: Models.TrendingEntry[] }) => {
           return (
             <li
               key={entry.id}
-              className="relative truncate whitespace-nowrap py-0.5 pr-10 marker:text-accent"
+              className="relative w-[calc(100%-2.5rem)] truncate whitespace-nowrap py-0.5 marker:text-accent"
             >
               <a
                 href={entry.url}
