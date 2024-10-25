@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "declaration": true,
+    "types": ["@follow/types/global"],
     "paths": {
       "@follow/utils/*": ["./src/*"]
     }

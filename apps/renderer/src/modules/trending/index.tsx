@@ -114,7 +114,7 @@ const TrendingLists: FC<{
                 follow({ isList: true, id: item.id })
               }}
             >
-              <div className="absolute -inset-y-1 inset-x-0 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
+              <div className="absolute -inset-y-1 inset-x-0 z-[-1] rounded-lg duration-200 group-hover:bg-theme-item-hover" />
               <FeedIcon feed={item as any} size={40} />
 
               <div className={cn("ml-1 flex w-full flex-col text-left")}>
@@ -135,11 +135,11 @@ const TrendingLists: FC<{
   )
 }
 
-const UserCount = ({ count }: { count: number }) => {
+const UserCount: Component<{ count: number }> = ({ count, className }) => {
   return (
-    <span className="flex -translate-y-0.5 items-center gap-0.5 text-xs tabular-nums text-gray-500">
+    <span className={cn("flex items-center gap-0.5 text-xs tabular-nums opacity-60", className)}>
       <PhUsersBold className="size-3" />
-      {count}
+      <span>{count}</span>
     </span>
   )
 }
@@ -215,7 +215,7 @@ const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
                   profile(user.id)
                 }}
               >
-                <div className="absolute -inset-2 right-0 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
+                <div className="absolute -inset-2 right-0 z-[-1] rounded-lg duration-200 group-hover:bg-theme-item-hover" />
                 <Avatar className="block aspect-square size-[40px] overflow-hidden rounded-full border border-border ring-1 ring-background">
                   <AvatarImage src={user?.image || undefined} />
                   <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
@@ -261,7 +261,7 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
               </a>
 
               <div className="pr-2">
-                <UserCount count={(feed as any).subscriberCount} />
+                <UserCount className="-mr-2" count={(feed as any).subscriberCount} />
 
                 <Button
                   type="button"
@@ -295,17 +295,19 @@ const TrendingEntries = ({ data }: { data: Models.TrendingEntry[] }) => {
           return (
             <li
               key={entry.id}
-              className="relative truncate whitespace-nowrap py-0.5 pr-10 marker:text-accent"
+              className="relative grid w-full grid-cols-[1fr_auto] gap-2 whitespace-nowrap py-0.5 marker:text-accent"
             >
-              <a
-                href={entry.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="follow-link--underline truncate text-sm"
-              >
-                {entry.title}
-              </a>
-              <span className="absolute right-0 top-0 flex items-center gap-0.5 text-xs opacity-60">
+              <div className="m-0 min-w-0 truncate p-0">
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="follow-link--underline truncate text-sm"
+                >
+                  {entry.title}
+                </a>
+              </div>
+              <span className="flex items-center gap-0.5 text-xs tabular-nums opacity-60">
                 <i className="i-mingcute-book-2-line" />
                 <span>{entry.readCount}</span>
               </span>

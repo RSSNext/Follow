@@ -2,6 +2,7 @@
   "name": "@follow/hooks",
   "version": "0.0.1",
   "private": true,
+  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./src/index.ts",

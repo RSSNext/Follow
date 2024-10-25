@@ -9,6 +9,7 @@
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./src/index.ts",

@@ -2,6 +2,7 @@
   "name": "@follow/components",
   "version": "0.0.1",
   "private": true,
+  "sideEffects": false,
   "exports": {
     "./tailwind": "./assets/index.css",
     "./modules/*": "./src/modules/*",
