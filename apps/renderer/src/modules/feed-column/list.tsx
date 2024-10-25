@@ -140,7 +140,6 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const hasListData = Object.keys(listsData).length > 0
   const hasInboxData = Object.keys(inboxesData).length > 0
 
-  const feedsArea = useRef<HTMLDivElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const selectoRef = useRef<Selecto>(null)
   const setSelectedFeedIds = useSetSelectedFeedIds()
@@ -184,10 +183,10 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         className="!border-theme-accent-400 !bg-theme-accent-400/60"
         ref={selectoRef}
         rootContainer={document.body}
-        dragContainer={feedsArea.current}
+        dragContainer={"#feeds-area"}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
-        hitRate={20}
+        hitRate={10}
         onSelect={(e) => {
           const allChanged = [...e.added, ...e.removed]
           setSelectedFeedIds((prev) => {
@@ -261,7 +260,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           </>
         )}
 
-        <div ref={feedsArea} className="space-y-px">
+        <div className="space-y-px" id="feeds-area">
           {(hasListData || hasInboxData) && (
             <div
               className={cn(
