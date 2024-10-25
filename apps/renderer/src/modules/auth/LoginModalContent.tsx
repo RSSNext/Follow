@@ -70,6 +70,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             onClick={() => {
               loginHandler("github", runtime)
               setLoadingLockSet("github")
+              window.analytics?.capture("login", {
+                type: "github",
+              })
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === "github"}>
@@ -87,6 +90,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             onClick={() => {
               loginHandler("google", runtime)
               setLoadingLockSet("google")
+              window.analytics?.capture("login", {
+                type: "google",
+              })
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === "google"}>
