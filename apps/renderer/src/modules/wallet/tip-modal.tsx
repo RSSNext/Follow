@@ -145,6 +145,7 @@ const TipModalContent_: FC<{
         <RadioGroup value={amount.toString()} onValueChange={(value) => setAmount(Number(value))}>
           <div className="grid grid-cols-2 gap-2">
             <RadioCard
+              disabled={tipMutation.isPending}
               wrapperClassName="justify-center"
               label={
                 <span className="flex items-center gap-1">
@@ -154,6 +155,7 @@ const TipModalContent_: FC<{
               value="10"
             />
             <RadioCard
+              disabled={tipMutation.isPending}
               wrapperClassName="justify-center group"
               label={
                 <span className="flex items-center gap-1">
