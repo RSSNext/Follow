@@ -1,6 +1,7 @@
 {
   "name": "@follow/atoms",
   "version": "0.0.1",
+  "sideEffects": false,
   "exports": {
     "./atoms/*": {
       "import": "./src/atoms/*",
