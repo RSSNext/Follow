@@ -241,7 +241,7 @@ export const appRoute = {
       try {
         const { url, title, content, author, publishedAt, vaultPath } = input
 
-        const fileName = `${(title || publishedAt).trim().slice(0, 20)}.md`
+        const fileName = `${(title || publishedAt).trim().slice(0, 20).replaceAll("/", "-")}.md`
         const filePath = path.join(vaultPath, fileName)
         const exists = fs.existsSync(filePath)
         if (exists) {

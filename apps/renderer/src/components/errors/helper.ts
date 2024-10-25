@@ -1,8 +1,8 @@
+import { nextFrame } from "@follow/utils/dom"
 import type { FC } from "react"
 import { createElement, useEffect, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
-import { nextFrame } from "~/lib/dom"
 import { createErrorToaster } from "~/lib/error-parser"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"

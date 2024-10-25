@@ -1,6 +1,7 @@
 export * from "./context"
 export * from "./helper"
-export * from "./hooks"
+// NOTE: This one can easily cause a circular dependency
+// export * from "./hooks"
 export * from "./modal"
 export * from "./provider"
 export * from "./types"

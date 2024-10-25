@@ -1,6 +1,7 @@
+import type { InboxModel } from "@follow/models/types"
+
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { InboxModel } from "~/models"
 import { InboxService } from "~/services/inbox"
 
 import { createImmerSetter, createZustandStore } from "../utils/helper"

@@ -1,35 +1,40 @@
+import { EmptyIcon } from "@follow/components/icons/empty.jsx"
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
+import { Card, CardContent } from "@follow/components/ui/card/index.jsx"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@follow/components/ui/tooltip/index.jsx"
+import { nextFrame, stopPropagation } from "@follow/utils/dom"
+import { cn, isBizId } from "@follow/utils/utils"
 import type { Variant } from "framer-motion"
 import { m, useAnimationControls } from "framer-motion"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { useEffect, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
-import { FeedIcon } from "~/components/feed-icon"
-import { EmptyIcon } from "~/components/icons/empty"
-import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
-import { Card, CardContent } from "~/components/ui/card"
 import { Collapse } from "~/components/ui/collapse"
 import { RelativeTime } from "~/components/ui/datetime"
 import type { LinkProps } from "~/components/ui/link"
-import { LoadingCircle } from "~/components/ui/loading"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { MarkdownLink } from "~/components/ui/markdown/renderers"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
-import { useModalStack } from "~/components/ui/modal"
 import { PeekModal } from "~/components/ui/modal/inspire/PeekModal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { Paper } from "~/components/ui/paper"
-import { ScrollArea } from "~/components/ui/scroll-area"
-import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
-import { nextFrame, stopPropagation } from "~/lib/dom"
-import { cn, isBizId } from "~/lib/utils"
 import { FlatMarkAllReadButton } from "~/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "~/modules/entry-column/star-icon"
 import { EntryContentRender } from "~/modules/entry-content"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
@@ -267,7 +272,6 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
               return <PeekModal to={`/feeds/${feedId}/${entryId}`}>{children}</PeekModal>
             },
             content: () => <EntryModalPreview entryId={entryId} />,
-
             overlay: true,
           })
         }
@@ -360,6 +364,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
                 "rounded-xl p-3 align-middle text-[15px]",
                 "rounded-tl-none bg-zinc-600/5 dark:bg-zinc-500/20",
                 "mt-1 -translate-x-3",
+                "break-words",
               )}
             >
               {entry.entries.description}

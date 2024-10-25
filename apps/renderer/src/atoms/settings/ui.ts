@@ -1,6 +1,5 @@
+import { createSettingAtom } from "@follow/atoms/helper/setting.js"
 import type { UISettings } from "@follow/shared/interface/settings"
-
-import { createSettingAtom } from "./helper"
 
 export const createDefaultSettings = (): UISettings => ({
   // Sidebar

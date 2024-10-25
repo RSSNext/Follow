@@ -1,3 +1,12 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
+import { Input } from "@follow/components/ui/input/Input.js"
+import { LoadingCircle, LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/ScrollArea.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
+import type { ExtractBizResponse } from "@follow/models/types"
+import { Chain } from "@follow/utils/chain"
+import { cn } from "@follow/utils/utils"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { SingletonRefObject } from "foxact/use-singleton"
@@ -10,18 +19,10 @@ import { useEffect, useId, useMemo, useRef } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { Button } from "~/components/ui/button"
-import { styledButtonVariant } from "~/components/ui/button/variants"
-import { Input } from "~/components/ui/input"
-import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
-import { Chain } from "~/lib/chain"
-import { cn } from "~/lib/utils"
 import achievementAnimationUri from "~/lottie/achievement.lottie?url"
-import type { ExtractBizResponse } from "~/models"
 
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
 enum AchievementsActionIdMap {
@@ -163,82 +164,84 @@ export const AchievementModalContent: FC = () => {
         />
       </small>
 
-      <ul className="mt-10 flex w-full grow flex-col gap-2">
-        {isLoading ? (
-          <div className="center pointer-events-none grow -translate-y-16">
-            <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
-          </div>
-        ) : (
-          sortedAchievements?.map((achievement) => {
-            const copy = achievementActionIdCopyMap[achievement.actionId]
-            if (!copy) return null
+      <ScrollArea rootClassName="h-0 grow mt-10 w-[calc(100%+2rem)] -mx-4" viewportClassName="px-4">
+        <ul className="flex w-full flex-col gap-2">
+          {isLoading ? (
+            <div className="center pointer-events-none grow -translate-y-16">
+              <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
+            </div>
+          ) : (
+            sortedAchievements?.map((achievement) => {
+              const copy = achievementActionIdCopyMap[achievement.actionId]
+              if (!copy) return null
 
-            return (
-              <li key={achievement.id} className="flex items-center justify-between">
-                <div>
-                  <div className="text-base font-bold">
-                    {t(copy.title)}
+              return (
+                <li key={achievement.id} className="flex items-center justify-between">
+                  <div>
+                    <div className="text-base font-bold">
+                      {t(copy.title)}
 
-                    {achievement.power && (
-                      <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
-                        <span className="font-medium opacity-80">{achievement.power}</span>
-                        <i className="i-mgc-power scale-95 text-sm text-accent" />
-                      </span>
-                    )}
+                      {achievement.power && (
+                        <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
+                          <span className="font-medium opacity-80">{achievement.power}</span>
+                          <i className="i-mgc-power scale-95 text-sm text-accent" />
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      {t(copy.description)}
+                    </div>
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    {t(copy.description)}
-                  </div>
-                </div>
-                {achievement.type === "checking" && (
-                  <div
-                    className={styledButtonVariant({
-                      variant: "outline",
-                      className: "relative border-0 pointer-events-none",
-                    })}
-                  >
-                    <LoadingCircle size="small" className="center absolute inset-0" />
-                    <span className="select-none opacity-0">{t("words.mint")}</span>
-                  </div>
-                )}
-                {achievement.type === "incomplete" && (
-                  <IncompleteButton achievement={achievement} refetch={refetch} />
-                )}
-                {achievement.type === "received" && (
-                  <div
-                    className={styledButtonVariant({
-                      variant: "outline",
-                      className:
-                        "relative !bg-green-100/50 gap-1 border-green-200 text-green-800 dark:text-foreground dark:!bg-green-100/5 dark:border-green-200/20",
-                    })}
-                  >
-                    <i className="i-mgc-check-filled" />
-                    {t("achievement.all_done")}
-                  </div>
-                )}
+                  {achievement.type === "checking" && (
+                    <div
+                      className={styledButtonVariant({
+                        variant: "outline",
+                        className: "relative border-0 pointer-events-none",
+                      })}
+                    >
+                      <LoadingCircle size="small" className="center absolute inset-0" />
+                      <span className="select-none opacity-0">{t("words.mint")}</span>
+                    </div>
+                  )}
+                  {achievement.type === "incomplete" && (
+                    <IncompleteButton achievement={achievement} refetch={refetch} />
+                  )}
+                  {achievement.type === "received" && (
+                    <div
+                      className={styledButtonVariant({
+                        variant: "outline",
+                        className:
+                          "relative !bg-green-100/50 gap-1 border-green-200 text-green-800 dark:text-foreground dark:!bg-green-100/5 dark:border-green-200/20",
+                      })}
+                    >
+                      <i className="i-mgc-check-filled" />
+                      {t("achievement.all_done")}
+                    </div>
+                  )}
 
-                {achievement.type === "audit" && (
-                  <div
-                    className={styledButtonVariant({
-                      variant: "outline",
-                      className:
-                        "relative cursor-not-allowed !bg-zinc-100/50 gap-1 border-zinc-200 text-zinc-800 dark:text-foreground dark:!bg-zinc-100/5 dark:border-zinc-200/20",
-                    })}
-                  >
-                    Validating...
-                  </div>
-                )}
-                {achievement.type === "completed" && (
-                  <MintButton
-                    achievementsDataAtom={achievementsDataAtom}
-                    achievement={achievement}
-                  />
-                )}
-              </li>
-            )
-          })
-        )}
-      </ul>
+                  {achievement.type === "audit" && (
+                    <div
+                      className={styledButtonVariant({
+                        variant: "outline",
+                        className:
+                          "relative cursor-not-allowed !bg-zinc-100/50 gap-1 border-zinc-200 text-zinc-800 dark:text-foreground dark:!bg-zinc-100/5 dark:border-zinc-200/20",
+                      })}
+                    >
+                      Validating...
+                    </div>
+                  )}
+                  {achievement.type === "completed" && (
+                    <MintButton
+                      achievementsDataAtom={achievementsDataAtom}
+                      achievement={achievement}
+                    />
+                  )}
+                </li>
+              )
+            })
+          )}
+        </ul>
+      </ScrollArea>
     </div>
   )
 }

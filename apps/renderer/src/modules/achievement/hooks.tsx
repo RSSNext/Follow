@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
-import { useModalStack } from "~/components/ui/modal"
 import { SlideUpModal } from "~/components/ui/modal/stacked/custom-modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
 import { AchievementModalContent } from "./AchievementModalContent"
 

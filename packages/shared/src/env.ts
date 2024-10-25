@@ -19,6 +19,8 @@ export const env = createEnv({
     VITE_EXTERNAL_PROD_API_URL: z.string().optional(),
     VITE_EXTERNAL_DEV_API_URL: z.string().optional(),
     VITE_EXTERNAL_API_URL: z.string().optional(),
+    VITE_WEB_PROD_URL: z.string().optional(),
+    VITE_WEB_DEV_URL: z.string().optional(),
   },
 
   emptyStringAsUndefined: true,

@@ -1,8 +1,8 @@
+import { usePageVisibility } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
-import { usePageVisibility } from "~/hooks/common"
 import { appLog } from "~/lib/log"
 
 const slateTime = 600000 // 10min

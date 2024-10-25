@@ -1,16 +1,16 @@
+import { FollowIcon } from "@follow/components/icons/follow.jsx"
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { FollowIcon } from "~/components/icons/follow"
-import { MotionButtonBase } from "~/components/ui/button"
-import { LoadingCircle } from "~/components/ui/loading"
-import { useCurrentModal } from "~/components/ui/modal"
 import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import type { LoginRuntime } from "~/lib/auth"
 import { loginHandler } from "~/lib/auth"
-import { stopPropagation } from "~/lib/dom"
 
 interface LoginModalContentProps {
   runtime?: LoginRuntime
@@ -70,6 +70,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             onClick={() => {
               loginHandler("github", runtime)
               setLoadingLockSet("github")
+              window.analytics?.capture("login", {
+                type: "github",
+              })
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === "github"}>
@@ -87,6 +90,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             onClick={() => {
               loginHandler("google", runtime)
               setLoadingLockSet("google")
+              window.analytics?.capture("login", {
+                type: "google",
+              })
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === "google"}>

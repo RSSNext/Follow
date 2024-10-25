@@ -1,6 +1,6 @@
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { useTranslation } from "react-i18next"
 
-import { MotionButtonBase } from "../../button"
 import { useCurrentModal } from "./hooks"
 
 export const ModalClose = () => {

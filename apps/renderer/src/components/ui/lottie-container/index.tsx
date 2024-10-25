@@ -1,3 +1,4 @@
+import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import type { DotLottie } from "@lottiefiles/dotlottie-react"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { atom, useAtomValue } from "jotai"
@@ -5,8 +6,6 @@ import type { FC, ReactNode, RefCallback } from "react"
 import { useEffect, useState } from "react"
 
 import { jotaiStore } from "~/lib/jotai"
-
-import { RootPortal } from "../portal"
 
 const portalElementsAtom = atom([] as ReactNode[])
 

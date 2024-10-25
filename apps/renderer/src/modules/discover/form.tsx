@@ -1,3 +1,17 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { Card, CardContent, CardFooter, CardHeader } from "@follow/components/ui/card/index.jsx"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import { Radio } from "@follow/components/ui/radio-group/index.js"
+import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.jsx"
+import type { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useSingleton } from "foxact/use-singleton"
@@ -10,26 +24,12 @@ import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
-import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { Radio } from "~/components/ui/radio-group"
-import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedViewType } from "~/lib/enum"
 
-import { FollowSummary } from "../../components/feed-summary"
+import { FollowSummary } from "../feed/feed-summary"
 import { FeedForm } from "./feed-form"
 
 const formSchema = z.object({

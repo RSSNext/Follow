@@ -1,5 +1,6 @@
-import { LoadingCircle } from "~/components/ui/loading"
-import { TokenBrandedRss3 } from "~/components/ui/platform-icon/icons"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { TokenBrandedRss3 } from "@follow/components/ui/platform-icon/icons.js"
+
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 

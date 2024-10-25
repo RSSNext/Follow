@@ -1,9 +1,9 @@
+import { cn } from "@follow/utils/utils"
 import { AnimatePresence } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { useId, useMemo } from "react"
 
 import { jotaiStore } from "~/lib/jotai"
-import { cn } from "~/lib/utils"
 
 import { modalStackAtom } from "./atom"
 import { ModalInternal } from "./modal"

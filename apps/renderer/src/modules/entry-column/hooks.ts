@@ -1,9 +1,9 @@
+import { views } from "@follow/constants"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { views } from "~/constants"
 import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"
@@ -105,9 +105,12 @@ export const useEntriesByView = ({
 
   const remoteEntryIds = useMemo(
     () =>
-      query.data?.pages
-        ?.map((page) => page.data?.map((entry) => entry.entries.id))
-        .flat() as string[],
+      // FIXME The back end should not return duplicate data, and the front end the unique id here.
+      [
+        ...new Set(
+          query.data?.pages?.map((page) => page.data?.map((entry) => entry.entries.id)).flat(),
+        ).values(),
+      ] as string[],
     [query.data?.pages],
   )
 
@@ -213,7 +216,7 @@ export const useEntriesByView = ({
     refetch: useCallback(() => {
       query.refetch()
       feedUnreadActions.fetchUnreadByView(view)
-    }, [query]),
+    }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries[view].length,

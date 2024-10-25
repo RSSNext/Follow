@@ -1,4 +1,4 @@
-import type { UserModel } from "~/models"
+import type { UserModel } from "@follow/models/types"
 
 import { useUserStore } from "./store"
 

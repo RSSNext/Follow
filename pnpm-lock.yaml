@@ -200,6 +200,9 @@ importers:
       tailwindcss-animate:
         specifier: 1.0.7
         version: 1.0.7(tailwindcss@3.4.14)
+      tailwindcss-motion:
+        specifier: 0.3.0-beta
+        version: 0.3.0-beta(tailwindcss@3.4.14)
       tsup:
         specifier: 8.3.0
         version: 8.3.0(jiti@2.3.3)(postcss@8.4.47)(tsx@4.19.1)(typescript@5.6.3)(yaml@2.6.0)
@@ -248,12 +251,6 @@ importers:
       builder-util-runtime:
         specifier: 9.2.10
         version: 9.2.10
-      dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
-      dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
       electron-context-menu:
         specifier: 4.0.4
         version: 4.0.4(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
@@ -275,18 +272,12 @@ importers:
       linkedom:
         specifier: ^0.18.5
         version: 0.18.5
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
       lowdb:
         specifier: 7.0.1
         version: 7.0.1
       msedge-tts:
         specifier: 1.3.4
         version: 1.3.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
-      nanoid:
-        specifier: 5.0.7
-        version: 5.0.7
       ofetch:
         specifier: 1.4.1
         version: 1.4.1
@@ -339,27 +330,18 @@ importers:
       '@hookform/resolvers':
         specifier: 3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
-      '@iconify/tools':
-        specifier: 4.0.7
-        version: 4.0.7
       '@lottiefiles/dotlottie-react':
         specifier: 0.9.1
         version: 0.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@microflash/remark-callout-directives':
         specifier: 4.3.1
         version: 4.3.1
-      '@mozilla/readability':
-        specifier: ^0.5.0
-        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
       '@radix-ui/react-avatar':
         specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-checkbox':
-        specifier: 1.1.2
-        version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-context-menu':
         specifier: 2.2.2
         version: 2.2.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -378,42 +360,18 @@ importers:
       '@radix-ui/react-popover':
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-radio-group':
-        specifier: 1.2.1
-        version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-scroll-area':
-        specifier: 1.2.0
-        version: 1.2.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-select':
-        specifier: 2.1.2
-        version: 2.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slider':
         specifier: ^1.2.1
         version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
         specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.11)(react@18.3.1)
-      '@radix-ui/react-switch':
-        specifier: 1.1.1
-        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-tabs':
-        specifier: 1.1.1
-        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-toast':
-        specifier: 1.2.2
-        version: 1.2.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-tooltip':
-        specifier: 1.1.3
-        version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@sentry/react':
         specifier: 8.34.0
         version: 8.34.0(react@18.3.1)
       '@shikijs/transformers':
         specifier: 1.22.0
         version: 1.22.0
-      '@t3-oss/env-core':
-        specifier: ^0.11.1
-        version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
       '@tanstack/query-sync-storage-persister':
         specifier: 5.59.13
         version: 5.59.13
@@ -429,15 +387,15 @@ importers:
       '@use-gesture/react':
         specifier: 10.3.1
         version: 10.3.1(react@18.3.1)
+      '@welldone-software/why-did-you-render':
+        specifier: 8.0.3
+        version: 8.0.3(react@18.3.1)
       '@yornaath/batshit':
         specifier: 0.10.1
         version: 0.10.1
       camelcase-keys:
         specifier: 9.1.3
         version: 9.1.3
-      class-variance-authority:
-        specifier: 0.7.0
-        version: 0.7.0
       click-to-react-component:
         specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -477,6 +435,9 @@ importers:
       hast-util-to-jsx-runtime:
         specifier: 2.3.2
         version: 2.3.2
+      hast-util-to-mdast:
+        specifier: ^10.1.0
+        version: 10.1.0
       hast-util-to-text:
         specifier: 4.0.2
         version: 4.0.2
@@ -507,6 +468,9 @@ importers:
       masonic:
         specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
+      mdast-util-to-markdown:
+        specifier: ^2.1.0
+        version: 2.1.0
       nanoid:
         specifier: 5.0.7
         version: 5.0.7
@@ -523,8 +487,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-error-boundary:
-        specifier: 4.0.13
-        version: 4.0.13(react@18.3.1)
+        specifier: 4.1.2
+        version: 4.1.2(react@18.3.1)
       react-fast-marquee:
         specifier: 1.6.5
         version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -547,7 +511,7 @@ importers:
         specifier: 6.27.0
         version: 6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-selecto:
-        specifier: 1.26.3
+        specifier: ^1.26.3
         version: 1.26.3
       react-shadow:
         specifier: 20.5.0
@@ -591,12 +555,6 @@ importers:
       swiper:
         specifier: 11.1.14
         version: 11.1.14
-      tailwind-merge:
-        specifier: 2.5.4
-        version: 2.5.4
-      tailwindcss-motion:
-        specifier: 0.3.0-beta
-        version: 0.3.0-beta(tailwindcss@3.4.14)
       tldts:
         specifier: 6.1.51
         version: 6.1.51
@@ -625,9 +583,27 @@ importers:
       '@babel/generator':
         specifier: 7.25.7
         version: 7.25.7
+      '@follow/atoms':
+        specifier: workspace:*
+        version: link:../../packages/atoms
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../packages/components
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../packages/models
       '@follow/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@hono/node-server':
         specifier: 1.13.2
         version: 1.13.2(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))
@@ -673,9 +649,6 @@ importers:
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
-      '@radix-ui/react-avatar':
-        specifier: 1.1.1
-        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@resvg/resvg-js':
         specifier: 2.6.2
         version: 2.6.2
@@ -742,9 +715,9 @@ importers:
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(patch_hash=6s3tquyt5wnkqaogymn3mkivuq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      swr:
-        specifier: 2.2.5
-        version: 2.2.5(react@18.3.1)
+      tailwindcss:
+        specifier: 3.4.14
+        version: 3.4.14
       uniqolor:
         specifier: 1.1.1
         version: 1.1.1
@@ -773,12 +746,27 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      '@radix-ui/react-avatar':
+        specifier: 1.1.1
+        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       daisyui:
         specifier: 4.12.13
         version: 4.12.13(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.4.47)
+      foxact:
+        specifier: 0.2.39
+        version: 0.2.39(react@18.3.1)
       lightningcss:
         specifier: 1.27.0
         version: 1.27.0
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      masonic:
+        specifier: 4.0.1
+        version: 4.0.1(react@18.3.1)
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
       tsup:
         specifier: 8.3.0
         version: 8.3.0(jiti@2.3.3)(postcss@8.4.47)(tsx@4.19.1)(typescript@5.6.3)(yaml@2.6.0)
@@ -917,12 +905,18 @@ importers:
       react-fast-marquee:
         specifier: 1.6.5
         version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-hook-form:
+        specifier: 7.53.0
+        version: 7.53.0(react@18.3.1)
       react-i18next:
         specifier: ^15.0.3
         version: 15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(patch_hash=6s3tquyt5wnkqaogymn3mkivuq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      use-context-selector:
+        specifier: 2.0.0
+        version: 2.0.0(react@18.3.1)(scheduler@0.23.2)
       usehooks-ts:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
@@ -932,6 +926,9 @@ importers:
       '@follow/types':
         specifier: workspace:*
         version: link:../types
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
 
   packages/hooks:
     dependencies:
@@ -1027,6 +1024,9 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      framer-motion:
+        specifier: 11.11.9
+        version: 11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -3599,7 +3599,7 @@ packages:
   '@radix-ui/react-slot@1.1.0':
     resolution: {integrity: sha512-FUCf5XMfmW4dtYl69pdS4DbxKy8nj4M7SafBgPllysxmdachynNflAdp/gCsnYWNDnge6tI9onzMp5ARYc1KNw==}
     peerDependencies:
-      '@types/react': '*'
+      '@types/react': npm:types-react@19.0.0-rc.1
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -4504,6 +4504,11 @@ packages:
     resolution: {integrity: sha512-rQ/BgMyLuIXSmbA0MSkIPHtcOw14QkeDbAq19sjvaS9LTRr905yij0S8lsyqN5JgOsbtIx7pAcyOxFMzPmqhZQ==}
     hasBin: true
 
+  '@welldone-software/why-did-you-render@8.0.3':
+    resolution: {integrity: sha512-bb5bKPMStYnocyTBVBu4UTegZdBqzV1mPhxc0UIV/S43KFUSRflux9gvzJfu2aM4EWLJ3egTvdjOi+viK+LKGA==}
+    peerDependencies:
+      react: ^18
+
   '@xmldom/xmldom@0.8.10':
     resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
     engines: {node: '>=10.0.0'}
@@ -4789,6 +4794,7 @@ packages:
 
   boolean@3.2.0:
     resolution: {integrity: sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   bottleneck@2.19.5:
     resolution: {integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==}
@@ -6541,6 +6547,9 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
+  hast-util-embedded@3.0.0:
+    resolution: {integrity: sha512-naH8sld4Pe2ep03qqULEtvYr7EjrLK2QHY8KJR6RJkTUjPGObe1vnx585uzem2hGra+s1q08DZZpfgDVYRbaXA==}
+
   hast-util-excerpt@2.0.0:
     resolution: {integrity: sha512-3hM4U3Tjvx8bn+KGM51BA2VL6poq3AyOHguq3dzDjI74lxYZfOV1zAEEiSbcGd8CXgx9N9JRS5MlS4izTWJRig==}
 
@@ -6553,11 +6562,20 @@ packages:
   hast-util-has-property@3.0.0:
     resolution: {integrity: sha512-MNilsvEKLFpV604hwfhVStK0usFY/QmM5zX16bo7EjnAEGofr5YyI37kzopBlZJkHD4t887i+q/C8/tr5Q94cA==}
 
+  hast-util-is-body-ok-link@3.0.1:
+    resolution: {integrity: sha512-0qpnzOBLztXHbHQenVB8uNuxTnm/QBFUOmdOSsEn7GnBtyY07+ENTWVFBAnXd/zEgd9/SUG3lRY7hSIBWRgGpQ==}
+
   hast-util-is-element@3.0.0:
     resolution: {integrity: sha512-Val9mnv2IWpLbNPqc/pUem+a7Ipj2aHacCwgNfTiK0vJKl0LF+4Ba4+v1oPHFpf3bLYmreq0/l3Gud9S5OH42g==}
 
+  hast-util-minify-whitespace@1.0.1:
+    resolution: {integrity: sha512-L96fPOVpnclQE0xzdWb/D12VT5FabA7SnZOUMtL1DbXmYiHJMXZvFkIZfiMmTCNJHUeO2K9UYNXoVyfz+QHuOw==}
+
   hast-util-parse-selector@4.0.0:
     resolution: {integrity: sha512-wkQCkSYoOGCRKERFWcxMVMOcYE2K1AaNLU8DXS9arxnLOUEWbOXKXiJUNzEpqZ3JOKpnha3jkFrumEjVliDe7A==}
+
+  hast-util-phrasing@3.0.1:
+    resolution: {integrity: sha512-6h60VfI3uBQUxHqTyMymMZnEbNl1XmEGtOxxKYL7stY2o601COo62AWAYBQR9lZbYXYSBoxag8UpPRXK+9fqSQ==}
 
   hast-util-sanitize@5.0.1:
     resolution: {integrity: sha512-IGrgWLuip4O2nq5CugXy4GI2V8kx4sFVy5Hd4vF7AR2gxS0N9s7nEAVUyeMtZKZvzrxVsHt73XdTsno1tClIkQ==}
@@ -6570,6 +6588,9 @@ packages:
 
   hast-util-to-jsx-runtime@2.3.2:
     resolution: {integrity: sha512-1ngXYb+V9UT5h+PxNRa1O1FYguZK/XL+gkeqvp7EdHlB9oHUG0eYRo/vY5inBdcqo3RkPMC58/H94HvkbfGdyg==}
+
+  hast-util-to-mdast@10.1.0:
+    resolution: {integrity: sha512-DsL/SvCK9V7+vfc6SLQ+vKIyBDXTk2KLSbfBYkH4zeF/uR1yBajHRhkzuaUSGOB1WJSTieJBdHwxlC+HLKvZZw==}
 
   hast-util-to-string@3.0.0:
     resolution: {integrity: sha512-OGkAxX1Ua3cbcW6EJ5pT/tslVb90uViVkcJ4ZZIMW/R33DX/AkcJcRrPebPwJkHYwlDHXz4aIwvAAaAdtrACFA==}
@@ -8499,8 +8520,8 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-error-boundary@4.0.13:
-    resolution: {integrity: sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==}
+  react-error-boundary@4.1.2:
+    resolution: {integrity: sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==}
     peerDependencies:
       react: '>=16.13.1'
 
@@ -8737,6 +8758,9 @@ packages:
 
   rehype-infer-description-meta@2.0.0:
     resolution: {integrity: sha512-8MZjKRfQiNB5+Qpt0fS9bpjcKe+nhF5GOTHo0M5e+XdStDpcZxkSMMnCfNIlpNaOyIQ7Hu1qEaUxm8ZL1lYI1g==}
+
+  rehype-minify-whitespace@6.0.2:
+    resolution: {integrity: sha512-Zk0pyQ06A3Lyxhe9vGtOtzz3Z0+qZ5+7icZ/PL/2x1SHPbKao5oB/g/rlc6BCTajqBb33JcOe71Ye1oFsuYbnw==}
 
   rehype-parse@9.0.1:
     resolution: {integrity: sha512-ksCzCD0Fgfh7trPDxr2rSylbwq9iYDkSn8TCDmEJ49ljEUBxDVCzCHv7QNzZOfODanX4+bWQ4WZqLCRWYLfhag==}
@@ -9241,11 +9265,6 @@ packages:
     resolution: {integrity: sha512-VbQLQXC04io6AoAjIUWuZwW4MSYozkcP9KjLdrsG/00Q/yiwvhz9RQyt0nHXV10hi9NVnDNy1/wv7Dzq1lkOCQ==}
     engines: {node: '>= 4.7.0'}
 
-  swr@2.2.5:
-    resolution: {integrity: sha512-QtxqyclFeAsxEUeZIYmsaQ0UjimSq1RZ9Un7I68/0ClKK/U3LoyQunwkQfJZr2fc22DfIXLNDc2wFyTEikCUpg==}
-    peerDependencies:
-      react: ^16.11.0 || ^17.0.0 || ^18.0.0
-
   synckit@0.6.2:
     resolution: {integrity: sha512-Vhf+bUa//YSTYKseDiiEuQmhGCoIF3CVBhunm3r/DQnYiGT4JssmnKQc44BIyOZRK2pKjXXAgbhfmbeoC9CJpA==}
     engines: {node: '>=12.20'}
@@ -9394,6 +9413,9 @@ packages:
   trim-repeated@1.0.0:
     resolution: {integrity: sha512-pkonvlKk8/ZuR0D5tLW8ljt5I8kmxp2XKymhepUeOdCEfKpZaktSArkLHZt76OB1ZvO9bssUsDty4SWhLvZpLg==}
     engines: {node: '>=0.10.0'}
+
+  trim-trailing-lines@2.1.0:
+    resolution: {integrity: sha512-5UR5Biq4VlVOtzqkm2AZlgvSlDJtME46uV0br0gENbwN4l5+mMKT4b9gJKqWtuL2zAIqajGJGuvbCbcAJUZqBg==}
 
   trough@2.2.0:
     resolution: {integrity: sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw==}
@@ -14402,6 +14424,11 @@ snapshots:
 
   '@vscode/vscode-languagedetection@1.0.22': {}
 
+  '@welldone-software/why-did-you-render@8.0.3(react@18.3.1)':
+    dependencies:
+      lodash: 4.17.21
+      react: 18.3.1
+
   '@xmldom/xmldom@0.8.10': {}
 
   '@yornaath/batshit-devtools@1.7.1': {}
@@ -16967,6 +16994,11 @@ snapshots:
       function-bind: 1.1.2
     optional: true
 
+  hast-util-embedded@3.0.0:
+    dependencies:
+      '@types/hast': 3.0.4
+      hast-util-is-element: 3.0.0
+
   hast-util-excerpt@2.0.0:
     dependencies:
       '@types/hast': 3.0.4
@@ -16996,13 +17028,33 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.4
 
+  hast-util-is-body-ok-link@3.0.1:
+    dependencies:
+      '@types/hast': 3.0.4
+
   hast-util-is-element@3.0.0:
     dependencies:
       '@types/hast': 3.0.4
 
+  hast-util-minify-whitespace@1.0.1:
+    dependencies:
+      '@types/hast': 3.0.4
+      hast-util-embedded: 3.0.0
+      hast-util-is-element: 3.0.0
+      hast-util-whitespace: 3.0.0
+      unist-util-is: 6.0.0
+
   hast-util-parse-selector@4.0.0:
     dependencies:
       '@types/hast': 3.0.4
+
+  hast-util-phrasing@3.0.1:
+    dependencies:
+      '@types/hast': 3.0.4
+      hast-util-embedded: 3.0.0
+      hast-util-has-property: 3.0.0
+      hast-util-is-body-ok-link: 3.0.1
+      hast-util-is-element: 3.0.0
 
   hast-util-sanitize@5.0.1:
     dependencies:
@@ -17062,6 +17114,23 @@ snapshots:
       vfile-message: 4.0.2
     transitivePeerDependencies:
       - supports-color
+
+  hast-util-to-mdast@10.1.0:
+    dependencies:
+      '@types/hast': 3.0.4
+      '@types/mdast': 4.0.4
+      '@ungap/structured-clone': 1.2.0
+      hast-util-phrasing: 3.0.1
+      hast-util-to-html: 9.0.3
+      hast-util-to-text: 4.0.2
+      hast-util-whitespace: 3.0.0
+      mdast-util-phrasing: 4.1.0
+      mdast-util-to-hast: 13.2.0
+      mdast-util-to-string: 4.0.0
+      rehype-minify-whitespace: 6.0.2
+      trim-trailing-lines: 2.1.0
+      unist-util-position: 5.0.0
+      unist-util-visit: 5.0.0
 
   hast-util-to-string@3.0.0:
     dependencies:
@@ -19204,7 +19273,7 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-error-boundary@4.0.13(react@18.3.1):
+  react-error-boundary@4.1.2(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.25.7
       react: 18.3.1
@@ -19463,6 +19532,11 @@ snapshots:
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
       vfile: 6.0.3
+
+  rehype-minify-whitespace@6.0.2:
+    dependencies:
+      '@types/hast': 3.0.4
+      hast-util-minify-whitespace: 1.0.1
 
   rehype-parse@9.0.1:
     dependencies:
@@ -20024,12 +20098,6 @@ snapshots:
 
   swiper@11.1.14: {}
 
-  swr@2.2.5(react@18.3.1):
-    dependencies:
-      client-only: 0.0.1
-      react: 18.3.1
-      use-sync-external-store: 1.2.2(react@18.3.1)
-
   synckit@0.6.2:
     dependencies:
       tslib: 2.7.0
@@ -20196,6 +20264,8 @@ snapshots:
   trim-repeated@1.0.0:
     dependencies:
       escape-string-regexp: 1.0.5
+
+  trim-trailing-lines@2.1.0: {}
 
   trough@2.2.0: {}
 

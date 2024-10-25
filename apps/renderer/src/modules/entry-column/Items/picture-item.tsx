@@ -1,17 +1,19 @@
+import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
+import { FeedViewType } from "@follow/constants"
+import { cn } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import { memo, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { FeedIcon } from "~/components/feed-icon"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
-import { Skeleton } from "~/components/ui/skeleton"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { FeedViewType } from "~/lib/enum"
-import { cn, filterSmallMedia } from "~/lib/utils"
+import { filterSmallMedia } from "~/lib/utils"
+import { EntryContent } from "~/modules/entry-content"
+import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useEntry } from "~/store/entry/hooks"
 import { useImageDimensions } from "~/store/image"
 
@@ -32,7 +34,8 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const { t } = useTranslation()
-  const previewMedia = usePreviewMedia(entryId)
+  const entryContent = useMemo(() => <EntryContent entryId={entryId} noMedia compact />, [entryId])
+  const previewMedia = usePreviewMedia(entryContent)
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
@@ -75,8 +78,8 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const entry = useEntry(entryId) || entryPreview
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
-
-  const previewMedia = usePreviewMedia(entryId)
+  const entryContent = useMemo(() => <EntryContent entryId={entryId} noMedia compact />, [entryId])
+  const previewMedia = usePreviewMedia(entryContent)
   const itemWidth = useMasonryItemWidth()
 
   const [ref, setRef] = useState<HTMLDivElement | null>(null)

@@ -1,4 +1,4 @@
-import type { FeedOrListModel } from "~/models"
+import type { FeedOrListModel } from "@follow/models/types"
 
 type FeedId = string
 

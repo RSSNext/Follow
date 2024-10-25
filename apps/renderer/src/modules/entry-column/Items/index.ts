@@ -1,4 +1,4 @@
-import { FeedViewType } from "~/lib/enum"
+import { FeedViewType } from "@follow/constants"
 
 import { ArticleItem, ArticleItemSkeleton, ArticleItemStateLess } from "./article-item"
 import { AudioItem, AudioItemSkeleton, AudioItemStateLess } from "./audio-item"

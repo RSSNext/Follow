@@ -1,9 +1,8 @@
+import { cn, getOS } from "@follow/utils/utils"
 import type { FC } from "react"
 import * as React from "react"
 import { Fragment, memo } from "react"
 import { isHotkeyPressed } from "react-hotkeys-hook"
-
-import { cn, getOS } from "~/lib/utils"
 
 const SharedKeys = {
   backspace: "⌫",

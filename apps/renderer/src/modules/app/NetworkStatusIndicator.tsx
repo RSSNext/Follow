@@ -1,7 +1,8 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
+import { cn } from "@follow/utils/utils"
+
 import { NetworkStatus, useApiStatus, useNetworkStatus } from "~/atoms/network"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
-import { cn } from "~/lib/utils"
 
 export const NetworkStatusIndicator = () => {
   const networkStatus = useNetworkStatus()

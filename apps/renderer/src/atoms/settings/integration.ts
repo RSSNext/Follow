@@ -1,6 +1,5 @@
+import { createSettingAtom } from "@follow/atoms/helper/setting.js"
 import type { IntegrationSettings } from "@follow/shared/interface/settings"
-
-import { createSettingAtom } from "./helper"
 
 export const createDefaultSettings = (): IntegrationSettings => ({
   // eagle

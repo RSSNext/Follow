@@ -1,7 +1,7 @@
 import type { User } from "@auth/core/types"
+import type { UserRole } from "@follow/constants"
 import { atom } from "jotai"
 
-import type { UserRole } from "~/lib/enum"
 import { createAtomHooks } from "~/lib/jotai"
 
 export const [, , useWhoami, , whoami, setWhoami] = createAtomHooks(atom<Nullable<User>>(null))

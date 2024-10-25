@@ -1,10 +1,10 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
-import { Button } from "~/components/ui/button"
 import { apiClient } from "~/lib/api-fetch"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 

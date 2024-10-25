@@ -1,13 +1,13 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { getCurrentEnvironment } from "@follow/utils/environment"
 import { license, repository } from "@pkg"
 import { Trans, useTranslation } from "react-i18next"
 
-import { Logo } from "~/components/icons/logo"
-import { Button } from "~/components/ui/button"
-import { styledButtonVariant } from "~/components/ui/button/variants"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Divider } from "~/components/ui/divider"
 import { SocialMediaLinks } from "~/constants/social"
-import { getCurrentEnvironment } from "~/lib/environment"
 import { getNewIssueUrl } from "~/lib/issues"
 
 export const SettingAbout = () => {

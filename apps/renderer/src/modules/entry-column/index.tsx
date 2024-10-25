@@ -1,3 +1,11 @@
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import { FeedViewType, views } from "@follow/constants"
+import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
+import type { FeedModel } from "@follow/models/types"
+import { clsx, cn, isBizId } from "@follow/utils/utils"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type {
@@ -13,18 +21,10 @@ import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import { m } from "~/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "~/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "~/components/errors/FeedNotFound"
-import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
-import { Button } from "~/components/ui/button"
-import { LoadingCircle } from "~/components/ui/loading"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
-import { ScrollArea } from "~/components/ui/scroll-area"
-import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING, views } from "~/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useTitle, useTypeScriptHappyCallback } from "~/hooks/common"
-import { FeedViewType } from "~/lib/enum"
-import { cn, isBizId } from "~/lib/utils"
-import type { FeedModel } from "~/models"
 import { useFeed } from "~/queries/feed"
 import { entryActions, getEntry, useEntry } from "~/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
@@ -130,7 +130,7 @@ function EntryColumnImpl() {
             />
           )
         }
-      }, [isFetchingNextPage, view, unreadOnly, isArchived, entries]),
+      }, [isFetchingNextPage, showArchivedButton, t, view, entries.data?.pages]),
       ScrollSeekPlaceholder: useCallback(() => <EntryItemSkeleton view={view} count={1} />, [view]),
     },
     scrollSeekConfiguration,
@@ -209,7 +209,7 @@ function EntryColumnImpl() {
           scrollbarClassName={cn("mt-3", !views[view].wideMode ? "w-[5px] p-0" : "")}
           mask={false}
           ref={scrollRef}
-          rootClassName="h-full"
+          rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}
           viewportClassName="[&>div]:grow flex"
         >
           {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (

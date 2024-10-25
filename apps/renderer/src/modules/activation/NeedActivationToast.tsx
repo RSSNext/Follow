@@ -1,8 +1,7 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { stopPropagation } from "@follow/utils/dom"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
-
-import { Button } from "~/components/ui/button"
-import { stopPropagation } from "~/lib/dom"
 
 import { useActivationModal } from "."
 

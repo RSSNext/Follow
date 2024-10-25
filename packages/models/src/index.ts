@@ -8,14 +8,14 @@ export * from "./types"
 export namespace Models {
   export interface TrendingList {
     id: string
-    title: string
-    description: string
-    image: string
+    title?: Nullable<string>
+    description?: Nullable<string>
+    image?: Nullable<string>
     view: number
     fee: number
     timelineUpdatedAt: string
-    ownerUserId: string
-    subscriberCount: number
+    ownerUserId?: Nullable<string>
+    subscriberCount?: number
   }
 
   export interface TrendingAggregates {

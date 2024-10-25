@@ -1,29 +1,60 @@
+import path from "node:path"
+
+import { red, yellow } from "kolorist"
 import type { HmrContext, Plugin } from "vite"
 
-function hasCircularDependency(mod: any, server: any, visited = new Set()): boolean {
-  if (visited.has(mod.id)) return true
-  visited.add(mod.id)
+function isNodeWithinCircularImports(
+  node: any,
+  nodeChain: any[],
+  currentChain: any[] = [node],
+  traversedModules = new Set<any>(),
+): boolean {
+  if (traversedModules.has(node)) {
+    return false
+  }
+  traversedModules.add(node)
 
-  const importers = server.moduleGraph.getModulesByFile(mod.file) || new Set()
-  for (const importer of importers) {
-    if (hasCircularDependency(importer, server, new Set(visited))) {
+  for (const importer of node.importers) {
+    if (importer === node) continue
+
+    const importerIndex = nodeChain.indexOf(importer)
+    if (importerIndex !== -1) {
+      const importChain = [
+        importer,
+        ...[...currentChain].reverse(),
+        ...nodeChain.slice(importerIndex, -1).reverse(),
+      ].map((m) => path.relative(process.cwd(), m.file))
+
+      console.warn(yellow(`Circular imports detected: ${importChain.join("\n↳  ")}`))
       return true
     }
-  }
 
+    if (!currentChain.includes(importer)) {
+      const result = isNodeWithinCircularImports(
+        importer,
+        nodeChain,
+        currentChain.concat(importer),
+        traversedModules,
+      )
+      if (result) return result
+    }
+  }
   return false
 }
 
 export const circularImportRefreshPlugin = (): Plugin => ({
   name: "circular-import-refresh",
   handleHotUpdate({ file, server }: HmrContext) {
-    if (file.includes("store")) {
-      const mod = server.moduleGraph.getModuleById(file)
-      if (mod && hasCircularDependency(mod, server)) {
-        console.warn(`Circular dependency detected in ${file}. Performing full page refresh.`)
-        server.ws.send({ type: "full-reload" })
-        return []
-      }
+    const mod = server.moduleGraph.getModuleById(file)
+    if (mod && isNodeWithinCircularImports(mod, [mod])) {
+      console.error(
+        red(
+          `Circular dependency detected in ${file} involving store files. Performing full page refresh.`,
+        ),
+      )
+
+      server.ws.send({ type: "full-reload" })
+      return []
     }
   },
 })

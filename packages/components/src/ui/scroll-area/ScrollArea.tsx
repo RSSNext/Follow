@@ -125,24 +125,39 @@ export const ScrollArea = React.forwardRef<
     scrollbarClassName?: string
     flex?: boolean
     mask?: boolean
+    onScroll?: (e: React.UIEvent<HTMLDivElement>) => void
   }
->(({ flex, children, rootClassName, viewportClassName, scrollbarClassName, mask = false }, ref) => {
-  const [viewportRef, setViewportRef] = React.useState<HTMLDivElement | null>(null)
-  React.useImperativeHandle(ref, () => viewportRef as HTMLDivElement)
+>(
+  (
+    {
+      flex,
+      children,
+      rootClassName,
+      viewportClassName,
+      scrollbarClassName,
+      mask = false,
+      onScroll,
+    },
+    ref,
+  ) => {
+    const [viewportRef, setViewportRef] = React.useState<HTMLDivElement | null>(null)
+    React.useImperativeHandle(ref, () => viewportRef as HTMLDivElement)
 
-  return (
-    <ScrollElementContext.Provider value={viewportRef}>
-      <Root className={rootClassName}>
-        <Viewport
-          ref={setViewportRef}
-          onWheel={stopPropagation}
-          className={cn(flex ? "[&>div]:!flex [&>div]:!flex-col" : "", viewportClassName)}
-          mask={mask}
-        >
-          {children}
-        </Viewport>
-        <Scrollbar className={scrollbarClassName} />
-      </Root>
-    </ScrollElementContext.Provider>
-  )
-})
+    return (
+      <ScrollElementContext.Provider value={viewportRef}>
+        <Root className={rootClassName}>
+          <Viewport
+            ref={setViewportRef}
+            onWheel={stopPropagation}
+            className={cn(flex ? "[&>div]:!flex [&>div]:!flex-col" : "", viewportClassName)}
+            mask={mask}
+            onScroll={onScroll}
+          >
+            {children}
+          </Viewport>
+          <Scrollbar className={scrollbarClassName} />
+        </Root>
+      </ScrollElementContext.Provider>
+    )
+  },
+)

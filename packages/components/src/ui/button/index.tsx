@@ -1,3 +1,4 @@
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
 import type { VariantProps } from "class-variance-authority"
@@ -8,7 +9,6 @@ import { useHotkeys } from "react-hotkeys-hook"
 import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
 
 import { KbdCombined } from "../kbd/Kbd"
-import { LoadingCircle } from "../loading"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 import { styledButtonVariant } from "./variants"
 

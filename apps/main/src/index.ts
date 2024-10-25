@@ -72,7 +72,9 @@ function bootstrap() {
         userAgent = userAgent.replace(/\s?Electron\/[\d.]+/, "")
         userAgent = userAgent.replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
       }
-      details.requestHeaders["Origin"] = "https://app.follow.is"
+      if (env.VITE_OPENPANEL_API_URL && details.url.startsWith(env.VITE_OPENPANEL_API_URL)) {
+        details.requestHeaders["Origin"] = "https://app.follow.is"
+      }
       details.requestHeaders["User-Agent"] = userAgent
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })
@@ -121,7 +123,7 @@ function bootstrap() {
   app.on("before-quit", () => {
     // store window pos when before app quit
     const window = getMainWindow()
-    if (!window) return
+    if (!window || window.isDestroyed()) return
     const bounds = window.getBounds()
 
     store.set(windowStateStoreKey, {

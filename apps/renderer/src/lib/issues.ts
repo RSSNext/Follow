@@ -1,6 +1,5 @@
+import { getCurrentEnvironment } from "@follow/utils/environment"
 import { repository } from "@pkg"
-
-import { getCurrentEnvironment } from "./environment"
 
 interface IssueOptions {
   title: string

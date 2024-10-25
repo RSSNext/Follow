@@ -1,4 +1,4 @@
-import { viewportAtom } from "@follow/components/atoms/viewport"
+import { viewportAtom } from "@follow/components/atoms/viewport.js"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { useStore } from "jotai"
 import { throttle } from "lodash-es"

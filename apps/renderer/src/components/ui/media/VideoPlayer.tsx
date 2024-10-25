@@ -1,3 +1,8 @@
+import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import type { HTMLMediaState } from "@follow/hooks"
+import { useRefValue, useVideo } from "@follow/hooks"
+import { nextFrame, stopPropagation } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import * as Slider from "@radix-ui/react-slider"
 import { useSingleton } from "foxact/use-singleton"
 import { m, useDragControls, useSpring } from "framer-motion"
@@ -19,13 +24,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { AudioPlayer } from "~/atoms/player"
 import { IconScaleTransition } from "~/components/ux/transition/icon"
-import { useRefValue } from "~/hooks/common"
-import type { HTMLMediaState } from "~/hooks/common/factory/createHTMLMediaHook"
-import { useVideo } from "~/hooks/common/useVideo"
-import { nextFrame, stopPropagation } from "~/lib/dom"
-import { cn } from "~/lib/utils"
 
-import { MotionButtonBase } from "../button"
 import { softSpringPreset } from "../constants/spring"
 import { VolumeSlider } from "./VolumeSlider"
 

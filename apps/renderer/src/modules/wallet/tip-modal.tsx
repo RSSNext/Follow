@@ -1,16 +1,16 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
+import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
+import { RadioGroup } from "@follow/components/ui/radio-group/index.js"
+import { RadioCard } from "@follow/components/ui/radio-group/RadioCard.js"
+import { nextFrame } from "@follow/utils/dom"
 import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Button } from "~/components/ui/button"
-import { Divider } from "~/components/ui/divider"
-import { LoadingWithIcon } from "~/components/ui/loading"
-import { useCurrentModal } from "~/components/ui/modal"
-import { RadioGroup } from "~/components/ui/radio-group"
-import { RadioCard } from "~/components/ui/radio-group/RadioCard"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
-import { nextFrame } from "~/lib/dom"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useWallet, useWalletTipMutation } from "~/queries/wallet"
 
@@ -145,6 +145,7 @@ const TipModalContent_: FC<{
         <RadioGroup value={amount.toString()} onValueChange={(value) => setAmount(Number(value))}>
           <div className="grid grid-cols-2 gap-2">
             <RadioCard
+              disabled={tipMutation.isPending}
               wrapperClassName="justify-center"
               label={
                 <span className="flex items-center gap-1">
@@ -154,6 +155,7 @@ const TipModalContent_: FC<{
               value="10"
             />
             <RadioCard
+              disabled={tipMutation.isPending}
               wrapperClassName="justify-center group"
               label={
                 <span className="flex items-center gap-1">

@@ -7,12 +7,12 @@ import { parse } from "tldts"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
+export { clsx } from "clsx"
 export type OS = "macOS" | "iOS" | "Windows" | "Android" | "Linux" | ""
-declare global {
-  interface Window {
-    platform?: string
-  }
+
+declare const window: {
+  platform: NodeJS.Platform
+  navigator: Navigator
 }
 declare const ELECTRON: boolean
 export const getOS = memoize((): OS => {
@@ -172,7 +172,6 @@ export const parseSafeUrl = (url: string) => {
     return null
   }
 }
-
 export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
   let src: string
   let fallbackUrl = ""
@@ -183,7 +182,7 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
     fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
       ?.slice(0, 2)
       .toUpperCase()}`
-    src = `https://unavatar.follow.is/${host}?fallback=${fallback || false}`
+    src = `https://unavatar.webp.se/${host}?fallback=${fallback || false}`
   } catch {
     const pureDomain = parse(url).domainWithoutSuffix
     src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
@@ -197,3 +196,6 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 }
 
 export { parse as parseUrl } from "tldts"
+
+export const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max)

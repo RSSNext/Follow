@@ -1,11 +1,10 @@
 /* eslint-disable @eslint-react/no-children-to-array */
 /* eslint-disable @eslint-react/no-children-map */
 
+import { cn } from "@follow/utils/utils"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { cloneElement } from "react"
 import * as React from "react"
-
-import { cn } from "~/lib/utils"
 
 import { SettingActionItem, SettingDescription, SettingSwitch } from "./control"
 

@@ -1,17 +1,17 @@
-import { useEffect } from "react"
-import { useTranslation } from "react-i18next"
-
-import { createSetting } from "~/atoms/settings/helper"
-import { setIntegrationSetting, useIntegrationSettingValue } from "~/atoms/settings/integration"
-import { Divider } from "~/components/ui/divider"
+import { Divider } from "@follow/components/ui/divider/index.js"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
   SimpleIconsOmnivore,
   SimpleIconsReadwise,
-} from "~/components/ui/platform-icon/icons"
+} from "@follow/components/ui/platform-icon/icons.js"
+import { useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
+import { setIntegrationSetting, useIntegrationSettingValue } from "~/atoms/settings/integration"
+
+import { createSetting } from "../helper/builder"
 import { useSetSettingCanSync } from "../modal/hooks"
 
 const { defineSettingItem, SettingBuilder } = createSetting(

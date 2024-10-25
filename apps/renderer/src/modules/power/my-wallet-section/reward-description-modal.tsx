@@ -1,9 +1,3 @@
-import { from } from "dnum"
-import { useCallback } from "react"
-import { useTranslation } from "react-i18next"
-
-import { useServerConfigs } from "~/atoms/server-configs"
-import { useModalStack } from "~/components/ui/modal"
 import {
   Table,
   TableBody,
@@ -11,7 +5,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table"
+} from "@follow/components/ui/table/index.jsx"
+import { from } from "dnum"
+import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
+
+import { useServerConfigs } from "~/atoms/server-configs"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { getLevelMultiplier } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Level } from "~/modules/wallet/level"
@@ -68,11 +68,7 @@ export const useRewardDescriptionModal = () => {
         </div>
       ),
       title: t("wallet.rewardDescription.title"),
-      overlay: true,
-      overlayOptions: {
-        blur: true,
-        className: "bg-black/80",
-      },
+
       clickOutsideToDismiss: true,
     })
   }, [serverConfigs, present, t])

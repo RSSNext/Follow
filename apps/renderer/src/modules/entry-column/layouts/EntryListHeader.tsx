@@ -1,4 +1,12 @@
+import { ActionButton } from "@follow/components/ui/button/index.js"
+import { DividerVertical } from "@follow/components/ui/divider/index.js"
+import { RotatingRefreshIcon } from "@follow/components/ui/loading/index.jsx"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { FeedViewType, views } from "@follow/constants"
+import { useIsOnline } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { stopPropagation } from "@follow/utils/dom"
+import { cn, getOS, isBizId } from "@follow/utils/utils"
 import type { FC } from "react"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
@@ -7,24 +15,15 @@ import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/genera
 import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
-import { ActionButton } from "~/components/ui/button"
-import { DividerVertical } from "~/components/ui/divider"
-import { RotatingRefreshIcon } from "~/components/ui/loading"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
-import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
+import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
-import { useIsOnline } from "~/hooks/common"
-import { stopPropagation } from "~/lib/dom"
-import { FeedViewType } from "~/lib/enum"
-import { cn, getOS, isBizId } from "~/lib/utils"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/useAIDailyReportModal"
 import { EntryHeader } from "~/modules/entry-content/header"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
-import { TimelineTabs } from "./TimelineTabs"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -69,13 +68,14 @@ export const EntryListHeader: FC<{
   const isList = !!listId
 
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        view !== FeedViewType.Articles && view !== FeedViewType.Pictures && "mb-2",
+        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
+        titleStyleBasedView[view],
       )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
@@ -156,7 +156,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
-      <TimelineTabs />
+      {/* <TimelineTabs /> */}
     </div>
   )
 }

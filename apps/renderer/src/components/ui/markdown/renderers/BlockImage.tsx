@@ -1,7 +1,7 @@
+import { cn } from "@follow/utils/utils"
 import { useContext } from "react"
 import { useContextSelector } from "use-context-selector"
 
-import { cn } from "~/lib/utils"
 import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 
 import { Media } from "../../media"

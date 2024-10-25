@@ -1,9 +1,9 @@
 // @ts-nocheck
+import type { EntryModel } from "@follow/models/types"
 import type { TargetModel } from "@follow/shared/hono"
 import { beforeAll, describe, expect, test } from "vitest"
 
 import { browserDB } from "~/database"
-import type { EntryModel } from "~/models"
 import type { SubscriptionFlatModel } from "~/store/subscription"
 
 import { CleanerService } from "./cleaner"

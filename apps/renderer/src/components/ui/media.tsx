@@ -1,12 +1,12 @@
+import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { createContext, memo, useContext, useMemo, useState } from "react"
 import { Blurhash, BlurhashCanvas } from "react-blurhash"
 import { useEventCallback } from "usehooks-ts"
 
-import { nextFrame } from "~/lib/dom"
 import { getImageProxyUrl } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
 import { saveImageDimensionsToDb } from "~/store/image/db"
 
 import { usePreviewMedia } from "./media/hooks"
@@ -21,6 +21,7 @@ type BaseProps = {
   thumbnail?: boolean
   blurhash?: string
   inline?: boolean
+  fitContent?: boolean
 }
 export type MediaProps = BaseProps &
   (
@@ -62,6 +63,7 @@ const MediaImpl: FC<MediaProps> = ({
     height,
     width,
     inline,
+    fitContent,
     ...rest
   } = props
 
@@ -253,6 +255,7 @@ const MediaImpl: FC<MediaProps> = ({
           height={Number.parseInt(props.height as string)}
           containerWidth={containerWidth}
           noScale={inline}
+          fitContent={fitContent}
         >
           <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded">
             {blurhash ? (
@@ -306,6 +309,7 @@ const AspectRatio = ({
   children,
   style,
   noScale,
+  fitContent,
   ...props
 }: {
   width: number
@@ -313,10 +317,23 @@ const AspectRatio = ({
   containerWidth?: number
   children: React.ReactNode
   style?: React.CSSProperties
+  /**
+   * Keep the content size for inline image usage
+   */
   noScale?: boolean
+  /**
+   * If `fit` is true, the content width may be increased to fit the container width
+   */
+  fitContent?: boolean
   [key: string]: any
 }) => {
-  const scaleFactor = noScale ? 1 : containerWidth && width ? containerWidth / width : 1
+  const scaleFactor = noScale
+    ? 1
+    : containerWidth && width
+      ? fitContent
+        ? containerWidth / width
+        : Math.min(1, containerWidth / width)
+      : 1
 
   const scaledWidth = width ? width * scaleFactor : undefined
   const scaledHeight = height ? height * scaleFactor : undefined

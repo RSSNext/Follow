@@ -1,3 +1,4 @@
+import { EmptyIcon } from "@follow/components/icons/empty.jsx"
 import type { HTMLMotionProps } from "framer-motion"
 import type { DOMAttributes, FC } from "react"
 import { forwardRef, memo, useCallback } from "react"
@@ -7,7 +8,6 @@ import { GroupedVirtuoso, Virtuoso } from "react-virtuoso"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { m } from "~/components/common/Motion"
-import { EmptyIcon } from "~/components/icons/empty"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry"

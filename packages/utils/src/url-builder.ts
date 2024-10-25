@@ -19,7 +19,7 @@ class UrlBuilderStatic {
   }
 
   profile(id: string) {
-    return this.join(`profile/${id}`)
+    return this.join(`share/users/${id}`)
   }
 }
 

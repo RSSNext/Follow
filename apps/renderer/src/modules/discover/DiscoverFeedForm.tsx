@@ -1,3 +1,16 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { Form, FormItem, FormLabel } from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@follow/components/ui/select/index.jsx"
+import type { FeedViewType } from "@follow/constants"
+import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { omit } from "lodash-es"
 import type { FC } from "react"
@@ -9,29 +22,16 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
-import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Form, FormItem, FormLabel } from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 import { Markdown } from "~/components/ui/markdown/Markdown"
-import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
-import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
-import { nextFrame } from "~/lib/dom"
-import type { FeedViewType } from "~/lib/enum"
+import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import {
   MissingOptionalParamError,
   parseFullPathParams,
   parseRegexpPathParams,
   regexpPathToPath,
 } from "~/lib/path-parser"
-import { cn, getViewFromRoute } from "~/lib/utils"
+import { getViewFromRoute } from "~/lib/utils"
 
 import { FeedForm } from "./feed-form"
 import type { RSSHubRoute } from "./types"
@@ -295,7 +295,7 @@ export const DiscoverFeedForm = ({
                 />
               )}
               {!!parameters && (
-                <Markdown className="text-xs text-theme-foreground/50">
+                <Markdown className="w-full max-w-full text-xs text-theme-foreground/50">
                   {parameters.description}
                 </Markdown>
               )}
@@ -312,11 +312,9 @@ export const DiscoverFeedForm = ({
                   placeholder={value.default}
                 />
                 {!!value.description && (
-                  <EllipsisHorizontalTextWithTooltip>
-                    <Markdown className="text-xs text-theme-foreground/50">
-                      {value.description}
-                    </Markdown>
-                  </EllipsisHorizontalTextWithTooltip>
+                  <Markdown className="w-full max-w-full text-xs text-theme-foreground/5">
+                    {value.description}
+                  </Markdown>
                 )}
               </FormItem>
             ))}

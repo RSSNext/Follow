@@ -1,11 +1,11 @@
+import { UserArrowLeftIcon } from "@follow/components/icons/user.jsx"
+import { ActionButton } from "@follow/components/ui/button/index.js"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 
-import { UserArrowLeftIcon } from "../../components/icons/user"
-import { ActionButton } from "../../components/ui/button"
 import { PlainModal } from "../../components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 
