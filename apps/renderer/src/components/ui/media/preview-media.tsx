@@ -318,7 +318,7 @@ const FallbackableImage: FC<
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
         <div
-          className={cn("relative", width <= height && "h-full")}
+          className={cn("relative max-h-full", width <= height && "h-full")}
           style={{
             // px-20 pb-8 pt-10
             width:
