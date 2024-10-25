@@ -1,5 +1,6 @@
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { useHover } from "@use-gesture/react"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -9,6 +10,7 @@ import { m } from "~/components/common/Motion"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import type { ModalContentComponent } from "~/components/ui/modal"
+import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -129,6 +131,17 @@ const PreviewVideoModalContent: ModalContentComponent<{
   }, [])
   return (
     <m.div exit={{ scale: 0.94, opacity: 0 }} className="size-full p-12" onClick={() => dismiss()}>
+      <m.div
+        onFocusCapture={stopPropagation}
+        initial={true}
+        exit={{
+          opacity: 0,
+        }}
+        className="fixed right-3 top-2 flex items-center gap-4"
+      >
+        <FixedModalCloseButton onClick={dismiss} />
+      </m.div>
+
       <ViewTag src={src} className="size-full" />
     </m.div>
   )

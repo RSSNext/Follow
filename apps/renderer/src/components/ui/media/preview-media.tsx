@@ -20,6 +20,7 @@ import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { EntryContent } from "~/modules/entry-content"
 
 import { microReboundPreset } from "../constants/spring"
+import { FixedModalCloseButton } from "../modal/components/close"
 import { useCurrentModal } from "../modal/stacked/hooks"
 import { VideoPlayer } from "./VideoPlayer"
 
@@ -33,6 +34,17 @@ const Wrapper: Component<{
 
   return (
     <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
+      <m.div
+        onFocusCapture={stopPropagation}
+        initial={true}
+        exit={{
+          opacity: 0,
+        }}
+        className="fixed right-3 top-2 flex items-center gap-4"
+      >
+        <FixedModalCloseButton onClick={dismiss} />
+      </m.div>
+
       <m.div
         className="center flex size-full"
         initial={{ scale: 0.94, opacity: 0 }}
