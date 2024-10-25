@@ -90,6 +90,7 @@ export const TransactionsSection: Component = ({ className }) => {
                   <BalanceRenderer
                     sign={row.fromUserId === user?.id ? "-" : "+"}
                     amount={row.powerToken}
+                    tax={row.tax}
                   />
                 </TableCell>
                 <TableCell align="left" size="sm">
@@ -155,20 +156,31 @@ const TypeRenderer = ({
 const BalanceRenderer = ({
   sign,
   amount,
+  tax,
 }: {
   sign: "+" | "-"
   amount: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["powerToken"]
-}) => (
-  <div
-    className={cn("flex items-center", {
-      "text-green-500": sign === "+",
-      "text-red-500": sign === "-",
-    })}
-  >
-    {sign}
-    <Balance>{amount}</Balance>
-  </div>
-)
+  tax: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["tax"]
+}) => {
+  // tax free or 100% tax
+  const showTax = tax !== "0" && tax !== amount
+  return (
+    <div
+      className={cn("flex items-center", {
+        "text-green-500": sign === "+",
+        "text-red-500": sign === "-",
+      })}
+    >
+      {sign}
+      <Balance className="mr-1">{amount}</Balance>
+      {showTax && (
+        <span className="text-xs text-gray-500">
+          (-<Balance>{tax}</Balance>)
+        </span>
+      )}
+    </div>
+  )
+}
 
 const UserRenderer = ({
   user,
