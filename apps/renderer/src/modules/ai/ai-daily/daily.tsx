@@ -272,7 +272,6 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
               return <PeekModal to={`/feeds/${feedId}/${entryId}`}>{children}</PeekModal>
             },
             content: () => <EntryModalPreview entryId={entryId} />,
-
             overlay: true,
           })
         }

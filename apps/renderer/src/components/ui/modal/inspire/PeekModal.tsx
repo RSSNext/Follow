@@ -8,7 +8,7 @@ import { m } from "~/components/common/Motion"
 
 import { microReboundPreset } from "../../constants/spring"
 import { FixedModalCloseButton } from "../components/close"
-import { useModalStack } from "../stacked/hooks"
+import { useCurrentModal, useModalStack } from "../stacked/hooks"
 
 const InPeekModal = createContext(false)
 export const useInPeekModal = () => useContext(InPeekModal)
@@ -17,9 +17,10 @@ export const PeekModal = (
     to: string
   }>,
 ) => {
-  const { dismissAll, dismissTop } = useModalStack()
+  const { dismissAll } = useModalStack()
   const { to, children } = props
   const { t } = useTranslation("common")
+  const { dismiss } = useCurrentModal()
 
   return (
     <div className="relative mx-auto mt-[10vh] max-w-full overflow-auto px-2 scrollbar-none lg:max-w-[65rem] lg:p-0">
@@ -52,7 +53,7 @@ export const PeekModal = (
           </TooltipTrigger>
           <TooltipContent>{t("words.expand")}</TooltipContent>
         </Tooltip>
-        <FixedModalCloseButton onClick={dismissTop} />
+        <FixedModalCloseButton onClick={dismiss} />
       </m.div>
     </div>
   )
