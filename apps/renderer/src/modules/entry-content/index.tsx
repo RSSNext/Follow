@@ -248,7 +248,7 @@ export const EntryContentRender: Component<{
               <EntryTitle entryId={entryId} compact={compact} />
 
               <WrappedElementProvider boundingDetection>
-                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
+                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
                   <TitleMetaHandler entryId={entry.entries.id} />
                   {(summary.isLoading || summary.data) && (
                     <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
