@@ -41,19 +41,7 @@ const prodHandler = (app: FastifyInstance) => {
 
     const upstreamEnv = req.requestContext.get("upstreamEnv")
     if (isInVercelReverseProxy || upstreamEnv === "prod") {
-      // Add asset prefix
-      // Map all link and script to /assets
-      // <script type="module" crossorigin src="/assets/index-kQ31_hj7.js"></script>
-      // <link rel="stylesheet" crossorigin href="/assets/index-BORNdGZP.css">
-      const prefix = "/external-dist"
       const { document } = parseHTML(template)
-      for (const script of document.querySelectorAll("script")) {
-        script.src = `${prefix}${script.src}`
-      }
-      for (const link of document.querySelectorAll("link")) {
-        link.href = `${prefix}${link.href}`
-      }
-
       const upstreamEnv = req.requestContext.get("upstreamEnv")
 
       if (upstreamEnv) {

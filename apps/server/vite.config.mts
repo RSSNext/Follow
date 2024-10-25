@@ -18,6 +18,15 @@ export default () => {
       ...viteRenderBaseConfig.define,
       ELECTRON: "false",
     },
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: "dist-external/[name]-[hash].[ext]",
+          chunkFileNames: "dist-external/[name]-[hash].js",
+          entryFileNames: "dist-external/[name]-[hash].js",
+        },
+      },
+    },
     plugins: [react(), twMacro()],
 
     server: {
