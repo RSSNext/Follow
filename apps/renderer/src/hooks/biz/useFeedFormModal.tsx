@@ -2,7 +2,7 @@ import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { useCallback } from "react"
 
 import { useWhoami } from "~/atoms/user"
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { ListForm } from "~/modules/discover/list-form"
 

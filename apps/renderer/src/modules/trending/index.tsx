@@ -15,8 +15,8 @@ import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 
 import { getTrendingAggregates } from "~/api/trending"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 

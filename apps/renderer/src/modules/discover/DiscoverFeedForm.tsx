@@ -24,7 +24,7 @@ import { z } from "zod"
 import { getSidebarActiveView } from "~/atoms/sidebar"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Markdown } from "~/components/ui/markdown/Markdown"
-import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal"
+import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import {
   MissingOptionalParamError,
   parseFullPathParams,

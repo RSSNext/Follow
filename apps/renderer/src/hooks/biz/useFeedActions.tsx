@@ -8,7 +8,7 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { whoami } from "~/atoms/user"
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"

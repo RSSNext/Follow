@@ -11,7 +11,7 @@ import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { getLevelMultiplier } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Level } from "~/modules/wallet/level"

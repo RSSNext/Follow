@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import type { ModalActionsInternal } from "~/components/ui/modal"
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { getFetchErrorMessage } from "~/lib/error-parser"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { auth } from "~/queries/auth"

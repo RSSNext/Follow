@@ -9,7 +9,7 @@ import type { FC } from "react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useWallet, useWalletTipMutation } from "~/queries/wallet"

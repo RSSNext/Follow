@@ -11,7 +11,8 @@ import { memo, Suspense, useCallback, useEffect, useRef } from "react"
 
 import { useUISettingSelector } from "~/atoms/settings/ui"
 import { m } from "~/components/common/Motion"
-import { resizableOnly, useResizeableModal } from "~/components/ui/modal"
+import { resizableOnly } from "~/components/ui/modal"
+import { useResizeableModal } from "~/components/ui/modal/stacked/hooks"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { useActivationModal } from "~/modules/activation"
 

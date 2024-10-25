@@ -10,7 +10,7 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { CopyButton, ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { useShikiDefaultTheme } from "~/components/ui/code-highlighter/shiki/hooks"
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { FollowSummary } from "~/modules/feed/feed-summary"
 import { feed as feedQuery, useClaimFeedMutation } from "~/queries/feed"

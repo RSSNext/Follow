@@ -1,7 +1,7 @@
 import { atom } from "jotai"
 import { useCallback } from "react"
 
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { createAtomHooks } from "~/lib/jotai"
 import { SourceContentView } from "~/modules/entry-content/components/SourceContentView"
 

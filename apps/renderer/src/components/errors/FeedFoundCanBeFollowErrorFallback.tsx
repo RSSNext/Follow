@@ -10,7 +10,7 @@ import { FeedForm } from "~/modules/discover/feed-form"
 import { entries } from "~/queries/entries"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
-import { useModalStack } from "../ui/modal"
+import { useModalStack } from "../ui/modal/stacked/hooks"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
 import { FeedPreview } from "./previews/FeedPreview"
 

@@ -4,7 +4,7 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { subscriptionActions } from "~/store/subscription"
 
-import { useCurrentModal } from "../../components/ui/modal"
+import { useCurrentModal } from "../../components/ui/modal/stacked/hooks"
 
 export function CategoryRemoveDialogContent({ feedIdList }: { feedIdList: string[] }) {
   const { t } = useTranslation()

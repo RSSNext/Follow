@@ -19,7 +19,7 @@ import { useEffect, useId, useMemo, useRef } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import achievementAnimationUri from "~/lottie/achievement.lottie?url"

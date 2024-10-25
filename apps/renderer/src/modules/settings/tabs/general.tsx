@@ -24,7 +24,7 @@ import {
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
 import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initAnalytics } from "~/initialize/analytics"

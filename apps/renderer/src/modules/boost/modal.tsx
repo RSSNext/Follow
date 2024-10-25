@@ -5,7 +5,7 @@ import { AnimatePresence, m } from "framer-motion"
 import { useCallback, useState } from "react"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
-import { useCurrentModal } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { boosts, useBoostFeedMutation } from "~/queries/boosts"
 import { useWallet } from "~/queries/wallet"
