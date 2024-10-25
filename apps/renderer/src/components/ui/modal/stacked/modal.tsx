@@ -39,6 +39,7 @@ import { CurrentModalContext, CurrentModalStateContext } from "./context"
 import { useModalAnimate } from "./internal/use-animate"
 import { useModalResizeAndDrag } from "./internal/use-drag"
 import { useModalSelect } from "./internal/use-select"
+import { useModalSubscriber } from "./internal/use-subscriber"
 import { ModalOverlay } from "./overlay"
 import type { ModalOverlayOptions, ModalProps } from "./types"
 
@@ -151,6 +152,7 @@ export const ModalInternal = memo(
       }),
       [close, getIndex, item.id, setStack],
     )
+    useModalSubscriber(item.id, ModalProps)
 
     const ModalContextProps = useMemo<CurrentModalContentProps>(
       () => ({
@@ -360,7 +362,7 @@ export const ModalInternal = memo(
                     </div>
                     <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
-                    <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
+                    <div className="-mx-2 min-h-0 shrink grow overflow-auto px-6 py-2">
                       <ModalContext modalContextProps={ModalContextProps} isTop={!!isTop}>
                         {finalChildren}
                       </ModalContext>
