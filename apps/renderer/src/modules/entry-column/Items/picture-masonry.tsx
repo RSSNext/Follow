@@ -3,7 +3,6 @@ import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { useRefValue } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
-import { useSingleton } from "foxact/use-singleton"
 import { throttle } from "lodash-es"
 import type { RenderComponentProps } from "masonic"
 import { useInfiniteLoader } from "masonic"
@@ -60,7 +59,7 @@ const gutter = 24
 
 export const PictureMasonry: FC<MasonryProps> = (props) => {
   const { data } = props
-  const cacheMap = useSingleton(() => new Map<string, object>()).current
+  const cacheMap = useState(() => new Map<string, object>())[0]
   const [isInitDim, setIsInitDim] = useState(false)
   const [isInitLayout, setIsInitLayout] = useState(false)
   const [currentItemWidth, setCurrentItemWidth] = useState(0)
@@ -277,7 +276,7 @@ interface MasonryProps {
 
 const LoadingSkeletonItem = () => {
   // random height, between 100-400px
-  const randomHeight = useSingleton(() => Math.random() * 300 + 100).current
+  const randomHeight = useState(() => Math.random() * 300 + 100)[0]
   return (
     <div className="relative flex gap-2 overflow-x-auto">
       <div

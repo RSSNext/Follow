@@ -14,11 +14,10 @@ import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useSingleton } from "foxact/use-singleton"
 import { produce } from "immer"
 import { atom, useAtomValue, useStore } from "jotai"
 import type { FC } from "react"
-import { memo, useCallback, useEffect } from "react"
+import { memo, useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
@@ -90,7 +89,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       return data
     },
   })
-  const discoverSearchDataAtom = useSingleton(() => atom<DiscoverSearchData>()).current
+  const discoverSearchDataAtom = useState(() => atom<DiscoverSearchData>())[0]
 
   const discoverSearchData = useAtomValue(discoverSearchDataAtom)
 

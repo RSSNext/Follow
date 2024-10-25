@@ -50,8 +50,13 @@ const InvalidateQueryProviderElectron = () => {
           `Window switch to visible, but skip invalidation, ${currentTimeRef.current ? now - currentTimeRef.current : 0}`,
         )
       } else {
-        appLog("Window switch to visible, invalidate all queries")
-        queryClient.invalidateQueries()
+        appLog("Window switch to visible, invalidate all queries except entries")
+        queryClient.invalidateQueries({
+          predicate(query) {
+            // Ignore entries queries
+            return query.queryKey[0] !== "entries"
+          },
+        })
       }
       currentTimeRef.current = 0
     }

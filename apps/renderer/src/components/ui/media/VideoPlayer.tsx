@@ -4,7 +4,6 @@ import { useRefValue, useVideo } from "@follow/hooks"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as Slider from "@radix-ui/react-slider"
-import { useSingleton } from "foxact/use-singleton"
 import { m, useDragControls, useSpring } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import {
@@ -164,15 +163,14 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
   },
 )
 const BizControlOutsideMedia = () => {
-  const currentAudioPlayerIsPlayRef = useSingleton(() => AudioPlayer.get().status === "playing")
+  const currentAudioPlayerIsPlayRef = useMemo(() => AudioPlayer.get().status === "playing", [])
   useEffect(() => {
-    const { current } = currentAudioPlayerIsPlayRef
-    if (current) {
+    if (currentAudioPlayerIsPlayRef) {
       AudioPlayer.pause()
     }
 
     return () => {
-      if (current) {
+      if (currentAudioPlayerIsPlayRef) {
         AudioPlayer.play()
       }
     }

@@ -9,13 +9,11 @@ import { Chain } from "@follow/utils/chain"
 import { cn } from "@follow/utils/utils"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import type { SingletonRefObject } from "foxact/use-singleton"
-import { useSingleton } from "foxact/use-singleton"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC, ReactNode } from "react"
-import { useEffect, useId, useMemo, useRef } from "react"
+import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
@@ -79,7 +77,7 @@ type Achievement = ExtractBizResponse<typeof apiClient.achievement.$get>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
 
-  const defaultAchievements = useSingleton(buildDefaultAchievements)
+  const defaultAchievements = useState(buildDefaultAchievements)[0]
 
   const {
     data: achievements,
@@ -97,10 +95,10 @@ export const AchievementModalContent: FC = () => {
         },
       })
 
-      jotaiStore.set(achievementsDataAtom.current, res.data)
+      jotaiStore.set(achievementsDataAtom, res.data)
       return res.data
     },
-    initialData: defaultAchievements.current as Achievement,
+    initialData: defaultAchievements as Achievement,
   })
 
   useEffect(() => {
@@ -126,7 +124,7 @@ export const AchievementModalContent: FC = () => {
     }
   }, [achievements, isLoading, refetch])
 
-  const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
+  const achievementsDataAtom = useState(() => atom<typeof achievements>())[0]
 
   const t = useI18n()
 
@@ -257,7 +255,7 @@ const buildDefaultAchievements = () => {
 }
 
 const MintButton: FC<{
-  achievementsDataAtom: SingletonRefObject<PrimitiveAtom<Achievement | undefined>>
+  achievementsDataAtom: PrimitiveAtom<Achievement | undefined>
   achievement: Achievement[number]
 }> = ({ achievementsDataAtom, achievement }) => {
   const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
@@ -280,7 +278,7 @@ const MintButton: FC<{
       onClick={async () => {
         const res = await mintAchievement(achievement.actionId)
 
-        const currentData = jotaiStore.get(achievementsDataAtom.current)
+        const currentData = jotaiStore.get(achievementsDataAtom)
         if (!currentData) return
         let shouldInvalidate = false
         const newData = currentData.map((item) => {
@@ -295,7 +293,7 @@ const MintButton: FC<{
           }
           return item
         })
-        jotaiStore.set(achievementsDataAtom.current, newData)
+        jotaiStore.set(achievementsDataAtom, newData)
 
         if (shouldInvalidate) {
           queryClient.invalidateQueries({ queryKey: ["achievements"] })
