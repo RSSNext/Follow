@@ -189,6 +189,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         hitRate={10}
         onSelect={(e) => {
           const allChanged = [...e.added, ...e.removed]
+
           setSelectedFeedIds((prev) => {
             const added = allChanged
               .map((el) => el.dataset.feedId)
