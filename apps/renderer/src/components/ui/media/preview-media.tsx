@@ -17,7 +17,6 @@ import { m } from "~/components/common/Motion"
 import { COPY_MAP } from "~/constants"
 import { tipcClient } from "~/lib/client"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { EntryContent } from "~/modules/entry-content"
 
 import { microReboundPreset } from "../constants/spring"
 import { FixedModalCloseButton } from "../modal/components/close"
@@ -27,8 +26,8 @@ import { VideoPlayer } from "./VideoPlayer"
 const Wrapper: Component<{
   src: string
   showActions?: boolean
-  entryId?: string
-}> = ({ children, src, showActions, entryId }) => {
+  sideContent?: React.ReactNode
+}> = ({ children, src, showActions, sideContent }) => {
   const { dismiss } = useCurrentModal()
   const { t } = useTranslation(["shortcuts", "external"])
 
@@ -55,11 +54,13 @@ const Wrapper: Component<{
         <div
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
-            entryId ? "min-w-96 items-center justify-center rounded-l-xl bg-native" : "rounded-xl",
+            sideContent
+              ? "min-w-96 items-center justify-center rounded-l-xl bg-native"
+              : "rounded-xl",
           )}
         >
           {children}
-          <RootPortal to={entryId ? null : undefined}>
+          <RootPortal to={sideContent ? null : undefined}>
             <div
               className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
               onClick={stopPropagation}
@@ -89,12 +90,12 @@ const Wrapper: Component<{
             </div>
           </RootPortal>
         </div>
-        {entryId && (
+        {!!sideContent && (
           <div
             className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-theme-background px-2 pt-1"
             onClick={stopPropagation}
           >
-            <EntryContent entryId={entryId} noMedia compact />
+            {sideContent}
           </div>
         )}
       </m.div>
@@ -108,8 +109,8 @@ export interface PreviewMediaProps extends MediaModel {
 export const PreviewMediaContent: FC<{
   media: PreviewMediaProps[]
   initialIndex?: number
-  entryId?: string
-}> = ({ media, initialIndex = 0, entryId }) => {
+  children?: React.ReactNode
+}> = ({ media, initialIndex = 0, children }) => {
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
   const swiperRef = useRef<SwiperRef>(null)
@@ -128,14 +129,14 @@ export const PreviewMediaContent: FC<{
     const src = media[0].url
     const { type } = media[0]
     return (
-      <Wrapper src={src} showActions={type !== "video"} entryId={entryId}>
+      <Wrapper src={src} showActions={type !== "video"} sideContent={children}>
         {type === "video" ? (
           <VideoPlayer
             src={src}
             controls
             autoPlay
             muted
-            className={cn("h-full w-auto object-contain", entryId && "rounded-l-xl")}
+            className={cn("h-full w-auto object-contain", !!children && "rounded-l-xl")}
             onClick={stopPropagation}
           />
         ) : (
@@ -154,7 +155,11 @@ export const PreviewMediaContent: FC<{
     )
   }
   return (
-    <Wrapper src={currentMedia.url} showActions={currentMedia.type !== "video"} entryId={entryId}>
+    <Wrapper
+      src={currentMedia.url}
+      showActions={currentMedia.type !== "video"}
+      sideContent={children}
+    >
       <Swiper
         ref={swiperRef}
         loop

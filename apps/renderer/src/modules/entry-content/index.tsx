@@ -2,9 +2,8 @@ import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import { FeedViewType } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
-import type { ActiveEntryId, FeedModel, InboxModel } from "@follow/models/types"
+import type { FeedModel, InboxModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -24,14 +23,13 @@ import {
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { enableShowSourceContent } from "~/atoms/source-content"
-import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
-import { isWebBuild, ROUTE_FEED_PENDING } from "~/constants"
+import { isWebBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
-import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { getNewIssueUrl } from "~/lib/issues"
 import { LanguageMap } from "~/lib/translate"
@@ -44,7 +42,6 @@ import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 
-import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryContentHTMLRenderer } from "../renderer/html"
 import {
   getTranslationCache,
@@ -52,7 +49,6 @@ import {
   setEntryTitleMeta,
   setTranslationCache,
 } from "./atoms"
-import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryTitle } from "./components/EntryTitle"
 import { SourceContentPanel } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
@@ -68,32 +64,11 @@ export const EntryContent = ({
   compact,
   classNames,
 }: {
-  entryId: ActiveEntryId
+  entryId: string
   noMedia?: boolean
   compact?: boolean
   classNames?: EntryContentClassNames
 }) => {
-  const { feedId, view } = useRouteParams()
-  const enableEntryWideMode = useUISettingKey("wideMode")
-
-  if (!entryId) {
-    if (enableEntryWideMode) {
-      return null
-    }
-    return (
-      <m.div
-        className="center size-full flex-col"
-        initial={{ opacity: 0.01, y: 300 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <EntryPlaceholderLogo />
-        {feedId === ROUTE_FEED_PENDING && view === FeedViewType.Articles && (
-          <EntryPlaceholderDaily view={view} />
-        )}
-      </m.div>
-    )
-  }
-
   return (
     <EntryContentRender
       entryId={entryId}

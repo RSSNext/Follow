@@ -12,6 +12,7 @@ import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { filterSmallMedia } from "~/lib/utils"
+import { EntryContent } from "~/modules/entry-content"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useEntry } from "~/store/entry/hooks"
 import { useImageDimensions } from "~/store/image"
@@ -33,7 +34,8 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const { t } = useTranslation()
-  const previewMedia = usePreviewMedia(entryId)
+  const entryContent = useMemo(() => <EntryContent entryId={entryId} noMedia compact />, [entryId])
+  const previewMedia = usePreviewMedia(entryContent)
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
@@ -76,8 +78,8 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const entry = useEntry(entryId) || entryPreview
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
-
-  const previewMedia = usePreviewMedia(entryId)
+  const entryContent = useMemo(() => <EntryContent entryId={entryId} noMedia compact />, [entryId])
+  const previewMedia = usePreviewMedia(entryContent)
   const itemWidth = useMasonryItemWidth()
 
   const [ref, setRef] = useState<HTMLDivElement | null>(null)
