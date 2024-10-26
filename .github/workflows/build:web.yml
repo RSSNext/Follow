@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: Format, Lint and Typecheck
+    name: Build web and SSR server
     runs-on: ubuntu-latest
 
     strategy:
