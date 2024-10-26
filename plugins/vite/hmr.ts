@@ -46,6 +46,8 @@ export const circularImportRefreshPlugin = (): Plugin => ({
   name: "circular-import-refresh",
   handleHotUpdate({ file, server }: HmrContext) {
     const mod = server.moduleGraph.getModuleById(file)
+
+    // Check for circular imports
     if (mod && isNodeWithinCircularImports(mod, [mod])) {
       console.error(
         red(
@@ -53,6 +55,12 @@ export const circularImportRefreshPlugin = (): Plugin => ({
         ),
       )
 
+      server.ws.send({ type: "full-reload" })
+      return []
+    }
+
+    if (file.startsWith(path.resolve(process.cwd(), "src/store")) && file.endsWith(".ts")) {
+      console.warn(yellow(`[memory-hmr] Detected change in store file: ${file}. Reloading page.`))
       server.ws.send({ type: "full-reload" })
       return []
     }
