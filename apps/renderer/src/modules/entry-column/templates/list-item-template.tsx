@@ -206,7 +206,7 @@ export function ListItem({
           loading="lazy"
           proxy={{
             width: 160,
-            height: 160,
+            height: 0,
           }}
           height={entry.entries.media[0].height}
           width={entry.entries.media[0].width}

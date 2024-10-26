@@ -44,11 +44,11 @@ export const RadioCards = ({
             wrapperClassName="justify-center"
             value={(item.value * monthlyBoostCost).toString()}
             label={
-              <div>
-                <h3 className="pr-3 font-medium leading-none">
+              <div className="text-center">
+                <h3 className="text-sm font-medium leading-none">
                   {dayjs.duration(item.value, "months").humanize()}
                 </h3>
-                <p className="mt-1 flex items-center justify-center gap-1 text-sm text-theme-vibrancyFg">
+                <p className="mt-0.5 flex items-center justify-center gap-1 text-sm text-theme-vibrancyFg">
                   {item.value * monthlyBoostCost}
                   <i className="i-mgc-power text-accent" />
                 </p>
