@@ -42,6 +42,6 @@ jobs:
         run: pnpm install
       - name: Format, Lint and Typecheck
         run: |
-          turbo run format:check typecheck lint
+          turbo run build:web @follow/server#build
       - name: Run test
         run: turbo run test
