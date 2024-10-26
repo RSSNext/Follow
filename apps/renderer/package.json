@@ -4,6 +4,7 @@
   "private": true,
   "main": "./dist/main/index.js",
   "scripts": {
+    "build:web": "cd ../.. && pnpm build:web",
     "dev": "cd ../.. && pnpm dev:web",
     "test": "vitest",
     "typecheck": "tsc --noEmit"

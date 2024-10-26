@@ -46,6 +46,10 @@
       "source": "/vendor/(.*)",
       "headers": [
         {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, immutable"
+        },
+        {
           "key": "CDN-Cache-Control",
           "value": "max-age=604800"
         },
@@ -63,8 +67,12 @@
       "source": "/assets/(.*)",
       "headers": [
         {
+          "key": "Cache-Control",
+          "value": "public, max-age=43200, stale-while-revalidate=3600, immutable"
+        },
+        {
           "key": "CDN-Cache-Control",
-          "value": "max-age=604800"
+          "value": "max-age=604800, stale-while-revalidate=3600"
         },
         {
           "key": "Vercel-CDN-Cache-Control",
@@ -79,6 +87,10 @@
     {
       "source": "/dist-external/(.*)",
       "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=43200, stale-while-revalidate=3600, immutable"
+        },
         {
           "key": "CDN-Cache-Control",
           "value": "max-age=604800"

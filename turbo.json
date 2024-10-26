@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "envMode": "loose",
+  "tasks": {
+    "//#build": {
+      "outputs": ["dist/**", "out/**"]
+    },
+    "//#build:web": {
+      "outputs": ["out/**"]
+    },
+    "typecheck": {},
+    "dev": {
+      "persistent": true,
+      "cache": false
+    }
+  }
+}

@@ -19,3 +19,4 @@ vite.config.*.mjs
 # apps/server/**/index.template.ts
 
 .generated
+.turbo
