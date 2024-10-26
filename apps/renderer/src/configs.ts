@@ -29,15 +29,13 @@ export const SentryConfig: BrowserOptions = {
 
   beforeSend(event, hint) {
     const error = hint.originalException
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const isIgnoredError = ERROR_PATTERNS.some((pattern) =>
+      pattern instanceof RegExp ? pattern.test(errorMessage) : errorMessage.includes(pattern),
+    )
 
-    if (error instanceof Error) {
-      const isIgnoredError = ERROR_PATTERNS.some((pattern) =>
-        pattern instanceof RegExp ? pattern.test(error.message) : error.message.includes(pattern),
-      )
-
-      if (isIgnoredError) {
-        return null
-      }
+    if (isIgnoredError) {
+      return null
     }
 
     const isPassthroughError = [CustomSafeError, FetchError].some((errorType) => {
