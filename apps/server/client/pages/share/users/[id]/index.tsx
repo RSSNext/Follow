@@ -46,9 +46,8 @@ export const Component = () => {
               <h1>{user.data?.name}</h1>
             </div>
             {user.data?.handle && (
-              <div className="mb-1 text-sm text-zinc-500">@{user.data.handle}</div>
+              <div className="mb-2 text-sm text-zinc-500">@{user.data.handle}</div>
             )}
-            {user.data?.id && <div className="mb-2 text-sm text-zinc-500">{user.data.id}</div>}
             {user.data?.id && (
               <Button
                 onClick={() => {
