@@ -367,7 +367,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
                 "break-words",
               )}
             >
-              {entry.entries.description}
+              <div dangerouslySetInnerHTML={{ __html: entry.entries.content || "" }} />
 
               {!!entry.entries.media?.length && (
                 <div className="mt-1 flex w-full gap-2 overflow-x-auto">
