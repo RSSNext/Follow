@@ -62,7 +62,9 @@ const Wrapper: Component<{
           {children}
           <RootPortal to={sideContent ? null : undefined}>
             <div
-              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
+              className={
+                "pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
+              }
               onClick={stopPropagation}
             >
               {showActions && (
@@ -128,9 +130,10 @@ export const PreviewMediaContent: FC<{
   if (media.length === 1) {
     const src = media[0].url
     const { type } = media[0]
+    const isVideo = type === "video"
     return (
-      <Wrapper src={src} showActions={type !== "video"} sideContent={children}>
-        {type === "video" ? (
+      <Wrapper src={src} showActions={!isVideo} sideContent={children}>
+        {isVideo ? (
           <VideoPlayer
             src={src}
             controls
@@ -154,12 +157,9 @@ export const PreviewMediaContent: FC<{
       </Wrapper>
     )
   }
+  const isVideo = currentMedia.type === "video"
   return (
-    <Wrapper
-      src={currentMedia.url}
-      showActions={currentMedia.type !== "video"}
-      sideContent={children}
-    >
+    <Wrapper src={currentMedia.url} showActions={!isVideo} sideContent={children}>
       <Swiper
         ref={swiperRef}
         loop
@@ -205,13 +205,21 @@ export const PreviewMediaContent: FC<{
 
         {showActions && (
           <div>
-            <div className="absolute bottom-4 left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6">
+            <div
+              className={cn(
+                "absolute left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6",
+                isVideo ? "bottom-12" : "bottom-4",
+              )}
+            >
               {currentSlideIndex + 1} / {media.length}
             </div>
             <div
               tabIndex={-1}
               onClick={stopPropagation}
-              className="center absolute bottom-4 left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6"
+              className={cn(
+                "center absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6",
+                isVideo ? "bottom-12" : "bottom-4",
+              )}
             >
               {Array.from({ length: media.length })
                 .fill(0)

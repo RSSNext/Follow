@@ -1,6 +1,10 @@
 import { COPY_MAP } from "~/constants"
 
-export const shortcuts = {
+type Shortcuts = Record<
+  string,
+  Record<string, { name: I18nKeysForShortcuts; key: string; extra?: string }>
+>
+export const shortcuts: Shortcuts = {
   feeds: {
     add: {
       name: "keys.feeds.add",
@@ -100,7 +104,7 @@ export const shortcuts = {
       key: "Space",
     },
   },
-} as const
+}
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",
