@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import {
+  getReadabilityContent,
   getReadabilityStatus,
   ReadabilityStatus,
   setReadabilityContent,
@@ -425,10 +426,18 @@ export const useEntryActions = ({
         onClick: () => {
           if (!isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON) return
 
+          const isReadabilityReady =
+            getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
+          const content =
+            (isReadabilityReady
+              ? getReadabilityContent()[populatedEntry.entries.id].content
+              : populatedEntry.entries.content) || ""
+          const markdownContent = parseHtml(content).toMarkdown()
+
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
             title: populatedEntry.entries.title || "",
-            content: parseHtml(populatedEntry.entries.content || "").toMarkdown(),
+            content: markdownContent,
             author: populatedEntry.entries.author || "",
             publishedAt: populatedEntry.entries.publishedAt || "",
             vaultPath: obsidianVaultPath,
