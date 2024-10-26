@@ -1,11 +1,8 @@
 {
   "name": "@follow/server",
-  "engines": {
-    "node": "20.x"
-  },
   "scripts": {
-    "build": "NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
-    "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
+    "build": "cross-env NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
+    "dev": "cross-env NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "start": "tsx index.ts"
   },
   "dependencies": {
