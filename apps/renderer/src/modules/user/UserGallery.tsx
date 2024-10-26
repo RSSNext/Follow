@@ -8,7 +8,7 @@ interface UserGalleryProps {
   limit?: number
 }
 
-export const UserGallery = ({ users, limit = 16 }: UserGalleryProps) => {
+export const UserGallery = ({ users, limit = 18 }: UserGalleryProps) => {
   const displayedUsers = users.slice(0, limit)
 
   return (
