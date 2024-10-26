@@ -46,10 +46,6 @@
       "source": "/vendor/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, immutable"
-        },
-        {
           "key": "CDN-Cache-Control",
           "value": "max-age=604800"
         },
@@ -67,10 +63,6 @@
       "source": "/assets/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, immutable"
-        },
-        {
           "key": "CDN-Cache-Control",
           "value": "max-age=604800"
         },
@@ -87,10 +79,6 @@
     {
       "source": "/dist-external/(.*)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, immutable"
-        },
         {
           "key": "CDN-Cache-Control",
           "value": "max-age=604800"
