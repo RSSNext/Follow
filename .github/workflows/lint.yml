@@ -35,8 +35,6 @@ jobs:
         run: pnpm install
       - name: Format, Lint and Typecheck
         run: |
-          pnpm run format:check
-          pnpm run typecheck
-          pnpm run lint
+          turbo run format:check typecheck lint
       - name: Run test
-        run: pnpm test
+        run: turbo run test

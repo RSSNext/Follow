@@ -8,7 +8,21 @@
     "//#build:web": {
       "outputs": ["out/**"]
     },
-    "typecheck": {},
+    "//#build:macos": {
+      "outputs": ["dist/**", "out/**"]
+    },
+    "//#format:check": {},
+    "//#lint": {},
+    "test": {},
+    "@follow/electron-main#build": {
+      "outputs": ["dist/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["@follow/electron-main#build"]
+    },
+    "@follow/server#build": {
+      "outputs": ["dist/**"]
+    },
     "dev": {
       "persistent": true,
       "cache": false

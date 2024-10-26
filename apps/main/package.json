@@ -19,7 +19,7 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "typecheck": "tsup && tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@egoist/tipc": "0.3.2",
