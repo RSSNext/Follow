@@ -169,6 +169,13 @@ function EntryColumnImpl() {
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
 
+  // automatically fetch archived entries when there is no entries in timeline
+  useEffect(() => {
+    if (!isArchived && virtuosoOptions.totalCount === 0 && !entries.isLoading) {
+      setIsArchived(true)
+    }
+  }, [entries.isLoading, isArchived, virtuosoOptions.totalCount])
+
   return (
     <div
       className="relative flex h-full flex-1 flex-col @container"
