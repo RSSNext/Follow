@@ -58,7 +58,7 @@ export const Component = () => {
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
-                {APP_NAME}
+                {t("words.follow")}
               </Button>
             )}
           </div>

@@ -275,15 +275,6 @@ export const UserProfileModalContent: FC<{
                 </m.div>
                 <m.div
                   className={cn(
-                    "mb-0.5 text-xs text-zinc-500",
-                    userInfo?.id ? "visible" : "hidden select-none",
-                  )}
-                  layout
-                >
-                  uid: {userInfo.id}
-                </m.div>
-                <m.div
-                  className={cn(
                     "text-sm text-zinc-500",
                     userInfo.handle ? "visible" : "hidden select-none",
                   )}
@@ -301,7 +292,7 @@ export const UserProfileModalContent: FC<{
                   }}
                 >
                   <FollowIcon className="mr-1 size-3" />
-                  {APP_NAME}
+                  {t("feed_form.follow")}
                 </Button>
               </m.div>
             </div>
