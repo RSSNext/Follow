@@ -290,6 +290,7 @@ export const UserProfileModalContent: FC<{
                       isList: false,
                     })
                   }}
+                  layout
                 >
                   <FollowIcon className="mr-1 size-3" />
                   {t("feed_form.follow")}
