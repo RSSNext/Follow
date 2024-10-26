@@ -54,12 +54,13 @@ class FeedActions {
             }
 
             // Not all API return these fields, so merging is needed here.
-            const optionalFields = ["owner", "tipUsers"] as const
-            optionalFields.forEach((field) => {
-              if (state.feeds[feed.id!]?.[field] && !(field in feed)) {
-                ;(feed as any)[field] = { ...state.feeds[feed.id!]?.[field] }
-              }
-            })
+            const targetFeed = state.feeds[feed.id]
+            if (targetFeed?.owner) {
+              feed.owner = { ...targetFeed.owner }
+            }
+            if (targetFeed && "tipUsers" in targetFeed && targetFeed.tipUsers) {
+              feed.tipUsers = [...targetFeed.tipUsers]
+            }
 
             state.feeds[feed.id] = omit(feed, "feeds") as FeedOrListModel
           } else {
