@@ -3,7 +3,7 @@ on:
   push:
     branches: [main, dev]
 
-name: CI Format, Typecheck and Lint
+name: CI Build web and SSR server
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -40,8 +40,6 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Format, Lint and Typecheck
+      - name: Build web and SSR server
         run: |
           turbo run build:web @follow/server#build
-      - name: Run test
-        run: turbo run test
