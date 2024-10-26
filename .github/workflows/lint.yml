@@ -42,6 +42,6 @@ jobs:
         run: pnpm install
       - name: Format, Lint and Typecheck
         run: |
-          turbo run format:check typecheck lint
+          npm exec turbo run format:check typecheck lint
       - name: Run test
-        run: turbo run test
+        run: npm exec turbo run test
