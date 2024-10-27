@@ -652,6 +652,9 @@ importers:
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
+      '@hono/auth-js':
+        specifier: 1.0.11
+        version: 1.0.11(@auth/core@0.37.0)(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))(react@18.3.1)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -3608,7 +3611,7 @@ packages:
   '@radix-ui/react-slot@1.1.0':
     resolution: {integrity: sha512-FUCf5XMfmW4dtYl69pdS4DbxKy8nj4M7SafBgPllysxmdachynNflAdp/gCsnYWNDnge6tI9onzMp5ARYc1KNw==}
     peerDependencies:
-      '@types/react': npm:types-react@19.0.0-rc.1
+      '@types/react': '*'
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -9475,7 +9478,7 @@ packages:
       '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
       postcss: ^8.4.12
-      typescript: '>=4.5.0'
+      typescript: 5.6.3
     peerDependenciesMeta:
       '@microsoft/api-extractor':
         optional: true
