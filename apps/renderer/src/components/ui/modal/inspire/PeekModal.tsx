@@ -38,7 +38,7 @@ export const PeekModal = (
         exit={{
           opacity: 0,
         }}
-        className="fixed right-3 top-2 flex items-center gap-4"
+        className="fixed right-3 flex items-center gap-4 safe-inset-top-2"
       >
         <Tooltip>
           <TooltipTrigger asChild>
