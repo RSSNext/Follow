@@ -1,4 +1,4 @@
-import { useFocusable } from "@follow/components/common/Focusable"
+import { useFocusable } from "@follow/components/common/Focusable.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
