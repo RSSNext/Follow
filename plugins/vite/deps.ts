@@ -14,8 +14,8 @@ export function createDependencyChunksPlugin(dependencies: string[][]): Plugin {
       outputConfig.assetFileNames = "assets/[name].[hash:6][extname]"
       outputConfig.chunkFileNames = (chunkInfo) => {
         return chunkInfo.name.startsWith("vendor/")
-          ? "[name].[hash].js"
-          : "assets/[name].[hash:9].js"
+          ? "[name].[hash:9].js"
+          : "assets/[name].[hash].js"
       }
 
       const manualChunks = Array.isArray(output) ? output[0].manualChunks : output.manualChunks
