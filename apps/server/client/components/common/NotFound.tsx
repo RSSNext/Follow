@@ -1,0 +1,31 @@
+import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
+import { Logo } from "@follow/components/icons/logo.jsx"
+import { Button } from "@follow/components/ui/button/index.js"
+import { useLocation, useNavigate } from "react-router-dom"
+
+export const NotFound = () => {
+  const location = useLocation()
+
+  const navigate = useNavigate()
+  return (
+    <div className="prose center m-auto size-full flex-col dark:prose-invert">
+      <main className="flex grow flex-col items-center justify-center">
+        <div className="center mb-8 flex">
+          <Logo className="size-20" />
+        </div>
+        <p className="font-semibold">
+          You have come to a desert of knowledge where there is nothing.
+        </p>
+        <p>
+          Current path: <code>{location.pathname}</code>
+        </p>
+
+        <p>
+          <Button onClick={() => navigate("/")}>Back to Home</Button>
+        </p>
+      </main>
+
+      <PoweredByFooter />
+    </div>
+  )
+}
