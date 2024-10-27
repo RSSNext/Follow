@@ -80,11 +80,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   })
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown((e) => {
+  useAnyPointDown(() => {
     setIsContextMenuOpen(false)
-    if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
-      setSelectedFeedIds([])
-    }
   })
   if (!feed) return null
 
