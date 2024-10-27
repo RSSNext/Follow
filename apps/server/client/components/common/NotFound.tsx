@@ -1,12 +1,11 @@
 import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 export const NotFound = () => {
   const location = useLocation()
 
-  const navigate = useNavigate()
   return (
     <div className="prose center m-auto size-full flex-col dark:prose-invert">
       <main className="flex grow flex-col items-center justify-center">
@@ -21,7 +20,7 @@ export const NotFound = () => {
         </p>
 
         <p>
-          <Button onClick={() => navigate("/")}>Back to Home</Button>
+          <Button onClick={() => (window.location.href = "/")}>Back to Home</Button>
         </p>
       </main>
 

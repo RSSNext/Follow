@@ -27,7 +27,7 @@ function Login() {
   const isAuthenticated = status === "authenticated"
   const onOpenInWebApp = () => {
     if (isAuthenticated) {
-      navigate("/")
+      window.location.href = "/"
     }
   }
 

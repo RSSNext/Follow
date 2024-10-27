@@ -5,10 +5,8 @@ import { Button } from "@follow/components/ui/button/index.js"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
 
 export function Component() {
-  const navigate = useNavigate()
   const { t } = useTranslation("external")
 
   const getCallbackUrl = async () => {
@@ -44,7 +42,7 @@ export function Component() {
           variant="text"
           className="h-14 px-10 text-base"
           onClick={() => {
-            navigate("/")
+            window.location.href = "/"
           }}
         >
           {t("redirect.continueInBrowser")}
