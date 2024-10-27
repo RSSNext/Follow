@@ -1,3 +1,4 @@
+import { Focusable } from "@follow/components/common/Focusable.js"
 import { SYSTEM_CAN_UNDER_BLUR_WINDOW } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 
@@ -7,15 +8,15 @@ type Props = Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 >
 const MacOSVibrancy: Props = ({ className, children, ...rest }) => (
-  <div className={cn("bg-native/30 dark:bg-native/10", className)} {...rest}>
+  <Focusable className={cn("bg-native/30 dark:bg-native/10", className)} {...rest}>
     {children}
-  </div>
+  </Focusable>
 )
 
 const Noop: Props = ({ children, className, ...rest }) => (
-  <div className={cn("bg-native", className)} {...rest}>
+  <Focusable className={cn("bg-native", className)} {...rest}>
     {children}
-  </div>
+  </Focusable>
 )
 
 // Disable blur effect on Windows, because electron backgroundMaterial has some issues

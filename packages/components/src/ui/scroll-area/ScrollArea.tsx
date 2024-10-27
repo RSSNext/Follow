@@ -95,6 +95,7 @@ const Viewport = React.forwardRef<
     <ScrollAreaBase.Viewport
       {...rest}
       ref={ref}
+      tabIndex={-1}
       className={cn("block size-full", shouldAddMask && styles["mask-scroller"], className)}
     />
   )

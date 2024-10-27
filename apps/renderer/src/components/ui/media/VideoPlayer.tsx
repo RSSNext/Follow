@@ -1,4 +1,4 @@
-import { Focusable, useFocusable } from "@follow/components/common/Focusable.js"
+import { Focusable } from "@follow/components/common/Focusable.js"
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import type { HTMLMediaState } from "@follow/hooks"
 import { useRefValue, useVideo } from "@follow/hooks"
@@ -427,25 +427,13 @@ const ActionIcon = ({
   children?: React.ReactNode
   shortcut?: string
 }) => {
-  const isFocusWithIn = useFocusable()
-
-  useHotkeys(
-    shortcut || "",
-    (e) => {
-      e.preventDefault()
-      onClick?.()
-    },
-    {
-      enabled: isFocusWithIn,
-    },
-  )
   return (
     <ActionButton
+      shortcutOnlyFocusWithIn
       tooltipSide="top"
       className={clsx("z-[2] hover:bg-transparent", className)}
       onClick={onClick}
       tooltip={label}
-      disableTriggerShortcut
       shortcut={shortcut}
     >
       {children || <i className={className} />}

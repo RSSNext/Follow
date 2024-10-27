@@ -11,7 +11,6 @@ import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
-import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -27,7 +26,6 @@ import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
 import { isWebBuild } from "~/constants"
-import { shortcuts } from "~/constants/shortcuts"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
@@ -122,15 +120,8 @@ export const EntryContentRender: Component<{
   const scrollerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     scrollerRef.current?.scrollTo(0, 0)
+    scrollerRef.current?.focus()
   }, [entryId])
-
-  useHotkeys(shortcuts.entry.scrollDown.key, () => {
-    scrollerRef.current?.scrollBy(0, window.innerHeight / 2)
-  })
-
-  useHotkeys(shortcuts.entry.scrollUp.key, () => {
-    scrollerRef.current?.scrollBy(0, -window.innerHeight / 2)
-  })
 
   const isPeekModal = useInPeekModal()
 

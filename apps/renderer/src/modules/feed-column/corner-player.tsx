@@ -1,3 +1,4 @@
+import { useFocusable } from "@follow/components/common/Focusable.js"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
@@ -102,9 +103,11 @@ const CornerPlayerImpl = () => {
   const feed = useFeedById(entry?.feedId)
   const list = useListById(listId)
 
+  const isFocused = useFocusable()
   useHotkeys("space", handleClickPlay, {
     preventDefault: true,
     scopes: HotKeyScopeMap.Home,
+    enabled: isFocused,
   })
 
   useEffect(() => {
