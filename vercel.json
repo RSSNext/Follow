@@ -17,6 +17,14 @@
       "destination": "https://follow-external-ssr.vercel.app/og/:path*"
     },
     {
+      "source": "/login",
+      "destination": "https://follow-external-ssr.vercel.app/login"
+    },
+    {
+      "source": "/redirect",
+      "destination": "https://follow-external-ssr.vercel.app/redirect"
+    },
+    {
       "source": "/external-dist/:path*",
       "destination": "https://follow-external-ssr.vercel.app/:path*"
     },
