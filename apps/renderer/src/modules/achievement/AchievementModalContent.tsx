@@ -345,7 +345,7 @@ const IncompleteButton: FC<{
             </Button>
           </TooltipTrigger>
           {!PRODUCT_HUNT_VOTE_URL && (
-            <TooltipContent>Product Hunk Vote is not ready, We'll see.</TooltipContent>
+            <TooltipContent>Product Hunt Vote is not ready, We'll see.</TooltipContent>
           )}
         </Tooltip>
       )
