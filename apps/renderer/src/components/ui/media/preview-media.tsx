@@ -29,7 +29,7 @@ const Wrapper: Component<{
   sideContent?: React.ReactNode
 }> = ({ children, src, showActions, sideContent }) => {
   const { dismiss } = useCurrentModal()
-  const { t } = useTranslation(["shortcuts", "external"])
+  const { t } = useTranslation(["shortcuts", "common"])
 
   return (
     <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
@@ -71,7 +71,7 @@ const Wrapper: Component<{
                 <Fragment>
                   {IN_ELECTRON && (
                     <ActionButton
-                      tooltip={t("external:header.download")}
+                      tooltip={t("common:words.download")}
                       onClick={() => {
                         tipcClient?.download(src)
                       }}
