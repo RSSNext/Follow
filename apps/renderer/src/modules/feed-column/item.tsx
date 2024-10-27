@@ -81,7 +81,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   useAnyPointDown(() => {
-    setIsContextMenuOpen(false)
+    isContextMenuOpen && setIsContextMenuOpen(false)
   })
   if (!feed) return null
 
@@ -208,7 +208,7 @@ const ListItemImpl: Component<{
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   useAnyPointDown(() => {
-    setIsContextMenuOpen(false)
+    isContextMenuOpen && setIsContextMenuOpen(false)
   })
   const subscription = useSubscriptionByFeedId(listId)
   const navigate = useNavigateEntry()
@@ -291,7 +291,7 @@ const InboxItemImpl: Component<{
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   useAnyPointDown(() => {
-    setIsContextMenuOpen(false)
+    isContextMenuOpen && setIsContextMenuOpen(false)
   })
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(

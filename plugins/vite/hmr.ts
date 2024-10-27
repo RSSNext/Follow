@@ -44,6 +44,11 @@ function isNodeWithinCircularImports(
 
 export const circularImportRefreshPlugin = (): Plugin => ({
   name: "circular-import-refresh",
+  configureServer(server) {
+    server.ws.on("message", (message) => {
+      console.info(message)
+    })
+  },
   handleHotUpdate({ file, server }: HmrContext) {
     const mod = server.moduleGraph.getModuleById(file)
 

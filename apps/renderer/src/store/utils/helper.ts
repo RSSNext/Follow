@@ -34,6 +34,11 @@ const storeMap = {} as Record<string, UseBoundStoreWithEqualityFn<any>>
 export const createZustandStore =
   <S, T extends StateCreator<S, [], []> = StateCreator<S, [], []>>(name: string) =>
   (store: T) => {
+    if (import.meta.env.DEV && window[`store_${name}`]) {
+      import.meta.hot?.send("message", "The store has been changed, reloading...")
+      globalThis.location.reload()
+    }
+
     const newStore = import.meta.env.DEV
       ? createWithEqualityFn(
           devtools(store, {
@@ -59,6 +64,8 @@ export const createZustandStore =
           },
         },
       )
+
+    window[`store_${name}`] = newStore
 
     return newStore
   }

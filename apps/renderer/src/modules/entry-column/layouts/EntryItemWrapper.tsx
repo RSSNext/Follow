@@ -74,7 +74,7 @@ export const EntryItemWrapper: FC<
     [entry.entries.url],
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => setIsContextMenuOpen(false))
+  useAnyPointDown(() => isContextMenuOpen && setIsContextMenuOpen(false))
   const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.preventDefault()
