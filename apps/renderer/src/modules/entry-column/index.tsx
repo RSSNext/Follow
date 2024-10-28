@@ -105,6 +105,22 @@ function EntryColumnImpl() {
     entries.totalCount < 40 &&
     feed?.type === "feed"
 
+  const shouldLoadArchivedEntries =
+    !isArchived &&
+    !unreadOnly &&
+    !isCollection &&
+    routeFeedId !== ROUTE_FEED_PENDING &&
+    (feed?.type === "feed" || !feed) &&
+    entries.totalCount === 0 &&
+    !entries.isLoading
+
+  // automatically fetch archived entries when there is no entries in timeline
+  useEffect(() => {
+    if (shouldLoadArchivedEntries) {
+      setIsArchived(true)
+    }
+  }, [shouldLoadArchivedEntries])
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
@@ -171,13 +187,6 @@ function EntryColumnImpl() {
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
-
-  // automatically fetch archived entries when there is no entries in timeline
-  useEffect(() => {
-    if (showArchivedButton && virtuosoOptions.totalCount === 0 && !entries.isLoading) {
-      setIsArchived(true)
-    }
-  }, [entries.isLoading, showArchivedButton, virtuosoOptions.totalCount])
 
   return (
     <div
