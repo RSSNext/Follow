@@ -1,4 +1,4 @@
-name: Nightly Release
+name: Build Electron Render
 
 on:
   push:
@@ -16,7 +16,7 @@ env:
   NODE_OPTIONS: --max-old-space-size=8192
 
 jobs:
-  nightly-release:
+  build-render:
     runs-on: ${{ matrix.os }}
 
     strategy:
