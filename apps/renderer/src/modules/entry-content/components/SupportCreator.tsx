@@ -54,8 +54,9 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
             enableModal
           />
         ) : (
-          <FeedIcon className="w-40 flex-col gap-3 p-0" size={46} feed={feed} fallback />
+          <FeedIcon className="mr-0 w-40 flex-col gap-3 p-0" size={46} feed={feed} fallback />
         )}
+        <span className="-mt-6 text-lg font-medium">{feed.title}</span>
 
         <div className="flex items-center gap-4">
           {!isMyOwnedFeed && (
