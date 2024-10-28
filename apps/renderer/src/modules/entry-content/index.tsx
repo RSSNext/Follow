@@ -6,6 +6,7 @@ import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
+import { EventBus } from "@follow/utils/event-bus"
 import { cn } from "@follow/utils/utils"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
@@ -51,6 +52,7 @@ import { EntryTitle } from "./components/EntryTitle"
 import { SourceContentPanel } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
+import { useFocusEntryContainerSubscriptions } from "./hooks"
 import { EntryContentLoading } from "./loading"
 
 export interface EntryContentClassNames {
@@ -129,6 +131,7 @@ export const EntryContentRender: Component<{
     () => (isPeekModal ? undefined : <ContainerToc key={entryId} />),
     [entryId, isPeekModal],
   )
+  useFocusEntryContainerSubscriptions(scrollerRef)
   const stableRenderStyle = useMemo(
     () =>
       readerFontFamily
@@ -457,11 +460,15 @@ const RenderError: FallbackRender = ({ error }) => {
 
 const ContainerToc: FC = memo(() => {
   const wrappedElement = useWrappedElement()
+
   return (
     <RootPortal to={wrappedElement!}>
       <div className="group absolute right-[-130px] top-0 h-full w-[100px]">
         <div className="sticky top-0">
           <Toc
+            onItemClick={() => {
+              EventBus.dispatch("FOCUS_ENTRY_CONTAINER")
+            }}
             className={cn(
               "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
