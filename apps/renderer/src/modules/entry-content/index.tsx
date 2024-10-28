@@ -48,6 +48,7 @@ import {
   setEntryTitleMeta,
   setTranslationCache,
 } from "./atoms"
+import { EntryTimelineSidebar } from "./components/EntryTimelineSidebar"
 import { EntryTitle } from "./components/EntryTitle"
 import { SourceContentPanel } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
@@ -196,10 +197,11 @@ export const EntryContentRender: Component<{
         compact={compact}
       />
 
-      <div className="relative flex size-full flex-col overflow-hidden">
+      <div className="relative flex size-full flex-col overflow-hidden @container">
+        <EntryTimelineSidebar entryId={entry.entries.id} />
         <ScrollArea.ScrollArea
           mask={false}
-          rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
+          rootClassName={cn("h-0 min-w-0 grow overflow-y-auto", className)}
           scrollbarClassName="mr-[1.5px]"
           viewportClassName="p-5"
           ref={scrollerRef}

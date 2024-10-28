@@ -1,5 +1,8 @@
 import { createSettingAtom } from "@follow/atoms/helper/setting.js"
 import type { UISettings } from "@follow/shared/interface/settings"
+import { atom, useAtomValue } from "jotai"
+
+import { internal_feedColumnShowAtom } from "../sidebar"
 
 export const createDefaultSettings = (): UISettings => ({
   // Sidebar
@@ -56,3 +59,10 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "opaqueSidebar",
   "voice",
 ]
+
+const isZenModeAtom = atom((get) => {
+  const ui = get(__uiSettingAtom)
+  return ui.wideMode && !get(internal_feedColumnShowAtom)
+})
+
+export const useIsZenMode = () => useAtomValue(isZenModeAtom)
