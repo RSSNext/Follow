@@ -1,4 +1,5 @@
 import { initI18n } from "@client/i18n"
+import { initializeDayjs } from "@follow/components/dayjs"
 import { env } from "@follow/shared/env"
 import { authConfigManager } from "@hono/auth-js/react"
 
@@ -12,6 +13,7 @@ export const initialize = () => {
     credentials: "include",
   })
 
+  initializeDayjs()
   initI18n()
   initAnalytics()
   initSentry()
