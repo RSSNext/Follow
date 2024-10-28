@@ -460,7 +460,7 @@ export const useEntryActions = ({
             toast.success(
               <>
                 {t("entry_actions.saved_to_outline")},{" "}
-                <a target="_blank" className="underline" href={data.data.saveUrl.url}>
+                <a target="_blank" className="underline" href={outlineEndpoint.replace(/\/api\/?/i, '') + data.data.url}>
                   view
                 </a>
               </>,
