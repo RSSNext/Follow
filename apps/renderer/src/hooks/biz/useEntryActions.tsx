@@ -3,6 +3,7 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
   SimpleIconsOmnivore,
+  SimpleIconsOutline,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { FeedViewType } from "@follow/constants"
@@ -189,6 +190,10 @@ export const useEntryActions = ({
   const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
   const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
   const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
+  const enableOutline = useIntegrationSettingKey("enableOutline")
+  const outlineEndpoint = useIntegrationSettingKey("outlineEndpoint")
+  const outlineToken = useIntegrationSettingKey("outlineToken")
+  const outlineCollection = useIntegrationSettingKey("outlineCollection")
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
   const isObsidianEnabled = enableObsidian && !!obsidianVaultPath
@@ -413,6 +418,58 @@ export const useEntryActions = ({
             )
           } catch {
             toast.error(t("entry_actions.failed_to_save_to_omnivore"), {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: t("entry_actions.save_to_outline"),
+        icon: <SimpleIconsOutline />,
+        key: "saveTooutline",
+        hide:
+          !enableOutline ||
+          !outlineToken ||
+          !outlineEndpoint ||
+          !outlineCollection ||
+          !populatedEntry.entries.title ||
+          !populatedEntry.entries.content,
+        onClick: async () => {
+          try {
+            const isReadabilityReady =
+              getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
+            const content =
+              (isReadabilityReady
+                ? getReadabilityContent()[populatedEntry.entries.id].content
+                : populatedEntry.entries.content) || ""
+            const markdownContent = parseHtml(content).toMarkdown()
+
+            const data = await ofetch(`${outlineEndpoint.replace(/\/$/, "")}/documents.create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${outlineToken}`,
+              },
+              body: {
+                title: populatedEntry.entries.title,
+                text: markdownContent,
+                collectionId: outlineCollection,
+                publish: true,
+              },
+            })
+            toast.success(
+              <>
+                {t("entry_actions.saved_to_outline")},{" "}
+                <a target="_blank" className="underline" href={data.data.saveUrl.url}>
+                  view
+                </a>
+              </>,
+              {
+                duration: 3000,
+              },
+            )
+          } catch {
+            toast.error(t("entry_actions.failed_to_save_to_outline"), {
               duration: 3000,
             })
           }

@@ -61,4 +61,10 @@ export interface IntegrationSettings {
   // obsidian
   enableObsidian: boolean
   obsidianVaultPath: string
+
+  // outline
+  enableOutline: boolean
+  outlineEndpoint: string
+  outlineToken: string
+  outlineCollection: string
 }
