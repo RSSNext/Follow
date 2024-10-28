@@ -18,14 +18,14 @@
     },
     {
       "source": "/external-dist/:path*",
-      "destination": "https://follow-external-ssr.vercel.app/:path*"
+      "destination": "https://follow-external-ssr.vercel.app/external-dist/:path*"
     },
     {
       "source": "/dist-external/:path*",
-      "destination": "https://follow-external-ssr.vercel.app/:path*"
+      "destination": "https://follow-external-ssr.vercel.app/dist-external/:path*"
     },
     {
-      "source": "/((?!assets|vendor|locales/).*)",
+      "source": "/((?!assets|vendor|locales|dist-external|external-dist/).*)",
       "destination": "/index.html"
     }
   ],
