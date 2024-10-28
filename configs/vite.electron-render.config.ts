@@ -1,9 +1,13 @@
-import { resolve } from "node:path"
+import { dirname, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
+
+import type { UserConfig } from "vite"
 
 import { createPlatformSpecificImportPlugin } from "../plugins/vite/specific-import"
 import { viteRenderBaseConfig } from "./vite.render.config"
 
-const root = resolve(import.meta.dirname, "..")
+const root = resolve(fileURLToPath(dirname(import.meta.url)), "..")
+
 export default {
   ...viteRenderBaseConfig,
 
@@ -16,7 +20,7 @@ export default {
     target: "esnext",
     rollupOptions: {
       input: {
-        main: resolve(root, "./apps/renderer/index.html"),
+        main: resolve(root, "apps/renderer/index.html"),
       },
     },
     minify: true,
@@ -25,4 +29,4 @@ export default {
     ...viteRenderBaseConfig.define,
     ELECTRON: "true",
   },
-}
+} satisfies UserConfig

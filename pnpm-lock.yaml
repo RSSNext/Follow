@@ -107,6 +107,9 @@ importers:
       '@tailwindcss/typography':
         specifier: 0.5.15
         version: 0.5.15(tailwindcss@3.4.14)
+      '@types/js-yaml':
+        specifier: 4.0.9
+        version: 4.0.9
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -167,6 +170,9 @@ importers:
       hono:
         specifier: 4.6.5
         version: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
+      js-yaml:
+        specifier: 4.1.0
+        version: 4.1.0
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10
@@ -272,12 +278,18 @@ importers:
       electron-updater:
         specifier: ^6.3.9
         version: 6.3.9
+      es-toolkit:
+        specifier: 1.26.1
+        version: 1.26.1
       font-list:
         specifier: 1.5.1
         version: 1.5.1
       i18next:
         specifier: ^23.16.0
         version: 23.16.0
+      js-yaml:
+        specifier: 4.1.0
+        version: 4.1.0
       linkedom:
         specifier: ^0.18.5
         version: 0.18.5
@@ -293,10 +305,16 @@ importers:
       semver:
         specifier: 7.6.3
         version: 7.6.3
+      tar:
+        specifier: 7.4.3
+        version: 7.4.3
       vscode-languagedetection:
         specifier: npm:@vscode/vscode-languagedetection@^1.0.22
         version: '@vscode/vscode-languagedetection@1.0.22'
     devDependencies:
+      '@types/js-yaml':
+        specifier: 4.0.9
+        version: 4.0.9
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -4321,6 +4339,9 @@ packages:
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
 
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -5840,6 +5861,9 @@ packages:
   es-errors@1.3.0:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
+
+  es-toolkit@1.26.1:
+    resolution: {integrity: sha512-E3H14lHWk8JpupVpIRA1gfNF4r953abHTFW+X1Rp7zl7eG37ksuthfEA4FinyVF/Y807vzzfQS1nubeZk2LTVA==}
 
   es6-error@4.1.1:
     resolution: {integrity: sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==}
@@ -14232,6 +14256,8 @@ snapshots:
 
   '@types/http-cache-semantics@4.0.4': {}
 
+  '@types/js-yaml@4.0.9': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/katex@0.16.7': {}
@@ -16024,6 +16050,8 @@ snapshots:
 
   es-errors@1.3.0:
     optional: true
+
+  es-toolkit@1.26.1: {}
 
   es6-error@4.1.1:
     optional: true

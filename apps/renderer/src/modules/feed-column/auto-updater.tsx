@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
-import { setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
+import { getUpdaterStatus, setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
 import { softBouncePreset } from "~/components/ui/constants/spring"
 import { tipcClient } from "~/lib/client"
 import { handlers } from "~/tipc"
@@ -15,16 +15,31 @@ export const AutoUpdater = () => {
 
   useEffect(() => {
     const unlisten = handlers?.updateDownloaded.listen(() => {
-      setUpdaterStatus(true)
+      setUpdaterStatus({
+        type: "app",
+        status: "ready",
+      })
     })
     return unlisten
   }, [])
 
   const handleClick = useCallback(() => {
-    setUpdaterStatus(false)
-    window.analytics?.capture("update_restart")
-
-    tipcClient?.quitAndInstall()
+    setUpdaterStatus(null)
+    const status = getUpdaterStatus()
+    if (!status) return
+    window.analytics?.capture("update_restart", {
+      type: status.type,
+    })
+    switch (status.type) {
+      case "app": {
+        tipcClient?.quitAndInstall()
+        break
+      }
+      case "renderer": {
+        tipcClient?.rendererUpdateReload()
+        break
+      }
+    }
   }, [])
 
   const playerIsShow = useAudioPlayerAtomSelector((s) => s.show)

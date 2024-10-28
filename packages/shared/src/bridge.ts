@@ -30,6 +30,8 @@ interface RenderGlobalContext {
 
   /// Utils
   toast: typeof toast
+
+  readyToUpdate: () => void
   // URL
   getWebUrl: () => string
   getApiUrl: () => string

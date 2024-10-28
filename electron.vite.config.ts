@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { defineConfig } from "electron-vite"
 
 import viteRenderConfig from "./configs/vite.electron-render.config"
+import { getGitHash } from "./scripts/lib"
 
 export default defineConfig({
   main: {
@@ -22,6 +23,7 @@ export default defineConfig({
     },
     define: {
       ELECTRON: "true",
+      GIT_COMMIT_HASH: JSON.stringify(getGitHash()),
     },
   },
   preload: {

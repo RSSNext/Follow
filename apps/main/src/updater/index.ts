@@ -1,6 +1,8 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { autoUpdater as defaultAutoUpdater } from "electron-updater"
 
+import { GITHUB_OWNER, GITHUB_REPO } from "~/constants/app"
+
 import { channel, isDev, isWindows } from "../env"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
@@ -82,8 +84,8 @@ export const registerUpdater = async () => {
     channel,
     // hack for custom provider
     provider: "custom" as "github",
-    repo: "follow",
-    owner: "RSSNext",
+    repo: GITHUB_REPO,
+    owner: GITHUB_OWNER,
     releaseType: channel === "stable" ? "release" : "prerelease",
     // @ts-expect-error hack for custom provider
     updateProvider: CustomGitHubProvider,

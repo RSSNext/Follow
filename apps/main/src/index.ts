@@ -10,6 +10,7 @@ import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { updateProxy } from "./lib/proxy"
 import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
+import { cleanupOldRender } from "./lib/updater"
 import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, getMainWindow, windowStateStoreKey } from "./window"
@@ -120,7 +121,7 @@ function bootstrap() {
     }
   })
 
-  app.on("before-quit", () => {
+  app.on("before-quit", async () => {
     // store window pos when before app quit
     const window = getMainWindow()
     if (!window || window.isDestroyed()) return
@@ -132,6 +133,8 @@ function bootstrap() {
       x: bounds.x,
       y: bounds.y,
     })
+
+    await cleanupOldRender()
   })
 
   const handleOpen = async (url: string) => {

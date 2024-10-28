@@ -3,8 +3,13 @@ import { atomWithStorage } from "jotai/utils"
 
 import { createAtomHooks } from "~/lib/jotai"
 
-export const [, , useUpdaterStatus, , , setUpdaterStatus] = createAtomHooks(
-  atomWithStorage(getStorageNS("updater"), false, undefined, {
+export type UpdaterStatus = "ready"
+export type UpdaterStatusAtom = {
+  type: "app" | "renderer"
+  status: UpdaterStatus
+} | null
+export const [, , useUpdaterStatus, , getUpdaterStatus, setUpdaterStatus] = createAtomHooks(
+  atomWithStorage(getStorageNS("update"), null as UpdaterStatusAtom, undefined, {
     getOnInit: true,
   }),
 )

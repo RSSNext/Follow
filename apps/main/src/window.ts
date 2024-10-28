@@ -10,6 +10,8 @@ import { BrowserWindow, screen, shell } from "electron"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
+import { hotUpdateRender, loadDynamicRenderEntry } from "./lib/updater"
+import { refreshBound } from "./lib/utils"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
 
@@ -83,18 +85,10 @@ export function createWindow(
   })
 
   window.on("leave-html-full-screen", () => {
-    function refreshBound(timeout = 0) {
-      setTimeout(() => {
-        // FIXME: workaround for theme bug in full screen mode
-        const size = window?.getSize()
-        window?.setSize(size[0] + 1, size[1] + 1)
-        window?.setSize(size[0], size[1])
-      }, timeout)
-    }
     // To solve the vibrancy losing issue when leaving full screen mode
     // @see https://github.com/toeverything/AFFiNE/blob/280e24934a27557529479a70ab38c4f5fc65cb00/packages/frontend/electron/src/main/windows-manager/main-window.ts:L157
-    refreshBound()
-    refreshBound(1000)
+    refreshBound(window)
+    refreshBound(window, 1000)
   })
 
   window.on("ready-to-show", () => {
@@ -113,11 +107,15 @@ export function createWindow(
 
     logger.log(process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""))
   } else {
-    const openPath = path.resolve(__dirname, "../renderer/index.html")
-    window.loadFile(openPath, {
+    // Production entry
+    const dynamicRenderEntry = loadDynamicRenderEntry()
+    logger.info("load dynamic render entry", dynamicRenderEntry)
+    const appLoadEntry = dynamicRenderEntry || path.resolve(__dirname, "../renderer/index.html")
+
+    window.loadFile(appLoadEntry, {
       hash: options?.extraPath,
     })
-    logger.log(openPath, {
+    logger.log(appLoadEntry, {
       hash: options?.extraPath,
     })
   }
@@ -252,13 +250,15 @@ export const createMainWindow = () => {
     const caller = callWindowExpose(window)
 
     caller.onWindowShow()
+
+    hotUpdateRender()
   })
 
   window.on("hide", async () => {
     const caller = callWindowExpose(window)
     const settings = await caller.getUISettings()
 
-    if (settings.showDockBadge) {
+    if (settings?.showDockBadge) {
       pollingUpdateUnreadCount()
     }
   })

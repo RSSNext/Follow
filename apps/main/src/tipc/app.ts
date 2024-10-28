@@ -1,14 +1,19 @@
+/* eslint-disable @typescript-eslint/require-await */
 import fs from "node:fs"
 import fsp from "node:fs/promises"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
-import type { BrowserWindow } from "electron"
-import { app, clipboard, dialog, screen } from "electron"
+import pkg from "@pkg"
+import { app, BrowserWindow, clipboard, dialog, screen } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData } from "~/lib/cleaner"
+import { cleanupOldRender, getCurrentRenderManifest, loadDynamicRenderEntry } from "~/lib/updater"
+import { refreshBound } from "~/lib/utils"
+import { logger } from "~/logger"
 
 import { isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
@@ -267,6 +272,32 @@ ${content}
         return { success: false, error: errorMessage }
       }
     }),
+
+  getRenderVersion: t.procedure.action(async () => {
+    const manifest = getCurrentRenderManifest()
+    return manifest?.version || pkg.version
+  }),
+  rendererUpdateReload: t.procedure.action(async () => {
+    const __dirname = fileURLToPath(new URL(".", import.meta.url))
+    const allWindows = BrowserWindow.getAllWindows()
+    const dynamicRenderEntry = loadDynamicRenderEntry()
+
+    const appLoadEntry = dynamicRenderEntry || path.resolve(__dirname, "../../renderer/index.html")
+    logger.info("appLoadEntry", appLoadEntry)
+    const mainWindow = getMainWindow()
+
+    for (const window of allWindows) {
+      if (window === mainWindow) {
+        window.loadFile(appLoadEntry)
+        refreshBound(window)
+        refreshBound(window, 1000)
+      } else window.destroy()
+    }
+
+    setTimeout(() => {
+      cleanupOldRender()
+    }, 1000)
+  }),
 }
 
 interface Sender extends Electron.WebContents {
