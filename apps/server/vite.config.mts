@@ -21,9 +21,9 @@ export default () => {
     build: {
       rollupOptions: {
         output: {
-          assetFileNames: "dist-external/[name]-[hash].[ext]",
-          chunkFileNames: "dist-external/[name]-[hash].js",
-          entryFileNames: "dist-external/[name]-[hash].js",
+          assetFileNames: "dist-external/[name].[hash].[ext]",
+          chunkFileNames: "dist-external/[name].[hash].js",
+          entryFileNames: "dist-external/[name].[hash].js",
         },
       },
     },
