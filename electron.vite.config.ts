@@ -2,8 +2,7 @@ import { resolve } from "node:path"
 
 import { defineConfig } from "electron-vite"
 
-import { viteRenderBaseConfig } from "./configs/vite.render.config"
-import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
+import viteRenderConfig from "./configs/vite.electron-render.config"
 
 export default defineConfig({
   main: {
@@ -39,26 +38,5 @@ export default defineConfig({
       },
     },
   },
-  renderer: {
-    ...viteRenderBaseConfig,
-
-    plugins: [...viteRenderBaseConfig.plugins, createPlatformSpecificImportPlugin(true)],
-
-    root: "apps/renderer",
-    build: {
-      outDir: "dist/renderer",
-      sourcemap: !!process.env.CI,
-      target: "esnext",
-      rollupOptions: {
-        input: {
-          main: resolve("./apps/renderer/index.html"),
-        },
-      },
-      minify: true,
-    },
-    define: {
-      ...viteRenderBaseConfig.define,
-      ELECTRON: "true",
-    },
-  },
+  renderer: viteRenderConfig,
 })
