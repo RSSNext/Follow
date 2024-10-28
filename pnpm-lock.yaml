@@ -107,6 +107,9 @@ importers:
       '@tailwindcss/typography':
         specifier: 0.5.15
         version: 0.5.15(tailwindcss@3.4.14)
+      '@types/js-yaml':
+        specifier: 4.0.9
+        version: 4.0.9
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -167,6 +170,9 @@ importers:
       hono:
         specifier: 4.6.5
         version: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
+      js-yaml:
+        specifier: 4.1.0
+        version: 4.1.0
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10
@@ -4320,6 +4326,9 @@ packages:
 
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
+
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -14231,6 +14240,8 @@ snapshots:
       '@types/unist': 3.0.3
 
   '@types/http-cache-semantics@4.0.4': {}
+
+  '@types/js-yaml@4.0.9': {}
 
   '@types/json-schema@7.0.15': {}
 
