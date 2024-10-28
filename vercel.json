@@ -26,14 +26,14 @@
     },
     {
       "source": "/external-dist/:path*",
-      "destination": "https://follow-external-ssr.vercel.app/:path*"
+      "destination": "https://follow-external-ssr.vercel.app/external-dist/:path*"
     },
     {
       "source": "/dist-external/:path*",
       "destination": "https://follow-external-ssr.vercel.app/dist-external/:path*"
     },
     {
-      "source": "/((?!assets|vendor|locales|dist-external/).*)",
+      "source": "/((?!assets|vendor|locales|dist-external|external-dist/).*)",
       "destination": "/index.html"
     }
   ],
@@ -76,28 +76,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=43200, stale-while-revalidate=3600, immutable"
-        },
-        {
-          "key": "CDN-Cache-Control",
-          "value": "max-age=604800, stale-while-revalidate=3600"
-        },
-        {
-          "key": "Vercel-CDN-Cache-Control",
-          "value": "max-age=604800"
-        },
-        {
-          "key": "Cloudflare-CDN-Cache-Control",
-          "value": "max-age=604800"
-        }
-      ]
-    },
-    {
-      "source": "/dist-external/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=43200, stale-while-revalidate=3600, immutable"
+          "value": "public, max-age=604800, immutable"
         },
         {
           "key": "CDN-Cache-Control",
