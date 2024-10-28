@@ -1,5 +1,6 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
+import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
@@ -7,9 +8,11 @@ import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedBoostersQuery } from "~/modules/boost/query"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { UserAvatar } from "~/modules/user/UserAvatar"
+import { deduplicateUsers } from "~/modules/user/utils"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 
+import { UserGallery } from "../../user/UserGallery"
 import { useTipModal } from "../../wallet/hooks"
 
 export const SupportCreator = ({ entryId }: { entryId: string }) => {
@@ -26,10 +29,17 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
   const openBoostModal = useBoostModal()
 
   const isMyOwnedFeed = feed?.ownerUserId === useWhoami()?.id
-  if (!feed || feed.type !== "feed") return null
+  const allSupporters = useMemo(
+    () =>
+      deduplicateUsers([
+        ...(feed && "tipUsers" in feed && feed.tipUsers ? feed.tipUsers : []),
+        ...(feedBoosters ?? []),
+      ]),
+    [feed, feedBoosters],
+  )
+  const supportAmount = allSupporters.length
 
-  const supportAmount =
-    (feed && feed.tipUsers ? feed.tipUsers.length : 0) + (feedBoosters ? feedBoosters.length : 0)
+  if (!feed || feed.type !== "feed") return null
 
   return (
     <>
@@ -69,32 +79,7 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
             <div className="text-sm text-zinc-500">
               {t("entry_content.support_amount", { amount: supportAmount })}
             </div>
-            <div className="flex w-fit max-w-80 flex-wrap gap-4">
-              {feed.tipUsers?.map((user) => (
-                <div key={user.id} className="size-8">
-                  <UserAvatar
-                    className="h-auto p-0"
-                    avatarClassName="size-8"
-                    userId={user?.id}
-                    enableModal={true}
-                    hideName={true}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="flex w-fit max-w-80 flex-wrap gap-4">
-              {feedBoosters?.map((user) => (
-                <div key={user.id} className="size-8">
-                  <UserAvatar
-                    className="h-auto p-0"
-                    avatarClassName="size-8"
-                    userId={user?.id}
-                    enableModal={true}
-                    hideName={true}
-                  />
-                </div>
-              ))}
-            </div>
+            <UserGallery users={allSupporters} />
           </>
         )}
       </div>
