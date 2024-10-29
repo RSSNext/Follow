@@ -40,12 +40,13 @@ export const useRewardDescriptionModal = () => {
               <TableBody>
                 {serverConfigs?.DAILY_POWER_PERCENTAGES.map((percentage, index) => {
                   const level = serverConfigs?.DAILY_POWER_PERCENTAGES.length - index - 1
+                  const rankPercentage = serverConfigs?.LEVEL_PERCENTAGES[index]
                   return (
                     <TableRow key={percentage} className="[&>td]:py-2">
                       <TableCell>
                         <Level level={level} />
                       </TableCell>
-                      <TableCell>{serverConfigs?.LEVEL_PERCENTAGES[index] * 100}%</TableCell>
+                      <TableCell>{rankPercentage ? `${rankPercentage * 100}%` : "-"}</TableCell>
                       <TableCell>{getLevelMultiplier(level)}</TableCell>
                       <TableCell>
                         <Balance withSuffix>
