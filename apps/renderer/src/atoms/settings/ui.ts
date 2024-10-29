@@ -11,6 +11,7 @@ export const createDefaultSettings = (): UISettings => ({
 
   opaqueSidebar: false,
   sidebarShowUnreadCount: true,
+  hideExtraBadge: false,
 
   // Global UI
   uiTextSize: 16,
@@ -37,9 +38,6 @@ export const createDefaultSettings = (): UISettings => ({
   pictureViewMasonry: true,
   pictureViewFilterNoImage: false,
   wideMode: false,
-
-  // TTS
-  voice: "en-US-AndrewMultilingualNeural",
 })
 
 export const {
@@ -57,7 +55,6 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "uiFontFamily",
   "readerFontFamily",
   "opaqueSidebar",
-  "voice",
 ]
 
 const isZenModeAtom = atom((get) => {

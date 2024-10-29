@@ -37,7 +37,7 @@ const HeaderWrapper: Component = (props) => {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 flex h-[80px] w-full items-center px-4 duration-200 lg:px-10",
-        showOverlay && "h-[60px] border-b",
+        showOverlay && "h-[60px]",
       )}
     >
       <div

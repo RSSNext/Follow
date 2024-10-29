@@ -3,6 +3,7 @@ import type {
   EntryModel,
   FeedModel,
   FeedOrListRespModel,
+  InboxModel,
 } from "@follow/models/types"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 import { omitObjectUndefinedValue } from "@follow/utils/utils"
@@ -82,11 +83,12 @@ class EntryActions {
       },
     })
     if (data) {
-      this.upsertMany([
-        // patch data, should omit `read` because the network race condition or server cache
-        omit(data, "read") as any,
-      ])
-      inboxActions.upsertMany([data.feeds])
+      // patch data, should omit `read` because the network race condition or server cache
+      const nextData = omit(data, "feeds", "read")
+      // Data compatibility
+      if (data.feeds && !(data as any).inboxes) (nextData as any).inboxes = data.feeds
+      this.upsertMany([nextData as any])
+      inboxActions.upsertMany([(nextData as any).inboxes])
     }
 
     return data
@@ -112,14 +114,26 @@ class EntryActions {
     isArchived?: boolean
   }) {
     const data = inboxId
-      ? await apiClient.entries.inbox.$post({
-          json: {
-            publishedAfter: pageParam,
-            limit,
-            inboxId: `${inboxId}`,
-            read,
-          },
-        })
+      ? await apiClient.entries.inbox
+          .$post({
+            json: {
+              publishedAfter: pageParam,
+              limit,
+              inboxId: `${inboxId}`,
+              read,
+            },
+          })
+          .then((res) => {
+            return {
+              ...res,
+              data: res.data?.map(({ feeds, ...d }) => {
+                return {
+                  ...d,
+                  inboxes: feeds,
+                }
+              }),
+            }
+          })
       : await apiClient.entries.$post({
           json: {
             publishedAfter: pageParam,
@@ -220,6 +234,7 @@ class EntryActions {
   upsertMany(data: CombinedEntryModel[]) {
     const feeds = [] as FeedOrListRespModel[]
     const entries = [] as EntryModel[]
+    const inboxes = [] as InboxModel[]
     const entry2Read = {} as Record<string, boolean>
     const entryFeedMap = {} as Record<string, string>
     const entryCollection = {} as Record<string, any>
@@ -233,38 +248,74 @@ class EntryActions {
             item.entries,
           )
 
-          if (!draft.entries[item.feeds.id]) {
-            draft.entries[item.feeds.id] = []
+          // Is related to feed
+          if (item.feeds) {
+            if (!draft.entries[item.feeds.id]) {
+              draft.entries[item.feeds.id] = []
+            }
+
+            if (!draft.internal_feedId2entryIdSet[item.feeds.id]) {
+              draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
+            }
+
+            if (!draft.internal_feedId2entryIdSet[item.feeds.id].has(item.entries.id)) {
+              draft.entries[item.feeds.id].push(item.entries.id)
+              draft.internal_feedId2entryIdSet[item.feeds.id].add(item.entries.id)
+            }
+
+            draft.flatMapEntries[item.entries.id] = merge(
+              draft.flatMapEntries[item.entries.id] || {},
+              {
+                feedId: item.feeds.id,
+                entries: mergedEntry,
+              },
+              omit(item, "feeds"),
+            )
+
+            // Push feed
+            feeds.push(item.feeds)
+            // Push entryFeedMap
+            entryFeedMap[item.entries.id] = item.feeds.id
           }
 
-          if (!draft.internal_feedId2entryIdSet[item.feeds.id]) {
-            draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
+          // Is related to inbox
+          if (item.inboxes) {
+            const inboxId = `inbox-${item.inboxes.id}`
+            if (!draft.entries[inboxId]) {
+              draft.entries[inboxId] = []
+            }
+
+            if (!draft.internal_feedId2entryIdSet[inboxId]) {
+              draft.internal_feedId2entryIdSet[inboxId] = new Set()
+            }
+
+            if (!draft.internal_feedId2entryIdSet[inboxId].has(item.entries.id)) {
+              draft.entries[inboxId].push(item.entries.id)
+              draft.internal_feedId2entryIdSet[inboxId].add(item.entries.id)
+            }
+
+            draft.flatMapEntries[item.entries.id] = merge(
+              draft.flatMapEntries[item.entries.id] || {},
+              {
+                inboxId: item.inboxes.id,
+                entries: mergedEntry,
+              },
+              omit(item, "inboxes"),
+            )
+
+            // Push entryFeedMap
+            entryFeedMap[item.entries.id] = inboxId
+
+            inboxes.push(item.inboxes)
           }
 
-          if (!draft.internal_feedId2entryIdSet[item.feeds.id].has(item.entries.id)) {
-            draft.entries[item.feeds.id].push(item.entries.id)
-            draft.internal_feedId2entryIdSet[item.feeds.id].add(item.entries.id)
-          }
-
-          draft.flatMapEntries[item.entries.id] = merge(
-            draft.flatMapEntries[item.entries.id] || {},
-            {
-              feedId: item.feeds.id,
-              entries: mergedEntry,
-            },
-            omit(item, "feeds"),
-          )
-
-          // Push feed
-          feeds.push(item.feeds)
           // Push entry
           entries.push(mergedEntry)
           // Push entry2Read
           if (!isNil(item.read)) {
             entry2Read[item.entries.id] = item.read
           }
-          // Push entryFeedMap
-          entryFeedMap[item.entries.id] = item.feeds.id
+
           // Push entryCollection
           if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
@@ -291,6 +342,7 @@ class EntryActions {
     )
     // Insert to feed store
     feedActions.upsertMany(feeds as FeedModel[])
+    inboxActions.upsertMany(inboxes)
     const newStarIds = new Set(get().starIds)
     for (const entryId in entryCollection) {
       newStarIds.add(entryId)

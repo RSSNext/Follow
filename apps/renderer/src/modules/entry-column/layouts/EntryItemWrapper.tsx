@@ -32,7 +32,7 @@ export const EntryItemWrapper: FC<
   })
 
   const { items: feedItems } = useFeedActions({
-    feedId: entry.feedId,
+    feedId: entry.feedId || entry.inboxId,
     view,
     type: "entryList",
   })

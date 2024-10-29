@@ -95,6 +95,7 @@ export function FeedPreview(props: {
                         feeds: feedData,
                         read: true,
                         feedId: feedData.id!,
+                        inboxId: "",
                       }}
                       entryId={entry.id}
                     />
