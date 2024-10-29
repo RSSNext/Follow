@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { getColorScheme, stringToHue } from "@follow/utils/color"
 import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
@@ -49,6 +50,7 @@ export const UserAvatar = forwardRef<
     }
 
     const renderUserData = userId ? profile.data : session?.user
+    const randomColor = stringToHue(renderUserData?.name || "")
     return (
       <div
         style={style}
@@ -75,7 +77,12 @@ export const UserAvatar = forwardRef<
             className="duration-200 animate-in fade-in-0"
             src={replaceImgUrlIfNeed(renderUserData?.image || undefined)}
           />
-          <AvatarFallback>{renderUserData?.name?.slice(0, 2)}</AvatarFallback>
+          <AvatarFallback
+            style={{ backgroundColor: getColorScheme(randomColor).light.accent }}
+            className="text-xs"
+          >
+            {renderUserData?.name?.[0]}
+          </AvatarFallback>
         </Avatar>
         {!hideName && <div>{renderUserData?.name}</div>}
       </div>
