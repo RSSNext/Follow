@@ -236,7 +236,12 @@ export const ModalInternal = memo(
             <Dialog.Portal>
               {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
-              <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
+              <Dialog.Content
+                asChild
+                aria-describedby={undefined}
+                onPointerDownOutside={(event) => event.preventDefault()}
+                onOpenAutoFocus={openAutoFocus}
+              >
                 <div
                   ref={setEdgeElementRef}
                   className={cn(
@@ -281,7 +286,12 @@ export const ModalInternal = memo(
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
             {Overlay}
-            <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
+            <Dialog.Content
+              asChild
+              aria-describedby={undefined}
+              onPointerDownOutside={(event) => event.preventDefault()}
+              onOpenAutoFocus={openAutoFocus}
+            >
               <div
                 ref={setEdgeElementRef}
                 className={cn(

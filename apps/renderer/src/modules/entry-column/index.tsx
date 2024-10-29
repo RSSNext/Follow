@@ -66,6 +66,8 @@ function EntryColumnImpl() {
     feedId: routeFeedId,
     isPendingEntry,
     isCollection,
+    inboxId,
+    listId,
   } = useRouteParams()
   const activeEntry = useEntry(activeEntryId)
   const feed = useFeedById(routeFeedId)
@@ -111,6 +113,8 @@ function EntryColumnImpl() {
     !isCollection &&
     routeFeedId !== ROUTE_FEED_PENDING &&
     (feed?.type === "feed" || !feed) &&
+    !inboxId &&
+    !listId &&
     entries.totalCount === 0 &&
     !entries.isLoading
 

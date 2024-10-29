@@ -158,6 +158,15 @@ function bootstrap() {
           domain: new URL(apiURL).hostname,
           sameSite: "no_restriction",
         })
+        mainWindow.webContents.session.cookies.set({
+          url: apiURL,
+          name: "authjs.callback-url",
+          value: env.VITE_WEB_URL,
+          secure: true,
+          httpOnly: true,
+          domain: new URL(apiURL).hostname,
+          sameSite: "no_restriction",
+        })
         userId && (await callWindowExpose(mainWindow).clearIfLoginOtherAccount(userId))
         mainWindow.reload()
 
