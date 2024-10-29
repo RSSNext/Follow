@@ -22,15 +22,14 @@ import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
-import { FeedCertification } from "~/modules/feed/feed-certification"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
-import { BoostCertification } from "../boost/boost-certification"
 import { useSelectedFeedIds } from "./atom"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
@@ -161,9 +160,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
           )}
         >
           <FeedIcon fallback feed={feed} size={16} />
-          <div className="truncate">{getPreferredTitle(feed)}</div>
-          {isFeed && !hideExtraBadge && <FeedCertification feed={feed} className="text-[15px]" />}
-          {isFeed && !hideExtraBadge && <BoostCertification feed={feed} className="text-[15px]" />}
+          <FeedTitle feed={feed} />
           {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
