@@ -184,6 +184,7 @@ class SubscriptionActions {
         updateFeedBoostStatus(subscription.feedId, subscription.boost.boosters.length > 0)
       }
     }
+
     this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))
     feedActions.upsertMany(feeds)
     listActions.upsertMany(lists)

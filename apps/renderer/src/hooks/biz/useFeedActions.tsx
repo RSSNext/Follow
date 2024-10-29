@@ -60,8 +60,15 @@ export const useFeedActions = ({
   type?: "feedList" | "entryList"
 }) => {
   const { t } = useTranslation()
-  const feed = useFeedById(feedId)
-  const isInbox = feed?.type === "inbox"
+  const feed = useFeedById(feedId, (feed) => {
+    return {
+      type: feed.type,
+      ownerUserId: feed.ownerUserId,
+      id: feed.id,
+    }
+  })
+  const inbox = useInboxById(feedId)
+  const isInbox = !!inbox
   const subscription = useSubscriptionByFeedId(feedId)
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
@@ -81,7 +88,8 @@ export const useFeedActions = ({
   const isMultipleSelection = feedIds && feedIds.length > 0
 
   const items = useMemo(() => {
-    if (!feed) return []
+    const related = feed || inbox
+    if (!related) return []
 
     const items: NullableNativeMenuItem[] = [
       {
@@ -95,9 +103,9 @@ export const useFeedActions = ({
           }),
         supportMultipleSelection: true,
       },
-      !feed.ownerUserId &&
-        !!isBizId(feed.id) &&
-        feed.type === "feed" && {
+      !related.ownerUserId &&
+        !!isBizId(related.id) &&
+        related.type === "feed" && {
           type: "text" as const,
           label: isEntryList
             ? t("sidebar.feed_actions.claim_feed")
@@ -107,7 +115,7 @@ export const useFeedActions = ({
             claimFeed()
           },
         },
-      ...(feed.ownerUserId === whoami()?.id
+      ...(related.ownerUserId === whoami()?.id
         ? [
             {
               type: "text" as const,
@@ -285,12 +293,13 @@ export const useFeedActions = ({
     return items
   }, [
     feed,
+    inbox,
     t,
     isEntryList,
     isInbox,
     listByView,
-    feedId,
     isMultipleSelection,
+    feedId,
     feedIds,
     claimFeed,
     openBoostModal,

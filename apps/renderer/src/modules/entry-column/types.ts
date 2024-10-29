@@ -11,6 +11,7 @@ export type UniversalItemProps = {
   entryPreview?: CombinedEntryModel & {
     feeds: FeedOrListRespModel
     feedId: string
+    inboxId: string
   }
   translation?: {
     title?: string

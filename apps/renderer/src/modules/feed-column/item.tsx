@@ -43,7 +43,18 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
-  const feed = useFeedById(feedId)
+  const feed = useFeedById(feedId, (feed) => {
+    return {
+      type: feed.type,
+      id: feed.id,
+      title: feed.title,
+      errorAt: feed.errorAt,
+      errorMessage: feed.errorMessage,
+      url: feed.url,
+      image: feed.image,
+    }
+  })
+
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(

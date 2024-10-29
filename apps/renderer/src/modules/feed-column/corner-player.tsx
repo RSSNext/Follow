@@ -24,6 +24,7 @@ import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 
 const handleClickPlay = () => {
@@ -119,6 +120,8 @@ const CornerPlayerImpl = () => {
     })
   }, [entry, feed])
 
+  const isInbox = useInboxById(entry?.feedId, (inbox) => inbox !== null)
+
   const navigateToEntry = useNavigateEntry()
   usePlayerTracker()
 
@@ -127,9 +130,9 @@ const CornerPlayerImpl = () => {
     const options: NavigateEntryOptions = {
       entryId: entry.entries.id,
     }
-    if (feed?.type === "inbox") {
+    if (isInbox) {
       Object.assign(options, {
-        inboxId: feed.id,
+        inboxId: entry?.feedId,
         view: FeedViewType.Articles,
       })
     } else if (list) {

@@ -7,9 +7,7 @@ import { FeedIcon } from "~/modules/feed/feed-icon"
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
 export function NotificationItem({ entryId, entryPreview, translation }: UniversalItemProps) {
-  return (
-    <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} withFollow />
-  )
+  return <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} />
 }
 
 export function NotificationItemStateLess({ entry, feed }: EntryItemStatelessProps) {
