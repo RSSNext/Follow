@@ -79,7 +79,7 @@ export const GridItemFooter = ({
       <div className="flex items-center gap-1 truncate text-[13px]">
         <FeedIcon fallback className="mr-0.5 flex" feed={feeds!} entry={entry.entries} size={18} />
         <span className={cn("min-w-0 truncate", descriptionClassName)}>
-          <FeedTitle feed={feeds!} />
+          <FeedTitle feed={feeds} />
         </span>
         <span className={cn("text-zinc-500", timeClassName)}>·</span>
         <span className={cn("text-zinc-500", timeClassName)}>
