@@ -9,6 +9,8 @@ export interface GeneralSettings {
   renderMarkUnread: boolean
   groupByDate: boolean
   jumpOutLinkWarn: boolean
+  // TTS
+  voice: string
 }
 
 export interface UISettings {
@@ -16,6 +18,7 @@ export interface UISettings {
   feedColWidth: number
   opaqueSidebar: boolean
   sidebarShowUnreadCount: boolean
+  hideExtraBadge: boolean
   uiTextSize: number
   showDockBadge: boolean
   modalOverlay: boolean
@@ -35,9 +38,6 @@ export interface UISettings {
   pictureViewMasonry: boolean
   pictureViewFilterNoImage: boolean
   wideMode: boolean
-
-  // tts
-  voice: string
 }
 
 export interface IntegrationSettings {
