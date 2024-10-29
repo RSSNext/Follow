@@ -12,10 +12,9 @@ import { app, BrowserWindow, clipboard, dialog, screen } from "electron"
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData } from "~/lib/cleaner"
 import { cleanupOldRender, getCurrentRenderManifest, loadDynamicRenderEntry } from "~/lib/updater"
-import { refreshBound } from "~/lib/utils"
 import { logger } from "~/logger"
 
-import { isWindows11 } from "../env"
+import { isDev, isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
 import { i18n } from "../lib/i18n"
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
@@ -288,9 +287,11 @@ ${content}
 
     for (const window of allWindows) {
       if (window === mainWindow) {
+        if (isDev) {
+          logger.verbose("[rendererUpdateReload]: skip reload in dev")
+          break
+        }
         window.loadFile(appLoadEntry)
-        refreshBound(window)
-        refreshBound(window, 1000)
       } else window.destroy()
     }
 
