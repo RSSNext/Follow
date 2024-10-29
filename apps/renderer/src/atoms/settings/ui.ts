@@ -8,10 +8,10 @@ export const createDefaultSettings = (): UISettings => ({
   // Sidebar
   entryColWidth: 356,
   feedColWidth: 256,
+  hideExtraBadge: false,
 
   opaqueSidebar: false,
   sidebarShowUnreadCount: true,
-  hideExtraBadge: false,
 
   // Global UI
   uiTextSize: 16,

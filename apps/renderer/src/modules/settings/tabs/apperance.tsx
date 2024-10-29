@@ -17,12 +17,14 @@ import {
   useUISettingSelector,
   useUISettingValue,
 } from "~/atoms/settings/ui"
+import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
 import { isElectronBuild } from "~/constants"
 import { useSetTheme } from "~/hooks/common"
 
-import { SettingTabbedSegment } from "../control"
+import { SettingDescription, SettingSwitch, SettingTabbedSegment } from "../control"
 import { createDefineSettingItem } from "../helper/builder"
 import { createSettingBuilder } from "../helper/setting-builder"
+import { SettingItemGroup } from "../section"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
@@ -58,6 +60,16 @@ export const SettingAppearance = () => {
           defineItem("sidebarShowUnreadCount", {
             label: t("appearance.sidebar_show_unread_count.label"),
           }),
+
+          {
+            type: "title",
+            value: t("appearance.sidebar"),
+          },
+          defineItem("hideExtraBadge", {
+            label: t("appearance.hide_extra_badge.label"),
+            description: t("appearance.hide_extra_badge.description"),
+          }),
+          ZenMode,
 
           {
             type: "title",
@@ -215,5 +227,30 @@ export const AppThemeSegment = () => {
         setTheme(value as "light" | "dark" | "system")
       }}
     />
+  )
+}
+
+const ZenMode = () => {
+  const { t } = useTranslation("settings")
+  const feedColumnShow = useFeedColumnShow()
+  const isWideMode = useUISettingKey("wideMode")
+  return (
+    <SettingItemGroup>
+      <SettingSwitch
+        checked={!feedColumnShow && isWideMode}
+        className="mt-4"
+        onCheckedChange={(checked) => {
+          if (checked) {
+            setFeedColumnShow(false)
+            setUISetting("wideMode", true)
+          } else {
+            setFeedColumnShow(true)
+            setUISetting("wideMode", false)
+          }
+        }}
+        label={t("appearance.zen_mode.label")}
+      />
+      <SettingDescription>{t("appearance.zen_mode.description")}</SettingDescription>
+    </SettingItemGroup>
   )
 }

@@ -16,6 +16,7 @@ import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { getMainContainerElement } from "~/atoms/dom"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -94,6 +95,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   useAnyPointDown(() => {
     isContextMenuOpen && setIsContextMenuOpen(false)
   })
+  const hideExtraBadge = useUISettingKey("hideExtraBadge")
   if (!feed) return null
 
   const isFeed = feed.type === "feed" || !feed.type
@@ -160,8 +162,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         >
           <FeedIcon fallback feed={feed} size={16} />
           <div className="truncate">{getPreferredTitle(feed)}</div>
-          {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
-          {isFeed && <BoostCertification feed={feed} className="text-[15px]" />}
+          {isFeed && !hideExtraBadge && <FeedCertification feed={feed} className="text-[15px]" />}
+          {isFeed && !hideExtraBadge && <BoostCertification feed={feed} className="text-[15px]" />}
           {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
