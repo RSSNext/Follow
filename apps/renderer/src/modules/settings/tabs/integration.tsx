@@ -4,6 +4,7 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
   SimpleIconsOmnivore,
+  SimpleIconsOutline,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { useEffect } from "react"
@@ -169,6 +170,35 @@ export const SettingIntegration = () => {
             label: t("integration.obsidian.vaultPath.label"),
             vertical: true,
             description: t("integration.obsidian.vaultPath.description"),
+          }),
+          {
+            type: "title",
+            value: (
+              <span className="flex items-center gap-2 font-bold">
+                <SimpleIconsOutline />
+                {t("integration.outline.title")}
+              </span>
+            ),
+          },
+          defineSettingItem("enableOutline", {
+            label: t("integration.outline.enable.label"),
+            description: t("integration.outline.enable.description"),
+          }),
+          defineSettingItem("outlineEndpoint", {
+            label: t("integration.outline.endpoint.label"),
+            vertical: true,
+            description: t("integration.outline.endpoint.description"),
+          }),
+          defineSettingItem("outlineToken", {
+            label: t("integration.outline.token.label"),
+            vertical: true,
+            type: "password",
+            description: t("integration.outline.token.description"),
+          }),
+          defineSettingItem("outlineCollection", {
+            label: t("integration.outline.collection.label"),
+            vertical: true,
+            description: t("integration.outline.collection.description"),
           }),
 
           BottomTip,
