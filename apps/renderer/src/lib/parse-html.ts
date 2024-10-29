@@ -244,6 +244,7 @@ export const parseHtml = (
 const Img: Components["img"] = ({ node, ...props }) => {
   const nextProps = {
     ...props,
+    preferOrigin: true,
     proxy: { height: 0, width: 700 },
   }
   const widthPx = Number.parseInt(props.width as string)

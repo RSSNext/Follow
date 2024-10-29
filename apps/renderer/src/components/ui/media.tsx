@@ -13,8 +13,6 @@ import { usePreviewMedia } from "./media/hooks"
 import type { VideoPlayerRef } from "./media/VideoPlayer"
 import { VideoPlayer } from "./media/VideoPlayer"
 
-const failedList = new Set<string | undefined>()
-
 type BaseProps = {
   mediaContainerClassName?: string
   showFallback?: boolean
@@ -30,6 +28,7 @@ export type MediaProps = BaseProps &
           width: number
           height: number
         }
+        preferOrigin?: boolean
         popper?: boolean
         type: "photo"
         previewImageUrl?: string
@@ -40,6 +39,7 @@ export type MediaProps = BaseProps &
           width: number
           height: number
         }
+        preferOrigin?: boolean
         popper?: boolean
         type: "video"
         previewImageUrl?: string
@@ -48,6 +48,7 @@ export type MediaProps = BaseProps &
 const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,
+  preferOrigin,
   popper = false,
   mediaContainerClassName,
   thumbnail,
@@ -74,41 +75,62 @@ const MediaImpl: FC<MediaProps> = ({
   const finalHeight = height || ctxHeight
   const finalWidth = width || ctxWidth
 
+  const [currentState, setCurrentState] = useState<"proxy" | "origin" | "error">(() =>
+    proxy && !preferOrigin ? "proxy" : "origin",
+  )
+
   const [imgSrc, setImgSrc] = useState(() =>
-    proxy && src && !failedList.has(src)
+    currentState === "proxy" && src
       ? getImageProxyUrl({
           url: src,
-          width: proxy.width,
-          height: proxy.height,
+          width: proxy?.width || 0,
+          height: proxy?.height || 0,
         })
       : src,
   )
 
   const previewImageSrc = useMemo(
     () =>
-      proxy && previewImageUrl
+      currentState === "proxy" && previewImageUrl
         ? getImageProxyUrl({
             url: previewImageUrl,
-            width: proxy.width,
-            height: proxy.height,
+            width: proxy?.width || 0,
+            height: proxy?.height || 0,
           })
         : previewImageUrl,
-    [previewImageUrl, proxy],
+    [currentState, previewImageUrl, proxy?.width, proxy?.height],
   )
 
-  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
-  const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
-    if (imgSrc !== props.src) {
-      setImgSrc(props.src)
-      failedList.add(props.src)
-    } else {
-      setMediaLoadState("error")
+  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded">("loading")
 
-      props.onError?.(e as any)
+  const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback(() => {
+    switch (currentState) {
+      case "proxy": {
+        if (imgSrc !== props.src && props.src) {
+          setImgSrc(props.src)
+        } else {
+          setCurrentState("error")
+        }
+        break
+      }
+      case "origin": {
+        if (imgSrc === props.src && props.src) {
+          setImgSrc(
+            getImageProxyUrl({
+              url: props.src,
+              width: proxy?.width || 0,
+              height: proxy?.height || 0,
+            }),
+          )
+        } else {
+          setCurrentState("error")
+        }
+        break
+      }
     }
   })
 
-  const isError = mediaLoadState === "error"
+  const isError = currentState === "error"
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
     if (popper && src) {
