@@ -76,6 +76,8 @@ const AppLayer = () => {
     appLog("App is ready", `${doneTime}ms`)
 
     applyAfterReadyCallbacks()
+
+    document.querySelector("#app-skeleton")?.remove()
   }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />

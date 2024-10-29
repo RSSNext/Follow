@@ -54,14 +54,78 @@
         }
       }
       setTheme()
+      // Can not get window.electron so check userAgent
+      const isElectron = navigator.userAgent.includes("Electron")
+      document.documentElement.dataset.buildType = isElectron ? "electron" : "web"
     </script>
   </head>
   <body>
-    <div id="root">
+    <div id="root"></div>
+
+    <div id="app-skeleton">
       <!-- Skeleton -->
-      <div class="h-full w-full flex">
-        <div class="w-64 shrink-0 h-full"></div>
-        <div class="grow w-full h-full bg-theme-background"></div>
+      <style>
+        html,
+        body {
+          height: 100%;
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        #app-skeleton {
+          position: fixed;
+          inset: 0;
+          z-index: 1000;
+        }
+        [data-theme="light"] {
+          --background: 0 0% 100%;
+        }
+
+        [data-theme="dark"] {
+          --background: 0 0% 7.1%;
+        }
+        .skeleton {
+          display: flex;
+          height: 100%;
+          width: 100%;
+        }
+        .sidebar {
+          width: 16rem;
+          flex-shrink: 0;
+          height: 100%;
+          background-color: hsl(var(--fo-native));
+        }
+        [data-build-type="electron"] .sidebar {
+          background-color: hsl(var(--fo-native) / 0.3);
+        }
+        [data-build-type="electron"][data-theme="dark"] .sidebar {
+          background-color: hsl(var(--fo-native) / 0.1);
+        }
+        .content {
+          flex-grow: 1;
+          width: 100%;
+          height: 100%;
+          background-color: hsl(var(--background));
+        }
+
+        [data-theme="light"] {
+          --fo-native: 240 1.6% 87.6%;
+        }
+        [data-theme="dark"] {
+          --fo-native: 30 1.7% 23.5%;
+        }
+
+        [data-build-type="web"] {
+          --fo-native: 240 4.8% 95.9%;
+        }
+
+        [data-build-type="web"][data-theme="dark"] {
+          --fo-native: 220 8.1% 14.5%;
+        }
+      </style>
+      <div class="skeleton">
+        <div class="sidebar"></div>
+        <div class="content"></div>
       </div>
     </div>
 
