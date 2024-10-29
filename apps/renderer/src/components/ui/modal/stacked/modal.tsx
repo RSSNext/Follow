@@ -94,6 +94,15 @@ export const ModalInternal = memo(
       onPropsClose?.(false)
     })
 
+    const onClose = useCallback(
+      (open: boolean): void => {
+        if (!open) {
+          close()
+        }
+      },
+      [close],
+    )
+
     const opaque = useUISettingKey("modalOpaque")
     const modalSettingOverlay = useUISettingKey("modalOverlay")
 
@@ -223,7 +232,7 @@ export const ModalInternal = memo(
     if (CustomModalComponent) {
       return (
         <Wrapper>
-          <Dialog.Root open modal={modal}>
+          <Dialog.Root open onOpenChange={onClose} modal={modal}>
             <Dialog.Portal>
               {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
@@ -269,7 +278,7 @@ export const ModalInternal = memo(
 
     return (
       <Wrapper>
-        <Dialog.Root modal={modal} open>
+        <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
             {Overlay}
             <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
