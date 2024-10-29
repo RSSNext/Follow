@@ -8,13 +8,15 @@ import { getPreferredTitle } from "~/store/feed/store"
 export const FeedTitle = ({
   feed,
   className,
+  title,
 }: {
   feed: FeedOrListRespModel
   className?: string
+  title?: string | null
 }) => {
   return (
     <div className={cn("flex items-center truncate", className)}>
-      <div className="truncate">11{getPreferredTitle(feed)}</div>
+      <div className="truncate">{title || getPreferredTitle(feed)}</div>
       <FeedCertification feed={feed} />
       <BoostCertification feed={feed} />
     </div>

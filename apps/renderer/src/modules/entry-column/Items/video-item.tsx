@@ -16,6 +16,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { urlToIframe } from "~/lib/url-to-iframe"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
@@ -182,7 +183,7 @@ export function VideoItemStateLess({ entry, feed }: EntryItemStatelessProps) {
             </div>
             <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
               <FeedIcon feed={feed} fallback className="size-4" />
-              <span>{feed.title}</span>
+              <FeedTitle feed={feed} />
               <span className="text-zinc-500">·</span>
               {!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}
             </div>

@@ -11,6 +11,7 @@ import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { EntryTranslation } from "~/modules/entry-column/translation"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
@@ -98,7 +99,11 @@ export function ListItem({
           )}
         >
           <EllipsisHorizontalTextWithTooltip className="truncate">
-            {getPreferredTitle(related, entry.entries)}
+            <FeedTitle
+              feed={related}
+              title={getPreferredTitle(related, entry.entries)}
+              className="space-x-0.5"
+            />
           </EllipsisHorizontalTextWithTooltip>
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
