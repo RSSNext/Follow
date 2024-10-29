@@ -260,10 +260,15 @@ export const useEntryActions = ({
           if (!populatedEntry.entries.url || !populatedEntry.entries.media?.length) {
             return
           }
+          window.analytics?.capture("integration", {
+            type: "eagle",
+            event: "save",
+          })
           const response = await tipcClient?.saveToEagle({
             url: populatedEntry.entries.url,
             mediaUrls: populatedEntry.entries.media.map((m) => m.url),
           })
+
           if (response?.status === "success") {
             toast.success(t("entry_actions.saved_to_eagle"), {
               duration: 3000,
@@ -282,6 +287,10 @@ export const useEntryActions = ({
         hide: !enableReadwise || !readwiseToken || !populatedEntry.entries.url,
         onClick: async () => {
           try {
+            window.analytics?.capture("integration", {
+              type: "readwise",
+              event: "save",
+            })
             const data = await ofetch("https://readwise.io/api/v3/save/", {
               method: "POST",
               headers: {
@@ -298,6 +307,7 @@ export const useEntryActions = ({
                 saved_using: "Follow",
               },
             })
+
             toast.success(
               <>
                 {t("entry_actions.saved_to_readwise")},{" "}
@@ -327,6 +337,10 @@ export const useEntryActions = ({
           !populatedEntry.entries.url,
         onClick: async () => {
           try {
+            window.analytics?.capture("integration", {
+              type: "instapaper",
+              event: "save",
+            })
             const data = await ofetch("https://www.instapaper.com/api/add", {
               query: {
                 url: populatedEntry.entries.url,
@@ -338,6 +352,7 @@ export const useEntryActions = ({
               },
               parseResponse: JSON.parse,
             })
+
             toast.success(
               <>
                 {t("entry_actions.saved_to_instapaper")},{" "}
@@ -381,6 +396,10 @@ export const useEntryActions = ({
   }
 `
 
+          window.analytics?.capture("integration", {
+            type: "omnivore",
+            event: "save",
+          })
           try {
             const data = await ofetch(omnivoreEndpoint, {
               method: "POST",
@@ -433,7 +452,10 @@ export const useEntryActions = ({
               ? getReadabilityContent()[populatedEntry.entries.id].content
               : populatedEntry.entries.content) || ""
           const markdownContent = parseHtml(content).toMarkdown()
-
+          window.analytics?.capture("integration", {
+            type: "obsidian",
+            event: "save",
+          })
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
             title: populatedEntry.entries.title || "",
