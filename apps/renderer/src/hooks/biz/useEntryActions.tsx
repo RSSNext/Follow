@@ -41,7 +41,8 @@ import StarAnimationUri from "~/lottie/star.lottie?url"
 import { useTipModal } from "~/modules/wallet/hooks"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
-import { useFeedById } from "~/store/feed"
+import { getFeedById, useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 
 import { navigateEntry } from "./useNavigateEntry"
 
@@ -110,23 +111,27 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) => {
 
 export const useRead = () =>
   useMutation({
-    mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry &&
-      entryActions.markRead({
-        feedId: entry.feeds.id,
+    mutationFn: async (entry: Nullable<CombinedEntryModel>) => {
+      const relatedId = entry?.feeds?.id || entry?.inboxes?.id
+      if (!relatedId) return
+      return entryActions.markRead({
+        feedId: relatedId,
         entryId: entry.entries.id,
         read: true,
-      }),
+      })
+    },
   })
 export const useUnread = () =>
   useMutation({
-    mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry &&
-      entryActions.markRead({
-        feedId: entry.feeds.id,
+    mutationFn: async (entry: Nullable<CombinedEntryModel>) => {
+      const relatedId = entry?.feeds?.id || entry?.inboxes?.id
+      if (!relatedId) return
+      return entryActions.markRead({
+        feedId: relatedId,
         entryId: entry.entries.id,
         read: false,
-      }),
+      })
+    },
   })
 
 export const useDeleteInboxEntry = () => {
@@ -155,21 +160,31 @@ export const useEntryActions = ({
 }) => {
   const { t } = useTranslation()
 
-  const feed = useFeedById(entry?.feedId)
-  const isInbox = feed?.type === "inbox"
+  const feed = useFeedById(entry?.feedId, (feed) => {
+    return {
+      type: feed.type,
+      ownerUserId: feed.ownerUserId,
+      id: feed.id,
+    }
+  })
+
+  const inbox = useInboxById(entry?.inboxId)
+  const isInbox = !!inbox
 
   const populatedEntry = useMemo(() => {
     if (!entry) return null
-    if (!feed) return null
+    if (!feed?.id && !inbox?.id) return null
+
     return {
       ...entry,
-      feeds: feed!,
+      feeds: feed ? getFeedById(feed.id) : undefined,
+      inboxes: inbox,
     } as CombinedEntryModel
-  }, [entry, feed])
+  }, [entry, feed, inbox])
 
   const openTipModal = useTipModal({
-    userId: populatedEntry?.feeds.ownerUserId ?? undefined,
-    feedId: populatedEntry?.feeds.id ?? undefined,
+    userId: populatedEntry?.feeds?.ownerUserId ?? undefined,
+    feedId: populatedEntry?.feeds?.id ?? undefined,
     entryId: populatedEntry?.entries.id ?? undefined,
   })
 

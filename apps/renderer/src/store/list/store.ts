@@ -23,15 +23,16 @@ class ListActionStatic {
       for (const list of lists) {
         state.lists[list.id] = list
 
-        if (list.feeds)
-          for (const feed of list.feeds) {
-            feeds.push(feed)
-          }
+        if (!list.feeds) continue
+        for (const feed of list.feeds) {
+          feeds.push(feed)
+        }
       }
 
-      feedActions.upsertMany(feeds)
       return state
     })
+
+    feedActions.upsertMany(feeds)
 
     runTransactionInScope(() => ListService.upsertMany(lists))
   }

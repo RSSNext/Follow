@@ -46,7 +46,7 @@ export const entries = {
       rootKey: ["entries"],
     }),
   byInboxId: (id: string) =>
-    defineQuery(["entry", id], async () => entryActions.fetchInboxEntryById(id), {
+    defineQuery(["entry", "inbox", id], async () => entryActions.fetchInboxEntryById(id), {
       rootKey: ["entries"],
     }),
   preview: (id: string) =>

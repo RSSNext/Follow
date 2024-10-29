@@ -1,8 +1,8 @@
-import type { FeedOrListModel } from "@follow/models/types"
+import type { FeedModel } from "@follow/models/types"
 
 type FeedId = string
 
 export interface FeedState {
-  feeds: Record<FeedId, FeedOrListModel>
+  feeds: Record<FeedId, FeedModel>
 }
 export type FeedQueryParams = { id?: string; url?: string }

@@ -64,6 +64,14 @@ const FallbackableImage = forwardRef<
     />
   )
 })
+
+type FeedIconFeed =
+  | (Pick<FeedModel, "ownerUserId" | "id" | "title" | "url" | "image"> & {
+      type: FeedOrListRespModel["type"]
+    })
+  | FeedOrListRespModel
+
+type FeedIconEntry = Pick<CombinedEntryModel["entries"], "media" | "authorAvatar">
 export function FeedIcon({
   feed,
   entry,
@@ -74,8 +82,8 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: FeedOrListRespModel | null
-  entry?: CombinedEntryModel["entries"]
+  feed?: FeedIconFeed | null
+  entry?: FeedIconEntry | null
   fallbackUrl?: string
   className?: string
   size?: number

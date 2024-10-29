@@ -2,5 +2,14 @@ import type { InboxModel } from "@follow/models/types"
 
 import { useInboxStore } from "./store"
 
-export const useInboxById = (inboxId: Nullable<string>): InboxModel | null =>
-  useInboxStore((state) => (inboxId ? state.inboxes[inboxId] : null))
+export function useInboxById(inboxId: Nullable<string>): InboxModel | null
+export function useInboxById<T>(
+  inboxId: Nullable<string>,
+  selector: (inbox: InboxModel | null) => T,
+): T
+
+export function useInboxById<T>(inboxId: Nullable<string>, selector?: (inbox: InboxModel) => T) {
+  return useInboxStore((state) =>
+    inboxId ? (selector ? selector(state.inboxes[inboxId]) : state.inboxes[inboxId]) : null,
+  )
+}
