@@ -1,3 +1,17 @@
+function escapeHtml(unsafe?: string | null) {
+  if (!unsafe) {
+    return unsafe
+  }
+
+  return unsafe
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#x27;")
+    .replaceAll("/", "&#x2F;")
+}
+
 export function buildSeoMetaTags(configs: {
   openGraph: {
     title: string
@@ -5,7 +19,11 @@ export function buildSeoMetaTags(configs: {
     image?: string | null
   }
 }) {
-  const { openGraph } = configs
+  const openGraph = {
+    title: escapeHtml(configs.openGraph.title),
+    description: escapeHtml(configs.openGraph.description),
+    image: escapeHtml(configs.openGraph.image),
+  }
   const title = `${openGraph.title} | Follow`
   return [
     `<meta property="og:title" content="${title}" />`,
