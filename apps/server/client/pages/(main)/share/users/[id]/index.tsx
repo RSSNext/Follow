@@ -1,6 +1,6 @@
 import { useWhoami } from "@client/atoms/user"
 import { MainContainer } from "@client/components/layout/main"
-import { openInFollowApp } from "@client/lib/helper"
+import { askOpenInFollowApp } from "@client/lib/helper"
 import { useUserQuery, useUserSubscriptionsQuery } from "@client/query/users"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -51,9 +51,7 @@ export const Component = () => {
             {user.data?.id && (
               <Button
                 onClick={() => {
-                  openInFollowApp(`add?url=rsshub://follow/profile/${user.data?.id}`, () => {
-                    window.location.href = `rsshub://follow/profile/${user.data?.id}`
-                  })
+                  askOpenInFollowApp(`add?url=rsshub://follow/profile/${user.data?.id}`)
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
@@ -109,8 +107,8 @@ export const Component = () => {
                               <Button
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  openInFollowApp(`add?id=${subscription.feedId}`, () => {
-                                    window.location.href = `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
+                                  askOpenInFollowApp(`add?id=${subscription.feedId}`, () => {
+                                    return `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
                                   })
                                 }}
                               >

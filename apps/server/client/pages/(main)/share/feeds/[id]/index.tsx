@@ -3,7 +3,7 @@ import { NormalListItem } from "@client/components/items/normal"
 import { PictureList } from "@client/components/items/picture"
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
-import { openInFollowApp } from "@client/lib/helper"
+import { askOpenInFollowApp } from "@client/lib/helper"
 import type { EntriesPreview } from "@client/query/entries"
 import { useEntriesPreview } from "@client/query/entries"
 import type { Feed } from "@client/query/feed"
@@ -118,8 +118,8 @@ export function Component() {
         <Button
           variant={isSubscribed ? "outline" : undefined}
           onClick={() => {
-            openInFollowApp(`add?id=${id}`, () => {
-              window.location.href = `/feeds/${id}/pending?view=${view}`
+            askOpenInFollowApp(`add?id=${id}`, () => {
+              return `/feeds/${id}/pending?view=${view}`
             })
           }}
         >
