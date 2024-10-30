@@ -6,7 +6,7 @@ import { env } from "@follow/shared/env"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { parseHTML } from "linkedom"
 import { FetchError } from "ofetch"
-import serialize from "serialize-javascript"
+import xss from "xss"
 
 import { isDev } from "~/lib/env"
 import { buildSeoMetaTags } from "~/lib/seo"
@@ -119,14 +119,12 @@ async function injectMetaToTemplate(template: string, req: FastifyRequest) {
         break
       }
       case "meta": {
-        allMetaString.push(
-          `<meta property="${meta.property}" content="${serialize(meta.content)}" />`,
-        )
+        allMetaString.push(`<meta property="${meta.property}" content="${xss(meta.content)}" />`)
         break
       }
       case "title": {
         if (meta.title) {
-          template = template.replace(`<!-- TITLE -->`, `${serialize(meta.title)} | Follow`)
+          template = template.replace(`<!-- TITLE -->`, `${xss(meta.title)} | Follow`)
           isTitleReplaced = true
         }
         break
@@ -137,7 +135,7 @@ async function injectMetaToTemplate(template: string, req: FastifyRequest) {
         const script = document.createElement("script")
         script.innerHTML = `
           window.__HYDRATE__ = window.__HYDRATE__ || {}
-          window.__HYDRATE__['${meta.key}'] = ${serialize(meta.data)}
+          window.__HYDRATE__['${meta.key}'] = ${xss(JSON.stringify(meta.data))}
         `
         document.head.append(script)
         template = document.toString()
