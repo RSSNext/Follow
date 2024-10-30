@@ -195,6 +195,7 @@ export const useFeedActions = ({
         click: () => {
           present({
             title: t("sidebar.feed_actions.edit_feed"),
+            modalClassName: "pb-[4.5rem]",
             content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
           })
         },
