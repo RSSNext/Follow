@@ -25,10 +25,12 @@ export const EntryItemWrapper: FC<
     style?: React.CSSProperties
   } & PropsWithChildren
 > = ({ entry, view, children, itemClassName, style }) => {
+  const listId = useRouteParamsSelector((s) => s.listId)
   const { items } = useEntryActions({
     view,
     entry,
     type: "entryList",
+    inList: !!listId,
   })
 
   const { items: feedItems } = useFeedActions({

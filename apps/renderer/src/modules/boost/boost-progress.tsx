@@ -36,7 +36,7 @@ export const BoostProgress = ({
           <i className="i-mgc-train-cute-fi mr-2 shrink-0" />
           {numberFormater.format(boostCount)}
         </span>
-        <div className="relative flex h-3 w-full overflow-hidden rounded-3xl bg-gray-200 dark:bg-gray-800">
+        <div className="relative flex h-3 w-full overflow-hidden rounded-3xl bg-gray-200 dark:bg-zinc-800">
           <div
             role="progressbar"
             aria-valuenow={boostCount}

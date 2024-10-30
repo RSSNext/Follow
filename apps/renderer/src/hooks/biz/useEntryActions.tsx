@@ -153,10 +153,12 @@ export const useEntryActions = ({
   view,
   entry,
   type,
+  inList,
 }: {
   view?: number
   entry?: FlatEntryModel | null
   type?: "toolbar" | "entryList"
+  inList?: boolean
 }) => {
   const { t } = useTranslation()
 
@@ -624,7 +626,7 @@ export const useEntryActions = ({
         name: t("entry_actions.mark_as_read"),
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-fi",
-        hide: !!(!!populatedEntry.read || populatedEntry.collections),
+        hide: !!(!!populatedEntry.read || populatedEntry.collections) || inList,
         onClick: () => {
           read.mutate(populatedEntry)
         },
@@ -634,7 +636,7 @@ export const useEntryActions = ({
         name: t("entry_actions.mark_as_unread"),
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-re",
-        hide: !!(!populatedEntry.read || populatedEntry.collections),
+        hide: !!(!populatedEntry.read || populatedEntry.collections) || inList,
         onClick: () => {
           unread.mutate(populatedEntry)
         },
@@ -662,6 +664,7 @@ export const useEntryActions = ({
     feed?.ownerUserId,
     type,
     showSourceContent,
+    inList,
     saveToObsidian,
     obsidianVaultPath,
     openTipModal,
