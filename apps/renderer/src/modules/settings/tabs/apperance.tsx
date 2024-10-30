@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import {
   Select,
   SelectContent,
@@ -8,20 +9,31 @@ import {
 import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
+import { useForceUpdate } from "framer-motion"
+import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
 import {
+  getUISettings,
   setUISetting,
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
 } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { isElectronBuild } from "~/constants"
 import { useSetTheme } from "~/hooks/common"
 
-import { SettingDescription, SettingSwitch, SettingTabbedSegment } from "../control"
+import { CSSEditor } from "../../editor/css-editor"
+import { SETTING_MODAL_ID } from "../constants"
+import {
+  SettingActionItem,
+  SettingDescription,
+  SettingSwitch,
+  SettingTabbedSegment,
+} from "../control"
 import { createDefineSettingItem } from "../helper/builder"
 import { createSettingBuilder } from "../helper/setting-builder"
 import { SettingItemGroup } from "../section"
@@ -71,6 +83,7 @@ export const SettingAppearance = () => {
           }),
           ZenMode,
           ThumbnailRatio,
+          CustomCSS,
 
           {
             type: "title",
@@ -288,5 +301,92 @@ const ThumbnailRatio = () => {
       </div>
       <SettingDescription>{t("appearance.thumbnail_ratio.description")}</SettingDescription>
     </SettingItemGroup>
+  )
+}
+
+const CustomCSS = () => {
+  const { t } = useTranslation("settings")
+  const { present } = useModalStack()
+  return (
+    <SettingItemGroup>
+      <SettingActionItem
+        label={t("appearance.custom_css.label")}
+        action={() => {
+          present({
+            title: t("appearance.custom_css.label"),
+            content: CustomCSSModal,
+            clickOutsideToDismiss: false,
+            overlay: false,
+            resizeable: true,
+            resizeDefaultSize: {
+              width: 700,
+              height: 400,
+            },
+          })
+        }}
+        buttonText={t("appearance.custom_css.button")}
+      />
+      <SettingDescription>{t("appearance.custom_css.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const CustomCSSModal = () => {
+  const initialCSS = useRef(getUISettings().customCSS)
+  const { t } = useTranslation("common")
+  const { dismiss } = useCurrentModal()
+  useEffect(() => {
+    return () => {
+      setUISetting("customCSS", initialCSS.current)
+    }
+  }, [])
+  useEffect(() => {
+    const modal = document.querySelector(`#${SETTING_MODAL_ID}`) as HTMLDivElement
+    if (!modal) return
+    const prevOverlay = getUISettings().modalOverlay
+    setUISetting("modalOverlay", false)
+
+    modal.style.display = "none"
+    return () => {
+      setUISetting("modalOverlay", prevOverlay)
+
+      modal.style.display = "block"
+    }
+  }, [])
+  const [forceUpdate, key] = useForceUpdate()
+  return (
+    <form
+      className="relative flex h-full max-w-full flex-col"
+      onSubmit={(e) => {
+        e.preventDefault()
+        if (initialCSS.current !== getUISettings().customCSS) {
+          initialCSS.current = getUISettings().customCSS
+        }
+        dismiss()
+      }}
+    >
+      <CSSEditor
+        defaultValue={initialCSS.current}
+        key={key}
+        className="h-0 grow rounded-lg border p-3 font-mono"
+        onChange={(value) => {
+          setUISetting("customCSS", value)
+        }}
+      />
+
+      <div className="mt-2 flex shrink-0 justify-end gap-2">
+        <Button
+          variant="outline"
+          onClick={(e) => {
+            e.preventDefault()
+            setUISetting("customCSS", initialCSS.current)
+            forceUpdate()
+          }}
+        >
+          {t("words.reset")}
+        </Button>
+        <Button type="submit">{t("words.save")}</Button>
+      </div>
+    </form>
   )
 }

@@ -2,7 +2,7 @@ import { Divider } from "@follow/components/ui/divider/index.js"
 import { RootPortalProvider } from "@follow/components/ui/portal/provider.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { useRefValue } from "@follow/hooks"
-import { nextFrame, stopPropagation } from "@follow/utils/dom"
+import { nextFrame, preventDefault, stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
 import * as Dialog from "@radix-ui/react-dialog"
 import type { BoundingBox } from "framer-motion"
@@ -289,7 +289,8 @@ export const ModalInternal = memo(
             <Dialog.Content
               asChild
               aria-describedby={undefined}
-              onPointerDownOutside={(event) => event.preventDefault()}
+              // @ts-expect-error
+              onPointerDownOutside={preventDefault}
               onOpenAutoFocus={openAutoFocus}
             >
               <div

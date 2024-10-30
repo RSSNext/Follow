@@ -486,6 +486,9 @@ importers:
       path-to-regexp:
         specifier: 8.2.0
         version: 8.2.0
+      plain-shiki:
+        specifier: 0.0.12
+        version: 0.0.12(shiki@1.22.0)
       re-resizable:
         specifier: 6.10.0
         version: 6.10.0(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -525,6 +528,9 @@ importers:
       react-virtuoso:
         specifier: 4.12.0
         version: 4.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react18-use:
+        specifier: 0.3.0
+        version: 0.3.0(react@18.3.1)
       rehype-infer-description-meta:
         specifier: 2.0.0
         version: 2.0.0
@@ -8135,6 +8141,11 @@ packages:
   pkg-types@1.2.1:
     resolution: {integrity: sha512-sQoqa8alT3nHjGuTjuKgOnvjo4cljkufdtLMnO2LBP/wRwuDlo1tkaEdMxCRhyGRPacv/ztlZgDPm2b7FAmEvw==}
 
+  plain-shiki@0.0.12:
+    resolution: {integrity: sha512-jaR0Rhm0wWOn1unMrt0yOTYI83y+ntabQ///GxYyRSYFRsNJZRrT7dpWbtX/QRFL44cznutwCT5EiEXj1KwXVQ==}
+    peerDependencies:
+      shiki: ^1.22.0
+
   plist@3.1.0:
     resolution: {integrity: sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==}
     engines: {node: '>=10.4.0'}
@@ -8673,6 +8684,11 @@ packages:
     peerDependencies:
       react: '>=16 || >=17 || >= 18'
       react-dom: '>=16 || >=17 || >= 18'
+
+  react18-use@0.3.0:
+    resolution: {integrity: sha512-h/s6y9CRE/LV3QZvEtS4iBg5UThXTyHCjbfxzHEHEoRISaQa9SVQ7pdTnUt7M83URP1QRJ2bVSDwMpBIvmi50w==}
+    peerDependencies:
+      react: '>=18.0.0'
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -18968,6 +18984,10 @@ snapshots:
       mlly: 1.7.2
       pathe: 1.1.2
 
+  plain-shiki@0.0.12(shiki@1.22.0):
+    dependencies:
+      shiki: 1.22.0
+
   plist@3.1.0:
     dependencies:
       '@xmldom/xmldom': 0.8.10
@@ -19452,6 +19472,10 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  react18-use@0.3.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react@18.3.1:
     dependencies:

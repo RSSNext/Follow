@@ -34,6 +34,7 @@ export const createDefaultSettings = (): UISettings => ({
   codeHighlightThemeDark: "github-dark",
   guessCodeLanguage: true,
   hideRecentReader: false,
+  customCSS: "",
 
   // View
   pictureViewMasonry: true,
@@ -56,6 +57,7 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "uiFontFamily",
   "readerFontFamily",
   "opaqueSidebar",
+  "customCSS",
 ]
 
 const isZenModeAtom = atom((get) => {
