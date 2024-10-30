@@ -148,7 +148,7 @@
   "integration.omnivore.title": "Omnivore",
   "integration.omnivore.token.description": "You can get it here: ",
   "integration.omnivore.token.label": "Omnivore API Key",
-  "integration.outline.collection.description": "The UUID of collection for document saving.",
+  "integration.outline.collection.description": "The UUID or urlId of the collection where the documents is saved.",
   "integration.outline.collection.label": "Outline Collection",
   "integration.outline.enable.description": "Display 'Save to Outline' button when available.",
   "integration.outline.enable.label": "Enable",

@@ -143,7 +143,7 @@
   "integration.omnivore.title": "Omnivore",
   "integration.omnivore.token.description": "在这里获取 API 密钥",
   "integration.omnivore.token.label": "Omnivore API 密钥",
-  "integration.outline.collection.description": "保存文档的文档集 UUID",
+  "integration.outline.collection.description": "保存文档的文档集的 UUID 或 urlId",
   "integration.outline.collection.label": "Outline 文档集",
   "integration.outline.enable.description": "显示\"保存到 Outline\"按钮（如果可用）",
   "integration.outline.enable.label": "启用",

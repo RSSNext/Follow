@@ -504,19 +504,29 @@ export const useEntryActions = ({
           !populatedEntry.entries.title,
         onClick: async () => {
           try {
+            const request = async (method: string, params: Record<string, unknown>) => {
+              return await ofetch(`${outlineEndpoint.replace(/\/$/, "")}/${method}`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${outlineToken}`,
+                },
+                body: params,
+              })
+            }
+            let collectionId = outlineCollection
+            if (!/^[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}$/i.test(collectionId)) {
+              const collection = await request("collections.info", {
+                id: collectionId,
+              })
+              collectionId = collection.data.id
+            }
             const markdownContent = getEntryContentAsMarkdown()
-            await ofetch(`${outlineEndpoint.replace(/\/$/, "")}/documents.create`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${outlineToken}`,
-              },
-              body: {
-                title: populatedEntry.entries.title,
-                text: markdownContent,
-                collectionId: outlineCollection,
-                publish: true,
-              },
+            await request("documents.create", {
+              title: populatedEntry.entries.title,
+              text: markdownContent,
+              collectionId,
+              publish: true,
             })
             toast.success(t("entry_actions.saved_to_outline"), {
               duration: 3000,
