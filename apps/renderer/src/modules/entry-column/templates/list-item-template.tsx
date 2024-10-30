@@ -46,6 +46,7 @@ export function ListItem({
         title: feed.title,
         url: (feed as any).url || "",
         image: feed.image,
+        siteUrl: feed.siteUrl,
       }
     }) || entryPreview?.feeds
 

@@ -348,7 +348,7 @@ const FeedInnerForm = ({
             control={form.control}
             name="view"
             render={() => (
-              <FormItem>
+              <FormItem className="mb-16">
                 <FormLabel>{t("feed_form.view")}</FormLabel>
 
                 <ViewSelectorRadioGroup

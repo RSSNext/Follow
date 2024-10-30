@@ -68,6 +68,7 @@ const FallbackableImage = forwardRef<
 type FeedIconFeed =
   | (Pick<FeedModel, "ownerUserId" | "id" | "title" | "url" | "image"> & {
       type: FeedOrListRespModel["type"]
+      siteUrl?: string
     })
   | FeedOrListRespModel
 

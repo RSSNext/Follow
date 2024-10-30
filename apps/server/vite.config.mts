@@ -32,7 +32,7 @@ export default () => {
     server: {
       proxy: {
         "/api": {
-          target: "https://api.follow.is",
+          target: "https://api.dev.follow.is",
           changeOrigin: true,
           rewrite(path) {
             return path.replace("/api", "")
