@@ -44,7 +44,7 @@
   "discover.inbox.actions": "動作",
   "discover.inbox.description": "你可以通過電子郵件和 Webhooks 在收件匣接收資訊。",
   "discover.inbox.email": "電子郵件",
-  "discover.inbox.handle": "識別代碼",
+  "discover.inbox.handle": "識別編號",
   "discover.inbox.secret": "密鑰",
   "discover.inbox.title": "標題",
   "discover.inbox.webhooks_docs": "Webhooks 文件",
