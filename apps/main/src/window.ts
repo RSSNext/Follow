@@ -3,7 +3,6 @@ import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
-import { IMAGE_PROXY_URL, imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, screen, shell } from "electron"
 
@@ -121,19 +120,6 @@ export function createWindow(
       hash: options?.extraPath,
     })
   }
-
-  window.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    const trueUrl = details.url.startsWith(IMAGE_PROXY_URL)
-      ? new URL(details.url).searchParams.get("url") || details.url
-      : details.url
-    const refererMatch = imageRefererMatches.find((item) => item.url.test(trueUrl))
-    callback({
-      requestHeaders: {
-        ...details.requestHeaders,
-        Referer: refererMatch?.referer || trueUrl,
-      },
-    })
-  })
 
   if (isWindows) {
     // Change the default font-family and font-size of the devtools.

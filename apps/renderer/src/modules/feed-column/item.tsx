@@ -51,6 +51,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       errorMessage: feed.errorMessage,
       url: feed.url,
       image: feed.image,
+      siteUrl: feed.siteUrl,
     }
   })
 

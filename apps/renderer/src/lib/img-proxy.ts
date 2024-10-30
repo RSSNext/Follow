@@ -4,6 +4,8 @@ import {
   webpCloudPublicServicesMatches,
 } from "@follow/shared/image"
 
+import { isWebBuild } from "~/constants"
+
 export const getImageProxyUrl = ({
   url,
   width,
@@ -25,9 +27,11 @@ export const replaceImgUrlIfNeed = (url?: string) => {
     }
   }
 
-  for (const rule of imageRefererMatches) {
-    if (rule.url.test(url)) {
-      return getImageProxyUrl({ url, width: 0, height: 0 })
+  if (isWebBuild) {
+    for (const rule of imageRefererMatches) {
+      if (rule.url.test(url)) {
+        return getImageProxyUrl({ url, width: 0, height: 0 })
+      }
     }
   }
   return url
