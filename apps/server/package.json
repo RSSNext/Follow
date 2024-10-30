@@ -34,7 +34,8 @@
     "satori": "0.11.2",
     "sonner": "^1.5.0",
     "tailwindcss": "3.4.14",
-    "use-context-selector": "2.0.0"
+    "use-context-selector": "2.0.0",
+    "xss": "1.0.15"
   },
   "devDependencies": {
     "@follow/components": "workspace:*",
@@ -45,14 +46,12 @@
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
     "@radix-ui/react-avatar": "1.1.1",
-    "@types/serialize-javascript": "5.0.4",
     "daisyui": "4.12.13",
     "foxact": "0.2.39",
     "lightningcss": "1.27.0",
     "lodash-es": "4.17.21",
     "masonic": "4.0.1",
     "react-dom": "^18.3.1",
-    "serialize-javascript": "6.0.2",
     "tailwindcss": "3.4.14",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
