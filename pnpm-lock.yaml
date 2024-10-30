@@ -528,9 +528,6 @@ importers:
       react-virtuoso:
         specifier: 4.12.0
         version: 4.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react18-use:
-        specifier: 0.3.0
-        version: 0.3.0(react@18.3.1)
       rehype-infer-description-meta:
         specifier: 2.0.0
         version: 2.0.0
@@ -8684,11 +8681,6 @@ packages:
     peerDependencies:
       react: '>=16 || >=17 || >= 18'
       react-dom: '>=16 || >=17 || >= 18'
-
-  react18-use@0.3.0:
-    resolution: {integrity: sha512-h/s6y9CRE/LV3QZvEtS4iBg5UThXTyHCjbfxzHEHEoRISaQa9SVQ7pdTnUt7M83URP1QRJ2bVSDwMpBIvmi50w==}
-    peerDependencies:
-      react: '>=18.0.0'
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -19472,10 +19464,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-
-  react18-use@0.3.0(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   react@18.3.1:
     dependencies:
