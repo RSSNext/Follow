@@ -12,6 +12,7 @@ export const createDefaultSettings = (): UISettings => ({
 
   opaqueSidebar: false,
   sidebarShowUnreadCount: true,
+  thumbnailRatio: "square",
 
   // Global UI
   uiTextSize: 16,

@@ -70,6 +70,7 @@ export const SettingAppearance = () => {
             description: t("appearance.hide_extra_badge.description"),
           }),
           ZenMode,
+          ThumbnailRatio,
 
           {
             type: "title",
@@ -251,6 +252,41 @@ const ZenMode = () => {
         label={t("appearance.zen_mode.label")}
       />
       <SettingDescription>{t("appearance.zen_mode.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const ThumbnailRatio = () => {
+  const { t } = useTranslation("settings")
+
+  const thumbnailRatio = useUISettingKey("thumbnailRatio")
+
+  return (
+    <SettingItemGroup>
+      <div className="mt-4 flex items-center justify-between">
+        <span className="shrink-0 text-sm font-medium">
+          {t("appearance.thumbnail_ratio.title")}
+        </span>
+        <Select
+          defaultValue="square"
+          value={thumbnailRatio}
+          onValueChange={(value) => {
+            setUISetting("thumbnailRatio", value as "square" | "original")
+          }}
+        >
+          <SelectTrigger size="sm" className="w-48 translate-y-2">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent position="item-aligned">
+            {["square", "original"].map((ratio) => (
+              <SelectItem key={ratio} value={ratio}>
+                {t(`appearance.thumbnail_ratio.${ratio as "square" | "original"}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <SettingDescription>{t("appearance.thumbnail_ratio.description")}</SettingDescription>
     </SettingItemGroup>
   )
 }

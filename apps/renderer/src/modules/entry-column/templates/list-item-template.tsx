@@ -63,6 +63,8 @@ export function ListItem({
   )
 
   const settingWideMode = useUISettingKey("wideMode")
+  const thumbnailRatio = useUISettingKey("thumbnailRatio")
+  const rid = `list-item-${entryId}`
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
@@ -187,9 +189,10 @@ export function ListItem({
           )}
           mediaContainerClassName={"w-auto h-auto rounded"}
           loading="lazy"
+          key={`${rid}-media-${thumbnailRatio}`}
           proxy={{
             width: 160,
-            height: 0,
+            height: thumbnailRatio === "square" ? 160 : 0,
           }}
           height={entry.entries.media[0].height}
           width={entry.entries.media[0].width}

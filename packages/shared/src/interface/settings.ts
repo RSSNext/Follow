@@ -19,6 +19,7 @@ export interface UISettings {
   opaqueSidebar: boolean
   sidebarShowUnreadCount: boolean
   hideExtraBadge: boolean
+  thumbnailRatio: "square" | "original"
   uiTextSize: number
   showDockBadge: boolean
   modalOverlay: boolean
