@@ -6,7 +6,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { toastFetchError } from "~/lib/error-parser"
 
-import { updateFeedBoostStatus } from "./hooks"
+import { updateFeedBoostStatus } from "./atom"
 
 const query = {
   getStatus: ({ feedId }: { feedId: string }) =>

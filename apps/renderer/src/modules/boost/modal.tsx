@@ -47,12 +47,12 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   return (
     <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
       <div className="relative flex w-full grow flex-col items-center gap-3">
-        <div className="mt-4 text-xl font-bold">
+        <div className="center mt-4 flex text-xl font-bold">
           <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
           {t("boost.boost_feed")}
         </div>
 
-        <small className="center mt-1 gap-1 text-theme-vibrancyFg">
+        <small className="center -mt-1 mb-2 gap-1 text-theme-vibrancyFg">
           {t("boost.boost_feed_description")}
         </small>
 
