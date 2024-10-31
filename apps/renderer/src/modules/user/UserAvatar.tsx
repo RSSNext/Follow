@@ -78,8 +78,8 @@ export const UserAvatar = forwardRef<
             src={replaceImgUrlIfNeed(renderUserData?.image || undefined)}
           />
           <AvatarFallback
-            style={{ backgroundColor: getColorScheme(randomColor).light.accent }}
-            className="text-xs"
+            style={{ backgroundColor: getColorScheme(randomColor, true).light.accent }}
+            className="text-xs text-white"
           >
             {renderUserData?.name?.[0]}
           </AvatarFallback>

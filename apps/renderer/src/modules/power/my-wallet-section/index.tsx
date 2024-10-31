@@ -100,6 +100,7 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
               {BigInt(myWallet.powerToken || 0n)}
             </Balance>
             <Button
+              buttonClassName={tw`rounded-full`}
               variant="ghost"
               onClick={() => refreshMutation.mutate()}
               disabled={refreshMutation.isPending}

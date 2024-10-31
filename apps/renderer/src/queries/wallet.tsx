@@ -58,7 +58,10 @@ export const wallet = {
   },
 }
 
-export const useWallet = () => useAuthQuery(wallet.get())
+export const useWallet = () =>
+  useAuthQuery(wallet.get(), {
+    refetchOnMount: true,
+  })
 
 export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
   useAuthQuery(wallet.transactions.get(query))

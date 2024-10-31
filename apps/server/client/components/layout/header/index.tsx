@@ -56,13 +56,13 @@ const HeaderWrapper: Component = (props) => {
 }
 export const Header = () => {
   const handleToApp = () => {
-    openInFollowApp(
-      "",
-      () => {
-        window.open(siteConfig.appUrl, "_blank")
+    openInFollowApp({
+      deeplink: "",
+      fallback: () => {
+        return siteConfig.appUrl
       },
-      true,
-    )
+      fallbackUrl: siteConfig.appUrl,
+    })
   }
   useHotkeys("l", handleToApp)
 

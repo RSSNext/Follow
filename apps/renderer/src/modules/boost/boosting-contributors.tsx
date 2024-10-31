@@ -1,5 +1,5 @@
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.js"
-import { m } from "framer-motion"
 
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { useFeedBoostersQuery } from "~/modules/boost/query"
@@ -11,27 +11,28 @@ import type { User } from "../user/utils"
 export const BoostingContributors = ({ feedId }: { feedId: string }) => {
   const { data: boosters, isLoading } = useFeedBoostersQuery(feedId)
   const presentUserProfile = usePresentUserProfileModal("drawer")
-  if (isLoading || !boosters || boosters.length === 0) return
+  const hasData = !(isLoading || !boosters || boosters.length === 0)
 
   return (
-    <m.div
-      className="overflow-hidden p-4"
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
-      exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-    >
-      <h2 className="mb-4 text-2xl font-bold">Boosting Contributors</h2>
-      <ul className="space-y-4">
-        {boosters.length < 8 ? (
-          boosters.map((user) => (
-            <UserListItem key={user.id} user={user} onClick={presentUserProfile} />
-          ))
-        ) : (
-          <UserGallery users={boosters} />
-        )}
-      </ul>
-    </m.div>
+    <AutoResizeHeight className="mt-4">
+      {hasData && (
+        <>
+          <h2 className="center mb-4 flex text-xl font-bold">
+            <i className="i-mgc-user-heart-cute-fi mr-1" />
+            Boosting Contributors
+          </h2>
+          <ul className="space-y-4">
+            {boosters.length < 8 ? (
+              boosters.map((user) => (
+                <UserListItem key={user.id} user={user} onClick={presentUserProfile} />
+              ))
+            ) : (
+              <UserGallery users={boosters} />
+            )}
+          </ul>
+        </>
+      )}
+    </AutoResizeHeight>
   )
 }
 

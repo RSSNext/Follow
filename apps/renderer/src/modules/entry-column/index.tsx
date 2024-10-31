@@ -5,7 +5,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
-import { clsx, cn, isBizId } from "@follow/utils/utils"
+import { clsx, isBizId } from "@follow/utils/utils"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type {
@@ -223,13 +223,13 @@ function EntryColumnImpl() {
       </AutoResizeHeight>
       <m.div
         key={`${routeFeedId}-${view}`}
-        className="relative h-0 grow"
+        className="relative mt-2 h-0 grow"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
       >
         <ScrollArea.ScrollArea
-          scrollbarClassName={cn("mt-3", !views[view].wideMode ? "w-[5px] p-0" : "")}
+          scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
           mask={false}
           ref={scrollRef}
           rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}

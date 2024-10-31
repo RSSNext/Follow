@@ -16,6 +16,7 @@ import { useResizeableModal } from "~/components/ui/modal/stacked/hooks"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { useActivationModal } from "~/modules/activation"
 
+import { SETTING_MODAL_ID } from "../constants"
 import { SettingSyncIndicator } from "../helper/SyncIndicator"
 import { useAvailableSettings, useSettingPageContext } from "../hooks/use-setting-ctx"
 import { SettingsSidebarTitle } from "../title"
@@ -82,7 +83,11 @@ export function SettingModalLayout(
   }, [])
 
   return (
-    <div className={cn("h-full", !isResizeable && "center")} ref={edgeElementRef}>
+    <div
+      id={SETTING_MODAL_ID}
+      className={cn("h-full", !isResizeable && "center")}
+      ref={edgeElementRef}
+    >
       <m.div
         exit={{
           opacity: 0,
