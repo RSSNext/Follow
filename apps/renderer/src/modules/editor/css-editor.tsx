@@ -1,4 +1,4 @@
-import { useIsDark } from "@follow/hooks"
+import { useInputComposition, useIsDark } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { createPlainShiki } from "plain-shiki"
@@ -44,30 +44,45 @@ export const CSSEditor: Component<{
     }
     return () => dispose?.()
   }, [isDark])
+  const props = useInputComposition<HTMLInputElement>({
+    onKeyDown: (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault()
+      }
+      if (e.key === "Tab") {
+        e.preventDefault()
+        const selection = window.getSelection()
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0)
+          const tabNode = document.createTextNode("\u00A0\u00A0\u00A0\u00A0") // Using four non-breaking spaces as a tab
+          range.insertNode(tabNode)
+          range.setStartAfter(tabNode)
+          range.setEndAfter(tabNode)
+          selection.removeAllRanges()
+          selection.addRange(range)
+        }
+      }
+      nextFrame(() => {
+        onChange(ref.current?.textContent ?? "")
+      })
+    },
+  })
   return (
     <div
-      className={cn("size-full", className)}
+      className={cn(
+        "size-full",
+
+        "ring-accent/20 duration-200 focus:border-accent/80 focus:outline-none focus:ring-2",
+        "focus:!bg-accent/5",
+        "border border-border",
+        "placeholder:text-theme-placeholder-text dark:bg-zinc-700/[0.15] dark:text-zinc-200",
+        "hover:border-accent/60",
+        className,
+      )}
       ref={ref}
       contentEditable
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Tab") {
-          e.preventDefault()
-          const selection = window.getSelection()
-          if (selection && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0)
-            const tabNode = document.createTextNode("\u00A0\u00A0\u00A0\u00A0") // Using four non-breaking spaces as a tab
-            range.insertNode(tabNode)
-            range.setStartAfter(tabNode)
-            range.setEndAfter(tabNode)
-            selection.removeAllRanges()
-            selection.addRange(range)
-          }
-        }
-        nextFrame(() => {
-          onChange(ref.current?.textContent ?? "")
-        })
-      }}
+      {...props}
     />
   )
 }
