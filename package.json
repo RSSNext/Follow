@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.1.1-beta.1",
+  "version": "0.1.1-beta.8",
   "private": true,
   "packageManager": "pnpm@9.11.0",
   "description": "Next generation information browser",
@@ -134,7 +134,7 @@
     ]
   },
   "render": {
-    "minimum": "0.1.0"
+    "minimum": "0.1.1-beta.7-app"
   },
   "bump": {
     "before": [
