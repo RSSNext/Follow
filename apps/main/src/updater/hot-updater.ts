@@ -18,6 +18,9 @@ import { GITHUB_OWNER, GITHUB_REPO, HOTUPDATE_RENDER_ENTRY_DIR } from "~/constan
 import { logger } from "~/logger"
 import { getMainWindow } from "~/window"
 
+import { checkForAppUpdates, downloadAppUpdate } from "."
+import { shouldUpdateApp } from "./utils"
+
 const url = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}`
 const releasesUrl = `${url}/releases`
 const latestReleaseApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`
@@ -58,9 +61,16 @@ const canUpdateRender = async () => {
   logger.info("fetched manifest", manifest)
 
   if (!manifest) return false
+  if (!shouldUpdateApp(appVersion, manifest.version)) return false
 
   const appSupport = gte(appVersion, manifest.minimum)
-  if (!appSupport) return false
+  if (!appSupport) {
+    // Trigger app force update
+    checkForAppUpdates().then(() => {
+      downloadAppUpdate()
+    })
+    return false
+  }
 
   const isVersionEqual = appVersion === manifest.version
   if (isVersionEqual) {

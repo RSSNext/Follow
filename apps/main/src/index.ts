@@ -11,9 +11,9 @@ import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { updateProxy } from "./lib/proxy"
 import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
-import { cleanupOldRender } from "./lib/updater"
 import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
 import { registerUpdater } from "./updater"
+import { cleanupOldRender } from "./updater/hot-updater"
 import { createMainWindow, getMainWindow, windowStateStoreKey } from "./window"
 
 if (isDev) console.info("[main] env loaded:", env)

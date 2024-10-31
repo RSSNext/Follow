@@ -3,7 +3,7 @@ import os from "node:os"
 export const mode = process.env.NODE_ENV
 export const isDev = mode === "development"
 
-export const channel: "development" | "beta" | "alpha" | "stable" = isDev ? "development" : "beta"
+export const channel: "development" | "beta" | "alpha" | "stable" = "beta"
 
 const { platform } = process
 export const isMacOS = platform === "darwin"
