@@ -50,7 +50,7 @@ export function FollowSummary({
           className="mask-squircle mask mr-3 shrink-0 rounded-none"
           size={32}
         />
-        <div className="leading-tight">
+        <div className="min-w-0 leading-tight">
           <FeedTitle feed={feed} className="text-base font-semibold" />
           <EllipsisHorizontalTextWithTooltip className="truncate text-xs font-normal text-zinc-500">
             {feed.description}
