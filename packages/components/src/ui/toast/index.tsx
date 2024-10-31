@@ -10,6 +10,7 @@ export const Toaster = ({ ...props }: ToasterProps) => (
       className: tw`pointer-events-auto`,
       classNames: {
         content: "min-w-0",
+        icon: tw`self-start translate-y-[2px]`,
       },
     }}
     {...props}

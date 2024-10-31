@@ -85,11 +85,7 @@ export const ShadowDOM: FC<
   const dark = useIsDark()
 
   const reduceMotion = useReduceMotion()
-  const [customCSS, uiFont, usePointerCursor] = useUISettingKeys([
-    "customCSS",
-    "uiFontFamily",
-    "usePointerCursor",
-  ])
+  const [uiFont, usePointerCursor] = useUISettingKeys(["uiFontFamily", "usePointerCursor"])
 
   return (
     <root.div {...rest}>
@@ -108,7 +104,6 @@ export const ShadowDOM: FC<
           className="font-theme"
         >
           {injectHostStyles ? stylesElements : null}
-          <MemoedDangerousHTMLStyle>{customCSS}</MemoedDangerousHTMLStyle>
           {props.children}
         </div>
       </ShadowDOMContext.Provider>

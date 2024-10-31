@@ -1,3 +1,4 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
@@ -159,7 +160,7 @@ export const EntryContentRender: Component<{
       ),
     [entry?.entries.media, data?.entries.media],
   )
-
+  const customCSS = useUISettingKey("customCSS")
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -237,6 +238,9 @@ export const EntryContentRender: Component<{
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
                       <ShadowDOM injectHostStyles={!isInbox}>
+                        {!!customCSS && (
+                          <MemoedDangerousHTMLStyle>{customCSS}</MemoedDangerousHTMLStyle>
+                        )}
                         <EntryContentHTMLRenderer
                           view={view}
                           feedId={feed?.id}
