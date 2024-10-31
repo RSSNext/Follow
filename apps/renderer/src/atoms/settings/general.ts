@@ -29,6 +29,7 @@ const createDefaultSettings = (): GeneralSettings => ({
 export const {
   useSettingKey: useGeneralSettingKey,
   useSettingSelector: useGeneralSettingSelector,
+  useSettingKeys: useGeneralSettingKeys,
   setSetting: setGeneralSetting,
   clearSettings: clearGeneralSettings,
   initializeDefaultSettings: initializeDefaultGeneralSettings,
