@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
-import { Button } from "@follow/components/ui/button/index.js"
+import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
@@ -32,11 +32,14 @@ import { listActions } from "~/store/list"
 
 import { ListCreationModalContent, ListFeedsModalContent } from "./modals"
 
-export const SettingLists = () => {
+const ConfirmDestroyModalContent = ({
+  listId,
+  onSuccess,
+}: {
+  listId: string
+  onSuccess: () => void
+}) => {
   const t = useI18n()
-  const listList = useAuthQuery(Queries.lists.list())
-
-  const { present } = useModalStack()
 
   const deleteFeedList = useMutation({
     mutationFn: async (payload: { listId: string }) => {
@@ -50,11 +53,33 @@ export const SettingLists = () => {
     onSuccess: () => {
       toast.success(t.settings("lists.delete.success"))
       Queries.lists.list().invalidate()
+      onSuccess()
     },
     async onError() {
       toast.error(t.settings("lists.delete.error"))
     },
   })
+
+  return (
+    <div className="w-[540px]">
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t.settings("lists.delete.warning")}
+      </div>
+      <div className="flex justify-end">
+        <Button className="bg-red-600" onClick={() => deleteFeedList.mutate({ listId })}>
+          {t("words.confirm")}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const SettingLists = () => {
+  const t = useI18n()
+  const listList = useAuthQuery(Queries.lists.list())
+
+  const { present } = useModalStack()
 
   return (
     <section className="mt-4">
@@ -169,14 +194,25 @@ export const SettingLists = () => {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            onClick={() => {
-                              deleteFeedList.mutate({ listId: row.id })
-                            }}
+                          <ActionButton
+                            size="sm"
+                            onClick={() =>
+                              present({
+                                title: t.settings("lists.delete.confirm"),
+                                content: ({ dismiss }) => (
+                                  <ConfirmDestroyModalContent
+                                    listId={row.id}
+                                    onSuccess={() => {
+                                      listList.refetch()
+                                      dismiss()
+                                    }}
+                                  />
+                                ),
+                              })
+                            }
                           >
                             <i className="i-mgc-delete-2-cute-re" />
-                          </Button>
+                          </ActionButton>
                         </TooltipTrigger>
                         <TooltipPortal>
                           <TooltipContent>{t.common("words.delete")}</TooltipContent>
