@@ -2,16 +2,19 @@ import { getRendererHandlers } from "@egoist/tipc/main"
 import { autoUpdater as defaultAutoUpdater } from "electron-updater"
 
 import { GITHUB_OWNER, GITHUB_REPO } from "~/constants/app"
+import { hotUpdateRender } from "~/updater/hot-updater"
 
 import { channel, isDev, isWindows } from "../env"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
 import { destroyMainWindow, getMainWindow } from "../window"
 import { CustomGitHubProvider } from "./custom-github-provider"
+import { shouldUpdateApp } from "./utils"
 import { WindowsUpdater } from "./windows-updater"
 
 // skip auto update in dev mode
-const disabled = isDev
+// const disabled = isDev
+const disabled = false
 
 const autoUpdater = isWindows ? new WindowsUpdater() : defaultAutoUpdater
 
@@ -42,20 +45,21 @@ const config: UpdaterConfig = {
   checkUpdateInterval: 15 * 60 * 1000,
 }
 
-export const checkForUpdates = async () => {
+export const checkForAppUpdates = async () => {
   if (disabled || checkingUpdate) {
     return
   }
+
   checkingUpdate = true
   try {
-    const info = await autoUpdater.checkForUpdates()
+    const [info] = await Promise.all([autoUpdater.checkForUpdates(), hotUpdateRender()])
     return info
   } finally {
     checkingUpdate = false
   }
 }
 
-export const downloadUpdate = async () => {
+export const downloadAppUpdate = async () => {
   if (disabled || downloading) {
     return
   }
@@ -104,8 +108,17 @@ export const registerUpdater = async () => {
   })
   autoUpdater.on("update-available", (info) => {
     logger.info("Update available", info)
+
+    const currentVersion = autoUpdater.currentVersion?.version
+    const nextVersion = info.version
+
+    if (currentVersion) {
+      const shouldUpdate = shouldUpdateApp(currentVersion, nextVersion)
+      if (!shouldUpdate) return
+    }
+
     if (config.autoDownloadUpdate && allowAutoUpdate) {
-      downloadUpdate().catch((err) => {
+      downloadAppUpdate().catch((err) => {
         logger.error(err)
       })
     }
@@ -133,13 +146,13 @@ export const registerUpdater = async () => {
 
   setInterval(() => {
     if (config.autoCheckUpdate) {
-      checkForUpdates().catch((err) => {
+      checkForAppUpdates().catch((err) => {
         logger.error("Error checking for updates", err)
       })
     }
   }, config.checkUpdateInterval)
   if (config.autoCheckUpdate) {
-    checkForUpdates().catch((err) => {
+    checkForAppUpdates().catch((err) => {
       logger.error("Error checking for updates", err)
     })
   }

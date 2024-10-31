@@ -7,7 +7,7 @@ import { isDev, isMacOS } from "./env"
 import { clearAllDataAndConfirm } from "./lib/cleaner"
 import { t } from "./lib/i18n"
 import { revealLogFile } from "./logger"
-import { checkForUpdates, quitAndInstall } from "./updater"
+import { checkForAppUpdates, quitAndInstall } from "./updater"
 import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 export const registerAppMenu = () => {
@@ -168,7 +168,7 @@ export const registerAppMenu = () => {
           label: t("menu.checkForUpdates"),
           click: async () => {
             getMainWindow()?.show()
-            await checkForUpdates()
+            await checkForAppUpdates()
           },
         },
       ],

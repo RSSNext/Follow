@@ -11,8 +11,12 @@ import { app, BrowserWindow, clipboard, dialog, screen } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData } from "~/lib/cleaner"
-import { cleanupOldRender, getCurrentRenderManifest, loadDynamicRenderEntry } from "~/lib/updater"
 import { logger } from "~/logger"
+import {
+  cleanupOldRender,
+  getCurrentRenderManifest,
+  loadDynamicRenderEntry,
+} from "~/updater/hot-updater"
 
 import { isDev, isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"

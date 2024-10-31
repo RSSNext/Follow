@@ -10,10 +10,10 @@ import { BrowserWindow, screen, shell } from "electron"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
-import { hotUpdateRender, loadDynamicRenderEntry } from "./lib/updater"
 import { refreshBound } from "./lib/utils"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
+import { loadDynamicRenderEntry } from "./updater/hot-updater"
 
 const windows = {
   settingWindow: null as BrowserWindow | null,
@@ -250,8 +250,6 @@ export const createMainWindow = () => {
     const caller = callWindowExpose(window)
 
     caller.onWindowShow()
-
-    hotUpdateRender()
   })
 
   window.on("hide", async () => {
