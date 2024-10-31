@@ -135,21 +135,17 @@ export const useEntriesByView = ({
   const isFetchingFirstPage = query.isFetching && !query.isFetchingNextPage
 
   useEffect(() => {
+    if (isArchived) {
+      return
+    }
     if (!isFetchingFirstPage) {
       prevEntryIdsRef.current = entryIds
-      setMergedEntries({ ...mergedEntries, [view]: entryIds })
+      setMergedEntries(entryIds)
       onReset?.()
     }
-  }, [isFetchingFirstPage])
+  }, [isFetchingFirstPage, isArchived])
 
-  const [mergedEntries, setMergedEntries] = useState<Record<number, string[]>>({
-    0: [],
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-  })
+  const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
   const entryIdsAsDeps = entryIds.toString()
 
@@ -159,23 +155,23 @@ export const useEntriesByView = ({
   useEffect(() => {
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds
-      setMergedEntries({ ...mergedEntries, [view]: entryIds })
+      setMergedEntries(entryIds)
       return
     }
     // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
-    setMergedEntries({ ...mergedEntries, [view]: entryIds })
+    setMergedEntries(nextIds)
   }, [entryIdsAsDeps])
 
   const sortEntries = useMemo(
     () =>
       isCollection
-        ? sortEntriesIdByStarAt(mergedEntries[view])
+        ? sortEntriesIdByStarAt(mergedEntries)
         : listId
-          ? sortEntriesIdByEntryInsertedAt(mergedEntries[view])
-          : sortEntriesIdByEntryPublishedAt(mergedEntries[view]),
-    [isCollection, listId, mergedEntries, view],
+          ? sortEntriesIdByEntryInsertedAt(mergedEntries)
+          : sortEntriesIdByEntryPublishedAt(mergedEntries),
+    [isCollection, listId, mergedEntries],
   )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
@@ -207,7 +203,7 @@ export const useEntriesByView = ({
     }
 
     return counts
-  }, [groupByDate, sortEntries, view])
+  }, [groupByDate, listId, sortEntries, view])
 
   return {
     ...query,
@@ -219,7 +215,7 @@ export const useEntriesByView = ({
     }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,
-    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries[view].length,
+    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
 }
 
