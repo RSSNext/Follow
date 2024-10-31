@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { useUserRole } from "~/atoms/user"
+import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
+import { ErrorComponentType } from "~/components/errors/enum"
 import { useActivationModal } from "~/modules/activation"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
@@ -114,7 +116,9 @@ export function Component() {
           </TabsContent>
         ))}
       </Tabs>
-      <Recommendations />
+      <AppErrorBoundary errorType={ErrorComponentType.RSSHubDiscoverError}>
+        <Recommendations />
+      </AppErrorBoundary>
     </div>
   )
 }
