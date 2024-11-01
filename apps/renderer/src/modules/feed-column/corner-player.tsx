@@ -1,3 +1,4 @@
+import { useFocusable } from "@follow/components/common/Focusable.js"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
@@ -23,6 +24,7 @@ import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 
 const handleClickPlay = () => {
@@ -102,9 +104,11 @@ const CornerPlayerImpl = () => {
   const feed = useFeedById(entry?.feedId)
   const list = useListById(listId)
 
+  const isFocused = useFocusable()
   useHotkeys("space", handleClickPlay, {
     preventDefault: true,
     scopes: HotKeyScopeMap.Home,
+    enabled: isFocused,
   })
 
   useEffect(() => {
@@ -116,6 +120,8 @@ const CornerPlayerImpl = () => {
     })
   }, [entry, feed])
 
+  const isInbox = useInboxById(entry?.feedId, (inbox) => inbox !== null)
+
   const navigateToEntry = useNavigateEntry()
   usePlayerTracker()
 
@@ -124,9 +130,9 @@ const CornerPlayerImpl = () => {
     const options: NavigateEntryOptions = {
       entryId: entry.entries.id,
     }
-    if (feed?.type === "inbox") {
+    if (isInbox) {
       Object.assign(options, {
-        inboxId: feed.id,
+        inboxId: entry?.feedId,
         view: FeedViewType.Articles,
       })
     } else if (list) {

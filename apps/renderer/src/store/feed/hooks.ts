@@ -1,5 +1,5 @@
 import { views } from "@follow/constants"
-import type { FeedOrListRespModel, InboxModel, ListModel } from "@follow/models/types"
+import type { FeedModel, FeedOrListRespModel, InboxModel, ListModel } from "@follow/models/types"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -14,8 +14,14 @@ import { listActions, useListStore } from "../list"
 import { getPreferredTitle, useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"
 
-export const useFeedById = (feedId: Nullable<string>): FeedOrListRespModel | null =>
-  useFeedStore((state) => (feedId ? state.feeds[feedId] : null))
+export function useFeedById(feedId: Nullable<string>): FeedModel | null
+export function useFeedById<T>(feedId: Nullable<string>, selector: (feed: FeedModel) => T): T | null
+export function useFeedById<T>(feedId: Nullable<string>, selector?: (feed: FeedModel) => T) {
+  return useFeedStore((state) => {
+    const feed = feedId ? state.feeds[feedId] : null
+    return selector ? feed && selector(feed) : feed
+  })
+}
 
 export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
   useFeedStore((state) => {

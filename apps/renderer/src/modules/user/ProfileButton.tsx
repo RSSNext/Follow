@@ -1,9 +1,11 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/EllipsisWithTooltip.js"
 import { UserRole } from "@follow/constants"
 import { useMeasure } from "@follow/hooks"
 import type { WalletModel } from "@follow/models/types"
 import { nextFrame } from "@follow/utils/dom"
+import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { repository } from "@pkg"
 import type { FC } from "react"
@@ -75,8 +77,16 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         >
           <DropdownMenuLabel>
             <div className="text-center leading-none">
-              <div className="truncate text-lg">{user?.name}</div>
-              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
+              <EllipsisHorizontalTextWithTooltip className="mx-auto max-w-[20ch] truncate text-lg">
+                {user?.name}
+              </EllipsisHorizontalTextWithTooltip>
+              {!!user?.handle && (
+                <a href={UrlBuilder.profile(user.handle)} target="_blank" className="block">
+                  <EllipsisHorizontalTextWithTooltip className="mt-0.5 truncate text-xs font-medium text-zinc-500">
+                    @{user.handle}
+                  </EllipsisHorizontalTextWithTooltip>
+                </a>
+              )}
             </div>
           </DropdownMenuLabel>
 

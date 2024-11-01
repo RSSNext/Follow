@@ -24,9 +24,7 @@ export const Balance = ({
 
   const Content = (
     <span className={cn("tabular-nums", className)}>
-      {withSuffix && (
-        <i className="i-mgc-power mr-1 translate-y-[-3px] align-text-bottom text-accent" />
-      )}
+      {withSuffix && <i className="i-mgc-power mr-1 -translate-y-px align-middle text-accent" />}
       <span>{formatted}</span>
     </span>
   )

@@ -25,14 +25,16 @@ export const EntryItemWrapper: FC<
     style?: React.CSSProperties
   } & PropsWithChildren
 > = ({ entry, view, children, itemClassName, style }) => {
+  const listId = useRouteParamsSelector((s) => s.listId)
   const { items } = useEntryActions({
     view,
     entry,
     type: "entryList",
+    inList: !!listId,
   })
 
   const { items: feedItems } = useFeedActions({
-    feedId: entry.feedId,
+    feedId: entry.feedId || entry.inboxId,
     view,
     type: "entryList",
   })
@@ -74,7 +76,7 @@ export const EntryItemWrapper: FC<
     [entry.entries.url],
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => setIsContextMenuOpen(false))
+  useAnyPointDown(() => isContextMenuOpen && setIsContextMenuOpen(false))
   const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.preventDefault()

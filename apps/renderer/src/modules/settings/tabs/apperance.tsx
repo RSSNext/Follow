@@ -1,3 +1,5 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import {
   Select,
   SelectContent,
@@ -5,23 +7,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
-import { useIsDark, useSetTheme, useThemeAtomValue } from "@follow/hooks"
+import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
+import { useForceUpdate } from "framer-motion"
+import { lazy, Suspense, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
 import {
+  getUISettings,
   setUISetting,
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
 } from "~/atoms/settings/ui"
+import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { isElectronBuild } from "~/constants"
+import { useSetTheme } from "~/hooks/common"
 
-import { SettingTabbedSegment } from "../control"
+import { SETTING_MODAL_ID } from "../constants"
+import {
+  SettingActionItem,
+  SettingDescription,
+  SettingSwitch,
+  SettingTabbedSegment,
+} from "../control"
 import { createDefineSettingItem } from "../helper/builder"
 import { createSettingBuilder } from "../helper/setting-builder"
+import { SettingItemGroup } from "../section"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
@@ -57,6 +72,18 @@ export const SettingAppearance = () => {
           defineItem("sidebarShowUnreadCount", {
             label: t("appearance.sidebar_show_unread_count.label"),
           }),
+
+          {
+            type: "title",
+            value: t("appearance.sidebar"),
+          },
+          defineItem("hideExtraBadge", {
+            label: t("appearance.hide_extra_badge.label"),
+            description: t("appearance.hide_extra_badge.description"),
+          }),
+          ZenMode,
+          ThumbnailRatio,
+          CustomCSS,
 
           {
             type: "title",
@@ -214,5 +241,163 @@ export const AppThemeSegment = () => {
         setTheme(value as "light" | "dark" | "system")
       }}
     />
+  )
+}
+
+const ZenMode = () => {
+  const { t } = useTranslation("settings")
+  const feedColumnShow = useFeedColumnShow()
+  const isWideMode = useUISettingKey("wideMode")
+  return (
+    <SettingItemGroup>
+      <SettingSwitch
+        checked={!feedColumnShow && isWideMode}
+        className="mt-4"
+        onCheckedChange={(checked) => {
+          if (checked) {
+            setFeedColumnShow(false)
+            setUISetting("wideMode", true)
+          } else {
+            setFeedColumnShow(true)
+            setUISetting("wideMode", false)
+          }
+        }}
+        label={t("appearance.zen_mode.label")}
+      />
+      <SettingDescription>{t("appearance.zen_mode.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const ThumbnailRatio = () => {
+  const { t } = useTranslation("settings")
+
+  const thumbnailRatio = useUISettingKey("thumbnailRatio")
+
+  return (
+    <SettingItemGroup>
+      <div className="mt-4 flex items-center justify-between">
+        <span className="shrink-0 text-sm font-medium">
+          {t("appearance.thumbnail_ratio.title")}
+        </span>
+        <Select
+          defaultValue="square"
+          value={thumbnailRatio}
+          onValueChange={(value) => {
+            setUISetting("thumbnailRatio", value as "square" | "original")
+          }}
+        >
+          <SelectTrigger size="sm" className="w-48 translate-y-2">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent position="item-aligned">
+            {["square", "original"].map((ratio) => (
+              <SelectItem key={ratio} value={ratio}>
+                {t(`appearance.thumbnail_ratio.${ratio as "square" | "original"}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <SettingDescription>{t("appearance.thumbnail_ratio.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const CustomCSS = () => {
+  const { t } = useTranslation("settings")
+  const { present } = useModalStack()
+  return (
+    <SettingItemGroup>
+      <SettingActionItem
+        label={t("appearance.custom_css.label")}
+        action={() => {
+          present({
+            title: t("appearance.custom_css.label"),
+            content: CustomCSSModal,
+            clickOutsideToDismiss: false,
+            overlay: false,
+            resizeable: true,
+            resizeDefaultSize: {
+              width: 700,
+              height: 400,
+            },
+          })
+        }}
+        buttonText={t("appearance.custom_css.button")}
+      />
+      <SettingDescription>{t("appearance.custom_css.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+const LazyCSSEditor = lazy(() =>
+  import("../../editor/css-editor").then((m) => ({ default: m.CSSEditor })),
+)
+
+const CustomCSSModal = () => {
+  const initialCSS = useRef(getUISettings().customCSS)
+  const { t } = useTranslation("common")
+  const { dismiss } = useCurrentModal()
+  useEffect(() => {
+    return () => {
+      setUISetting("customCSS", initialCSS.current)
+    }
+  }, [])
+  useEffect(() => {
+    const modal = document.querySelector(`#${SETTING_MODAL_ID}`) as HTMLDivElement
+    if (!modal) return
+    const prevOverlay = getUISettings().modalOverlay
+    setUISetting("modalOverlay", false)
+
+    modal.style.display = "none"
+    return () => {
+      setUISetting("modalOverlay", prevOverlay)
+
+      modal.style.display = ""
+    }
+  }, [])
+  const [forceUpdate, key] = useForceUpdate()
+  return (
+    <form
+      className="relative flex h-full max-w-full flex-col"
+      onSubmit={(e) => {
+        e.preventDefault()
+        if (initialCSS.current !== getUISettings().customCSS) {
+          initialCSS.current = getUISettings().customCSS
+        }
+        dismiss()
+      }}
+    >
+      <Suspense
+        fallback={
+          <div className="center flex h-0 grow">
+            <LoadingCircle size="large" />
+          </div>
+        }
+      >
+        <LazyCSSEditor
+          defaultValue={initialCSS.current}
+          key={key}
+          className="h-0 grow rounded-lg border p-3 font-mono"
+          onChange={(value) => {
+            setUISetting("customCSS", value)
+          }}
+        />
+      </Suspense>
+
+      <div className="mt-2 flex shrink-0 justify-end gap-2">
+        <Button
+          variant="outline"
+          onClick={(e) => {
+            e.preventDefault()
+            setUISetting("customCSS", initialCSS.current)
+            forceUpdate()
+          }}
+        >
+          {t("words.reset")}
+        </Button>
+        <Button type="submit">{t("words.save")}</Button>
+      </div>
+    </form>
   )
 }

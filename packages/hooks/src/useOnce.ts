@@ -1,8 +1,10 @@
-import { useSingleton } from "foxact/use-singleton"
+import { useEffect, useRef } from "react"
 
 export const useOnce = (fn: () => any) => {
-  useSingleton(async () => {
-    await fn()
-    return true
-  })
+  const isDone = useRef(false)
+  useEffect(() => {
+    if (isDone.current) return
+    fn()
+    isDone.current = true
+  }, [])
 }

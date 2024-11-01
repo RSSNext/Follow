@@ -19,6 +19,7 @@ import {
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
 import type { FlatEntryModel } from "~/store/entry"
@@ -41,10 +42,12 @@ function EntryHeaderImpl({
 }) {
   const entry = useEntry(entryId)
 
+  const listId = useRouteParamsSelector((s) => s.listId)
   const { items } = useEntryActions({
     view,
     entry,
     type: "toolbar",
+    inList: !!listId,
   })
 
   const entryTitleMeta = useEntryTitleMeta()
@@ -59,7 +62,7 @@ function EntryHeaderImpl({
   return (
     <div
       className={cn(
-        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500",
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200",
         shouldShowMeta && "border-b border-border",
         className,
       )}

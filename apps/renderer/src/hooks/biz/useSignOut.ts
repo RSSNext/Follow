@@ -1,3 +1,4 @@
+import { env } from "@follow/shared/env"
 import { clearStorage } from "@follow/utils/ns"
 import { signOut } from "@hono/auth-js/react"
 import { useCallback } from "react"
@@ -21,5 +22,7 @@ export const useSignOut = () =>
     // clear local store data
     await Promise.allSettled([clearLocalPersistStoreData(), tipcClient?.cleanAuthSessionToken()])
     // Sign out
-    await signOut()
+    await signOut({
+      callbackUrl: env.VITE_WEB_URL,
+    })
   }, [])

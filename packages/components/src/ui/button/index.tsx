@@ -1,3 +1,4 @@
+import { useFocusable } from "@follow/components/common/Focusable.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
@@ -5,8 +6,8 @@ import type { VariantProps } from "class-variance-authority"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import * as React from "react"
+import type { Options } from "react-hotkeys-hook"
 import { useHotkeys } from "react-hotkeys-hook"
-import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
 
 import { KbdCombined } from "../kbd/Kbd"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
@@ -27,6 +28,12 @@ interface ActionButtonProps {
   shortcut?: string
   disableTriggerShortcut?: boolean
   size?: "sm" | "md" | "base"
+
+  /**
+   * @description only trigger shortcut when focus with in `<Focusable />`
+   * @default false
+   */
+  shortcutOnlyFocusWithIn?: boolean
 }
 
 const actionButtonStyleVariant = {
@@ -52,6 +59,7 @@ export const ActionButton = React.forwardRef<
       disabled,
       disableTriggerShortcut,
       size = "base",
+      shortcutOnlyFocusWithIn,
       ...rest
     },
     ref,
@@ -87,10 +95,15 @@ export const ActionButton = React.forwardRef<
         {children}
       </button>
     )
+
     return (
       <>
         {finalShortcut && !disableTriggerShortcut && (
-          <HotKeyTrigger shortcut={finalShortcut} fn={() => buttonRef.current?.click()} />
+          <HotKeyTrigger
+            shortcut={finalShortcut}
+            fn={() => buttonRef.current?.click()}
+            shortcutOnlyFocusWithIn={shortcutOnlyFocusWithIn}
+          />
         )}
         {tooltip ? (
           <Tooltip disableHoverableContent>
@@ -120,13 +133,23 @@ const HotKeyTrigger = ({
   shortcut,
   fn,
   options,
+  shortcutOnlyFocusWithIn,
 }: {
   shortcut: string
   fn: () => void
-  options?: OptionsOrDependencyArray
+  options?: Options
+  shortcutOnlyFocusWithIn?: boolean
 }) => {
+  const isFocusWithIn = useFocusable()
+  const enabledInOptions = options?.enabled || true
+
   useHotkeys(shortcut, fn, {
     preventDefault: true,
+    enabled: shortcutOnlyFocusWithIn
+      ? isFocusWithIn
+        ? enabledInOptions
+        : false
+      : enabledInOptions,
     ...options,
   })
   return null

@@ -2,7 +2,7 @@ import { cn } from "@follow/utils/utils"
 
 const benefits = [
   {
-    level: "Lv1",
+    level: 1,
     benefits: [
       {
         icon: "i-mgc-certificate-cute-fi",
@@ -14,20 +14,20 @@ const benefits = [
     ],
   },
   {
-    level: "Lv2",
+    level: 2,
     benefits: [
       { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
     ],
   },
   {
-    level: "Lv3",
+    level: 3,
     benefits: [
       { icon: "i-mgc-eye-2-cute-re", text: "More developer attention" },
       { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
     ],
   },
   {
-    level: "Lv4",
+    level: 4,
     benefits: [
       { icon: "i-mgc-eye-2-cute-re", text: "More developer attention" },
       { icon: "i-mgc-magic-2-cute-re", text: "AI summary for feed", comingSoon: true },
@@ -57,7 +57,7 @@ const BoostLevel = ({
   level,
   benefits,
 }: {
-  level: string
+  level: number
   benefits: { icon?: string; text: string; comingSoon?: boolean }[]
 }) => {
   return (
@@ -65,7 +65,7 @@ const BoostLevel = ({
       <div className="flex flex-col">
         <h3 className="flex items-center gap-2 text-xl font-semibold text-theme-accent">
           <span className="grow border-t border-gray-300 dark:border-gray-700" />
-          <span>{level}</span>
+          <span>Lv. {level}</span>
           <span className="grow border-t border-gray-300 dark:border-gray-700" />
         </h3>
         <ul className="ml-4 list-inside list-disc space-y-1">

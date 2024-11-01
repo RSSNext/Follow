@@ -15,7 +15,7 @@ import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/genera
 import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
-import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING } from "~/constants"
+import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_LIST } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/useAIDailyReportModal"
@@ -42,7 +42,8 @@ export const EntryListHeader: FC<{
   const os = getOS()
 
   const titleAtBottom = IN_ELECTRON && os === "macOS"
-  const isInCollectionList = feedId === FEED_COLLECTION_LIST
+  const isInCollectionList =
+    feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>

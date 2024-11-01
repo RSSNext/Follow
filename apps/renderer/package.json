@@ -4,6 +4,7 @@
   "private": true,
   "main": "./dist/main/index.js",
   "scripts": {
+    "build:web": "cd ../.. && pnpm build:web",
     "dev": "cd ../.. && pnpm dev:web",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
@@ -63,10 +64,12 @@
     "lethargy": "1.0.9",
     "lodash-es": "4.17.21",
     "masonic": "4.0.1",
+    "mdast-util-gfm-table": "^2.0.0",
     "mdast-util-to-markdown": "^2.1.0",
     "nanoid": "5.0.7",
     "ofetch": "1.4.1",
     "path-to-regexp": "8.2.0",
+    "plain-shiki": "0.0.12",
     "re-resizable": "6.10.0",
     "react-blurhash": "^0.3.0",
     "react-error-boundary": "4.1.2",

@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { useUserRole } from "~/atoms/user"
+import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
+import { ErrorComponentType } from "~/components/errors/enum"
 import { useActivationModal } from "~/modules/activation"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
@@ -14,7 +16,6 @@ import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
-import { Trend } from "~/modules/trending"
 
 import { useSubViewTitle } from "../hooks"
 
@@ -102,7 +103,7 @@ export function Component() {
             </TabsTrigger>
           ))}
 
-          <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" />
+          {/* <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" /> */}
         </TabsList>
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
@@ -114,7 +115,9 @@ export function Component() {
           </TabsContent>
         ))}
       </Tabs>
-      <Recommendations />
+      <AppErrorBoundary errorType={ErrorComponentType.RSSHubDiscoverError}>
+        <Recommendations />
+      </AppErrorBoundary>
     </div>
   )
 }

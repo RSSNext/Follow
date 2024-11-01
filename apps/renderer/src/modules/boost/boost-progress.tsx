@@ -1,4 +1,5 @@
 import { cn } from "@follow/utils/utils"
+import { useState } from "react"
 
 import { useI18n } from "~/hooks/common"
 
@@ -16,30 +17,33 @@ export const BoostProgress = ({
     expiresAt: string
   } | null
 }) => {
+  const [numberFormater] = useState(() => new Intl.NumberFormat())
   const t = useI18n()
-  const percentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
-  const nextLevel = level + 1
+  const rawPercentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
+  const percentage = 2 + (rawPercentage * (98 - 1)) / 100
+  const nextLevel = level + 2
   return (
     <div className="flex w-full flex-col px-2">
-      <div className="relative w-full pt-12">
+      <div className="relative -mx-2 pt-12">
         <span
           className={cn(
-            "absolute bottom-0 mb-10 flex h-8 w-12 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-bold text-white transition-all duration-500 ease-out after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 ",
+            "absolute -bottom-3 mb-10 flex h-7 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full p-2 text-sm font-bold text-white transition-all duration-500 ease-out after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 ",
             "bg-orange-500 after:bg-orange-500",
+            "motion-preset-shake",
           )}
           style={{ left: `${percentage}%` }}
         >
           <i className="i-mgc-train-cute-fi mr-2 shrink-0" />
-          {boostCount}
+          {numberFormater.format(boostCount)}
         </span>
-        <div className="relative flex h-6 w-full overflow-hidden rounded-3xl bg-gray-200 dark:bg-gray-800">
+        <div className="relative flex h-3 w-full overflow-hidden rounded-3xl bg-gray-200 dark:bg-zinc-800">
           <div
             role="progressbar"
             aria-valuenow={boostCount}
             aria-valuemin={0}
             aria-valuemax={remainingBoostsToLevelUp}
-            style={{ width: `${percentage}%` }}
-            className="flex h-full items-center justify-center rounded-3xl bg-accent text-white transition-all duration-500 ease-out"
+            style={{ width: `calc(${percentage}% + 0.5rem)` }}
+            className="flex h-full -translate-x-2 items-center justify-center rounded-3xl bg-accent text-white transition-all duration-500 ease-out"
           />
         </div>
       </div>
@@ -48,8 +52,10 @@ export const BoostProgress = ({
         <span className="text-lg font-bold text-accent">Lv. {level}</span>
         <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
       </div>
-      <small className="center mt-1 gap-1">
-        {t("boost.remaining_boosts_to_level_up", { remainingBoostsToLevelUp })}
+      <small className="center mt-2 gap-1">
+        {t("boost.remaining_boosts_to_level_up", {
+          remainingBoostsToLevelUp: numberFormater.format(remainingBoostsToLevelUp),
+        })}
       </small>
       {lastValidBoost && (
         <small className="center mt-1 gap-1">

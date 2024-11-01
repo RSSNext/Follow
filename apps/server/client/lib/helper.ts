@@ -1,3 +1,4 @@
+import { setOpenInAppDeeplink } from "@client/atoms/app"
 import type { FeedOrListRespModel } from "@follow/models/types"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 
@@ -13,11 +14,27 @@ export const getHydrateData = (key: string) => {
   return window.__HYDRATE__?.[key]
 }
 
-export const openInFollowApp = (
-  deeplink: string,
-  fallback: () => void,
-  alwaysFallback?: boolean,
-): Promise<boolean> => {
+export const askOpenInFollowApp = (deeplink: string, fallback?: () => string): Promise<boolean> => {
+  return new Promise(() => {
+    const deeplinkUrl = `${DEEPLINK_SCHEME}${deeplink}`
+    setOpenInAppDeeplink({
+      deeplink: deeplinkUrl,
+      fallbackUrl: fallback ? fallback() : undefined,
+    })
+  })
+}
+
+export const openInFollowApp = ({
+  deeplink,
+  fallback,
+  alwaysFallback,
+  fallbackUrl,
+}: {
+  deeplink: string
+  fallback: () => void
+  alwaysFallback?: boolean
+  fallbackUrl?: string
+}): Promise<boolean> => {
   return new Promise((resolve) => {
     const timeout = 500
     let isAppOpened = false
@@ -45,7 +62,10 @@ export const openInFollowApp = (
         resolve(false)
         return
       }
-      // TODO present a modal to the user asking if they want to open the app
+      setOpenInAppDeeplink({
+        deeplink: deeplinkUrl,
+        fallbackUrl,
+      })
     }, timeout)
   })
 }

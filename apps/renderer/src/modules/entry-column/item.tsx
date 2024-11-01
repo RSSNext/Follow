@@ -52,6 +52,7 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
 
 export const EntryItem: FC<EntryItemProps> = memo(({ entryId, view }) => {
   const entry = useEntry(entryId)
+
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return <EntryItemImpl entry={entry} view={view} />
 })

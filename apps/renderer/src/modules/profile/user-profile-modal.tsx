@@ -9,7 +9,7 @@ import type { SubscriptionModel } from "@follow/models/types"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { getStorageNS } from "@follow/utils/ns"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils/utils"
 import { AnimatePresence, useAnimationControls } from "framer-motion"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -60,15 +60,18 @@ export const UserProfileModalContent: FC<{
         avatar: user.data.image,
         name: user.data.name,
         handle: user.data.handle,
+        id: user.data.id,
       }
     : storeUser
       ? {
           avatar: storeUser.image,
           name: storeUser.name,
           handle: storeUser.handle,
+          id: storeUser.id,
         }
       : null
 
+  const follow = useFollow()
   const subscriptions = useUserSubscriptionsQuery(user.data?.id)
   const modal = useCurrentModal()
   const controller = useAnimationControls()
@@ -258,7 +261,7 @@ export const UserProfileModalContent: FC<{
                 layout
                 transition={{ duration: 0.35 }}
                 className={cn(
-                  "flex cursor-text select-text flex-col items-center",
+                  "relative flex cursor-text select-text flex-col items-center",
                   isHeaderSimple ? "ml-8 items-start" : "",
                 )}
               >
@@ -270,16 +273,29 @@ export const UserProfileModalContent: FC<{
                 >
                   <m.h1 layout>{userInfo.name}</m.h1>
                 </m.div>
-
                 <m.div
                   className={cn(
-                    "mb-0 text-sm text-zinc-500",
+                    "text-sm text-zinc-500",
                     userInfo.handle ? "visible" : "hidden select-none",
                   )}
                   layout
                 >
                   @{userInfo.handle}
                 </m.div>
+                <Button
+                  buttonClassName={cn(
+                    isHeaderSimple ? "absolute -right-full top-4 rounded-full p-2" : "mt-4",
+                  )}
+                  onClick={() => {
+                    follow({
+                      url: `rsshub://follow/profile/${userInfo.id}`,
+                      isList: false,
+                    })
+                  }}
+                >
+                  <FollowIcon className={clsx("size-3", !isHeaderSimple ? "mr-1" : "")} />
+                  {isHeaderSimple ? "" : t("feed_form.follow")}
+                </Button>
               </m.div>
             </div>
             <ScrollArea.ScrollArea

@@ -1,6 +1,6 @@
 import { useWhoami } from "@client/atoms/user"
 import { MainContainer } from "@client/components/layout/main"
-import { openInFollowApp } from "@client/lib/helper"
+import { askOpenInFollowApp } from "@client/lib/helper"
 import { useUserQuery, useUserSubscriptionsQuery } from "@client/query/users"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -27,6 +27,7 @@ export const Component = () => {
   const isMe = user.data?.id === me?.id
 
   const { t } = useTranslation("common")
+
   return (
     <MainContainer className="items-center">
       {user.isLoading ? (
@@ -40,12 +41,22 @@ export const Component = () => {
             />
             <AvatarFallback>{user.data?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col items-center">
+          <div className="mb-8 flex flex-col items-center">
             <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
               <h1>{user.data?.name}</h1>
             </div>
             {user.data?.handle && (
-              <div className="mb-8 text-sm text-zinc-500">@{user.data.handle}</div>
+              <div className="mb-2 text-sm text-zinc-500">@{user.data.handle}</div>
+            )}
+            {user.data?.id && (
+              <Button
+                onClick={() => {
+                  askOpenInFollowApp(`add?url=rsshub://follow/profile/${user.data?.id}`)
+                }}
+              >
+                <FollowIcon className="mr-1 size-3" />
+                {t("words.follow")}
+              </Button>
             )}
           </div>
           <div
@@ -96,8 +107,8 @@ export const Component = () => {
                               <Button
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  openInFollowApp(`add?id=${subscription.feedId}`, () => {
-                                    window.location.href = `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
+                                  askOpenInFollowApp(`add?id=${subscription.feedId}`, () => {
+                                    return `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
                                   })
                                 }}
                               >

@@ -1,10 +1,10 @@
-import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { Focusable } from "@follow/components/common/Focusable.js"
+import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import type { HTMLMediaState } from "@follow/hooks"
 import { useRefValue, useVideo } from "@follow/hooks"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils/utils"
 import * as Slider from "@radix-ui/react-slider"
-import { useSingleton } from "foxact/use-singleton"
 import { m, useDragControls, useSpring } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import {
@@ -131,7 +131,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
     )
 
     return (
-      <div className="group center relative size-full" ref={wrapperRef}>
+      <Focusable className="group center relative size-full" ref={wrapperRef}>
         {element}
 
         <div className="center pointer-events-none absolute inset-0">
@@ -159,20 +159,19 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
           {variant === "preview" && <FloatMutedButton />}
           {isPlayer && <ControlBar />}
         </VideoPlayerContext.Provider>
-      </div>
+      </Focusable>
     )
   },
 )
 const BizControlOutsideMedia = () => {
-  const currentAudioPlayerIsPlayRef = useSingleton(() => AudioPlayer.get().status === "playing")
+  const currentAudioPlayerIsPlayRef = useMemo(() => AudioPlayer.get().status === "playing", [])
   useEffect(() => {
-    const { current } = currentAudioPlayerIsPlayRef
-    if (current) {
+    if (currentAudioPlayerIsPlayRef) {
       AudioPlayer.pause()
     }
 
     return () => {
-      if (current) {
+      if (currentAudioPlayerIsPlayRef) {
         AudioPlayer.play()
       }
     }
@@ -286,7 +285,6 @@ const FullScreenControl = () => {
     <ActionIcon
       label={isFullScreen ? t("player.exit_full_screen") : t("player.full_screen")}
       shortcut="f"
-      labelDelayDuration={1}
       onClick={() => {
         if (!ref.current) return
 
@@ -326,7 +324,7 @@ const DownloadVideo = () => {
   })
 
   return (
-    <ActionIcon shortcut="d" label={t("player.download")} labelDelayDuration={1} onClick={download}>
+    <ActionIcon shortcut="d" label={t("player.download")} onClick={download}>
       {isDownloading ? (
         <i className="i-mgc-loading-3-cute-re animate-spin" />
       ) : (
@@ -353,7 +351,6 @@ const VolumeControl = () => {
           controls.mute()
         }
       }}
-      labelDelayDuration={1}
     >
       {muted ? (
         <i className="i-mgc-volume-mute-cute-re" title={t("player.unmute")} />
@@ -422,31 +419,24 @@ const ActionIcon = ({
   onClick,
   children,
   shortcut,
+  label,
 }: {
   className?: string
   onClick?: () => void
   label: React.ReactNode
-  labelDelayDuration?: number
   children?: React.ReactNode
   shortcut?: string
 }) => {
-  useHotkeys(
-    shortcut || "",
-    (e) => {
-      e.preventDefault()
-      onClick?.()
-    },
-    {
-      enabled: !!shortcut,
-    },
-  )
   return (
-    <button
-      type="button"
-      className="center relative z-[1] size-6 rounded-md hover:bg-theme-button-hover"
+    <ActionButton
+      shortcutOnlyFocusWithIn
+      tooltipSide="top"
+      className={clsx("z-[2] hover:bg-transparent", className)}
       onClick={onClick}
+      tooltip={label}
+      shortcut={shortcut}
     >
       {children || <i className={className} />}
-    </button>
+    </ActionButton>
   )
 }

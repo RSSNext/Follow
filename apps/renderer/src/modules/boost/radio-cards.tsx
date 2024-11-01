@@ -32,7 +32,7 @@ export const RadioCards = ({
   return (
     <RadioGroup value={value.toString()} onValueChange={(value) => onValueChange(+value)}>
       <m.div
-        className="grid w-full grid-cols-2 gap-2 overflow-hidden"
+        className="grid w-full grid-cols-2 gap-2"
         initial={{ height: "auto", opacity: 0 }}
         animate={{ height: "auto", opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}
@@ -44,11 +44,11 @@ export const RadioCards = ({
             wrapperClassName="justify-center"
             value={(item.value * monthlyBoostCost).toString()}
             label={
-              <div>
-                <h3 className="pr-3 font-medium leading-none">
+              <div className="text-center">
+                <h3 className="text-sm font-medium leading-none">
                   {dayjs.duration(item.value, "months").humanize()}
                 </h3>
-                <p className="mt-1 flex items-center justify-center gap-1 text-sm text-theme-vibrancyFg">
+                <p className="mt-0.5 flex items-center justify-center gap-1 text-sm text-theme-vibrancyFg">
                   {item.value * monthlyBoostCost}
                   <i className="i-mgc-power text-accent" />
                 </p>

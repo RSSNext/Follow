@@ -24,7 +24,7 @@ export const entries = {
     isArchived?: boolean
   }) =>
     defineQuery(
-      ["entries", inboxId || listId || feedId, view, read, limit],
+      ["entries", inboxId || listId || feedId, view, read, limit, isArchived],
       async ({ pageParam }) =>
         entryActions.fetchEntries({
           feedId,
@@ -46,7 +46,7 @@ export const entries = {
       rootKey: ["entries"],
     }),
   byInboxId: (id: string) =>
-    defineQuery(["entry", id], async () => entryActions.fetchInboxEntryById(id), {
+    defineQuery(["entry", "inbox", id], async () => entryActions.fetchInboxEntryById(id), {
       rootKey: ["entries"],
     }),
   preview: (id: string) =>

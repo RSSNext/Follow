@@ -1,6 +1,7 @@
 {
   "name": "@follow/constants",
   "version": "0.0.1",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts"
   },

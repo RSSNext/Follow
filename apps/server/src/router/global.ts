@@ -1,11 +1,12 @@
-/* eslint-disable no-param-reassign */
 import { readFileSync } from "node:fs"
 import path, { resolve } from "node:path"
 
 import { env } from "@follow/shared/env"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
+import type { Document } from "linkedom"
 import { parseHTML } from "linkedom"
 import { FetchError } from "ofetch"
+import xss from "xss"
 
 import { isDev } from "~/lib/env"
 import { buildSeoMetaTags } from "~/lib/seo"
@@ -22,10 +23,11 @@ const devHandler = (app: FastifyInstance) => {
     try {
       let template = readFileSync(path.resolve(root, vite.config.root, "index.html"), "utf-8")
       template = await vite.transformIndexHtml(url, template)
-      template = await safeInjectMetaToTemplate(template, req, reply)
+      const { document } = parseHTML(template)
+      await safeInjectMetaToTemplate(document, req, reply)
 
       reply.type("text/html")
-      reply.send(template)
+      reply.send(document.toString())
     } catch (e) {
       vite.ssrFixStacktrace(e)
       reply.code(500).send(e)
@@ -34,26 +36,14 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
-    let template = require("../../.generated/index.template").default
-    template = await safeInjectMetaToTemplate(template, req, reply)
+    const template = require("../../.generated/index.template").default
+    const { document } = parseHTML(template)
+    await safeInjectMetaToTemplate(document, req, reply)
 
     const isInVercelReverseProxy = req.headers["x-middleware-subrequest"]
 
     const upstreamEnv = req.requestContext.get("upstreamEnv")
     if (isInVercelReverseProxy || upstreamEnv === "prod") {
-      // Add asset prefix
-      // Map all link and script to /assets
-      // <script type="module" crossorigin src="/assets/index-kQ31_hj7.js"></script>
-      // <link rel="stylesheet" crossorigin href="/assets/index-BORNdGZP.css">
-      const prefix = "/external-dist"
-      const { document } = parseHTML(template)
-      for (const script of document.querySelectorAll("script")) {
-        script.src = `${prefix}${script.src}`
-      }
-      for (const link of document.querySelectorAll("link")) {
-        link.href = `${prefix}${link.href}`
-      }
-
       const upstreamEnv = req.requestContext.get("upstreamEnv")
 
       if (upstreamEnv) {
@@ -83,20 +73,22 @@ injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_
           injectScript(env.VITE_EXTERNAL_PROD_API_URL)
         }
       }
-
-      template = document.toString()
     }
 
     reply.type("text/html")
-    reply.send(template)
+    reply.send(document.toString())
   })
 }
 
 export const globalRoute = isDev ? devHandler : prodHandler
 
-async function safeInjectMetaToTemplate(template: string, req: FastifyRequest, res: FastifyReply) {
+async function safeInjectMetaToTemplate(
+  document: Document,
+  req: FastifyRequest,
+  res: FastifyReply,
+) {
   try {
-    return await injectMetaToTemplate(template, req)
+    return await injectMetaToTemplate(document, req)
   } catch (e) {
     console.error("inject meta error", e)
 
@@ -104,12 +96,10 @@ async function safeInjectMetaToTemplate(template: string, req: FastifyRequest, r
       res.code(e.response.status)
     }
 
-    template = template.replace(`<!-- TITLE -->`, `Follow`)
-
-    return template
+    return document
   }
 }
-async function injectMetaToTemplate(template: string, req: FastifyRequest) {
+async function injectMetaToTemplate(document: Document, req: FastifyRequest) {
   const injectMetadata = await injectMetaHandler(req).catch((err) => {
     if (isDev) {
       throw err
@@ -118,48 +108,54 @@ async function injectMetaToTemplate(template: string, req: FastifyRequest) {
   })
 
   if (!injectMetadata) {
-    return template
+    return document
   }
 
-  const allMetaString = []
-  let isTitleReplaced = false
   for (const meta of injectMetadata) {
     switch (meta.type) {
       case "openGraph": {
-        allMetaString.push(buildSeoMetaTags({ openGraph: meta }))
+        const $metaArray = buildSeoMetaTags(document, { openGraph: meta })
+        for (const $meta of $metaArray) {
+          document.head.append($meta)
+        }
         break
       }
       case "meta": {
-        allMetaString.push(`<meta property="${meta.property}" content="${meta.content}" />`)
+        const $meta = document.createElement("meta")
+        $meta.setAttribute("property", meta.property)
+        $meta.setAttribute("content", xss(meta.content))
+        document.head.append($meta)
         break
       }
       case "title": {
         if (meta.title) {
-          template = template.replace(`<!-- TITLE -->`, `${meta.title} | Follow`)
-          isTitleReplaced = true
+          const $title = document.querySelector("title")
+          if ($title) {
+            $title.textContent = `${xss(meta.title)} | Follow`
+          } else {
+            const $head = document.querySelector("head")
+            if ($head) {
+              const $title = document.createElement("title")
+              $title.textContent = `${xss(meta.title)} | Follow`
+              $head.append($title)
+            }
+          }
         }
         break
       }
       case "hydrate": {
-        const { document } = parseHTML(template)
         // Insert hydrate script
         const script = document.createElement("script")
         script.innerHTML = `
           window.__HYDRATE__ = window.__HYDRATE__ || {}
-          window.__HYDRATE__['${meta.key}'] = ${JSON.stringify(meta.data)}
+          window.__HYDRATE__['${meta.key}'] = ${xss(JSON.stringify(meta.data))}
         `
         document.head.append(script)
-        template = document.toString()
+
         break
       }
     }
   }
 
-  if (!isTitleReplaced) {
-    template = template.replace(`<!-- TITLE -->`, `Follow`)
-  }
-
-  template = template.replace(`<!-- SSG-META -->`, allMetaString.join("\n"))
-
-  return template
+  return document
 }

@@ -18,12 +18,21 @@ export default () => {
       ...viteRenderBaseConfig.define,
       ELECTRON: "false",
     },
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: "dist-external/[name].[hash].[ext]",
+          chunkFileNames: "dist-external/[name].[hash].js",
+          entryFileNames: "dist-external/[name].[hash].js",
+        },
+      },
+    },
     plugins: [react(), twMacro()],
 
     server: {
       proxy: {
         "/api": {
-          target: "https://api.follow.is",
+          target: "https://api.dev.follow.is",
           changeOrigin: true,
           rewrite(path) {
             return path.replace("/api", "")

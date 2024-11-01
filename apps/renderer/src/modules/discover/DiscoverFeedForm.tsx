@@ -310,9 +310,10 @@ export const DiscoverFeedForm = ({
                 <Input
                   {...form.register(`${routeParamsKeyPrefix}${key}`)}
                   placeholder={value.default}
+                  className="grow-0"
                 />
                 {!!value.description && (
-                  <Markdown className="w-full max-w-full text-xs text-theme-foreground/5">
+                  <Markdown className="w-full max-w-full text-xs text-theme-foreground/50">
                     {value.description}
                   </Markdown>
                 )}

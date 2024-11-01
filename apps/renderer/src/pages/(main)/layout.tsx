@@ -44,6 +44,7 @@ import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
+import { AppNotificationContainer } from "~/modules/upgrade/lazy/index"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 import { settings } from "~/queries/settings"
 
@@ -107,6 +108,9 @@ export function Component() {
     <RootContainer ref={containerRef}>
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
+      <Suspense>
+        <AppNotificationContainer />
+      </Suspense>
       <AppLayoutGridContainerProvider>
         <FeedResponsiveResizerContainer containerRef={containerRef}>
           <FeedColumn>

@@ -2,6 +2,7 @@ import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
+import { imageRefererMatches, selfRefererMatches } from "@follow/shared/image"
 import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
@@ -65,17 +66,25 @@ function bootstrap() {
     updateProxy()
     registerUpdater()
 
-    //remove Electron, Follow from user agent
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+      // remove Electron, Follow from user agent
       let userAgent = details.requestHeaders["User-Agent"]
       if (userAgent) {
         userAgent = userAgent.replace(/\s?Electron\/[\d.]+/, "")
         userAgent = userAgent.replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
       }
-      if (env.VITE_OPENPANEL_API_URL && details.url.startsWith(env.VITE_OPENPANEL_API_URL)) {
-        details.requestHeaders["Origin"] = "https://app.follow.is"
-      }
       details.requestHeaders["User-Agent"] = userAgent
+
+      // set referer and origin
+      if (selfRefererMatches.some((item) => details.url.startsWith(item))) {
+        details.requestHeaders["Referer"] = "https://app.follow.is"
+        details.requestHeaders["Origin"] = "https://app.follow.is"
+      } else {
+        const refererMatch = imageRefererMatches.find((item) => item.url.test(details.url))
+        const referer = refererMatch?.referer || details.url
+        details.requestHeaders["Referer"] = referer
+      }
+
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })
 
@@ -150,6 +159,15 @@ function bootstrap() {
           url: apiURL,
           name: "authjs.session-token",
           value: token,
+          secure: true,
+          httpOnly: true,
+          domain: new URL(apiURL).hostname,
+          sameSite: "no_restriction",
+        })
+        mainWindow.webContents.session.cookies.set({
+          url: apiURL,
+          name: "authjs.callback-url",
+          value: env.VITE_WEB_URL,
           secure: true,
           httpOnly: true,
           domain: new URL(apiURL).hostname,

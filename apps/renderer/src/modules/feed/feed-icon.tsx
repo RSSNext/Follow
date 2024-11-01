@@ -1,6 +1,6 @@
 import { PlatformIcon } from "@follow/components/ui/platform-icon/index.jsx"
 import type { CombinedEntryModel, FeedModel, FeedOrListRespModel } from "@follow/models/types"
-import { getColorScheme, stringToHue } from "@follow/utils/color"
+import { getBackgroundGradient } from "@follow/utils/color"
 import { cn, getUrlIcon } from "@follow/utils/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { m } from "framer-motion"
@@ -65,6 +65,14 @@ const FallbackableImage = forwardRef<
   )
 })
 
+type FeedIconFeed =
+  | (Pick<FeedModel, "ownerUserId" | "id" | "title" | "url" | "image"> & {
+      type: FeedOrListRespModel["type"]
+      siteUrl?: string
+    })
+  | FeedOrListRespModel
+
+type FeedIconEntry = Pick<CombinedEntryModel["entries"], "media" | "authorAvatar">
 export function FeedIcon({
   feed,
   entry,
@@ -75,8 +83,8 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: FeedOrListRespModel | null
-  entry?: CombinedEntryModel["entries"]
+  feed?: FeedIconFeed | null
+  entry?: FeedIconEntry | null
   fallbackUrl?: string
   className?: string
   size?: number
@@ -98,30 +106,34 @@ export function FeedIcon({
   }
 
   const colors = useMemo(
-    () =>
-      getColorScheme(stringToHue(feed?.title || (feed as FeedModel)?.url || siteUrl || ""), true),
+    () => getBackgroundGradient(feed?.title || (feed as FeedModel)?.url || siteUrl || ""),
     [feed?.title, (feed as FeedModel)?.url, siteUrl],
   )
   let ImageElement: ReactNode
   let finalSrc = ""
 
-  const sizeStyle = {
-    width: size,
-    height: size,
-  }
+  const sizeStyle: React.CSSProperties = useMemo(
+    () => ({
+      width: size,
+      height: size,
+    }),
+    [size],
+  )
+  const colorfulStyle: React.CSSProperties = useMemo(() => {
+    const [, , , bgAccent, bgAccentLight, bgAccentUltraLight] = colors
+    return {
+      // Create a bottom-left to top-right avatar fallback background gradient
+      backgroundImage: `linear-gradient(to top right, ${bgAccent} 20%, ${bgAccentLight} 80%, ${bgAccentUltraLight} 95%)`,
+      ...sizeStyle,
+    }
+  }, [colors, sizeStyle])
 
   const fallbackIcon = (
     <span
-      style={
-        {
-          ...sizeStyle,
-          "--fo-light-background": colors.light.background,
-          "--fo-dark-background": colors.dark.background,
-        } as any
-      }
+      style={colorfulStyle}
       className={cn(
         "flex shrink-0 items-center justify-center rounded-sm",
-        "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)]",
+        "text-white",
         "mr-2",
         className,
       )}

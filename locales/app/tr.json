@@ -2,7 +2,6 @@
   "achievement.all_done": "Tüm tamamlandı!",
   "achievement.first_claim_feed": "Besleme Sahibi",
   "achievement.first_claim_feed_description": "Follow'da beslemenizi sahibi olun.",
-  "achievement.mint_more_power": "Sert çalışan bir oyuncu olun ve daha fazla <güç /> kazanın.",
   "ai_daily.title": "Öne Çıkan Haberler - {{title}}",
   "ai_daily.tooltip.content": "Burada, zaman çizelgenizden (<From /> - <To />) AI tarafından seçilen ve sizin için önemli olabilecek haberler bulunmaktadır.",
   "ai_daily.tooltip.update_schedule": "Her gün saat 08:00 ve 20:00'de güncellenir.",

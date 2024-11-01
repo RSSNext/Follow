@@ -9,6 +9,7 @@
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "require": "./src/index.ts",
@@ -26,10 +27,12 @@
   },
   "dependencies": {
     "@follow/shared": "workspace:*",
+    "@follow/types": "workspace:*",
     "clsx": "2.1.1",
     "framer-motion": "11.11.9",
     "lodash-es": "4.17.21",
     "tailwind-merge": "2.5.4",
-    "tldts": "6.1.51"
+    "tldts": "6.1.51",
+    "uniqolor": "1.1.1"
   }
 }

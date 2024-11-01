@@ -9,7 +9,6 @@ import { useMotionValueEvent, useScroll } from "framer-motion"
 import * as React from "react"
 import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import { Link } from "react-router-dom"
 
 const useMotionValueToState = (value: MotionValue<number>) => {
   const [state, setState] = useState(value.get())
@@ -38,7 +37,7 @@ const HeaderWrapper: Component = (props) => {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 flex h-[80px] w-full items-center px-4 duration-200 lg:px-10",
-        showOverlay && "h-[60px] border-b",
+        showOverlay && "h-[60px]",
       )}
     >
       <div
@@ -57,13 +56,13 @@ const HeaderWrapper: Component = (props) => {
 }
 export const Header = () => {
   const handleToApp = () => {
-    openInFollowApp(
-      "",
-      () => {
-        window.open(siteConfig.appUrl, "_blank")
+    openInFollowApp({
+      deeplink: "",
+      fallback: () => {
+        return siteConfig.appUrl
       },
-      true,
-    )
+      fallbackUrl: siteConfig.appUrl,
+    })
   }
   useHotkeys("l", handleToApp)
 
@@ -72,10 +71,10 @@ export const Header = () => {
       <Container>
         <nav className="relative flex justify-between">
           <div className="flex items-center md:gap-x-12">
-            <Link className="flex items-center gap-4" to="/">
+            <a className="flex items-center gap-4" href="/">
               <Logo className="h-8 w-auto" />
               <p className="font-default text-xl font-semibold">{APP_NAME}</p>
-            </Link>
+            </a>
           </div>
           <div className="flex items-center gap-4">
             <Button

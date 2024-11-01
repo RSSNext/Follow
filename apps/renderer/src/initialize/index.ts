@@ -1,3 +1,4 @@
+import { initializeDayjs } from "@follow/components/dayjs"
 import { registerGlobalContext } from "@follow/shared/bridge"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
@@ -49,6 +50,7 @@ export const initializeApp = async () => {
     basePath: "/auth",
     credentials: "include",
   })
+  initializeDayjs()
 
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"

@@ -1,17 +1,15 @@
 {
   "name": "@follow/server",
-  "engines": {
-    "node": "20.x"
-  },
   "scripts": {
-    "build": "NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
-    "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
+    "build": "cross-env NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
+    "dev": "cross-env NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "start": "tsx index.ts"
   },
   "dependencies": {
     "@fastify/middie": "9.0.2",
     "@fastify/request-context": "6.0.1",
     "@fontsource/sn-pro": "5.1.0",
+    "@hono/auth-js": "1.0.11",
     "@openpanel/web": "1.0.1",
     "@resvg/resvg-js": "2.6.2",
     "@sentry/react": "8.34.0",
@@ -36,8 +34,8 @@
     "satori": "0.11.2",
     "sonner": "^1.5.0",
     "tailwindcss": "3.4.14",
-    "uniqolor": "1.1.1",
-    "use-context-selector": "2.0.0"
+    "use-context-selector": "2.0.0",
+    "xss": "1.0.15"
   },
   "devDependencies": {
     "@follow/components": "workspace:*",

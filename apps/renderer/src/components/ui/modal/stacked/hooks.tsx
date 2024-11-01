@@ -11,6 +11,7 @@ import { getUISettings } from "~/atoms/settings/ui"
 import { jotaiStore } from "~/lib/jotai"
 
 import { modalStackAtom } from "./atom"
+import { ModalEventBus } from "./bus"
 import { MODAL_STACK_Z_INDEX } from "./constants"
 import { CurrentModalContext, CurrentModalStateContext } from "./context"
 import type { ModalProps, ModalStackOptions } from "./types"
@@ -71,19 +72,26 @@ export const useModalStack = (options?: ModalStackOptions) => {
 }
 const actions = {
   getTopModalStack() {
-    return jotaiStore.get(modalStackAtom)[0]
+    return jotaiStore.get(modalStackAtom).at(-1)
   },
   getModalStackById(id: string) {
     return jotaiStore.get(modalStackAtom).find((item) => item.id === id)
   },
   dismiss(id: string) {
-    jotaiStore.set(modalStackAtom, (p) => p.filter((item) => item.id !== id))
+    ModalEventBus.dispatch("MODAL_DISPATCH", {
+      type: "dismiss",
+      id,
+    })
   },
   dismissTop() {
-    jotaiStore.set(modalStackAtom, (p) => p.slice(0, -1))
+    const topModal = actions.getTopModalStack()
+
+    if (!topModal) return
+    actions.dismiss(topModal.id)
   },
   dismissAll() {
-    jotaiStore.set(modalStackAtom, [])
+    const modalStack = jotaiStore.get(modalStackAtom)
+    modalStack.forEach((item) => actions.dismiss(item.id))
   },
 }
 

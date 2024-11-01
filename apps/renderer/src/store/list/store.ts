@@ -12,9 +12,9 @@ export const useListStore = createZustandStore<ListState>("list")(() => ({
   lists: {},
 }))
 
-const set = createImmerSetter(useListStore)
+const immerSet = createImmerSetter(useListStore)
 const get = useListStore.getState
-
+const set = useListStore.setState
 class ListActionStatic {
   upsertMany(lists: ListModelPoplutedFeeds[]) {
     if (lists.length === 0) return
@@ -23,15 +23,19 @@ class ListActionStatic {
       for (const list of lists) {
         state.lists[list.id] = list
 
-        if (list.feeds)
-          for (const feed of list.feeds) {
-            feeds.push(feed)
-          }
+        if (!list.feeds) continue
+        for (const feed of list.feeds) {
+          feeds.push(feed)
+        }
       }
 
-      feedActions.upsertMany(feeds)
-      return state
+      return {
+        ...state,
+        lists: { ...state.lists },
+      }
     })
+
+    feedActions.upsertMany(feeds)
 
     runTransactionInScope(() => ListService.upsertMany(lists))
   }
@@ -44,7 +48,7 @@ class ListActionStatic {
   }
 
   private patch(listId: string, data: Partial<ListModel>) {
-    set((state) => {
+    immerSet((state) => {
       state.lists[listId] = { ...state.lists[listId], ...data }
       return state
     })
@@ -75,7 +79,7 @@ class ListActionStatic {
   }
 
   deleteList(listId: string) {
-    set((state) => {
+    immerSet((state) => {
       delete state.lists[listId]
       return state
     })
@@ -91,7 +95,7 @@ class ListActionStatic {
   }
 
   clear() {
-    set((state) => {
+    immerSet((state) => {
       state.lists = {}
     })
   }

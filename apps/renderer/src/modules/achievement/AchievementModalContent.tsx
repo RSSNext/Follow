@@ -9,14 +9,12 @@ import { Chain } from "@follow/utils/chain"
 import { cn } from "@follow/utils/utils"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import type { SingletonRefObject } from "foxact/use-singleton"
-import { useSingleton } from "foxact/use-singleton"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC, ReactNode } from "react"
-import { useEffect, useId, useMemo, useRef } from "react"
-import { Trans, useTranslation } from "react-i18next"
+import { useEffect, useId, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -79,7 +77,7 @@ type Achievement = ExtractBizResponse<typeof apiClient.achievement.$get>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
 
-  const defaultAchievements = useSingleton(buildDefaultAchievements)
+  const defaultAchievements = useState(buildDefaultAchievements)[0]
 
   const {
     data: achievements,
@@ -97,10 +95,10 @@ export const AchievementModalContent: FC = () => {
         },
       })
 
-      jotaiStore.set(achievementsDataAtom.current, res.data)
+      jotaiStore.set(achievementsDataAtom, res.data)
       return res.data
     },
-    initialData: defaultAchievements.current as Achievement,
+    initialData: defaultAchievements as Achievement,
   })
 
   useEffect(() => {
@@ -126,7 +124,7 @@ export const AchievementModalContent: FC = () => {
     }
   }, [achievements, isLoading, refetch])
 
-  const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
+  const achievementsDataAtom = useState(() => atom<typeof achievements>())[0]
 
   const t = useI18n()
 
@@ -150,18 +148,9 @@ export const AchievementModalContent: FC = () => {
 
       <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
-      <small className="center mt-1 gap-1 text-theme-vibrancyFg">
-        <Trans
-          i18nKey={"achievement.mint_more_power"}
-          components={{
-            power: (
-              <span className="center gap-0.5 font-semibold">
-                <span>{t("words.power")}</span>
-                <i className="i-mgc-power text-accent" />
-              </span>
-            ),
-          }}
-        />
+      <small className="mt-1 gap-1 text-theme-vibrancyFg">
+        {t("achievement.description")}
+        <sup className="inline-block translate-y-1 text-xs">*</sup>
       </small>
 
       <ScrollArea rootClassName="h-0 grow mt-10 w-[calc(100%+2rem)] -mx-4" viewportClassName="px-4">
@@ -178,16 +167,7 @@ export const AchievementModalContent: FC = () => {
               return (
                 <li key={achievement.id} className="flex items-center justify-between">
                   <div>
-                    <div className="text-base font-bold">
-                      {t(copy.title)}
-
-                      {achievement.power && (
-                        <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
-                          <span className="font-medium opacity-80">{achievement.power}</span>
-                          <i className="i-mgc-power scale-95 text-sm text-accent" />
-                        </span>
-                      )}
-                    </div>
+                    <div className="text-base font-bold">{t(copy.title)}</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       {t(copy.description)}
                     </div>
@@ -242,6 +222,8 @@ export const AchievementModalContent: FC = () => {
           )}
         </ul>
       </ScrollArea>
+
+      <p className="mt-4 pb-2 text-xs text-muted-foreground">{t("achievement.nft_coming_soon")}</p>
     </div>
   )
 }
@@ -257,7 +239,7 @@ const buildDefaultAchievements = () => {
 }
 
 const MintButton: FC<{
-  achievementsDataAtom: SingletonRefObject<PrimitiveAtom<Achievement | undefined>>
+  achievementsDataAtom: PrimitiveAtom<Achievement | undefined>
   achievement: Achievement[number]
 }> = ({ achievementsDataAtom, achievement }) => {
   const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
@@ -280,7 +262,7 @@ const MintButton: FC<{
       onClick={async () => {
         const res = await mintAchievement(achievement.actionId)
 
-        const currentData = jotaiStore.get(achievementsDataAtom.current)
+        const currentData = jotaiStore.get(achievementsDataAtom)
         if (!currentData) return
         let shouldInvalidate = false
         const newData = currentData.map((item) => {
@@ -295,7 +277,7 @@ const MintButton: FC<{
           }
           return item
         })
-        jotaiStore.set(achievementsDataAtom.current, newData)
+        jotaiStore.set(achievementsDataAtom, newData)
 
         if (shouldInvalidate) {
           queryClient.invalidateQueries({ queryKey: ["achievements"] })
@@ -347,7 +329,7 @@ const IncompleteButton: FC<{
             </Button>
           </TooltipTrigger>
           {!PRODUCT_HUNT_VOTE_URL && (
-            <TooltipContent>Product Hunk Vote is not ready, We'll see.</TooltipContent>
+            <TooltipContent>Product Hunt Vote is not ready, We'll see.</TooltipContent>
           )}
         </Tooltip>
       )

@@ -14,7 +14,7 @@ import { whoami } from "~/atoms/user"
 import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import { updateFeedBoostStatus } from "~/modules/boost/hooks"
+import { updateFeedBoostStatus } from "~/modules/boost/atom"
 import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"
@@ -184,6 +184,7 @@ class SubscriptionActions {
         updateFeedBoostStatus(subscription.feedId, subscription.boost.boosters.length > 0)
       }
     }
+
     this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))
     feedActions.upsertMany(feeds)
     listActions.upsertMany(lists)

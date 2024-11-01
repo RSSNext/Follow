@@ -145,7 +145,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   useAnyPointDown(() => {
-    setIsContextMenuOpen(false)
+    isContextMenuOpen && setIsContextMenuOpen(false)
   })
   const isCategoryIsWaiting = isChangePending
 

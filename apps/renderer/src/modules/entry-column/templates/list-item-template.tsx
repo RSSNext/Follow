@@ -1,25 +1,21 @@
-import { FollowIcon } from "@follow/components/icons/follow.jsx"
-import { Button } from "@follow/components/ui/button/index.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn, isSafari } from "@follow/utils/utils"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
-import { useUISettingKey } from "~/atoms/settings/ui"
+import { useUISettingKeys } from "~/atoms/settings/ui"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { FeedForm } from "~/modules/discover/feed-form"
 import { EntryTranslation } from "~/modules/entry-column/translation"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
-import { useSubscriptionStore } from "~/store/subscription"
+import { useInboxById } from "~/store/inbox"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { StarIcon } from "../star-icon"
@@ -31,11 +27,9 @@ export function ListItem({
   translation,
   withDetails,
   withAudio,
-  withFollow,
 }: UniversalItemProps & {
   withDetails?: boolean
   withAudio?: boolean
-  withFollow?: boolean
 }) {
   const entry = useEntry(entryId) || entryPreview
 
@@ -43,11 +37,24 @@ export function ListItem({
 
   const inInCollection = useRouteParamsSelector((s) => s.feedId === FEED_COLLECTION_LIST)
 
-  const feed = useFeedById(entry?.feedId) || entryPreview?.feeds
+  const feed =
+    useFeedById(entry?.feedId, (feed) => {
+      return {
+        type: feed.type,
+        ownerUserId: feed.ownerUserId,
+        id: feed.id,
+        title: feed.title,
+        url: (feed as any).url || "",
+        image: feed.image,
+        siteUrl: feed.siteUrl,
+      }
+    }) || entryPreview?.feeds
+
+  const inbox = useInboxById(entry?.inboxId)
 
   const handlePrefetchEntry = useDebounceCallback(
     () => {
-      feed?.type === "inbox"
+      inbox
         ? Queries.entries.byInboxId(entryId).prefetch()
         : Queries.entries.byId(entryId).prefetch()
     },
@@ -55,21 +62,16 @@ export function ListItem({
     { leading: false },
   )
 
-  const isSubscription =
-    withFollow && entry?.entries.url?.startsWith(UrlBuilder.shareFeed(entry.feedId))
-  const feedId = isSubscription
-    ? entry?.entries.url?.slice(UrlBuilder.shareFeed(entry.feedId).length)
-    : undefined
-  const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
-  const { present } = useModalStack()
-
-  const settingWideMode = useUISettingKey("wideMode")
+  const [settingWideMode, thumbnailRatio] = useUISettingKeys(["wideMode", "thumbnailRatio"])
+  const rid = `list-item-${entryId}`
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
-  if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
+  if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
 
   const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
   const envIsSafari = isSafari()
+
+  const related = feed || inbox
 
   return (
     <div
@@ -82,7 +84,7 @@ export function ListItem({
         settingWideMode ? "py-3" : "py-4",
       )}
     >
-      {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
+      {!withAudio && <FeedIcon feed={related} fallback entry={entry.entries} />}
       <div
         className={cn(
           "-mt-0.5 flex-1 text-sm leading-tight",
@@ -99,7 +101,11 @@ export function ListItem({
           )}
         >
           <EllipsisHorizontalTextWithTooltip className="truncate">
-            {getPreferredTitle(feed, entry.entries)}
+            <FeedTitle
+              feed={related}
+              title={getPreferredTitle(related, entry.entries)}
+              className="space-x-0.5"
+            />
           </EllipsisHorizontalTextWithTooltip>
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
@@ -149,28 +155,6 @@ export function ListItem({
         )}
       </div>
 
-      {/* TODO remove This only share page needed */}
-      {feedId && !isFollowed && (
-        <Button
-          onClick={(e) => {
-            e.stopPropagation()
-            e.preventDefault()
-            present({
-              title: `${APP_NAME}`,
-              clickOutsideToDismiss: true,
-              content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
-            })
-          }}
-          variant="outline"
-          className="h-8"
-        >
-          <>
-            <FollowIcon className="mr-1 size-3" />
-            {APP_NAME}
-          </>
-        </Button>
-      )}
-
       {withAudio && entry.entries?.attachments?.[0].url && (
         <AudioCover
           entryId={entryId}
@@ -182,7 +166,7 @@ export function ListItem({
           feedIcon={
             <FeedIcon
               fallback={false}
-              feed={feed}
+              feed={feed || inbox}
               entry={entry.entries}
               size={settingWideMode ? 65 : 80}
               className="m-0 rounded"
@@ -204,9 +188,10 @@ export function ListItem({
           )}
           mediaContainerClassName={"w-auto h-auto rounded"}
           loading="lazy"
+          key={`${rid}-media-${thumbnailRatio}`}
           proxy={{
             width: 160,
-            height: 160,
+            height: thumbnailRatio === "square" ? 160 : 0,
           }}
           height={entry.entries.media[0].height}
           width={entry.entries.media[0].width}

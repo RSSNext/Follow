@@ -9,7 +9,10 @@ import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { useBoostFeedMutation, useBoostStatusQuery } from "~/modules/boost/query"
 import { useWallet } from "~/queries/wallet"
+import { useFeedById } from "~/store/feed"
+import { feedIconSelector } from "~/store/feed/selector"
 
+import { FeedIcon } from "../feed/feed-icon"
 import { BoostProgress } from "./boost-progress"
 import { BoostingContributors } from "./boosting-contributors"
 import { LevelBenefits } from "./level-benefits"
@@ -36,6 +39,8 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
     boostFeedMutation.mutate({ feedId, amount: amountBigInt.toString() })
   }, [amountBigInt, boostFeedMutation, feedId])
 
+  const feed = useFeedById(feedId, feedIconSelector)
+
   if (isLoading || !boostStatus) {
     return (
       <div className="center pointer-events-none grow -translate-y-16">
@@ -46,13 +51,19 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
 
   return (
     <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
-      <div className="relative flex w-full grow flex-col items-center gap-3">
-        <div className="mt-4 text-xl font-bold">
-          <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
-          {t("boost.boost_feed")}
-        </div>
+      <div className="center flex flex-col gap-2">
+        <FeedIcon className="mr-0" feed={feed} size={50} />
 
-        <small className="center mt-1 gap-1 text-theme-vibrancyFg">
+        <h1 className="center mt-2 flex text-lg font-bold">
+          <div className="center flex">
+            <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
+            {t("boost.boost_feed")}
+          </div>
+          <span>「{feed?.title}」</span>
+        </h1>
+      </div>
+      <div className="relative flex w-full grow flex-col items-center gap-3">
+        <small className="center -mt-1 mb-2 gap-1 text-theme-vibrancyFg">
           {t("boost.boost_feed_description")}
         </small>
 

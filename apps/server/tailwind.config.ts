@@ -19,6 +19,8 @@ export default resolveConfig({
     "./client/**/*.{ts,tsx}",
     "./index.html",
     "./node_modules/@follow/components/**/*.{ts,tsx}",
+    "./node_modules/rc-modal-sheet/**/*.{ts,tsx}",
+    "../../node_modules/rc-modal-sheet/**/*.{ts,tsx}",
   ],
   plugins: [...baseConfig.plugins, daisyui],
   daisyui: {

@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.1.1-beta.1",
+  "version": "0.1.2-beta.0",
   "private": true,
   "packageManager": "pnpm@9.11.0",
   "description": "Next generation information browser",
@@ -36,9 +36,7 @@
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
     "test": "CI=1 pnpm --recursive run test",
-    "typecheck": "npm run typecheck:node && npm run typecheck:web",
-    "typecheck:node": "pnpm -F electron-main run typecheck",
-    "typecheck:web": "pnpm -F web run typecheck"
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@babel/generator": "7.25.7",
@@ -71,6 +69,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-legacy": "5.4.2",
     "@vitejs/plugin-react": "^4.3.2",
+    "cross-env": "7.0.3",
     "cssnano": "7.0.6",
     "dnum": "^2.14.0",
     "dotenv": "16.4.5",
@@ -80,7 +79,7 @@
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
     "eslint": "^9.13.0",
-    "eslint-config-hyoban": "^3.1.11",
+    "eslint-config-hyoban": "^3.1.12",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.7.4",
     "hono": "4.6.5",
@@ -99,6 +98,7 @@
     "tailwindcss-motion": "0.3.0-beta",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
+    "turbo": "2.2.3",
     "typescript": "5.6.3",
     "vite": "^5.4.9",
     "vite-plugin-mkcert": "1.17.6",
@@ -131,7 +131,9 @@
   },
   "bump": {
     "before": [
-      "git pull --rebase"
+      "git pull --rebase",
+      "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
+      "git add changelog/${NEW_VERSION}.md"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"

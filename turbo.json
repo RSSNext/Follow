@@ -1,0 +1,31 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "envMode": "loose",
+  "tasks": {
+    "//#build": {
+      "outputs": ["dist/**", "out/**"]
+    },
+    "//#build:web": {
+      "outputs": ["out/**"]
+    },
+    "//#build:macos": {
+      "outputs": ["dist/**", "out/**"]
+    },
+    "//#format:check": {},
+    "//#lint": {},
+    "test": {},
+    "@follow/electron-main#build": {
+      "outputs": ["dist/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["@follow/electron-main#build"]
+    },
+    "@follow/server#build": {
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "persistent": true,
+      "cache": false
+    }
+  }
+}

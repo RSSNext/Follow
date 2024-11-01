@@ -1,7 +1,6 @@
 import type {
   CombinedEntryModel,
   FeedModel,
-  FeedOrListModel,
   FeedOrListRespModel,
   UserModel,
 } from "@follow/models/types"
@@ -16,7 +15,7 @@ import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
 import { userActions } from "../user"
-import { createZustandStore } from "../utils/helper"
+import { createImmerSetter, createZustandStore } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -24,6 +23,7 @@ export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
 }))
 
 const set = useFeedStore.setState
+const immerSet = createImmerSetter(useFeedStore)
 const get = useFeedStore.getState
 const distanceTime = 1000 * 60 * 60 * 9
 class FeedActions {
@@ -35,41 +35,37 @@ class FeedActions {
     runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
     })
-    set((state) =>
-      produce(state, (state) => {
-        for (const feed of feeds) {
-          if (
-            feed.type === "feed" &&
-            feed.errorAt &&
-            new Date(feed.errorAt).getTime() > Date.now() - distanceTime
-          ) {
-            feed.errorAt = null
-          }
-          if (feed.id) {
-            if (feed.owner) {
-              userActions.upsert(feed.owner as UserModel)
-            }
-            if (feed.type === "feed" && feed.tipUsers) {
-              userActions.upsert(feed.tipUsers)
-            }
-
-            // Not all API return these fields, so merging is needed here.
-            const optionalFields = ["owner", "tipUsers"] as const
-            optionalFields.forEach((field) => {
-              if (state.feeds[feed.id!]?.[field] && !(field in feed)) {
-                ;(feed as any)[field] = { ...state.feeds[feed.id!]?.[field] }
-              }
-            })
-
-            state.feeds[feed.id] = omit(feed, "feeds") as FeedOrListModel
-          } else {
-            // Store temp feed in memory
-            const nonce = feed["nonce"] || nanoid(8)
-            state.feeds[nonce] = { ...feed, id: nonce }
-          }
+    immerSet((state) => {
+      for (const feed of feeds) {
+        if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - distanceTime) {
+          feed.errorAt = null
         }
-      }),
-    )
+        if (feed.id) {
+          if (feed.owner) {
+            userActions.upsert(feed.owner as UserModel)
+          }
+          if (feed.tipUsers) {
+            userActions.upsert(feed.tipUsers)
+          }
+
+          // Not all API return these fields, so merging is needed here.
+          const targetFeed = state.feeds[feed.id]
+
+          if (targetFeed?.owner) {
+            feed.owner = { ...targetFeed.owner }
+          }
+          if (targetFeed && "tipUsers" in targetFeed && targetFeed.tipUsers) {
+            feed.tipUsers = [...targetFeed.tipUsers]
+          }
+
+          state.feeds[feed.id] = omit(feed, "feeds") as FeedModel
+        } else {
+          // Store temp feed in memory
+          const nonce = feed["nonce"] || nanoid(8)
+          state.feeds[nonce] = { ...feed, id: nonce }
+        }
+      }
+    })
   }
 
   private patch(feedId: string, patch: Partial<FeedOrListRespModel>) {
@@ -136,8 +132,8 @@ export const getFeedById = (feedId: string): Nullable<FeedOrListRespModel> =>
   useFeedStore.getState().feeds[feedId]
 
 export const getPreferredTitle = (
-  feed?: FeedOrListRespModel | null,
-  entry?: CombinedEntryModel["entries"],
+  feed?: Pick<FeedOrListRespModel, "type" | "id" | "title"> | null,
+  entry?: Pick<CombinedEntryModel["entries"], "authorUrl"> | null,
 ) => {
   if (!feed?.id) {
     return feed?.title

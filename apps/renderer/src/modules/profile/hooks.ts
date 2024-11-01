@@ -55,6 +55,7 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
 
       present({
         title: "User Profile",
+        id: `user-profile-${userId}`,
         content: () =>
           createElement(LazyUserProfileModalContent, {
             userId,

@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-finally */
-import { produce } from "immer"
+import { isDraft, original, produce } from "immer"
 import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator, StoreApi, UseBoundStore } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
@@ -34,6 +34,11 @@ const storeMap = {} as Record<string, UseBoundStoreWithEqualityFn<any>>
 export const createZustandStore =
   <S, T extends StateCreator<S, [], []> = StateCreator<S, [], []>>(name: string) =>
   (store: T) => {
+    if (import.meta.env.DEV && window[`store_${name}`]) {
+      import.meta.hot?.send("message", "The store has been changed, reloading...")
+      globalThis.location.reload()
+    }
+
     const newStore = import.meta.env.DEV
       ? createWithEqualityFn(
           devtools(store, {
@@ -59,6 +64,8 @@ export const createZustandStore =
           },
         },
       )
+
+    window[`store_${name}`] = newStore
 
     return newStore
   }
@@ -136,4 +143,9 @@ export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
         updater(draft as T)
       }),
     )
+}
+
+type MayBeDraft<T> = T
+export const toRaw = <T>(draft: MayBeDraft<T>): T => {
+  return isDraft(draft) ? original(draft)! : draft
 }

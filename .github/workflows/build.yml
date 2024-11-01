@@ -13,7 +13,7 @@ on:
         required: true
 # https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-build
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
@@ -106,7 +106,7 @@ jobs:
 
       - name: Build
         if: matrix.os != 'macos-latest'
-        run: pnpm build
+        run: npm exec turbo run //#build
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
@@ -117,7 +117,7 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
-        run: pnpm build:macos
+        run: npm exec turbo run //#build:macos
 
       - name: Upload file
         uses: actions/upload-artifact@v4

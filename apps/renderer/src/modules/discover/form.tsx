@@ -12,13 +12,13 @@ import { Input } from "@follow/components/ui/input/index.js"
 import { Radio } from "@follow/components/ui/radio-group/index.js"
 import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.jsx"
 import type { FeedViewType } from "@follow/constants"
+import { getBackgroundGradient } from "@follow/utils/color"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useSingleton } from "foxact/use-singleton"
 import { produce } from "immer"
 import { atom, useAtomValue, useStore } from "jotai"
 import type { FC } from "react"
-import { memo, useCallback, useEffect } from "react"
+import { memo, useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
@@ -90,7 +90,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       return data
     },
   })
-  const discoverSearchDataAtom = useSingleton(() => atom<DiscoverSearchData>()).current
+  const discoverSearchDataAtom = useState(() => atom<DiscoverSearchData>())[0]
 
   const discoverSearchData = useAtomValue(discoverSearchDataAtom)
 
@@ -300,18 +300,7 @@ const SearchCard: FC<{
                         className="flex min-w-0 flex-1 flex-col items-center gap-1"
                         rel="noreferrer"
                       >
-                        {assertEntry.media?.[0] ? (
-                          <Media
-                            src={assertEntry.media?.[0].url}
-                            type={assertEntry.media?.[0].type}
-                            previewImageUrl={assertEntry.media?.[0].preview_image_url}
-                            className="aspect-square w-full"
-                          />
-                        ) : (
-                          <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
-                            {assertEntry.title}
-                          </div>
-                        )}
+                        <FeedCardMediaThumbnail entry={assertEntry} />
                         <div className="line-clamp-2 w-full text-xs leading-tight">
                           {assertEntry.title}
                         </div>
@@ -352,3 +341,26 @@ const SearchCard: FC<{
     </Card>
   )
 })
+
+const FeedCardMediaThumbnail: FC<{
+  entry: NonUndefined<DiscoverSearchData[number]["entries"]>[number]
+}> = ({ entry }) => {
+  const [, , , bgAccent, bgAccentLight, bgAccentUltraLight] = getBackgroundGradient(entry.title)
+  return entry.media?.[0] ? (
+    <Media
+      src={entry.media?.[0].url}
+      type={entry.media?.[0].type}
+      previewImageUrl={entry.media?.[0].preview_image_url}
+      className="aspect-square w-full"
+    />
+  ) : (
+    <div
+      className="relative flex aspect-square w-full items-end overflow-hidden rounded p-2 text-xs leading-tight text-zinc-900"
+      style={{
+        background: `linear-gradient(37deg, ${bgAccent} 27.82%, ${bgAccentLight} 79.68%, ${bgAccentUltraLight} 100%)`,
+      }}
+    >
+      <div className="line-clamp-2 text-right font-medium">{entry.title}</div>
+    </div>
+  )
+}
