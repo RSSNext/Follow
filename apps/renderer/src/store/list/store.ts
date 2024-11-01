@@ -5,7 +5,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"
-import { createImmerSetter, createZustandStore, toRaw } from "../utils/helper"
+import { createImmerSetter, createZustandStore } from "../utils/helper"
 import type { ListState } from "./types"
 
 export const useListStore = createZustandStore<ListState>("list")(() => ({
@@ -25,7 +25,7 @@ class ListActionStatic {
 
         if (!list.feeds) continue
         for (const feed of list.feeds) {
-          feeds.push(toRaw(feed))
+          feeds.push({ ...feed })
         }
       }
 

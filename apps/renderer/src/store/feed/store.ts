@@ -15,7 +15,7 @@ import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
 import { userActions } from "../user"
-import { createZustandStore } from "../utils/helper"
+import { createImmerSetter, createZustandStore } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -23,6 +23,7 @@ export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
 }))
 
 const set = useFeedStore.setState
+const immerSet = createImmerSetter(useFeedStore)
 const get = useFeedStore.getState
 const distanceTime = 1000 * 60 * 60 * 9
 class FeedActions {
@@ -34,38 +35,37 @@ class FeedActions {
     runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
     })
-    set((state) =>
-      produce(state, (state) => {
-        for (const feed of feeds) {
-          if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - distanceTime) {
-            feed.errorAt = null
-          }
-          if (feed.id) {
-            if (feed.owner) {
-              userActions.upsert(feed.owner as UserModel)
-            }
-            if (feed.tipUsers) {
-              userActions.upsert(feed.tipUsers)
-            }
-
-            // Not all API return these fields, so merging is needed here.
-            const targetFeed = state.feeds[feed.id]
-            if (targetFeed?.owner) {
-              feed.owner = { ...targetFeed.owner }
-            }
-            if (targetFeed && "tipUsers" in targetFeed && targetFeed.tipUsers) {
-              feed.tipUsers = [...targetFeed.tipUsers]
-            }
-
-            state.feeds[feed.id] = omit(feed, "feeds") as FeedModel
-          } else {
-            // Store temp feed in memory
-            const nonce = feed["nonce"] || nanoid(8)
-            state.feeds[nonce] = { ...feed, id: nonce }
-          }
+    immerSet((state) => {
+      for (const feed of feeds) {
+        if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - distanceTime) {
+          feed.errorAt = null
         }
-      }),
-    )
+        if (feed.id) {
+          if (feed.owner) {
+            userActions.upsert(feed.owner as UserModel)
+          }
+          if (feed.tipUsers) {
+            userActions.upsert(feed.tipUsers)
+          }
+
+          // Not all API return these fields, so merging is needed here.
+          const targetFeed = state.feeds[feed.id]
+
+          if (targetFeed?.owner) {
+            feed.owner = { ...targetFeed.owner }
+          }
+          if (targetFeed && "tipUsers" in targetFeed && targetFeed.tipUsers) {
+            feed.tipUsers = [...targetFeed.tipUsers]
+          }
+
+          state.feeds[feed.id] = omit(feed, "feeds") as FeedModel
+        } else {
+          // Store temp feed in memory
+          const nonce = feed["nonce"] || nanoid(8)
+          state.feeds[nonce] = { ...feed, id: nonce }
+        }
+      }
+    })
   }
 
   private patch(feedId: string, patch: Partial<FeedOrListRespModel>) {
