@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-finally */
-import { produce } from "immer"
+import { isDraft, original, produce } from "immer"
 import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator, StoreApi, UseBoundStore } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
@@ -143,4 +143,9 @@ export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
         updater(draft as T)
       }),
     )
+}
+
+type MayBeDraft<T> = T
+export const toRaw = <T>(draft: MayBeDraft<T>): T => {
+  return isDraft(draft) ? original(draft)! : draft
 }

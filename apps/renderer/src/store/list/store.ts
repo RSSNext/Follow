@@ -5,27 +5,27 @@ import { apiClient } from "~/lib/api-fetch"
 import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"
-import { createImmerSetter, createZustandStore } from "../utils/helper"
+import { createImmerSetter, createZustandStore, toRaw } from "../utils/helper"
 import type { ListState } from "./types"
 
 export const useListStore = createZustandStore<ListState>("list")(() => ({
   lists: {},
 }))
 
-const set = createImmerSetter(useListStore)
+const immerSet = createImmerSetter(useListStore)
 const get = useListStore.getState
 
 class ListActionStatic {
   upsertMany(lists: ListModelPoplutedFeeds[]) {
     if (lists.length === 0) return
     const feeds = [] as FeedModel[]
-    set((state) => {
+    immerSet((state) => {
       for (const list of lists) {
         state.lists[list.id] = list
 
         if (!list.feeds) continue
         for (const feed of list.feeds) {
-          feeds.push(feed)
+          feeds.push(toRaw(feed))
         }
       }
 
@@ -45,7 +45,7 @@ class ListActionStatic {
   }
 
   private patch(listId: string, data: Partial<ListModel>) {
-    set((state) => {
+    immerSet((state) => {
       state.lists[listId] = { ...state.lists[listId], ...data }
       return state
     })
@@ -76,7 +76,7 @@ class ListActionStatic {
   }
 
   deleteList(listId: string) {
-    set((state) => {
+    immerSet((state) => {
       delete state.lists[listId]
       return state
     })
@@ -92,7 +92,7 @@ class ListActionStatic {
   }
 
   clear() {
-    set((state) => {
+    immerSet((state) => {
       state.lists = {}
     })
   }
