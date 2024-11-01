@@ -4521,6 +4521,48 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/probes/postgresql": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/probes/redis": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/probes/bullmq": {
+        $get: {
+            input: {
+                query: {
+                    name: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    completed: number;
+                    wait: number;
+                    failed: number;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     boosts: {
         $get: {
             input: {
@@ -5666,30 +5708,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/metrics": {
-        $get: {
-            input: {
-                query: {
-                    type?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    data: number[];
-                    meta: {
-                        count: number;
-                        prevTS: number;
-                        prevCount: number;
-                    };
-                    count: number;
                 };
             };
             outputFormat: "json" | "text";
