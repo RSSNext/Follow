@@ -112,7 +112,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         {
           title: t.app("new_user_guide.step.shortcuts.title"),
           content: (
-            <div className="w-[400px] space-y-2">
+            <div className="space-y-2">
               <p>{t.app("new_user_guide.step.shortcuts.description1")}</p>
               <p>
                 <Trans

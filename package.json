@@ -131,7 +131,8 @@
   },
   "bump": {
     "before": [
-      "git pull --rebase"
+      "git pull --rebase",
+      "tsx scripts/apply-changelog.ts ${NEW_VERSION}"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
