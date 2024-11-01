@@ -26,7 +26,7 @@ import {
   setReadabilityContent,
   setReadabilityStatus,
 } from "~/atoms/readability"
-import { useIntegrationSettingKey } from "~/atoms/settings/integration"
+import { useIntegrationSettingValue } from "~/atoms/settings/integration"
 import {
   setShowSourceContent,
   toggleShowSourceContent,
@@ -198,22 +198,25 @@ export const useEntryActions = ({
   const uncollect = useUnCollect(populatedEntry)
   const read = useRead()
   const unread = useUnread()
-  const enableEagle = useIntegrationSettingKey("enableEagle")
-  const enableReadwise = useIntegrationSettingKey("enableReadwise")
-  const readwiseToken = useIntegrationSettingKey("readwiseToken")
-  const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
-  const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
-  const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
-  const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
-  const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
-  const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
-  const enableObsidian = useIntegrationSettingKey("enableObsidian")
-  const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
+
+  const {
+    enableEagle,
+    enableReadwise,
+    enableInstapaper,
+    enableOmnivore,
+    enableObsidian,
+    enableOutline,
+    readwiseToken,
+    instapaperUsername,
+    instapaperPassword,
+    omnivoreToken,
+    omnivoreEndpoint,
+    obsidianVaultPath,
+    outlineToken,
+    outlineEndpoint,
+    outlineCollection,
+  } = useIntegrationSettingValue()
   const isObsidianEnabled = enableObsidian && !!obsidianVaultPath
-  const enableOutline = useIntegrationSettingKey("enableOutline")
-  const outlineEndpoint = useIntegrationSettingKey("outlineEndpoint")
-  const outlineToken = useIntegrationSettingKey("outlineToken")
-  const outlineCollection = useIntegrationSettingKey("outlineCollection")
 
   const saveToObsidian = useMutation({
     mutationKey: ["save-to-obsidian"],
@@ -717,6 +720,10 @@ export const useEntryActions = ({
     omnivoreToken,
     omnivoreEndpoint,
     isObsidianEnabled,
+    enableOutline,
+    outlineToken,
+    outlineEndpoint,
+    outlineCollection,
     isInbox,
     feed?.ownerUserId,
     type,
