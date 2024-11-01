@@ -125,8 +125,6 @@
   "search.group.entries": "Merkinnät",
   "search.group.feeds": "Syötteet",
   "search.options.all": "Kaikki",
-  "search.options.entries": "Merkinnät",
-  "search.options.feeds": "Syötteet",
   "search.options.search_type": "Hakutyyppi",
   "search.placeholder": "Hae...",
   "search.result_count_local_mode": "(Paikallinen tila)",
