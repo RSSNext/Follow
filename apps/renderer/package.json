@@ -64,6 +64,7 @@
     "lethargy": "1.0.9",
     "lodash-es": "4.17.21",
     "masonic": "4.0.1",
+    "mdast-util-gfm-table": "^2.0.0",
     "mdast-util-to-markdown": "^2.1.0",
     "nanoid": "5.0.7",
     "ofetch": "1.4.1",
