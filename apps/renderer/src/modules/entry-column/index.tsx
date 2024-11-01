@@ -52,13 +52,19 @@ function EntryColumnImpl() {
       virtuosoRef.current?.scrollTo({
         top: 0,
       })
-      setIsArchived(false)
     }, []),
     isArchived,
   })
 
   const { entriesIds, isFetchingNextPage, groupedCounts } = entries
   useSnapEntryIdList(entriesIds)
+  const prevEntriesIdsRef = useRef(entriesIds)
+
+  useEffect(() => {
+    if (entriesIds.length > 0) {
+      prevEntriesIdsRef.current = entriesIds
+    }
+  }, [entriesIds])
 
   const {
     entryId: activeEntryId,
@@ -69,6 +75,11 @@ function EntryColumnImpl() {
     inboxId,
     listId,
   } = useRouteParams()
+
+  useEffect(() => {
+    setIsArchived(false)
+  }, [view, routeFeedId])
+
   const activeEntry = useEntry(activeEntryId)
   const feed = useFeedById(routeFeedId)
   const title = useFeedHeaderTitle()
@@ -99,24 +110,17 @@ function EntryColumnImpl() {
     }
   }, [isArchived])
 
-  const showArchivedButton =
-    !isArchived &&
-    !unreadOnly &&
-    !isCollection &&
-    routeFeedId !== ROUTE_FEED_PENDING &&
-    entries.totalCount < 40 &&
-    feed?.type === "feed"
+  // Common conditions for both showArchivedButton and shouldLoadArchivedEntries
+  const commonConditions =
+    !isArchived && !unreadOnly && !isCollection && routeFeedId !== ROUTE_FEED_PENDING
 
+  // Determine if the archived button should be shown
+  const showArchivedButton = commonConditions && entries.totalCount < 40 && feed?.type === "feed"
+  const hasNoEntries = entries.totalCount === 0 && !entries.isLoading
+
+  // Determine if archived entries should be loaded
   const shouldLoadArchivedEntries =
-    !isArchived &&
-    !unreadOnly &&
-    !isCollection &&
-    routeFeedId !== ROUTE_FEED_PENDING &&
-    (feed?.type === "feed" || !feed) &&
-    !inboxId &&
-    !listId &&
-    entries.totalCount === 0 &&
-    !entries.isLoading
+    commonConditions && (feed?.type === "feed" || !feed) && !inboxId && !listId && hasNoEntries
 
   // automatically fetch archived entries when there is no entries in timeline
   useEffect(() => {
@@ -124,6 +128,9 @@ function EntryColumnImpl() {
       setIsArchived(true)
     }
   }, [shouldLoadArchivedEntries])
+
+  const finalEntriesIds =
+    hasNoEntries && !isArchived ? prevEntriesIdsRef.current || entriesIds : entriesIds
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
@@ -173,7 +180,7 @@ function EntryColumnImpl() {
         }
       }
     }, [entries]),
-    data: entriesIds,
+    data: finalEntriesIds,
     onScroll: () => {
       if (!isInteracted.current) {
         isInteracted.current = true
