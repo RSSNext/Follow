@@ -42,8 +42,8 @@ const AppNotificationContainer: FC = () => {
       }
 
       toast.info(payload.title, {
-        description: payload.content,
-        duration: 10e8,
+        description: <Markdown>{payload.content}</Markdown>,
+        duration: Infinity,
         closeButton: true,
       })
     } catch (e) {
