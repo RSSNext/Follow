@@ -14,22 +14,25 @@ export const useListStore = createZustandStore<ListState>("list")(() => ({
 
 const immerSet = createImmerSetter(useListStore)
 const get = useListStore.getState
-
+const set = useListStore.setState
 class ListActionStatic {
   upsertMany(lists: ListModelPoplutedFeeds[]) {
     if (lists.length === 0) return
     const feeds = [] as FeedModel[]
-    immerSet((state) => {
+    set((state) => {
       for (const list of lists) {
         state.lists[list.id] = list
 
         if (!list.feeds) continue
         for (const feed of list.feeds) {
-          feeds.push({ ...feed })
+          feeds.push(feed)
         }
       }
 
-      return state
+      return {
+        ...state,
+        lists: { ...state.lists },
+      }
     })
 
     feedActions.upsertMany(feeds)
