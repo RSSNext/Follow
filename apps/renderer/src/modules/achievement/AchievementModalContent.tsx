@@ -223,7 +223,7 @@ export const AchievementModalContent: FC = () => {
         </ul>
       </ScrollArea>
 
-      <p className="mt-4 pb-2 text-xs text-muted-foreground">{t("achievement.ntf_coming_soon")}</p>
+      <p className="mt-4 pb-2 text-xs text-muted-foreground">{t("achievement.nft_coming_soon")}</p>
     </div>
   )
 }
