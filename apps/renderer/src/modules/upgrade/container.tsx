@@ -1,8 +1,11 @@
 import { useOnce } from "@follow/hooks"
+import { getStorageNS } from "@follow/utils/ns"
 import { repository } from "@pkg"
 import type { FC } from "react"
+import { useEffect, useRef } from "react"
 import { toast } from "sonner"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { PeekModal } from "~/components/ui/modal/inspire/PeekModal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -10,8 +13,44 @@ import { Paper } from "~/components/ui/paper"
 import { isDev } from "~/constants"
 import { DebugRegistry } from "~/modules/debug/registry"
 
-const AppUpgradeProvider: FC = () => {
+const AppNotificationContainer: FC = () => {
   const { present } = useModalStack()
+
+  const serverConfigs = useServerConfigs()
+
+  const onceRef = useRef(false)
+  useEffect(() => {
+    if (onceRef.current) return
+
+    if (!serverConfigs?.ANNOUNCEMENT) return
+    onceRef.current = true
+    try {
+      const payload = JSON.parse(serverConfigs.ANNOUNCEMENT) as {
+        title: string
+        id: number | string
+        content: string
+      }
+
+      if (payload.id) {
+        const storeKey = getStorageNS(`announcement-${payload.id}`)
+
+        const showPrevious = localStorage.getItem(storeKey)
+        if (showPrevious) {
+          return
+        }
+        localStorage.setItem(storeKey, payload.id.toString())
+      }
+
+      toast.info(payload.title, {
+        description: payload.content,
+        duration: 10e8,
+        closeButton: true,
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }, [serverConfigs?.ANNOUNCEMENT])
+
   useOnce(() => {
     const toaster = () => {
       toast.success(
@@ -55,7 +94,7 @@ const AppUpgradeProvider: FC = () => {
   return null
 }
 
-export default AppUpgradeProvider
+export default AppNotificationContainer
 
 const Changelog = () => (
   <Paper>

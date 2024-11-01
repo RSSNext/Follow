@@ -1,1 +1,1 @@
-export { default as AppUpgradeProvider } from "../provider"
+export { default as AppNotificationContainer } from "../container"

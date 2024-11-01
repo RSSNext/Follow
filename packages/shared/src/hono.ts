@@ -5066,6 +5066,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     DAILY_POWER_SUPPLY: number;
                     IS_RSS3_TESTNET: boolean;
                     PRODUCT_HUNT_VOTE_URL: string;
+                    ANNOUNCEMENT: string;
                 };
             };
             outputFormat: "json" | "text";
