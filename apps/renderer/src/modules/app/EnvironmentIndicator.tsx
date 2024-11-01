@@ -35,8 +35,8 @@ export const EnvironmentIndicator = () => {
                   <div className="flex flex-col gap-2">
                     {Object.entries(actionMap).map(([key, action]) => {
                       return (
-                        <div key={key} className="flex items-center gap-2">
-                          <span>{key}</span>
+                        <div key={key} className="flex w-full items-center gap-2">
+                          <span className="flex flex-1">{key}</span>
                           <Button variant="outline" type="button" onClick={() => action()}>
                             <i className="i-mgc-play-cute-fi size-3" />
                             <span className="ml-1">Run</span>
