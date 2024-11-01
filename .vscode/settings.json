@@ -79,5 +79,6 @@
   "i18n-ally.displayLanguage": "en",
   "i18n-ally.localesPaths": ["locales"],
   "i18n-ally.namespace": true,
-  "i18n-ally.pathMatcher": "{namespaces}/{locale}.json"
+  "i18n-ally.pathMatcher": "{namespaces}/{locale}.json",
+  "editorconfig": true
 }
