@@ -1,5 +1,5 @@
-import { readFileSync, renameSync, writeFileSync } from "node:fs"
-import { dirname, join, resolve } from "node:path"
+import { copyFileSync, readFileSync, renameSync, writeFileSync } from "node:fs"
+import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -17,4 +17,5 @@ renameSync(nextFile, join(changelogDir, `${new_version}.md`))
 // Replace the NEXT_VERSION in the next.md file with the new version
 
 // Create the new next.md file
-writeFileSync(resolve(changelogDir, "next.md"), `# NEXT_VERSION Changelog`)
+
+copyFileSync(join(changelogDir, "next.template.md"), join(changelogDir, "next.md"))

@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.1.1-beta.1",
+  "version": "0.1.2-beta.0",
   "private": true,
   "packageManager": "pnpm@9.11.0",
   "description": "Next generation information browser",
@@ -132,7 +132,8 @@
   "bump": {
     "before": [
       "git pull --rebase",
-      "tsx scripts/apply-changelog.ts ${NEW_VERSION}"
+      "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
+      "git add changelog/${NEW_VERSION}.md"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"

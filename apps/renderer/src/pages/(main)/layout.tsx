@@ -108,7 +108,9 @@ export function Component() {
     <RootContainer ref={containerRef}>
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
-      <AppUpgradeProvider />
+      <Suspense>
+        <AppUpgradeProvider />
+      </Suspense>
       <AppLayoutGridContainerProvider>
         <FeedResponsiveResizerContainer containerRef={containerRef}>
           <FeedColumn>

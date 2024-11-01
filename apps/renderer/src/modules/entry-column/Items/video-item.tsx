@@ -138,7 +138,7 @@ const PreviewVideoModalContent: ModalContentComponent<{
         exit={{
           opacity: 0,
         }}
-        className="fixed right-3 flex items-center gap-4 safe-inset-top-2"
+        className="fixed right-4 flex items-center safe-inset-top-4"
       >
         <FixedModalCloseButton onClick={dismiss} />
       </m.div>
