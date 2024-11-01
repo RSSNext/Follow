@@ -16,7 +16,6 @@ import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
-import { Trend } from "~/modules/trending"
 
 import { useSubViewTitle } from "../hooks"
 
@@ -104,7 +103,7 @@ export function Component() {
             </TabsTrigger>
           ))}
 
-          <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" />
+          {/* <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" /> */}
         </TabsList>
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
