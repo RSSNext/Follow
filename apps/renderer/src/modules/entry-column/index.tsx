@@ -8,6 +8,7 @@ import type { FeedModel } from "@follow/models/types"
 import { clsx, isBizId } from "@follow/utils/utils"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useLocation } from "react-router-dom"
 import type {
   ScrollSeekConfiguration,
   VirtuosoGridProps,
@@ -52,10 +53,14 @@ function EntryColumnImpl() {
       virtuosoRef.current?.scrollTo({
         top: 0,
       })
-      setIsArchived(false)
     }, []),
     isArchived,
   })
+
+  const location = useLocation()
+  useEffect(() => {
+    setIsArchived(false)
+  }, [location])
 
   const { entriesIds, isFetchingNextPage, groupedCounts } = entries
   useSnapEntryIdList(entriesIds)
