@@ -7,9 +7,9 @@ import { isBizId } from "@follow/utils/utils"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
+import type { FollowMenuItem, MenuItemInput } from "~/atoms/context-menu"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
@@ -91,7 +91,7 @@ export const useFeedActions = ({
     const related = feed || inbox
     if (!related) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.mark_all_as_read"),
@@ -328,7 +328,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
   const items = useMemo(() => {
     if (!list) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       list.ownerUserId === whoami()?.id && {
         type: "text" as const,
         label: t("sidebar.feed_actions.list_owned_by_you"),
@@ -416,7 +416,7 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
   const items = useMemo(() => {
     if (!inbox) return []
 
-    const items: NativeMenuItem[] = [
+    const items: FollowMenuItem[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.edit"),
