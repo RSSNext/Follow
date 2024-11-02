@@ -45,6 +45,7 @@ export const createDefaultSettings = (): UISettings => ({
 export const {
   useSettingKey: useUISettingKey,
   useSettingSelector: useUISettingSelector,
+  useSettingKeys: useUISettingKeys,
   setSetting: setUISetting,
   clearSettings: clearUISettings,
   initializeDefaultSettings: initializeDefaultUISettings,

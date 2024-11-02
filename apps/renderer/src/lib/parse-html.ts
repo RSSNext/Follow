@@ -6,6 +6,7 @@ import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { toMdast } from "hast-util-to-mdast"
 import { toText } from "hast-util-to-text"
+import { gfmTableToMarkdown } from "mdast-util-gfm-table"
 import { toMarkdown } from "mdast-util-to-markdown"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -23,7 +24,6 @@ import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { LazyKateX } from "~/components/ui/katex/lazy"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
-import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
 import { useIsInParagraphContext } from "~/components/ui/markdown/renderers/ctx"
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
 import { MarkdownInlineImage } from "~/components/ui/markdown/renderers/InlineImage"
@@ -208,10 +208,8 @@ export const parseHtml = (
               try {
                 codeString = extractCodeFromHtml(renderToString(code))
               } catch (error) {
-                return createElement(BlockError, {
-                  error,
-                  message: "Code Block Render Error",
-                })
+                console.error("Code Block Render Error", error)
+                return createElement("pre", props, props.children)
               }
             }
 
@@ -237,7 +235,7 @@ export const parseHtml = (
         },
       }),
     toText: () => toText(hastTree),
-    toMarkdown: () => toMarkdown(toMdast(hastTree)),
+    toMarkdown: () => toMarkdown(toMdast(hastTree), { extensions: [gfmTableToMarkdown()] }),
   }
 }
 

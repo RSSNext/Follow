@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.1.1-beta.1",
+  "version": "0.1.2-beta.0",
   "private": true,
   "packageManager": "pnpm@9.11.0",
   "description": "Next generation information browser",
@@ -79,7 +79,7 @@
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
     "eslint": "^9.13.0",
-    "eslint-config-hyoban": "^3.1.11",
+    "eslint-config-hyoban": "^3.1.12",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.7.4",
     "hono": "4.6.5",
@@ -131,7 +131,9 @@
   },
   "bump": {
     "before": [
-      "git pull --rebase"
+      "git pull --rebase",
+      "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
+      "git add changelog/${NEW_VERSION}.md"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"

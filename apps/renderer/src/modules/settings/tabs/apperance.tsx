@@ -1,4 +1,5 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import {
   Select,
   SelectContent,
@@ -10,7 +11,7 @@ import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
 import { useForceUpdate } from "framer-motion"
-import { useEffect, useRef } from "react"
+import { lazy, Suspense, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
@@ -26,7 +27,6 @@ import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/ho
 import { isElectronBuild } from "~/constants"
 import { useSetTheme } from "~/hooks/common"
 
-import { CSSEditor } from "../../editor/css-editor"
 import { SETTING_MODAL_ID } from "../constants"
 import {
   SettingActionItem,
@@ -330,6 +330,9 @@ const CustomCSS = () => {
     </SettingItemGroup>
   )
 }
+const LazyCSSEditor = lazy(() =>
+  import("../../editor/css-editor").then((m) => ({ default: m.CSSEditor })),
+)
 
 const CustomCSSModal = () => {
   const initialCSS = useRef(getUISettings().customCSS)
@@ -350,7 +353,7 @@ const CustomCSSModal = () => {
     return () => {
       setUISetting("modalOverlay", prevOverlay)
 
-      modal.style.display = "block"
+      modal.style.display = ""
     }
   }, [])
   const [forceUpdate, key] = useForceUpdate()
@@ -365,14 +368,22 @@ const CustomCSSModal = () => {
         dismiss()
       }}
     >
-      <CSSEditor
-        defaultValue={initialCSS.current}
-        key={key}
-        className="h-0 grow rounded-lg border p-3 font-mono"
-        onChange={(value) => {
-          setUISetting("customCSS", value)
-        }}
-      />
+      <Suspense
+        fallback={
+          <div className="center flex h-0 grow">
+            <LoadingCircle size="large" />
+          </div>
+        }
+      >
+        <LazyCSSEditor
+          defaultValue={initialCSS.current}
+          key={key}
+          className="h-0 grow rounded-lg border p-3 font-mono"
+          onChange={(value) => {
+            setUISetting("customCSS", value)
+          }}
+        />
+      </Suspense>
 
       <div className="mt-2 flex shrink-0 justify-end gap-2">
         <Button

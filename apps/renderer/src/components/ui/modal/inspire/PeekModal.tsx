@@ -14,7 +14,7 @@ const InPeekModal = createContext(false)
 export const useInPeekModal = () => useContext(InPeekModal)
 export const PeekModal = (
   props: PropsWithChildren<{
-    to: string
+    to?: string
   }>,
 ) => {
   const { dismissAll } = useModalStack()
@@ -38,21 +38,23 @@ export const PeekModal = (
         exit={{
           opacity: 0,
         }}
-        className="fixed right-3 flex items-center gap-4 safe-inset-top-2"
+        className="fixed right-4 flex items-center gap-4 safe-inset-top-4"
       >
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              className="center flex size-8 cursor-button rounded-full bg-theme-background p-1 shadow-sm ring-1 ring-zinc-200 dark:ring-neutral-800"
-              to={to}
-              onClick={dismissAll}
-            >
-              <i className="i-mgc-fullscreen-2-cute-re text-lg" />
-              <span className="sr-only">Go to this link</span>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent>{t("words.expand")}</TooltipContent>
-        </Tooltip>
+        {!!to && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                className="center flex size-8 cursor-button rounded-full bg-theme-background p-1 shadow-sm ring-1 ring-zinc-200 dark:ring-neutral-800"
+                to={to}
+                onClick={dismissAll}
+              >
+                <i className="i-mgc-fullscreen-2-cute-re text-lg" />
+                <span className="sr-only">Go to this link</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>{t("words.expand")}</TooltipContent>
+          </Tooltip>
+        )}
         <FixedModalCloseButton onClick={dismiss} />
       </m.div>
     </div>

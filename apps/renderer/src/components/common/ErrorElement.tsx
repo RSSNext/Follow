@@ -78,7 +78,7 @@ export function ErrorElement() {
         </Button>
       </div>
 
-      <FeedbackIssue message={message} stack={stack} />
+      <FeedbackIssue message={message} stack={stack} error={error as Error} />
       <div className="grow" />
 
       <PoweredByFooter />
@@ -89,15 +89,18 @@ export function ErrorElement() {
 export const FeedbackIssue = ({
   message,
   stack,
+  error,
 }: {
   message: string
   stack: string | null | undefined
+  error?: unknown
 }) => (
   <p className="mt-8">
     Still having this issue? Please give feedback in GitHub, thanks!
     <a
       className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-accent"
       href={getNewIssueUrl({
+        error: error instanceof Error ? error : undefined,
         title: `Error: ${message}`,
         body: ["### Error", "", message, "", "### Stack", "", "```", stack, "```"].join("\n"),
         label: "bug",

@@ -199,3 +199,12 @@ export { parse as parseUrl } from "tldts"
 
 export const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max)
+
+export function shallowCopy<T>(input: T): T {
+  if (Array.isArray(input)) {
+    return [...input] as T
+  } else if (input && typeof input === "object") {
+    return { ...input } as T
+  }
+  return input
+}

@@ -3,6 +3,7 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
   SimpleIconsOmnivore,
+  SimpleIconsOutline,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { FeedViewType } from "@follow/constants"
@@ -25,7 +26,7 @@ import {
   setReadabilityContent,
   setReadabilityStatus,
 } from "~/atoms/readability"
-import { useIntegrationSettingKey } from "~/atoms/settings/integration"
+import { useIntegrationSettingValue } from "~/atoms/settings/integration"
 import {
   setShowSourceContent,
   toggleShowSourceContent,
@@ -197,17 +198,24 @@ export const useEntryActions = ({
   const uncollect = useUnCollect(populatedEntry)
   const read = useRead()
   const unread = useUnread()
-  const enableEagle = useIntegrationSettingKey("enableEagle")
-  const enableReadwise = useIntegrationSettingKey("enableReadwise")
-  const readwiseToken = useIntegrationSettingKey("readwiseToken")
-  const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
-  const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
-  const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
-  const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
-  const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
-  const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
-  const enableObsidian = useIntegrationSettingKey("enableObsidian")
-  const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
+
+  const {
+    enableEagle,
+    enableReadwise,
+    enableInstapaper,
+    enableOmnivore,
+    enableObsidian,
+    enableOutline,
+    readwiseToken,
+    instapaperUsername,
+    instapaperPassword,
+    omnivoreToken,
+    omnivoreEndpoint,
+    obsidianVaultPath,
+    outlineToken,
+    outlineEndpoint,
+    outlineCollection,
+  } = useIntegrationSettingValue()
   const isObsidianEnabled = enableObsidian && !!obsidianVaultPath
 
   const saveToObsidian = useMutation({
@@ -254,6 +262,17 @@ export const useEntryActions = ({
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
+
+    const getEntryContentAsMarkdown = () => {
+      const isReadabilityReady =
+        getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
+      const content =
+        (isReadabilityReady
+          ? getReadabilityContent()[populatedEntry.entries.id].content
+          : populatedEntry.entries.content) || ""
+      return parseHtml(content).toMarkdown()
+    }
+
     const items: {
       key: string
       className?: string
@@ -462,13 +481,7 @@ export const useEntryActions = ({
         onClick: () => {
           if (!isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON) return
 
-          const isReadabilityReady =
-            getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
-          const content =
-            (isReadabilityReady
-              ? getReadabilityContent()[populatedEntry.entries.id].content
-              : populatedEntry.entries.content) || ""
-          const markdownContent = parseHtml(content).toMarkdown()
+          const markdownContent = getEntryContentAsMarkdown()
           window.analytics?.capture("integration", {
             type: "obsidian",
             event: "save",
@@ -481,6 +494,53 @@ export const useEntryActions = ({
             publishedAt: populatedEntry.entries.publishedAt || "",
             vaultPath: obsidianVaultPath,
           })
+        },
+      },
+      {
+        name: t("entry_actions.save_to_outline"),
+        icon: <SimpleIconsOutline />,
+        key: "saveTooutline",
+        hide:
+          !IN_ELECTRON ||
+          !enableOutline ||
+          !outlineToken ||
+          !outlineEndpoint ||
+          !outlineCollection ||
+          !populatedEntry.entries.title,
+        onClick: async () => {
+          try {
+            const request = async (method: string, params: Record<string, unknown>) => {
+              return await ofetch(`${outlineEndpoint.replace(/\/$/, "")}/${method}`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${outlineToken}`,
+                },
+                body: params,
+              })
+            }
+            let collectionId = outlineCollection
+            if (!/^[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}$/i.test(collectionId)) {
+              const collection = await request("collections.info", {
+                id: collectionId,
+              })
+              collectionId = collection.data.id
+            }
+            const markdownContent = getEntryContentAsMarkdown()
+            await request("documents.create", {
+              title: populatedEntry.entries.title,
+              text: markdownContent,
+              collectionId,
+              publish: true,
+            })
+            toast.success(t("entry_actions.saved_to_outline"), {
+              duration: 3000,
+            })
+          } catch {
+            toast.error(t("entry_actions.failed_to_save_to_outline"), {
+              duration: 3000,
+            })
+          }
         },
       },
       {
@@ -660,6 +720,10 @@ export const useEntryActions = ({
     omnivoreToken,
     omnivoreEndpoint,
     isObsidianEnabled,
+    enableOutline,
+    outlineToken,
+    outlineEndpoint,
+    outlineCollection,
     isInbox,
     feed?.ownerUserId,
     type,

@@ -3,7 +3,7 @@ import { cn, isSafari } from "@follow/utils/utils"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
-import { useUISettingKey } from "~/atoms/settings/ui"
+import { useUISettingKeys } from "~/atoms/settings/ui"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { FEED_COLLECTION_LIST } from "~/constants"
@@ -62,8 +62,7 @@ export function ListItem({
     { leading: false },
   )
 
-  const settingWideMode = useUISettingKey("wideMode")
-  const thumbnailRatio = useUISettingKey("thumbnailRatio")
+  const [settingWideMode, thumbnailRatio] = useUISettingKeys(["wideMode", "thumbnailRatio"])
   const rid = `list-item-${entryId}`
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more

@@ -9,9 +9,10 @@ export const Radio: FC<
   React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
     label: ReactNode
     wrapperClassName?: string
+    labelClassName?: string
   }
 > = (props) => {
-  const { id, label, className, wrapperClassName, value, onChange, ...rest } = props
+  const { id, label, className, wrapperClassName, labelClassName, value, onChange, ...rest } = props
   const { onChange: ctxOnChange } = useRadioContext() || {}
   const fallbackId = useId()
 
@@ -22,7 +23,7 @@ export const Radio: FC<
     onChange?.(e)
   })
   return (
-    <div className={cn("flex items-center", wrapperClassName)}>
+    <label className={cn("flex items-center", wrapperClassName)} htmlFor={id ?? fallbackId}>
       <input
         {...rest}
         type="radio"
@@ -36,12 +37,9 @@ export const Radio: FC<
         onChange={handleChange}
       />
 
-      <label
-        className={cn(rest.disabled ? "text-theme-disabled" : "", "pl-2")}
-        htmlFor={id ?? fallbackId}
-      >
+      <span className={cn(rest.disabled ? "text-theme-disabled" : "", "pl-2", labelClassName)}>
         {label}
-      </label>
-    </div>
+      </span>
+    </label>
   )
 }

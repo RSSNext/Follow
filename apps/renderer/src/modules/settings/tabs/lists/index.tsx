@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
-import { Button } from "@follow/components/ui/button/index.js"
+import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
@@ -32,11 +32,14 @@ import { listActions } from "~/store/list"
 
 import { ListCreationModalContent, ListFeedsModalContent } from "./modals"
 
-export const SettingLists = () => {
+const ConfirmDestroyModalContent = ({
+  listId,
+  onSuccess,
+}: {
+  listId: string
+  onSuccess: () => void
+}) => {
   const t = useI18n()
-  const listList = useAuthQuery(Queries.lists.list())
-
-  const { present } = useModalStack()
 
   const deleteFeedList = useMutation({
     mutationFn: async (payload: { listId: string }) => {
@@ -50,11 +53,33 @@ export const SettingLists = () => {
     onSuccess: () => {
       toast.success(t.settings("lists.delete.success"))
       Queries.lists.list().invalidate()
+      onSuccess()
     },
     async onError() {
       toast.error(t.settings("lists.delete.error"))
     },
   })
+
+  return (
+    <div className="w-[540px]">
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t.settings("lists.delete.warning")}
+      </div>
+      <div className="flex justify-end">
+        <Button className="bg-red-600" onClick={() => deleteFeedList.mutate({ listId })}>
+          {t("words.confirm")}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const SettingLists = () => {
+  const t = useI18n()
+  const listList = useAuthQuery(Queries.lists.list())
+
+  const { present } = useModalStack()
 
   return (
     <section className="mt-4">
@@ -76,117 +101,130 @@ export const SettingLists = () => {
       <div className="flex flex-1 flex-col">
         <ScrollArea.ScrollArea viewportClassName="max-h-[380px]">
           {listList.data?.length ? (
-            <Table className="mt-4">
-              <TableHeader className="border-b">
-                <TableRow className="[&_*]:!font-semibold">
-                  <TableHead size="sm">{t.settings("lists.title")}</TableHead>
-                  <TableHead size="sm">{t.settings("lists.view")}</TableHead>
-                  <TableHead size="sm">{t.settings("lists.fee.label")}</TableHead>
-                  <TableHead size="sm">{t.settings("lists.subscriptions")}</TableHead>
-                  <TableHead size="sm">{t.settings("lists.earnings")}</TableHead>
-                  <TableHead size="sm" className="center">
-                    {t.common("words.actions")}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
-                {listList.data?.map((row) => (
-                  <TableRow key={row.title} className="h-8">
-                    <TableCell size="sm">
-                      <a
-                        target="_blank"
-                        href={UrlBuilder.shareList(row.id)}
-                        className="inline-flex items-center gap-2 font-semibold"
-                      >
-                        {row.image && (
-                          <Avatar className="size-6">
-                            <AvatarImage src={row.image} />
-                          </Avatar>
-                        )}
-                        <span className="inline-block max-w-[200px] truncate">{row.title}</span>
-                      </a>
-                    </TableCell>
-                    <TableCell size="sm">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span
-                            className={cn("inline-flex items-center", views[row.view].className)}
-                          >
-                            {views[row.view].icon}
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipPortal>
-                          <TooltipContent>{t(views[row.view].name)}</TooltipContent>
-                        </TooltipPortal>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell size="sm">
-                      <div className="flex items-center gap-1">
-                        {row.fee}
-                        <i className="i-mgc-power shrink-0 text-lg text-accent" />
-                      </div>
-                    </TableCell>
-                    <TableCell size="sm">{row.subscriptionCount}</TableCell>
-                    <TableCell size="sm">
-                      <Balance>{BigInt(row.purchaseAmount || 0n)}</Balance>
-                    </TableCell>
-                    <TableCell size="sm" className="center">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            onClick={() => {
-                              present({
-                                title: t.settings("lists.feeds.manage"),
-                                content: () => <ListFeedsModalContent id={row.id} />,
-                              })
-                            }}
-                          >
-                            <i className="i-mgc-inbox-cute-re" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipPortal>
-                          <TooltipContent>{t.common("words.manage")}</TooltipContent>
-                        </TooltipPortal>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            onClick={() => {
-                              present({
-                                title: t.settings("lists.edit.label"),
-                                content: () => <ListCreationModalContent id={row.id} />,
-                              })
-                            }}
-                          >
-                            <i className="i-mgc-edit-cute-re" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipPortal>
-                          <TooltipContent>{t.common("words.edit")}</TooltipContent>
-                        </TooltipPortal>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            onClick={() => {
-                              deleteFeedList.mutate({ listId: row.id })
-                            }}
-                          >
-                            <i className="i-mgc-delete-2-cute-re" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipPortal>
-                          <TooltipContent>{t.common("words.delete")}</TooltipContent>
-                        </TooltipPortal>
-                      </Tooltip>
-                    </TableCell>
+            <div className="overflow-auto">
+              <Table className="mt-4">
+                <TableHeader className="border-b">
+                  <TableRow className="[&_*]:!font-semibold">
+                    <TableHead size="sm">{t.settings("lists.title")}</TableHead>
+                    <TableHead size="sm">{t.settings("lists.view")}</TableHead>
+                    <TableHead size="sm">{t.settings("lists.fee.label")}</TableHead>
+                    <TableHead size="sm">{t.settings("lists.subscriptions")}</TableHead>
+                    <TableHead size="sm">{t.settings("lists.earnings")}</TableHead>
+                    <TableHead size="sm" className="center">
+                      {t.common("words.actions")}
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
+                  {listList.data?.map((row) => (
+                    <TableRow key={row.title} className="h-8">
+                      <TableCell size="sm">
+                        <a
+                          target="_blank"
+                          href={UrlBuilder.shareList(row.id)}
+                          className="inline-flex items-center gap-2 font-semibold"
+                        >
+                          {row.image && (
+                            <Avatar className="size-6">
+                              <AvatarImage src={row.image} />
+                            </Avatar>
+                          )}
+                          <span className="inline-block max-w-[200px] truncate">{row.title}</span>
+                        </a>
+                      </TableCell>
+                      <TableCell size="sm">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span
+                              className={cn("inline-flex items-center", views[row.view].className)}
+                            >
+                              {views[row.view].icon}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipPortal>
+                            <TooltipContent>{t(views[row.view].name)}</TooltipContent>
+                          </TooltipPortal>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell size="sm">
+                        <div className="flex items-center gap-1">
+                          {row.fee}
+                          <i className="i-mgc-power shrink-0 text-lg text-accent" />
+                        </div>
+                      </TableCell>
+                      <TableCell size="sm">{row.subscriptionCount}</TableCell>
+                      <TableCell size="sm">
+                        <Balance>{BigInt(row.purchaseAmount || 0n)}</Balance>
+                      </TableCell>
+                      <TableCell size="sm" className="center">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              onClick={() => {
+                                present({
+                                  title: t.settings("lists.feeds.manage"),
+                                  content: () => <ListFeedsModalContent id={row.id} />,
+                                })
+                              }}
+                            >
+                              <i className="i-mgc-inbox-cute-re" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipPortal>
+                            <TooltipContent>{t.common("words.manage")}</TooltipContent>
+                          </TooltipPortal>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              onClick={() => {
+                                present({
+                                  title: t.settings("lists.edit.label"),
+                                  content: () => <ListCreationModalContent id={row.id} />,
+                                })
+                              }}
+                            >
+                              <i className="i-mgc-edit-cute-re" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipPortal>
+                            <TooltipContent>{t.common("words.edit")}</TooltipContent>
+                          </TooltipPortal>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <ActionButton
+                              size="sm"
+                              onClick={() =>
+                                present({
+                                  title: t.settings("lists.delete.confirm"),
+                                  content: ({ dismiss }) => (
+                                    <ConfirmDestroyModalContent
+                                      listId={row.id}
+                                      onSuccess={() => {
+                                        listList.refetch()
+                                        dismiss()
+                                      }}
+                                    />
+                                  ),
+                                })
+                              }
+                            >
+                              <i className="i-mgc-delete-2-cute-re" />
+                            </ActionButton>
+                          </TooltipTrigger>
+                          <TooltipPortal>
+                            <TooltipContent>{t.common("words.delete")}</TooltipContent>
+                          </TooltipPortal>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : listList.isLoading ? (
             <LoadingCircle size="large" className="center absolute inset-0" />
           ) : (
