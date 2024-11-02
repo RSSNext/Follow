@@ -6,6 +6,9 @@ type ToasterProps = React.ComponentProps<typeof Sonner>
 export const Toaster = ({ ...props }: ToasterProps) => (
   <Sonner
     theme={useIsDark() ? "dark" : "light"}
+    style={{
+      fontFamily: "var(--fo-font-family)",
+    }}
     toastOptions={{
       className: tw`pointer-events-auto group`,
       classNames: {
