@@ -1,6 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
-import { useAnyPointDown } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback, useState } from "react"
@@ -76,13 +75,12 @@ export const EntryItemWrapper: FC<
     [entry.entries.url],
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => isContextMenuOpen && setIsContextMenuOpen(false))
-  const showMenu = useShowContextMenu()
+  const showContextMenu = useShowContextMenu()
   const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
     async (e) => {
       e.preventDefault()
       setIsContextMenuOpen(true)
-      await showMenu(
+      await showContextMenu(
         [
           ...items
             .filter((item) => !item.hide)
@@ -110,8 +108,9 @@ export const EntryItemWrapper: FC<
         ],
         e,
       )
+      setIsContextMenuOpen(false)
     },
-    [showMenu, items, feedItems, t, entry.entries.id],
+    [showContextMenu, items, feedItems, t, entry.entries.id],
   )
 
   return (

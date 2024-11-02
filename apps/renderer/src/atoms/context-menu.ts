@@ -114,7 +114,6 @@ function normalizeMenuItems(items: MenuItemInput[]): FollowMenuItem[] {
         submenu: item.submenu ? normalizeMenuItems(item.submenu) : undefined,
       }
     })
-    .filter((item) => item !== null)
 }
 
 // MenuItem must have at least one of label, role or type

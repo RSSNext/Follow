@@ -3,7 +3,7 @@ import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
-import { useAnyPointDown, useInputComposition, useRefValue } from "@follow/hooks"
+import { useInputComposition, useRefValue } from "@follow/hooks"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, sortByAlphabet } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
@@ -13,7 +13,7 @@ import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } fro
 import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
-import type { NullableNativeMenuItem } from "~/atoms/context-menu"
+import type { MenuItemInput } from "~/atoms/context-menu"
 import { useShowContextMenu } from "~/atoms/context-menu"
 import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -144,9 +144,6 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const [isCategoryEditing, setIsCategoryEditing] = useState(false)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const isCategoryIsWaiting = isChangePending
 
   const addMutation = useAddFeedToFeedList()
@@ -169,10 +166,10 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
               setCategoryActive()
             }
           }}
-          onContextMenu={(e) => {
+          onContextMenu={async (e) => {
             setIsContextMenuOpen(true)
 
-            showContextMenu(
+            await showContextMenu(
               [
                 {
                   type: "text",
@@ -200,7 +197,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                               listId: list.id,
                             })
                           },
-                        }) as NullableNativeMenuItem,
+                        }) as MenuItemInput,
                     )
                     .concat(listList?.length > 0 ? [{ type: "separator" as const }] : [])
                     .concat([
@@ -256,6 +253,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
               ],
               e,
             )
+            setIsContextMenuOpen(false)
           }}
         >
           <div className="flex w-full min-w-0 items-center" onDoubleClick={toggleCategoryOpenState}>

@@ -7,7 +7,6 @@ import {
 } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedViewType } from "@follow/constants"
-import { useAnyPointDown } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
@@ -92,9 +91,6 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   const showContextMenu = useShowContextMenu()
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   if (!feed) return null
 
   const isFeed = feed.type === "feed" || !feed.type
@@ -114,8 +110,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         onDoubleClick={() => {
           window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
-        onContextMenu={(e) => {
-          setIsContextMenuOpen(true)
+        onContextMenu={async (e) => {
           const nextItems = items.concat()
           if (isFeed && feed.errorAt && feed.errorMessage) {
             nextItems.push(
@@ -140,7 +135,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
               },
             )
           }
-          showContextMenu(
+          setIsContextMenuOpen(true)
+          await showContextMenu(
             nextItems.filter(
               (item) =>
                 selectedFeedIds.length === 0 ||
@@ -151,6 +147,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             ),
             e,
           )
+          setIsContextMenuOpen(false)
         }}
       >
         <div
@@ -217,9 +214,6 @@ const ListItemImpl: Component<{
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const subscription = useSubscriptionByFeedId(listId)
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
@@ -258,9 +252,10 @@ const ListItemImpl: Component<{
       onDoubleClick={() => {
         window.open(UrlBuilder.shareList(listId, view), "_blank")
       }}
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         setIsContextMenuOpen(true)
-        showContextMenu(items, e)
+        await showContextMenu(items, e)
+        setIsContextMenuOpen(false)
       }}
     >
       <div className={"flex min-w-0 items-center"}>
@@ -300,9 +295,6 @@ const InboxItemImpl: Component<{
   const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -330,9 +322,10 @@ const InboxItemImpl: Component<{
         className,
       )}
       onClick={handleNavigate}
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         setIsContextMenuOpen(true)
-        showContextMenu(items, e)
+        await showContextMenu(items, e)
+        setIsContextMenuOpen(false)
       }}
     >
       <div className={"flex min-w-0 items-center"}>
