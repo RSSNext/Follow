@@ -31,6 +31,7 @@
     "clsx": "2.1.1",
     "framer-motion": "11.11.9",
     "lodash-es": "4.17.21",
+    "nanoid": "5.0.7",
     "tailwind-merge": "2.5.4",
     "tldts": "6.1.51",
     "uniqolor": "1.1.1"
