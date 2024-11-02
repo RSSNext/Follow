@@ -24,7 +24,6 @@ import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { LazyKateX } from "~/components/ui/katex/lazy"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
-import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
 import { useIsInParagraphContext } from "~/components/ui/markdown/renderers/ctx"
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
 import { MarkdownInlineImage } from "~/components/ui/markdown/renderers/InlineImage"
@@ -209,10 +208,8 @@ export const parseHtml = (
               try {
                 codeString = extractCodeFromHtml(renderToString(code))
               } catch (error) {
-                return createElement(BlockError, {
-                  error,
-                  message: "Code Block Render Error",
-                })
+                console.error("Code Block Render Error", error)
+                return createElement("pre", props, props.children)
               }
             }
 

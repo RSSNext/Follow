@@ -56,7 +56,7 @@ export const Component = () => {
       <EntryGridContainer showEntryContent={showEntryContent} wideMode={wideMode}>
         {wideMode && (
           <FixedModalCloseButton
-            className="absolute left-4 top-4 z-10"
+            className="no-drag-region absolute left-4 top-4 z-10"
             onClick={() => navigate({ entryId: null })}
           />
         )}
