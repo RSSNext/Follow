@@ -15,12 +15,12 @@ import dayjs from "dayjs"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useShowContextMenu } from "~/atoms/context-menu"
 import { getMainContainerElement } from "~/atoms/dom"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getNewIssueUrl } from "~/lib/issues"
-import { showNativeMenu } from "~/lib/native-menu"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
@@ -91,6 +91,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   })
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  const showContextMenu = useShowContextMenu()
   useAnyPointDown(() => {
     isContextMenuOpen && setIsContextMenuOpen(false)
   })
@@ -139,7 +140,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
               },
             )
           }
-          showNativeMenu(
+          showContextMenu(
             nextItems.filter(
               (item) =>
                 selectedFeedIds.length === 0 ||
@@ -240,6 +241,7 @@ const ListItemImpl: Component<{
     },
     [listId, navigate, view],
   )
+  const showContextMenu = useShowContextMenu()
   const { t } = useTranslation()
   if (!list) return null
   return (
@@ -258,8 +260,7 @@ const ListItemImpl: Component<{
       }}
       onContextMenu={(e) => {
         setIsContextMenuOpen(true)
-
-        showNativeMenu(items, e)
+        showContextMenu(items, e)
       }}
     >
       <div className={"flex min-w-0 items-center"}>
@@ -315,6 +316,8 @@ const InboxItemImpl: Component<{
     },
     [inboxId, navigate, view],
   )
+  const showContextMenu = useShowContextMenu()
+
   if (!inbox) return null
   return (
     <div
@@ -329,7 +332,7 @@ const InboxItemImpl: Component<{
       onClick={handleNavigate}
       onContextMenu={(e) => {
         setIsContextMenuOpen(true)
-        showNativeMenu(items, e)
+        showContextMenu(items, e)
       }}
     >
       <div className={"flex min-w-0 items-center"}>

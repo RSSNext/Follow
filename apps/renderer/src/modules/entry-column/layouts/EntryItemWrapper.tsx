@@ -7,13 +7,13 @@ import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
+import { useShowContextMenu } from "~/atoms/context-menu"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { showNativeMenu } from "~/lib/native-menu"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -77,11 +77,12 @@ export const EntryItemWrapper: FC<
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   useAnyPointDown(() => isContextMenuOpen && setIsContextMenuOpen(false))
+  const showMenu = useShowContextMenu()
   const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault()
       setIsContextMenuOpen(true)
-      showNativeMenu(
+      await showMenu(
         [
           ...items
             .filter((item) => !item.hide)
@@ -110,7 +111,7 @@ export const EntryItemWrapper: FC<
         e,
       )
     },
-    [items, feedItems, t, entry.entries.id],
+    [showMenu, items, feedItems, t, entry.entries.id],
   )
 
   return (

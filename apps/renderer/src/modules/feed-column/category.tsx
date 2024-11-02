@@ -13,11 +13,11 @@ import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } fro
 import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
+import type { NullableNativeMenuItem } from "~/atoms/context-menu"
+import { useShowContextMenu } from "~/atoms/context-menu"
 import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import type { NullableNativeMenuItem } from "~/lib/native-menu"
-import { showNativeMenu } from "~/lib/native-menu"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
 import { useOwnedList } from "~/store/list"
 import {
@@ -152,6 +152,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const addMutation = useAddFeedToFeedList()
 
   const listList = useOwnedList(view!)
+  const showContextMenu = useShowContextMenu()
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
@@ -171,7 +172,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           onContextMenu={(e) => {
             setIsContextMenuOpen(true)
 
-            showNativeMenu(
+            showContextMenu(
               [
                 {
                   type: "text",
