@@ -3,7 +3,7 @@ import { cn } from "@follow/utils/utils"
 import { Fragment, memo, useCallback, useEffect, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 
-import type { NativeMenuItem } from "~/atoms/context-menu"
+import type { FollowMenuItem } from "~/atoms/context-menu"
 import { useContextMenuState } from "~/atoms/context-menu"
 import {
   ContextMenu,
@@ -79,7 +79,7 @@ const Handler = () => {
   )
 }
 
-const Item = memo(({ item }: { item: NativeMenuItem }) => {
+const Item = memo(({ item }: { item: FollowMenuItem }) => {
   const onClick = useCallback(() => {
     if ("click" in item) {
       // Here we need to delay one frame,
