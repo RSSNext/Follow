@@ -102,6 +102,7 @@ async function safeInjectMetaToTemplate(
     return document
   }
 }
+
 async function injectMetaToTemplate(document: Document, req: FastifyRequest, res: FastifyReply) {
   const injectMetadata = await injectMetaHandler(req, res).catch((err) => {
     if (isDev) {
