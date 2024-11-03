@@ -688,9 +688,6 @@ importers:
       framer-motion:
         specifier: 11.11.9
         version: 11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      glob:
-        specifier: 11.0.0
-        version: 11.0.0
       i18next:
         specifier: ^23.16.0
         version: 23.16.0
@@ -703,15 +700,9 @@ importers:
       linkedom:
         specifier: ^0.18.5
         version: 0.18.5
-      nanoid:
-        specifier: 5.0.7
-        version: 5.0.7
       ofetch:
         specifier: 1.4.1
         version: 1.4.1
-      path-to-regexp:
-        specifier: 8.2.0
-        version: 8.2.0
       rc-modal-sheet:
         specifier: 0.3.2
         version: 0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
@@ -782,6 +773,9 @@ importers:
       foxact:
         specifier: 0.2.39
         version: 0.2.39(react@18.3.1)
+      glob:
+        specifier: 11.0.0
+        version: 11.0.0
       lightningcss:
         specifier: 1.27.0
         version: 1.27.0
@@ -791,6 +785,12 @@ importers:
       masonic:
         specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
+      nanoid:
+        specifier: 5.0.7
+        version: 5.0.7
+      path-to-regexp:
+        specifier: 8.2.0
+        version: 8.2.0
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
