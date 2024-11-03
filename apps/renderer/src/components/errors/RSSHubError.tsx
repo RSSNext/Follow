@@ -23,7 +23,7 @@ const RSSHubErrorFallback: FC<AppErrorFallbackProps> = (props) => {
           </pre>
         ) : null}
 
-        <FeedbackIssue message={message!} stack={stack} />
+        <FeedbackIssue message={message!} stack={stack} error={props.error} />
       </div>
     </div>
   )
