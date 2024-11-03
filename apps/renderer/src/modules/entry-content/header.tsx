@@ -57,6 +57,20 @@ function EntryHeaderImpl({
 
   const shouldShowMeta = (hideRecentReader || !isAtTop) && !!entryTitleMeta?.title
 
+  const [actionLoading, setActionLoading] = useState(
+    items.reduce((states, { key }) => {
+      states[key] = false
+      return states
+    }, {}),
+  )
+
+  const setActionLoadingByKey = (key: string, value: boolean) => {
+    setActionLoading((actionLoading) => ({
+      ...actionLoading,
+      [key]: value,
+    }))
+  }
+
   if (!entry?.entries) return null
 
   return (
@@ -108,7 +122,9 @@ function EntryHeaderImpl({
               <ActionButton
                 disabled={item.disabled}
                 icon={
-                  item.icon ? (
+                  actionLoading[item.key] ? (
+                    <i className="i-mgc-loading-3-cute-re animate-spin" />
+                  ) : item.icon ? (
                     <Slot className="size-4">{item.icon}</Slot>
                   ) : (
                     <i className={item.className} />
@@ -116,7 +132,15 @@ function EntryHeaderImpl({
                 }
                 active={item.active}
                 shortcut={item.shortcut}
-                onClick={item.onClick}
+                onClick={async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                  if (actionLoading[item.key]) return
+                  setActionLoadingByKey(item.key, true)
+                  try {
+                    await item.onClick(e)
+                  } finally {
+                    setActionLoadingByKey(item.key, false)
+                  }
+                }}
                 tooltip={item.name}
                 key={item.name}
               />
