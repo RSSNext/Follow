@@ -65,6 +65,8 @@ export const useFeedActions = ({
       type: feed.type,
       ownerUserId: feed.ownerUserId,
       id: feed.id,
+      url: feed.url,
+      siteUrl: feed.siteUrl,
     }
   })
   const inbox = useInboxById(feedId)
@@ -273,10 +275,10 @@ export const useFeedActions = ({
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => {
-          // @ts-expect-error
-          const { url } = feed || {}
-          if (!url) return
-          navigator.clipboard.writeText(url)
+          const { url, siteUrl } = feed || {}
+          const copied = url || siteUrl
+          if (!copied) return
+          navigator.clipboard.writeText(copied)
         },
       },
       {
