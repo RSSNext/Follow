@@ -3,6 +3,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
     "dev": "cross-env NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
+    "meta": "tsx helper/meta-map.ts --watch",
     "start": "tsx index.ts"
   },
   "dependencies": {
@@ -19,11 +20,14 @@
     "dayjs": "1.11.13",
     "fastify": "5.0.0",
     "framer-motion": "11.11.9",
+    "glob": "11.0.0",
     "i18next": "^23.16.0",
     "jotai": "2.10.1",
     "kose-font": "1.0.0",
     "linkedom": "^0.18.5",
+    "nanoid": "5.0.7",
     "ofetch": "1.4.1",
+    "path-to-regexp": "8.2.0",
     "rc-modal-sheet": "0.3.2",
     "react": "^18.3.1",
     "react-blurhash": "^0.3.0",
@@ -46,6 +50,7 @@
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
     "@radix-ui/react-avatar": "1.1.1",
+    "chokidar": "4.0.1",
     "daisyui": "4.12.13",
     "foxact": "0.2.39",
     "lightningcss": "1.27.0",

@@ -11,7 +11,7 @@ import xss from "xss"
 import { isDev } from "~/lib/env"
 import { buildSeoMetaTags } from "~/lib/seo"
 
-import { injectMetaHandler } from "../meta-handler"
+import { injectMetaHandler, MetaError } from "../meta-handler"
 
 const devHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
@@ -88,7 +88,7 @@ async function safeInjectMetaToTemplate(
   res: FastifyReply,
 ) {
   try {
-    return await injectMetaToTemplate(document, req)
+    return await injectMetaToTemplate(document, req, res)
   } catch (e) {
     console.error("inject meta error", e)
 
@@ -96,11 +96,14 @@ async function safeInjectMetaToTemplate(
       res.code(e.response.status)
     }
 
+    if (e instanceof MetaError) {
+      throw e
+    }
     return document
   }
 }
-async function injectMetaToTemplate(document: Document, req: FastifyRequest) {
-  const injectMetadata = await injectMetaHandler(req).catch((err) => {
+async function injectMetaToTemplate(document: Document, req: FastifyRequest, res: FastifyReply) {
+  const injectMetadata = await injectMetaHandler(req, res).catch((err) => {
     if (isDev) {
       throw err
     }
