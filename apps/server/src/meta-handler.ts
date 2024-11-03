@@ -46,7 +46,7 @@ export async function injectMetaHandler(
     if (result) {
       const parsedUrl = new URL(url, upstreamOrigin)
 
-      return await handler({
+      return (await handler({
         params: result.params as Record<string, string>,
         url: parsedUrl,
         req,
@@ -61,7 +61,7 @@ export async function injectMetaHandler(
         throwError(status, message) {
           throw new MetaError(status, message)
         },
-      })
+      })) as MetaTag[]
     }
   }
 
