@@ -19,6 +19,7 @@
     "build:macos": "electron-vite build && electron-forge make --arch=universal --platform=darwin",
     "build:web": "rm -rf out/web && vite build",
     "bump": "vv",
+    "dedupe:locales": "eslint --fix locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
     "dev": "electron-vite dev",
     "dev:debug": "export DEBUG=true && vite --debug",
@@ -127,6 +128,9 @@
     "*": [
       "eslint --fix",
       "prettier --ignore-unknown --write"
+    ],
+    "locales/**/*.json": [
+      "npm run dedupe:locales"
     ]
   },
   "bump": {
