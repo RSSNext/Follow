@@ -68,22 +68,20 @@ export async function injectMetaHandler(
   return []
 }
 
-export function defineMetadata<Params extends Record<string, string>>(
+export function defineMetadata<Params extends Record<string, string>, T extends readonly MetaTag[]>(
   fn: (args: {
     req: FastifyRequest
     url: URL
     params: Params
     apiClient: ApiClient
     origin: string
-
     setStatus: (status: number) => void
     setStatusText: (statusText: string) => void
     throwError: (status: number, message: any) => never
-  }) => MetaTag[] | Promise<MetaTag[]>,
+  }) => Promise<T> | T,
 ) {
   return fn
 }
-
 export class MetaError extends Error {
   status: number
   metaMessage: object

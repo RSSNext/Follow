@@ -1,6 +1,8 @@
+import type { GetHydrateData } from "@client/lib/helper"
+
 import { defineMetadata } from "~/meta-handler"
 
-export default defineMetadata(async ({ params, apiClient, origin, throwError }) => {
+const meta = defineMetadata(async ({ params, apiClient, origin, throwError }) => {
   const feedId = params.id
 
   const feed = await apiClient.feeds.$get({ query: { id: feedId } }).catch((e) => {
@@ -27,5 +29,8 @@ export default defineMetadata(async ({ params, apiClient, origin, throwError }) 
       path: apiClient.feeds.$url({ query: { id: feedId } }).pathname,
       key: `feeds.$get,query:id=${feedId}`,
     },
-  ]
+  ] as const
 })
+
+export type FeedHydrateData = GetHydrateData<typeof meta>
+export default meta
