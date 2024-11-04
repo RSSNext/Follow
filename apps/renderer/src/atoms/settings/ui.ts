@@ -8,10 +8,11 @@ export const createDefaultSettings = (): UISettings => ({
   // Sidebar
   entryColWidth: 356,
   feedColWidth: 256,
+  hideExtraBadge: false,
 
   opaqueSidebar: false,
   sidebarShowUnreadCount: true,
-  hideExtraBadge: false,
+  thumbnailRatio: "square",
 
   // Global UI
   uiTextSize: 16,
@@ -33,6 +34,7 @@ export const createDefaultSettings = (): UISettings => ({
   codeHighlightThemeDark: "github-dark",
   guessCodeLanguage: true,
   hideRecentReader: false,
+  customCSS: "",
 
   // View
   pictureViewMasonry: true,
@@ -43,6 +45,7 @@ export const createDefaultSettings = (): UISettings => ({
 export const {
   useSettingKey: useUISettingKey,
   useSettingSelector: useUISettingSelector,
+  useSettingKeys: useUISettingKeys,
   setSetting: setUISetting,
   clearSettings: clearUISettings,
   initializeDefaultSettings: initializeDefaultUISettings,
@@ -55,6 +58,7 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "uiFontFamily",
   "readerFontFamily",
   "opaqueSidebar",
+  "customCSS",
 ]
 
 const isZenModeAtom = atom((get) => {

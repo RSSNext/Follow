@@ -3,7 +3,7 @@ import { cn, isSafari } from "@follow/utils/utils"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
-import { useUISettingKey } from "~/atoms/settings/ui"
+import { useUISettingKeys } from "~/atoms/settings/ui"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { FEED_COLLECTION_LIST } from "~/constants"
@@ -11,6 +11,7 @@ import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { EntryTranslation } from "~/modules/entry-column/translation"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
@@ -45,6 +46,7 @@ export function ListItem({
         title: feed.title,
         url: (feed as any).url || "",
         image: feed.image,
+        siteUrl: feed.siteUrl,
       }
     }) || entryPreview?.feeds
 
@@ -60,7 +62,8 @@ export function ListItem({
     { leading: false },
   )
 
-  const settingWideMode = useUISettingKey("wideMode")
+  const [settingWideMode, thumbnailRatio] = useUISettingKeys(["wideMode", "thumbnailRatio"])
+  const rid = `list-item-${entryId}`
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
@@ -98,7 +101,11 @@ export function ListItem({
           )}
         >
           <EllipsisHorizontalTextWithTooltip className="truncate">
-            {getPreferredTitle(related, entry.entries)}
+            <FeedTitle
+              feed={related}
+              title={getPreferredTitle(related, entry.entries)}
+              className="space-x-0.5"
+            />
           </EllipsisHorizontalTextWithTooltip>
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
@@ -181,9 +188,10 @@ export function ListItem({
           )}
           mediaContainerClassName={"w-auto h-auto rounded"}
           loading="lazy"
+          key={`${rid}-media-${thumbnailRatio}`}
           proxy={{
             width: 160,
-            height: 0,
+            height: thumbnailRatio === "square" ? 160 : 0,
           }}
           height={entry.entries.media[0].height}
           width={entry.entries.media[0].width}

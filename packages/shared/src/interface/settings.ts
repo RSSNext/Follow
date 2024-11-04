@@ -19,6 +19,7 @@ export interface UISettings {
   opaqueSidebar: boolean
   sidebarShowUnreadCount: boolean
   hideExtraBadge: boolean
+  thumbnailRatio: "square" | "original"
   uiTextSize: number
   showDockBadge: boolean
   modalOverlay: boolean
@@ -28,11 +29,13 @@ export interface UISettings {
   usePointerCursor: boolean | null
   uiFontFamily: string
   readerFontFamily: string
+  // Content
   readerRenderInlineStyle: boolean
   codeHighlightThemeLight: string
   codeHighlightThemeDark: string
   guessCodeLanguage: boolean
   hideRecentReader: boolean
+  customCSS: string
 
   // view
   pictureViewMasonry: boolean
@@ -61,4 +64,10 @@ export interface IntegrationSettings {
   // obsidian
   enableObsidian: boolean
   obsidianVaultPath: string
+
+  // outline
+  enableOutline: boolean
+  outlineEndpoint: string
+  outlineToken: string
+  outlineCollection: string
 }

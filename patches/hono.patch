@@ -1,8 +1,8 @@
 diff --git a/dist/types/client/types.d.ts b/dist/types/client/types.d.ts
-index b0853100a2184fa9e0e2ef5033c0adb6591b423a..4d407f5d364516b008c7afb9b862353495cbef49 100644
+index 35e2c7a1dccc9f148c87ba07d71d7f6101106f2d..5c52cd70594e57d8c375f2c048dd337eaa55e906 100644
 --- a/dist/types/client/types.d.ts
 +++ b/dist/types/client/types.d.ts
-@@ -43,7 +43,7 @@ type ClientResponseOfEndpoint<T extends Endpoint = Endpoint> = T extends {
+@@ -52,7 +52,7 @@ type ClientResponseOfEndpoint<T extends Endpoint = Endpoint> = T extends {
      output: infer O;
      outputFormat: infer F;
      status: infer S;

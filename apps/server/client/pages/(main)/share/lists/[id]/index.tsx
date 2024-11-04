@@ -1,6 +1,6 @@
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
-import { openInFollowApp } from "@client/lib/helper"
+import { askOpenInFollowApp } from "@client/lib/helper"
 import type { Feed } from "@client/query/feed"
 import { useList } from "@client/query/list"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
@@ -36,8 +36,8 @@ export function Component() {
   useTitle(list.data?.list.title)
 
   const handleOpenInFollowApp = () => {
-    openInFollowApp(`add?type=list&id=${id!}`, () => {
-      window.location.href = `/feeds/all/pending?view=0&follow=${id}&follow_type=list`
+    askOpenInFollowApp(`add?type=list&id=${id!}`, () => {
+      return `/feeds/all/pending?view=0&follow=${id}&follow_type=list`
     })
   }
   return (

@@ -24,10 +24,10 @@
     "@egoist/tipc": "0.3.2",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
-    "@eneris/push-receiver": "4.2.0",
+    "@eneris/push-receiver": "4.3.0",
     "@follow/shared": "workspace:*",
     "@mozilla/readability": "^0.5.0",
-    "@sentry/electron": "5.6.0",
+    "@sentry/electron": "5.7.0",
     "builder-util-runtime": "9.2.10",
     "electron-context-menu": "4.0.4",
     "electron-log": "5.2.0",
@@ -35,7 +35,7 @@
     "electron-updater": "^6.3.9",
     "es-toolkit": "1.26.1",
     "font-list": "1.5.1",
-    "i18next": "^23.16.0",
+    "i18next": "^23.16.4",
     "js-yaml": "4.1.0",
     "linkedom": "^0.18.5",
     "lowdb": "7.0.1",
@@ -48,9 +48,9 @@
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
     "@types/lodash-es": "4.17.12",
-    "@types/node": "^22.7.5",
-    "electron": "33.0.0",
+    "@types/node": "^22.8.7",
+    "electron": "33.0.2",
     "electron-devtools-installer": "3.2.0",
-    "hono": "4.6.5"
+    "hono": "4.6.8"
   }
 }

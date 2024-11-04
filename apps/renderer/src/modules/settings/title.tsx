@@ -4,8 +4,8 @@ import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
 
-import { settings } from "./constants"
 import { IsInSettingIndependentWindowContext } from "./context"
+import { settings } from "./settings-glob"
 import type { SettingPageConfig } from "./utils"
 
 export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {

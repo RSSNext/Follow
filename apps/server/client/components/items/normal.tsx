@@ -51,7 +51,7 @@ function NormalListItemImpl({
         </div>
         {withDetails && (
           <div className="flex gap-2">
-            <div className={cn("text-[13px]", "text-zinc-400 dark:text-neutral-500")}>
+            <div className={cn("grow text-[13px]", "text-zinc-400 dark:text-neutral-500")}>
               {entry.entries.description}
             </div>
 

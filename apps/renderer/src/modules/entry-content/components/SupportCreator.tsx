@@ -60,14 +60,13 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
 
         <div className="flex items-center gap-4">
           {!isMyOwnedFeed && (
-            <Button className="text-base" onClick={() => openTipModal()}>
+            <Button onClick={() => openTipModal()}>
               <i className="i-mgc-power-outline mr-1.5 text-lg" />
               {t("entry_content.support_creator")}
             </Button>
           )}
           <Button
             variant={!isMyOwnedFeed ? "outline" : "primary"}
-            className="text-base"
             onClick={() => openBoostModal(feed.id)}
           >
             <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />

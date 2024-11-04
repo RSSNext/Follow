@@ -5,7 +5,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
-import { clsx, cn, isBizId } from "@follow/utils/utils"
+import { clsx, isBizId } from "@follow/utils/utils"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type {
@@ -52,13 +52,19 @@ function EntryColumnImpl() {
       virtuosoRef.current?.scrollTo({
         top: 0,
       })
-      setIsArchived(false)
     }, []),
     isArchived,
   })
 
   const { entriesIds, isFetchingNextPage, groupedCounts } = entries
   useSnapEntryIdList(entriesIds)
+  const prevEntriesIdsRef = useRef(entriesIds)
+
+  useEffect(() => {
+    if (entriesIds.length > 0) {
+      prevEntriesIdsRef.current = entriesIds
+    }
+  }, [entriesIds])
 
   const {
     entryId: activeEntryId,
@@ -69,6 +75,11 @@ function EntryColumnImpl() {
     inboxId,
     listId,
   } = useRouteParams()
+
+  useEffect(() => {
+    setIsArchived(false)
+  }, [view, routeFeedId])
+
   const activeEntry = useEntry(activeEntryId)
   const feed = useFeedById(routeFeedId)
   const title = useFeedHeaderTitle()
@@ -99,24 +110,17 @@ function EntryColumnImpl() {
     }
   }, [isArchived])
 
-  const showArchivedButton =
-    !isArchived &&
-    !unreadOnly &&
-    !isCollection &&
-    routeFeedId !== ROUTE_FEED_PENDING &&
-    entries.totalCount < 40 &&
-    feed?.type === "feed"
+  // Common conditions for both showArchivedButton and shouldLoadArchivedEntries
+  const commonConditions =
+    !isArchived && !unreadOnly && !isCollection && routeFeedId !== ROUTE_FEED_PENDING
 
+  // Determine if the archived button should be shown
+  const showArchivedButton = commonConditions && entries.totalCount < 40 && feed?.type === "feed"
+  const hasNoEntries = entries.totalCount === 0 && !entries.isLoading
+
+  // Determine if archived entries should be loaded
   const shouldLoadArchivedEntries =
-    !isArchived &&
-    !unreadOnly &&
-    !isCollection &&
-    routeFeedId !== ROUTE_FEED_PENDING &&
-    (feed?.type === "feed" || !feed) &&
-    !inboxId &&
-    !listId &&
-    entries.totalCount === 0 &&
-    !entries.isLoading
+    commonConditions && (feed?.type === "feed" || !feed) && !inboxId && !listId && hasNoEntries
 
   // automatically fetch archived entries when there is no entries in timeline
   useEffect(() => {
@@ -124,6 +128,9 @@ function EntryColumnImpl() {
       setIsArchived(true)
     }
   }, [shouldLoadArchivedEntries])
+
+  const finalEntriesIds =
+    hasNoEntries && !isArchived ? prevEntriesIdsRef.current || entriesIds : entriesIds
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
@@ -173,7 +180,7 @@ function EntryColumnImpl() {
         }
       }
     }, [entries]),
-    data: entriesIds,
+    data: finalEntriesIds,
     onScroll: () => {
       if (!isInteracted.current) {
         isInteracted.current = true
@@ -223,13 +230,13 @@ function EntryColumnImpl() {
       </AutoResizeHeight>
       <m.div
         key={`${routeFeedId}-${view}`}
-        className="relative h-0 grow"
+        className="relative mt-2 h-0 grow"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
       >
         <ScrollArea.ScrollArea
-          scrollbarClassName={cn("mt-3", !views[view].wideMode ? "w-[5px] p-0" : "")}
+          scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
           mask={false}
           ref={scrollRef}
           rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}

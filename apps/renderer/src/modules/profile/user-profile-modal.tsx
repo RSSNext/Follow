@@ -9,7 +9,7 @@ import type { SubscriptionModel } from "@follow/models/types"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { getStorageNS } from "@follow/utils/ns"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils/utils"
 import { AnimatePresence, useAnimationControls } from "framer-motion"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -261,7 +261,7 @@ export const UserProfileModalContent: FC<{
                 layout
                 transition={{ duration: 0.35 }}
                 className={cn(
-                  "flex cursor-text select-text flex-col items-center",
+                  "relative flex cursor-text select-text flex-col items-center",
                   isHeaderSimple ? "ml-8 items-start" : "",
                 )}
               >
@@ -283,17 +283,18 @@ export const UserProfileModalContent: FC<{
                   @{userInfo.handle}
                 </m.div>
                 <Button
-                  buttonClassName="mt-2"
+                  buttonClassName={cn(
+                    isHeaderSimple ? "absolute -right-full top-4 rounded-full p-2" : "mt-4",
+                  )}
                   onClick={() => {
                     follow({
                       url: `rsshub://follow/profile/${userInfo.id}`,
                       isList: false,
                     })
                   }}
-                  layout
                 >
-                  <FollowIcon className="mr-1 size-3" />
-                  {t("feed_form.follow")}
+                  <FollowIcon className={clsx("size-3", !isHeaderSimple ? "mr-1" : "")} />
+                  {isHeaderSimple ? "" : t("feed_form.follow")}
                 </Button>
               </m.div>
             </div>

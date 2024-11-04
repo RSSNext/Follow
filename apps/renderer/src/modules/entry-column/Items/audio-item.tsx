@@ -3,6 +3,7 @@ import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { ListItem } from "~/modules/entry-column/templates/list-item-template"
+import { FeedTitle } from "~/modules/feed/feed-title"
 
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
@@ -19,7 +20,7 @@ export function AudioItemStateLess({ entry, feed }: EntryItemStatelessProps) {
         <div className="group relative flex py-4 pl-3 pr-2">
           <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
             <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">
-              <span>{feed.title}</span>
+              <FeedTitle feed={feed} />
               <span>·</span>
               <span>{!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}</span>
             </div>

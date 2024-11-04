@@ -8,7 +8,7 @@ import { Trans } from "react-i18next"
 import { ModalClose } from "~/components/ui/modal/stacked/components"
 import { SettingsTitle } from "~/modules/settings/title"
 
-import { settings } from "../constants"
+import { settings } from "../settings-glob"
 import { SettingTabProvider, useSettingTab } from "./context"
 import { SettingModalLayout } from "./layout"
 

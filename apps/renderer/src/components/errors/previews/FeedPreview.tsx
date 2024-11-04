@@ -9,8 +9,8 @@ import { useSearchParams } from "react-router-dom"
 
 import { getItemComponentByView } from "~/modules/entry-column/Items"
 import type { UniversalItemProps } from "~/modules/entry-column/types"
-import { FeedCertification } from "~/modules/feed/feed-certification"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntriesPreview } from "~/queries/entries"
 import { useFeed } from "~/queries/feed"
 
@@ -56,10 +56,7 @@ export function FeedPreview(props: {
               size={64}
             />
             <div className="flex flex-col items-center">
-              <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
-                <h1>{feed.data.feed.title}</h1>
-                <FeedCertification feed={feed.data.feed} />
-              </div>
+              <FeedTitle feed={feed.data.feed} className="mb-2 mt-4 text-2xl font-bold" />
               <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
             <div className="mb-4 text-sm">

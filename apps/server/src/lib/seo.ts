@@ -1,24 +1,36 @@
-export function buildSeoMetaTags(configs: {
-  openGraph: {
-    title: string
-    description?: string
-    image?: string | null
+import type { Document } from "linkedom"
+import xss from "xss"
+
+export function buildSeoMetaTags(
+  document: Document,
+  configs: {
+    openGraph: {
+      title: string
+      description?: string
+      image?: string | null
+    }
+  },
+) {
+  const openGraph = {
+    title: xss(configs.openGraph.title),
+    description: xss(configs.openGraph.description ?? ""),
+    image: xss(configs.openGraph.image ?? ""),
   }
-}) {
-  const { openGraph } = configs
-  const title = `${openGraph.title} | Follow`
+
+  const createMeta = (property: string, content: string) => {
+    const $meta = document.createElement("meta")
+    $meta.setAttribute("property", property)
+    $meta.setAttribute("content", content)
+    return $meta
+  }
+
   return [
-    `<meta property="og:title" content="${title}" />`,
-    openGraph.description
-      ? `<meta property="og:description" content="${openGraph.description}" />`
-      : "",
-    openGraph.image ? `<meta property="og:image" content="${openGraph.image}" />` : "",
-    // Twitter
-    `<meta property="twitter:card" content="summary_large_image" />`,
-    `<meta property="twitter:title" content="${title}" />`,
-    openGraph.description
-      ? `<meta property="twitter:description" content="${openGraph.description}" />`
-      : "",
-    openGraph.image ? `<meta property="twitter:image" content="${openGraph.image}" />` : "",
-  ].join("\n")
+    createMeta("og:title", openGraph.title),
+    createMeta("og:description", openGraph.description),
+    createMeta("og:image", openGraph.image),
+    createMeta("twitter:card", "summary_large_image"),
+    createMeta("twitter:title", openGraph.title),
+    createMeta("twitter:description", openGraph.description),
+    createMeta("twitter:image", openGraph.image),
+  ]
 }

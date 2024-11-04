@@ -135,12 +135,15 @@ export const useEntriesByView = ({
   const isFetchingFirstPage = query.isFetching && !query.isFetchingNextPage
 
   useEffect(() => {
+    if (isArchived) {
+      return
+    }
     if (!isFetchingFirstPage) {
       prevEntryIdsRef.current = entryIds
       setMergedEntries({ ...mergedEntries, [view]: entryIds })
       onReset?.()
     }
-  }, [isFetchingFirstPage])
+  }, [isFetchingFirstPage, isArchived])
 
   const [mergedEntries, setMergedEntries] = useState<Record<number, string[]>>({
     0: [],
@@ -207,7 +210,7 @@ export const useEntriesByView = ({
     }
 
     return counts
-  }, [groupByDate, sortEntries, view])
+  }, [groupByDate, listId, sortEntries, view])
 
   return {
     ...query,

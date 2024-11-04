@@ -14,7 +14,7 @@ import { whoami } from "~/atoms/user"
 import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import { updateFeedBoostStatus } from "~/modules/boost/hooks"
+import { updateFeedBoostStatus } from "~/modules/boost/atom"
 import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"

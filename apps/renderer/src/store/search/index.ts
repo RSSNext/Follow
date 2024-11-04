@@ -16,7 +16,7 @@ import type { SearchResult, SearchState } from "./types"
 
 const searchTypeAtom = atomWithStorage<SearchType>(
   getStorageNS("search-type"),
-  SearchType.All,
+  SearchType.Feed,
   undefined,
   { getOnInit: true },
 )

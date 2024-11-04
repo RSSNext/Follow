@@ -1,57 +1,49 @@
+import type { ActionContext } from "@egoist/tipc/main"
 import type { MenuItemConstructorOptions, MessageBoxOptions } from "electron"
 import { dialog, Menu, ShareMenu } from "electron"
 
 import { t } from "./_instance"
 
-type MenuItem = ActionMenuItem | { type: "separator" }
-export interface ActionMenuItem {
-  type: "text"
-  label: string
-  enabled?: boolean
-
-  shortcut?: string
-  icon?: string
-  submenu?: MenuItem[]
-  checked?: boolean
+type SerializableMenuItem = Omit<MenuItemConstructorOptions, "click" | "submenu"> & {
+  // id: string
+  submenu?: SerializableMenuItem[]
 }
+
+function normalizeMenuItems(
+  items: SerializableMenuItem[],
+  context: ActionContext,
+  path = [] as number[],
+): MenuItemConstructorOptions[] {
+  return items.map((item, index) => {
+    const curPath = [...path, index]
+    return {
+      ...item,
+      click() {
+        context.sender.send("menu-click", {
+          id: item.id,
+          path: curPath,
+        })
+      },
+      submenu: item.submenu ? normalizeMenuItems(item.submenu, context, curPath) : undefined,
+    }
+  })
+}
+
 export const menuRoute = {
   showContextMenu: t.procedure
     .input<{
-      items: Array<MenuItem>
+      items: SerializableMenuItem[]
     }>()
-    .action(async ({ input, context }) => {
-      const menu = Menu.buildFromTemplate(transformMenuItems(input.items))
+    .action(({ input, context }) => {
+      const defer = Promise.withResolvers<void>()
+      const normalizedMenuItems = normalizeMenuItems(input.items, context)
 
-      function transformMenuItems(items: MenuItem[], parentIndex?: number) {
-        return items.map((item, index) => {
-          if (item.type === "separator") {
-            return {
-              type: "separator" as const,
-            }
-          }
-
-          return {
-            label: item.label,
-            enabled: item.enabled ?? true,
-            accelerator: item.shortcut?.replace("Meta", "CmdOrCtrl"),
-            checked: typeof item.checked === "boolean" ? item.checked : undefined,
-            type: typeof item.checked === "boolean" ? "checkbox" : undefined,
-            click() {
-              context.sender.send(
-                "menu-click",
-                parentIndex !== undefined ? `${parentIndex}-${index}` : `${index}`,
-              )
-            },
-            submenu: item.submenu ? transformMenuItems(item.submenu, index) : undefined,
-          } as MenuItemConstructorOptions
-        })
-      }
-
+      // See https://www.electronjs.org/docs/latest/api/menu
+      const menu = Menu.buildFromTemplate(normalizedMenuItems)
       menu.popup({
-        callback: () => {
-          context.sender.send("menu-closed")
-        },
+        callback: () => defer.resolve(),
       })
+      return defer.promise
     }),
 
   /** @deprecated */

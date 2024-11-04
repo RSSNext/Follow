@@ -65,7 +65,7 @@ const useSticky = () => {
 export const DateItem = memo(({ date, view }: { date: string; view: FeedViewType }) => {
   const className = cn(
     "pt-2",
-    `relative z-10 -mx-2 flex items-center gap-1 bg-background px-4 text-base font-bold text-zinc-800 dark:text-neutral-400`,
+    `relative -mx-2 flex items-center gap-1 bg-background px-4 text-base font-bold text-zinc-800 dark:text-neutral-400`,
   )
 
   if (view === FeedViewType.SocialMedia) {

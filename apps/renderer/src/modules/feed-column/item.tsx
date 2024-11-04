@@ -7,7 +7,6 @@ import {
 } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedViewType } from "@follow/constants"
-import { useAnyPointDown } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
@@ -15,21 +14,20 @@ import dayjs from "dayjs"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useShowContextMenu } from "~/atoms/context-menu"
 import { getMainContainerElement } from "~/atoms/dom"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getNewIssueUrl } from "~/lib/issues"
-import { showNativeMenu } from "~/lib/native-menu"
-import { FeedCertification } from "~/modules/feed/feed-certification"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
-import { BoostCertification } from "../boost/boost-certification"
 import { useSelectedFeedIds } from "./atom"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
@@ -52,6 +50,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       errorMessage: feed.errorMessage,
       url: feed.url,
       image: feed.image,
+      siteUrl: feed.siteUrl,
     }
   })
 
@@ -91,9 +90,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   })
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
+  const showContextMenu = useShowContextMenu()
   if (!feed) return null
 
   const isFeed = feed.type === "feed" || !feed.type
@@ -113,8 +110,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         onDoubleClick={() => {
           window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
-        onContextMenu={(e) => {
-          setIsContextMenuOpen(true)
+        onContextMenu={async (e) => {
           const nextItems = items.concat()
           if (isFeed && feed.errorAt && feed.errorMessage) {
             nextItems.push(
@@ -139,7 +135,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
               },
             )
           }
-          showNativeMenu(
+          setIsContextMenuOpen(true)
+          await showContextMenu(
             nextItems.filter(
               (item) =>
                 selectedFeedIds.length === 0 ||
@@ -150,6 +147,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             ),
             e,
           )
+          setIsContextMenuOpen(false)
         }}
       >
         <div
@@ -159,9 +157,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
           )}
         >
           <FeedIcon fallback feed={feed} size={16} />
-          <div className="truncate">{getPreferredTitle(feed)}</div>
-          {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
-          {isFeed && <BoostCertification feed={feed} className="text-[15px]" />}
+          <FeedTitle feed={feed} />
           {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
@@ -218,9 +214,6 @@ const ListItemImpl: Component<{
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const subscription = useSubscriptionByFeedId(listId)
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
@@ -242,6 +235,7 @@ const ListItemImpl: Component<{
     },
     [listId, navigate, view],
   )
+  const showContextMenu = useShowContextMenu()
   const { t } = useTranslation()
   if (!list) return null
   return (
@@ -258,10 +252,10 @@ const ListItemImpl: Component<{
       onDoubleClick={() => {
         window.open(UrlBuilder.shareList(listId, view), "_blank")
       }}
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         setIsContextMenuOpen(true)
-
-        showNativeMenu(items, e)
+        await showContextMenu(items, e)
+        setIsContextMenuOpen(false)
       }}
     >
       <div className={"flex min-w-0 items-center"}>
@@ -301,9 +295,6 @@ const InboxItemImpl: Component<{
   const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -317,6 +308,8 @@ const InboxItemImpl: Component<{
     },
     [inboxId, navigate, view],
   )
+  const showContextMenu = useShowContextMenu()
+
   if (!inbox) return null
   return (
     <div
@@ -329,9 +322,10 @@ const InboxItemImpl: Component<{
         className,
       )}
       onClick={handleNavigate}
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         setIsContextMenuOpen(true)
-        showNativeMenu(items, e)
+        await showContextMenu(items, e)
+        setIsContextMenuOpen(false)
       }}
     >
       <div className={"flex min-w-0 items-center"}>
