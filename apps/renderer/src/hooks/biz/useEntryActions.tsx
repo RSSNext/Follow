@@ -282,7 +282,7 @@ export const useEntryActions = ({
       hide?: boolean
       active?: boolean
       disabled?: boolean
-      onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void | Promise<void>
+      onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
     }[] = [
       {
         name: t("entry_actions.save_media_to_eagle"),
