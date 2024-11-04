@@ -11,6 +11,7 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
+import { load } from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
@@ -233,6 +234,16 @@ const config: ForgeConfig = {
         return result
       })
       yml.releaseDate = new Date().toISOString()
+
+      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${
+        ymlMapsMap[makeResults[0].platform]
+      }`
+      if (fs.existsSync(ymlPath)) {
+        const originalContent = fs.readFileSync(ymlPath, "utf-8")
+        const originalYml = load(originalContent)
+        yml.files = [...originalYml.files, ...yml.files]
+      }
+
       const ymlStr =
         `version: ${yml.version}\n` +
         `files:\n${yml.files
@@ -244,9 +255,6 @@ const config: ForgeConfig = {
           )
           .join("")}releaseDate: ${yml.releaseDate}\n`
 
-      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${
-        ymlMapsMap[makeResults[0].platform]
-      }`
       fs.writeFileSync(ymlPath, ymlStr)
 
       makeResults.push({
