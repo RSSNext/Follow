@@ -19,7 +19,7 @@ import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
-import { useOwnedList } from "~/store/list"
+import { useOwnedListByView } from "~/store/list"
 import {
   subscriptionActions,
   subscriptionCategoryExist,
@@ -148,7 +148,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const addMutation = useAddFeedToFeedList()
 
-  const listList = useOwnedList(view!)
+  const listList = useOwnedListByView(view!)
   const showContextMenu = useShowContextMenu()
 
   return (

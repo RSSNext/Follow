@@ -1,4 +1,5 @@
 /* eslint-disable no-unsafe-finally */
+
 import { isDraft, original, produce } from "immer"
 import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator, StoreApi, UseBoundStore } from "zustand"
@@ -148,4 +149,44 @@ export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
 type MayBeDraft<T> = T
 export const toRaw = <T>(draft: MayBeDraft<T>): T => {
   return isDraft(draft) ? original(draft)! : draft
+}
+
+const noop = (err: any) => {
+  console.error(err)
+}
+export const createTransaction = <S>(snapshot: S) => {
+  let onRollback: ((snapshot: S) => Promise<void>) | undefined
+  let executorFn: (snapshot: S) => Promise<void> | undefined
+  let optimisticExecutor: (snapshot: S) => Promise<void> | undefined
+  let onPersist: ((snapshot: S) => Promise<void>) | undefined
+
+  const ret = {
+    rollback: (fn: (snapshot: S) => Promise<void>) => {
+      onRollback = fn
+      return ret
+    },
+    execute: (executor: (snapshot: S) => Promise<void>) => {
+      executorFn = executor
+      return ret
+    },
+    optimistic: (executor: (snapshot: S) => Promise<void>) => {
+      optimisticExecutor = executor
+      return ret
+    },
+    run: async () => {
+      await optimisticExecutor?.(snapshot)?.catch(noop)
+      await executorFn?.(snapshot)?.catch((err) => {
+        if (onRollback) {
+          onRollback(snapshot)
+        }
+        throw err
+      })
+      await runTransactionInScope(() => onPersist?.(snapshot))
+    },
+    onPersist: (fn: (snapshot: S) => Promise<void>) => {
+      onPersist = fn
+      return ret
+    },
+  }
+  return ret
 }
