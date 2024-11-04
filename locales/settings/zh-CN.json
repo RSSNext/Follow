@@ -82,7 +82,7 @@
   "appearance.theme.label": "主题",
   "appearance.theme.light": "亮色",
   "appearance.theme.system": "跟随系统",
-  "appearance.thumbnail_ratio.description": "列表中文章缩略图的比例",
+  "appearance.thumbnail_ratio.description": "文章列表缩略图比例",
   "appearance.thumbnail_ratio.original": "原始图像",
   "appearance.thumbnail_ratio.square": "正方形",
   "appearance.thumbnail_ratio.title": "缩略比例",
