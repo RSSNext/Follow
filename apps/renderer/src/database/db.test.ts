@@ -20,9 +20,9 @@ describe("upgradeToV8", () => {
 
     const feeds = await browserDB.feeds.toArray()
     expect(feeds.length).toEqual(3)
-    expect(feeds[0].tipUsers).toEqual({})
-    expect(feeds[1].tipUsers).toEqual(null)
-    expect(feeds[2].tipUsers).toEqual([{ name: "user1" }])
+    expect(feeds[0].tipUsers).toEqual(insertFeeds[0].tipUsers)
+    expect(feeds[1].tipUsers).toEqual(insertFeeds[1].tipUsers)
+    expect(feeds[2].tipUsers).toEqual(insertFeeds[2].tipUsers)
 
     await browserDB.transaction("rw", [browserDB.feeds], async (tx) => {
       await browserDB.upgradeToV8(tx)
