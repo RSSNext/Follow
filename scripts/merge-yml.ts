@@ -3,7 +3,7 @@ import path from "node:path"
 
 import yaml from "js-yaml"
 
-const outDir = "./out"
+const outDir = "./out/make"
 
 function findYmlFiles(dir: string): string[] {
   let results: string[] = []
