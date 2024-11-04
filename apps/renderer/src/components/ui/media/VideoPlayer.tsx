@@ -377,7 +377,7 @@ const PlayProgressBar = () => {
   })
   return (
     <Slider.Root
-      className="relative z-[1] flex size-full items-center transition-all duration-200 ease-in-out"
+      className="swiper-no-swiping relative z-[1] flex size-full items-center transition-all duration-200 ease-in-out"
       min={0}
       max={state.duration}
       step={0.01}
