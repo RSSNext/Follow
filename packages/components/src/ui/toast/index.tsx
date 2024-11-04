@@ -10,7 +10,7 @@ export const Toaster = ({ ...props }: ToasterProps) => (
     <Sonner
       theme={useIsDark() ? "dark" : "light"}
       toastOptions={{
-        className: tw`pointer-events-auto group`,
+        className: tw`pointer-events-auto group font-theme`,
         classNames: {
           content: "min-w-0",
           icon: tw`self-start translate-y-[2px]`,
