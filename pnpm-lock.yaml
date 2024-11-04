@@ -167,6 +167,9 @@ importers:
       hono:
         specifier: 4.6.8
         version: 4.6.8(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+      js-yaml:
+        specifier: 4.1.0
+        version: 4.1.0
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10

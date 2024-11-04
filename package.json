@@ -16,7 +16,7 @@
   "scripts": {
     "analyze:web": "npx vite-bundle-visualizer",
     "build": "electron-vite build && electron-forge make",
-    "build:macos": "electron-vite build && electron-forge make --arch=universal --platform=darwin",
+    "build:macos": "electron-vite build && electron-forge make --arch=x64 --platform=darwin && electron-forge make --arch=arm64 --platform=darwin && tsx scripts/merge-yml.ts",
     "build:web": "rm -rf out/web && vite build",
     "bump": "vv",
     "dedupe:locales": "eslint --fix locales/**/*.json",
@@ -84,6 +84,7 @@
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.8.0",
     "hono": "4.6.8",
+    "js-yaml": "4.1.0",
     "lint-staged": "15.2.10",
     "nbump": "2.0.7",
     "postcss": "8.4.47",
