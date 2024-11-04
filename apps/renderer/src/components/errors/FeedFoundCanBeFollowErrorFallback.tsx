@@ -9,9 +9,10 @@ import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { entries } from "~/queries/entries"
 
+import { CustomSafeError } from "../../errors/CustomSafeError"
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { useModalStack } from "../ui/modal/stacked/hooks"
-import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
+import { useResetErrorWhenRouteChange } from "./helper"
 import { FeedPreview } from "./previews/FeedPreview"
 
 const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetError, error }) => {

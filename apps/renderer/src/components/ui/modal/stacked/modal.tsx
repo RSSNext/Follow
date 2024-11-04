@@ -1,13 +1,15 @@
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { RootPortalProvider } from "@follow/components/ui/portal/provider.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { ZIndexProvider } from "@follow/components/ui/z-index/index.js"
 import { useRefValue } from "@follow/hooks"
 import { nextFrame, preventDefault, stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
 import * as Dialog from "@radix-ui/react-dialog"
 import type { BoundingBox } from "framer-motion"
 import { produce } from "immer"
-import { useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
+import { selectAtom } from "jotai/utils"
 import { Resizable } from "re-resizable"
 import type { FC, PropsWithChildren, SyntheticEvent } from "react"
 import {
@@ -405,6 +407,14 @@ const ModalContext: FC<
     isTop: boolean
   }
 > = ({ modalContextProps, isTop, children }) => {
+  const { getIndex } = modalContextProps
+  const zIndex = useAtomValue(
+    useMemo(
+      () => selectAtom(modalStackAtom, (v) => v.length + MODAL_STACK_Z_INDEX + getIndex() + 1),
+      [getIndex],
+    ),
+  )
+
   return (
     <CurrentModalContext.Provider value={modalContextProps}>
       <CurrentModalStateContext.Provider
@@ -415,7 +425,7 @@ const ModalContext: FC<
           [isTop],
         )}
       >
-        {children}
+        <ZIndexProvider zIndex={zIndex}>{children}</ZIndexProvider>
       </CurrentModalStateContext.Provider>
     </CurrentModalContext.Provider>
   )

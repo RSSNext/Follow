@@ -1,5 +1,7 @@
 import { env } from "@follow/shared/env"
+import { appSessionTraceId } from "@follow/utils/environment"
 import { version } from "@pkg"
+import { nanoid } from "nanoid"
 import { useEffect } from "react"
 import {
   createRoutesFromChildren,
@@ -10,8 +12,16 @@ import {
 
 import { whoami } from "~/atoms/user"
 
-import { SentryConfig } from "../configs"
+import { SentryConfig } from "./sentry.config"
 
+Object.defineProperty(window.Error.prototype, "traceId", {
+  get() {
+    if (!this._traceId) {
+      this._traceId = nanoid()
+    }
+    return this._traceId
+  },
+})
 export const initSentry = async () => {
   if (!window.SENTRY_RELEASE) return
   if (import.meta.env.DEV) return
@@ -42,5 +52,6 @@ export const initSentry = async () => {
     Sentry.setTag("user_name", user.name)
   }
 
+  Sentry.setTag("session_trace_id", appSessionTraceId)
   Sentry.setTag("appVersion", version)
 }

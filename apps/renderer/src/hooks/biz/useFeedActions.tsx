@@ -7,9 +7,9 @@ import { isBizId } from "@follow/utils/utils"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
+import type { FollowMenuItem, MenuItemInput } from "~/atoms/context-menu"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
@@ -65,6 +65,8 @@ export const useFeedActions = ({
       type: feed.type,
       ownerUserId: feed.ownerUserId,
       id: feed.id,
+      url: feed.url,
+      siteUrl: feed.siteUrl,
     }
   })
   const inbox = useInboxById(feedId)
@@ -91,7 +93,7 @@ export const useFeedActions = ({
     const related = feed || inbox
     if (!related) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.mark_all_as_read"),
@@ -273,10 +275,10 @@ export const useFeedActions = ({
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => {
-          // @ts-expect-error
-          const { url } = feed || {}
-          if (!url) return
-          navigator.clipboard.writeText(url)
+          const { url, siteUrl } = feed || {}
+          const copied = url || siteUrl
+          if (!copied) return
+          navigator.clipboard.writeText(copied)
         },
       },
       {
@@ -328,7 +330,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
   const items = useMemo(() => {
     if (!list) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       list.ownerUserId === whoami()?.id && {
         type: "text" as const,
         label: t("sidebar.feed_actions.list_owned_by_you"),
@@ -416,7 +418,7 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
   const items = useMemo(() => {
     if (!inbox) return []
 
-    const items: NativeMenuItem[] = [
+    const items: FollowMenuItem[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.edit"),
