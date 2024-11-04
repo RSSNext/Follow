@@ -11,6 +11,7 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
+import yaml from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
@@ -238,17 +239,9 @@ const config: ForgeConfig = {
         ymlMapsMap[makeResults[0].platform]
       }`
 
-      const ymlStr =
-        `version: ${yml.version}\n` +
-        `files:\n${yml.files
-          .map(
-            (file) =>
-              `  - url: ${file.url}\n` +
-              `    sha512: ${file.sha512}\n` +
-              `    size: ${file.size}\n`,
-          )
-          .join("")}releaseDate: ${yml.releaseDate}\n`
-
+      const ymlStr = yaml.dump(yml, {
+        lineWidth: -1,
+      })
       fs.writeFileSync(ymlPath, ymlStr)
 
       makeResults.push({
