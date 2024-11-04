@@ -70,6 +70,7 @@ export default ({ mode }) => {
           renderLegacyChunks: false,
           modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
           modernPolyfills: [
+            // https://unpkg.com/browse/core-js@3.39.0/modules/
             "es.array.find-last-index",
             "es.array.find-last",
             "es.promise.with-resolvers",
