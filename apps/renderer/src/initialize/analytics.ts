@@ -2,6 +2,7 @@ import { env } from "@follow/shared/env"
 import type { TrackProperties } from "@openpanel/web"
 
 import { getGeneralSettings } from "~/atoms/settings/general"
+import { whoami } from "~/atoms/user"
 
 import { op } from "./op"
 
@@ -31,8 +32,12 @@ export const initAnalytics = () => {
       if (!getGeneralSettings().sendAnonymousData) {
         return
       }
+      const me = whoami()
 
-      op.track(event_name, properties as TrackProperties)
+      op.track(event_name, {
+        ...properties,
+        user_id: me?.id,
+      } as TrackProperties)
     },
   }
 }
