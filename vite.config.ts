@@ -69,7 +69,11 @@ export default ({ mode }) => {
           targets: "defaults",
           renderLegacyChunks: false,
           modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
-          modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
+          modernPolyfills: [
+            "es.array.find-last-index",
+            "es.array.find-last",
+            "es.promise.with-resolvers",
+          ],
         }),
       htmlInjectPlugin(typedEnv),
       mkcert(),
