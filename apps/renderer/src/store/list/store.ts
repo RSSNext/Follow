@@ -106,7 +106,7 @@ class ListActionStatic {
       })
     })
 
-    tx.onPersist(async () => {
+    tx.persist(async () => {
       ListService.bulkDelete([listId])
     })
     await tx.run()

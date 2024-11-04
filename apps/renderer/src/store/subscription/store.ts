@@ -22,7 +22,7 @@ import { feedActions, getFeedById } from "../feed"
 import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
-import { createImmerSetter, createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
 import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
@@ -241,28 +241,36 @@ class SubscriptionActions {
   }
 
   async markReadByView(view: FeedViewType, filter?: MarkReadFilter) {
-    doMutationAndTransaction(
-      () =>
-        apiClient.reads.all.$post({
-          json: {
-            view,
-            ...filter,
-          },
-        }),
-      async () => {
-        const state = get()
-        for (const feedId in state.data) {
-          if (state.data[feedId].view === view) {
-            // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
-            !filter && feedUnreadActions.updateByFeedId(feedId, 0)
-            entryActions.patchManyByFeedId(feedId, { read: true }, filter)
-          }
+    const tx = createTransaction()
+
+    tx.execute(async () => {
+      await apiClient.reads.all.$post({
+        json: {
+          view,
+          ...filter,
+        },
+      })
+    })
+
+    tx.optimistic(async () => {
+      const state = get()
+      for (const feedId in state.data) {
+        if (state.data[feedId].view === view) {
+          // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+          !filter && feedUnreadActions.updateByFeedId(feedId, 0)
+          entryActions.patchManyByFeedId(feedId, { read: true }, filter)
         }
-        if (filter) {
-          feedUnreadActions.fetchUnreadByView(view)
-        }
-      },
-    )
+      }
+      if (filter) {
+        feedUnreadActions.fetchUnreadByView(view)
+      }
+    })
+
+    tx.rollback(async () => {
+      // TODO handle this local?
+      await feedUnreadActions.fetchUnreadByView(view)
+    })
+    await tx.run()
   }
 
   async markReadByFeedIds({
@@ -280,42 +288,50 @@ class SubscriptionActions {
   }) {
     const stableFeedIds = feedIds?.concat() || []
 
-    doMutationAndTransaction(
-      () =>
-        apiClient.reads.all.$post({
-          json: {
-            ...(listId
+    const tx = createTransaction()
+
+    tx.execute(async () => {
+      await apiClient.reads.all.$post({
+        json: {
+          ...(listId
+            ? {
+                listId,
+              }
+            : inboxId
               ? {
-                  listId,
+                  inboxId,
                 }
-              : inboxId
-                ? {
-                    inboxId,
-                  }
-                : {
-                    feedIdList: stableFeedIds,
-                  }),
-            ...filter,
-          },
-        }),
-      async () => {
-        if (listId) {
-          feedUnreadActions.updateByFeedId(listId, 0)
-        } else if (inboxId) {
-          feedUnreadActions.updateByFeedId(inboxId, 0)
-          entryActions.patchManyByFeedId(inboxId, { read: true }, filter)
-        } else {
-          for (const feedId of stableFeedIds) {
-            // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
-            !filter && feedUnreadActions.updateByFeedId(feedId, 0)
-            entryActions.patchManyByFeedId(feedId, { read: true }, filter)
-          }
+              : {
+                  feedIdList: stableFeedIds,
+                }),
+          ...filter,
+        },
+      })
+    })
+    tx.optimistic(async () => {
+      if (listId) {
+        feedUnreadActions.updateByFeedId(listId, 0)
+      } else if (inboxId) {
+        feedUnreadActions.updateByFeedId(inboxId, 0)
+        entryActions.patchManyByFeedId(inboxId, { read: true }, filter)
+      } else {
+        for (const feedId of stableFeedIds) {
+          // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+          !filter && feedUnreadActions.updateByFeedId(feedId, 0)
+          entryActions.patchManyByFeedId(feedId, { read: true }, filter)
         }
-        if (filter) {
-          feedUnreadActions.fetchUnreadByView(view)
-        }
-      },
-    )
+      }
+      if (filter) {
+        feedUnreadActions.fetchUnreadByView(view)
+      }
+    })
+
+    tx.rollback(async () => {
+      // TODO handle this local?
+      await feedUnreadActions.fetchUnreadByView(view)
+    })
+
+    await tx.run()
   }
 
   clear() {
@@ -326,102 +342,127 @@ class SubscriptionActions {
     })
   }
 
-  deleteCategory(ids: string[]) {
+  async deleteCategory(ids: string[]) {
     const idSet = new Set(ids)
+    const tx = createTransaction(get())
 
-    return doMutationAndTransaction(
-      () =>
-        apiClient.categories.$delete({
-          json: {
-            feedIdList: ids,
-            deleteSubscriptions: false,
-          },
+    tx.execute(async () => {
+      await apiClient.categories.$delete({
+        json: {
+          feedIdList: ids,
+          deleteSubscriptions: false,
+        },
+      })
+    })
+
+    tx.optimistic(async () => {
+      immerSet((state) =>
+        Object.keys(state.data).forEach((id) => {
+          if (!idSet.has(id)) {
+            return
+          }
+          const subscription = state.data[id]
+          const feed = getFeedById(subscription.feedId)
+          if (!feed || feed.type !== "feed") return
+          const { siteUrl } = feed
+          if (!siteUrl) return
+          const parsed = parse(siteUrl)
+          subscription.category = null
+          // The logic for removing Category here is to use domain as the default category name.
+          parsed.domain && (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
         }),
-      async () => {
-        immerSet((state) =>
-          Object.keys(state.data).forEach((id) => {
-            if (idSet.has(id)) {
-              const subscription = state.data[id]
-              const feed = getFeedById(subscription.feedId)
-              if (!feed || feed.type !== "feed") return
-              const { siteUrl } = feed
-              if (!siteUrl) return
-              const parsed = parse(siteUrl)
-              subscription.category = null
-              // The logic for removing Category here is to use domain as the default category name.
-              parsed.domain && (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
-            }
-          }),
-        )
-        const { data } = get()
-        return ids.map((id) => data[id] && SubscriptionService.upsert(data[id]))
-      },
+      )
+    })
+
+    tx.rollback(async (snapshot) => {
+      immerSet((state) => {
+        Object.keys(snapshot.data).forEach((id) => {
+          state.data[id] = snapshot.data[id]
+        })
+      })
+    })
+
+    tx.persist(async () => {
+      const { data } = get()
+      ids.map((id) => data[id] && SubscriptionService.upsert(data[id]))
+    })
+    await tx.run()
+  }
+
+  async unfollow(feedIds: string[]) {
+    // const feed = getFeedById(feedId)
+    const feeds = feedIds.map((feedId) => getFeedById(feedId))
+    const tx = createTransaction<
+      ReturnType<typeof get>,
       {
-        doTranscationWhenMutationFail: false,
-        waitMutation: true,
-      },
-    )
-  }
+        subscription: Record<FeedId, SubscriptionFlatModel>
+        viewDeleted: Record<FeedId, FeedViewType[]>
+      }
+    >(get(), {
+      viewDeleted: {},
+      subscription: {},
+    })
 
-  async unfollow(feedId: string) {
-    const feed = getFeedById(feedId)
-    // Remove feed and subscription
-    set((state) =>
-      produce(state, (draft) => {
-        delete draft.data[feedId]
-        for (const view in draft.feedIdByView) {
-          const currentViewFeedIds = draft.feedIdByView[view] as string[]
-          currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
-        }
-      }),
-    )
-
-    // Remove feed's entries
-    entryActions.clearByFeedId(feedId)
-    // Clear feed's unread count
-    feedUnreadActions.updateByFeedId(feedId, 0)
-
-    return doMutationAndTransaction(
-      () =>
-        apiClient.subscriptions
-          .$delete({
-            json: {
-              feedId,
-            },
-          })
-          .then(() => feed),
-      () => SubscriptionService.removeSubscription(whoami()!.id, feedId),
-    ).then(() => feed)
-  }
-
-  async unfollowMany(feedIdList: string[]) {
-    for (const feedId of feedIdList) {
+    tx.optimistic(async (_, ctx) => {
       // Remove feed and subscription
       set((state) =>
         produce(state, (draft) => {
-          delete draft.data[feedId]
-          for (const view in draft.feedIdByView) {
-            const currentViewFeedIds = draft.feedIdByView[view] as string[]
-            currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
+          for (const feedId of feedIds) {
+            const subscription = state.data[feedId]
+            ctx.subscription[feedId] = subscription
+
+            delete draft.data[feedId]
+
+            for (const view in draft.feedIdByView) {
+              const currentViewFeedIds = draft.feedIdByView[view] as string[]
+
+              const idx = currentViewFeedIds.indexOf(feedId)
+
+              if (idx !== -1) {
+                currentViewFeedIds.splice(idx, 1)
+                ctx.viewDeleted[feedId] = ctx.viewDeleted[feedId] || []
+                ctx.viewDeleted[feedId].push(Number.parseInt(view))
+              }
+            }
           }
         }),
       )
+    })
+    tx.rollback(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (const feedId of feedIds) {
+            if (!ctx.subscription[feedId]) return
+            draft.data[feedId] = ctx.subscription[feedId]
 
-      // Remove feed's entries
-      entryActions.clearByFeedId(feedId)
-      // Clear feed's unread count
-      feedUnreadActions.updateByFeedId(feedId, 0)
-    }
-
-    return doMutationAndTransaction(
-      () =>
-        apiClient.subscriptions.$delete({
-          json: {
-            feedIdList,
-          },
+            for (const view of ctx.viewDeleted[feedId]) {
+              draft.feedIdByView[view].push(feedId)
+            }
+          }
         }),
-      () => SubscriptionService.removeSubscriptionMany(whoami()!.id, feedIdList),
-    )
+      )
+    })
+
+    tx.persist(async () => {
+      for (const feedId of feedIds) {
+        // Remove feed's entries
+        entryActions.clearByFeedId(feedId)
+        // Clear feed's unread count
+        feedUnreadActions.updateByFeedId(feedId, 0)
+
+        SubscriptionService.removeSubscription(whoami()!.id, feedId)
+      }
+    })
+    tx.execute(async () => {
+      await apiClient.subscriptions.$delete({
+        json: {
+          feedIdList: feedIds,
+        },
+      })
+    })
+
+    await tx.run()
+    return feeds
   }
 
   async changeCategoryView(
@@ -482,6 +523,17 @@ class SubscriptionActions {
   }
 
   async renameCategory(lastCategory: string, newCategory: string) {
+    const tx = createTransaction<
+      unknown,
+      {
+        subscription: Record<FeedId, SubscriptionFlatModel>
+      }
+    >(
+      {},
+      {
+        subscription: {},
+      },
+    )
     const subscriptionIds = [] as string[]
     const state = get()
     for (const feedId in state.data) {
@@ -491,30 +543,45 @@ class SubscriptionActions {
       }
     }
 
-    set((state) =>
-      produce(state, (state) => {
-        for (const feedId of subscriptionIds) {
-          const subscription = state.data[feedId]
-          if (subscription) {
-            subscription.category = newCategory
-            subscription.defaultCategory = undefined
-          }
-        }
-      }),
-    )
+    tx.execute(async () => {
+      await apiClient.categories.$patch({
+        json: {
+          feedIdList: subscriptionIds,
+          category: newCategory,
+        },
+      })
+    })
 
-    return doMutationAndTransaction(
-      () =>
-        apiClient.categories.$patch({
-          json: {
-            feedIdList: subscriptionIds,
-            category: newCategory,
-          },
+    tx.persist(async () => {
+      SubscriptionService.renameCategory(whoami()!.id, subscriptionIds, newCategory)
+    })
+
+    tx.optimistic(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (const feedId of subscriptionIds) {
+            const subscription = draft.data[feedId]
+            if (subscription) {
+              subscription.category = newCategory
+              subscription.defaultCategory = undefined
+
+              ctx.subscription[feedId] = state.data[feedId]
+            }
+          }
         }),
-      async () =>
-        // Db
-        SubscriptionService.renameCategory(whoami()!.id, subscriptionIds, newCategory),
-    )
+      )
+    })
+    tx.rollback(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (const feedId of Object.keys(ctx.subscription)) {
+            draft.data[feedId] = ctx.subscription[feedId]
+          }
+        }),
+      )
+    })
+
+    await tx.run()
   }
 }
 

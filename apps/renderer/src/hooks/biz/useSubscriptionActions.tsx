@@ -26,14 +26,14 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
       feedIdList?: string[]
     }) => {
       if (feedIdList) {
-        await subscriptionActions.unfollowMany(feedIdList)
+        await subscriptionActions.unfollow(feedIdList)
         toast.success(t("notify.unfollow_feed_many"))
         return
       }
 
       if (!subscription) return
 
-      subscriptionActions.unfollow(subscription.feedId).then((feed) => {
+      subscriptionActions.unfollow([subscription.feedId]).then(([feed]) => {
         subscriptionQuery.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
