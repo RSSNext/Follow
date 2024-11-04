@@ -47,6 +47,7 @@ ymlFiles.forEach((file) => {
 const mergedYml = yaml.dump(mergedContent, {
   lineWidth: -1,
 })
+fs.mkdirSync(path.join(outDir, "merged"), { recursive: true })
 const mergedFilePath = path.join(outDir, "merged", path.basename(ymlFiles[0]))
 fs.writeFileSync(mergedFilePath, mergedYml)
 
