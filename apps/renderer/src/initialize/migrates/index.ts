@@ -13,6 +13,7 @@ declare global {
 }
 
 async function migrationTipUser() {
+  // Fix https://github.com/RSSNext/Follow/issues/1308
   const feeds = await FeedService.findAll()
   const dirtyFeed = feeds.filter((feed) => !!feed.tipUsers && !Array.isArray(feed.tipUsers))
   const newFeed = dirtyFeed.map((feed) => ({ ...feed, tipUsers: [] }))
