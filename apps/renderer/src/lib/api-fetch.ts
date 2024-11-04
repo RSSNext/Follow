@@ -14,16 +14,20 @@ import { NeedActivationToast } from "~/modules/activation/NeedActivationToast"
 import { DebugRegistry } from "~/modules/debug/registry"
 
 let csrfTokenPromise: Promise<string> | null = null
+
+const getPromisedCsrfToken = async () => {
+  if (!csrfTokenPromise) {
+    csrfTokenPromise = getCsrfToken()
+  }
+
+  return await csrfTokenPromise
+}
 export const apiFetch = ofetch.create({
   baseURL: env.VITE_API_URL,
   credentials: "include",
   retry: false,
   onRequest: async ({ options }) => {
-    if (!csrfTokenPromise) {
-      csrfTokenPromise = getCsrfToken()
-    }
-
-    const csrfToken = await csrfTokenPromise
+    const csrfToken = await getPromisedCsrfToken()
 
     const header = new Headers(options.headers)
 
@@ -92,7 +96,7 @@ export const apiClient = hc<AppType>(env.VITE_API_URL, {
     return {
       "X-App-Version": PKG.version,
       "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
-      "X-Csrf-Token": await getCsrfToken(),
+      "X-Csrf-Token": await getPromisedCsrfToken(),
     }
   },
 })
