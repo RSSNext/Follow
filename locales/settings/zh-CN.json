@@ -54,7 +54,7 @@
   "appearance.content": "内容",
   "appearance.content_font": "正文字体",
   "appearance.custom_css.button": "编辑",
-  "appearance.custom_css.description": "自定义上下文中的 css 样式",
+  "appearance.custom_css.description": "自定义条目渲染中的 CSS 样式",
   "appearance.custom_css.label": "自定义 CSS",
   "appearance.custom_font": "自定义字体",
   "appearance.fonts": "字体",
