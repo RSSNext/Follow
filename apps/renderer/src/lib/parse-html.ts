@@ -18,6 +18,7 @@ import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
 import type { Node } from "unist"
 import { visit } from "unist-util-visit"
+import { visitParents } from "unist-util-visit-parents"
 import { VFile } from "vfile"
 
 import { ShadowDOM } from "~/components/common/ShadowDOM"
@@ -99,10 +100,7 @@ export const parseHtml = (
 
   const tree = pipeline.parse(content)
 
-  // NOTE: disable for now, it introduces some issues
-  // 1. It may convert parts beyond the actual link into links
-  // 2. It cannot correctly handle the situation in the code block
-  // rehypeUrlToAnchor(tree)
+  rehypeUrlToAnchor(tree)
 
   // console.log("tree", tree)
 
@@ -353,9 +351,21 @@ const Style: Components["style"] = ({ node, ...props }) => {
   return null
 }
 
-function _rehypeUrlToAnchor(tree: Node) {
+function rehypeUrlToAnchor(tree: Node) {
+  const tagsShouldNotBeWrapped = new Set(["a", "pre", "code"])
   // https://chatgpt.com/share/37e0ceec-5c9e-4086-b9d6-5afc1af13bb0
-  visit(tree, "text", (node: Text, index, parent: Node) => {
+  visitParents(tree, "text", (node: Text, ancestors: Node[]) => {
+    if (
+      ancestors.some(
+        (ancestor) =>
+          "tagName" in ancestor && tagsShouldNotBeWrapped.has((ancestor as Element).tagName),
+      )
+    ) {
+      return
+    }
+
+    const parent = ancestors.at(-1)
+
     const urlRegex = /https?:\/\/\S+/g
     const text = node.value
     const matches = [...text.matchAll(urlRegex)]
@@ -397,6 +407,7 @@ function _rehypeUrlToAnchor(tree: Node) {
       })
     }
 
+    const index = (parent.children as (Text | Element)[]).indexOf(node)
     ;(parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
   })
 }
