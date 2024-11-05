@@ -101,7 +101,7 @@
   "feed_view_type.pictures": "Images",
   "feed_view_type.social_media": "Réseaux sociaux",
   "feed_view_type.videos": "Vidéos",
-  "mark_all_read_button.auto_confirm_info": "Sera confirmé automatiquement après 3s.",
+  "mark_all_read_button.auto_confirm_info": "Sera confirmé automatiquement après {{countdown}}s.",
   "mark_all_read_button.confirm": "Confirmer",
   "mark_all_read_button.confirm_mark_all": "Marquer <which /> comme lu ?",
   "mark_all_read_button.confirm_mark_all_info": "Confirmez que vous voulez tout marquer comme lu ?",

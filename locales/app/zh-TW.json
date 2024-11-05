@@ -185,7 +185,7 @@
   "feed_view_type.pictures": "圖片",
   "feed_view_type.social_media": "社交媒體",
   "feed_view_type.videos": "影片",
-  "mark_all_read_button.auto_confirm_info": "將在 3 秒後自動確認。",
+  "mark_all_read_button.auto_confirm_info": "將在 {{countdown}} 秒後自動確認。",
   "mark_all_read_button.confirm": "確認",
   "mark_all_read_button.confirm_mark_all": "將 <which /> 標記為已讀？",
   "mark_all_read_button.confirm_mark_all_info": "確認將全部標記為已讀？",

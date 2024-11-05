@@ -195,7 +195,7 @@
   "feed_view_type.pictures": "Pictures",
   "feed_view_type.social_media": "Social Media",
   "feed_view_type.videos": "Videos",
-  "mark_all_read_button.auto_confirm_info": "Will be confirmed automatically after 3s.",
+  "mark_all_read_button.auto_confirm_info": "Will be confirmed automatically after {{countdown}}s.",
   "mark_all_read_button.confirm": "Confirm",
   "mark_all_read_button.confirm_mark_all": "Mark <which /> as read?",
   "mark_all_read_button.confirm_mark_all_info": "Confirm mark all as read?",

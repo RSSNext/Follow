@@ -121,7 +121,7 @@
   "feed_view_type.pictures": "Resimler",
   "feed_view_type.social_media": "Sosyal Medya",
   "feed_view_type.videos": "Videolar",
-  "mark_all_read_button.auto_confirm_info": "3 saniye sonra otomatik olarak onaylanacak.",
+  "mark_all_read_button.auto_confirm_info": "{{countdown}} saniye sonra otomatik olarak onaylanacak.",
   "mark_all_read_button.confirm": "Onayla",
   "mark_all_read_button.confirm_mark_all": "<which /> okundu olarak işaretlensin mi?",
   "mark_all_read_button.confirm_mark_all_info": "Tümünü okundu olarak işaretlemeyi onaylıyor musunuz?",
