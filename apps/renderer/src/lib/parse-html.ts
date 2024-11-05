@@ -133,12 +133,30 @@ export const parseHtml = (
           },
           img: Img,
 
-          h1: createHeadingRenderer(1),
-          h2: createHeadingRenderer(2),
-          h3: createHeadingRenderer(3),
-          h4: createHeadingRenderer(4),
-          h5: createHeadingRenderer(5),
-          h6: createHeadingRenderer(6),
+          h1: (props) => {
+            markInlineImage(props.node)
+            return createHeadingRenderer(1)(props)
+          },
+          h2: (props) => {
+            markInlineImage(props.node)
+            return createHeadingRenderer(2)(props)
+          },
+          h3: (props) => {
+            markInlineImage(props.node)
+            return createHeadingRenderer(3)(props)
+          },
+          h4: (props) => {
+            markInlineImage(props.node)
+            return createHeadingRenderer(4)(props)
+          },
+          h5: (props) => {
+            markInlineImage(props.node)
+            return createHeadingRenderer(5)(props)
+          },
+          h6: (props) => {
+            markInlineImage(props.node)
+            return createHeadingRenderer(6)(props)
+          },
           style: Style,
 
           video: ({ node, ...props }) =>
@@ -156,6 +174,14 @@ export const parseHtml = (
           span: ({ node, ...props }) => {
             markInlineImage(node)
             return createElement("span", props, props.children)
+          },
+          b: ({ node, ...props }) => {
+            markInlineImage(node)
+            return createElement("b", props, props.children)
+          },
+          i: ({ node, ...props }) => {
+            markInlineImage(node)
+            return createElement("i", props, props.children)
           },
           // @ts-expect-error
           math: Math,
@@ -248,7 +274,9 @@ const Img: Components["img"] = ({ node, ...props }) => {
   const widthPx = Number.parseInt(props.width as string)
 
   return createElement(
-    node?.properties.inline && widthPx < 600 ? MarkdownInlineImage : MarkdownBlockImage,
+    node?.properties.inline && (Number.isNaN(widthPx) || widthPx < 600)
+      ? MarkdownInlineImage
+      : MarkdownBlockImage,
     nextProps,
   )
 }
