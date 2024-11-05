@@ -45,6 +45,7 @@
     "cmdk": "1.0.3",
     "dayjs": "1.11.13",
     "dexie": "4.0.9",
+    "dexie-export-import": "^4.1.2",
     "dnum": "^2.14.0",
     "electron-log": "5.2.0",
     "firebase": "10.14.1",

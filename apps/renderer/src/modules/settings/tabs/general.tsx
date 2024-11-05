@@ -25,6 +25,7 @@ import {
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { exportDB } from "~/database"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initAnalytics } from "~/initialize/analytics"
@@ -159,6 +160,14 @@ export const SettingGeneral = () => {
             },
             description: t("general.rebuild_database.description"),
             buttonText: t("general.rebuild_database.button"),
+          },
+          {
+            label: t("general.export_database.label"),
+            description: t("general.export_database.description"),
+            buttonText: t("general.export_database.button"),
+            action: () => {
+              exportDB()
+            },
           },
           {
             label: t("general.export.label"),

@@ -1,3 +1,5 @@
+import "dexie-export-import"
+
 import type { Transaction } from "dexie"
 import Dexie from "dexie"
 
@@ -78,6 +80,15 @@ class BrowserDB extends Dexie {
 }
 
 export const browserDB = new BrowserDB()
+
+export const exportDB = async () => {
+  const blob = await browserDB.export({ prettyJson: true })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `${LOCAL_DB_NAME}.json`
+  a.click()
+}
 
 // ================================================ //
 // ================================================ //

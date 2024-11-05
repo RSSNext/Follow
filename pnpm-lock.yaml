@@ -420,6 +420,9 @@ importers:
       dexie:
         specifier: 4.0.9
         version: 4.0.9
+      dexie-export-import:
+        specifier: ^4.1.2
+        version: 4.1.2(dexie@4.0.9)
       dnum:
         specifier: ^2.14.0
         version: 2.14.0
@@ -3340,8 +3343,8 @@ packages:
   '@radix-ui/react-avatar@1.1.1':
     resolution: {integrity: sha512-eoOtThOmxeoizxpX6RiEsQZ2wj5r4+zoeqAwO0cBaFQGjJwIH3dIX0OCxNrCyrrdxG+vBweMETh3VziQG7c1kw==}
     peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
+      '@types/react': npm:types-react@19.0.0-rc.1
+      '@types/react-dom': npm:types-react-dom@19.0.0-rc.1
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
@@ -5613,6 +5616,11 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
+  dexie-export-import@4.1.2:
+    resolution: {integrity: sha512-dWIkkajX+CsEJ19xMnvyqUDlldIl7jW/G49hy3pXZeIgCei9fPeGSjteoh7BeTujexIM3XZ+uAGCEwgCx2HAsQ==}
+    peerDependencies:
+      dexie: ^2.0.4 || ^3.0.0 || ^4.0.1-alpha.5
 
   dexie@4.0.9:
     resolution: {integrity: sha512-VQG1huEVSAdDZssb9Bb9mFy+d3jAE0PT4d1nIRYlT46ip1fzbs1tXi0SlUayRDgV3tTbJG8ZRqAo2um49gtynA==}
@@ -15756,6 +15764,10 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+
+  dexie-export-import@4.1.2(dexie@4.0.9):
+    dependencies:
+      dexie: 4.0.9
 
   dexie@4.0.9: {}
 
