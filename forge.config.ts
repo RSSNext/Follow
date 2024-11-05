@@ -126,8 +126,8 @@ const config: ForgeConfig = {
     new MakerZIP({}, ["darwin"]),
     new MakerDMG({
       overwrite: true,
-      background: "resources/dmg-background.png",
-      icon: "resources/dmg-icon.icns",
+      background: "static/dmg-background.png",
+      icon: "static/dmg-icon.icns",
       iconSize: 160,
       additionalDMGOptions: {
         window: {
