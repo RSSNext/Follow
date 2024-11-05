@@ -69,6 +69,9 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
   })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    if (values.amount === 0) {
+      return
+    }
     mutation.mutate(values)
   }
 
