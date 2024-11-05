@@ -49,7 +49,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
 
   const formSchema = z.object({
     address: z.string().startsWith("0x").length(42),
-    amount: z.number().min(0).max(cashablePowerTokenNumber),
+    amount: z.number().positive().max(cashablePowerTokenNumber),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -69,9 +69,6 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
   })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (values.amount === 0) {
-      return
-    }
     mutation.mutate(values)
   }
 
