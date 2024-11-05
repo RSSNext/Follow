@@ -4,7 +4,7 @@ import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { cn, getOS } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
-import { forwardRef, Fragment, useState } from "react"
+import { forwardRef, Fragment, useEffect, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -186,14 +186,26 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
 
 const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
   const { t } = useTranslation()
+  const [countdown, setCountdown] = useState(3)
+
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [countdown])
+
   return (
     <div>
       <p>{t("mark_all_read_button.confirm_mark_all_info")}</p>
-      <small className="opacity-50">{t("mark_all_read_button.auto_confirm_info")}</small>
+      <small className="opacity-50">
+        {t("mark_all_read_button.auto_confirm_info", { countdown })}
+      </small>
     </div>
   )
 }

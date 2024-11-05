@@ -108,7 +108,7 @@
   "feed_view_type.pictures": "Bilder",
   "feed_view_type.social_media": "Soziale Medien",
   "feed_view_type.videos": "Videos",
-  "mark_all_read_button.auto_confirm_info": "Wird nach 3 Sekunden automatisch bestätigt.",
+  "mark_all_read_button.auto_confirm_info": "Wird nach {{countdown}} Sekunden automatisch bestätigt.",
   "mark_all_read_button.confirm": "Bestätigen",
   "mark_all_read_button.confirm_mark_all": "<which /> als gelesen markieren?",
   "mark_all_read_button.confirm_mark_all_info": "Möchten Sie alle als gelesen markieren?",

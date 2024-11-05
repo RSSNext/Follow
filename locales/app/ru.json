@@ -101,7 +101,7 @@
   "feed_view_type.pictures": "Картинки",
   "feed_view_type.social_media": "Социальные сети",
   "feed_view_type.videos": "Видео",
-  "mark_all_read_button.auto_confirm_info": "Будет автоматически подтверждено через 3 секунды.",
+  "mark_all_read_button.auto_confirm_info": "Будет автоматически подтверждено через {{countdown}} секунды.",
   "mark_all_read_button.confirm": "Подтвердить",
   "mark_all_read_button.confirm_mark_all": "Отметить <which /> как прочитанное?",
   "mark_all_read_button.confirm_mark_all_info": "Подтвердить отметку всего как прочитанное?",
