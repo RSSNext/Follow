@@ -4,7 +4,7 @@ import { app, Menu, nativeImage, Tray } from "electron"
 import { isMacOS } from "~/env"
 import { getIconPath } from "~/helper"
 
-import { getMainWindow } from "../window"
+import { getMainWindowOrCreate } from "../window"
 import { t } from "./i18n"
 import { store } from "./store"
 
@@ -37,7 +37,7 @@ export const registerAppTray = () => {
 }
 
 const showWindow = () => {
-  const mainWindow = getMainWindow()
+  const mainWindow = getMainWindowOrCreate()
   if (!mainWindow) return
   if (mainWindow.isMinimized()) {
     mainWindow.restore()

@@ -14,7 +14,12 @@ import { store } from "./lib/store"
 import { registerAppTray } from "./lib/tray"
 import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
 import { registerUpdater } from "./updater"
-import { createMainWindow, getMainWindow, windowStateStoreKey } from "./window"
+import {
+  createMainWindow,
+  getMainWindow,
+  getMainWindowOrCreate,
+  windowStateStoreKey,
+} from "./window"
 
 if (isDev) console.info("[main] env loaded:", env)
 
@@ -95,11 +100,8 @@ function bootstrap() {
     app.on("activate", () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (BrowserWindow.getAllWindows().length === 0) {
-        mainWindow = createMainWindow()
-      }
-
-      if (mainWindow) mainWindow.show()
+      mainWindow = getMainWindowOrCreate()
+      mainWindow.show()
     })
 
     app.on("open-url", (_, url) => {

@@ -282,7 +282,7 @@ export const getMainWindow = () => windows.mainWindow
 
 export const getMainWindowOrCreate = () => {
   if (!windows.mainWindow) {
-    createMainWindow()
+    return createMainWindow()
   }
   return windows.mainWindow
 }
