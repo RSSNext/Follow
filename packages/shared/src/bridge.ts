@@ -1,4 +1,5 @@
 import type { BrowserWindow } from "electron"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import type { toast } from "sonner"
 
 import type { GeneralSettings, UISettings } from "./interface/settings"
@@ -23,7 +24,10 @@ interface RenderGlobalContext {
   /// Actions
   follow: (options?: { isList: boolean; id?: string; url?: string }) => void
   profile: (id: string, variant?: "drawer" | "dialog") => void
+  quickAdd: () => void
   rsshubRoute: (route: string) => void
+  // Navigate
+  goToDiscover: () => void
 
   // user data
   clearIfLoginOtherAccount: (newUserId: string) => void
@@ -43,6 +47,20 @@ export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => 
     ...globalThis[PREFIX],
     ...context,
   }
+}
+
+export const useRegisterGlobalContext = <K extends keyof RenderGlobalContext>(
+  key: K,
+  fn: RenderGlobalContext[K],
+) => {
+  const eventCallbackRef = useRef(fn)
+  useLayoutEffect(() => {
+    eventCallbackRef.current = fn
+  }, [fn])
+
+  useEffect(() => {
+    registerGlobalContext({ [key]: eventCallbackRef.current })
+  }, [key])
 }
 
 function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path: string[] = []): T {
@@ -77,4 +95,8 @@ type Fn<T> = {
 }
 export function callWindowExpose<T extends RenderGlobalContext>(window: BrowserWindow) {
   return createProxy(window) as Fn<T>
+}
+
+export function callWindowExposeRenderer() {
+  return globalThis[PREFIX] as Fn<RenderGlobalContext>
 }

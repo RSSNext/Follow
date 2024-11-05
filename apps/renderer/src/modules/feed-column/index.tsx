@@ -1,7 +1,7 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { useSubscribeElectronEvent } from "@follow/shared/event"
+import { useRegisterGlobalContext } from "@follow/shared/bridge"
 import { stopPropagation } from "@follow/utils/dom"
 import { clamp, cn } from "@follow/utils/utils"
 import { useWheel } from "@use-gesture/react"
@@ -136,7 +136,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
 
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
-  useSubscribeElectronEvent("Discover", () => {
+  useRegisterGlobalContext("goToDiscover", () => {
     window.router.navigate(Routes.Discover)
   })
 

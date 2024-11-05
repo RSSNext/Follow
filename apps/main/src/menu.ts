@@ -59,7 +59,8 @@ export const registerAppMenu = () => {
             const mainWindow = getMainWindow()
             if (!mainWindow) return
             mainWindow.show()
-            dispatchEventOnWindow(mainWindow, "QuickAdd")
+            const caller = callWindowExpose(mainWindow)
+            caller.quickAdd()
           },
         },
 
@@ -71,7 +72,9 @@ export const registerAppMenu = () => {
             const mainWindow = getMainWindow()
             if (!mainWindow) return
             mainWindow.show()
-            dispatchEventOnWindow(mainWindow, "Discover")
+
+            const caller = callWindowExpose(mainWindow)
+            caller.goToDiscover()
           },
         },
 

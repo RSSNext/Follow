@@ -12,6 +12,7 @@ import { RouterProvider } from "react-router-dom"
 import { setAppIsReady } from "./atoms/app"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "./constants"
 import { initializeApp } from "./initialize"
+import { registerAppGlobalShortcuts } from "./initialize/global-shortcuts"
 import { router } from "./router"
 
 initializeApp().finally(() => {
@@ -34,6 +35,8 @@ if (IN_ELECTRON) {
     }
   }
   document.documentElement.dataset.os = getOS()
+} else {
+  registerAppGlobalShortcuts()
 }
 
 ReactDOM.createRoot($container).render(
