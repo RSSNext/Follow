@@ -21,6 +21,7 @@ import {
   useAddFeedToFeedList,
   useFeedById,
   useRemoveFeedFromFeedList,
+  useResetFeed,
 } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { useListById, useOwnedListByView } from "~/store/list"
@@ -83,6 +84,7 @@ export const useFeedActions = ({
 
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
+  const { mutateAsync: resetFeed } = useResetFeed()
   const openBoostModal = useBoostModal()
 
   const listByView = useOwnedListByView(view!)
@@ -92,6 +94,8 @@ export const useFeedActions = ({
   const items = useMemo(() => {
     const related = feed || inbox
     if (!related) return []
+
+    const isFeedOwner = related.ownerUserId === whoami()?.id
 
     const items: MenuItemInput[] = [
       {
@@ -117,11 +121,18 @@ export const useFeedActions = ({
             claimFeed()
           },
         },
-      ...(related.ownerUserId === whoami()?.id
+      ...(isFeedOwner
         ? [
             {
               type: "text" as const,
               label: t("sidebar.feed_actions.feed_owned_by_you"),
+            },
+            {
+              type: "text" as const,
+              label: t("sidebar.feed_actions.reset_feed"),
+              click: () => {
+                resetFeed(feedId)
+              },
             },
           ]
         : []),
