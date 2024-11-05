@@ -8,7 +8,9 @@ import type { BrowserWindow } from "electron"
 import { app, clipboard, dialog, screen } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
-import { clearAllData } from "~/lib/cleaner"
+import { clearAllData, getCacheSize } from "~/lib/cleaner"
+import { store, StoreKey } from "~/lib/store"
+import { logger } from "~/logger"
 
 import { isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
@@ -267,6 +269,27 @@ ${content}
         return { success: false, error: errorMessage }
       }
     }),
+
+  getCacheSize: t.procedure.action(async () => {
+    return getCacheSize()
+  }),
+  getCacheLimit: t.procedure.action(async () => {
+    return store.get(StoreKey.CacheSizeLimit)
+  }),
+
+  clearCache: t.procedure.action(async () => {
+    const cachePath = path.join(app.getPath("userData"), "cache")
+    await fsp.rm(cachePath, { recursive: true, force: true })
+  }),
+
+  limitCacheSize: t.procedure.input<number>().action(async ({ input }) => {
+    logger.info("set limitCacheSize", input)
+    if (input === 0) {
+      store.delete(StoreKey.CacheSizeLimit)
+    } else {
+      store.set(StoreKey.CacheSizeLimit, input)
+    }
+  }),
 }
 
 interface Sender extends Electron.WebContents {

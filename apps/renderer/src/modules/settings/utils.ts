@@ -10,10 +10,10 @@ export enum DisableWhy {
 }
 
 export interface SettingPageConfig {
-  iconName: string
+  icon: string | React.ReactNode
   name: I18nKeysForSettings
   priority: number
-  headerIcon?: string
+  headerIcon?: string | React.ReactNode
   hideIf?: (ctx: SettingPageContext) => boolean
   disableIf?: (ctx: SettingPageContext) => [boolean, DisableWhy]
 }

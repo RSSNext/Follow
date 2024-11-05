@@ -131,7 +131,8 @@
       "prettier --ignore-unknown --write"
     ],
     "locales/**/*.json": [
-      "npm run dedupe:locales"
+      "npm run dedupe:locales",
+      "git add locales"
     ]
   },
   "bump": {

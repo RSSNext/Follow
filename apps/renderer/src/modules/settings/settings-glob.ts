@@ -5,7 +5,7 @@ function getSettings() {
 
   const settings = [] as {
     name: I18nKeysForSettings
-    iconName: string
+    icon: string | React.ReactNode
     path: string
     Component: () => JSX.Element
     priority: number

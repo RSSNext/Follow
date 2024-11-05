@@ -8,7 +8,7 @@ const iconName = "i-mgc-love-cute-re"
 const priority = 1070
 
 export const loader = defineSettingPageData({
-  iconName,
+  icon: iconName,
   name: "titles.invitations",
   priority,
   disableIf: (ctx) => [ctx.role === UserRole.Trial, DisableWhy.NotActivation],

@@ -15,6 +15,11 @@ const createOrGetDb = () => {
   }
   return db
 }
+
+export enum StoreKey {
+  CacheSizeLimit = "cacheSizeLimit",
+}
+
 export const store = {
   get: (key: string) => {
     const db = createOrGetDb()
@@ -24,6 +29,11 @@ export const store = {
   set: (key: string, value: any) => {
     const db = createOrGetDb()
     db.data[key] = value
+    db.write()
+  },
+  delete: (key: string) => {
+    const db = createOrGetDb()
+    delete db.data[key]
     db.write()
   },
 }

@@ -106,7 +106,6 @@
   "general.mark_as_read.scroll.description": "當滾動出視圖時，自動標記條目為已讀。",
   "general.mark_as_read.scroll.label": "滾動時標記為已讀",
   "general.network": "網絡",
-  "general.privacy_data": "隱私與數據",
   "general.proxy.description": "代理網絡流量，例如：socks://proxy.example.com:1080",
   "general.proxy.label": "代理",
   "general.rebuild_database.button": "重建",

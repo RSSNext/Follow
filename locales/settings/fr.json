@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "Marquer comme lu lors de l'affichage",
   "general.mark_as_read.scroll.description": "Marquer automatiquement les entrées comme lues lorsqu'elles sortent de la vue.",
   "general.mark_as_read.scroll.label": "Marquer comme lu lors du défilement",
-  "general.privacy_data": "Confidentialité & Données",
   "general.rebuild_database.button": "Reconstruire",
   "general.rebuild_database.description": "Si vous rencontrez des problèmes d'affichage, la reconstruction de la base de données peut les résoudre.",
   "general.rebuild_database.label": "Reconstruire la base de données",

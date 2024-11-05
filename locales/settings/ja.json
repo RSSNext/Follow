@@ -118,7 +118,6 @@
   "general.mark_as_read.scroll.description": "表示からスクロールアウトしたときにエントリを自動的に既読にします。",
   "general.mark_as_read.scroll.label": "スクロール時に既読にする",
   "general.network": "ネットワーク",
-  "general.privacy_data": "プライバシーとデータ",
   "general.proxy.description": "ネットワークリクエストを代理します。例: socks://proxy.example.com:1080",
   "general.proxy.label": "プロキシ",
   "general.rebuild_database.button": "再構築",

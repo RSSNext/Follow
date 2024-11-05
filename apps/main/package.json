@@ -34,6 +34,7 @@
     "electron-log": "5.2.0",
     "electron-squirrel-startup": "1.0.1",
     "electron-updater": "^6.3.9",
+    "fast-folder-size": "2.3.0",
     "font-list": "1.5.1",
     "i18next": "^23.16.4",
     "linkedom": "^0.18.5",

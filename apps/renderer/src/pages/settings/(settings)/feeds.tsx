@@ -6,7 +6,7 @@ const iconName = "i-mgc-certificate-cute-re"
 const priority = 1060
 
 export const loader = defineSettingPageData({
-  iconName,
+  icon: iconName,
   name: "titles.feeds",
   priority,
 })

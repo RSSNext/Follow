@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "Marcar como lido ao visualizar",
   "general.mark_as_read.scroll.description": "Marcar automaticamente as entradas como lidas quando saem do campo de visão.",
   "general.mark_as_read.scroll.label": "Marcar como lido ao rolar a página",
-  "general.privacy_data": "Privacidade & Dados",
   "general.rebuild_database.button": "Reconstruir",
   "general.rebuild_database.description": "Se estiver a ter problemas de renderização, reconstruir a base de dados pode resolver.",
   "general.rebuild_database.label": "Reconstruir Base de Dados",

@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "Marcar como leído cuando está en vista",
   "general.mark_as_read.scroll.description": "Marcar automáticamente las entradas como leídas al desplazarse fuera de la vista.",
   "general.mark_as_read.scroll.label": "Marcar como leído al desplazarse",
-  "general.privacy_data": "Privacidad y Datos",
   "general.rebuild_database.button": "Reconstruir",
   "general.rebuild_database.description": "Si experimentas problemas de renderizado, reconstruir la base de datos puede solucionarlos.",
   "general.rebuild_database.label": "Reconstruir Base de Datos",

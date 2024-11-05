@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "Merkitse luetuksi, kun näkyvissä",
   "general.mark_as_read.scroll.description": "Merkitse merkinnät automaattisesti luetuiksi, kun ne vieritetään pois näkymästä.",
   "general.mark_as_read.scroll.label": "Merkitse luetuksi vierittäessä",
-  "general.privacy_data": "Yksityisyys ja data",
   "general.rebuild_database.button": "Rakenna uudelleen",
   "general.rebuild_database.description": "Jos kohtaat renderöintiongelmia, tietokannan uudelleenrakentaminen saattaa ratkaista ne.",
   "general.rebuild_database.label": "Rakenna tietokanta uudelleen",

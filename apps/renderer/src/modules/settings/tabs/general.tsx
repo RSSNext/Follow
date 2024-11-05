@@ -1,4 +1,3 @@
-import { Button } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import {
   Select,
@@ -8,7 +7,6 @@ import {
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { env } from "@follow/shared/env"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
@@ -24,13 +22,9 @@ import {
   useGeneralSettingSelector,
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { exportDB } from "~/database"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
-import { initAnalytics } from "~/initialize/analytics"
 import { tipcClient } from "~/lib/client"
-import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 import { SettingDescription, SettingInput } from "../control"
 import { createSetting } from "../helper/builder"
@@ -53,8 +47,6 @@ export const SettingGeneral = () => {
 
     setGeneralSetting("appLaunchOnStartup", checked)
   }, [])
-
-  const { present } = useModalStack()
 
   return (
     <div className="mt-4">
@@ -105,82 +97,6 @@ export const SettingGeneral = () => {
 
           IN_ELECTRON && VoiceSelector,
 
-          // { type: "title", value: "Secure" },
-          // defineSettingItem("jumpOutLinkWarn", {
-          //   label: "Warn when opening external links",
-          //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
-          // }),
-          {
-            type: "title",
-            value: t("general.privacy_data"),
-          },
-
-          defineSettingItem("dataPersist", {
-            label: t("general.data_persist.label"),
-            description: t("general.data_persist.description"),
-          }),
-
-          defineSettingItem("sendAnonymousData", {
-            label: t("general.send_anonymous_data.label"),
-            description: t("general.send_anonymous_data.description"),
-            onChange(value) {
-              setGeneralSetting("sendAnonymousData", value)
-              if (value) {
-                initAnalytics()
-              } else {
-                window.analytics?.reset()
-                delete window.analytics
-              }
-            },
-          }),
-          {
-            label: t("general.rebuild_database.label"),
-            action: () => {
-              present({
-                title: t("general.rebuild_database.title"),
-                clickOutsideToDismiss: true,
-                content: () => (
-                  <div className="text-sm">
-                    <p>{t("general.rebuild_database.warning.line1")}</p>
-                    <p>{t("general.rebuild_database.warning.line2")}</p>
-                    <div className="mt-4 flex justify-end">
-                      <Button
-                        className="bg-red-500 px-3 text-white"
-                        onClick={async () => {
-                          await clearLocalPersistStoreData()
-                          window.location.reload()
-                        }}
-                      >
-                        {t("ok", { ns: "common" })}
-                      </Button>
-                    </div>
-                  </div>
-                ),
-              })
-            },
-            description: t("general.rebuild_database.description"),
-            buttonText: t("general.rebuild_database.button"),
-          },
-          {
-            label: t("general.export_database.label"),
-            description: t("general.export_database.description"),
-            buttonText: t("general.export_database.button"),
-            action: () => {
-              exportDB()
-            },
-          },
-          {
-            label: t("general.export.label"),
-            description: t("general.export.description"),
-            buttonText: t("general.export.button"),
-            action: () => {
-              const link = document.createElement("a")
-              link.href = `${env.VITE_API_URL}/subscriptions/export`
-              link.download = "follow.opml"
-              link.click()
-            },
-          },
-
           { type: "title", value: t("general.network"), disabled: !IN_ELECTRON },
           IN_ELECTRON && NettingSetting,
         ]}
@@ -189,7 +105,7 @@ export const SettingGeneral = () => {
   )
 }
 
-export const VoiceSelector = () => {
+const VoiceSelector = () => {
   const { t } = useTranslation("settings")
 
   const { data } = useQuery({
