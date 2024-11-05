@@ -6,7 +6,6 @@ import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons"
 import { cleanupSVG, importDirectorySync, isEmptyColor, parseColors, runSVGO } from "@iconify/tools"
 import { compareColors, stringToColor } from "@iconify/utils/lib/colors"
 import type { Config } from "tailwindcss"
-import plugin from "tailwindcss/plugin"
 
 export const baseConfig = {
   darkMode: ["class", '[data-theme="dark"]'],
@@ -22,9 +21,6 @@ export const baseConfig = {
     },
 
     extend: {
-      spacing: {
-        "safe-inset-top": "var(--fo-window-padding-top, 0)",
-      },
       fontFamily: {
         theme: "var(--fo-font-family)",
         default: "SN pro, sans-serif, system-ui",
@@ -147,37 +143,6 @@ export const baseConfig = {
     require("tailwindcss-motion"),
 
     require(resolve(__dirname, "./tailwind-extend.css")),
-
-    plugin(({ addVariant }) => {
-      addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
-      addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')
-      addVariant("peer-motion-reduce", ':merge(.peer)[data-motion-reduce="true"] ~ &')
-    }),
-    plugin(({ addUtilities, matchUtilities, theme }) => {
-      addUtilities({
-        ".safe-inset-top": {
-          top: "var(--fo-window-padding-top, 0)",
-        },
-      })
-
-      const safeInsetTopVariants = {}
-      for (let i = 1; i <= 16; i++) {
-        safeInsetTopVariants[`.safe-inset-top-${i}`] = {
-          top: `calc(var(--fo-window-padding-top, 0px) + ${theme(`spacing.${i}`)})`,
-        }
-      }
-      addUtilities(safeInsetTopVariants)
-
-      // Add arbitrary value support
-      matchUtilities(
-        {
-          "safe-inset-top": (value) => ({
-            top: `calc(var(--fo-window-padding-top, 0px) + ${value})`,
-          }),
-        },
-        { values: theme("spacing") },
-      )
-    }),
   ],
 } satisfies Config
 

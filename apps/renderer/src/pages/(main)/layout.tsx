@@ -16,7 +16,7 @@ import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
-import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
   setFeedColumnShow,
@@ -214,8 +214,8 @@ const FeedResponsiveResizerContainer = ({
 
       const uiSettings = getUISettings()
       const feedColumnTempShow = getFeedColumnTempShow()
-      const isInEntryContentWideMode = uiSettings.wideMode
-      if (mouseY < 100 && isInEntryContentWideMode) return
+      const isInEntryContentWideMode = uiSettings.wideMode || getIsZenMode()
+      if (mouseY < 200 && isInEntryContentWideMode) return
       const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
       if (mouseX < threshold) {

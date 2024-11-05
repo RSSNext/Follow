@@ -5,7 +5,12 @@ import { useMemo, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import {
+  getUISettings,
+  setUISetting,
+  useRealInWideMode,
+  useUISettingKey,
+} from "~/atoms/settings/ui"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { EntryColumn } from "~/modules/entry-column"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
@@ -15,7 +20,7 @@ export function Component() {
 
   // Memo this initial value to avoid re-render
 
-  const settingWideMode = useUISettingKey("wideMode")
+  const settingWideMode = useRealInWideMode()
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
   const { view } = useRouteParams()
   const inWideMode = (view ? views[view].wideMode : false) || settingWideMode

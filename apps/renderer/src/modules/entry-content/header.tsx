@@ -70,7 +70,7 @@ function EntryHeaderImpl({
       {!hideRecentReader && (
         <div
           className={cn(
-            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
+            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500 zen-mode-macos:left-12",
             "visible z-[11]",
             views[view].wideMode && "static",
             shouldShowMeta && "hidden",

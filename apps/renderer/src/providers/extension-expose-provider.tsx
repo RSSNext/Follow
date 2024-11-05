@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { getGeneralSettings } from "~/atoms/settings/general"
-import { getUISettings } from "~/atoms/settings/ui"
+import { getUISettings, useToggleZenMode } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
@@ -64,5 +64,12 @@ export const ExtensionExposeProvider = () => {
       },
     })
   }, [follow, present, presentDiscoverRSSHubRoute, presentUserProfile, t])
+
+  const toggleZenMode = useToggleZenMode()
+  useEffect(() => {
+    registerGlobalContext({
+      zenMode: toggleZenMode,
+    })
+  }, [toggleZenMode])
   return null
 }

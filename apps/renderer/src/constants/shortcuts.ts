@@ -32,6 +32,10 @@ export const shortcuts: Shortcuts = {
       name: "keys.layout.toggleWideMode",
       key: "Meta+[",
     },
+    zenMode: {
+      name: "keys.layout.zenMode",
+      key: "Control+Shift+Z",
+    },
   },
   entries: {
     refetch: {

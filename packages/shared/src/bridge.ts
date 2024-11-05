@@ -33,6 +33,9 @@ interface RenderGlobalContext {
   // URL
   getWebUrl: () => string
   getApiUrl: () => string
+
+  // View
+  zenMode: () => void
 }
 
 export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => {

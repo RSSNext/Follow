@@ -1,4 +1,5 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
+import { MdiMeditation } from "@follow/components/icons/Meditation.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Popover, PopoverContent, PopoverTrigger } from "@follow/components/ui/popover/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
@@ -13,6 +14,7 @@ import { toast } from "sonner"
 
 import { setAppSearchOpen } from "~/atoms/app"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
+import { useIsZenMode, useSetZenMode } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useI18n } from "~/hooks/common"
@@ -81,7 +83,8 @@ const LayoutActionButton = () => {
   const [animation, setAnimation] = useState({
     width: !feedColumnShow ? "auto" : 0,
   })
-
+  const isZenMode = useIsZenMode()
+  const setIsZenMode = useSetZenMode()
   useEffect(() => {
     setAnimation({
       width: !feedColumnShow ? "auto" : 0,
@@ -95,18 +98,28 @@ const LayoutActionButton = () => {
   return (
     <m.div initial={animation} animate={animation} className="overflow-hidden">
       <ActionButton
-        tooltip={t("app.toggle_sidebar")}
+        tooltip={isZenMode ? t("zen.exit") : t("app.toggle_sidebar")}
         icon={
-          <i
-            className={cn(
-              !feedColumnShow
-                ? "i-mgc-layout-leftbar-open-cute-re "
-                : "i-mgc-layout-leftbar-close-cute-re",
-              "text-theme-vibrancyFg",
-            )}
-          />
+          isZenMode ? (
+            <MdiMeditation />
+          ) : (
+            <i
+              className={cn(
+                !feedColumnShow
+                  ? "i-mgc-layout-leftbar-open-cute-re "
+                  : "i-mgc-layout-leftbar-close-cute-re",
+                "text-theme-vibrancyFg",
+              )}
+            />
+          )
         }
-        onClick={() => setFeedColumnShow(!feedColumnShow)}
+        onClick={() => {
+          if (isZenMode) {
+            setIsZenMode(false)
+          } else {
+            setFeedColumnShow(!feedColumnShow)
+          }
+        }}
       />
     </m.div>
   )

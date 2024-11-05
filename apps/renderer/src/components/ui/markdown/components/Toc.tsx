@@ -18,7 +18,7 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { useUISettingKey } from "~/atoms/settings/ui"
+import { useRealInWideMode } from "~/atoms/settings/ui"
 import {
   useGetWrappedElementPosition,
   useWrappedElementPosition,
@@ -58,7 +58,7 @@ export const Toc: Component<TocProps> = ({ className, onItemClick }) => {
 
   const renderContentElementPosition = useWrappedElementPosition()
   const renderContentElementSize = useWrappedElementSize()
-  const entryContentInWideMode = useUISettingKey("wideMode")
+  const entryContentInWideMode = useRealInWideMode()
   const shouldShowTitle = useViewport((v) => {
     if (!entryContentInWideMode) return false
     const { w } = v

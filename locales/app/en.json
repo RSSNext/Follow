@@ -373,5 +373,6 @@
   "words.unread": "Unread",
   "words.user": "User",
   "words.which.all": "all",
-  "words.zero_items": "Zero items"
+  "words.zero_items": "Zero items",
+  "zen.exit": "Exit Zen Mode"
 }
