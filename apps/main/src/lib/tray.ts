@@ -14,6 +14,9 @@ let tray: Tray | null = null
 
 export const registerAppTray = () => {
   if (!getTrayConfig()) return
+  if (tray) {
+    destroyAppTray()
+  }
 
   const icon = nativeImage.createFromPath(getIconPath())
   // See https://stackoverflow.com/questions/41664208/electron-tray-icon-change-depending-on-dark-theme/41998326#41998326
