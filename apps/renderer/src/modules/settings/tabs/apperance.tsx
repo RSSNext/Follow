@@ -133,7 +133,7 @@ export const SettingAppearance = () => {
             label: t("appearance.use_pointer_cursor.label"),
             description: t("appearance.use_pointer_cursor.description"),
           }),
-          MinimizeToTraySetting,
+          IN_ELECTRON && MinimizeToTraySetting,
         ]}
       />
     </div>
