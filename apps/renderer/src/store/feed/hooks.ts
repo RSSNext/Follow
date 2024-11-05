@@ -1,6 +1,7 @@
 import { views } from "@follow/constants"
 import type { FeedModel, FeedOrListRespModel, InboxModel, ListModel } from "@follow/models/types"
 import { useMutation } from "@tanstack/react-query"
+import { useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useShallow } from "zustand/react/shallow"
@@ -8,6 +9,7 @@ import { useShallow } from "zustand/react/shallow"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { apiClient } from "~/lib/api-fetch"
+import { entries } from "~/queries/entries"
 
 import { useInboxStore } from "../inbox"
 import { listActions, useListStore } from "../list"
@@ -134,6 +136,31 @@ export const useRemoveFeedFromFeedList = (options?: {
     async onError() {
       toast.error(t("lists.feeds.delete.error"))
       options?.onError?.()
+    },
+  })
+}
+
+export const useResetFeed = () => {
+  const { t } = useTranslation()
+  const toastIDRef = useRef<string | number | null>(null)
+
+  return useMutation({
+    mutationFn: async (feedId: string) => {
+      toastIDRef.current = toast.loading(t("sidebar.feed_actions.resetting_feed"))
+      await apiClient.feeds.reset.$get({ query: { id: feedId } })
+    },
+    onSuccess: (_, feedId) => {
+      entries.entries({ feedId }).invalidateRoot()
+      toast.success(
+        t("sidebar.feed_actions.reset_feed_success"),
+        toastIDRef.current ? { id: toastIDRef.current } : undefined,
+      )
+    },
+    onError: () => {
+      toast.error(
+        t("sidebar.feed_actions.reset_feed_error"),
+        toastIDRef.current ? { id: toastIDRef.current } : undefined,
+      )
     },
   })
 }
