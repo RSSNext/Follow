@@ -26,6 +26,7 @@ import {
 } from "~/atoms/settings/ui"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { isElectronBuild } from "~/constants"
+import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTraySetting"
 import { useSetTheme } from "~/hooks/common"
 
 import { SETTING_MODAL_ID } from "../constants"
@@ -132,6 +133,7 @@ export const SettingAppearance = () => {
             label: t("appearance.use_pointer_cursor.label"),
             description: t("appearance.use_pointer_cursor.description"),
           }),
+          MinimizeToTraySetting,
         ]}
       />
     </div>
@@ -392,5 +394,22 @@ const CustomCSSModal = () => {
         <Button type="submit">{t("words.save")}</Button>
       </div>
     </form>
+  )
+}
+
+const MinimizeToTraySetting = () => {
+  const { t } = useTranslation("settings")
+  const minimizeToTray = useMinimizeToTrayValue()
+  const setMinimizeToTray = useSetMinimizeToTray()
+  return (
+    <SettingItemGroup>
+      <SettingSwitch
+        checked={minimizeToTray}
+        className="mt-4"
+        onCheckedChange={setMinimizeToTray}
+        label={t("appearance.minimize_to_tray.label")}
+      />
+      <SettingDescription>{t("appearance.minimize_to_tray.description")}</SettingDescription>
+    </SettingItemGroup>
   )
 }
