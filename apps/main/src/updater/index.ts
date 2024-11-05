@@ -43,6 +43,8 @@ export const checkForAppUpdates = async () => {
   try {
     const [info] = await Promise.all([autoUpdater.checkForUpdates(), hotUpdateRender()])
     return info
+  } catch (e) {
+    logger.error("Error checking for updates", e)
   } finally {
     checkingUpdate = false
   }
