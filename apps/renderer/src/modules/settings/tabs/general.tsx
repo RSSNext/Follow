@@ -20,10 +20,10 @@ import { defaultResources } from "~/@types/default-resource"
 import { langLoadingLockMapAtom } from "~/atoms/lang"
 import {
   setGeneralSetting,
+  useGeneralSettingKey,
   useGeneralSettingSelector,
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
-import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
@@ -190,16 +190,17 @@ export const VoiceSelector = () => {
       persist: true,
     },
   })
-  const voice = useUISettingSelector((state) => state.voice)
+
+  const voice = useGeneralSettingKey("voice")
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("general.voices")}</span>
       <Select
-        defaultValue={createDefaultSettings().voice}
+        defaultValue={voice}
         value={voice}
         onValueChange={(value) => {
-          setUISetting("voice", value)
+          setGeneralSetting("voice", value)
         }}
       >
         <SelectTrigger size="sm" className="w-48">

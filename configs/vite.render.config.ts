@@ -14,10 +14,20 @@ import { twMacro } from "../plugins/vite/tw-macro"
 import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
 
-const pkgDir = dirname(fileURLToPath(import.meta.url))
-const pkg = JSON.parse(readFileSync(resolve(pkgDir, "../package.json"), "utf8"))
+const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "..")
+const pkg = JSON.parse(readFileSync(resolve(pkgDir, "./package.json"), "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
 
+const getChangelogFileContent = () => {
+  const { version } = pkg
+  const isDev = process.env.NODE_ENV === "development"
+  try {
+    return readFileSync(resolve(pkgDir, "./changelog", `${isDev ? "next" : version}.md`), "utf8")
+  } catch {
+    return ""
+  }
+}
+const changelogFile = getChangelogFileContent()
 export const viteRenderBaseConfig = {
   resolve: {
     alias: {
@@ -73,5 +83,6 @@ export const viteRenderBaseConfig = {
     DEBUG: process.env.DEBUG === "true",
 
     I18N_COMPLETENESS_MAP: JSON.stringify({ ...i18nCompleteness, en: 100 }),
+    CHANGELOG_CONTENT: JSON.stringify(changelogFile),
   },
 } satisfies UserConfig

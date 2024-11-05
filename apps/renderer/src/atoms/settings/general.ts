@@ -18,15 +18,18 @@ const createDefaultSettings = (): GeneralSettings => ({
   hoverMarkUnread: true,
   renderMarkUnread: false,
   // UX
-  // autoHideFeedColumn: true,
+
   groupByDate: true,
   // Secure
   jumpOutLinkWarn: true,
+  // TTS
+  voice: "en-US-AndrewMultilingualNeural",
 })
 
 export const {
   useSettingKey: useGeneralSettingKey,
   useSettingSelector: useGeneralSettingSelector,
+  useSettingKeys: useGeneralSettingKeys,
   setSetting: setGeneralSetting,
   clearSettings: clearGeneralSettings,
   initializeDefaultSettings: initializeDefaultGeneralSettings,
@@ -44,4 +47,5 @@ export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
   "dataPersist",
   "sendAnonymousData",
   "language",
+  "voice",
 ]

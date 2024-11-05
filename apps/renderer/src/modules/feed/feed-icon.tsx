@@ -64,6 +64,15 @@ const FallbackableImage = forwardRef<
     />
   )
 })
+
+type FeedIconFeed =
+  | (Pick<FeedModel, "ownerUserId" | "id" | "title" | "url" | "image"> & {
+      type: FeedOrListRespModel["type"]
+      siteUrl?: string
+    })
+  | FeedOrListRespModel
+
+type FeedIconEntry = Pick<CombinedEntryModel["entries"], "media" | "authorAvatar">
 export function FeedIcon({
   feed,
   entry,
@@ -74,8 +83,8 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: FeedOrListRespModel | null
-  entry?: CombinedEntryModel["entries"]
+  feed?: FeedIconFeed | null
+  entry?: FeedIconEntry | null
   fallbackUrl?: string
   className?: string
   size?: number
@@ -113,8 +122,8 @@ export function FeedIcon({
   const colorfulStyle: React.CSSProperties = useMemo(() => {
     const [, , , bgAccent, bgAccentLight, bgAccentUltraLight] = colors
     return {
-      // Create a bottom-left to top-right avatar fallback background gradient
-      backgroundImage: `linear-gradient(to top right, ${bgAccent} 20%, ${bgAccentLight} 80%, ${bgAccentUltraLight} 95%)`,
+      backgroundImage: `linear-gradient(to top, ${bgAccent} 0%, ${bgAccentLight} 99%, ${bgAccentUltraLight} 100%)`,
+
       ...sizeStyle,
     }
   }, [colors, sizeStyle])

@@ -46,10 +46,12 @@ export type EntriesResponse = Array<
   | Exclude<Awaited<ReturnType<typeof _apiClient.entries.inbox.$post>>["data"], undefined>
 >[number]
 
-export type CombinedEntryModel = EntriesResponse[number] & {
+export type CombinedEntryModel = Omit<EntriesResponse[number], "feeds"> & {
   entries: {
     content?: string | null
   }
+  inboxes?: InboxModel
+  feeds?: EntriesResponse[number]["feeds"]
 }
 export type EntryModel = CombinedEntryModel["entries"]
 export type EntryModelSimple = Exclude<

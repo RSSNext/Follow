@@ -14,7 +14,7 @@ import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC, ReactNode } from "react"
 import { useEffect, useId, useMemo, useRef, useState } from "react"
-import { Trans, useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -148,18 +148,9 @@ export const AchievementModalContent: FC = () => {
 
       <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
-      <small className="center mt-1 gap-1 text-theme-vibrancyFg">
-        <Trans
-          i18nKey={"achievement.mint_more_power"}
-          components={{
-            power: (
-              <span className="center gap-0.5 font-semibold">
-                <span>{t("words.power")}</span>
-                <i className="i-mgc-power text-accent" />
-              </span>
-            ),
-          }}
-        />
+      <small className="mt-1 gap-1 text-theme-vibrancyFg">
+        {t("achievement.description")}
+        <sup className="inline-block translate-y-1 text-xs">*</sup>
       </small>
 
       <ScrollArea rootClassName="h-0 grow mt-10 w-[calc(100%+2rem)] -mx-4" viewportClassName="px-4">
@@ -176,16 +167,7 @@ export const AchievementModalContent: FC = () => {
               return (
                 <li key={achievement.id} className="flex items-center justify-between">
                   <div>
-                    <div className="text-base font-bold">
-                      {t(copy.title)}
-
-                      {achievement.power && (
-                        <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
-                          <span className="font-medium opacity-80">{achievement.power}</span>
-                          <i className="i-mgc-power scale-95 text-sm text-accent" />
-                        </span>
-                      )}
-                    </div>
+                    <div className="text-base font-bold">{t(copy.title)}</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       {t(copy.description)}
                     </div>
@@ -240,6 +222,8 @@ export const AchievementModalContent: FC = () => {
           )}
         </ul>
       </ScrollArea>
+
+      <p className="mt-4 pb-2 text-xs text-muted-foreground">{t("achievement.nft_coming_soon")}</p>
     </div>
   )
 }

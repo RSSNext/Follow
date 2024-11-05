@@ -1,20 +1,21 @@
 import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "@follow/models/types"
+import { sleep } from "@follow/utils/utils"
 
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"
-import { createImmerSetter, createZustandStore } from "../utils/helper"
+import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
 import type { ListState } from "./types"
 
 export const useListStore = createZustandStore<ListState>("list")(() => ({
   lists: {},
 }))
 
-const set = createImmerSetter(useListStore)
+const immerSet = createImmerSetter(useListStore)
 const get = useListStore.getState
-
+const set = useListStore.setState
 class ListActionStatic {
   upsertMany(lists: ListModelPoplutedFeeds[]) {
     if (lists.length === 0) return
@@ -23,15 +24,19 @@ class ListActionStatic {
       for (const list of lists) {
         state.lists[list.id] = list
 
-        if (list.feeds)
-          for (const feed of list.feeds) {
-            feeds.push(feed)
-          }
+        if (!list.feeds) continue
+        for (const feed of list.feeds) {
+          feeds.push(feed)
+        }
       }
 
-      feedActions.upsertMany(feeds)
-      return state
+      return {
+        ...state,
+        lists: { ...state.lists },
+      }
     })
+
+    feedActions.upsertMany(feeds)
 
     runTransactionInScope(() => ListService.upsertMany(lists))
   }
@@ -44,7 +49,7 @@ class ListActionStatic {
   }
 
   private patch(listId: string, data: Partial<ListModel>) {
-    set((state) => {
+    immerSet((state) => {
       state.lists[listId] = { ...state.lists[listId], ...data }
       return state
     })
@@ -74,13 +79,37 @@ class ListActionStatic {
     })
   }
 
-  deleteList(listId: string) {
-    set((state) => {
-      delete state.lists[listId]
-      return state
+  async deleteList(listId: string) {
+    const deletedList = get().lists[listId]
+    if (!deletedList) return
+    const tx = createTransaction(deletedList)
+
+    tx.optimistic(async () => {
+      immerSet((state) => {
+        delete state.lists[listId]
+        return state
+      })
+    })
+    tx.execute(async () => {
+      await sleep(1000)
+
+      await apiClient.lists.$delete({
+        json: {
+          listId,
+        },
+      })
+    })
+    tx.rollback(async (s) => {
+      immerSet((state) => {
+        state.lists[listId] = s
+        return state
+      })
     })
 
-    runTransactionInScope(() => ListService.bulkDelete([listId]))
+    tx.persist(async () => {
+      ListService.bulkDelete([listId])
+    })
+    await tx.run()
   }
 
   async fetchListById(id: string) {
@@ -91,7 +120,7 @@ class ListActionStatic {
   }
 
   clear() {
-    set((state) => {
+    immerSet((state) => {
       state.lists = {}
     })
   }

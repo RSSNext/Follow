@@ -1,3 +1,4 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
@@ -40,6 +41,7 @@ import {
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 
 import { EntryContentHTMLRenderer } from "../renderer/html"
 import {
@@ -93,9 +95,10 @@ export const EntryContentRender: Component<{
 
   const feed = useFeedById(entry?.feedId) as FeedModel | InboxModel
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
+  const inbox = useInboxById(entry?.inboxId, (inbox) => inbox !== null)
 
   const { error, data, isPending } = useAuthQuery(
-    feed?.type === "inbox" ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
+    inbox ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
     {
       staleTime: 300_000,
     },
@@ -157,7 +160,7 @@ export const EntryContentRender: Component<{
       ),
     [entry?.entries.media, data?.entries.media],
   )
-
+  const customCSS = useUISettingKey("customCSS")
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -186,7 +189,7 @@ export const EntryContentRender: Component<{
     })
   }
 
-  const isInbox = feed?.type === "inbox"
+  const isInbox = !!inbox
 
   return (
     <>
@@ -235,6 +238,9 @@ export const EntryContentRender: Component<{
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
                       <ShadowDOM injectHostStyles={!isInbox}>
+                        {!!customCSS && (
+                          <MemoedDangerousHTMLStyle>{customCSS}</MemoedDangerousHTMLStyle>
+                        )}
                         <EntryContentHTMLRenderer
                           view={view}
                           feedId={feed?.id}
@@ -266,7 +272,9 @@ export const EntryContentRender: Component<{
               {!content && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
-                    <EntryContentLoading icon={!isInbox ? feed?.siteUrl! : undefined} />
+                    <EntryContentLoading
+                      icon={!isInbox ? (feed as FeedModel)?.siteUrl! : undefined}
+                    />
                   ) : error ? (
                     <div className="center flex min-w-0 flex-col gap-2">
                       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
@@ -310,10 +318,12 @@ const TitleMetaHandler: Component<{
   const {
     entries: { title: entryTitle },
     feedId,
+    inboxId,
   } = useEntry(entryId)!
 
-  const { title: feedTitle } = useFeedById(feedId)!
-
+  const feed = useFeedById(feedId)
+  const inbox = useInboxById(inboxId)
+  const feedTitle = feed?.title || inbox?.title
   const atTop = useIsSoFWrappedElement()
   useEffect(() => {
     setEntryContentScrollToTop(true)

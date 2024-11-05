@@ -104,6 +104,12 @@ export const shortcuts: Shortcuts = {
       key: "Space",
     },
   },
+  misc: {
+    quickSearch: {
+      name: "keys.misc.quickSearch",
+      key: "Meta+K",
+    },
+  },
 }
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
@@ -112,4 +118,5 @@ export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortc
   entries: "keys.type.entries",
   entry: "keys.type.entry",
   audio: "keys.type.audio",
+  misc: "keys.type.misc",
 }

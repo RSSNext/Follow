@@ -22,6 +22,12 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   // obsidian
   enableObsidian: false,
   obsidianVaultPath: "",
+
+  // outline
+  enableOutline: false,
+  outlineEndpoint: "",
+  outlineToken: "",
+  outlineCollection: "",
 })
 
 export const {

@@ -174,6 +174,7 @@ const SearchTrigger = () => {
     },
     {
       enabled: canSearch,
+      preventDefault: true,
     },
   )
 

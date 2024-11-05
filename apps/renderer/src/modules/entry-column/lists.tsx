@@ -96,6 +96,7 @@ const EntryGroupedList = forwardRef<
     }
 >(({ groupCounts, itemContent, onKeyDown, data, totalCount, ...virtuosoOptions }, ref) => (
   <GroupedVirtuoso
+    className="z-0"
     ref={ref}
     groupContent={useCallback(
       (index: number) => {

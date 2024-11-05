@@ -32,7 +32,7 @@ export const RadioCards = ({
   return (
     <RadioGroup value={value.toString()} onValueChange={(value) => onValueChange(+value)}>
       <m.div
-        className="grid w-full grid-cols-2 gap-2 overflow-hidden"
+        className="grid w-full grid-cols-2 gap-2"
         initial={{ height: "auto", opacity: 0 }}
         animate={{ height: "auto", opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}

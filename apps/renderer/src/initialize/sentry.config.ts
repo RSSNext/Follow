@@ -2,7 +2,7 @@ import { env } from "@follow/shared/env"
 import type { BrowserOptions } from "@sentry/react"
 import { FetchError } from "ofetch"
 
-import { CustomSafeError } from "./components/errors/helper"
+import { CustomSafeError } from "../errors/CustomSafeError"
 
 const ERROR_PATTERNS = [
   /Network Error/i,
@@ -49,6 +49,14 @@ export const SentryConfig: BrowserOptions = {
     if (isPassthroughError || isAbortError) {
       return null
     }
+
+    if (error instanceof Error && "traceId" in error && error.traceId) {
+      event.tags = {
+        ...event.tags,
+        traceId: error.traceId as string,
+      }
+    }
+
     return event
   },
 }

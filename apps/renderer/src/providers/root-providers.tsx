@@ -34,6 +34,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
       <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
         <Provider store={jotaiStore}>
           <I18nProvider>
+            <Toaster />
             <EventProvider />
 
             <UserProvider />
@@ -52,7 +53,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <LazyLottieRenderContainer />
               <LazyExternalJumpInProvider />
             </Suspense>
-            <Toaster />
           </I18nProvider>
         </Provider>
       </HotkeysProvider>

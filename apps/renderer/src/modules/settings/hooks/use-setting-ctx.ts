@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import { useUserRole } from "~/atoms/user"
 
-import { settings } from "../constants"
+import { settings } from "../settings-glob"
 import type { SettingPageContext } from "../utils"
 
 export const useSettingPageContext = (): SettingPageContext => {

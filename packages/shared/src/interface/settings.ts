@@ -9,6 +9,8 @@ export interface GeneralSettings {
   renderMarkUnread: boolean
   groupByDate: boolean
   jumpOutLinkWarn: boolean
+  // TTS
+  voice: string
 }
 
 export interface UISettings {
@@ -16,6 +18,8 @@ export interface UISettings {
   feedColWidth: number
   opaqueSidebar: boolean
   sidebarShowUnreadCount: boolean
+  hideExtraBadge: boolean
+  thumbnailRatio: "square" | "original"
   uiTextSize: number
   showDockBadge: boolean
   modalOverlay: boolean
@@ -25,19 +29,18 @@ export interface UISettings {
   usePointerCursor: boolean | null
   uiFontFamily: string
   readerFontFamily: string
+  // Content
   readerRenderInlineStyle: boolean
   codeHighlightThemeLight: string
   codeHighlightThemeDark: string
   guessCodeLanguage: boolean
   hideRecentReader: boolean
+  customCSS: string
 
   // view
   pictureViewMasonry: boolean
   pictureViewFilterNoImage: boolean
   wideMode: boolean
-
-  // tts
-  voice: string
 }
 
 export interface IntegrationSettings {
@@ -61,4 +64,10 @@ export interface IntegrationSettings {
   // obsidian
   enableObsidian: boolean
   obsidianVaultPath: string
+
+  // outline
+  enableOutline: boolean
+  outlineEndpoint: string
+  outlineToken: string
+  outlineCollection: string
 }

@@ -13,6 +13,9 @@ export const setIntegrationIdentify = async (user: User) => {
       name: user.name,
     },
   })
+  op.track("identify", {
+    user_id: user.id,
+  })
   await import("@sentry/react").then(({ setTag }) => {
     setTag("user_id", user.id)
     setTag("user_name", user.name)

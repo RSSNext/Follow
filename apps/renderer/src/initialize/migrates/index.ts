@@ -9,14 +9,15 @@ declare global {
     __app_is_upgraded__: boolean
   }
 }
-export const doMigration = () => {
+
+export const doMigration = async () => {
   const lastVersion = localStorage.getItem(appVersionKey)
-
-  if (lastVersion && lastVersion !== APP_VERSION) {
-    appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
-    window.__app_is_upgraded__ = true
-
-    // NOTE: Add migration logic here
+  if (!lastVersion || lastVersion === APP_VERSION) {
+    localStorage.setItem(appVersionKey, APP_VERSION)
+    return
   }
-  localStorage.setItem(appVersionKey, APP_VERSION)
+  // NOTE: Add migration logic here
+
+  appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
+  window.__app_is_upgraded__ = true
 }

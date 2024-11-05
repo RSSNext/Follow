@@ -1,5 +1,7 @@
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 
+import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
+import { ErrorComponentType } from "~/components/errors/enum"
 import { useAuthQuery } from "~/hooks/common"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { Queries } from "~/queries"
@@ -27,10 +29,12 @@ export function RSSHubGuide() {
   }
 
   return (
-    <ScrollArea.ScrollArea viewportClassName="h-[450px]">
-      <div className="space-y-3">
-        <Recommendations hideTitle className="grid-cols-4" />
-      </div>
-    </ScrollArea.ScrollArea>
+    <AppErrorBoundary errorType={ErrorComponentType.RSSHubDiscoverError}>
+      <ScrollArea.ScrollArea viewportClassName="h-[450px]">
+        <div className="space-y-3">
+          <Recommendations hideTitle className="grid-cols-4" />
+        </div>
+      </ScrollArea.ScrollArea>
+    </AppErrorBoundary>
   )
 }

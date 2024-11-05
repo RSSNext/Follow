@@ -7,9 +7,9 @@ import { isBizId } from "@follow/utils/utils"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
+import type { FollowMenuItem, MenuItemInput } from "~/atoms/context-menu"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
@@ -23,7 +23,7 @@ import {
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
-import { useListById, useOwnedList } from "~/store/list"
+import { useListById, useOwnedListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
@@ -60,8 +60,17 @@ export const useFeedActions = ({
   type?: "feedList" | "entryList"
 }) => {
   const { t } = useTranslation()
-  const feed = useFeedById(feedId)
-  const isInbox = feed?.type === "inbox"
+  const feed = useFeedById(feedId, (feed) => {
+    return {
+      type: feed.type,
+      ownerUserId: feed.ownerUserId,
+      id: feed.id,
+      url: feed.url,
+      siteUrl: feed.siteUrl,
+    }
+  })
+  const inbox = useInboxById(feedId)
+  const isInbox = !!inbox
   const subscription = useSubscriptionByFeedId(feedId)
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
@@ -76,14 +85,15 @@ export const useFeedActions = ({
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
   const openBoostModal = useBoostModal()
 
-  const listByView = useOwnedList(view!)
+  const listByView = useOwnedListByView(view!)
 
   const isMultipleSelection = feedIds && feedIds.length > 0
 
   const items = useMemo(() => {
-    if (!feed) return []
+    const related = feed || inbox
+    if (!related) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.mark_all_as_read"),
@@ -95,9 +105,9 @@ export const useFeedActions = ({
           }),
         supportMultipleSelection: true,
       },
-      !feed.ownerUserId &&
-        !!isBizId(feed.id) &&
-        feed.type === "feed" && {
+      !related.ownerUserId &&
+        !!isBizId(related.id) &&
+        related.type === "feed" && {
           type: "text" as const,
           label: isEntryList
             ? t("sidebar.feed_actions.claim_feed")
@@ -107,7 +117,7 @@ export const useFeedActions = ({
             claimFeed()
           },
         },
-      ...(feed.ownerUserId === whoami()?.id
+      ...(related.ownerUserId === whoami()?.id
         ? [
             {
               type: "text" as const,
@@ -265,10 +275,10 @@ export const useFeedActions = ({
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => {
-          // @ts-expect-error
-          const { url } = feed || {}
-          if (!url) return
-          navigator.clipboard.writeText(url)
+          const { url, siteUrl } = feed || {}
+          const copied = url || siteUrl
+          if (!copied) return
+          navigator.clipboard.writeText(copied)
         },
       },
       {
@@ -285,12 +295,13 @@ export const useFeedActions = ({
     return items
   }, [
     feed,
+    inbox,
     t,
     isEntryList,
     isInbox,
     listByView,
-    feedId,
     isMultipleSelection,
+    feedId,
     feedIds,
     claimFeed,
     openBoostModal,
@@ -319,7 +330,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
   const items = useMemo(() => {
     if (!list) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       list.ownerUserId === whoami()?.id && {
         type: "text" as const,
         label: t("sidebar.feed_actions.list_owned_by_you"),
@@ -407,7 +418,7 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
   const items = useMemo(() => {
     if (!inbox) return []
 
-    const items: NativeMenuItem[] = [
+    const items: FollowMenuItem[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.edit"),
