@@ -40,6 +40,14 @@ describe("proxy", () => {
       expect(result).toBe(true)
     })
 
+    it("should handle default port", () => {
+      // https://github.com/RSSNext/Follow/issues/1197
+      const proxy = "http://example.com:80"
+      const result = setProxyConfig(proxy)
+      expect(store.set).toHaveBeenCalledWith("proxy", "http://example.com")
+      expect(result).toBe(true)
+    })
+
     it("should return false for invalid proxy", () => {
       const proxy = "invalid-proxy"
       const result = setProxyConfig(proxy)
