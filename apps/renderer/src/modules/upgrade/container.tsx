@@ -56,8 +56,14 @@ const AppNotificationContainer: FC = () => {
       toast.success(
         <div>
           App is upgraded to{" "}
-          <a href={`${repository.url}/releases/tag/${APP_VERSION}`}>{APP_VERSION}</a>, enjoy the new
-          features! 🎉
+          <a
+            href={`${repository.url}/releases/tag/${APP_VERSION}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {APP_VERSION}
+          </a>
+          , enjoy the new features! 🎉
         </div>,
         {
           duration: 10e8,
