@@ -16,20 +16,39 @@ import { x } from "tar"
 
 import { GITHUB_OWNER, GITHUB_REPO, HOTUPDATE_RENDER_ENTRY_DIR } from "~/constants/app"
 import { logger } from "~/logger"
+import {
+  hotUpdateAppNotSupportTriggerTrack,
+  hotUpdateDownloadTrack,
+  hotUpdateRenderSuccessTrack,
+} from "~/tracker"
 import { getMainWindow } from "~/window"
 
 import { checkForAppUpdates, downloadAppUpdate } from "."
+import { appUpdaterConfig } from "./configs"
+import type { GitHubReleasesItem } from "./types"
 import { shouldUpdateApp } from "./utils"
+
+const isNightlyBuild = appVersion.includes("nightly")
 
 const url = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}`
 const releasesUrl = `${url}/releases`
-const latestReleaseApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`
+const releaseApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases`
 
 const getLatestReleaseTag = memoize(async () => {
-  const res = await fetch(latestReleaseApiUrl)
-  const json = await res.json()
+  if (!isNightlyBuild) {
+    const res = await fetch(`${releaseApiUrl}/latest`)
+    const json = await res.json()
 
-  return json.tag_name
+    return json.tag_name
+  } else {
+    const res = await fetch(releaseApiUrl)
+    const json = (await res.json()) as GitHubReleasesItem[]
+
+    // Search the top nightly release
+    const nightlyRelease = json.find((item) => item.prerelease)
+    if (!nightlyRelease) return json[0].tag_name
+    return nightlyRelease.tag_name
+  }
 })
 
 const getFileDownloadUrl = async (filename: string) => {
@@ -65,6 +84,10 @@ const canUpdateRender = async () => {
 
   const appSupport = gte(appVersion, manifest.minimum)
   if (!appSupport) {
+    hotUpdateAppNotSupportTriggerTrack({
+      appVersion,
+      manifestVersion: manifest.version,
+    })
     // Trigger app force update
     checkForAppUpdates().then(() => {
       downloadAppUpdate()
@@ -108,6 +131,7 @@ const downloadRenderAsset = async () => {
     logger.error("Failed to get latest release manifest")
     return false
   }
+  hotUpdateDownloadTrack(manifest.version)
   const { filename } = manifest
   const url = await getFileDownloadUrl(filename)
 
@@ -129,7 +153,9 @@ const downloadRenderAsset = async () => {
   return filePath
 }
 export const hotUpdateRender = async () => {
+  if (!appUpdaterConfig.enableRenderHotUpdate) return false
   if (!(await canUpdateRender())) return false
+
   const filePath = await downloadRenderAsset()
   if (!filePath) return false
 
@@ -154,6 +180,7 @@ export const hotUpdateRender = async () => {
     JSON.stringify(manifest),
   )
   logger.info(`Hot update render success, update to ${manifest.version}`)
+  hotUpdateRenderSuccessTrack(manifest.version)
   const mainWindow = getMainWindow()
   if (!mainWindow) return false
   const caller = callWindowExpose(mainWindow)

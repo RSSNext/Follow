@@ -6,6 +6,7 @@ import { imageRefererMatches, selfRefererMatches } from "@follow/shared/image"
 import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
+import { DEVICE_ID } from "./constants/system"
 import { isDev, isMacOS } from "./env"
 import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { updateProxy } from "./lib/proxy"
@@ -18,6 +19,7 @@ import { createMainWindow, getMainWindow, windowStateStoreKey } from "./window"
 
 if (isDev) console.info("[main] env loaded:", env)
 
+console.info("[main] device id:", DEVICE_ID)
 if (squirrelStartup) {
   app.quit()
 }

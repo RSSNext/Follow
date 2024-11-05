@@ -8,13 +8,14 @@ import { channel, isDev, isWindows } from "../env"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
 import { destroyMainWindow, getMainWindow } from "../window"
+import { appUpdaterConfig } from "./configs"
 import { CustomGitHubProvider } from "./custom-github-provider"
 import { shouldUpdateApp } from "./utils"
 import { WindowsUpdater } from "./windows-updater"
 
 // skip auto update in dev mode
 // const disabled = isDev
-const disabled = false
+const disabled = !appUpdaterConfig.enableAppUpdate
 
 const autoUpdater = isWindows ? new WindowsUpdater() : defaultAutoUpdater
 
@@ -32,18 +33,6 @@ export const quitAndInstall = () => {
 
 let downloading = false
 let checkingUpdate = false
-
-export type UpdaterConfig = {
-  autoCheckUpdate: boolean
-  autoDownloadUpdate: boolean
-  checkUpdateInterval: number
-}
-
-const config: UpdaterConfig = {
-  autoCheckUpdate: true,
-  autoDownloadUpdate: true,
-  checkUpdateInterval: 15 * 60 * 1000,
-}
 
 export const checkForAppUpdates = async () => {
   if (disabled || checkingUpdate) {
@@ -77,8 +66,7 @@ export const registerUpdater = async () => {
     return
   }
 
-  const allowAutoUpdate = true
-
+  // Disable there, control this in event
   autoUpdater.autoDownload = false
   autoUpdater.allowPrerelease = channel !== "stable"
   autoUpdater.autoInstallOnAppQuit = true
@@ -109,15 +97,20 @@ export const registerUpdater = async () => {
   autoUpdater.on("update-available", (info) => {
     logger.info("Update available", info)
 
-    const currentVersion = autoUpdater.currentVersion?.version
-    const nextVersion = info.version
+    // The app hotfix strategy is as follows:
+    // Determine whether the app should be updated in full or only the renderer layer based on the version number.
+    // https://www.notion.so/rss3/Follow-Hotfix-Electron-Renderer-layer-RFC-fe2444b9ac194c2cb38f9fa0bb1ef3c1?pvs=4#12e35ea049b480f1b268f1e605d86a62
+    if (appUpdaterConfig.enableRenderHotUpdate) {
+      const currentVersion = autoUpdater.currentVersion?.version
+      const nextVersion = info.version
 
-    if (currentVersion) {
-      const shouldUpdate = shouldUpdateApp(currentVersion, nextVersion)
-      if (!shouldUpdate) return
+      if (currentVersion) {
+        const shouldUpdate = shouldUpdateApp(currentVersion, nextVersion)
+        if (!shouldUpdate) return
+      }
     }
 
-    if (config.autoDownloadUpdate && allowAutoUpdate) {
+    if (appUpdaterConfig.app.autoDownloadUpdate) {
       downloadAppUpdate().catch((err) => {
         logger.error(err)
       })
@@ -145,13 +138,13 @@ export const registerUpdater = async () => {
   autoUpdater.forceDevUpdateConfig = isDev
 
   setInterval(() => {
-    if (config.autoCheckUpdate) {
+    if (appUpdaterConfig.app.autoCheckUpdate) {
       checkForAppUpdates().catch((err) => {
         logger.error("Error checking for updates", err)
       })
     }
-  }, config.checkUpdateInterval)
-  if (config.autoCheckUpdate) {
+  }, appUpdaterConfig.app.checkUpdateInterval)
+  if (appUpdaterConfig.app.autoCheckUpdate) {
     checkForAppUpdates().catch((err) => {
       logger.error("Error checking for updates", err)
     })
