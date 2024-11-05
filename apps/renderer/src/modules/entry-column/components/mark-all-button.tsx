@@ -86,7 +86,7 @@ export const MarkAllReadWithOverlay = forwardRef<
             <Trans
               i18nKey="mark_all_read_button.mark_as_read"
               components={{
-                which: commonT(`words.which.${which}` as any),
+                which: <>{commonT(`words.which.${which}` as any)}</>,
               }}
             />
             {shortcut && (
@@ -162,7 +162,7 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
               <Trans
                 i18nKey="mark_all_read_button.confirm_mark_all"
                 components={{
-                  which: commonT(`words.which.${which}` as any),
+                  which: <>{commonT(`words.which.${which}` as any)}</>,
                 }}
               />
             </span>

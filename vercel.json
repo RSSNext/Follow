@@ -47,6 +47,11 @@
       "source": "/list/:id",
       "destination": "/share/lists/:id",
       "permanent": true
+    },
+    {
+      "source": "/profile/:path*",
+      "destination": "/share/users/:path*",
+      "permanent": true
     }
   ],
   "headers": [

@@ -13,11 +13,18 @@ export const useListByView = (view: FeedViewType) => {
   return useListStore((state) => Object.values(state.lists).filter((list) => list.view === view))
 }
 
-export const useOwnedList = (view: FeedViewType) => {
+export const useOwnedListByView = (view: FeedViewType) => {
   const whoami = useWhoami()
   const viewLists = useListByView(view)
   return useMemo(
     () => viewLists.filter((list) => list.ownerUserId === whoami?.id),
     [viewLists, whoami],
+  )
+}
+
+export const useOwnedLists = () => {
+  const whoami = useWhoami()
+  return useListStore((state) =>
+    Object.values(state.lists).filter((list) => list.ownerUserId === whoami?.id),
   )
 }

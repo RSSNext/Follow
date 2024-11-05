@@ -82,8 +82,10 @@ function bootstrap() {
         details.requestHeaders["Origin"] = "https://app.follow.is"
       } else {
         const refererMatch = imageRefererMatches.find((item) => item.url.test(details.url))
-        const referer = refererMatch?.referer || details.url
-        details.requestHeaders["Referer"] = referer
+        const referer = refererMatch?.referer
+        if (referer) {
+          details.requestHeaders["Referer"] = referer
+        }
       }
 
       callback({ cancel: false, requestHeaders: details.requestHeaders })

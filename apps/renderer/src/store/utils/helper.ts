@@ -1,6 +1,4 @@
-/* eslint-disable no-unsafe-finally */
 import { isDraft, original, produce } from "immer"
-import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator, StoreApi, UseBoundStore } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
 import { devtools } from "zustand/middleware"
@@ -88,54 +86,6 @@ export const getStoreActions = <T extends { getState: () => any }>(
   return actions as any
 }
 
-export type MutationAndTranscationOptions = {
-  /**
-   * If true, will wait for the mutation to finish before running the transaction
-   */
-  waitMutation?: boolean
-  /**
-   * If true, will run the transaction even if the mutation fails, useful in network offline
-   */
-  doTranscationWhenMutationFail?: boolean
-}
-export const doMutationAndTransaction = async <M, T>(
-  mutationFn: () => Promise<M>,
-  transaction: () => Promise<T>,
-  options?: MutationAndTranscationOptions,
-): Promise<[M | null | void, T | null | void]> => {
-  const isOnline = navigator.onLine
-  const { waitMutation = false, doTranscationWhenMutationFail = !isOnline } = options || {}
-  const wrappedTransaction = () => {
-    const ret = runTransactionInScope(() => unstable_batchedUpdates(() => transaction()))
-
-    if (ret instanceof Promise) {
-      return ret
-    }
-    return null
-  }
-  const wrappedMutation = () => (isOnline ? mutationFn() : Promise.resolve())
-
-  if (waitMutation) {
-    let runTransactionOnce = false
-
-    try {
-      const mutationRet = await wrappedMutation()
-      runTransactionOnce = true
-      const transactionRet = await wrappedTransaction()
-      return [mutationRet, transactionRet]
-    } finally {
-      if (!runTransactionOnce && doTranscationWhenMutationFail) {
-        const transactionRet = await wrappedTransaction()
-
-        return [null, transactionRet]
-      }
-      return [null, null]
-    }
-  } else {
-    return await Promise.all([wrappedMutation(), wrappedTransaction()])
-  }
-}
-
 export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
   return (updater: (state: T) => void) =>
     useStore.setState((state) =>
@@ -148,4 +98,70 @@ export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
 type MayBeDraft<T> = T
 export const toRaw = <T>(draft: MayBeDraft<T>): T => {
   return isDraft(draft) ? original(draft)! : draft
+}
+
+class Transaction<S, Ctx> {
+  private _snapshot: S
+  private _ctx: Ctx
+  private onRollback?: (snapshot: S, ctx: Ctx) => Promise<void>
+  private executorFn?: (snapshot: S, ctx: Ctx) => Promise<void>
+  private optimisticExecutor?: (snapshot: S, ctx: Ctx) => Promise<void>
+  private onPersist?: (snapshot: S, ctx: Ctx) => Promise<void>
+
+  constructor(snapshot?: S, ctx?: Ctx) {
+    this._snapshot = snapshot || ({} as S)
+    this._ctx = ctx || ({} as Ctx)
+  }
+
+  rollback(fn: (snapshot: S, ctx: Ctx) => Promise<void>): this {
+    this.onRollback = fn
+    return this
+  }
+
+  execute(executor: (snapshot: S, ctx: Ctx) => Promise<void>): this {
+    this.executorFn = executor
+    return this
+  }
+
+  optimistic(executor: (snapshot: S, ctx: Ctx) => Promise<void>): this {
+    this.optimisticExecutor = executor
+    return this
+  }
+
+  persist(fn: (snapshot: S, ctx: Ctx) => Promise<void>): this {
+    this.onPersist = fn
+    return this
+  }
+
+  async run(): Promise<void> {
+    let isOptimisticFailed = false
+
+    if (this.optimisticExecutor) {
+      try {
+        await this.optimisticExecutor(this._snapshot, this._ctx)
+      } catch (error) {
+        isOptimisticFailed = true
+        console.error(error)
+      }
+    }
+
+    if (this.executorFn) {
+      try {
+        await this.executorFn(this._snapshot, this._ctx)
+      } catch (err) {
+        if (this.onRollback && !isOptimisticFailed) {
+          await this.onRollback(this._snapshot, this._ctx)
+        }
+        throw err
+      }
+    }
+
+    if (this.onPersist) {
+      await runTransactionInScope(() => this.onPersist!(this._snapshot, this._ctx))
+    }
+  }
+}
+
+export const createTransaction = <S, Ctx>(snapshot?: S, ctx?: Ctx): Transaction<S, Ctx> => {
+  return new Transaction(snapshot, ctx)
 }

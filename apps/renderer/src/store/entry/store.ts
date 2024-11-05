@@ -20,7 +20,7 @@ import { imageActions } from "../image"
 import { inboxActions } from "../inbox"
 import { getSubscriptionByFeedId } from "../subscription"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createTransaction, createZustandStore } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
@@ -415,81 +415,112 @@ class EntryActions {
       return
     }
 
-    feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+    const tx = createTransaction<unknown, { prevUnread: number }>({})
 
-    this.patch(entryId, {
-      read,
+    tx.optimistic(async (_, ctx) => {
+      const prevUnread = feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+      ctx.prevUnread = prevUnread
+
+      this.patch(entryId, {
+        read,
+      })
     })
-
-    await doMutationAndTransaction(
-      // Send api request
-      async () => {
-        if (read) {
-          await internal_batchMarkRead({
+    tx.execute(async (_) => {
+      if (read) {
+        await internal_batchMarkRead({
+          entryId,
+          isInbox,
+          isPrivate: subscription?.isPrivate,
+        })
+      } else {
+        await apiClient.reads.$delete({
+          json: {
             entryId,
             isInbox,
-            isPrivate: subscription?.isPrivate,
-          })
-        } else {
-          await apiClient.reads.$delete({
-            json: {
-              entryId,
-              isInbox,
-            },
-          })
-        }
-      },
-      async () =>
-        EntryService.bulkStoreReadStatus({
-          [entryId]: read,
-        }),
-    )
+          },
+        })
+      }
+    })
+
+    tx.persist(async () => {
+      EntryService.bulkStoreReadStatus({
+        [entryId]: read,
+      })
+    })
+
+    tx.rollback(async (_, ctx) => {
+      feedUnreadActions.updateByFeedId(feedId, ctx.prevUnread)
+      this.patch(entryId, {
+        read: !read,
+      })
+    })
+
+    await tx.run()
   }
 
   async markStar(entryId: string, star: boolean) {
-    this.patch(entryId, {
-      collections: star
-        ? {
-            createdAt: new Date().toISOString(),
-          }
-        : (null as unknown as undefined),
+    const tx = createTransaction<unknown, { prevIsStar: boolean }>({})
+
+    tx.optimistic(async (_, ctx) => {
+      ctx.prevIsStar = !!get().flatMapEntries[entryId]?.collections?.createdAt
+      this.patch(entryId, {
+        collections: star
+          ? {
+              createdAt: new Date().toISOString(),
+            }
+          : (null as unknown as undefined),
+      })
+
+      set((state) =>
+        produce(state, (state) => {
+          star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
+        }),
+      )
+    })
+    tx.execute(async () => {
+      if (star) {
+        await apiClient.collections.$post({
+          json: {
+            entryId,
+          },
+        })
+      } else {
+        await apiClient.collections.$delete({
+          json: {
+            entryId,
+          },
+        })
+      }
     })
 
-    set((state) =>
-      produce(state, (state) => {
-        star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
-      }),
-    )
-
-    await doMutationAndTransaction(
-      // Send api request
-      async () => {
-        if (star) {
-          apiClient.collections.$post({
-            json: {
-              entryId,
-            },
-          })
-        } else {
-          await apiClient.collections.$delete({
-            json: {
-              entryId,
-            },
-          })
-        }
-      },
-      async () => {
-        if (star) {
-          return EntryService.bulkStoreCollection({
-            [entryId]: {
+    tx.rollback(async (_, ctx) => {
+      set((state) =>
+        produce(state, (state) => {
+          ctx.prevIsStar ? state.starIds.add(entryId) : state.starIds.delete(entryId)
+        }),
+      )
+      this.patch(entryId, {
+        collections: ctx.prevIsStar
+          ? {
               createdAt: new Date().toISOString(),
-            },
-          })
-        } else {
-          return EntryService.deleteCollection(entryId)
-        }
-      },
-    )
+            }
+          : (null as unknown as undefined),
+      })
+    })
+
+    tx.persist(async () => {
+      if (star) {
+        await EntryService.bulkStoreCollection({
+          [entryId]: {
+            createdAt: new Date().toISOString(),
+          },
+        })
+      } else {
+        await EntryService.deleteCollection(entryId)
+      }
+    })
+
+    await tx.run()
   }
 
   updateReadHistory(entryId: string, readHistory: Omit<EntryReadHistoriesModel, "entryId">) {
@@ -505,26 +536,64 @@ class EntryActions {
   async deleteInboxEntry(entryId: string) {
     const entry = get().flatMapEntries[entryId]
     if (!entry) return
+    const tx = createTransaction(entry, {
+      deletedIndex: -1,
+    })
 
-    set((state) =>
-      produce(state, (draft) => {
-        delete draft.flatMapEntries[entryId]
-        for (const feedId in draft.entries) {
-          const index = draft.entries[feedId].indexOf(entryId)
-          if (index !== -1) {
-            draft.entries[feedId].splice(index, 1)
-          }
+    tx.optimistic(async (entry, ctx) => {
+      const { inboxId } = entry
+      const fullInboxId = `inbox-${inboxId}`
+
+      set((state) => {
+        const nextFlatMapEntries = { ...state.flatMapEntries }
+
+        delete nextFlatMapEntries[entryId]
+
+        const index = state.entries[fullInboxId].indexOf(entryId)
+
+        const nextState = {
+          ...state,
+          flatMapEntries: nextFlatMapEntries,
         }
-      }),
-    )
-    await doMutationAndTransaction(
-      async () => {
-        await apiClient.entries.inbox.$delete({ json: { entryId } })
-      },
-      async () => {
-        await EntryService.deleteEntries([entryId])
-      },
-    )
+        if (index !== -1) {
+          ctx.deletedIndex = index
+
+          const nextFeedEntries = {
+            ...state.entries,
+
+            [fullInboxId]: state.entries[fullInboxId].filter((id) => id !== entryId),
+          }
+
+          nextState.entries = nextFeedEntries
+        }
+
+        return nextState
+      })
+    })
+
+    tx.execute(async () => {
+      await apiClient.entries.inbox.$delete({ json: { entryId } })
+    })
+
+    tx.persist(async () => {
+      await EntryService.deleteEntries([entryId])
+    })
+
+    tx.rollback(async (entry, ctx) => {
+      set((state) => ({
+        ...state,
+        entries: {
+          ...state.entries,
+          [entry.feedId]: state.entries[entry.feedId].splice(ctx.deletedIndex, 0, entryId),
+        },
+        flatMapEntries: {
+          ...state.flatMapEntries,
+          [entryId]: entry,
+        },
+      }))
+    })
+
+    await tx.run()
   }
 }
 

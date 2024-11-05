@@ -23,7 +23,7 @@ import {
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
-import { useListById, useOwnedList } from "~/store/list"
+import { useListById, useOwnedListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
@@ -85,7 +85,7 @@ export const useFeedActions = ({
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
   const openBoostModal = useBoostModal()
 
-  const listByView = useOwnedList(view!)
+  const listByView = useOwnedListByView(view!)
 
   const isMultipleSelection = feedIds && feedIds.length > 0
 

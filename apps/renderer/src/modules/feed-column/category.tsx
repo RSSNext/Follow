@@ -11,6 +11,7 @@ import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
 import type { MenuItemInput } from "~/atoms/context-menu"
@@ -18,8 +19,9 @@ import { useShowContextMenu } from "~/atoms/context-menu"
 import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { createErrorToaster } from "~/lib/error-parser"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
-import { useOwnedList } from "~/store/list"
+import { useOwnedListByView } from "~/store/list"
 import {
   subscriptionActions,
   subscriptionCategoryExist,
@@ -148,7 +150,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const addMutation = useAddFeedToFeedList()
 
-  const listList = useOwnedList(view!)
+  const listList = useOwnedListByView(view!)
   const showContextMenu = useShowContextMenu()
 
   return (
@@ -337,6 +339,7 @@ const RenameCategoryForm: FC<{
   onFinished: () => void
 }> = ({ currentCategory, onFinished }) => {
   const navigate = useNavigateEntry()
+  const { t } = useTranslation()
   const renameMutation = useMutation({
     mutationFn: async ({
       lastCategory,
@@ -355,6 +358,10 @@ const RenameCategoryForm: FC<{
       }
 
       onFinished()
+    },
+    onError: createErrorToaster(t("sidebar.feed_column.context_menu.rename_category_error")),
+    onSuccess: () => {
+      toast.success(t("sidebar.feed_column.context_menu.rename_category_success"))
     },
   })
   const formRef = useRef<HTMLFormElement>(null)
