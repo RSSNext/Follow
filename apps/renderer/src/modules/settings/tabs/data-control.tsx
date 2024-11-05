@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingValue } from "~/atoms/settings/general"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { isElectronBuild } from "~/constants"
 import { exportDB } from "~/database"
 import { initAnalytics } from "~/initialize/analytics"
 import { tipcClient } from "~/lib/client"
@@ -112,12 +113,12 @@ export const SettingDataControl = () => {
             },
           },
 
-          {
+          isElectronBuild && {
             type: "title",
             value: t("general.cache"),
           },
-          AppCacheLimit,
-          {
+          isElectronBuild && AppCacheLimit,
+          isElectronBuild && {
             label: t("data_control.clean_cache.button"),
             description: t("data_control.clean_cache.description"),
             buttonText: t("data_control.clean_cache.button"),
