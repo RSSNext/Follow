@@ -1,10 +1,11 @@
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { ActionButton, Button, IconButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
+import { useCountdown } from "@follow/hooks"
 import { cn, getOS } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
-import { forwardRef, Fragment, useEffect, useState } from "react"
+import { forwardRef, Fragment, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -186,19 +187,12 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
 
 const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
   const { t } = useTranslation()
-  const [countdown, setCountdown] = useState(3)
+  const [countdown] = useCountdown({ countStart: 3 })
 
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
-
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [countdown])
 
   return (
     <div>
