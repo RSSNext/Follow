@@ -71,7 +71,7 @@ jobs:
         run: pnpm add -g appdmg
 
       - name: Install the Apple certificate and provisioning profile
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS' && secrets.BUILD_CERTIFICATE_BASE64 != '' && secrets.P12_PASSWORD != '' && secrets.BUILD_PROVISION_PROFILE_BASE64 != '' && secrets.KEYCHAIN_PASSWORD != ''
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
