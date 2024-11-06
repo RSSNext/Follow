@@ -21,7 +21,7 @@
             $script.crossOrigin = script.crossOrigin
 
             if (script.src) {
-              $script.src = script.src
+              $script.src = script.src.startsWith("/") ? `${host}${script.src}` : script.src
             } else if (script.innerHTML) {
               $script.innerHTML = script.innerHTML
             } else {
