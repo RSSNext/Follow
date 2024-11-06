@@ -57,7 +57,7 @@ const AppNotificationContainer: FC = () => {
         <div>
           App is upgraded to{" "}
           <a
-            href={`${repository.url}/releases/tag/${APP_VERSION}`}
+            href={`${repository.url}/releases/tag/v${APP_VERSION}`}
             target="_blank"
             rel="noreferrer"
           >
