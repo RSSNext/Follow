@@ -77,13 +77,20 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
     <a
       href={populatedFullHref || void 0}
       target="_blank"
+      draggable="false"
       className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
       rel="noreferrer"
+      onClick={(e) => {
+        if (window.getSelection()?.toString()) {
+          e.preventDefault()
+        }
+      }}
     >
       <div className={cn("select-text break-words font-bold", compact ? "text-2xl" : "text-3xl")}>
         <EntryTranslation
           source={entry.entries.title}
           target={translation.data?.title}
+          className="select-text"
           useOverlay
         />
       </div>
