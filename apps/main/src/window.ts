@@ -10,6 +10,7 @@ import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
+import { getTrayConfig } from "./lib/tray"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
 
@@ -217,7 +218,8 @@ export const createMainWindow = () => {
   windows.mainWindow = window
 
   window.on("close", (event) => {
-    if (isMacOS) {
+    const minimizeToTray = getTrayConfig()
+    if (isMacOS || minimizeToTray) {
       event.preventDefault()
       if (window.isFullScreen()) {
         window.once("leave-full-screen", () => {
