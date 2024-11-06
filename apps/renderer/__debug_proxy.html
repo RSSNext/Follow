@@ -9,6 +9,7 @@
       window.__vite_plugin_react_preamble_installed__ = true
     </script>
 
+    <title>Debug Proxy</title>
     <script type="module">
       const host = "https://localhost:2233"
 
@@ -26,7 +27,18 @@
             script.remove()
           })
 
-          document.head.innerHTML = doc.head.innerHTML
+          // header meta
+
+          const $meta = doc.head.querySelectorAll("meta")
+          $meta.forEach((meta) => {
+            document.head.appendChild(meta)
+          })
+
+          const $style = doc.head.querySelectorAll("style")
+          $style.forEach((style) => {
+            document.head.appendChild(style)
+          })
+
           document.body.innerHTML = doc.body.innerHTML
 
           scripts.forEach((script) => {
