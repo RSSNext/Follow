@@ -2,6 +2,14 @@
 <html>
   <head>
     <script type="module">
+      import RefreshRuntime from "https://localhost:2233/@react-refresh"
+      RefreshRuntime.injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => (type) => type
+      window.__vite_plugin_react_preamble_installed__ = true
+    </script>
+
+    <script type="module">
       const host = "https://localhost:2233"
 
       globalThis["__DEBUG_PROXY__"] = true
@@ -11,16 +19,23 @@
         .then((html) => {
           const parser = new DOMParser()
           const doc = parser.parseFromString(html, "text/html")
+
+          const scripts = doc.querySelectorAll("script")
+
+          scripts.forEach((script) => {
+            script.remove()
+          })
+
           document.head.innerHTML = doc.head.innerHTML
           document.body.innerHTML = doc.body.innerHTML
 
-          const scripts = doc.querySelectorAll("script")
           scripts.forEach((script) => {
             const $script = document.createElement("script")
             $script.type = "module"
             $script.crossOrigin = script.crossOrigin
 
             if (script.src) {
+              console.log(script.src)
               $script.src = script.src.startsWith("/") ? `${host}${script.src}` : script.src
             } else if (script.innerHTML) {
               $script.innerHTML = script.innerHTML
@@ -29,10 +44,6 @@
             }
 
             document.body.appendChild($script)
-          })
-
-          scripts.forEach((script) => {
-            script.remove()
           })
         })
     </script>
