@@ -34,7 +34,7 @@ fetch(`${host}`)
       $script.crossOrigin = script.crossOrigin
 
       if (script.src) {
-        $script.src = script.src.startsWith("/") ? `${host}${script.src}` : script.src
+        $script.src = new URL(script.src, host).toString()
       } else if (script.innerHTML) {
         $script.innerHTML = script.innerHTML
       } else {
