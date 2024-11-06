@@ -38,8 +38,6 @@ fetch(`${host}`)
           script.src.startsWith("http") ? new URL(script.src).pathname : script.src,
           host,
         ).toString()
-
-        console.info($script.src, script.src, host)
       } else if (script.innerHTML) {
         $script.innerHTML = script.innerHTML
       } else {
