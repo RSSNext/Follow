@@ -7,3 +7,4 @@ const iconMap = {
   dev: path.join(__dirname, "../../static/icon-dev.png"),
 }
 export const getIconPath = () => iconMap[process.env.NODE_ENV === "development" ? "dev" : "prod"]
+export const getTrayIconPath = () => path.join(__dirname, "../../resources/tray-icon.png")

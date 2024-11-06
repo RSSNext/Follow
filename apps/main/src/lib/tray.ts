@@ -2,7 +2,7 @@ import { name } from "@pkg"
 import { app, Menu, nativeImage, Tray } from "electron"
 
 import { isMacOS } from "~/env"
-import { getIconPath } from "~/helper"
+import { getTrayIconPath } from "~/helper"
 
 import { getMainWindowOrCreate } from "../window"
 import { t } from "./i18n"
@@ -18,10 +18,10 @@ export const registerAppTray = () => {
     destroyAppTray()
   }
 
-  const icon = nativeImage.createFromPath(getIconPath())
+  const icon = nativeImage.createFromPath(getTrayIconPath())
   // See https://stackoverflow.com/questions/41664208/electron-tray-icon-change-depending-on-dark-theme/41998326#41998326
   const trayIcon = icon.resize({ width: 16 })
-  // trayIcon.setTemplateImage(true)
+  trayIcon.setTemplateImage(true)
   tray = new Tray(trayIcon)
 
   const contextMenu = Menu.buildFromTemplate([
