@@ -17,26 +17,22 @@
           const scripts = doc.querySelectorAll("script")
           scripts.forEach((script) => {
             const $script = document.createElement("script")
-            if (!script.innerHTML) return
-            $script.innerHTML = script.innerHTML
-
             $script.type = "module"
-
             $script.crossOrigin = script.crossOrigin
+
+            if (script.src) {
+              $script.src = script.src
+            } else if (script.innerHTML) {
+              $script.innerHTML = script.innerHTML
+            } else {
+              return
+            }
 
             document.body.appendChild($script)
           })
 
-          const srcScripts = doc.querySelectorAll("script[src]")
-          srcScripts.forEach((script) => {
-            fetch(`${script.src}`)
-              .then((res) => res.text())
-              .then((text) => {
-                const $script = document.createElement("script")
-                $script.innerHTML = text
-                $script.type = "module"
-                document.body.appendChild($script)
-              })
+          scripts.forEach((script) => {
+            script.remove()
           })
         })
     </script>
