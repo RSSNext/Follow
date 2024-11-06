@@ -34,7 +34,10 @@ fetch(`${host}`)
       $script.crossOrigin = script.crossOrigin
 
       if (script.src) {
-        $script.src = new URL(script.src, host).toString()
+        $script.src = new URL(
+          script.src.startsWith("http") ? new URL(script.src).pathname : script.src,
+          host,
+        ).toString()
 
         console.info($script.src, script.src, host)
       } else if (script.innerHTML) {
