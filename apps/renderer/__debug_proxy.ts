@@ -35,6 +35,8 @@ fetch(`${host}`)
 
       if (script.src) {
         $script.src = new URL(script.src, host).toString()
+
+        console.info($script.src, script.src, host)
       } else if (script.innerHTML) {
         $script.innerHTML = script.innerHTML
       } else {
