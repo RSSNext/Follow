@@ -278,7 +278,7 @@ function sortEntriesIdByEntryInsertedAt(entries: string[]) {
     )
 }
 
-const useFetchEntryContentByStream = (remoteEntryIds: string[]) => {
+const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {
   const { mutate: updateEntryContent } = useMutation({
     mutationKey: ["stream-entry-content", remoteEntryIds],
     mutationFn: async (remoteEntryIds: string[]) => {
@@ -295,6 +295,8 @@ const useFetchEntryContentByStream = (remoteEntryIds: string[]) => {
           nextIds.push(id)
         }
       }
+
+      if (nextIds.length === 0) return
 
       const readStream = async () => {
         const response = await apiFetch(apiClient.entries.stream.$url().toString(), {
