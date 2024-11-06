@@ -2,6 +2,7 @@ import { createRequire } from "node:module"
 
 import { app, nativeTheme } from "electron"
 
+import { START_IN_TRAY_ARGS } from "~/constants/app"
 import { getTrayConfig, setTrayConfig } from "~/lib/tray"
 
 import { setDockCount } from "../lib/dock"
@@ -16,6 +17,8 @@ export const settingRoute = {
   setLoginItemSettings: t.procedure.input<boolean>().action(async ({ input }) => {
     app.setLoginItemSettings({
       openAtLogin: input,
+      openAsHidden: true,
+      args: [START_IN_TRAY_ARGS],
     })
   }),
   openSettingWindow: t.procedure.action(async () => createSettingWindow()),
