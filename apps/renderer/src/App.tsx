@@ -53,6 +53,8 @@ const AppLayer = () => {
   const appIsReady = useAppIsReady()
 
   useEffect(() => {
+    document.querySelector("#app-skeleton")?.remove()
+
     const doneTime = Math.trunc(performance.now())
     window.analytics?.capture("ui_render_init", {
       time: doneTime,
@@ -60,8 +62,6 @@ const AppLayer = () => {
     appLog("App is ready", `${doneTime}ms`)
 
     applyAfterReadyCallbacks()
-
-    document.querySelector("#app-skeleton")?.remove()
   }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />

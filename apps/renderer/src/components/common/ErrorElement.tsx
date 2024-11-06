@@ -21,6 +21,10 @@ export function ErrorElement() {
   const stack = error instanceof Error ? error.stack : null
 
   useEffect(() => {
+    document.querySelector("#app-skeleton")?.remove()
+  }, [])
+
+  useEffect(() => {
     console.error("Error handled by React Router default ErrorBoundary:", error)
 
     captureException(error)
