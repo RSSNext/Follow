@@ -51,6 +51,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       url: feed.url,
       image: feed.image,
       siteUrl: feed.siteUrl,
+      ownerUserId: feed.ownerUserId,
+      owner: feed.owner,
     }
   })
 
