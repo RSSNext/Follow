@@ -1,6 +1,5 @@
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn, isSafari } from "@follow/utils/utils"
-import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useRealInWideMode, useUISettingKey } from "~/atoms/settings/ui"
@@ -12,7 +11,6 @@ import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { EntryTranslation } from "~/modules/entry-column/translation"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
-import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -52,15 +50,15 @@ export function ListItem({
 
   const inbox = useInboxById(entry?.inboxId)
 
-  const handlePrefetchEntry = useDebounceCallback(
-    () => {
-      inbox
-        ? Queries.entries.byInboxId(entryId).prefetch()
-        : Queries.entries.byId(entryId).prefetch()
-    },
-    300,
-    { leading: false },
-  )
+  // const handlePrefetchEntry = useDebounceCallback(
+  //   () => {
+  //     inbox
+  //       ? Queries.entries.byInboxId(entryId).prefetch()
+  //       : Queries.entries.byId(entryId).prefetch()
+  //   },
+  //   300,
+  //   { leading: false },
+  // )
 
   const settingWideMode = useRealInWideMode()
   const thumbnailRatio = useUISettingKey("thumbnailRatio")
@@ -76,8 +74,8 @@ export function ListItem({
 
   return (
     <div
-      onMouseEnter={handlePrefetchEntry}
-      onMouseLeave={handlePrefetchEntry.cancel}
+      // onMouseEnter={handlePrefetchEntry}
+      // onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
         "group relative flex cursor-menu pl-3 pr-2",
         !asRead &&

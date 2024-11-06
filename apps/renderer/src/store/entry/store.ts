@@ -59,6 +59,15 @@ class EntryActions {
     runTransactionInScope(() => EntryService.deleteEntries(entryIds))
   }
 
+  updateEntryContent(entryId: string, content: string) {
+    set((state) =>
+      produce(state, (draft) => {
+        if (!draft.flatMapEntries[entryId]) return
+        draft.flatMapEntries[entryId].entries.content = content
+      }),
+    )
+  }
+
   async fetchEntryById(entryId: string) {
     const { data } = await apiClient.entries.$get({
       query: {
