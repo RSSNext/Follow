@@ -10,6 +10,7 @@ import { app, clipboard, dialog, screen } from "electron"
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
 import { store, StoreKey } from "~/lib/store"
+import { registerAppTray } from "~/lib/tray"
 import { logger } from "~/logger"
 
 import { isWindows11 } from "../env"
@@ -224,6 +225,7 @@ export const appRoute = {
   switchAppLocale: t.procedure.input<string>().action(async ({ input }) => {
     i18n.changeLanguage(input)
     registerMenuAndContextMenu()
+    registerAppTray()
 
     app.commandLine.appendSwitch("lang", input)
   }),

@@ -4,7 +4,6 @@ import { Label } from "@follow/components/ui/label/index.jsx"
 import { Slider } from "@follow/components/ui/slider/index.js"
 import { env } from "@follow/shared/env"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingValue } from "~/atoms/settings/general"
@@ -26,12 +25,6 @@ const { defineSettingItem, SettingBuilder } = createSetting(
 )
 export const SettingDataControl = () => {
   const { t } = useTranslation("settings")
-  useEffect(() => {
-    tipcClient?.getLoginItemSettings().then((settings) => {
-      setGeneralSetting("appLaunchOnStartup", settings.openAtLogin)
-    })
-  }, [])
-
   const { present } = useModalStack()
 
   return (

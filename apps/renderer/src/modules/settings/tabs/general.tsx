@@ -23,10 +23,11 @@ import {
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
+import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTraySetting"
 import { fallbackLanguage } from "~/i18n"
 import { tipcClient } from "~/lib/client"
 
-import { SettingDescription, SettingInput } from "../control"
+import { SettingDescription, SettingInput, SettingSwitch } from "../control"
 import { createSetting } from "../helper/builder"
 import { SettingItemGroup } from "../section"
 
@@ -64,6 +65,7 @@ export const SettingGeneral = () => {
               saveLoginSetting(value)
             },
           }),
+          IN_ELECTRON && MinimizeToTraySetting,
           LanguageSelector,
           {
             type: "title",
@@ -228,6 +230,23 @@ const NettingSetting = () => {
         onChange={(event) => setProxyConfig(event.target.value.trim())}
       />
       <SettingDescription>{t("general.proxy.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const MinimizeToTraySetting = () => {
+  const { t } = useTranslation("settings")
+  const minimizeToTray = useMinimizeToTrayValue()
+  const setMinimizeToTray = useSetMinimizeToTray()
+  return (
+    <SettingItemGroup>
+      <SettingSwitch
+        checked={minimizeToTray}
+        className="mt-4"
+        onCheckedChange={setMinimizeToTray}
+        label={t("general.minimize_to_tray.label")}
+      />
+      <SettingDescription>{t("general.minimize_to_tray.description")}</SettingDescription>
     </SettingItemGroup>
   )
 }
