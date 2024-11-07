@@ -25,15 +25,11 @@
       "destination": "https://follow-external-ssr.vercel.app/redirect"
     },
     {
-      "source": "/external-dist/:path*",
-      "destination": "https://follow-external-ssr.vercel.app/external-dist/:path*"
-    },
-    {
       "source": "/dist-external/:path*",
       "destination": "https://follow-external-ssr.vercel.app/dist-external/:path*"
     },
     {
-      "source": "/((?!assets|vendor|locales|dist-external|external-dist/).*)",
+      "source": "/((?!assets|vendor|locales|dist-external/).*)",
       "destination": "/index.html"
     }
   ],
@@ -59,6 +55,10 @@
       "source": "/vendor/(.*)",
       "headers": [
         {
+          "key": "Cache-Tag",
+          "value": "follow-assets"
+        },
+        {
           "key": "Cache-Control",
           "value": "public, max-age=604800, immutable"
         },
@@ -77,8 +77,30 @@
       ]
     },
     {
+      "source": "/locales/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Tag",
+          "value": "follow-assets"
+        }
+      ]
+    },
+    {
+      "source": "/dist-external/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Tag",
+          "value": "follow-assets"
+        }
+      ]
+    },
+    {
       "source": "/assets/(.*)",
       "headers": [
+        {
+          "key": "Cache-Tag",
+          "value": "follow-assets"
+        },
         {
           "key": "Cache-Control",
           "value": "public, max-age=604800, immutable"

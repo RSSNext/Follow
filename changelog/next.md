@@ -14,3 +14,5 @@
 - Improvement web app global shortcuts.
 
 ## Bug Fixes
+
+- While using arrow keys to switch between entries, the entry view will not scroll unexpexted.

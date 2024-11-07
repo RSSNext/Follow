@@ -4,11 +4,11 @@ import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
 import { useAuthQuery } from "~/hooks/common"
-import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSession } from "~/queries/auth"
+import { userActions } from "~/store/user"
 
 import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
@@ -35,10 +35,7 @@ export const UserAvatar = forwardRef<
 
     const profile = useAuthQuery(
       defineQuery(["profiles", userId], async () => {
-        const res = await apiClient.profiles.$get({
-          query: { id: userId! },
-        })
-        return res.data
+        return userActions.getOrFetchProfile(userId!)
       }),
       {
         enabled: !!userId,
