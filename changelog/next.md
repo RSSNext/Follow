@@ -14,3 +14,5 @@
 - Improvement web app global shortcuts.
 
 ## Bug Fixes
+
+- Default scrolling behavior is prevented while using arrow keys to switch between entries.
