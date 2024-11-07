@@ -11,6 +11,7 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
+import manifestPlugin from "./plugins/vite/manifest"
 import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
@@ -147,6 +148,7 @@ export default ({ mode }) => {
       ]),
 
       createPlatformSpecificImportPlugin(false),
+      manifestPlugin(),
     ],
 
     define: {
