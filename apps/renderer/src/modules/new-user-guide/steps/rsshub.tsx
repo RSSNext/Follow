@@ -6,10 +6,12 @@ import { useAuthQuery } from "~/hooks/common"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { Queries } from "~/queries"
 
-export function RSSHubGuide() {
+export function RSSHubGuide({ categories, lang }: { categories?: string; lang?: string }) {
   const rsshubPopular = useAuthQuery(
     Queries.discover.rsshubCategory({
       category: "popular",
+      categories,
+      lang,
     }),
     {
       meta: {

@@ -14,6 +14,7 @@ import { useI18n } from "~/hooks/common"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { MyWalletSection } from "~/modules/power/my-wallet-section"
 import { settings } from "~/queries/settings"
+import { localStorage } from "~/store/utils/helper"
 
 import { ActivationModalContent } from "../activation/ActivationModalContent"
 import { DiscoverImport } from "../discover/import"
@@ -72,6 +73,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   const t = useI18n()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
+  const lang = localStorage.getItem("follow:I18N_LOCALE") as string | null
 
   const guideSteps = useMemo(
     () =>
@@ -106,7 +108,10 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         {
           title: t.app("new_user_guide.step.rsshub.title"),
           description: t.app("new_user_guide.step.rsshub.info"),
-          content: createElement(RSSHubGuide),
+          content: createElement(RSSHubGuide, {
+            categories: "popular",
+            lang: lang ?? "en",
+          }),
           icon: <img src={RSSHubIcon} className="size-[22px]" />,
         },
         {
@@ -132,7 +137,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         content: FunctionComponentElement<object>
         description?: string
       }[],
-    [t],
+    [t, lang],
   )
 
   const totalSteps = useMemo(() => guideSteps.length, [guideSteps])
