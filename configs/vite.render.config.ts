@@ -5,8 +5,6 @@ import { fileURLToPath } from "node:url"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { prerelease } from "semver"
-import { RemoveWrapperFunction } from "unplugin-ast/transformers"
-import AST from "unplugin-ast/vite"
 import type { UserConfig } from "vite"
 
 import { circularImportRefreshPlugin } from "../plugins/vite/hmr"
@@ -14,6 +12,7 @@ import { customI18nHmrPlugin } from "../plugins/vite/i18n-hmr"
 import { localesPlugin } from "../plugins/vite/locales"
 import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
+import { astPlugin } from "./plugins"
 
 const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 const pkg = JSON.parse(readFileSync(resolve(pkgDir, "./package.json"), "utf8"))
@@ -69,9 +68,7 @@ export const viteRenderBaseConfig = {
     }),
 
     localesPlugin(),
-    AST({
-      transformer: [RemoveWrapperFunction(["tw", "defineSettingPageData"])],
-    }),
+    astPlugin,
     customI18nHmrPlugin(),
   ],
   define: {
