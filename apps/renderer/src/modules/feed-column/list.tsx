@@ -247,8 +247,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         }}
         mask={false}
         flex
-        viewportClassName="!px-3 !overflow-visible"
-        rootClassName="h-full overflow-visible"
+        viewportClassName={cn("!px-3", isDragging && "!overflow-visible")}
+        rootClassName={cn("h-full", isDragging && "overflow-visible")}
       >
         <div
           data-active={feedId === FEED_COLLECTION_LIST}
