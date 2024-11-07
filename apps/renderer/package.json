@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.1.0",
     "@egoist/tipc": "0.3.2",
     "@electron-toolkit/preload": "^3.0.1",
     "@follow/electron-main": "workspace:*",

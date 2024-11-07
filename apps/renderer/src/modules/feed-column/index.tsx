@@ -1,3 +1,4 @@
+import { DndContext, pointerWithin } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
@@ -141,78 +142,80 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   })
 
   return (
-    <WindowUnderBlur
-      className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
-      onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
-    >
-      <FeedColumnHeader />
+    <DndContext collisionDetection={pointerWithin}>
+      <WindowUnderBlur
+        className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
+        onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
+      >
+        <FeedColumnHeader />
 
-      <div
-        className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
-        onClick={stopPropagation}
-      >
-        {views.map((item, index) => (
-          <ActionButton
-            key={item.name}
-            tooltip={t(item.name)}
-            shortcut={`${index + 1}`}
-            className={cn(
-              active === index && item.className,
-              "flex h-11 flex-col items-center gap-1 text-xl",
-              ELECTRON ? "hover:!bg-theme-item-hover" : "",
-              active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
-            )}
-            onClick={(e) => {
-              setActive(index)
-              setUseHotkeysSwitch(false)
-              e.stopPropagation()
-            }}
-          >
-            {item.icon}
-            {showSidebarUnreadCount ? (
-              <div className="text-[0.625rem] font-medium leading-none">
-                {unreadByView[index] > 99 ? (
-                  <span className="-mr-0.5">99+</span>
-                ) : (
-                  unreadByView[index]
-                )}
-              </div>
-            ) : (
-              <i
-                className={cn(
-                  "i-mgc-round-cute-fi text-[0.25rem]",
-                  unreadByView[index]
-                    ? active === index
-                      ? "opacity-100"
-                      : "opacity-60"
-                    : "opacity-0",
-                )}
-              />
-            )}
-          </ActionButton>
-        ))}
-      </div>
-      <div
-        className="relative flex size-full overflow-hidden"
-        ref={carouselRef}
-        onPointerDown={useTypeScriptHappyCallback((e) => {
-          if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
-            const nextSelectedFeedIds = getSelectedFeedIds()
-            setSelectedFeedIds(nextSelectedFeedIds.length === 0 ? nextSelectedFeedIds : [])
-          }
-        }, [])}
-      >
-        <SwipeWrapper active={active}>
+        <div
+          className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
+          onClick={stopPropagation}
+        >
           {views.map((item, index) => (
-            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
-              <FeedList className="flex size-full flex-col text-sm" view={index} />
-            </section>
+            <ActionButton
+              key={item.name}
+              tooltip={t(item.name)}
+              shortcut={`${index + 1}`}
+              className={cn(
+                active === index && item.className,
+                "flex h-11 flex-col items-center gap-1 text-xl",
+                ELECTRON ? "hover:!bg-theme-item-hover" : "",
+                active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
+              )}
+              onClick={(e) => {
+                setActive(index)
+                setUseHotkeysSwitch(false)
+                e.stopPropagation()
+              }}
+            >
+              {item.icon}
+              {showSidebarUnreadCount ? (
+                <div className="text-[0.625rem] font-medium leading-none">
+                  {unreadByView[index] > 99 ? (
+                    <span className="-mr-0.5">99+</span>
+                  ) : (
+                    unreadByView[index]
+                  )}
+                </div>
+              ) : (
+                <i
+                  className={cn(
+                    "i-mgc-round-cute-fi text-[0.25rem]",
+                    unreadByView[index]
+                      ? active === index
+                        ? "opacity-100"
+                        : "opacity-60"
+                      : "opacity-0",
+                  )}
+                />
+              )}
+            </ActionButton>
           ))}
-        </SwipeWrapper>
-      </div>
+        </div>
+        <div
+          className="relative flex size-full"
+          ref={carouselRef}
+          onPointerDown={useTypeScriptHappyCallback((e) => {
+            if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
+              const nextSelectedFeedIds = getSelectedFeedIds()
+              setSelectedFeedIds(nextSelectedFeedIds.length === 0 ? nextSelectedFeedIds : [])
+            }
+          }, [])}
+        >
+          <SwipeWrapper active={active}>
+            {views.map((item, index) => (
+              <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
+                <FeedList className="flex size-full flex-col text-sm" view={index} />
+              </section>
+            ))}
+          </SwipeWrapper>
+        </div>
 
-      {children}
-    </WindowUnderBlur>
+        {children}
+      </WindowUnderBlur>
+    </DndContext>
   )
 }
 
