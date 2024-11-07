@@ -15,4 +15,4 @@
 
 ## Bug Fixes
 
-- the volume bar can click.
+- Fixed the issue where the Volume of VideoPlayer was not clickable.
