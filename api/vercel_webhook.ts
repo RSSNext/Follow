@@ -7,7 +7,10 @@ export default async function handler(request: VercelRequest, response: VercelRe
   const { WEBHOOK_SECRET: INTEGRATION_SECRET } = process.env
 
   if (typeof INTEGRATION_SECRET != "string") {
-    throw new TypeError("No integration secret found")
+    return response.status(400).json({
+      code: "invalid_secret",
+      error: "No integration secret found",
+    })
   }
 
   const rawBody = await getRawBody(request)
@@ -28,7 +31,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
       const { target } = json.payload || json.data
 
       if (target === "production") {
-        purgeCloudflareCache()
+        return purgeCloudflareCache(response)
       }
     }
     // ...
@@ -47,11 +50,14 @@ export const config = {
   },
 }
 
-async function purgeCloudflareCache() {
+async function purgeCloudflareCache(response: VercelResponse) {
   const { CF_TOKEN, CF_ZONE_ID } = process.env
 
   if (typeof CF_TOKEN !== "string" || typeof CF_ZONE_ID !== "string") {
-    throw new TypeError("No Cloudflare token or zone ID found")
+    return response.status(400).json({
+      code: "invalid_secret",
+      error: "No Cloudflare token or zone ID found",
+    })
   }
 
   const apiUrl = `https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache`
