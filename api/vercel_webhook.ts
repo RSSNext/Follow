@@ -31,7 +31,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
       const { target } = json.payload || json.data
 
       if (target === "production") {
-        await purgeCloudflareCache(response)
+        await purgeCloudflareCache()
       } else {
         console.info(`Skipping non-production deployment: ${target}`, json)
       }
@@ -52,14 +52,11 @@ export const config = {
   },
 }
 
-async function purgeCloudflareCache(response: VercelResponse) {
+async function purgeCloudflareCache() {
   const { CF_TOKEN, CF_ZONE_ID } = process.env
 
   if (typeof CF_TOKEN !== "string" || typeof CF_ZONE_ID !== "string") {
-    return response.status(400).json({
-      code: "invalid_secret",
-      error: "No Cloudflare token or zone ID found",
-    })
+    throw new TypeError("No Cloudflare token or zone ID found")
   }
 
   const apiUrl = `https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache`
