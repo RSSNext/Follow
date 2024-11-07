@@ -87,7 +87,7 @@ export function Component() {
                 {isSubscribed ? "Followed" : <>{APP_NAME}</>}
               </Button>
             </span>
-            <div className="flex w-full max-w-3xl flex-col gap-4 pb-12 pt-8">
+            <div className="flex w-full max-w-3xl flex-col items-center gap-4 pb-12 pt-8">
               {listData!.feedIds
                 ?.slice(0, 5)
                 .map((feedId) => <FeedRow feed={feedMap[feedId]} key={feedId} />)}
