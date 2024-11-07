@@ -136,8 +136,9 @@ export function Recommendations({
 }) {
   const { t } = useTranslation()
   const lang = localStorage.getItem("follow:I18N_LOCALE") as string | null
+  const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
   const [category, setCategory] = useState<DiscoverCategories>("all")
-  const [selectedLang, setSelectedLang] = useState<Language>((lang as Language) ?? "en")
+  const [selectedLang, setSelectedLang] = useState<Language>(defaultLang)
 
   const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
     return Queries.discover.rsshubCategory({

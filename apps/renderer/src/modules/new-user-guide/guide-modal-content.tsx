@@ -74,6 +74,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
   const lang = localStorage.getItem("follow:I18N_LOCALE") as string | null
+  const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
 
   const guideSteps = useMemo(
     () =>
@@ -110,7 +111,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
           description: t.app("new_user_guide.step.rsshub.info"),
           content: createElement(RSSHubGuide, {
             categories: "popular",
-            lang: lang ?? "en",
+            lang: defaultLang,
           }),
           icon: <img src={RSSHubIcon} className="size-[22px]" />,
         },
@@ -137,7 +138,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         content: FunctionComponentElement<object>
         description?: string
       }[],
-    [t, lang],
+    [t, defaultLang],
   )
 
   const totalSteps = useMemo(() => guideSteps.length, [guideSteps])
