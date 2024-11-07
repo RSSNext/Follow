@@ -217,7 +217,7 @@ const ViewSwitchButton: FC<{
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
   const { isOver, setNodeRef } = useDroppable({
-    id: item.name,
+    id: `view-${item.name}`,
     data: {
       category: "",
       view: item.view,

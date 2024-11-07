@@ -155,7 +155,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const showContextMenu = useShowContextMenu()
 
   const { isOver, setNodeRef } = useDroppable({
-    id: folderName!,
+    id: `category-${folderName}`,
     data: {
       category: folderName,
       view,
