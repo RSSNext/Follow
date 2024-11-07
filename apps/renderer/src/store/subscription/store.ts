@@ -521,9 +521,18 @@ class SubscriptionActions {
       ReturnType<typeof get>,
       {
         subscription: Record<FeedId, SubscriptionFlatModel>
+        feedIdByView: Record<FeedViewType, FeedId[]>
       }
     >(get(), {
       subscription: {},
+      feedIdByView: {
+        [FeedViewType.Articles]: [],
+        [FeedViewType.Audios]: [],
+        [FeedViewType.Notifications]: [],
+        [FeedViewType.Pictures]: [],
+        [FeedViewType.SocialMedia]: [],
+        [FeedViewType.Videos]: [],
+      },
     })
 
     tx.execute(async () => {
@@ -539,19 +548,25 @@ class SubscriptionActions {
     tx.optimistic(async (_, ctx) => {
       set((state) =>
         produce(state, (draft) => {
+          for (let i = 0; i < 6; i++) {
+            ctx.feedIdByView[i] = state.feedIdByView[i]
+          }
+
           for (const feedId of feedIdList) {
             const subscription = draft.data[feedId]
             if (!subscription) return
 
-            const currentViewFeedIds = draft.feedIdByView[subscription.view] as string[]
-            currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
-
             subscription.category = category
-            subscription.view = view
-            ctx.subscription[feedId] = subscription
 
-            const changeToViewFeedIds = draft.feedIdByView[view] as string[]
-            changeToViewFeedIds.push(feedId)
+            if (subscription.view !== view) {
+              const currentViewFeedIds = draft.feedIdByView[subscription.view] as string[]
+              currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
+              subscription.view = view
+              const changeToViewFeedIds = draft.feedIdByView[view] as string[]
+              changeToViewFeedIds.push(feedId)
+            }
+
+            ctx.subscription[feedId] = state.data[feedId]
           }
         }),
       )
@@ -562,6 +577,9 @@ class SubscriptionActions {
         produce(state, (draft) => {
           for (const feedId of feedIdList) {
             draft.data[feedId] = ctx.subscription[feedId]
+          }
+          for (let i = 0; i < 6; i++) {
+            draft.feedIdByView[i] = ctx.feedIdByView[i]
           }
         }),
       )
