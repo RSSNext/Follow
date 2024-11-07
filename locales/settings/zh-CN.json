@@ -138,6 +138,8 @@
   "general.rebuild_database.title": "重建数据库",
   "general.rebuild_database.warning.line1": "重建数据库将清除所有本地数据，且无法恢复。",
   "general.rebuild_database.warning.line2": "确定继续？",
+  "general.reduce_refetch.description": "降低时间线数据的重取频率，以避免在不同视图间切换时时间线被再次刷新。",
+  "general.reduce_refetch.label": "降低时间线重取频率",
   "general.send_anonymous_data.description": "发送匿名用户数据，帮助产品改进和功能迭代",
   "general.send_anonymous_data.label": "发送匿名数据",
   "general.show_unread_on_launch.description": "启动时显示未读内容",
