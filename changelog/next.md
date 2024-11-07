@@ -16,3 +16,4 @@
 ## Bug Fixes
 
 - Fixed the issue where the Volume of VideoPlayer was not clickable.
+- While using arrow keys to switch between entries, the entry view will not scroll unexpexted.
