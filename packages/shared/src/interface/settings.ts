@@ -11,6 +11,7 @@ export interface GeneralSettings {
   jumpOutLinkWarn: boolean
   // TTS
   voice: string
+  reduceRefetch: boolean
 }
 
 export interface UISettings {

@@ -9,7 +9,7 @@ function getSettings() {
     path: string
     Component: () => JSX.Element
     priority: number
-    loader: () => SettingPageConfig
+    loader: SettingPageConfig
   }[]
   for (const path in map) {
     const prefix = "(settings)"
@@ -27,12 +27,12 @@ function getSettings() {
 
     const Module = map[path] as {
       Component: () => JSX.Element
-      loader: () => SettingPageConfig
+      loader: SettingPageConfig
     }
 
     if (!Module.loader) continue
     settings.push({
-      ...Module.loader(),
+      ...Module.loader,
       Component: Module.Component,
       loader: Module.loader,
       path: p,

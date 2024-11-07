@@ -41,7 +41,7 @@ export const SettingsTitle = ({
     icon: iconName,
     name: title,
     headerIcon,
-  } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
+  } = (useLoaderData() || loader || {}) as SettingPageConfig
 
   const usedIcon = headerIcon || iconName
   const isInSettingIndependentWindow = useContext(IsInSettingIndependentWindowContext)

@@ -17,6 +17,6 @@ export interface SettingPageConfig {
   hideIf?: (ctx: SettingPageContext) => boolean
   disableIf?: (ctx: SettingPageContext) => [boolean, DisableWhy]
 }
-export const defineSettingPageData = (config: SettingPageConfig) => () => ({
+export const defineSettingPageData = (config: SettingPageConfig) => ({
   ...config,
 })

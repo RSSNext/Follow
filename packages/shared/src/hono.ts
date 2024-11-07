@@ -6196,6 +6196,30 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/profiles/batch": {
+        $post: {
+            input: {
+                json: {
+                    ids: string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    [x: string]: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    };
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 } & {
     "/invitations/new": {
         $post: {

@@ -138,6 +138,8 @@
   "general.rebuild_database.title": "Rebuild Database",
   "general.rebuild_database.warning.line1": "Rebuilding the database will clear all your local data.",
   "general.rebuild_database.warning.line2": "Are you sure you want to continue?",
+  "general.reduce_refetch.description": "Reduce the data refetch of Timeline, to avoid Timeline being refreshed again when switching between different views.",
+  "general.reduce_refetch.label": "Reduce timeline refetch",
   "general.send_anonymous_data.description": "By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Follow.",
   "general.send_anonymous_data.label": "Send anonymous data",
   "general.show_unread_on_launch.description": "Show unread content on launch",

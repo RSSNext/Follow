@@ -28,6 +28,7 @@ interface ActionButtonProps {
   disabled?: boolean
   shortcut?: string
   disableTriggerShortcut?: boolean
+  enableHoverableContent?: boolean
   size?: "sm" | "md" | "base"
 
   /**
@@ -59,6 +60,7 @@ export const ActionButton = React.forwardRef<
       shortcut,
       disabled,
       disableTriggerShortcut,
+      enableHoverableContent,
       size = "base",
       shortcutOnlyFocusWithIn,
       onClick,
@@ -127,7 +129,7 @@ export const ActionButton = React.forwardRef<
           />
         )}
         {tooltip ? (
-          <Tooltip disableHoverableContent>
+          <Tooltip disableHoverableContent={!enableHoverableContent}>
             <TooltipTrigger aria-label={typeof tooltip === "string" ? tooltip : undefined} asChild>
               {Trigger}
             </TooltipTrigger>
