@@ -1,5 +1,6 @@
-import { DndContext, pointerWithin } from "@dnd-kit/core"
+import { DndContext, pointerWithin, useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import type { FeedViewType } from "@follow/constants"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
@@ -20,13 +21,14 @@ import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
+import { useBatchUpdateSubscription } from "~/hooks/biz/useSubscriptionActions"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useSubscriptionStore } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { WindowUnderBlur } from "../../components/ui/background"
-import { getSelectedFeedIds, setSelectedFeedIds } from "./atom"
+import { getSelectedFeedIds, setSelectedFeedIds, useSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
 import { FeedList } from "./list"
 
@@ -88,27 +90,6 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     }
   }, [setActive_])
 
-  const [useHotkeysSwitch, setUseHotkeysSwitch] = useState<boolean>(false)
-  useHotkeys(
-    shortcuts.feeds.switchBetweenViews.key,
-    (e) => {
-      e.preventDefault()
-      setUseHotkeysSwitch(true)
-      if (isHotkeyPressed("Left")) {
-        setActive((i) => {
-          if (i === 0) {
-            return views.length - 1
-          } else {
-            return i - 1
-          }
-        })
-      } else {
-        setActive((i) => (i + 1) % views.length)
-      }
-    },
-    { scopes: HotKeyScopeMap.Home },
-  )
-
   useWheel(
     ({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
       if (!last) {
@@ -132,17 +113,32 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     },
   )
 
-  const unreadByView = useUnreadByView()
-  const { t } = useTranslation()
-
-  const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
-
   useRegisterGlobalContext("goToDiscover", () => {
     window.router.navigate(Routes.Discover)
   })
 
+  const [selectedIds, setSelectedIds] = useSelectedFeedIds()
+
+  const { mutate } = useBatchUpdateSubscription()
+
   return (
-    <DndContext collisionDetection={pointerWithin}>
+    <DndContext
+      collisionDetection={pointerWithin}
+      onDragEnd={(event) => {
+        if (!event.over) {
+          return
+        }
+
+        const { category, view } = event.over.data.current as {
+          category: string
+          view: FeedViewType
+        }
+
+        mutate({ category, view, feedIdList: selectedIds })
+
+        setSelectedIds([])
+      }}
+    >
       <WindowUnderBlur
         className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
         onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
@@ -154,44 +150,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
           onClick={stopPropagation}
         >
           {views.map((item, index) => (
-            <ActionButton
+            <ViewSwitchButton
               key={item.name}
-              tooltip={t(item.name)}
-              shortcut={`${index + 1}`}
-              className={cn(
-                active === index && item.className,
-                "flex h-11 flex-col items-center gap-1 text-xl",
-                ELECTRON ? "hover:!bg-theme-item-hover" : "",
-                active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
-              )}
-              onClick={(e) => {
-                setActive(index)
-                setUseHotkeysSwitch(false)
-                e.stopPropagation()
-              }}
-            >
-              {item.icon}
-              {showSidebarUnreadCount ? (
-                <div className="text-[0.625rem] font-medium leading-none">
-                  {unreadByView[index] > 99 ? (
-                    <span className="-mr-0.5">99+</span>
-                  ) : (
-                    unreadByView[index]
-                  )}
-                </div>
-              ) : (
-                <i
-                  className={cn(
-                    "i-mgc-round-cute-fi text-[0.25rem]",
-                    unreadByView[index]
-                      ? active === index
-                        ? "opacity-100"
-                        : "opacity-60"
-                      : "opacity-0",
-                  )}
-                />
-              )}
-            </ActionButton>
+              item={item}
+              index={index}
+              active={active}
+              setActive={setActive}
+            />
           ))}
         </div>
         <div
@@ -216,6 +181,82 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         {children}
       </WindowUnderBlur>
     </DndContext>
+  )
+}
+
+const ViewSwitchButton: FC<{
+  item: (typeof views)[number]
+  index: number
+
+  active: number
+  setActive: (next: number | ((prev: number) => number)) => void
+}> = ({ item, index, active, setActive }) => {
+  const [useHotkeysSwitch, setUseHotkeysSwitch] = useState<boolean>(false)
+  useHotkeys(
+    shortcuts.feeds.switchBetweenViews.key,
+    (e) => {
+      e.preventDefault()
+      setUseHotkeysSwitch(true)
+      if (isHotkeyPressed("Left")) {
+        setActive((i) => {
+          if (i === 0) {
+            return views.length - 1
+          } else {
+            return i - 1
+          }
+        })
+      } else {
+        setActive((i) => (i + 1) % views.length)
+      }
+    },
+    { scopes: HotKeyScopeMap.Home },
+  )
+
+  const unreadByView = useUnreadByView()
+  const { t } = useTranslation()
+  const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
+
+  const { isOver, setNodeRef } = useDroppable({
+    id: item.name,
+    data: {
+      category: "",
+      view: item.view,
+    },
+  })
+
+  return (
+    <ActionButton
+      ref={setNodeRef}
+      key={item.name}
+      tooltip={t(item.name)}
+      shortcut={`${index + 1}`}
+      className={cn(
+        active === index && item.className,
+        "flex h-11 flex-col items-center gap-1 text-xl",
+        ELECTRON ? "hover:!bg-theme-item-hover" : "",
+        active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
+        isOver && "border-theme-accent-400 bg-theme-accent-400/60",
+      )}
+      onClick={(e) => {
+        setActive(index)
+        setUseHotkeysSwitch(false)
+        e.stopPropagation()
+      }}
+    >
+      {item.icon}
+      {showSidebarUnreadCount ? (
+        <div className="text-[0.625rem] font-medium leading-none">
+          {unreadByView[index] > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[index]}
+        </div>
+      ) : (
+        <i
+          className={cn(
+            "i-mgc-round-cute-fi text-[0.25rem]",
+            unreadByView[index] ? (active === index ? "opacity-100" : "opacity-60") : "opacity-0",
+          )}
+        />
+      )}
+    </ActionButton>
   )
 }
 

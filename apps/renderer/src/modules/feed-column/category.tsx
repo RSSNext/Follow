@@ -156,6 +156,10 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const { isOver, setNodeRef } = useDroppable({
     id: folderName!,
+    data: {
+      category: folderName,
+      view,
+    },
   })
 
   return (

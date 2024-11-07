@@ -508,6 +508,73 @@ class SubscriptionActions {
     )
   }
 
+  async batchUpdateSubscription({
+    feedIdList,
+    category,
+    view,
+  }: {
+    feedIdList: string[]
+    category: string
+    view: FeedViewType
+  }) {
+    const tx = createTransaction<
+      ReturnType<typeof get>,
+      {
+        subscription: Record<FeedId, SubscriptionFlatModel>
+      }
+    >(get(), {
+      subscription: {},
+    })
+
+    tx.execute(async () => {
+      await apiClient.subscriptions.batch.$patch({
+        json: {
+          feedIds: feedIdList,
+          category,
+          view,
+        },
+      })
+    })
+
+    tx.optimistic(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (const feedId of feedIdList) {
+            const subscription = draft.data[feedId]
+            if (!subscription) return
+
+            const currentViewFeedIds = draft.feedIdByView[subscription.view] as string[]
+            currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
+
+            subscription.category = category
+            subscription.view = view
+            ctx.subscription[feedId] = subscription
+
+            const changeToViewFeedIds = draft.feedIdByView[view] as string[]
+            changeToViewFeedIds.push(feedId)
+          }
+        }),
+      )
+    })
+
+    tx.rollback(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (const feedId of feedIdList) {
+            draft.data[feedId] = ctx.subscription[feedId]
+          }
+        }),
+      )
+    })
+
+    tx.persist(async () => {
+      SubscriptionService.updateCategories(feedIdList, category)
+      SubscriptionService.changeViews(feedIdList, view)
+    })
+
+    await tx.run()
+  }
+
   async changeListView(listId: string, currentView: FeedViewType, toView: FeedViewType) {
     const state = get()
 

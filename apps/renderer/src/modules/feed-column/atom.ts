@@ -38,7 +38,7 @@ export const setFeedListSortOrder = (order: FeedListSortOrder) => {
 export const [
   ,
   useSelectedFeedIds,
-  ,
+  useGetSelectedFeedIds,
   useSetSelectedFeedIds,
   getSelectedFeedIds,
   setSelectedFeedIds,

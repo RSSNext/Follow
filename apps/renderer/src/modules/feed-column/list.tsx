@@ -247,8 +247,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         }}
         mask={false}
         flex
-        viewportClassName="!px-3"
-        rootClassName="h-full"
+        viewportClassName="!px-3 !overflow-visible"
+        rootClassName="h-full overflow-visible"
       >
         <div
           data-active={feedId === FEED_COLLECTION_LIST}

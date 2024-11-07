@@ -106,3 +106,23 @@ const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
     </>
   )
 }
+
+export const useBatchUpdateSubscription = () => {
+  return useMutation({
+    mutationFn: async ({
+      feedIdList,
+      category,
+      view,
+    }: {
+      feedIdList: string[]
+      category: string
+      view: number
+    }) => {
+      await subscriptionActions.batchUpdateSubscription({
+        category,
+        feedIdList,
+        view,
+      })
+    },
+  })
+}
