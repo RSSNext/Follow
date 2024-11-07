@@ -52,6 +52,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   }, [feedView, handleMarkReadInRange, handleRenderAsRead, renderAsRead, scrollMarkUnread])
 }
 const anyString = [] as string[]
+
 export const useEntriesByView = ({
   onReset,
   isArchived,
