@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 import tsconfigPath from "vite-tsconfig-paths"
 import { defineProject } from "vitest/config"
 
-import { astPlugin } from "../../configs/plugins"
+import { astPlugin } from "../../plugins/vite/ast"
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const __dirname = fileURLToPath(new URL(".", import.meta.url))

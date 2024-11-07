@@ -3,8 +3,8 @@ import { resolve } from "node:path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
-import { astPlugin } from "../../configs/plugins"
 import { viteRenderBaseConfig } from "../../configs/vite.render.config"
+import { astPlugin } from "../../plugins/vite/ast"
 
 export default () => {
   return defineConfig({
