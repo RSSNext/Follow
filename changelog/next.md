@@ -15,4 +15,4 @@
 
 ## Bug Fixes
 
-- Default scrolling behavior is prevented while using arrow keys to switch between entries.
+- While using arrow keys to switch between entries, the entry view will not scroll unexpexted.
