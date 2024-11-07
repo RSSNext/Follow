@@ -31,7 +31,9 @@ export default async function handler(request: VercelRequest, response: VercelRe
       const { target } = json.payload || json.data
 
       if (target === "production") {
-        return purgeCloudflareCache(response)
+        await purgeCloudflareCache(response)
+      } else {
+        console.info(`Skipping non-production deployment: ${target}`, json)
       }
     }
     // ...
