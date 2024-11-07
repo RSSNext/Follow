@@ -14,3 +14,5 @@
 - Improvement web app global shortcuts.
 
 ## Bug Fixes
+
+- the volume bar can click.
