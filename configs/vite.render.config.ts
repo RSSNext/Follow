@@ -10,9 +10,9 @@ import type { UserConfig } from "vite"
 import { circularImportRefreshPlugin } from "../plugins/vite/hmr"
 import { customI18nHmrPlugin } from "../plugins/vite/i18n-hmr"
 import { localesPlugin } from "../plugins/vite/locales"
-import { twMacro } from "../plugins/vite/tw-macro"
 import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
+import { astPlugin } from "./plugins"
 
 const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 const pkg = JSON.parse(readFileSync(resolve(pkgDir, "./package.json"), "utf8"))
@@ -68,7 +68,7 @@ export const viteRenderBaseConfig = {
     }),
 
     localesPlugin(),
-    twMacro(),
+    astPlugin,
     customI18nHmrPlugin(),
   ],
   define: {
