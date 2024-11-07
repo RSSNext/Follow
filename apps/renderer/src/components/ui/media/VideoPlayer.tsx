@@ -344,6 +344,7 @@ const VolumeControl = () => {
   return (
     <ActionIcon
       label={<VolumeSlider onVolumeChange={controls.volume} volume={volume} />}
+      enableHoverableContent
       onClick={() => {
         if (muted) {
           controls.unmute()
@@ -420,12 +421,14 @@ const ActionIcon = ({
   children,
   shortcut,
   label,
+  enableHoverableContent,
 }: {
   className?: string
   onClick?: () => void
   label: React.ReactNode
   children?: React.ReactNode
   shortcut?: string
+  enableHoverableContent?: boolean
 }) => {
   return (
     <ActionButton
@@ -435,6 +438,7 @@ const ActionIcon = ({
       onClick={onClick}
       tooltip={label}
       shortcut={shortcut}
+      enableHoverableContent={enableHoverableContent}
     >
       {children || <i className={className} />}
     </ActionButton>

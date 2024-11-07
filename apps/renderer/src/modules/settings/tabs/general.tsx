@@ -80,6 +80,10 @@ export const SettingGeneral = () => {
             description: t("general.group_by_date.description"),
           }),
 
+          defineSettingItem("reduceRefetch", {
+            label: t("general.reduce_refetch.label"),
+            description: t("general.reduce_refetch.description"),
+          }),
           { type: "title", value: t("general.unread") },
 
           defineSettingItem("scrollMarkUnread", {

@@ -12,7 +12,9 @@
 
 - Optimized the Zen mode experience on macOS.
 - Improvement web app global shortcuts.
+- Optimized the Timeline's data cache, reducing data reloads within a short period of time. You can go to Settings -> General -> Timeline -> Reduce timeline refetch to control this feature, default is enabled.
 
 ## Bug Fixes
 
+- Fixed the issue where the Volume of VideoPlayer was not clickable.
 - While using arrow keys to switch between entries, the entry view will not scroll unexpexted.
