@@ -14,6 +14,7 @@ import { whoami } from "~/atoms/user"
 import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
+import { queryClient } from "~/lib/query-client"
 import { updateFeedBoostStatus } from "~/modules/boost/atom"
 import { SubscriptionService } from "~/services"
 
@@ -535,12 +536,22 @@ class SubscriptionActions {
       },
     })
 
-    tx.execute(async () => {
+    tx.execute(async (snapshot) => {
       await apiClient.subscriptions.batch.$patch({
         json: {
           feedIds: feedIdList,
           category,
           view,
+        },
+      })
+      const oldView = snapshot.data[feedIdList[0]].view
+
+      queryClient.invalidateQueries({
+        predicate(query) {
+          return (
+            query.queryKey[0] === "entries" &&
+            [oldView, view].includes(query.queryKey[2] as FeedViewType)
+          )
         },
       })
     })
