@@ -11,7 +11,7 @@ import { Kbd } from "~/components/ui/kbd/Kbd"
 import { mountLottie } from "~/components/ui/lottie-container"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useI18n } from "~/hooks/common"
-import confettiUrl from "~/lottie/confetti.lottie?raw"
+import confettiUrl from "~/lottie/confetti.lottie?url"
 import { MyWalletSection } from "~/modules/power/my-wallet-section"
 import { settings } from "~/queries/settings"
 
@@ -69,6 +69,7 @@ function Outtro() {
   )
 }
 const absoluteConfettiUrl = new URL(confettiUrl, import.meta.url).href
+
 export function GuideModalContent({ onClose }: { onClose: () => void }) {
   const t = useI18n()
   const [step, setStep] = useState(0)

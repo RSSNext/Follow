@@ -363,7 +363,13 @@ if (isDev) {
     import("~/modules/new-user-guide/guide-modal-content").then((m) => {
       window.presentModal({
         title: "New User Guide",
-        content: (props) => <m.GuideModalContent onClose={props.dismiss} />,
+        content: ({ dismiss }) => (
+          <m.GuideModalContent
+            onClose={() => {
+              dismiss()
+            }}
+          />
+        ),
 
         CustomModalComponent: PlainModal,
         modalContainerClassName: "flex items-center justify-center",
