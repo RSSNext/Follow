@@ -113,6 +113,27 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     },
   )
 
+  const [useHotkeysSwitch, setUseHotkeysSwitch] = useState<boolean>(false)
+  useHotkeys(
+    shortcuts.feeds.switchBetweenViews.key,
+    (e) => {
+      e.preventDefault()
+      setUseHotkeysSwitch(true)
+      if (isHotkeyPressed("Left")) {
+        setActive((i) => {
+          if (i === 0) {
+            return views.length - 1
+          } else {
+            return i - 1
+          }
+        })
+      } else {
+        setActive((i) => (i + 1) % views.length)
+      }
+    },
+    { scopes: HotKeyScopeMap.Home },
+  )
+
   useRegisterGlobalContext("goToDiscover", () => {
     window.router.navigate(Routes.Discover)
   })
@@ -156,6 +177,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
               index={index}
               active={active}
               setActive={setActive}
+              useHotkeysSwitch={useHotkeysSwitch}
+              setUseHotkeysSwitch={setUseHotkeysSwitch}
             />
           ))}
         </div>
@@ -190,28 +213,10 @@ const ViewSwitchButton: FC<{
 
   active: number
   setActive: (next: number | ((prev: number) => number)) => void
-}> = ({ item, index, active, setActive }) => {
-  const [useHotkeysSwitch, setUseHotkeysSwitch] = useState<boolean>(false)
-  useHotkeys(
-    shortcuts.feeds.switchBetweenViews.key,
-    (e) => {
-      e.preventDefault()
-      setUseHotkeysSwitch(true)
-      if (isHotkeyPressed("Left")) {
-        setActive((i) => {
-          if (i === 0) {
-            return views.length - 1
-          } else {
-            return i - 1
-          }
-        })
-      } else {
-        setActive((i) => (i + 1) % views.length)
-      }
-    },
-    { scopes: HotKeyScopeMap.Home },
-  )
 
+  useHotkeysSwitch: boolean
+  setUseHotkeysSwitch: (next: boolean) => void
+}> = ({ item, index, active, setActive, useHotkeysSwitch, setUseHotkeysSwitch }) => {
   const unreadByView = useUnreadByView()
   const { t } = useTranslation()
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
