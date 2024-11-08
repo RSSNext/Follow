@@ -11,19 +11,15 @@ declare global {
 }
 
 export const doMigration = async () => {
-  const lastVersion = localStorage.getItem(appVersionKey)
-  if (!lastVersion || lastVersion === APP_VERSION) {
-    if (!lastVersion) {
-      localStorage.setItem(appVersionKey, APP_VERSION)
-    }
-    return
-  }
+  const lastVersion = localStorage.getItem(appVersionKey) || APP_VERSION
+  localStorage.setItem(appVersionKey, APP_VERSION)
+
+  if (lastVersion === APP_VERSION) return
+
   // NOTE: Add migration logic here
 
   if (!APP_VERSION.includes("nightly")) {
     window.__app_is_upgraded__ = true
   }
   appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
-
-  localStorage.setItem(appVersionKey, APP_VERSION)
 }
