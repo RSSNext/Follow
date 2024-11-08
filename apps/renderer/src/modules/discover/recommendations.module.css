@@ -18,4 +18,7 @@
   border-radius: 8px;
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.06) inset;
   border: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/card/index.jsx"
 import type { FC } from "react"
-import { memo } from "react"
+import { memo, useMemo } from "react"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { FeedIcon } from "~/modules/feed/feed-icon"
@@ -15,6 +15,25 @@ interface RecommendationCardProps {
 }
 export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, routePrefix }) => {
   const { present } = useModalStack()
+
+  const { maintainers, categories } = useMemo(() => {
+    const maintainers = new Set<string>()
+    const categories = new Set<string>()
+    for (const route in data.routes) {
+      const routeData = data.routes[route]
+      if (routeData.maintainers) {
+        routeData.maintainers.forEach((m) => maintainers.add(m))
+      }
+      if (routeData.categories) {
+        routeData.categories.forEach((c) => categories.add(c))
+      }
+    }
+    return {
+      maintainers: Array.from(maintainers),
+      categories: Array.from(categories),
+    }
+  }, [data])
+
   return (
     <Card className={styles["recommendations-card"]}>
       <CardHeader className="relative p-5 pb-3">
@@ -31,14 +50,14 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
         <CardTitle className="relative z-[1] flex items-center pt-[10px] text-base">
           <span className="center box-content flex aspect-square rounded-full bg-background p-1.5">
             <span className="overflow-hidden rounded-full">
-              <FeedIcon size={28} className="mr-0 " siteUrl={`https://${data.url}`} />
+              <FeedIcon size={28} className="mr-0" siteUrl={`https://${data.url}`} />
             </span>
           </span>
           <span className="ml-2 translate-y-1.5">{data.name}</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-5 pt-0">
-        <ul className="columns-2 gap-2 space-y-1 text-sm text-muted-foreground">
+      <CardContent className="flex grow flex-col p-5 pt-0">
+        <ul className="grow columns-2 gap-2 space-y-1 text-sm text-foreground/90">
           {Object.keys(data.routes).map((route) => (
             <li
               key={route}
@@ -50,7 +69,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
             >
               <button
                 type="button"
-                className="-translate-x-1.5 rounded p-0.5 px-1.5 duration-200 group-hover:translate-x-0 group-hover:bg-muted"
+                className="rounded p-0.5 px-1.5 duration-200 group-hover:bg-muted"
                 onClick={() => {
                   present({
                     id: `recommendation-content-${route}`,
@@ -67,6 +86,40 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
             </li>
           ))}
         </ul>
+
+        <div className="mt-4 flex flex-col gap-2 text-muted-foreground">
+          <div className="flex flex-1 items-center text-sm">
+            <i className="i-mingcute-hammer-line mr-1 shrink-0 translate-y-0.5 self-start" />
+
+            <span className="flex flex-wrap gap-1">
+              {maintainers.map((m) => (
+                <a
+                  key={m}
+                  href={`https://github.com/${m}`}
+                  className="follow-link--underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  @{m}
+                </a>
+              ))}
+            </span>
+          </div>
+          <div className="flex flex-1 items-center text-sm">
+            <i className="i-mingcute-tag-2-line mr-1 shrink-0 translate-y-1 self-start" />
+            <span className="flex flex-wrap gap-1">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className="cursor-pointer rounded bg-muted/50 px-1.5 duration-200 hover:bg-muted"
+                >
+                  {c}
+                </button>
+              ))}
+            </span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   )
