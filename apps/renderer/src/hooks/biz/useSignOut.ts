@@ -4,7 +4,7 @@ import { signOut } from "@hono/auth-js/react"
 import { useCallback } from "react"
 
 import { setWhoami } from "~/atoms/user"
-import { QUERY_PERSIST_KEY } from "~/constants"
+import { isWebBuild, QUERY_PERSIST_KEY } from "~/constants"
 import { tipcClient } from "~/lib/client"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
@@ -23,6 +23,6 @@ export const useSignOut = () =>
     await Promise.allSettled([clearLocalPersistStoreData(), tipcClient?.cleanAuthSessionToken()])
     // Sign out
     await signOut({
-      callbackUrl: env.VITE_WEB_URL,
+      callbackUrl: isWebBuild ? env.VITE_WEB_URL : undefined,
     })
   }, [])
