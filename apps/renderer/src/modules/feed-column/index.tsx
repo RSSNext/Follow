@@ -10,7 +10,7 @@ import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
 import type { FC, PropsWithChildren } from "react"
-import { useCallback, useLayoutEffect, useRef, useState } from "react"
+import { startTransition, useCallback, useLayoutEffect, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
@@ -243,8 +243,10 @@ const ViewSwitchButton: FC<{
         isOver && "border-theme-accent-400 bg-theme-accent-400/60",
       )}
       onClick={(e) => {
-        setActive(index)
-        setUseHotkeysSwitch(false)
+        startTransition(() => {
+          setActive(index)
+          setUseHotkeysSwitch(false)
+        })
         e.stopPropagation()
       }}
     >

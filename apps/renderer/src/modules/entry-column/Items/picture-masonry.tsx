@@ -9,10 +9,22 @@ import { Masonry } from "@follow/components/ui/masonry/index.js"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { useRefValue } from "@follow/hooks"
+import clsx from "clsx"
 import type { RenderComponentProps } from "masonic"
 import { useInfiniteLoader } from "masonic"
 import type { FC } from "react"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  createContext,
+  startTransition,
+  useCallback,
+  useContext,
+  useDeferredValue,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
@@ -25,6 +37,9 @@ import { PictureWaterFallItem } from "./picture-item"
 
 // grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5
 
+const FirstScreenItemCount = 20
+const FirstScreenReadyCountDown = 150
+const FirstScreenReadyContext = createContext(false)
 const gutter = 24
 
 export const PictureMasonry: FC<MasonryProps> = (props) => {
@@ -32,6 +47,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   const cacheMap = useState(() => new Map<string, object>())[0]
   const [isInitDim, setIsInitDim] = useState(false)
   const [isInitLayout, setIsInitLayout] = useState(false)
+  const deferIsInitLayout = useDeferredValue(isInitLayout)
   const restoreDimensions = useEventCallback(async () => {
     const images = [] as string[]
     data.forEach((entryId) => {
@@ -42,9 +58,11 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     })
     return imageActions.fetchDimensionsFromDb(images)
   })
-  useEffect(() => {
+  useLayoutEffect(() => {
     restoreDimensions().finally(() => {
-      setIsInitDim(true)
+      startTransition(() => {
+        setIsInitDim(true)
+      })
     })
   }, [])
 
@@ -165,24 +183,37 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     }
   }, [scrollElement, renderMarkRead, scrollMarkRead, dataRef])
 
+  const [firstScreenReady, setFirstScreenReady] = useState(false)
+  useEffect(() => {
+    if (firstScreenReady) return
+    const timer = setTimeout(() => {
+      setFirstScreenReady(true)
+    }, FirstScreenReadyCountDown)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [])
+
   return (
     <div ref={containerRef} className="px-4 pt-2">
-      {isInitDim && isInitLayout && (
+      {isInitDim && deferIsInitLayout && (
         <MasonryItemWidthContext.Provider value={currentItemWidth}>
           <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
             <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
               <MasonryIntersectionContext.Provider value={intersectionObserver}>
                 <MediaContainerWidthProvider width={currentItemWidth}>
-                  <Masonry
-                    items={items}
-                    columnGutter={gutter}
-                    columnWidth={currentItemWidth}
-                    columnCount={currentColumn}
-                    overscanBy={2}
-                    render={render}
-                    onRender={handleRender}
-                    itemKey={itemKey}
-                  />
+                  <FirstScreenReadyContext.Provider value={firstScreenReady}>
+                    <Masonry
+                      items={firstScreenReady ? items : items.slice(0, FirstScreenItemCount)}
+                      columnGutter={gutter}
+                      columnWidth={currentItemWidth}
+                      columnCount={currentColumn}
+                      overscanBy={2}
+                      render={MasonryRender}
+                      onRender={handleRender}
+                      itemKey={itemKey}
+                    />
+                  </FirstScreenReadyContext.Provider>
                 </MediaContainerWidthProvider>
               </MasonryIntersectionContext.Provider>
             </MasonryItemsAspectRatioSetterContext.Provider>
@@ -194,16 +225,26 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
 }
 
 const itemKey = (item: { entryId: string }) => item.entryId
-const render: React.ComponentType<
+const MasonryRender: React.ComponentType<
   RenderComponentProps<{
     entryId: string
   }>
 > = ({ data, index }) => {
+  const firstScreenReady = useContext(FirstScreenReadyContext)
   if (data.entryId.startsWith("placeholder")) {
     return <LoadingSkeletonItem />
   }
 
-  return <PictureWaterFallItem entryId={data.entryId} index={index} />
+  return (
+    <PictureWaterFallItem
+      className={clsx(
+        firstScreenReady ? "opacity-100" : "opacity-0",
+        "transition-opacity duration-200",
+      )}
+      entryId={data.entryId}
+      index={index}
+    />
+  )
 }
 interface MasonryProps {
   data: string[]
