@@ -30,7 +30,7 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { HotKeyScopeMap, isDev } from "~/constants"
+import { HotKeyScopeMap, isDev, isWebBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { useAuthQuery, useI18n } from "~/hooks/common"
@@ -63,7 +63,7 @@ const FooterInfo = () => {
         </div>
       )}
 
-      {!ELECTRON && (
+      {isWebBuild && (
         <div className="center absolute inset-y-0 right-2">
           <button
             type="button"
