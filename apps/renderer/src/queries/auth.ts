@@ -24,6 +24,8 @@ export const useSession = (options?: { enabled?: boolean }) => {
       return !!(3 - failureCount)
     },
     enabled: options?.enabled ?? true,
+    refetchOnMount: true,
+    staleTime: 0,
     meta: {
       persist: true,
     },

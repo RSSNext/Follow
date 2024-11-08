@@ -207,10 +207,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         }}
         mask={false}
         flex
-        viewportClassName={cn(
-          "!px-3 [&>[data-radix-scroll-area-content]]:h-full",
-          isDragging && "!overflow-visible",
-        )}
+        viewportClassName={cn("!px-3", isDragging && "!overflow-visible")}
         rootClassName={cn("h-full", isDragging && "overflow-visible")}
       >
         <div
@@ -251,7 +248,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         )}
 
         <DraggableContext.Provider value={draggableContextValue}>
-          <div className="h-full space-y-px" id="feeds-area" ref={setNodeRef}>
+          <div className="space-y-px" id="feeds-area" ref={setNodeRef}>
             {(hasListData || hasInboxData) && (
               <div
                 className={cn(
