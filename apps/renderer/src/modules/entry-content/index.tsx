@@ -6,7 +6,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { stopPropagation } from "@follow/utils/dom"
+import { clearSelection, stopPropagation } from "@follow/utils/dom"
 import { EventBus } from "@follow/utils/event-bus"
 import { cn } from "@follow/utils/utils"
 import type { FallbackRender } from "@sentry/react"
@@ -210,6 +210,7 @@ export const EntryContentRender: Component<{
           ref={scrollerRef}
         >
           <div
+            onPointerDown={clearSelection}
             style={stableRenderStyle}
             className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
             key={entry.entries.id}

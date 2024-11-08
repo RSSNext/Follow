@@ -21,3 +21,5 @@ export const getElementTop = (element: HTMLElement) => {
   }
   return actualTop
 }
+
+export const clearSelection = () => window.getSelection()?.removeAllRanges()
