@@ -1,22 +1,3 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "sourceMap": false,
-    "strict": true,
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "types": ["node"]
-  }
+  "extends": "./node_modules/@electron-toolkit/tsconfig/tsconfig.node.json"
 }
