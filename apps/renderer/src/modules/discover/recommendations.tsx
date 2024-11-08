@@ -46,9 +46,11 @@ const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
 export function Recommendations({
   hideTitle,
   className,
+  headerClassName,
 }: {
   hideTitle?: boolean
   className?: string
+  headerClassName?: string
 }) {
   const { t } = useTranslation()
   const lang = useGeneralSettingKey("language")
@@ -103,6 +105,21 @@ export function Recommendations({
   const tabRef = useRef<HTMLDivElement>(null)
   const handleChangeCategoryAndJumpTo = useEventCallback((category: DiscoverCategories) => {
     handleCategoryChange(category)
+
+    if (tabRef.current) {
+      const tab = tabRef.current.querySelector(`[data-value="${category}"]`)
+      if (tab) {
+        const tabRect = tab.getBoundingClientRect()
+        const containerRect = tabRef.current.getBoundingClientRect()
+        const scrollLeft =
+          tabRect.left -
+          containerRect.left +
+          tabRef.current.scrollLeft -
+          (containerRect.width - tabRect.width) / 2
+
+        tabRef.current.scrollTo({ left: scrollLeft, behavior: "smooth" })
+      }
+    }
   })
 
   if (isLoading) {
@@ -130,16 +147,26 @@ export function Recommendations({
         </div>
       )}
 
-      <div className="sticky top-0 z-[9] my-3 flex w-full items-center gap-4 bg-theme-background">
+      <div
+        className={cn(
+          "z-[9] my-3 flex w-full items-center gap-4 bg-theme-background",
+          headerClassName,
+        )}
+      >
         <ScrollArea.ScrollArea
+          ref={tabRef}
           orientation="horizontal"
           rootClassName="grow min-w-0 overflow-visible"
           scrollbarClassName="-mb-3 z-[100]"
         >
           <Tabs value={category} onValueChange={handleCategoryChange}>
-            <TabsList ref={tabRef}>
+            <TabsList>
               {RSSHubCategoryOptions.map((category) => (
-                <TabsTrigger key={category.value} value={category.value}>
+                <TabsTrigger
+                  data-value={category.value}
+                  key={category.value}
+                  value={category.value}
+                >
                   {category.name}
                 </TabsTrigger>
               ))}

@@ -38,7 +38,7 @@ export function RSSHubGuide({ categories, lang }: { categories?: string; lang?: 
         rootClassName="overflow-visible"
       >
         <div className="space-y-3">
-          <Recommendations hideTitle />
+          <Recommendations hideTitle headerClassName="sticky top-0" />
         </div>
       </ScrollArea.ScrollArea>
     </AppErrorBoundary>
