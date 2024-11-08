@@ -20,7 +20,10 @@ export const doMigration = async () => {
   }
   // NOTE: Add migration logic here
 
+  if (!APP_VERSION.includes("nightly")) {
+    window.__app_is_upgraded__ = true
+  }
   appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
-  window.__app_is_upgraded__ = true
+
   localStorage.setItem(appVersionKey, APP_VERSION)
 }

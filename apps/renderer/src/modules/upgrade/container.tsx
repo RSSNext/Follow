@@ -66,7 +66,8 @@ const AppNotificationContainer: FC = () => {
           , enjoy the new features! 🎉
         </div>,
         {
-          duration: 10e8,
+          closeButton: true,
+          duration: 5000,
           action: CHANGELOG_CONTENT
             ? {
                 label: "What's new?",
