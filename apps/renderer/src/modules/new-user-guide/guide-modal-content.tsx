@@ -6,6 +6,7 @@ import type { ComponentProps, FunctionComponentElement } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { mountLottie } from "~/components/ui/lottie-container"
 import { Markdown } from "~/components/ui/markdown/Markdown"
@@ -13,7 +14,6 @@ import { useI18n } from "~/hooks/common"
 import confettiUrl from "~/lottie/confetti.lottie?raw"
 import { MyWalletSection } from "~/modules/power/my-wallet-section"
 import { settings } from "~/queries/settings"
-import { localStorage } from "~/store/utils/helper"
 
 import { ActivationModalContent } from "../activation/ActivationModalContent"
 import { DiscoverImport } from "../discover/import"
@@ -73,7 +73,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   const t = useI18n()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
-  const lang = localStorage.getItem("follow:I18N_LOCALE") as string | null
+  const lang = useGeneralSettingKey("language")
   const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
 
   const guideSteps = useMemo(
