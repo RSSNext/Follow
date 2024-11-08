@@ -6,8 +6,8 @@ import { useEffect, useRef } from "react"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { appLog } from "~/lib/log"
 
-const defaultSlateTime = 600_000 // 10min
-const maxSlateTime = 6 * 60 * (60 * 1000) // 6hr
+const defaultStaleTime = 600_000 // 10min
+const maxStaleTime = 6 * 60 * (60 * 1000) // 6hr
 
 export class ElectronCloseEvent extends Event {
   static type = "electron-close"
@@ -24,7 +24,7 @@ export class ElectronShowEvent extends Event {
 
 const useSlateTime = () => {
   const reduceRefetch = useGeneralSettingKey("reduceRefetch")
-  return reduceRefetch ? maxSlateTime : defaultSlateTime
+  return reduceRefetch ? maxStaleTime : defaultStaleTime
 }
 /**
  * Add a event listener to invalidate all queries

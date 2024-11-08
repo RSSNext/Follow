@@ -7,6 +7,7 @@
 - Now you can export the data from the local database.
 - App: In consideration of your hard drive, now it supports clearing cache and limiting the size of cache.
 - Added a new feature to allow minimizing to the system tray by enabling a switch in the settings.
+- Discover Page: Enhance RSSHub recommendations with filters
 - Quickly update views or categories at once by dragging and dropping.
 
 ## Improvements

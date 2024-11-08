@@ -17,7 +17,11 @@ export const localStorage: PersistStorage<any> = {
       return null
     }
 
-    return JSON.parse(data)
+    try {
+      return JSON.parse(data)
+    } catch {
+      return data
+    }
   },
   setItem: (name, value) => {
     window.localStorage.setItem(name, JSON.stringify(value))

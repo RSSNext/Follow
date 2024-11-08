@@ -6,10 +6,12 @@ import { useAuthQuery } from "~/hooks/common"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { Queries } from "~/queries"
 
-export function RSSHubGuide() {
+export function RSSHubGuide({ categories, lang }: { categories?: string; lang?: string }) {
   const rsshubPopular = useAuthQuery(
     Queries.discover.rsshubCategory({
       category: "popular",
+      categories,
+      lang,
     }),
     {
       meta: {
@@ -30,9 +32,13 @@ export function RSSHubGuide() {
 
   return (
     <AppErrorBoundary errorType={ErrorComponentType.RSSHubDiscoverError}>
-      <ScrollArea.ScrollArea viewportClassName="h-[450px]">
+      <ScrollArea.ScrollArea
+        viewportClassName="h-[450px]"
+        scrollbarClassName="-mr-4"
+        rootClassName="overflow-visible"
+      >
         <div className="space-y-3">
-          <Recommendations hideTitle className="grid-cols-4" />
+          <Recommendations hideTitle headerClassName="sticky top-0" />
         </div>
       </ScrollArea.ScrollArea>
     </AppErrorBoundary>
