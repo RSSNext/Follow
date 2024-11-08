@@ -40,7 +40,7 @@ type DiscoverCategories = (typeof RSSHubCategories)[number]
 const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
   return Queries.discover.rsshubCategory({
     category: "popular",
-    categories: category === "all" ? "popular" : `${category}`,
+    categories: category === "all" ? "popular" : `popular,${category}`,
     lang,
   })
 }
