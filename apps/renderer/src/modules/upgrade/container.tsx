@@ -105,6 +105,6 @@ export default AppNotificationContainer
 
 const Changelog = () => (
   <Paper>
-    <Markdown className="mt-8">{CHANGELOG_CONTENT}</Markdown>
+    <Markdown className="mt-8 w-full max-w-full">{CHANGELOG_CONTENT}</Markdown>
   </Paper>
 )
