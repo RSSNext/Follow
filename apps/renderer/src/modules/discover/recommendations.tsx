@@ -1,3 +1,4 @@
+import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import {
   Select,
@@ -8,7 +9,8 @@ import {
 } from "@follow/components/ui/select/index.jsx"
 import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.js"
 import { cn, isASCII } from "@follow/utils/utils"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { keepPreviousData } from "@tanstack/react-query"
+import { useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useEventCallback } from "usehooks-ts"
 
@@ -59,50 +61,48 @@ export function Recommendations({
     meta: {
       persist: true,
     },
+    placeholderData: keepPreviousData,
   })
 
-  const { data, isLoading } = rsshubPopular
+  const { data, isLoading, isFetching } = rsshubPopular
 
   const keys = useMemo(() => {
-    if (data) {
-      return Object.keys(data).sort((a, b) => {
-        const aname = data[a].name
-        const bname = data[b].name
-
-        const aRouteName = data[a].routes[Object.keys(data[a].routes)[0]].name
-        const bRouteName = data[b].routes[Object.keys(data[b].routes)[0]].name
-
-        const ia = isASCII(aname) && isASCII(aRouteName)
-        const ib = isASCII(bname) && isASCII(bRouteName)
-
-        if (ia && ib) {
-          return aname.toLowerCase() < bname.toLowerCase() ? -1 : 1
-        } else if (ia || ib) {
-          return ia > ib ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    } else {
+    if (!data) {
       return []
     }
-  }, [data])
+    return Object.keys(data).sort((a, b) => {
+      const aname = data[a].name
+      const bname = data[b].name
 
-  useEffect(() => {
-    rsshubPopular.refetch()
-  }, [category, selectedLang, rsshubPopular])
+      const aRouteName = data[a].routes[Object.keys(data[a].routes)[0]].name
+      const bRouteName = data[b].routes[Object.keys(data[b].routes)[0]].name
+
+      const ia = isASCII(aname) && isASCII(aRouteName)
+      const ib = isASCII(bname) && isASCII(bRouteName)
+
+      if (ia && ib) {
+        return aname.toLowerCase() < bname.toLowerCase() ? -1 : 1
+      } else if (ia || ib) {
+        return ia > ib ? -1 : 1
+      } else {
+        return 0
+      }
+    })
+  }, [data])
 
   const handleCategoryChange = (value: DiscoverCategories) => {
     setCategory(value)
+    rsshubPopular.refetch()
   }
 
   const handleLangChange = (value: string) => {
     setSelectedLang(value as Language)
+    rsshubPopular.refetch()
   }
 
   const tabRef = useRef<HTMLDivElement>(null)
   const handleChangeCategoryAndJumpTo = useEventCallback((category: DiscoverCategories) => {
-    setCategory(category)
+    handleCategoryChange(category)
   })
 
   if (isLoading) {
@@ -115,7 +115,20 @@ export function Recommendations({
 
   return (
     <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px] px-4")}>
-      {!hideTitle && <div className="text-center text-lg font-bold">{t("discover.popular")}</div>}
+      {!hideTitle && (
+        <div className="relative text-center text-lg font-bold">
+          <span>{t("discover.popular")}</span>
+
+          {isFetching && (
+            <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-center gap-8">
+              <span className="opacity-0" aria-hidden>
+                {t("discover.popular")}
+              </span>
+              <LoadingCircle size="small" className="center flex" />
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="sticky top-0 z-[9] my-3 flex w-full items-center gap-4 bg-theme-background">
         <ScrollArea.ScrollArea

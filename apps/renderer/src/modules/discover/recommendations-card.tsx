@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/card/index.jsx"
+import clsx from "clsx"
 import { upperFirst } from "lodash-es"
 import type { FC } from "react"
 import { memo, useMemo } from "react"
@@ -32,6 +33,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
           routeData.categories.forEach((c) => categories.add(c))
         }
       }
+      categories.delete("popular")
       return {
         maintainers: Array.from(maintainers),
         categories: Array.from(categories),
@@ -127,10 +129,16 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
               <span className="flex flex-wrap gap-1">
                 {categories.map((c) => (
                   <button
-                    onClick={() => setCategory(c)}
+                    onClick={() => {
+                      if (!RSSHubCategoryMap[c]) return
+                      setCategory(c)
+                    }}
                     key={c}
                     type="button"
-                    className="cursor-pointer rounded bg-muted/50 px-1.5 duration-200 hover:bg-muted"
+                    className={clsx(
+                      "cursor-pointer rounded bg-muted/50 px-1.5 duration-200 hover:bg-muted",
+                      !RSSHubCategoryMap[c] && "pointer-events-none opacity-50",
+                    )}
                   >
                     {RSSHubCategoryMap[c] || upperFirst(c)}
                   </button>
