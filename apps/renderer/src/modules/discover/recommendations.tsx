@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.js
 import { cn, isASCII } from "@follow/utils/utils"
 import { keepPreviousData } from "@tanstack/react-query"
 import { useMemo, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { useTranslation } from "react-i18next"
 import { useEventCallback } from "usehooks-ts"
 
@@ -93,12 +94,16 @@ export function Recommendations({
   }, [data])
 
   const handleCategoryChange = (value: DiscoverCategories) => {
-    setCategory(value)
+    flushSync(() => {
+      setCategory(value)
+    })
     rsshubPopular.refetch()
   }
 
   const handleLangChange = (value: string) => {
-    setSelectedLang(value as Language)
+    flushSync(() => {
+      setSelectedLang(value as Language)
+    })
     rsshubPopular.refetch()
   }
 
@@ -177,7 +182,8 @@ export function Recommendations({
           <SelectTrigger size="sm" className="w-32">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent position="item-aligned">
+
+          <SelectContent className="z-[1]" position="item-aligned">
             {LanguageOptions.map((lang) => (
               <SelectItem key={lang.value} value={lang.value}>
                 {lang.name}
