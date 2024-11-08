@@ -65,7 +65,7 @@ function EntryHeaderImpl({
   return (
     <div
       className={cn(
-        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200",
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
         shouldShowMeta && "border-b border-border",
         className,
       )}
