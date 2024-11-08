@@ -6,6 +6,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 
 import { RecommendationContent } from "./recommendation-content"
+import styles from "./recommendations.module.css"
 import type { RSSHubRouteDeclaration } from "./types"
 
 interface RecommendationCardProps {
@@ -15,15 +16,29 @@ interface RecommendationCardProps {
 export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, routePrefix }) => {
   const { present } = useModalStack()
   return (
-    <Card className="shadow-none">
-      <CardHeader className="p-5 pb-3">
-        <CardTitle className="flex items-center text-base">
-          <FeedIcon siteUrl={`https://${data.url}`} />
-          {data.name}
+    <Card className={styles["recommendations-card"]}>
+      <CardHeader className="relative p-5 pb-3">
+        <div className="absolute left-0 top-0 h-[50px] w-full overflow-hidden">
+          <span className="opacity-50 blur-2xl">
+            <FeedIcon
+              siteUrl={`https://${data.url}`}
+              size={400}
+              className="pointer-events-none size-[500px]"
+            />
+          </span>
+        </div>
+
+        <CardTitle className="relative z-[1] flex items-center pt-[10px] text-base">
+          <span className="center box-content flex aspect-square rounded-full bg-background p-1.5">
+            <span className="overflow-hidden rounded-full">
+              <FeedIcon size={28} className="mr-0 " siteUrl={`https://${data.url}`} />
+            </span>
+          </span>
+          <span className="ml-2 translate-y-1.5">{data.name}</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="p-5 pt-0">
-        <ul className="space-y-1 text-sm text-muted-foreground">
+        <ul className="columns-2 gap-2 space-y-1 text-sm text-muted-foreground">
           {Object.keys(data.routes).map((route) => (
             <li
               key={route}

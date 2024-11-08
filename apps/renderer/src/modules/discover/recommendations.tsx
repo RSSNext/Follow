@@ -13,6 +13,7 @@ import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { localStorage } from "~/store/utils/helper"
 
+import styles from "./recommendations.module.css"
 import { RecommendationCard } from "./recommendations-card"
 
 const LanguageOptions = [
@@ -202,7 +203,7 @@ export function Recommendations({
   }
 
   return (
-    <div className={cn(!hideTitle && "mt-8")}>
+    <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px] px-4")}>
       {!hideTitle && <div className="text-center text-lg font-bold">{t("discover.popular")}</div>}
 
       <div className="my-3 flex justify-end gap-4 px-3">
@@ -233,7 +234,7 @@ export function Recommendations({
         </Select>
       </div>
 
-      <div className={cn("mt-4 grid grid-cols-3 gap-4 px-3", className)}>
+      <div className={cn(styles["recommendations-grid"], "mt-4", className)}>
         {keys.map((key) => (
           <RecommendationCard key={key} data={data[key]} routePrefix={key} />
         ))}
