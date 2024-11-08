@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "Отметить как прочитанное при отображении",
   "general.mark_as_read.scroll.description": "Автоматически отмечать записи как прочитанные при прокрутке.",
   "general.mark_as_read.scroll.label": "Отметить как прочитанное при прокрутке",
-  "general.privacy_data": "Конфиденциальность и данные",
   "general.rebuild_database.button": "Перестроить",
   "general.rebuild_database.description": "Если у вас возникают проблемы с отображением, перестроение базы данных может их решить.",
   "general.rebuild_database.label": "Перестроить базу данных",

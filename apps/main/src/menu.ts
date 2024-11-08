@@ -1,3 +1,4 @@
+import { callWindowExpose } from "@follow/shared/bridge"
 import { dispatchEventOnWindow } from "@follow/shared/event"
 import { name } from "@pkg"
 import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electron"
@@ -58,7 +59,8 @@ export const registerAppMenu = () => {
             const mainWindow = getMainWindow()
             if (!mainWindow) return
             mainWindow.show()
-            dispatchEventOnWindow(mainWindow, "QuickAdd")
+            const caller = callWindowExpose(mainWindow)
+            caller.quickAdd()
           },
         },
 
@@ -70,7 +72,9 @@ export const registerAppMenu = () => {
             const mainWindow = getMainWindow()
             if (!mainWindow) return
             mainWindow.show()
-            dispatchEventOnWindow(mainWindow, "Discover")
+
+            const caller = callWindowExpose(mainWindow)
+            caller.goToDiscover()
           },
         },
 
@@ -130,6 +134,18 @@ export const registerAppMenu = () => {
         { role: "zoomIn", label: t("menu.zoomIn") },
         { role: "zoomOut", label: t("menu.zoomOut") },
         { type: "separator" },
+        {
+          type: "normal",
+          label: t("menu.zenMode"),
+          accelerator: "Ctrl+Shift+Z",
+          click: () => {
+            const mainWindow = getMainWindow()
+            if (!mainWindow) return
+
+            const caller = callWindowExpose(mainWindow)
+            caller.zenMode()
+          },
+        },
         { role: "togglefullscreen", label: t("menu.toggleFullScreen") },
       ],
     },

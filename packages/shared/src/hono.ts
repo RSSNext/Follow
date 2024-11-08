@@ -5282,6 +5282,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
+    "/metrics": {
+        $get: {
+            input: {};
+            output: {};
+            outputFormat: string;
+            status: 200;
+        };
+    };
+} & {
     "/lists": {
         $get: {
             input: {
@@ -6048,6 +6057,24 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/subscriptions/batch": {
+        $patch: {
+            input: {
+                json: {
+                    view: number;
+                    feedIds: string[];
+                    title?: string | null | undefined;
+                    category?: string | null | undefined;
+                    isPrivate?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 } & {
     "/settings": {
         $get: {
@@ -6181,6 +6208,30 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/profiles/batch": {
+        $post: {
+            input: {
+                json: {
+                    ids: string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    [x: string]: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    };
                 };
             };
             outputFormat: "json" | "text";
@@ -6411,6 +6462,20 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
     "/feeds/refresh": {
+        $get: {
+            input: {
+                query: {
+                    id: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/feeds/reset": {
         $get: {
             input: {
                 query: {
@@ -6845,6 +6910,18 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/entries/stream": {
+        $post: {
+            input: {
+                json: {
+                    ids: string[];
+                };
+            };
+            output: {};
+            outputFormat: string;
+            status: 200;
+        };
+    };
     "/entries/preview": {
         $get: {
             input: {
@@ -7034,7 +7111,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 query: {
                     category?: string | string[] | undefined;
+                    categories?: string | string[] | undefined;
                     namespace?: string | string[] | undefined;
+                    lang?: string | string[] | undefined;
                 };
             };
             output: {
@@ -7043,6 +7122,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         description: string;
                         name: string;
                         url: string;
+                        lang: string;
                         routes: {
                             [x: string]: {
                                 description: string;

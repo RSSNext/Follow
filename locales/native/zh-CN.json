@@ -42,6 +42,7 @@
   "menu.hide": "隐藏 {{name}}",
   "menu.hideOthers": "隐藏其他",
   "menu.minimize": "最小化",
+  "menu.open": "打开 {{name}}",
   "menu.openLogFile": "打开日志文件",
   "menu.paste": "粘贴",
   "menu.pasteAndMatchStyle": "粘贴并匹配样式",
@@ -62,6 +63,7 @@
   "menu.undo": "撤销",
   "menu.view": "视图",
   "menu.window": "窗口",
+  "menu.zenMode": "Zen 模式",
   "menu.zoom": "缩放",
   "menu.zoomIn": "放大",
   "menu.zoomOut": "缩小"

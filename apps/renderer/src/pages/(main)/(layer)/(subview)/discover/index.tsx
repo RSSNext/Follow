@@ -76,7 +76,7 @@ export function Component() {
   })
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="relative flex w-full flex-col items-center gap-8">
       <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
       <Tabs
         value={search.get("type") || "search"}

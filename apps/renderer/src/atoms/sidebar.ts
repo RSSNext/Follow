@@ -4,6 +4,8 @@ import { atom } from "jotai"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { createAtomHooks } from "~/lib/jotai"
 
+import { getIsZenMode, useIsZenMode } from "./settings/ui"
+
 const defaultFeedView = FeedViewType.Articles
 const viewAtom = atom<FeedViewType | -1>(-1)
 const [
@@ -48,14 +50,20 @@ viewAtom.onMount = () => {
     setSidebarActiveView(view)
   }
 }
-export const [
-  internal_feedColumnShowAtom,
-  ,
-  useFeedColumnShow,
-  ,
-  getFeedColumnShow,
-  setFeedColumnShow,
-] = createAtomHooks(atom(true))
+const [, , internal_useFeedColumnShow, , internal_getFeedColumnShow, setFeedColumnShow] =
+  createAtomHooks(atom(true))
+
+export const useFeedColumnShow = () => {
+  const isZenMode = useIsZenMode()
+  return internal_useFeedColumnShow() && !isZenMode
+}
+
+export const getFeedColumnShow = () => {
+  const isZenMode = getIsZenMode()
+  return internal_getFeedColumnShow() && !isZenMode
+}
+
+export { setFeedColumnShow }
 
 export const [, , useFeedColumnTempShow, , getFeedColumnTempShow, setFeedColumnTempShow] =
   createAtomHooks(atom(false))

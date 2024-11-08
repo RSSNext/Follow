@@ -96,7 +96,6 @@
   "general.mark_as_read.scroll.description": "Görünümden kaydırıldığında girdileri otomatik olarak okundu olarak işaretle.",
   "general.mark_as_read.scroll.label": "Kaydırıldığında okundu olarak işaretle",
   "general.network": "Ağ",
-  "general.privacy_data": "Gizlilik ve Veri",
   "general.proxy.description": "Ağ trafiği yönlendirmesi için proxy ayarla, örn., socks://proxy.example.com:1080",
   "general.proxy.label": "Proxy",
   "general.rebuild_database.button": "Yeniden Oluştur",

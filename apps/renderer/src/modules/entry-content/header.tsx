@@ -1,7 +1,7 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/index.js"
 import { FeedViewType, views } from "@follow/constants"
-import type { CombinedEntryModel } from "@follow/models/types"
+import type { CombinedEntryModel, MediaModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
@@ -17,15 +17,18 @@ import {
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
+import { filterSmallMedia } from "~/lib/utils"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
+import { ImageGallery } from "./actions/picture-gallery"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
@@ -62,7 +65,7 @@ function EntryHeaderImpl({
   return (
     <div
       className={cn(
-        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200",
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
         shouldShowMeta && "border-b border-border",
         className,
       )}
@@ -70,7 +73,7 @@ function EntryHeaderImpl({
       {!hideRecentReader && (
         <div
           className={cn(
-            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
+            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500 zen-mode-macos:left-12",
             "visible z-[11]",
             views[view].wideMode && "static",
             shouldShowMeta && "hidden",
@@ -102,6 +105,7 @@ function EntryHeaderImpl({
         <div className="relative flex shrink-0 items-center justify-end gap-3">
           {!compact && <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />}
 
+          <SpecialActions id={entry.entries.id} />
           {items
             .filter((item) => !item.hide)
             .map((item) => (
@@ -228,3 +232,26 @@ const ElectronAdditionActions = IN_ELECTRON
   : noop
 
 export const EntryHeader = memo(EntryHeaderImpl)
+
+const SpecialActions = ({ id }: { id: string }) => {
+  const images = useEntry(id, (entry) => entry.entries.media)
+  const { present } = useModalStack()
+  const filteredImages = filterSmallMedia(images)
+  if (filteredImages?.length && filteredImages.length > 5) {
+    return (
+      <ActionButton
+        onClick={() => {
+          window.analytics?.capture("entry_content_header_image_gallery_click")
+          present({
+            title: "Image Gallery",
+            content: () => <ImageGallery images={filteredImages as any as MediaModel[]} />,
+            max: true,
+          })
+        }}
+        icon={<i className="i-mgc-pic-cute-fi" />}
+        tooltip={`Image Gallery`}
+      />
+    )
+  }
+  return null
+}

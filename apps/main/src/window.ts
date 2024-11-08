@@ -4,11 +4,13 @@ import { fileURLToPath } from "node:url"
 import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { BrowserWindow, screen, shell } from "electron"
+import { app, BrowserWindow, screen, shell } from "electron"
 
+import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
+import { getTrayConfig } from "./lib/tray"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
 
@@ -97,7 +99,9 @@ export function createWindow(
   })
 
   window.on("ready-to-show", () => {
-    window?.show()
+    const shouldShowWindow =
+      !app.getLoginItemSettings().wasOpenedAsHidden && !process.argv.includes(START_IN_TRAY_ARGS)
+    if (shouldShowWindow) window.show()
   })
 
   window.webContents.setWindowOpenHandler((details) => {
@@ -214,7 +218,8 @@ export const createMainWindow = () => {
   windows.mainWindow = window
 
   window.on("close", (event) => {
-    if (isMacOS) {
+    const minimizeToTray = getTrayConfig()
+    if (isMacOS || minimizeToTray) {
       event.preventDefault()
       if (window.isFullScreen()) {
         window.once("leave-full-screen", () => {
@@ -282,7 +287,7 @@ export const getMainWindow = () => windows.mainWindow
 
 export const getMainWindowOrCreate = () => {
   if (!windows.mainWindow) {
-    createMainWindow()
+    return createMainWindow()
   }
   return windows.mainWindow
 }

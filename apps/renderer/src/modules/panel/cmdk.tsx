@@ -377,14 +377,14 @@ const SearchOptions: Component = memo(({ children }) => {
             value={`${SearchType.Entry}`}
             disabled={searchType === SearchType.Entry}
           >
-            {t("search.options.entries")}
+            {t("search.options.entry")}
           </SelectItem>
           <SelectItem
             className="hover:bg-theme-item-hover"
             value={`${SearchType.Feed}`}
             disabled={searchType === SearchType.Feed}
           >
-            {t("search.options.feeds")}
+            {t("search.options.feed")}
           </SelectItem>
         </SelectContent>
       </Select>

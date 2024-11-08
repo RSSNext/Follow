@@ -12,5 +12,5 @@ export const useSettingPageContext = (): SettingPageContext => {
 
 export const useAvailableSettings = () => {
   const ctx = useSettingPageContext()
-  return useMemo(() => settings.filter((t) => !t.loader().hideIf?.(ctx)), [ctx])
+  return useMemo(() => settings.filter((t) => !t.loader.hideIf?.(ctx)), [ctx])
 }

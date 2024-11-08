@@ -63,11 +63,16 @@ class FeedUnreadActions {
     return data
   }
 
+  /**
+   * @returns previous value
+   */
   incrementByFeedId(feedId: string, inc: number) {
     const state = get()
     const cur = state.data[feedId]
+    const nextValue = Math.max(0, (cur || 0) + inc)
 
-    this.internal_setValue([[feedId, Math.max(0, (cur || 0) + inc)]])
+    this.internal_setValue([[feedId, nextValue]])
+    return cur
   }
 
   updateByFeedId(feedId: string, unread: number) {

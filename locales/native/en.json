@@ -42,6 +42,7 @@
   "menu.hide": "Hide {{name}}",
   "menu.hideOthers": "Hide Others",
   "menu.minimize": "Minimize",
+  "menu.open": "Open {{name}}",
   "menu.openLogFile": "Open log file",
   "menu.paste": "Paste",
   "menu.pasteAndMatchStyle": "Paste and Match Style",
@@ -62,6 +63,7 @@
   "menu.undo": "Undo",
   "menu.view": "View",
   "menu.window": "Window",
+  "menu.zenMode": "Zen Mode",
   "menu.zoom": "Zoom",
   "menu.zoomIn": "Zoom In",
   "menu.zoomOut": "Zoom Out"

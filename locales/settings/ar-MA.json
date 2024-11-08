@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "تحديد كمقروء عند العرض",
   "general.mark_as_read.scroll.description": "تحديد المدخلات كمقروءة تلقائيًا فاش كتخرج من العرض.",
   "general.mark_as_read.scroll.label": "تحديد كمقروء عند التمرير",
-  "general.privacy_data": "الخصوصية والبيانات",
   "general.rebuild_database.button": "إعادة بناء",
   "general.rebuild_database.description": "إلى كنتي كتواجه مشاكل فالعرض، إعادة بناء قاعدة البيانات غادي يحلها.",
   "general.rebuild_database.label": "إعادة بناء قاعدة البيانات",

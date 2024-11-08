@@ -73,6 +73,10 @@ type FeedIconFeed =
   | FeedOrListRespModel
 
 type FeedIconEntry = Pick<CombinedEntryModel["entries"], "media" | "authorAvatar">
+const fadeInVariant = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+}
 export function FeedIcon({
   feed,
   entry,
@@ -82,6 +86,7 @@ export function FeedIcon({
   fallback = true,
   siteUrl,
   useMedia,
+  disableFadeIn,
 }: {
   feed?: FeedIconFeed | null
   entry?: FeedIconEntry | null
@@ -95,6 +100,7 @@ export function FeedIcon({
   fallback?: boolean
 
   useMedia?: boolean
+  disableFadeIn?: boolean
 }) {
   const image =
     (useMedia
@@ -122,8 +128,8 @@ export function FeedIcon({
   const colorfulStyle: React.CSSProperties = useMemo(() => {
     const [, , , bgAccent, bgAccentLight, bgAccentUltraLight] = colors
     return {
-      // Create a bottom-left to top-right avatar fallback background gradient
-      backgroundImage: `linear-gradient(to top right, ${bgAccent} 20%, ${bgAccentLight} 80%, ${bgAccentUltraLight} 95%)`,
+      backgroundImage: `linear-gradient(to top, ${bgAccent} 0%, ${bgAccentLight} 99%, ${bgAccentUltraLight} 100%)`,
+
       ...sizeStyle,
     }
   }, [colors, sizeStyle])
@@ -157,7 +163,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
-          <m.img style={sizeStyle} initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
+          <m.img style={sizeStyle} {...(disableFadeIn ? {} : fadeInVariant)} />
         </PlatformIcon>
       )
       break
@@ -173,8 +179,7 @@ export function FeedIcon({
           <m.img
             className={cn("mr-2", className)}
             style={sizeStyle}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            {...(disableFadeIn ? {} : fadeInVariant)}
           />
         </PlatformIcon>
       )

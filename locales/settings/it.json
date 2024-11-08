@@ -86,7 +86,6 @@
   "general.mark_as_read.render.label": "Segna come letto quando è in visualizzazione",
   "general.mark_as_read.scroll.description": "Segna automaticamente le voci come lette quando scorri fuori dalla visualizzazione.",
   "general.mark_as_read.scroll.label": "Segna come letto durante lo scorrimento",
-  "general.privacy_data": "Privacy e Dati",
   "general.rebuild_database.button": "Ricostruisci",
   "general.rebuild_database.description": "Se riscontri problemi di visualizzazione, la ricostruzione del database potrebbe risolverli.",
   "general.rebuild_database.label": "Ricostruisci Database",

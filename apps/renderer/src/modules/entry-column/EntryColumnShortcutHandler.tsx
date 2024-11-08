@@ -67,7 +67,7 @@ export const EntryColumnShortcutHandler: FC<{
         entryId: nextId,
       })
     },
-    { scopes: HotKeyScopeMap.Home, enabled: enabledArrowKey },
+    { scopes: HotKeyScopeMap.Home, enabled: enabledArrowKey, preventDefault: true },
   )
   useHotkeys(
     shortcuts.entries.previous.key,
@@ -87,7 +87,7 @@ export const EntryColumnShortcutHandler: FC<{
         entryId: nextId,
       })
     },
-    { scopes: HotKeyScopeMap.Home, enabled: enabledArrowKey },
+    { scopes: HotKeyScopeMap.Home, enabled: enabledArrowKey, preventDefault: true },
   )
   return null
 })

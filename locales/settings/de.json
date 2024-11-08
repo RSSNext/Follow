@@ -96,7 +96,6 @@
   "general.mark_as_read.scroll.description": "Einträge automatisch als gelesen markieren, wenn sie aus dem Ansichtsbereich gescrollt werden.",
   "general.mark_as_read.scroll.label": "Als gelesen markieren, wenn gescrollt wird",
   "general.network": "Netzwerk",
-  "general.privacy_data": "Datenschutz & Daten",
   "general.proxy.description": "Proxy für Netzwerkverkehrsrouting einrichten, z.B. socks://proxy.beispiel.de:1080",
   "general.proxy.label": "Proxy",
   "general.rebuild_database.button": "Neu aufbauen",

@@ -4,6 +4,7 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
+import { useCorrectZIndex } from "@follow/components/ui/z-index/ctx.js"
 import { useContext } from "react"
 
 import type { LinkProps } from "../../link"
@@ -17,6 +18,7 @@ export const MarkdownLink = (props: LinkProps) => {
   const populatedFullHref = transformUrl(props.href)
 
   const parseTimeStamp = isAudio(populatedFullHref)
+  const zIndex = useCorrectZIndex(0)
   if (parseTimeStamp) {
     const childrenText = props.children
 
@@ -30,6 +32,7 @@ export const MarkdownLink = (props: LinkProps) => {
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <a
+          draggable="false"
           className="follow-link--underline font-semibold text-foreground no-underline"
           href={populatedFullHref}
           title={props.title}
@@ -45,7 +48,7 @@ export const MarkdownLink = (props: LinkProps) => {
       </TooltipTrigger>
       {!!props.href && (
         <TooltipPortal>
-          <TooltipContent align="start" className="break-all" side="bottom">
+          <TooltipContent align="start" className="break-all" style={{ zIndex }} side="bottom">
             {populatedFullHref}
           </TooltipContent>
         </TooltipPortal>

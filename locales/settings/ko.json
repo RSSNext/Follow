@@ -96,7 +96,6 @@
   "general.mark_as_read.scroll.description": "스크롤하여 보기에서 벗어날 때 자동으로 항목을 읽음으로 표시합니다.",
   "general.mark_as_read.scroll.label": "스크롤 시 읽음으로 표시",
   "general.network": "네트워크",
-  "general.privacy_data": "개인정보 및 데이터",
   "general.proxy.description": "네트워크 트래픽 라우팅을 위한 프록시 설정, 예: socks://proxy.example.com:1080",
   "general.proxy.label": "프록시",
   "general.rebuild_database.button": "재구축",

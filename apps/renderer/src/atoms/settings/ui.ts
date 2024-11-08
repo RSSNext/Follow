@@ -1,8 +1,8 @@
 import { createSettingAtom } from "@follow/atoms/helper/setting.js"
 import type { UISettings } from "@follow/shared/interface/settings"
-import { atom, useAtomValue } from "jotai"
-
-import { internal_feedColumnShowAtom } from "../sidebar"
+import { jotaiStore } from "@follow/utils/jotai"
+import { atom, useAtomValue, useSetAtom } from "jotai"
+import { useEventCallback } from "usehooks-ts"
 
 export const createDefaultSettings = (): UISettings => ({
   // Sidebar
@@ -42,6 +42,8 @@ export const createDefaultSettings = (): UISettings => ({
   wideMode: false,
 })
 
+const zenModeAtom = atom(false)
+
 export const {
   useSettingKey: useUISettingKey,
   useSettingSelector: useUISettingSelector,
@@ -61,9 +63,28 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "customCSS",
 ]
 
-const isZenModeAtom = atom((get) => {
-  const ui = get(__uiSettingAtom)
-  return ui.wideMode && !get(internal_feedColumnShowAtom)
-})
+export const useIsZenMode = () => useAtomValue(zenModeAtom)
+export const getIsZenMode = () => jotaiStore.get(zenModeAtom)
 
-export const useIsZenMode = () => useAtomValue(isZenModeAtom)
+export const useSetZenMode = () => {
+  const setZenMode = useSetAtom(zenModeAtom)
+  return useEventCallback((checked: boolean) => {
+    setZenMode(checked)
+  })
+}
+
+export const useToggleZenMode = () => {
+  const setZenMode = useSetZenMode()
+  const isZenMode = useIsZenMode()
+  return useEventCallback(() => {
+    const newIsZenMode = !isZenMode
+    document.documentElement.dataset.zenMode = newIsZenMode.toString()
+    setZenMode(newIsZenMode)
+  })
+}
+
+export const useRealInWideMode = () => {
+  const wideMode = useUISettingKey("wideMode")
+  const isZenMode = useIsZenMode()
+  return wideMode || isZenMode
+}

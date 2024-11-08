@@ -16,7 +16,7 @@ import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
-import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
   setFeedColumnShow,
@@ -30,13 +30,14 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { HotKeyScopeMap } from "~/constants"
+import { HotKeyScopeMap, isDev } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
 import { NetworkStatusIndicator } from "~/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
+import { DebugRegistry } from "~/modules/debug/registry"
 import { FeedColumn } from "~/modules/feed-column"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { CornerPlayer } from "~/modules/feed-column/corner-player"
@@ -214,8 +215,8 @@ const FeedResponsiveResizerContainer = ({
 
       const uiSettings = getUISettings()
       const feedColumnTempShow = getFeedColumnTempShow()
-      const isInEntryContentWideMode = uiSettings.wideMode
-      if (mouseY < 100 && isInEntryContentWideMode) return
+      const isInEntryContentWideMode = uiSettings.wideMode || getIsZenMode()
+      if (mouseY < 200 && isInEntryContentWideMode) return
       const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
       if (mouseX < threshold) {
@@ -355,4 +356,28 @@ const NotSupport = () => {
       </div>
     </div>
   )
+}
+
+if (isDev) {
+  DebugRegistry.add("New User Guide", () => {
+    import("~/modules/new-user-guide/guide-modal-content").then((m) => {
+      window.presentModal({
+        title: "New User Guide",
+        content: ({ dismiss }) => (
+          <m.GuideModalContent
+            onClose={() => {
+              dismiss()
+            }}
+          />
+        ),
+
+        CustomModalComponent: PlainModal,
+        modalContainerClassName: "flex items-center justify-center",
+
+        canClose: false,
+        clickOutsideToDismiss: false,
+        overlay: true,
+      })
+    })
+  })
 }

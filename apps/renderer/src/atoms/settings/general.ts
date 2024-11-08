@@ -10,6 +10,7 @@ const createDefaultSettings = (): GeneralSettings => ({
   // Data control
   dataPersist: true,
   sendAnonymousData: true,
+  reduceRefetch: true,
 
   // view
   unreadOnly: false,

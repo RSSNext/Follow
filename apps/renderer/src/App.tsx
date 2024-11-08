@@ -1,6 +1,6 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn, getOS } from "@follow/utils/utils"
-import { useEffect, useLayoutEffect } from "react"
+import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 
 import { queryClient } from "~/lib/query-client"
@@ -29,22 +29,6 @@ function App() {
     return cleanup
   }, [])
 
-  useLayoutEffect(() => {
-    // Electron app register in app scope, but web app should register in window scope
-    if (IN_ELECTRON) return
-    const handleOpenSettings = (e) => {
-      if (e.key === "," && (e.metaKey || e.ctrlKey)) {
-        window.router.showSettings()
-        e.preventDefault()
-      }
-    }
-    document.addEventListener("keydown", handleOpenSettings)
-
-    return () => {
-      document.removeEventListener("keydown", handleOpenSettings)
-    }
-  }, [])
-
   const windowsElectron = IN_ELECTRON && getOS() === "Windows"
   return (
     <RootProviders>
@@ -69,6 +53,8 @@ const AppLayer = () => {
   const appIsReady = useAppIsReady()
 
   useEffect(() => {
+    document.querySelector("#app-skeleton")?.remove()
+
     const doneTime = Math.trunc(performance.now())
     window.analytics?.capture("ui_render_init", {
       time: doneTime,
@@ -76,8 +62,6 @@ const AppLayer = () => {
     appLog("App is ready", `${doneTime}ms`)
 
     applyAfterReadyCallbacks()
-
-    document.querySelector("#app-skeleton")?.remove()
   }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />

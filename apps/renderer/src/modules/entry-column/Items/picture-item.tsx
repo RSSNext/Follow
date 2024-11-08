@@ -1,3 +1,9 @@
+import {
+  MasonryIntersectionContext,
+  useMasonryItemRatio,
+  useMasonryItemWidth,
+  useSetStableMasonryItemRatio,
+} from "@follow/components/ui/masonry/contexts.jsx"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
@@ -22,12 +28,6 @@ import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
 import { GridItem, GridItemFooter } from "../templates/grid-item-template"
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
-import {
-  MasonryIntersectionContext,
-  useMasonryItemRatio,
-  useMasonryItemWidth,
-  useSetStableMasonryItemRatio,
-} from "./contexts/picture-masonry-context"
 
 export function PictureItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
@@ -75,7 +75,8 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryPreview,
   translation,
   index,
-}: UniversalItemProps & { index: number }) {
+  className,
+}: UniversalItemProps & { index: number; className?: string }) {
   const entry = useEntry(entryId) || entryPreview
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
@@ -97,6 +98,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   }, [ref, intersectionObserver])
 
   const [isMouseEnter, setIsMouseEnter] = useState(false)
+
   if (!entry) return null
 
   const media = filterSmallMedia(entry.entries.media)
@@ -108,6 +110,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
       data-index={index}
       onMouseEnter={() => setIsMouseEnter(true)}
       onMouseLeave={() => setIsMouseEnter(false)}
+      className={className}
     >
       <EntryItemWrapper
         view={FeedViewType.Pictures}

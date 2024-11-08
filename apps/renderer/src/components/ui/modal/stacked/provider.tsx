@@ -4,7 +4,15 @@ import type { FC, PropsWithChildren } from "react"
 import { useEffect } from "react"
 
 import { modalStackAtom } from "./atom"
+import { useModalStack } from "./hooks"
 import { ModalInternal } from "./modal"
+import type { ModalProps } from "./types"
+
+declare global {
+  interface Window {
+    presentModal: (modal: ModalProps) => void
+  }
+}
 
 export const ModalStackProvider: FC<PropsWithChildren> = ({ children }) => (
   <>
@@ -14,6 +22,9 @@ export const ModalStackProvider: FC<PropsWithChildren> = ({ children }) => (
 )
 
 const ModalStack = () => {
+  const { present } = useModalStack()
+  window.presentModal = present
+
   const stack = useAtomValue(modalStackAtom)
 
   const topModalIndex = stack.findLastIndex((item) => item.modal)

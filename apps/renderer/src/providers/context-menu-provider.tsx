@@ -1,9 +1,10 @@
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
-import type { ReactNode } from "react"
-import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react"
+import { Fragment, memo, useCallback, useEffect, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 
+import type { FollowMenuItem } from "~/atoms/context-menu"
+import { useContextMenuState } from "~/atoms/context-menu"
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -19,80 +20,66 @@ import {
 import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
-import type { NativeMenuItem } from "~/lib/native-menu"
-import { CONTEXT_MENU_SHOW_EVENT_KEY } from "~/lib/native-menu"
 
 export const ContextMenuProvider: Component = ({ children }) => (
   <>
     {children}
-
     <Handler />
   </>
 )
 
 const Handler = () => {
   const ref = useRef<HTMLSpanElement>(null)
-
-  const [node, setNode] = useState([] as ReactNode[] | ReactNode)
-
-  const [open, setOpen] = useState(false)
+  const [contextMenuState, setContextMenuState] = useContextMenuState()
 
   const switchHotkeyScope = useSwitchHotKeyScope()
 
   useEffect(() => {
-    if (!open) return
+    if (!contextMenuState.open) return
     switchHotkeyScope("Menu")
     return () => {
       switchHotkeyScope("Home")
     }
-  }, [open, switchHotkeyScope])
+  }, [contextMenuState.open, switchHotkeyScope])
 
   useEffect(() => {
-    const fakeElement = ref.current
-    if (!fakeElement) return
-    const handler = (e: unknown) => {
-      const bizEvent = e as {
-        detail?: {
-          items: NativeMenuItem[]
-          x: number
-          y: number
-        }
-      }
-      if (!bizEvent.detail) return
+    if (!contextMenuState.open) return
+    const triggerElement = ref.current
+    if (!triggerElement) return
+    // [ContextMenu] Add ability to control
+    // https://github.com/radix-ui/primitives/issues/1307#issuecomment-1689754796
+    triggerElement.dispatchEvent(
+      new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: contextMenuState.position.x,
+        clientY: contextMenuState.position.y,
+      }),
+    )
+  }, [contextMenuState])
 
-      if (!("items" in bizEvent.detail) || !("x" in bizEvent.detail) || !("y" in bizEvent.detail)) {
-        return
-      }
-      if (!Array.isArray(bizEvent.detail?.items)) return
-
-      setNode(bizEvent.detail.items.map((item, index) => <Item key={index} item={item} />))
-
-      fakeElement.dispatchEvent(
-        new MouseEvent("contextmenu", {
-          bubbles: true,
-          cancelable: true,
-          clientX: bizEvent.detail.x,
-          clientY: bizEvent.detail.y,
-        }),
-      )
-    }
-
-    // eslint-disable-next-line @eslint-react/web-api/no-leaked-event-listener
-    document.addEventListener(CONTEXT_MENU_SHOW_EVENT_KEY, handler)
-    return () => {
-      document.removeEventListener(CONTEXT_MENU_SHOW_EVENT_KEY, handler)
-    }
-  }, [])
+  const handleOpenChange = useCallback(
+    (state: boolean) => {
+      if (state) return
+      if (!contextMenuState.open) return
+      setContextMenuState({ open: false })
+      contextMenuState.abortController.abort()
+    },
+    [contextMenuState, setContextMenuState],
+  )
 
   return (
-    <ContextMenu onOpenChange={setOpen}>
+    <ContextMenu onOpenChange={handleOpenChange}>
       <ContextMenuTrigger className="hidden" ref={ref} />
-      <ContextMenuContent>{node}</ContextMenuContent>
+      <ContextMenuContent>
+        {contextMenuState.open &&
+          contextMenuState.menuItems.map((item, index) => <Item key={index} item={item} />)}
+      </ContextMenuContent>
     </ContextMenu>
   )
 }
 
-const Item = memo(({ item }: { item: NativeMenuItem }) => {
+const Item = memo(({ item }: { item: FollowMenuItem }) => {
   const onClick = useCallback(() => {
     if ("click" in item) {
       // Here we need to delay one frame,
@@ -109,10 +96,6 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
     scopes: HotKeyScopeMap.Menu,
     preventDefault: true,
   })
-
-  if (item.hide) {
-    return null
-  }
 
   switch (item.type) {
     case "separator": {
@@ -131,7 +114,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
         <Sub>
           <Wrapper
             ref={itemRef}
-            disabled={item.click === undefined && !item.submenu}
+            disabled={item.disabled || (item.click === undefined && !item.submenu)}
             onClick={onClick}
             className="flex items-center gap-2"
             checked={item.checked}

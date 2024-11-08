@@ -1,8 +1,3 @@
-import {
-  MasonryItemsAspectRatioContext,
-  MasonryItemsAspectRatioSetterContext,
-  MasonryItemWidthContext,
-} from "@client/components/items/picture-masonry-context"
 import { TeleportalTakeOff } from "@client/components/layout/main/teleportal"
 import { LazyImage } from "@client/components/ui/image"
 import { getPreferredTitle } from "@client/lib/helper"
@@ -11,6 +6,14 @@ import type { Feed } from "@client/query/feed"
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { TitleMarquee } from "@follow/components/ui/marquee/index.jsx"
+import {
+  MasonryItemsAspectRatioContext,
+  MasonryItemsAspectRatioSetterContext,
+  MasonryItemWidthContext,
+  useMasonryItemRatio,
+  useMasonryItemWidth,
+  useSetStableMasonryItemRatio,
+} from "@follow/components/ui/masonry/contexts.jsx"
 import { Masonry } from "@follow/components/ui/masonry/index.jsx"
 import type { EntryModel } from "@follow/models/types"
 import { nextFrame } from "@follow/utils/dom"
@@ -23,12 +26,6 @@ import type { FC, PropsWithChildren } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { PhotoProvider, PhotoView } from "react-photo-view"
 import inlineStyle from "react-photo-view/dist/react-photo-view.css?raw"
-
-import {
-  useMasonryItemRatio,
-  useMasonryItemWidth,
-  useSetStableMasonryItemRatio,
-} from "./picture-masonry-context"
 
 const MasonryItemFixedDimensionWrapper = (
   props: PropsWithChildren<{

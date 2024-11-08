@@ -7,20 +7,19 @@ import {
 } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedViewType } from "@follow/constants"
-import { useAnyPointDown } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
-import { memo, useCallback, useState } from "react"
+import { memo, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useShowContextMenu } from "~/atoms/context-menu"
 import { getMainContainerElement } from "~/atoms/dom"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getNewIssueUrl } from "~/lib/issues"
-import { showNativeMenu } from "~/lib/native-menu"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
@@ -30,6 +29,7 @@ import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscripti
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useSelectedFeedIds } from "./atom"
+import { DraggableContext } from "./context"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
@@ -52,10 +52,14 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       url: feed.url,
       image: feed.image,
       siteUrl: feed.siteUrl,
+      ownerUserId: feed.ownerUserId,
+      owner: feed.owner,
     }
   })
 
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
+  const draggableContext = useContext(DraggableContext)
+  const isInMultipleSelection = selectedFeedIds.includes(feedId)
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -91,9 +95,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   })
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
+  const showContextMenu = useShowContextMenu()
   if (!feed) return null
 
   const isFeed = feed.type === "feed" || !feed.type
@@ -101,8 +103,15 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   return (
     <>
       <div
+        {...(isInMultipleSelection && draggableContext?.attributes
+          ? draggableContext.attributes
+          : {})}
+        {...(isInMultipleSelection && draggableContext?.listeners
+          ? draggableContext.listeners
+          : {})}
+        style={isInMultipleSelection ? draggableContext?.style : undefined}
         data-feed-id={feedId}
-        data-active={isActive || isContextMenuOpen || selectedFeedIds.includes(feedId)}
+        data-active={isActive || isContextMenuOpen || isInMultipleSelection}
         className={cn(
           "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           feedColumnStyles.item,
@@ -113,8 +122,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         onDoubleClick={() => {
           window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
-        onContextMenu={(e) => {
-          setIsContextMenuOpen(true)
+        onContextMenu={async (e) => {
           const nextItems = items.concat()
           if (isFeed && feed.errorAt && feed.errorMessage) {
             nextItems.push(
@@ -139,7 +147,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
               },
             )
           }
-          showNativeMenu(
+          setIsContextMenuOpen(true)
+          await showContextMenu(
             nextItems.filter(
               (item) =>
                 selectedFeedIds.length === 0 ||
@@ -150,6 +159,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             ),
             e,
           )
+          setIsContextMenuOpen(false)
         }}
       >
         <div
@@ -216,9 +226,6 @@ const ListItemImpl: Component<{
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const subscription = useSubscriptionByFeedId(listId)
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
@@ -240,6 +247,7 @@ const ListItemImpl: Component<{
     },
     [listId, navigate, view],
   )
+  const showContextMenu = useShowContextMenu()
   const { t } = useTranslation()
   if (!list) return null
   return (
@@ -256,10 +264,10 @@ const ListItemImpl: Component<{
       onDoubleClick={() => {
         window.open(UrlBuilder.shareList(listId, view), "_blank")
       }}
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         setIsContextMenuOpen(true)
-
-        showNativeMenu(items, e)
+        await showContextMenu(items, e)
+        setIsContextMenuOpen(false)
       }}
     >
       <div className={"flex min-w-0 items-center"}>
@@ -299,9 +307,6 @@ const InboxItemImpl: Component<{
   const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
-    isContextMenuOpen && setIsContextMenuOpen(false)
-  })
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -315,6 +320,8 @@ const InboxItemImpl: Component<{
     },
     [inboxId, navigate, view],
   )
+  const showContextMenu = useShowContextMenu()
+
   if (!inbox) return null
   return (
     <div
@@ -327,9 +334,10 @@ const InboxItemImpl: Component<{
         className,
       )}
       onClick={handleNavigate}
-      onContextMenu={(e) => {
+      onContextMenu={async (e) => {
         setIsContextMenuOpen(true)
-        showNativeMenu(items, e)
+        await showContextMenu(items, e)
+        setIsContextMenuOpen(false)
       }}
     >
       <div className={"flex min-w-0 items-center"}>

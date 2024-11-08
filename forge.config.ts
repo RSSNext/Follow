@@ -11,6 +11,7 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
+import yaml from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
@@ -25,7 +26,7 @@ const ymlMapsMap = {
   win32: "latest.yml",
 }
 
-const keepModules = new Set(["font-list", "vscode-languagedetection"])
+const keepModules = new Set(["font-list", "vscode-languagedetection", "fast-folder-size"])
 const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
 
 // remove folders & files not to be included in the app
@@ -125,8 +126,8 @@ const config: ForgeConfig = {
     new MakerZIP({}, ["darwin"]),
     new MakerDMG({
       overwrite: true,
-      background: "resources/dmg-background.png",
-      icon: "resources/dmg-icon.icns",
+      background: "static/dmg-background.png",
+      icon: "static/dmg-icon.icns",
       iconSize: 160,
       additionalDMGOptions: {
         window: {
@@ -233,20 +234,14 @@ const config: ForgeConfig = {
         return result
       })
       yml.releaseDate = new Date().toISOString()
-      const ymlStr =
-        `version: ${yml.version}\n` +
-        `files:\n${yml.files
-          .map(
-            (file) =>
-              `  - url: ${file.url}\n` +
-              `    sha512: ${file.sha512}\n` +
-              `    size: ${file.size}\n`,
-          )
-          .join("")}releaseDate: ${yml.releaseDate}\n`
 
       const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${
         ymlMapsMap[makeResults[0].platform]
       }`
+
+      const ymlStr = yaml.dump(yml, {
+        lineWidth: -1,
+      })
       fs.writeFileSync(ymlPath, ymlStr)
 
       makeResults.push({

@@ -1,6 +1,6 @@
 import { Form, FormControl, FormField, FormItem } from "@follow/components/ui/form/index.jsx"
 import type { FeedViewType } from "@follow/constants"
-import { useSubscribeElectronEvent } from "@follow/shared/event"
+import { useRegisterGlobalContext } from "@follow/shared/bridge"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useLayoutEffect } from "react"
@@ -115,7 +115,7 @@ export const CmdNTrigger = () => {
     })
   }
 
-  useSubscribeElectronEvent("QuickAdd", handler)
+  useRegisterGlobalContext("quickAdd", handler)
 
   useHotkeys("meta+n,ctrl+n", handler, {
     scopes: HotKeyScopeMap.Home,

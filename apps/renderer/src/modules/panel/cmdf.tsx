@@ -19,6 +19,8 @@ const CmdFImpl: FC<{
   onClose: () => void
 }> = ({ onClose }) => {
   const [value, setValue] = useState("")
+  const [activeMatchOrdinal, setActiveMatchOrdinal] = useState(0)
+  const [matches, setMatches] = useState(0)
 
   const currentValue = useRefValue(value)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -88,6 +90,10 @@ const CmdFImpl: FC<{
               forward: dir === "forward",
             },
           })
+          .then((result) => {
+            setMatches(result?.matches || 0)
+            setActiveMatchOrdinal(result?.activeMatchOrdinal || 0)
+          })
           .finally(() => {
             if (searchId === searchIdRef.current) {
               setIsSearching(false)
@@ -148,6 +154,11 @@ const CmdFImpl: FC<{
         />
       </div>
       <div className="center gap-1 [&>*]:opacity-80">
+        {!!value && matches > 0 && activeMatchOrdinal > 0 && (
+          <span>
+            {activeMatchOrdinal}/{matches}
+          </span>
+        )}
         <button
           type="button"
           className="center hover:opacity-90"

@@ -26,14 +26,14 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
       feedIdList?: string[]
     }) => {
       if (feedIdList) {
-        await subscriptionActions.unfollowMany(feedIdList)
+        await subscriptionActions.unfollow(feedIdList)
         toast.success(t("notify.unfollow_feed_many"))
         return
       }
 
       if (!subscription) return
 
-      subscriptionActions.unfollow(subscription.feedId).then((feed) => {
+      subscriptionActions.unfollow([subscription.feedId]).then(([feed]) => {
         subscriptionQuery.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
@@ -105,4 +105,24 @@ const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
       />
     </>
   )
+}
+
+export const useBatchUpdateSubscription = () => {
+  return useMutation({
+    mutationFn: async ({
+      feedIdList,
+      category,
+      view,
+    }: {
+      feedIdList: string[]
+      category: string
+      view: number
+    }) => {
+      await subscriptionActions.batchUpdateSubscription({
+        category,
+        feedIdList,
+        view,
+      })
+    },
+  })
 }

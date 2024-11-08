@@ -11,6 +11,7 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
+import manifestPlugin from "./plugins/vite/manifest"
 import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
@@ -69,7 +70,12 @@ export default ({ mode }) => {
           targets: "defaults",
           renderLegacyChunks: false,
           modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
-          modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
+          modernPolyfills: [
+            // https://unpkg.com/browse/core-js@3.39.0/modules/
+            "es.array.find-last-index",
+            "es.array.find-last",
+            "es.promise.with-resolvers",
+          ],
         }),
       htmlInjectPlugin(typedEnv),
       mkcert(),
@@ -142,6 +148,7 @@ export default ({ mode }) => {
       ]),
 
       createPlatformSpecificImportPlugin(false),
+      manifestPlugin(),
     ],
 
     define: {

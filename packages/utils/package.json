@@ -29,10 +29,11 @@
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "clsx": "2.1.1",
-    "framer-motion": "11.11.9",
+    "framer-motion": "11.11.11",
     "lodash-es": "4.17.21",
+    "nanoid": "5.0.8",
     "tailwind-merge": "2.5.4",
-    "tldts": "6.1.51",
+    "tldts": "6.1.58",
     "uniqolor": "1.1.1"
   }
 }

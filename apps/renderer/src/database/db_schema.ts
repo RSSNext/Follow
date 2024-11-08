@@ -38,3 +38,5 @@ export const dbSchemaV7 = {
   ...dbSchemaV6,
   inboxes: "&id",
 }
+
+export const dbSchemaV8 = dbSchemaV7

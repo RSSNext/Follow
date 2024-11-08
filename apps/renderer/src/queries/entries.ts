@@ -1,3 +1,4 @@
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthInfiniteQuery, useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
@@ -125,6 +126,9 @@ export const entries = {
     ),
 }
 
+const maxStaleTime = 6 * 60 * (60 * 1000) // 6 hours
+const defaultStaleTime = 10 * (60 * 1000) // 10 minutes
+
 export const useEntries = ({
   feedId,
   inboxId,
@@ -139,17 +143,24 @@ export const useEntries = ({
   view?: number
   read?: boolean
   isArchived?: boolean
-}) =>
-  useAuthInfiniteQuery(entries.entries({ feedId, inboxId, listId, view, read, isArchived }), {
-    enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
-    getNextPageParam: (lastPage) =>
-      inboxId || listId
-        ? lastPage.data?.at(-1)?.entries.insertedAt
-        : lastPage.data?.at(-1)?.entries.publishedAt,
-    initialPageParam: undefined,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  })
+}) => {
+  const reduceRefetch = useGeneralSettingKey("reduceRefetch")
+  return useAuthInfiniteQuery(
+    entries.entries({ feedId, inboxId, listId, view, read, isArchived }),
+    {
+      enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
+      getNextPageParam: (lastPage) =>
+        inboxId || listId
+          ? lastPage.data?.at(-1)?.entries.insertedAt
+          : lastPage.data?.at(-1)?.entries.publishedAt,
+      initialPageParam: undefined,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+
+      staleTime: reduceRefetch ? maxStaleTime : defaultStaleTime,
+    },
+  )
+}
 
 export const useEntriesPreview = ({ id }: { id?: string }) =>
   useAuthQuery(entries.preview(id!), {

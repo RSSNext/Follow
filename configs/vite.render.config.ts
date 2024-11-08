@@ -7,10 +7,10 @@ import react from "@vitejs/plugin-react"
 import { prerelease } from "semver"
 import type { UserConfig } from "vite"
 
+import { astPlugin } from "../plugins/vite/ast"
 import { circularImportRefreshPlugin } from "../plugins/vite/hmr"
 import { customI18nHmrPlugin } from "../plugins/vite/i18n-hmr"
 import { localesPlugin } from "../plugins/vite/locales"
-import { twMacro } from "../plugins/vite/tw-macro"
 import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
 
@@ -63,12 +63,17 @@ export const viteRenderBaseConfig = {
         electron: false,
       },
       sourcemaps: {
-        filesToDeleteAfterUpload: ["out/web/assets/*.js.map", "dist/renderer/assets/*.js.map"],
+        filesToDeleteAfterUpload: [
+          "out/web/assets/*.js.map",
+          "out/web/vendor/*.js.map",
+          "dist/renderer/assets/*.js.map",
+          "dist/renderer/vendor/*.css.map",
+        ],
       },
     }),
 
     localesPlugin(),
-    twMacro(),
+    astPlugin,
     customI18nHmrPlugin(),
   ],
   define: {

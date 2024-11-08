@@ -1,3 +1,4 @@
+import { MdiMeditation } from "@follow/components/icons/Meditation.jsx"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/index.js"
 import { RotatingRefreshIcon } from "@follow/components/ui/loading/index.jsx"
@@ -12,7 +13,13 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
-import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import {
+  setUISetting,
+  useIsZenMode,
+  useRealInWideMode,
+  useSetZenMode,
+  useUISettingKey,
+} from "~/atoms/settings/ui"
 import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_LIST } from "~/constants"
@@ -234,9 +241,11 @@ const SwitchToMasonryButton = () => {
 }
 
 const WideModeButton = () => {
-  const isWideMode = useUISettingKey("wideMode")
+  const isWideMode = useRealInWideMode()
+  const isZenMode = useIsZenMode()
   const { t } = useTranslation()
 
+  const setIsZenMode = useSetZenMode()
   return (
     <ImpressionView
       event="Switch to Wide Mode"
@@ -247,23 +256,33 @@ const WideModeButton = () => {
       <ActionButton
         shortcut={shortcuts.layout.toggleWideMode.key}
         onClick={() => {
-          setUISetting("wideMode", !isWideMode)
-          // TODO: Remove this after useMeasure can get bounds in time
-          window.dispatchEvent(new Event("resize"))
+          if (isZenMode) {
+            setIsZenMode(false)
+          } else {
+            setUISetting("wideMode", !isWideMode)
+            // TODO: Remove this after useMeasure can get bounds in time
+            window.dispatchEvent(new Event("resize"))
+          }
           window.analytics?.capture("Switch to Wide Mode", {
             wideMode: !isWideMode ? 1 : 0,
             click: 1,
           })
         }}
         tooltip={
-          !isWideMode
-            ? t("entry_list_header.switch_to_widemode")
-            : t("entry_list_header.switch_to_normalmode")
+          isZenMode
+            ? t("zen.exit")
+            : !isWideMode
+              ? t("entry_list_header.switch_to_widemode")
+              : t("entry_list_header.switch_to_normalmode")
         }
       >
-        <i
-          className={cn(isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-align-left-cute-re")}
-        />
+        {isZenMode ? (
+          <MdiMeditation />
+        ) : (
+          <i
+            className={cn(isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-align-left-cute-re")}
+          />
+        )}
       </ActionButton>
     </ImpressionView>
   )

@@ -1,4 +1,5 @@
 import { views } from "@follow/constants"
+import { useMutation } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
@@ -6,8 +7,9 @@ import { useDebounceCallback } from "usehooks-ts"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
+import { apiClient, apiFetch } from "~/lib/api-fetch"
 import { entries, useEntries } from "~/queries/entries"
-import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
+import { entryActions, getEntry, useEntryIdsByFeedIdOrView } from "~/store/entry"
 import { useFolderFeedsByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
@@ -50,6 +52,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   }, [feedView, handleMarkReadInRange, handleRenderAsRead, renderAsRead, scrollMarkUnread])
 }
 const anyString = [] as string[]
+
 export const useEntriesByView = ({
   onReset,
   isArchived,
@@ -113,6 +116,8 @@ export const useEntriesByView = ({
       ).values(),
     ] as string[]
   }, [query.data?.pages])
+
+  useFetchEntryContentByStream(remoteEntryIds)
 
   const currentEntries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : folderIds || feedId!, {
     unread: unreadOnly,
@@ -272,4 +277,83 @@ function sortEntriesIdByEntryInsertedAt(entries: string[]) {
     .sort((a, b) =>
       entriesId2Map[b]?.entries.insertedAt.localeCompare(entriesId2Map[a]?.entries.insertedAt),
     )
+}
+
+const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {
+  const { mutate: updateEntryContent } = useMutation({
+    mutationKey: ["stream-entry-content", remoteEntryIds],
+    mutationFn: async (remoteEntryIds: string[]) => {
+      const onlyNoStored = true
+
+      const nextIds = [] as string[]
+      if (onlyNoStored) {
+        for (const id of remoteEntryIds) {
+          const entry = getEntry(id)
+          if (entry.entries.content) {
+            continue
+          }
+
+          nextIds.push(id)
+        }
+      }
+
+      if (nextIds.length === 0) return
+
+      const readStream = async () => {
+        const response = await apiFetch(apiClient.entries.stream.$url().toString(), {
+          method: "post",
+          body: JSON.stringify({
+            ids: nextIds,
+          }),
+          responseType: "stream",
+        })
+
+        const reader = response.getReader()
+        if (!reader) return
+
+        const decoder = new TextDecoder()
+        let buffer = ""
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split("\n")
+
+            // Process all complete lines
+            for (let i = 0; i < lines.length - 1; i++) {
+              if (lines[i].trim()) {
+                const json = JSON.parse(lines[i])
+                // Handle each JSON line here
+                entryActions.updateEntryContent(json.id, json.content)
+              }
+            }
+
+            // Keep the last incomplete line in the buffer
+            buffer = lines.at(-1) || ""
+          }
+
+          // Process any remaining data
+          if (buffer.trim()) {
+            const json = JSON.parse(buffer)
+
+            entryActions.updateEntryContent(json.id, json.content)
+          }
+        } catch (error) {
+          console.error("Error reading stream:", error)
+        } finally {
+          reader.releaseLock()
+        }
+      }
+
+      readStream()
+    },
+  })
+
+  useEffect(() => {
+    if (!remoteEntryIds) return
+    updateEntryContent(remoteEntryIds)
+  }, [remoteEntryIds, updateEntryContent])
 }
