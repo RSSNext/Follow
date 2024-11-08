@@ -43,7 +43,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
     return (
       <Card className={styles["recommendations-card"]}>
         <CardHeader className="relative p-5 pb-3 @container">
-          <div className="absolute left-0 top-0 h-[50px] w-full overflow-hidden @[280px]:h-[80px]">
+          <div className="absolute left-0 top-0 h-[50px] w-full overflow-hidden @[280px]:h-[80px] dark:brightness-75">
             <span className="opacity-50 blur-2xl">
               <FeedIcon
                 disableFadeIn
