@@ -1,3 +1,4 @@
+import { useDroppable } from "@dnd-kit/core"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
@@ -153,13 +154,26 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const listList = useOwnedListByView(view!)
   const showContextMenu = useShowContextMenu()
 
+  const isAutoGroupedCategory = !!folderName && !subscriptionCategoryExist(folderName)
+
+  const { isOver, setNodeRef } = useDroppable({
+    id: `category-${folderName}`,
+    disabled: isAutoGroupedCategory,
+    data: {
+      category: folderName,
+      view,
+    },
+  })
+
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
         <div
+          ref={setNodeRef}
           data-active={isActive || isContextMenuOpen}
           className={cn(
             "my-px flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
+            isOver && "border-theme-accent-400 bg-theme-accent-400/60",
             feedColumnStyles.item,
           )}
           onClick={(e) => {
@@ -242,7 +256,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.delete_category"),
-                  hide: !folderName || !subscriptionCategoryExist(folderName),
+                  hide: !folderName || isAutoGroupedCategory,
                   click: () => {
                     present({
                       title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
@@ -304,7 +318,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         {open && (
           <m.div
             ref={itemsRef}
-            className="space-y-px overflow-hidden"
+            className="space-y-px"
             initial={
               !!showCollapse && {
                 height: 0,

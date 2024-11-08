@@ -6057,6 +6057,24 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/subscriptions/batch": {
+        $patch: {
+            input: {
+                json: {
+                    view: number;
+                    feedIds: string[];
+                    title?: string | null | undefined;
+                    category?: string | null | undefined;
+                    isPrivate?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 } & {
     "/settings": {
         $get: {
