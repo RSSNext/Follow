@@ -50,6 +50,16 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> imp
   async changeView(feedId: string, view: number) {
     return this.table.where("feedId").equals(feedId).modify({ view })
   }
+  async changeViews(feedIdList: string[], view: number) {
+    return this.table.where("feedId").anyOf(feedIdList).modify({ view })
+  }
+
+  async updateCategory(feedId: string, category: string) {
+    return this.table.where("feedId").equals(feedId).modify({ category })
+  }
+  async updateCategories(feedIdList: string[], category: string) {
+    return this.table.where("feedId").anyOf(feedIdList).modify({ category })
+  }
 
   async removeSubscription(userId: string, feedId: string): Promise<void>
   // @ts-expect-error
