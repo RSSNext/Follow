@@ -1,3 +1,4 @@
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import {
   Select,
   SelectContent,
@@ -5,14 +6,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
+import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.js"
 import { cn, isASCII } from "@follow/utils/utils"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
-import { localStorage } from "~/store/utils/helper"
 
+import { RSSHubCategoryOptions } from "./constants"
 import styles from "./recommendations.module.css"
 import { RecommendationCard } from "./recommendations-card"
 
@@ -27,106 +30,8 @@ const LanguageOptions = [
   },
 ] as const
 
-const CategoryOptions: {
-  name: string
-  value: string
-}[] = [
-  {
-    name: "All",
-    value: "all",
-  },
-  {
-    name: "Social Media",
-    value: "social-media",
-  },
-  {
-    name: "New Media",
-    value: "new-media",
-  },
-  {
-    name: "News",
-    value: "traditional-media",
-  },
-  {
-    name: "BBS",
-    value: "bbs",
-  },
-  {
-    name: "Blog",
-    value: "blog",
-  },
-  {
-    name: "Programming",
-    value: "programming",
-  },
-  {
-    name: "Design",
-    value: "design",
-  },
-  {
-    name: "Live",
-    value: "live",
-  },
-  {
-    name: "Multimedia",
-    value: "multimedia",
-  },
-  {
-    name: "Picture",
-    value: "picture",
-  },
-  {
-    name: "ACG",
-    value: "anime",
-  },
-  {
-    name: "Application Updates",
-    value: "program-update",
-  },
-  {
-    name: "University",
-    value: "university",
-  },
-  {
-    name: "Forecast",
-    value: "forecast",
-  },
-  {
-    name: "Travel",
-    value: "travel",
-  },
-  {
-    name: "Shopping",
-    value: "shopping",
-  },
-  {
-    name: "Gaming",
-    value: "game",
-  },
-  {
-    name: "Reading",
-    value: "reading",
-  },
-  {
-    name: "Government",
-    value: "government",
-  },
-  {
-    name: "Study",
-    value: "study",
-  },
-  {
-    name: "Scientific Journal",
-    value: "journal",
-  },
-  {
-    name: "Finance",
-    value: "finance",
-  },
-]
-
 type Language = (typeof LanguageOptions)[number]["value"]
-type DiscoverCategories = (typeof CategoryOptions)[number]["value"]
+type DiscoverCategories = (typeof RSSHubCategoryOptions)[number]["value"]
 
 export function Recommendations({
   hideTitle,
@@ -136,7 +41,8 @@ export function Recommendations({
   className?: string
 }) {
   const { t } = useTranslation()
-  const lang = localStorage.getItem("follow:I18N_LOCALE") as string | null
+  const lang = useGeneralSettingKey("language")
+
   const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
   const [category, setCategory] = useState<DiscoverCategories>("all")
   const [selectedLang, setSelectedLang] = useState<Language>(defaultLang)
@@ -206,20 +112,22 @@ export function Recommendations({
     <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px] px-4")}>
       {!hideTitle && <div className="text-center text-lg font-bold">{t("discover.popular")}</div>}
 
-      <div className="my-3 flex justify-end gap-4 px-3">
-        <Select value={category} onValueChange={handleCategoryChange}>
-          <SelectTrigger size="sm" className="w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent position="item-aligned">
-            {CategoryOptions.map((category) => (
-              <SelectItem key={category.value} value={category.value}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
+      <div className="my-3 flex w-full items-center gap-4">
+        <ScrollArea.ScrollArea
+          orientation="horizontal"
+          rootClassName="grow min-w-0 overflow-visible"
+          scrollbarClassName="-mb-3 z-[100]"
+        >
+          <Tabs value={category} onValueChange={handleCategoryChange}>
+            <TabsList>
+              {RSSHubCategoryOptions.map((category) => (
+                <TabsTrigger key={category.value} value={category.value}>
+                  {category.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </ScrollArea.ScrollArea>
         <Select value={selectedLang} onValueChange={handleLangChange}>
           <SelectTrigger size="sm" className="w-32">
             <SelectValue />
@@ -234,7 +142,7 @@ export function Recommendations({
         </Select>
       </div>
 
-      <div className={cn(styles["recommendations-grid"], "mt-4", className)}>
+      <div className={cn(styles["recommendations-grid"], "mt-6", className)}>
         {keys.map((key) => (
           <RecommendationCard key={key} data={data[key]} routePrefix={key} />
         ))}

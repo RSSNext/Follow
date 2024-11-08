@@ -127,6 +127,7 @@ export const ScrollArea = React.forwardRef<
     flex?: boolean
     mask?: boolean
     onScroll?: (e: React.UIEvent<HTMLDivElement>) => void
+    orientation?: "vertical" | "horizontal"
   }
 >(
   (
@@ -138,6 +139,7 @@ export const ScrollArea = React.forwardRef<
       scrollbarClassName,
       mask = false,
       onScroll,
+      orientation = "vertical",
     },
     ref,
   ) => {
@@ -156,7 +158,7 @@ export const ScrollArea = React.forwardRef<
           >
             {children}
           </Viewport>
-          <Scrollbar className={scrollbarClassName} />
+          <Scrollbar orientation={orientation} className={scrollbarClassName} />
         </Root>
       </ScrollElementContext.Provider>
     )

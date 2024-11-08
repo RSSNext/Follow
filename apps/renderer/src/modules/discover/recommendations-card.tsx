@@ -40,6 +40,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
         <div className="absolute left-0 top-0 h-[50px] w-full overflow-hidden">
           <span className="opacity-50 blur-2xl">
             <FeedIcon
+              disableFadeIn
               siteUrl={`https://${data.url}`}
               size={400}
               className="pointer-events-none size-[500px]"
@@ -53,7 +54,14 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
               <FeedIcon size={28} className="mr-0" siteUrl={`https://${data.url}`} />
             </span>
           </span>
-          <span className="ml-2 translate-y-1.5">{data.name}</span>
+          <a
+            href={`https://${data.url}`}
+            target="_blank"
+            rel="noreferrer"
+            className="ml-2 translate-y-1.5"
+          >
+            {data.name}
+          </a>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex grow flex-col p-5 pt-0">
@@ -61,7 +69,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
           {Object.keys(data.routes).map((route) => (
             <li
               key={route}
-              className="group hover:text-theme-foreground-hover"
+              className="group ml-1 hover:text-theme-foreground-hover"
               onClick={(e) => {
                 ;(e.target as HTMLElement).querySelector("button")?.click()
               }}
@@ -69,7 +77,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
             >
               <button
                 type="button"
-                className="rounded p-0.5 px-1.5 duration-200 group-hover:bg-muted"
+                className="relative rounded p-0.5 px-1 duration-200 before:absolute before:inset-y-0 before:-left-2 before:my-auto before:size-1.5 before:rounded-full before:bg-accent before:content-[''] group-hover:bg-muted"
                 onClick={() => {
                   present({
                     id: `recommendation-content-${route}`,
