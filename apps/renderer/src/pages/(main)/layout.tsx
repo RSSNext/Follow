@@ -30,13 +30,14 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { HotKeyScopeMap } from "~/constants"
+import { HotKeyScopeMap, isDev } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
 import { NetworkStatusIndicator } from "~/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
+import { DebugRegistry } from "~/modules/debug/registry"
 import { FeedColumn } from "~/modules/feed-column"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { CornerPlayer } from "~/modules/feed-column/corner-player"
@@ -355,4 +356,22 @@ const NotSupport = () => {
       </div>
     </div>
   )
+}
+
+if (isDev) {
+  DebugRegistry.add("New User Guide", () => {
+    import("~/modules/new-user-guide/guide-modal-content").then((m) => {
+      window.presentModal({
+        title: "New User Guide",
+        content: (props) => <m.GuideModalContent onClose={props.dismiss} />,
+
+        CustomModalComponent: PlainModal,
+        modalContainerClassName: "flex items-center justify-center",
+
+        canClose: false,
+        clickOutsideToDismiss: false,
+        overlay: true,
+      })
+    })
+  })
 }

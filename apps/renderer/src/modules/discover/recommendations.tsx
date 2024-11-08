@@ -8,8 +8,9 @@ import {
 } from "@follow/components/ui/select/index.jsx"
 import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.js"
 import { cn, isASCII } from "@follow/utils/utils"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthQuery } from "~/hooks/common"
@@ -33,6 +34,13 @@ const LanguageOptions = [
 type Language = (typeof LanguageOptions)[number]["value"]
 type DiscoverCategories = (typeof RSSHubCategoryOptions)[number]["value"]
 
+const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
+  return Queries.discover.rsshubCategory({
+    category: "popular",
+    categories: category === "all" ? "popular" : `popular,${category}`,
+    lang,
+  })
+}
 export function Recommendations({
   hideTitle,
   className,
@@ -46,14 +54,6 @@ export function Recommendations({
   const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
   const [category, setCategory] = useState<DiscoverCategories>("all")
   const [selectedLang, setSelectedLang] = useState<Language>(defaultLang)
-
-  const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
-    return Queries.discover.rsshubCategory({
-      category: "popular",
-      categories: category === "all" ? "popular" : `popular,${category}`,
-      lang,
-    })
-  }
 
   const rsshubPopular = useAuthQuery(fetchRsshubPopular(category, selectedLang), {
     meta: {
@@ -100,6 +100,11 @@ export function Recommendations({
     setSelectedLang(value as Language)
   }
 
+  const tabRef = useRef<HTMLDivElement>(null)
+  const handleChangeCategoryAndJumpTo = useEventCallback((category: DiscoverCategories) => {
+    setCategory(category)
+  })
+
   if (isLoading) {
     return null
   }
@@ -112,14 +117,14 @@ export function Recommendations({
     <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px] px-4")}>
       {!hideTitle && <div className="text-center text-lg font-bold">{t("discover.popular")}</div>}
 
-      <div className="my-3 flex w-full items-center gap-4">
+      <div className="sticky top-0 z-[9] my-3 flex w-full items-center gap-4 bg-theme-background">
         <ScrollArea.ScrollArea
           orientation="horizontal"
           rootClassName="grow min-w-0 overflow-visible"
           scrollbarClassName="-mb-3 z-[100]"
         >
           <Tabs value={category} onValueChange={handleCategoryChange}>
-            <TabsList>
+            <TabsList ref={tabRef}>
               {RSSHubCategoryOptions.map((category) => (
                 <TabsTrigger key={category.value} value={category.value}>
                   {category.name}
@@ -144,7 +149,12 @@ export function Recommendations({
 
       <div className={cn(styles["recommendations-grid"], "mt-6", className)}>
         {keys.map((key) => (
-          <RecommendationCard key={key} data={data[key]} routePrefix={key} />
+          <RecommendationCard
+            key={key}
+            data={data[key]}
+            routePrefix={key}
+            setCategory={handleChangeCategoryAndJumpTo}
+          />
         ))}
       </div>
     </div>

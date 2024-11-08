@@ -11,7 +11,7 @@ export const discover = {
     categories?: string
     lang?: string
   }) =>
-    defineQuery(["discover", "rsshub", "category", category], async () => {
+    defineQuery(["discover", "rsshub", "category", category, categories, lang], async () => {
       const res = await apiClient.discover.rsshub.$get({
         query: {
           category,

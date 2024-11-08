@@ -32,9 +32,13 @@ export function RSSHubGuide({ categories, lang }: { categories?: string; lang?: 
 
   return (
     <AppErrorBoundary errorType={ErrorComponentType.RSSHubDiscoverError}>
-      <ScrollArea.ScrollArea viewportClassName="h-[450px]">
+      <ScrollArea.ScrollArea
+        viewportClassName="h-[450px]"
+        scrollbarClassName="-mr-4"
+        rootClassName="overflow-visible"
+      >
         <div className="space-y-3">
-          <Recommendations hideTitle className="grid-cols-4" />
+          <Recommendations hideTitle />
         </div>
       </ScrollArea.ScrollArea>
     </AppErrorBoundary>
