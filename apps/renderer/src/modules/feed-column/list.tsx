@@ -110,19 +110,6 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const listsData = useListsGroupedData(view)
   const inboxesData = useInboxesGroupedData(view)
   const categoryOpenStateData = useCategoryOpenStateByView(view)
-  const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
-  useUpdateUnreadCount()
-
-  const totalUnread = useFeedUnreadStore((state) => {
-    let unread = 0
-
-    for (const category in feedsData) {
-      for (const feedId of feedsData[category]) {
-        unread += state.data[feedId] || 0
-      }
-    }
-    return unread
-  })
 
   const hasData =
     Object.keys(feedsData).length > 0 ||
@@ -146,39 +133,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
   return (
     <div className={cn(className, "font-medium")}>
-      <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
-        <div
-          className="font-bold"
-          onClick={(e) => {
-            e.stopPropagation()
-            if (!document.hasFocus()) return
-            if (view !== undefined) {
-              navigateEntry({
-                entryId: null,
-                feedId: null,
-                view,
-              })
-            }
-          }}
-        >
-          {view !== undefined && t(views[view].name)}
-        </div>
-        <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
-          <SortButton />
-          {expansion ? (
-            <i
-              className="i-mgc-list-collapse-cute-re"
-              onClick={() => subscriptionActions.expandCategoryOpenStateByView(view, false)}
-            />
-          ) : (
-            <i
-              className="i-mgc-list-expansion-cute-re"
-              onClick={() => subscriptionActions.expandCategoryOpenStateByView(view, true)}
-            />
-          )}
-          <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
-        </div>
-      </div>
+      <ListHeader view={view} />
       <Selecto
         className="!border-theme-accent-400 !bg-theme-accent-400/60"
         ref={selectoRef}
@@ -296,7 +251,64 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   )
 }
 
-const LIST = [
+const ListHeader = ({ view }: { view: number }) => {
+  const { t } = useTranslation()
+  const feedsData = useFeedsGroupedData(view)
+  const categoryOpenStateData = useCategoryOpenStateByView(view)
+  const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
+  useUpdateUnreadCount()
+
+  const totalUnread = useFeedUnreadStore((state) => {
+    let unread = 0
+
+    for (const category in feedsData) {
+      for (const feedId of feedsData[category]) {
+        unread += state.data[feedId] || 0
+      }
+    }
+    return unread
+  })
+
+  const navigateEntry = useNavigateEntry()
+
+  return (
+    <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
+      <div
+        className="font-bold"
+        onClick={(e) => {
+          e.stopPropagation()
+          if (!document.hasFocus()) return
+          if (view !== undefined) {
+            navigateEntry({
+              entryId: null,
+              feedId: null,
+              view,
+            })
+          }
+        }}
+      >
+        {view !== undefined && t(views[view].name)}
+      </div>
+      <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
+        <SortButton />
+        {expansion ? (
+          <i
+            className="i-mgc-list-collapse-cute-re"
+            onClick={() => subscriptionActions.expandCategoryOpenStateByView(view, false)}
+          />
+        ) : (
+          <i
+            className="i-mgc-list-expansion-cute-re"
+            onClick={() => subscriptionActions.expandCategoryOpenStateByView(view, true)}
+          />
+        )}
+        <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
+      </div>
+    </div>
+  )
+}
+
+const SORT_LIST = [
   { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
   { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
 
@@ -311,6 +323,7 @@ const LIST = [
     order: "desc",
   },
 ] as const
+
 const SortButton = () => {
   const { by, order } = useFeedListSort()
   const { t } = useTranslation()
@@ -353,7 +366,7 @@ const SortButton = () => {
                 <section className="w-[170px] text-center">
                   <span className="text-[13px]">{t("sidebar.select_sort_method")}</span>
                   <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
-                    {LIST.map(({ icon, by, order }) => {
+                    {SORT_LIST.map(({ icon, by, order }) => {
                       const current = getFeedListSort()
                       const active = by === current.by && order === current.order
                       return (
