@@ -140,9 +140,11 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const style = useMemo(
     () =>
       transform
-        ? {
+        ? ({
             transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-          }
+            transitionDuration: "0",
+            transition: "none",
+          } as React.CSSProperties)
         : undefined,
     [transform],
   )
@@ -151,7 +153,10 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
     () => ({
       attributes,
       listeners,
-      style,
+      style: {
+        ...style,
+        willChange: "transform",
+      },
     }),
     [attributes, listeners, style],
   )
