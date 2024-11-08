@@ -154,8 +154,11 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const listList = useOwnedListByView(view!)
   const showContextMenu = useShowContextMenu()
 
+  const isAutoGroupedCategory = !!folderName && !subscriptionCategoryExist(folderName)
+
   const { isOver, setNodeRef } = useDroppable({
     id: `category-${folderName}`,
+    disabled: isAutoGroupedCategory,
     data: {
       category: folderName,
       view,
@@ -253,7 +256,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.delete_category"),
-                  hide: !folderName || !subscriptionCategoryExist(folderName),
+                  hide: !folderName || isAutoGroupedCategory,
                   click: () => {
                     present({
                       title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
