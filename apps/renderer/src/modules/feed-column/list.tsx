@@ -10,6 +10,7 @@ import { memo, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
+import { useEventListener } from "usehooks-ts"
 
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST } from "~/constants"
@@ -26,12 +27,14 @@ import { useFeedUnreadStore } from "~/store/unread"
 
 import {
   getFeedListSort,
+  setFeedAreaScrollProgressValue,
   setFeedListSortBy,
   setFeedListSortOrder,
   useFeedListSort,
   useSelectedFeedIds,
 } from "./atom"
 import { DraggableContext } from "./context"
+import { useShouldFreeUpSpace } from "./hook"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
@@ -161,6 +164,32 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
     [attributes, listeners, style],
   )
 
+  useEventListener(
+    "scroll",
+    () => {
+      const round = (num: number) => Math.round(num * 1e2) / 1e2
+      const getPositions = () => {
+        const el = scrollerRef.current
+        if (!el) return
+
+        return {
+          x: round(el.scrollLeft / (el.scrollWidth - el.clientWidth)),
+          y: round(el.scrollTop / (el.scrollHeight - el.clientHeight)),
+        }
+      }
+
+      const newScrollValues = getPositions()
+      if (!newScrollValues) return
+
+      const { y } = newScrollValues
+      setFeedAreaScrollProgressValue(y)
+    },
+    scrollerRef,
+    { capture: false, passive: true },
+  )
+
+  const shouldFreeUpSpace = useShouldFreeUpSpace()
+
   return (
     <div className={cn(className, "font-medium")}>
       <ListHeader view={view} />
@@ -207,8 +236,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         }}
         mask={false}
         flex
-        viewportClassName={cn("!px-3", isDragging && "!overflow-visible")}
-        rootClassName={cn("h-full", isDragging && "overflow-visible")}
+        viewportClassName={cn("!px-3", shouldFreeUpSpace && "!overflow-visible")}
+        rootClassName={cn("h-full", shouldFreeUpSpace && "overflow-visible")}
       >
         <div
           data-active={feedId === FEED_COLLECTION_LIST}

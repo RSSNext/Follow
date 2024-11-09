@@ -16,6 +16,11 @@ export const doMigration = async () => {
 
   if (lastVersion === APP_VERSION) return
 
+  const lastVersionParts = lastVersion.split("-")
+  const lastVersionMajorMinor = lastVersionParts[0]
+  const currentVersionMajorMinor = APP_VERSION.split("-")[0]
+  if (lastVersionMajorMinor === currentVersionMajorMinor) return
+
   // NOTE: Add migration logic here
 
   if (!APP_VERSION.includes("nightly")) {

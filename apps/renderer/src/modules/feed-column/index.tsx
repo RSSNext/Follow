@@ -1,6 +1,5 @@
-import { DndContext, pointerWithin, useDroppable } from "@dnd-kit/core"
+import { useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
-import type { FeedViewType } from "@follow/constants"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
@@ -21,15 +20,15 @@ import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
-import { useBatchUpdateSubscription } from "~/hooks/biz/useSubscriptionActions"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useSubscriptionStore } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { WindowUnderBlur } from "../../components/ui/background"
-import { getSelectedFeedIds, setSelectedFeedIds, useSelectedFeedIds } from "./atom"
+import { getSelectedFeedIds, setSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
+import { useShouldFreeUpSpace } from "./hook"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -138,72 +137,52 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     window.router.navigate(Routes.Discover)
   })
 
-  const [selectedIds, setSelectedIds] = useSelectedFeedIds()
-
-  const { mutate } = useBatchUpdateSubscription()
+  const shouldFreeUpSpace = useShouldFreeUpSpace()
 
   return (
-    <DndContext
-      collisionDetection={pointerWithin}
-      onDragEnd={(event) => {
-        if (!event.over) {
-          return
-        }
-
-        const { category, view } = event.over.data.current as {
-          category: string
-          view: FeedViewType
-        }
-
-        mutate({ category, view, feedIdList: selectedIds })
-
-        setSelectedIds([])
-      }}
+    <WindowUnderBlur
+      className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
+      onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
-      <WindowUnderBlur
-        className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
-        onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
+      <FeedColumnHeader />
+
+      <div
+        className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
+        onClick={stopPropagation}
       >
-        <FeedColumnHeader />
-
-        <div
-          className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
-          onClick={stopPropagation}
-        >
+        {views.map((item, index) => (
+          <ViewSwitchButton
+            key={item.name}
+            item={item}
+            index={index}
+            active={active}
+            setActive={setActive}
+            useHotkeysSwitch={useHotkeysSwitch}
+            setUseHotkeysSwitch={setUseHotkeysSwitch}
+          />
+        ))}
+      </div>
+      <div
+        className={cn("relative flex size-full", !shouldFreeUpSpace && "overflow-hidden")}
+        ref={carouselRef}
+        onPointerDown={useTypeScriptHappyCallback((e) => {
+          if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
+            const nextSelectedFeedIds = getSelectedFeedIds()
+            setSelectedFeedIds(nextSelectedFeedIds.length === 0 ? nextSelectedFeedIds : [])
+          }
+        }, [])}
+      >
+        <SwipeWrapper active={active}>
           {views.map((item, index) => (
-            <ViewSwitchButton
-              key={item.name}
-              item={item}
-              index={index}
-              active={active}
-              setActive={setActive}
-              useHotkeysSwitch={useHotkeysSwitch}
-              setUseHotkeysSwitch={setUseHotkeysSwitch}
-            />
+            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
+              <FeedList className="flex size-full flex-col text-sm" view={index} />
+            </section>
           ))}
-        </div>
-        <div
-          className="relative flex size-full"
-          ref={carouselRef}
-          onPointerDown={useTypeScriptHappyCallback((e) => {
-            if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
-              const nextSelectedFeedIds = getSelectedFeedIds()
-              setSelectedFeedIds(nextSelectedFeedIds.length === 0 ? nextSelectedFeedIds : [])
-            }
-          }, [])}
-        >
-          <SwipeWrapper active={active}>
-            {views.map((item, index) => (
-              <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
-                <FeedList className="flex size-full flex-col text-sm" view={index} />
-              </section>
-            ))}
-          </SwipeWrapper>
-        </div>
+        </SwipeWrapper>
+      </div>
 
-        {children}
-      </WindowUnderBlur>
-    </DndContext>
+      {children}
+    </WindowUnderBlur>
   )
 }
 
