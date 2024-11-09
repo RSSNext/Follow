@@ -13,4 +13,5 @@ export default defineConfig({
   commit_message: "chore(release): hotfix to release v${NEW_VERSION}",
   tag: false,
   changelog: true,
+  allowedBranches: ["hotfix/*"],
 })

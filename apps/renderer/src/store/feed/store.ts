@@ -54,7 +54,13 @@ class FeedActions {
           if (targetFeed?.owner) {
             feed.owner = { ...targetFeed.owner }
           }
-          if (targetFeed && "tipUsers" in targetFeed && targetFeed.tipUsers) {
+          if (
+            targetFeed &&
+            "tipUsers" in targetFeed &&
+            targetFeed.tipUsers &&
+            // Workaround for type issue
+            Array.isArray(targetFeed.tipUsers)
+          ) {
             feed.tipUsers = [...targetFeed.tipUsers]
           }
 
