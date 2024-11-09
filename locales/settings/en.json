@@ -101,7 +101,6 @@
   "data_control.clean_cache.description": "Clean the app cache to free up space.",
   "feeds.claimTips": "To claim your feeds and receive tips, right-click on the feed in your subscription list and select Claim.",
   "feeds.noFeeds": "No claimed feeds",
-  "feeds.tableHeaders.entryCount": "Entries",
   "feeds.tableHeaders.name": "Name",
   "feeds.tableHeaders.subscriptionCount": "Subs",
   "feeds.tableHeaders.tipAmount": "Tips",

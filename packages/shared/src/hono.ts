@@ -6366,7 +6366,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     };
                     subscriptionCount: number;
                     tipAmount: number;
-                    entryCount: number;
                 }[];
             };
             outputFormat: "json" | "text";

@@ -85,7 +85,6 @@
   "common.give_star": "<HeartIcon />喜歡我們的產品嗎？ <Link>在 GitHub 上給我們 star 吧！</Link>",
   "feeds.claimTips": "要認領你的 feed 並接收贊助，請右鍵點擊訂閱列表中的 feed，然後選擇「認領」。",
   "feeds.noFeeds": "沒有已認領的 feed",
-  "feeds.tableHeaders.entryCount": "條目數",
   "feeds.tableHeaders.name": "名稱",
   "feeds.tableHeaders.subscriptionCount": "訂閱數",
   "feeds.tableHeaders.tipAmount": "收到的贊助",

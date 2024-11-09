@@ -78,7 +78,6 @@
   "common.give_star": "<HeartIcon />Ürünümüzü beğendiniz mi? <Link>GitHub'da bize bir yıldız verin!</Link>",
   "feeds.claimTips": "Beslemelerinizi talep etmek ve bahşiş almak için, abonelik listenizde beslemeye sağ tıklayın ve Talep Et'i seçin.",
   "feeds.noFeeds": "Talep edilmiş besleme yok",
-  "feeds.tableHeaders.entryCount": "Girdiler",
   "feeds.tableHeaders.name": "İsim",
   "feeds.tableHeaders.subscriptionCount": "Abonelikler",
   "feeds.tableHeaders.tipAmount": "Alınan bahşişler",

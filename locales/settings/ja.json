@@ -97,7 +97,6 @@
   "common.give_star": "<HeartIcon />私たちの製品が好きですか？<Link>GitHub で Star を付けましょう！</Link>",
   "feeds.claimTips": "フィードを認証してチップを受け取るには、購読リストのフィードを右クリックして「フィードをクレーム」を選択してください。",
   "feeds.noFeeds": "認証されたフィードはありません",
-  "feeds.tableHeaders.entryCount": "エントリ数",
   "feeds.tableHeaders.name": "名前",
   "feeds.tableHeaders.subscriptionCount": "購読者",
   "feeds.tableHeaders.tipAmount": "受け取った報酬",

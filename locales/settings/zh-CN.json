@@ -101,7 +101,6 @@
   "data_control.clean_cache.description": "清理应用缓存以释放空间。",
   "feeds.claimTips": "要认证你的订阅源并接收打赏，请在订阅列表中右键点击订阅源并选择“认证”。",
   "feeds.noFeeds": "没有已认证的订阅源",
-  "feeds.tableHeaders.entryCount": "条目数",
   "feeds.tableHeaders.name": "名称",
   "feeds.tableHeaders.subscriptionCount": "订阅数",
   "feeds.tableHeaders.tipAmount": "收到的打赏",
