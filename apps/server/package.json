@@ -49,6 +49,7 @@
     "@radix-ui/react-avatar": "1.1.1",
     "chokidar": "4.0.1",
     "daisyui": "4.12.14",
+    "dotenv-flow": "4.1.0",
     "foxact": "0.2.41",
     "glob": "11.0.0",
     "lightningcss": "1.27.0",

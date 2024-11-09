@@ -1,7 +1,5 @@
-import { resolve } from "node:path"
-
-import { config } from "dotenv"
+import { config } from "dotenv-flow"
 
 config({
-  path: resolve(__dirname, "../../.env"),
+  files: [".env.development.local", ".env"],
 })
