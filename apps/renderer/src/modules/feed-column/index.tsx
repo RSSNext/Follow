@@ -14,8 +14,8 @@ import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useSidebarActiveView } from "~/atoms/sidebar"
-import { HotKeyScopeMap } from "~/constants"
+import { useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
+import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
@@ -138,10 +138,16 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   })
 
   const shouldFreeUpSpace = useShouldFreeUpSpace()
+  const feedColumnShow = useFeedColumnShow()
 
   return (
     <WindowUnderBlur
-      className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
+      className={cn(
+        "relative flex h-full flex-col space-y-3 pt-2.5",
+
+        !feedColumnShow && isElectronBuild && "bg-zinc-200/80 backdrop-blur dark:bg-neutral-800/80",
+        className,
+      )}
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <FeedColumnHeader />
