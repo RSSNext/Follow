@@ -44,3 +44,6 @@ export const [
   setSelectedFeedIds,
   useSelectedFeedIdsSelector,
 ] = createAtomHooks(atom<string[]>([]))
+
+export const [, , useFeedAreaScrollProgressValue, , , setFeedAreaScrollProgressValue] =
+  createAtomHooks(atom(0))
