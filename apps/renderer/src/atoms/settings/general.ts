@@ -13,7 +13,7 @@ const createDefaultSettings = (): GeneralSettings => ({
   reduceRefetch: true,
 
   // view
-  unreadOnly: false,
+  unreadOnly: true,
   // mark unread
   scrollMarkUnread: true,
   hoverMarkUnread: true,
