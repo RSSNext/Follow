@@ -71,7 +71,7 @@ const Handler = () => {
   return (
     <ContextMenu onOpenChange={handleOpenChange}>
       <ContextMenuTrigger className="hidden" ref={ref} />
-      <ContextMenuContent>
+      <ContextMenuContent onContextMenu={(e) => e.preventDefault()}>
         {contextMenuState.open &&
           contextMenuState.menuItems.map((item, index) => <Item key={index} item={item} />)}
       </ContextMenuContent>
