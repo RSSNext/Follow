@@ -1,4 +1,3 @@
-import { useDraggable } from "@dnd-kit/core"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
@@ -31,7 +30,6 @@ import {
   useFeedListSort,
   useSelectedFeedIds,
 } from "./atom"
-import { DraggableContext } from "./context"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
@@ -131,35 +129,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
   const scrollerRef = useRef<HTMLDivElement>(null)
   const selectoRef = useRef<Selecto>(null)
-  const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
-
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: "selected-feed",
-    disabled: selectedFeedIds.length === 0,
-  })
-  const style = useMemo(
-    () =>
-      transform
-        ? ({
-            transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-            transitionDuration: "0",
-            transition: "none",
-          } as React.CSSProperties)
-        : undefined,
-    [transform],
-  )
-
-  const draggableContextValue = useMemo(
-    () => ({
-      attributes,
-      listeners,
-      style: {
-        ...style,
-        willChange: "transform",
-      },
-    }),
-    [attributes, listeners, style],
-  )
+  const [_selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -169,7 +139,6 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => !(selectedFeedIds.length > 0 && isDragging)}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
         hitRate={10}
@@ -207,8 +176,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         }}
         mask={false}
         flex
-        viewportClassName={cn("!px-3", isDragging && "!overflow-visible")}
-        rootClassName={cn("h-full", isDragging && "overflow-visible")}
+        viewportClassName={cn("!px-3")}
+        rootClassName={cn("h-full")}
       >
         <div
           data-active={feedId === FEED_COLLECTION_LIST}
@@ -247,38 +216,36 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           </>
         )}
 
-        <DraggableContext.Provider value={draggableContextValue}>
-          <div className="space-y-px" id="feeds-area" ref={setNodeRef}>
-            {(hasListData || hasInboxData) && (
-              <div
-                className={cn(
-                  "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
-                  Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
-                )}
+        <div className="space-y-px" id="feeds-area">
+          {(hasListData || hasInboxData) && (
+            <div
+              className={cn(
+                "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+              )}
+            >
+              {t("words.feeds")}
+            </div>
+          )}
+          {hasData ? (
+            <SortableFeedList
+              view={view}
+              data={feedsData}
+              categoryOpenStateData={categoryOpenStateData}
+            />
+          ) : (
+            <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
+              <Link
+                to="/discover"
+                className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
+                onClick={stopPropagation}
               >
-                {t("words.feeds")}
-              </div>
-            )}
-            {hasData ? (
-              <SortableFeedList
-                view={view}
-                data={feedsData}
-                categoryOpenStateData={categoryOpenStateData}
-              />
-            ) : (
-              <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
-                <Link
-                  to="/discover"
-                  className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
-                  onClick={stopPropagation}
-                >
-                  <i className="i-mgc-add-cute-re text-3xl" />
-                  <span className="text-base">{t("sidebar.add_more_feeds")}</span>
-                </Link>
-              </div>
-            )}
-          </div>
-        </DraggableContext.Provider>
+                <i className="i-mgc-add-cute-re text-3xl" />
+                <span className="text-base">{t("sidebar.add_more_feeds")}</span>
+              </Link>
+            </div>
+          )}
+        </div>
       </ScrollArea.ScrollArea>
     </div>
   )

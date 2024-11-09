@@ -11,7 +11,7 @@ import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
-import { memo, useCallback, useContext, useState } from "react"
+import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useShowContextMenu } from "~/atoms/context-menu"
@@ -29,7 +29,6 @@ import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscripti
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useSelectedFeedIds } from "./atom"
-import { DraggableContext } from "./context"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
@@ -58,7 +57,6 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   })
 
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
-  const draggableContext = useContext(DraggableContext)
   const isInMultipleSelection = selectedFeedIds.includes(feedId)
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
@@ -103,13 +101,6 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   return (
     <>
       <div
-        {...(isInMultipleSelection && draggableContext?.attributes
-          ? draggableContext.attributes
-          : {})}
-        {...(isInMultipleSelection && draggableContext?.listeners
-          ? draggableContext.listeners
-          : {})}
-        style={isInMultipleSelection ? draggableContext?.style : undefined}
         data-feed-id={feedId}
         data-active={isActive || isContextMenuOpen || isInMultipleSelection}
         className={cn(
