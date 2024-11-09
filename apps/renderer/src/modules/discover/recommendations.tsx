@@ -35,7 +35,7 @@ const LanguageOptions = [
 ] as const
 
 type Language = (typeof LanguageOptions)[number]["value"]
-type DiscoverCategories = (typeof RSSHubCategories)[number]
+type DiscoverCategories = (typeof RSSHubCategories)[number] | string
 
 const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
   return Queries.discover.rsshubCategory({
@@ -168,7 +168,7 @@ export function Recommendations({
             <TabsList>
               {RSSHubCategories.map((category) => (
                 <TabsTrigger data-value={category} key={category} value={category}>
-                  {t(`discover.category.${category}` as any)}
+                  {t(`discover.category.${category}`)}
                 </TabsTrigger>
               ))}
             </TabsList>

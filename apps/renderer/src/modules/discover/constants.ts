@@ -1,4 +1,4 @@
-export const RSSHubCategories: string[] = [
+export const RSSHubCategories = [
   "all",
   "social-media",
   "new-media",
@@ -22,4 +22,4 @@ export const RSSHubCategories: string[] = [
   "study",
   "journal",
   "finance",
-]
+] as const
