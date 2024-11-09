@@ -19,8 +19,10 @@ const pkg = JSON.parse(readFileSync(resolve(pkgDir, "./package.json"), "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
 
 const getChangelogFileContent = () => {
-  const { version } = pkg
+  const { version: pkgVersion } = pkg
   const isDev = process.env.NODE_ENV === "development"
+  // get major-minor-patch, e.g. 0.2.0-beta.2 -> 0.2.0
+  const version = pkgVersion.split("-")[0]
   try {
     return readFileSync(resolve(pkgDir, "./changelog", `${isDev ? "next" : version}.md`), "utf8")
   } catch {
