@@ -21,11 +21,7 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
   const feed = useFeedById(entry?.feedId)
   const { data: feedBoosters } = useFeedBoostersQuery(entry?.feedId)
 
-  const openTipModal = useTipModal({
-    userId: feed?.ownerUserId ?? undefined,
-    feedId: entry?.feedId,
-    entryId,
-  })
+  const openTipModal = useTipModal()
   const openBoostModal = useBoostModal()
 
   const isMyOwnedFeed = feed?.ownerUserId === useWhoami()?.id
@@ -60,7 +56,15 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
 
         <div className="flex items-center gap-4">
           {!isMyOwnedFeed && (
-            <Button onClick={() => openTipModal()}>
+            <Button
+              onClick={() =>
+                openTipModal({
+                  userId: feed.ownerUserId ?? undefined,
+                  feedId: entry?.feedId,
+                  entryId,
+                })
+              }
+            >
               <i className="i-mgc-power-outline mr-1.5 text-lg" />
               {t("entry_content.support_creator")}
             </Button>
