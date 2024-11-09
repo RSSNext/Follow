@@ -44,7 +44,7 @@ function bootstrap() {
   app.on("second-instance", (_, commandLine) => {
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
+      mainWindow.show()
     }
 
     const url = commandLine.pop()
