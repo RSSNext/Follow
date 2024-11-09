@@ -159,7 +159,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         ))}
       </div>
       <div
-        className="relative flex size-full"
+        className="relative flex size-full overflow-hidden"
         ref={carouselRef}
         onPointerDown={useTypeScriptHappyCallback((e) => {
           if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
