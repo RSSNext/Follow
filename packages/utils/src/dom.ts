@@ -1,8 +1,7 @@
-import type { ReactEventHandler } from "react"
+export const stopPropagation = <T extends { stopPropagation: () => any }>(e: T) =>
+  e.stopPropagation()
 
-export const stopPropagation: ReactEventHandler<any> = (e) => e.stopPropagation()
-
-export const preventDefault: ReactEventHandler<any> = (e) => e.preventDefault()
+export const preventDefault = <T extends { preventDefault: () => any }>(e: T) => e.preventDefault()
 
 export const nextFrame = (fn: (...args: any[]) => any) => {
   requestAnimationFrame(() => {

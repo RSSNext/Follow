@@ -241,7 +241,7 @@ export const ModalInternal = memo(
               <Dialog.Content
                 asChild
                 aria-describedby={undefined}
-                onPointerDownOutside={(event) => event.preventDefault()}
+                onPointerDownOutside={preventDefault}
                 onOpenAutoFocus={openAutoFocus}
               >
                 <div
@@ -291,7 +291,6 @@ export const ModalInternal = memo(
             <Dialog.Content
               asChild
               aria-describedby={undefined}
-              // @ts-expect-error
               onPointerDownOutside={preventDefault}
               onOpenAutoFocus={openAutoFocus}
             >
