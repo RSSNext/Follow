@@ -20,7 +20,7 @@ export const CSSEditor: Component<{
   const ref = useRef<HTMLDivElement>(null)
 
   const isDark = useIsDark()
-  const updateFnRef = useRef<() => void>()
+
   useLayoutEffect(() => {
     let dispose: () => void
     if (ref.current) {
@@ -34,7 +34,7 @@ export const CSSEditor: Component<{
       selection?.addRange(range)
 
       ref.current.textContent = defaultValue ?? ""
-      const { dispose: disposeShiki, update } = createPlainShiki(shiki).mount(ref.current, {
+      const { dispose: disposeShiki } = createPlainShiki(shiki).mount(ref.current, {
         lang: "css",
         themes: {
           light: "github-light",
@@ -42,7 +42,7 @@ export const CSSEditor: Component<{
         },
         defaultTheme: isDark ? "dark" : "light",
       })
-      updateFnRef.current = update
+
       dispose = disposeShiki
     }
     return () => dispose?.()
@@ -70,50 +70,10 @@ export const CSSEditor: Component<{
       })
     },
   })
-  const handleCopy = useEventCallback((e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.clipboardData.setData("text/plain", ref.current?.textContent ?? "")
-  })
-  const handlePaste = useEventCallback((e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    const text = e.clipboardData.getData("text/plain")
-
-    const selection = window.getSelection()
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0)
-      // Delete the current selection
-      range.deleteContents()
-      // Insert the text at the current cursor position
-      range.insertNode(document.createTextNode(text))
-
-      range.setStartAfter(range.endContainer)
-      range.setEndAfter(range.endContainer)
-      selection.removeAllRanges()
-      selection.addRange(range)
-    }
-    updateFnRef.current?.()
+  const handleInput = useEventCallback(() => {
     onChange(ref.current?.textContent ?? "")
-    // Focus the editor and set cursor to the end
-    if (ref.current) {
-      ref.current.focus()
-      const selection = window.getSelection()
-      const range = document.createRange()
-      range.selectNodeContents(ref.current)
-      range.collapse(false) // collapse to end
-      selection?.removeAllRanges()
-      selection?.addRange(range)
-
-      // Get selection position
-      const rect = range.getBoundingClientRect()
-      const containerRect = ref.current.getBoundingClientRect()
-      const relativeBottom = rect.bottom - containerRect.top
-
-      // If out of view, scroll to the position
-      if (relativeBottom > ref.current.clientHeight) {
-        ref.current.scrollTop += relativeBottom - ref.current.clientHeight
-      }
-    }
   })
+
   return (
     <div
       className={cn(
@@ -127,9 +87,8 @@ export const CSSEditor: Component<{
         className,
       )}
       ref={ref}
-      onCopy={handleCopy}
-      onPaste={handlePaste}
-      contentEditable
+      onInput={handleInput}
+      contentEditable="plaintext-only"
       tabIndex={0}
       {...props}
     />

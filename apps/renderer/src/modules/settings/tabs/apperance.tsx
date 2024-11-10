@@ -313,7 +313,7 @@ const CustomCSS = () => {
             resizeable: true,
             resizeDefaultSize: {
               width: 700,
-              height: 400,
+              height: window.innerHeight - 200,
             },
           })
         }}
