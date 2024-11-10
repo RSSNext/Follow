@@ -111,6 +111,7 @@ export type ActionsInput = {
     summary?: boolean
     readability?: boolean
     silence?: boolean
+    block?: boolean
     sourceContent?: boolean
     newEntryNotification?: boolean
     rewriteRules?: {
