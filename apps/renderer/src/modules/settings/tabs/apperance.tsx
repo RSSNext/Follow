@@ -383,7 +383,9 @@ const CustomCSSModal = () => {
           variant="outline"
           onClick={(e) => {
             e.preventDefault()
+
             setUISetting("customCSS", initialCSS.current)
+
             forceUpdate()
           }}
         >
