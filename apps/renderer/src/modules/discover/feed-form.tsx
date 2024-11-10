@@ -202,8 +202,8 @@ const FeedInnerForm = ({
       form.setValue("view", `${subscription?.view}`)
       subscription?.category && form.setValue("category", subscription.category)
       form.setValue("isPrivate", subscription?.isPrivate || false)
-      form.setValue("title", subscription?.title || "")
     }
+    form.setValue("title", subscription?.title || feed.title || "")
   }, [subscription])
 
   const followMutation = useMutation({
@@ -290,7 +290,7 @@ const FeedInnerForm = ({
                   <FormDescription>{t("feed_form.title_description")}</FormDescription>
                 </div>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} placeholder={feed.title || ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
