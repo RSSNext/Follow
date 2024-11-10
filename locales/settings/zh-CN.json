@@ -16,7 +16,7 @@
   "actions.action_card.feed_options.entry_content": "条目内容",
   "actions.action_card.feed_options.entry_media_length": "条目媒体时长",
   "actions.action_card.feed_options.entry_title": "条目标题",
-  "actions.action_card.feed_options.entry_url": "条目 URL",
+  "actions.action_card.feed_options.entry_url": "条目地址",
   "actions.action_card.feed_options.feed_category": "订阅源分类",
   "actions.action_card.feed_options.feed_title": "订阅源标题",
   "actions.action_card.feed_options.feed_url": "订阅源地址",
