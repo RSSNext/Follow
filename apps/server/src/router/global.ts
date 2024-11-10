@@ -3,7 +3,7 @@ import path, { resolve } from "node:path"
 
 import { env } from "@follow/shared/env"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
-import { minify } from "html-minifier"
+import { minify } from "html-minifier-terser"
 import { parseHTML } from "linkedom"
 import { FetchError } from "ofetch"
 import xss from "xss"
