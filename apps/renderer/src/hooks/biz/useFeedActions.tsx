@@ -89,7 +89,7 @@ export const useFeedActions = ({
 
   const listByView = useOwnedListByView(view!)
 
-  const isMultipleSelection = feedIds && feedIds.length > 0
+  const isMultipleSelection = feedIds && feedIds.length > 1
 
   const items = useMemo(() => {
     const related = feed || inbox
