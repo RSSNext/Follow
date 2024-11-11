@@ -69,7 +69,9 @@ export const getCacheSize = async () => {
   const cachePath = path.join(app.getPath("userData"), "cache")
 
   // Size is in bytes
-  const sizeInBytes = await fastFolderSizeAsync(cachePath)
+  const sizeInBytes = await fastFolderSizeAsync(cachePath).catch((error) => {
+    logger.error(error)
+  })
   return sizeInBytes || 0
 }
 

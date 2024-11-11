@@ -1,5 +1,5 @@
 import { CarbonInfinitySymbol } from "@follow/components/icons/infinify.jsx"
-import { Button } from "@follow/components/ui/button/index.js"
+import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { Label } from "@follow/components/ui/label/index.jsx"
 import { Slider } from "@follow/components/ui/slider/index.js"
 import { env } from "@follow/shared/env"
@@ -15,7 +15,7 @@ import { tipcClient } from "~/lib/client"
 import { queryClient } from "~/lib/query-client"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
-import { SettingDescription } from "../control"
+import { SettingActionItem, SettingDescription } from "../control"
 import { createSetting } from "../helper/builder"
 import { SettingItemGroup } from "../section"
 
@@ -111,18 +111,39 @@ export const SettingDataControl = () => {
             value: t("general.cache"),
           },
           isElectronBuild && AppCacheLimit,
-          isElectronBuild && {
-            label: t("data_control.clean_cache.button"),
-            description: t("data_control.clean_cache.description"),
-            buttonText: t("data_control.clean_cache.button"),
-            action: async () => {
-              await tipcClient?.clearCache()
-              queryClient.invalidateQueries({ queryKey: ["app", "cache", "size"] })
-            },
-          },
+          isElectronBuild && CleanCache,
         ]}
       />
     </div>
+  )
+}
+const CleanCache = () => {
+  const { t } = useTranslation("settings")
+
+  return (
+    <SettingItemGroup>
+      <SettingActionItem
+        label={
+          <span className="flex items-center gap-1">
+            {t("data_control.clean_cache.button")}
+            <MotionButtonBase
+              onClick={() => {
+                tipcClient?.openCacheFolder()
+              }}
+              className="center flex"
+            >
+              <i className="i-mgc-folder-open-cute-re" />
+            </MotionButtonBase>
+          </span>
+        }
+        action={async () => {
+          await tipcClient?.clearCache()
+          queryClient.setQueryData(["app", "cache", "size"], 0)
+        }}
+        buttonText={t("data_control.clean_cache.button")}
+      />
+      <SettingDescription>{t("data_control.clean_cache.description")}</SettingDescription>
+    </SettingItemGroup>
   )
 }
 const AppCacheLimit = () => {
