@@ -214,7 +214,7 @@ const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children 
           "--fo-feed-col-w": `${feedColWidth}px`,
         } as any
       }
-      className="relative z-0 flex h-screen overflow-hidden"
+      className="relative z-0 flex h-screen overflow-hidden print:h-auto print:overflow-auto"
       onContextMenu={preventDefault}
     >
       {children}
@@ -304,6 +304,7 @@ const FeedResponsiveResizerContainer = ({
   return (
     <>
       <div
+        data-hide-in-print
         className={cn(
           "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-[2]",
@@ -321,6 +322,7 @@ const FeedResponsiveResizerContainer = ({
       </div>
 
       <div
+        data-hide-in-print
         className={!isDragging ? "duration-200" : ""}
         style={{
           width: feedColumnShow ? `${position}px` : 0,
