@@ -1,22 +1,21 @@
 import { useEffect, useMemo, useState } from "react"
 
 export function useKeyPressing(key: string) {
-  const [keysPressed, setKeysPressed] = useState(() => new Set())
+  const [keysPressed, setKeysPressed] = useState<string[]>([])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       setKeysPressed((prev) => {
-        const newSet = new Set(prev)
-        newSet.add(event.key)
-        return newSet
+        if (!prev.includes(event.key)) {
+          return [...prev, event.key]
+        }
+        return prev
       })
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
       setKeysPressed((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(event.key)
-        return newSet
+        return prev.filter((key) => key !== event.key)
       })
     }
 
@@ -29,5 +28,5 @@ export function useKeyPressing(key: string) {
     }
   }, [])
 
-  return useMemo(() => keysPressed.has(key), [keysPressed, key])
+  return useMemo(() => keysPressed.includes(key), [keysPressed, key])
 }

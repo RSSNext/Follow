@@ -122,7 +122,7 @@ export function Component() {
       }
 
       const { category, view } = event.over.data.current as {
-        category: string
+        category?: string | null
         view: FeedViewType
       }
 
