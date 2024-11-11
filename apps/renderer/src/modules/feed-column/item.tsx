@@ -153,17 +153,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             )
           }
           setIsContextMenuOpen(true)
-          await showContextMenu(
-            nextItems.filter(
-              (item) =>
-                selectedFeedIds.length <= 1 ||
-                (typeof item === "object" &&
-                  item !== null &&
-                  "supportMultipleSelection" in item &&
-                  item.supportMultipleSelection),
-            ),
-            e,
-          )
+          await showContextMenu(nextItems, e)
           setIsContextMenuOpen(false)
         }}
       >

@@ -89,7 +89,7 @@ export const useFeedActions = ({
 
   const listByView = useOwnedListByView(view!)
 
-  const isMultipleSelection = feedIds && feedIds.length > 1
+  const isMultipleSelection = feedIds && feedIds.length > 1 && feedIds.includes(feedId)
 
   const items = useMemo(() => {
     const related = feed || inbox
@@ -303,7 +303,14 @@ export const useFeedActions = ({
       },
     ]
 
-    return items
+    return items.filter(
+      (item) =>
+        !isMultipleSelection ||
+        (typeof item === "object" &&
+          item !== null &&
+          "supportMultipleSelection" in item &&
+          item.supportMultipleSelection),
+    )
   }, [
     feed,
     inbox,
@@ -315,6 +322,7 @@ export const useFeedActions = ({
     feedId,
     feedIds,
     claimFeed,
+    resetFeed,
     openBoostModal,
     addFeedToListMutation,
     removeFeedFromListMutation,
