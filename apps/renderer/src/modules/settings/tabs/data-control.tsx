@@ -160,7 +160,7 @@ const AppCacheLimit = () => {
         <Label className="center flex">
           {t("data_control.app_cache_limit.label")}
 
-          <span className="center ml-2 flex shrink-0 gap-1 text-xs text-gray-500">
+          <span className="center ml-2 flex shrink-0 gap-1 text-xs opacity-60">
             <span>({cacheSize}M</span> /{" "}
             <span className="center flex shrink-0">
               {cacheLimit ? `${cacheLimit}M` : InfinitySymbol})

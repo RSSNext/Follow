@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { defineConfig } from "electron-vite"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
+import { cleanupUnnecessaryFilesPlugin } from "./plugins/vite/cleanup"
 import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 export default defineConfig({
@@ -42,7 +43,18 @@ export default defineConfig({
   renderer: {
     ...viteRenderBaseConfig,
 
-    plugins: [...viteRenderBaseConfig.plugins, createPlatformSpecificImportPlugin(true)],
+    plugins: [
+      ...viteRenderBaseConfig.plugins,
+      createPlatformSpecificImportPlugin(true),
+      cleanupUnnecessaryFilesPlugin([
+        "og-image.png",
+        "icon-512x512.png",
+        "opengraph-image.png",
+        "favicon.ico",
+        "icon-192x192.png",
+        "favicon-dev.ico",
+      ]),
+    ],
 
     root: "apps/renderer",
     build: {
