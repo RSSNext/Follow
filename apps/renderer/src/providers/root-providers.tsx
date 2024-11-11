@@ -64,7 +64,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 
 const Devtools = () =>
   !IN_ELECTRON && (
-    <div className="print:hidden">
+    <div className="hidden lg:block print:hidden">
       <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />
     </div>
   )

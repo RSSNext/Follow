@@ -172,8 +172,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           ref={setNodeRef}
           data-active={isActive || isContextMenuOpen}
           className={cn(
-            "my-px flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
             isOver && "border-theme-accent-400 bg-theme-accent-400/60",
+            "my-px px-2.5",
             feedColumnStyles.item,
           )}
           onClick={(e) => {
@@ -294,7 +294,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                   <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
                 </MotionButtonBase>
               ) : (
-                <div className="mr-2 size-[16px]">
+                <div className="center mr-2 size-[16px]">
                   <i className="i-mgc-right-cute-fi transition-transform" />
                 </div>
               )}

@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { repository } from "@pkg"
 import { useTranslation } from "react-i18next"
 
@@ -5,6 +6,8 @@ import { isWebBuild } from "~/constants"
 
 export const FooterInfo = () => {
   const { t } = useTranslation()
+
+  const isMobile = useMobile()
   return (
     <div className="relative !mt-0">
       {APP_VERSION?.[0] === "0" && (
@@ -13,7 +16,7 @@ export const FooterInfo = () => {
         </div>
       )}
 
-      {isWebBuild && (
+      {isWebBuild && !isMobile && (
         <div className="center absolute inset-y-0 right-2">
           <button
             type="button"

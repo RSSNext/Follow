@@ -118,9 +118,9 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             : isActive || isContextMenuOpen || isInMultipleSelection
         }
         className={cn(
-          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           feedColumnStyles.item,
           isFeed ? "py-[2px]" : "py-1.5",
+          "justify-between py-[2px]",
           className,
         )}
         onClick={handleClick}
@@ -249,12 +249,7 @@ const ListItemImpl: Component<{
     <div
       data-list-id={listId}
       data-active={isActive || isContextMenuOpen}
-      className={cn(
-        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
-        feedColumnStyles.item,
-        "py-1.5 pl-2.5",
-        className,
-      )}
+      className={cn(feedColumnStyles.item, "py-1.5 pl-2.5", className)}
       onClick={handleNavigate}
       onDoubleClick={() => {
         window.open(UrlBuilder.shareList(listId, view), "_blank")
@@ -323,7 +318,7 @@ const InboxItemImpl: Component<{
       data-active={isActive || isContextMenuOpen}
       data-inbox-id={inboxId}
       className={cn(
-        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
+        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
         feedColumnStyles.item,
         "py-[2px] pl-2.5",
         className,

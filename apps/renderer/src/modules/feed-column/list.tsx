@@ -8,7 +8,7 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useMemo, useRef, useState } from "react"
+import { forwardRef, memo, useImperativeHandle, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -112,207 +112,212 @@ const useUpdateUnreadCount = () => {
   })
 }
 
-function FeedListImpl({ className, view }: { className?: string; view: number }) {
-  const feedsData = useFeedsGroupedData(view)
-  const listsData = useListsGroupedData(view)
-  const inboxesData = useInboxesGroupedData(view)
-  const categoryOpenStateData = useCategoryOpenStateByView(view)
+const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(
+  ({ className, view }, ref) => {
+    const feedsData = useFeedsGroupedData(view)
+    const listsData = useListsGroupedData(view)
+    const inboxesData = useInboxesGroupedData(view)
+    const categoryOpenStateData = useCategoryOpenStateByView(view)
 
-  const hasData =
-    Object.keys(feedsData).length > 0 ||
-    Object.keys(listsData).length > 0 ||
-    Object.keys(inboxesData).length > 0
+    const hasData =
+      Object.keys(feedsData).length > 0 ||
+      Object.keys(listsData).length > 0 ||
+      Object.keys(inboxesData).length > 0
 
-  const feedId = useRouteFeedId()
-  const navigateEntry = useNavigateEntry()
+    const feedId = useRouteFeedId()
+    const navigateEntry = useNavigateEntry()
 
-  const { t } = useTranslation()
+    const { t } = useTranslation()
 
-  // Data prefetch
-  useAuthQuery(Queries.lists.list())
+    // Data prefetch
+    useAuthQuery(Queries.lists.list())
 
-  const hasListData = Object.keys(listsData).length > 0
-  const hasInboxData = Object.keys(inboxesData).length > 0
+    const hasListData = Object.keys(listsData).length > 0
+    const hasInboxData = Object.keys(inboxesData).length > 0
 
-  const scrollerRef = useRef<HTMLDivElement>(null)
-  const selectoRef = useRef<Selecto>(null)
-  const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
+    const scrollerRef = useRef<HTMLDivElement>(null)
+    const selectoRef = useRef<Selecto>(null)
+    const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: "selected-feed",
-    disabled: selectedFeedIds.length === 0,
-  })
-  const style = useMemo(
-    () =>
-      transform
-        ? ({
-            transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-            transitionDuration: "0",
-            transition: "none",
-          } as React.CSSProperties)
-        : undefined,
-    [transform],
-  )
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+      id: "selected-feed",
+      disabled: selectedFeedIds.length === 0,
+    })
+    const style = useMemo(
+      () =>
+        transform
+          ? ({
+              transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+              transitionDuration: "0",
+              transition: "none",
+            } as React.CSSProperties)
+          : undefined,
+      [transform],
+    )
 
-  const draggableContextValue = useMemo(
-    () => ({
-      attributes,
-      listeners,
-      style: {
-        ...style,
-        willChange: "transform",
-      },
-    }),
-    [attributes, listeners, style],
-  )
+    const draggableContextValue = useMemo(
+      () => ({
+        attributes,
+        listeners,
+        style: {
+          ...style,
+          willChange: "transform",
+        },
+      }),
+      [attributes, listeners, style],
+    )
 
-  useEventListener(
-    "scroll",
-    () => {
-      const round = (num: number) => Math.round(num * 1e2) / 1e2
-      const getPositions = () => {
-        const el = scrollerRef.current
-        if (!el) return
+    useImperativeHandle(ref, () => scrollerRef.current!)
 
-        return {
-          x: round(el.scrollLeft / (el.scrollWidth - el.clientWidth)),
-          y: round(el.scrollTop / (el.scrollHeight - el.clientHeight)),
+    useEventListener(
+      "scroll",
+      () => {
+        const round = (num: number) => Math.round(num * 1e2) / 1e2
+        const getPositions = () => {
+          const el = scrollerRef.current
+          if (!el) return
+
+          return {
+            x: round(el.scrollLeft / (el.scrollWidth - el.clientWidth)),
+            y: round(el.scrollTop / (el.scrollHeight - el.clientHeight)),
+          }
         }
-      }
 
-      const newScrollValues = getPositions()
-      if (!newScrollValues) return
+        const newScrollValues = getPositions()
+        if (!newScrollValues) return
 
-      const { y } = newScrollValues
-      setFeedAreaScrollProgressValue(y)
-    },
-    scrollerRef,
-    { capture: false, passive: true },
-  )
+        const { y } = newScrollValues
+        setFeedAreaScrollProgressValue(y)
+      },
+      scrollerRef,
+      { capture: false, passive: true },
+    )
 
-  const shouldFreeUpSpace = useShouldFreeUpSpace()
-  const isMobile = useMobile()
+    const shouldFreeUpSpace = useShouldFreeUpSpace()
+    const isMobile = useMobile()
 
-  const isMetaKeyPressed = useKeyPressing("Meta")
+    const isMetaKeyPressed = useKeyPressing("Meta")
 
-  return (
-    <div className={cn(className, "font-medium")}>
-      <ListHeader view={view} />
-      {!isMobile && (
-        <Selecto
-          className="!border-theme-accent-400 !bg-theme-accent-400/60"
-          ref={selectoRef}
-          rootContainer={document.body}
-          dragContainer={"#feeds-area"}
-          dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
-          selectableTargets={["[data-feed-id]"]}
-          continueSelect
-          hitRate={10}
-          onSelect={(e) => {
-            const allChanged = [...e.added, ...e.removed]
-              .map((el) => el.dataset.feedId)
-              .filter((id) => id !== undefined)
+    return (
+      <div className={cn(className, "font-medium")}>
+        <ListHeader view={view} />
+        {!isMobile && (
+          <Selecto
+            className="!border-theme-accent-400 !bg-theme-accent-400/60"
+            ref={selectoRef}
+            rootContainer={document.body}
+            dragContainer={"#feeds-area"}
+            dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
+            selectableTargets={["[data-feed-id]"]}
+            continueSelect
+            hitRate={10}
+            onSelect={(e) => {
+              const allChanged = [...e.added, ...e.removed]
+                .map((el) => el.dataset.feedId)
+                .filter((id) => id !== undefined)
 
-            setSelectedFeedIds((prev) => {
-              const added = allChanged.filter((id) => !prev.includes(id))
-              const removed = new Set(allChanged.filter((id) => prev.includes(id)))
-              return [...prev.filter((id) => !removed.has(id)), ...added]
-            })
-          }}
-          scrollOptions={{
-            container: scrollerRef.current as HTMLElement,
-            throttleTime: 30,
-            threshold: 0,
-          }}
-          onScroll={(e) => {
-            scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
-          }}
-        />
-      )}
-
-      <ScrollArea.ScrollArea
-        ref={scrollerRef}
-        onScroll={() => {
-          selectoRef.current?.checkScroll()
-        }}
-        mask={false}
-        flex
-        viewportClassName={cn("!px-3", shouldFreeUpSpace && "!overflow-visible")}
-        rootClassName={cn("h-full", shouldFreeUpSpace && "overflow-visible")}
-      >
-        <div
-          data-active={feedId === FEED_COLLECTION_LIST}
-          className={cn(
-            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
-            feedColumnStyles.item,
-          )}
-          onClick={(e) => {
-            e.stopPropagation()
-            if (view !== undefined) {
-              navigateEntry({
-                entryId: null,
-                feedId: FEED_COLLECTION_LIST,
-                view,
+              setSelectedFeedIds((prev) => {
+                const added = allChanged.filter((id) => !prev.includes(id))
+                const removed = new Set(allChanged.filter((id) => prev.includes(id)))
+                return [...prev.filter((id) => !removed.has(id)), ...added]
               })
-            }
-          }}
-        >
-          <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
-          {t("words.starred")}
-        </div>
-        {hasListData && (
-          <>
-            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-              {t("words.lists")}
-            </div>
-            <SortByAlphabeticalList view={view} data={listsData} />
-          </>
-        )}
-        {hasInboxData && (
-          <>
-            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-              {t("words.inbox")}
-            </div>
-            <SortByAlphabeticalInbox view={view} data={inboxesData} />
-          </>
+            }}
+            scrollOptions={{
+              container: scrollerRef.current as HTMLElement,
+              throttleTime: 30,
+              threshold: 0,
+            }}
+            onScroll={(e) => {
+              scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
+            }}
+          />
         )}
 
-        <DraggableContext.Provider value={draggableContextValue}>
-          <div className="space-y-px" id="feeds-area" ref={setNodeRef}>
-            {(hasListData || hasInboxData) && (
-              <div
-                className={cn(
-                  "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
-                  Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
-                )}
-              >
-                {t("words.feeds")}
-              </div>
+        <ScrollArea.ScrollArea
+          ref={scrollerRef}
+          onScroll={() => {
+            selectoRef.current?.checkScroll()
+          }}
+          mask={false}
+          flex
+          viewportClassName={cn("!px-3", shouldFreeUpSpace && "!overflow-visible")}
+          rootClassName={cn("h-full", shouldFreeUpSpace && "overflow-visible")}
+        >
+          <div
+            data-active={feedId === FEED_COLLECTION_LIST}
+            className={cn(
+              "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
+              feedColumnStyles.item,
             )}
-            {hasData ? (
-              <SortableFeedList
-                view={view}
-                data={feedsData}
-                categoryOpenStateData={categoryOpenStateData}
-              />
-            ) : (
-              <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
-                <Link
-                  to="/discover"
-                  className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
-                  onClick={stopPropagation}
-                >
-                  <i className="i-mgc-add-cute-re text-3xl" />
-                  <span className="text-base">{t("sidebar.add_more_feeds")}</span>
-                </Link>
-              </div>
-            )}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (view !== undefined) {
+                navigateEntry({
+                  entryId: null,
+                  feedId: FEED_COLLECTION_LIST,
+                  view,
+                })
+              }
+            }}
+          >
+            <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
+            {t("words.starred")}
           </div>
-        </DraggableContext.Provider>
-      </ScrollArea.ScrollArea>
-    </div>
-  )
-}
+          {hasListData && (
+            <>
+              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+                {t("words.lists")}
+              </div>
+              <SortByAlphabeticalList view={view} data={listsData} />
+            </>
+          )}
+          {hasInboxData && (
+            <>
+              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+                {t("words.inbox")}
+              </div>
+              <SortByAlphabeticalInbox view={view} data={inboxesData} />
+            </>
+          )}
+
+          <DraggableContext.Provider value={draggableContextValue}>
+            <div className="space-y-px" id="feeds-area" ref={setNodeRef}>
+              {(hasListData || hasInboxData) && (
+                <div
+                  className={cn(
+                    "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                    Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+                  )}
+                >
+                  {t("words.feeds")}
+                </div>
+              )}
+              {hasData ? (
+                <SortableFeedList
+                  view={view}
+                  data={feedsData}
+                  categoryOpenStateData={categoryOpenStateData}
+                />
+              ) : (
+                <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
+                  <Link
+                    to="/discover"
+                    className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
+                    onClick={stopPropagation}
+                  >
+                    <i className="i-mgc-add-cute-re text-3xl" />
+                    <span className="text-base">{t("sidebar.add_more_feeds")}</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </DraggableContext.Provider>
+        </ScrollArea.ScrollArea>
+      </div>
+    )
+  },
+)
+FeedListImpl.displayName = "FeedListImpl"
 
 const ListHeader = ({ view }: { view: number }) => {
   const { t } = useTranslation()
@@ -335,9 +340,12 @@ const ListHeader = ({ view }: { view: number }) => {
   const navigateEntry = useNavigateEntry()
 
   return (
-    <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
+    <div
+      onClick={stopPropagation}
+      className="mx-3 mb-6 mt-12 flex items-center justify-between px-2.5 py-1 lg:my-0"
+    >
       <div
-        className="font-bold"
+        className="text-4xl font-bold lg:text-base"
         onClick={(e) => {
           e.stopPropagation()
           if (!document.hasFocus()) return
@@ -352,7 +360,7 @@ const ListHeader = ({ view }: { view: number }) => {
       >
         {view !== undefined && t(views[view].name)}
       </div>
-      <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
+      <div className="ml-2 flex items-center gap-3 text-base text-theme-vibrancyFg lg:text-sm">
         <SortButton />
         {expansion ? (
           <i

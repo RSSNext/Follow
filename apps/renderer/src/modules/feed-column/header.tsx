@@ -70,7 +70,7 @@ export const FeedColumnHeader = memo(() => {
         </Link>
         <SearchTrigger />
 
-        <ProfileButton method="modal" />
+        <ProfileButton method="modal" animatedAvatar />
         <LayoutActionButton />
       </div>
     </div>

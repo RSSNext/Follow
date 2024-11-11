@@ -37,7 +37,11 @@ import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
 import { UserAvatar } from "./UserAvatar"
 
-export const ProfileButton: FC<LoginProps> = memo((props) => {
+export type ProfileButtonProps = LoginProps & {
+  animatedAvatar?: boolean
+}
+
+export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
   const { status, session } = useSession()
   const { user } = session || {}
   const signOut = useSignOut()
@@ -67,7 +71,11 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           asChild
           className="!outline-none focus-visible:bg-theme-item-hover data-[state=open]:bg-transparent"
         >
-          <TransitionAvatar stage={dropdown ? "zoom-in" : ""} />
+          {props.animatedAvatar ? (
+            <TransitionAvatar stage={dropdown ? "zoom-in" : ""} />
+          ) : (
+            <UserAvatar hideName className="size-6 p-0 [&_*]:border-0" />
+          )}
         </DropdownMenuTrigger>
 
         <DropdownMenuContent

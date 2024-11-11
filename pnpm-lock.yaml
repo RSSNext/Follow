@@ -221,6 +221,9 @@ importers:
       tailwindcss-motion:
         specifier: 0.3.0-beta
         version: 0.3.0-beta(tailwindcss@3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3)))
+      tailwindcss-safe-area:
+        specifier: 0.6.0
+        version: 0.6.0(tailwindcss@3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3)))
       tsup:
         specifier: 8.3.5
         version: 8.3.5(jiti@2.3.3)(postcss@8.4.47)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.6.0)
@@ -9933,6 +9936,12 @@ packages:
     resolution: {integrity: sha512-dBmakhcseaB7zK82H9zMmzNhAZFCA9DxWeuw0rkttIarur/7tnjWg1Nv9LlZZR9c+YctRyZns3D+1Fjbksq7Fg==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
+
+  tailwindcss-safe-area@0.6.0:
+    resolution: {integrity: sha512-5PM3CKquzmaa6mow64zWJ0438/yGSqdPfjaXtwNDb31LezNWqFoGPSbvrW12T8iB4EBjeWot+qAA9nbUqqf3sw==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      tailwindcss: ^2.0.0 || >=3.0.0
 
   tailwindcss@3.4.14:
     resolution: {integrity: sha512-IcSvOcTRcUtQQ7ILQL5quRDg7Xs93PdJEk1ZLbhhvJc7uj/OAhYOnruEiwnGgBvUtaUAJ8/mhSw1o8L2jCiENA==}
@@ -21425,6 +21434,10 @@ snapshots:
       tailwindcss: 3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3))
 
   tailwindcss-motion@0.3.0-beta(tailwindcss@3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3))):
+    dependencies:
+      tailwindcss: 3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3))
+
+  tailwindcss-safe-area@0.6.0(tailwindcss@3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3))):
     dependencies:
       tailwindcss: 3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3))
 
