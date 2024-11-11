@@ -59,6 +59,9 @@
       const isElectron = navigator.userAgent.includes("Electron")
       document.documentElement.dataset.buildType = isElectron ? "electron" : "web"
     </script>
+    <script>
+      window.innerWidth < 1024 && document.getElementById("app-skeleton")?.remove()
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -90,6 +93,7 @@
           height: 100%;
           width: 100%;
         }
+
         .sidebar {
           width: 16rem;
           flex-shrink: 0;
