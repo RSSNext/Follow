@@ -144,3 +144,25 @@ export const clearCacheCronJob = () => {
     timer = clearInterval(timer)
   }
 }
+
+export const checkAndCleanCodeCache = async () => {
+  const cachePath = path.join(app.getPath("userData"), "Code Cache")
+
+  const size = await fastFolderSizeAsync(cachePath).catch((error) => {
+    logger.error(error)
+  })
+
+  if (!size) return
+
+  const threshold = 1024 * 1024 * 100 // 100MB
+  if (size > threshold) {
+    await fsp
+      .rm(cachePath, { force: true, recursive: true })
+      .then(() => {
+        logger.info(`Cleaned ${size} bytes code cache`)
+      })
+      .catch((error) => {
+        logger.error(`clean code cache failed: ${error.message}`)
+      })
+  }
+}
