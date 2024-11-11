@@ -3,7 +3,7 @@ import { Fragment } from "react"
 
 import { INBOX_PREFIX_ID } from "~/constants"
 import { getPreferredTitle, useFeedStore } from "~/store/feed"
-import { getSubscriptionByFeedId } from "~/store/subscription"
+import { useSubscriptionStore } from "~/store/subscription"
 
 import { useFeedListSortSelector } from "../atom"
 import { FeedCategory } from "../category"
@@ -15,6 +15,23 @@ export const SortByAlphabeticalFeedList = ({
   data,
   categoryOpenStateData,
 }: FeedListProps) => {
+  const feedId2CategoryMap = useSubscriptionStore((state) => {
+    const map = {} as Record<string, string>
+    for (const categoryName in data) {
+      const feedId = data[categoryName][0]
+      if (!feedId) {
+        continue
+      }
+      const subscription = state.data[feedId]
+      if (!subscription) {
+        continue
+      }
+      if (subscription.category) {
+        map[feedId] = subscription.category
+      }
+    }
+    return map
+  })
   const categoryName2RealDisplayNameMap = useFeedStore((state) => {
     const map = {} as Record<string, string>
     for (const categoryName in data) {
@@ -27,7 +44,7 @@ export const SortByAlphabeticalFeedList = ({
       if (!feed) {
         continue
       }
-      const hascategoryNameNotDefault = !!getSubscriptionByFeedId(feedId)?.category
+      const hascategoryNameNotDefault = !!feedId2CategoryMap[feedId]
       const isSingle = data[categoryName].length === 1
       if (!isSingle || hascategoryNameNotDefault) {
         map[categoryName] = categoryName
@@ -43,6 +60,9 @@ export const SortByAlphabeticalFeedList = ({
   let sortedByAlphabetical = Object.keys(data).sort((a, b) => {
     const nameA = categoryName2RealDisplayNameMap[a]
     const nameB = categoryName2RealDisplayNameMap[b]
+    if (typeof nameA !== "string" || typeof nameB !== "string") {
+      return 0
+    }
     return sortByAlphabet(nameA, nameB)
   })
   if (!isDesc) {
