@@ -156,7 +156,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
           await showContextMenu(
             nextItems.filter(
               (item) =>
-                selectedFeedIds.length === 0 ||
+                selectedFeedIds.length <= 1 ||
                 (typeof item === "object" &&
                   item !== null &&
                   "supportMultipleSelection" in item &&
