@@ -147,6 +147,7 @@ export function Component() {
       <AppLayoutGridContainerProvider>
         <FeedResponsiveResizerContainer containerRef={containerRef}>
           <DndContext
+            autoScroll={{ threshold: { x: 0, y: 0.2 } }}
             sensors={sensors}
             collisionDetection={pointerWithin}
             onDragEnd={handleDragEnd}

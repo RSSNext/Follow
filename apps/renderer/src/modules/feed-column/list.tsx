@@ -2,6 +2,7 @@ import { useDraggable } from "@dnd-kit/core"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
+import { useKeyPressing } from "@follow/hooks"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
@@ -190,6 +191,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
   const shouldFreeUpSpace = useShouldFreeUpSpace()
 
+  const isMetaKeyPressed = useKeyPressing("Meta")
+
   return (
     <div className={cn(className, "font-medium")}>
       <ListHeader view={view} />
@@ -198,24 +201,18 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => selectedFeedIds.length === 0}
+        dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
         hitRate={10}
         onSelect={(e) => {
           const allChanged = [...e.added, ...e.removed]
+            .map((el) => el.dataset.feedId)
+            .filter((id) => id !== undefined)
 
           setSelectedFeedIds((prev) => {
-            const added = allChanged
-              .map((el) => el.dataset.feedId)
-              .filter((id) => id !== undefined)
-              .filter((id) => !prev.includes(id))
-            const removed = new Set(
-              allChanged
-                .map((el) => el.dataset.feedId)
-                .filter((id) => id !== undefined)
-                .filter((id) => prev.includes(id)),
-            )
+            const added = allChanged.filter((id) => !prev.includes(id))
+            const removed = new Set(allChanged.filter((id) => prev.includes(id)))
             return [...prev.filter((id) => !removed.has(id)), ...added]
           })
         }}
