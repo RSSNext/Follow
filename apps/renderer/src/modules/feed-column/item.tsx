@@ -66,7 +66,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       if (e.metaKey) {
         return
       } else {
-        setSelectedFeedIds([])
+        setSelectedFeedIds([feedId])
       }
 
       e.stopPropagation()
