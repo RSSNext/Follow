@@ -78,6 +78,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       setActive_(args)
 
       navigateBackHome(nextActive)
+      setSelectedFeedIds([])
     },
     [active, navigateBackHome],
   )
