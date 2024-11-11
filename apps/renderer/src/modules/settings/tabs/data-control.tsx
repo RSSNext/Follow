@@ -154,6 +154,7 @@ const AppCacheLimit = () => {
       const byteSize = (await tipcClient?.getCacheSize()) ?? 0
       return Math.round(byteSize / 1024 / 1024)
     },
+    refetchOnMount: "always",
   })
   const {
     data: cacheLimit,

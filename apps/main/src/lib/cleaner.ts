@@ -92,6 +92,7 @@ const getCachedFilesRecursive = async (dir: string, result: string[] = []) => {
 }
 
 let timer: any = null
+
 export const clearCacheCronJob = () => {
   if (timer) {
     timer = clearInterval(timer)
@@ -121,11 +122,16 @@ export const clearCacheCronJob = () => {
 
         let cleanedSize = 0
         for (const file of files) {
-          const fileSize = statSync(file).size
-          cleanedSize += fileSize
-          if (cleanedSize >= shouldCleanSize) {
-            logger.info(`Cleaned ${cleanedSize} bytes cache`)
-            break
+          try {
+            const fileSize = statSync(file).size
+            await fsp.rm(file, { force: true })
+            cleanedSize += fileSize
+            if (cleanedSize >= shouldCleanSize) {
+              logger.info(`Cleaned ${cleanedSize} bytes cache`)
+              break
+            }
+          } catch (error) {
+            logger.error(`Failed to delete cache file ${file}:`, error)
           }
         }
       }
