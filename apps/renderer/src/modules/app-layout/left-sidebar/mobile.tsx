@@ -12,9 +12,9 @@ import { useEventListener } from "usehooks-ts"
 import { useSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 
-import { FeedList } from "../feed-column/list"
-import { ProfileButton } from "../user/ProfileButton"
-import { FooterInfo } from "./left-sidebar/components/FooterInfo"
+import { FeedList } from "../../feed-column/list"
+import { ProfileButton } from "../../user/ProfileButton"
+import { FooterInfo } from "./components/FooterInfo"
 import styles from "./mobile.module.css"
 
 export function MainMobileLayout() {
