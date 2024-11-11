@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/card/index.jsx"
+import { getDominantColor } from "@follow/utils/color"
+import { cn, getUrlIcon } from "@follow/utils/utils"
 import clsx from "clsx"
 import { upperFirst } from "lodash-es"
 import type { FC } from "react"
-import { memo, useMemo } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -46,13 +48,8 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
       <Card className={styles["recommendations-card"]}>
         <CardHeader className="relative p-5 pb-3 @container">
           <div className="absolute left-0 top-0 h-[50px] w-full overflow-hidden @[280px]:h-[80px] dark:brightness-75">
-            <span className="opacity-50 blur-2xl">
-              <FeedIcon
-                disableFadeIn
-                siteUrl={`https://${data.url}`}
-                size={400}
-                className="pointer-events-none size-[500px]"
-              />
+            <span className="pointer-events-none opacity-50">
+              <BackgroundGradient className="size-full" url={data.url} />
             </span>
           </div>
 
@@ -85,7 +82,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
               >
                 <button
                   type="button"
-                  className="relative rounded p-0.5 px-1 duration-200 before:absolute before:inset-y-0 before:-left-2 before:my-auto before:size-1.5 before:rounded-full before:bg-accent before:content-[''] group-hover:bg-muted"
+                  className="relative rounded p-0.5 px-1 text-left duration-200 before:absolute before:inset-y-0 before:-left-2 before:mb-auto before:mt-2 before:size-1.5 before:rounded-full before:bg-accent before:content-[''] group-hover:bg-muted"
                   onClick={() => {
                     present({
                       id: `recommendation-content-${route}`,
@@ -155,3 +152,28 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
     )
   },
 )
+
+const BackgroundGradient = memo(({ url, className }: { url: string; className?: string }) => {
+  const [color, setColor] = useState<string>()
+
+  useEffect(() => {
+    const { src } = getUrlIcon(`https://${url}`)
+    const image = new Image()
+    image.src = src
+    image.crossOrigin = "anonymous"
+    image.onload = () => {
+      try {
+        const color = getDominantColor(image)
+        setColor(color)
+      } catch {
+        setColor("#333")
+      }
+    }
+  }, [url])
+  return (
+    <div
+      className={cn("pointer-events-none size-[500px]", className)}
+      style={{ backgroundColor: color }}
+    />
+  )
+})
