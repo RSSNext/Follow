@@ -1,4 +1,5 @@
 import { useDraggable } from "@dnd-kit/core"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
@@ -190,41 +191,44 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   )
 
   const shouldFreeUpSpace = useShouldFreeUpSpace()
+  const isMobile = useMobile()
 
   const isMetaKeyPressed = useKeyPressing("Meta")
 
   return (
     <div className={cn(className, "font-medium")}>
       <ListHeader view={view} />
-      <Selecto
-        className="!border-theme-accent-400 !bg-theme-accent-400/60"
-        ref={selectoRef}
-        rootContainer={document.body}
-        dragContainer={"#feeds-area"}
-        dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
-        selectableTargets={["[data-feed-id]"]}
-        continueSelect
-        hitRate={10}
-        onSelect={(e) => {
-          const allChanged = [...e.added, ...e.removed]
-            .map((el) => el.dataset.feedId)
-            .filter((id) => id !== undefined)
+      {!isMobile && (
+        <Selecto
+          className="!border-theme-accent-400 !bg-theme-accent-400/60"
+          ref={selectoRef}
+          rootContainer={document.body}
+          dragContainer={"#feeds-area"}
+          dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
+          selectableTargets={["[data-feed-id]"]}
+          continueSelect
+          hitRate={10}
+          onSelect={(e) => {
+            const allChanged = [...e.added, ...e.removed]
+              .map((el) => el.dataset.feedId)
+              .filter((id) => id !== undefined)
 
-          setSelectedFeedIds((prev) => {
-            const added = allChanged.filter((id) => !prev.includes(id))
-            const removed = new Set(allChanged.filter((id) => prev.includes(id)))
-            return [...prev.filter((id) => !removed.has(id)), ...added]
-          })
-        }}
-        scrollOptions={{
-          container: scrollerRef.current as HTMLElement,
-          throttleTime: 30,
-          threshold: 0,
-        }}
-        onScroll={(e) => {
-          scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
-        }}
-      />
+            setSelectedFeedIds((prev) => {
+              const added = allChanged.filter((id) => !prev.includes(id))
+              const removed = new Set(allChanged.filter((id) => prev.includes(id)))
+              return [...prev.filter((id) => !removed.has(id)), ...added]
+            })
+          }}
+          scrollOptions={{
+            container: scrollerRef.current as HTMLElement,
+            throttleTime: 30,
+            threshold: 0,
+          }}
+          onScroll={(e) => {
+            scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
+          }}
+        />
+      )}
 
       <ScrollArea.ScrollArea
         ref={scrollerRef}

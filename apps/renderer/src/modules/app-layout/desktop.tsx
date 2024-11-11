@@ -6,14 +6,13 @@ import type { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
-import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
 import * as React from "react"
 import { forwardRef, lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import { Trans, useTranslation } from "react-i18next"
+import { Trans } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
@@ -32,7 +31,7 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { HotKeyScopeMap, isDev, isWebBuild } from "~/constants"
+import { HotKeyScopeMap, isDev } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { useBatchUpdateSubscription } from "~/hooks/biz/useSubscriptionActions"
@@ -53,37 +52,11 @@ import { AppNotificationContainer } from "~/modules/upgrade/lazy/index"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 import { settings } from "~/queries/settings"
 
+import { FooterInfo } from "./components/FooterInfo"
+
 const LazyNewUserGuideModal = lazy(() =>
   import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
 )
-
-const FooterInfo = () => {
-  const { t } = useTranslation()
-  return (
-    <div className="relative !mt-0">
-      {APP_VERSION?.[0] === "0" && (
-        <div className="pointer-events-none w-full py-3 text-center text-xs opacity-20">
-          {t("beta_access")} {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
-        </div>
-      )}
-
-      {isWebBuild && (
-        <div className="center absolute inset-y-0 right-2">
-          <button
-            type="button"
-            aria-label="Download Desktop App"
-            onClick={() => {
-              window.open(`${repository.url}/releases`)
-            }}
-            className="center rounded-full border bg-background p-1.5 shadow-sm"
-          >
-            <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
 
 const errorTypes = [
   ErrorComponentType.Page,
