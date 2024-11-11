@@ -1,0 +1,414 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import type { FeedViewType } from "@follow/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
+import { UrlBuilder } from "@follow/utils/url-builder"
+import { isBizId } from "@follow/utils/utils"
+import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
+
+import { whoami } from "~/atoms/user"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { useBoostModal } from "~/modules/boost/hooks"
+import { useFeedClaimModal } from "~/modules/claim"
+import { FeedForm } from "~/modules/discover/feed-form"
+import { InboxForm } from "~/modules/discover/inbox-form"
+import { ListForm } from "~/modules/discover/list-form"
+import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
+import {
+  getFeedById,
+  useAddFeedToFeedList,
+  useFeedById,
+  useRemoveFeedFromFeedList,
+} from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
+import { useListById, useOwnedList } from "~/store/list"
+import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+
+import { useNavigateEntry } from "./useNavigateEntry"
+import { getRouteParams } from "./useRouteParams"
+import { useDeleteSubscription } from "./useSubscriptionActions"
+
+const ConfirmDestroyModalContent = ({ onConfirm }: { onConfirm: () => void }) => {
+  const { t } = useTranslation()
+
+  return (
+    <div className="w-[540px]">
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t("sidebar.feed_actions.unfollow_feed_many_warning")}
+      </div>
+      <div className="flex justify-end">
+        <Button className="bg-red-600" onClick={onConfirm}>
+          {t("words.confirm")}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const useFeedActions = ({
+  feedId,
+  feedIds,
+  view,
+  type,
+}: {
+  feedId: string
+  feedIds?: string[]
+  view?: number
+  type?: "feedList" | "entryList"
+}) => {
+  const { t } = useTranslation()
+  const feed = useFeedById(feedId, (feed) => {
+    return {
+      type: feed.type,
+      ownerUserId: feed.ownerUserId,
+      id: feed.id,
+    }
+  })
+  const inbox = useInboxById(feedId)
+  const isInbox = !!inbox
+  const subscription = useSubscriptionByFeedId(feedId)
+  const { present } = useModalStack()
+  const deleteSubscription = useDeleteSubscription({})
+  const claimFeed = useFeedClaimModal({
+    feedId,
+  })
+
+  const navigateEntry = useNavigateEntry()
+  const isEntryList = type === "entryList"
+
+  const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
+  const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
+  const openBoostModal = useBoostModal()
+
+  const listByView = useOwnedList(view!)
+
+  const isMultipleSelection = feedIds && feedIds.length > 0
+
+  const items = useMemo(() => {
+    const related = feed || inbox
+    if (!related) return []
+
+    const items: NullableNativeMenuItem[] = [
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.mark_all_as_read"),
+        shortcut: "Meta+Shift+A",
+        disabled: isEntryList,
+        click: () =>
+          subscriptionActions.markReadByFeedIds({
+            feedIds: isMultipleSelection ? feedIds : [feedId],
+          }),
+        supportMultipleSelection: true,
+      },
+      !related.ownerUserId &&
+        !!isBizId(related.id) &&
+        related.type === "feed" && {
+          type: "text" as const,
+          label: isEntryList
+            ? t("sidebar.feed_actions.claim_feed")
+            : t("sidebar.feed_actions.claim"),
+          shortcut: "C",
+          click: () => {
+            claimFeed()
+          },
+        },
+      ...(related.ownerUserId === whoami()?.id
+        ? [
+            {
+              type: "text" as const,
+              label: t("sidebar.feed_actions.feed_owned_by_you"),
+            },
+          ]
+        : []),
+      {
+        type: "text" as const,
+        label: t("words.boost"),
+        click: () => {
+          openBoostModal(feedId)
+        },
+      },
+      {
+        type: "separator" as const,
+        disabled: isEntryList,
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
+        disabled: isInbox,
+        supportMultipleSelection: true,
+        submenu: [
+          ...listByView.map((list) => {
+            const isIncluded = list.feedIds.includes(feedId)
+            return {
+              label: list.title || "",
+              type: "text" as const,
+              checked: isIncluded,
+              click() {
+                if (isMultipleSelection) {
+                  addFeedToListMutation({
+                    feedIds,
+                    listId: list.id,
+                  })
+                  return
+                }
+
+                if (!isIncluded) {
+                  addFeedToListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                } else {
+                  removeFeedFromListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                }
+              },
+            }
+          }),
+          listByView.length > 0 && { type: "separator" as const },
+          {
+            label: t("sidebar.feed_actions.create_list"),
+            type: "text" as const,
+            icon: <i className="i-mgc-add-cute-re" />,
+            click() {
+              present({
+                title: t("sidebar.feed_actions.create_list"),
+                content: () => <ListCreationModalContent />,
+              })
+            },
+          },
+        ],
+      },
+      {
+        type: "separator" as const,
+        disabled: isEntryList,
+      },
+      {
+        type: "text" as const,
+        label: isEntryList ? t("sidebar.feed_actions.edit_feed") : t("sidebar.feed_actions.edit"),
+        shortcut: "E",
+        disabled: isInbox,
+        click: () => {
+          present({
+            title: t("sidebar.feed_actions.edit_feed"),
+            content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
+          })
+        },
+      },
+      {
+        type: "text" as const,
+        label: isMultipleSelection
+          ? t("sidebar.feed_actions.unfollow_feed_many")
+          : isEntryList
+            ? t("sidebar.feed_actions.unfollow_feed")
+            : t("sidebar.feed_actions.unfollow"),
+        shortcut: "Meta+Backspace",
+        disabled: isInbox,
+        supportMultipleSelection: true,
+        click: () => {
+          if (isMultipleSelection) {
+            present({
+              title: t("sidebar.feed_actions.unfollow_feed_many_confirm"),
+              content: ({ dismiss }) => (
+                <ConfirmDestroyModalContent
+                  onConfirm={() => {
+                    deleteSubscription.mutate({ feedIdList: feedIds })
+                    dismiss()
+                  }}
+                />
+              ),
+            })
+            return
+          }
+          deleteSubscription.mutate({ subscription })
+        },
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.navigate_to_feed"),
+        shortcut: "Meta+G",
+        disabled: isInbox || !isEntryList || getRouteParams().feedId === feedId,
+        click: () => {
+          navigateEntry({ feedId })
+        },
+      },
+      {
+        type: "separator" as const,
+        disabled: isEntryList,
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.open_feed_in_browser", {
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
+        }),
+        disabled: isEntryList,
+        shortcut: "O",
+        click: () => window.open(UrlBuilder.shareFeed(feedId, view), "_blank"),
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.open_site_in_browser", {
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
+        }),
+        shortcut: "Meta+O",
+        disabled: isEntryList,
+        click: () => {
+          const feed = getFeedById(feedId)
+          if (feed) {
+            "siteUrl" in feed && feed.siteUrl && window.open(feed.siteUrl, "_blank")
+          }
+        },
+      },
+      {
+        type: "separator",
+        disabled: isEntryList,
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.copy_feed_url"),
+        disabled: isEntryList,
+        shortcut: "Meta+C",
+        click: () => {
+          // @ts-expect-error
+          const { url } = feed || {}
+          if (!url) return
+          navigator.clipboard.writeText(url)
+        },
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.copy_feed_id"),
+        shortcut: "Meta+Shift+C",
+        disabled: isEntryList,
+        click: () => {
+          navigator.clipboard.writeText(feedId)
+        },
+      },
+    ]
+
+    return items
+  }, [
+    feed,
+    inbox,
+    t,
+    isEntryList,
+    isInbox,
+    listByView,
+    isMultipleSelection,
+    feedId,
+    feedIds,
+    claimFeed,
+    openBoostModal,
+    addFeedToListMutation,
+    removeFeedFromListMutation,
+    present,
+    deleteSubscription,
+    subscription,
+    navigateEntry,
+    view,
+  ])
+
+  return { items }
+}
+
+export const useListActions = ({ listId }: { listId: string; view: FeedViewType }) => {
+  const { t } = useTranslation()
+  const list = useListById(listId)
+
+  const items = useMemo(() => {
+    if (!list) return []
+
+    const items: NullableNativeMenuItem[] = [
+      list.ownerUserId === whoami()?.id && {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.list_owned_by_you"),
+      },
+      {
+        type: "separator" as const,
+        hide: list.ownerUserId !== whoami()?.id,
+      },
+
+      {
+        type: "command",
+        command: "list:edit",
+      },
+      {
+        type: "command",
+        command: "list:unfollow",
+      },
+      {
+        type: "command",
+        command: "list:navigate-to",
+      },
+      {
+        type: "separator",
+        disabled: false,
+      },
+      {
+        type: "command",
+        command: "list:open-in-browser",
+      },
+      {
+        type: "separator",
+        disabled: false,
+      },
+      {
+        type: "command",
+        command: "list:copy-url",
+      },
+      {
+        type: "command",
+        command: "list:copy-id",
+      },
+    ]
+
+    return items
+  }, [list, t])
+
+  return { items }
+}
+
+export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
+  const { t } = useTranslation()
+  const inbox = useInboxById(inboxId)
+  const { present } = useModalStack()
+
+  const items = useMemo(() => {
+    if (!inbox) return []
+
+    const items: NativeMenuItem[] = [
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.edit"),
+        shortcut: "E",
+        click: () => {
+          present({
+            title: t("sidebar.feed_actions.edit_inbox"),
+            content: ({ dismiss }) => <InboxForm asWidget id={inboxId} onSuccess={dismiss} />,
+          })
+        },
+      },
+      {
+        type: "separator" as const,
+        disabled: false,
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.copy_email_address"),
+        shortcut: "Meta+Shift+C",
+        disabled: false,
+        click: () => {
+          navigator.clipboard.writeText(`${inboxId}${env.VITE_INBOXES_EMAIL}`)
+        },
+      },
+    ]
+
+    return items
+  }, [inbox, t, inboxId, present])
+
+  return { items }
+}
