@@ -56,6 +56,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
           </div>
 
           <div className="mx-auto flex w-[300px] items-center justify-between font-semibold">
+            {/* TODO navigate to wallet page */}
             <PowerButton isLoading={isLoadingWallet} myWallet={myWallet} />
             <Level level={myWallet?.level?.level || 0} isLoading={isLoadingWallet} />
             <ActivityPoints
