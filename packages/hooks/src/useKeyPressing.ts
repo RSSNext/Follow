@@ -5,7 +5,11 @@ export function useKeyPressing(key: string) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      setKeysPressed((prev) => new Set(prev).add(event.key))
+      setKeysPressed((prev) => {
+        const newSet = new Set(prev)
+        newSet.add(event.key)
+        return newSet
+      })
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
