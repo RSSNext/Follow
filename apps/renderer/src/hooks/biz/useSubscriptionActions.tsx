@@ -14,7 +14,7 @@ import { feedUnreadActions } from "~/store/unread"
 import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
-export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { t } = useTranslation()
 
   return useMutation({
