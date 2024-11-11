@@ -3,11 +3,12 @@ import clsx from "clsx"
 import { upperFirst } from "lodash-es"
 import type { FC } from "react"
 import { memo, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 
-import { RSSHubCategoryMap } from "./constants"
+import { RSSHubCategories } from "./constants"
 import { RecommendationContent } from "./recommendation-content"
 import styles from "./recommendations.module.css"
 import type { RSSHubRouteDeclaration } from "./types"
@@ -19,6 +20,7 @@ interface RecommendationCardProps {
 }
 export const RecommendationCard: FC<RecommendationCardProps> = memo(
   ({ data, routePrefix, setCategory }) => {
+    const { t } = useTranslation()
     const { present } = useModalStack()
 
     const { maintainers, categories } = useMemo(() => {
@@ -36,7 +38,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
       categories.delete("popular")
       return {
         maintainers: Array.from(maintainers),
-        categories: Array.from(categories),
+        categories: Array.from(categories) as typeof RSSHubCategories | string[],
       }
     }, [data])
 
@@ -130,17 +132,19 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
                 {categories.map((c) => (
                   <button
                     onClick={() => {
-                      if (!RSSHubCategoryMap[c]) return
+                      if (!RSSHubCategories.includes(c)) return
                       setCategory(c)
                     }}
                     key={c}
                     type="button"
                     className={clsx(
                       "cursor-pointer rounded bg-muted/50 px-1.5 duration-200 hover:bg-muted",
-                      !RSSHubCategoryMap[c] && "pointer-events-none opacity-50",
+                      !RSSHubCategories.includes(c) && "pointer-events-none opacity-50",
                     )}
                   >
-                    {RSSHubCategoryMap[c] || upperFirst(c)}
+                    {RSSHubCategories.includes(c)
+                      ? t(`discover.category.${c as (typeof RSSHubCategories)[number]}`)
+                      : upperFirst(c)}
                   </button>
                 ))}
               </span>
