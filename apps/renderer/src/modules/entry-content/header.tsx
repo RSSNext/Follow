@@ -4,7 +4,6 @@ import { FeedViewType, views } from "@follow/constants"
 import type { CombinedEntryModel, MediaModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
-import { Slot } from "@radix-ui/react-slot"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useMemo, useState } from "react"
@@ -19,8 +18,7 @@ import {
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
-import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
-import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
 import { filterSmallMedia } from "~/lib/utils"
@@ -28,9 +26,33 @@ import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
+import { CommandIdButton } from "../command/command-button"
+import { COMMAND_ID } from "../command/commands/id"
 import { ImageGallery } from "./actions/picture-gallery"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
+
+const entryActions = [
+  COMMAND_ID.integration.saveToEagle,
+  COMMAND_ID.integration.saveToReadwise,
+  COMMAND_ID.integration.saveToInstapaper,
+  COMMAND_ID.integration.saveToOmnivore,
+  COMMAND_ID.integration.saveToObsidian,
+  COMMAND_ID.integration.saveToOutline,
+
+  COMMAND_ID.entry.Tip,
+  COMMAND_ID.entry.star,
+  COMMAND_ID.entry.unstar,
+  COMMAND_ID.entry.delete,
+  COMMAND_ID.entry.copyLink,
+  // COMMAND_ID.entry.copyTitle,
+  // COMMAND_ID.entry.openInBrowser,
+  COMMAND_ID.entry.viewSourceContent,
+  COMMAND_ID.entry.viewEntryContent,
+  COMMAND_ID.entry.share,
+  COMMAND_ID.entry.read,
+  COMMAND_ID.entry.unread,
+]
 
 function EntryHeaderImpl({
   view,
@@ -44,15 +66,6 @@ function EntryHeaderImpl({
   compact?: boolean
 }) {
   const entry = useEntry(entryId)
-
-  const listId = useRouteParamsSelector((s) => s.listId)
-  const { items } = useEntryActions({
-    view,
-    entry,
-    type: "toolbar",
-    inList: !!listId,
-  })
-
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()
 
@@ -110,25 +123,13 @@ function EntryHeaderImpl({
           {!compact && <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />}
 
           <SpecialActions id={entry.entries.id} />
-          {items
-            .filter((item) => !item.hide)
-            .map((item) => (
-              <ActionButton
-                disabled={item.disabled}
-                icon={
-                  item.icon ? (
-                    <Slot className="size-4">{item.icon}</Slot>
-                  ) : (
-                    <i className={item.className} />
-                  )
-                }
-                active={item.active}
-                shortcut={item.shortcut}
-                onClick={item.onClick}
-                tooltip={item.name}
-                key={item.name}
-              />
-            ))}
+          {entryActions.map((cmdId) => (
+            <CommandIdButton
+              key={cmdId}
+              commandId={cmdId}
+              context={{ entryId: entry.entries.id, feedId: entry.feedId }}
+            />
+          ))}
         </div>
       </div>
     </div>
