@@ -136,7 +136,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const selectoRef = useRef<Selecto>(null)
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: "selected-feed",
     disabled: selectedFeedIds.length === 0,
   })
@@ -198,7 +198,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => !(selectedFeedIds.length > 0 && isDragging)}
+        dragCondition={() => selectedFeedIds.length === 0}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
         hitRate={10}

@@ -1,4 +1,5 @@
-import { DndContext, pointerWithin } from "@dnd-kit/core"
+import type { DragEndEvent } from "@dnd-kit/core"
+import { DndContext, PointerSensor, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
@@ -105,9 +106,32 @@ export function Component() {
   const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
   const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  )
   const [selectedIds, setSelectedIds] = useSelectedFeedIds()
-
   const { mutate } = useBatchUpdateSubscription()
+  const handleDragEnd = React.useCallback(
+    (event: DragEndEvent) => {
+      if (!event.over) {
+        return
+      }
+
+      const { category, view } = event.over.data.current as {
+        category: string
+        view: FeedViewType
+      }
+
+      mutate({ category, view, feedIdList: selectedIds })
+
+      setSelectedIds([])
+    },
+    [mutate, selectedIds, setSelectedIds],
+  )
 
   if (isNotSupportWidth) {
     return <NotSupport />
@@ -123,21 +147,9 @@ export function Component() {
       <AppLayoutGridContainerProvider>
         <FeedResponsiveResizerContainer containerRef={containerRef}>
           <DndContext
+            sensors={sensors}
             collisionDetection={pointerWithin}
-            onDragEnd={(event) => {
-              if (!event.over) {
-                return
-              }
-
-              const { category, view } = event.over.data.current as {
-                category: string
-                view: FeedViewType
-              }
-
-              mutate({ category, view, feedIdList: selectedIds })
-
-              setSelectedIds([])
-            }}
+            onDragEnd={handleDragEnd}
           >
             <FeedColumn>
               <CornerPlayer />
