@@ -111,7 +111,8 @@
     "vite-plugin-mkcert": "1.17.6",
     "vite-plugin-pwa": "^0.20.5",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.0.5"
+    "vitest": "2.0.5",
+    "workbox-build": "^7.3.0"
   },
   "pnpm": {
     "patchedDependencies": {
