@@ -277,7 +277,6 @@
   "wallet.power.description2": "Power is an <Link>ERC-20 token</Link> on the {{blockchainName}} blockchain, which can be used for purchases and tipping on Follow.",
   "wallet.power.rewardDescription": "All active users on Follow are eligible for daily power rewards.",
   "wallet.power.rewardDescription2": "Based on your level and past activities, you can receive a <Balance /> reward today. <Link>Learn more.</Link>",
-  "wallet.power.rewardDescription3": "We are testing a new reward system. Users who are active on Follow and contribute to the platform will receive more rewards. Below are the rewards you can expect under the new, yet-to-be-implemented rules. Please note that this information is for reference only.",
   "wallet.ranking.level": "Level",
   "wallet.ranking.name": "Name",
   "wallet.ranking.power": "Power",

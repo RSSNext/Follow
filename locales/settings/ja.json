@@ -277,7 +277,6 @@
   "wallet.power.description2": "Power はブロックチェーン {{blockchainName}} 上にある <Link>ERC-20 トークン</Link> で、Follow 内でのチップや購入に使用できます。",
   "wallet.power.rewardDescription": "Follow のすべてのアクティブ ユーザーは、デイリー Power 特典の対象となります。",
   "wallet.power.rewardDescription2": "あなたのレベルや日々のアクティビティによって <Balance /> が本日の報酬として提供されます。<Link>さらなる情報はこちら</Link>",
-  "wallet.power.rewardDescription3": "新しい報酬システムをテストしています。Follow に積極的に参加しプラットフォームに貢献しているユーザーは、より多くの報酬を受け取ることができます。以下はまだ実装されていない新しいルールで期待できる報酬です。この情報はあくまでも参考情報であることをご了承ください。",
   "wallet.ranking.level": "レベル",
   "wallet.ranking.name": "名前",
   "wallet.ranking.power": "Power",
