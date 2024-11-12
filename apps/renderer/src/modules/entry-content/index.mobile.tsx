@@ -139,7 +139,7 @@ export const EntryContent: Component<{
         compact={compact}
       />
 
-      <div className="relative flex size-full flex-col px-4 @container print:size-auto print:overflow-visible">
+      <div className="relative mt-12 flex min-w-0 flex-col px-4 @container print:size-auto print:overflow-visible">
         <div
           onPointerDown={clearSelection}
           style={stableRenderStyle}

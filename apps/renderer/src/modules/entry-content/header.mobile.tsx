@@ -1,4 +1,4 @@
-import { ActionButton } from "@follow/components/ui/button/index.js"
+import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { clsx, cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
 import { AnimatePresence, m } from "framer-motion"
@@ -58,14 +58,14 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
         className="relative z-10 flex w-full items-center justify-between gap-3"
         data-hide-in-print
       >
-        <div className="flex min-w-0 shrink grow">
+        <div className="pointer-events-none absolute inset-0 flex min-w-0 shrink grow">
           <AnimatePresence>
             {shouldShowMeta && (
               <m.div
                 initial={{ opacity: 0.01, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0.01, y: 30 }}
-                className="flex min-w-0 shrink items-end gap-2 truncate px-1.5 text-sm leading-tight text-theme-foreground"
+                className="pointer-events-auto flex min-w-0 shrink items-end gap-2 truncate px-1.5 text-sm leading-tight text-theme-foreground"
               >
                 <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
                 <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
@@ -77,6 +77,13 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
           </AnimatePresence>
         </div>
 
+        <div className="flex shrink-0 items-center justify-end gap-3">
+          <MotionButtonBase onClick={window.history.returnBack} className="center size-8">
+            <i className="i-mingcute-left-line size-6" />
+
+            <span className="sr-only">Return</span>
+          </MotionButtonBase>
+        </div>
         <div
           className={clsx(
             "relative flex shrink-0 items-center justify-end gap-3",
