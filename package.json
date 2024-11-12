@@ -109,7 +109,7 @@
     "unplugin-ast": "^0.11.0",
     "vite": "^5.4.10",
     "vite-plugin-mkcert": "1.17.6",
-    "vite-plugin-pwa": "^0.20.5",
+    "vite-plugin-pwa": "https://pkg.pr.new/vite-plugin-pwa@781",
     "vite-tsconfig-paths": "5.0.1",
     "vitest": "2.0.5",
     "workbox-build": "^7.3.0"
@@ -122,9 +122,7 @@
       "hono": "patches/hono.patch",
       "electron-context-menu": "patches/electron-context-menu.patch",
       "@mozilla/readability": "patches/@mozilla__readability.patch",
-      "daisyui": "patches/daisyui.patch",
-      "vite-plugin-pwa": "patches/vite-plugin-pwa.patch",
-      "jsonpointer": "patches/jsonpointer.patch"
+      "daisyui": "patches/daisyui.patch"
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",

@@ -24,18 +24,12 @@ patchedDependencies:
   immer@10.1.1:
     hash: og7mbnoo5vh43tjlw5rbmrdbvu
     path: patches/immer@10.1.1.patch
-  jsonpointer:
-    hash: prxuhlhyjugus5tiew4vc3pahu
-    path: patches/jsonpointer.patch
   re-resizable:
     hash: yitcmpfwcomg2fky72uc3lhk2i
     path: patches/re-resizable@6.9.17.patch
   sonner@1.5.0:
     hash: 6s3tquyt5wnkqaogymn3mkivuq
     path: patches/sonner@1.5.0.patch
-  vite-plugin-pwa:
-    hash: awqkz67srww4vtfwpb6enzwjlq
-    path: patches/vite-plugin-pwa.patch
 
 importers:
 
@@ -249,8 +243,8 @@ importers:
         specifier: 1.17.6
         version: 1.17.6(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))
       vite-plugin-pwa:
-        specifier: ^0.20.5
-        version: 0.20.5(patch_hash=awqkz67srww4vtfwpb6enzwjlq)(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
+        specifier: https://pkg.pr.new/vite-plugin-pwa@781
+        version: https://pkg.pr.new/vite-plugin-pwa@781(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
       vite-tsconfig-paths:
         specifier: 5.0.1
         version: 5.0.1(typescript@5.6.3)(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))
@@ -10430,14 +10424,15 @@ packages:
     peerDependencies:
       vite: '>=3'
 
-  vite-plugin-pwa@0.20.5:
-    resolution: {integrity: sha512-aweuI/6G6n4C5Inn0vwHumElU/UEpNuO+9iZzwPZGTCH87TeZ6YFMrEY6ZUBQdIHHlhTsbMDryFARcSuOdsz9Q==}
+  vite-plugin-pwa@https://pkg.pr.new/vite-plugin-pwa@781:
+    resolution: {tarball: https://pkg.pr.new/vite-plugin-pwa@781}
+    version: 0.20.5
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.6
       vite: ^3.1.0 || ^4.0.0 || ^5.0.0
-      workbox-build: ^7.1.0
-      workbox-window: ^7.1.0
+      workbox-build: ^7.3.0
+      workbox-window: ^7.3.0
     peerDependenciesMeta:
       '@vite-pwa/assets-generator':
         optional: true
@@ -10790,7 +10785,7 @@ snapshots:
     dependencies:
       ajv: 8.17.1
       json-schema: 0.4.0
-      jsonpointer: 5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu)
+      jsonpointer: 5.0.1
       leven: 3.1.0
 
   '@auth/core@0.37.2':
@@ -18337,7 +18332,7 @@ snapshots:
       generate-function: 2.3.1
       generate-object-property: 1.2.0
       is-my-ip-valid: 1.0.1
-      jsonpointer: 5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu)
+      jsonpointer: 5.0.1
       xtend: 4.0.2
     optional: true
 
@@ -18500,7 +18495,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jsonpointer@5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu): {}
+  jsonpointer@5.0.1: {}
 
   jsonwebtoken@9.0.2:
     dependencies:
@@ -21837,7 +21832,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-pwa@0.20.5(patch_hash=awqkz67srww4vtfwpb6enzwjlq)(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0):
+  vite-plugin-pwa@https://pkg.pr.new/vite-plugin-pwa@781(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0):
     dependencies:
       debug: 4.3.7
       pretty-bytes: 6.1.1
