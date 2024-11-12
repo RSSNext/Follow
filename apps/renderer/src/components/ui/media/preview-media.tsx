@@ -32,7 +32,7 @@ const Wrapper: Component<{
   const { t } = useTranslation(["shortcuts", "common"])
 
   return (
-    <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
+    <div className="center relative size-full py-12 lg:px-20 lg:pb-8 lg:pt-10" onClick={dismiss}>
       <m.div
         onFocusCapture={stopPropagation}
         initial={true}
@@ -328,7 +328,6 @@ const FallbackableImage: FC<
         <div
           className={cn("relative max-h-full", width <= height && "h-full")}
           style={{
-            // px-20 pb-8 pt-10
             width:
               width && height && width > height
                 ? `${Math.min((windowHeight - 32 - 40) * (width / height), width)}px`
@@ -359,9 +358,9 @@ const FallbackableImage: FC<
           >
             {blurhash ? (
               <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            ) : (
+            ) : isLoading ? (
               <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-            )}
+            ) : null}
           </div>
         </div>
       )}

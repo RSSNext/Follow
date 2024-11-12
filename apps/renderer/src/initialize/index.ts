@@ -17,6 +17,7 @@ import { subscribeNetworkStatus } from "../atoms/network"
 import { getGeneralSettings, subscribeShouldUseIndexedDB } from "../atoms/settings/general"
 import { appLog } from "../lib/log"
 import { initAnalytics } from "./analytics"
+import { registerHistoryStack } from "./history"
 import { hydrateDatabaseToStore, hydrateSettings, setHydrated } from "./hydrate"
 import { doMigration } from "./migrates"
 import { initSentry } from "./sentry"
@@ -51,6 +52,7 @@ export const initializeApp = async () => {
     credentials: "include",
   })
   initializeDayjs()
+  registerHistoryStack()
 
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"

@@ -1,6 +1,5 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
-import { views } from "@follow/constants"
-import { cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
 import { AnimatePresence, m } from "framer-motion"
 import { memo } from "react"
@@ -11,9 +10,7 @@ import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry/hooks"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
-import { EntryReadHistory } from "./components/EntryReadHistory"
 import type { EntryHeaderProps } from "./header.shared"
-import { EntryHeaderSpecialActions } from "./header.shared"
 
 function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
   const entry = useEntry(entryId)
@@ -44,7 +41,8 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
         className,
       )}
     >
-      {!hideRecentReader && (
+      {/* TODO */}
+      {/* {!hideRecentReader && (
         <div
           className={cn(
             "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500 zen-mode-macos:left-12",
@@ -55,7 +53,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
         >
           <EntryReadHistory entryId={entryId} />
         </div>
-      )}
+      )} */}
       <div
         className="relative z-10 flex w-full items-center justify-between gap-3"
         data-hide-in-print
@@ -67,7 +65,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
                 initial={{ opacity: 0.01, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0.01, y: 30 }}
-                className="flex min-w-0 shrink items-end gap-2 truncate text-sm leading-tight text-theme-foreground"
+                className="flex min-w-0 shrink items-end gap-2 truncate px-1.5 text-sm leading-tight text-theme-foreground"
               >
                 <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
                 <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
@@ -79,8 +77,12 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
           </AnimatePresence>
         </div>
 
-        <div className="relative flex shrink-0 items-center justify-end gap-3">
-          <EntryHeaderSpecialActions id={entry.entries.id} />
+        <div
+          className={clsx(
+            "relative flex shrink-0 items-center justify-end gap-3",
+            shouldShowMeta && "hidden",
+          )}
+        >
           {items
             .filter((item) => !item.hide)
             .map((item) => (
