@@ -30,6 +30,9 @@ patchedDependencies:
   sonner@1.5.0:
     hash: 6s3tquyt5wnkqaogymn3mkivuq
     path: patches/sonner@1.5.0.patch
+  vite-plugin-pwa:
+    hash: awqkz67srww4vtfwpb6enzwjlq
+    path: patches/vite-plugin-pwa.patch
 
 importers:
 
@@ -244,7 +247,7 @@ importers:
         version: 1.17.6(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))
       vite-plugin-pwa:
         specifier: ^0.20.5
-        version: 0.20.5(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
+        version: 0.20.5(patch_hash=awqkz67srww4vtfwpb6enzwjlq)(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
       vite-tsconfig-paths:
         specifier: 5.0.1
         version: 5.0.1(typescript@5.6.3)(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))
@@ -21831,7 +21834,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-pwa@0.20.5(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0):
+  vite-plugin-pwa@0.20.5(patch_hash=awqkz67srww4vtfwpb6enzwjlq)(vite@5.4.10(@types/node@22.9.0)(lightningcss@1.27.0)(terser@5.36.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0):
     dependencies:
       debug: 4.3.7
       pretty-bytes: 6.1.1
