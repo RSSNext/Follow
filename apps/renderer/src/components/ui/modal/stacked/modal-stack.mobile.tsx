@@ -2,16 +2,19 @@ import { sheetStackAtom } from "@follow/components/ui/sheet/context.js"
 import type { SheetRef } from "@follow/components/ui/sheet/Sheet.js"
 import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 import { jotaiStore } from "@follow/utils/jotai"
+import { AnimatePresence } from "framer-motion"
 import { produce } from "immer"
 import { useAtomValue, useSetAtom } from "jotai"
 import { createElement, useMemo, useRef } from "react"
 import { useEventCallback } from "usehooks-ts"
 
+import { ModalInternal } from ".."
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
 import { CurrentModalContext } from "./context"
 import { useModalStack } from "./hooks"
+import { useModalStackCalculationAndEffect } from "./modal-stack.shared"
 import type { ModalProps } from "./types"
 
 export const ModalStack = () => {
@@ -20,7 +23,26 @@ export const ModalStack = () => {
 
   const stack = useAtomValue(modalStackAtom)
 
-  return stack.map((item, index) => <ModalToSheet {...item} key={item.id} index={index} />)
+  const { topModalIndex, overlayOptions } = useModalStackCalculationAndEffect()
+
+  return (
+    <AnimatePresence mode="popLayout">
+      {stack.map((item, index) => {
+        const shouldUseModal = !!item.CustomModalComponent
+        if (!shouldUseModal) return <ModalToSheet {...item} key={item.id} index={index} />
+        return (
+          <ModalInternal
+            key={item.id}
+            item={item}
+            index={index}
+            isTop={index === topModalIndex}
+            isBottom={index === 0}
+            overlayOptions={overlayOptions}
+          />
+        )
+      })}
+    </AnimatePresence>
+  )
 }
 
 const ModalToSheet = (props: ModalProps & { index: number; id: string }) => {
