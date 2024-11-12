@@ -201,6 +201,7 @@ function EntryColumnImpl() {
 
   return (
     <div
+      data-hide-in-print
       className="relative flex h-full flex-1 flex-col @container"
       onClick={() =>
         navigate({

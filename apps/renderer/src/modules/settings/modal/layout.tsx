@@ -123,7 +123,7 @@ export function SettingModalLayout(
             minHeight={500}
             minWidth={600}
             maxWidth="95vw"
-            className="flex flex-col"
+            className="flex !select-none flex-col"
           >
             {draggable && (
               <div className="absolute inset-x-0 top-0 z-[1] h-8" onPointerDown={handleDrag} />

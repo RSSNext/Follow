@@ -78,6 +78,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       setActive_(args)
 
       navigateBackHome(nextActive)
+      setSelectedFeedIds([])
     },
     [active, navigateBackHome],
   )
@@ -142,6 +143,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
 
   return (
     <WindowUnderBlur
+      data-hide-in-print
       className={cn(
         "relative flex h-full flex-col space-y-3 pt-2.5",
 

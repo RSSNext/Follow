@@ -35,6 +35,7 @@ const Render: React.ComponentType<
     <MasonryItemFixedDimensionWrapper url={url}>
       <Media
         thumbnail
+        popper
         src={url}
         type={type}
         className="size-full overflow-hidden"

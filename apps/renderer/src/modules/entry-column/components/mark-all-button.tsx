@@ -32,6 +32,7 @@ export const MarkAllReadWithOverlay = forwardRef<
     containerRef: React.RefObject<HTMLDivElement>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
+  const { t } = useTranslation()
   const { t: commonT } = useTranslation("common")
 
   const [show, setShow] = useState(false)
@@ -63,7 +64,7 @@ export const MarkAllReadWithOverlay = forwardRef<
         action: {
           label: (
             <span className="flex items-center gap-1">
-              Undo
+              {t("mark_all_read_button.undo")}
               <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
                 Meta+Z
               </Kbd>

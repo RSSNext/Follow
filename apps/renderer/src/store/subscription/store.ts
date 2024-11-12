@@ -515,7 +515,7 @@ class SubscriptionActions {
     view,
   }: {
     feedIdList: string[]
-    category: string
+    category?: string | null
     view: FeedViewType
   }) {
     const tx = createTransaction<
@@ -568,6 +568,13 @@ class SubscriptionActions {
             if (!subscription) return
 
             subscription.category = category
+            const feed = getFeedById(feedId)
+            if (feed?.type === "feed" && feed.siteUrl) {
+              const parsed = parse(feed.siteUrl)
+              if (parsed.domain) {
+                subscription.defaultCategory = capitalizeFirstLetter(parsed.domain)
+              }
+            }
 
             if (subscription.view !== view) {
               const currentViewFeedIds = draft.feedIdByView[subscription.view] as string[]

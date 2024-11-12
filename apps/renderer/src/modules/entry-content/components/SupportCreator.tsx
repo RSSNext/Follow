@@ -39,9 +39,9 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
 
   return (
     <>
-      <Divider />
+      <Divider data-hide-in-print />
 
-      <div className="my-16 flex flex-col items-center gap-8">
+      <div className="my-16 flex flex-col items-center gap-8" data-hide-in-print>
         {feed.ownerUserId ? (
           <UserAvatar
             className="w-40 flex-col gap-3 p-0"

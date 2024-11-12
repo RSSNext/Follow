@@ -161,6 +161,7 @@ export const EntryContentRender: Component<{
     [entry?.entries.media, data?.entries.media],
   )
   const customCSS = useUISettingKey("customCSS")
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -200,12 +201,15 @@ export const EntryContentRender: Component<{
         compact={compact}
       />
 
-      <div className="relative flex size-full flex-col overflow-hidden @container">
+      <div className="relative flex size-full flex-col overflow-hidden @container print:size-auto print:overflow-visible">
         <EntryTimelineSidebar entryId={entry.entries.id} />
         <ScrollArea.ScrollArea
           mask={false}
-          rootClassName={cn("h-0 min-w-0 grow overflow-y-auto", className)}
-          scrollbarClassName="mr-[1.5px]"
+          rootClassName={cn(
+            "h-0 min-w-0 grow overflow-y-auto print:h-auto print:overflow-visible",
+            className,
+          )}
+          scrollbarClassName="mr-[1.5px] print:hidden"
           viewportClassName="p-5"
           ref={scrollerRef}
         >
@@ -476,7 +480,7 @@ const ContainerToc: FC = memo(() => {
 
   return (
     <RootPortal to={wrappedElement!}>
-      <div className="group absolute right-[-130px] top-0 h-full w-[100px]">
+      <div className="group absolute right-[-130px] top-0 h-full w-[100px]" data-hide-in-print>
         <div className="sticky top-0">
           <Toc
             onItemClick={() => {
