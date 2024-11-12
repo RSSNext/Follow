@@ -24,6 +24,9 @@ patchedDependencies:
   immer@10.1.1:
     hash: og7mbnoo5vh43tjlw5rbmrdbvu
     path: patches/immer@10.1.1.patch
+  jsonpointer:
+    hash: prxuhlhyjugus5tiew4vc3pahu
+    path: patches/jsonpointer.patch
   re-resizable:
     hash: yitcmpfwcomg2fky72uc3lhk2i
     path: patches/re-resizable@6.9.17.patch
@@ -10787,7 +10790,7 @@ snapshots:
     dependencies:
       ajv: 8.17.1
       json-schema: 0.4.0
-      jsonpointer: 5.0.1
+      jsonpointer: 5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu)
       leven: 3.1.0
 
   '@auth/core@0.37.2':
@@ -18334,7 +18337,7 @@ snapshots:
       generate-function: 2.3.1
       generate-object-property: 1.2.0
       is-my-ip-valid: 1.0.1
-      jsonpointer: 5.0.1
+      jsonpointer: 5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu)
       xtend: 4.0.2
     optional: true
 
@@ -18497,7 +18500,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jsonpointer@5.0.1: {}
+  jsonpointer@5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu): {}
 
   jsonwebtoken@9.0.2:
     dependencies:

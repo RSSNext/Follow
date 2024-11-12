@@ -123,7 +123,8 @@
       "electron-context-menu": "patches/electron-context-menu.patch",
       "@mozilla/readability": "patches/@mozilla__readability.patch",
       "daisyui": "patches/daisyui.patch",
-      "vite-plugin-pwa": "patches/vite-plugin-pwa.patch"
+      "vite-plugin-pwa": "patches/vite-plugin-pwa.patch",
+      "jsonpointer": "patches/jsonpointer.patch"
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
