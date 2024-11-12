@@ -1,14 +1,10 @@
-import { withResponsiveComponent } from "@follow/components/utils/selector.js"
+import { withResponsiveSyncComponent } from "@follow/components/utils/selector.js"
 
+import { EntryListHeader as EntryListHeaderDesktop } from "./EntryListHeader.desktop"
+import { EntryListHeader as EntryListHeaderMobile } from "./EntryListHeader.mobile"
 import type { EntryListHeaderProps } from "./EntryListHeader.shared"
 
-export const EntryListHeader = withResponsiveComponent<EntryListHeaderProps>(
-  () =>
-    import("./EntryListHeader.desktop").then((mo) => ({
-      default: mo.EntryListHeader,
-    })),
-  () =>
-    import("./EntryListHeader.mobile").then((mo) => ({
-      default: mo.EntryListHeader,
-    })),
+export const EntryListHeader = withResponsiveSyncComponent<EntryListHeaderProps>(
+  EntryListHeaderDesktop,
+  EntryListHeaderMobile,
 )

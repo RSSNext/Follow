@@ -1,11 +1,10 @@
-import { withResponsiveComponent } from "@follow/components/utils/selector.js"
+import { withResponsiveSyncComponent } from "@follow/components/utils/selector.js"
 
+import { EntryHeader as EntryHeaderDesktop } from "./header.desktop"
+import { EntryHeader as EntryHeaderMobile } from "./header.mobile"
 import type { EntryHeaderProps } from "./header.shared"
 
-const EntryHeaderDesktop = () =>
-  import("./header.desktop").then((m) => ({ default: m.EntryHeader }))
-const EntryHeaderMobile = () => import("./header.mobile").then((m) => ({ default: m.EntryHeader }))
-export const EntryHeader = withResponsiveComponent<EntryHeaderProps>(
+export const EntryHeader = withResponsiveSyncComponent<EntryHeaderProps>(
   EntryHeaderDesktop,
   EntryHeaderMobile,
 )
