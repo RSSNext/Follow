@@ -1,9 +1,9 @@
 import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 
-import { ModalInternal } from "."
 import { modalStackAtom } from "./atom"
 import { useModalStack } from "./hooks"
+import { ModalInternal } from "./modal"
 import { useModalStackCalculationAndEffect } from "./modal-stack.shared"
 
 export const ModalStack = () => {

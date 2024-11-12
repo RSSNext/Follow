@@ -8,12 +8,12 @@ import { useAtomValue, useSetAtom } from "jotai"
 import { createElement, useMemo, useRef } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { ModalInternal } from ".."
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
 import { CurrentModalContext } from "./context"
 import { useModalStack } from "./hooks"
+import { ModalInternal } from "./modal"
 import { useModalStackCalculationAndEffect } from "./modal-stack.shared"
 import type { ModalProps } from "./types"
 
