@@ -25,7 +25,7 @@ import { useWalletRanking } from "~/queries/wallet"
 const medals = ["", "🥇", "🥈", "🥉"]
 const rankNumber = (index: number) => {
   if (index < medals.length) {
-    return <span className="-ml-[3px]">{medals[index]}</span>
+    return <span className="ml-[-3px]">{medals[index]}</span>
   }
   return <span>{index}</span>
 }

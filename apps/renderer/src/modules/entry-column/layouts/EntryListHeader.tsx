@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { MdiMeditation } from "@follow/components/icons/Meditation.jsx"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/index.js"
@@ -31,6 +32,7 @@ import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
+import { TimelineTabs } from "./TimelineTabs"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -77,6 +79,7 @@ export const EntryListHeader: FC<{
 
   const containerRef = React.useRef<HTMLDivElement>(null)
   const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
+  const isMobile = useMobile()
 
   return (
     <div
@@ -98,7 +101,7 @@ export const EntryListHeader: FC<{
           )}
           onClick={stopPropagation}
         >
-          {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && (
+          {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && !isMobile && (
             <>
               <EntryHeader view={view} entryId={entryId} />
               <DividerVertical className="mx-2 w-px" />
@@ -106,7 +109,7 @@ export const EntryListHeader: FC<{
           )}
 
           <AppendTaildingDivider>
-            {!views[view].wideMode && <WideModeButton />}
+            {!views[view].wideMode && !isMobile && <WideModeButton />}
             {view === FeedViewType.SocialMedia && <DailyReportButton />}
             {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
             {view === FeedViewType.Pictures && <FilterNoImageButton />}
@@ -164,7 +167,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
-      {/* <TimelineTabs /> */}
+      {isMobile && <TimelineTabs />}
     </div>
   )
 }

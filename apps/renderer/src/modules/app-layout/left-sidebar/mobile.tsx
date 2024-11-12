@@ -30,7 +30,7 @@ export function MainMobileLayout() {
   const [feedListScrollRef, setFeedListScrollRef] = useState<HTMLDivElement | null>()
 
   return (
-    <div className={clsx("relative flex h-full flex-col space-y-3", "bg-background")}>
+    <div className={clsx("relative flex h-screen flex-col space-y-3", "bg-background")}>
       <div className={"relative flex size-full h-0 grow"}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
@@ -99,9 +99,7 @@ const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElemen
 
   return (
     <m.div
-      className={clsx(
-        "absolute inset-x-0 flex h-10 justify-center will-change-transform bottom-safe-offset-8",
-      )}
+      className="absolute inset-x-0 flex h-10 justify-center will-change-transform bottom-safe-offset-8"
       transition={{ type: "spring" }}
       animate={animateController}
     >

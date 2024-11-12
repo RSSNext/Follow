@@ -1,6 +1,4 @@
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
-import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
@@ -221,14 +219,14 @@ function EntryColumnImpl() {
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
-      <AutoResizeHeight spring>
+      {/* <AutoResizeHeight spring>
         {isRefreshing && (
           <div className="center box-content h-7 gap-2 py-3 text-xs">
             <LoadingCircle size="small" />
             {t("entry_column.refreshing")}
           </div>
         )}
-      </AutoResizeHeight>
+      </AutoResizeHeight> */}
       <m.div
         key={`${routeFeedId}-${view}`}
         className="relative mt-2 h-0 grow"
