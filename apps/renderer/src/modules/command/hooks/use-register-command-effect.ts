@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
-import type { FollowCommandOptions } from "../registry/command"
 import { registerCommand } from "../registry/registry"
+import type { CommandOptions } from "../types"
 
 export type RegisterOptions = {
   deps?: unknown[]
@@ -13,7 +13,7 @@ export type RegisterOptions = {
 }
 
 export const useRegisterCommandEffect = (
-  options: FollowCommandOptions | FollowCommandOptions[],
+  options: CommandOptions | CommandOptions[],
   // registerOptions?: RegisterOptions,
 ) => {
   // TODO memo command via useMemo
@@ -21,11 +21,10 @@ export const useRegisterCommandEffect = (
 
   useEffect(() => {
     if (!Array.isArray(options)) {
-      if (!options.when) return
       return registerCommand(options)
     }
 
-    const unsubscribes = options.filter((i) => i.when).map((option) => registerCommand(option))
+    const unsubscribes = options.map((option) => registerCommand(option))
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe())
     }

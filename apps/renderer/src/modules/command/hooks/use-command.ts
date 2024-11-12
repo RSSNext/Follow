@@ -1,14 +1,15 @@
 import { useAtomValue } from "jotai"
 
-import type { FollowCommand } from "../registry/command"
 import { CommandRegistry } from "../registry/registry"
+import type { FollowCommandId, FollowCommandMap } from "../types"
 
 export function useGetCommand() {
-  const commands: Record<string, FollowCommand> = useAtomValue(CommandRegistry.atom)
-  return (id: string) => (id in commands ? commands[id] : null)
+  const commands = useAtomValue(CommandRegistry.atom) as FollowCommandMap
+  return <T extends FollowCommandId>(id: T): FollowCommandMap[T] | null =>
+    id in commands ? commands[id] : null
 }
 
-export function useCommand(id: string) {
+export function useCommand<T extends FollowCommandId>(id: T): FollowCommandMap[T] | null {
   const getCmd = useGetCommand()
   return getCmd(id)
 }

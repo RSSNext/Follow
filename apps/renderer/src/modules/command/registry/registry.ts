@@ -3,10 +3,8 @@ import { atom } from "jotai"
 // import { createKeybindingsHandler } from "tinykeys"
 import { jotaiStore } from "~/lib/jotai"
 
-import type { Command, CommandOptions as CommandOptions } from "./command"
+import type { Command, CommandOptions } from "../types"
 import { createCommand } from "./command"
-
-type KeyBindingMap = Record<string, (event: KeyboardEvent) => void>
 
 export interface KeyBindingOptions {
   /**
@@ -27,19 +25,6 @@ export interface KeyBindingOptions {
    * of your users.
    */
   timeout?: number
-}
-
-const bindKeys = (
-  target: Window | HTMLElement,
-  keyBindingMap: KeyBindingMap,
-  _options: KeyBindingOptions = {},
-) => {
-  // const event = options.event ?? "keydown"
-  // const onKeyEvent = createKeybindingsHandler(keyBindingMap, options)
-  // target.addEventListener(event, onKeyEvent, options.capture)
-  return () => {
-    // target.removeEventListener(event, onKeyEvent, options.capture)
-  }
 }
 
 export const CommandRegistry = new (class {
@@ -69,27 +54,7 @@ export const CommandRegistry = new (class {
     const command = createCommand(options)
     this.commands.set(command.id, command)
 
-    let unsubscribeKeyboardShortcut: (() => void) | undefined
-
-    if (command.keyBinding && !command.keyBinding.skipRegister && typeof window !== "undefined") {
-      const { binding: keybinding, capture } = command.keyBinding
-      unsubscribeKeyboardShortcut = bindKeys(
-        window,
-        {
-          [keybinding]: (e: Event) => {
-            if (!command.when) return
-            e.preventDefault()
-            command.run()
-          },
-        },
-        {
-          capture,
-        },
-      )
-    }
-
     return () => {
-      unsubscribeKeyboardShortcut?.()
       this.commands.delete(command.id)
     }
   }
