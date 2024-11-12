@@ -40,6 +40,8 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
+
+let prevScrollTop = 0
 function EntryColumnImpl() {
   const { t } = useTranslation()
   const virtuosoRef = useRef<VirtuosoHandle>(null)
@@ -168,6 +170,7 @@ function EntryColumnImpl() {
         handleMarkReadInRange(...args, isInteracted.current)
     },
     customScrollParent: scrollRef.current!,
+    initialScrollTop: prevScrollTop || 0,
 
     totalCount: entries.totalCount,
     endReached: useCallback(async () => {
@@ -179,11 +182,6 @@ function EntryColumnImpl() {
       }
     }, [entries]),
     data: finalEntriesIds,
-    onScroll: () => {
-      if (!isInteracted.current) {
-        isInteracted.current = true
-      }
-    },
     itemContent: useTypeScriptHappyCallback(
       (_, entryId) => {
         if (!entryId) return <ReactVirtuosoItemPlaceholder />
@@ -193,6 +191,14 @@ function EntryColumnImpl() {
       [view],
     ),
   } satisfies VirtuosoProps<string, unknown>
+
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    if (!isInteracted.current) {
+      isInteracted.current = true
+    }
+    const { scrollTop } = e.currentTarget
+    prevScrollTop = scrollTop
+  }, [])
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
@@ -238,6 +244,7 @@ function EntryColumnImpl() {
           scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
           mask={false}
           ref={scrollRef}
+          onScroll={handleScroll}
           rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}
           viewportClassName="[&>div]:grow flex"
         >

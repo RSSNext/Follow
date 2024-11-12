@@ -22,11 +22,6 @@ export const TimelineTabs = () => {
   const navigate = useNavigateEntry()
   if (!hasData) return null
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.currentTarget.scrollLeft += e.deltaY
-  }
-
   return (
     <Tabs
       className="-ml-3 -mr-4 mt-3 flex overflow-x-auto scrollbar-none"
@@ -41,7 +36,7 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList className="justify-start overflow-hidden border-b-0" onWheel={handleWheel}>
+      <TabsList className="justify-start border-b-0">
         <TabsTrigger variant={"rounded"} className="p-0" value="">
           Yours
         </TabsTrigger>

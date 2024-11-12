@@ -5,7 +5,7 @@ import { AnimatePresence, m } from "framer-motion"
 import { memo } from "react"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { HeaderTopReturnButton } from "~/components/mobile/button"
+import { HeaderTopReturnBackButton } from "~/components/mobile/button"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry/hooks"
@@ -39,7 +39,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
       className={cn(
         "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
         shouldShowMeta && "border-b border-border",
-        "pt-safe-inset-top",
+        "box-content pt-safe",
         className,
       )}
     >
@@ -79,7 +79,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
           </AnimatePresence>
         </div>
 
-        <HeaderTopReturnButton className={"absolute left-0"} />
+        <HeaderTopReturnBackButton className={"absolute left-0"} />
         <div className="flex-1" />
 
         <div

@@ -49,6 +49,7 @@ export const EntryContent: Component<{
   const { error, data, isPending } = useAuthQuery(
     inbox ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
     {
+      enabled: !!entryId,
       staleTime: 300_000,
     },
   )
