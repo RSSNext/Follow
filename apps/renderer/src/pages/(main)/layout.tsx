@@ -58,6 +58,14 @@ const LazyNewUserGuideModal = lazy(() =>
   import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
 )
 
+const ReloadPrompt = ELECTRON
+  ? () => null
+  : lazy(() =>
+      import("~/components/common/ReloadPrompt").then((module) => ({
+        default: module.ReloadPrompt,
+      })),
+    )
+
 const FooterInfo = () => {
   const { t } = useTranslation()
   return (
@@ -197,6 +205,7 @@ export function Component() {
         </RootPortal>
       )}
 
+      <ReloadPrompt />
       <SearchCmdK />
       <CmdNTrigger />
       {ELECTRON && <CmdF />}
