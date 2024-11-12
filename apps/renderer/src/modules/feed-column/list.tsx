@@ -2,12 +2,12 @@ import { useDraggable } from "@dnd-kit/core"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
-import { useKeyPressing } from "@follow/hooks"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useMemo, useRef, useState } from "react"
+import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -191,8 +191,6 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
   const shouldFreeUpSpace = useShouldFreeUpSpace()
 
-  const isMetaKeyPressed = useKeyPressing("Meta")
-
   return (
     <div className={cn(className, "font-medium")}>
       <ListHeader view={view} />
@@ -201,7 +199,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
+        dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
         hitRate={10}
