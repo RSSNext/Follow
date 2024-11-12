@@ -9,6 +9,7 @@ import { modalMontionConfig } from "../constants"
  */
 export const useModalAnimate = (isTop: boolean) => {
   const animateController = useAnimationControls()
+
   useEffect(() => {
     nextFrame(() => {
       animateController.start(modalMontionConfig.animate)

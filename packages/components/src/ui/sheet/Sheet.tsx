@@ -1,5 +1,5 @@
 import { useStore } from "jotai"
-import type { FC, PropsWithChildren, ReactNode } from "react"
+import type { FC, PropsWithChildren, ReactNode, RefObject } from "react"
 import * as React from "react"
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react"
 import { Drawer } from "vaul"
@@ -16,6 +16,7 @@ export interface PresentSheetProps {
   defaultOpen?: boolean
 
   triggerAsChild?: boolean
+  contentRef?: RefObject<HTMLDivElement>
 }
 
 export type SheetRef = {
@@ -32,6 +33,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
       dismissible = true,
       defaultOpen,
       triggerAsChild,
+      contentRef,
     } = props
 
     const [isOpen, setIsOpen] = useState(props.open ?? defaultOpen)
@@ -85,13 +87,14 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
 
     return (
       <Root dismissible={dismissible} {...nextRootProps}>
-        <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>
+        {!!children && <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>}
         <Drawer.Portal>
           <Drawer.Content
+            ref={contentRef}
             style={{
               zIndex: contentZIndex,
             }}
-            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque p-4"
+            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque px-6 pt-4 pb-safe-offset-4"
           >
             {dismissible && (
               <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800" />
