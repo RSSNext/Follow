@@ -11,7 +11,6 @@ import { omit } from "lodash-es"
 import { parse } from "tldts"
 
 import { whoami } from "~/atoms/user"
-import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { queryClient } from "~/lib/query-client"
@@ -24,7 +23,6 @@ import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
-import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
@@ -689,18 +687,3 @@ class SubscriptionActions {
 }
 
 export const subscriptionActions = new SubscriptionActions()
-
-export const getSubscriptionByFeedId = (feedId: FeedId) => {
-  const state = get()
-  return state.data[feedId]
-}
-
-export const isListSubscription = (feedId?: FeedId) => {
-  if (!feedId) return false
-  const subscription = getSubscriptionByFeedId(feedId.replace(ROUTE_FEED_IN_LIST, ""))
-  if (!subscription) return false
-  return "listId" in subscription && !!subscription.listId
-}
-
-export const subscriptionCategoryExist = (name: string) =>
-  subscriptionCategoryExistSelector(name)(get())

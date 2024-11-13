@@ -12,8 +12,8 @@ import {
   subscriptionByFeedIdSelector,
   subscriptionByViewSelector,
   subscriptionCategoryExistSelector,
-  useSubscriptionStore,
-} from "../subscription"
+} from "./selector"
+import { useSubscriptionStore } from "./store"
 
 type FeedId = string
 

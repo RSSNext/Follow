@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
-import { useShallow } from "zustand/react/shallow"
+import { useCallback } from "react"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
 
@@ -14,79 +14,85 @@ export const useEntry = <T = FlatEntryModel>(
   selector?: (state: FlatEntryModel) => T,
 ): T | null =>
   useEntryStore(
-    useShallow((state) => {
-      if (!entryId) return null
-      const data = state.flatMapEntries[entryId]
+    useCallback(
+      (state) => {
+        if (!entryId) return null
+        const data = state.flatMapEntries[entryId]
 
-      if (!data) return null
+        if (!data) return null
 
-      return selector ? selector(data) : (data as T)
-    }),
+        return selector ? selector(data) : (data as T)
+      },
+      [entryId, selector],
+    ),
   )
 
 // feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
   useEntryStore(
-    useShallow((state) => {
-      if (typeof feedId !== "string") return []
-      const isMultiple = feedId.includes(",")
+    useCallback(
+      (state) => {
+        if (typeof feedId !== "string") return []
+        const isMultiple = feedId.includes(",")
 
-      const isInFolder = feedId.startsWith(ROUTE_FEED_IN_FOLDER)
+        const isInFolder = feedId.startsWith(ROUTE_FEED_IN_FOLDER)
 
-      if (isMultiple) {
-        const feedIds = feedId.split(",")
-        const result = [] as string[]
-        for (const id of feedIds) {
-          result.push(...getSingle(id))
-        }
-        return result
-      } else if (feedId === FEED_COLLECTION_LIST) {
-        const result = [] as string[]
-        state.starIds.forEach((entryId) => {
-          if (getEntryIsInView(entryId)?.toString() === filter?.view?.toString()) {
-            result.push(entryId)
-          }
-        })
-
-        return result
-      } else if (isInFolder) {
-        // please use `useEntryIdsByFolderName` instead
-        return []
-      } else {
-        return getSingle(feedId)
-      }
-
-      function getSingle(feedId: string) {
-        const data = state.entries[feedId] || []
-        if (filter?.unread) {
+        if (isMultiple) {
+          const feedIds = feedId.split(",")
           const result = [] as string[]
-          for (const entryId of data) {
-            const entry = state.flatMapEntries[entryId]
-            if (!entry?.read) {
-              result.push(entryId)
-            }
+          for (const id of feedIds) {
+            result.push(...getSingle(id))
           }
           return result
+        } else if (feedId === FEED_COLLECTION_LIST) {
+          const result = [] as string[]
+          state.starIds.forEach((entryId) => {
+            if (getEntryIsInView(entryId)?.toString() === filter?.view?.toString()) {
+              result.push(entryId)
+            }
+          })
+
+          return result
+        } else if (isInFolder) {
+          // please use `useEntryIdsByFolderName` instead
+          return []
+        } else {
+          return getSingle(feedId)
         }
-        return data
-      }
-    }),
+
+        function getSingle(feedId: string) {
+          const data = state.entries[feedId] || []
+          if (filter?.unread) {
+            const result = [] as string[]
+            for (const entryId of data) {
+              const entry = state.flatMapEntries[entryId]
+              if (!entry?.read) {
+                result.push(entryId)
+              }
+            }
+            return result
+          }
+          return data
+        }
+      },
+      [feedId, filter?.unread, filter?.view],
+    ),
   )
 
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
 
-  return useEntryStore(useShallow(() => getFilteredFeedIds(feedIds, filter)))
+  return useEntryStore(useCallback(() => getFilteredFeedIds(feedIds, filter), [feedIds, filter]))
 }
 
 export const useEntryIdsByFeedIds = (feedIds: string[], filter: EntryFilter = {}) =>
   useEntryStore(
-    useShallow(() => {
+    useCallback(() => {
       if (!feedIds) return null
       if (!Array.isArray(feedIds)) return null
 
       return getFilteredFeedIds(feedIds, filter)
-    }),
+    }, [feedIds, filter]),
   )
 export const useEntryIdsByFeedIdOrView = (
   feedIdOrView: string | string[] | FeedViewType,
@@ -107,4 +113,4 @@ export const useEntryIdsByFeedIdOrView = (
 export const useEntryReadHistory = (
   entryId: string,
 ): Omit<EntryReadHistoriesModel, "entryId"> | null =>
-  useEntryStore(useShallow((state) => state.readHistory[entryId]))
+  useEntryStore((state) => state.readHistory[entryId])

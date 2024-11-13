@@ -1,17 +1,13 @@
 import { views } from "@follow/constants"
 import type { FeedModel, FeedOrListRespModel, InboxModel, ListModel } from "@follow/models/types"
-import { useMutation } from "@tanstack/react-query"
-import { useCallback, useRef } from "react"
+import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
-import { toast } from "sonner"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
-import { apiClient } from "~/lib/api-fetch"
-import { entries } from "~/queries/entries"
 
 import { useInboxStore } from "../inbox"
-import { listActions, useListStore } from "../list"
+import { useListStore } from "../list"
 import {
   feedByIdOrUrlSelector,
   feedByIdSelector,
@@ -96,82 +92,4 @@ export const useFeedHeaderTitle = () => {
       return feedTitle || listTitle || inboxTitle
     }
   }
-}
-
-export const useAddFeedToFeedList = (options?: {
-  onSuccess?: () => void
-  onError?: () => void
-}) => {
-  const { t } = useTranslation("settings")
-  return useMutation({
-    mutationFn: async (
-      payload: { feedId: string; listId: string } | { feedIds: string[]; listId: string },
-    ) => {
-      const feeds = await apiClient.lists.feeds.$post({
-        json: payload,
-      })
-
-      feeds.data.forEach((feed) => listActions.addFeedToFeedList(payload.listId, feed))
-    },
-    onSuccess: () => {
-      toast.success(t("lists.feeds.add.success"))
-
-      options?.onSuccess?.()
-    },
-    async onError() {
-      toast.error(t("lists.feeds.add.error"))
-      options?.onError?.()
-    },
-  })
-}
-
-export const useRemoveFeedFromFeedList = (options?: {
-  onSuccess: () => void
-  onError: () => void
-}) => {
-  const { t } = useTranslation("settings")
-  return useMutation({
-    mutationFn: async (payload: { feedId: string; listId: string }) => {
-      listActions.removeFeedFromFeedList(payload.listId, payload.feedId)
-      await apiClient.lists.feeds.$delete({
-        json: {
-          listId: payload.listId,
-          feedId: payload.feedId,
-        },
-      })
-    },
-    onSuccess: () => {
-      toast.success(t("lists.feeds.delete.success"))
-      options?.onSuccess?.()
-    },
-    async onError() {
-      toast.error(t("lists.feeds.delete.error"))
-      options?.onError?.()
-    },
-  })
-}
-
-export const useResetFeed = () => {
-  const { t } = useTranslation()
-  const toastIDRef = useRef<string | number | null>(null)
-
-  return useMutation({
-    mutationFn: async (feedId: string) => {
-      toastIDRef.current = toast.loading(t("sidebar.feed_actions.resetting_feed"))
-      await apiClient.feeds.reset.$get({ query: { id: feedId } })
-    },
-    onSuccess: (_, feedId) => {
-      entries.entries({ feedId }).invalidateRoot()
-      toast.success(
-        t("sidebar.feed_actions.reset_feed_success"),
-        toastIDRef.current ? { id: toastIDRef.current } : undefined,
-      )
-    },
-    onError: () => {
-      toast.error(
-        t("sidebar.feed_actions.reset_feed_error"),
-        toastIDRef.current ? { id: toastIDRef.current } : undefined,
-      )
-    },
-  })
 }

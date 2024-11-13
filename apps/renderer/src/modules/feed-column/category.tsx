@@ -18,10 +18,11 @@ import { useOnClickOutside } from "usehooks-ts"
 import type { MenuItemInput } from "~/atoms/context-menu"
 import { useShowContextMenu } from "~/atoms/context-menu"
 import { ROUTE_FEED_IN_FOLDER } from "~/constants"
+import { useAddFeedToFeedList } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { createErrorToaster } from "~/lib/error-parser"
-import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
+import { getPreferredTitle, useFeedStore } from "~/store/feed"
 import { useOwnedListByView } from "~/store/list"
 import {
   subscriptionActions,
