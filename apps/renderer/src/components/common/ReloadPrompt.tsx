@@ -2,6 +2,10 @@ import { useCallback, useEffect } from "react"
 import { toast } from "sonner"
 import { useRegisterSW } from "virtual:pwa-register/react"
 
+function isInPWA() {
+  return window.matchMedia("(display-mode: standalone)").matches
+}
+
 export function ReloadPrompt() {
   const {
     offlineReady: [, setOfflineReady],
@@ -23,7 +27,7 @@ export function ReloadPrompt() {
   }, [setNeedRefresh, setOfflineReady])
 
   useEffect(() => {
-    if (needRefresh) {
+    if (needRefresh && isInPWA()) {
       toast.info("New version available", {
         action: {
           label: "Refresh",

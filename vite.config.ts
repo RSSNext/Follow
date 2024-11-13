@@ -68,7 +68,7 @@ export default ({ mode }) => {
         ? {
             proxy: {
               [env.VITE_DEV_PROXY]: {
-                target: env.VITE_API_URL,
+                target: env.VITE_DEV_PROXY_TARGET,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(new RegExp(`^${env.VITE_DEV_PROXY}`), ""),
               },
