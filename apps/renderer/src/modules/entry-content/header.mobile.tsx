@@ -1,5 +1,8 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
+import { findElementInShadowDOM } from "@follow/utils/dom"
+import { springScrollToElement } from "@follow/utils/scroller"
 import { clsx, cn } from "@follow/utils/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
 import { Slot } from "@radix-ui/react-slot"
@@ -9,6 +12,8 @@ import { RemoveScroll } from "react-remove-scroll"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
+import { useTocItems } from "~/components/ui/markdown/components/useTocItems"
+import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -114,18 +119,59 @@ const HeaderRightActions = ({
   className?: string
   actions: EntryActionItem[]
 }) => {
-  const [open, setOpen] = useState(true)
+  const [ctxOpen, setCtxOpen] = useState(false)
+
+  const [markdownElement, setMarkdownElement] = useState<HTMLElement | null>(null)
+  const { toc, rootDepth } = useTocItems(markdownElement)
+
   return (
-    <div className={clsx(className, "absolute right-0")}>
-      <MotionButtonBase className="center size-8" onClick={() => setOpen((v) => !v)}>
+    <div className={clsx(className, "absolute right-0 flex items-center gap-2")}>
+      <PresentSheet
+        title="Table of Contents"
+        onOpenChange={(open) => {
+          if (open) {
+            setMarkdownElement(
+              findElementInShadowDOM(`#${ENTRY_CONTENT_RENDER_CONTAINER_ID}`) as HTMLElement,
+            )
+          }
+        }}
+        content={
+          <ul className="text-sm">
+            {toc.map((heading) => (
+              <li
+                key={heading.anchorId}
+                className="flex w-full items-center"
+                style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
+              >
+                <button
+                  className={cn("group flex w-full cursor-pointer justify-between py-1")}
+                  type="button"
+                  onClick={() => {
+                    springScrollToElement(heading.$heading, -100)
+                  }}
+                >
+                  <span className="duration-200 group-hover:text-accent/80">{heading.title}</span>
+
+                  <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        }
+      >
+        <MotionButtonBase className="center size-8">
+          <TableOfContentsIcon className="size-6" />
+        </MotionButtonBase>
+      </PresentSheet>
+      <MotionButtonBase className="center size-8" onClick={() => setCtxOpen((v) => !v)}>
         <i className="i-mingcute-more-1-fill size-6" />
       </MotionButtonBase>
 
       <RootPortal>
         <AnimatePresence>
-          {open && (
+          {ctxOpen && (
             <RemoveScroll>
-              <DismissableLayer disableOutsidePointerEvents onDismiss={() => setOpen(false)}>
+              <DismissableLayer disableOutsidePointerEvents onDismiss={() => setCtxOpen(false)}>
                 <m.div
                   initial={{
                     scale: 0.8,
@@ -155,7 +201,7 @@ const HeaderRightActions = ({
                       .map((item) => (
                         <MotionButtonBase
                           onClick={(e) => {
-                            setOpen(false)
+                            setCtxOpen(false)
                             item.onClick?.(e)
                           }}
                           key={item.name}
@@ -174,5 +220,26 @@ const HeaderRightActions = ({
         </AnimatePresence>
       </RootPortal>
     </div>
+  )
+}
+const TableOfContentsIcon = ({ className = "size-6" }) => {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <line x1="4" y1="6" x2="20" y2="6" />
+
+      <line x1="4" y1="12" x2="20" y2="12" strokeWidth="1.5" />
+      <line x1="4" y1="18" x2="20" y2="18" strokeWidth="1.5" />
+
+      <line x1="7" y1="12" x2="8" y2="12" strokeWidth="2.5" />
+      <line x1="7" y1="18" x2="8" y2="18" strokeWidth="2.5" />
+    </svg>
   )
 }

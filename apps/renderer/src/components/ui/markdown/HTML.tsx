@@ -2,6 +2,7 @@ import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDanger
 import katexStyle from "katex/dist/katex.min.css?raw"
 import { createElement, Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 
+import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import { parseHtml } from "~/lib/parse-html"
 import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 
@@ -79,7 +80,15 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(props: HTMLProp
       <MediaContainerWidthProvider width={containerWidth}>
         <MediaInfoRecordProvider mediaInfo={mediaInfo}>
           <MemoedDangerousHTMLStyle>{katexStyle}</MemoedDangerousHTMLStyle>
-          {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+          {createElement(
+            as,
+            {
+              ...rest,
+              id: ENTRY_CONTENT_RENDER_CONTAINER_ID,
+              ref: setRefElement,
+            },
+            markdownElement,
+          )}
         </MediaInfoRecordProvider>
       </MediaContainerWidthProvider>
       {!!accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}

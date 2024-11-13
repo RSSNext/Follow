@@ -49,7 +49,7 @@ export const springScrollToElement = (
   element: HTMLElement,
   delta = 40,
 
-  scrollerElement: HTMLElement,
+  scrollerElement: HTMLElement = document.documentElement,
 ) => {
   const y = calculateElementTop(element)
 

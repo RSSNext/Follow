@@ -147,7 +147,7 @@ export const EntryContent: Component<{
         >
           <article
             onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
+            className="relative m-auto min-w-0 max-w-[550px]"
           >
             <EntryTitle entryId={entryId} compact={compact} />
 
