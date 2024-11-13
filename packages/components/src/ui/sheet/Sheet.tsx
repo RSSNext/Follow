@@ -22,13 +22,13 @@ export interface PresentSheetProps {
 export type SheetRef = {
   dismiss: () => void
 }
-
+const MODAL_STACK_Z_INDEX = 1001
 export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetProps>>(
   (props, ref) => {
     const {
       content,
       children,
-      zIndex = 10000,
+      zIndex = MODAL_STACK_Z_INDEX,
       title,
       dismissible = true,
       defaultOpen,
