@@ -58,6 +58,14 @@ const LazyNewUserGuideModal = lazy(() =>
   import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
 )
 
+const ReloadPrompt = ELECTRON
+  ? () => null
+  : lazy(() =>
+      import("~/components/common/ReloadPrompt").then((module) => ({
+        default: module.ReloadPrompt,
+      })),
+    )
+
 const errorTypes = [
   ErrorComponentType.Page,
   ErrorComponentType.FeedFoundCanBeFollow,
@@ -162,6 +170,7 @@ export function MainDestopLayout() {
         </RootPortal>
       )}
 
+      <ReloadPrompt />
       <SearchCmdK />
       <CmdNTrigger />
       {ELECTRON && <CmdF />}
