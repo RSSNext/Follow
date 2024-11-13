@@ -1,70 +1,75 @@
-import { FeedViewType } from "@follow/constants"
+import type { FeedViewType } from "@follow/constants"
+import { useCallback } from "react"
 
-import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
-
-import { subscriptionCategoryExistSelector, useSubscriptionStore } from "../subscription"
+import { useFeedStore } from "../feed"
+import {
+  categoryOpenStateByViewSelector,
+  feedIdByViewSelector,
+  feedSubscriptionCountSelector,
+  folderFeedsByFeedIdSelector,
+  inboxSubscriptionCountSelector,
+  listSubscriptionCountSelector,
+  subscriptionByFeedIdSelector,
+  subscriptionByViewSelector,
+  subscriptionCategoryExistSelector,
+  useSubscriptionStore,
+} from "../subscription"
 
 type FeedId = string
+
 export const useFeedIdByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) => state.feedIdByView[view] || [])
+  useSubscriptionStore(useCallback((state) => feedIdByViewSelector(view)(state), [view]))
 
 export const useCategoryOpenStateByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) => state.categoryOpenStateByView[view])
+  useSubscriptionStore(useCallback((state) => categoryOpenStateByViewSelector(view)(state), [view]))
 
 export const useSubscriptionByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) => state.feedIdByView[view].map((id) => state.data[id]))
+  useSubscriptionStore(useCallback((state) => subscriptionByViewSelector(view)(state), [view]))
 
 export const useSubscriptionByFeedId = (feedId: FeedId) =>
-  useSubscriptionStore((state) => state.data[feedId])
+  useSubscriptionStore(
+    useCallback((state) => subscriptionByFeedIdSelector(feedId)(state), [feedId]),
+  )
 
 export const useFolderFeedsByFeedId = ({ feedId, view }: { feedId?: string; view: FeedViewType }) =>
-  useSubscriptionStore((state): string[] | null => {
-    if (typeof feedId !== "string") return null
-    if (feedId === FEED_COLLECTION_LIST) {
-      return [feedId]
-    }
-
-    if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
-      return null
-    }
-
-    const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")
-    const feedIds: string[] = []
-    for (const feedId in state.data) {
-      const subscription = state.data[feedId]
-      if (
-        subscription.view === view &&
-        (subscription.category === folderName || subscription.defaultCategory === folderName)
-      ) {
-        feedIds.push(feedId)
-      }
-    }
-    return feedIds
-  })
-
-export const useListSubscriptionCount = () =>
   useSubscriptionStore(
-    (state) =>
-      Object.values(state.data).filter((s) => !!s.listId && state.subscriptionIdSet.has(s.listId))
-        .length,
+    useCallback((state) => folderFeedsByFeedIdSelector({ feedId, view })(state), [feedId, view]),
   )
 
-export const useInboxSubscriptionCount = () =>
-  useSubscriptionStore(
-    (state) =>
-      Object.values(state.data).filter(
-        (s) => !!s.inboxId && state.feedIdByView[FeedViewType.Articles].includes(s.inboxId),
-      ).length,
-  )
+export const useListSubscriptionCount = () => useSubscriptionStore(listSubscriptionCountSelector)
 
-export const useFeedSubscriptionCount = () =>
-  useSubscriptionStore(
-    (state) =>
-      Object.values(state.data).filter(
-        // FIXME: Backend data compatibility
-        (s) => !!s.feedId && !s.listId && !s.inboxId && state.subscriptionIdSet.has(s.feedId),
-      ).length,
-  )
+export const useInboxSubscriptionCount = () => useSubscriptionStore(inboxSubscriptionCountSelector)
+
+export const useFeedSubscriptionCount = () => useSubscriptionStore(feedSubscriptionCountSelector)
 
 export const useSubscriptionCategoryExist = (name: string) =>
-  useSubscriptionStore(subscriptionCategoryExistSelector(name))
+  useSubscriptionStore(
+    useCallback((state) => subscriptionCategoryExistSelector(name)(state), [name]),
+  )
+
+export const useAllFeeds = () => {
+  const feedTitleMap = useFeedStore(
+    useCallback((store) => {
+      return Object.fromEntries(Object.entries(store.feeds).map(([id, feed]) => [id, feed.title]))
+    }, []),
+  )
+  return useSubscriptionStore(
+    useCallback(
+      (store) => {
+        const feedInfo = [] as { title: string; id: string }[]
+
+        const allSubscriptions = Object.values(store.feedIdByView).flat()
+
+        for (const feedId of allSubscriptions) {
+          const subscription = store.data[feedId]
+          const feed = feedTitleMap[feedId]
+          if (feed) {
+            feedInfo.push({ title: subscription.title || feed || "", id: feedId })
+          }
+        }
+        return feedInfo
+      },
+      [feedTitleMap],
+    ),
+  )
+}

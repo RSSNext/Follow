@@ -48,8 +48,8 @@ interface FeedCategoryProps {
 function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCategoryProps) {
   const { t } = useTranslation()
 
-  const sortByUnreadFeedList = useFeedUnreadStore((state) =>
-    ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)),
+  const sortByUnreadFeedList = useFeedUnreadStore(
+    useCallback((state) => ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)), [ids]),
   )
 
   const navigate = useNavigateEntry()
@@ -126,8 +126,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
     }
   }
 
-  const unread = useFeedUnreadStore((state) =>
-    ids.reduce((acc, feedId) => (state.data[feedId] || 0) + acc, 0),
+  const unread = useFeedUnreadStore(
+    useCallback((state) => ids.reduce((acc, feedId) => (state.data[feedId] || 0) + acc, 0), [ids]),
   )
 
   const isActive = useRouteParamsSelector(
@@ -452,18 +452,23 @@ const SortedFeedItems = (props: SortListProps) => {
 const SortByAlphabeticalList = (props: SortListProps) => {
   const { ids, showCollapse, view } = props
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
-  const sortedFeedList = useFeedStore((state) => {
-    const res = ids.sort((a, b) => {
-      const feedTitleA = getPreferredTitle(state.feeds[a]) || ""
-      const feedTitleB = getPreferredTitle(state.feeds[b]) || ""
-      return sortByAlphabet(feedTitleA, feedTitleB)
-    })
+  const sortedFeedList = useFeedStore(
+    useCallback(
+      (state) => {
+        const res = ids.sort((a, b) => {
+          const feedTitleA = getPreferredTitle(state.feeds[a]) || ""
+          const feedTitleB = getPreferredTitle(state.feeds[b]) || ""
+          return sortByAlphabet(feedTitleA, feedTitleB)
+        })
 
-    if (isDesc) {
-      return res
-    }
-    return res.reverse()
-  })
+        if (isDesc) {
+          return res
+        }
+        return res.reverse()
+      },
+      [ids, isDesc],
+    ),
+  )
   return (
     <Fragment>
       {sortedFeedList.map((feedId) => (
@@ -479,10 +484,15 @@ const SortByAlphabeticalList = (props: SortListProps) => {
 }
 const SortByUnreadList = ({ ids, showCollapse, view }: SortListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
-  const sortByUnreadFeedList = useFeedUnreadStore((state) => {
-    const res = ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0))
-    return isDesc ? res : res.reverse()
-  })
+  const sortByUnreadFeedList = useFeedUnreadStore(
+    useCallback(
+      (state) => {
+        const res = ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0))
+        return isDesc ? res : res.reverse()
+      },
+      [ids, isDesc],
+    ),
+  )
 
   return (
     <Fragment>

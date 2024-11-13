@@ -1,10 +1,9 @@
 import { views } from "@follow/constants"
 import type { FeedModel, FeedOrListRespModel, InboxModel, ListModel } from "@follow/models/types"
 import { useMutation } from "@tanstack/react-query"
-import { useRef } from "react"
+import { useCallback, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
-import { useShallow } from "zustand/react/shallow"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
@@ -13,35 +12,43 @@ import { entries } from "~/queries/entries"
 
 import { useInboxStore } from "../inbox"
 import { listActions, useListStore } from "../list"
+import {
+  feedByIdOrUrlSelector,
+  feedByIdSelector,
+  feedByIdSelectorWithTransform,
+  feedByIdWithTransformSelector,
+  inboxByIdSelectorWithTransform,
+  listByIdSelectorWithTransform,
+} from "./selector"
 import { getPreferredTitle, useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"
 
 export function useFeedById(feedId: Nullable<string>): FeedModel | null
 export function useFeedById<T>(feedId: Nullable<string>, selector: (feed: FeedModel) => T): T | null
-export function useFeedById<T>(feedId: Nullable<string>, selector?: (feed: FeedModel) => T) {
-  return useFeedStore((state) => {
-    const feed = feedId ? state.feeds[feedId] : null
-    return selector ? feed && selector(feed) : feed
-  })
+export function useFeedById<T>(feedId: Nullable<string>, transform?: (feed: FeedModel) => T) {
+  return useFeedStore(
+    useCallback(
+      (state) =>
+        transform
+          ? feedByIdWithTransformSelector(feedId, transform)(state)
+          : feedByIdSelector(feedId)(state),
+      [feedId, transform],
+    ),
+  )
 }
 
 export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
-  useFeedStore((state) => {
-    if (feed.id) {
-      return state.feeds[feed.id]
-    }
-    if (feed.url) {
-      return Object.values(state.feeds).find((f) => f.type === "feed" && f.url === feed.url) || null
-    }
-    return null
-  })
+  useFeedStore(useCallback((state) => feedByIdOrUrlSelector(feed)(state), [feed]))
 
 export const useFeedByIdSelector = <T>(
   feedId: Nullable<string>,
   selector: (feed: FeedOrListRespModel) => T,
 ) =>
   useFeedStore(
-    useShallow((state) => (feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null)),
+    useCallback(
+      (state) => feedByIdSelectorWithTransform(feedId, selector)(state),
+      [feedId, selector],
+    ),
   )
 
 export const useListByIdSelector = <T>(
@@ -49,7 +56,10 @@ export const useListByIdSelector = <T>(
   selector: (list: ListModel) => T,
 ) =>
   useListStore(
-    useShallow((state) => (listId && state.lists[listId] ? selector(state.lists[listId]) : null)),
+    useCallback(
+      (state) => listByIdSelectorWithTransform(listId, selector)(state),
+      [listId, selector],
+    ),
   )
 
 export const useInboxByIdSelector = <T>(
@@ -57,8 +67,9 @@ export const useInboxByIdSelector = <T>(
   selector: (inbox: InboxModel) => T,
 ) =>
   useInboxStore(
-    useShallow((state) =>
-      inboxId && state.inboxes[inboxId] ? selector(state.inboxes[inboxId]) : null,
+    useCallback(
+      (state) => inboxByIdSelectorWithTransform(inboxId, selector)(state),
+      [inboxId, selector],
     ),
   )
 
@@ -67,9 +78,9 @@ export const useFeedHeaderTitle = () => {
 
   const { feedId: currentFeedId, view, listId, inboxId } = useRouteParams()
 
-  const listTitle = useListByIdSelector(listId, (list) => getPreferredTitle(list))
-  const inboxTitle = useInboxByIdSelector(inboxId, (inbox) => getPreferredTitle(inbox))
-  const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => getPreferredTitle(feed))
+  const listTitle = useListByIdSelector(listId, getPreferredTitle)
+  const inboxTitle = useInboxByIdSelector(inboxId, getPreferredTitle)
+  const feedTitle = useFeedByIdSelector(currentFeedId, getPreferredTitle)
 
   switch (currentFeedId) {
     case ROUTE_FEED_PENDING: {
