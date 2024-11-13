@@ -68,7 +68,7 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
       <DropdownMenu onOpenChange={setDropdown}>
         <DropdownMenuTrigger
           asChild
-          className="focus-visible:bg-theme-item-hover !outline-none data-[state=open]:bg-transparent"
+          className="!outline-none focus-visible:bg-theme-item-hover data-[state=open]:bg-transparent"
         >
           {props.animatedAvatar ? (
             <TransitionAvatar stage={dropdown ? "zoom-in" : ""} />

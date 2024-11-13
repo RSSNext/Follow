@@ -37,9 +37,9 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
     <div
       data-hide-in-print
       className={cn(
-        "zen-mode-macos:ml-margin-macos-traffic-light-x relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200",
-        shouldShowMeta && "border-border border-b",
-        "pt-safe box-content",
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
+        shouldShowMeta && "border-b border-border",
+        "box-content pt-safe",
         className,
       )}
     >
@@ -67,7 +67,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
                 initial={{ opacity: 0.01, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0.01, y: 30 }}
-                className="text-theme-foreground pointer-events-auto flex min-w-0 shrink items-end gap-2 truncate px-1.5 pl-10 text-sm leading-tight"
+                className="pointer-events-auto flex min-w-0 shrink items-end gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground"
               >
                 <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
                 <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />

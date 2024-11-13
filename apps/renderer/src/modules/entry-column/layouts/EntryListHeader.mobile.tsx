@@ -76,7 +76,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
       ref={containerRef}
       className={cn(
         "mb-2 flex w-full flex-col pr-4 transition-[padding] duration-300 ease-in-out",
-        "pt-safe-offset-2.5 pl-6",
+        "pl-6 pt-safe-offset-2.5",
       )}
     >
       <div className="flex w-full justify-between pl-8">

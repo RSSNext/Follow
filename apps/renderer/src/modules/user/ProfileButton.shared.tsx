@@ -13,7 +13,7 @@ export function PowerButton({
     <div className="flex items-center gap-1">
       <i className="i-mgc-power text-accent" />
       {isLoading ? (
-        <span className="bg-theme-inactive h-3 w-8 animate-pulse rounded-xl" />
+        <span className="h-3 w-8 animate-pulse rounded-xl bg-theme-inactive" />
       ) : (
         <Balance precision={0}>{BigInt(myWallet?.powerToken || 0n)}</Balance>
       )}

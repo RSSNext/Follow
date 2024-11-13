@@ -215,7 +215,7 @@ function EntryColumnImpl() {
   return (
     <div
       data-hide-in-print
-      className="@container relative flex h-full flex-1 flex-col"
+      className="relative flex h-full flex-1 flex-col @container"
       onClick={() =>
         navigate({
           entryId: null,
@@ -314,7 +314,7 @@ const ListGird = ({
     return (
       <div className="center absolute inset-x-0 inset-y-12 -translate-y-12 flex-col gap-5">
         <i className="i-mgc-photo-album-cute-fi size-12" />
-        <div className="text-muted-foreground text-sm">
+        <div className="text-sm text-muted-foreground">
           {t("entry_column.filtered_content_tip")}
         </div>
 

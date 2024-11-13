@@ -134,23 +134,23 @@ export const EntryContent: Component<{
         entryId={entry.entries.id}
         view={0}
         className={cn(
-          "bg-background @container sticky top-0 z-[12] h-[55px] shrink-0 px-3",
+          "sticky top-0 z-[12] h-[55px] shrink-0 bg-background px-3 @container",
           classNames?.header,
         )}
         compact={compact}
       />
 
-      <div className="@container relative mt-12 flex min-w-0 flex-col px-4 print:size-auto print:overflow-visible">
+      <div className="relative mt-12 flex min-w-0 flex-col px-4 @container print:size-auto print:overflow-visible">
         <div
           onPointerDown={clearSelection}
           style={stableRenderStyle}
-          className="animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0 duration-200 ease-in-out"
+          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
           key={entry.entries.id}
         >
           <article
             data-testid="entry-render"
             onContextMenu={stopPropagation}
-            className="@3xl:max-w-[70ch] @7xl:max-w-[80ch] relative m-auto min-w-0 max-w-[550px]"
+            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
           >
             <EntryTitle entryId={entryId} compact={compact} />
 
@@ -181,7 +181,7 @@ export const EntryContent: Component<{
                       mediaInfo={mediaInfo}
                       noMedia={noMedia}
                       as="article"
-                      className="prose dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold !max-w-full"
+                      className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
                       style={stableRenderStyle}
                       renderInlineStyle={readerRenderInlineStyle}
                     >

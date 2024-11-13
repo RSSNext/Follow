@@ -290,7 +290,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                   onClick={() => {
                     setIsCategoryEditing(false)
                   }}
-                  className="center hover:bg-theme-button-hover -ml-1 flex size-5 shrink-0 rounded-lg"
+                  className="center -ml-1 flex size-5 shrink-0 rounded-lg hover:bg-theme-button-hover"
                 >
                   <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
                 </MotionButtonBase>
@@ -417,11 +417,11 @@ const RenameCategoryForm: FC<{
         name="category"
         autoFocus
         defaultValue={currentCategory}
-        className="caret-accent w-full appearance-none bg-transparent"
+        className="w-full appearance-none bg-transparent caret-accent"
       />
       <MotionButtonBase
         type="submit"
-        className="center hover:bg-theme-button-hover -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 dark:text-green-400"
+        className="center -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 hover:bg-theme-button-hover dark:text-green-400"
       >
         <i className="i-mgc-check-filled size-3" />
       </MotionButtonBase>

@@ -99,7 +99,7 @@ const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElemen
 
   return (
     <m.div
-      className="bottom-safe-offset-8 absolute inset-x-0 flex h-10 justify-center will-change-transform"
+      className="absolute inset-x-0 flex h-10 justify-center will-change-transform bottom-safe-offset-8"
       transition={{ type: "spring" }}
       animate={animateController}
     >
@@ -118,7 +118,7 @@ const ViewTabs = () => {
   const [active, setActive] = useSidebarActiveView()
   return (
     <div
-      className="text-theme-vibrancyFg flex w-full items-center justify-between gap-4 text-xl"
+      className="flex w-full items-center justify-between gap-4 text-xl text-theme-vibrancyFg"
       onClick={stopPropagation}
     >
       {views.map((item) => (

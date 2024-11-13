@@ -318,7 +318,7 @@ const InboxItemImpl: Component<{
       data-active={isActive || isContextMenuOpen}
       data-inbox-id={inboxId}
       className={cn(
-        "cursor-menu flex w-full items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
+        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
         feedColumnStyles.item,
         "py-[2px] pl-2.5",
         className,

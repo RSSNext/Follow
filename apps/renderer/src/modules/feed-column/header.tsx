@@ -51,7 +51,7 @@ export const FeedColumnHeader = memo(() => {
       {normalStyle && (
         <LogoContextMenu>
           <div
-            className="font-default relative flex items-center gap-1 text-lg font-semibold"
+            className="relative flex items-center gap-1 font-default text-lg font-semibold"
             onClick={(e) => {
               e.stopPropagation()
               navigateBackHome()
@@ -65,7 +65,7 @@ export const FeedColumnHeader = memo(() => {
       <div className="relative flex items-center gap-2" onClick={stopPropagation}>
         <Link to="/discover" tabIndex={-1}>
           <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
-            <i className="i-mgc-add-cute-re text-theme-vibrancyFg size-5" />
+            <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
           </ActionButton>
         </Link>
         <SearchTrigger />
@@ -149,9 +149,9 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
             toast.success(t.common("app.copied_to_clipboard"))
           }}
           className={cn(
-            "cursor-menu relative flex select-none items-center rounded-sm px-1 py-0.5 text-sm outline-none",
-            "hover:bg-theme-item-hover focus-within:outline-transparent dark:hover:bg-neutral-800",
-            "text-foreground/80 gap-2 [&_svg]:size-3",
+            "relative flex cursor-menu select-none items-center rounded-sm px-1 py-0.5 text-sm outline-none",
+            "focus-within:outline-transparent hover:bg-theme-item-hover dark:hover:bg-neutral-800",
+            "gap-2 text-foreground/80 [&_svg]:size-3",
           )}
         >
           <Logo ref={logoRef} />

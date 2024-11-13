@@ -55,15 +55,15 @@ function EntryHeaderImpl({ view, entryId, className, compact }: EntryHeaderProps
     <div
       data-hide-in-print
       className={cn(
-        "zen-mode-macos:ml-margin-macos-traffic-light-x relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200",
-        shouldShowMeta && "border-border border-b",
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
+        shouldShowMeta && "border-b border-border",
         className,
       )}
     >
       {!hideRecentReader && (
         <div
           className={cn(
-            "zen-mode-macos:left-12 absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
+            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500 zen-mode-macos:left-12",
             "visible z-[11]",
             views[view].wideMode && "static",
             shouldShowMeta && "hidden",
@@ -83,7 +83,7 @@ function EntryHeaderImpl({ view, entryId, className, compact }: EntryHeaderProps
                 initial={{ opacity: 0.01, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0.01, y: 30 }}
-                className="text-theme-foreground flex min-w-0 shrink items-end gap-2 truncate text-sm leading-tight"
+                className="flex min-w-0 shrink items-end gap-2 truncate text-sm leading-tight text-theme-foreground"
               >
                 <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
                 <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />

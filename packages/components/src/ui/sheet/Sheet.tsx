@@ -94,7 +94,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             style={{
               zIndex: contentZIndex,
             }}
-            className="bg-theme-modal-background-opaque pb-safe-offset-4 fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t px-6 pt-4"
+            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque px-6 pt-4 pb-safe-offset-4"
           >
             {dismissible && (
               <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800" />

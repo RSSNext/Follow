@@ -161,7 +161,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
                   components={{
                     a: RelatedEntryLink as Components["a"],
                   }}
-                  className="prose-sm prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent mt-4 px-6"
+                  className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
                 >
                   {content.data}
                 </Markdown>
@@ -212,7 +212,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
             components={{
               a: RelatedEntryLink as Components["a"],
             }}
-            className="prose-sm prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent mt-4 h-0 grow overflow-auto px-6"
+            className="prose-sm mt-4 h-0 grow overflow-auto px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
           >
             {content.data}
           </Markdown>
@@ -244,7 +244,7 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
   return (
     <button
       type="button"
-      className="follow-link--underline text-foreground cursor-pointer font-semibold no-underline"
+      className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
       onClick={() => {
         const basePresentProps = {
           clickOutsideToDismiss: true,
@@ -333,7 +333,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
       exit="exit"
       layout="size"
       className={cn(
-        "shadow-perfect bg-theme-background relative flex flex-col items-center rounded-xl border p-8",
+        "shadow-perfect relative flex flex-col items-center rounded-xl border bg-theme-background p-8",
         "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
       )}
     >

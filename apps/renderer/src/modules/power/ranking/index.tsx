@@ -39,7 +39,7 @@ export const PowerRanking: Component = ({ className }) => {
       <SettingSectionTitle title={t("wallet.ranking.title")} />
       <div className={cn("w-fit min-w-0 grow overflow-x-auto", className)}>
         <Table className="w-full table-fixed text-sm">
-          <TableHeader className="bg-theme-background sticky top-0">
+          <TableHeader className="sticky top-0 bg-theme-background">
             <TableRow className="[&_*]:!font-semibold">
               <TableHead className="w-20">#</TableHead>
               <TableHead>{t("wallet.ranking.name")}</TableHead>
@@ -115,9 +115,9 @@ const UserRenderer = ({
       onClick={() => {
         if (user?.id) presentUserModal(user.id)
       }}
-      className="cursor-button flex w-full min-w-0 items-center gap-2"
+      className="flex w-full min-w-0 cursor-button items-center gap-2"
     >
-      <Avatar className={cn("animate-in fade-in-0 aspect-square duration-200", avatarClassName)}>
+      <Avatar className={cn("aspect-square duration-200 animate-in fade-in-0", avatarClassName)}>
         <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
         <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
       </Avatar>

@@ -160,11 +160,11 @@ export const EntryContent: Component<EntryContentProps> = ({
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className={cn("@container h-[55px] shrink-0 px-3", classNames?.header)}
+        className={cn("h-[55px] shrink-0 px-3 @container", classNames?.header)}
         compact={compact}
       />
 
-      <div className="@container relative flex size-full flex-col overflow-hidden print:size-auto print:overflow-visible">
+      <div className="relative flex size-full flex-col overflow-hidden @container print:size-auto print:overflow-visible">
         <EntryTimelineSidebar entryId={entry.entries.id} />
         <ScrollArea.ScrollArea
           mask={false}
@@ -179,13 +179,13 @@ export const EntryContent: Component<EntryContentProps> = ({
           <div
             onPointerDown={clearSelection}
             style={stableRenderStyle}
-            className="animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0 duration-200 ease-in-out"
+            className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
             key={entry.entries.id}
           >
             <article
               data-testid="entry-render"
               onContextMenu={stopPropagation}
-              className="@3xl:max-w-[70ch] @7xl:max-w-[80ch] relative m-auto min-w-0 max-w-[550px]"
+              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
             >
               <EntryTitle entryId={entryId} compact={compact} />
 
@@ -218,7 +218,7 @@ export const EntryContent: Component<EntryContentProps> = ({
                           noMedia={noMedia}
                           accessory={contentAccessories}
                           as="article"
-                          className="prose dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold !max-w-full"
+                          className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
                           style={stableRenderStyle}
                           renderInlineStyle={readerRenderInlineStyle}
                         >

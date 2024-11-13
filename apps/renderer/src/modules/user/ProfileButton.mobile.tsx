@@ -66,7 +66,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
             />
           </div>
 
-          <Divider className="!bg-border h-px" />
+          <Divider className="h-px !bg-border" />
 
           <div className="mx-auto w-full max-w-[350px]">
             <Item
@@ -89,7 +89,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
               icon={<i className="i-mgc-trophy-cute-re" />}
             />
 
-            <Divider className="!bg-border/80 mx-auto h-px w-[50px]" />
+            <Divider className="mx-auto h-px w-[50px] !bg-border/80" />
 
             <Item
               label={t("user_button.log_out")}
@@ -115,7 +115,7 @@ const Item: FC<{ icon: React.ReactNode; label: string; onClick: () => void }> = 
       type="button"
       onClick={onClick}
       className={clsx(
-        "focus:bg-theme-item-hover relative flex w-full select-none items-center rounded-sm px-4 py-1.5 outline-none transition-colors",
+        "relative flex w-full select-none items-center rounded-sm px-4 py-1.5 outline-none transition-colors focus:bg-theme-item-hover",
         "text-base font-medium",
         "focus-within:!outline-transparent",
       )}
