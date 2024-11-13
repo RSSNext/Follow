@@ -139,6 +139,18 @@ export const useDeleteInboxEntry = () => {
   })
 }
 
+export type EntryActionItem = {
+  key: string
+  className?: string
+  shortcut?: string
+  name: string
+  icon?: ReactNode
+  hide?: boolean
+  active?: boolean
+  disabled?: boolean
+  onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+}
+
 export const useEntryActions = ({
   view,
   entry,
@@ -188,17 +200,7 @@ export const useEntryActions = ({
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
 
-    const items: {
-      key: string
-      className?: string
-      shortcut?: string
-      name: string
-      icon?: ReactNode
-      hide?: boolean
-      active?: boolean
-      disabled?: boolean
-      onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
-    }[] = [
+    const items: EntryActionItem[] = [
       ...integrationActions.items,
       {
         key: "tip",

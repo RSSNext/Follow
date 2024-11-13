@@ -1,11 +1,15 @@
-import { ActionButton } from "@follow/components/ui/button/index.js"
+import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { clsx, cn } from "@follow/utils/utils"
+import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
 import { Slot } from "@radix-ui/react-slot"
 import { AnimatePresence, m } from "framer-motion"
-import { memo } from "react"
+import { memo, useState } from "react"
+import { RemoveScroll } from "react-remove-scroll"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
+import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry/hooks"
@@ -39,23 +43,10 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
       className={cn(
         "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
         shouldShowMeta && "border-b border-border",
-        "box-content pt-safe",
+        "box-content h-14 pt-safe",
         className,
       )}
     >
-      {/* TODO */}
-      {/* {!hideRecentReader && (
-        <div
-          className={cn(
-            "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500 zen-mode-macos:left-12",
-            "visible z-[11]",
-            views[view].wideMode && "static",
-            shouldShowMeta && "hidden",
-          )}
-        >
-          <EntryReadHistory entryId={entryId} />
-        </div>
-      )} */}
       <div
         className="relative z-10 flex size-full items-center justify-between gap-3"
         data-hide-in-print
@@ -80,6 +71,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
         </div>
 
         <HeaderTopReturnBackButton className={"absolute left-0"} />
+        <HeaderRightActions actions={items} className={!shouldShowMeta ? "hidden" : ""} />
         <div className="flex-1" />
 
         <div
@@ -114,3 +106,73 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
 }
 
 export const EntryHeader = memo(EntryHeaderImpl)
+
+const HeaderRightActions = ({
+  className,
+  actions,
+}: {
+  className?: string
+  actions: EntryActionItem[]
+}) => {
+  const [open, setOpen] = useState(true)
+  return (
+    <div className={clsx(className, "absolute right-0")}>
+      <MotionButtonBase className="center size-8" onClick={() => setOpen((v) => !v)}>
+        <i className="i-mingcute-more-1-fill size-6" />
+      </MotionButtonBase>
+
+      <RootPortal>
+        <AnimatePresence>
+          {open && (
+            <RemoveScroll>
+              <DismissableLayer disableOutsidePointerEvents onDismiss={() => setOpen(false)}>
+                <m.div
+                  initial={{
+                    scale: 0.8,
+                    opacity: 0,
+                    transformOrigin: "top right",
+                  }}
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                  }}
+                  exit={{
+                    scale: 0.8,
+                    opacity: 0,
+                    transformOrigin: "top right",
+                  }}
+                  transition={{
+                    type: "spring",
+                    damping: 20,
+                    stiffness: 300,
+                    mass: 0.8,
+                  }}
+                  className="shadow-modal fixed right-1 top-1 z-[1] mt-14 max-w-full rounded-lg border bg-theme-modal-background-opaque"
+                >
+                  <div className="flex flex-col items-center py-2">
+                    {actions
+                      .filter((item) => !item.hide)
+                      .map((item) => (
+                        <MotionButtonBase
+                          onClick={(e) => {
+                            setOpen(false)
+                            item.onClick?.(e)
+                          }}
+                          key={item.name}
+                          layout={false}
+                          className="flex w-full items-center gap-2 px-4 py-2"
+                        >
+                          {item.icon || <i className={item.className} />}
+                          {item.name}
+                        </MotionButtonBase>
+                      ))}
+                  </div>
+                </m.div>
+              </DismissableLayer>
+            </RemoveScroll>
+          )}
+        </AnimatePresence>
+      </RootPortal>
+    </div>
+  )
+}
