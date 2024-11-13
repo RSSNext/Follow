@@ -6,6 +6,7 @@ import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
 import { clsx, isBizId } from "@follow/utils/utils"
+import type { FunctionComponent } from "react"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type {
@@ -42,6 +43,10 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
+
+export type VirtuosoComponentProps = { onlyShowArchivedButton: boolean }
+type VirtuosoComponentPropsContext = { context?: VirtuosoComponentProps }
+
 function EntryColumnImpl() {
   const { t } = useTranslation()
   const virtuosoRef = useRef<VirtuosoHandle>(null)
@@ -116,7 +121,7 @@ function EntryColumnImpl() {
 
   // Determine if the archived button should be shown
   const showArchivedButton = commonConditions && entries.totalCount < 40 && feed?.type === "feed"
-  const hasNoEntries = entries.totalCount === 0 && !entries.isLoading
+  const hasNoEntries = entries.queryTotalCount === 0 && !entries.isLoading
 
   // Determine if archived entries should be loaded
   const shouldLoadArchivedEntries =
@@ -136,31 +141,35 @@ function EntryColumnImpl() {
   const virtuosoOptions = {
     components: {
       List: EntryListContent,
-      Footer: useCallback(() => {
-        if (!isFetchingNextPage) {
-          if (showArchivedButton) {
-            return (
-              <div className="flex justify-center py-4">
-                <Button variant="outline" onClick={() => setIsArchived(true)}>
-                  {t("words.load_archived_entries")}
-                </Button>
-              </div>
-            )
+      Footer: useCallback(
+        ({ context }: VirtuosoComponentPropsContext) => {
+          if (!isFetchingNextPage) {
+            if (showArchivedButton) {
+              return (
+                <div className="flex justify-center py-4">
+                  <Button variant="outline" onClick={() => setIsArchived(true)}>
+                    {t("words.load_archived_entries")}
+                  </Button>
+                </div>
+              )
+            } else {
+              return null
+            }
           } else {
-            return null
+            if (context?.onlyShowArchivedButton) return null
+            return (
+              <EntryItemSkeleton
+                view={view}
+                count={Math.min(
+                  entries.data?.pages?.[0].data?.length || 20,
+                  entries.data?.pages.at(-1)?.remaining || 20,
+                )}
+              />
+            )
           }
-        } else {
-          return (
-            <EntryItemSkeleton
-              view={view}
-              count={Math.min(
-                entries.data?.pages?.[0].data?.length || 20,
-                entries.data?.pages.at(-1)?.remaining || 20,
-              )}
-            />
-          )
-        }
-      }, [isFetchingNextPage, showArchivedButton, t, view, entries.data?.pages]),
+        },
+        [isFetchingNextPage, showArchivedButton, t, view, entries.data?.pages],
+      ),
       ScrollSeekPlaceholder: useCallback(() => <EntryItemSkeleton view={view} count={1} />, [view]),
     },
     scrollSeekConfiguration,
@@ -194,7 +203,7 @@ function EntryColumnImpl() {
       },
       [view],
     ),
-  } satisfies VirtuosoProps<string, unknown>
+  } satisfies VirtuosoProps<string, VirtuosoComponentProps>
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
@@ -272,7 +281,10 @@ const ListGird = ({
   virtuosoRef,
   hasNextPage,
 }: {
-  virtuosoOptions: Omit<VirtuosoGridProps<string, unknown>, "data" | "endReached"> & {
+  virtuosoOptions: Omit<
+    VirtuosoGridProps<string, VirtuosoComponentProps>,
+    "data" | "endReached"
+  > & {
     data: string[]
     endReached: () => Promise<any>
   }
@@ -338,6 +350,11 @@ const ListGird = ({
           endReached={virtuosoOptions.endReached}
           data={nextData}
         />
+
+        {virtuosoOptions.components?.Footer &&
+          (virtuosoOptions.components.Footer as FunctionComponent<VirtuosoComponentPropsContext>)({
+            context: { onlyShowArchivedButton: true },
+          })}
 
         {FilteredContentTip}
       </>
