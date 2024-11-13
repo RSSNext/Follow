@@ -277,7 +277,6 @@
   "wallet.power.description2": "Power 是 {{blockchainName}} 区块链上的一个 <Link>ERC-20 代币</Link>，可用于在 Follow 平台上进行购买和打赏。",
   "wallet.power.rewardDescription": "所有活跃在 Follow 的用户都有资格获得每日 Power 奖励。",
   "wallet.power.rewardDescription2": "根据你的等级和过往活动，你获得一份 <Balance /> 奖励。<Link>了解更多</Link>",
-  "wallet.power.rewardDescription3": "我们正在测试一种新的奖励系统，在 Follow 上活跃并对平台做出贡献的用户将获得更多的奖励。以下是根据即将实施的新规则，你可能获得的奖励。请注意，此信息仅供参考。",
   "wallet.ranking.level": "等级",
   "wallet.ranking.name": "用户",
   "wallet.ranking.power": "Power",

@@ -277,7 +277,6 @@
   "wallet.power.description2": "Power 是 {{blockchainName}} 區塊鏈上的 <Link>ERC-20 代币</Link>，可用於 Follow 購買或贊助",
   "wallet.power.rewardDescription": "所有 Follow 的活躍用戶都可以獲得每日 Power 獎勵",
   "wallet.power.rewardDescription2": "根據你的等級和過去活動，你獲得一份 <Balance /> 奖励。<Link>更多詳情</Link>",
-  "wallet.power.rewardDescription3": "我們正在測試一種新的獎勵系統，在 Follow 上活躍並對平台做出貢獻的用戶將獲得更多的獎勵。以下是根據即將實施的新規則，你可能獲得的獎勵。請注意，此資訊僅供參考。",
   "wallet.ranking.level": "等級",
   "wallet.ranking.name": "用戶",
   "wallet.ranking.power": "Power",
