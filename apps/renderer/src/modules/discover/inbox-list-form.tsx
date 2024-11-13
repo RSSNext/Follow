@@ -11,18 +11,19 @@ import {
 import { FeedViewType, UserRole } from "@follow/constants"
 import { env } from "@follow/shared/env"
 import { useMutation } from "@tanstack/react-query"
+import { memo } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
 
 import { useUserRole } from "~/atoms/user"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { MAX_TRIAL_USER_INBOX_SUBSCRIPTION } from "~/constants/limit"
 import { CustomSafeError } from "~/errors/CustomSafeError"
 import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
-import { inboxActions } from "~/store/inbox"
+import { inboxActions, useInboxById } from "~/store/inbox"
 import { subscriptionActions, useInboxSubscriptionCount } from "~/store/subscription"
 
 import { useActivationModal } from "../activation"
@@ -97,68 +98,7 @@ export function DiscoverInboxList() {
               </TableCell>
             </TableRow>
           ) : (
-            inboxes.data?.map((inbox) => (
-              <TableRow key={inbox.id}>
-                <TableCell size="sm">{inbox.id}</TableCell>
-                <TableCell size="sm">
-                  <div className="group relative flex w-fit items-center gap-2">
-                    <span className="shrink-0">
-                      {inbox.id}
-                      {env.VITE_INBOXES_EMAIL}
-                    </span>
-                    <CopyButton
-                      value={`${inbox.id}${env.VITE_INBOXES_EMAIL}`}
-                      className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
-                    />
-                  </div>
-                </TableCell>
-                <TableCell size="sm">{inbox.title}</TableCell>
-                <TableCell size="sm">
-                  <div className="group relative flex w-fit items-center gap-2 font-mono">
-                    <span className="shrink-0">****</span>
-                    <CopyButton
-                      value={inbox.secret}
-                      className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
-                    />
-                  </div>
-                </TableCell>
-                <TableCell size="sm" className="center">
-                  <ActionButton
-                    size="sm"
-                    tooltip={t("discover.inbox_destroy")}
-                    onClick={() =>
-                      present({
-                        title: t("discover.inbox_destroy_confirm"),
-                        content: ({ dismiss }) => (
-                          <ConfirmDestroyModalContent
-                            id={inbox.id}
-                            onSuccess={() => {
-                              inboxes.refetch()
-                              dismiss()
-                            }}
-                          />
-                        ),
-                      })
-                    }
-                  >
-                    <i className="i-mgc-delete-2-cute-re" />
-                  </ActionButton>
-                  <ActionButton
-                    size="sm"
-                    onClick={() => {
-                      present({
-                        title: t("sidebar.feed_actions.edit_inbox"),
-                        content: ({ dismiss }) => (
-                          <InboxForm asWidget id={inbox.id} onSuccess={dismiss} />
-                        ),
-                      })
-                    }}
-                  >
-                    <i className="i-mgc-edit-cute-re" />
-                  </ActionButton>
-                </TableCell>
-              </TableRow>
-            ))
+            inboxes.data?.map((inbox) => <Row id={inbox.id} key={inbox.id} />)
           )}
         </TableBody>
       </Table>
@@ -190,8 +130,9 @@ export function DiscoverInboxList() {
   )
 }
 
-const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: () => void }) => {
+const ConfirmDestroyModalContent = ({ id }: { id: string }) => {
   const { t } = useTranslation()
+  const { dismiss } = useCurrentModal()
 
   const mutationDestroy = useMutation({
     mutationFn: async (id: string) => {
@@ -200,7 +141,9 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
     onSuccess: () => {
       subscriptionActions.fetchByView(FeedViewType.Articles)
       toast.success(t("discover.inbox_destroy_success"))
-      onSuccess()
+    },
+    onMutate: () => {
+      dismiss()
     },
     onError: createErrorToaster(t("discover.inbox_destroy_error")),
   })
@@ -219,3 +162,62 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
     </div>
   )
 }
+
+const Row = memo(({ id }: { id: string }) => {
+  const { t } = useTranslation()
+  const { present } = useModalStack()
+  const inbox = useInboxById(id)
+  if (!inbox) return null
+  return (
+    <TableRow key={inbox.id}>
+      <TableCell size="sm">{inbox.id}</TableCell>
+      <TableCell size="sm">
+        <div className="group relative flex w-fit items-center gap-2">
+          <span className="shrink-0">
+            {inbox.id}
+            {env.VITE_INBOXES_EMAIL}
+          </span>
+          <CopyButton
+            value={`${inbox.id}${env.VITE_INBOXES_EMAIL}`}
+            className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
+          />
+        </div>
+      </TableCell>
+      <TableCell size="sm">{inbox.title}</TableCell>
+      <TableCell size="sm">
+        <div className="group relative flex w-fit items-center gap-2 font-mono">
+          <span className="shrink-0">****</span>
+          <CopyButton
+            value={inbox.secret}
+            className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
+          />
+        </div>
+      </TableCell>
+      <TableCell size="sm" className="center">
+        <ActionButton
+          size="sm"
+          tooltip={t("discover.inbox_destroy")}
+          onClick={() =>
+            present({
+              title: t("discover.inbox_destroy_confirm"),
+              content: () => <ConfirmDestroyModalContent id={inbox.id} />,
+            })
+          }
+        >
+          <i className="i-mgc-delete-2-cute-re" />
+        </ActionButton>
+        <ActionButton
+          size="sm"
+          onClick={() => {
+            present({
+              title: t("sidebar.feed_actions.edit_inbox"),
+              content: ({ dismiss }) => <InboxForm asWidget id={inbox.id} onSuccess={dismiss} />,
+            })
+          }}
+        >
+          <i className="i-mgc-edit-cute-re" />
+        </ActionButton>
+      </TableCell>
+    </TableRow>
+  )
+})
