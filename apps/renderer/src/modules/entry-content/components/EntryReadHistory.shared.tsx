@@ -42,7 +42,9 @@ export const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => 
 
   return (
     <li
-      onClick={() => presentUserProfile(userId)}
+      onClick={() => {
+        presentUserProfile(userId)
+      }}
       role="button"
       tabIndex={0}
       className="relative flex min-w-0 max-w-[50ch] shrink-0 cursor-button items-center gap-2 truncate rounded-md p-1 px-2 hover:bg-muted"

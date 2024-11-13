@@ -1,11 +1,14 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.js"
 import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 
 import { useWhoami } from "~/atoms/user"
 import { useAuthQuery } from "~/hooks/common"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { Queries } from "~/queries"
 import { useEntryReadHistory } from "~/store/entry"
+import { useUserById } from "~/store/user"
 
-import { EntryUser, EntryUserRow } from "./EntryReadHistory.shared"
+import { EntryUser } from "./EntryReadHistory.shared"
 
 const LIMIT = 8
 export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) => {
@@ -35,16 +38,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
       {!!totalCount && totalCount > LIMIT && (
         <PresentSheet
           title="Entry Recent Readers"
-          content={
-            <ul className="flex flex-col gap-2 !text-base">
-              {entryHistory.userIds
-                .filter((id) => id !== me?.id)
-                .slice(LIMIT)
-                .map((userId) => (
-                  <EntryUserRow userId={userId} key={userId} />
-                ))}
-            </ul>
-          }
+          content={<Content entryHistory={entryHistory} />}
         >
           <button
             type="button"
@@ -61,5 +55,45 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         </PresentSheet>
       )}
     </div>
+  )
+}
+
+const Content: Component<{
+  entryHistory: ReturnType<typeof useEntryReadHistory>
+}> = ({ entryHistory }) => {
+  const me = useWhoami()
+
+  return (
+    <ul className="flex flex-col gap-2 !text-base">
+      {entryHistory?.userIds
+        ?.filter((id) => id !== me?.id)
+        .slice(LIMIT)
+        .map((userId) => <EntryUserRow userId={userId} key={userId} />)}
+    </ul>
+  )
+}
+
+const EntryUserRow: Component<{ userId: string }> = ({ userId }) => {
+  const user = useUserById(userId)
+
+  if (!user) return null
+  return (
+    <li
+      onClick={() => {}}
+      role="button"
+      tabIndex={0}
+      className="relative flex min-w-0 max-w-[50ch] shrink-0 items-center gap-2 truncate rounded-md p-1 px-2"
+    >
+      <Avatar className="block aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
+        <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
+        <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+      </Avatar>
+
+      {user.name && (
+        <span className="truncate text-xs font-medium">
+          <span>{user.name}</span>
+        </span>
+      )}
+    </li>
   )
 }
