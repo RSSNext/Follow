@@ -4,15 +4,15 @@
   "private": true,
   "sideEffects": false,
   "exports": {
-    "./atoms/*": "./src/atoms/*",
-    "./common/*": "./src/common/*",
-    "./dayjs": "./src/utils/dayjs.ts",
-    "./hooks/*": "./src/hooks/*",
-    "./icons/*": "./src/icons/*",
-    "./modules/*": "./src/modules/*",
-    "./providers/*": "./src/providers/*",
     "./tailwind": "./assets/index.css",
+    "./modules/*": "./src/modules/*",
+    "./common/*": "./src/common/*",
+    "./icons/*": "./src/icons/*",
     "./ui/*": "./src/ui/*",
+    "./providers/*": "./src/providers/*",
+    "./hooks/*": "./src/hooks/*",
+    "./atoms/*": "./src/atoms/*",
+    "./dayjs": "./src/utils/dayjs.ts",
     "./utils/*": "./src/utils/*"
   },
   "peerDependencies": {
