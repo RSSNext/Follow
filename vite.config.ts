@@ -79,7 +79,6 @@ export default ({ mode }) => {
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
       VitePWA({
-        registerType: "autoUpdate",
         devOptions: {
           enabled: true,
           type: "module",
