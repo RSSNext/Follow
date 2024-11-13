@@ -16,6 +16,8 @@ const ERROR_PATTERNS = [
   "HTTP Client Error",
   // Biz errors
   "Chain aborted",
+  "The database connection is closing",
+  "NotSupportedError",
 ]
 
 export const SentryConfig: BrowserOptions = {

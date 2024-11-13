@@ -1,4 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
+import { useCallback } from "react"
 
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
@@ -9,11 +10,17 @@ export const TimelineTabs = () => {
   const routerParams = useRouteParams()
   const { view, listId, inboxId } = routerParams
 
-  const listsData = useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
+  const listsData = useSubscriptionStore(
+    useCallback(
+      (state) => state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
+      [view],
+    ),
   )
-  const inboxData = useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
+  const inboxData = useSubscriptionStore(
+    useCallback(
+      (state) => state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
+      [view],
+    ),
   )
   const hasData = listsData.length > 0 || inboxData.length > 0
 

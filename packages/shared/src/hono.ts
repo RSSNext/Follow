@@ -5074,7 +5074,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         trial: number;
                         normal: number;
                     };
-                    DISABLE_PERSONAL_DAILY_POWER: boolean;
                     TAX_POINT: string;
                     INVITATION_INTERVAL_DAYS: number;
                     INVITATION_PRICE: number;

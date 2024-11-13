@@ -3,12 +3,20 @@ import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
-import { useKeyPressing } from "@follow/hooks"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { forwardRef, memo, useImperativeHandle, useMemo, useRef, useState } from "react"
+import {
+  forwardRef,
+  memo,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
+import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -196,8 +204,6 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
     const shouldFreeUpSpace = useShouldFreeUpSpace()
     const isMobile = useMobile()
 
-    const isMetaKeyPressed = useKeyPressing("Meta")
-
     return (
       <div className={cn(className, "font-medium")}>
         <ListHeader view={view} />
@@ -207,7 +213,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
             ref={selectoRef}
             rootContainer={document.body}
             dragContainer={"#feeds-area"}
-            dragCondition={() => selectedFeedIds.length === 0 || isMetaKeyPressed}
+            dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
             selectableTargets={["[data-feed-id]"]}
             continueSelect
             hitRate={10}
@@ -326,16 +332,21 @@ const ListHeader = ({ view }: { view: number }) => {
   const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
   useUpdateUnreadCount()
 
-  const totalUnread = useFeedUnreadStore((state) => {
-    let unread = 0
+  const totalUnread = useFeedUnreadStore(
+    useCallback(
+      (state) => {
+        let unread = 0
 
-    for (const category in feedsData) {
-      for (const feedId of feedsData[category]) {
-        unread += state.data[feedId] || 0
-      }
-    }
-    return unread
-  })
+        for (const category in feedsData) {
+          for (const feedId of feedsData[category]) {
+            unread += state.data[feedId] || 0
+          }
+        }
+        return unread
+      },
+      [feedsData],
+    ),
+  )
 
   const navigateEntry = useNavigateEntry()
 

@@ -69,7 +69,9 @@ export const getCacheSize = async () => {
   const cachePath = path.join(app.getPath("userData"), "cache")
 
   // Size is in bytes
-  const sizeInBytes = await fastFolderSizeAsync(cachePath)
+  const sizeInBytes = await fastFolderSizeAsync(cachePath).catch((error) => {
+    logger.error(error)
+  })
   return sizeInBytes || 0
 }
 
@@ -90,6 +92,7 @@ const getCachedFilesRecursive = async (dir: string, result: string[] = []) => {
 }
 
 let timer: any = null
+
 export const clearCacheCronJob = () => {
   if (timer) {
     timer = clearInterval(timer)
@@ -119,11 +122,16 @@ export const clearCacheCronJob = () => {
 
         let cleanedSize = 0
         for (const file of files) {
-          const fileSize = statSync(file).size
-          cleanedSize += fileSize
-          if (cleanedSize >= shouldCleanSize) {
-            logger.info(`Cleaned ${cleanedSize} bytes cache`)
-            break
+          try {
+            const fileSize = statSync(file).size
+            await fsp.rm(file, { force: true })
+            cleanedSize += fileSize
+            if (cleanedSize >= shouldCleanSize) {
+              logger.info(`Cleaned ${cleanedSize} bytes cache`)
+              break
+            }
+          } catch (error) {
+            logger.error(`Failed to delete cache file ${file}:`, error)
           }
         }
       }
@@ -134,5 +142,27 @@ export const clearCacheCronJob = () => {
   return () => {
     if (!timer) return
     timer = clearInterval(timer)
+  }
+}
+
+export const checkAndCleanCodeCache = async () => {
+  const cachePath = path.join(app.getPath("userData"), "Code Cache")
+
+  const size = await fastFolderSizeAsync(cachePath).catch((error) => {
+    logger.error(error)
+  })
+
+  if (!size) return
+
+  const threshold = 1024 * 1024 * 100 // 100MB
+  if (size > threshold) {
+    await fsp
+      .rm(cachePath, { force: true, recursive: true })
+      .then(() => {
+        logger.info(`Cleaned ${size} bytes code cache`)
+      })
+      .catch((error) => {
+        logger.error(`clean code cache failed: ${error.message}`)
+      })
   }
 }
