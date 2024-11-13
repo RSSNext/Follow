@@ -32,6 +32,7 @@ export function ReloadPrompt() {
             close()
           },
         },
+        duration: Infinity,
       })
     }
   }, [close, needRefresh, updateServiceWorker])
