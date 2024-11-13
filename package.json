@@ -109,10 +109,9 @@
     "unplugin-ast": "^0.11.0",
     "vite": "^5.4.10",
     "vite-plugin-mkcert": "1.17.6",
-    "vite-plugin-pwa": "https://pkg.pr.new/vite-plugin-pwa@781",
+    "vite-plugin-pwa": "0.21.0",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.0.5",
-    "workbox-build": "^7.3.0"
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "patchedDependencies": {
