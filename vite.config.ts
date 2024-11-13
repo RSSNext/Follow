@@ -84,7 +84,6 @@ export default ({ mode }) => {
           enabled: true,
           type: "module",
         },
-        filename: "sw.ts",
         manifest: {
           theme_color: "#ff5c00",
           name: "Follow",
