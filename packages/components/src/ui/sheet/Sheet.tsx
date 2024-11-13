@@ -80,13 +80,11 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
       }
     }, [holderRef, store])
 
-    const { Root } = Drawer
-
     const overlayZIndex = zIndex - 1
     const contentZIndex = zIndex
 
     return (
-      <Root dismissible={dismissible} {...nextRootProps}>
+      <Drawer.Root dismissible={dismissible} {...nextRootProps}>
         {!!children && <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>}
         <Drawer.Portal>
           <Drawer.Content
@@ -116,7 +114,9 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
                 [setIsOpen],
               )}
             >
-              {typeof content === "function" ? React.createElement(content) : content}
+              <div className="flex grow flex-col overflow-auto">
+                {typeof content === "function" ? React.createElement(content) : content}
+              </div>
             </SheetContext.Provider>
             <div ref={setHolderRef} />
           </Drawer.Content>
@@ -127,7 +127,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             }}
           />
         </Drawer.Portal>
-      </Root>
+      </Drawer.Root>
     )
   },
 )

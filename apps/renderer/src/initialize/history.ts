@@ -9,11 +9,33 @@ declare global {
     stack: string[]
 
     returnBack: () => void
+
+    get isPop(): boolean
   }
 }
 
+let __isPop = false
+const F = {} as { isPop: boolean }
+let resetTimer: any = null
+Object.defineProperty(F, "isPop", {
+  get() {
+    return __isPop
+  },
+  set(value) {
+    if (!value) return
+
+    resetTimer && clearTimeout(resetTimer)
+    resetTimer = setTimeout(() => {
+      __isPop = false
+    }, 1200)
+
+    __isPop = true
+  },
+})
 export const registerHistoryStack = () => {
   const onPopState = (e: PopStateEvent) => {
+    F.isPop = true
+
     const url = e.state?.url
     if (url) {
       jotaiStore.set(historyAtom, jotaiStore.get(historyAtom).slice(0, -1))
@@ -40,6 +62,8 @@ export const registerHistoryStack = () => {
     value: () => {
       const stack = jotaiStore.get(historyAtom)
       const last = stack.at(-1)
+      F.isPop = true
+
       if (last) {
         window.history.back()
       } else {
@@ -49,6 +73,13 @@ export const registerHistoryStack = () => {
           jotaiStore.set(historyAtom, [])
         })
       }
+    },
+    enumerable: false,
+  })
+
+  Object.defineProperty(window.history, "isPop", {
+    get() {
+      return F.isPop
     },
     enumerable: false,
   })
