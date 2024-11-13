@@ -18,22 +18,29 @@ import { useSubscriptionStore } from "./store"
 type FeedId = string
 
 export const useFeedIdByView = (view: FeedViewType) =>
-  useSubscriptionStore(useCallback((state) => feedIdByViewSelector(view)(state), [view]))
+  useSubscriptionStore(useCallback((state) => feedIdByViewSelector(view)(state) || [], [view]))
 
 export const useCategoryOpenStateByView = (view: FeedViewType) =>
-  useSubscriptionStore(useCallback((state) => categoryOpenStateByViewSelector(view)(state), [view]))
+  useSubscriptionStore(
+    useCallback((state) => categoryOpenStateByViewSelector(view)(state) || {}, [view]),
+  )
 
 export const useSubscriptionByView = (view: FeedViewType) =>
-  useSubscriptionStore(useCallback((state) => subscriptionByViewSelector(view)(state), [view]))
+  useSubscriptionStore(
+    useCallback((state) => subscriptionByViewSelector(view)(state) || [], [view]),
+  )
 
 export const useSubscriptionByFeedId = (feedId: FeedId) =>
   useSubscriptionStore(
-    useCallback((state) => subscriptionByFeedIdSelector(feedId)(state), [feedId]),
+    useCallback((state) => subscriptionByFeedIdSelector(feedId)(state) || null, [feedId]),
   )
 
 export const useFolderFeedsByFeedId = ({ feedId, view }: { feedId?: string; view: FeedViewType }) =>
   useSubscriptionStore(
-    useCallback((state) => folderFeedsByFeedIdSelector({ feedId, view })(state), [feedId, view]),
+    useCallback(
+      (state) => folderFeedsByFeedIdSelector({ feedId, view })(state) || [],
+      [feedId, view],
+    ),
   )
 
 export const useListSubscriptionCount = () => useSubscriptionStore(listSubscriptionCountSelector)
