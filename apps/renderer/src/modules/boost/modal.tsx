@@ -50,7 +50,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   }
 
   return (
-    <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
+    <div className="flex w-full flex-col gap-3 lg:w-[80vw] lg:max-w-[350px]">
       <div className="center flex flex-col gap-2">
         <FeedIcon className="mr-0" feed={feed} size={50} />
 
@@ -63,7 +63,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
         </h1>
       </div>
       <div className="relative flex w-full grow flex-col items-center gap-3">
-        <small className="center -mt-1 mb-2 gap-1 text-theme-vibrancyFg">
+        <small className="center text-theme-vibrancyFg -mt-1 mb-2 gap-1">
           {t("boost.boost_feed_description")}
         </small>
 

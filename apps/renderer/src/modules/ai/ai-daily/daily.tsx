@@ -33,7 +33,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { FlatMarkAllReadButton } from "~/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "~/modules/entry-column/star-icon"
-import { EntryContentRender } from "~/modules/entry-content"
+import { EntryContent } from "~/modules/entry-content"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
@@ -161,7 +161,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
                   components={{
                     a: RelatedEntryLink as Components["a"],
                   }}
-                  className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+                  className="prose-sm prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent mt-4 px-6"
                 >
                   {content.data}
                 </Markdown>
@@ -212,7 +212,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
             components={{
               a: RelatedEntryLink as Components["a"],
             }}
-            className="prose-sm mt-4 h-0 grow overflow-auto px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+            className="prose-sm prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent mt-4 h-0 grow overflow-auto px-6"
           >
             {content.data}
           </Markdown>
@@ -244,7 +244,7 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
   return (
     <button
       type="button"
-      className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
+      className="follow-link--underline text-foreground cursor-pointer font-semibold no-underline"
       onClick={() => {
         const basePresentProps = {
           clickOutsideToDismiss: true,
@@ -333,7 +333,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
       exit="exit"
       layout="size"
       className={cn(
-        "shadow-perfect relative flex flex-col items-center rounded-xl border bg-theme-background p-8",
+        "shadow-perfect bg-theme-background relative flex flex-col items-center rounded-xl border p-8",
         "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
       )}
     >
@@ -404,7 +404,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
 
 const EntryModalPreview = ({ entryId }: { entryId: string }) => (
   <Paper className="!p-0">
-    <EntryContentRender
+    <EntryContent
       className="h-auto [&_#entry-action-header-bar]:!bg-transparent"
       entryId={entryId}
     />

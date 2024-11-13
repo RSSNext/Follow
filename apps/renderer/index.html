@@ -5,7 +5,7 @@
     <meta name="referrer" content="no-referrer" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
     />
 
     <meta name="theme-color" content="#ff5c00" />
@@ -58,6 +58,9 @@
       const isElectron = navigator.userAgent.includes("Electron")
       document.documentElement.dataset.buildType = isElectron ? "electron" : "web"
     </script>
+    <script>
+      window.innerWidth < 1024 && document.getElementById("app-skeleton")?.remove()
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -89,6 +92,7 @@
           height: 100%;
           width: 100%;
         }
+
         .sidebar {
           width: 16rem;
           flex-shrink: 0;

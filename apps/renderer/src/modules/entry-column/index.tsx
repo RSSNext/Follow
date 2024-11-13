@@ -1,6 +1,4 @@
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
-import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
@@ -43,6 +41,8 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
+
+let prevScrollTop = 0
 
 export type VirtuosoComponentProps = { onlyShowArchivedButton: boolean }
 type VirtuosoComponentPropsContext = { context?: VirtuosoComponentProps }
@@ -179,6 +179,7 @@ function EntryColumnImpl() {
         handleMarkReadInRange(...args, isInteracted.current)
     },
     customScrollParent: scrollRef.current!,
+    initialScrollTop: prevScrollTop || 0,
 
     totalCount: entries.totalCount,
     endReached: useCallback(async () => {
@@ -190,11 +191,6 @@ function EntryColumnImpl() {
       }
     }, [entries]),
     data: finalEntriesIds,
-    onScroll: () => {
-      if (!isInteracted.current) {
-        isInteracted.current = true
-      }
-    },
     itemContent: useTypeScriptHappyCallback(
       (_, entryId) => {
         if (!entryId) return <ReactVirtuosoItemPlaceholder />
@@ -205,13 +201,21 @@ function EntryColumnImpl() {
     ),
   } satisfies VirtuosoProps<string, VirtuosoComponentProps>
 
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    if (!isInteracted.current) {
+      isInteracted.current = true
+    }
+    const { scrollTop } = e.currentTarget
+    prevScrollTop = scrollTop
+  }, [])
+
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
 
   return (
     <div
       data-hide-in-print
-      className="relative flex h-full flex-1 flex-col @container"
+      className="@container relative flex h-full flex-1 flex-col"
       onClick={() =>
         navigate({
           entryId: null,
@@ -230,14 +234,14 @@ function EntryColumnImpl() {
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
-      <AutoResizeHeight spring>
+      {/* <AutoResizeHeight spring>
         {isRefreshing && (
           <div className="center box-content h-7 gap-2 py-3 text-xs">
             <LoadingCircle size="small" />
             {t("entry_column.refreshing")}
           </div>
         )}
-      </AutoResizeHeight>
+      </AutoResizeHeight> */}
       <m.div
         key={`${routeFeedId}-${view}`}
         className="relative mt-2 h-0 grow"
@@ -249,6 +253,7 @@ function EntryColumnImpl() {
           scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
           mask={false}
           ref={scrollRef}
+          onScroll={handleScroll}
           rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}
           viewportClassName="[&>div]:grow flex"
         >
@@ -309,7 +314,7 @@ const ListGird = ({
     return (
       <div className="center absolute inset-x-0 inset-y-12 -translate-y-12 flex-col gap-5">
         <i className="i-mgc-photo-album-cute-fi size-12" />
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           {t("entry_column.filtered_content_tip")}
         </div>
 

@@ -1,0 +1,23 @@
+import { withResponsiveComponent } from "@follow/components/utils/selector.js"
+import { Outlet } from "react-router-dom"
+
+const noop = () =>
+  Promise.resolve({
+    default: () => null,
+  })
+export const CenterColumnLayout = withResponsiveComponent<object>(
+  () =>
+    import("~/modules/app-layout/center-column/desktop").then((m) => ({
+      default: m.CenterColumnDesktop,
+    })),
+  () =>
+    Promise.resolve({
+      default: Outlet,
+    }),
+)
+
+export const MobileCenterColumnScreen = withResponsiveComponent<object>(noop, () =>
+  import("~/modules/app-layout/center-column/mobile").then((m) => ({
+    default: m.CenterColumnMobile,
+  })),
+)

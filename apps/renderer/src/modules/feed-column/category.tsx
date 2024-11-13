@@ -173,8 +173,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           ref={setNodeRef}
           data-active={isActive || isContextMenuOpen}
           className={cn(
-            "my-px flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
             isOver && "border-theme-accent-400 bg-theme-accent-400/60",
+            "my-px px-2.5",
             feedColumnStyles.item,
           )}
           onClick={(e) => {
@@ -290,12 +290,12 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                   onClick={() => {
                     setIsCategoryEditing(false)
                   }}
-                  className="center -ml-1 flex size-5 shrink-0 rounded-lg hover:bg-theme-button-hover"
+                  className="center hover:bg-theme-button-hover -ml-1 flex size-5 shrink-0 rounded-lg"
                 >
                   <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
                 </MotionButtonBase>
               ) : (
-                <div className="mr-2 size-[16px]">
+                <div className="center mr-2 size-[16px]">
                   <i className="i-mgc-right-cute-fi transition-transform" />
                 </div>
               )}
@@ -417,11 +417,11 @@ const RenameCategoryForm: FC<{
         name="category"
         autoFocus
         defaultValue={currentCategory}
-        className="w-full appearance-none bg-transparent caret-accent"
+        className="caret-accent w-full appearance-none bg-transparent"
       />
       <MotionButtonBase
         type="submit"
-        className="center -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 hover:bg-theme-button-hover dark:text-green-400"
+        className="center hover:bg-theme-button-hover -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 dark:text-green-400"
       >
         <i className="i-mgc-check-filled size-3" />
       </MotionButtonBase>

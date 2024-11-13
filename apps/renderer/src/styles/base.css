@@ -5,7 +5,7 @@ html,
 
 body,
 #root {
-  @apply h-screen;
+  @apply h-auto lg:h-screen;
   @apply cursor-default;
   @apply select-none;
   /* @apply bg-white; */

@@ -62,7 +62,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   if (!entry) return null
 
   return compact ? (
-    <div className="-mx-6 flex cursor-button items-center gap-2 rounded-lg p-6 transition-colors @sm:-mx-3 @sm:p-3">
+    <div className="cursor-button @sm:-mx-3 @sm:p-3 -mx-6 flex items-center gap-2 rounded-lg p-6 transition-colors">
       <FeedIcon fallback feed={feed || inbox} entry={entry.entries} size={50} />
       <div className="leading-6">
         <div className="flex items-center gap-1 text-base font-semibold">
@@ -78,7 +78,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
       href={populatedFullHref || void 0}
       target="_blank"
       draggable="false"
-      className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
+      className="cursor-button hover:bg-theme-item-hover focus-visible:bg-theme-item-hover @sm:-mx-3 @sm:p-3 block min-w-0 rounded-lg transition-colors focus-visible:!outline-none lg:-mx-6 lg:p-6"
       rel="noreferrer"
       onClick={(e) => {
         if (window.getSelection()?.toString()) {

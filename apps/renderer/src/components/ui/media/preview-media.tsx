@@ -32,14 +32,14 @@ const Wrapper: Component<{
   const { t } = useTranslation(["shortcuts", "common"])
 
   return (
-    <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
+    <div className="center relative size-full py-12 lg:px-20 lg:pb-8 lg:pt-10" onClick={dismiss}>
       <m.div
         onFocusCapture={stopPropagation}
         initial={true}
         exit={{
           opacity: 0,
         }}
-        className="fixed right-4 flex items-center safe-inset-top-4"
+        className="safe-inset-top-4 fixed right-4 flex items-center"
       >
         <FixedModalCloseButton onClick={dismiss} />
       </m.div>
@@ -55,7 +55,7 @@ const Wrapper: Component<{
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
             sideContent
-              ? "min-w-96 items-center justify-center rounded-l-xl bg-native"
+              ? "bg-native min-w-96 items-center justify-center rounded-l-xl"
               : "rounded-xl",
           )}
         >
@@ -63,7 +63,7 @@ const Wrapper: Component<{
           <RootPortal to={sideContent ? null : undefined}>
             <div
               className={
-                "pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
+                "text-theme-vibrancyFg [&_button]:hover:text-theme-vibrancyFg pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 dark:text-white/70 dark:[&_button]:hover:text-white"
               }
               onClick={stopPropagation}
             >
@@ -94,7 +94,7 @@ const Wrapper: Component<{
         </div>
         {!!sideContent && (
           <div
-            className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-theme-background px-2 pt-1"
+            className="bg-theme-background box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl px-2 pt-1"
             onClick={stopPropagation}
           >
             {sideContent}
@@ -207,7 +207,7 @@ export const PreviewMediaContent: FC<{
           <div>
             <div
               className={cn(
-                "absolute left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6",
+                "animate-in fade-in-0 slide-in-from-bottom-6 absolute left-4 text-sm tabular-nums text-white/60",
                 isVideo ? "bottom-12" : "bottom-4",
               )}
             >
@@ -217,7 +217,7 @@ export const PreviewMediaContent: FC<{
               tabIndex={-1}
               onClick={stopPropagation}
               className={cn(
-                "center absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6",
+                "center animate-in fade-in-0 slide-in-from-bottom-6 absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200",
                 isVideo ? "bottom-12" : "bottom-4",
               )}
             >
@@ -328,7 +328,6 @@ const FallbackableImage: FC<
         <div
           className={cn("relative max-h-full", width <= height && "h-full")}
           style={{
-            // px-20 pb-8 pt-10
             width:
               width && height && width > height
                 ? `${Math.min((windowHeight - 32 - 40) * (width / height), width)}px`
@@ -359,9 +358,9 @@ const FallbackableImage: FC<
           >
             {blurhash ? (
               <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            ) : (
+            ) : isLoading ? (
               <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-            )}
+            ) : null}
           </div>
         </div>
       )}
@@ -409,7 +408,7 @@ const FallbackableImage: FC<
               href={src}
               target="_blank"
               rel="noreferrer"
-              className="underline duration-200 hover:text-accent"
+              className="hover:text-accent underline duration-200"
             >
               visit the original image
             </a>{" "}
