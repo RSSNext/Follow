@@ -83,6 +83,12 @@ export default ({ mode }) => {
           enabled: true,
           type: "module",
         },
+        workbox: {
+          globPatterns: [
+            "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
+          ],
+          globIgnores: ["manifest**.webmanifest"],
+        },
         manifest: {
           theme_color: "#ff5c00",
           name: "Follow",
