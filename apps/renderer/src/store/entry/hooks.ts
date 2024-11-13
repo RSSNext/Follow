@@ -82,7 +82,9 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
 
-  return useEntryStore(useCallback(() => getFilteredFeedIds(feedIds, filter), [feedIds, filter]))
+  return useEntryStore(
+    useCallback(() => getFilteredFeedIds(feedIds, filter) || [], [feedIds, filter]),
+  )
 }
 
 export const useEntryIdsByFeedIds = (feedIds: string[], filter: EntryFilter = {}) =>
