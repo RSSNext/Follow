@@ -349,10 +349,7 @@ const FallbackableImage: FC<
   const [ref, { width: imgWidth }] = useMeasure()
 
   return (
-    <div
-      className={cn("center flex size-full flex-col", containerClassName)}
-      onClick={stopPropagation}
-    >
+    <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
         <TransformWrapper
           wheel={{ smoothStep: 0.008 }}
@@ -372,6 +369,9 @@ const FallbackableImage: FC<
             }}
             contentClass={wrapperClass}
             contentStyle={wrapperStyle}
+            wrapperProps={{
+              onClick: stopPropagation,
+            }}
           >
             <img
               ref={ref}
