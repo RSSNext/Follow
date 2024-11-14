@@ -368,6 +368,7 @@ const FallbackableImage: FC<
                 scale > 1 && !haveSideContent
                   ? `${Math.min(maxContainerWidth / 2, scale * imgWidth)}px`
                   : undefined,
+              height: scale > 1 ? "100%" : undefined,
             }}
             contentClass={wrapperClass}
             contentStyle={wrapperStyle}
