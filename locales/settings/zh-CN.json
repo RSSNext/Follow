@@ -14,7 +14,7 @@
   "actions.action_card.enable_readability": "启用阅读模式",
   "actions.action_card.feed_options.entry_author": "条目作者",
   "actions.action_card.feed_options.entry_content": "条目内容",
-  "actions.action_card.feed_options.entry_media_length": "条目媒体时长",
+  "actions.action_card.feed_options.entry_media_length": "条目媒体个数",
   "actions.action_card.feed_options.entry_title": "条目标题",
   "actions.action_card.feed_options.entry_url": "条目地址",
   "actions.action_card.feed_options.feed_category": "订阅源分类",
