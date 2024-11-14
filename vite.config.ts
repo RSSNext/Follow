@@ -6,6 +6,7 @@ import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
+import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
@@ -149,6 +150,7 @@ export default ({ mode }) => {
       createPlatformSpecificImportPlugin(false),
       manifestPlugin(),
       htmlPlugin(typedEnv),
+      process.env.analyzer && analyzer(),
     ],
 
     define: {
