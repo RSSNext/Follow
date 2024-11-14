@@ -7,7 +7,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/t
 import type { ExtractBizResponse } from "@follow/models/types"
 import { Chain } from "@follow/utils/chain"
 import { cn } from "@follow/utils/utils"
-import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
@@ -17,6 +16,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
+import { LazyDotLottie } from "~/components/common/LazyDotLottie"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
@@ -143,7 +143,7 @@ export const AchievementModalContent: FC = () => {
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
-      <DotLottieReact
+      <LazyDotLottie
         className="mt-12 size-[100px]"
         autoplay
         speed={2}
