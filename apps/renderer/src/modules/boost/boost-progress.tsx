@@ -43,14 +43,14 @@ export const BoostProgress = ({
             aria-valuemin={0}
             aria-valuemax={remainingBoostsToLevelUp}
             style={{ width: `calc(${percentage}% + 0.5rem)` }}
-            className="bg-accent flex h-full -translate-x-2 items-center justify-center rounded-3xl text-white transition-all duration-500 ease-out"
+            className="flex h-full -translate-x-2 items-center justify-center rounded-3xl bg-accent text-white transition-all duration-500 ease-out"
           />
         </div>
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <span className="text-accent text-lg font-bold">Lv. {level}</span>
-        <span className="text-accent text-lg font-bold">Lv. {nextLevel}</span>
+        <span className="text-lg font-bold text-accent">Lv. {level}</span>
+        <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
       </div>
       <small className="center mt-2 gap-1">
         {t("boost.remaining_boosts_to_level_up", {
