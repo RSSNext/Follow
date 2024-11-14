@@ -7,14 +7,14 @@ import { useCommand, useGetCommand } from "./use-command"
 test("useGetCommand types work properly", () => {
   const getCmd = useGetCommand()
   expectTypeOf(getCmd).toBeFunction()
-  expectTypeOf(getCmd(COMMAND_ID.entry.Tip)).toMatchTypeOf<TipCommand | null>()
+  expectTypeOf(getCmd(COMMAND_ID.entry.tip)).toMatchTypeOf<TipCommand | null>()
 
   // @ts-expect-error - get an unknown command should throw an error
   assertType(getCmd("unknown command"))
 })
 
 test("useCommand types work properly", () => {
-  const tipCmd = useCommand(COMMAND_ID.entry.Tip)
+  const tipCmd = useCommand(COMMAND_ID.entry.tip)
   expectTypeOf(tipCmd).toMatchTypeOf<TipCommand | null>()
 
   // @ts-expect-error - get an unknown command should throw an error

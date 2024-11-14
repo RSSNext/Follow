@@ -1,20 +1,20 @@
 import { assertType, test } from "vitest"
 
 import { COMMAND_ID } from "../commands/id"
-import { useRegisterHotkey } from "./use-register-hotkey"
+import { useCommandHotkey } from "./use-register-hotkey"
 
 test("useRegisterHotkey types", () => {
   assertType(
-    useRegisterHotkey({
-      key: "",
+    useCommandHotkey({
+      shortcut: "",
       commandId: COMMAND_ID.entry.openInBrowser,
       args: [""],
     }),
   )
 
   assertType(
-    useRegisterHotkey({
-      key: "",
+    useCommandHotkey({
+      shortcut: "",
       commandId: COMMAND_ID.entry.openInBrowser,
       // @ts-expect-error - missing required options
       args: [],
@@ -22,8 +22,8 @@ test("useRegisterHotkey types", () => {
   )
 
   assertType(
-    useRegisterHotkey({
-      key: "",
+    useCommandHotkey({
+      shortcut: "",
       commandId: COMMAND_ID.entry.openInBrowser,
       // @ts-expect-error - invalid args type
       args: [1],
@@ -31,8 +31,8 @@ test("useRegisterHotkey types", () => {
   )
 
   assertType(
-    useRegisterHotkey({
-      key: "",
+    useCommandHotkey({
+      shortcut: "",
       commandId: COMMAND_ID.entry.openInBrowser,
       // @ts-expect-error - invalid args number
       args: ["", ""],
@@ -40,8 +40,8 @@ test("useRegisterHotkey types", () => {
   )
 
   assertType(
-    useRegisterHotkey({
-      key: "",
+    useCommandHotkey({
+      shortcut: "",
       // @ts-expect-error - invalid command id
       commandId: "unknown command",
     }),

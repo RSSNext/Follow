@@ -4,21 +4,22 @@ import type { FollowCommand, FollowCommandId } from "../types"
 import { useGetCommand } from "./use-command"
 
 interface RegisterHotkeyOptions<T extends FollowCommandId> {
-  key: string
+  shortcut: string
   commandId: T
   args?: Parameters<Extract<FollowCommand, { id: T }>["run"]>
   when?: boolean
+  // hotkeyOptions?: Options
 }
 
-export const useRegisterHotkey = <T extends FollowCommandId>({
-  key,
+export const useCommandHotkey = <T extends FollowCommandId>({
+  shortcut,
   commandId,
   when,
   args,
 }: RegisterHotkeyOptions<T>) => {
   const getCommand = useGetCommand()
   useHotkeys(
-    key,
+    shortcut,
     () => {
       const command = getCommand(commandId)
       if (!command) return

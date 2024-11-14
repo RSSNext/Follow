@@ -34,5 +34,5 @@ export function createFollowCommand<T extends FollowCommand>(
 export function defineFollowCommand<T extends FollowCommandId>(
   options: CommandOptions<{ id: T; fn: Extract<FollowCommand, { id: T }>["run"] }>,
 ) {
-  return options
+  return options as CommandOptions
 }

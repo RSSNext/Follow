@@ -1,36 +1,44 @@
 import type { ActionButtonProps } from "@follow/components/ui/button/index.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 
-import type { CommandId } from "./commands/id"
 import { useCommand } from "./hooks/use-command"
-import type { CommandContext, FollowCommand } from "./registry/command"
+import type { FollowCommand, FollowCommandId, FollowCommandMap } from "./types"
 
-interface CommandButtonProps extends ActionButtonProps {
-  command: FollowCommand
-  context: CommandContext
-  // args?: unknown[]
+interface CommandButtonProps<T extends FollowCommand> extends ActionButtonProps {
+  command: T
+  args: Parameters<T["run"]>
+  shortcut?: string
 }
 
-interface CommandIdButtonProps extends ActionButtonProps {
-  commandId: CommandId
-  context: CommandContext
-  // args?: unknown[]
+export interface CommandIdButtonProps<T extends FollowCommandId = FollowCommandId>
+  extends ActionButtonProps {
+  commandId: T
+  args: Parameters<FollowCommandMap[T]["run"]>
+  shortcut?: string
 }
 
-export const CommandActionButton = ({ command, context, ...props }: CommandButtonProps) => {
+export const CommandActionButton = <T extends FollowCommand>({
+  command,
+  args,
+  shortcut,
+  ...props
+}: CommandButtonProps<T>) => {
   return (
     <ActionButton
-      disabled={!command.when}
       icon={command.icon}
-      shortcut={command.keyBinding?.binding}
+      shortcut={shortcut}
       tooltip={command.label.title}
-      onClick={() => command.run({ context: context ?? {} })}
+      // @ts-expect-error - The type should be discriminated
+      onClick={() => command.run(...args)}
       {...props}
     />
   )
 }
 
-export const CommandIdButton = ({ commandId, ...props }: CommandIdButtonProps) => {
+export const CommandIdButton = <T extends FollowCommandId>({
+  commandId,
+  ...props
+}: CommandIdButtonProps<T>) => {
   const cmd = useCommand(commandId)
   if (!cmd) return
   return <CommandActionButton command={cmd} {...props} />
