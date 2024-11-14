@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
@@ -212,14 +213,18 @@ function EntryColumnImpl() {
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
 
+  const isMobile = useMobile()
   return (
     <div
       data-hide-in-print
       className="relative flex h-full flex-1 flex-col @container"
-      onClick={() =>
-        navigate({
-          entryId: null,
-        })
+      onClick={
+        isMobile
+          ? undefined
+          : () =>
+              navigate({
+                entryId: null,
+              })
       }
       data-total-count={virtuosoOptions.totalCount}
     >

@@ -80,7 +80,10 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
       )}
     >
       <div className="flex w-full justify-between pl-8">
-        <HeaderTopReturnBackButton className="absolute left-3 translate-y-px text-zinc-500" />
+        <HeaderTopReturnBackButton
+          to="/"
+          className="absolute left-3 translate-y-px text-zinc-500"
+        />
         {titleInfo}
         <div
           className={cn(
