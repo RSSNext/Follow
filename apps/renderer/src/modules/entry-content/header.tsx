@@ -16,43 +16,126 @@ import {
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { useShowSourceContent } from "~/atoms/source-content"
+import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
 import { filterSmallMedia } from "~/lib/utils"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox/hooks"
 
 import { CommandIdButton } from "../command/command-button"
 import { COMMAND_ID } from "../command/commands/id"
+import { useCommandHotkey } from "../command/hooks/use-register-hotkey"
 import { ImageGallery } from "./actions/picture-gallery"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
-const entryActions = [
-  COMMAND_ID.integration.saveToEagle,
-  COMMAND_ID.integration.saveToReadwise,
-  COMMAND_ID.integration.saveToInstapaper,
-  COMMAND_ID.integration.saveToOmnivore,
-  COMMAND_ID.integration.saveToObsidian,
-  COMMAND_ID.integration.saveToOutline,
+const EntryActions = ({ entryId }: { entryId: string }) => {
+  const entry = useEntry(entryId)
 
-  COMMAND_ID.entry.Tip,
-  COMMAND_ID.entry.star,
-  COMMAND_ID.entry.unstar,
-  COMMAND_ID.entry.delete,
-  COMMAND_ID.entry.copyLink,
-  // COMMAND_ID.entry.copyTitle,
-  // COMMAND_ID.entry.openInBrowser,
-  COMMAND_ID.entry.viewSourceContent,
-  COMMAND_ID.entry.viewEntryContent,
-  COMMAND_ID.entry.share,
-  COMMAND_ID.entry.read,
-  COMMAND_ID.entry.unread,
-]
+  const feed = useFeedById(entry?.feedId, (feed) => {
+    return {
+      type: feed.type,
+      ownerUserId: feed.ownerUserId,
+      id: feed.id,
+    }
+  })
+  const listId = useRouteParamsSelector((s) => s.listId)
+  const inList = !!listId
+  const inbox = useInboxById(entry?.inboxId)
+  const isInbox = !!inbox
+  const isShowSourceContent = useShowSourceContent()
+
+  useCommandHotkey({
+    shortcut: shortcuts.entry.openInBrowser.key,
+    when: !!entry?.entries.url,
+    commandId: COMMAND_ID.entry.openInBrowser,
+    args: [{ entryId }],
+  })
+
+  return (
+    <>
+      {/* integration */}
+      <CommandIdButton commandId={COMMAND_ID.integration.saveToEagle} args={[{ entryId }]} />
+      <CommandIdButton commandId={COMMAND_ID.integration.saveToReadwise} args={[{ entryId }]} />
+      <CommandIdButton commandId={COMMAND_ID.integration.saveToInstapaper} args={[{ entryId }]} />
+      <CommandIdButton commandId={COMMAND_ID.integration.saveToOmnivore} args={[{ entryId }]} />
+      <CommandIdButton commandId={COMMAND_ID.integration.saveToObsidian} args={[{ entryId }]} />
+      <CommandIdButton commandId={COMMAND_ID.integration.saveToOutline} args={[{ entryId }]} />
+
+      {!isInbox && feed?.ownerUserId !== whoami()?.id && (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.tip}
+          args={[{ entryId, feedId: feed?.id }]}
+          shortcut={shortcuts.entry.tip.key}
+        />
+      )}
+
+      {entry?.collections ? (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.unstar}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.toggleStarred.key}
+        />
+      ) : (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.star}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.toggleStarred.key}
+        />
+      )}
+
+      {isInbox && (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.delete}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.copyLink.key}
+        />
+      )}
+      {entry?.entries.url && (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.copyLink}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.copyTitle.key}
+        />
+      )}
+      {!isShowSourceContent && !!entry?.entries.url && (
+        <CommandIdButton commandId={COMMAND_ID.entry.viewSourceContent} args={[{ entryId }]} />
+      )}
+      {isShowSourceContent && (
+        <CommandIdButton commandId={COMMAND_ID.entry.viewEntryContent} args={[]} active />
+      )}
+      {!!entry?.entries.url && "share" in navigator && (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.share}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.share.key}
+        />
+      )}
+      {entry && !entry.read && !entry?.collections && !inList && (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.read}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.toggleRead.key}
+        />
+      )}
+      {entry && !!entry.read && !entry.collections && !inList && (
+        <CommandIdButton
+          commandId={COMMAND_ID.entry.unread}
+          args={[{ entryId }]}
+          shortcut={shortcuts.entry.toggleRead.key}
+        />
+      )}
+    </>
+  )
+}
 
 function EntryHeaderImpl({
   view,
@@ -123,13 +206,7 @@ function EntryHeaderImpl({
           {!compact && <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />}
 
           <SpecialActions id={entry.entries.id} />
-          {entryActions.map((cmdId) => (
-            <CommandIdButton
-              key={cmdId}
-              commandId={cmdId}
-              context={{ entryId: entry.entries.id, feedId: entry.feedId }}
-            />
-          ))}
+          <EntryActions entryId={entry.entries.id} />
         </div>
       </div>
     </div>
