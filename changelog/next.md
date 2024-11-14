@@ -2,15 +2,15 @@
 
 ## New Features
 
-- Supports zooming when browsing pictures
-- Set default `Show Unread Only` to true
-- Merge redirect page into login page
-- Add entry conditions for actions
+- Added zoom functionality for viewing pictures.
+- Set `Show Unread Only` as the default option.
+- Merged the redirect page with the login page.
+- Introduced entry conditions for actions.
 
 ## Improvements
 
-- Improve the logic of multi-selection and dragging
+- Enhanced the logic for multi-selection and dragging.
 
 ## Bug Fixes
 
-- Fail to load Instagram image
+- Resolved issue with loading Instagram images.
