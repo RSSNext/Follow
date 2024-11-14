@@ -16,7 +16,7 @@ export const discover = {
         query: {
           category,
           categories,
-          lang,
+          ...(lang !== "all" && { lang }),
         },
       })
       return res.data

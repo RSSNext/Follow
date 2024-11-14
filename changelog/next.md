@@ -6,6 +6,7 @@
 - Set `Show Unread Only` as the default option.
 - Merged the redirect page with the login page.
 - Introduced entry conditions for actions.
+- Added `all` language filter in dicover page.
 
 ## Improvements
 
