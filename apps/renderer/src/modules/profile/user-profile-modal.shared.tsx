@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -9,6 +10,7 @@ import { cn } from "@follow/utils/utils"
 import { AnimatePresence } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useState } from "react"
+import { useEventCallback } from "usehooks-ts"
 
 import { m } from "~/components/common/Motion"
 import { useFollow } from "~/hooks/biz/useFollow"
@@ -117,7 +119,27 @@ const SubscriptionItem: FC<{
   const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
   const follow = useFollow()
   const isLoose = variant === "loose"
+  const handleFollow = useEventCallback((e: React.MouseEvent) => {
+    if (!("feeds" in subscription)) return
+    e.stopPropagation()
+    e.preventDefault()
+
+    const defaultView = subscription.view
+
+    follow({
+      id: subscription.feedId,
+      url: subscription.feeds.url,
+      isList: false,
+      defaultValues: {
+        view: defaultView.toString(),
+        category: subscription.category,
+      },
+    })
+  })
+
+  const isMobile = useMobile()
   if (!("feeds" in subscription)) return null
+
   return (
     <m.div
       exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
@@ -128,6 +150,7 @@ const SubscriptionItem: FC<{
         className="flex flex-1 cursor-menu items-center"
         href={subscription.feeds.siteUrl!}
         target="_blank"
+        onClick={isMobile ? handleFollow : undefined}
       >
         <FeedIcon feed={subscription.feeds} size={22} className="mr-3" />
         <div
@@ -144,35 +167,20 @@ const SubscriptionItem: FC<{
             </div>
           )}
         </div>
-        <div className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-
-              const defaultView = subscription.view
-
-              follow({
-                id: subscription.feedId,
-                url: subscription.feeds.url,
-                isList: false,
-                defaultValues: {
-                  view: defaultView.toString(),
-                  category: subscription.category,
-                },
-              })
-            }}
-          >
-            {isFollowed ? (
-              t("user_profile.edit")
-            ) : (
-              <>
-                <FollowIcon className="mr-1 size-3" />
-                {APP_NAME}
-              </>
-            )}
-          </Button>
-        </div>
+        {!isMobile && (
+          <div className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100">
+            <Button onClick={handleFollow}>
+              {isFollowed ? (
+                t("user_profile.edit")
+              ) : (
+                <>
+                  <FollowIcon className="mr-1 size-3" />
+                  {APP_NAME}
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </a>
     </m.div>
   )
