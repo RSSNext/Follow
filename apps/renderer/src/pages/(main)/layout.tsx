@@ -18,7 +18,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-import { setMainContainerElement } from "~/atoms/dom"
+import { setMainContainerElement, setRootContainerElement } from "~/atoms/dom"
 import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
@@ -206,9 +206,15 @@ export function Component() {
 
 const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
   const feedColWidth = useUISettingKey("feedColWidth")
+  const [elementRef, _setElementRef] = useState<HTMLDivElement | null>(null)
+  const setElementRef = React.useCallback((el: HTMLDivElement | null) => {
+    _setElementRef(el)
+    setRootContainerElement(el)
+  }, [])
+  React.useImperativeHandle(ref, () => elementRef!)
   return (
     <div
-      ref={ref}
+      ref={setElementRef}
       style={
         {
           "--fo-feed-col-w": `${feedColWidth}px`,
