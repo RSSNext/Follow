@@ -8,6 +8,7 @@ import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
 import { useTranslation } from "react-i18next"
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -321,49 +322,70 @@ const FallbackableImage: FC<
   const width = Number.parseInt(props.width as string)
 
   const { height: windowHeight, width: windowWidth } = useWindowSize()
+  // px-20 pb-8 pt-10
+  // wrapper side content w-[400px]
+  const maxContainerHeight = windowHeight - 32 - 40
+  const maxContainerWidth = windowWidth - 80 - 80 - 400
+
+  const wrapperClass = cn("relative !max-h-full", width <= height && "!h-full")
+  const wrapperStyle: React.CSSProperties = {
+    width:
+      width && height && width > height
+        ? `${Math.min(maxContainerHeight * (width / height), width)}px`
+        : undefined,
+    maxWidth: width > height ? `${maxContainerWidth}px` : undefined,
+  }
 
   return (
-    <div className={cn("center flex size-full flex-col", containerClassName)}>
+    <div
+      className={cn("center flex size-full flex-col", containerClassName)}
+      onClick={stopPropagation}
+    >
       {!isAllError && (
-        <div
-          className={cn("relative max-h-full", width <= height && "h-full")}
-          style={{
-            // px-20 pb-8 pt-10
-            width:
-              width && height && width > height
-                ? `${Math.min((windowHeight - 32 - 40) * (width / height), width)}px`
-                : undefined,
-            maxWidth: width > height ? `${windowWidth - 80 - 80 - 400}px` : undefined,
-          }}
-        >
-          <img
-            data-blurhash={blurhash}
-            src={currentSrc}
-            onLoad={() => setIsLoading(false)}
-            onError={handleError}
-            height={props.height}
-            width={props.width}
-            {...props}
-            className={cn(
-              "transition-opacity duration-700",
-              isLoading ? "opacity-0" : "opacity-100",
-              props.className,
-            )}
-            style={props.style}
-          />
-          <div
-            className={cn(
-              "center absolute inset-0 size-full transition-opacity duration-700",
-              isLoading ? "opacity-100" : "opacity-0",
-            )}
+        <TransformWrapper wheel={{ step: 1 }}>
+          <TransformComponent
+            wrapperClass={wrapperClass}
+            wrapperStyle={wrapperStyle}
+            contentClass={wrapperClass}
+            contentStyle={wrapperStyle}
           >
-            {blurhash ? (
-              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            ) : (
-              <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-            )}
-          </div>
-        </div>
+            <img
+              data-blurhash={blurhash}
+              src={currentSrc}
+              onLoad={() => setIsLoading(false)}
+              onError={handleError}
+              height={props.height}
+              width={props.width}
+              {...props}
+              className={cn(
+                "transition-opacity duration-700",
+                isLoading ? "opacity-0" : "opacity-100",
+                props.className,
+              )}
+              style={{
+                maxHeight: `${maxContainerHeight}px`,
+                ...props.style,
+              }}
+            />
+            <div
+              className={cn(
+                "center absolute inset-0 size-full transition-opacity duration-700",
+                isLoading ? "opacity-100" : "opacity-0",
+              )}
+            >
+              {blurhash ? (
+                <Blurhash
+                  hash={blurhash}
+                  resolutionX={32}
+                  resolutionY={32}
+                  className="!size-full"
+                />
+              ) : (
+                <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+              )}
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
       )}
       {isAllError && (
         <div
