@@ -1,5 +1,6 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { useMeasure } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import type { MediaModel } from "@follow/shared/hono"
 import { stopPropagation } from "@follow/utils/dom"
@@ -153,6 +154,7 @@ export const PreviewMediaContent: FC<{
             height={media[0].height}
             width={media[0].width}
             blurhash={media[0].blurhash}
+            haveSideContent={!!children}
           />
         )}
       </Wrapper>
@@ -262,6 +264,7 @@ export const PreviewMediaContent: FC<{
                 height={med.height}
                 width={med.width}
                 blurhash={med.blurhash}
+                haveSideContent={!!children}
               />
             )}
           </SwiperSlide>
@@ -271,14 +274,19 @@ export const PreviewMediaContent: FC<{
   )
 }
 
+function parseNumber(value: string | number | undefined) {
+  return typeof value === "string" ? Number.parseInt(value) : value
+}
+
 const FallbackableImage: FC<
   Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
     src: string
     containerClassName?: string
     fallbackUrl?: string
     blurhash?: string
+    haveSideContent?: boolean
   }
-> = ({ src, onError, fallbackUrl, containerClassName, blurhash, ...props }) => {
+> = ({ src, onError, fallbackUrl, containerClassName, blurhash, haveSideContent, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
@@ -318,23 +326,27 @@ const FallbackableImage: FC<
     }
   }, [currentSrc, currentState, fallbackUrl, src])
 
-  const height = Number.parseInt(props.height as string)
-  const width = Number.parseInt(props.width as string)
+  const height = parseNumber(props.height)
+  const width = parseNumber(props.width)
 
   const { height: windowHeight, width: windowWidth } = useWindowSize()
   // px-20 pb-8 pt-10
   // wrapper side content w-[400px]
   const maxContainerHeight = windowHeight - 32 - 40
-  const maxContainerWidth = windowWidth - 80 - 80 - 400
+  const maxContainerWidth = windowWidth - 80 - 80 - (haveSideContent ? 400 : 0)
 
-  const wrapperClass = cn("relative !max-h-full", width <= height && "!h-full")
+  const [scale, setScale] = useState(1)
+
+  const wrapperClass = cn("relative !max-h-full", width && height && width <= height && "!h-full")
   const wrapperStyle: React.CSSProperties = {
     width:
       width && height && width > height
         ? `${Math.min(maxContainerHeight * (width / height), width)}px`
         : undefined,
-    maxWidth: width > height ? `${maxContainerWidth}px` : undefined,
+    maxWidth: width && height && width > height ? `${maxContainerWidth}px` : undefined,
   }
+
+  const [ref, { width: imgWidth }] = useMeasure()
 
   return (
     <div
@@ -342,14 +354,26 @@ const FallbackableImage: FC<
       onClick={stopPropagation}
     >
       {!isAllError && (
-        <TransformWrapper wheel={{ step: 1 }}>
+        <TransformWrapper
+          wheel={{ step: 1 }}
+          onZoom={(e) => {
+            setScale(e.state.scale)
+          }}
+        >
           <TransformComponent
             wrapperClass={wrapperClass}
-            wrapperStyle={wrapperStyle}
+            wrapperStyle={{
+              ...wrapperStyle,
+              minWidth:
+                scale > 1 && !haveSideContent
+                  ? `${Math.min(maxContainerWidth / 2, scale * imgWidth)}px`
+                  : undefined,
+            }}
             contentClass={wrapperClass}
             contentStyle={wrapperStyle}
           >
             <img
+              ref={ref}
               data-blurhash={blurhash}
               src={currentSrc}
               onLoad={() => setIsLoading(false)}
@@ -358,7 +382,7 @@ const FallbackableImage: FC<
               width={props.width}
               {...props}
               className={cn(
-                "transition-opacity duration-700",
+                "mx-auto transition-opacity duration-700",
                 isLoading ? "opacity-0" : "opacity-100",
                 props.className,
               )}
