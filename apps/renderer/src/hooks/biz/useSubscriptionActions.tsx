@@ -115,7 +115,7 @@ export const useBatchUpdateSubscription = () => {
       view,
     }: {
       feedIdList: string[]
-      category: string
+      category?: string | null
       view: number
     }) => {
       await subscriptionActions.batchUpdateSubscription({

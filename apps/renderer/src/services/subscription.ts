@@ -54,10 +54,10 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> imp
     return this.table.where("feedId").anyOf(feedIdList).modify({ view })
   }
 
-  async updateCategory(feedId: string, category: string) {
+  async updateCategory(feedId: string, category?: string | null) {
     return this.table.where("feedId").equals(feedId).modify({ category })
   }
-  async updateCategories(feedIdList: string[], category: string) {
+  async updateCategories(feedIdList: string[], category?: string | null) {
     return this.table.where("feedId").anyOf(feedIdList).modify({ category })
   }
 

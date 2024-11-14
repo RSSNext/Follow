@@ -83,6 +83,7 @@ export const SourceContentPanel = ({ src }: { src: string | null }) => {
     <AnimatePresence>
       {showSourceContent && src && (
         <m.div
+          data-hide-in-print
           className="absolute left-0 top-0 z-[1] size-full bg-theme-background"
           initial="hidden"
           animate="visible"

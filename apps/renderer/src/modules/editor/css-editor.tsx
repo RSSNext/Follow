@@ -6,6 +6,7 @@ import { useLayoutEffect, useRef } from "react"
 import css from "shiki/langs/css.mjs"
 import githubDark from "shiki/themes/github-dark.mjs"
 import githubLight from "shiki/themes/github-light.mjs"
+import { useEventCallback } from "usehooks-ts"
 
 import { shiki } from "~/components/ui/code-highlighter/shiki/shared"
 
@@ -19,6 +20,7 @@ export const CSSEditor: Component<{
   const ref = useRef<HTMLDivElement>(null)
 
   const isDark = useIsDark()
+
   useLayoutEffect(() => {
     let dispose: () => void
     if (ref.current) {
@@ -40,6 +42,7 @@ export const CSSEditor: Component<{
         },
         defaultTheme: isDark ? "dark" : "light",
       })
+
       dispose = disposeShiki
     }
     return () => dispose?.()
@@ -67,6 +70,10 @@ export const CSSEditor: Component<{
       })
     },
   })
+  const handleInput = useEventCallback(() => {
+    onChange(ref.current?.textContent ?? "")
+  })
+
   return (
     <div
       className={cn(
@@ -76,11 +83,12 @@ export const CSSEditor: Component<{
         "focus:!bg-accent/5",
         "border border-border",
         "placeholder:text-theme-placeholder-text dark:bg-zinc-700/[0.15] dark:text-zinc-200",
-        "hover:border-accent/60",
+        "overflow-auto whitespace-pre hover:border-accent/60",
         className,
       )}
       ref={ref}
-      contentEditable
+      onInput={handleInput}
+      contentEditable="plaintext-only"
       tabIndex={0}
       {...props}
     />

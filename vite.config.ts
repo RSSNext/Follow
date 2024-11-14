@@ -2,6 +2,7 @@ import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import legacy from "@vitejs/plugin-legacy"
+import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
@@ -72,8 +73,6 @@ export default ({ mode }) => {
           modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
           modernPolyfills: [
             // https://unpkg.com/browse/core-js@3.39.0/modules/
-            "es.array.find-last-index",
-            "es.array.find-last",
             "es.promise.with-resolvers",
           ],
         }),
@@ -149,6 +148,7 @@ export default ({ mode }) => {
 
       createPlatformSpecificImportPlugin(false),
       manifestPlugin(),
+      htmlPlugin(typedEnv),
     ],
 
     define: {
@@ -156,4 +156,38 @@ export default ({ mode }) => {
       ELECTRON: "false",
     },
   })
+}
+function checkBrowserSupport() {
+  if (!("findLastIndex" in Array.prototype) || !("structuredClone" in window)) {
+    window.alert(
+      "Follow is not compatible with your browser because your browser version is too old. You can download and use the Follow app or continue using it with the latest browser.",
+    )
+
+    window.location.href = "https://follow.is/download"
+  }
+}
+
+const htmlPlugin: (env: any) => PluginOption = () => {
+  return {
+    name: "html-transform",
+    enforce: "post",
+    transformIndexHtml(html) {
+      return htmlMinify(
+        html.replace(
+          "<!-- Check Browser Script Inject -->",
+          `<script>${checkBrowserSupport.toString()}; checkBrowserSupport()</script>`,
+        ),
+        {
+          removeComments: true,
+          html5: true,
+          minifyJS: true,
+          minifyCSS: true,
+          removeTagWhitespace: true,
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          collapseInlineTagWhitespace: true,
+        },
+      )
+    },
+  }
 }

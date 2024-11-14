@@ -6,7 +6,8 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useMemo, useRef, useState } from "react"
+import { memo, useCallback, useMemo, useRef, useState } from "react"
+import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -136,7 +137,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const selectoRef = useRef<Selecto>(null)
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: "selected-feed",
     disabled: selectedFeedIds.length === 0,
   })
@@ -198,24 +199,18 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => !(selectedFeedIds.length > 0 && isDragging)}
+        dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
         hitRate={10}
         onSelect={(e) => {
           const allChanged = [...e.added, ...e.removed]
+            .map((el) => el.dataset.feedId)
+            .filter((id) => id !== undefined)
 
           setSelectedFeedIds((prev) => {
-            const added = allChanged
-              .map((el) => el.dataset.feedId)
-              .filter((id) => id !== undefined)
-              .filter((id) => !prev.includes(id))
-            const removed = new Set(
-              allChanged
-                .map((el) => el.dataset.feedId)
-                .filter((id) => id !== undefined)
-                .filter((id) => prev.includes(id)),
-            )
+            const added = allChanged.filter((id) => !prev.includes(id))
+            const removed = new Set(allChanged.filter((id) => prev.includes(id)))
             return [...prev.filter((id) => !removed.has(id)), ...added]
           })
         }}
@@ -320,16 +315,21 @@ const ListHeader = ({ view }: { view: number }) => {
   const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
   useUpdateUnreadCount()
 
-  const totalUnread = useFeedUnreadStore((state) => {
-    let unread = 0
+  const totalUnread = useFeedUnreadStore(
+    useCallback(
+      (state) => {
+        let unread = 0
 
-    for (const category in feedsData) {
-      for (const feedId of feedsData[category]) {
-        unread += state.data[feedId] || 0
-      }
-    }
-    return unread
-  })
+        for (const category in feedsData) {
+          for (const feedId of feedsData[category]) {
+            unread += state.data[feedId] || 0
+          }
+        }
+        return unread
+      },
+      [feedsData],
+    ),
+  )
 
   const navigateEntry = useNavigateEntry()
 

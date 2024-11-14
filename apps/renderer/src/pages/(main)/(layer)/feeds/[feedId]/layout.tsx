@@ -43,6 +43,7 @@ export function Component() {
     <div ref={containerRef} className="relative flex min-w-0 grow">
       <div
         className={cn("h-full shrink-0", inWideMode ? "flex-1" : "border-r", "will-change-[width]")}
+        data-hide-in-print
         style={{
           width: position,
         }}

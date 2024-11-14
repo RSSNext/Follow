@@ -1,4 +1,5 @@
-import { DndContext, pointerWithin } from "@dnd-kit/core"
+import type { DragEndEvent } from "@dnd-kit/core"
+import { DndContext, PointerSensor, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
@@ -17,7 +18,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-import { setMainContainerElement } from "~/atoms/dom"
+import { setMainContainerElement, setRootContainerElement } from "~/atoms/dom"
 import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
@@ -105,9 +106,32 @@ export function Component() {
   const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
   const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  )
   const [selectedIds, setSelectedIds] = useSelectedFeedIds()
-
   const { mutate } = useBatchUpdateSubscription()
+  const handleDragEnd = React.useCallback(
+    (event: DragEndEvent) => {
+      if (!event.over) {
+        return
+      }
+
+      const { category, view } = event.over.data.current as {
+        category?: string | null
+        view: FeedViewType
+      }
+
+      mutate({ category, view, feedIdList: selectedIds })
+
+      setSelectedIds([])
+    },
+    [mutate, selectedIds, setSelectedIds],
+  )
 
   if (isNotSupportWidth) {
     return <NotSupport />
@@ -123,21 +147,10 @@ export function Component() {
       <AppLayoutGridContainerProvider>
         <FeedResponsiveResizerContainer containerRef={containerRef}>
           <DndContext
+            autoScroll={{ threshold: { x: 0, y: 0.2 } }}
+            sensors={sensors}
             collisionDetection={pointerWithin}
-            onDragEnd={(event) => {
-              if (!event.over) {
-                return
-              }
-
-              const { category, view } = event.over.data.current as {
-                category: string
-                view: FeedViewType
-              }
-
-              mutate({ category, view, feedIdList: selectedIds })
-
-              setSelectedIds([])
-            }}
+            onDragEnd={handleDragEnd}
           >
             <FeedColumn>
               <CornerPlayer />
@@ -193,15 +206,21 @@ export function Component() {
 
 const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
   const feedColWidth = useUISettingKey("feedColWidth")
+  const [elementRef, _setElementRef] = useState<HTMLDivElement | null>(null)
+  const setElementRef = React.useCallback((el: HTMLDivElement | null) => {
+    _setElementRef(el)
+    setRootContainerElement(el)
+  }, [])
+  React.useImperativeHandle(ref, () => elementRef!)
   return (
     <div
-      ref={ref}
+      ref={setElementRef}
       style={
         {
           "--fo-feed-col-w": `${feedColWidth}px`,
         } as any
       }
-      className="relative z-0 flex h-screen overflow-hidden"
+      className="relative z-0 flex h-screen overflow-hidden print:h-auto print:overflow-auto"
       onContextMenu={preventDefault}
     >
       {children}
@@ -291,10 +310,11 @@ const FeedResponsiveResizerContainer = ({
   return (
     <>
       <div
+        data-hide-in-print
         className={cn(
           "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-[2]",
-          feedColumnTempShow && !feedColumnShow && "shadow-drawer-to-right z-[12] border-r",
+          feedColumnTempShow && !feedColumnShow && "shadow-drawer-to-right z-[12]",
           !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
           !isDragging ? "duration-200" : "",
         )}
@@ -308,6 +328,7 @@ const FeedResponsiveResizerContainer = ({
       </div>
 
       <div
+        data-hide-in-print
         className={!isDragging ? "duration-200" : ""}
         style={{
           width: feedColumnShow ? `${position}px` : 0,

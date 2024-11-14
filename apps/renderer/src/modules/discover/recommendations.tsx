@@ -19,23 +19,27 @@ import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 
-import { RSSHubCategoryOptions } from "./constants"
+import { RSSHubCategories } from "./constants"
 import styles from "./recommendations.module.css"
 import { RecommendationCard } from "./recommendations-card"
 
 const LanguageOptions = [
   {
+    name: "All",
+    value: "all",
+  },
+  {
     name: "English",
     value: "en",
   },
   {
-    name: "简体中文",
+    name: "中文",
     value: "zh-CN",
   },
 ] as const
 
 type Language = (typeof LanguageOptions)[number]["value"]
-type DiscoverCategories = (typeof RSSHubCategoryOptions)[number]["value"]
+type DiscoverCategories = (typeof RSSHubCategories)[number] | string
 
 const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
   return Queries.discover.rsshubCategory({
@@ -56,7 +60,7 @@ export function Recommendations({
   const { t } = useTranslation()
   const lang = useGeneralSettingKey("language")
 
-  const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
+  const defaultLang = !lang || ["zh-CN", "zh-HK", "zh-TW"].includes(lang) ? "all" : "en"
   const [category, setCategory] = useState<DiscoverCategories>("all")
   const [selectedLang, setSelectedLang] = useState<Language>(defaultLang)
 
@@ -166,13 +170,9 @@ export function Recommendations({
         >
           <Tabs value={category} onValueChange={handleCategoryChange}>
             <TabsList>
-              {RSSHubCategoryOptions.map((category) => (
-                <TabsTrigger
-                  data-value={category.value}
-                  key={category.value}
-                  value={category.value}
-                >
-                  {category.name}
+              {RSSHubCategories.map((category) => (
+                <TabsTrigger data-value={category} key={category} value={category}>
+                  {t(`discover.category.${category}`)}
                 </TabsTrigger>
               ))}
             </TabsList>

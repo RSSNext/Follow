@@ -47,3 +47,24 @@ fetch(`${host}`)
       document.body.append($script)
     })
   })
+
+const injectScript = (apiUrl: string) => {
+  const upstreamOrigin = window.location.origin
+  const template = `function injectEnv(env2) {
+for (const key in env2) {
+if (env2[key] === void 0) continue;
+globalThis["__followEnv"] ??= {};
+globalThis["__followEnv"][key] = env2[key];
+}
+}
+injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_WEB_URL":"${upstreamOrigin}"})`
+  const $script = document.createElement("script")
+  $script.innerHTML = template
+  document.head.prepend($script)
+}
+
+const apiMap = {
+  "https://dev.follow.is": "https://api.dev.follow.is",
+  "https://app.follow.is": "https://api.follow.is",
+}
+injectScript(apiMap[window.location.origin])

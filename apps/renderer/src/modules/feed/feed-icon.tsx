@@ -20,7 +20,6 @@ const getFeedIconSrc = ({
   fallback?: boolean
   proxy?: { height: number; width: number }
 } = {}) => {
-  // src ? getProxyUrl(src) : "";
   if (src) {
     if (proxy) {
       return [

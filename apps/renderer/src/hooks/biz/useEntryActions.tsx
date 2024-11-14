@@ -173,11 +173,7 @@ export const useEntryActions = ({
     } as CombinedEntryModel
   }, [entry, feed, inbox])
 
-  const openTipModal = useTipModal({
-    userId: populatedEntry?.feeds?.ownerUserId ?? undefined,
-    feedId: populatedEntry?.feeds?.id ?? undefined,
-    entryId: populatedEntry?.entries.id ?? undefined,
-  })
+  const openTipModal = useTipModal()
 
   const showSourceContent = useShowSourceContent()
   const showSourceContentModal = useSourceContentModal()
@@ -210,7 +206,13 @@ export const useEntryActions = ({
         className: "i-mgc-power-outline",
         hide: isInbox || feed?.ownerUserId === whoami()?.id,
         onClick: () => {
-          nextFrame(openTipModal)
+          nextFrame(() =>
+            openTipModal({
+              userId: populatedEntry?.feeds?.ownerUserId ?? undefined,
+              feedId: populatedEntry?.feeds?.id ?? undefined,
+              entryId: populatedEntry?.entries.id ?? undefined,
+            }),
+          )
         },
       },
       {

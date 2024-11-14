@@ -313,7 +313,7 @@ const CustomCSS = () => {
             resizeable: true,
             resizeDefaultSize: {
               width: 700,
-              height: 400,
+              height: window.innerHeight - 200,
             },
           })
         }}
@@ -383,7 +383,9 @@ const CustomCSSModal = () => {
           variant="outline"
           onClick={(e) => {
             e.preventDefault()
+
             setUISetting("customCSS", initialCSS.current)
+
             forceUpdate()
           }}
         >

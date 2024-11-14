@@ -33,6 +33,7 @@ enum AchievementsActionIdMap {
   // TODO
   // FOLLOW_SPECIAL_FEED = 6,
   ALPHA_TESTER = 7,
+  FEED_BOOSTER = 8,
 }
 
 const achievementActionIdCopyMap: Record<
@@ -70,6 +71,10 @@ const achievementActionIdCopyMap: Record<
   [AchievementsActionIdMap.ALPHA_TESTER]: {
     title: "achievement.alpha_tester",
     description: "achievement.alpha_tester_description",
+  },
+  [AchievementsActionIdMap.FEED_BOOSTER]: {
+    title: "achievement.feed_booster",
+    description: "achievement.feed_booster_description",
   },
 }
 

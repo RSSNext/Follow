@@ -3,7 +3,7 @@ import path, { resolve } from "node:path"
 
 import { env } from "@follow/shared/env"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
-import type { Document } from "linkedom"
+import { minify } from "html-minifier-terser"
 import { parseHTML } from "linkedom"
 import { FetchError } from "ofetch"
 import xss from "xss"
@@ -76,10 +76,20 @@ injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_
     }
 
     reply.type("text/html")
-    reply.send(document.toString())
+    reply.send(
+      minify(document.toString(), {
+        removeComments: true,
+        html5: true,
+        minifyJS: true,
+        minifyCSS: true,
+        removeTagWhitespace: true,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        collapseInlineTagWhitespace: true,
+      }),
+    )
   })
 }
-
 export const globalRoute = isDev ? devHandler : prodHandler
 
 async function safeInjectMetaToTemplate(

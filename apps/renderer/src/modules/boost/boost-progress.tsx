@@ -20,8 +20,8 @@ export const BoostProgress = ({
   const [numberFormater] = useState(() => new Intl.NumberFormat())
   const t = useI18n()
   const rawPercentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
-  const percentage = 2 + (rawPercentage * (98 - 1)) / 100
-  const nextLevel = level + 2
+  const percentage = Math.max(rawPercentage, 2)
+  const nextLevel = level + 1
   return (
     <div className="flex w-full flex-col px-2">
       <div className="relative -mx-2 pt-12">

@@ -60,13 +60,14 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
   const draggableContext = useContext(DraggableContext)
   const isInMultipleSelection = selectedFeedIds.includes(feedId)
+  const isMultiSelectingButNotSelected = selectedFeedIds.length > 0 && !isInMultipleSelection
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (e.metaKey) {
         return
       } else {
-        setSelectedFeedIds([])
+        setSelectedFeedIds([feedId])
       }
 
       e.stopPropagation()
@@ -111,7 +112,11 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
           : {})}
         style={isInMultipleSelection ? draggableContext?.style : undefined}
         data-feed-id={feedId}
-        data-active={isActive || isContextMenuOpen || isInMultipleSelection}
+        data-active={
+          isMultiSelectingButNotSelected
+            ? false
+            : isActive || isContextMenuOpen || isInMultipleSelection
+        }
         className={cn(
           "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           feedColumnStyles.item,
@@ -148,17 +153,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             )
           }
           setIsContextMenuOpen(true)
-          await showContextMenu(
-            nextItems.filter(
-              (item) =>
-                selectedFeedIds.length === 0 ||
-                (typeof item === "object" &&
-                  item !== null &&
-                  "supportMultipleSelection" in item &&
-                  item.supportMultipleSelection),
-            ),
-            e,
-          )
+          await showContextMenu(nextItems, e)
           setIsContextMenuOpen(false)
         }}
       >

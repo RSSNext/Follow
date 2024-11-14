@@ -120,7 +120,7 @@ export const SettingActionItem = ({
   action,
   buttonText,
 }: {
-  label: string
+  label: ReactNode
   action: () => void
   buttonText: string
 }) => (

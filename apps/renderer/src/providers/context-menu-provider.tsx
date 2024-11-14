@@ -1,4 +1,4 @@
-import { nextFrame } from "@follow/utils/dom"
+import { nextFrame, preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { Fragment, memo, useCallback, useEffect, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -71,7 +71,7 @@ const Handler = () => {
   return (
     <ContextMenu onOpenChange={handleOpenChange}>
       <ContextMenuTrigger className="hidden" ref={ref} />
-      <ContextMenuContent>
+      <ContextMenuContent onContextMenu={preventDefault}>
         {contextMenuState.open &&
           contextMenuState.menuItems.map((item, index) => <Item key={index} item={item} />)}
       </ContextMenuContent>

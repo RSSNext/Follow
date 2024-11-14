@@ -1,13 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/card/index.jsx"
+import { getDominantColor } from "@follow/utils/color"
+import { cn, getUrlIcon } from "@follow/utils/utils"
 import clsx from "clsx"
 import { upperFirst } from "lodash-es"
 import type { FC } from "react"
-import { memo, useMemo } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 
-import { RSSHubCategoryMap } from "./constants"
+import { RSSHubCategories } from "./constants"
 import { RecommendationContent } from "./recommendation-content"
 import styles from "./recommendations.module.css"
 import type { RSSHubRouteDeclaration } from "./types"
@@ -19,6 +22,7 @@ interface RecommendationCardProps {
 }
 export const RecommendationCard: FC<RecommendationCardProps> = memo(
   ({ data, routePrefix, setCategory }) => {
+    const { t } = useTranslation()
     const { present } = useModalStack()
 
     const { maintainers, categories } = useMemo(() => {
@@ -36,7 +40,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
       categories.delete("popular")
       return {
         maintainers: Array.from(maintainers),
-        categories: Array.from(categories),
+        categories: Array.from(categories) as typeof RSSHubCategories | string[],
       }
     }, [data])
 
@@ -44,13 +48,8 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
       <Card className={styles["recommendations-card"]}>
         <CardHeader className="relative p-5 pb-3 @container">
           <div className="absolute left-0 top-0 h-[50px] w-full overflow-hidden @[280px]:h-[80px] dark:brightness-75">
-            <span className="opacity-50 blur-2xl">
-              <FeedIcon
-                disableFadeIn
-                siteUrl={`https://${data.url}`}
-                size={400}
-                className="pointer-events-none size-[500px]"
-              />
+            <span className="pointer-events-none opacity-50">
+              <BackgroundGradient className="size-full" url={data.url} />
             </span>
           </div>
 
@@ -83,7 +82,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
               >
                 <button
                   type="button"
-                  className="relative rounded p-0.5 px-1 duration-200 before:absolute before:inset-y-0 before:-left-2 before:my-auto before:size-1.5 before:rounded-full before:bg-accent before:content-[''] group-hover:bg-muted"
+                  className="relative rounded p-0.5 px-1 text-left duration-200 before:absolute before:inset-y-0 before:-left-2 before:mb-auto before:mt-2 before:size-1.5 before:rounded-full before:bg-accent before:content-[''] group-hover:bg-muted"
                   onClick={() => {
                     present({
                       id: `recommendation-content-${route}`,
@@ -130,17 +129,19 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
                 {categories.map((c) => (
                   <button
                     onClick={() => {
-                      if (!RSSHubCategoryMap[c]) return
+                      if (!RSSHubCategories.includes(c)) return
                       setCategory(c)
                     }}
                     key={c}
                     type="button"
                     className={clsx(
                       "cursor-pointer rounded bg-muted/50 px-1.5 duration-200 hover:bg-muted",
-                      !RSSHubCategoryMap[c] && "pointer-events-none opacity-50",
+                      !RSSHubCategories.includes(c) && "pointer-events-none opacity-50",
                     )}
                   >
-                    {RSSHubCategoryMap[c] || upperFirst(c)}
+                    {RSSHubCategories.includes(c)
+                      ? t(`discover.category.${c as (typeof RSSHubCategories)[number]}`)
+                      : upperFirst(c)}
                   </button>
                 ))}
               </span>
@@ -151,3 +152,28 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
     )
   },
 )
+
+const BackgroundGradient = memo(({ url, className }: { url: string; className?: string }) => {
+  const [color, setColor] = useState<string>()
+
+  useEffect(() => {
+    const { src } = getUrlIcon(`https://${url}`)
+    const image = new Image()
+    image.src = src
+    image.crossOrigin = "anonymous"
+    image.onload = () => {
+      try {
+        const color = getDominantColor(image)
+        setColor(color)
+      } catch {
+        setColor("#333")
+      }
+    }
+  }, [url])
+  return (
+    <div
+      className={cn("pointer-events-none size-[500px]", className)}
+      style={{ backgroundColor: color }}
+    />
+  )
+})

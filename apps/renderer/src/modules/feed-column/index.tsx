@@ -1,5 +1,6 @@
 import { useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
@@ -13,9 +14,10 @@ import { startTransition, useCallback, useLayoutEffect, useRef, useState } from 
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
+import { useRootContainerElement } from "~/atoms/dom"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useSidebarActiveView } from "~/atoms/sidebar"
-import { HotKeyScopeMap } from "~/constants"
+import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
+import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
@@ -51,17 +53,22 @@ const useBackHome = (active: number) => {
 const useUnreadByView = () => {
   useAuthQuery(Queries.subscription.byView())
   const idByView = useSubscriptionStore((state) => state.feedIdByView)
-  const totalUnread = useFeedUnreadStore((state) => {
-    const unread = {} as Record<number, number>
+  const totalUnread = useFeedUnreadStore(
+    useCallback(
+      (state) => {
+        const unread = {} as Record<number, number>
 
-    for (const view in idByView) {
-      unread[view] = idByView[view].reduce(
-        (acc: number, feedId: string) => acc + (state.data[feedId] || 0),
-        0,
-      )
-    }
-    return unread
-  })
+        for (const view in idByView) {
+          unread[view] = idByView[view].reduce(
+            (acc: number, feedId: string) => acc + (state.data[feedId] || 0),
+            0,
+          )
+        }
+        return unread
+      },
+      [idByView],
+    ),
+  )
 
   return totalUnread
 }
@@ -78,6 +85,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       setActive_(args)
 
       navigateBackHome(nextActive)
+      setSelectedFeedIds([])
     },
     [active, navigateBackHome],
   )
@@ -138,13 +146,32 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   })
 
   const shouldFreeUpSpace = useShouldFreeUpSpace()
+  const feedColumnShow = useFeedColumnShow()
+  const rootContainerElement = useRootContainerElement()
 
   return (
     <WindowUnderBlur
-      className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
+      data-hide-in-print
+      className={cn(
+        "relative flex h-full flex-col space-y-3 pt-2.5",
+
+        !feedColumnShow && isElectronBuild && "bg-zinc-200 dark:bg-neutral-800",
+        className,
+      )}
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <FeedColumnHeader />
+      {!feedColumnShow && (
+        <RootPortal to={rootContainerElement}>
+          <ActionButton
+            tooltip={"Toggle Feed Column"}
+            className="center absolute top-2.5 z-0 hidden -translate-x-2 text-zinc-500 left-macos-traffic-light macos:flex"
+            onClick={() => setFeedColumnShow(true)}
+          >
+            <i className="i-mgc-layout-leftbar-open-cute-re" />
+          </ActionButton>
+        </RootPortal>
+      )}
 
       <div
         className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"

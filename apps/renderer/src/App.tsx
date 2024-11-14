@@ -9,6 +9,7 @@ import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
 import { navigateEntry } from "./hooks/biz/useNavigateEntry"
 import { applyAfterReadyCallbacks } from "./initialize/queue"
+import { removeAppSkeleton } from "./lib/app"
 import { appLog } from "./lib/log"
 import { Titlebar } from "./modules/app/Titlebar"
 import { RootProviders } from "./providers/root-providers"
@@ -53,7 +54,7 @@ const AppLayer = () => {
   const appIsReady = useAppIsReady()
 
   useEffect(() => {
-    document.querySelector("#app-skeleton")?.remove()
+    removeAppSkeleton()
 
     const doneTime = Math.trunc(performance.now())
     window.analytics?.capture("ui_render_init", {

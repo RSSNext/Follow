@@ -64,6 +64,7 @@ function EntryHeaderImpl({
 
   return (
     <div
+      data-hide-in-print
       className={cn(
         "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
         shouldShowMeta && "border-b border-border",
@@ -82,7 +83,10 @@ function EntryHeaderImpl({
           <EntryReadHistory entryId={entryId} />
         </div>
       )}
-      <div className="relative z-10 flex w-full items-center justify-between gap-3">
+      <div
+        className="relative z-10 flex w-full items-center justify-between gap-3"
+        data-hide-in-print
+      >
         <div className="flex min-w-0 shrink grow">
           <AnimatePresence>
             {shouldShowMeta && (

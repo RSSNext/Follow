@@ -54,9 +54,9 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
       <div className="center flex flex-col gap-2">
         <FeedIcon className="mr-0" feed={feed} size={50} />
 
-        <h1 className="center mt-2 flex text-lg font-bold">
-          <div className="center flex">
-            <i className="i-mgc-rocket-cute-fi mr-1.5 text-lg" />
+        <h1 className="center mt-2 flex flex-wrap text-lg font-bold">
+          <div className="center flex shrink-0">
+            <i className="i-mgc-rocket-cute-fi mr-1.5 shrink-0 text-lg" />
             {t("boost.boost_feed")}
           </div>
           <span>「{feed?.title}」</span>

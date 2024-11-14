@@ -4,27 +4,25 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { isBizId } from "@follow/utils/utils"
-import { useMemo } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 
 import type { FollowMenuItem, MenuItemInput } from "~/atoms/context-menu"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { apiClient } from "~/lib/api-fetch"
 import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
 import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
-import {
-  getFeedById,
-  useAddFeedToFeedList,
-  useFeedById,
-  useRemoveFeedFromFeedList,
-  useResetFeed,
-} from "~/store/feed"
+import { entries } from "~/queries/entries"
+import { getFeedById, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
-import { useListById, useOwnedListByView } from "~/store/list"
+import { listActions, useListById, useOwnedListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
@@ -89,7 +87,7 @@ export const useFeedActions = ({
 
   const listByView = useOwnedListByView(view!)
 
-  const isMultipleSelection = feedIds && feedIds.length > 0
+  const isMultipleSelection = feedIds && feedIds.length > 1 && feedIds.includes(feedId)
 
   const items = useMemo(() => {
     const related = feed || inbox
@@ -303,7 +301,14 @@ export const useFeedActions = ({
       },
     ]
 
-    return items
+    return items.filter(
+      (item) =>
+        !isMultipleSelection ||
+        (typeof item === "object" &&
+          item !== null &&
+          "supportMultipleSelection" in item &&
+          item.supportMultipleSelection),
+    )
   }, [
     feed,
     inbox,
@@ -315,6 +320,7 @@ export const useFeedActions = ({
     feedId,
     feedIds,
     claimFeed,
+    resetFeed,
     openBoostModal,
     addFeedToListMutation,
     removeFeedFromListMutation,
@@ -460,4 +466,82 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
   }, [inbox, t, inboxId, present])
 
   return { items }
+}
+
+export const useAddFeedToFeedList = (options?: {
+  onSuccess?: () => void
+  onError?: () => void
+}) => {
+  const { t } = useTranslation("settings")
+  return useMutation({
+    mutationFn: async (
+      payload: { feedId: string; listId: string } | { feedIds: string[]; listId: string },
+    ) => {
+      const feeds = await apiClient.lists.feeds.$post({
+        json: payload,
+      })
+
+      feeds.data.forEach((feed) => listActions.addFeedToFeedList(payload.listId, feed))
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.add.success"))
+
+      options?.onSuccess?.()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.add.error"))
+      options?.onError?.()
+    },
+  })
+}
+
+export const useRemoveFeedFromFeedList = (options?: {
+  onSuccess: () => void
+  onError: () => void
+}) => {
+  const { t } = useTranslation("settings")
+  return useMutation({
+    mutationFn: async (payload: { feedId: string; listId: string }) => {
+      listActions.removeFeedFromFeedList(payload.listId, payload.feedId)
+      await apiClient.lists.feeds.$delete({
+        json: {
+          listId: payload.listId,
+          feedId: payload.feedId,
+        },
+      })
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.delete.success"))
+      options?.onSuccess?.()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.delete.error"))
+      options?.onError?.()
+    },
+  })
+}
+
+export const useResetFeed = () => {
+  const { t } = useTranslation()
+  const toastIDRef = useRef<string | number | null>(null)
+
+  return useMutation({
+    mutationFn: async (feedId: string) => {
+      toastIDRef.current = toast.loading(t("sidebar.feed_actions.resetting_feed"))
+      await apiClient.feeds.reset.$get({ query: { id: feedId } })
+    },
+    onSuccess: (_, feedId) => {
+      entries.entries({ feedId }).invalidateRoot()
+      toast.success(
+        t("sidebar.feed_actions.reset_feed_success"),
+        toastIDRef.current ? { id: toastIDRef.current } : undefined,
+      )
+    },
+    onError: () => {
+      toast.error(
+        t("sidebar.feed_actions.reset_feed_error"),
+        toastIDRef.current ? { id: toastIDRef.current } : undefined,
+      )
+    },
+  })
 }
