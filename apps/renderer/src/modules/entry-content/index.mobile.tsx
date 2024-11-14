@@ -118,7 +118,7 @@ export const EntryContent: Component<{
   const isInbox = !!inbox
 
   return (
-    <>
+    <WrappedElementProvider>
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
@@ -214,6 +214,6 @@ export const EntryContent: Component<{
           </article>
         </div>
       </div>
-    </>
+    </WrappedElementProvider>
   )
 }

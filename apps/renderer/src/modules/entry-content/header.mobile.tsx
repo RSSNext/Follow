@@ -2,7 +2,6 @@ import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/ind
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 import { findElementInShadowDOM } from "@follow/utils/dom"
-import { springScrollToElement } from "@follow/utils/scroller"
 import { clsx, cn } from "@follow/utils/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
 import { Slot } from "@radix-ui/react-slot"
@@ -13,7 +12,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
-import { useTocItems } from "~/components/ui/markdown/components/useTocItems"
+import { useScrollTracking, useTocItems } from "~/components/ui/markdown/components/hooks"
 import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
@@ -142,26 +141,35 @@ const HeaderRightActions = ({
     return () => clearTimeout(timeout)
   }, [getSetMarkdownElement])
 
+  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc, {
+    useWindowScroll: true,
+  })
+
   return (
-    <div className={clsx(className, "flex items-center gap-2")}>
+    <div className={clsx(className, "flex items-center gap-2 text-zinc-500")}>
       <PresentSheet
         title="Table of Contents"
         content={
           <ul className="text-sm">
-            {toc.map((heading) => (
+            {toc.map((heading, index) => (
               <li
                 key={heading.anchorId}
-                className="flex w-full items-center"
+                className={cn(
+                  "flex w-full items-center",
+                  currentScrollRange[0] === index && "text-accent",
+                )}
                 style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
               >
                 <button
                   className={cn("group flex w-full cursor-pointer justify-between py-1")}
                   type="button"
                   onClick={() => {
-                    springScrollToElement(heading.$heading, -100)
+                    handleScrollTo(index, heading.$heading, heading.anchorId)
                   }}
                 >
-                  <span className="duration-200 group-hover:text-accent/80">{heading.title}</span>
+                  <span className="text-left duration-200 group-hover:text-accent/80">
+                    {heading.title}
+                  </span>
 
                   <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
                 </button>
