@@ -20,8 +20,8 @@ export const BoostProgress = ({
   const [numberFormater] = useState(() => new Intl.NumberFormat())
   const t = useI18n()
   const rawPercentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
-  const percentage = 2 + (rawPercentage * (98 - 1)) / 100
-  const nextLevel = level + 2
+  const percentage = Math.max(rawPercentage, 2)
+  const nextLevel = level + 1
   return (
     <div className="flex w-full flex-col px-2">
       <div className="relative -mx-2 pt-12">
@@ -43,14 +43,14 @@ export const BoostProgress = ({
             aria-valuemin={0}
             aria-valuemax={remainingBoostsToLevelUp}
             style={{ width: `calc(${percentage}% + 0.5rem)` }}
-            className="flex h-full -translate-x-2 items-center justify-center rounded-3xl bg-accent text-white transition-all duration-500 ease-out"
+            className="bg-accent flex h-full -translate-x-2 items-center justify-center rounded-3xl text-white transition-all duration-500 ease-out"
           />
         </div>
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <span className="text-lg font-bold text-accent">Lv. {level}</span>
-        <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
+        <span className="text-accent text-lg font-bold">Lv. {level}</span>
+        <span className="text-accent text-lg font-bold">Lv. {nextLevel}</span>
       </div>
       <small className="center mt-2 gap-1">
         {t("boost.remaining_boosts_to_level_up", {

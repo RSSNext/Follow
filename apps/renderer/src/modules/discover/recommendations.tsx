@@ -25,11 +25,15 @@ import { RecommendationCard } from "./recommendations-card"
 
 const LanguageOptions = [
   {
+    name: "All",
+    value: "all",
+  },
+  {
     name: "English",
     value: "en",
   },
   {
-    name: "简体中文",
+    name: "中文",
     value: "zh-CN",
   },
 ] as const
@@ -56,7 +60,7 @@ export function Recommendations({
   const { t } = useTranslation()
   const lang = useGeneralSettingKey("language")
 
-  const defaultLang = ["zh-CN", "zh-HK", "zh-TW"].includes(lang ?? "") ? "zh-CN" : "en"
+  const defaultLang = !lang || ["zh-CN", "zh-HK", "zh-TW"].includes(lang) ? "all" : "en"
   const [category, setCategory] = useState<DiscoverCategories>("all")
   const [selectedLang, setSelectedLang] = useState<Language>(defaultLang)
 
@@ -154,7 +158,7 @@ export function Recommendations({
 
       <div
         className={cn(
-          "z-[9] my-3 flex w-full items-center gap-4 bg-theme-background",
+          "bg-theme-background z-[9] my-3 flex w-full items-center gap-4",
           headerClassName,
         )}
       >

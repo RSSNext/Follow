@@ -16,7 +16,7 @@ import { Trans } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-import { setMainContainerElement } from "~/atoms/dom"
+import { setMainContainerElement, setRootContainerElement } from "~/atoms/dom"
 import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
@@ -131,7 +131,7 @@ export function MainDestopLayout() {
 
       <main
         ref={setMainContainerElement}
-        className="flex min-w-0 flex-1 bg-theme-background pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"
+        className="bg-theme-background flex min-w-0 flex-1 pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"
         // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
@@ -171,9 +171,16 @@ export function MainDestopLayout() {
 
 const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
   const feedColWidth = useUISettingKey("feedColWidth")
+
+  const [elementRef, _setElementRef] = useState<HTMLDivElement | null>(null)
+  const setElementRef = React.useCallback((el: HTMLDivElement | null) => {
+    _setElementRef(el)
+    setRootContainerElement(el)
+  }, [])
+  React.useImperativeHandle(ref, () => elementRef!)
   return (
     <div
-      ref={ref}
+      ref={setElementRef}
       style={
         {
           "--fo-feed-col-w": `${feedColWidth}px`,

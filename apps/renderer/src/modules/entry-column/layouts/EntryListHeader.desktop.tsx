@@ -4,14 +4,14 @@ import { RotatingRefreshIcon } from "@follow/components/ui/loading/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useIsOnline } from "@follow/hooks"
-import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn, getOS, isBizId } from "@follow/utils/utils"
+import { cn, isBizId } from "@follow/utils/utils"
 import type { FC } from "react"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
+import { useFeedColumnShow } from "~/atoms/sidebar"
 import { useWhoami } from "~/atoms/user"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_LIST } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
@@ -21,7 +21,6 @@ import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
-import type { EntryListHeaderProps } from "./EntryListHeader.shared"
 import {
   AppendTaildingDivider,
   DailyReportButton,
@@ -30,12 +29,12 @@ import {
   WideModeButton,
 } from "./EntryListHeader.shared"
 
-export const EntryListHeader: FC<EntryListHeaderProps> = ({
-  totalCount,
-  refetch,
-  isRefreshing,
-  hasUpdate,
-}) => {
+export const EntryListHeader: FC<{
+  totalCount: number
+  refetch: () => void
+  isRefreshing: boolean
+  hasUpdate: boolean
+}> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParams()
   const { t } = useTranslation()
 
@@ -44,14 +43,12 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
   const { feedId, entryId, view, listId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
-  const os = getOS()
 
-  const titleAtBottom = IN_ELECTRON && os === "macOS"
   const isInCollectionList =
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
-    <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
+    <div className={"min-w-0 translate-y-1"}>
       <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
@@ -76,17 +73,18 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
   const containerRef = React.useRef<HTMLDivElement>(null)
   const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
 
+  const feedColumnShow = useFeedColumnShow()
   return (
     <div
       ref={containerRef}
       className={cn(
         "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
+        !feedColumnShow && "macos:mt-4 macos:pt-margin-macos-traffic-light-y",
         titleStyleBasedView[view],
       )}
     >
-      <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
-        {!titleAtBottom && titleInfo}
-
+      <div className={"flex w-full justify-between"}>
+        {titleInfo}
         <div
           className={cn(
             "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
@@ -161,7 +159,8 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
           )}
         </div>
       </div>
-      {titleAtBottom && titleInfo}
+
+      {/* <TimelineTabs /> */}
     </div>
   )
 }

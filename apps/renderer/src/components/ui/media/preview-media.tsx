@@ -1,5 +1,6 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { useMeasure } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import type { MediaModel } from "@follow/shared/hono"
 import { stopPropagation } from "@follow/utils/dom"
@@ -8,6 +9,7 @@ import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
 import { useTranslation } from "react-i18next"
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -39,7 +41,7 @@ const Wrapper: Component<{
         exit={{
           opacity: 0,
         }}
-        className="fixed right-4 flex items-center safe-inset-top-4"
+        className="safe-inset-top-4 fixed right-4 flex items-center"
       >
         <FixedModalCloseButton onClick={dismiss} />
       </m.div>
@@ -55,7 +57,7 @@ const Wrapper: Component<{
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
             sideContent
-              ? "min-w-96 items-center justify-center rounded-l-xl bg-native"
+              ? "bg-native min-w-96 items-center justify-center rounded-l-xl"
               : "rounded-xl",
           )}
         >
@@ -63,7 +65,7 @@ const Wrapper: Component<{
           <RootPortal to={sideContent ? null : undefined}>
             <div
               className={
-                "pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
+                "text-theme-vibrancyFg [&_button]:hover:text-theme-vibrancyFg pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 dark:text-white/70 dark:[&_button]:hover:text-white"
               }
               onClick={stopPropagation}
             >
@@ -94,7 +96,7 @@ const Wrapper: Component<{
         </div>
         {!!sideContent && (
           <div
-            className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-theme-background px-2 pt-1"
+            className="bg-theme-background box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl px-2 pt-1"
             onClick={stopPropagation}
           >
             {sideContent}
@@ -152,6 +154,7 @@ export const PreviewMediaContent: FC<{
             height={media[0].height}
             width={media[0].width}
             blurhash={media[0].blurhash}
+            haveSideContent={!!children}
           />
         )}
       </Wrapper>
@@ -207,7 +210,7 @@ export const PreviewMediaContent: FC<{
           <div>
             <div
               className={cn(
-                "absolute left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6",
+                "animate-in fade-in-0 slide-in-from-bottom-6 absolute left-4 text-sm tabular-nums text-white/60",
                 isVideo ? "bottom-12" : "bottom-4",
               )}
             >
@@ -217,7 +220,7 @@ export const PreviewMediaContent: FC<{
               tabIndex={-1}
               onClick={stopPropagation}
               className={cn(
-                "center absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6",
+                "center animate-in fade-in-0 slide-in-from-bottom-6 absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200",
                 isVideo ? "bottom-12" : "bottom-4",
               )}
             >
@@ -261,6 +264,7 @@ export const PreviewMediaContent: FC<{
                 height={med.height}
                 width={med.width}
                 blurhash={med.blurhash}
+                haveSideContent={!!children}
               />
             )}
           </SwiperSlide>
@@ -270,14 +274,19 @@ export const PreviewMediaContent: FC<{
   )
 }
 
+function parseNumber(value: string | number | undefined) {
+  return typeof value === "string" ? Number.parseInt(value) : value
+}
+
 const FallbackableImage: FC<
   Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
     src: string
     containerClassName?: string
     fallbackUrl?: string
     blurhash?: string
+    haveSideContent?: boolean
   }
-> = ({ src, onError, fallbackUrl, containerClassName, blurhash, ...props }) => {
+> = ({ src, onError, fallbackUrl, containerClassName, blurhash, haveSideContent, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
@@ -317,52 +326,97 @@ const FallbackableImage: FC<
     }
   }, [currentSrc, currentState, fallbackUrl, src])
 
-  const height = Number.parseInt(props.height as string)
-  const width = Number.parseInt(props.width as string)
+  const height = parseNumber(props.height)
+  const width = parseNumber(props.width)
 
   const { height: windowHeight, width: windowWidth } = useWindowSize()
+  // px-20 pb-8 pt-10
+  // wrapper side content w-[400px]
+  const maxContainerHeight = windowHeight - 32 - 40
+  const maxContainerWidth = windowWidth - 80 - 80 - (haveSideContent ? 400 : 0)
+
+  const [zoomingState, setZoomingState] = useState<"zoom-in" | "zoom-out" | null>(null)
+  const [zoomContainerWidth, setZoomContainerWidth] = useState(0)
+
+  const wrapperClass = cn("relative !max-h-full", width && height && width <= height && "!h-full")
+  const wrapperStyle: React.CSSProperties = {
+    width:
+      width && height && width > height
+        ? `${Math.min(maxContainerHeight * (width / height), width)}px`
+        : undefined,
+    maxWidth: width && height && width > height ? `${maxContainerWidth}px` : undefined,
+  }
+
+  const [ref, { width: imgWidth }] = useMeasure()
 
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
-        <div
-          className={cn("relative max-h-full", width <= height && "h-full")}
-          style={{
-            width:
-              width && height && width > height
-                ? `${Math.min((windowHeight - 32 - 40) * (width / height), width)}px`
-                : undefined,
-            maxWidth: width > height ? `${windowWidth - 80 - 80 - 400}px` : undefined,
+        <TransformWrapper
+          wheel={{ smoothStep: 0.008 }}
+          onZoom={(e) => {
+            if (e.state.scale !== 1) {
+              setZoomingState(e.state.scale > 1 ? "zoom-in" : "zoom-out")
+            } else {
+              setZoomingState(null)
+            }
+            setZoomContainerWidth(Math.min(maxContainerWidth, e.state.scale * imgWidth))
           }}
         >
-          <img
-            data-blurhash={blurhash}
-            src={currentSrc}
-            onLoad={() => setIsLoading(false)}
-            onError={handleError}
-            height={props.height}
-            width={props.width}
-            {...props}
-            className={cn(
-              "transition-opacity duration-700",
-              isLoading ? "opacity-0" : "opacity-100",
-              props.className,
-            )}
-            style={props.style}
-          />
-          <div
-            className={cn(
-              "center absolute inset-0 size-full transition-opacity duration-700",
-              isLoading ? "opacity-100" : "opacity-0",
-            )}
+          <TransformComponent
+            wrapperClass={wrapperClass}
+            wrapperStyle={{
+              ...wrapperStyle,
+              minWidth:
+                zoomingState === "zoom-in" && !haveSideContent
+                  ? `${zoomContainerWidth}px`
+                  : undefined,
+              height: zoomingState === "zoom-in" ? "100%" : undefined,
+            }}
+            contentClass={wrapperClass}
+            contentStyle={wrapperStyle}
+            wrapperProps={{
+              onClick: stopPropagation,
+            }}
           >
-            {blurhash ? (
-              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            ) : isLoading ? (
-              <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-            ) : null}
-          </div>
-        </div>
+            <img
+              ref={ref}
+              data-blurhash={blurhash}
+              src={currentSrc}
+              onLoad={() => setIsLoading(false)}
+              onError={handleError}
+              height={props.height}
+              width={props.width}
+              {...props}
+              className={cn(
+                "mx-auto transition-opacity duration-700",
+                isLoading ? "opacity-0" : "opacity-100",
+                props.className,
+              )}
+              style={{
+                maxHeight: `${maxContainerHeight}px`,
+                ...props.style,
+              }}
+            />
+            <div
+              className={cn(
+                "center absolute inset-0 size-full transition-opacity duration-700",
+                isLoading ? "opacity-100" : "opacity-0",
+              )}
+            >
+              {blurhash ? (
+                <Blurhash
+                  hash={blurhash}
+                  resolutionX={32}
+                  resolutionY={32}
+                  className="!size-full"
+                />
+              ) : isLoading ? (
+                <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+              ) : null}
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
       )}
       {isAllError && (
         <div
@@ -408,7 +462,7 @@ const FallbackableImage: FC<
               href={src}
               target="_blank"
               rel="noreferrer"
-              className="underline duration-200 hover:text-accent"
+              className="hover:text-accent underline duration-200"
             >
               visit the original image
             </a>{" "}

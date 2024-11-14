@@ -25,7 +25,8 @@ export const imageRefererMatches = [
   },
   {
     url: /^https:\/\/sp1\.piokok\.com/,
-    referer: "https://sp1.piokok.com",
+    referer: "https://www.piokok.com",
+    force: true,
   },
 ]
 
