@@ -335,7 +335,8 @@ const FallbackableImage: FC<
   const maxContainerHeight = windowHeight - 32 - 40
   const maxContainerWidth = windowWidth - 80 - 80 - (haveSideContent ? 400 : 0)
 
-  const [scale, setScale] = useState(1)
+  const [zoomingState, setZoomingState] = useState<"zoom-in" | "zoom-out" | null>(null)
+  const [zoomContainerWidth, setZoomContainerWidth] = useState(0)
 
   const wrapperClass = cn("relative !max-h-full", width && height && width <= height && "!h-full")
   const wrapperStyle: React.CSSProperties = {
@@ -354,7 +355,12 @@ const FallbackableImage: FC<
         <TransformWrapper
           wheel={{ smoothStep: 0.008 }}
           onZoom={(e) => {
-            setScale(e.state.scale)
+            if (e.state.scale !== 1) {
+              setZoomingState(e.state.scale > 1 ? "zoom-in" : "zoom-out")
+            } else {
+              setZoomingState(null)
+            }
+            setZoomContainerWidth(Math.min(maxContainerWidth, e.state.scale * imgWidth))
           }}
         >
           <TransformComponent
@@ -362,10 +368,10 @@ const FallbackableImage: FC<
             wrapperStyle={{
               ...wrapperStyle,
               minWidth:
-                scale > 1 && !haveSideContent
-                  ? `${Math.min(maxContainerWidth, scale * imgWidth)}px`
+                zoomingState === "zoom-in" && !haveSideContent
+                  ? `${zoomContainerWidth}px`
                   : undefined,
-              height: scale > 1 ? "100%" : undefined,
+              height: zoomingState === "zoom-in" ? "100%" : undefined,
             }}
             contentClass={wrapperClass}
             contentStyle={wrapperStyle}
