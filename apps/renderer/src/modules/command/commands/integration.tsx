@@ -18,11 +18,10 @@ import { useIntegrationSettingKey } from "~/atoms/settings/integration"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
-import { useEntry, usePopulatedEntry } from "~/store/entry/hooks"
-import { useFeedById } from "~/store/feed"
+import { useEntryStore } from "~/store/entry"
 
-import { useUserFocusValue } from "../contexts/focus"
 import { useRegisterCommandEffect } from "../hooks/use-register-command-effect"
+import { defineFollowCommand } from "../registry/command"
 import { COMMAND_ID } from "./id"
 
 export const useRegisterIntegrationCommands = () => {
@@ -36,18 +35,13 @@ export const useRegisterIntegrationCommands = () => {
 
 const useRegisterEagleCommands = () => {
   const { t } = useTranslation()
-  const { entryId: layoutEntryId, view } = useRouteParams()
-  const userFocus = useUserFocusValue()
-  const entryId = userFocus.type === "entry" ? userFocus.entryId : layoutEntryId
+  const { view } = useRouteParams()
 
-  const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
   const enableEagle = useIntegrationSettingKey("enableEagle")
-  const contextPopulatedEntry = usePopulatedEntry(entry, feed)
 
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
-    enabled: ELECTRON && enableEagle && !!entry?.entries.url && view !== undefined,
+    enabled: ELECTRON && enableEagle && view !== undefined,
     queryFn: async () => {
       try {
         await ofetch("http://localhost:41595")
@@ -65,29 +59,27 @@ const useRegisterEagleCommands = () => {
   useRegisterCommandEffect(
     !isEagleAvailable
       ? []
-      : {
+      : defineFollowCommand({
           id: COMMAND_ID.integration.saveToEagle,
           label: t("entry_actions.save_media_to_eagle"),
           icon: <SimpleIconsEagle />,
-          when:
-            !!contextPopulatedEntry?.entries?.url &&
-            !!contextPopulatedEntry?.entries?.media?.length,
-          // TODO get entry based on context
-          run: async () => {
-            const populatedEntry = contextPopulatedEntry
-            if (
-              !populatedEntry ||
-              !populatedEntry.entries.url ||
-              !populatedEntry.entries.media?.length
-            ) {
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Eagle: entry is not available", {
+                duration: 3000,
+              })
+              return
+            }
+            if (!entry.entries.url || !entry.entries.media?.length) {
               toast.error('Failed to save to Eagle: "url" or "media" is not available', {
                 duration: 3000,
               })
               return
             }
             const response = await tipcClient?.saveToEagle({
-              url: populatedEntry.entries.url,
-              mediaUrls: populatedEntry.entries.media.map((m) => m.url),
+              url: entry.entries.url,
+              mediaUrls: entry.entries.media.map((m) => m.url),
             })
             if (response?.status === "success") {
               toast.success(t("entry_actions.saved_to_eagle"), {
@@ -99,19 +91,12 @@ const useRegisterEagleCommands = () => {
               })
             }
           },
-        },
+        }),
   )
 }
 
 const useRegisterReadwiseCommands = () => {
   const { t } = useTranslation()
-  const { entryId: layoutEntryId } = useRouteParams()
-  const userFocus = useUserFocusValue()
-  const entryId = userFocus.type === "entry" ? userFocus.entryId : layoutEntryId
-
-  const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
-  const populatedEntry = usePopulatedEntry(entry, feed)
 
   const enableReadwise = useIntegrationSettingKey("enableReadwise")
   const readwiseToken = useIntegrationSettingKey("readwiseToken")
@@ -121,13 +106,16 @@ const useRegisterReadwiseCommands = () => {
   useRegisterCommandEffect(
     !isReadwiseAvailable
       ? []
-      : {
+      : defineFollowCommand({
           id: COMMAND_ID.integration.saveToReadwise,
           label: t("entry_actions.save_to_readwise"),
           icon: <SimpleIconsReadwise />,
-          when: !!populatedEntry && !!populatedEntry.entries.url,
-          run: async () => {
-            if (!populatedEntry) return
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Readwise: entry is not available", { duration: 3000 })
+              return
+            }
             try {
               window.analytics?.capture("integration", {
                 type: "readwise",
@@ -139,13 +127,13 @@ const useRegisterReadwiseCommands = () => {
                   Authorization: `Token ${readwiseToken}`,
                 },
                 body: {
-                  url: populatedEntry.entries.url,
-                  html: populatedEntry.entries.content || undefined,
-                  title: populatedEntry.entries.title || undefined,
-                  author: populatedEntry.entries.author || undefined,
-                  summary: populatedEntry.entries.description || undefined,
-                  published_date: populatedEntry.entries.publishedAt || undefined,
-                  image_url: populatedEntry.entries.media?.[0]?.url || undefined,
+                  url: entry.entries.url,
+                  html: entry.entries.content || undefined,
+                  title: entry.entries.title || undefined,
+                  author: entry.entries.author || undefined,
+                  summary: entry.entries.description || undefined,
+                  published_date: entry.entries.publishedAt || undefined,
+                  image_url: entry.entries.media?.[0]?.url || undefined,
                   saved_using: "Follow",
                 },
               })
@@ -167,19 +155,12 @@ const useRegisterReadwiseCommands = () => {
               })
             }
           },
-        },
+        }),
   )
 }
 
 const useRegisterInstapaperCommands = () => {
   const { t } = useTranslation()
-  const { entryId: layoutEntryId } = useRouteParams()
-  const userFocus = useUserFocusValue()
-  const entryId = userFocus.type === "entry" ? userFocus.entryId : layoutEntryId
-
-  const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
-  const populatedEntry = usePopulatedEntry(entry, feed)
 
   const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
   const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
@@ -190,13 +171,19 @@ const useRegisterInstapaperCommands = () => {
   useRegisterCommandEffect(
     !isInstapaperAvailable
       ? []
-      : {
+      : defineFollowCommand({
           id: COMMAND_ID.integration.saveToInstapaper,
           label: t("entry_actions.save_to_instapaper"),
           icon: <SimpleIconsInstapaper />,
-          when: !!populatedEntry && !!populatedEntry.entries.url,
-          run: async () => {
-            if (!populatedEntry) return
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Instapaper: entry is not available", {
+                duration: 3000,
+              })
+              return
+            }
+
             try {
               window.analytics?.capture("integration", {
                 type: "instapaper",
@@ -204,8 +191,8 @@ const useRegisterInstapaperCommands = () => {
               })
               const data = await ofetch("https://www.instapaper.com/api/add", {
                 query: {
-                  url: populatedEntry.entries.url,
-                  title: populatedEntry.entries.title,
+                  url: entry.entries.url,
+                  title: entry.entries.title,
                 },
                 method: "POST",
                 headers: {
@@ -235,19 +222,12 @@ const useRegisterInstapaperCommands = () => {
               })
             }
           },
-        },
+        }),
   )
 }
 
 const useRegisterOmnivoreCommands = () => {
   const { t } = useTranslation()
-  const { entryId: layoutEntryId } = useRouteParams()
-  const userFocus = useUserFocusValue()
-  const entryId = userFocus.type === "entry" ? userFocus.entryId : layoutEntryId
-
-  const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
-  const populatedEntry = usePopulatedEntry(entry, feed)
 
   const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
   const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
@@ -258,13 +238,16 @@ const useRegisterOmnivoreCommands = () => {
   useRegisterCommandEffect(
     !isOmnivoreAvailable
       ? []
-      : {
+      : defineFollowCommand({
           id: COMMAND_ID.integration.saveToOmnivore,
           label: t("entry_actions.save_to_omnivore"),
           icon: <SimpleIconsOmnivore />,
-          when: !!populatedEntry && !!populatedEntry.entries.url,
-          run: async () => {
-            if (!populatedEntry) return
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Omnivore: entry is not available", { duration: 3000 })
+              return
+            }
             const saveUrlQuery = `
   mutation SaveUrl($input: SaveUrlInput!) {
     saveUrl(input: $input) {
@@ -295,10 +278,10 @@ const useRegisterOmnivoreCommands = () => {
                   query: saveUrlQuery,
                   variables: {
                     input: {
-                      url: populatedEntry.entries.url,
+                      url: entry.entries.url,
                       source: "Follow",
                       clientRequestId: globalThis.crypto.randomUUID(),
-                      publishedAt: new Date(populatedEntry.entries.publishedAt),
+                      publishedAt: new Date(entry.entries.publishedAt),
                     },
                   },
                 },
@@ -320,19 +303,12 @@ const useRegisterOmnivoreCommands = () => {
               })
             }
           },
-        },
+        }),
   )
 }
 
 const useRegisterObsidianCommands = () => {
   const { t } = useTranslation()
-  const { entryId: layoutEntryId } = useRouteParams()
-  const userFocus = useUserFocusValue()
-  const entryId = userFocus.type === "entry" ? userFocus.entryId : layoutEntryId
-
-  const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
-  const populatedEntry = usePopulatedEntry(entry, feed)
 
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
@@ -366,47 +342,42 @@ const useRegisterObsidianCommands = () => {
   useRegisterCommandEffect(
     !IN_ELECTRON || !isObsidianAvailable
       ? []
-      : {
+      : defineFollowCommand({
           id: COMMAND_ID.integration.saveToObsidian,
           label: t("entry_actions.save_to_obsidian"),
           icon: <SimpleIconsObsidian />,
-          when: !!populatedEntry?.entries?.url,
-          run: () => {
-            if (!populatedEntry?.entries?.url) return
-
+          run: ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Obsidian: entry is not available", { duration: 3000 })
+              return
+            }
             const isReadabilityReady =
-              getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
+              getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
             const content =
               (isReadabilityReady
-                ? getReadabilityContent()[populatedEntry.entries.id].content
-                : populatedEntry.entries.content) || ""
+                ? getReadabilityContent()[entry.entries.id].content
+                : entry.entries.content) || ""
             const markdownContent = parseHtml(content).toMarkdown()
             window.analytics?.capture("integration", {
               type: "obsidian",
               event: "save",
             })
             saveToObsidian.mutate({
-              url: populatedEntry.entries.url,
-              title: populatedEntry.entries.title || "",
+              url: entry.entries.url || "",
+              title: entry.entries.title || "",
               content: markdownContent,
-              author: populatedEntry.entries.author || "",
-              publishedAt: populatedEntry.entries.publishedAt || "",
+              author: entry.entries.author || "",
+              publishedAt: entry.entries.publishedAt || "",
               vaultPath: obsidianVaultPath,
             })
           },
-        },
+        }),
   )
 }
 
 const useRegisterOutlineCommands = () => {
   const { t } = useTranslation()
-  const { entryId: layoutEntryId } = useRouteParams()
-  const userFocus = useUserFocusValue()
-  const entryId = userFocus.type === "entry" ? userFocus.entryId : layoutEntryId
-
-  const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
-  const populatedEntry = usePopulatedEntry(entry, feed)
 
   const enableOutline = useIntegrationSettingKey("enableOutline")
   const outlineEndpoint = useIntegrationSettingKey("outlineEndpoint")
@@ -418,21 +389,23 @@ const useRegisterOutlineCommands = () => {
   useRegisterCommandEffect(
     !IN_ELECTRON || !outlineAvailable
       ? []
-      : {
+      : defineFollowCommand({
           id: COMMAND_ID.integration.saveToOutline,
           label: t("entry_actions.save_to_outline"),
           icon: <SimpleIconsOutline />,
-          when: !!populatedEntry && !!populatedEntry.entries.title,
-          run: async () => {
-            if (!populatedEntry?.entries?.url) return
-
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Outline: entry is not available", { duration: 3000 })
+              return
+            }
             const getEntryContentAsMarkdown = () => {
               const isReadabilityReady =
-                getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
+                getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
               const content =
                 (isReadabilityReady
-                  ? getReadabilityContent()[populatedEntry.entries.id].content
-                  : populatedEntry.entries.content) || ""
+                  ? getReadabilityContent()[entry.entries.id].content
+                  : entry.entries.content) || ""
               return parseHtml(content).toMarkdown()
             }
 
@@ -456,7 +429,7 @@ const useRegisterOutlineCommands = () => {
               }
               const markdownContent = getEntryContentAsMarkdown()
               await request("documents.create", {
-                title: populatedEntry.entries.title,
+                title: entry.entries.title,
                 text: markdownContent,
                 collectionId,
                 publish: true,
@@ -470,6 +443,6 @@ const useRegisterOutlineCommands = () => {
               })
             }
           },
-        },
+        }),
   )
 }

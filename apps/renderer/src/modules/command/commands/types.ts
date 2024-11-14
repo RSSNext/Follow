@@ -5,12 +5,75 @@ import type { COMMAND_ID } from "./id"
 
 export type TipCommand = Command<{
   id: typeof COMMAND_ID.entry.tip
-  fn: ({ userId, feedId, entryId }: { userId?: string; feedId?: string; entryId?: string }) => void
+  fn: (data: { userId?: string; feedId?: string; entryId?: string }) => void
 }>
+
+export type StarCommand = Command<{
+  id: typeof COMMAND_ID.entry.star
+  fn: (data: { entryId: string }) => void
+}>
+export type UnStarCommand = Command<{
+  id: typeof COMMAND_ID.entry.unstar
+  fn: (data: { entryId: string }) => void
+}>
+
+export type DeleteCommand = Command<{
+  id: typeof COMMAND_ID.entry.delete
+  fn: (data: { entryId: string }) => void
+}>
+
+export type CopyLinkCommand = Command<{
+  id: typeof COMMAND_ID.entry.copyLink
+  fn: (data: { entryId: string }) => void
+}>
+
+export type CopyTitleCommand = Command<{
+  id: typeof COMMAND_ID.entry.copyTitle
+  fn: (data: { entryId: string }) => void
+}>
+
 export type OpenInBrowserCommand = Command<{
   id: typeof COMMAND_ID.entry.openInBrowser
-  fn: (url: string) => void
+  fn: (data: { entryId: string }) => void
 }>
+
+export type ViewSourceContentCommand = Command<{
+  id: typeof COMMAND_ID.entry.viewSourceContent
+  fn: (data: { entryId: string }) => void
+}>
+export type ViewEntryContentCommand = Command<{
+  id: typeof COMMAND_ID.entry.viewEntryContent
+  fn: () => void
+}>
+
+export type ShareCommand = Command<{
+  id: typeof COMMAND_ID.entry.share
+  fn: ({ entryId }) => void
+}>
+
+export type ReadCommand = Command<{
+  id: typeof COMMAND_ID.entry.read
+  fn: ({ entryId }) => void
+}>
+
+export type UnReadCommand = Command<{
+  id: typeof COMMAND_ID.entry.unread
+  fn: ({ entryId }) => void
+}>
+
+export type EntryCommand =
+  | TipCommand
+  | StarCommand
+  | UnStarCommand
+  | DeleteCommand
+  | CopyLinkCommand
+  | CopyTitleCommand
+  | OpenInBrowserCommand
+  | ViewSourceContentCommand
+  | ViewEntryContentCommand
+  | ShareCommand
+  | ReadCommand
+  | UnReadCommand
 
 // Integration commands
 
@@ -51,7 +114,5 @@ export type IntegrationCommand =
   | SaveToOmnivoreCommand
   | SaveToObsidianCommand
   | SaveToOutlineCommand
-
-export type EntryCommand = TipCommand | OpenInBrowserCommand
 
 export type BasicCommand = EntryCommand | IntegrationCommand

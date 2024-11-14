@@ -1,6 +1,6 @@
 export const COMMAND_ID = {
   entry: {
-    Tip: "entry:tip",
+    tip: "entry:tip",
     star: "entry:star",
     unstar: "entry:unstar",
     delete: "entry:delete",
@@ -37,9 +37,9 @@ export const COMMAND_ID = {
 } as const
 
 // Helper type to extract all command IDs
-type ExtractCommandIds<T> = {
-  [K in keyof T]: T[K][keyof T[K]]
-}[keyof T]
+// type ExtractCommandIds<T> = {
+//   [K in keyof T]: T[K][keyof T[K]]
+// }[keyof T]
 
 // Define CommandId as a union of all command ID strings
-export type CommandId = ExtractCommandIds<typeof COMMAND_ID>
+// export type CommandId = ExtractCommandIds<typeof COMMAND_ID>
