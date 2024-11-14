@@ -355,7 +355,7 @@ const FallbackableImage: FC<
     >
       {!isAllError && (
         <TransformWrapper
-          wheel={{ step: 1 }}
+          wheel={{ smoothStep: 0.008 }}
           onZoom={(e) => {
             setScale(e.state.scale)
           }}
