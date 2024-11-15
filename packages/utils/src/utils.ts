@@ -208,3 +208,10 @@ export function shallowCopy<T>(input: T): T {
   }
   return input
 }
+
+export function isKeyForMultiSelectPressed(e: MouseEvent) {
+  if (getOS() === "macOS") {
+    return e.metaKey || e.shiftKey
+  }
+  return e.ctrlKey || e.shiftKey
+}

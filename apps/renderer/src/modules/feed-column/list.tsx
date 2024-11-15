@@ -3,16 +3,16 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useCallback, useMemo, useRef, useState } from "react"
-import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
 import { useEventListener } from "usehooks-ts"
 
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -45,13 +45,17 @@ const useFeedsGroupedData = (view: FeedViewType) => {
 
   const data = useSubscriptionByView(view) || remoteData
 
+  const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
+
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
     const groupFolder = {} as Record<string, string[]>
 
     for (const subscription of data) {
-      const category = subscription.category || subscription.defaultCategory
+      const category =
+        subscription.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
+
       if (category) {
         if (!groupFolder[category]) {
           groupFolder[category] = []
@@ -61,7 +65,7 @@ const useFeedsGroupedData = (view: FeedViewType) => {
     }
 
     return groupFolder
-  }, [data])
+  }, [autoGroup, data])
 }
 
 const useListsGroupedData = (view: FeedViewType) => {
@@ -199,10 +203,29 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
+        dragCondition={(e) => {
+          const inputEvent = e.inputEvent as MouseEvent
+          const target = inputEvent.target as HTMLElement
+          const closest = target.closest("[data-feed-id]") as HTMLElement | null
+          const dataFeedId = closest?.dataset.feedId
+
+          if (
+            dataFeedId &&
+            selectedFeedIds.includes(dataFeedId) &&
+            !isKeyForMultiSelectPressed(inputEvent)
+          )
+            return false
+
+          return true
+        }}
+        onDragStart={(e) => {
+          if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
+            setSelectedFeedIds([])
+          }
+        }}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
-        hitRate={10}
+        hitRate={1}
         onSelect={(e) => {
           const allChanged = [...e.added, ...e.removed]
             .map((el) => el.dataset.feedId)
