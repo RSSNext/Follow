@@ -351,12 +351,9 @@ const ListHeader = ({ view }: { view: number }) => {
   const navigateEntry = useNavigateEntry()
 
   return (
-    <div
-      onClick={stopPropagation}
-      className="mx-3 mb-6 mt-12 flex items-center justify-between px-2.5 py-1 lg:my-0"
-    >
+    <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
       <div
-        className="text-4xl font-bold lg:text-base"
+        className="text-base font-bold"
         onClick={(e) => {
           e.stopPropagation()
           if (!document.hasFocus()) return
@@ -371,7 +368,7 @@ const ListHeader = ({ view }: { view: number }) => {
       >
         {view !== undefined && t(views[view].name)}
       </div>
-      <div className="ml-2 flex items-center gap-3 text-base text-theme-vibrancyFg lg:text-sm">
+      <div className="ml-2 flex items-center gap-3 text-base text-zinc-400 dark:text-zinc-600 lg:text-sm lg:!text-theme-vibrancyFg">
         <SortButton />
         {expansion ? (
           <i

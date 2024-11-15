@@ -1,5 +1,5 @@
 import { Logo } from "@follow/components/icons/logo.js"
-import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
@@ -7,6 +7,8 @@ import clsx from "clsx"
 import { m, useAnimationControls } from "framer-motion"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 import { useEventListener } from "usehooks-ts"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
@@ -35,8 +37,23 @@ export function MainMobileLayout() {
 
   const [feedListScrollRef, setFeedListScrollRef] = useState<HTMLDivElement | null>()
 
+  const { t } = useTranslation()
   return (
-    <div className={clsx("relative flex h-screen flex-col space-y-3", "bg-background")}>
+    <div className={"relative flex h-screen flex-col space-y-3"}>
+      <div className="mt-4 flex items-center justify-between pl-6 pr-2">
+        <span className="inline-flex items-center gap-3 text-lg font-bold">
+          <Logo className="size-8 shrink-0" />
+          {APP_NAME}
+        </span>
+        <div className="center inline-flex">
+          <Link to="/discover" tabIndex={-1}>
+            <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
+              <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
+            </ActionButton>
+          </Link>
+          {/* <SearchTrigger /> */}
+        </div>
+      </div>
       <div className={"relative flex size-full h-0 grow"}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
@@ -81,7 +98,7 @@ const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElemen
       if (!scrollContainer) return
       const currentY = scrollContainer.scrollTop
 
-      if (currentY < 100) return
+      if (currentY < 30) return
 
       setIsScrollDown(currentY > prevScrollY.current)
       prevScrollY.current = currentY
