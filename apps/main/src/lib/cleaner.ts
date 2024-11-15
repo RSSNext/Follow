@@ -25,10 +25,12 @@ export const clearAllDataAndConfirm = async () => {
     type: "warning",
 
     message: t("dialog.clearAllData"),
-    buttons: [t("dialog.yes"), t("dialog.no")],
+    buttons: [t("dialog.no"), t("dialog.yes")],
+    cancelId: 0,
+    defaultId: 1,
   })
 
-  if (result.response === 1) {
+  if (result.response === 0) {
     return
   }
   return clearAllData()
