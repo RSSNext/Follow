@@ -100,7 +100,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
         </>
       }
     >
-      <UserAvatar hideName className="size-6 p-0 [&_*]:border-0" />
+      <UserAvatar hideName className="size-6 shrink-0 p-0 [&_*]:border-0" />
     </PresentSheet>
   )
 }

@@ -29,13 +29,15 @@ const playerInitialValue: PlayerAtomValue = {
 }
 
 const jsonStorage = createJSONStorage<PlayerAtomValue>()
+let hydrationDone = false
 const patchedLocalStorage: SyncStorage<PlayerAtomValue> = {
   setItem: jsonStorage.setItem,
   getItem: (key, initialValue) => {
     const value = jsonStorage.getItem(key, initialValue)
-    if (value) {
+    if (value && !hydrationDone) {
       // patch status to `paused` when hydration
       value.status = "paused"
+      hydrationDone = true
     }
     return value
   },

@@ -6,11 +6,17 @@ import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { m, useAnimationControls } from "framer-motion"
 import type { FC } from "react"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useEventListener } from "usehooks-ts"
 
+import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
+import { FeedIcon } from "~/modules/feed/feed-icon"
+import { CornerPlayer } from "~/modules/player/corner-player"
+import { useEntry } from "~/store/entry"
+import { useFeedById } from "~/store/feed"
+import { feedIconSelector } from "~/store/feed/selector"
 
 import { FeedList } from "../../feed-column/list"
 import { ProfileButton } from "../../user/ProfileButton"
@@ -104,10 +110,11 @@ const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElemen
       animate={animateController}
     >
       <div className={styles["float-bar"]}>
-        <Logo className="size-6" />
-        <DividerVertical className="h-3/4" />
+        <Logo className="size-5 shrink-0" />
+        <DividerVertical className="h-3/4 shrink-0" />
         <ViewTabs />
-        <DividerVertical className="h-3/4" />
+        <DividerVertical className="h-3/4 shrink-0" />
+        <PlayerIcon />
         <ProfileButton />
       </div>
     </m.div>
@@ -118,7 +125,7 @@ const ViewTabs = () => {
   const [active, setActive] = useSidebarActiveView()
   return (
     <div
-      className="flex w-full items-center justify-between gap-4 text-xl text-theme-vibrancyFg"
+      className="flex w-full shrink items-center justify-between gap-4 overflow-auto text-xl text-theme-vibrancyFg"
       onClick={stopPropagation}
     >
       {views.map((item) => (
@@ -134,5 +141,31 @@ const ViewTabs = () => {
         </MotionButtonBase>
       ))}
     </div>
+  )
+}
+
+const PlayerIcon = () => {
+  const { isPlaying, entryId } = useAudioPlayerAtomSelector(
+    useCallback((state) => ({ isPlaying: state.status === "playing", entryId: state.entryId }), []),
+  )
+  const feedId = useEntry(entryId, (s) => s.feedId)
+  const feed = useFeedById(feedId, feedIconSelector)
+  const [isShowPlayer, setIsShowPlayer] = useState(false)
+  if (!feed) return null
+  if (!isPlaying) return null
+  return (
+    <>
+      <button
+        type="button"
+        className="mr-3 size-5 shrink-0"
+        onClick={() => setIsShowPlayer((v) => !v)}
+      >
+        <FeedIcon feed={feed} />
+      </button>
+
+      {isShowPlayer && (
+        <CornerPlayer className="absolute bottom-12 left-0 w-full max-w-[350px] overflow-hidden rounded-r-lg" />
+      )}
+    </>
   )
 }
