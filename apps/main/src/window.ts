@@ -112,19 +112,23 @@ export function createWindow(
 
   window.webContents.on("did-attach-webview", (_, webContents) => {
     webContents.on("will-navigate", async (e, url) => {
-      e.preventDefault()
       const { protocol } = new URL(url)
-      if (protocol !== "http:" && protocol !== "https:" && protocol !== "follow:") {
-        const res = await dialog.showMessageBox(window, {
-          type: "question",
-          title: t("dialog.confirmation"),
-          message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
-          buttons: [t("dialog.cancel"), t("dialog.open")],
-        })
-        if (res.response === 1) {
-          shell.openExternal(url)
-        }
+      if (protocol === "http:" || protocol === "https:" || protocol === "follow:") {
+        return
       }
+      e.preventDefault()
+      const res = await dialog.showMessageBox(window, {
+        type: "question",
+        title: t("dialog.confirmation"),
+        message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
+        buttons: [t("dialog.cancel"), t("dialog.open")],
+        cancelId: 0,
+        defaultId: 1,
+      })
+      if (res.response === 0) {
+        return
+      }
+      shell.openExternal(url)
     })
   })
 
