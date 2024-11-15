@@ -1,4 +1,5 @@
 import { useDroppable } from "@dnd-kit/core"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
@@ -13,7 +14,7 @@ import type { FC } from "react"
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
-import { useOnClickOutside } from "usehooks-ts"
+import { useEventCallback, useOnClickOutside } from "usehooks-ts"
 
 import type { MenuItemInput } from "~/atoms/context-menu"
 import { useShowContextMenu } from "~/atoms/context-menu"
@@ -107,15 +108,18 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
-  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
-    e.stopPropagation()
-    if (!isCategoryEditing) {
-      setCategoryActive()
-    }
-    if (view !== undefined && folderName) {
-      subscriptionActions.toggleCategoryOpenState(view, folderName)
-    }
-  }
+  const isMobile = useMobile()
+  const toggleCategoryOpenState = useEventCallback(
+    (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+      e.stopPropagation()
+      if (!isCategoryEditing && !isMobile) {
+        setCategoryActive()
+      }
+      if (view !== undefined && folderName) {
+        subscriptionActions.toggleCategoryOpenState(view, folderName)
+      }
+    },
+  )
 
   const setCategoryActive = () => {
     if (view !== undefined) {

@@ -249,7 +249,7 @@ function EntryColumnImpl() {
       </AutoResizeHeight> */}
       <m.div
         key={`${routeFeedId}-${view}`}
-        className="relative mt-2 h-0 grow"
+        className="relative h-0 grow lg:mt-2"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
@@ -259,7 +259,7 @@ function EntryColumnImpl() {
           mask={false}
           ref={scrollRef}
           onScroll={handleScroll}
-          rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}
+          rootClassName={clsx("h-full", views[view].wideMode ? "lg:mt-2" : "")}
           viewportClassName="[&>div]:grow flex"
         >
           {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
@@ -301,7 +301,8 @@ const ListGird = ({
   virtuosoRef: React.RefObject<VirtuosoHandle>
   hasNextPage: boolean
 }) => {
-  const masonry = useUISettingKey("pictureViewMasonry")
+  const isMobile = useMobile()
+  const masonry = useUISettingKey("pictureViewMasonry") || isMobile
   const view = useRouteParamsSelector((s) => s.view)
   const feedId = useRouteParamsSelector((s) => s.feedId)
   const filterNoImage = useUISettingKey("pictureViewFilterNoImage")

@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { nextFrame, preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { Fragment, memo, useCallback, useEffect, useRef } from "react"
@@ -97,6 +98,8 @@ const Item = memo(({ item }: { item: FollowMenuItem }) => {
     preventDefault: true,
   })
 
+  const isMobile = useMobile()
+
   switch (item.type) {
     case "separator": {
       return <ContextMenuSeparator />
@@ -124,7 +127,7 @@ const Item = memo(({ item }: { item: FollowMenuItem }) => {
             )}
             <span className={cn(item.icon && "pl-6")}>{item.label}</span>
 
-            {!!item.shortcut && (
+            {!!item.shortcut && !isMobile && (
               <div className="ml-auto pl-4">
                 <KbdCombined joint>{item.shortcut}</KbdCombined>
               </div>

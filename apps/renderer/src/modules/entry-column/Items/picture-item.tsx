@@ -110,6 +110,8 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
       data-index={index}
       onMouseEnter={() => setIsMouseEnter(true)}
       onMouseLeave={() => setIsMouseEnter(false)}
+      onTouchMove={() => setIsMouseEnter(true)}
+      onTouchEnd={() => setIsMouseEnter(false)}
       className={className}
     >
       <EntryItemWrapper
