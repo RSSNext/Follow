@@ -12,6 +12,7 @@ import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
 import { useEventListener } from "usehooks-ts"
 
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -44,13 +45,17 @@ const useFeedsGroupedData = (view: FeedViewType) => {
 
   const data = useSubscriptionByView(view) || remoteData
 
+  const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
+
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
     const groupFolder = {} as Record<string, string[]>
 
     for (const subscription of data) {
-      const category = subscription.category || subscription.defaultCategory
+      const category =
+        subscription.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
+
       if (category) {
         if (!groupFolder[category]) {
           groupFolder[category] = []
@@ -60,7 +65,7 @@ const useFeedsGroupedData = (view: FeedViewType) => {
     }
 
     return groupFolder
-  }, [data])
+  }, [autoGroup, data])
 }
 
 const useListsGroupedData = (view: FeedViewType) => {
