@@ -7,6 +7,7 @@ import { ErrorBoundary } from "@sentry/react"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -18,6 +19,7 @@ import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 
+import { CornerPlayer } from "../player/corner-player"
 import { EntryContentHTMLRenderer } from "../renderer/html"
 import { getTranslationCache, setTranslationCache } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
@@ -87,6 +89,9 @@ export const EntryContent: Component<{
     [entry?.entries.media, data?.entries.media],
   )
   const hideRecentReader = useUISettingKey("hideRecentReader")
+
+  const { entryId: audioEntryId } = useAudioPlayerAtomSelector((state) => state)
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -150,6 +155,10 @@ export const EntryContent: Component<{
             className="relative m-auto min-w-0 max-w-[550px]"
           >
             <EntryTitle entryId={entryId} compact={compact} />
+
+            {audioEntryId === entryId && (
+              <CornerPlayer className="mx-auto !mt-4 w-full overflow-hidden rounded-md md:w-[350px]" />
+            )}
 
             <WrappedElementProvider boundingDetection>
               <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">

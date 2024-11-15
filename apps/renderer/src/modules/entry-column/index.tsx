@@ -18,7 +18,6 @@ import { VirtuosoGrid } from "react-virtuoso"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
-import { m } from "~/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "~/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "~/components/errors/FeedNotFound"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
@@ -30,6 +29,7 @@ import { entryActions, getEntry, useEntry } from "~/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 
+import { CornerPlayer } from "../player/corner-player"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { useSnapEntryIdList } from "./hooks/useEntryIdListSnap"
 import { EntryItem, EntryItemSkeleton } from "./item"
@@ -247,12 +247,9 @@ function EntryColumnImpl() {
           </div>
         )}
       </AutoResizeHeight> */}
-      <m.div
+      <div
         key={`${routeFeedId}-${view}`}
-        className="relative h-0 grow lg:mt-2"
-        initial={{ opacity: 0.01, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0.01, y: -100 }}
+        className="relative h-0 grow duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0 lg:mt-2"
       >
         <ScrollArea.ScrollArea
           scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
@@ -260,7 +257,7 @@ function EntryColumnImpl() {
           ref={scrollRef}
           onScroll={handleScroll}
           rootClassName={clsx("h-full", views[view].wideMode ? "lg:mt-2" : "")}
-          viewportClassName="[&>div]:grow flex"
+          viewportClassName="[&>div]:grow flex pb-36 lg:pb-0"
         >
           {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
             entries.isLoading ? null : (
@@ -281,7 +278,9 @@ function EntryColumnImpl() {
             />
           )}
         </ScrollArea.ScrollArea>
-      </m.div>
+
+        {isMobile && <CornerPlayer className="absolute bottom-0 w-full md:w-[350px]" />}
+      </div>
     </div>
   )
 }
