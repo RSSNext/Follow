@@ -329,6 +329,7 @@
   "sidebar.feed_actions.unfollow_feed_many": "取消订阅选中的订阅源",
   "sidebar.feed_actions.unfollow_feed_many_confirm": "确认要取消订阅选中的订阅源？",
   "sidebar.feed_actions.unfollow_feed_many_warning": "警告：这个操作将取消订阅所有选中的订阅源，并且不可恢复。",
+  "sidebar.feed_actions.unfollow_feed_warning": "警告：这个操作将取消订阅这个订阅源，并且不可恢复。",
   "sidebar.feed_column.context_menu.add_feeds_to_list": "添加订阅源到列表",
   "sidebar.feed_column.context_menu.change_to_other_view": "更改为其他视图",
   "sidebar.feed_column.context_menu.delete_category": "删除分类",

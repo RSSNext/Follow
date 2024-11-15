@@ -329,6 +329,7 @@
   "sidebar.feed_actions.unfollow_feed_many": "Unfollow all selected feeds",
   "sidebar.feed_actions.unfollow_feed_many_confirm": "Confirm unfollow all selected feeds?",
   "sidebar.feed_actions.unfollow_feed_many_warning": "Warning: This operation will unfollow all selected feeds, and cannot be undone.",
+  "sidebar.feed_actions.unfollow_feed_warning": "Warning: This operation will unfollow the feed, and cannot be undone.",
   "sidebar.feed_column.context_menu.add_feeds_to_list": "Add Feeds to List",
   "sidebar.feed_column.context_menu.change_to_other_view": "Switch to Another View",
   "sidebar.feed_column.context_menu.delete_category": "Delete Category",

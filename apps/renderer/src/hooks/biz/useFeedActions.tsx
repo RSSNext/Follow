@@ -29,14 +29,20 @@ import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 import { useDeleteSubscription } from "./useSubscriptionActions"
 
-const ConfirmDestroyModalContent = ({ onConfirm }: { onConfirm: () => void }) => {
+const ConfirmDestroyModalContent = ({
+  onConfirm,
+  content,
+}: {
+  onConfirm: () => void
+  content: string
+}) => {
   const { t } = useTranslation()
 
   return (
     <div className="w-[540px]">
       <div className="mb-4">
         <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
-        {t("sidebar.feed_actions.unfollow_feed_many_warning")}
+        {content}
       </div>
       <div className="flex justify-end">
         <Button className="bg-red-600" onClick={onConfirm}>
@@ -221,21 +227,27 @@ export const useFeedActions = ({
         disabled: isInbox,
         supportMultipleSelection: true,
         click: () => {
-          if (isMultipleSelection) {
-            present({
-              title: t("sidebar.feed_actions.unfollow_feed_many_confirm"),
-              content: ({ dismiss }) => (
-                <ConfirmDestroyModalContent
-                  onConfirm={() => {
-                    deleteSubscription.mutate({ feedIdList: feedIds })
-                    dismiss()
-                  }}
-                />
-              ),
-            })
-            return
-          }
-          deleteSubscription.mutate({ subscription })
+          present({
+            title: isMultipleSelection
+              ? t("sidebar.feed_actions.unfollow_feed_many")
+              : isEntryList
+                ? t("sidebar.feed_actions.unfollow_feed")
+                : t("sidebar.feed_actions.unfollow"),
+            content: ({ dismiss }) => (
+              <ConfirmDestroyModalContent
+                content={
+                  isMultipleSelection
+                    ? t("sidebar.feed_actions.unfollow_feed_many_warning")
+                    : t("sidebar.feed_actions.unfollow_feed_warning")
+                }
+                onConfirm={() => {
+                  const options = isMultipleSelection ? { feedIdList: feedIds } : { subscription }
+                  deleteSubscription.mutate(options)
+                  dismiss()
+                }}
+              />
+            ),
+          })
         },
       },
       {
