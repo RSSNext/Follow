@@ -1,14 +1,7 @@
+![](https://github.com/user-attachments/assets/80cc7a6d-5044-44a5-ae00-2a29b7e936a2)
+
 <div align="center">
-  <a href="https://github.com/RSSNext/Follow">
-    <img src="https://github.com/RSSNext/follow/assets/41265413/c6c02ad5-cddc-46f5-8420-a47afe1c82fe" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3>Follow</h3>
-
   <p>
-    Next generation information browser.
-    <br />
-    <br />
     <a href="https://discord.gg/followapp">Discord</a>
     ·
     <a href="https://x.com/intent/follow?screen_name=follow_app_">Twitter</a>
@@ -22,78 +15,72 @@
   </p>
 </div>
 
-## Introduction
+As they say, your thoughts are what you read—and we’ve been consuming noisy feeds for too long! Follow organizes content into one timeline, keeping you updated on what matters, noise-free. Share lists, explore collections, and enjoy distraction-free browsing.
 
-Welcome to Follow! This software is all about allowing you to follow your favorite websites, blogs, social media accounts, podcasts and notifications in one place. It is designed as a modern, fast, and convenient all-in-one information center.
+## 👋🏻 Getting Started & Join Our Community
 
-AI: Follow leverages advanced AI to assist your operations. Beyond basic AI translation, summarization, and recommendations, it provides twice-daily AI reports to highlight key information from your subscriptions. Additionally, it offers a personalized AI knowledge base built from your subscriptions.
+Whether for users or professional developers, Follow will be your open information playground. Please be aware that Follow is currently under active development, and feedback is welcome for any [issue](https://github.com/RSSNext/Follow/issues) encountered.
 
-Blockchain: Follow uses blockchain technology as an incentive mechanism for active users and outstanding creators. Users can obtain more services and benefits by holding and using Power Token. Creators can obtain more rewards by providing high-quality content and services.
+Feel free to try it using the following methods:
 
-Social: Follow is also a social platform that allows you to follow other users, share your subscriptions, and discover new content. It also offers a subscription list synchronization feature, enabling your friends to sync with your subscriptions.
+| [![](https://img.shields.io/badge/Try%20Web%20App-Online-55b467?labelColor=black&logo=vercel&style=flat-square)](https://app.follow.is)                                                     | No installation necessary! Visit our web app to experience it firsthand.                 |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
+| [![](https://img.shields.io/github/v/release/RSSNext/Follow?color=369eff&labelColor=black&logo=github&style=flat-square&label=Releases)](https://github.com/RSSNext/Follow/releases/latest) | Download and install the desktop client for a smoother experience and enhanced features. |
 
-Supported Platforms: Follow Desktop for Windows, macOS, Linux, and Browser; Follow Mobile for Android and iOS (coming soon).
+You can also install using the following methods maintained by our community:
 
-## Screenshots
-
-The project is currently under active development. The following screenshots are for reference only and may differ from the final release version.
-
-- Use different views for various types of content to offer an experience equal to or better than the original platform - Articles, Social Media, Pictures, Videos, Podcasts, and Notifications
-  ![Screenshot 2024-09-10 at 6 22 18 PM](https://github.com/user-attachments/assets/1958ec70-1916-47c5-82d0-3bd8e43f3a26)
-  ![Screenshot 2024-09-10 at 6 22 47 PM](https://github.com/user-attachments/assets/1d0c3ed7-3da5-45e6-a264-399e8ea4071b)
-  ![Screenshot 2024-09-10 at 6 23 07 PM](https://github.com/user-attachments/assets/d21d54be-c343-4ac6-99f0-90c1e410245a)
-  ![Screenshot 2024-09-10 at 6 23 31 PM](https://github.com/user-attachments/assets/1781f368-8375-4b50-a66c-c8d8340f3ffb)
-  ![Screenshot 2024-09-10 at 6 23 47 PM](https://github.com/user-attachments/assets/6ccfeada-dbc3-4c76-8ca2-5dcac8c06804)
-  ![Screenshot 2024-09-10 at 6 24 11 PM](https://github.com/user-attachments/assets/f723d62a-1be7-48b1-a42c-83960af133be)
-
-- Everything is RSSible. Our [RSSHub](https://github.com/DIYgod/RSSHub) community, comprising over 1,000 developers, has spent six years adapting nearly a thousand websites to provide almost all the content you need. This includes platforms like X (Twitter), Instagram, PlayStation, Spotify, Telegram, YouTube, and more. You can also write your own scripts to adapt additional websites.
-  ![Screenshot 2024-09-10 at 8 09 36 PM](https://github.com/user-attachments/assets/5bd445f3-e005-4273-b892-7b29212970e2)
-  ![Screenshot 2024-09-10 at 8 10 01 PM](https://github.com/user-attachments/assets/25fbc9d2-ea10-4477-a4e9-1732f59fcb57)
-
-- Actions and AI features. Follow leverages advanced AI to assist your operations. Beyond basic AI translation, summarization, and recommendations, it provides twice-daily AI reports to highlight key information from your subscriptions. Additionally, it offers a personalized AI knowledge base built from your subscriptions.
-
-  ![Screenshot 2024-09-10 at 9 44 23 PM](https://github.com/user-attachments/assets/1801f1ba-e57f-4daf-8120-32631b0bdc2c)
-  ![Screenshot 2024-09-10 at 6 25 27 PM](https://github.com/user-attachments/assets/ddd14398-f735-433c-91cb-a2898ddf2098)
-
-- Blockchain features and $Power token. Follow uses blockchain technology as an incentive mechanism for active users and outstanding creators. Users can obtain more services and benefits by holding and using Power Token. Creators can obtain more rewards by providing high-quality content and services.
-  ![Screenshot 2024-09-10 at 6 25 43 PM](https://github.com/user-attachments/assets/351ac415-d94e-4d5a-af42-37656c3e535c)
-  ![Screenshot 2024-09-10 at 6 27 08 PM](https://github.com/user-attachments/assets/82d71c46-c039-41b9-b3cd-5ad078ff14a5)
-  ![Screenshot 2024-09-10 at 8 10 56 PM](https://github.com/user-attachments/assets/2424dfd4-59a6-4dad-8eb7-8db61a711b45)
-
-- Social features. Follow is also a social platform that allows you to follow other users, share your subscriptions, and discover new content. It also offers a subscription list synchronization feature, enabling your friends to sync with your subscriptions. Click [here](https://app.follow.is/share/users/54728159538884608) to view my automatically generated personal page.
-  ![Screenshot 2024-09-10 at 6 26 37 PM](https://github.com/user-attachments/assets/b636fd6d-0fcb-436b-8856-f7a965dba12d)
-
-- Extensive customization options
-  ![Screenshot 2024-09-10 at 6 24 38 PM](https://github.com/user-attachments/assets/53ff78cd-02d0-4eeb-a10f-40ae21d85912)
-  ![Screenshot 2024-09-10 at 6 24 48 PM](https://github.com/user-attachments/assets/64bf2e9e-d9fe-4a90-bb3d-975ddb3e6558)
-
-- Third-party integrations
-  ![Screenshot 2024-09-10 at 6 25 33 PM](https://github.com/user-attachments/assets/ea86fdbd-4b53-47ae-8bc5-d9a382ef07b5)
-
-- Shortcuts and gestures
-  ![Screenshot 2024-09-10 at 6 25 38 PM](https://github.com/user-attachments/assets/43116bea-47b9-4c17-bc4f-92fb101a37a5)
-
-## Releases
-
-[![Discord](https://img.shields.io/discord/1243823539426033696?logo=discord&label=Discord&style=flat-square&color=5865F2)](https://discord.gg/followapp) [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&cacheSeconds=3600&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)
-
-Currently, Follow is still in the early developer preview stage (alpha) and is only available to a limited number of users through an invitation system.
-
-You can get an invitation code in the following ways:
-
-- Looking for any alpha test user to invite you.
-- Join our Discord server for occasional giveaways.
-- Follow our X account for occasional giveaways.
-
-If you have access, you are welcome to use the following methods to download and install it:
-
-- Visit our online webapp at [app.follow.is](https://app.follow.is)
-- You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
 - If you are using Arch Linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
 - If you are using Nix, you can install package [follow](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/fo/follow/package.nix) that maintained by [iosmanthus](https://github.com/iosmanthus).
 - If you are using macOS with [Homebrew](https://brew.sh), you can install cask [follow](https://formulae.brew.sh/cask/follow) (also [@alpha](https://formulae.brew.sh/cask/follow@alpha) and [@nightly](https://formulae.brew.sh/cask/follow@nightly)) that maintained by [realSunyz](https://github.com/realSunyz).
 
-## Contributing
+| [![Discord](https://img.shields.io/discord/1243823539426033696?color=5865F2&label=Discord&labelColor=black&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/followapp) | Join our Discord server to connect with developers, request features, and receive support. |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&labelColor=black&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)              | Follow us on X/Twitter for product updates and to join in on reward activities.            |
+
+> \[!IMPORTANT]
+>
+> **Star Us**, You will receive all release notifications from GitHub without any delay \~
+
+<a href="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats?repo_id=783512367" target="_blank" style="display: block" align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats/thumbnail.png?repo_id=783512367&image_size=auto&color_scheme=dark" width="655" height="auto">
+    <img alt="Performance Stats of RSSNext/Follow - Last 28 days" src="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats/thumbnail.png?repo_id=783512367&image_size=auto&color_scheme=light" width="655" height="auto">
+  </picture>
+</a>
+
+## ✨ Features
+
+### Customized Information Hub
+
+Subscribe to a vast range of feeds and curated lists. Curate your favorites and keep track of what matters most to you.
+
+![](https://github.com/user-attachments/assets/11dc7d21-f5d8-4e41-9269-24fc352aa02b)
+
+### AI At Your Fingertips
+
+A smarter and more efficient browsing with AI-powered features like translation, summary, and more.
+
+![](https://github.com/user-attachments/assets/37cf4f2f-4c5e-4775-86e8-2fa1a1b2ecf5)
+
+### Dynamic Content Support
+
+Because we know content is more than just text. From articles to videos, images to audio — Follow gets it all covered.
+
+![](https://github.com/user-attachments/assets/d1379fd6-8767-476e-b0dc-d61753715e26)
+
+### $POWER An Ownership Economy
+
+Tip creators across instantly with $POWER, support content you love, and unlock value in your own work. Your content, your power.
+
+![](https://github.com/user-attachments/assets/23bbcd63-45ca-40c8-83ef-96bd1100b701)
+
+### More Than Just An App
+
+This isn’t just another app. Follow is a community — introducing a new era of openness and community-driven experience.
+
+![](https://github.com/user-attachments/assets/62004a04-eaea-4f5d-bfbf-4e68b6b90286)
+
+## 🤝 Contributing
 
 If you are eligible to use Follow, you are welcome to join the open source community to build together.
 
@@ -136,7 +123,7 @@ Since it is not very convenient to develop in Electron, the first way to develop
 > [!TIP]
 > If you can't log in to the app, copy the `authjs.session-token` in the cookie from your browser into the app.
 
-## License
+## 📝 License
 
 Follow is licensed under the GNU General Public License version 3 with the addition of the following special exception:
 
