@@ -3,11 +3,10 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useCallback, useMemo, useRef, useState } from "react"
-import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -199,10 +198,29 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         ref={selectoRef}
         rootContainer={document.body}
         dragContainer={"#feeds-area"}
-        dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
+        dragCondition={(e) => {
+          const inputEvent = e.inputEvent as MouseEvent
+          const target = inputEvent.target as HTMLElement
+          const closest = target.closest("[data-feed-id]") as HTMLElement | null
+          const dataFeedId = closest?.dataset.feedId
+
+          if (
+            dataFeedId &&
+            selectedFeedIds.includes(dataFeedId) &&
+            !isKeyForMultiSelectPressed(inputEvent)
+          )
+            return false
+
+          return true
+        }}
+        onDragStart={(e) => {
+          if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
+            setSelectedFeedIds([])
+          }
+        }}
         selectableTargets={["[data-feed-id]"]}
         continueSelect
-        hitRate={10}
+        hitRate={1}
         onSelect={(e) => {
           const allChanged = [...e.added, ...e.removed]
             .map((el) => el.dataset.feedId)
