@@ -67,7 +67,9 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
         overlay: finalVariant === "dialog",
         autoFocus: false,
         modalContainerClassName:
-          finalVariant === "drawer" ? tw`right-4 left-[auto] safe-inset-top-4 bottom-4` : "",
+          finalVariant === "drawer"
+            ? tw`right-4 left-[auto] safe-inset-top-4 bottom-4`
+            : "overflow-hidden",
       })
     },
     [present, variant],

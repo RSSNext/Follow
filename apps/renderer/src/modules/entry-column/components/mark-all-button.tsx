@@ -141,13 +141,13 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
       <m.div
         ref={setPopoverRef}
         initial={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         animate={{
-          y: isElectronWindows ? -10 : 0,
+          transform: `translateY(${isElectronWindows ? "-10px" : "0px"})`,
         }}
         exit={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
         className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
