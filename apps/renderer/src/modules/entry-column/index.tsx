@@ -1,10 +1,9 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
-import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
-import { clsx, isBizId } from "@follow/utils/utils"
+import { isBizId } from "@follow/utils/utils"
 import type { FunctionComponent } from "react"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -29,7 +28,6 @@ import { entryActions, getEntry, useEntry } from "~/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 
-import { CornerPlayer } from "../player/corner-player"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { useSnapEntryIdList } from "./hooks/useEntryIdListSnap"
 import { EntryItem, EntryItemSkeleton } from "./item"
@@ -37,6 +35,7 @@ import { PictureMasonry } from "./Items/picture-masonry"
 import { EntryListHeader } from "./layouts/EntryListHeader"
 import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
 import { girdClassNames } from "./styles"
+import { EntryColumnWrapper } from "./wrapper"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
@@ -139,6 +138,16 @@ function EntryColumnImpl() {
     hasNoEntries && !isArchived ? prevEntriesIdsRef.current || entriesIds : entriesIds
 
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    if (!isInteracted.current) {
+      isInteracted.current = true
+    }
+    const { scrollTop } = e.currentTarget
+
+    prevScrollTop = scrollTop
+  }, [])
+
   const virtuosoOptions = {
     components: {
       List: EntryListContent,
@@ -192,6 +201,7 @@ function EntryColumnImpl() {
       }
     }, [entries]),
     data: finalEntriesIds,
+    onScroll: handleScroll,
     itemContent: useTypeScriptHappyCallback(
       (_, entryId) => {
         if (!entryId) return <ReactVirtuosoItemPlaceholder />
@@ -201,14 +211,6 @@ function EntryColumnImpl() {
       [view],
     ),
   } satisfies VirtuosoProps<string, VirtuosoComponentProps>
-
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    if (!isInteracted.current) {
-      isInteracted.current = true
-    }
-    const { scrollTop } = e.currentTarget
-    prevScrollTop = scrollTop
-  }, [])
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
@@ -239,48 +241,27 @@ function EntryColumnImpl() {
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
-      {/* <AutoResizeHeight spring>
-        {isRefreshing && (
-          <div className="center box-content h-7 gap-2 py-3 text-xs">
-            <LoadingCircle size="small" />
-            {t("entry_column.refreshing")}
-          </div>
-        )}
-      </AutoResizeHeight> */}
-      <div
-        key={`${routeFeedId}-${view}`}
-        className="relative h-0 grow duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0 lg:mt-2"
-      >
-        <ScrollArea.ScrollArea
-          scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
-          mask={false}
-          ref={scrollRef}
-          onScroll={handleScroll}
-          rootClassName={clsx("h-full", views[view].wideMode ? "lg:mt-2" : "")}
-          viewportClassName="[&>div]:grow flex pb-36 lg:pb-0"
-        >
-          {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
-            entries.isLoading ? null : (
-              <EntryEmptyList />
-            )
-          ) : view && views[view].gridMode ? (
-            <ListGird
-              virtuosoOptions={virtuosoOptions}
-              virtuosoRef={virtuosoRef}
-              hasNextPage={entries.hasNextPage}
-            />
-          ) : (
-            <EntryList
-              {...virtuosoOptions}
-              virtuosoRef={virtuosoRef}
-              refetch={entries.refetch}
-              groupCounts={groupedCounts}
-            />
-          )}
-        </ScrollArea.ScrollArea>
 
-        {isMobile && <CornerPlayer className="absolute bottom-0 w-full md:w-[350px]" />}
-      </div>
+      <EntryColumnWrapper onScroll={handleScroll} onPullToRefresh={entries.refetch}>
+        {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
+          entries.isLoading ? null : (
+            <EntryEmptyList />
+          )
+        ) : view && views[view].gridMode ? (
+          <ListGird
+            virtuosoOptions={virtuosoOptions}
+            virtuosoRef={virtuosoRef}
+            hasNextPage={entries.hasNextPage}
+          />
+        ) : (
+          <EntryList
+            {...virtuosoOptions}
+            virtuosoRef={virtuosoRef}
+            refetch={entries.refetch}
+            groupCounts={groupedCounts}
+          />
+        )}
+      </EntryColumnWrapper>
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
-import type { ComponentType, ReactNode } from "react"
-import { lazy, Suspense } from "react"
+import type { ComponentType, PropsWithoutRef, ReactNode, RefAttributes } from "react"
+import { forwardRef, lazy, Suspense } from "react"
 
 export function withResponsiveComponent<P extends object>(
   desktopImport: () => Promise<{ default: ComponentType<P> }>,
   mobileImport: () => Promise<{ default: ComponentType<P> }>,
-
   fallbackElement?: ReactNode,
 ) {
   const LazyDesktopLayout = lazy(desktopImport) as unknown as ComponentType<P>
@@ -20,12 +19,19 @@ export function withResponsiveComponent<P extends object>(
     )
   }
 }
-export function withResponsiveSyncComponent<P extends object>(
-  DesktopComponent: ComponentType<P>,
-  MobileComponent: ComponentType<P>,
+
+export function withResponsiveSyncComponent<P extends object, R = any>(
+  DesktopComponent: ComponentType<P & RefAttributes<R>>,
+  MobileComponent: ComponentType<P & RefAttributes<R>>,
 ) {
-  return function ResponsiveLayout(props: P) {
+  return forwardRef<R, P>(function ResponsiveLayout(props: PropsWithoutRef<P>, ref) {
     const isMobile = useMobile()
-    return isMobile ? <MobileComponent {...props} /> : <DesktopComponent {...props} />
-  }
+    const componentProps = { ...props, ref } as P & RefAttributes<R>
+
+    return isMobile ? (
+      <MobileComponent {...componentProps} />
+    ) : (
+      <DesktopComponent {...componentProps} />
+    )
+  })
 }
