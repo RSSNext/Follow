@@ -1,6 +1,9 @@
-![](https://github.com/user-attachments/assets/80cc7a6d-5044-44a5-ae00-2a29b7e936a2)
-
 <div align="center">
+  <a href="https://github.com/RSSNext/Follow">
+    <img src="https://github.com/RSSNext/follow/assets/41265413/c6c02ad5-cddc-46f5-8420-a47afe1c82fe" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3>Follow</h3>
   <p>
     <a href="https://discord.gg/followapp">Discord</a>
     ·
@@ -14,6 +17,8 @@
     <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://github.com/user-attachments/assets/c3c6ee92-f81a-4f0a-b9d7-c03832c8a3ee" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
   </p>
 </div>
+
+![](https://github.com/user-attachments/assets/80cc7a6d-5044-44a5-ae00-2a29b7e936a2)
 
 As they say, your thoughts are what you read—and we’ve been consuming noisy feeds for too long! Follow organizes content into one timeline, keeping you updated on what matters, noise-free. Share lists, explore collections, and enjoy distraction-free browsing.
 
