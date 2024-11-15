@@ -4,11 +4,12 @@ import { fileURLToPath } from "node:url"
 import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { app, BrowserWindow, screen, shell } from "electron"
+import { app, BrowserWindow, dialog, screen, shell } from "electron"
 
 import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
+import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { getTrayConfig } from "./lib/tray"
 import { logger } from "./logger"
@@ -107,6 +108,24 @@ export function createWindow(
   window.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: "deny" }
+  })
+
+  window.webContents.on("did-attach-webview", (_, webContents) => {
+    webContents.on("will-navigate", async (e, url) => {
+      e.preventDefault()
+      const { protocol } = new URL(url)
+      if (protocol !== "http:" && protocol !== "https:" && protocol !== "follow:") {
+        const res = await dialog.showMessageBox(window, {
+          type: "question",
+          title: t("dialog.confirmation"),
+          message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
+          buttons: [t("dialog.cancel"), t("dialog.open")],
+        })
+        if (res.response === 1) {
+          shell.openExternal(url)
+        }
+      }
+    })
   })
 
   // HMR for renderer base on electron-vite cli.
