@@ -38,3 +38,5 @@ body:
       options:
         - label: Check that there isn't already an issue that request the same feature to avoid creating a duplicate.
           required: true
+        - label: This issue is valid
+          required: true

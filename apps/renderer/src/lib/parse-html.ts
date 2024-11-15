@@ -4,10 +4,7 @@ import type { Element, Parent, Text } from "hast"
 import type { Schema } from "hast-util-sanitize"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
-import { toMdast } from "hast-util-to-mdast"
 import { toText } from "hast-util-to-text"
-import { gfmTableToMarkdown } from "mdast-util-gfm-table"
-import { toMarkdown } from "mdast-util-to-markdown"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 import { renderToString } from "react-dom/server"
@@ -259,7 +256,6 @@ export const parseHtml = (
         },
       }),
     toText: () => toText(hastTree),
-    toMarkdown: () => toMarkdown(toMdast(hastTree), { extensions: [gfmTableToMarkdown()] }),
   }
 }
 

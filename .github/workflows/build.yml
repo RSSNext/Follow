@@ -127,21 +127,22 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: |
+            out/make/**/*.dmg
             out/make/**/*.zip
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
           retention-days: 90
 
-      - name: Upload file (dmg)
+      - name: Upload file (arm64.dmg)
         uses: actions/upload-artifact@v4
         if: matrix.os == 'macos-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: macos-dmg
+          name: macos-arm64-dmg
           path: |
-            out/make/**/*.dmg
+            out/make/**/*arm64.dmg
           retention-days: 90
 
       - name: Generate artifact attestation

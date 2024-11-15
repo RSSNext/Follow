@@ -35,20 +35,16 @@ import { z } from "zod"
 import type { Suggestion } from "~/components/ui/auto-completion"
 import { Autocomplete } from "~/components/ui/auto-completion"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
+import { useAddFeedToFeedList, useRemoveFeedFromFeedList } from "~/hooks/biz/useFeedActions"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
 import { FeedCertification } from "~/modules/feed/feed-certification"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Queries } from "~/queries"
-import {
-  getFeedById,
-  useAddFeedToFeedList,
-  useFeedById,
-  useRemoveFeedFromFeedList,
-} from "~/store/feed"
+import { useFeedById } from "~/store/feed"
 import { useListById } from "~/store/list"
-import { subscriptionActions, useSubscriptionStore } from "~/store/subscription"
+import { subscriptionActions, useAllFeeds } from "~/store/subscription"
 
 const formSchema = z.object({
   view: z.string(),
@@ -224,21 +220,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
     },
   })
 
-  const allFeeds = useSubscriptionStore((store) => {
-    const feedInfo = [] as { title: string; id: string }[]
-
-    const allSubscriptions = Object.values(store.feedIdByView).flat()
-
-    for (const feedId of allSubscriptions) {
-      const subscription = store.data[feedId]
-      const feed = getFeedById(feedId)
-      if (feed && feed.type === "feed") {
-        feedInfo.push({ title: subscription.title || feed.title || "", id: feed.id })
-      }
-    }
-    return feedInfo
-  })
-
+  const allFeeds = useAllFeeds()
   const autocompleteSuggestions: Suggestion[] = useMemo(() => {
     return allFeeds
       .filter((feed) => !list?.feedIds?.includes(feed.id))

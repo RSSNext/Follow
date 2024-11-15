@@ -27,11 +27,9 @@ export const replaceImgUrlIfNeed = (url?: string) => {
     }
   }
 
-  if (isWebBuild) {
-    for (const rule of imageRefererMatches) {
-      if (rule.url.test(url)) {
-        return getImageProxyUrl({ url, width: 0, height: 0 })
-      }
+  for (const rule of imageRefererMatches) {
+    if ((isWebBuild || rule.force) && rule.url.test(url)) {
+      return getImageProxyUrl({ url, width: 0, height: 0 })
     }
   }
   return url
