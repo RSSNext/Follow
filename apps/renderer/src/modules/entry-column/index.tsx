@@ -242,7 +242,11 @@ function EntryColumnImpl() {
         hasUpdate={entries.hasUpdate}
       />
 
-      <EntryColumnWrapper onScroll={handleScroll} onPullToRefresh={entries.refetch}>
+      <EntryColumnWrapper
+        onScroll={handleScroll}
+        onPullToRefresh={entries.refetch}
+        key={`${routeFeedId}-${view}`}
+      >
         {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
           entries.isLoading ? null : (
             <EntryEmptyList />

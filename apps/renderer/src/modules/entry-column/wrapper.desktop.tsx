@@ -11,10 +11,9 @@ import { styles } from "./wrapper.shared"
 export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperProps>(
   ({ children, onScroll }, ref) => {
     const view = useRouteParamsSelector((state) => state.view)
-    const routeFeedId = useRouteParamsSelector((state) => state.feedId)
 
     return (
-      <div key={`${routeFeedId}-${view}`} className={clsx(styles, "mt-2")}>
+      <div className={clsx(styles, "mt-2")}>
         <ScrollArea
           scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
           mask={false}
