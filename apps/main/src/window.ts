@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { app, BrowserWindow, dialog, screen, shell } from "electron"
+import { app, BrowserWindow, screen, shell } from "electron"
 
 import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
@@ -117,14 +117,16 @@ export function createWindow(
         return
       }
       e.preventDefault()
-      const res = await dialog.showMessageBox(window, {
-        type: "question",
-        icon: getIconPath(),
+
+      const caller = callWindowExpose(window)
+
+      const confirm = await caller.dialog.ask({
+        title: "Open External App?",
         message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
-        buttons: [t("dialog.open"), t("dialog.cancel")],
-        cancelId: 1,
+        confirmText: t("dialog.open"),
+        cancelText: t("dialog.cancel"),
       })
-      if (res.response === 1) {
+      if (!confirm) {
         return
       }
       shell.openExternal(url)
