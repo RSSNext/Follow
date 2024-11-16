@@ -21,7 +21,6 @@
   "contextMenu.services": "Services",
   "dialog.cancel": "Cancel",
   "dialog.clearAllData": "Are you sure you want to clear all data?",
-  "dialog.confirmation": "Confirmation",
   "dialog.no": "No",
   "dialog.open": "Open",
   "dialog.openExternalApp": "Are you sure you want to open \"{{url}}\" with other apps?",

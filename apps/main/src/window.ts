@@ -119,7 +119,7 @@ export function createWindow(
       e.preventDefault()
       const res = await dialog.showMessageBox(window, {
         type: "question",
-        title: t("dialog.confirmation"),
+        icon: getIconPath(),
         message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
         buttons: [t("dialog.cancel"), t("dialog.open")],
         cancelId: 0,
