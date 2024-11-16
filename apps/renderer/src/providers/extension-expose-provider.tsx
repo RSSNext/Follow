@@ -6,7 +6,7 @@ import { toast } from "sonner"
 
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings, useToggleZenMode } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { useDialog, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
@@ -71,5 +71,12 @@ export const ExtensionExposeProvider = () => {
       zenMode: toggleZenMode,
     })
   }, [toggleZenMode])
+
+  const dialog = useDialog()
+  useEffect(() => {
+    registerGlobalContext({
+      dialog,
+    })
+  }, [dialog])
   return null
 }
