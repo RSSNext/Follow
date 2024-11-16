@@ -5,6 +5,7 @@ import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { app, BrowserWindow, screen, shell } from "electron"
+import type { Event } from "electron/main"
 
 import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
@@ -110,27 +111,32 @@ export function createWindow(
     return { action: "deny" }
   })
 
-  window.webContents.on("did-attach-webview", (_, webContents) => {
-    webContents.on("will-navigate", async (e, url) => {
-      const { protocol } = new URL(url)
-      if (protocol === "http:" || protocol === "https:" || protocol === "follow:") {
-        return
-      }
-      e.preventDefault()
+  const handleExternalProtocol = async (e: Event, url: string, window: BrowserWindow) => {
+    const { protocol } = new URL(url)
+    if (protocol === "http:" || protocol === "https:" || protocol === "follow:") {
+      return
+    }
+    e.preventDefault()
 
-      const caller = callWindowExpose(window)
-
-      const confirm = await caller.dialog.ask({
-        title: "Open External App?",
-        message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
-        confirmText: t("dialog.open"),
-        cancelText: t("dialog.cancel"),
-      })
-      if (!confirm) {
-        return
-      }
-      shell.openExternal(url)
+    const caller = callWindowExpose(window)
+    const confirm = await caller.dialog.ask({
+      title: "Open External App?",
+      message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
+      confirmText: t("dialog.open"),
+      cancelText: t("dialog.cancel"),
     })
+    if (!confirm) {
+      return
+    }
+    shell.openExternal(url)
+  }
+
+  // Handle main window external links
+  window.webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
+
+  // Handle webview external links
+  window.webContents.on("did-attach-webview", (_, webContents) => {
+    webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
   })
 
   // HMR for renderer base on electron-vite cli.
