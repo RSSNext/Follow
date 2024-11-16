@@ -8,7 +8,7 @@ test("useRegisterHotkey types", () => {
     useCommandHotkey({
       shortcut: "",
       commandId: COMMAND_ID.entry.openInBrowser,
-      args: [""],
+      args: [{ entryId: "" }],
     }),
   )
 

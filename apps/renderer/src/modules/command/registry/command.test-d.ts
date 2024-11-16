@@ -8,8 +8,10 @@ test("defineFollowCommand types", () => {
     defineFollowCommand({
       id: COMMAND_ID.entry.openInBrowser,
       label: "",
-      run: (url) => {
-        expectTypeOf(url).toEqualTypeOf<string>()
+      run: (data) => {
+        expectTypeOf(data).toEqualTypeOf<{
+          entryId: string
+        }>()
       },
     }),
   )

@@ -9,7 +9,7 @@ test("CommandActionButton types", () => {
   assertType(
     CommandActionButton({
       command: mockCommand,
-      args: [""],
+      args: [{ entryId: "" }],
     }),
   )
 
@@ -62,7 +62,7 @@ test("CommandActionButton types", () => {
     CommandActionButton({
       command: mockCommand,
       // @ts-expect-error - invalid args type
-      args: [{ entryId: "" }],
+      args: [""],
     }),
   )
 })
@@ -72,7 +72,7 @@ test("CommandIdButton types", () => {
   assertType(
     CommandIdButton({
       commandId,
-      args: [""],
+      args: [{ entryId: "" }],
     }),
   )
 
@@ -104,7 +104,7 @@ test("CommandIdButton types", () => {
     CommandIdButton({
       commandId,
       // @ts-expect-error - invalid args type
-      args: [{ entryId: "" }],
+      args: [""],
     }),
   )
 
