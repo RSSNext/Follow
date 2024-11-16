@@ -7,6 +7,7 @@ import { promisify } from "node:util"
 import { callWindowExpose } from "@follow/shared/bridge"
 import { app, dialog } from "electron"
 
+import { getIconPath } from "~/helper"
 import { logger } from "~/logger"
 import { getMainWindow } from "~/window"
 
@@ -23,7 +24,7 @@ export const clearAllDataAndConfirm = async () => {
   // Dialog to confirm
   const result = await dialog.showMessageBox({
     type: "warning",
-
+    icon: getIconPath(),
     message: t("dialog.clearAllData"),
     buttons: [t("dialog.no"), t("dialog.yes")],
     cancelId: 0,
