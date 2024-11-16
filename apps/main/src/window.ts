@@ -121,11 +121,10 @@ export function createWindow(
         type: "question",
         icon: getIconPath(),
         message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
-        buttons: [t("dialog.cancel"), t("dialog.open")],
-        cancelId: 0,
-        defaultId: 1,
+        buttons: [t("dialog.open"), t("dialog.cancel")],
+        cancelId: 1,
       })
-      if (res.response === 0) {
+      if (res.response === 1) {
         return
       }
       shell.openExternal(url)
