@@ -156,7 +156,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
             [state, controls, src, variant],
           )}
         >
-          {variant === "preview" && <FloatMutedButton />}
+          {variant === "preview" && state.hasAudio && <FloatMutedButton />}
           {isPlayer && <ControlBar />}
         </VideoPlayerContext.Provider>
       </Focusable>

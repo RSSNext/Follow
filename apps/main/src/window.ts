@@ -120,8 +120,8 @@ export function createWindow(
 
     const caller = callWindowExpose(window)
     const confirm = await caller.dialog.ask({
-      title: "Open External App?",
-      message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
+      title: t("dialog.openExternalApp.title"),
+      message: t("dialog.openExternalApp.message", { url, interpolation: { escapeValue: false } }),
       confirmText: t("dialog.open"),
       cancelText: t("dialog.cancel"),
     })

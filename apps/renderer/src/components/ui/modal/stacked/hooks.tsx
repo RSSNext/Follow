@@ -188,6 +188,7 @@ export const useDialog = (): DialogInstance => {
                   onClick={() => {
                     options.onConfirm?.()
                     resolve(true)
+                    dismiss()
                   }}
                 >
                   {options.confirmText ?? t("confirm", { ns: "common" })}

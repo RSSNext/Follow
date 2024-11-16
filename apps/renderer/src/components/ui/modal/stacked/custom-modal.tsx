@@ -97,3 +97,33 @@ export const DrawerModalLayout: FC<PropsWithChildren> = ({ children }) => {
     </div>
   )
 }
+
+export const ScaleModal: ModalTemplateType = (props) => {
+  const { dismiss } = useCurrentModal()
+
+  return (
+    <div className={"container center h-full"} onPointerDown={dismiss} onClick={stopPropagation}>
+      <m.div
+        onPointerDown={stopPropagation}
+        transition={{
+          type: "spring",
+          mass: 0.4,
+          tension: 100,
+          friction: 1,
+        }}
+        initial={{ transform: "scale(0)", opacity: 0 }}
+        animate={{ transform: "scale(1)", opacity: 1 }}
+        exit={{ transform: "scale(0.6)", opacity: 0 }}
+        className="relative"
+      >
+        {props.children}
+      </m.div>
+    </div>
+  )
+}
+
+ScaleModal.class = (className: string) => {
+  return (props: ComponentType) => (
+    <ScaleModal {...props} className={cn(props.className, className)} />
+  )
+}
