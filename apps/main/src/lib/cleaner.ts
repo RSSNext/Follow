@@ -26,9 +26,8 @@ export const clearAllDataAndConfirm = async () => {
     type: "warning",
     icon: getIconPath(),
     message: t("dialog.clearAllData"),
-    buttons: [t("dialog.no"), t("dialog.yes")],
+    buttons: [t("dialog.yes"), t("dialog.no")],
     cancelId: 0,
-    defaultId: 1,
   })
 
   if (result.response === 0) {
