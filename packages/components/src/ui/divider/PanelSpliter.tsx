@@ -45,7 +45,7 @@ export const PanelSplitter = (
   )
 
   return (
-    <div className="relative h-full w-0 shrink-0">
+    <div className="relative h-full w-0 shrink-0" data-hide-in-print>
       {tooltip ? (
         <Tooltip>
           <TooltipTrigger>{El}</TooltipTrigger>

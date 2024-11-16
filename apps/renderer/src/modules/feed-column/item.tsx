@@ -9,9 +9,9 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import dayjs from "dayjs"
-import { memo, useCallback, useState } from "react"
+import { memo, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useShowContextMenu } from "~/atoms/context-menu"
@@ -29,6 +29,7 @@ import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscripti
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useSelectedFeedIds } from "./atom"
+import { DraggableContext } from "./context"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
@@ -51,17 +52,22 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       url: feed.url,
       image: feed.image,
       siteUrl: feed.siteUrl,
+      ownerUserId: feed.ownerUserId,
+      owner: feed.owner,
     }
   })
 
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
+  const draggableContext = useContext(DraggableContext)
+  const isInMultipleSelection = selectedFeedIds.includes(feedId)
+  const isMultiSelectingButNotSelected = selectedFeedIds.length > 0 && !isInMultipleSelection
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      if (e.metaKey) {
+      if (isKeyForMultiSelectPressed(e.nativeEvent)) {
         return
       } else {
-        setSelectedFeedIds([])
+        setSelectedFeedIds([feedId])
       }
 
       e.stopPropagation()
@@ -98,8 +104,19 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   return (
     <>
       <div
+        {...(isInMultipleSelection && draggableContext?.attributes
+          ? draggableContext.attributes
+          : {})}
+        {...(isInMultipleSelection && draggableContext?.listeners
+          ? draggableContext.listeners
+          : {})}
+        style={isInMultipleSelection ? draggableContext?.style : undefined}
         data-feed-id={feedId}
-        data-active={isActive || isContextMenuOpen || selectedFeedIds.includes(feedId)}
+        data-active={
+          isMultiSelectingButNotSelected
+            ? false
+            : isActive || isContextMenuOpen || isInMultipleSelection
+        }
         className={cn(
           "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           feedColumnStyles.item,
@@ -136,17 +153,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             )
           }
           setIsContextMenuOpen(true)
-          await showContextMenu(
-            nextItems.filter(
-              (item) =>
-                selectedFeedIds.length === 0 ||
-                (typeof item === "object" &&
-                  item !== null &&
-                  "supportMultipleSelection" in item &&
-                  item.supportMultipleSelection),
-            ),
-            e,
-          )
+          await showContextMenu(nextItems, e)
           setIsContextMenuOpen(false)
         }}
       >

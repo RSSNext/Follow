@@ -1,7 +1,9 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import type { DragControls } from "framer-motion"
 import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
 import { useCallback, useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
+import { useTranslation } from "react-i18next"
 import { useContextSelector } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
@@ -11,7 +13,7 @@ import { jotaiStore } from "~/lib/jotai"
 import { modalStackAtom } from "./atom"
 import { ModalEventBus } from "./bus"
 import { CurrentModalContext, CurrentModalStateContext } from "./context"
-import type { ModalProps, ModalStackOptions } from "./types"
+import type { DialogInstance, ModalProps, ModalStackOptions } from "./types"
 
 export const modalIdToPropsMap = {} as Record<string, ModalProps>
 export const useModalStack = (options?: ModalStackOptions) => {
@@ -158,3 +160,45 @@ export const useResizeableModal = (
 }
 
 export const useIsTopModal = () => useContextSelector(CurrentModalStateContext, (v) => v.isTop)
+
+export const useDialog = (): DialogInstance => {
+  const { present } = useModalStack()
+  const { t } = useTranslation()
+  return {
+    ask: useEventCallback((options) => {
+      return new Promise<boolean>((resolve) => {
+        present({
+          title: options.title,
+          content: ({ dismiss }) => (
+            <div className="flex max-w-[75ch] flex-col gap-3">
+              {options.message}
+
+              <div className="flex items-center justify-end gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    options.onCancel?.()
+                    resolve(false)
+                    dismiss()
+                  }}
+                >
+                  {options.cancelText ?? t("cancel", { ns: "common" })}
+                </Button>
+                <Button
+                  onClick={() => {
+                    options.onConfirm?.()
+                    resolve(true)
+                  }}
+                >
+                  {options.confirmText ?? t("confirm", { ns: "common" })}
+                </Button>
+              </div>
+            </div>
+          ),
+          canClose: true,
+          clickOutsideToDismiss: false,
+        })
+      })
+    }),
+  }
+}

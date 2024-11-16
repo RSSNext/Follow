@@ -10,7 +10,7 @@ const iconName = "i-mgc-hotkey-cute-re"
 const priority = 1080
 
 export const loader = defineSettingPageData({
-  iconName,
+  icon: iconName,
   name: "titles.shortcuts",
   priority,
 })

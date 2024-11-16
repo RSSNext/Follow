@@ -2,15 +2,18 @@ import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import legacy from "@vitejs/plugin-legacy"
+import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
+import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
+import manifestPlugin from "./plugins/vite/manifest"
 import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
@@ -62,6 +65,12 @@ export default ({ mode }) => {
         ignored: ["**/dist/**", "**/out/**", "**/public/**", ".git/**"],
       },
     },
+    resolve: {
+      alias: {
+        ...viteRenderBaseConfig.resolve?.alias,
+        "@follow/logger": resolve(__dirname, "./packages/logger/web.ts"),
+      },
+    },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
       mode !== "development" &&
@@ -71,8 +80,6 @@ export default ({ mode }) => {
           modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
           modernPolyfills: [
             // https://unpkg.com/browse/core-js@3.39.0/modules/
-            "es.array.find-last-index",
-            "es.array.find-last",
             "es.promise.with-resolvers",
           ],
         }),
@@ -142,11 +149,12 @@ export default ({ mode }) => {
         ["shiki", "@shikijs/transformers"],
         ["@sentry/react", "@openpanel/web"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
-
-        ["swiper"],
       ]),
 
       createPlatformSpecificImportPlugin(false),
+      manifestPlugin(),
+      htmlPlugin(typedEnv),
+      process.env.analyzer && analyzer(),
     ],
 
     define: {
@@ -154,4 +162,38 @@ export default ({ mode }) => {
       ELECTRON: "false",
     },
   })
+}
+function checkBrowserSupport() {
+  if (!("findLastIndex" in Array.prototype) || !("structuredClone" in window)) {
+    window.alert(
+      "Follow is not compatible with your browser because your browser version is too old. You can download and use the Follow app or continue using it with the latest browser.",
+    )
+
+    window.location.href = "https://follow.is/download"
+  }
+}
+
+const htmlPlugin: (env: any) => PluginOption = () => {
+  return {
+    name: "html-transform",
+    enforce: "post",
+    transformIndexHtml(html) {
+      return htmlMinify(
+        html.replace(
+          "<!-- Check Browser Script Inject -->",
+          `<script>${checkBrowserSupport.toString()}; checkBrowserSupport()</script>`,
+        ),
+        {
+          removeComments: true,
+          html5: true,
+          minifyJS: true,
+          minifyCSS: true,
+          removeTagWhitespace: true,
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          collapseInlineTagWhitespace: true,
+        },
+      )
+    },
+  }
 }

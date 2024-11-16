@@ -86,7 +86,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 {...inputProps}
               />
               <AnimatePresence>
-                {open && (
+                {open && filterableSuggestions.length > 0 && (
                   <ComboboxOptions
                     portal
                     static

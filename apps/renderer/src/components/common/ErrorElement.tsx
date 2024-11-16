@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
+import { removeAppSkeleton } from "~/lib/app"
 import { attachOpenInEditor } from "~/lib/dev"
 import { getNewIssueUrl } from "~/lib/issues"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
@@ -19,6 +20,10 @@ export function ErrorElement() {
       ? error.message
       : JSON.stringify(error)
   const stack = error instanceof Error ? error.stack : null
+
+  useEffect(() => {
+    removeAppSkeleton()
+  }, [])
 
   useEffect(() => {
     console.error("Error handled by React Router default ErrorBoundary:", error)

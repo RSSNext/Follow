@@ -1,18 +1,25 @@
+import { MdiMeditation } from "@follow/components/icons/Meditation.jsx"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/index.js"
 import { RotatingRefreshIcon } from "@follow/components/ui/loading/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useIsOnline } from "@follow/hooks"
-import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn, getOS, isBizId } from "@follow/utils/utils"
+import { cn, isBizId } from "@follow/utils/utils"
 import type { FC } from "react"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
-import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import {
+  setUISetting,
+  useIsZenMode,
+  useRealInWideMode,
+  useSetZenMode,
+  useUISettingKey,
+} from "~/atoms/settings/ui"
+import { useFeedColumnShow } from "~/atoms/sidebar"
 import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_LIST } from "~/constants"
@@ -39,14 +46,12 @@ export const EntryListHeader: FC<{
   const { feedId, entryId, view, listId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
-  const os = getOS()
 
-  const titleAtBottom = IN_ELECTRON && os === "macOS"
   const isInCollectionList =
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
-    <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
+    <div className={"min-w-0 translate-y-1"}>
       <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
@@ -71,17 +76,18 @@ export const EntryListHeader: FC<{
   const containerRef = React.useRef<HTMLDivElement>(null)
   const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
 
+  const feedColumnShow = useFeedColumnShow()
   return (
     <div
       ref={containerRef}
       className={cn(
         "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
+        !feedColumnShow && "macos:mt-4 macos:pt-margin-macos-traffic-light-y",
         titleStyleBasedView[view],
       )}
     >
-      <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
-        {!titleAtBottom && titleInfo}
-
+      <div className={"flex w-full justify-between"}>
+        {titleInfo}
         <div
           className={cn(
             "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
@@ -156,7 +162,7 @@ export const EntryListHeader: FC<{
           )}
         </div>
       </div>
-      {titleAtBottom && titleInfo}
+
       {/* <TimelineTabs /> */}
     </div>
   )
@@ -234,9 +240,11 @@ const SwitchToMasonryButton = () => {
 }
 
 const WideModeButton = () => {
-  const isWideMode = useUISettingKey("wideMode")
+  const isWideMode = useRealInWideMode()
+  const isZenMode = useIsZenMode()
   const { t } = useTranslation()
 
+  const setIsZenMode = useSetZenMode()
   return (
     <ImpressionView
       event="Switch to Wide Mode"
@@ -247,23 +255,33 @@ const WideModeButton = () => {
       <ActionButton
         shortcut={shortcuts.layout.toggleWideMode.key}
         onClick={() => {
-          setUISetting("wideMode", !isWideMode)
-          // TODO: Remove this after useMeasure can get bounds in time
-          window.dispatchEvent(new Event("resize"))
+          if (isZenMode) {
+            setIsZenMode(false)
+          } else {
+            setUISetting("wideMode", !isWideMode)
+            // TODO: Remove this after useMeasure can get bounds in time
+            window.dispatchEvent(new Event("resize"))
+          }
           window.analytics?.capture("Switch to Wide Mode", {
             wideMode: !isWideMode ? 1 : 0,
             click: 1,
           })
         }}
         tooltip={
-          !isWideMode
-            ? t("entry_list_header.switch_to_widemode")
-            : t("entry_list_header.switch_to_normalmode")
+          isZenMode
+            ? t("zen.exit")
+            : !isWideMode
+              ? t("entry_list_header.switch_to_widemode")
+              : t("entry_list_header.switch_to_normalmode")
         }
       >
-        <i
-          className={cn(isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-align-left-cute-re")}
-        />
+        {isZenMode ? (
+          <MdiMeditation />
+        ) : (
+          <i
+            className={cn(isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-align-left-cute-re")}
+          />
+        )}
       </ActionButton>
     </ImpressionView>
   )

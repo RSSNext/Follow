@@ -1,16 +1,17 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { useMeasure } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import type { MediaModel } from "@follow/shared/hono"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
+import useEmblaCarousel from "embla-carousel-react"
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
 import type { FC } from "react"
-import { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import { Fragment, useCallback, useEffect, useState } from "react"
 import { Blurhash } from "react-blurhash"
 import { useTranslation } from "react-i18next"
-import { Keyboard, Mousewheel } from "swiper/modules"
-import type { SwiperRef } from "swiper/react"
-import { Swiper, SwiperSlide } from "swiper/react"
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { useWindowSize } from "usehooks-ts"
 
 import { m } from "~/components/common/Motion"
@@ -113,10 +114,13 @@ export const PreviewMediaContent: FC<{
   initialIndex?: number
   children?: React.ReactNode
 }> = ({ media, initialIndex = 0, children }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, startIndex: initialIndex }, [
+    WheelGesturesPlugin(),
+  ])
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
-  const swiperRef = useRef<SwiperRef>(null)
+
   // This only to delay show
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
   const [showActions, setShowActions] = useState(false)
 
   useEffect(() => {
@@ -125,6 +129,31 @@ export const PreviewMediaContent: FC<{
     }, 500)
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.on("select", () => {
+        const realIndex = emblaApi.selectedScrollSnap()
+        setCurrentMedia(media[realIndex])
+        setCurrentSlideIndex(realIndex)
+      })
+    }
+  }, [emblaApi, media])
+
+  const { ref } = useCurrentModal()
+
+  // Keyboard
+  useEffect(() => {
+    if (!emblaApi) return
+    const $container = ref.current
+    if (!$container) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") emblaApi?.scrollPrev()
+      if (e.key === "ArrowRight") emblaApi?.scrollNext()
+    }
+    $container.addEventListener("keydown", handleKeyDown)
+    return () => $container.removeEventListener("keydown", handleKeyDown)
+  }, [emblaApi, ref])
 
   if (media.length === 0) return null
   if (media.length === 1) {
@@ -152,6 +181,7 @@ export const PreviewMediaContent: FC<{
             height={media[0].height}
             width={media[0].width}
             blurhash={media[0].blurhash}
+            haveSideContent={!!children}
           />
         )}
       </Wrapper>
@@ -160,30 +190,44 @@ export const PreviewMediaContent: FC<{
   const isVideo = currentMedia.type === "video"
   return (
     <Wrapper src={currentMedia.url} showActions={!isVideo} sideContent={children}>
-      <Swiper
-        ref={swiperRef}
-        loop
-        initialSlide={initialIndex}
-        mousewheel={{
-          forceToAxis: true,
-        }}
-        keyboard={{
-          enabled: true,
-        }}
-        onSlideChange={({ realIndex }) => {
-          setCurrentMedia(media[realIndex])
-          setCurrentSlideIndex(realIndex)
-        }}
-        modules={[Mousewheel, Keyboard]}
-        className="h-full w-auto"
-      >
+      <div className="size-full overflow-hidden" ref={emblaRef}>
+        <div className="flex size-full">
+          {media.map((med) => (
+            <div className="mr-2 flex w-full flex-none items-center justify-center" key={med.url}>
+              {med.type === "video" ? (
+                <VideoPlayer
+                  src={med.url}
+                  autoPlay
+                  muted
+                  controls
+                  className="size-full object-contain"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <FallbackableImage
+                  fallbackUrl={med.fallbackUrl}
+                  className="size-full object-contain"
+                  alt="cover"
+                  src={med.url}
+                  loading="lazy"
+                  height={med.height}
+                  width={med.width}
+                  blurhash={med.blurhash}
+                  haveSideContent={!!children}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
         {showActions && (
           <div tabIndex={-1} onClick={stopPropagation}>
             <m.button
-              initial={{ opacity: 0, x: -20, scale: 0.94 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
+              initial={{ opacity: 0, transform: "translate3d(-20px, 0, 0) scale(0.94)" }}
+              animate={{ opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }}
               transition={{ ease: "easeInOut", duration: 0.2 }}
-              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              whileTap={{ transform: "translate3d(0, 0, 0) scale(0.9)" }}
+              onClick={() => emblaApi?.scrollPrev()}
               type="button"
               className="center absolute left-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
@@ -191,10 +235,11 @@ export const PreviewMediaContent: FC<{
             </m.button>
 
             <m.button
-              initial={{ opacity: 0, x: 20, scale: 0.94 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
+              initial={{ opacity: 0, transform: "translate3d(20px, 0, 0) scale(0.94)" }}
+              animate={{ opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }}
               transition={{ ease: "easeInOut", duration: 0.2 }}
-              onClick={() => swiperRef.current?.swiper.slideNext()}
+              whileTap={{ transform: "translate3d(0, 0, 0) scale(0.9)" }}
+              onClick={() => emblaApi?.scrollNext()}
               type="button"
               className="center absolute right-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
@@ -226,7 +271,7 @@ export const PreviewMediaContent: FC<{
                 .map((_, index) => (
                   <button
                     onClick={() => {
-                      swiperRef.current?.swiper.slideTo(index)
+                      emblaApi?.scrollTo(index)
                     }}
                     type="button"
                     key={index}
@@ -239,35 +284,13 @@ export const PreviewMediaContent: FC<{
             </div>
           </div>
         )}
-
-        {media.map((med, index) => (
-          <SwiperSlide key={med.url} virtualIndex={index} className="center !flex">
-            {med.type === "video" ? (
-              <VideoPlayer
-                src={med.url}
-                autoPlay
-                muted
-                controls
-                className="size-full object-contain"
-                onClick={(e) => e.stopPropagation()}
-              />
-            ) : (
-              <FallbackableImage
-                fallbackUrl={med.fallbackUrl}
-                className="size-full object-contain"
-                alt="cover"
-                src={med.url}
-                loading="lazy"
-                height={med.height}
-                width={med.width}
-                blurhash={med.blurhash}
-              />
-            )}
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      </div>
     </Wrapper>
   )
+}
+
+function parseNumber(value: string | number | undefined) {
+  return typeof value === "string" ? Number.parseInt(value) : value
 }
 
 const FallbackableImage: FC<
@@ -276,8 +299,9 @@ const FallbackableImage: FC<
     containerClassName?: string
     fallbackUrl?: string
     blurhash?: string
+    haveSideContent?: boolean
   }
-> = ({ src, onError, fallbackUrl, containerClassName, blurhash, ...props }) => {
+> = ({ src, onError, fallbackUrl, containerClassName, blurhash, haveSideContent, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
@@ -317,53 +341,97 @@ const FallbackableImage: FC<
     }
   }, [currentSrc, currentState, fallbackUrl, src])
 
-  const height = Number.parseInt(props.height as string)
-  const width = Number.parseInt(props.width as string)
+  const height = parseNumber(props.height)
+  const width = parseNumber(props.width)
 
   const { height: windowHeight, width: windowWidth } = useWindowSize()
+  // px-20 pb-8 pt-10
+  // wrapper side content w-[400px]
+  const maxContainerHeight = windowHeight - 32 - 40
+  const maxContainerWidth = windowWidth - 80 - 80 - (haveSideContent ? 400 : 0)
+
+  const [zoomingState, setZoomingState] = useState<"zoom-in" | "zoom-out" | null>(null)
+  const [zoomContainerWidth, setZoomContainerWidth] = useState(0)
+
+  const wrapperClass = cn("relative !max-h-full", width && height && width <= height && "!h-full")
+  const wrapperStyle: React.CSSProperties = {
+    width:
+      width && height && width > height
+        ? `${Math.min(maxContainerHeight * (width / height), width)}px`
+        : undefined,
+    maxWidth: width && height && width > height ? `${maxContainerWidth}px` : undefined,
+  }
+
+  const [ref, { width: imgWidth }] = useMeasure()
 
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
-        <div
-          className={cn("relative max-h-full", width <= height && "h-full")}
-          style={{
-            // px-20 pb-8 pt-10
-            width:
-              width && height && width > height
-                ? `${Math.min((windowHeight - 32 - 40) * (width / height), width)}px`
-                : undefined,
-            maxWidth: width > height ? `${windowWidth - 80 - 80 - 400}px` : undefined,
+        <TransformWrapper
+          wheel={{ smoothStep: 0.008 }}
+          onZoom={(e) => {
+            if (e.state.scale !== 1) {
+              setZoomingState(e.state.scale > 1 ? "zoom-in" : "zoom-out")
+            } else {
+              setZoomingState(null)
+            }
+            setZoomContainerWidth(Math.min(maxContainerWidth, e.state.scale * imgWidth))
           }}
         >
-          <img
-            data-blurhash={blurhash}
-            src={currentSrc}
-            onLoad={() => setIsLoading(false)}
-            onError={handleError}
-            height={props.height}
-            width={props.width}
-            {...props}
-            className={cn(
-              "transition-opacity duration-700",
-              isLoading ? "opacity-0" : "opacity-100",
-              props.className,
-            )}
-            style={props.style}
-          />
-          <div
-            className={cn(
-              "center absolute inset-0 size-full transition-opacity duration-700",
-              isLoading ? "opacity-100" : "opacity-0",
-            )}
+          <TransformComponent
+            wrapperClass={wrapperClass}
+            wrapperStyle={{
+              ...wrapperStyle,
+              minWidth:
+                zoomingState === "zoom-in" && !haveSideContent
+                  ? `${zoomContainerWidth}px`
+                  : undefined,
+              height: zoomingState === "zoom-in" ? "100%" : undefined,
+            }}
+            contentClass={wrapperClass}
+            contentStyle={wrapperStyle}
+            wrapperProps={{
+              onClick: stopPropagation,
+            }}
           >
-            {blurhash ? (
-              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            ) : (
-              <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-            )}
-          </div>
-        </div>
+            <img
+              ref={ref}
+              data-blurhash={blurhash}
+              src={currentSrc}
+              onLoad={() => setIsLoading(false)}
+              onError={handleError}
+              height={props.height}
+              width={props.width}
+              {...props}
+              className={cn(
+                "mx-auto transition-opacity duration-700",
+                isLoading ? "opacity-0" : "opacity-100",
+                props.className,
+              )}
+              style={{
+                maxHeight: `${maxContainerHeight}px`,
+                ...props.style,
+              }}
+            />
+            <div
+              className={cn(
+                "center absolute inset-0 size-full transition-opacity duration-700",
+                isLoading ? "opacity-100" : "opacity-0",
+              )}
+            >
+              {blurhash ? (
+                <Blurhash
+                  hash={blurhash}
+                  resolutionX={32}
+                  resolutionY={32}
+                  className="!size-full"
+                />
+              ) : (
+                <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+              )}
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
       )}
       {isAllError && (
         <div

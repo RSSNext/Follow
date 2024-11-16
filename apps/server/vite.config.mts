@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
 import { viteRenderBaseConfig } from "../../configs/vite.render.config"
-import { twMacro } from "../../plugins/vite/tw-macro"
+import { astPlugin } from "../../plugins/vite/ast"
 
 export default () => {
   return defineConfig({
@@ -27,7 +27,7 @@ export default () => {
         },
       },
     },
-    plugins: [react(), twMacro()],
+    plugins: [react(), astPlugin],
 
     server: {
       proxy: {

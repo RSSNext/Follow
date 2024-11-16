@@ -179,7 +179,7 @@ const MediaImpl: FC<MediaProps> = ({
             onError={errorHandle}
             className={cn(
               "size-full object-contain",
-              // "bg-gray-200 dark:bg-neutral-800",
+              inline && "size-auto",
               popper && "cursor-zoom-in",
               "duration-200",
               mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
@@ -226,6 +226,7 @@ const MediaImpl: FC<MediaProps> = ({
     src,
     thumbnail,
     type,
+    inline,
   ])
 
   if (!type || !src) return null
@@ -268,7 +269,7 @@ const MediaImpl: FC<MediaProps> = ({
   return (
     <span
       data-state={type !== "video" ? mediaLoadState : undefined}
-      className={cn("relative block overflow-hidden rounded", className)}
+      className={cn("relative overflow-hidden rounded", inline ? "inline" : "block", className)}
       style={style}
     >
       {!!props.width && !!props.height && !!containerWidth ? (

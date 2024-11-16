@@ -38,9 +38,6 @@ export const SettingFeeds = () => {
                     {t("feeds.tableHeaders.name")}
                   </TableHead>
                   <TableHead className="text-center" size="sm">
-                    {t("feeds.tableHeaders.entryCount")}
-                  </TableHead>
-                  <TableHead className="text-center" size="sm">
                     {t("feeds.tableHeaders.subscriptionCount")}
                   </TableHead>
                   <TableHead className="text-center" size="sm">
@@ -62,9 +59,6 @@ export const SettingFeeds = () => {
                           {row.feed.title}
                         </EllipsisHorizontalTextWithTooltip>
                       </a>
-                    </TableCell>
-                    <TableCell align="center" className="tabular-nums" size="sm">
-                      {row.entryCount}
                     </TableCell>
                     <TableCell align="center" className="tabular-nums" size="sm">
                       {row.subscriptionCount}

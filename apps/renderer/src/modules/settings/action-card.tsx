@@ -211,49 +211,19 @@ export function ActionCard({
 }) {
   const { t } = useTranslation("settings")
 
-  const EntryOptions = useMemo(() => {
-    return [
-      {
-        name: t("actions.action_card.entry_options.all"),
-        value: "all",
-      },
-      {
-        name: t("actions.action_card.entry_options.title"),
-        value: "title",
-      },
-      {
-        name: t("actions.action_card.entry_options.content"),
-        value: "content",
-      },
-      {
-        name: t("actions.action_card.entry_options.author"),
-        value: "author",
-      },
-      {
-        name: t("actions.action_card.entry_options.url"),
-        value: "url",
-      },
-      {
-        name: t("actions.action_card.entry_options.order"),
-        value: "order",
-        type: "number",
-      },
-    ]
-  }, [t])
-
   const FeedOptions = useMemo(() => {
     return [
       {
-        name: t("actions.action_card.feed_options.view"),
+        name: t("actions.action_card.feed_options.subscription_view"),
         value: "view",
         type: "view",
       },
       {
-        name: t("actions.action_card.feed_options.title"),
+        name: t("actions.action_card.feed_options.feed_title"),
         value: "title",
       },
       {
-        name: t("actions.action_card.feed_options.category"),
+        name: t("actions.action_card.feed_options.feed_category"),
         value: "category",
       },
       {
@@ -263,6 +233,27 @@ export function ActionCard({
       {
         name: t("actions.action_card.feed_options.feed_url"),
         value: "feed_url",
+      },
+      {
+        name: t("actions.action_card.feed_options.entry_title"),
+        value: "entry_title",
+      },
+      {
+        name: t("actions.action_card.feed_options.entry_content"),
+        value: "entry_content",
+      },
+      {
+        name: t("actions.action_card.feed_options.entry_url"),
+        value: "entry_url",
+      },
+      {
+        name: t("actions.action_card.feed_options.entry_author"),
+        value: "entry_author",
+      },
+      {
+        name: t("actions.action_card.feed_options.entry_media_length"),
+        value: "entry_media_length",
+        type: "number",
       },
     ]
   }, [t])
@@ -527,6 +518,19 @@ export function ActionCard({
                 </div>
                 <Divider />
 
+                <div className="flex w-full items-center justify-between">
+                  <span className="w-0 shrink grow truncate">{t("actions.action_card.block")}</span>
+                  <Switch
+                    disabled={disabled}
+                    checked={data.result.block}
+                    onCheckedChange={(checked) => {
+                      data.result.block = checked
+                      onChange(data)
+                    }}
+                  />
+                </div>
+                <Divider />
+
                 <SettingCollapsible
                   title={t("actions.action_card.rewrite_rules")}
                   onOpenChange={(open) => {
@@ -609,90 +613,6 @@ export function ActionCard({
                   />
                 </SettingCollapsible>
                 <Divider />
-                <SettingCollapsible
-                  title={t("actions.action_card.block_rules")}
-                  onOpenChange={(open) => {
-                    if (open && (!data.result.blockRules || data.result.blockRules?.length === 0)) {
-                      data.result.blockRules = [{}]
-                    }
-                    onChange(data)
-                  }}
-                >
-                  {data.result.blockRules && data.result.blockRules.length > 0 && (
-                    <Table>
-                      <FieldTableHeader />
-                      <TableBody>
-                        {data.result.blockRules.map((rule, index) => {
-                          const change = (key: string, value: string | number) => {
-                            data.result.blockRules![index][key] = value
-                            onChange(data)
-                          }
-                          const type =
-                            EntryOptions.find((option) => option.value === rule.field)?.type ||
-                            "text"
-                          return (
-                            <TableRow key={index}>
-                              <DeleteTableCell
-                                disabled={disabled}
-                                onClick={() => {
-                                  if (data.result.blockRules?.length === 1) {
-                                    delete data.result.blockRules
-                                  } else {
-                                    data.result.blockRules?.splice(index, 1)
-                                  }
-                                  onChange(data)
-                                }}
-                              />
-                              <TableCell size="sm">
-                                <Select
-                                  disabled={disabled}
-                                  value={rule.field}
-                                  onValueChange={(value) => change("field", value)}
-                                >
-                                  <CommonSelectTrigger />
-                                  <SelectContent>
-                                    {EntryOptions.map((option) => (
-                                      <SelectItem key={option.value} value={option.value}>
-                                        {option.name}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </TableCell>
-                              <OperationTableCell
-                                disabled={disabled}
-                                type={type}
-                                value={rule.operator}
-                                onValueChange={(value) => change("operator", value)}
-                              />
-                              <TableCell size="sm">
-                                <Input
-                                  disabled={disabled}
-                                  type={type}
-                                  value={rule.value}
-                                  className="h-8"
-                                  onChange={(e) => change("value", e.target.value)}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          )
-                        })}
-                      </TableBody>
-                    </Table>
-                  )}
-                  <AddTableRow
-                    disabled={disabled}
-                    onClick={() => {
-                      if (!data.result.blockRules) {
-                        data.result.blockRules = []
-                      }
-                      data.result.blockRules!.push({})
-                      onChange(data)
-                    }}
-                  />
-                </SettingCollapsible>
-                <Divider />
-
                 <SettingCollapsible
                   title={t("actions.action_card.webhooks")}
                   onOpenChange={(open) => {

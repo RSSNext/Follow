@@ -7,7 +7,7 @@ import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useParams } from "react-router-dom"
 
-import { useUISettingKey } from "~/atoms/settings/ui"
+import { useRealInWideMode } from "~/atoms/settings/ui"
 import { useFeedColumnShow, useFeedColumnTempShow } from "~/atoms/sidebar"
 import { m } from "~/components/common/Motion"
 import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
@@ -24,7 +24,7 @@ export const Component = () => {
   const view = useRouteView()
   const navigate = useNavigateEntry()
 
-  const settingWideMode = useUISettingKey("wideMode")
+  const settingWideMode = useRealInWideMode()
   const realEntryId = entryId === ROUTE_ENTRY_PENDING ? "" : entryId
   const showEntryContent = !(views[view].wideMode || (settingWideMode && !realEntryId))
   const wideMode = !!(settingWideMode && realEntryId)
@@ -45,7 +45,6 @@ export const Component = () => {
   )
 
   const { feedId } = useRouteParams()
-  const enableEntryWideMode = useUISettingKey("wideMode")
 
   if (!showEntryContent) {
     return null
@@ -56,7 +55,7 @@ export const Component = () => {
       <EntryGridContainer showEntryContent={showEntryContent} wideMode={wideMode}>
         {wideMode && (
           <FixedModalCloseButton
-            className="no-drag-region absolute left-4 top-4 z-10"
+            className="no-drag-region absolute left-4 top-4 z-10 macos:translate-y-margin-macos-traffic-light-y"
             onClick={() => navigate({ entryId: null })}
           />
         )}
@@ -71,7 +70,7 @@ export const Component = () => {
                   : "",
             }}
           />
-        ) : !enableEntryWideMode ? (
+        ) : !settingWideMode ? (
           <m.div
             className="center size-full flex-col"
             initial={{ opacity: 0.01, y: 300 }}

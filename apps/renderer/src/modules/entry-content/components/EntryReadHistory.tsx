@@ -65,7 +65,10 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
   if (!entryHistory.userIds) return null
 
   return (
-    <div className="hidden items-center duration-200 animate-in fade-in @md:flex">
+    <div
+      className="hidden items-center duration-200 animate-in fade-in @md:flex"
+      data-hide-in-print
+    >
       {entryHistory.userIds
         .filter((id) => id !== me?.id)
         .slice(0, LIMIT)

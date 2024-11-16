@@ -35,6 +35,7 @@
     "electron-squirrel-startup": "1.0.1",
     "electron-updater": "^6.3.9",
     "es-toolkit": "1.26.1",
+    "fast-folder-size": "2.3.0",
     "font-list": "1.5.1",
     "i18next": "^23.16.4",
     "js-yaml": "4.1.0",

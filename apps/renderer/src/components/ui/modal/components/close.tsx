@@ -12,7 +12,7 @@ export const FixedModalCloseButton: Component<{
       <TooltipTrigger
         type="button"
         className={cn(
-          "center flex size-8 rounded-full bg-background p-1 shadow-sm ring-1 ring-zinc-200 dark:ring-neutral-800",
+          "no-drag-region center flex size-8 rounded-full bg-background p-1 shadow-sm ring-1 ring-zinc-200 dark:ring-neutral-800",
           className,
         )}
         onClick={onClick}

@@ -10,9 +10,12 @@ const createDefaultSettings = (): GeneralSettings => ({
   // Data control
   dataPersist: true,
   sendAnonymousData: true,
+  reduceRefetch: true,
+
+  autoGroup: true,
 
   // view
-  unreadOnly: false,
+  unreadOnly: true,
   // mark unread
   scrollMarkUnread: true,
   hoverMarkUnread: true,

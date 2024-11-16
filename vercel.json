@@ -21,10 +21,6 @@
       "destination": "https://follow-external-ssr.vercel.app/login"
     },
     {
-      "source": "/redirect",
-      "destination": "https://follow-external-ssr.vercel.app/redirect"
-    },
-    {
       "source": "/external-dist/:path*",
       "destination": "https://follow-external-ssr.vercel.app/external-dist/:path*"
     },
@@ -59,20 +55,8 @@
       "source": "/vendor/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, immutable"
-        },
-        {
-          "key": "CDN-Cache-Control",
-          "value": "max-age=604800"
-        },
-        {
-          "key": "Vercel-CDN-Cache-Control",
-          "value": "max-age=604800"
-        },
-        {
-          "key": "Cloudflare-CDN-Cache-Control",
-          "value": "max-age=604800"
+          "key": "Cache-Tag",
+          "value": "follow-assets"
         }
       ]
     },
@@ -80,20 +64,8 @@
       "source": "/assets/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, immutable"
-        },
-        {
-          "key": "CDN-Cache-Control",
-          "value": "max-age=604800"
-        },
-        {
-          "key": "Vercel-CDN-Cache-Control",
-          "value": "max-age=604800"
-        },
-        {
-          "key": "Cloudflare-CDN-Cache-Control",
-          "value": "max-age=604800"
+          "key": "Cache-Tag",
+          "value": "follow-assets"
         }
       ]
     }

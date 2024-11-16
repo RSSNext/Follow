@@ -24,26 +24,14 @@ export const SlideUpModal: ModalTemplateType = (props) => {
       <m.div
         onPointerDown={stopPropagation}
         tabIndex={-1}
-        initial={{
-          y: "100%",
-          opacity: 0.9,
-        }}
-        animate={{
-          y: 0,
-          opacity: 1,
-        }}
         exit={{
           y: winHeight,
-        }}
-        transition={{
-          type: "spring",
-          mass: 0.4,
-          tension: 100,
-          friction: 1,
+          opacity: 0,
         }}
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           "aspect-[7/9] w-[600px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
+          "motion-preset-slide-up motion-duration-200 motion-ease-spring-smooth",
           props.className,
         )}
       >

@@ -13,6 +13,8 @@ body,
   @apply font-theme;
 
   overscroll-behavior: none;
+
+  @apply print:overflow-auto print:h-auto;
 }
 
 :focus-visible {

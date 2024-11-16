@@ -7,10 +7,12 @@ import { fileURLToPath } from "node:url"
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
 import pkg from "@pkg"
-import { app, BrowserWindow, clipboard, dialog, screen } from "electron"
+import { app, BrowserWindow, clipboard, dialog, screen, shell } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
-import { clearAllData } from "~/lib/cleaner"
+import { clearAllData, getCacheSize } from "~/lib/cleaner"
+import { store, StoreKey } from "~/lib/store"
+import { registerAppTray } from "~/lib/tray"
 import { logger } from "~/logger"
 import {
   cleanupOldRender,
@@ -230,6 +232,7 @@ export const appRoute = {
   switchAppLocale: t.procedure.input<string>().action(async ({ input }) => {
     i18n.changeLanguage(input)
     registerMenuAndContextMenu()
+    registerAppTray()
 
     app.commandLine.appendSwitch("lang", input)
   }),
@@ -302,6 +305,48 @@ ${content}
     setTimeout(() => {
       cleanupOldRender()
     }, 1000)
+  }),
+
+  getCacheSize: t.procedure.action(async () => {
+    return getCacheSize()
+  }),
+  openCacheFolder: t.procedure.action(async () => {
+    const dir = path.join(app.getPath("userData"), "cache")
+    shell.openPath(dir)
+  }),
+  getCacheLimit: t.procedure.action(async () => {
+    return store.get(StoreKey.CacheSizeLimit)
+  }),
+
+  clearCache: t.procedure.action(async () => {
+    const cachePath = path.join(app.getPath("userData"), "cache", "Cache_Data")
+    if (process.platform === "win32") {
+      // Request elevation on Windows
+
+      try {
+        // Create a bat file to delete cache with elevated privileges
+        const batPath = path.join(app.getPath("temp"), "clear_cache.bat")
+        await fsp.writeFile(batPath, `@echo off\nrd /s /q "${cachePath}"\ndel "%~f0"`, "utf-8")
+
+        // Execute the bat file with admin privileges
+        await shell.openPath(batPath)
+        return
+      } catch (err) {
+        logger.error("Failed to clear cache with elevation", { error: err })
+      }
+    }
+    await fsp.rm(cachePath, { recursive: true, force: true }).catch(() => {
+      logger.error("Failed to clear cache")
+    })
+  }),
+
+  limitCacheSize: t.procedure.input<number>().action(async ({ input }) => {
+    logger.info("set limitCacheSize", input)
+    if (input === 0) {
+      store.delete(StoreKey.CacheSizeLimit)
+    } else {
+      store.set(StoreKey.CacheSizeLimit, input)
+    }
   }),
 }
 

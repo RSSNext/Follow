@@ -2,8 +2,9 @@ import { resolve } from "node:path"
 
 import { defineConfig } from "electron-vite"
 
-import viteRenderConfig from "./configs/vite.electron-render.config"
-import { getGitHash } from "./scripts/lib"
+import { viteRenderBaseConfig } from "./configs/vite.render.config"
+import { cleanupUnnecessaryFilesPlugin } from "./plugins/vite/cleanup"
+import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 export default defineConfig({
   main: {
@@ -40,5 +41,38 @@ export default defineConfig({
       },
     },
   },
-  renderer: viteRenderConfig,
+  renderer: {
+    ...viteRenderBaseConfig,
+
+    root: "apps/renderer",
+    build: {
+      outDir: "dist/renderer",
+      sourcemap: !!process.env.CI,
+      target: "esnext",
+      rollupOptions: {
+        input: {
+          main: resolve("./apps/renderer/index.html"),
+        },
+      },
+      minify: true,
+    },
+
+    plugins: [
+      ...viteRenderBaseConfig.plugins,
+      createPlatformSpecificImportPlugin(true),
+      cleanupUnnecessaryFilesPlugin([
+        "og-image.png",
+        "icon-512x512.png",
+        "opengraph-image.png",
+        "favicon.ico",
+        "icon-192x192.png",
+        "favicon-dev.ico",
+      ]),
+    ],
+
+    define: {
+      ...viteRenderBaseConfig.define,
+      ELECTRON: "true",
+    },
+  },
 })

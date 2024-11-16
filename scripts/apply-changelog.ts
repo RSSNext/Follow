@@ -9,11 +9,13 @@ const nextFile = join(changelogDir, "next.md")
 
 const new_version = process.argv[2]
 
+const majorMinorPatch = new_version.split("-")[0]
+
 const nextContent = readFileSync(nextFile, "utf-8")
-writeFileSync(nextFile, nextContent.replaceAll("NEXT_VERSION", new_version))
+writeFileSync(nextFile, nextContent.replaceAll("NEXT_VERSION", majorMinorPatch))
 
 // Rename the next.md to the new version
-renameSync(nextFile, join(changelogDir, `${new_version}.md`))
+renameSync(nextFile, join(changelogDir, `${majorMinorPatch}.md`))
 // Replace the NEXT_VERSION in the next.md file with the new version
 
 // Create the new next.md file

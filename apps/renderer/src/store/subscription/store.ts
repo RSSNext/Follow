@@ -11,9 +11,9 @@ import { omit } from "lodash-es"
 import { parse } from "tldts"
 
 import { whoami } from "~/atoms/user"
-import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
+import { queryClient } from "~/lib/query-client"
 import { updateFeedBoostStatus } from "~/modules/boost/atom"
 import { SubscriptionService } from "~/services"
 
@@ -23,7 +23,6 @@ import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
-import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
@@ -508,6 +507,108 @@ class SubscriptionActions {
     )
   }
 
+  async batchUpdateSubscription({
+    feedIdList,
+    category,
+    view,
+  }: {
+    feedIdList: string[]
+    category?: string | null
+    view: FeedViewType
+  }) {
+    const tx = createTransaction<
+      ReturnType<typeof get>,
+      {
+        subscription: Record<FeedId, SubscriptionFlatModel>
+        feedIdByView: Record<FeedViewType, FeedId[]>
+      }
+    >(get(), {
+      subscription: {},
+      feedIdByView: {
+        [FeedViewType.Articles]: [],
+        [FeedViewType.Audios]: [],
+        [FeedViewType.Notifications]: [],
+        [FeedViewType.Pictures]: [],
+        [FeedViewType.SocialMedia]: [],
+        [FeedViewType.Videos]: [],
+      },
+    })
+
+    tx.execute(async (snapshot) => {
+      await apiClient.subscriptions.batch.$patch({
+        json: {
+          feedIds: feedIdList,
+          category,
+          view,
+        },
+      })
+      const oldView = snapshot.data[feedIdList[0]].view
+
+      queryClient.invalidateQueries({
+        predicate(query) {
+          return (
+            query.queryKey[0] === "entries" &&
+            [oldView, view].includes(query.queryKey[2] as FeedViewType)
+          )
+        },
+      })
+    })
+
+    tx.optimistic(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (let i = 0; i < 6; i++) {
+            ctx.feedIdByView[i] = state.feedIdByView[i]
+          }
+
+          for (const feedId of feedIdList) {
+            const subscription = draft.data[feedId]
+            if (!subscription) return
+
+            subscription.category = category
+            const feed = getFeedById(feedId)
+            if (feed?.type === "feed" && feed.siteUrl) {
+              const parsed = parse(feed.siteUrl)
+              if (parsed.domain) {
+                subscription.defaultCategory = capitalizeFirstLetter(parsed.domain)
+              }
+            }
+
+            if (subscription.view !== view) {
+              const currentViewFeedIds = draft.feedIdByView[subscription.view] as string[]
+              currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
+              subscription.view = view
+              const changeToViewFeedIds = draft.feedIdByView[view] as string[]
+              changeToViewFeedIds.push(feedId)
+            }
+
+            ctx.subscription[feedId] = state.data[feedId]
+          }
+        }),
+      )
+    })
+
+    tx.rollback(async (_, ctx) => {
+      set((state) =>
+        produce(state, (draft) => {
+          for (const feedId of feedIdList) {
+            draft.data[feedId] = ctx.subscription[feedId]
+          }
+          for (let i = 0; i < 6; i++) {
+            draft.feedIdByView[i] = ctx.feedIdByView[i]
+          }
+        }),
+      )
+    })
+
+    tx.persist(async () => {
+      SubscriptionService.updateCategories(feedIdList, category)
+      SubscriptionService.changeViews(feedIdList, view)
+    })
+
+    await tx.run()
+  }
+
   async changeListView(listId: string, currentView: FeedViewType, toView: FeedViewType) {
     const state = get()
 
@@ -586,18 +687,3 @@ class SubscriptionActions {
 }
 
 export const subscriptionActions = new SubscriptionActions()
-
-export const getSubscriptionByFeedId = (feedId: FeedId) => {
-  const state = get()
-  return state.data[feedId]
-}
-
-export const isListSubscription = (feedId?: FeedId) => {
-  if (!feedId) return false
-  const subscription = getSubscriptionByFeedId(feedId.replace(ROUTE_FEED_IN_LIST, ""))
-  if (!subscription) return false
-  return "listId" in subscription && !!subscription.listId
-}
-
-export const subscriptionCategoryExist = (name: string) =>
-  subscriptionCategoryExistSelector(name)(get())

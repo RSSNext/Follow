@@ -56,11 +56,18 @@ const AppNotificationContainer: FC = () => {
       toast.success(
         <div>
           App is upgraded to{" "}
-          <a href={`${repository.url}/releases/tag/${APP_VERSION}`}>{APP_VERSION}</a>, enjoy the new
-          features! 🎉
+          <a
+            href={`${repository.url}/releases/tag/v${APP_VERSION}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {APP_VERSION}
+          </a>
+          , enjoy the new features! 🎉
         </div>,
         {
-          duration: 10e8,
+          closeButton: true,
+          duration: 5000,
           action: CHANGELOG_CONTENT
             ? {
                 label: "What's new?",
@@ -98,6 +105,6 @@ export default AppNotificationContainer
 
 const Changelog = () => (
   <Paper>
-    <Markdown className="mt-8">{CHANGELOG_CONTENT}</Markdown>
+    <Markdown className="mt-8 w-full max-w-full">{CHANGELOG_CONTENT}</Markdown>
   </Paper>
 )

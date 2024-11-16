@@ -7,7 +7,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/t
 import type { ExtractBizResponse } from "@follow/models/types"
 import { Chain } from "@follow/utils/chain"
 import { cn } from "@follow/utils/utils"
-import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
@@ -17,6 +16,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
+import { LazyDotLottie } from "~/components/common/LazyDotLottie"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
@@ -33,6 +33,7 @@ enum AchievementsActionIdMap {
   // TODO
   // FOLLOW_SPECIAL_FEED = 6,
   ALPHA_TESTER = 7,
+  FEED_BOOSTER = 8,
 }
 
 const achievementActionIdCopyMap: Record<
@@ -70,6 +71,10 @@ const achievementActionIdCopyMap: Record<
   [AchievementsActionIdMap.ALPHA_TESTER]: {
     title: "achievement.alpha_tester",
     description: "achievement.alpha_tester_description",
+  },
+  [AchievementsActionIdMap.FEED_BOOSTER]: {
+    title: "achievement.feed_booster",
+    description: "achievement.feed_booster_description",
   },
 }
 
@@ -138,7 +143,7 @@ export const AchievementModalContent: FC = () => {
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
-      <DotLottieReact
+      <LazyDotLottie
         className="mt-12 size-[100px]"
         autoplay
         speed={2}

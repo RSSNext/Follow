@@ -15,6 +15,7 @@ import { isListSubscription } from "~/store/subscription"
 
 import { DateItem } from "./components/DateItem"
 import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
+import type { VirtuosoComponentProps } from "./index"
 
 export const EntryListContent = forwardRef<HTMLDivElement>((props, ref) => (
   <div className="px-2" {...props} ref={ref} />
@@ -48,7 +49,7 @@ type BaseEntryProps = {
   virtuosoRef: React.RefObject<VirtuosoHandle>
   refetch: () => void
 }
-type EntryListProps = VirtuosoProps<string, unknown> & {
+type EntryListProps = VirtuosoProps<string, VirtuosoComponentProps> & {
   groupCounts?: number[]
 } & BaseEntryProps
 export const EntryList: FC<EntryListProps> = memo(
@@ -90,7 +91,7 @@ export const EntryList: FC<EntryListProps> = memo(
 
 const EntryGroupedList = forwardRef<
   VirtuosoHandle,
-  VirtuosoProps<string, unknown> &
+  VirtuosoProps<string, VirtuosoComponentProps> &
     DOMAttributes<HTMLDivElement> & {
       groupCounts: number[]
     }

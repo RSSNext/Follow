@@ -1,5 +1,6 @@
 export type { HTMLMediaState } from "./factory/createHTMLMediaHook"
 export * from "./useAnyPointDown"
+export * from "./useCountDown"
 export * from "./useDark"
 export * from "./useInputComposition"
 export * from "./useInterval"

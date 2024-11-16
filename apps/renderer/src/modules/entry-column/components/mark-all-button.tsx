@@ -1,6 +1,7 @@
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { ActionButton, Button, IconButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
+import { useCountdown } from "@follow/hooks"
 import { cn, getOS } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
@@ -31,6 +32,7 @@ export const MarkAllReadWithOverlay = forwardRef<
     containerRef: React.RefObject<HTMLDivElement>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
+  const { t } = useTranslation()
   const { t: commonT } = useTranslation("common")
 
   const [show, setShow] = useState(false)
@@ -62,7 +64,7 @@ export const MarkAllReadWithOverlay = forwardRef<
         action: {
           label: (
             <span className="flex items-center gap-1">
-              Undo
+              {t("mark_all_read_button.undo")}
               <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
                 Meta+Z
               </Kbd>
@@ -139,13 +141,13 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
       <m.div
         ref={setPopoverRef}
         initial={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         animate={{
-          y: isElectronWindows ? -10 : 0,
+          transform: `translateY(${isElectronWindows ? "-10px" : "0px"})`,
         }}
         exit={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
         className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
@@ -186,14 +188,19 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
 
 const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
   const { t } = useTranslation()
+  const [countdown] = useCountdown({ countStart: 3 })
+
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
+
   return (
     <div>
       <p>{t("mark_all_read_button.confirm_mark_all_info")}</p>
-      <small className="opacity-50">{t("mark_all_read_button.auto_confirm_info")}</small>
+      <small className="opacity-50">
+        {t("mark_all_read_button.auto_confirm_info", { countdown })}
+      </small>
     </div>
   )
 }

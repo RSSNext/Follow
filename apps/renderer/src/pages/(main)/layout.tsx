@@ -1,6 +1,9 @@
+import type { DragEndEvent } from "@dnd-kit/core"
+import { DndContext, PointerSensor, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
+import type { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
@@ -15,8 +18,8 @@ import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-import { setMainContainerElement } from "~/atoms/dom"
-import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import { setMainContainerElement, setRootContainerElement } from "~/atoms/dom"
+import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
   setFeedColumnShow,
@@ -30,14 +33,17 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { HotKeyScopeMap } from "~/constants"
+import { HotKeyScopeMap, isDev, isWebBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
+import { useBatchUpdateSubscription } from "~/hooks/biz/useSubscriptionActions"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
 import { NetworkStatusIndicator } from "~/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
+import { DebugRegistry } from "~/modules/debug/registry"
 import { FeedColumn } from "~/modules/feed-column"
+import { useSelectedFeedIds } from "~/modules/feed-column/atom"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { CornerPlayer } from "~/modules/feed-column/corner-player"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
@@ -62,7 +68,7 @@ const FooterInfo = () => {
         </div>
       )}
 
-      {!ELECTRON && (
+      {isWebBuild && (
         <div className="center absolute inset-y-0 right-2">
           <button
             type="button"
@@ -100,6 +106,33 @@ export function Component() {
   const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
   const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  )
+  const [selectedIds, setSelectedIds] = useSelectedFeedIds()
+  const { mutate } = useBatchUpdateSubscription()
+  const handleDragEnd = React.useCallback(
+    (event: DragEndEvent) => {
+      if (!event.over) {
+        return
+      }
+
+      const { category, view } = event.over.data.current as {
+        category?: string | null
+        view: FeedViewType
+      }
+
+      mutate({ category, view, feedIdList: selectedIds })
+
+      setSelectedIds([])
+    },
+    [mutate, selectedIds, setSelectedIds],
+  )
+
   if (isNotSupportWidth) {
     return <NotSupport />
   }
@@ -113,14 +146,21 @@ export function Component() {
       </Suspense>
       <AppLayoutGridContainerProvider>
         <FeedResponsiveResizerContainer containerRef={containerRef}>
-          <FeedColumn>
-            <CornerPlayer />
-            <FooterInfo />
+          <DndContext
+            autoScroll={{ threshold: { x: 0, y: 0.2 } }}
+            sensors={sensors}
+            collisionDetection={pointerWithin}
+            onDragEnd={handleDragEnd}
+          >
+            <FeedColumn>
+              <CornerPlayer />
+              <FooterInfo />
 
-            {ELECTRON && <AutoUpdater />}
+              {ELECTRON && <AutoUpdater />}
 
-            <NetworkStatusIndicator />
-          </FeedColumn>
+              <NetworkStatusIndicator />
+            </FeedColumn>
+          </DndContext>
         </FeedResponsiveResizerContainer>
       </AppLayoutGridContainerProvider>
 
@@ -166,15 +206,21 @@ export function Component() {
 
 const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
   const feedColWidth = useUISettingKey("feedColWidth")
+  const [elementRef, _setElementRef] = useState<HTMLDivElement | null>(null)
+  const setElementRef = React.useCallback((el: HTMLDivElement | null) => {
+    _setElementRef(el)
+    setRootContainerElement(el)
+  }, [])
+  React.useImperativeHandle(ref, () => elementRef!)
   return (
     <div
-      ref={ref}
+      ref={setElementRef}
       style={
         {
           "--fo-feed-col-w": `${feedColWidth}px`,
         } as any
       }
-      className="relative z-0 flex h-screen overflow-hidden"
+      className="relative z-0 flex h-screen overflow-hidden print:h-auto print:overflow-auto"
       onContextMenu={preventDefault}
     >
       {children}
@@ -214,8 +260,8 @@ const FeedResponsiveResizerContainer = ({
 
       const uiSettings = getUISettings()
       const feedColumnTempShow = getFeedColumnTempShow()
-      const isInEntryContentWideMode = uiSettings.wideMode
-      if (mouseY < 100 && isInEntryContentWideMode) return
+      const isInEntryContentWideMode = uiSettings.wideMode || getIsZenMode()
+      if (mouseY < 200 && isInEntryContentWideMode) return
       const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
       if (mouseX < threshold) {
@@ -264,10 +310,11 @@ const FeedResponsiveResizerContainer = ({
   return (
     <>
       <div
+        data-hide-in-print
         className={cn(
           "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-[2]",
-          feedColumnTempShow && !feedColumnShow && "shadow-drawer-to-right z-[12] border-r",
+          feedColumnTempShow && !feedColumnShow && "shadow-drawer-to-right z-[12]",
           !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
           !isDragging ? "duration-200" : "",
         )}
@@ -281,6 +328,7 @@ const FeedResponsiveResizerContainer = ({
       </div>
 
       <div
+        data-hide-in-print
         className={!isDragging ? "duration-200" : ""}
         style={{
           width: feedColumnShow ? `${position}px` : 0,
@@ -355,4 +403,28 @@ const NotSupport = () => {
       </div>
     </div>
   )
+}
+
+if (isDev) {
+  DebugRegistry.add("New User Guide", () => {
+    import("~/modules/new-user-guide/guide-modal-content").then((m) => {
+      window.presentModal({
+        title: "New User Guide",
+        content: ({ dismiss }) => (
+          <m.GuideModalContent
+            onClose={() => {
+              dismiss()
+            }}
+          />
+        ),
+
+        CustomModalComponent: PlainModal,
+        modalContainerClassName: "flex items-center justify-center",
+
+        canClose: false,
+        clickOutsideToDismiss: false,
+        overlay: true,
+      })
+    })
+  })
 }

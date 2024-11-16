@@ -3,9 +3,11 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { appLog } from "~/lib/log"
 
-const slateTime = 600000 // 10min
+const defaultStaleTime = 600_000 // 10min
+const maxStaleTime = 6 * 60 * (60 * 1000) // 6hr
 
 export class ElectronCloseEvent extends Event {
   static type = "electron-close"
@@ -20,6 +22,10 @@ export class ElectronShowEvent extends Event {
   }
 }
 
+const useSlateTime = () => {
+  const reduceRefetch = useGeneralSettingKey("reduceRefetch")
+  return reduceRefetch ? maxStaleTime : defaultStaleTime
+}
 /**
  * Add a event listener to invalidate all queries
  */
@@ -41,6 +47,8 @@ const InvalidateQueryProviderElectron = () => {
       document.removeEventListener(ElectronCloseEvent.type, handler)
     }
   }, [queryClient])
+
+  const slateTime = useSlateTime()
 
   useEffect(() => {
     const handler = () => {
@@ -81,6 +89,8 @@ const InvalidateQueryProviderWebApp = () => {
   const currentVisibilityRef = useRef(!document.hidden)
 
   const pageVisibility = usePageVisibility()
+
+  const slateTime = useSlateTime()
 
   useEffect(() => {
     if (currentVisibilityRef.current === pageVisibility) {

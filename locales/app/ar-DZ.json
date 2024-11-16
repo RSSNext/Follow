@@ -104,7 +104,7 @@
   "feed_view_type.pictures": "صور",
   "feed_view_type.social_media": "وسائل التواصل الاجتماعي",
   "feed_view_type.videos": "فيديوهات",
-  "mark_all_read_button.auto_confirm_info": "سيتم التأكيد تلقائيًا بعد 3 ثوانٍ.",
+  "mark_all_read_button.auto_confirm_info": "سيتم التأكيد تلقائيًا بعد {{countdown}} ثوانٍ.",
   "mark_all_read_button.confirm": "تأكيد",
   "mark_all_read_button.confirm_mark_all": "هل تريد تحديد <which /> كمقروء؟",
   "mark_all_read_button.confirm_mark_all_info": "تأكيد تحديد الكل كمقروء؟",

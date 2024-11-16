@@ -1,11 +1,13 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { SessionProvider, signIn, useSession } from "@hono/auth-js/react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { useSignOut } from "~/hooks/biz/useSignOut"
+import { apiClient } from "~/lib/api-fetch"
 import { LOGIN_CALLBACK_URL, loginHandler } from "~/lib/auth"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 
@@ -26,39 +28,32 @@ function Login() {
   const provider = urlParams.get("provider")
 
   const isAuthenticated = status === "authenticated"
-  const onOpenInWebApp = () => {
-    if (isAuthenticated) {
-      navigate("/")
-    }
-  }
 
   const { t } = useTranslation("external")
 
   useEffect(() => {
-    if (!window.electron && provider) {
-      if (status === "authenticated") {
-        signOut()
-      }
-      if (status === "unauthenticated") {
-        signIn(provider, {
-          callbackUrl: LOGIN_CALLBACK_URL,
-        })
-      }
+    if (!window.electron && provider && status === "unauthenticated") {
+      signIn(provider, {
+        callbackUrl: LOGIN_CALLBACK_URL,
+      })
       setRedirecting(true)
     }
   }, [status])
 
+  const getCallbackUrl = async () => {
+    const { data } = await apiClient["auth-app"]["new-session"].$post({})
+    return {
+      url: `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}&userId=${data.userId}`,
+      userId: data.userId,
+    }
+  }
+
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
       <Logo className="size-20" />
-      {!isAuthenticated ? (
+      {!isAuthenticated && (
         <h1 className="text-3xl font-bold">
           {t("login.logInTo")}
-          {` ${APP_NAME}`}
-        </h1>
-      ) : (
-        <h1 className="-mb-6 text-3xl font-bold">
-          {t("login.welcomeTo")}
           {` ${APP_NAME}`}
         </h1>
       )}
@@ -67,27 +62,42 @@ function Login() {
       ) : (
         <div className="flex flex-col gap-3">
           {isAuthenticated ? (
-            <>
-              <div className="center flex">
-                <UserAvatar className="gap-8 px-10 py-4 text-2xl" />
-                <Button variant="ghost" onClick={signOut}>
-                  <i className="i-mingcute-exit-line" />
-                </Button>
+            <div className="flex w-full flex-col items-center justify-center gap-10 px-4">
+              <div className="relative flex items-center justify-center">
+                <UserAvatar className="gap-4 px-10 py-4 text-2xl" />
+                <div className="absolute right-0">
+                  <Button variant="ghost" onClick={signOut}>
+                    <i className="i-mingcute-exit-line text-xl" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center justify-center gap-4">
-                <Button variant="outline" onClick={onOpenInWebApp}>
-                  {t("login.backToWebApp")}
-                </Button>
+              <h2 className="text-center">
+                {t("redirect.successMessage", { app_name: APP_NAME })} <br />
+                <br />
+                {t("redirect.instruction", { app_name: APP_NAME })}
+              </h2>
+              <div className="center flex flex-col gap-20 sm:flex-row">
                 <Button
-                  variant="primary"
+                  variant="text"
+                  className="h-14 text-base"
                   onClick={() => {
-                    navigate("/redirect?app=follow")
+                    navigate("/")
                   }}
                 >
-                  {t("login.openApp")}
+                  {t("redirect.continueInBrowser")}
+                </Button>
+
+                <Button
+                  className="h-14 !rounded-full px-5 text-lg"
+                  onClick={async () => {
+                    const { url } = await getCallbackUrl()
+                    window.open(url, "_top")
+                  }}
+                >
+                  {t("redirect.openApp", { app_name: APP_NAME })}
                 </Button>
               </div>
-            </>
+            </div>
           ) : (
             <>
               <Button

@@ -20,7 +20,6 @@ const getFeedIconSrc = ({
   fallback?: boolean
   proxy?: { height: number; width: number }
 } = {}) => {
-  // src ? getProxyUrl(src) : "";
   if (src) {
     if (proxy) {
       return [
@@ -73,6 +72,10 @@ type FeedIconFeed =
   | FeedOrListRespModel
 
 type FeedIconEntry = Pick<CombinedEntryModel["entries"], "media" | "authorAvatar">
+const fadeInVariant = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+}
 export function FeedIcon({
   feed,
   entry,
@@ -82,6 +85,7 @@ export function FeedIcon({
   fallback = true,
   siteUrl,
   useMedia,
+  disableFadeIn,
 }: {
   feed?: FeedIconFeed | null
   entry?: FeedIconEntry | null
@@ -95,6 +99,7 @@ export function FeedIcon({
   fallback?: boolean
 
   useMedia?: boolean
+  disableFadeIn?: boolean
 }) {
   const image =
     (useMedia
@@ -157,7 +162,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
-          <m.img style={sizeStyle} initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
+          <m.img style={sizeStyle} {...(disableFadeIn ? {} : fadeInVariant)} />
         </PlatformIcon>
       )
       break
@@ -173,8 +178,7 @@ export function FeedIcon({
           <m.img
             className={cn("mr-2", className)}
             style={sizeStyle}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            {...(disableFadeIn ? {} : fadeInVariant)}
           />
         </PlatformIcon>
       )

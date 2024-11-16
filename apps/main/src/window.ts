@@ -4,11 +4,15 @@ import { fileURLToPath } from "node:url"
 import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { BrowserWindow, screen, shell } from "electron"
+import { app, BrowserWindow, screen, shell } from "electron"
+import type { Event } from "electron/main"
 
+import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
+import { t } from "./lib/i18n"
 import { store } from "./lib/store"
+import { getTrayConfig } from "./lib/tray"
 import { refreshBound } from "./lib/utils"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
@@ -91,12 +95,42 @@ export function createWindow(
   })
 
   window.on("ready-to-show", () => {
-    window?.show()
+    const shouldShowWindow =
+      !app.getLoginItemSettings().wasOpenedAsHidden && !process.argv.includes(START_IN_TRAY_ARGS)
+    if (shouldShowWindow) window.show()
   })
 
   window.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: "deny" }
+  })
+
+  const handleExternalProtocol = async (e: Event, url: string, window: BrowserWindow) => {
+    const { protocol } = new URL(url)
+    if (protocol === "http:" || protocol === "https:" || protocol === "follow:") {
+      return
+    }
+    e.preventDefault()
+
+    const caller = callWindowExpose(window)
+    const confirm = await caller.dialog.ask({
+      title: "Open External App?",
+      message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
+      confirmText: t("dialog.open"),
+      cancelText: t("dialog.cancel"),
+    })
+    if (!confirm) {
+      return
+    }
+    shell.openExternal(url)
+  }
+
+  // Handle main window external links
+  window.webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
+
+  // Handle webview external links
+  window.webContents.on("did-attach-webview", (_, webContents) => {
+    webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
   })
 
   // HMR for renderer base on electron-vite cli.
@@ -212,7 +246,8 @@ export const createMainWindow = () => {
   windows.mainWindow = window
 
   window.on("close", (event) => {
-    if (isMacOS) {
+    const minimizeToTray = getTrayConfig()
+    if (isMacOS || minimizeToTray) {
       event.preventDefault()
       if (window.isFullScreen()) {
         window.once("leave-full-screen", () => {
@@ -280,7 +315,7 @@ export const getMainWindow = () => windows.mainWindow
 
 export const getMainWindowOrCreate = () => {
   if (!windows.mainWindow) {
-    createMainWindow()
+    return createMainWindow()
   }
   return windows.mainWindow
 }

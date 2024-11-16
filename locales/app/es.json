@@ -70,7 +70,7 @@
   "feed_view_type.pictures": "Imágenes",
   "feed_view_type.social_media": "Redes Sociales",
   "feed_view_type.videos": "Videos",
-  "mark_all_read_button.auto_confirm_info": "Confirmación automática después de 3 segundos.",
+  "mark_all_read_button.auto_confirm_info": "Confirmación automática después de {{countdown}} segundos.",
   "mark_all_read_button.confirm": "Confirmar",
   "mark_all_read_button.confirm_mark_all": "¿Marcar <which /> como leído?",
   "mark_all_read_button.confirm_mark_all_info": "¿Confirmar marcar todo como leído?",

@@ -18,11 +18,12 @@ import { bundledThemesInfo } from "shiki/themes"
 import {
   getUISettings,
   setUISetting,
+  useIsZenMode,
+  useToggleZenMode,
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
 } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { isElectronBuild } from "~/constants"
 import { useSetTheme } from "~/hooks/common"
@@ -246,22 +247,14 @@ export const AppThemeSegment = () => {
 
 const ZenMode = () => {
   const { t } = useTranslation("settings")
-  const feedColumnShow = useFeedColumnShow()
-  const isWideMode = useUISettingKey("wideMode")
+  const isZenMode = useIsZenMode()
+  const toggleZenMode = useToggleZenMode()
   return (
     <SettingItemGroup>
       <SettingSwitch
-        checked={!feedColumnShow && isWideMode}
+        checked={isZenMode}
         className="mt-4"
-        onCheckedChange={(checked) => {
-          if (checked) {
-            setFeedColumnShow(false)
-            setUISetting("wideMode", true)
-          } else {
-            setFeedColumnShow(true)
-            setUISetting("wideMode", false)
-          }
-        }}
+        onCheckedChange={toggleZenMode}
         label={t("appearance.zen_mode.label")}
       />
       <SettingDescription>{t("appearance.zen_mode.description")}</SettingDescription>
@@ -320,7 +313,7 @@ const CustomCSS = () => {
             resizeable: true,
             resizeDefaultSize: {
               width: 700,
-              height: 400,
+              height: window.innerHeight - 200,
             },
           })
         }}
@@ -390,7 +383,9 @@ const CustomCSSModal = () => {
           variant="outline"
           onClick={(e) => {
             e.preventDefault()
+
             setUISetting("customCSS", initialCSS.current)
+
             forceUpdate()
           }}
         >
