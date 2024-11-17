@@ -33,11 +33,12 @@ import { useInboxById } from "~/store/inbox/hooks"
 import { CommandIdButton } from "../command/command-button"
 import { COMMAND_ID } from "../command/commands/id"
 import { useCommandHotkey } from "../command/hooks/use-register-hotkey"
+import { defineCommandArgsArray } from "../command/registry/command"
 import { ImageGallery } from "./actions/picture-gallery"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
-const EntryActions = ({ entryId }: { entryId: string }) => {
+const EntryHeaderActions = ({ entryId }: { entryId: string }) => {
   const entry = useEntry(entryId)
 
   const feed = useFeedById(entry?.feedId, (feed) => {
@@ -60,81 +61,91 @@ const EntryActions = ({ entryId }: { entryId: string }) => {
     args: [{ entryId }],
   })
 
-  return (
-    <>
-      {/* integration */}
-      <CommandIdButton commandId={COMMAND_ID.integration.saveToEagle} args={[{ entryId }]} />
-      <CommandIdButton commandId={COMMAND_ID.integration.saveToReadwise} args={[{ entryId }]} />
-      <CommandIdButton commandId={COMMAND_ID.integration.saveToInstapaper} args={[{ entryId }]} />
-      <CommandIdButton commandId={COMMAND_ID.integration.saveToOmnivore} args={[{ entryId }]} />
-      <CommandIdButton commandId={COMMAND_ID.integration.saveToObsidian} args={[{ entryId }]} />
-      <CommandIdButton commandId={COMMAND_ID.integration.saveToOutline} args={[{ entryId }]} />
+  const buttonsConfig = defineCommandArgsArray<{
+    when?: boolean
+    shortcut?: string
+    active?: boolean
+  }>([
+    { commandId: COMMAND_ID.integration.saveToEagle, args: [{ entryId }] },
+    { commandId: COMMAND_ID.integration.saveToReadwise, args: [{ entryId }] },
+    { commandId: COMMAND_ID.integration.saveToInstapaper, args: [{ entryId }] },
+    { commandId: COMMAND_ID.integration.saveToOmnivore, args: [{ entryId }] },
+    { commandId: COMMAND_ID.integration.saveToObsidian, args: [{ entryId }] },
+    { commandId: COMMAND_ID.integration.saveToOutline, args: [{ entryId }] },
+    {
+      when: !isInbox && feed?.ownerUserId !== whoami()?.id,
+      commandId: COMMAND_ID.entry.tip,
+      args: [{ entryId, feedId: feed?.id }],
+      shortcut: shortcuts.entry.tip.key,
+    },
+    {
+      when: !!entry?.collections,
+      commandId: COMMAND_ID.entry.unstar,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.toggleStarred.key,
+    },
+    {
+      when: !entry?.collections,
+      commandId: COMMAND_ID.entry.star,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.toggleStarred.key,
+    },
+    {
+      when: isInbox,
+      commandId: COMMAND_ID.entry.delete,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.copyLink.key,
+    },
+    {
+      when: !!entry?.entries.url,
+      commandId: COMMAND_ID.entry.copyLink,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.copyTitle.key,
+    },
+    {
+      when: !isShowSourceContent && !!entry?.entries.url,
+      commandId: COMMAND_ID.entry.viewSourceContent,
+      args: [{ entryId }],
+    },
+    {
+      when: isShowSourceContent,
+      commandId: COMMAND_ID.entry.viewEntryContent,
+      args: [],
+      active: true,
+    },
+    {
+      when: !!entry?.entries.url && "share" in navigator,
+      commandId: COMMAND_ID.entry.share,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.share.key,
+    },
+    {
+      when: !!entry && !entry.read && !entry.collections && !inList,
+      commandId: COMMAND_ID.entry.read,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.toggleRead.key,
+    },
+    {
+      when: !!entry && !!entry.read && !entry.collections && !inList,
+      commandId: COMMAND_ID.entry.unread,
+      args: [{ entryId }],
+      shortcut: shortcuts.entry.toggleRead.key,
+    },
+  ])
 
-      {!isInbox && feed?.ownerUserId !== whoami()?.id && (
+  return buttonsConfig
+    .filter((config) => ("when" in config ? config.when : true))
+    .map((config) => {
+      return (
         <CommandIdButton
-          commandId={COMMAND_ID.entry.tip}
-          args={[{ entryId, feedId: feed?.id }]}
-          shortcut={shortcuts.entry.tip.key}
+          key={config.commandId}
+          commandId={config.commandId}
+          args={config.args}
+          shortcut={config.shortcut}
+          active={config.active}
         />
-      )}
-
-      {entry?.collections ? (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.unstar}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.toggleStarred.key}
-        />
-      ) : (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.star}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.toggleStarred.key}
-        />
-      )}
-
-      {isInbox && (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.delete}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.copyLink.key}
-        />
-      )}
-      {entry?.entries.url && (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.copyLink}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.copyTitle.key}
-        />
-      )}
-      {!isShowSourceContent && !!entry?.entries.url && (
-        <CommandIdButton commandId={COMMAND_ID.entry.viewSourceContent} args={[{ entryId }]} />
-      )}
-      {isShowSourceContent && (
-        <CommandIdButton commandId={COMMAND_ID.entry.viewEntryContent} args={[]} active />
-      )}
-      {!!entry?.entries.url && "share" in navigator && (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.share}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.share.key}
-        />
-      )}
-      {entry && !entry.read && !entry?.collections && !inList && (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.read}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.toggleRead.key}
-        />
-      )}
-      {entry && !!entry.read && !entry.collections && !inList && (
-        <CommandIdButton
-          commandId={COMMAND_ID.entry.unread}
-          args={[{ entryId }]}
-          shortcut={shortcuts.entry.toggleRead.key}
-        />
-      )}
-    </>
-  )
+      )
+    })
 }
 
 function EntryHeaderImpl({
@@ -206,7 +217,7 @@ function EntryHeaderImpl({
           {!compact && <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />}
 
           <SpecialActions id={entry.entries.id} />
-          <EntryActions entryId={entry.entries.id} />
+          <EntryHeaderActions entryId={entry.entries.id} />
         </div>
       </div>
     </div>

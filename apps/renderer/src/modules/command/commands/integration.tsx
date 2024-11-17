@@ -18,6 +18,7 @@ import { useIntegrationSettingKey } from "~/atoms/settings/integration"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
+import type { FlatEntryModel } from "~/store/entry"
 import { useEntryStore } from "~/store/entry"
 
 import { useRegisterCommandEffect } from "../hooks/use-register-command-effect"
@@ -307,6 +308,22 @@ const useRegisterOmnivoreCommands = () => {
   )
 }
 
+const getEntryContentAsMarkdown = async (entry: FlatEntryModel) => {
+  const isReadabilityReady = getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
+  const content =
+    (isReadabilityReady
+      ? getReadabilityContent()[entry.entries.id].content
+      : entry.entries.content) || ""
+  const [toMarkdown, toMdast, gfmTableToMarkdown] = await Promise.all([
+    import("mdast-util-to-markdown").then((m) => m.toMarkdown),
+    import("hast-util-to-mdast").then((m) => m.toMdast),
+    import("mdast-util-gfm-table").then((m) => m.gfmTableToMarkdown),
+  ])
+  return toMarkdown(toMdast(parseHtml(content).hastTree), {
+    extensions: [gfmTableToMarkdown()],
+  })
+}
+
 const useRegisterObsidianCommands = () => {
   const { t } = useTranslation()
 
@@ -346,19 +363,13 @@ const useRegisterObsidianCommands = () => {
           id: COMMAND_ID.integration.saveToObsidian,
           label: t("entry_actions.save_to_obsidian"),
           icon: <SimpleIconsObsidian />,
-          run: ({ entryId }) => {
+          run: async ({ entryId }) => {
             const entry = useEntryStore.getState().flatMapEntries[entryId]
             if (!entry) {
               toast.error("Failed to save to Obsidian: entry is not available", { duration: 3000 })
               return
             }
-            const isReadabilityReady =
-              getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
-            const content =
-              (isReadabilityReady
-                ? getReadabilityContent()[entry.entries.id].content
-                : entry.entries.content) || ""
-            const markdownContent = parseHtml(content).toMarkdown()
+            const markdownContent = await getEntryContentAsMarkdown(entry)
             window.analytics?.capture("integration", {
               type: "obsidian",
               event: "save",
@@ -399,15 +410,6 @@ const useRegisterOutlineCommands = () => {
               toast.error("Failed to save to Outline: entry is not available", { duration: 3000 })
               return
             }
-            const getEntryContentAsMarkdown = () => {
-              const isReadabilityReady =
-                getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
-              const content =
-                (isReadabilityReady
-                  ? getReadabilityContent()[entry.entries.id].content
-                  : entry.entries.content) || ""
-              return parseHtml(content).toMarkdown()
-            }
 
             try {
               const request = async (method: string, params: Record<string, unknown>) => {
@@ -427,7 +429,7 @@ const useRegisterOutlineCommands = () => {
                 })
                 collectionId = collection.data.id
               }
-              const markdownContent = getEntryContentAsMarkdown()
+              const markdownContent = await getEntryContentAsMarkdown(entry)
               await request("documents.create", {
                 title: entry.entries.title,
                 text: markdownContent,
