@@ -6,7 +6,7 @@ import { initializeDefaultUISettings } from "~/atoms/settings/ui"
 import { appLog } from "~/lib/log"
 import { EntryService, FeedService, FeedUnreadService, SubscriptionService } from "~/services"
 import { InboxService } from "~/services/inbox"
-import type { Hydable } from "~/services/interface"
+import type { Hydratable } from "~/services/interface"
 import { ListService } from "~/services/list"
 
 export const setHydrated = (v: boolean) => {
@@ -17,7 +17,7 @@ export const hydrateDatabaseToStore = async () => {
   async function hydrate() {
     const now = Date.now()
 
-    const hydrates: Hydable[] = [
+    const hydrates: Hydratable[] = [
       FeedService,
       SubscriptionService,
       FeedUnreadService,

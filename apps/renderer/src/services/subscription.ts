@@ -5,11 +5,11 @@ import type { SubscriptionFlatModel } from "~/store/subscription"
 import { subscriptionActions } from "~/store/subscription/store"
 
 import { BaseService } from "./base"
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
 type SubscriptionModelWithId = SubscriptionFlatModel & { id: string }
 
-class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> implements Hydable {
+class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> implements Hydratable {
   constructor() {
     super(browserDB.subscriptions)
   }

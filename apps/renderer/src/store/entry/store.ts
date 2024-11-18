@@ -344,6 +344,10 @@ class EntryActions {
               ])
             }
           }
+
+          if (item.settings && draft.flatMapEntries[item.entries.id]) {
+            draft.flatMapEntries[item.entries.id].settings = item.settings
+          }
         }
 
         return draft

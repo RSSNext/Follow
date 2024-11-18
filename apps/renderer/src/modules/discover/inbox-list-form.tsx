@@ -19,31 +19,26 @@ import { useEventCallback } from "usehooks-ts"
 import { useUserRole } from "~/atoms/user"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { MAX_TRIAL_USER_INBOX_SUBSCRIPTION } from "~/constants/limit"
 import { CustomSafeError } from "~/errors/CustomSafeError"
 import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
 import { inboxActions, useInboxById } from "~/store/inbox"
-import { subscriptionActions, useInboxSubscriptionCount } from "~/store/subscription"
+import { subscriptionActions } from "~/store/subscription"
 
 import { useActivationModal } from "../activation"
 import { InboxForm } from "./inbox-form"
 
 const useCanCreateMoreInboxAndNotify = () => {
   const role = useUserRole()
-  const currentInboxCount = useInboxSubscriptionCount()
   const presentActivationModal = useActivationModal()
 
   return useEventCallback(() => {
     if (role === UserRole.Trial) {
-      const can = currentInboxCount < MAX_TRIAL_USER_INBOX_SUBSCRIPTION
+      const can = false
       if (!can) {
         presentActivationModal()
 
-        throw new CustomSafeError(
-          `Trial user cannot create more inboxes, limit: ${MAX_TRIAL_USER_INBOX_SUBSCRIPTION}, current: ${currentInboxCount}`,
-          true,
-        )
+        throw new CustomSafeError(`Trial user cannot create more inboxes`, true)
       }
       return can
     } else {

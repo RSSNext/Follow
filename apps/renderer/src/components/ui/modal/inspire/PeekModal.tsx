@@ -6,7 +6,6 @@ import { Link } from "react-router-dom"
 
 import { m } from "~/components/common/Motion"
 
-import { microReboundPreset } from "../../constants/spring"
 import { FixedModalCloseButton } from "../components/close"
 import { useCurrentModal, useModalStack } from "../stacked/hooks"
 
@@ -25,11 +24,9 @@ export const PeekModal = (
   return (
     <div className="relative mx-auto mt-[10vh] max-w-full overflow-auto px-2 scrollbar-none lg:max-w-[65rem] lg:p-0">
       <m.div
-        initial={{ opacity: 0.5, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 50 }}
-        transition={microReboundPreset}
-        className="scrollbar-none"
+        transition={{ duration: 0.2 }}
+        className="motion-preset-slide-up overflow-hidden motion-duration-200 motion-ease-spring-smooth scrollbar-none"
       >
         <InPeekModal.Provider value={true}>{children}</InPeekModal.Provider>
       </m.div>
