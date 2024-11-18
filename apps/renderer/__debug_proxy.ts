@@ -63,8 +63,4 @@ injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_
   document.head.prepend($script)
 }
 
-const apiMap = {
-  "https://dev.follow.is": "https://api.dev.follow.is",
-  "https://app.follow.is": "https://api.follow.is",
-}
-injectScript(apiMap[window.location.origin])
+injectScript(import.meta.env.VITE_API_URL)
