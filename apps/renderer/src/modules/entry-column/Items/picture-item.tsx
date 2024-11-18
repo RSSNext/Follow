@@ -55,7 +55,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
             }}
           />
         ) : (
-          <div className="center bg-muted  text-muted-foreground aspect-square w-full flex-col gap-1 rounded-md text-xs">
+          <div className="center aspect-square  w-full flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
             {t("entry_content.no_content")}
           </div>
@@ -156,7 +156,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
             </AnimatePresence>
           </MasonryItemFixedDimensionWrapper>
         ) : (
-          <div className="center bg-muted text-muted-foreground aspect-video flex-col gap-1 rounded-md text-xs">
+          <div className="center aspect-video flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
             No media available
           </div>
@@ -207,7 +207,7 @@ const MasonryItemFixedDimensionWrapper = (
 
 export function PictureItemStateLess({ entry, feed }: EntryItemStatelessProps) {
   return (
-    <div className="bg-theme-background relative mx-auto max-w-md rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
+    <div className="relative mx-auto max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
       <div className="relative">
         <div className="p-1.5">
           <div className="relative flex gap-2 overflow-x-auto">
@@ -257,7 +257,7 @@ export function PictureItemStateLess({ entry, feed }: EntryItemStatelessProps) {
 }
 
 export const PictureItemSkeleton = (
-  <div className="bg-theme-background relative max-w-md rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
+  <div className="relative max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
     <div className="relative">
       <div className="p-1.5">
         <div className="relative flex gap-2 overflow-x-auto">

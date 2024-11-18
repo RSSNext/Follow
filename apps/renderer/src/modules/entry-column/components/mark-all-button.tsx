@@ -65,7 +65,7 @@ export const MarkAllReadWithOverlay = forwardRef<
           label: (
             <span className="flex items-center gap-1">
               {t("mark_all_read_button.undo")}
-              <Kbd className="border-border inline-flex items-center border bg-transparent dark:text-white">
+              <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
                 Meta+Z
               </Kbd>
             </span>
@@ -150,7 +150,7 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
           transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        className="shadow-modal bg-theme-modal-background-opaque absolute z-50 shadow"
+        className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
         style={{
           left: -paddingLeft,
           top: rect.top,

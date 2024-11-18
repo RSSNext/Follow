@@ -131,7 +131,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
     )
 
     return (
-      <Focusable className="center group relative size-full" ref={wrapperRef}>
+      <Focusable className="group center relative size-full" ref={wrapperRef}>
         {element}
 
         <div className="center pointer-events-none absolute inset-0">

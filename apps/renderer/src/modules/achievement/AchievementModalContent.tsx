@@ -206,7 +206,7 @@ export const AchievementModalContent: FC = () => {
 
       <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
-      <small className="text-theme-vibrancyFg mt-1 gap-1">
+      <small className="mt-1 gap-1 text-theme-vibrancyFg">
         {t("achievement.description")}
         <sup className="inline-block translate-y-1 text-xs">*</sup>
       </small>
@@ -230,7 +230,7 @@ export const AchievementModalContent: FC = () => {
 
                       {copy.video && achievement.type === "received" && (
                         <MotionButtonBase
-                          className="hover:text-accent p-1 duration-200"
+                          className="p-1 duration-200 hover:text-accent"
                           onClick={() => {
                             presentBadgeVideo(achievement.actionId)
                           }}
@@ -239,7 +239,7 @@ export const AchievementModalContent: FC = () => {
                         </MotionButtonBase>
                       )}
                     </div>
-                    <div className="text-muted-foreground flex items-center text-sm">
+                    <div className="flex items-center text-sm text-muted-foreground">
                       {t(copy.description)}
                     </div>
                   </div>
@@ -297,7 +297,7 @@ export const AchievementModalContent: FC = () => {
         </ul>
       </ScrollArea>
 
-      <p className="text-muted-foreground mt-4 pb-2 text-xs">
+      <p className="mt-4 pb-2 text-xs text-muted-foreground">
         * {t("achievement.nft_coming_soon")}
       </p>
     </div>
@@ -418,19 +418,19 @@ const IncompleteButton: FC<{
           <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
             <i
               className={cn(
-                "i-mgc-refresh-2-cute-re text-accent size-5",
+                "i-mgc-refresh-2-cute-re size-5 text-accent",
                 checkPending && "animate-spin",
               )}
             />
           </div>
           <div className="duration-200 group-hover:opacity-30">
             <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
-              <small className="text-muted-foreground shrink-0 text-xs leading-tight">
+              <small className="shrink-0 text-xs leading-tight text-muted-foreground">
                 {achievement.progress} / {achievement.progressMax}
               </small>
-              <span className="bg-accent/10 relative h-1 w-full overflow-hidden rounded-full">
+              <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
                 <span
-                  className="bg-accent absolute -left-3 top-0 inline-block h-1 rounded-full"
+                  className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
                   style={{
                     width: `calc(${Math.min(
                       (achievement.progress / achievement.progressMax) * 100,

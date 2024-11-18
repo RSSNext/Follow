@@ -40,7 +40,7 @@ const Wrapper: Component<{
         exit={{
           opacity: 0,
         }}
-        className="safe-inset-top-4 fixed right-4 flex items-center"
+        className="fixed right-4 flex items-center safe-inset-top-4"
       >
         <FixedModalCloseButton onClick={dismiss} />
       </m.div>
@@ -56,7 +56,7 @@ const Wrapper: Component<{
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
             sideContent
-              ? "bg-native min-w-96 items-center justify-center rounded-l-xl"
+              ? "min-w-96 items-center justify-center rounded-l-xl bg-native"
               : "rounded-xl",
           )}
         >
@@ -64,7 +64,7 @@ const Wrapper: Component<{
           <RootPortal to={sideContent ? null : undefined}>
             <div
               className={
-                "text-theme-vibrancyFg [&_button]:hover:text-theme-vibrancyFg pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 dark:text-white/70 dark:[&_button]:hover:text-white"
+                "pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
               }
               onClick={stopPropagation}
             >
@@ -95,7 +95,7 @@ const Wrapper: Component<{
         </div>
         {!!sideContent && (
           <div
-            className="bg-theme-background box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl px-2 pt-1"
+            className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-theme-background px-2 pt-1"
             onClick={stopPropagation}
           >
             {sideContent}
@@ -252,7 +252,7 @@ export const PreviewMediaContent: FC<{
           <div>
             <div
               className={cn(
-                "animate-in fade-in-0 slide-in-from-bottom-6 absolute left-4 text-sm tabular-nums text-white/60",
+                "absolute left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6",
                 isVideo ? "bottom-12" : "bottom-4",
               )}
             >
@@ -262,7 +262,7 @@ export const PreviewMediaContent: FC<{
               tabIndex={-1}
               onClick={stopPropagation}
               className={cn(
-                "center animate-in fade-in-0 slide-in-from-bottom-6 absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200",
+                "center absolute left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6",
                 isVideo ? "bottom-12" : "bottom-4",
               )}
             >
@@ -477,7 +477,7 @@ const FallbackableImage: FC<
               href={src}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-accent underline duration-200"
+              className="underline duration-200 hover:text-accent"
             >
               visit the original image
             </a>{" "}

@@ -70,7 +70,7 @@ export const TransactionsSection: Component = ({ className }) => {
       </Tabs>
       <div className={cn("w-fit min-w-0 grow overflow-x-auto", className)}>
         <Table className="w-full table-fixed">
-          <TableHeader className="bg-theme-background sticky top-0">
+          <TableHeader className="sticky top-0 bg-theme-background">
             <TableRow className="[&_*]:!pl-0 [&_*]:!font-semibold">
               <TableHead>{t("wallet.transactions.type")}</TableHead>
               <TableHead>{t("wallet.transactions.amount")}</TableHead>
@@ -200,12 +200,12 @@ const UserRenderer = ({
       onClick={() => {
         if (user?.id) presentUserModal(user.id)
       }}
-      className="cursor-button flex w-full min-w-0 items-center"
+      className="flex w-full min-w-0 cursor-button items-center"
     >
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
       ) : (
-        <Avatar className="animate-in fade-in-0 aspect-square size-4 duration-200">
+        <Avatar className="aspect-square size-4 duration-200 animate-in fade-in-0">
           <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
           <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
         </Avatar>

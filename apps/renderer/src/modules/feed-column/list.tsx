@@ -275,7 +275,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           <div
             data-active={feedId === FEED_COLLECTION_LIST}
             className={cn(
-              "cursor-menu mt-1 flex h-8 w-full shrink-0 items-center gap-2 rounded-md px-2.5",
+              "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
               feedColumnStyles.item,
             )}
             onClick={(e) => {
@@ -294,7 +294,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           </div>
           {hasListData && (
             <>
-              <div className="text-theme-vibrancyFg mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors">
+              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
                 {t("words.lists")}
               </div>
               <SortByAlphabeticalList view={view} data={listsData} />
@@ -302,7 +302,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           )}
           {hasInboxData && (
             <>
-              <div className="text-theme-vibrancyFg mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors">
+              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
                 {t("words.inbox")}
               </div>
               <SortByAlphabeticalInbox view={view} data={inboxesData} />
@@ -314,7 +314,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
               {(hasListData || hasInboxData) && (
                 <div
                   className={cn(
-                    "text-theme-vibrancyFg mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors",
+                    "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
                     Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
                   )}
                 >
@@ -331,7 +331,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
                 <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
                   <Link
                     to="/discover"
-                    className="cursor-menu absolute inset-0 mt-[-3.75rem] flex h-full flex-1 flex-col items-center justify-center gap-2"
+                    className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
                     onClick={stopPropagation}
                   >
                     <i className="i-mgc-add-cute-re text-3xl" />
@@ -391,7 +391,7 @@ const ListHeader = ({ view }: { view: number }) => {
       >
         {view !== undefined && t(views[view].name)}
       </div>
-      <div className="lg:!text-theme-vibrancyFg ml-2 flex items-center gap-3 text-base text-zinc-400 lg:text-sm dark:text-zinc-600">
+      <div className="ml-2 flex items-center gap-3 text-base text-zinc-400 dark:text-zinc-600 lg:text-sm lg:!text-theme-vibrancyFg">
         <SortButton />
         {expansion ? (
           <i
@@ -462,9 +462,9 @@ const SortButton = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: 10 }}
                 transition={{ type: "spring", duration: 0.3 }}
-                className="border-border bg-theme-modal-background-opaque relative z-10 rounded-md border p-3 shadow-md dark:shadow-zinc-500/20"
+                className="relative z-10 rounded-md border border-border bg-theme-modal-background-opaque p-3 shadow-md dark:shadow-zinc-500/20"
               >
-                <HoverCard.Arrow className="fill-border -translate-x-4" />
+                <HoverCard.Arrow className="-translate-x-4 fill-border" />
                 <section className="w-[170px] text-center">
                   <span className="text-[13px]">{t("sidebar.select_sort_method")}</span>
                   <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
@@ -480,9 +480,9 @@ const SortButton = () => {
                           }}
                           key={`${by}-${order}`}
                           className={cn(
-                            "center border-border flex aspect-square rounded border",
+                            "center flex aspect-square rounded border border-border",
 
-                            "ring-accent/20 ring-0 duration-200",
+                            "ring-0 ring-accent/20 duration-200",
                             active && "border-accent bg-accent/5 ring-2",
                           )}
                         >
