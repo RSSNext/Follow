@@ -42,7 +42,7 @@ const AppNotificationContainer: FC = () => {
       }
 
       toast.info(payload.title, {
-        description: <Markdown>{payload.content}</Markdown>,
+        description: <Markdown className="text-sm">{payload.content}</Markdown>,
         duration: Infinity,
         closeButton: true,
       })
