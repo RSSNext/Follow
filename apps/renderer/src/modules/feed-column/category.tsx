@@ -18,6 +18,7 @@ import { useEventCallback, useOnClickOutside } from "usehooks-ts"
 
 import type { MenuItemInput } from "~/atoms/context-menu"
 import { useShowContextMenu } from "~/atoms/context-menu"
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useAddFeedToFeedList } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -51,13 +52,25 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore(
-    useCallback((state) => ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)), [ids]),
+    useCallback(
+      (state) =>
+        ids.sort((a, b) => {
+          const unreadCompare = (state.data[b] || 0) - (state.data[a] || 0)
+          if (unreadCompare !== 0) {
+            return unreadCompare
+          }
+          return a.localeCompare(b)
+        }),
+      [ids],
+    ),
   )
 
   const navigate = useNavigateEntry()
 
   const subscription = useSubscriptionByFeedId(ids[0])
-  const folderName = subscription?.category || subscription.defaultCategory
+  const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
+  const folderName =
+    subscription?.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
 
   const showCollapse = sortByUnreadFeedList.length > 1 || !!subscription?.category
 
@@ -294,7 +307,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                   onClick={() => {
                     setIsCategoryEditing(false)
                   }}
-                  className="center -ml-1 flex size-5 shrink-0 rounded-lg hover:bg-theme-button-hover"
+                  className="center hover:bg-theme-button-hover -ml-1 flex size-5 shrink-0 rounded-lg"
                 >
                   <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
                 </MotionButtonBase>
@@ -421,11 +434,11 @@ const RenameCategoryForm: FC<{
         name="category"
         autoFocus
         defaultValue={currentCategory}
-        className="w-full appearance-none bg-transparent caret-accent"
+        className="caret-accent w-full appearance-none bg-transparent"
       />
       <MotionButtonBase
         type="submit"
-        className="center -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 hover:bg-theme-button-hover dark:text-green-400"
+        className="center hover:bg-theme-button-hover -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 dark:text-green-400"
       >
         <i className="i-mgc-check-filled size-3" />
       </MotionButtonBase>

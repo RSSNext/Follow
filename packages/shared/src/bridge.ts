@@ -6,6 +6,17 @@ import type { GeneralSettings, UISettings } from "./interface/settings"
 
 const PREFIX = "__follow"
 
+// eslint-disable-next-line unused-imports/no-unused-vars
+declare const dialog: {
+  ask: (options: {
+    title: string
+    message: string
+    onConfirm?: () => void
+    onCancel?: () => void
+    confirmText?: string
+    cancelText?: string
+  }) => Promise<boolean>
+}
 interface RenderGlobalContext {
   /// Access Settings
   showSetting: (path?: string) => void
@@ -34,6 +45,7 @@ interface RenderGlobalContext {
 
   /// Utils
   toast: typeof toast
+  dialog: typeof dialog
   // URL
   getWebUrl: () => string
   getApiUrl: () => string
@@ -87,7 +99,7 @@ type AddPromise<T> = T extends (...args: infer A) => Promise<infer R>
   ? (...args: A) => Promise<R>
   : T extends (...args: infer A) => infer R
     ? (...args: A) => Promise<Awaited<R>>
-    : any
+    : unknown
 
 type Fn<T> = {
   [K in keyof T]: AddPromise<T[K]> &

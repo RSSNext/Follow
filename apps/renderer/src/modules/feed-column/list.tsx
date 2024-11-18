@@ -4,7 +4,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import {
@@ -16,12 +16,12 @@ import {
   useRef,
   useState,
 } from "react"
-import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
 import { useEventListener } from "usehooks-ts"
 
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -54,13 +54,17 @@ const useFeedsGroupedData = (view: FeedViewType) => {
 
   const data = useSubscriptionByView(view) || remoteData
 
+  const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
+
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
     const groupFolder = {} as Record<string, string[]>
 
     for (const subscription of data) {
-      const category = subscription.category || subscription.defaultCategory
+      const category =
+        subscription.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
+
       if (category) {
         if (!groupFolder[category]) {
           groupFolder[category] = []
@@ -70,7 +74,7 @@ const useFeedsGroupedData = (view: FeedViewType) => {
     }
 
     return groupFolder
-  }, [data])
+  }, [autoGroup, data])
 }
 
 const useListsGroupedData = (view: FeedViewType) => {
@@ -213,10 +217,29 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
             ref={selectoRef}
             rootContainer={document.body}
             dragContainer={"#feeds-area"}
-            dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
+            dragCondition={(e) => {
+              const inputEvent = e.inputEvent as MouseEvent
+              const target = inputEvent.target as HTMLElement
+              const closest = target.closest("[data-feed-id]") as HTMLElement | null
+              const dataFeedId = closest?.dataset.feedId
+
+              if (
+                dataFeedId &&
+                selectedFeedIds.includes(dataFeedId) &&
+                !isKeyForMultiSelectPressed(inputEvent)
+              )
+                return false
+
+              return true
+            }}
+            onDragStart={(e) => {
+              if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
+                setSelectedFeedIds([])
+              }
+            }}
             selectableTargets={["[data-feed-id]"]}
             continueSelect
-            hitRate={10}
+            hitRate={1}
             onSelect={(e) => {
               const allChanged = [...e.added, ...e.removed]
                 .map((el) => el.dataset.feedId)
@@ -252,7 +275,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           <div
             data-active={feedId === FEED_COLLECTION_LIST}
             className={cn(
-              "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
+              "cursor-menu mt-1 flex h-8 w-full shrink-0 items-center gap-2 rounded-md px-2.5",
               feedColumnStyles.item,
             )}
             onClick={(e) => {
@@ -271,7 +294,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           </div>
           {hasListData && (
             <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              <div className="text-theme-vibrancyFg mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors">
                 {t("words.lists")}
               </div>
               <SortByAlphabeticalList view={view} data={listsData} />
@@ -279,7 +302,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           )}
           {hasInboxData && (
             <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              <div className="text-theme-vibrancyFg mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors">
                 {t("words.inbox")}
               </div>
               <SortByAlphabeticalInbox view={view} data={inboxesData} />
@@ -291,7 +314,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
               {(hasListData || hasInboxData) && (
                 <div
                   className={cn(
-                    "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                    "text-theme-vibrancyFg mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors",
                     Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
                   )}
                 >
@@ -308,7 +331,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
                 <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
                   <Link
                     to="/discover"
-                    className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
+                    className="cursor-menu absolute inset-0 mt-[-3.75rem] flex h-full flex-1 flex-col items-center justify-center gap-2"
                     onClick={stopPropagation}
                   >
                     <i className="i-mgc-add-cute-re text-3xl" />
@@ -368,7 +391,7 @@ const ListHeader = ({ view }: { view: number }) => {
       >
         {view !== undefined && t(views[view].name)}
       </div>
-      <div className="ml-2 flex items-center gap-3 text-base text-zinc-400 dark:text-zinc-600 lg:text-sm lg:!text-theme-vibrancyFg">
+      <div className="lg:!text-theme-vibrancyFg ml-2 flex items-center gap-3 text-base text-zinc-400 lg:text-sm dark:text-zinc-600">
         <SortButton />
         {expansion ? (
           <i
@@ -439,9 +462,9 @@ const SortButton = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: 10 }}
                 transition={{ type: "spring", duration: 0.3 }}
-                className="relative z-10 rounded-md border border-border bg-theme-modal-background-opaque p-3 shadow-md dark:shadow-zinc-500/20"
+                className="border-border bg-theme-modal-background-opaque relative z-10 rounded-md border p-3 shadow-md dark:shadow-zinc-500/20"
               >
-                <HoverCard.Arrow className="-translate-x-4 fill-border" />
+                <HoverCard.Arrow className="fill-border -translate-x-4" />
                 <section className="w-[170px] text-center">
                   <span className="text-[13px]">{t("sidebar.select_sort_method")}</span>
                   <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
@@ -457,9 +480,9 @@ const SortButton = () => {
                           }}
                           key={`${by}-${order}`}
                           className={cn(
-                            "center flex aspect-square rounded border border-border",
+                            "center border-border flex aspect-square rounded border",
 
-                            "ring-0 ring-accent/20 duration-200",
+                            "ring-accent/20 ring-0 duration-200",
                             active && "border-accent bg-accent/5 ring-2",
                           )}
                         >

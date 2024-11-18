@@ -10,13 +10,13 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
+import { LazyDotLottie } from "~/components/common/LazyDotLottie"
 import type { ModalActionsInternal } from "~/components/ui/modal"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { getFetchErrorMessage } from "~/lib/error-parser"
@@ -84,7 +84,7 @@ export const ActivationModalContent = ({
               )}
               <FormControl>
                 <Input
-                  className="font-mono placeholder:font-default"
+                  className="placeholder:font-default font-mono"
                   placeholder={t("activation.title")}
                   {...field}
                 />
@@ -97,7 +97,7 @@ export const ActivationModalContent = ({
         />
         <div className="center relative flex">
           {showConfetti && (
-            <DotLottieReact
+            <LazyDotLottie
               className="absolute z-[1] size-[120px]"
               src={absoluteConfettiUrl}
               loop={false}

@@ -1,5 +1,6 @@
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { ActionButton, Button, IconButton } from "@follow/components/ui/button/index.js"
+import { Kbd, KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useCountdown } from "@follow/hooks"
 import { cn, getOS } from "@follow/utils/utils"
@@ -11,7 +12,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
-import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useI18n } from "~/hooks/common"
@@ -65,7 +65,7 @@ export const MarkAllReadWithOverlay = forwardRef<
           label: (
             <span className="flex items-center gap-1">
               {t("mark_all_read_button.undo")}
-              <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
+              <Kbd className="border-border inline-flex items-center border bg-transparent dark:text-white">
                 Meta+Z
               </Kbd>
             </span>
@@ -141,16 +141,16 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
       <m.div
         ref={setPopoverRef}
         initial={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         animate={{
-          y: isElectronWindows ? -10 : 0,
+          transform: `translateY(${isElectronWindows ? "-10px" : "0px"})`,
         }}
         exit={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
+        className="shadow-modal bg-theme-modal-background-opaque absolute z-50 shadow"
         style={{
           left: -paddingLeft,
           top: rect.top,

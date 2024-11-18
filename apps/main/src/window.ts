@@ -2,13 +2,16 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
+import { APP_PROTOCOL } from "@follow/shared"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { app, BrowserWindow, screen, shell } from "electron"
+import type { Event } from "electron/main"
 
 import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
+import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { getTrayConfig } from "./lib/tray"
 import { logger } from "./logger"
@@ -107,6 +110,36 @@ export function createWindow(
   window.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: "deny" }
+  })
+
+  const handleExternalProtocol = async (e: Event, url: string, window: BrowserWindow) => {
+    const { protocol } = new URL(url)
+
+    const ignoreProtocols = ["http", "https", APP_PROTOCOL, "file", "code", "cursor"]
+    if (ignoreProtocols.includes(protocol.slice(0, -1))) {
+      return
+    }
+    e.preventDefault()
+
+    const caller = callWindowExpose(window)
+    const confirm = await caller.dialog.ask({
+      title: t("dialog.openExternalApp.title"),
+      message: t("dialog.openExternalApp.message", { url, interpolation: { escapeValue: false } }),
+      confirmText: t("dialog.open"),
+      cancelText: t("dialog.cancel"),
+    })
+    if (!confirm) {
+      return
+    }
+    shell.openExternal(url)
+  }
+
+  // Handle main window external links
+  window.webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
+
+  // Handle webview external links
+  window.webContents.on("did-attach-webview", (_, webContents) => {
+    webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
   })
 
   // HMR for renderer base on electron-vite cli.

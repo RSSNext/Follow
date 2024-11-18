@@ -14,6 +14,7 @@ export const useAchievementModal = () => {
       title: "Achievements",
       content: AchievementModalContent,
       CustomModalComponent: SlideUpModal,
+      modalContainerClassName: "overflow-hidden",
       overlay: true,
     })
   }, [present])

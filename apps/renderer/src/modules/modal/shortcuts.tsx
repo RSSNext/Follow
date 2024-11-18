@@ -1,4 +1,5 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { cn } from "@follow/utils/utils"
 import clsx from "clsx"
@@ -7,7 +8,6 @@ import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts, shortcutsType } from "~/constants/shortcuts"
@@ -38,7 +38,7 @@ const ShortcutModalContent = () => {
         cursor: "grabbing",
       }}
       className={clsx(
-        "center absolute inset-0 m-auto flex max-h-[80vh] w-[60ch] max-w-[90vw] flex-col rounded-xl border bg-theme-modal-background-opaque",
+        "center bg-theme-modal-background-opaque absolute inset-0 m-auto flex max-h-[80vh] w-[60ch] max-w-[90vw] flex-col rounded-xl border",
 
         !modalOverlay && "shadow-modal",
       )}

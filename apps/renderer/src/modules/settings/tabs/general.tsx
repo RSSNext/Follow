@@ -67,6 +67,16 @@ export const SettingGeneral = () => {
           }),
           IN_ELECTRON && MinimizeToTraySetting,
           LanguageSelector,
+
+          {
+            type: "title",
+            value: t("general.sidebar"),
+          },
+          defineSettingItem("autoGroup", {
+            label: t("general.auto_group.label"),
+            description: t("general.auto_group.description"),
+          }),
+
           {
             type: "title",
             value: t("general.timeline"),

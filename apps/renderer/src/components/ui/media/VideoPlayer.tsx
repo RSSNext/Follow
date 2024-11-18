@@ -131,7 +131,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
     )
 
     return (
-      <Focusable className="group center relative size-full" ref={wrapperRef}>
+      <Focusable className="center group relative size-full" ref={wrapperRef}>
         {element}
 
         <div className="center pointer-events-none absolute inset-0">
@@ -156,7 +156,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
             [state, controls, src, variant],
           )}
         >
-          {variant === "preview" && <FloatMutedButton />}
+          {variant === "preview" && state.hasAudio && <FloatMutedButton />}
           {isPlayer && <ControlBar />}
         </VideoPlayerContext.Provider>
       </Focusable>
@@ -378,7 +378,7 @@ const PlayProgressBar = () => {
   })
   return (
     <Slider.Root
-      className="swiper-no-swiping relative z-[1] flex size-full items-center transition-all duration-200 ease-in-out"
+      className="relative z-[1] flex size-full items-center transition-all duration-200 ease-in-out"
       min={0}
       max={state.duration}
       step={0.01}

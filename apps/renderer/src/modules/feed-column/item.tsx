@@ -9,7 +9,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import dayjs from "dayjs"
 import { memo, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -64,7 +64,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      if (e.metaKey) {
+      if (isKeyForMultiSelectPressed(e.nativeEvent)) {
         return
       } else {
         setSelectedFeedIds([feedId])
@@ -318,7 +318,7 @@ const InboxItemImpl: Component<{
       data-active={isActive || isContextMenuOpen}
       data-inbox-id={inboxId}
       className={cn(
-        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
+        "cursor-menu flex w-full items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
         feedColumnStyles.item,
         "py-[2px] pl-2.5",
         className,

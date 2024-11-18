@@ -1,13 +1,14 @@
-import { Button } from "@follow/components/ui/button/index.js"
+import { RiNftFill } from "@follow/components/icons/nft.jsx"
+import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
 import { Input } from "@follow/components/ui/input/Input.js"
 import { LoadingCircle, LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/ScrollArea.js"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
+import { useOnce } from "@follow/hooks"
 import type { ExtractBizResponse } from "@follow/models/types"
 import { Chain } from "@follow/utils/chain"
 import { cn } from "@follow/utils/utils"
-import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"
@@ -17,6 +18,9 @@ import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
+import { LazyDotLottie } from "~/components/common/LazyDotLottie"
+import { VideoPlayer } from "~/components/ui/media/VideoPlayer"
+import { ScaleModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
@@ -36,33 +40,39 @@ enum AchievementsActionIdMap {
   FEED_BOOSTER = 8,
 }
 
-const achievementActionIdCopyMap: Record<
+const achievementActionIdMetaMap: Record<
   AchievementsActionIdMap,
-  { title: I18nKeys; description: I18nKeys }
+  { title: I18nKeys; description: I18nKeys; video?: string }
 > = {
   [AchievementsActionIdMap.FIRST_CLAIM_FEED]: {
     title: "achievement.first_claim_feed",
     description: "achievement.first_claim_feed_description",
+    video: "https://assets.follow.is/FeedOwnerBadge.webm",
   },
   [AchievementsActionIdMap.FIRST_CREATE_LIST]: {
     title: "achievement.first_create_list",
     description: "achievement.first_create_list_description",
+    video: "https://assets.follow.is/ListBadge.webm",
   },
   [AchievementsActionIdMap.LIST_SUBSCRIBE_50]: {
     title: "achievement.list_subscribe_50",
     description: "achievement.list_subscribe_50_description",
+    video: "https://assets.follow.is/50Subs.webm",
   },
   [AchievementsActionIdMap.LIST_SUBSCRIBE_100]: {
     title: "achievement.list_subscribe_100",
     description: "achievement.list_subscribe_100_description",
+    video: "https://assets.follow.is/100Subs.webm",
   },
   [AchievementsActionIdMap.LIST_SUBSCRIBE_500]: {
     title: "achievement.list_subscribe_500",
     description: "achievement.list_subscribe_500_description",
+    video: "https://assets.follow.is/500Subs.webm",
   },
   [AchievementsActionIdMap.PRODUCT_HUNT_VOTE]: {
     title: "achievement.product_hunt_vote",
     description: "achievement.product_hunt_vote_description",
+    video: "https://assets.follow.is/ProductHunt.webm",
   },
   // [AchievementsActionIdMap.FOLLOW_SPECIAL_FEED]: {
   //   title: "achievement.follow_special_feed",
@@ -71,6 +81,7 @@ const achievementActionIdCopyMap: Record<
   [AchievementsActionIdMap.ALPHA_TESTER]: {
     title: "achievement.alpha_tester",
     description: "achievement.alpha_tester_description",
+    video: "https://assets.follow.is/AlphaBadge.webm",
   },
   [AchievementsActionIdMap.FEED_BOOSTER]: {
     title: "achievement.feed_booster",
@@ -78,9 +89,24 @@ const achievementActionIdCopyMap: Record<
   },
 }
 
+const prefetchVideos = () => {
+  Object.values(achievementActionIdMetaMap).forEach(({ video }) => {
+    if (video) {
+      const link = document.createElement("link")
+      link.rel = "prefetch"
+      link.href = video
+      document.head.append(link)
+    }
+  })
+}
+
 type Achievement = ExtractBizResponse<typeof apiClient.achievement.$get>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
+
+  useOnce(() => {
+    prefetchVideos()
+  })
 
   const defaultAchievements = useState(buildDefaultAchievements)[0]
 
@@ -140,10 +166,37 @@ export const AchievementModalContent: FC = () => {
       return 0
     })
   }, [achievements])
+  const { present } = useModalStack()
+
+  const presentBadgeVideo = (type: keyof typeof achievementActionIdMetaMap) => {
+    const copy = achievementActionIdMetaMap[type]
+    if (!copy) return
+    const { video } = copy
+    if (!video) return
+    present({
+      title: "Congratulations!",
+      CustomModalComponent: ScaleModal,
+      content: ({ dismiss }) => (
+        <VideoPlayer
+          variant="preview"
+          onClick={dismiss}
+          aria-label="Close video"
+          src={video}
+          autoPlay
+          muted
+          height={500}
+          width={500}
+          loop
+        />
+      ),
+
+      overlay: true,
+    })
+  }
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
-      <DotLottieReact
+      <LazyDotLottie
         className="mt-12 size-[100px]"
         autoplay
         speed={2}
@@ -153,7 +206,7 @@ export const AchievementModalContent: FC = () => {
 
       <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
-      <small className="mt-1 gap-1 text-theme-vibrancyFg">
+      <small className="text-theme-vibrancyFg mt-1 gap-1">
         {t("achievement.description")}
         <sup className="inline-block translate-y-1 text-xs">*</sup>
       </small>
@@ -166,14 +219,27 @@ export const AchievementModalContent: FC = () => {
             </div>
           ) : (
             sortedAchievements?.map((achievement) => {
-              const copy = achievementActionIdCopyMap[achievement.actionId]
+              const copy = achievementActionIdMetaMap[achievement.actionId]
               if (!copy) return null
 
               return (
                 <li key={achievement.id} className="flex items-center justify-between">
                   <div>
-                    <div className="text-base font-bold">{t(copy.title)}</div>
-                    <div className="flex items-center text-sm text-muted-foreground">
+                    <div className="flex items-center text-base font-bold">
+                      {t(copy.title)}
+
+                      {copy.video && achievement.type === "received" && (
+                        <MotionButtonBase
+                          className="hover:text-accent p-1 duration-200"
+                          onClick={() => {
+                            presentBadgeVideo(achievement.actionId)
+                          }}
+                        >
+                          <RiNftFill className="size-4" />
+                        </MotionButtonBase>
+                      )}
+                    </div>
+                    <div className="text-muted-foreground flex items-center text-sm">
                       {t(copy.description)}
                     </div>
                   </div>
@@ -217,6 +283,9 @@ export const AchievementModalContent: FC = () => {
                   )}
                   {achievement.type === "completed" && (
                     <MintButton
+                      onMinted={() => {
+                        presentBadgeVideo(achievement.actionId)
+                      }}
                       achievementsDataAtom={achievementsDataAtom}
                       achievement={achievement}
                     />
@@ -228,13 +297,15 @@ export const AchievementModalContent: FC = () => {
         </ul>
       </ScrollArea>
 
-      <p className="mt-4 pb-2 text-xs text-muted-foreground">{t("achievement.nft_coming_soon")}</p>
+      <p className="text-muted-foreground mt-4 pb-2 text-xs">
+        * {t("achievement.nft_coming_soon")}
+      </p>
     </div>
   )
 }
 
 const buildDefaultAchievements = () => {
-  return Object.keys(achievementActionIdCopyMap).map((key) => {
+  return Object.keys(achievementActionIdMetaMap).map((key) => {
     return {
       id: nanoid(),
       actionId: Number(key),
@@ -246,7 +317,8 @@ const buildDefaultAchievements = () => {
 const MintButton: FC<{
   achievementsDataAtom: PrimitiveAtom<Achievement | undefined>
   achievement: Achievement[number]
-}> = ({ achievementsDataAtom, achievement }) => {
+  onMinted: () => void
+}> = ({ achievementsDataAtom, achievement, onMinted }) => {
   const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
     mutationFn: async (actionId: number) => {
       return apiClient.achievement.$put({
@@ -287,6 +359,7 @@ const MintButton: FC<{
         if (shouldInvalidate) {
           queryClient.invalidateQueries({ queryKey: ["achievements"] })
         }
+        onMinted()
       }}
     >
       {t("words.mint")}
@@ -345,19 +418,19 @@ const IncompleteButton: FC<{
           <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
             <i
               className={cn(
-                "i-mgc-refresh-2-cute-re size-5 text-accent",
+                "i-mgc-refresh-2-cute-re text-accent size-5",
                 checkPending && "animate-spin",
               )}
             />
           </div>
           <div className="duration-200 group-hover:opacity-30">
             <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
-              <small className="shrink-0 text-xs leading-tight text-muted-foreground">
+              <small className="text-muted-foreground shrink-0 text-xs leading-tight">
                 {achievement.progress} / {achievement.progressMax}
               </small>
-              <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
+              <span className="bg-accent/10 relative h-1 w-full overflow-hidden rounded-full">
                 <span
-                  className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
+                  className="bg-accent absolute -left-3 top-0 inline-block h-1 rounded-full"
                   style={{
                     width: `calc(${Math.min(
                       (achievement.progress / achievement.progressMax) * 100,

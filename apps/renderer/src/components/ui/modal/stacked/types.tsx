@@ -35,3 +35,14 @@ export interface ModalProps {
 export interface ModalStackOptions {
   wrapper?: FC
 }
+
+export interface DialogInstance {
+  ask: (options: {
+    title: string
+    message: string
+    onConfirm?: () => void
+    onCancel?: () => void
+    confirmText?: string
+    cancelText?: string
+  }) => Promise<boolean>
+}

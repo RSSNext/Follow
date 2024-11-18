@@ -1,5 +1,6 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
 import type { ComponentProps, FunctionComponentElement } from "react"
@@ -7,7 +8,6 @@ import { createElement, useCallback, useMemo, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { mountLottie } from "~/components/ui/lottie-container"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useI18n } from "~/hooks/common"
@@ -162,7 +162,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   return (
     <m.div
       layout
-      className="relative flex min-h-[80%] w-4/5 flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-background shadow-xl"
+      className="bg-theme-background relative flex min-h-[80%] w-4/5 flex-col items-center justify-center overflow-hidden rounded-xl shadow-xl"
     >
       <div className="center relative mx-auto w-full">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -190,7 +190,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
                   {title}
                 </h1>
                 {!!guideSteps[step - 1].description && (
-                  <div className="text-center text-sm text-theme-vibrancyFg">
+                  <div className="text-theme-vibrancyFg text-center text-sm">
                     <Markdown className="max-w-full text-sm">
                       {guideSteps[step - 1].description!}
                     </Markdown>
@@ -290,7 +290,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
           type: "tween",
           ease: "circOut",
         }}
-        className="absolute inset-0 rounded-full bg-theme-accent/20"
+        className="bg-theme-accent/20 absolute inset-0 rounded-full"
       />
 
       <m.div

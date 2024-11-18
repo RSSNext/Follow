@@ -20,30 +20,18 @@ export const SlideUpModal: ModalTemplateType = (props) => {
   const winHeight = useState(() => window.innerHeight)[0]
   const { dismiss } = useCurrentModal()
   return (
-    <div className={"container center h-full"} onPointerDown={dismiss} onClick={stopPropagation}>
+    <div className={"center container h-full"} onPointerDown={dismiss} onClick={stopPropagation}>
       <m.div
         onPointerDown={stopPropagation}
         tabIndex={-1}
-        initial={{
-          y: "100%",
-          opacity: 0.9,
-        }}
-        animate={{
-          y: 0,
-          opacity: 1,
-        }}
         exit={{
           y: winHeight,
-        }}
-        transition={{
-          type: "spring",
-          mass: 0.4,
-          tension: 100,
-          friction: 1,
+          opacity: 0,
         }}
         className={cn(
-          "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
+          "bg-theme-background relative flex flex-col items-center overflow-hidden rounded-xl border p-8 pb-0",
           "aspect-[7/9] w-[600px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
+          "motion-preset-slide-up motion-duration-200 motion-ease-spring-smooth",
           props.className,
         )}
       >
@@ -99,13 +87,43 @@ export const DrawerModalLayout: FC<PropsWithChildren> = ({ children }) => {
         exit="exit"
         layout="size"
         className={cn(
-          "flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
+          "bg-theme-background flex flex-col items-center overflow-hidden rounded-xl border p-8 pb-0",
           "shadow-drawer-to-left w-[60ch] max-w-full",
-          "fixed bottom-4 right-2 safe-inset-top-4",
+          "safe-inset-top-4 fixed bottom-4 right-2",
         )}
       >
         {children}
       </m.div>
     </div>
+  )
+}
+
+export const ScaleModal: ModalTemplateType = (props) => {
+  const { dismiss } = useCurrentModal()
+
+  return (
+    <div className={"center container h-full"} onPointerDown={dismiss} onClick={stopPropagation}>
+      <m.div
+        onPointerDown={stopPropagation}
+        transition={{
+          type: "spring",
+          mass: 0.4,
+          tension: 100,
+          friction: 1,
+        }}
+        initial={{ transform: "scale(0)", opacity: 0 }}
+        animate={{ transform: "scale(1)", opacity: 1 }}
+        exit={{ transform: "scale(0.6)", opacity: 0 }}
+        className="relative"
+      >
+        {props.children}
+      </m.div>
+    </div>
+  )
+}
+
+ScaleModal.class = (className: string) => {
+  return (props: ComponentType) => (
+    <ScaleModal {...props} className={cn(props.className, className)} />
   )
 }

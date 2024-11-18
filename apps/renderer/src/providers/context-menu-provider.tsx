@@ -1,4 +1,5 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
+import { KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { nextFrame, preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { Fragment, memo, useCallback, useEffect, useRef } from "react"
@@ -18,7 +19,6 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu"
-import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom"
 
 import { m } from "~/components/common/Motion"
 
-import { microReboundPreset } from "../../constants/spring"
 import { FixedModalCloseButton } from "../components/close"
 import { useCurrentModal, useModalStack } from "../stacked/hooks"
 
@@ -23,13 +22,11 @@ export const PeekModal = (
   const { dismiss } = useCurrentModal()
 
   return (
-    <div className="relative mx-auto mt-[10vh] max-w-full overflow-auto px-2 scrollbar-none lg:max-w-[65rem] lg:p-0">
+    <div className="scrollbar-none relative mx-auto mt-[10vh] max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0">
       <m.div
-        initial={{ opacity: 0.5, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 50 }}
-        transition={microReboundPreset}
-        className="scrollbar-none"
+        transition={{ duration: 0.2 }}
+        className="motion-preset-slide-up motion-duration-200 motion-ease-spring-smooth scrollbar-none overflow-hidden"
       >
         <InPeekModal.Provider value={true}>{children}</InPeekModal.Provider>
       </m.div>
@@ -38,13 +35,13 @@ export const PeekModal = (
         exit={{
           opacity: 0,
         }}
-        className="fixed right-4 flex items-center gap-4 safe-inset-top-4"
+        className="safe-inset-top-4 fixed right-4 flex items-center gap-4"
       >
         {!!to && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                className="center flex size-8 cursor-button rounded-full bg-theme-background p-1 shadow-sm ring-1 ring-zinc-200 dark:ring-neutral-800"
+                className="center cursor-button bg-theme-background flex size-8 rounded-full p-1 shadow-sm ring-1 ring-zinc-200 dark:ring-neutral-800"
                 to={to}
                 onClick={dismissAll}
               >
