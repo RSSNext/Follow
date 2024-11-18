@@ -9,6 +9,7 @@ import { useUserRole } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
 import { useActivationModal } from "~/modules/activation"
+import { useSubViewTitle } from "~/modules/app-layout/subview/hooks"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
 import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
@@ -16,8 +17,6 @@ import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
-
-import { useSubViewTitle } from "../hooks"
 
 const tabs: {
   name: I18nKeys
