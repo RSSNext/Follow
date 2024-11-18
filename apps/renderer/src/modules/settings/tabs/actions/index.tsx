@@ -24,7 +24,7 @@ export const ActionSetting = () => {
           const { condition } = rule
           // fix old data
           const finalCondition =
-            condition.length > 0 && Array.isArray(condition[0]) ? condition : [condition]
+            condition.length === 0 || Array.isArray(condition[0]) ? condition : [condition]
 
           return {
             ...rule,
