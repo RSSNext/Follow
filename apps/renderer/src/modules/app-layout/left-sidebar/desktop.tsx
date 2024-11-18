@@ -1,6 +1,7 @@
 import type { DragEndEvent } from "@dnd-kit/core"
 import { DndContext, PointerSensor, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -28,7 +29,6 @@ import {
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
 import { HotKeyScopeMap, isDev } from "~/constants"
@@ -131,7 +131,7 @@ export function MainDestopLayout() {
 
       <main
         ref={setMainContainerElement}
-        className="flex min-w-0 flex-1 bg-theme-background pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"
+        className="bg-theme-background flex min-w-0 flex-1 pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"
         // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
