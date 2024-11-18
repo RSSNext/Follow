@@ -2,7 +2,7 @@ import { getViewport } from "@follow/components/hooks/useViewport.js"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import { getElementTop } from "@follow/utils/dom"
 import { springScrollToElement } from "@follow/utils/scroller"
-import { throttle } from "lodash-es"
+import { throttle } from "es-toolkit/compat"
 import {
   startTransition,
   useCallback,
