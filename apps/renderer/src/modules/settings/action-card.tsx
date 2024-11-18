@@ -431,7 +431,7 @@ export function ActionCard({
                                 <DeleteTableCell
                                   disabled={disabled}
                                   onClick={() => {
-                                    data.condition.splice(orConditionIdx, 1)
+                                    data.condition[orConditionIdx].splice(conditionIdx, 1)
                                     onChange(data)
                                   }}
                                 />
