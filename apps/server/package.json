@@ -51,7 +51,7 @@
     "chokidar": "4.0.1",
     "daisyui": "4.12.14",
     "dotenv-flow": "4.1.0",
-    "es-toolkit/compat": "catalog:",
+    "es-toolkit": "catalog:",
     "foxact": "0.2.41",
     "glob": "11.0.0",
     "html-minifier-terser": "7.2.0",

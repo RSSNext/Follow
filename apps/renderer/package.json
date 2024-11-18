@@ -51,7 +51,7 @@
     "electron-log": "5.2.0",
     "embla-carousel-react": "8.3.1",
     "embla-carousel-wheel-gestures": "8.0.1",
-    "es-toolkit/compat": "catalog:",
+    "es-toolkit": "catalog:",
     "firebase": "10.14.1",
     "foxact": "0.2.41",
     "framer-motion": "11.11.11",
