@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
+import { queryClient } from "~/lib/query-client"
 import { ActionCard } from "~/modules/settings/action-card"
 import { Queries } from "~/queries"
 
@@ -57,6 +58,9 @@ export const ActionSetting = () => {
     },
     onSuccess: () => {
       Queries.action.getAll().invalidate()
+      queryClient.invalidateQueries({
+        queryKey: ["entries"],
+      })
       toast(t("actions.saveSuccess"))
     },
     onError: (error) => {
