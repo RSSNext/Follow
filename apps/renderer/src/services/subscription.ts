@@ -1,4 +1,4 @@
-import { uniq } from "lodash-es"
+import { uniq } from "es-toolkit/compat"
 
 import { browserDB } from "~/database"
 import type { SubscriptionFlatModel } from "~/store/subscription"

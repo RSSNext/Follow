@@ -1,5 +1,5 @@
 import { nextFrame } from "@follow/utils/dom"
-import { throttle } from "lodash-es"
+import { throttle } from "es-toolkit/compat"
 import { useLayoutEffect, useRef, useState } from "react"
 
 import { getCurrentColumn } from "./utils"

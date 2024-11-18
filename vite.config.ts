@@ -165,7 +165,7 @@ export default ({ mode }) => {
           "react-shadow",
         ],
         ["vfile", "unified"],
-        ["lodash-es"],
+        ["es-toolkit/compat"],
         ["framer-motion"],
         ["clsx", "tailwind-merge", "class-variance-authority"],
 

@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
-import { memoize } from "lodash-es"
+import { memoize } from "es-toolkit/compat"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 

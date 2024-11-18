@@ -1,7 +1,7 @@
 import { getReadonlyRoute, getStableRouterNavigate } from "@follow/components/atoms/route.js"
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
-import { isUndefined } from "lodash-es"
+import { isUndefined } from "es-toolkit/compat"
 
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
