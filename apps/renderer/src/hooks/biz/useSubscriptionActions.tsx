@@ -1,9 +1,9 @@
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import { useMutation } from "@tanstack/react-query"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"

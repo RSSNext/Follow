@@ -5,14 +5,13 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import type { MediaModel } from "@follow/shared/hono"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
+import useEmblaCarousel from "embla-carousel-react"
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
 import type { FC } from "react"
-import { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import { Fragment, useCallback, useEffect, useState } from "react"
 import { Blurhash } from "react-blurhash"
 import { useTranslation } from "react-i18next"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
-import { Keyboard, Mousewheel } from "swiper/modules"
-import type { SwiperRef } from "swiper/react"
-import { Swiper, SwiperSlide } from "swiper/react"
 import { useWindowSize } from "usehooks-ts"
 
 import { m } from "~/components/common/Motion"
@@ -115,10 +114,13 @@ export const PreviewMediaContent: FC<{
   initialIndex?: number
   children?: React.ReactNode
 }> = ({ media, initialIndex = 0, children }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, startIndex: initialIndex }, [
+    WheelGesturesPlugin(),
+  ])
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
-  const swiperRef = useRef<SwiperRef>(null)
+
   // This only to delay show
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
   const [showActions, setShowActions] = useState(false)
 
   useEffect(() => {
@@ -127,6 +129,31 @@ export const PreviewMediaContent: FC<{
     }, 500)
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.on("select", () => {
+        const realIndex = emblaApi.selectedScrollSnap()
+        setCurrentMedia(media[realIndex])
+        setCurrentSlideIndex(realIndex)
+      })
+    }
+  }, [emblaApi, media])
+
+  const { ref } = useCurrentModal()
+
+  // Keyboard
+  useEffect(() => {
+    if (!emblaApi) return
+    const $container = ref.current
+    if (!$container) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") emblaApi?.scrollPrev()
+      if (e.key === "ArrowRight") emblaApi?.scrollNext()
+    }
+    $container.addEventListener("keydown", handleKeyDown)
+    return () => $container.removeEventListener("keydown", handleKeyDown)
+  }, [emblaApi, ref])
 
   if (media.length === 0) return null
   if (media.length === 1) {
@@ -163,30 +190,44 @@ export const PreviewMediaContent: FC<{
   const isVideo = currentMedia.type === "video"
   return (
     <Wrapper src={currentMedia.url} showActions={!isVideo} sideContent={children}>
-      <Swiper
-        ref={swiperRef}
-        loop
-        initialSlide={initialIndex}
-        mousewheel={{
-          forceToAxis: true,
-        }}
-        keyboard={{
-          enabled: true,
-        }}
-        onSlideChange={({ realIndex }) => {
-          setCurrentMedia(media[realIndex])
-          setCurrentSlideIndex(realIndex)
-        }}
-        modules={[Mousewheel, Keyboard]}
-        className="h-full w-auto"
-      >
+      <div className="size-full overflow-hidden" ref={emblaRef}>
+        <div className="flex size-full">
+          {media.map((med) => (
+            <div className="mr-2 flex w-full flex-none items-center justify-center" key={med.url}>
+              {med.type === "video" ? (
+                <VideoPlayer
+                  src={med.url}
+                  autoPlay
+                  muted
+                  controls
+                  className="size-full object-contain"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <FallbackableImage
+                  fallbackUrl={med.fallbackUrl}
+                  className="size-full object-contain"
+                  alt="cover"
+                  src={med.url}
+                  loading="lazy"
+                  height={med.height}
+                  width={med.width}
+                  blurhash={med.blurhash}
+                  haveSideContent={!!children}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
         {showActions && (
           <div tabIndex={-1} onClick={stopPropagation}>
             <m.button
-              initial={{ opacity: 0, x: -20, scale: 0.94 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
+              initial={{ opacity: 0, transform: "translate3d(-20px, 0, 0) scale(0.94)" }}
+              animate={{ opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }}
               transition={{ ease: "easeInOut", duration: 0.2 }}
-              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              whileTap={{ transform: "translate3d(0, 0, 0) scale(0.9)" }}
+              onClick={() => emblaApi?.scrollPrev()}
               type="button"
               className="center absolute left-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
@@ -194,10 +235,11 @@ export const PreviewMediaContent: FC<{
             </m.button>
 
             <m.button
-              initial={{ opacity: 0, x: 20, scale: 0.94 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
+              initial={{ opacity: 0, transform: "translate3d(20px, 0, 0) scale(0.94)" }}
+              animate={{ opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }}
               transition={{ ease: "easeInOut", duration: 0.2 }}
-              onClick={() => swiperRef.current?.swiper.slideNext()}
+              whileTap={{ transform: "translate3d(0, 0, 0) scale(0.9)" }}
+              onClick={() => emblaApi?.scrollNext()}
               type="button"
               className="center absolute right-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
@@ -229,7 +271,7 @@ export const PreviewMediaContent: FC<{
                 .map((_, index) => (
                   <button
                     onClick={() => {
-                      swiperRef.current?.swiper.slideTo(index)
+                      emblaApi?.scrollTo(index)
                     }}
                     type="button"
                     key={index}
@@ -242,34 +284,7 @@ export const PreviewMediaContent: FC<{
             </div>
           </div>
         )}
-
-        {media.map((med, index) => (
-          <SwiperSlide key={med.url} virtualIndex={index} className="center !flex">
-            {med.type === "video" ? (
-              <VideoPlayer
-                src={med.url}
-                autoPlay
-                muted
-                controls
-                className="size-full object-contain"
-                onClick={(e) => e.stopPropagation()}
-              />
-            ) : (
-              <FallbackableImage
-                fallbackUrl={med.fallbackUrl}
-                className="size-full object-contain"
-                alt="cover"
-                src={med.url}
-                loading="lazy"
-                height={med.height}
-                width={med.width}
-                blurhash={med.blurhash}
-                haveSideContent={!!children}
-              />
-            )}
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      </div>
     </Wrapper>
   )
 }
