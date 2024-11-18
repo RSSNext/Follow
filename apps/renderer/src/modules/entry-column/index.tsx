@@ -44,6 +44,15 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
 
+const INITIAL_ITEM_COUNTS = {
+  [FeedViewType.Articles]: 10,
+  [FeedViewType.Pictures]: 20,
+  [FeedViewType.Videos]: 20,
+  [FeedViewType.SocialMedia]: 5,
+  [FeedViewType.Notifications]: 10,
+  [FeedViewType.Audios]: 10,
+}
+
 export type VirtuosoComponentProps = { onlyShowArchivedButton: boolean }
 type VirtuosoComponentPropsContext = { context?: VirtuosoComponentProps }
 
@@ -139,8 +148,10 @@ function EntryColumnImpl() {
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
+    initialItemCount: INITIAL_ITEM_COUNTS[view],
     components: {
       List: EntryListContent,
+
       Footer: useCallback(
         ({ context }: VirtuosoComponentPropsContext) => {
           if (!isFetchingNextPage) {
