@@ -164,7 +164,7 @@ const BalanceRenderer = ({
 }) => {
   const hideTax = sign === "-" || tax === "0"
   return (
-    <div
+    <EllipsisHorizontalTextWithTooltip
       className={cn("flex items-center", {
         "text-green-500": sign === "+",
         "text-red-500": sign === "-",
@@ -177,7 +177,7 @@ const BalanceRenderer = ({
           (-<Balance>{tax}</Balance>)
         </span>
       )}
-    </div>
+    </EllipsisHorizontalTextWithTooltip>
   )
 }
 
