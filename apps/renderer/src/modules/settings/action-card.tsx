@@ -70,8 +70,8 @@ const FieldTableHeader = () => {
 }
 
 const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: () => void }) => (
-  <TableCell size="sm" className="h-10">
-    <Button variant="ghost" className="w-full px-0" disabled={disabled} onClick={onClick}>
+  <TableCell size="sm" className="flex h-10 items-center">
+    <Button variant="ghost" className="w-full" disabled={disabled} onClick={onClick}>
       <i className="i-mgc-delete-2-cute-re text-zinc-600" />
     </Button>
   </TableCell>
