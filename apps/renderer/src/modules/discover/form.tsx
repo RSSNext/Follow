@@ -196,7 +196,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[540px] space-y-8"
+          className="w-full max-w-[540px] space-y-8"
           data-testid="discover-form"
         >
           <FormField
@@ -244,7 +244,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="mt-8 max-w-lg">
+        <div className="mt-8 w-full max-w-lg">
           <div className="mb-4 text-zinc-500">
             Found {mutation.data?.length || 0} feed
             {mutation.data?.length > 1 && "s"}

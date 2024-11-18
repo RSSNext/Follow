@@ -100,7 +100,7 @@ export function DiscoverImport() {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[540px] space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[540px] space-y-8">
           <FormField
             control={form.control}
             name="file"
@@ -153,7 +153,7 @@ export function DiscoverImport() {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="mt-8 max-w-lg">
+        <div className="mt-8 w-full max-w-lg">
           <Card>
             <CardHeader className="block text-zinc-500">
               <Trans

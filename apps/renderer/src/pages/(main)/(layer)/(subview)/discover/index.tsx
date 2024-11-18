@@ -1,3 +1,4 @@
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
 import { UserRole } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
@@ -75,7 +76,7 @@ export function Component() {
   })
 
   return (
-    <div className="relative flex w-full flex-col items-center gap-8">
+    <div className="relative flex w-full flex-col items-center gap-8 px-4">
       <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
       <Tabs
         value={search.get("type") || "search"}
@@ -85,25 +86,28 @@ export function Component() {
             return new URLSearchParams(search)
           })
         }}
+        className="max-w-full"
       >
-        <TabsList className="relative w-full">
-          {currentTabs.map((tab) => (
-            <TabsTrigger
-              key={tab.name}
-              value={tab.value}
-              className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
-              onClick={() => {
-                if (tab.disabled) {
-                  presentActivationModal()
-                }
-              }}
-            >
-              {t(tab.name)}
-            </TabsTrigger>
-          ))}
+        <ScrollArea.ScrollArea orientation="horizontal" rootClassName="max-w-full">
+          <TabsList className="relative w-full">
+            {currentTabs.map((tab) => (
+              <TabsTrigger
+                key={tab.name}
+                value={tab.value}
+                className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
+                onClick={() => {
+                  if (tab.disabled) {
+                    presentActivationModal()
+                  }
+                }}
+              >
+                {t(tab.name)}
+              </TabsTrigger>
+            ))}
 
-          {/* <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" /> */}
-        </TabsList>
+            {/* <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" /> */}
+          </TabsList>
+        </ScrollArea.ScrollArea>
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
             <div className={tab.value === "inbox" ? "" : "center flex flex-col"}>

@@ -140,7 +140,7 @@ export function Recommendations({
   }
 
   return (
-    <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px] px-4")}>
+    <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px]")}>
       {!hideTitle && (
         <div className="relative text-center text-lg font-bold">
           <span>{t("discover.popular")}</span>

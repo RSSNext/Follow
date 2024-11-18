@@ -62,7 +62,7 @@ export function DiscoverInboxList() {
 
   return (
     <>
-      <div className="mb-4 flex items-center gap-2 text-sm text-zinc-500">
+      <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
         <span>{t("discover.inbox.description")}</span>
         <a
           href="https://github.com/RSSNext/Follow/wiki/Inbox#webhooks"
@@ -73,7 +73,7 @@ export function DiscoverInboxList() {
           {t("discover.inbox.webhooks_docs")}
         </a>
       </div>
-      <Table className="mb-8 w-[600px]">
+      <Table containerClassName="overflow-auto mb-8">
         <TableHeader>
           <TableRow>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.handle")}</TableHead>
@@ -144,7 +144,7 @@ const ConfirmDestroyModalContent = ({ id }: { id: string }) => {
   })
 
   return (
-    <div className="w-[540px]">
+    <div className="w-full max-w-[540px]">
       <div className="mb-4">
         <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
         {t("discover.inbox_destroy_warning")}
