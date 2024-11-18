@@ -1,8 +1,8 @@
 // @copy internal masonic hooks
 import { clearRequestTimeout, requestTimeout } from "@essentials/request-timeout"
 import { useWindowSize } from "@react-hook/window-size"
+import { isEqual, throttle } from "es-toolkit/compat"
 import { useForceUpdate } from "framer-motion"
-import { isEqual, throttle } from "lodash-es"
 import type { ContainerPosition, MasonryProps, MasonryScrollerProps, Positioner } from "masonic"
 import { createResizeObserver, useMasonry, usePositioner, useScrollToIndex } from "masonic"
 import * as React from "react"

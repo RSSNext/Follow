@@ -2,7 +2,7 @@ import type { MediaModel } from "@follow/shared/hono"
 import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
-import { uniqBy } from "lodash-es"
+import { uniqBy } from "es-toolkit/compat"
 import { useCallback, useRef } from "react"
 
 import { Media } from "~/components/ui/media"

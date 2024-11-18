@@ -1,4 +1,4 @@
-import { isNil } from "lodash-es"
+import { isNil } from "es-toolkit/compat"
 import type { CompileOptions } from "path-to-regexp"
 import { compile, match, parse } from "path-to-regexp"
 

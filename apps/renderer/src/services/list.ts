@@ -1,5 +1,5 @@
 import type { ListModel } from "@follow/models/types"
-import { omit } from "lodash-es"
+import { omit } from "es-toolkit/compat"
 
 import { browserDB } from "~/database"
 import { listActions } from "~/store/list"
@@ -18,7 +18,7 @@ class ServiceStatic extends BaseService<{ id: string }> implements Hydratable {
 
     // FIXME The backend should not pass these computed attributes, and these need to be removed here.
     // Subsequent refactoring of the backend data flow should not nest computed attributes
-    return this.table.bulkPut(data.map((d) => omit(d, "owner")))
+    return this.table.bulkPut(data.map((d) => omit(d, "owner")) as ListModel[])
   }
 
   override async findAll() {
@@ -28,7 +28,7 @@ class ServiceStatic extends BaseService<{ id: string }> implements Hydratable {
   override async upsert(data: ListModel): Promise<string | null> {
     if (!data.id) return null
     CleanerService.reset([{ type: "list", id: data.id }])
-    return this.table.put(omit(data, "owner"))
+    return this.table.put(omit(data, "owner") as ListModel)
   }
 
   async bulkDelete(ids: string[]) {
