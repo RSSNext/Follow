@@ -122,8 +122,9 @@ export const DiscoverFeedForm = ({
           "lang",
           "sort",
         ],
+        forceExcludeNames: routeParams ? ["routeParams"] : [],
       }),
-    [route.path],
+    [route.path, routeParams],
   )
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {

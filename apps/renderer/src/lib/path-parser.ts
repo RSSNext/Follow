@@ -104,12 +104,13 @@ export type PathParams = {
 
 export type ParseRegexpPathParamsOptions = {
   excludeNames?: string[]
+  forceExcludeNames?: string[]
 }
 export const parseRegexpPathParams = (
   regexpPath: string,
   options?: ParseRegexpPathParamsOptions,
 ) => {
-  const { excludeNames = [] } = options || {}
+  const { excludeNames = [], forceExcludeNames = [] } = options || {}
   const transformedPath = transformUriPath(regexpPath)
   const { tokens } = parse(transformedPath)
 
@@ -151,7 +152,8 @@ export const parseRegexpPathParams = (
       (item) =>
         typeof item === "object" &&
         "name" in item &&
-        (!excludeNames.includes(item.name) || !item.optional),
+        (!excludeNames.includes(item.name) || !item.optional) &&
+        !forceExcludeNames.includes(item.name),
     ) as PathParams[]
 }
 export const parseFullPathParams = (path: string, regexpPath: string) => {
