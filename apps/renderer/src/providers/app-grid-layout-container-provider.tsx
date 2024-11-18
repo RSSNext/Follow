@@ -1,4 +1,4 @@
-import { throttle } from "lodash-es"
+import { throttle } from "es-toolkit/compat"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useLayoutEffect, useRef, useState } from "react"
 

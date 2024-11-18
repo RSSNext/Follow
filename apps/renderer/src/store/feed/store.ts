@@ -4,8 +4,8 @@ import type {
   FeedOrListRespModel,
   UserModel,
 } from "@follow/models/types"
+import { omit } from "es-toolkit/compat"
 import { produce } from "immer"
-import { omit } from "lodash-es"
 import { nanoid } from "nanoid"
 
 import { whoami } from "~/atoms/user"

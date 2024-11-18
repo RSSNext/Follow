@@ -4,6 +4,12 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    es-toolkit:
+      specifier: ^1.27.0
+      version: 1.27.0
+
 overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
   isarray: npm:@nolyfill/isarray@^1
@@ -110,9 +116,6 @@ importers:
       '@types/html-minifier-terser':
         specifier: 7.0.2
         version: 7.0.2
-      '@types/lodash-es':
-        specifier: 4.17.12
-        version: 4.17.12
       '@types/node':
         specifier: ^22.8.7
         version: 22.8.7
@@ -318,9 +321,6 @@ importers:
         specifier: npm:@vscode/vscode-languagedetection@^1.0.22
         version: '@vscode/vscode-languagedetection@1.0.22'
     devDependencies:
-      '@types/lodash-es':
-        specifier: 4.17.12
-        version: 4.17.12
       '@types/node':
         specifier: ^22.8.7
         version: 22.8.7
@@ -459,6 +459,9 @@ importers:
       embla-carousel-wheel-gestures:
         specifier: 8.0.1
         version: 8.0.1(embla-carousel@8.3.1)
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.27.0
       firebase:
         specifier: 10.14.1
         version: 10.14.1
@@ -504,9 +507,6 @@ importers:
       lethargy:
         specifier: 1.0.9
         version: 1.0.9
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
       masonic:
         specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
@@ -664,9 +664,6 @@ importers:
       '@types/katex':
         specifier: 0.16.7
         version: 0.16.7
-      '@types/lodash-es':
-        specifier: 4.17.12
-        version: 4.17.12
       '@types/node':
         specifier: ^22.8.7
         version: 22.8.7
@@ -818,6 +815,9 @@ importers:
       dotenv-flow:
         specifier: 4.1.0
         version: 4.1.0
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.27.0
       foxact:
         specifier: 0.2.41
         version: 0.2.41(react@18.3.1)
@@ -830,9 +830,6 @@ importers:
       lightningcss:
         specifier: 1.27.0
         version: 1.27.0
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
       masonic:
         specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
@@ -965,9 +962,6 @@ importers:
       jotai:
         specifier: 2.10.1
         version: 2.10.1(@types/react@18.3.12)(react@18.3.1)
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
       masonic:
         specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
@@ -1025,9 +1019,6 @@ importers:
       jotai:
         specifier: 2.10.1
         version: 2.10.1(@types/react@18.3.12)(react@18.3.1)
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
       react:
         specifier: ^18.0.0
         version: 18.3.1
@@ -1114,9 +1105,6 @@ importers:
       framer-motion:
         specifier: 11.11.11
         version: 11.11.11(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
       nanoid:
         specifier: 5.0.8
         version: 5.0.8
@@ -3445,8 +3433,8 @@ packages:
   '@radix-ui/react-avatar@1.1.1':
     resolution: {integrity: sha512-eoOtThOmxeoizxpX6RiEsQZ2wj5r4+zoeqAwO0cBaFQGjJwIH3dIX0OCxNrCyrrdxG+vBweMETh3VziQG7c1kw==}
     peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
+      '@types/react': npm:types-react@19.0.0-rc.1
+      '@types/react-dom': npm:types-react-dom@19.0.0-rc.1
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
@@ -3616,8 +3604,8 @@ packages:
   '@radix-ui/react-label@2.1.0':
     resolution: {integrity: sha512-peLblDlFw/ngk3UWq0VnYaOLy6agTZZ+MUO/WhVfm14vJGML+xH4FAl2XQGLqdefjNb7ApRg6Yn7U42ZhmYXdw==}
     peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
+      '@types/react': npm:types-react@19.0.0-rc.1
+      '@types/react-dom': npm:types-react-dom@19.0.0-rc.1
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
@@ -4499,12 +4487,6 @@ packages:
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
-
-  '@types/lodash-es@4.17.12':
-    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
-
-  '@types/lodash@4.17.7':
-    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
@@ -6210,6 +6192,9 @@ packages:
   es-module-lexer@1.4.1:
     resolution: {integrity: sha512-cXLGjP0c4T3flZJKQSuziYoq7MlT+rnvfZjfp7h+I7K9BNX54kP9nyWvdbwjQ4u1iWbOL4u96fgeZLToQlZC7w==}
 
+  es-toolkit@1.27.0:
+    resolution: {integrity: sha512-ETSFA+ZJArcuSCpzD2TjAy6UHpx4E4uqFsoDg9F/nTLogrLmVVZQ+zNxco5h7cWnA1nNak07IXsLcaSMih+ZPQ==}
+
   es6-error@4.1.1:
     resolution: {integrity: sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==}
 
@@ -7783,9 +7768,6 @@ packages:
   locate-path@6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
-
-  lodash-es@4.17.21:
-    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -14975,12 +14957,6 @@ snapshots:
     dependencies:
       '@types/node': 22.8.7
 
-  '@types/lodash-es@4.17.12':
-    dependencies:
-      '@types/lodash': 4.17.7
-
-  '@types/lodash@4.17.7': {}
-
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
@@ -17024,6 +17000,8 @@ snapshots:
 
   es-module-lexer@1.4.1: {}
 
+  es-toolkit@1.27.0: {}
+
   es6-error@4.1.1:
     optional: true
 
@@ -19016,8 +18994,6 @@ snapshots:
   locate-path@6.0.0:
     dependencies:
       p-locate: 5.0.0
-
-  lodash-es@4.17.21: {}
 
   lodash.camelcase@4.3.0: {}
 
