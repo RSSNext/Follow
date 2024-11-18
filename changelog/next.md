@@ -2,6 +2,8 @@
 
 ## New Features
 
+- And Or conditions for actions
+
 ## Improvements
 
 ## Bug Fixes

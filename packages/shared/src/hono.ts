@@ -195,10 +195,22 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
 }>;
 
 declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
-declare const conditionFieldSchema: z.ZodEnum<["view", "title", "site_url", "feed_url", "category", "entry_title", "entry_content", "entry_url", "entry_author", "entry_media_length"]>;
-declare const conditionOperatorSchema: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
 declare const ruleFieldSchema: z.ZodEnum<["all", "title", "content", "author", "url", "order"]>;
 declare const ruleOperatorSchema: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+declare const conditionItemSchema: z.ZodObject<{
+    field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category", "entry_title", "entry_content", "entry_url", "entry_author", "entry_media_length"]>;
+    operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+    value: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    value: string;
+    field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+    operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+}, {
+    value: string;
+    field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+    operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+}>;
+type ConditionItem = z.infer<typeof conditionItemSchema>;
 declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "actions";
     schema: undefined;
@@ -226,11 +238,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
             columnType: "PgJsonb";
             data: {
                 name: string;
-                condition: {
-                    field: z.infer<typeof conditionFieldSchema>;
-                    operator: z.infer<typeof conditionOperatorSchema>;
-                    value: string;
-                }[];
+                condition: ConditionItem[] | ConditionItem[][];
                 result: {
                     disabled?: boolean;
                     translation?: z.infer<typeof languageSchema>;
@@ -267,7 +275,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
 }>;
 declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: z.ZodString;
-    condition: z.ZodArray<z.ZodObject<{
+    condition: z.ZodUnion<[z.ZodArray<z.ZodObject<{
         field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category", "entry_title", "entry_content", "entry_url", "entry_author", "entry_media_length"]>;
         operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
         value: z.ZodString;
@@ -279,7 +287,19 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         value: string;
         field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }>, "many">;
+    }>, "many">, z.ZodArray<z.ZodArray<z.ZodObject<{
+        field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category", "entry_title", "entry_content", "entry_url", "entry_author", "entry_media_length"]>;
+        operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+        value: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }, {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }>, "many">, "many">]>;
     result: z.ZodObject<{
         disabled: z.ZodOptional<z.ZodBoolean>;
         translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
@@ -378,7 +398,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         value: string;
         field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[];
+    }[] | {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[][];
 }, {
     name: string;
     result: {
@@ -405,7 +429,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         value: string;
         field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[];
+    }[] | {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[][];
 }>;
 declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     userId: z.ZodString;
@@ -417,7 +445,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
 }, "rules">, {
     rules: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         name: z.ZodString;
-        condition: z.ZodArray<z.ZodObject<{
+        condition: z.ZodUnion<[z.ZodArray<z.ZodObject<{
             field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category", "entry_title", "entry_content", "entry_url", "entry_author", "entry_media_length"]>;
             operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
             value: z.ZodString;
@@ -429,7 +457,19 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             value: string;
             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }>, "many">;
+        }>, "many">, z.ZodArray<z.ZodArray<z.ZodObject<{
+            field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category", "entry_title", "entry_content", "entry_url", "entry_author", "entry_media_length"]>;
+            operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+            value: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }, {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }>, "many">, "many">]>;
         result: z.ZodObject<{
             disabled: z.ZodOptional<z.ZodBoolean>;
             translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
@@ -528,7 +568,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             value: string;
             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
     }, {
         name: string;
         result: {
@@ -555,7 +599,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             value: string;
             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
     }>, "many">>>;
 }>, "strip", z.ZodTypeAny, {
     userId: string;
@@ -585,7 +633,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             value: string;
             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
     }[] | null | undefined;
 }, {
     userId: string;
@@ -615,7 +667,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             value: string;
             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
     }[] | null | undefined;
 }>;
 declare const actionsRelations: drizzle_orm.Relations<"actions", {
@@ -7384,7 +7440,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             value: string;
                             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[];
+                        }[] | {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[][];
                     }[] | null | undefined;
                 } | undefined;
             };
@@ -7420,7 +7480,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             value: string;
                             field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[];
+                        }[] | {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[][];
                     }[] | null | undefined;
                 };
             };
@@ -7512,4 +7576,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

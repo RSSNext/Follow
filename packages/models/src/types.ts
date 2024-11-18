@@ -114,7 +114,7 @@ export type ActionsInput = {
     field?: ActionFeedField
     operator?: ActionOperation
     value?: string
-  }[]
+  }[][]
   result: {
     disabled?: boolean
     translation?: string
