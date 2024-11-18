@@ -1,3 +1,4 @@
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { useTranslation } from "react-i18next"
 
@@ -16,7 +17,7 @@ export function Component() {
     t("words.power"),
   )
   return (
-    <div className="px-10 lg:w-[768px]">
+    <div className="px-5 md:px-10 lg:w-[768px] lg:px-0">
       <div className="center mb-8 flex h-24 items-center gap-2 text-3xl font-bold">
         <div className="motion-preset-shake center text-accent motion-delay-500">
           <i className="i-mgc-power size-20" />
@@ -28,7 +29,9 @@ export function Component() {
       <PowerRanking />
 
       <Divider className="my-8" />
-      <TransactionsSection />
+      <AutoResizeHeight>
+        <TransactionsSection />
+      </AutoResizeHeight>
     </div>
   )
 }
