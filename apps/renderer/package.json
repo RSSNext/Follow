@@ -6,6 +6,7 @@
   "scripts": {
     "build:web": "cd ../.. && pnpm build:web",
     "dev": "cd ../.. && pnpm dev:web",
+    "generate-pwa-assets": "pwa-assets-generator public/icon.svg",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
@@ -127,6 +128,7 @@
     "@types/node": "^22.8.7",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.8.0",
     "react": "^18.3.1",
