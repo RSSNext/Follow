@@ -71,7 +71,7 @@ export const SourceContentPanel = ({ src }: { src: string | null }) => {
       {showSourceContent && src && (
         <m.div
           data-hide-in-print
-          className="bg-theme-background absolute left-0 top-0 z-[1] size-full"
+          className="absolute left-0 top-0 z-[1] size-full bg-theme-background"
           initial="hidden"
           animate="visible"
           exit="exit"
