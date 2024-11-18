@@ -256,9 +256,6 @@ class EntryActions {
             state.flatMapEntries[item.entries.id]?.entries || {},
             item.entries,
           )
-          if (item.settings) {
-            draft.flatMapEntries[item.entries.id].settings = item.settings
-          }
 
           // Is related to feed
           if (item.feeds) {
@@ -346,6 +343,10 @@ class EntryActions {
                 },
               ])
             }
+          }
+
+          if (item.settings && draft.flatMapEntries[item.entries.id]) {
+            draft.flatMapEntries[item.entries.id].settings = item.settings
           }
         }
 
