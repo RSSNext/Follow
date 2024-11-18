@@ -1,6 +1,35 @@
-const host = "https://localhost:2233"
-
 globalThis["__DEBUG_PROXY__"] = true
+
+const searchParams = new URLSearchParams(window.location.search)
+const debugHost = searchParams.get("debug-host")
+
+const resetSessionStorage = () => {
+  sessionStorage.removeItem("debug-host")
+}
+
+const resetParams = searchParams.get("reset")
+if (resetParams) {
+  resetSessionStorage()
+}
+
+const debugHostInSessionStorage = sessionStorage.getItem("debug-host")
+
+const host = debugHost || debugHostInSessionStorage || "https://localhost:2233"
+if (debugHost) {
+  sessionStorage.setItem("debug-host", debugHost)
+}
+
+const createRefreshRuntimeScript = `
+import RefreshRuntime from "${host}/@react-refresh";
+RefreshRuntime.injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
+window.__vite_plugin_react_preamble_installed__ = true;
+`
+const $script = document.createElement("script")
+$script.innerHTML = createRefreshRuntimeScript
+$script.type = "module"
+document.head.append($script)
 
 fetch(`${host}`)
   .then((res) => res.text())
