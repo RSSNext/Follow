@@ -1,12 +1,15 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { capitalizeFirstLetter } from "@follow/utils/utils"
 import { createElement, lazy, useCallback } from "react"
 import { parse } from "tldts"
 
+import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { users } from "~/queries/users"
 
 const LazyUserProfileModalContent = lazy(() =>
   import("./user-profile-modal").then((mod) => ({ default: mod.UserProfileModalContent })),
@@ -47,11 +50,31 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
 type Variant = "drawer" | "dialog"
 export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
   const { present } = useModalStack()
-
+  const presentAsync = useAsyncModal()
   return useCallback(
     (userId: string | undefined, overrideVariant?: Variant) => {
       if (!userId) return
       const finalVariant = overrideVariant || variant
+
+      if (isMobile()) {
+        const useDataFetcher = () => {
+          const user = useAuthQuery(users.profile({ userId }))
+          const subscriptions = useUserSubscriptionsQuery(user.data?.id)
+          return {
+            ...user,
+            isLoading: user.isLoading || subscriptions.isLoading,
+          }
+        }
+        type ResponseType = Awaited<ReturnType<ReturnType<typeof useDataFetcher>["fn"]>>
+        return presentAsync<ResponseType>({
+          id: `user-profile-${userId}`,
+          title: (data: ResponseType) => `${data.name}'s Profile`,
+
+          content: () => createElement(LazyUserProfileModalContent, { userId }),
+          useDataFetcher,
+          overlay: true,
+        })
+      }
 
       present({
         title: "User Profile",
@@ -72,6 +95,6 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
             : "overflow-hidden",
       })
     },
-    [present, variant],
+    [present, presentAsync, variant],
   )
 }

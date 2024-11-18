@@ -197,7 +197,7 @@ export const AchievementModalContent: FC = () => {
   return (
     <div className="relative flex w-full grow flex-col items-center">
       <LazyDotLottie
-        className="mt-12 size-[100px]"
+        className="mt-4 size-[100px] lg:mt-12"
         autoplay
         speed={2}
         src={absoluteachievementAnimationUri}
@@ -211,7 +211,10 @@ export const AchievementModalContent: FC = () => {
         <sup className="inline-block translate-y-1 text-xs">*</sup>
       </small>
 
-      <ScrollArea rootClassName="h-0 grow mt-10 w-[calc(100%+2rem)] -mx-4" viewportClassName="px-4">
+      <ScrollArea
+        rootClassName="lg:h-0 h-auto grow mt-10 w-[calc(100%+2rem)] -mx-4"
+        viewportClassName="px-4"
+      >
         <ul className="flex w-full flex-col gap-2">
           {isLoading ? (
             <div className="center pointer-events-none grow -translate-y-16">

@@ -43,7 +43,7 @@ export const initializeApp = async () => {
   appLog(`${APP_NAME}: Follow your favorites in one inbox`, repository.url)
 
   if (isDev) {
-    const favicon = await import("~/../public/favicon-dev.ico?url")
+    const favicon = await import("/favicon-dev.ico?url")
 
     const url = new URL(favicon.default, import.meta.url).href
 
