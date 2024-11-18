@@ -51,7 +51,17 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore(
-    useCallback((state) => ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)), [ids]),
+    useCallback(
+      (state) =>
+        ids.sort((a, b) => {
+          const unreadCompare = (state.data[b] || 0) - (state.data[a] || 0)
+          if (unreadCompare !== 0) {
+            return unreadCompare
+          }
+          return a.localeCompare(b)
+        }),
+      [ids],
+    ),
   )
 
   const navigate = useNavigateEntry()
