@@ -5,6 +5,7 @@ import { defineConfig } from "electron-vite"
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import { cleanupUnnecessaryFilesPlugin } from "./plugins/vite/cleanup"
 import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
+import { getGitHash } from "./scripts/lib"
 
 export default defineConfig({
   main: {
