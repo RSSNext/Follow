@@ -1,7 +1,6 @@
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
-import { throttle } from "es-toolkit/compat"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useContext, useEffect, useRef, useState } from "react"
 
