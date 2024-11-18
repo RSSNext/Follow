@@ -1,10 +1,10 @@
 import { browserDB } from "~/database"
 import { feedUnreadActions } from "~/store/unread"
 
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
 const feedUnreadModel = browserDB.feedUnreads
-class ServiceStatic implements Hydable {
+class ServiceStatic implements Hydratable {
   updateFeedUnread(list: [string, number][]) {
     return feedUnreadModel.bulkPut(list.map(([feedId, count]) => ({ id: feedId, count })))
   }

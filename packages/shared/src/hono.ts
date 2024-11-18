@@ -5137,6 +5137,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     IS_RSS3_TESTNET: boolean;
                     PRODUCT_HUNT_VOTE_URL: string;
                     ANNOUNCEMENT: string;
+                    MAX_TRIAL_USER_FEED_SUBSCRIPTION: number;
+                    MAX_TRIAL_USER_LIST_SUBSCRIPTION: number;
                 };
             };
             outputFormat: "json" | "text";

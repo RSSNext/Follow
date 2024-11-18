@@ -65,6 +65,12 @@ export default ({ mode }) => {
         ignored: ["**/dist/**", "**/out/**", "**/public/**", ".git/**"],
       },
     },
+    resolve: {
+      alias: {
+        ...viteRenderBaseConfig.resolve?.alias,
+        "@follow/logger": resolve(__dirname, "./packages/logger/web.ts"),
+      },
+    },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
       mode !== "development" &&
@@ -143,8 +149,6 @@ export default ({ mode }) => {
         ["shiki", "@shikijs/transformers"],
         ["@sentry/react", "@openpanel/web"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
-
-        ["swiper"],
       ]),
 
       createPlatformSpecificImportPlugin(false),

@@ -4,7 +4,7 @@
   "version": "0.2.1-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
-  "description": "Next generation information browser",
+  "description": "Follow your favorites in one inbox",
   "author": "Follow Team",
   "license": "GPL-3.0-only",
   "homepage": "https://github.com/RSSNext",

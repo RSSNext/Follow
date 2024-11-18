@@ -136,7 +136,7 @@ export const ModalInternal = memo(
     const { noticeModal, animateController } = useModalAnimate(!!isTop)
 
     const getIndex = useEventCallback(() => index)
-    const modalContentRef = useRef<HTMLDivElement>(null)
+    const [modalContentRef, setModalContentRef] = useState<HTMLDivElement | null>(null)
     const ModalProps: ModalActionsInternal = useMemo(
       () => ({
         dismiss: close,
@@ -159,9 +159,9 @@ export const ModalInternal = memo(
     const ModalContextProps = useMemo<CurrentModalContentProps>(
       () => ({
         ...ModalProps,
-        ref: modalContentRef,
+        ref: { current: modalContentRef },
       }),
-      [ModalProps],
+      [ModalProps, modalContentRef],
     )
 
     const [edgeElementRef, setEdgeElementRef] = useState<HTMLDivElement | null>(null)
@@ -239,6 +239,7 @@ export const ModalInternal = memo(
               {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
               <Dialog.Content
+                ref={setModalContentRef}
                 asChild
                 aria-describedby={undefined}
                 onPointerDownOutside={preventDefault}
@@ -289,6 +290,7 @@ export const ModalInternal = memo(
           <Dialog.Portal>
             {Overlay}
             <Dialog.Content
+              ref={setModalContentRef}
               asChild
               aria-describedby={undefined}
               onPointerDownOutside={preventDefault}

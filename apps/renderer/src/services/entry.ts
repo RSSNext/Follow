@@ -8,12 +8,12 @@ import { entryActions, useEntryStore } from "~/store/entry"
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
 import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
 type EntryCollection = {
   createdAt: string
 }
-class EntryServiceStatic extends BaseService<EntryModel> implements Hydable {
+class EntryServiceStatic extends BaseService<EntryModel> implements Hydratable {
   constructor() {
     super(browserDB.entries)
   }
