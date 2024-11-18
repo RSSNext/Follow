@@ -2,7 +2,7 @@ import { assertType, expectTypeOf, test } from "vitest"
 
 import { COMMAND_ID } from "../commands/id"
 import type { TipCommand } from "../commands/types"
-import { useCommand, useGetCommand } from "./use-command"
+import { useCommand, useGetCommand, useRunCommandFn } from "./use-command"
 
 test("useGetCommand types work properly", () => {
   const getCmd = useGetCommand()
@@ -19,4 +19,17 @@ test("useCommand types work properly", () => {
 
   // @ts-expect-error - get an unknown command should throw an error
   assertType(useCommand("unknown command"))
+})
+
+test("useRunCommandFn types work properly", () => {
+  const runCmdFn = useRunCommandFn()
+  expectTypeOf(runCmdFn).toBeFunction()
+
+  assertType(runCmdFn(COMMAND_ID.entry.tip, [{ entryId: "1" }]))
+  // @ts-expect-error - invalid argument type
+  assertType(runCmdFn(COMMAND_ID.entry.tip, [{ entryId: 1 }]))
+  // @ts-expect-error - invalid argument type
+  assertType(runCmdFn(COMMAND_ID.entry.tip, []))
+  // @ts-expect-error - invalid argument type
+  assertType(runCmdFn(COMMAND_ID.entry.tip, [1]))
 })

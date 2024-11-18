@@ -16,131 +16,42 @@ import {
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useShowSourceContent } from "~/atoms/source-content"
-import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
-import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
-import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { tipcClient } from "~/lib/client"
 import { parseHtml } from "~/lib/parse-html"
 import { filterSmallMedia } from "~/lib/utils"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
-import { useInboxById } from "~/store/inbox/hooks"
 
-import { CommandIdButton } from "../command/command-button"
 import { COMMAND_ID } from "../command/commands/id"
 import { useCommandHotkey } from "../command/hooks/use-register-hotkey"
-import { defineCommandArgsArray } from "../command/registry/command"
 import { ImageGallery } from "./actions/picture-gallery"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
 const EntryHeaderActions = ({ entryId }: { entryId: string }) => {
+  const actionConfigs = useEntryActions({ entryId })
   const entry = useEntry(entryId)
 
-  const feed = useFeedById(entry?.feedId, (feed) => {
-    return {
-      type: feed.type,
-      ownerUserId: feed.ownerUserId,
-      id: feed.id,
-    }
-  })
-  const listId = useRouteParamsSelector((s) => s.listId)
-  const inList = !!listId
-  const inbox = useInboxById(entry?.inboxId)
-  const isInbox = !!inbox
-  const isShowSourceContent = useShowSourceContent()
-
   useCommandHotkey({
-    shortcut: shortcuts.entry.openInBrowser.key,
     when: !!entry?.entries.url,
+    shortcut: shortcuts.entry.openInBrowser.key,
     commandId: COMMAND_ID.entry.openInBrowser,
     args: [{ entryId }],
   })
 
-  const buttonsConfig = defineCommandArgsArray<{
-    when?: boolean
-    shortcut?: string
-    active?: boolean
-  }>([
-    { commandId: COMMAND_ID.integration.saveToEagle, args: [{ entryId }] },
-    { commandId: COMMAND_ID.integration.saveToReadwise, args: [{ entryId }] },
-    { commandId: COMMAND_ID.integration.saveToInstapaper, args: [{ entryId }] },
-    { commandId: COMMAND_ID.integration.saveToOmnivore, args: [{ entryId }] },
-    { commandId: COMMAND_ID.integration.saveToObsidian, args: [{ entryId }] },
-    { commandId: COMMAND_ID.integration.saveToOutline, args: [{ entryId }] },
-    {
-      when: !isInbox && feed?.ownerUserId !== whoami()?.id,
-      commandId: COMMAND_ID.entry.tip,
-      args: [{ entryId, feedId: feed?.id }],
-      shortcut: shortcuts.entry.tip.key,
-    },
-    {
-      when: !!entry?.collections,
-      commandId: COMMAND_ID.entry.unstar,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.toggleStarred.key,
-    },
-    {
-      when: !entry?.collections,
-      commandId: COMMAND_ID.entry.star,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.toggleStarred.key,
-    },
-    {
-      when: isInbox,
-      commandId: COMMAND_ID.entry.delete,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.copyLink.key,
-    },
-    {
-      when: !!entry?.entries.url,
-      commandId: COMMAND_ID.entry.copyLink,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.copyTitle.key,
-    },
-    {
-      when: !isShowSourceContent && !!entry?.entries.url,
-      commandId: COMMAND_ID.entry.viewSourceContent,
-      args: [{ entryId }],
-    },
-    {
-      when: isShowSourceContent,
-      commandId: COMMAND_ID.entry.viewEntryContent,
-      args: [],
-      active: true,
-    },
-    {
-      when: !!entry?.entries.url && "share" in navigator,
-      commandId: COMMAND_ID.entry.share,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.share.key,
-    },
-    {
-      when: !!entry && !entry.read && !entry.collections && !inList,
-      commandId: COMMAND_ID.entry.read,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.toggleRead.key,
-    },
-    {
-      when: !!entry && !!entry.read && !entry.collections && !inList,
-      commandId: COMMAND_ID.entry.unread,
-      args: [{ entryId }],
-      shortcut: shortcuts.entry.toggleRead.key,
-    },
-  ])
-
-  return buttonsConfig
-    .filter((config) => ("when" in config ? config.when : true))
+  return actionConfigs
+    .filter((config) => config.id !== COMMAND_ID.entry.openInBrowser)
     .map((config) => {
       return (
-        <CommandIdButton
-          key={config.commandId}
-          commandId={config.commandId}
-          args={config.args}
+        <ActionButton
+          key={config.id}
+          tooltip={config.name}
+          icon={config.icon}
+          onClick={config.onClick}
           shortcut={config.shortcut}
           active={config.active}
         />
