@@ -148,7 +148,10 @@ export const parseRegexpPathParams = (
       }
     })
     .filter(
-      (item) => typeof item === "object" && "name" in item && !excludeNames.includes(item.name),
+      (item) =>
+        typeof item === "object" &&
+        "name" in item &&
+        (!excludeNames.includes(item.name) || !item.optional),
     ) as PathParams[]
 }
 export const parseFullPathParams = (path: string, regexpPath: string) => {
