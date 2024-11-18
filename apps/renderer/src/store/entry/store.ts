@@ -7,8 +7,8 @@ import type {
 } from "@follow/models/types"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 import { omitObjectUndefinedValue } from "@follow/utils/utils"
+import { isNil, merge, omit } from "es-toolkit/compat"
 import { produce } from "immer"
-import { isNil, merge, omit } from "lodash-es"
 
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
@@ -343,6 +343,10 @@ class EntryActions {
                 },
               ])
             }
+          }
+
+          if (item.settings && draft.flatMapEntries[item.entries.id]) {
+            draft.flatMapEntries[item.entries.id].settings = item.settings
           }
         }
 

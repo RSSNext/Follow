@@ -1,7 +1,7 @@
+import { KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
-import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { shortcuts, shortcutsType } from "~/constants/shortcuts"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"

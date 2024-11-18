@@ -30,6 +30,7 @@
   "4010": "Airdrop not eligible",
   "4011": "Airdrop is sending",
   "4012": "Airdrop already sent",
+  "4013": "Airdrop not verified",
   "5000": "Invitation limit exceeded. Please try again in a few days.",
   "5001": "Invitation already exists.",
   "5002": "Invitation code already used.",

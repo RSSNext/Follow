@@ -228,7 +228,7 @@ export const AchievementModalContent: FC = () => {
                     <div className="flex items-center text-base font-bold">
                       {t(copy.title)}
 
-                      {copy.video && (
+                      {copy.video && achievement.type === "received" && (
                         <MotionButtonBase
                           className="p-1 duration-200 hover:text-accent"
                           onClick={() => {
