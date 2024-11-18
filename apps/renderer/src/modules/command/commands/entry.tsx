@@ -8,7 +8,7 @@ import { toast } from "sonner"
 
 import { setShowSourceContent, useSourceContentModal } from "~/atoms/source-content"
 import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { useRouteParams } from "~/hooks/biz/useRouteParams"
+import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 import { useTipModal } from "~/modules/wallet/hooks"
 import { entryActions, useEntryStore } from "~/store/entry"
@@ -80,9 +80,6 @@ export const useUnread = () =>
 
 export const useRegisterEntryCommands = () => {
   const { t } = useTranslation()
-  const { entryId: routeEntryId, isPendingEntry, view } = useRouteParams()
-  const layoutEntryId = isPendingEntry ? undefined : routeEntryId
-
   const collect = useCollect()
   const uncollect = useUnCollect()
   const deleteInboxEntry = useDeleteInboxEntry()
@@ -215,11 +212,12 @@ export const useRegisterEntryCommands = () => {
           toast.error("Failed to view source content: url is not available", { duration: 3000 })
           return
         }
+        const routeParams = getRouteParams()
         const viewPreviewInModal = [
           FeedViewType.SocialMedia,
           FeedViewType.Videos,
           FeedViewType.Pictures,
-        ].includes(view)
+        ].includes(routeParams.view)
         if (viewPreviewInModal) {
           showSourceContentModal({
             title: entry.entries.title ?? undefined,
@@ -227,6 +225,7 @@ export const useRegisterEntryCommands = () => {
           })
           return
         }
+        const layoutEntryId = routeParams.entryId
         if (layoutEntryId !== entry.entries.id) {
           navigateEntry({ entryId: entry.entries.id })
         }

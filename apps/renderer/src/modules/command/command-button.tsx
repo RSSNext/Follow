@@ -17,6 +17,9 @@ export interface CommandIdButtonProps<T extends FollowCommandId = FollowCommandI
   shortcut?: string
 }
 
+/**
+ * @deprecated
+ */
 export const CommandActionButton = <T extends FollowCommand>({
   command,
   args,
@@ -35,6 +38,9 @@ export const CommandActionButton = <T extends FollowCommand>({
   )
 }
 
+/**
+ * @deprecated
+ */
 export const CommandIdButton = <T extends FollowCommandId>({
   commandId,
   ...props

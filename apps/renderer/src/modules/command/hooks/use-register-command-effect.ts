@@ -14,7 +14,7 @@ export type RegisterOptions = {
 
 export const useRegisterCommandEffect = (
   options: CommandOptions | CommandOptions[],
-  // registerOptions?: RegisterOptions,
+  registerOptions?: RegisterOptions,
 ) => {
   // TODO memo command via useMemo
   // See https://github.com/supabase/supabase/blob/master/packages/ui-patterns/CommandMenu/api/hooks/commandsHooks.ts
@@ -28,5 +28,6 @@ export const useRegisterCommandEffect = (
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe())
     }
-  }, [options])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we want to run this effect only once
+  }, registerOptions?.deps ?? [])
 }

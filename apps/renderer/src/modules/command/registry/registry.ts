@@ -6,27 +6,6 @@ import { jotaiStore } from "~/lib/jotai"
 import type { Command, CommandOptions } from "../types"
 import { createCommand } from "./command"
 
-export interface KeyBindingOptions {
-  /**
-   * Key presses will listen to this event (default: "keydown").
-   */
-  event?: "keydown" | "keyup"
-
-  /**
-   * Whether to capture the event during the capture phase (default: false).
-   */
-  capture?: boolean
-
-  /**
-   * Keybinding sequences will wait this long between key presses before
-   * cancelling (default: 1000).
-   *
-   * **Note:** Setting this value too low (i.e. `300`) will be too fast for many
-   * of your users.
-   */
-  timeout?: number
-}
-
 export const CommandRegistry = new (class {
   readonly atom = atom<Record<string, Command>>({})
 

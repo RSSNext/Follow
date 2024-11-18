@@ -36,3 +36,29 @@ export function defineFollowCommand<T extends FollowCommandId>(
 ) {
   return options as CommandOptions
 }
+
+/**
+ * @deprecated
+ */
+export const defineFollowCommandArgs = <T extends FollowCommandId>(config: {
+  commandId: T
+  args: Parameters<Extract<FollowCommand, { id: T }>["run"]>
+}) => config
+
+/**
+ * @deprecated
+ */
+export const defineCommandArgsArray = <
+  Ext extends Record<string, unknown>,
+  T extends FollowCommandId[] = FollowCommandId[],
+>(
+  config: [
+    ...{
+      [K in keyof T]: {
+        commandId: T[K]
+        args: Parameters<Extract<FollowCommand, { id: T[K] }>["run"]>
+        // [key: string]: unknown
+      } & Ext
+    },
+  ],
+) => config

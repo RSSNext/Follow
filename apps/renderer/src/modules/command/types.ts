@@ -66,10 +66,12 @@ export interface Command<
   // readonly keyBinding?: KeybindingOptions
 }
 
+export type SimpleCommand<T extends string> = Command<{ id: T; fn: () => void }>
+
 export interface CommandOptions<
   T extends { id: string; fn: (...args: any[]) => unknown } = {
     id: string
-    fn: (...args: unknown[]) => unknown
+    fn: (...args: any[]) => unknown
   },
 > {
   id: T["id"]
@@ -83,6 +85,9 @@ export interface CommandOptions<
   icon?: ReactNode
   category?: CommandCategory
   run: T["fn"]
+
+  when?: boolean
+  keyBinding?: T["fn"] extends () => void ? KeybindingOptions | string : never
 }
 
 export type FollowCommandMap = {

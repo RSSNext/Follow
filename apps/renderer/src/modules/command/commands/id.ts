@@ -35,11 +35,3 @@ export const COMMAND_ID = {
     toLight: "follow:change-color-mode-to-light",
   },
 } as const
-
-// Helper type to extract all command IDs
-// type ExtractCommandIds<T> = {
-//   [K in keyof T]: T[K][keyof T[K]]
-// }[keyof T]
-
-// Define CommandId as a union of all command ID strings
-// export type CommandId = ExtractCommandIds<typeof COMMAND_ID>

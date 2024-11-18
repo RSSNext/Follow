@@ -178,7 +178,10 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
       {entryActions
         .filter(
           (item) =>
-            !item.hide && item.id !== COMMAND_ID.entry.read && item.id !== COMMAND_ID.entry.unread,
+            !item.hide &&
+            item.id !== COMMAND_ID.entry.read &&
+            item.id !== COMMAND_ID.entry.unread &&
+            item.id !== COMMAND_ID.entry.openInBrowser,
         )
         .map((item) => (
           <ActionButton
