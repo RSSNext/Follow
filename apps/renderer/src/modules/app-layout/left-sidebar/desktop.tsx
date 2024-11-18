@@ -1,6 +1,7 @@
 import type { DragEndEvent } from "@dnd-kit/core"
 import { DndContext, PointerSensor, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -16,7 +17,7 @@ import { Trans } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-import { setMainContainerElement } from "~/atoms/dom"
+import { setMainContainerElement, setRootContainerElement } from "~/atoms/dom"
 import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
   getFeedColumnTempShow,
@@ -28,7 +29,6 @@ import {
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
 import { HotKeyScopeMap, isDev } from "~/constants"
@@ -43,11 +43,11 @@ import { DebugRegistry } from "~/modules/debug/registry"
 import { FeedColumn } from "~/modules/feed-column"
 import { useSelectedFeedIds } from "~/modules/feed-column/atom"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
-import { CornerPlayer } from "~/modules/feed-column/corner-player"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
+import { CornerPlayer } from "~/modules/player/corner-player"
 import { AppNotificationContainer } from "~/modules/upgrade/lazy/index"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 import { settings } from "~/queries/settings"
@@ -180,9 +180,16 @@ export function MainDestopLayout() {
 
 const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
   const feedColWidth = useUISettingKey("feedColWidth")
+
+  const [elementRef, _setElementRef] = useState<HTMLDivElement | null>(null)
+  const setElementRef = React.useCallback((el: HTMLDivElement | null) => {
+    _setElementRef(el)
+    setRootContainerElement(el)
+  }, [])
+  React.useImperativeHandle(ref, () => elementRef!)
   return (
     <div
-      ref={ref}
+      ref={setElementRef}
       style={
         {
           "--fo-feed-col-w": `${feedColWidth}px`,

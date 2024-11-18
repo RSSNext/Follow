@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { useCallback } from "react"
 
 import { SlideUpModal } from "~/components/ui/modal/stacked/custom-modal"
@@ -11,9 +12,10 @@ export const useAchievementModal = () => {
   return useCallback(() => {
     present({
       id: "achievement",
-      title: "Achievements",
+      title: isMobile() ? "" : "Achievements",
       content: AchievementModalContent,
-      CustomModalComponent: SlideUpModal,
+      CustomModalComponent: !isMobile() ? SlideUpModal : undefined,
+      modalContainerClassName: "overflow-hidden",
       overlay: true,
     })
   }, [present])

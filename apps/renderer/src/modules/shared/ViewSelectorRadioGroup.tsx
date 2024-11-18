@@ -43,7 +43,7 @@ export const ViewSelectorRadioGroup = forwardRef<
               )}
             >
               <span className="text-lg">{view.icon}</span>
-              {t(view.name)}
+              <span className="hidden lg:inline">{t(view.name)}</span>
             </label>
           </div>
         ))}

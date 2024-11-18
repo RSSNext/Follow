@@ -6,6 +6,7 @@ import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
+import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
 import { VitePWA } from "vite-plugin-pwa"
 
@@ -75,6 +76,12 @@ export default ({ mode }) => {
             },
           }
         : {}),
+    },
+    resolve: {
+      alias: {
+        ...viteRenderBaseConfig.resolve?.alias,
+        "@follow/logger": resolve(__dirname, "./packages/logger/web.ts"),
+      },
     },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
@@ -194,13 +201,12 @@ export default ({ mode }) => {
         ["shiki", "@shikijs/transformers"],
         ["@sentry/react", "@openpanel/web"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
-
-        ["swiper"],
       ]),
 
       createPlatformSpecificImportPlugin(false),
       manifestPlugin(),
       htmlPlugin(typedEnv),
+      process.env.analyzer && analyzer(),
     ],
 
     define: {

@@ -22,13 +22,13 @@ export interface PresentSheetProps {
 export type SheetRef = {
   dismiss: () => void
 }
-
+const MODAL_STACK_Z_INDEX = 1001
 export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetProps>>(
   (props, ref) => {
     const {
       content,
       children,
-      zIndex = 10000,
+      zIndex = MODAL_STACK_Z_INDEX,
       title,
       dismissible = true,
       defaultOpen,
@@ -80,13 +80,11 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
       }
     }, [holderRef, store])
 
-    const { Root } = Drawer
-
     const overlayZIndex = zIndex - 1
     const contentZIndex = zIndex
 
     return (
-      <Root dismissible={dismissible} {...nextRootProps}>
+      <Drawer.Root nested dismissible={dismissible} {...nextRootProps}>
         {!!children && <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>}
         <Drawer.Portal>
           <Drawer.Content
@@ -94,14 +92,14 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             style={{
               zIndex: contentZIndex,
             }}
-            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque px-6 pt-4 pb-safe-offset-4"
+            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4 pb-safe-offset-4"
           >
             {dismissible && (
               <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800" />
             )}
 
             {!!title && (
-              <Drawer.Title className="-mt-4 mb-4 flex justify-center text-lg font-medium">
+              <Drawer.Title className="-mt-4 mb-4 flex justify-center px-4 text-lg font-medium">
                 {title}
               </Drawer.Title>
             )}
@@ -116,7 +114,9 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
                 [setIsOpen],
               )}
             >
-              {typeof content === "function" ? React.createElement(content) : content}
+              <div className="flex grow flex-col overflow-auto px-4">
+                {typeof content === "function" ? React.createElement(content) : content}
+              </div>
             </SheetContext.Provider>
             <div ref={setHolderRef} />
           </Drawer.Content>
@@ -127,7 +127,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             }}
           />
         </Drawer.Portal>
-      </Root>
+      </Drawer.Root>
     )
   },
 )

@@ -12,6 +12,8 @@ const createDefaultSettings = (): GeneralSettings => ({
   sendAnonymousData: true,
   reduceRefetch: true,
 
+  autoGroup: true,
+
   // view
   unreadOnly: true,
   // mark unread

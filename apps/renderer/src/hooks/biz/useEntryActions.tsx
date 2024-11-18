@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
 import type { CombinedEntryModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -138,6 +139,18 @@ export const useDeleteInboxEntry = () => {
   })
 }
 
+export type EntryActionItem = {
+  key: string
+  className?: string
+  shortcut?: string
+  name: string
+  icon?: ReactNode
+  hide?: boolean
+  active?: boolean
+  disabled?: boolean
+  onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+}
+
 export const useEntryActions = ({
   view,
   entry,
@@ -187,17 +200,7 @@ export const useEntryActions = ({
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
 
-    const items: {
-      key: string
-      className?: string
-      shortcut?: string
-      name: string
-      icon?: ReactNode
-      hide?: boolean
-      active?: boolean
-      disabled?: boolean
-      onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
-    }[] = [
+    const items: EntryActionItem[] = [
       ...integrationActions.items,
       {
         key: "tip",
@@ -303,6 +306,11 @@ export const useEntryActions = ({
         active: showSourceContent,
         onClick: () => {
           if (!populatedEntry.entries.url) return
+
+          if (isMobile()) {
+            window.open(populatedEntry.entries.url, "_blank")
+            return
+          }
           const viewPreviewInModal = [
             FeedViewType.SocialMedia,
             FeedViewType.Videos,

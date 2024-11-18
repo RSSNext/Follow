@@ -8,12 +8,34 @@ declare global {
   interface History {
     stack: string[]
 
-    returnBack: () => void
+    returnBack: (to?: string) => void
+
+    get isPop(): boolean
   }
 }
 
+let __isPop = false
+const F = {} as { isPop: boolean }
+let resetTimer: any = null
+Object.defineProperty(F, "isPop", {
+  get() {
+    return __isPop
+  },
+  set(value) {
+    if (!value) return
+
+    resetTimer && clearTimeout(resetTimer)
+    resetTimer = setTimeout(() => {
+      __isPop = false
+    }, 1200)
+
+    __isPop = true
+  },
+})
 export const registerHistoryStack = () => {
   const onPopState = (e: PopStateEvent) => {
+    F.isPop = true
+
     const url = e.state?.url
     if (url) {
       jotaiStore.set(historyAtom, jotaiStore.get(historyAtom).slice(0, -1))
@@ -37,18 +59,29 @@ export const registerHistoryStack = () => {
   })
 
   Object.defineProperty(window.history, "returnBack", {
-    value: () => {
+    value: (to?: string) => {
       const stack = jotaiStore.get(historyAtom)
+      F.isPop = true
       const last = stack.at(-1)
-      if (last) {
-        window.history.back()
-      } else {
-        window.router.navigate("/")
+
+      to = typeof to === "string" ? to : last
+
+      if (!last || last !== to) {
+        window.router.navigate(to ?? "/")
 
         nextFrame(() => {
           jotaiStore.set(historyAtom, [])
         })
+      } else {
+        window.history.back()
       }
+    },
+    enumerable: false,
+  })
+
+  Object.defineProperty(window.history, "isPop", {
+    get() {
+      return F.isPop
     },
     enumerable: false,
   })

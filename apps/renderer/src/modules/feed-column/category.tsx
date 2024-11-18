@@ -1,4 +1,5 @@
 import { useDroppable } from "@dnd-kit/core"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
@@ -13,10 +14,11 @@ import type { FC } from "react"
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
-import { useOnClickOutside } from "usehooks-ts"
+import { useEventCallback, useOnClickOutside } from "usehooks-ts"
 
 import type { MenuItemInput } from "~/atoms/context-menu"
 import { useShowContextMenu } from "~/atoms/context-menu"
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useAddFeedToFeedList } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -50,13 +52,25 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore(
-    useCallback((state) => ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)), [ids]),
+    useCallback(
+      (state) =>
+        ids.sort((a, b) => {
+          const unreadCompare = (state.data[b] || 0) - (state.data[a] || 0)
+          if (unreadCompare !== 0) {
+            return unreadCompare
+          }
+          return a.localeCompare(b)
+        }),
+      [ids],
+    ),
   )
 
   const navigate = useNavigateEntry()
 
   const subscription = useSubscriptionByFeedId(ids[0])
-  const folderName = subscription?.category || subscription.defaultCategory
+  const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
+  const folderName =
+    subscription?.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
 
   const showCollapse = sortByUnreadFeedList.length > 1 || !!subscription?.category
 
@@ -107,15 +121,18 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
-  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
-    e.stopPropagation()
-    if (!isCategoryEditing) {
-      setCategoryActive()
-    }
-    if (view !== undefined && folderName) {
-      subscriptionActions.toggleCategoryOpenState(view, folderName)
-    }
-  }
+  const isMobile = useMobile()
+  const toggleCategoryOpenState = useEventCallback(
+    (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+      e.stopPropagation()
+      if (!isCategoryEditing && !isMobile) {
+        setCategoryActive()
+      }
+      if (view !== undefined && folderName) {
+        subscriptionActions.toggleCategoryOpenState(view, folderName)
+      }
+    },
+  )
 
   const setCategoryActive = () => {
     if (view !== undefined) {

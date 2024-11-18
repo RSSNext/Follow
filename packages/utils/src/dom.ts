@@ -22,3 +22,25 @@ export const getElementTop = (element: HTMLElement) => {
 }
 
 export const clearSelection = () => window.getSelection()?.removeAllRanges()
+
+export const findElementInShadowDOM = (selector: string): HTMLElement | null => {
+  const element = document.querySelector(selector)
+  if (element) return element as HTMLElement
+
+  // find in all shadow roots
+  const getAllShadowRoots = (root: Document | Element | ShadowRoot): Element[] => {
+    const hosts = Array.from(root.querySelectorAll("*")).filter((el) => el.shadowRoot)
+
+    return hosts.reduce((acc, host) => {
+      if (host.shadowRoot) {
+        const shadowElement = host.shadowRoot.querySelector(selector)
+        if (shadowElement) acc.push(shadowElement)
+        return [...acc, ...getAllShadowRoots(host.shadowRoot)]
+      }
+      return acc
+    }, [] as Element[])
+  }
+
+  const results = getAllShadowRoots(document)
+  return (results[0] as HTMLElement) || null
+}

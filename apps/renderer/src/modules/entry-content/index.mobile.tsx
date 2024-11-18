@@ -1,13 +1,13 @@
-import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel } from "@follow/models/types"
-import { clearSelection, stopPropagation } from "@follow/utils/dom"
+import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -19,8 +19,10 @@ import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 
+import { CornerPlayer } from "../player/corner-player"
 import { EntryContentHTMLRenderer } from "../renderer/html"
 import { getTranslationCache, setTranslationCache } from "./atoms"
+import { EntryReadHistory } from "./components/EntryReadHistory"
 import { EntryTitle } from "./components/EntryTitle"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
@@ -69,18 +71,8 @@ export const EntryContent: Component<{
     },
   )
 
-  const readerFontFamily = useUISettingKey("readerFontFamily")
   const view = useRouteParamsSelector((route) => route.view)
 
-  const stableRenderStyle = useMemo(
-    () =>
-      readerFontFamily
-        ? {
-            fontFamily: readerFontFamily,
-          }
-        : undefined,
-    [readerFontFamily],
-  )
   const mediaInfo = useMemo(
     () =>
       Object.fromEntries(
@@ -96,7 +88,9 @@ export const EntryContent: Component<{
       ),
     [entry?.entries.media, data?.entries.media],
   )
-  const customCSS = useUISettingKey("customCSS")
+  const hideRecentReader = useUISettingKey("hideRecentReader")
+
+  const { entryId: audioEntryId } = useAudioPlayerAtomSelector((state) => state)
 
   if (!entry) return null
 
@@ -129,7 +123,7 @@ export const EntryContent: Component<{
   const isInbox = !!inbox
 
   return (
-    <>
+    <WrappedElementProvider>
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
@@ -141,18 +135,30 @@ export const EntryContent: Component<{
       />
 
       <div className="relative mt-12 flex min-w-0 flex-col px-4 @container print:size-auto print:overflow-visible">
+        {!hideRecentReader && (
+          <div
+            className={cn(
+              "absolute top-0 my-2 -mt-8 flex items-center gap-2 text-[13px] leading-none text-zinc-500",
+              "visible z-[11]",
+            )}
+          >
+            <EntryReadHistory entryId={entryId} />
+          </div>
+        )}
+
         <div
-          onPointerDown={clearSelection}
-          style={stableRenderStyle}
           className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
           key={entry.entries.id}
         >
           <article
-            data-testid="entry-render"
             onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
+            className="relative m-auto min-w-0 max-w-[550px]"
           >
             <EntryTitle entryId={entryId} compact={compact} />
+
+            {audioEntryId === entryId && (
+              <CornerPlayer className="mx-auto !mt-4 w-full overflow-hidden rounded-md md:w-[350px]" />
+            )}
 
             <WrappedElementProvider boundingDetection>
               <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
@@ -170,9 +176,6 @@ export const EntryContent: Component<{
                 )}
                 <ErrorBoundary fallback={RenderError}>
                   <ShadowDOM injectHostStyles={!isInbox}>
-                    {!!customCSS && (
-                      <MemoedDangerousHTMLStyle>{customCSS}</MemoedDangerousHTMLStyle>
-                    )}
                     <EntryContentHTMLRenderer
                       view={view}
                       feedId={feed?.id}
@@ -182,7 +185,6 @@ export const EntryContent: Component<{
                       noMedia={noMedia}
                       as="article"
                       className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
-                      style={stableRenderStyle}
                       renderInlineStyle={readerRenderInlineStyle}
                     >
                       {content}
@@ -221,6 +223,6 @@ export const EntryContent: Component<{
           </article>
         </div>
       </div>
-    </>
+    </WrappedElementProvider>
   )
 }

@@ -47,7 +47,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
-    <div>
+    <div className="min-w-0">
       <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
@@ -80,7 +80,10 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
       )}
     >
       <div className="flex w-full justify-between pl-8">
-        <HeaderTopReturnBackButton className="absolute left-3 translate-y-px text-zinc-500" />
+        <HeaderTopReturnBackButton
+          to={`/?view=${view}`}
+          className="absolute left-3 translate-y-px text-zinc-500"
+        />
         {titleInfo}
         <div
           className={cn(
