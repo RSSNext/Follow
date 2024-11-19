@@ -196,7 +196,7 @@ export const EntryContentRender: Component<{
     <>
       <EntryHeader
         entryId={entry.entries.id}
-        view={0}
+        view={view}
         className={cn("h-[55px] shrink-0 px-3 @container", classNames?.header)}
         compact={compact}
       />

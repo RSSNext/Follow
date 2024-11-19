@@ -1,3 +1,4 @@
+import type { FeedViewType } from "@follow/constants"
 import type {
   CombinedEntryModel,
   EntryModel,
@@ -471,7 +472,7 @@ class EntryActions {
     await tx.run()
   }
 
-  async markStar(entryId: string, star: boolean) {
+  async markStar(entryId: string, star: boolean, view?: FeedViewType) {
     const tx = createTransaction<unknown, { prevIsStar: boolean }>({})
 
     tx.optimistic(async (_, ctx) => {
@@ -495,6 +496,7 @@ class EntryActions {
         await apiClient.collections.$post({
           json: {
             entryId,
+            view,
           },
         })
       } else {

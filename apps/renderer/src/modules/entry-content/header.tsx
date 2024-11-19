@@ -32,8 +32,8 @@ import { ImageGallery } from "./actions/picture-gallery"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
-const EntryHeaderActions = ({ entryId }: { entryId: string }) => {
-  const actionConfigs = useEntryActions({ entryId })
+const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
+  const actionConfigs = useEntryActions({ entryId, view })
   const entry = useEntry(entryId)
 
   const hasModal = useHasModal()
@@ -131,7 +131,7 @@ function EntryHeaderImpl({
           {!compact && <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />}
 
           <SpecialActions id={entry.entries.id} />
-          <EntryHeaderActions entryId={entry.entries.id} />
+          <EntryHeaderActions entryId={entry.entries.id} view={view} />
         </div>
       </div>
     </div>

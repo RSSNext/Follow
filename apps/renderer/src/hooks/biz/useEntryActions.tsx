@@ -1,3 +1,4 @@
+import type { FeedViewType } from "@follow/constants"
 import { useCallback } from "react"
 
 import {
@@ -54,7 +55,7 @@ export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string
     }
   }, [id, url])
 
-export const useEntryActions = ({ entryId }: { entryId: string }) => {
+export const useEntryActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId, (feed) => {
     return {
@@ -111,7 +112,7 @@ export const useEntryActions = ({ entryId }: { entryId: string }) => {
     },
     {
       id: COMMAND_ID.entry.star,
-      onClick: runCmdFn(COMMAND_ID.entry.star, [{ entryId }]),
+      onClick: runCmdFn(COMMAND_ID.entry.star, [{ entryId, view }]),
       hide: !!entry?.collections,
       shortcut: shortcuts.entry.toggleStarred.key,
     },

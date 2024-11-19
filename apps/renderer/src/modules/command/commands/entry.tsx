@@ -20,7 +20,8 @@ import { COMMAND_ID } from "./id"
 const useCollect = () => {
   const { t } = useTranslation()
   return useMutation({
-    mutationFn: async (entryId: string) => entryActions.markStar(entryId, true),
+    mutationFn: async ({ entryId, view }: { entryId: string; view?: FeedViewType }) =>
+      entryActions.markStar(entryId, true, view),
 
     onSuccess: () => {
       toast.success(t("entry_actions.starred"), {
@@ -109,7 +110,7 @@ export const useRegisterEntryCommands = () => {
       id: COMMAND_ID.entry.star,
       label: t("entry_actions.star"),
       icon: <i className="i-mgc-star-cute-re" />,
-      run: ({ entryId }) => {
+      run: ({ entryId, view }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
         if (!entry) {
           toast.error("Failed to star: entry is not available", { duration: 3000 })
@@ -124,7 +125,7 @@ export const useRegisterEntryCommands = () => {
         //     width: 252,
         //   })
         // }
-        collect.mutate(entry.entries.id)
+        collect.mutate({ entryId, view })
       },
     }),
     defineFollowCommand({

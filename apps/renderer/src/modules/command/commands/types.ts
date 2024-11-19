@@ -1,5 +1,7 @@
 // Entry commands
 
+import type { FeedViewType } from "@follow/constants"
+
 import type { Command } from "../types"
 import type { COMMAND_ID } from "./id"
 
@@ -10,7 +12,7 @@ export type TipCommand = Command<{
 
 export type StarCommand = Command<{
   id: typeof COMMAND_ID.entry.star
-  fn: (data: { entryId: string }) => void
+  fn: (data: { entryId: string; view?: FeedViewType }) => void
 }>
 export type UnStarCommand = Command<{
   id: typeof COMMAND_ID.entry.unstar
