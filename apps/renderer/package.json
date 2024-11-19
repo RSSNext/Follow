@@ -6,7 +6,7 @@
   "scripts": {
     "build:web": "cd ../.. && pnpm build:web",
     "dev": "cd ../.. && pnpm dev:web",
-    "test": "vitest",
+    "test": "vitest --typecheck",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
