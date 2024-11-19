@@ -158,14 +158,14 @@ export function Recommendations({
 
       <div
         className={cn(
-          "z-[9] my-3 flex w-full items-center gap-4 bg-theme-background",
+          "z-[9] my-3 flex w-full flex-col items-end gap-4 bg-theme-background sm:flex-row sm:items-center",
           headerClassName,
         )}
       >
         <ScrollArea.ScrollArea
           ref={tabRef}
           orientation="horizontal"
-          rootClassName="grow min-w-0 overflow-visible"
+          rootClassName="grow min-w-0 max-w-full overflow-visible"
           scrollbarClassName="-mb-3 z-[100]"
         >
           <Tabs value={category} onValueChange={handleCategoryChange}>
