@@ -1,0 +1,37 @@
+export const COMMAND_ID = {
+  entry: {
+    tip: "entry:tip",
+    star: "entry:star",
+    unstar: "entry:unstar",
+    delete: "entry:delete",
+    copyLink: "entry:copy-link",
+    copyTitle: "entry:copy-title",
+    openInBrowser: "entry:open-in-browser",
+    viewSourceContent: "entry:view-source-content",
+    viewEntryContent: "entry:view-entry-content",
+    share: "entry:share",
+    read: "entry:read",
+    unread: "entry:unread",
+  },
+  integration: {
+    saveToEagle: "integration:save-to-eagle",
+    saveToReadwise: "integration:save-to-readwise",
+    saveToInstapaper: "integration:save-to-instapaper",
+    saveToOmnivore: "integration:save-to-omnivore",
+    saveToObsidian: "integration:save-to-obsidian",
+    saveToOutline: "integration:save-to-outline",
+  },
+  list: {
+    edit: "list:edit",
+    unfollow: "list:unfollow",
+    navigateTo: "list:navigate-to",
+    openInBrowser: "list:open-in-browser",
+    copyUrl: "list:copy-url",
+    copyId: "list:copy-id",
+  },
+  theme: {
+    toAuto: "follow:change-color-mode-to-auto",
+    toDark: "follow:change-color-mode-to-dark",
+    toLight: "follow:change-color-mode-to-light",
+  },
+} as const

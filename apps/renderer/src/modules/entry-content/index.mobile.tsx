@@ -121,7 +121,7 @@ export const EntryContent: Component<{
     <>
       <EntryHeader
         entryId={entry.entries.id}
-        view={0}
+        view={view}
         className={cn(
           "sticky top-0 z-[12] h-[55px] shrink-0 bg-background px-3 @container",
           classNames?.header,

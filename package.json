@@ -1,10 +1,10 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.2.0-beta.2",
+  "version": "0.2.2-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
-  "description": "Next generation information browser",
+  "description": "Follow your favorites in one inbox",
   "author": "Follow Team",
   "license": "GPL-3.0-only",
   "homepage": "https://github.com/RSSNext",
@@ -14,7 +14,7 @@
   },
   "main": "./dist/main/index.js",
   "scripts": {
-    "analyze:web": "npx vite-bundle-visualizer",
+    "analyze:web": "analyzer=1 vite build",
     "build": "electron-vite build && electron-forge make",
     "build:macos": "electron-vite build && electron-forge make --arch=x64 --platform=darwin && electron-forge make --arch=arm64 --platform=darwin && tsx scripts/merge-yml.ts",
     "build:web": "rm -rf out/web && vite build",
@@ -65,7 +65,6 @@
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.15",
     "@types/html-minifier-terser": "7.0.2",
-    "@types/lodash-es": "4.17.12",
     "@types/node": "^22.8.7",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -109,6 +108,7 @@
     "typescript": "5.6.3",
     "unplugin-ast": "^0.11.0",
     "vite": "^5.4.10",
+    "vite-bundle-analyzer": "0.13.1",
     "vite-plugin-mkcert": "1.17.6",
     "vite-tsconfig-paths": "5.0.1",
     "vitest": "2.0.5"
@@ -145,7 +145,7 @@
     "before": [
       "git pull --rebase",
       "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
-      "git add changelog/${NEW_VERSION}.md"
+      "git add changelog"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"

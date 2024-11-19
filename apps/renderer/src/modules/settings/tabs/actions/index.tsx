@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
+import { queryClient } from "~/lib/query-client"
 import { ActionCard } from "~/modules/settings/action-card"
 import { Queries } from "~/queries"
 
@@ -19,14 +20,30 @@ export const ActionSetting = () => {
 
   useEffect(() => {
     if (actions.data?.rules) {
-      setActionsData(actions.data.rules)
+      setActionsData(
+        actions.data.rules.map((rule) => {
+          const { condition } = rule
+          // fix old data
+          const finalCondition =
+            condition.length === 0 || Array.isArray(condition[0]) ? condition : [condition]
+
+          return {
+            ...rule,
+            condition: finalCondition as any,
+          }
+        }),
+      )
     }
   }, [actions.data?.rules])
 
   const mutation = useMutation({
     mutationFn: async () => {
       actionsData.forEach((action) => {
-        action.condition = action.condition.filter((c) => c.field && c.operator && c.value)
+        action.condition = action.condition
+          .map((condition) => {
+            return condition.filter((c) => c.field && c.operator && c.value)
+          })
+          .filter((c) => c.length > 0)
         action.result.rewriteRules = action.result.rewriteRules?.filter((r) => r.from && r.to)
         action.result.blockRules = action.result.blockRules?.filter(
           (r) => r.field && r.operator && r.value,
@@ -41,6 +58,9 @@ export const ActionSetting = () => {
     },
     onSuccess: () => {
       Queries.action.getAll().invalidate()
+      queryClient.invalidateQueries({
+        queryKey: ["entries"],
+      })
       toast(t("actions.saveSuccess"))
     },
     onError: (error) => {

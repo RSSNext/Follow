@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
-import { memoize } from "lodash-es"
+import { memoize } from "es-toolkit/compat"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
@@ -207,4 +207,11 @@ export function shallowCopy<T>(input: T): T {
     return { ...input } as T
   }
   return input
+}
+
+export function isKeyForMultiSelectPressed(e: MouseEvent) {
+  if (getOS() === "macOS") {
+    return e.metaKey || e.shiftKey
+  }
+  return e.ctrlKey || e.shiftKey
 }

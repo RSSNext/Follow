@@ -3,8 +3,8 @@ import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js
 import { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
+import { throttle } from "es-toolkit/compat"
 import { m } from "framer-motion"
-import { throttle } from "lodash-es"
 import type { FC, PropsWithChildren } from "react"
 import {
   cloneElement,

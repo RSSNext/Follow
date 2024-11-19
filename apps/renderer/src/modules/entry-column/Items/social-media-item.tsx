@@ -1,19 +1,18 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { cn } from "@follow/utils/utils"
-import { Slot } from "@radix-ui/react-slot"
 import { atom } from "jotai"
-import { useLayoutEffect, useRef } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
-import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { jotaiStore } from "~/lib/jotai"
 import { parseSocialMedia } from "~/lib/parsers"
+import { COMMAND_ID } from "~/modules/command/commands/id"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
@@ -34,7 +33,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   const feed = useFeedById(entry?.feedId)
 
   const ref = useRef<HTMLDivElement>(null)
-
+  const [showAction, setShowAction] = useState(false)
   useLayoutEffect(() => {
     if (ref.current) {
       jotaiStore.set(socialMediaContentWidthAtom, ref.current.offsetWidth)
@@ -51,6 +50,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 
   return (
     <div
+      onMouseEnter={() => setShowAction(true)}
+      onMouseLeave={() => setShowAction(false)}
       className={cn(
         "relative flex px-8 py-6",
         "group",
@@ -158,14 +159,11 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
         )}
       </div>
 
-      <div
-        className={cn(
-          "absolute right-1 top-1.5",
-          "invisible opacity-0 duration-200 group-hover:visible group-hover:opacity-80",
-        )}
-      >
-        <ActionBar entryId={entryId} />
-      </div>
+      {showAction && (
+        <div className={"absolute right-1 top-1.5"}>
+          <ActionBar entryId={entryId} />
+        </div>
+      )}
     </div>
   )
 }
@@ -173,26 +171,20 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 SocialMediaItem.wrapperClassName = tw`w-[645px] max-w-full m-auto`
 
 const ActionBar = ({ entryId }: { entryId: string }) => {
-  const entry = useEntry(entryId)
-  const view = useRouteParamsSelector((s) => s.view)
-  const { items } = useEntryActions({
-    entry,
-    view,
-    type: "toolbar",
-  })
+  const entryActions = useEntryActions({ entryId })
   return (
     <div className="flex origin-right scale-90 items-center gap-1">
-      {items
-        .filter((item) => !item.hide && item.key !== "read" && item.key !== "unread")
+      {entryActions
+        .filter(
+          (item) =>
+            !item.hide &&
+            item.id !== COMMAND_ID.entry.read &&
+            item.id !== COMMAND_ID.entry.unread &&
+            item.id !== COMMAND_ID.entry.openInBrowser,
+        )
         .map((item) => (
           <ActionButton
-            icon={
-              item.icon ? (
-                <Slot className="size-4">{item.icon}</Slot>
-              ) : (
-                <i className={item.className} />
-              )
-            }
+            icon={item.icon}
             onClick={item.onClick}
             tooltip={item.name}
             key={item.name}

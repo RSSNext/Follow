@@ -5,7 +5,6 @@ import { findElementInShadowDOM } from "@follow/utils/dom"
 import { springScrollToElement } from "@follow/utils/scroller"
 import { clsx, cn } from "@follow/utils/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
-import { Slot } from "@radix-ui/react-slot"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useState } from "react"
 import { RemoveScroll } from "react-remove-scroll"
@@ -16,7 +15,6 @@ import { useTocItems } from "~/components/ui/markdown/components/useTocItems"
 import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
-import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry/hooks"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
@@ -24,14 +22,7 @@ import type { EntryHeaderProps } from "./header.shared"
 
 function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
   const entry = useEntry(entryId)
-
-  const listId = useRouteParamsSelector((s) => s.listId)
-  const { items } = useEntryActions({
-    view,
-    entry,
-    type: "toolbar",
-    inList: !!listId,
-  })
+  const actionConfigs = useEntryActions({ entryId, view })
 
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()
@@ -76,7 +67,7 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
         </div>
 
         <HeaderTopReturnBackButton className={"absolute left-0"} />
-        <HeaderRightActions actions={items} className={!shouldShowMeta ? "hidden" : ""} />
+        <HeaderRightActions actions={actionConfigs} className={!shouldShowMeta ? "hidden" : ""} />
         <div className="flex-1" />
 
         <div
@@ -85,25 +76,16 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
             shouldShowMeta && "hidden",
           )}
         >
-          {items
-            .filter((item) => !item.hide)
-            .map((item) => (
-              <ActionButton
-                disabled={item.disabled}
-                icon={
-                  item.icon ? (
-                    <Slot className="size-4">{item.icon}</Slot>
-                  ) : (
-                    <i className={item.className} />
-                  )
-                }
-                active={item.active}
-                shortcut={item.shortcut}
-                onClick={item.onClick}
-                tooltip={item.name}
-                key={item.name}
-              />
-            ))}
+          {actionConfigs.map((item) => (
+            <ActionButton
+              icon={item.icon}
+              active={item.active}
+              shortcut={item.shortcut}
+              onClick={item.onClick}
+              tooltip={item.name}
+              key={item.name}
+            />
+          ))}
         </div>
       </div>
     </div>
@@ -196,22 +178,20 @@ const HeaderRightActions = ({
                   className="shadow-modal fixed right-1 top-1 z-[1] mt-14 max-w-full rounded-lg border bg-theme-modal-background-opaque"
                 >
                   <div className="flex flex-col items-center py-2">
-                    {actions
-                      .filter((item) => !item.hide)
-                      .map((item) => (
-                        <MotionButtonBase
-                          onClick={(e) => {
-                            setCtxOpen(false)
-                            item.onClick?.(e)
-                          }}
-                          key={item.name}
-                          layout={false}
-                          className="flex w-full items-center gap-2 px-4 py-2"
-                        >
-                          {item.icon || <i className={item.className} />}
-                          {item.name}
-                        </MotionButtonBase>
-                      ))}
+                    {actions.map((item) => (
+                      <MotionButtonBase
+                        onClick={() => {
+                          setCtxOpen(false)
+                          item.onClick?.()
+                        }}
+                        key={item.name}
+                        layout={false}
+                        className="flex w-full items-center gap-2 px-4 py-2"
+                      >
+                        {item.icon}
+                        {item.name}
+                      </MotionButtonBase>
+                    ))}
                   </div>
                 </m.div>
               </DismissableLayer>

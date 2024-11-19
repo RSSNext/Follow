@@ -20,7 +20,7 @@ export interface BaseButtonProps {
 
 // BIZ buttons
 
-interface ActionButtonProps {
+export interface ActionButtonProps {
   icon?: React.ReactNode | React.FC<ComponentType>
   tooltip?: React.ReactNode
   tooltipSide?: "top" | "bottom"

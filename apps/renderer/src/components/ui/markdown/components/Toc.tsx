@@ -4,8 +4,8 @@ import { getElementTop } from "@follow/utils/dom"
 import { springScrollToElement } from "@follow/utils/scroller"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
+import { throttle } from "es-toolkit/compat"
 import { AnimatePresence, m } from "framer-motion"
-import { throttle } from "lodash-es"
 import {
   memo,
   startTransition,

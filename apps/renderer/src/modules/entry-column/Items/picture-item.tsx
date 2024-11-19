@@ -50,7 +50,6 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
               isActive && "rounded-b-none",
             )}
             imgClassName="object-cover"
-            uniqueKey={entryId}
             onPreview={(media, i) => {
               previewMedia(media, i)
             }}
@@ -127,7 +126,6 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
               className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
               proxySize={proxySize}
               imgClassName="object-cover"
-              uniqueKey={entryId}
               onPreview={previewMedia}
             />
 

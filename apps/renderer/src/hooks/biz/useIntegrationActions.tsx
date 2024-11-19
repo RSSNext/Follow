@@ -116,14 +116,23 @@ export const useIntegrationActions = ({
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
 
-    const getEntryContentAsMarkdown = () => {
+    const getEntryContentAsMarkdown = async () => {
       const isReadabilityReady =
         getReadabilityStatus()[populatedEntry.entries.id] === ReadabilityStatus.SUCCESS
       const content =
         (isReadabilityReady
           ? getReadabilityContent()[populatedEntry.entries.id].content
           : populatedEntry.entries.content) || ""
-      return parseHtml(content).toMarkdown()
+
+      const [toMarkdown, toMdast, gfmTableToMarkdown] = await Promise.all([
+        import("mdast-util-to-markdown").then((m) => m.toMarkdown),
+        import("hast-util-to-mdast").then((m) => m.toMdast),
+        import("mdast-util-gfm-table").then((m) => m.gfmTableToMarkdown),
+      ])
+
+      return toMarkdown(toMdast(parseHtml(content).hastTree), {
+        extensions: [gfmTableToMarkdown()],
+      })
     }
 
     const items: {
@@ -331,10 +340,10 @@ export const useIntegrationActions = ({
         icon: <SimpleIconsObsidian />,
         key: "saveToObsidian",
         hide: !isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON,
-        onClick: () => {
+        onClick: async () => {
           if (!isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON) return
 
-          const markdownContent = getEntryContentAsMarkdown()
+          const markdownContent = await getEntryContentAsMarkdown()
           window.analytics?.capture("integration", {
             type: "obsidian",
             event: "save",
@@ -379,7 +388,7 @@ export const useIntegrationActions = ({
               })
               collectionId = collection.data.id
             }
-            const markdownContent = getEntryContentAsMarkdown()
+            const markdownContent = await getEntryContentAsMarkdown()
             await request("documents.create", {
               title: populatedEntry.entries.title,
               text: markdownContent,

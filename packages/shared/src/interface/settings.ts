@@ -12,6 +12,7 @@ export interface GeneralSettings {
   // TTS
   voice: string
   reduceRefetch: boolean
+  autoGroup: boolean
 }
 
 export interface UISettings {

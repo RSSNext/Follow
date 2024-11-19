@@ -51,7 +51,7 @@ const useShowWebContextMenu = () => {
 
 // Menu
 
-type BaseMenuItemText = {
+export type BaseMenuItemText = {
   type: "text"
   label: string
   click?: () => void
