@@ -4,6 +4,7 @@ import * as React from "react"
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react"
 import { Drawer } from "vaul"
 
+import { RootPortalProvider } from "../portal/provider"
 import { SheetContext, sheetStackAtom } from "./context"
 
 export interface PresentSheetProps {
@@ -83,12 +84,15 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
     const overlayZIndex = zIndex - 1
     const contentZIndex = zIndex
 
+    const contentInnerRef = React.useRef<HTMLDivElement>(null)
+    useImperativeHandle(contentRef, () => contentInnerRef.current!)
+
     return (
       <Drawer.Root nested dismissible={dismissible} {...nextRootProps}>
         {!!children && <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>}
         <Drawer.Portal>
           <Drawer.Content
-            ref={contentRef}
+            ref={contentInnerRef}
             style={{
               zIndex: contentZIndex,
             }}
@@ -114,9 +118,11 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
                 [setIsOpen],
               )}
             >
-              <div className="flex grow flex-col overflow-auto px-4">
-                {typeof content === "function" ? React.createElement(content) : content}
-              </div>
+              <RootPortalProvider value={contentInnerRef.current!}>
+                <div className="flex grow flex-col overflow-auto px-4">
+                  {typeof content === "function" ? React.createElement(content) : content}
+                </div>
+              </RootPortalProvider>
             </SheetContext.Provider>
             <div ref={setHolderRef} />
           </Drawer.Content>

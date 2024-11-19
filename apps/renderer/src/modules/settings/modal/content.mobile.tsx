@@ -55,9 +55,7 @@ const Content = (props: { tab: string }) => {
       <SettingsTitle loader={loader} className="relative -mt-6 mb-0 text-xl font-semibold" />
       {createElement(Component)}
 
-      <div className="h-12" />
-
-      <p className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-1 text-xs opacity-80">
+      <p className="flex items-center justify-center gap-1 text-xs opacity-80">
         <Trans
           ns="settings"
           i18nKey="common.give_star"

@@ -63,9 +63,9 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
                 initial={{ opacity: 0.01, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0.01, y: 30 }}
-                className="pointer-events-auto flex min-w-0 shrink gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground"
+                className="pointer-events-auto flex w-full min-w-0 shrink gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground"
               >
-                <div className="flex min-w-0 items-center">
+                <div className="flex min-w-0 grow items-center">
                   <div className="flex min-w-0 shrink items-end gap-1">
                     <span className="min-w-0 shrink truncate font-bold">
                       {entryTitleMeta.title}
