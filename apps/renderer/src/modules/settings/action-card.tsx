@@ -58,7 +58,7 @@ const TransitionOptions: {
 const FieldTableHeader = () => {
   const { t } = useTranslation("settings")
   return (
-    <TableHeader>
+    <TableHeader className="max-sm:hidden">
       <TableRow>
         <TableHead size="sm">{t("actions.action_card.field")}</TableHead>
         <TableHead size="sm">{t("actions.action_card.operator")}</TableHead>
@@ -77,14 +77,32 @@ const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: 
   </TableCell>
 )
 
-const AndTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: () => void }) => {
+const ActionTableCell = ({
+  disabled,
+  onAnd,
+  onDelete,
+}: {
+  disabled?: boolean
+  onAnd?: () => void
+  onDelete?: () => void
+}) => {
   const { t } = useTranslation("settings")
   return (
-    <TableCell size="sm">
-      <Button variant="outline" className="w-full" disabled={disabled} onClick={onClick}>
-        {t("actions.action_card.and")}
-      </Button>
-    </TableCell>
+    <>
+      <TableCell size="sm" className="max-sm:flex max-sm:space-x-2 max-sm:pr-0">
+        <Button variant="ghost" className="sm:w-full" disabled={disabled} onClick={onDelete}>
+          <i className="i-mgc-delete-2-cute-re text-zinc-600" />
+        </Button>
+        <Button className="w-full sm:hidden" variant="outline" disabled={disabled} onClick={onAnd}>
+          {t("actions.action_card.and")}
+        </Button>
+      </TableCell>
+      <TableCell size="sm" className="max-sm:hidden">
+        <Button variant="outline" className="w-full" disabled={disabled} onClick={onAnd}>
+          {t("actions.action_card.and")}
+        </Button>
+      </TableCell>
+    </>
   )
 }
 
@@ -173,9 +191,13 @@ const OperationTableCell = ({
 
   const options = OperationOptions.filter((option) => option.types.includes(type))
   return (
-    <TableCell size="sm">
+    <TableCell
+      size="sm"
+      className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:pr-0"
+    >
+      <span className="sm:hidden">{t("actions.action_card.operator")}</span>
       <Select disabled={disabled} value={value} onValueChange={onValueChange}>
-        <SelectTrigger className="h-8">
+        <SelectTrigger className="h-8 max-sm:w-fit">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -376,8 +398,14 @@ export function ActionCard({
                                   </Button>
                                 </TableRow>
                               )}
-                              <TableRow>
-                                <TableCell size="sm">
+                              <TableRow className="max-sm:flex max-sm:flex-col">
+                                <TableCell
+                                  size="sm"
+                                  className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:pr-0"
+                                >
+                                  <span className="sm:hidden">
+                                    {t("actions.action_card.field")}
+                                  </span>
                                   <Select
                                     disabled={disabled}
                                     value={condition.field}
@@ -385,7 +413,7 @@ export function ActionCard({
                                       change("field", value)
                                     }
                                   >
-                                    <CommonSelectTrigger />
+                                    <CommonSelectTrigger className="max-sm:w-fit" />
                                     <SelectContent>
                                       {FeedOptions.map((option) => (
                                         <SelectItem key={option.value} value={option.value}>
@@ -401,14 +429,20 @@ export function ActionCard({
                                   value={condition.operator}
                                   onValueChange={(value) => change("operator", value)}
                                 />
-                                <TableCell size="sm">
+                                <TableCell
+                                  size="sm"
+                                  className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:gap-4 max-sm:pr-0"
+                                >
+                                  <span className="sm:hidden">
+                                    {t("actions.action_card.value")}
+                                  </span>
                                   {type === "view" ? (
                                     <Select
                                       disabled={disabled}
                                       onValueChange={(value) => change("value", value)}
                                       value={condition.value}
                                     >
-                                      <CommonSelectTrigger />
+                                      <CommonSelectTrigger className="max-sm:w-fit" />
                                       <ViewSelectContent />
                                     </Select>
                                   ) : (
@@ -421,16 +455,13 @@ export function ActionCard({
                                     />
                                   )}
                                 </TableCell>
-                                <AndTableCell
+                                <ActionTableCell
                                   disabled={disabled}
-                                  onClick={() => {
+                                  onAnd={() => {
                                     data.condition[orConditionIdx].push({})
                                     onChange(data)
                                   }}
-                                />
-                                <DeleteTableCell
-                                  disabled={disabled}
-                                  onClick={() => {
+                                  onDelete={() => {
                                     if (data.condition[orConditionIdx].length === 1) {
                                       data.condition.splice(orConditionIdx, 1)
                                     } else {
