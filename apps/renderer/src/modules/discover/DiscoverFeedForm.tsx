@@ -330,7 +330,7 @@ export const DiscoverFeedForm = ({
         )}
         <div
           className={cn(
-            "sticky bottom-0 -mt-4 mb-1 flex w-full translate-y-3 justify-end py-3",
+            "sticky bottom-0 -mt-4 mb-1 flex w-full justify-end py-3",
             submitButtonClassName,
           )}
         >
