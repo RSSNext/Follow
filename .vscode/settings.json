@@ -80,5 +80,11 @@
   "i18n-ally.displayLanguage": "en",
   "i18n-ally.localesPaths": ["locales"],
   "i18n-ally.namespace": true,
-  "i18n-ally.pathMatcher": "{namespaces}/{locale}.json"
+  "i18n-ally.pathMatcher": "{namespaces}/{locale}.json",
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
 }
