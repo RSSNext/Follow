@@ -27,7 +27,7 @@ export const SubviewLayout = () => {
         )}
         style={{
           opacity,
-          borderColor: `hsl(var(--border) / ${borderOpacity.get()})`,
+          borderColor: useTransform(borderOpacity, (value) => `hsl(var(--border) / ${value})`),
         }}
       >
         <div />
