@@ -368,7 +368,7 @@ export function ActionCard({
                             FeedOptions.find((option) => option.value === condition.field)?.type ||
                             "text"
                           return (
-                            <Fragment key={orConditionIdx}>
+                            <Fragment key={`${orConditionIdx}${conditionIdx}`}>
                               {conditionIdx === 0 && orConditionIdx !== 0 && (
                                 <TableRow className="flex h-16 items-center">
                                   <Button disabled variant="outline">
@@ -431,7 +431,11 @@ export function ActionCard({
                                 <DeleteTableCell
                                   disabled={disabled}
                                   onClick={() => {
-                                    data.condition[orConditionIdx].splice(conditionIdx, 1)
+                                    if (data.condition[orConditionIdx].length === 1) {
+                                      data.condition.splice(orConditionIdx, 1)
+                                    } else {
+                                      data.condition[orConditionIdx].splice(conditionIdx, 1)
+                                    }
                                     onChange(data)
                                   }}
                                 />

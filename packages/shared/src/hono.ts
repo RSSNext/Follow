@@ -769,6 +769,8 @@ declare const detailModelSchema: z.ZodNullable<z.ZodObject<{
     "GitHub Community Contributions Rank": number;
 }>>;
 type DetailModel = z.infer<typeof detailModelSchema>;
+declare const activityEnum: readonly ["public_beta"];
+type AirdropActivity = typeof activityEnum[number];
 declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "airdrops";
     schema: undefined;
@@ -4537,7 +4539,7 @@ declare const walletsRelations: drizzle_orm.Relations<"wallets", {
     transactionTo: drizzle_orm.Many<"transactions">;
     level: drizzle_orm.One<"levels", false>;
 }>;
-declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw", "purchase"]>;
+declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw", "purchase", "airdrop"]>;
 declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "transactions";
     schema: undefined;
@@ -4563,14 +4565,14 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             tableName: "transactions";
             dataType: "string";
             columnType: "PgEnumColumn";
-            data: "tip" | "mint" | "burn" | "withdraw" | "purchase";
+            data: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
             driverParam: string;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: ["tip", "mint", "burn", "withdraw", "purchase"];
+            enumValues: ["tip", "mint", "burn", "withdraw", "purchase", "airdrop"];
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
@@ -4723,7 +4725,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
 }>;
 declare const transactionsOpenAPISchema: zod.ZodObject<{
     hash: zod.ZodString;
-    type: zod.ZodEnum<["tip", "mint", "burn", "withdraw", "purchase"]>;
+    type: zod.ZodEnum<["tip", "mint", "burn", "withdraw", "purchase", "airdrop"]>;
     fromUserId: zod.ZodNullable<zod.ZodString>;
     toUserId: zod.ZodNullable<zod.ZodString>;
     toFeedId: zod.ZodNullable<zod.ZodString>;
@@ -4734,7 +4736,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     createdAt: zod.ZodString;
     comment: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
+    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
     fromUserId: string | null;
     toUserId: string | null;
@@ -4746,7 +4748,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     tax: string;
     comment: string | null;
 }, {
-    type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
+    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
     fromUserId: string | null;
     toUserId: string | null;
@@ -5652,6 +5654,17 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
     };
 } & {
     "/wallets/airdrop": {
+        $post: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
         $get: {
             input: {};
             output: {
@@ -5743,7 +5756,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
+                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
                     createdAt: string;
                     fromUserId: string | null;
                     toUserId: string | null;
@@ -7576,4 +7589,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

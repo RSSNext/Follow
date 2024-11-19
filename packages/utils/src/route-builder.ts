@@ -1,4 +1,4 @@
-import { get, omit } from "lodash-es"
+import { get, omit } from "es-toolkit/compat"
 import { Fragment } from "react/jsx-runtime"
 import type { RouteObject } from "react-router-dom"
 
@@ -119,7 +119,7 @@ export function buildGlobRoutes(glob: Record<string, () => Promise<any>>): Route
 
         const childrenChildren: RouteObject[] = []
         // should omit layout, because layout is already handled
-        dtsRoutes(parentKey, childrenChildren, omit(paths, "layout"), parentPath)
+        dtsRoutes(parentKey, childrenChildren, omit(paths, "layout") as NestedStructure, parentPath)
         children.push({
           path: "",
           lazy: globGetter,
