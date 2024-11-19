@@ -75,14 +75,12 @@ export const EntryItemWrapper: FC<
       setIsContextMenuOpen(true)
       await showContextMenu(
         [
-          ...actionConfigs
-            .filter((item) => !item.hide)
-            .map((item) => ({
-              type: "text" as const,
-              label: item.name,
-              click: () => item.onClick(),
-              shortcut: item.shortcut,
-            })),
+          ...actionConfigs.map((item) => ({
+            type: "text" as const,
+            label: item.name,
+            click: () => item.onClick(),
+            shortcut: item.shortcut,
+          })),
           {
             type: "separator" as const,
           },
