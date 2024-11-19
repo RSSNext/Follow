@@ -1,8 +1,7 @@
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { repository } from "@pkg"
-import i18next from "i18next"
 import type { FC } from "react"
-import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
+import { Suspense, useDeferredValue, useLayoutEffect, useState } from "react"
 import { Trans } from "react-i18next"
 
 import { ModalClose } from "~/components/ui/modal/stacked/components"
@@ -27,10 +26,6 @@ const pages = (() => {
 export const SettingModalContent: FC<{
   initialTab?: string
 }> = ({ initialTab }) => {
-  useEffect(() => {
-    // load i18n
-    i18next.loadNamespaces("settings")
-  }, [])
   return (
     <SettingTabProvider>
       <SettingModalLayout

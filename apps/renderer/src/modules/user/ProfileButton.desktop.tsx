@@ -23,7 +23,7 @@ import {
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { useSettingModal } from "~/modules/settings/modal/use-setting-modal-hack"
 import { useSession } from "~/queries/auth"
 import { useWallet } from "~/queries/wallet"
 
