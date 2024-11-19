@@ -24,7 +24,7 @@ export function AudioItemStateLess({ entry, feed }: EntryItemStatelessProps) {
               <span>·</span>
               <span>{!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}</span>
             </div>
-            <div className="relative my-0.5 line-clamp-3 break-words  font-medium">
+            <div className="relative my-0.5 line-clamp-3 break-words font-medium">
               {entry.description}
             </div>
           </div>
@@ -47,7 +47,7 @@ export function AudioItemStateLess({ entry, feed }: EntryItemStatelessProps) {
                 blurhash={entry.media[0].blurhash}
               />
             ) : (
-              <Skeleton className="mr-2 size-20 shrink-0 overflow-hidden rounded-sm " />
+              <Skeleton className="mr-2 size-20 shrink-0 overflow-hidden rounded-sm" />
             )}
           </div>
         </div>

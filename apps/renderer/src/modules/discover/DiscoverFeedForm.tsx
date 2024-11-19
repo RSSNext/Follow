@@ -304,7 +304,7 @@ export const DiscoverFeedForm = ({
           )
         })}
         {routeParams && (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {Object.entries(routeParams).map(([key, value]) => (
               <FormItem key={`${routeParamsKeyPrefix}${key}`} className="flex flex-col space-y-2">
                 <FormLabel className="capitalize">{key}</FormLabel>

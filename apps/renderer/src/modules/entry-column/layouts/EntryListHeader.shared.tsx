@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { MdiMeditation } from "@follow/components/icons/Meditation.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
@@ -60,7 +61,9 @@ export const FilterNoImageButton = () => {
 export const SwitchToMasonryButton = () => {
   const isMasonry = useUISettingKey("pictureViewMasonry")
   const { t } = useTranslation()
+  const isMobile = useMobile()
 
+  if (isMobile) return null
   return (
     <ImpressionView
       event="Switch to Masonry"

@@ -1,5 +1,4 @@
 import { withResponsiveComponent } from "@follow/components/utils/selector.js"
-import { Outlet } from "react-router-dom"
 
 const noop = () =>
   Promise.resolve({
@@ -11,9 +10,9 @@ export const LeftSidebarLayout = withResponsiveComponent<object>(
       default: m.MainDestopLayout,
     })),
   () =>
-    Promise.resolve({
-      default: Outlet,
-    }),
+    import("~/modules/app-layout/left-sidebar/index.mobile").then((m) => ({
+      default: m.LeftSidebarLayout,
+    })),
 )
 
 export const MobileFeedScreen = withResponsiveComponent<object>(noop, () =>

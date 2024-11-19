@@ -2,16 +2,16 @@ import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/ind
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 import { findElementInShadowDOM } from "@follow/utils/dom"
-import { springScrollToElement } from "@follow/utils/scroller"
 import { clsx, cn } from "@follow/utils/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { RemoveScroll } from "react-remove-scroll"
+import { useEventCallback } from "usehooks-ts"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
-import { useTocItems } from "~/components/ui/markdown/components/useTocItems"
+import { useScrollTracking, useTocItems } from "~/components/ui/markdown/components/hooks"
 import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
@@ -54,20 +54,26 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
                 initial={{ opacity: 0.01, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0.01, y: 30 }}
-                className="pointer-events-auto flex min-w-0 shrink items-end gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground"
+                className="pointer-events-auto flex w-full min-w-0 shrink gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground"
               >
-                <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
-                <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
-                <span className="shrink-0 truncate text-xs opacity-80">
-                  {entryTitleMeta.description}
-                </span>
+                <div className="flex min-w-0 grow items-center">
+                  <div className="flex min-w-0 shrink items-end gap-1">
+                    <span className="min-w-0 shrink truncate font-bold">
+                      {entryTitleMeta.title}
+                    </span>
+                    <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
+                    <span className="shrink-0 truncate text-xs opacity-80">
+                      {entryTitleMeta.description}
+                    </span>
+                  </div>
+                </div>
+                <HeaderRightActions actions={actionConfigs} />
               </m.div>
             )}
           </AnimatePresence>
         </div>
 
         <HeaderTopReturnBackButton className={"absolute left-0"} />
-        <HeaderRightActions actions={actionConfigs} className={!shouldShowMeta ? "hidden" : ""} />
         <div className="flex-1" />
 
         <div
@@ -106,33 +112,45 @@ const HeaderRightActions = ({
   const [markdownElement, setMarkdownElement] = useState<HTMLElement | null>(null)
   const { toc, rootDepth } = useTocItems(markdownElement)
 
+  const getSetMarkdownElement = useEventCallback(() => {
+    setMarkdownElement(
+      findElementInShadowDOM(`#${ENTRY_CONTENT_RENDER_CONTAINER_ID}`) as HTMLElement,
+    )
+  })
+  useEffect(() => {
+    const timeout = setTimeout(getSetMarkdownElement, 1000)
+    return () => clearTimeout(timeout)
+  }, [getSetMarkdownElement])
+
+  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc, {
+    useWindowScroll: true,
+  })
+
   return (
-    <div className={clsx(className, "absolute right-0 flex items-center gap-2")}>
+    <div className={clsx(className, "flex items-center gap-2 text-zinc-500")}>
       <PresentSheet
         title="Table of Contents"
-        onOpenChange={(open) => {
-          if (open) {
-            setMarkdownElement(
-              findElementInShadowDOM(`#${ENTRY_CONTENT_RENDER_CONTAINER_ID}`) as HTMLElement,
-            )
-          }
-        }}
         content={
           <ul className="text-sm">
-            {toc.map((heading) => (
+            {toc.map((heading, index) => (
               <li
                 key={heading.anchorId}
-                className="flex w-full items-center"
+                className={cn(
+                  "flex w-full items-center",
+                  currentScrollRange[0] === index && "text-accent",
+                )}
                 style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
               >
                 <button
                   className={cn("group flex w-full cursor-pointer justify-between py-1")}
                   type="button"
                   onClick={() => {
-                    springScrollToElement(heading.$heading, -100)
+                    handleScrollTo(index, heading.$heading, heading.anchorId)
                   }}
                 >
-                  <span className="duration-200 group-hover:text-accent/80">{heading.title}</span>
+                  <span className="text-left duration-200 group-hover:text-accent/80">
+                    {heading.title}
+                  </span>
 
                   <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
                 </button>
@@ -141,10 +159,14 @@ const HeaderRightActions = ({
           </ul>
         }
       >
-        <MotionButtonBase className="center size-8">
+        <MotionButtonBase
+          disabled={toc.length === 0}
+          className="center size-8 duration-200 disabled:opacity-50"
+        >
           <TableOfContentsIcon className="size-6" />
         </MotionButtonBase>
       </PresentSheet>
+
       <MotionButtonBase className="center size-8" onClick={() => setCtxOpen((v) => !v)}>
         <i className="i-mingcute-more-1-fill size-6" />
       </MotionButtonBase>

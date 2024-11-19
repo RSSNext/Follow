@@ -426,9 +426,9 @@ const FallbackableImage: FC<
                   resolutionY={32}
                   className="!size-full"
                 />
-              ) : (
+              ) : isLoading ? (
                 <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-              )}
+              ) : null}
             </div>
           </TransformComponent>
         </TransformWrapper>

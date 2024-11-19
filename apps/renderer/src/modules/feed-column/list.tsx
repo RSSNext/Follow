@@ -16,7 +16,6 @@ import {
   useRef,
   useState,
 } from "react"
-import { isHotkeyPressed } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -218,10 +217,29 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
             ref={selectoRef}
             rootContainer={document.body}
             dragContainer={"#feeds-area"}
-            dragCondition={() => selectedFeedIds.length === 0 || isHotkeyPressed("Meta")}
+            dragCondition={(e) => {
+              const inputEvent = e.inputEvent as MouseEvent
+              const target = inputEvent.target as HTMLElement
+              const closest = target.closest("[data-feed-id]") as HTMLElement | null
+              const dataFeedId = closest?.dataset.feedId
+
+              if (
+                dataFeedId &&
+                selectedFeedIds.includes(dataFeedId) &&
+                !isKeyForMultiSelectPressed(inputEvent)
+              )
+                return false
+
+              return true
+            }}
+            onDragStart={(e) => {
+              if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
+                setSelectedFeedIds([])
+              }
+            }}
             selectableTargets={["[data-feed-id]"]}
             continueSelect
-            hitRate={10}
+            hitRate={1}
             onSelect={(e) => {
               const allChanged = [...e.added, ...e.removed]
                 .map((el) => el.dataset.feedId)
@@ -356,12 +374,9 @@ const ListHeader = ({ view }: { view: number }) => {
   const navigateEntry = useNavigateEntry()
 
   return (
-    <div
-      onClick={stopPropagation}
-      className="mx-3 mb-6 mt-12 flex items-center justify-between px-2.5 py-1 lg:my-0"
-    >
+    <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
       <div
-        className="text-4xl font-bold lg:text-base"
+        className="text-base font-bold"
         onClick={(e) => {
           e.stopPropagation()
           if (!document.hasFocus()) return
@@ -376,7 +391,7 @@ const ListHeader = ({ view }: { view: number }) => {
       >
         {view !== undefined && t(views[view].name)}
       </div>
-      <div className="ml-2 flex items-center gap-3 text-base text-theme-vibrancyFg lg:text-sm">
+      <div className="ml-2 flex items-center gap-3 text-base text-zinc-400 dark:text-zinc-600 lg:text-sm lg:!text-theme-vibrancyFg">
         <SortButton />
         {expansion ? (
           <i

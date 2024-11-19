@@ -4,6 +4,7 @@ import * as React from "react"
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react"
 import { Drawer } from "vaul"
 
+import { RootPortalProvider } from "../portal/provider"
 import { SheetContext, sheetStackAtom } from "./context"
 
 export interface PresentSheetProps {
@@ -83,23 +84,26 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
     const overlayZIndex = zIndex - 1
     const contentZIndex = zIndex
 
+    const contentInnerRef = React.useRef<HTMLDivElement>(null)
+    useImperativeHandle(contentRef, () => contentInnerRef.current!)
+
     return (
-      <Drawer.Root dismissible={dismissible} {...nextRootProps}>
+      <Drawer.Root nested dismissible={dismissible} {...nextRootProps}>
         {!!children && <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>}
         <Drawer.Portal>
           <Drawer.Content
-            ref={contentRef}
+            ref={contentInnerRef}
             style={{
               zIndex: contentZIndex,
             }}
-            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque px-6 pt-4 pb-safe-offset-4"
+            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4 pb-safe-offset-4"
           >
             {dismissible && (
               <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800" />
             )}
 
             {!!title && (
-              <Drawer.Title className="-mt-4 mb-4 flex justify-center text-lg font-medium">
+              <Drawer.Title className="-mt-4 mb-4 flex justify-center px-4 text-lg font-medium">
                 {title}
               </Drawer.Title>
             )}
@@ -114,9 +118,11 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
                 [setIsOpen],
               )}
             >
-              <div className="flex grow flex-col overflow-auto">
-                {typeof content === "function" ? React.createElement(content) : content}
-              </div>
+              <RootPortalProvider value={contentInnerRef.current!}>
+                <div className="flex grow flex-col overflow-auto px-4">
+                  {typeof content === "function" ? React.createElement(content) : content}
+                </div>
+              </RootPortalProvider>
             </SheetContext.Provider>
             <div ref={setHolderRef} />
           </Drawer.Content>

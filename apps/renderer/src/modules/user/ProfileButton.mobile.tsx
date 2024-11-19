@@ -6,6 +6,7 @@ import { UrlBuilder } from "@follow/utils/url-builder"
 import clsx from "clsx"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 import { useUserRole, useWhoami } from "~/atoms/user"
 import { useSignOut } from "~/hooks/biz/useSignOut"
@@ -14,6 +15,7 @@ import { useWallet } from "~/queries/wallet"
 import { useAchievementModal } from "../achievement/hooks"
 import { useActivationModal } from "../activation"
 import { usePresentUserProfileModal } from "../profile/hooks"
+import { useSettingModal } from "../settings/modal/use-setting-modal-hack"
 import { ActivityPoints } from "../wallet/activity-points"
 import { Level } from "../wallet/level"
 import type { ProfileButtonProps } from "./ProfileButton.desktop"
@@ -34,9 +36,10 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
   const { isLoading: isLoadingWallet } = wallet
   const myWallet = wallet.data?.[0]
   const presentActivationModal = useActivationModal()
-
+  const settingModalPresent = useSettingModal()
   return (
     <PresentSheet
+      zIndex={99}
       content={
         <>
           <div className="p-4 pt-0">
@@ -55,8 +58,10 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
             </div>
           </div>
 
-          <div className="mx-auto flex w-[300px] items-center justify-between font-semibold">
-            {/* TODO navigate to wallet page */}
+          <Link
+            to="/power"
+            className="mx-auto flex w-[300px] items-center justify-between font-semibold"
+          >
             <PowerButton isLoading={isLoadingWallet} myWallet={myWallet} />
             <Level level={myWallet?.level?.level || 0} isLoading={isLoadingWallet} />
             <ActivityPoints
@@ -64,7 +69,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
               points={myWallet?.level?.prevActivityPoints || 0}
               isLoading={isLoadingWallet}
             />
-          </div>
+          </Link>
 
           <Divider className="h-px !bg-border" />
 
@@ -90,7 +95,13 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
             />
 
             <Divider className="mx-auto h-px w-[50px] !bg-border/80" />
-
+            <Item
+              label={t("user_button.preferences")}
+              onClick={() => {
+                settingModalPresent()
+              }}
+              icon={<i className="i-mgc-settings-7-cute-re" />}
+            />
             <Item
               label={t("user_button.log_out")}
               onClick={signOut}
@@ -100,7 +111,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
         </>
       }
     >
-      <UserAvatar hideName className="size-6 p-0 [&_*]:border-0" />
+      <UserAvatar hideName className="size-6 shrink-0 p-0 [&_*]:border-0" />
     </PresentSheet>
   )
 }

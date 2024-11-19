@@ -3,7 +3,6 @@ import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/EllipsisWithTooltip.js"
 import { UserRole } from "@follow/constants"
 import { useMeasure } from "@follow/hooks"
-import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { repository } from "@pkg"
@@ -24,7 +23,7 @@ import {
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { useSettingModal } from "~/modules/settings/modal/use-setting-modal-hack"
 import { useSession } from "~/queries/auth"
 import { useWallet } from "~/queries/wallet"
 
@@ -144,7 +143,7 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           <DropdownMenuItem
             className="pl-3"
             onClick={() => {
-              nextFrame(settingModalPresent)
+              settingModalPresent()
             }}
             icon={<i className="i-mgc-settings-7-cute-re" />}
           >

@@ -87,7 +87,7 @@ export const UserProfileModalContent: FC<SubscriptionModalContentProps> = ({ use
               </Button>
             </div>
           </div>
-          <div className="w-full max-w-full grow px-5">
+          <div className="w-full max-w-full grow">
             {subscriptions.isLoading ? (
               <LoadingWithIcon
                 size="large"

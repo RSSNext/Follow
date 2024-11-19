@@ -8,7 +8,7 @@ declare global {
   interface History {
     stack: string[]
 
-    returnBack: () => void
+    returnBack: (to?: string) => void
 
     get isPop(): boolean
   }
@@ -59,19 +59,21 @@ export const registerHistoryStack = () => {
   })
 
   Object.defineProperty(window.history, "returnBack", {
-    value: () => {
+    value: (to?: string) => {
       const stack = jotaiStore.get(historyAtom)
-      const last = stack.at(-1)
       F.isPop = true
+      const last = stack.at(-1)
 
-      if (last) {
-        window.history.back()
-      } else {
-        window.router.navigate("/")
+      to = typeof to === "string" ? to : last
+
+      if (!last || last !== to) {
+        window.router.navigate(to ?? "/")
 
         nextFrame(() => {
           jotaiStore.set(historyAtom, [])
         })
+      } else {
+        window.history.back()
       }
     },
     enumerable: false,

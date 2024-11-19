@@ -103,7 +103,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
         />
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-96 space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 lg:w-96">
           <FormField
             control={form.control}
             name="address"

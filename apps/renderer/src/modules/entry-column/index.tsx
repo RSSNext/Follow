@@ -1,9 +1,9 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
-import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle, useTypeScriptHappyCallback } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
-import { clsx, isBizId } from "@follow/utils/utils"
+import { isBizId } from "@follow/utils/utils"
 import type { FunctionComponent } from "react"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -17,7 +17,6 @@ import { VirtuosoGrid } from "react-virtuoso"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
-import { m } from "~/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "~/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "~/components/errors/FeedNotFound"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
@@ -36,6 +35,7 @@ import { PictureMasonry } from "./Items/picture-masonry"
 import { EntryListHeader } from "./layouts/EntryListHeader"
 import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
 import { girdClassNames } from "./styles"
+import { EntryColumnWrapper } from "./wrapper"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
@@ -138,6 +138,16 @@ function EntryColumnImpl() {
     hasNoEntries && !isArchived ? prevEntriesIdsRef.current || entriesIds : entriesIds
 
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    if (!isInteracted.current) {
+      isInteracted.current = true
+    }
+    const { scrollTop } = e.currentTarget
+
+    prevScrollTop = scrollTop
+  }, [])
+
   const virtuosoOptions = {
     components: {
       List: EntryListContent,
@@ -191,6 +201,7 @@ function EntryColumnImpl() {
       }
     }, [entries]),
     data: finalEntriesIds,
+    onScroll: handleScroll,
     itemContent: useTypeScriptHappyCallback(
       (_, entryId) => {
         if (!entryId) return <ReactVirtuosoItemPlaceholder />
@@ -201,25 +212,21 @@ function EntryColumnImpl() {
     ),
   } satisfies VirtuosoProps<string, VirtuosoComponentProps>
 
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    if (!isInteracted.current) {
-      isInteracted.current = true
-    }
-    const { scrollTop } = e.currentTarget
-    prevScrollTop = scrollTop
-  }, [])
-
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
 
+  const isMobile = useMobile()
   return (
     <div
       data-hide-in-print
       className="relative flex h-full flex-1 flex-col @container"
-      onClick={() =>
-        navigate({
-          entryId: null,
-        })
+      onClick={
+        isMobile
+          ? undefined
+          : () =>
+              navigate({
+                entryId: null,
+              })
       }
       data-total-count={virtuosoOptions.totalCount}
     >
@@ -234,49 +241,31 @@ function EntryColumnImpl() {
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
-      {/* <AutoResizeHeight spring>
-        {isRefreshing && (
-          <div className="center box-content h-7 gap-2 py-3 text-xs">
-            <LoadingCircle size="small" />
-            {t("entry_column.refreshing")}
-          </div>
-        )}
-      </AutoResizeHeight> */}
-      <m.div
+
+      <EntryColumnWrapper
+        onScroll={handleScroll}
+        onPullToRefresh={entries.refetch}
         key={`${routeFeedId}-${view}`}
-        className="relative mt-2 h-0 grow"
-        initial={{ opacity: 0.01, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0.01, y: -100 }}
       >
-        <ScrollArea.ScrollArea
-          scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
-          mask={false}
-          ref={scrollRef}
-          onScroll={handleScroll}
-          rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}
-          viewportClassName="[&>div]:grow flex"
-        >
-          {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
-            entries.isLoading ? null : (
-              <EntryEmptyList />
-            )
-          ) : view && views[view].gridMode ? (
-            <ListGird
-              virtuosoOptions={virtuosoOptions}
-              virtuosoRef={virtuosoRef}
-              hasNextPage={entries.hasNextPage}
-            />
-          ) : (
-            <EntryList
-              {...virtuosoOptions}
-              virtuosoRef={virtuosoRef}
-              refetch={entries.refetch}
-              groupCounts={groupedCounts}
-            />
-          )}
-        </ScrollArea.ScrollArea>
-      </m.div>
+        {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
+          entries.isLoading ? null : (
+            <EntryEmptyList />
+          )
+        ) : view && views[view].gridMode ? (
+          <ListGird
+            virtuosoOptions={virtuosoOptions}
+            virtuosoRef={virtuosoRef}
+            hasNextPage={entries.hasNextPage}
+          />
+        ) : (
+          <EntryList
+            {...virtuosoOptions}
+            virtuosoRef={virtuosoRef}
+            refetch={entries.refetch}
+            groupCounts={groupedCounts}
+          />
+        )}
+      </EntryColumnWrapper>
     </div>
   )
 }
@@ -296,7 +285,8 @@ const ListGird = ({
   virtuosoRef: React.RefObject<VirtuosoHandle>
   hasNextPage: boolean
 }) => {
-  const masonry = useUISettingKey("pictureViewMasonry")
+  const isMobile = useMobile()
+  const masonry = useUISettingKey("pictureViewMasonry") || isMobile
   const view = useRouteParamsSelector((s) => s.view)
   const feedId = useRouteParamsSelector((s) => s.feedId)
   const filterNoImage = useUISettingKey("pictureViewFilterNoImage")

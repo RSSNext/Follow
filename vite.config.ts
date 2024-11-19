@@ -8,6 +8,7 @@ import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
 import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
+import { VitePWA } from "vite-plugin-pwa"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
@@ -64,6 +65,17 @@ export default ({ mode }) => {
       watch: {
         ignored: ["**/dist/**", "**/out/**", "**/public/**", ".git/**"],
       },
+      ...(env.VITE_DEV_PROXY
+        ? {
+            proxy: {
+              [env.VITE_DEV_PROXY]: {
+                target: env.VITE_DEV_PROXY_TARGET,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(new RegExp(`^${env.VITE_DEV_PROXY}`), ""),
+              },
+            },
+          }
+        : {}),
     },
     resolve: {
       alias: {
@@ -73,6 +85,46 @@ export default ({ mode }) => {
     },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
+      VitePWA({
+        devOptions: {
+          enabled: true,
+          type: "module",
+        },
+        workbox: {
+          globPatterns: [
+            "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
+          ],
+          globIgnores: ["manifest**.webmanifest"],
+        },
+        manifest: {
+          theme_color: "#ff5c00",
+          name: "Follow",
+          display: "standalone",
+          icons: [
+            {
+              src: "pwa-64x64.png",
+              sizes: "64x64",
+              type: "image/png",
+            },
+            {
+              src: "pwa-192x192.png",
+              sizes: "192x192",
+              type: "image/png",
+            },
+            {
+              src: "pwa-512x512.png",
+              sizes: "512x512",
+              type: "image/png",
+            },
+            {
+              src: "maskable-icon-512x512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
+            },
+          ],
+        },
+      }),
       mode !== "development" &&
         legacy({
           targets: "defaults",
