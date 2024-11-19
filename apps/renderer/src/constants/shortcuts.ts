@@ -4,7 +4,7 @@ type Shortcuts = Record<
   string,
   Record<string, { name: I18nKeysForShortcuts; key: string; extra?: string }>
 >
-export const shortcuts: Shortcuts = {
+export const shortcuts = {
   feeds: {
     add: {
       name: "keys.feeds.add",
@@ -114,7 +114,7 @@ export const shortcuts: Shortcuts = {
       key: "Meta+K",
     },
   },
-}
+} as const satisfies Shortcuts
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",
