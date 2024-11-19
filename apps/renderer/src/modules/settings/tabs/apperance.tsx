@@ -359,7 +359,7 @@ const CustomCSSModal = () => {
     >
       <Suspense
         fallback={
-          <div className="center flex h-0 grow">
+          <div className="center flex grow lg:h-0">
             <LoadingCircle size="large" />
           </div>
         }
@@ -367,7 +367,7 @@ const CustomCSSModal = () => {
         <LazyCSSEditor
           defaultValue={initialCSS.current}
           key={key}
-          className="h-0 grow rounded-lg border p-3 font-mono"
+          className="h-[70vh] grow rounded-lg border p-3 font-mono lg:h-0"
           onChange={(value) => {
             setUISetting("customCSS", value)
           }}
