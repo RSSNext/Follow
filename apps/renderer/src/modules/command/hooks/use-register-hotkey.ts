@@ -22,6 +22,7 @@ export const useCommandHotkey = <T extends FollowCommandId>({
     shortcut,
     () => {
       const command = getCommand(commandId)
+
       if (!command) return
       if (Array.isArray(args)) {
         // It should be safe to spread the args here because we are checking if it is an array

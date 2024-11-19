@@ -16,7 +16,7 @@ import {
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { useHasModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { tipcClient } from "~/lib/client"
@@ -36,8 +36,10 @@ const EntryHeaderActions = ({ entryId }: { entryId: string }) => {
   const actionConfigs = useEntryActions({ entryId })
   const entry = useEntry(entryId)
 
+  const hasModal = useHasModal()
+
   useCommandHotkey({
-    when: !!entry?.entries.url,
+    when: !!entry?.entries.url && !hasModal,
     shortcut: shortcuts.entry.openInBrowser.key,
     commandId: COMMAND_ID.entry.openInBrowser,
     args: [{ entryId }],
@@ -54,6 +56,7 @@ const EntryHeaderActions = ({ entryId }: { entryId: string }) => {
           onClick={config.onClick}
           shortcut={config.shortcut}
           active={config.active}
+          disableTriggerShortcut={hasModal}
         />
       )
     })

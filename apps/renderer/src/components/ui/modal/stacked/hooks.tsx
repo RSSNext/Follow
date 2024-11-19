@@ -1,5 +1,6 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import type { DragControls } from "framer-motion"
+import { atom, useAtomValue } from "jotai"
 import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
 import { useCallback, useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
@@ -203,3 +204,6 @@ export const useDialog = (): DialogInstance => {
     }),
   }
 }
+
+const modalStackLengthAtom = atom((get) => get(modalStackAtom).length)
+export const useHasModal = () => useAtomValue(modalStackLengthAtom) > 0
