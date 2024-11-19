@@ -2,7 +2,7 @@ import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { cn } from "@follow/utils/utils"
 import { atom } from "jotai"
-import { useLayoutEffect, useRef } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
@@ -33,7 +33,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   const feed = useFeedById(entry?.feedId)
 
   const ref = useRef<HTMLDivElement>(null)
-
+  const [showAction, setShowAction] = useState(false)
   useLayoutEffect(() => {
     if (ref.current) {
       jotaiStore.set(socialMediaContentWidthAtom, ref.current.offsetWidth)
@@ -50,6 +50,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 
   return (
     <div
+      onMouseEnter={() => setShowAction(true)}
+      onMouseLeave={() => setShowAction(false)}
       className={cn(
         "relative flex px-8 py-6",
         "group",
@@ -157,14 +159,11 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
         )}
       </div>
 
-      <div
-        className={cn(
-          "absolute right-1 top-1.5",
-          "invisible opacity-0 duration-200 group-hover:visible group-hover:opacity-80",
-        )}
-      >
-        <ActionBar entryId={entryId} />
-      </div>
+      {showAction && (
+        <div className={"absolute right-1 top-1.5"}>
+          <ActionBar entryId={entryId} />
+        </div>
+      )}
     </div>
   )
 }
