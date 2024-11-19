@@ -2,7 +2,6 @@ import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
 import type { CombinedEntryModel } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { nextFrame } from "@follow/utils/dom"
 import { getOS } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import type { ReactNode } from "react"
@@ -209,13 +208,11 @@ export const useEntryActions = ({
         className: "i-mgc-power-outline",
         hide: isInbox || feed?.ownerUserId === whoami()?.id,
         onClick: () => {
-          nextFrame(() =>
-            openTipModal({
-              userId: populatedEntry?.feeds?.ownerUserId ?? undefined,
-              feedId: populatedEntry?.feeds?.id ?? undefined,
-              entryId: populatedEntry?.entries.id ?? undefined,
-            }),
-          )
+          openTipModal({
+            userId: populatedEntry?.feeds?.ownerUserId ?? undefined,
+            feedId: populatedEntry?.feeds?.id ?? undefined,
+            entryId: populatedEntry?.entries.id ?? undefined,
+          })
         },
       },
       {

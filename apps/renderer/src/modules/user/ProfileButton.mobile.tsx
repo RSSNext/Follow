@@ -15,6 +15,7 @@ import { useWallet } from "~/queries/wallet"
 import { useAchievementModal } from "../achievement/hooks"
 import { useActivationModal } from "../activation"
 import { usePresentUserProfileModal } from "../profile/hooks"
+import { useSettingModal } from "../settings/modal/hooks-hack"
 import { ActivityPoints } from "../wallet/activity-points"
 import { Level } from "../wallet/level"
 import type { ProfileButtonProps } from "./ProfileButton.desktop"
@@ -35,9 +36,10 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
   const { isLoading: isLoadingWallet } = wallet
   const myWallet = wallet.data?.[0]
   const presentActivationModal = useActivationModal()
-
+  const settingModalPresent = useSettingModal()
   return (
     <PresentSheet
+      zIndex={99}
       content={
         <>
           <div className="p-4 pt-0">
@@ -93,7 +95,13 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
             />
 
             <Divider className="mx-auto h-px w-[50px] !bg-border/80" />
-
+            <Item
+              label={t("user_button.preferences")}
+              onClick={() => {
+                settingModalPresent()
+              }}
+              icon={<i className="i-mgc-settings-7-cute-re" />}
+            />
             <Item
               label={t("user_button.log_out")}
               onClick={signOut}

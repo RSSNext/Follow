@@ -3,7 +3,6 @@ import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/EllipsisWithTooltip.js"
 import { UserRole } from "@follow/constants"
 import { useMeasure } from "@follow/hooks"
-import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { repository } from "@pkg"
@@ -144,7 +143,7 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           <DropdownMenuItem
             className="pl-3"
             onClick={() => {
-              nextFrame(settingModalPresent)
+              settingModalPresent()
             }}
             icon={<i className="i-mgc-settings-7-cute-re" />}
           >
