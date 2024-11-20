@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import {
@@ -34,6 +35,7 @@ export const PowerRanking: Component = ({ className }) => {
   const { t } = useTranslation("settings")
   const ranking = useWalletRanking()
 
+  const isMobile = useMobile()
   return (
     <div className="relative flex min-w-0 grow flex-col">
       <SettingSectionTitle title={t("wallet.ranking.title")} />
@@ -41,10 +43,10 @@ export const PowerRanking: Component = ({ className }) => {
         <Table className="w-full table-fixed text-sm">
           <TableHeader className="sticky top-0 bg-theme-background">
             <TableRow className="[&_*]:!font-semibold">
-              <TableHead className="w-20">#</TableHead>
+              <TableHead className="w-12">#</TableHead>
               <TableHead>{t("wallet.ranking.name")}</TableHead>
               <TableHead>{t("wallet.ranking.power")}</TableHead>
-              <TableHead>{t("wallet.ranking.level")}</TableHead>
+              <TableHead className="w-24">{t("wallet.ranking.level")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -74,7 +76,14 @@ export const PowerRanking: Component = ({ className }) => {
                     </TableCell>
                     <TableCell className="py-2">
                       <div className="flex items-center gap-1">
-                        <Balance withSuffix>{row.powerToken}</Balance>
+                        <Balance
+                          withSuffix
+                          className="whitespace-nowrap"
+                          withTooltip
+                          scientificThreshold={isMobile ? 6 : 8}
+                        >
+                          {row.powerToken}
+                        </Balance>
                       </div>
                     </TableCell>
                     <TableCell className="py-2">
