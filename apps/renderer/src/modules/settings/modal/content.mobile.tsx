@@ -4,7 +4,7 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
-import { settings } from "../settings-glob"
+import { getSettingPages } from "../settings-glob"
 import { SettingsTitle } from "../title"
 import { SettingTabProvider } from "./context"
 import { SidebarItems } from "./layout"
@@ -33,22 +33,10 @@ export const MobileSettingModalContent = () => {
     </SettingTabProvider>
   )
 }
-const pages = (() => {
-  const pages = {}
-  for (const setting of settings) {
-    const filename = setting.path
-
-    pages[filename] = {
-      Component: setting.Component,
-      loader: setting.loader,
-    }
-  }
-  return pages
-})()
 
 const Content = (props: { tab: string }) => {
   const { tab } = props
-  const { Component, loader } = pages[tab]
+  const { Component, loader } = getSettingPages()[tab]
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

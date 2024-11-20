@@ -7,25 +7,14 @@ import { Trans } from "react-i18next"
 import { ModalClose } from "~/components/ui/modal/stacked/components"
 import { SettingsTitle } from "~/modules/settings/title"
 
-import { settings } from "../settings-glob"
+import { getSettingPages } from "../settings-glob"
 import { SettingTabProvider, useSettingTab } from "./context"
 import { SettingModalLayout } from "./layout"
 
-const pages = (() => {
-  const pages = {}
-  for (const setting of settings) {
-    const filename = setting.path
-
-    pages[filename] = {
-      Component: setting.Component,
-      loader: setting.loader,
-    }
-  }
-  return pages
-})()
 export const SettingModalContent: FC<{
   initialTab?: string
 }> = ({ initialTab }) => {
+  const pages = getSettingPages()
   return (
     <SettingTabProvider>
       <SettingModalLayout
@@ -39,6 +28,7 @@ export const SettingModalContent: FC<{
 
 const Content = () => {
   const key = useDeferredValue(useSettingTab() || "general")
+  const pages = getSettingPages()
   const { Component, loader } = pages[key]
 
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null)
