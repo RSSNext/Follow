@@ -4,7 +4,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import {
