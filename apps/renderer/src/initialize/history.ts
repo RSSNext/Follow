@@ -2,6 +2,8 @@ import { nextFrame } from "@follow/utils/dom"
 import { jotaiStore } from "@follow/utils/jotai"
 import { atom } from "jotai"
 
+import { router } from "~/router"
+
 const historyAtom = atom<string[]>([])
 
 declare global {
@@ -32,6 +34,7 @@ Object.defineProperty(F, "isPop", {
     __isPop = true
   },
 })
+
 export const registerHistoryStack = () => {
   const onPopState = (e: PopStateEvent) => {
     F.isPop = true
@@ -43,13 +46,10 @@ export const registerHistoryStack = () => {
   }
   window.addEventListener("popstate", onPopState)
 
-  // Push
-  const originalPushState = window.history.pushState
-  window.history.pushState = (...args) => {
-    const url = args[2] as string
+  const unsub = router.subscribe((e) => {
+    const url = e.location.pathname + e.location.search
     jotaiStore.set(historyAtom, [...jotaiStore.get(historyAtom), url])
-    return originalPushState(...args)
-  }
+  })
 
   Object.defineProperty(window.history, "stack", {
     get() {
@@ -88,6 +88,7 @@ export const registerHistoryStack = () => {
 
   return () => {
     window.removeEventListener("popstate", onPopState)
-    window.history.pushState = originalPushState
+
+    unsub()
   }
 }
