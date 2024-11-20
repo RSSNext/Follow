@@ -7270,6 +7270,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     entryId: string;
+                    view?: number | undefined;
                 };
             };
             output: {

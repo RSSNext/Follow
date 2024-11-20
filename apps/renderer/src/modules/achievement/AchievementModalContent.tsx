@@ -516,7 +516,7 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
           target="_blank"
           rel="noreferrer"
         >
-          Product Hunk!
+          Product Hunt!
         </a>{" "}
         Then fill in your username here.
       </label>

@@ -1,3 +1,4 @@
+import type { FeedViewType } from "@follow/constants"
 import type {
   CombinedEntryModel,
   EntryModel,
@@ -160,7 +161,7 @@ class EntryActions {
         })
 
     if (data.data) {
-      this.upsertMany(data.data)
+      this.upsertMany(data.data, { isArchived })
     }
     return data
   }
@@ -240,7 +241,7 @@ class EntryActions {
     })
   }
 
-  upsertMany(data: CombinedEntryModel[]) {
+  upsertMany(data: CombinedEntryModel[], options?: { isArchived?: boolean }) {
     const feeds = [] as FeedOrListRespModel[]
     const entries = [] as EntryModel[]
     const inboxes = [] as InboxModel[]
@@ -345,7 +346,7 @@ class EntryActions {
             }
           }
 
-          if (item.settings && draft.flatMapEntries[item.entries.id]) {
+          if (item.settings && draft.flatMapEntries[item.entries.id] && !options?.isArchived) {
             draft.flatMapEntries[item.entries.id].settings = item.settings
           }
         }
@@ -471,7 +472,7 @@ class EntryActions {
     await tx.run()
   }
 
-  async markStar(entryId: string, star: boolean) {
+  async markStar(entryId: string, star: boolean, view?: FeedViewType) {
     const tx = createTransaction<unknown, { prevIsStar: boolean }>({})
 
     tx.optimistic(async (_, ctx) => {
@@ -495,6 +496,7 @@ class EntryActions {
         await apiClient.collections.$post({
           json: {
             entryId,
+            view,
           },
         })
       } else {
