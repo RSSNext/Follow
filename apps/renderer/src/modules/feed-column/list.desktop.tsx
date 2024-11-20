@@ -147,6 +147,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
               .filter((id) => id !== undefined)
             const added = allChanged.filter((id) => !selectedFeedIds.includes(id))
             const removed = allChanged.filter((id) => selectedFeedIds.includes(id))
+
             if (isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
               const allVisible = Array.from(document.querySelectorAll("[data-feed-id]")).map(
                 (el) => (el as HTMLElement).dataset.feedId,
@@ -154,10 +155,12 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
               const currentSelected =
                 added.length === 1 ? added[0] : removed.length === 1 ? removed[0] : null
               const currentIndex = currentSelected ? allVisible.indexOf(currentSelected) : -1
+
               // command or ctrl with click, update start feed id
               if (!(e.inputEvent as MouseEvent).shiftKey && currentSelected) {
                 setCurrentStartFeedId(currentSelected)
               }
+
               // shift with click, select all between
               if ((e.inputEvent as MouseEvent).shiftKey && currentSelected) {
                 const firstSelected = currentStartFeedId ?? selectedFeedIds[0]
