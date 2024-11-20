@@ -97,9 +97,10 @@ export default ({ mode }) => {
           globIgnores: ["manifest**.webmanifest"],
         },
         manifest: {
-          theme_color: "#ff5c00",
+          theme_color: "#000000",
           name: "Follow",
           display: "standalone",
+          background_color: "#ffffff",
           icons: [
             {
               src: "pwa-64x64.png",
