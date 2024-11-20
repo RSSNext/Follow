@@ -1,4 +1,4 @@
-import { views } from "@follow/constants"
+import { FeedViewType, views } from "@follow/constants"
 import { clsx } from "clsx"
 import { forwardRef } from "react"
 
@@ -10,6 +10,11 @@ import type { EntryColumnWrapperProps } from "./wrapper.shared"
 import { styles } from "./wrapper.shared"
 
 const noop = async () => {}
+
+const selectorMap = {
+  // Masonry
+  [FeedViewType.Pictures]: "#entry-column-wrapper",
+}
 export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperProps>(
   ({ children, onPullToRefresh }, ref) => {
     const view = useRouteParamsSelector((state) => state.view)
@@ -17,8 +22,14 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
     return (
       <div className={clsx(styles, "relative flex flex-col")}>
         <div ref={ref} className={clsx("grow overflow-hidden", views[view].wideMode ? "mt-2" : "")}>
-          <PullToRefresh className="h-full" onRefresh={onPullToRefresh || noop}>
-            {children}
+          <PullToRefresh
+            className="h-full"
+            scrollContainerSelector={selectorMap[view]}
+            onRefresh={onPullToRefresh || noop}
+          >
+            <div id="entry-column-wrapper" className="h-full overflow-y-auto">
+              {children}
+            </div>
           </PullToRefresh>
         </div>
 
