@@ -51,7 +51,7 @@ export function MainMobileLayout() {
 
   const { t } = useTranslation()
   return (
-    <div className={"relative flex h-screen flex-col space-y-3"}>
+    <div className={"relative flex h-screen flex-col space-y-3 bg-background"}>
       <div className="mt-4 flex items-center justify-between pl-6 pr-2">
         <span className="inline-flex items-center gap-3 text-lg font-bold">
           <Logo className="size-8 shrink-0" />

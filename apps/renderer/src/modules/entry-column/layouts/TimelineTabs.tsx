@@ -31,7 +31,7 @@ export const TimelineTabs = () => {
 
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-3 flex overflow-x-auto scrollbar-none"
+      className="-ml-3 -mr-4 mt-2 flex overflow-x-auto overflow-y-hidden scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {

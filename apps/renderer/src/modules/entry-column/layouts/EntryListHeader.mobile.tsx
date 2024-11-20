@@ -77,9 +77,10 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
       className={cn(
         "mb-2 flex w-full flex-col pr-4 transition-[padding] duration-300 ease-in-out",
         "pl-6 pt-safe-offset-2.5",
+        "bg-background",
       )}
     >
-      <div className="flex w-full justify-between pl-8">
+      <div className="flex w-full justify-between pb-1 pl-8">
         <HeaderTopReturnBackButton
           to={`/?view=${view}`}
           className="absolute left-3 translate-y-px text-zinc-500"
