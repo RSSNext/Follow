@@ -128,6 +128,14 @@ const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElemen
 
       if (currentY < 30) return
 
+      const isScrollEnd =
+        scrollContainer.scrollHeight - currentY - scrollContainer.clientHeight < 10
+
+      if (isScrollEnd) {
+        setIsScrollDown(true)
+        return
+      }
+
       setIsScrollDown(currentY > prevScrollY.current)
       prevScrollY.current = currentY
     },
