@@ -5,6 +5,13 @@ html,
   overscroll-behavior: none;
 }
 
+html[data-viewport="desktop"],
+html[data-viewport="desktop"] body,
+html[data-viewport="desktop"] #shadow-html,
+html[data-viewport="desktop"] #root {
+  overscroll-behavior: none;
+}
+
 body,
 #root {
   @apply h-auto lg:h-screen;
@@ -13,8 +20,6 @@ body,
   /* @apply bg-white; */
 
   @apply font-theme;
-
-  overscroll-behavior: none;
 
   @apply print:overflow-auto print:h-auto;
 }
