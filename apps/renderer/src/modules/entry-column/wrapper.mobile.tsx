@@ -1,6 +1,7 @@
+import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { FeedViewType, views } from "@follow/constants"
 import { clsx } from "clsx"
-import { forwardRef } from "react"
+import { forwardRef, useState } from "react"
 
 import { PullToRefresh } from "~/components/ux/pull-to-refresh"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -19,6 +20,7 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
   ({ children, onPullToRefresh }, ref) => {
     const view = useRouteParamsSelector((state) => state.view)
 
+    const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null)
     return (
       <div className={clsx(styles, "relative flex flex-col")}>
         <div ref={ref} className={clsx("grow overflow-hidden", views[view].wideMode ? "mt-2" : "")}>
@@ -27,9 +29,15 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
             scrollContainerSelector={selectorMap[view]}
             onRefresh={onPullToRefresh || noop}
           >
-            <div id="entry-column-wrapper" className="h-full overflow-y-auto">
-              {children}
-            </div>
+            <ScrollElementContext.Provider value={scrollElement}>
+              <div
+                id="entry-column-wrapper"
+                className="h-full overflow-y-auto"
+                ref={setScrollElement}
+              >
+                {children}
+              </div>
+            </ScrollElementContext.Provider>
           </PullToRefresh>
         </div>
 
