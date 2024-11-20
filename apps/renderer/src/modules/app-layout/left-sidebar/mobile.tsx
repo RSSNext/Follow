@@ -1,7 +1,9 @@
 import { Logo } from "@follow/components/icons/logo.js"
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { views } from "@follow/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { m, useAnimationControls } from "framer-motion"
@@ -13,7 +15,12 @@ import { useEventListener } from "usehooks-ts"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useSidebarActiveView } from "~/atoms/sidebar"
+import { useLoginModalShow, useWhoami } from "~/atoms/user"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
+import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
+import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
+import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { CornerPlayer } from "~/modules/player/corner-player"
 import { useEntry } from "~/store/entry"
@@ -36,6 +43,11 @@ export function MainMobileLayout() {
   }, [setActive_])
 
   const [feedListScrollRef, setFeedListScrollRef] = useState<HTMLDivElement | null>()
+
+  useDailyTask()
+
+  const isAuthFail = useLoginModalShow()
+  const user = useWhoami()
 
   const { t } = useTranslation()
   return (
@@ -67,6 +79,22 @@ export function MainMobileLayout() {
           ))}
         </SwipeWrapper>
       </div>
+
+      {isAuthFail && !user && (
+        <RootPortal>
+          <DeclarativeModal
+            id="login"
+            CustomModalComponent={PlainModal}
+            open
+            overlay
+            title="Login"
+            canClose={false}
+            clickOutsideToDismiss={false}
+          >
+            <LoginModalContent canClose={false} runtime={IN_ELECTRON ? "app" : "browser"} />
+          </DeclarativeModal>
+        </RootPortal>
+      )}
 
       <FooterInfo />
       <FloatBar scrollContainer={feedListScrollRef} />
