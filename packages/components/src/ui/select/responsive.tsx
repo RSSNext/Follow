@@ -1,8 +1,8 @@
-import { useMobile } from "@follow/components/hooks/useMobile"
 import { useControlled } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
 import { useMemo, useState } from "react"
 
+import { useMobile } from "../../hooks/useMobile"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./index"
 
 export type ResponsiveSelectItem = {
