@@ -1,16 +1,11 @@
 import { useDraggable } from "@dnd-kit/core"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import { stopPropagation } from "@follow/utils/dom"
 import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
 import { useEventListener } from "usehooks-ts"
 
-import { FEED_COLLECTION_LIST } from "~/constants"
-import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { useRouteFeedId } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useCategoryOpenStateByView } from "~/store/subscription"
@@ -19,13 +14,14 @@ import { setFeedAreaScrollProgressValue, useSelectedFeedIds } from "./atom"
 import { DraggableContext } from "./context"
 import { useShouldFreeUpSpace } from "./hook"
 import {
+  EmptyFeedList,
   ListHeader,
+  StarredItem,
   useFeedsGroupedData,
   useInboxesGroupedData,
   useListsGroupedData,
 } from "./list.shared"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
-import { feedColumnStyles } from "./styles"
 
 const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(
   ({ className, view }, ref) => {
@@ -38,9 +34,6 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
       Object.keys(feedsData).length > 0 ||
       Object.keys(listsData).length > 0 ||
       Object.keys(inboxesData).length > 0
-
-    const feedId = useRouteFeedId()
-    const navigateEntry = useNavigateEntry()
 
     const { t } = useTranslation()
 
@@ -173,26 +166,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           viewportClassName={cn("!px-3", shouldFreeUpSpace && "!overflow-visible")}
           rootClassName={cn("h-full", shouldFreeUpSpace && "overflow-visible")}
         >
-          <div
-            data-active={feedId === FEED_COLLECTION_LIST}
-            className={cn(
-              "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
-              feedColumnStyles.item,
-            )}
-            onClick={(e) => {
-              e.stopPropagation()
-              if (view !== undefined) {
-                navigateEntry({
-                  entryId: null,
-                  feedId: FEED_COLLECTION_LIST,
-                  view,
-                })
-              }
-            }}
-          >
-            <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
-            {t("words.starred")}
-          </div>
+          <StarredItem view={view} />
           {hasListData && (
             <>
               <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
@@ -229,16 +203,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
                   categoryOpenStateData={categoryOpenStateData}
                 />
               ) : (
-                <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
-                  <Link
-                    to="/discover"
-                    className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
-                    onClick={stopPropagation}
-                  >
-                    <i className="i-mgc-add-cute-re text-3xl" />
-                    <span className="text-base">{t("sidebar.add_more_feeds")}</span>
-                  </Link>
-                </div>
+                <EmptyFeedList />
               )}
             </div>
           </DraggableContext.Provider>

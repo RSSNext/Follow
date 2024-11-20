@@ -4,12 +4,15 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { useCallback, useMemo, useState } from "react"
+import { memo, useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
+import { FEED_COLLECTION_LIST } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteFeedId } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import {
@@ -20,6 +23,7 @@ import {
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 export const useFeedsGroupedData = (view: FeedViewType) => {
@@ -249,3 +253,54 @@ const SortButton = () => {
     </HoverCard.Root>
   )
 }
+
+export const EmptyFeedList = memo(({ onClick }: { onClick?: (e: React.MouseEvent) => void }) => {
+  const { t } = useTranslation()
+
+  return (
+    <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
+      <Link
+        to="/discover"
+        className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
+        onClick={(e) => {
+          stopPropagation(e)
+          onClick?.(e)
+        }}
+      >
+        <i className="i-mgc-add-cute-re text-3xl" />
+        <span className="text-base">{t("sidebar.add_more_feeds")}</span>
+      </Link>
+    </div>
+  )
+})
+EmptyFeedList.displayName = "EmptyFeedList"
+
+export const StarredItem = memo(({ view }: { view: number }) => {
+  const feedId = useRouteFeedId()
+  const navigateEntry = useNavigateEntry()
+  const { t } = useTranslation()
+
+  return (
+    <div
+      data-active={feedId === FEED_COLLECTION_LIST}
+      className={cn(
+        "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
+        feedColumnStyles.item,
+      )}
+      onClick={(e) => {
+        e.stopPropagation()
+        if (view !== undefined) {
+          navigateEntry({
+            entryId: null,
+            feedId: FEED_COLLECTION_LIST,
+            view,
+          })
+        }
+      }}
+    >
+      <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
+      {t("words.starred")}
+    </div>
+  )
+})
+StarredItem.displayName = "StarredItem"

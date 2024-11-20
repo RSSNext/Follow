@@ -26,6 +26,7 @@ export const EntryHeaderSpecialActions = ({ id }: { id: string }) => {
             title: "Image Gallery",
             content: () => <ImageGallery images={filteredImages as any as MediaModel[]} />,
             max: true,
+            clickOutsideToDismiss: true,
           })
         }}
         icon={<i className="i-mgc-pic-cute-fi" />}
