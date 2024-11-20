@@ -138,7 +138,7 @@ const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElemen
   useEffect(() => {
     if (isScrollDown) {
       animateController.start({
-        translateY: "calc(100% + 40px)",
+        translateY: "calc(100% + 40px + env(safe-area-inset-bottom))",
         transition: { type: "tween", duration: 0.1 },
       })
     } else {

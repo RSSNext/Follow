@@ -60,7 +60,10 @@
       document.documentElement.dataset.buildType = isElectron ? "electron" : "web"
     </script>
     <script>
-      window.innerWidth < 1024 && document.getElementById("app-skeleton")?.remove()
+      const isMobile = window.innerWidth < 1024
+      if (isMobile) document.getElementById("app-skeleton")?.remove()
+
+      document.documentElement.dataset.viewport = isMobile ? "mobile" : "desktop"
     </script>
   </head>
   <body>

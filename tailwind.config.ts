@@ -22,6 +22,10 @@ export default resolveConfig({
         "margin-macos-traffic-light-x": "var(--fo-macos-traffic-light-width, 0)",
         "margin-macos-traffic-light-y": "var(--fo-macos-traffic-light-height, 0)",
       },
+
+      height: {
+        screen: "100svh",
+      },
     },
   },
   plugins: [
