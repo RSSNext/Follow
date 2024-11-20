@@ -64,17 +64,6 @@ export default ({ mode }) => {
       watch: {
         ignored: ["**/dist/**", "**/out/**", "**/public/**", ".git/**"],
       },
-      ...(env.VITE_DEV_PROXY
-        ? {
-            proxy: {
-              [env.VITE_DEV_PROXY]: {
-                target: env.VITE_DEV_PROXY_TARGET,
-                changeOrigin: true,
-                rewrite: (path) => path.replace(new RegExp(`^${env.VITE_DEV_PROXY}`), ""),
-              },
-            },
-          }
-        : {}),
     },
     resolve: {
       alias: {
@@ -84,7 +73,6 @@ export default ({ mode }) => {
     },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
-
       mode !== "development" &&
         legacy({
           targets: "defaults",
