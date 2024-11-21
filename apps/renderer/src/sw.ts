@@ -1,8 +1,27 @@
 /// <reference lib="webworker" />
-import type { ManifestEntry } from "workbox-build"
+import {
+  cleanupOutdatedCaches,
+  createHandlerBoundToURL,
+  precacheAndRoute,
+} from "workbox-precaching"
+import { NavigationRoute, registerRoute } from "workbox-routing"
 
-// Give TypeScript the correct global.
 declare let self: ServiceWorkerGlobalScope
-// @ts-expect-error
-// eslint-disable-next-line unused-imports/no-unused-vars
-const manifest = self.__WB_MANIFEST as Array<ManifestEntry>
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting()
+})
+
+// self.__WB_MANIFEST is the default injection point
+precacheAndRoute(self.__WB_MANIFEST)
+
+// clean old assets
+cleanupOutdatedCaches()
+
+/** @type {RegExp[] | undefined} */
+let allowlist
+// in dev mode, we disable precaching to avoid caching issues
+if (import.meta.env.DEV) allowlist = [/^\/$/]
+
+// to allow work offline
+registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), { allowlist }))

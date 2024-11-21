@@ -86,16 +86,24 @@ export default ({ mode }) => {
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
       VitePWA({
+        strategies: "injectManifest",
+        srcDir: "src",
+        filename: "sw.ts",
         registerType: "prompt",
         injectRegister: false,
 
-        workbox: {
+        injectManifest: {
           globPatterns: [
             "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
           ],
-          cleanupOutdatedCaches: true,
-          clientsClaim: true,
         },
+        // workbox: {
+        //   globPatterns: [
+        //     "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
+        //   ],
+        //   cleanupOutdatedCaches: true,
+        //   clientsClaim: true,
+        // },
 
         manifest: {
           theme_color: "#000000",
