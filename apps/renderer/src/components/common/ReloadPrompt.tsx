@@ -1,13 +1,14 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { toast } from "sonner"
 import { useRegisterSW } from "virtual:pwa-register/react"
 
-// check for updates every hour
-const period = 60 * 60 * 1000
-
 export function ReloadPrompt() {
+  // check for updates every hour
+  const period = 60 * 60 * 1000
+
   const {
-    needRefresh: [needRefresh],
+    offlineReady: [offlineReady, setOfflineReady],
+    needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
@@ -22,6 +23,23 @@ export function ReloadPrompt() {
       }
     },
   })
+
+  const close = useCallback(() => {
+    setOfflineReady(false)
+    setNeedRefresh(false)
+  }, [setNeedRefresh, setOfflineReady])
+
+  useEffect(() => {
+    if (offlineReady) {
+      toast.info("App is ready to work offline", {
+        action: {
+          label: "Close",
+          onClick: close,
+        },
+        duration: Infinity,
+      })
+    }
+  }, [offlineReady, close])
 
   useEffect(() => {
     if (needRefresh) {
