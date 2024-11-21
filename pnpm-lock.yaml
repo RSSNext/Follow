@@ -40,7 +40,7 @@ patchedDependencies:
     hash: 6s3tquyt5wnkqaogymn3mkivuq
     path: patches/sonner@1.5.0.patch
   workbox-precaching:
-    hash: qiyork6qfxr734gjgdma7m4oju
+    hash: sohczzebvzr4xx2mkxf4vzmcjm
     path: patches/workbox-precaching.patch
 
 importers:
@@ -140,6 +140,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.3
         version: 4.3.3(vite@5.4.10(@types/node@22.8.7)(lightningcss@1.27.0)(terser@5.35.0))
+      async-es:
+        specifier: ^3.2.6
+        version: 3.2.6
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.47)
@@ -197,9 +200,6 @@ importers:
       nbump:
         specifier: 2.0.7
         version: 2.0.7(conventional-commits-filter@5.0.0)
-      p-limit:
-        specifier: ^6.1.0
-        version: 6.1.0
       postcss:
         specifier: 8.4.47
         version: 8.4.47
@@ -4784,6 +4784,9 @@ packages:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
 
+  async-es@3.2.6:
+    resolution: {integrity: sha512-9C2+oOPd7/EzIeneF4k24o75oY7OcHU/Isl7xIot12EBRwXonyuqKsmxwLuAbFWL6B/FucTQip09xTbiu1CA8A==}
+
   async-exit-hook@2.0.1:
     resolution: {integrity: sha512-NW2cX8m1Q7KPA7a5M2ULQeZ2wR5qI5PAbw5L0UOMxdioVk9PMZ0h1TmyZEkPYrCvYjDlFICusOu1dlEKAAeXBw==}
     engines: {node: '>=0.12.0'}
@@ -8509,10 +8512,6 @@ packages:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
     engines: {node: '>=10'}
 
-  p-limit@6.1.0:
-    resolution: {integrity: sha512-H0jc0q1vOzlEk0TqAKXKZxdl7kX3OFUzCnNVUnq5Pc3DGo0kpeaMuPqxQn235HibwBEb0/pm9dgKTjXy66fBkg==}
-    engines: {node: '>=18'}
-
   p-locate@2.0.0:
     resolution: {integrity: sha512-nQja7m7gSKuewoVRen45CtVfODR3crN3goVQ0DDZ9N3yHxgpkuBhZqsaiotSQRrADUrne346peY7kT3TSACykg==}
     engines: {node: '>=4'}
@@ -10992,10 +10991,6 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-
-  yocto-queue@1.1.1:
-    resolution: {integrity: sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==}
-    engines: {node: '>=12.20'}
 
   yoga-wasm-web@0.3.3:
     resolution: {integrity: sha512-N+d4UJSJbt/R3wqY7Coqs5pcV0aUj2j9IaQ3rNj9bVCLld8tTGKRa2USARjnvZJWVx1NDmQev8EknoczaOQDOA==}
@@ -15558,6 +15553,8 @@ snapshots:
 
   astral-regex@2.0.0:
     optional: true
+
+  async-es@3.2.6: {}
 
   async-exit-hook@2.0.1: {}
 
@@ -20123,10 +20120,6 @@ snapshots:
     dependencies:
       yocto-queue: 0.1.0
 
-  p-limit@6.1.0:
-    dependencies:
-      yocto-queue: 1.1.1
-
   p-locate@2.0.0:
     dependencies:
       p-limit: 1.3.0
@@ -22673,7 +22666,7 @@ snapshots:
       workbox-expiration: 7.3.0
       workbox-google-analytics: 7.3.0
       workbox-navigation-preload: 7.3.0
-      workbox-precaching: 7.3.0(patch_hash=qiyork6qfxr734gjgdma7m4oju)
+      workbox-precaching: 7.3.0(patch_hash=sohczzebvzr4xx2mkxf4vzmcjm)
       workbox-range-requests: 7.3.0
       workbox-recipes: 7.3.0
       workbox-routing: 7.3.0
@@ -22707,7 +22700,7 @@ snapshots:
     dependencies:
       workbox-core: 7.3.0
 
-  workbox-precaching@7.3.0(patch_hash=qiyork6qfxr734gjgdma7m4oju):
+  workbox-precaching@7.3.0(patch_hash=sohczzebvzr4xx2mkxf4vzmcjm):
     dependencies:
       workbox-core: 7.3.0
       workbox-routing: 7.3.0
@@ -22722,7 +22715,7 @@ snapshots:
       workbox-cacheable-response: 7.3.0
       workbox-core: 7.3.0
       workbox-expiration: 7.3.0
-      workbox-precaching: 7.3.0(patch_hash=qiyork6qfxr734gjgdma7m4oju)
+      workbox-precaching: 7.3.0(patch_hash=sohczzebvzr4xx2mkxf4vzmcjm)
       workbox-routing: 7.3.0
       workbox-strategies: 7.3.0
 
@@ -22817,8 +22810,6 @@ snapshots:
   yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
-
-  yocto-queue@1.1.1: {}
 
   yoga-wasm-web@0.3.3: {}
 

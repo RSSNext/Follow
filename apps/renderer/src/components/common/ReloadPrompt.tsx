@@ -55,12 +55,6 @@ export function ReloadPrompt() {
     }
   }, [needRefresh, updateServiceWorker])
 
-  useEffect(() => {
-    toast(
-      `App is ${offlineReady ? "offline" : "online"} and ${needRefresh ? "needs" : "does not need"} refresh`,
-    )
-  }, [needRefresh, offlineReady])
-
   return null
 }
 

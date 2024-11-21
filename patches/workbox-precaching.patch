@@ -1,65 +1,32 @@
-diff --git a/PrecacheController.js b/PrecacheController.js
-index e00975e3762dc6382c39bebee04a89a651aae3d0..c8ff7eb1a5821fd5ccf218908a1a2355b0d57dae 100644
---- a/PrecacheController.js
-+++ b/PrecacheController.js
+diff --git a/node_modules/workbox-precaching/PrecacheController.js b/node_modules/workbox-precaching/PrecacheController.js
+index e00975e..7380049 100644
+--- a/node_modules/workbox-precaching/PrecacheController.js
++++ b/node_modules/workbox-precaching/PrecacheController.js
 @@ -5,6 +5,7 @@
    license that can be found in the LICENSE file or at
    https://opensource.org/licenses/MIT.
  */
-+import pLimit from 'p-limit';
++import eachLimit from 'async-es/eachLimit'
  import { assert } from 'workbox-core/_private/assert.js';
  import { cacheNames } from 'workbox-core/_private/cacheNames.js';
  import { logger } from 'workbox-core/_private/logger.js';
-@@ -17,6 +18,9 @@ import { printCleanupDetails } from './utils/printCleanupDetails.js';
- import { printInstallDetails } from './utils/printInstallDetails.js';
- import { PrecacheStrategy } from './PrecacheStrategy.js';
- import './_version.js';
-+
-+const limit = pLimit(10);
-+
- /**
-  * Performs efficient precaching of assets.
-  *
-@@ -152,20 +156,29 @@ class PrecacheController {
+@@ -150,9 +151,8 @@ class PrecacheController {
+         return waitUntil(event, async () => {
+             const installReportPlugin = new PrecacheInstallReportPlugin();
              this.strategy.plugins.push(installReportPlugin);
-             // Cache entries one at a time.
+-            // Cache entries one at a time.
              // See https://github.com/GoogleChrome/workbox/issues/2528
 -            for (const [url, cacheKey] of this._urlsToCacheKeys) {
--                const integrity = this._cacheKeysToIntegrities.get(cacheKey);
--                const cacheMode = this._urlsToCacheModes.get(url);
--                const request = new Request(url, {
--                    integrity,
--                    cache: cacheMode,
--                    credentials: 'same-origin',
-+            // for (const [url, cacheKey] of this._urlsToCacheKeys) {
-+
-+            // }
-+
-+            await Promise.all(
-+              this._urlsToCacheKeys.entries().map(([url, cacheKey]) => {
-+                return limit( async() => {
-+                  const integrity = this._cacheKeysToIntegrities.get(cacheKey);
-+                  const cacheMode = this._urlsToCacheModes.get(url);
-+                  const request = new Request(url, {
-+                      integrity,
-+                      cache: cacheMode,
-+                      credentials: 'same-origin',
-+                  });
-+                  await Promise.all(this.strategy.handleAll({
-+                      params: { cacheKey },
-+                      request,
-+                      event,
-+                  }));
-                 });
--                await Promise.all(this.strategy.handleAll({
--                    params: { cacheKey },
--                    request,
--                    event,
--                }));
++            await eachLimit(this._urlsToCacheKeys, 10, async ([url, cacheKey]) => {
+                 const integrity = this._cacheKeysToIntegrities.get(cacheKey);
+                 const cacheMode = this._urlsToCacheModes.get(url);
+                 const request = new Request(url, {
+@@ -165,7 +165,7 @@ class PrecacheController {
+                     request,
+                     event,
+                 }));
 -            }
-+              })
-+            )
-+
++            })
              const { updatedURLs, notUpdatedURLs } = installReportPlugin;
              if (process.env.NODE_ENV !== 'production') {
                  printInstallDetails(updatedURLs, notUpdatedURLs);
