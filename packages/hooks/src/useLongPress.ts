@@ -29,6 +29,7 @@ export function useLongPress({
     isLongPress.current = false
     const touch = e.touches[0]
 
+    clearTimeout(timerRef.current)
     startPosition.current = {
       x: touch.clientX + window.scrollX,
       y: touch.clientY + window.scrollY,
