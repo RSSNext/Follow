@@ -11,8 +11,8 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/export.d.ts",
-      "import": "./dist/export.js"
+      "types": "./export.d.ts",
+      "import": "./export.js"
     }
   },
   "main": "./src/index.ts",

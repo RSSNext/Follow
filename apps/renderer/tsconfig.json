@@ -17,5 +17,6 @@
       "@pkg": ["../../package.json"],
       "@locales/*": ["../../locales/*"]
     }
-  }
+  },
+  "references": [{ "path": "../main" }]
 }

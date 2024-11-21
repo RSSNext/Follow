@@ -12,6 +12,7 @@
       "@pkg": ["../../package.json"],
       "@locales/*": ["../../locales/*"],
       "~/*": ["./src/*"]
-    }
+    },
+    "composite": true
   }
 }
