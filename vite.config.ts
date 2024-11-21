@@ -86,16 +86,18 @@ export default ({ mode }) => {
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
       VitePWA({
-        devOptions: {
-          enabled: true,
-          type: "module",
-        },
+        registerType: "prompt",
+        injectRegister: false,
+
         workbox: {
           globPatterns: [
             "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
           ],
           globIgnores: ["manifest**.webmanifest"],
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
         },
+
         manifest: {
           theme_color: "#000000",
           name: "Follow",
@@ -124,6 +126,13 @@ export default ({ mode }) => {
               purpose: "maskable",
             },
           ],
+        },
+
+        devOptions: {
+          enabled: false,
+          navigateFallback: "index.html",
+          suppressWarnings: true,
+          type: "module",
         },
       }),
       mode !== "development" &&
