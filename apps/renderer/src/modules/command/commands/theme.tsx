@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 
 import { useSetTheme } from "~/hooks/common"
 
-import { useRegisterCommandEffect } from "../hooks/use-register-command-effect"
+import { useRegisterCommandEffect } from "../hooks/use-register-command"
 
 export const useRegisterThemeCommands = () => {
   const [t] = useTranslation("settings")

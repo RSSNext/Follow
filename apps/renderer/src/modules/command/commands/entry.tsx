@@ -12,8 +12,7 @@ import { tipcClient } from "~/lib/client"
 import { useTipModal } from "~/modules/wallet/hooks"
 import { entryActions, useEntryStore } from "~/store/entry"
 
-import { useRegisterCommandEffect } from "../hooks/use-register-command-effect"
-import { defineFollowCommand } from "../registry/command"
+import { useRegisterFollowCommand } from "../hooks/use-register-command"
 import { COMMAND_ID } from "./id"
 
 const useCollect = () => {
@@ -88,8 +87,8 @@ export const useRegisterEntryCommands = () => {
   const read = useRead()
   const unread = useUnread()
 
-  useRegisterCommandEffect([
-    defineFollowCommand({
+  useRegisterFollowCommand([
+    {
       id: COMMAND_ID.entry.tip,
       label: t("entry_actions.tip"),
       icon: <i className="i-mgc-power-outline" />,
@@ -102,8 +101,8 @@ export const useRegisterEntryCommands = () => {
           entryId,
         })
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.star,
       label: t("entry_actions.star"),
       icon: <i className="i-mgc-star-cute-re" />,
@@ -124,8 +123,8 @@ export const useRegisterEntryCommands = () => {
         // }
         collect.mutate({ entryId, view })
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.unstar,
       label: t("entry_actions.unstar"),
       icon: <i className="i-mgc-star-cute-fi text-orange-500" />,
@@ -137,8 +136,8 @@ export const useRegisterEntryCommands = () => {
         }
         uncollect.mutate(entry.entries.id)
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.delete,
       label: t("entry_actions.delete"),
       icon: <i className="i-mgc-delete-2-cute-re" />,
@@ -150,8 +149,8 @@ export const useRegisterEntryCommands = () => {
         }
         deleteInboxEntry.mutate(entry.entries.id)
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.copyLink,
       label: t("entry_actions.copy_link"),
       icon: <i className="i-mgc-link-cute-re" />,
@@ -167,8 +166,8 @@ export const useRegisterEntryCommands = () => {
           duration: 1000,
         })
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.copyTitle,
       label: t("entry_actions.copy_title"),
       icon: <i className="i-mgc-copy-cute-re" />,
@@ -184,8 +183,8 @@ export const useRegisterEntryCommands = () => {
           duration: 1000,
         })
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.openInBrowser,
       label: t("entry_actions.open_in_browser", {
         which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
@@ -199,8 +198,8 @@ export const useRegisterEntryCommands = () => {
         }
         window.open(entry.entries.url, "_blank")
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.viewSourceContent,
       label: t("entry_actions.view_source_content"),
       icon: <i className="i-mgc-world-2-cute-re" />,
@@ -229,16 +228,16 @@ export const useRegisterEntryCommands = () => {
         }
         setShowSourceContent(true)
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.viewEntryContent,
       label: t("entry_actions.view_source_content"),
       icon: <i className="i-mgc-world-2-cute-fi" />,
       run: () => {
         setShowSourceContent(false)
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.share,
       label: t("entry_actions.share"),
       icon:
@@ -264,8 +263,8 @@ export const useRegisterEntryCommands = () => {
         }
         return
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.read,
       label: t("entry_actions.mark_as_read"),
       icon: <i className="i-mgc-round-cute-fi" />,
@@ -277,8 +276,8 @@ export const useRegisterEntryCommands = () => {
         }
         read.mutate({ entryId, feedId: entry.feedId })
       },
-    }),
-    defineFollowCommand({
+    },
+    {
       id: COMMAND_ID.entry.unread,
       label: t("entry_actions.mark_as_unread"),
       icon: <i className="i-mgc-round-cute-re" />,
@@ -290,6 +289,6 @@ export const useRegisterEntryCommands = () => {
         }
         unread.mutate({ entryId, feedId: entry.feedId })
       },
-    }),
+    },
   ])
 }
