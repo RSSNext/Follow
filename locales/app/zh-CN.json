@@ -68,7 +68,7 @@
   "discover.import.click_to_upload": "导入 OPML 文件",
   "discover.import.conflictItems": "冲突项目",
   "discover.import.noItems": "没有项目",
-  "discover.import.opml": "OPML 文件",
+  "discover.import.opml": "如果您以前使用过RSS,您可以将数据配置导出到 OPML 文件，并在此处导入",
   "discover.import.parsedErrorItems": "解析错误项目",
   "discover.import.result": "成功导入了 <SuccessfulNum /> 个订阅源，<ConflictNum /> 个已订阅，<ErrorNum /> 个导入失败。",
   "discover.import.successfulItems": "成功项目",

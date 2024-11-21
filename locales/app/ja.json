@@ -68,7 +68,7 @@
   "discover.import.click_to_upload": "OPML ファイルをアップロードするにはクリック",
   "discover.import.conflictItems": "重複アイテム",
   "discover.import.noItems": "アイテムなし",
-  "discover.import.opml": "OPML ファイル",
+  "discover.import.opml": "以前にRSSを使用したことがある場合、データ構成をOPMLファイルにエクスポートし、ここでインポートすることができます。",
   "discover.import.parsedErrorItems": "パースエラーのアイテム",
   "discover.import.result": "<SuccessfulNum /> フィードのインポートに成功しました、 <ConflictNum /> 件を購読中、インポート失敗は <ErrorNum /> 件。",
   "discover.import.successfulItems": "成功したアイテム",
