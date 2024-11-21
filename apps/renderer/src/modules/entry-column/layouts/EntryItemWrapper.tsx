@@ -13,6 +13,7 @@ import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useContextMenu } from "~/hooks/common/useContextMenu"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -69,8 +70,9 @@ export const EntryItemWrapper: FC<
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   const showContextMenu = useShowContextMenu()
-  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
-    async (e) => {
+
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
       e.preventDefault()
       setIsContextMenuOpen(true)
       await showContextMenu(
@@ -101,8 +103,7 @@ export const EntryItemWrapper: FC<
       )
       setIsContextMenuOpen(false)
     },
-    [showContextMenu, actionConfigs, feedItems, t, entry.entries.id],
-  )
+  })
 
   return (
     <div data-entry-id={entry.entries.id} style={style}>
@@ -119,7 +120,7 @@ export const EntryItemWrapper: FC<
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseEnter.cancel}
         onDoubleClick={handleDoubleClick}
-        onContextMenu={handleContextMenu}
+        {...contextMenuProps}
       >
         {children}
       </div>

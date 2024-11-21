@@ -18,6 +18,7 @@ import { useIsZenMode, useSetZenMode } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useI18n } from "~/hooks/common"
+import { useContextMenu } from "~/hooks/common/useContextMenu"
 import { ProfileButton } from "~/modules/user/ProfileButton"
 
 const useBackHome = (active: number) => {
@@ -129,15 +130,15 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = useState(false)
   const logoRef = useRef<SVGSVGElement>(null)
   const t = useI18n()
+  const contextMenuProps = useContextMenu({
+    onContextMenu: () => {
+      setOpen(true)
+    },
+  })
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        asChild
-        onContextMenu={() => {
-          setOpen(true)
-        }}
-      >
+      <PopoverTrigger asChild {...contextMenuProps}>
         {children}
       </PopoverTrigger>
       <PopoverContent align="start" className="!p-1">

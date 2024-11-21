@@ -19,6 +19,7 @@ import { getMainContainerElement } from "~/atoms/dom"
 import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useContextMenu } from "~/hooks/common/useContextMenu"
 import { getNewIssueUrl } from "~/lib/issues"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
@@ -97,6 +98,39 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   const showContextMenu = useShowContextMenu()
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
+      const nextItems = items.concat()
+
+      if (!feed) return
+      if (isFeed && feed.errorAt && feed.errorMessage) {
+        nextItems.push(
+          {
+            type: "separator",
+            disabled: false,
+          },
+          {
+            label: "Feedback",
+            type: "text",
+            click: () => {
+              window.open(
+                getNewIssueUrl({
+                  body:
+                    `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
+                    `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
+                  label: "bug",
+                  title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
+                }),
+              )
+            },
+          },
+        )
+      }
+      setIsContextMenuOpen(true)
+      await showContextMenu(nextItems, e)
+      setIsContextMenuOpen(false)
+    },
+  })
   if (!feed) return null
 
   const isFeed = feed.type === "feed" || !feed.type
@@ -127,35 +161,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         onDoubleClick={() => {
           window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
-        onContextMenu={async (e) => {
-          const nextItems = items.concat()
-          if (isFeed && feed.errorAt && feed.errorMessage) {
-            nextItems.push(
-              {
-                type: "separator",
-                disabled: false,
-              },
-              {
-                label: "Feedback",
-                type: "text",
-                click: () => {
-                  window.open(
-                    getNewIssueUrl({
-                      body:
-                        `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
-                        `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
-                      label: "bug",
-                      title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
-                    }),
-                  )
-                },
-              },
-            )
-          }
-          setIsContextMenuOpen(true)
-          await showContextMenu(nextItems, e)
-          setIsContextMenuOpen(false)
-        }}
+        {...contextMenuProps}
       >
         <div
           className={cn(
@@ -244,6 +250,14 @@ const ListItemImpl: Component<{
   )
   const showContextMenu = useShowContextMenu()
   const { t } = useTranslation()
+
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
+      setIsContextMenuOpen(true)
+      await showContextMenu(items, e)
+      setIsContextMenuOpen(false)
+    },
+  })
   if (!list) return null
   return (
     <div
@@ -254,11 +268,7 @@ const ListItemImpl: Component<{
       onDoubleClick={() => {
         window.open(UrlBuilder.shareList(listId, view), "_blank")
       }}
-      onContextMenu={async (e) => {
-        setIsContextMenuOpen(true)
-        await showContextMenu(items, e)
-        setIsContextMenuOpen(false)
-      }}
+      {...contextMenuProps}
     >
       <div className={"flex min-w-0 items-center"}>
         <FeedIcon fallback feed={list} size={iconSize} />
@@ -312,6 +322,13 @@ const InboxItemImpl: Component<{
   )
   const showContextMenu = useShowContextMenu()
 
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
+      setIsContextMenuOpen(true)
+      await showContextMenu(items, e)
+      setIsContextMenuOpen(false)
+    },
+  })
   if (!inbox) return null
   return (
     <div
@@ -324,11 +341,7 @@ const InboxItemImpl: Component<{
         className,
       )}
       onClick={handleNavigate}
-      onContextMenu={async (e) => {
-        setIsContextMenuOpen(true)
-        await showContextMenu(items, e)
-        setIsContextMenuOpen(false)
-      }}
+      {...contextMenuProps}
     >
       <div className={"flex min-w-0 items-center"}>
         <FeedIcon fallback feed={inbox} size={iconSize} />
