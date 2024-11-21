@@ -90,6 +90,7 @@
     "js-yaml": "4.1.0",
     "lint-staged": "15.2.10",
     "nbump": "2.0.7",
+    "p-limit": "^6.1.0",
     "postcss": "8.4.47",
     "postcss-js": "4.0.1",
     "prettier": "3.3.3",
@@ -124,7 +125,8 @@
       "electron-context-menu": "patches/electron-context-menu.patch",
       "@mozilla/readability": "patches/@mozilla__readability.patch",
       "daisyui": "patches/daisyui.patch",
-      "jsonpointer": "patches/jsonpointer.patch"
+      "jsonpointer": "patches/jsonpointer.patch",
+      "workbox-precaching": "patches/workbox-precaching.patch"
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
