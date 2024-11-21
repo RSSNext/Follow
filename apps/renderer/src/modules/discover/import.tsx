@@ -59,7 +59,7 @@ const list: {
   },
 ]
 
-export function DiscoverImport() {
+export function DiscoverImport({ isInit = false }: { isInit?: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -106,7 +106,9 @@ export function DiscoverImport() {
             name="file"
             render={({ field: { value, onChange, ...fieldProps } }) => (
               <FormItem>
-                <FormLabel>{t("discover.import.opml")}</FormLabel>
+                <FormLabel>
+                  {isInit ? t("discover.import.new_import_opml") : t("discover.import.opml")}
+                </FormLabel>
                 <FormControl>
                   <label
                     className="center flex h-[100px] w-full rounded-md border border-dashed"
