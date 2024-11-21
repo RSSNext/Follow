@@ -6,7 +6,7 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useCallback, useMemo, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import Selecto from "react-selecto"
@@ -140,6 +140,12 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const scrollerRef = useRef<HTMLDivElement>(null)
   const selectoRef = useRef<Selecto>(null)
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
+  const [currentStartFeedId, setCurrentStartFeedId] = useState<string | null>(null)
+  useEffect(() => {
+    if (selectedFeedIds.length <= 1) {
+      setCurrentStartFeedId(null)
+    }
+  }, [selectedFeedIds])
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: "selected-feed",
@@ -230,11 +236,51 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           const allChanged = [...e.added, ...e.removed]
             .map((el) => el.dataset.feedId)
             .filter((id) => id !== undefined)
+          const added = allChanged.filter((id) => !selectedFeedIds.includes(id))
+          const removed = allChanged.filter((id) => selectedFeedIds.includes(id))
+
+          if (isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
+            const allVisible = Array.from(document.querySelectorAll("[data-feed-id]")).map(
+              (el) => (el as HTMLElement).dataset.feedId,
+            )
+            const currentSelected =
+              added.length === 1 ? added[0] : removed.length === 1 ? removed[0] : null
+            const currentIndex = currentSelected ? allVisible.indexOf(currentSelected) : -1
+
+            // command or ctrl with click, update start feed id
+            if (!(e.inputEvent as MouseEvent).shiftKey && currentSelected) {
+              setCurrentStartFeedId(currentSelected)
+            }
+
+            // shift with click, select all between
+            if ((e.inputEvent as MouseEvent).shiftKey && currentSelected) {
+              const firstSelected = currentStartFeedId ?? selectedFeedIds[0]
+              if (firstSelected) {
+                const firstIndex = allVisible.indexOf(firstSelected)
+
+                const order =
+                  firstIndex < currentIndex
+                    ? [firstIndex, currentIndex]
+                    : [currentIndex, firstIndex]
+                const between = allVisible.slice(order[0], order[1] + 1) as string[]
+
+                setSelectedFeedIds((prev) => {
+                  // with intersection, we need to update selected ids as between
+                  // otherwise, we need to add between to selected ids
+                  const hasIntersection = between.slice(1, -1).some((id) => prev.includes(id))
+
+                  return [
+                    ...(hasIntersection ? prev.filter((id) => between.includes(id)) : prev),
+                    ...between,
+                  ]
+                })
+                return
+              }
+            }
+          }
 
           setSelectedFeedIds((prev) => {
-            const added = allChanged.filter((id) => !prev.includes(id))
-            const removed = new Set(allChanged.filter((id) => prev.includes(id)))
-            return [...prev.filter((id) => !removed.has(id)), ...added]
+            return [...prev.filter((id) => !removed.includes(id)), ...added]
           })
         }}
         scrollOptions={{

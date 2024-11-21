@@ -12,7 +12,7 @@ import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { omit } from "lodash-es"
+import { omit } from "es-toolkit/compat"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
@@ -122,8 +122,9 @@ export const DiscoverFeedForm = ({
           "lang",
           "sort",
         ],
+        forceExcludeNames: routeParams ? ["routeParams"] : [],
       }),
-    [route.path],
+    [route.path, routeParams],
   )
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {

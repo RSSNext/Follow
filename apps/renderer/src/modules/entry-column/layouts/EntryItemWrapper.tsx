@@ -24,14 +24,7 @@ export const EntryItemWrapper: FC<
     style?: React.CSSProperties
   } & PropsWithChildren
 > = ({ entry, view, children, itemClassName, style }) => {
-  const listId = useRouteParamsSelector((s) => s.listId)
-  const { items } = useEntryActions({
-    view,
-    entry,
-    type: "entryList",
-    inList: !!listId,
-  })
-
+  const actionConfigs = useEntryActions({ entryId: entry.entries.id })
   const { items: feedItems } = useFeedActions({
     feedId: entry.feedId || entry.inboxId,
     view,
@@ -82,12 +75,12 @@ export const EntryItemWrapper: FC<
       setIsContextMenuOpen(true)
       await showContextMenu(
         [
-          ...items
+          ...actionConfigs
             .filter((item) => !item.hide)
             .map((item) => ({
               type: "text" as const,
               label: item.name,
-              click: () => item.onClick(e),
+              click: () => item.onClick(),
               shortcut: item.shortcut,
             })),
           {
@@ -110,7 +103,7 @@ export const EntryItemWrapper: FC<
       )
       setIsContextMenuOpen(false)
     },
-    [showContextMenu, items, feedItems, t, entry.entries.id],
+    [showContextMenu, actionConfigs, feedItems, t, entry.entries.id],
   )
 
   return (

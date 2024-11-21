@@ -39,7 +39,6 @@ export const entries = {
         }),
       {
         rootKey: ["entries", inboxId || listId || feedId],
-        structuralSharing: false,
       },
     ),
   byId: (id: string) =>

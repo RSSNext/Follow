@@ -1,5 +1,5 @@
 import daisyui from "daisyui"
-import { omit } from "lodash-es"
+import { omit } from "es-toolkit/compat"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 import { baseConfig } from "../../configs/tailwind.base.config"
