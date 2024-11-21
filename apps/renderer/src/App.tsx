@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn, getOS } from "@follow/utils/utils"
 import { useEffect } from "react"
@@ -65,6 +66,17 @@ const AppLayer = () => {
     appLog("App is ready", `${doneTime}ms`)
 
     applyAfterReadyCallbacks()
+
+    if (isMobile()) {
+      const handler = (e: MouseEvent) => {
+        e.preventDefault()
+      }
+      document.addEventListener("contextmenu", handler)
+
+      return () => {
+        document.removeEventListener("contextmenu", handler)
+      }
+    }
   }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />

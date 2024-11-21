@@ -5,6 +5,10 @@ html,
   overscroll-behavior: none;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 html[data-viewport="desktop"],
 html[data-viewport="desktop"] body,
 html[data-viewport="desktop"] #shadow-html,
