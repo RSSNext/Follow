@@ -1,7 +1,7 @@
 import { assertType, expectTypeOf, test } from "vitest"
 
 import { COMMAND_ID } from "../commands/id"
-import { defineCommandArgsArray, defineFollowCommand, defineFollowCommandArgs } from "./command"
+import { defineFollowCommand } from "./command"
 
 test("defineFollowCommand types", () => {
   assertType(
@@ -66,73 +66,5 @@ test("defineFollowCommand with keyBinding types", () => {
         expectTypeOf(entryId).toEqualTypeOf<string>()
       },
     }),
-  )
-})
-
-test("defineCommandArgs with keyBinding types", () => {
-  assertType(
-    defineFollowCommandArgs({
-      commandId: COMMAND_ID.entry.star,
-      args: [{ entryId: "1" }],
-    }),
-  )
-
-  assertType(
-    defineFollowCommandArgs({
-      commandId: COMMAND_ID.entry.star,
-      // @ts-expect-error - invalid args
-      args: [],
-    }),
-  )
-})
-
-test("defineCommandArgsArray with keyBinding types", () => {
-  assertType(
-    defineCommandArgsArray([
-      {
-        commandId: COMMAND_ID.entry.star,
-        args: [{ entryId: "1" }],
-      },
-    ]),
-  )
-
-  assertType(
-    defineCommandArgsArray([
-      {
-        commandId: COMMAND_ID.entry.star,
-        // @ts-expect-error - invalid args
-        args: [],
-      },
-    ]),
-  )
-
-  assertType(
-    defineCommandArgsArray([
-      {
-        commandId: COMMAND_ID.entry.star,
-        // @ts-expect-error - invalid args
-        args: [],
-      },
-      {
-        commandId: COMMAND_ID.entry.viewEntryContent,
-        args: [],
-      },
-    ]),
-  )
-
-  assertType(
-    defineCommandArgsArray<{ test: boolean }>([
-      {
-        commandId: COMMAND_ID.entry.star,
-        args: [{ entryId: "1" }],
-        test: true,
-      },
-      {
-        commandId: COMMAND_ID.entry.viewEntryContent,
-        args: [],
-        // @ts-expect-error - invalid extra property
-        test: 1,
-      },
-    ]),
   )
 })

@@ -9,7 +9,7 @@ import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { useDeleteSubscription } from "~/hooks/biz/useSubscriptionActions"
 import { ListForm } from "~/modules/discover/list-form"
 
-import { useRegisterCommandEffect } from "../hooks/use-register-command-effect"
+import { useRegisterCommandEffect } from "../hooks/use-register-command"
 import { COMMAND_ID } from "./id"
 
 export const useRegisterListCommands = () => {

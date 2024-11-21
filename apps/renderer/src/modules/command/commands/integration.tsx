@@ -21,7 +21,7 @@ import { parseHtml } from "~/lib/parse-html"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntryStore } from "~/store/entry"
 
-import { useRegisterCommandEffect } from "../hooks/use-register-command-effect"
+import { useRegisterCommandEffect } from "../hooks/use-register-command"
 import { defineFollowCommand } from "../registry/command"
 import { COMMAND_ID } from "./id"
 
