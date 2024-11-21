@@ -2,10 +2,10 @@ import { useEffect } from "react"
 import { toast } from "sonner"
 import { useRegisterSW } from "virtual:pwa-register/react"
 
-export function ReloadPrompt() {
-  // check for updates every hour
-  const period = 60 * 60 * 1000
+// check for updates every hour
+const period = 60 * 60 * 1000
 
+export function ReloadPrompt() {
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
