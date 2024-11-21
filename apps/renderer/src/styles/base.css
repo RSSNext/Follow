@@ -16,6 +16,12 @@ html[data-viewport="desktop"] #root {
   overscroll-behavior: none;
 }
 
+[data-viewport="mobile"] {
+  *:not(input):not(textarea):not([contenteditable]) {
+    @apply select-none;
+  }
+}
+
 body,
 #root {
   @apply h-auto lg:h-screen;
