@@ -1,5 +1,12 @@
 import { Outlet } from "react-router-dom"
 
+import { ReloadPrompt } from "./index.shared"
+
 export const LeftSidebarLayout = () => {
-  return <Outlet />
+  return (
+    <>
+      <ReloadPrompt />
+      <Outlet />
+    </>
+  )
 }

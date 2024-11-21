@@ -53,18 +53,11 @@ import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-cont
 import { settings } from "~/queries/settings"
 
 import { FooterInfo } from "./components/FooterInfo"
+import { ReloadPrompt } from "./index.shared"
 
 const LazyNewUserGuideModal = lazy(() =>
   import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
 )
-
-const ReloadPrompt = ELECTRON
-  ? () => null
-  : lazy(() =>
-      import("~/components/common/ReloadPrompt").then((module) => ({
-        default: module.ReloadPrompt,
-      })),
-    )
 
 const errorTypes = [
   ErrorComponentType.Page,
