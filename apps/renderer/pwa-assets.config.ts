@@ -19,7 +19,7 @@ const minimal2023Preset: Preset = {
   },
   maskable: {
     sizes: [512],
-    padding: 0.3,
+    padding: 0,
     resizeOptions: {
       fit: "contain",
       background: {
@@ -32,7 +32,7 @@ const minimal2023Preset: Preset = {
   },
   apple: {
     sizes: [180],
-    padding: 0.3,
+    padding: 0,
     resizeOptions: {
       fit: "contain",
       background: {
