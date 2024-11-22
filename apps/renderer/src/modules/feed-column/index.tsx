@@ -139,7 +139,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         <RootPortal to={rootContainerElement}>
           <ActionButton
             tooltip={"Toggle Feed Column"}
-            className="center left-macos-traffic-light macos:flex absolute top-2.5 z-0 hidden -translate-x-2 text-zinc-500"
+            className="center absolute top-2.5 z-0 hidden -translate-x-2 text-zinc-500 left-macos-traffic-light macos:flex"
             onClick={() => setFeedColumnShow(true)}
           >
             <i className="i-mgc-layout-leftbar-open-cute-re" />
@@ -148,7 +148,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       )}
 
       <div
-        className="text-theme-vibrancyFg flex w-full justify-between px-3 text-xl"
+        className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
         onClick={stopPropagation}
       >
         {views.map((item, index) => (
@@ -175,7 +175,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       >
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
-            <section key={item.name} className="w-feed-col h-full shrink-0 snap-center">
+            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
               <FeedList className="flex size-full flex-col text-sm" view={index} />
             </section>
           ))}

@@ -112,7 +112,7 @@ export const EntryItemWrapper: FC<
           "relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
           views[view as FeedViewType]?.wideMode ? "rounded-md" : "-mx-2 px-2",
-          "hover:bg-theme-item-hover duration-200",
+          "duration-200 hover:bg-theme-item-hover",
           (isActive || isContextMenuOpen) && "!bg-theme-item-active",
           itemClassName,
         )}

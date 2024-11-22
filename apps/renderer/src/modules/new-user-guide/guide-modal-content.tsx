@@ -164,7 +164,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   return (
     <m.div
       layout
-      className="bg-theme-background relative flex min-h-[80%] w-4/5 flex-col items-center justify-center overflow-hidden rounded-xl shadow-xl"
+      className="relative flex min-h-[80%] w-4/5 flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-background shadow-xl"
     >
       <div className="center relative mx-auto w-full">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -192,7 +192,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
                   {title}
                 </h1>
                 {!!guideSteps[step - 1].description && (
-                  <div className="text-theme-vibrancyFg text-center text-sm">
+                  <div className="text-center text-sm text-theme-vibrancyFg">
                     <Markdown className="max-w-full text-sm">
                       {guideSteps[step - 1].description!}
                     </Markdown>
@@ -292,7 +292,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
           type: "tween",
           ease: "circOut",
         }}
-        className="bg-theme-accent/20 absolute inset-0 rounded-full"
+        className="absolute inset-0 rounded-full bg-theme-accent/20"
       />
 
       <m.div
