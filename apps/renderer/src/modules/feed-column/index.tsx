@@ -22,10 +22,7 @@ import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
-import { useAuthQuery } from "~/hooks/common"
-import { Queries } from "~/queries"
-import { useSubscriptionStore } from "~/store/subscription"
-import { useFeedUnreadStore } from "~/store/unread"
+import { useUnreadByView } from "~/store/unread/hooks"
 
 import { WindowUnderBlur } from "../../components/ui/background"
 import { getSelectedFeedIds, SELECT_NOTHING, setSelectedFeedIds } from "./atom"
@@ -48,29 +45,6 @@ const useBackHome = (active: number) => {
     },
     [active, navigate],
   )
-}
-
-const useUnreadByView = () => {
-  useAuthQuery(Queries.subscription.byView())
-  const idByView = useSubscriptionStore((state) => state.feedIdByView)
-  const totalUnread = useFeedUnreadStore(
-    useCallback(
-      (state) => {
-        const unread = {} as Record<number, number>
-
-        for (const view in idByView) {
-          unread[view] = idByView[view].reduce(
-            (acc: number, feedId: string) => acc + (state.data[feedId] || 0),
-            0,
-          )
-        }
-        return unread
-      },
-      [idByView],
-    ),
-  )
-
-  return totalUnread
 }
 
 export function FeedColumn({ children, className }: PropsWithChildren<{ className?: string }>) {

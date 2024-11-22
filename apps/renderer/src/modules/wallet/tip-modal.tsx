@@ -107,7 +107,7 @@ const TipModalContent_: FC<{
   }
 
   return (
-    <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
+    <div className="flex w-full flex-col gap-3 lg:w-[80vw] lg:max-w-[350px]">
       {userId ? (
         <>
           <p className="text-sm font-medium">{t("tip_modal.feed_owner")}</p>

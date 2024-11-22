@@ -1,6 +1,5 @@
 import { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { nextFrame } from "@follow/utils/dom"
 import { getOS } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
@@ -96,13 +95,11 @@ export const useRegisterEntryCommands = () => {
       // keyBinding: shortcuts.entry.tip.key,
       // when: !isInbox && feed?.ownerUserId !== whoami()?.id && !!populatedEntry,
       run: ({ userId, feedId, entryId }) => {
-        nextFrame(() =>
-          openTipModal({
-            userId,
-            feedId,
-            entryId,
-          }),
-        )
+        openTipModal({
+          userId,
+          feedId,
+          entryId,
+        })
       },
     },
     {

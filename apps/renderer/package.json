@@ -6,6 +6,7 @@
   "scripts": {
     "build:web": "cd ../.. && pnpm build:web",
     "dev": "cd ../.. && pnpm dev:web",
+    "generate-pwa-assets": "pwa-assets-generator public/icon.svg",
     "test": "vitest --typecheck",
     "typecheck": "tsc --noEmit"
   },
@@ -82,6 +83,7 @@
     "react-hotkeys-hook": "4.6.1",
     "react-i18next": "^15.1.0",
     "react-intersection-observer": "9.13.1",
+    "react-ios-pwa-prompt": "^2.0.6",
     "react-resizable-layout": "npm:@innei/react-resizable-layout@0.7.3-fork.1",
     "react-router-dom": "6.27.0",
     "react-selecto": "^1.26.3",
@@ -103,6 +105,7 @@
     "unified": "11.0.5",
     "unist-util-visit-parents": "^6.0.1",
     "use-context-selector": "2.0.0",
+    "use-pull-to-refresh": "2.4.1",
     "use-sync-external-store": "1.2.2",
     "usehooks-ts": "3.1.0",
     "vfile": "6.0.3",
@@ -125,6 +128,7 @@
     "@types/node": "^22.8.7",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.8.0",
     "react": "^18.3.1",

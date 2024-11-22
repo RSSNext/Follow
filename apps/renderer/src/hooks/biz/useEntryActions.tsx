@@ -1,4 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
+import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 
 import {
@@ -13,6 +14,7 @@ import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useGetCommand, useRunCommandFn } from "~/modules/command/hooks/use-command"
+import type { FollowCommandId } from "~/modules/command/types"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -54,6 +56,15 @@ export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string
       })
     }
   }, [id, url])
+
+export type EntryActionItem = {
+  id: FollowCommandId
+  name: string
+  icon?: ReactNode
+  active?: boolean
+  shortcut?: string
+  onClick: () => void
+}
 
 export const useEntryActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const entry = useEntry(entryId)

@@ -10,7 +10,7 @@ import { useDialog, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { useSettingModal } from "~/modules/settings/modal/use-setting-modal"
 import { clearDataIfLoginOtherAccount } from "~/store/utils/clear"
 
 declare module "@follow/components/providers/stable-router-provider.js" {
