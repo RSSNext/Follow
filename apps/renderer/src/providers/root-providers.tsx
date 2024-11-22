@@ -55,9 +55,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <LazyLottieRenderContainer />
               <LazyExternalJumpInProvider />
               <LazyReloadPrompt />
-              <LazyPWAPrompt
-                appIconPath={`${window.location.origin}/apple-touch-icon-180x180.png`}
-              />
+              <LazyPWAPrompt />
             </Suspense>
           </I18nProvider>
         </Provider>

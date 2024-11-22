@@ -1,4 +1,4 @@
-import { lazy } from "react"
+import { createElement, lazy, Suspense, useState } from "react"
 
 const LazyLottieRenderContainer = lazy(() =>
   import("../../components/ui/lottie-container").then((res) => ({
@@ -28,7 +28,25 @@ const LazyReloadPrompt = lazy(() =>
   })),
 )
 
-const LazyPWAPrompt = lazy(() => import("react-ios-pwa-prompt"))
+const LazyPWAPromptImport = lazy(() => import("react-ios-pwa-prompt"))
+
+const LazyPWAPrompt = () => {
+  const [show, setShow] = useState(true)
+  if (!show) return null
+  return createElement(
+    Suspense,
+    null,
+    createElement(LazyPWAPromptImport, {
+      onClose() {
+        setTimeout(() => {
+          setShow(false)
+        }, 250)
+      },
+
+      appIconPath: `${window.location.origin}/apple-touch-icon-180x180.png`,
+    }),
+  )
+}
 
 export {
   LazyContextMenuProvider,

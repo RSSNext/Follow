@@ -96,7 +96,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             style={{
               zIndex: contentZIndex,
             }}
-            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4 pb-safe-offset-4"
+            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4"
           >
             {dismissible && (
               <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800" />
@@ -121,7 +121,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
               )}
             >
               <RootPortalProvider value={contentInnerRef.current!}>
-                <div className="flex grow flex-col overflow-auto px-4">
+                <div className="flex grow flex-col overflow-auto px-4 pb-safe-offset-4">
                   {typeof content === "function" ? React.createElement(content) : content}
                 </div>
               </RootPortalProvider>
