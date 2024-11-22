@@ -1,7 +1,9 @@
+import { views } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import { forwardRef, memo, useImperativeHandle, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
+import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useCategoryOpenStateByView } from "~/store/subscription"
@@ -15,6 +17,7 @@ import {
   useListsGroupedData,
 } from "./list.shared"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
+import { feedColumnStyles } from "./styles"
 
 const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(
   ({ className, view }, ref) => {
@@ -75,11 +78,25 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
               </div>
             )}
             {hasData ? (
-              <SortableFeedList
-                view={view}
-                data={feedsData}
-                categoryOpenStateData={categoryOpenStateData}
-              />
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigateEntry({
+                      view,
+                    })
+                  }}
+                  className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
+                >
+                  {views[view].icon}
+                  <span className="ml-2">All</span>
+                </button>
+                <SortableFeedList
+                  view={view}
+                  data={feedsData}
+                  categoryOpenStateData={categoryOpenStateData}
+                />
+              </>
             ) : (
               <EmptyFeedList />
             )}

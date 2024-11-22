@@ -1,12 +1,14 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useCallback, useMemo, useState } from "react"
+import { memo, useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import { useOnClickOutside } from "usehooks-ts"
 
 import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
@@ -184,11 +186,19 @@ const SortButton = () => {
   const { t } = useTranslation()
 
   const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useOnClickOutside(ref, () => {
+    setOpen(false)
+  })
 
   return (
     <HoverCard.Root open={open} onOpenChange={setOpen}>
       <HoverCard.Trigger
         onClick={() => {
+          if (isMobile()) {
+            setOpen(true)
+            return
+          }
           setFeedListSortBy(by === "count" ? "alphabetical" : "count")
         }}
         className="center"
@@ -207,7 +217,7 @@ const SortButton = () => {
       </HoverCard.Trigger>
 
       <HoverCard.Portal forceMount>
-        <HoverCard.Content className="z-10 -translate-x-4" sideOffset={5} forceMount>
+        <HoverCard.Content ref={ref} className="z-10 -translate-x-4" sideOffset={5} forceMount>
           <AnimatePresence>
             {open && (
               <m.div
