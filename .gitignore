@@ -20,3 +20,4 @@ vite.config.*.mjs
 
 .generated
 .turbo
+tsconfig.tsbuildinfo

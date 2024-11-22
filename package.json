@@ -101,7 +101,6 @@
     "tailwindcss": "3.4.14",
     "tailwindcss-animate": "1.0.7",
     "tailwindcss-motion": "0.3.0-beta",
-    "tsup": "8.3.5",
     "tsx": "4.19.2",
     "turbo": "2.2.3",
     "typescript": "5.6.3",

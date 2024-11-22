@@ -224,9 +224,6 @@ importers:
       tailwindcss-motion:
         specifier: 0.3.0-beta
         version: 0.3.0-beta(tailwindcss@3.4.14(ts-node@10.9.1(@types/node@22.8.7)(typescript@5.6.3)))
-      tsup:
-        specifier: 8.3.5
-        version: 8.3.5(jiti@2.3.3)(postcss@8.4.47)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.6.0)
       tsx:
         specifier: 4.19.2
         version: 4.19.2
