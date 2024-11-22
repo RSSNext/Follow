@@ -712,6 +712,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-scan:
+        specifier: 0.0.16
+        version: 0.0.16
 
   apps/server:
     dependencies:
@@ -9327,6 +9330,9 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
+
+  react-scan@0.0.16:
+    resolution: {integrity: sha512-lv7n1/w3liWZrtD58HVz5xFAEEg1z7hhAzt3+rHWf1fLzQRDaV1IBT3FyAiJmprETXjwOtIFQCTLNwIo/hMt8g==}
 
   react-selecto@1.26.3:
     resolution: {integrity: sha512-Ubik7kWSnZyQEBNro+1k38hZaI1tJarE+5aD/qsqCOA1uUBSjgKVBy3EWRzGIbdmVex7DcxznFZLec/6KZNvwQ==}
@@ -20893,6 +20899,8 @@ snapshots:
     dependencies:
       '@remix-run/router': 1.20.0
       react: 18.3.1
+
+  react-scan@0.0.16: {}
 
   react-selecto@1.26.3:
     dependencies:

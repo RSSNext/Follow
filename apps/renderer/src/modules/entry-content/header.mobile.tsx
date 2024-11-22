@@ -122,9 +122,7 @@ const HeaderRightActions = ({
     return () => clearTimeout(timeout)
   }, [getSetMarkdownElement])
 
-  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc, {
-    useWindowScroll: true,
-  })
+  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc, {})
 
   return (
     <div className={clsx(className, "flex items-center gap-2 text-zinc-500")}>

@@ -6,4 +6,6 @@ if (import.meta.env.DEV) {
   whyDidYouRender.default(React as any, {
     trackAllPureComponents: true,
   })
+  const { scan } = await import("react-scan")
+  scan({ enabled: true, log: true, showToolbar: true })
 }

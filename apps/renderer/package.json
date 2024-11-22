@@ -132,6 +132,7 @@
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.8.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-scan": "0.0.16"
   }
 }
