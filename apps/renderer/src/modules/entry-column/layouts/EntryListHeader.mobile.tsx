@@ -1,5 +1,7 @@
+import { FollowIcon } from "@follow/components/icons/follow.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RotatingRefreshIcon } from "@follow/components/ui/loading/index.jsx"
+import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { FeedViewType } from "@follow/constants"
 import { useIsOnline } from "@follow/hooks"
@@ -15,6 +17,7 @@ import { HeaderTopReturnBackButton } from "~/components/mobile/button"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_LIST } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
+import { MainMobileLayout } from "~/modules/app-layout/left-sidebar/mobile"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
@@ -42,6 +45,8 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
   const { feedId, view, listId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
+
+  const isTimelineFirst = useGeneralSettingKey("startupScreen") === "timeline"
 
   const isInCollectionList =
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
@@ -81,10 +86,14 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
       )}
     >
       <div className="flex w-full justify-between pb-1 pl-8">
-        <HeaderTopReturnBackButton
-          to={`/?view=${view}`}
-          className="absolute left-3 translate-y-px text-zinc-500"
-        />
+        {isTimelineFirst ? (
+          <FollowSubscriptionButton />
+        ) : (
+          <HeaderTopReturnBackButton
+            to={`/?view=${view}`}
+            className="absolute left-3 translate-y-px text-zinc-500"
+          />
+        )}
         {titleInfo}
         <div
           className={cn(
@@ -155,5 +164,22 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
 
       <TimelineTabs />
     </div>
+  )
+}
+
+const FollowSubscriptionButton = () => {
+  return (
+    <PresentSheet
+      zIndex={90}
+      dismissableClassName="mb-0"
+      triggerAsChild
+      content={<MainMobileLayout />}
+      modalClassName="bg-background pt-4"
+      contentClassName="p-0"
+    >
+      <ActionButton tooltip="Subscription" className="absolute left-3 translate-y-px text-zinc-500">
+        <FollowIcon className="size-4" />
+      </ActionButton>
+    </PresentSheet>
   )
 }

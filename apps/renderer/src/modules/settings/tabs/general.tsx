@@ -70,6 +70,7 @@ export const SettingGeneral = () => {
             },
           }),
           IN_ELECTRON && MinimizeToTraySetting,
+          isMobile && StartupScreenSelector,
           LanguageSelector,
 
           {
@@ -275,5 +276,35 @@ const MinimizeToTraySetting = () => {
       />
       <SettingDescription>{t("general.minimize_to_tray.description")}</SettingDescription>
     </SettingItemGroup>
+  )
+}
+
+const StartupScreenSelector = () => {
+  const { t } = useTranslation("settings")
+  const startupScreen = useGeneralSettingKey("startupScreen")
+
+  return (
+    <div className="mb-3 mt-4 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("general.startup_screen.title")}</span>
+      <ResponsiveSelect
+        size="sm"
+        items={[
+          {
+            label: t("general.startup_screen.timeline"),
+            value: "timeline",
+          },
+          {
+            label: t("general.startup_screen.subscription"),
+            value: "subscription",
+          },
+        ]}
+        triggerClassName="w-48"
+        defaultValue={startupScreen}
+        value={startupScreen}
+        onValueChange={(value) => {
+          setGeneralSetting("startupScreen", value as "subscription" | "timeline")
+        }}
+      />
+    </div>
   )
 }

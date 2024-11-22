@@ -64,7 +64,6 @@ export function MainMobileLayout() {
               <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
             </ActionButton>
           </Link>
-          {/* <SearchTrigger /> */}
         </div>
       </div>
       <div className={"relative flex size-full h-0 grow"}>

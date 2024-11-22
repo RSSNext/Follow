@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/utils"
 import { useStore } from "jotai"
 import type { FC, PropsWithChildren, ReactNode, RefObject } from "react"
 import * as React from "react"
@@ -18,6 +19,9 @@ export interface PresentSheetProps {
 
   triggerAsChild?: boolean
   contentRef?: RefObject<HTMLDivElement>
+  dismissableClassName?: string
+  modalClassName?: string
+  contentClassName?: string
 }
 
 export type SheetRef = {
@@ -35,6 +39,9 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
       defaultOpen,
       triggerAsChild,
       contentRef,
+      dismissableClassName,
+      modalClassName,
+      contentClassName,
     } = props
 
     const [isOpen, setIsOpen] = useState(props.open ?? defaultOpen)
@@ -96,10 +103,18 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             style={{
               zIndex: contentZIndex,
             }}
-            className="fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4"
+            className={cn(
+              "fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-5rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4",
+              modalClassName,
+            )}
           >
             {dismissible && (
-              <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800" />
+              <div
+                className={cn(
+                  "mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300 dark:bg-neutral-800",
+                  dismissableClassName,
+                )}
+              />
             )}
 
             {title ? (
@@ -121,7 +136,12 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
               )}
             >
               <RootPortalProvider value={contentInnerRef.current!}>
-                <div className="flex grow flex-col overflow-auto px-4 pb-safe-offset-4">
+                <div
+                  className={cn(
+                    "flex grow flex-col overflow-auto px-4 pb-safe-offset-4",
+                    contentClassName,
+                  )}
+                >
                   {typeof content === "function" ? React.createElement(content) : content}
                 </div>
               </RootPortalProvider>
