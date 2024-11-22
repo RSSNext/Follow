@@ -59,7 +59,6 @@ export default ({ mode }) => {
           __debug_proxy: resolve(ROOT, "/__debug_proxy.html"),
         },
       },
-      minify: false,
     },
     server: {
       port: 2233,
