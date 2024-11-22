@@ -12,8 +12,14 @@ self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting()
 })
 
+const preCacheExclude = new Set(["og-image.png", "opengraph-image.png"])
+
 // self.__WB_MANIFEST is the default injection point
-precacheAndRoute(self.__WB_MANIFEST)
+precacheAndRoute(
+  self.__WB_MANIFEST.filter((entry) => {
+    return typeof entry === "string" || !preCacheExclude.has(entry.url)
+  }),
+)
 
 // clean old assets
 cleanupOutdatedCaches()
@@ -23,10 +29,5 @@ let allowlist
 // in dev mode, we disable precaching to avoid caching issues
 if (import.meta.env.DEV) allowlist = [/^\/$/]
 
-let denylist: undefined | RegExp[]
-if (import.meta.env.PROD) {
-  denylist = [/^\/og-image.png$/, /^\/opengraph-image.png$/]
-}
-
 // to allow work offline
-registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), { allowlist, denylist }))
+registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), { allowlist }))
