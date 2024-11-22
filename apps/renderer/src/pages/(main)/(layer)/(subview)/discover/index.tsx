@@ -122,7 +122,7 @@ export function Component() {
   )
 }
 
-const TabComponent: Record<string, React.FC<{ type?: string }>> = {
+const TabComponent: Record<string, React.FC<{ type?: string; isInit?: boolean }>> = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
   inbox: DiscoverInboxList,
