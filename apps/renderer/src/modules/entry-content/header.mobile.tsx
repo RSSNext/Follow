@@ -1,6 +1,5 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
-import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 import { findElementInShadowDOM } from "@follow/utils/dom"
 import { clsx, cn } from "@follow/utils/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
@@ -108,6 +107,7 @@ const HeaderRightActions = ({
   actions: EntryActionItem[]
 }) => {
   const [ctxOpen, setCtxOpen] = useState(false)
+  const [tocOpen, setTocOpen] = useState(false)
 
   const [markdownElement, setMarkdownElement] = useState<HTMLElement | null>(null)
   const { toc, rootDepth } = useTocItems(markdownElement)
@@ -128,44 +128,63 @@ const HeaderRightActions = ({
 
   return (
     <div className={clsx(className, "flex items-center gap-2 text-zinc-500")}>
-      <PresentSheet
-        title="Table of Contents"
-        content={
-          <ul className="text-sm">
-            {toc.map((heading, index) => (
-              <li
-                key={heading.anchorId}
-                className={cn(
-                  "flex w-full items-center",
-                  currentScrollRange[0] === index && "text-accent",
-                )}
-                style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
-              >
-                <button
-                  className={cn("group flex w-full cursor-pointer justify-between py-1")}
-                  type="button"
-                  onClick={() => {
-                    handleScrollTo(index, heading.$heading, heading.anchorId)
+      <RootPortal>
+        <AnimatePresence>
+          {tocOpen && (
+            <RemoveScroll>
+              <DismissableLayer onDismiss={() => setTocOpen(false)}>
+                <m.div
+                  initial={{ y: "-100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-100%" }}
+                  transition={{
+                    type: "spring",
+                    damping: 20,
+                    stiffness: 150,
+                    mass: 0.8,
                   }}
+                  className="fixed left-1/3 right-0 top-0 z-[1] mt-14 max-w-full rounded-bl-md border border-t-0 bg-background px-3 py-1.5 shadow-sm"
                 >
-                  <span className="text-left duration-200 group-hover:text-accent/80">
-                    {heading.title}
-                  </span>
+                  <ul className="text-sm">
+                    {toc.map((heading, index) => (
+                      <li
+                        key={heading.anchorId}
+                        className={cn(
+                          "flex w-full items-center",
+                          currentScrollRange[0] === index && "text-accent",
+                        )}
+                        style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
+                      >
+                        <button
+                          className={cn("group flex w-full cursor-pointer justify-between py-1.5")}
+                          type="button"
+                          onClick={() => {
+                            handleScrollTo(index, heading.$heading, heading.anchorId)
+                          }}
+                        >
+                          <span className="text-left duration-200 group-hover:text-accent/80">
+                            {heading.title}
+                          </span>
 
-                  <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        }
+                          <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </m.div>
+              </DismissableLayer>
+            </RemoveScroll>
+          )}
+        </AnimatePresence>
+      </RootPortal>
+
+      <MotionButtonBase
+        disabled={toc.length === 0}
+        className="center size-8 duration-200 disabled:opacity-50"
+        onClick={() => setTocOpen((v) => !v)}
       >
-        <MotionButtonBase
-          disabled={toc.length === 0}
-          className="center size-8 duration-200 disabled:opacity-50"
-        >
-          <TableOfContentsIcon className="size-6" />
-        </MotionButtonBase>
-      </PresentSheet>
+        <TableOfContentsIcon className="size-6" />
+      </MotionButtonBase>
 
       <MotionButtonBase className="center size-8" onClick={() => setCtxOpen((v) => !v)}>
         <i className="i-mingcute-more-1-fill size-6" />
