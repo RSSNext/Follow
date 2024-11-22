@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useEffect } from "react"
 import { toast } from "sonner"
 import { useRegisterSW } from "virtual:pwa-register/react"
 
@@ -7,8 +7,8 @@ const period = 60 * 60 * 1000
 
 export function ReloadPrompt() {
   const {
-    offlineReady: [offlineReady, setOfflineReady],
-    needRefresh: [needRefresh, setNeedRefresh],
+    // offlineReady: [offlineReady, setOfflineReady],
+    needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
@@ -24,24 +24,27 @@ export function ReloadPrompt() {
     },
   })
 
-  const close = useCallback(() => {
-    setOfflineReady(false)
-    setNeedRefresh(false)
-  }, [setNeedRefresh, setOfflineReady])
+  // const close = useCallback(() => {
+  //   setOfflineReady(false)
+  //   setNeedRefresh(false)
+  // }, [setNeedRefresh, setOfflineReady])
+
+  // useEffect(() => {
+  //   if (offlineReady) {
+  //     toast.info("App is ready to work offline", {
+  //       action: {
+  //         label: "Close",
+  //         onClick: close,
+  //       },
+  //       duration: Infinity,
+  //     })
+  //   }
+  // }, [offlineReady, close])
 
   useEffect(() => {
-    if (offlineReady) {
-      toast.info("App is ready to work offline", {
-        action: {
-          label: "Close",
-          onClick: close,
-        },
-        duration: Infinity,
-      })
-    }
-  }, [offlineReady, close])
+    const isPwa = window.matchMedia("(display-mode: standalone)").matches
+    if (!isPwa) return
 
-  useEffect(() => {
     if (needRefresh) {
       toast.info("New version available", {
         action: {
