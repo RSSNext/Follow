@@ -3,6 +3,8 @@ import resolveConfig from "tailwindcss/resolveConfig"
 
 import { baseConfig } from "./configs/tailwind.base.config"
 
+const isWebBuild = !!process.env.WEB_BUILD || !!process.env.VERCEL
+
 export default resolveConfig({
   ...baseConfig,
   content: [
@@ -14,7 +16,7 @@ export default resolveConfig({
     "./packages/**/*.{ts,tsx}",
   ],
   future: {
-    hoverOnlyWhenSupported: true,
+    hoverOnlyWhenSupported: isWebBuild,
   },
   theme: {
     ...baseConfig.theme,

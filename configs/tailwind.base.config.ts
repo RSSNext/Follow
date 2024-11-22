@@ -8,9 +8,6 @@ import { compareColors, stringToColor } from "@iconify/utils/lib/colors"
 import type { Config } from "tailwindcss"
 
 export const baseConfig = {
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
   darkMode: ["class", '[data-theme="dark"]'],
   content: [],
   prefix: "",
