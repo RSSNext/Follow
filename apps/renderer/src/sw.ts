@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
+import type { NavigationRouteMatchOptions } from "workbox-routing"
 import { NavigationRoute, registerRoute } from "workbox-routing"
 import { CacheFirst, NetworkFirst } from "workbox-strategies"
 
@@ -42,7 +43,7 @@ registerRoute(({ url }) => {
   return fileExtensionRegexp.test(url.pathname)
 }, strategy)
 
-let allowlist
+let allowlist: NavigationRouteMatchOptions["allowlist"]
 if (import.meta.env.DEV) allowlist = [/^\/$/]
 
 registerRoute(new NavigationRoute(strategy, { allowlist }))
