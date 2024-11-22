@@ -93,6 +93,9 @@ const useRegisterEagleCommands = () => {
             }
           },
         }),
+    {
+      deps: [isEagleAvailable],
+    },
   )
 }
 
@@ -157,6 +160,9 @@ const useRegisterReadwiseCommands = () => {
             }
           },
         }),
+    {
+      deps: [isReadwiseAvailable],
+    },
   )
 }
 
@@ -224,6 +230,9 @@ const useRegisterInstapaperCommands = () => {
             }
           },
         }),
+    {
+      deps: [isInstapaperAvailable],
+    },
   )
 }
 
@@ -305,6 +314,9 @@ const useRegisterOmnivoreCommands = () => {
             }
           },
         }),
+    {
+      deps: [isOmnivoreAvailable],
+    },
   )
 }
 
@@ -384,6 +396,9 @@ const useRegisterObsidianCommands = () => {
             })
           },
         }),
+    {
+      deps: [isObsidianAvailable],
+    },
   )
 }
 
@@ -446,5 +461,8 @@ const useRegisterOutlineCommands = () => {
             }
           },
         }),
+    {
+      deps: [outlineAvailable],
+    },
   )
 }
