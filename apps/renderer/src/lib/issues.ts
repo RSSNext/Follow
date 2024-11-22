@@ -7,10 +7,12 @@ interface IssueOptions {
   label: string
   error?: Error
 }
+
 export const getNewIssueUrl = ({ body, label, title, error }: Partial<IssueOptions> = {}) => {
-  const baseUrl = `${repository.url}/issues/new`
+  const baseUrl = `${repository.url}/discussions/new`
 
   const searchParams = new URLSearchParams()
+  searchParams.set("category", "feed-expired")
 
   let nextBody = [body || "", "", ...getCurrentEnvironment()].join("\n")
   if (label) searchParams.set("label", label)
