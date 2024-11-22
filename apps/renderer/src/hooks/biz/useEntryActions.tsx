@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import type { FeedViewType } from "@follow/constants"
 import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
@@ -147,7 +148,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.viewSourceContent,
         onClick: runCmdFn(COMMAND_ID.entry.viewSourceContent, [{ entryId }]),
-        hide: isShowSourceContent || !entry?.entries.url,
+        hide: isMobile() || isShowSourceContent || !entry?.entries.url,
       },
       {
         id: COMMAND_ID.entry.viewEntryContent,
