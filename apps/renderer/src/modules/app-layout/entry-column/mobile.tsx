@@ -26,6 +26,7 @@ export const EntryColumnMobile = () => {
 
       {isStartupTimeline && (
         <MobileFloatBar
+          className="!bottom-10"
           scrollContainer={scrollContainer}
           onLogoClick={() => {
             ;(document.querySelector(`#${LOGO_MOBILE_ID}`) as HTMLElement)?.click()

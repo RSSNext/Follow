@@ -118,9 +118,9 @@ const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) =
           <div className="relative flex flex-col items-center">
             {item.icon}
 
-            {showCount && unreadByView[item.view] > 0 && (
+            {showCount && (
               <span className="mt-px text-[8px] leading-none">
-                {unreadByView[item.view] > 99 ? "99+" : unreadByView[item.view]}
+                {unreadByView[item.view] > 99 ? "99+" : unreadByView[item.view] || "0"}
               </span>
             )}
           </div>
