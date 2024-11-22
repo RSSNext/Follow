@@ -23,5 +23,10 @@ let allowlist
 // in dev mode, we disable precaching to avoid caching issues
 if (import.meta.env.DEV) allowlist = [/^\/$/]
 
+let denylist: undefined | RegExp[]
+if (import.meta.env.PROD) {
+  denylist = [/^\/og-image.png$/, /^\/opengraph-image.png$/]
+}
+
 // to allow work offline
-registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), { allowlist }))
+registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), { allowlist, denylist }))
