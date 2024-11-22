@@ -42,7 +42,7 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
 
-let prevScrollTop = 0
+const prevScrollTopMap = {}
 
 export type VirtuosoComponentProps = { onlyShowArchivedButton: boolean }
 type VirtuosoComponentPropsContext = { context?: VirtuosoComponentProps }
@@ -139,14 +139,18 @@ function EntryColumnImpl() {
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    if (!isInteracted.current) {
-      isInteracted.current = true
-    }
-    const { scrollTop } = e.currentTarget
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      if (!isInteracted.current) {
+        isInteracted.current = true
+      }
+      const { scrollTop } = e.currentTarget
 
-    prevScrollTop = scrollTop
-  }, [])
+      if (!routeFeedId) return
+      prevScrollTopMap[routeFeedId] = scrollTop
+    },
+    [routeFeedId],
+  )
 
   const virtuosoOptions = {
     components: {
@@ -189,7 +193,7 @@ function EntryColumnImpl() {
         handleMarkReadInRange(...args, isInteracted.current)
     },
     customScrollParent: scrollRef.current!,
-    initialScrollTop: prevScrollTop || 0,
+    initialScrollTop: prevScrollTopMap[routeFeedId || ""] || 0,
 
     totalCount: entries.totalCount,
     endReached: useCallback(async () => {
