@@ -89,7 +89,11 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
                   className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
                 >
                   {views[view].icon}
-                  <span className="ml-2">All</span>
+                  <span className="ml-2">
+                    {t("words.all", { ns: "common" })}
+                    {t("space", { ns: "common" })}
+                    {t(views[view].name)}
+                  </span>
                 </button>
                 <SortableFeedList
                   view={view}
