@@ -65,9 +65,7 @@ const TipModalContent_: FC<{
 
   const { dismiss } = useCurrentModal()
 
-  const claimFeed = useFeedClaimModal({
-    feedId,
-  })
+  const claimFeed = useFeedClaimModal()
 
   const navigate = useNavigate()
 
@@ -127,7 +125,7 @@ const TipModalContent_: FC<{
             </span>
           </p>
           <div className="text-center">
-            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed()}>
+            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed({ feedId })}>
               {t("tip_modal.claim_feed")}
             </Button>
           </div>

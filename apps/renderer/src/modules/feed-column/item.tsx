@@ -89,7 +89,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
 
-  const { items } = useFeedActions({
+  const items = useFeedActions({
     feedIds: selectedFeedIds,
     feedId,
     view,
@@ -216,7 +216,7 @@ const ListItemImpl: Component<{
   const list = useListById(listId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
-  const { items } = useListActions({ listId, view })
+  const items = useListActions({ listId, view })
 
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
 
