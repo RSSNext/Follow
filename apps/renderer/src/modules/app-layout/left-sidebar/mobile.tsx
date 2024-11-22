@@ -6,6 +6,7 @@ import { views } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
+import useEmblaCarousel from "embla-carousel-react"
 import { m, useAnimationControls } from "framer-motion"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
@@ -14,7 +15,7 @@ import { Link } from "react-router-dom"
 import { useEventListener } from "usehooks-ts"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
-import { useSidebarActiveView } from "~/atoms/sidebar"
+import { useSetSidebarActiveView, useSidebarActiveView } from "~/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
@@ -69,7 +70,7 @@ export function MainMobileLayout() {
       <div className={"relative flex size-full h-0 grow"}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
-            <section key={item.name} className="size-full shrink-0 snap-center">
+            <section key={item.name} className="size-full flex-none shrink-0 snap-center">
               <FeedList
                 ref={setFeedListScrollRef}
                 className="flex size-full flex-col text-sm"
@@ -103,19 +104,40 @@ export function MainMobileLayout() {
 }
 
 const SwipeWrapper: FC<{
-  active: number
   children: React.JSX.Element[]
+  active: number
 }> = ({ children, active }) => {
-  const [currentAnimtedActive, setCurrentAnimatedActive] = useState(active)
+  const setActive = useSetSidebarActiveView()
 
-  useLayoutEffect(() => {
-    // eslint-disable-next-line @eslint-react/web-api/no-leaked-timeout
-    setTimeout(() => {
-      setCurrentAnimatedActive(active)
-    }, 0)
-  }, [active])
+  const [initialActive] = useState(active)
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: false,
+      startIndex: initialActive,
+    },
+    [],
+  )
 
-  return <div className="size-full">{children[currentAnimtedActive]}</div>
+  useEffect(() => {
+    if (!emblaApi) return
+    emblaApi.on("select", () => {
+      setActive(emblaApi.selectedScrollSnap())
+    })
+  }, [emblaApi, setActive])
+
+  useEffect(() => {
+    if (!emblaApi) return
+    const currentSlideIndex = emblaApi.selectedScrollSnap()
+    if (currentSlideIndex !== active) {
+      emblaApi.scrollTo(active)
+    }
+  }, [active, emblaApi])
+
+  return (
+    <div ref={emblaRef} className="w-full overflow-hidden">
+      <div className="flex size-full">{children}</div>
+    </div>
+  )
 }
 const FloatBar = ({ scrollContainer }: { scrollContainer: Nullable<HTMLDivElement> }) => {
   const [isScrollDown, setIsScrollDown] = useState(false)

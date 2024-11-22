@@ -1,8 +1,9 @@
 import { views } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
-import { forwardRef, memo, useImperativeHandle, useRef } from "react"
+import { memo } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useSidebarActiveViewValue } from "~/atoms/sidebar"
 import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
@@ -19,97 +20,98 @@ import {
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 
-const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(
-  ({ className, view }, ref) => {
-    const feedsData = useFeedsGroupedData(view)
-    const listsData = useListsGroupedData(view)
-    const inboxesData = useInboxesGroupedData(view)
-    const categoryOpenStateData = useCategoryOpenStateByView(view)
+const FeedListImpl = ({ className, view }: { className?: string; view: number }) => {
+  const feedsData = useFeedsGroupedData(view)
+  const listsData = useListsGroupedData(view)
+  const inboxesData = useInboxesGroupedData(view)
+  const categoryOpenStateData = useCategoryOpenStateByView(view)
 
-    const hasData =
-      Object.keys(feedsData).length > 0 ||
-      Object.keys(listsData).length > 0 ||
-      Object.keys(inboxesData).length > 0
+  const hasData =
+    Object.keys(feedsData).length > 0 ||
+    Object.keys(listsData).length > 0 ||
+    Object.keys(inboxesData).length > 0
 
-    const { t } = useTranslation()
+  const { t } = useTranslation()
 
-    // Data prefetch
-    useAuthQuery(Queries.lists.list())
+  // Data prefetch
+  useAuthQuery(Queries.lists.list())
 
-    const hasListData = Object.keys(listsData).length > 0
-    const hasInboxData = Object.keys(inboxesData).length > 0
+  const hasListData = Object.keys(listsData).length > 0
+  const hasInboxData = Object.keys(inboxesData).length > 0
 
-    const scrollerRef = useRef<HTMLDivElement>(null)
+  const currentActiveView = useSidebarActiveViewValue()
+  // Render only adjacent views
+  // 0 => 0, 1
+  // 1 => 0, 1, 2
+  // 2 => 1, 2, 3
+  const shouldRender = view >= currentActiveView && view < currentActiveView + 2
 
-    useImperativeHandle(ref, () => scrollerRef.current!)
+  return (
+    <div className={cn(className, "font-medium", !shouldRender && "hidden")}>
+      <ListHeader view={view} />
 
-    return (
-      <div className={cn(className, "font-medium")}>
-        <ListHeader view={view} />
+      <div className="h-full overflow-y-auto overflow-x-hidden px-3">
+        <StarredItem view={view} />
+        {hasListData && (
+          <>
+            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.lists")}
+            </div>
+            <SortByAlphabeticalList view={view} data={listsData} />
+          </>
+        )}
+        {hasInboxData && (
+          <>
+            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.inbox")}
+            </div>
+            <SortByAlphabeticalInbox view={view} data={inboxesData} />
+          </>
+        )}
 
-        <div ref={scrollerRef} className="h-full overflow-auto px-3">
-          <StarredItem view={view} />
-          {hasListData && (
-            <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-                {t("words.lists")}
-              </div>
-              <SortByAlphabeticalList view={view} data={listsData} />
-            </>
+        <div className="space-y-px" id="feeds-area">
+          {(hasListData || hasInboxData) && (
+            <div
+              className={cn(
+                "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+              )}
+            >
+              {t("words.feeds")}
+            </div>
           )}
-          {hasInboxData && (
+          {hasData ? (
             <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-                {t("words.inbox")}
-              </div>
-              <SortByAlphabeticalInbox view={view} data={inboxesData} />
-            </>
-          )}
-
-          <div className="space-y-px" id="feeds-area">
-            {(hasListData || hasInboxData) && (
-              <div
-                className={cn(
-                  "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
-                  Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
-                )}
+              <button
+                type="button"
+                onClick={() => {
+                  navigateEntry({
+                    view,
+                  })
+                }}
+                className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
               >
-                {t("words.feeds")}
-              </div>
-            )}
-            {hasData ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigateEntry({
-                      view,
-                    })
-                  }}
-                  className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
-                >
-                  {views[view].icon}
-                  <span className="ml-2">
-                    {t("words.all", { ns: "common" })}
-                    {t("space", { ns: "common" })}
-                    {t(views[view].name)}
-                  </span>
-                </button>
-                <SortableFeedList
-                  view={view}
-                  data={feedsData}
-                  categoryOpenStateData={categoryOpenStateData}
-                />
-              </>
-            ) : (
-              <EmptyFeedList />
-            )}
-          </div>
+                {views[view].icon}
+                <span className="ml-2">
+                  {t("words.all", { ns: "common" })}
+                  {t("space", { ns: "common" })}
+                  {t(views[view].name)}
+                </span>
+              </button>
+              <SortableFeedList
+                view={view}
+                data={feedsData}
+                categoryOpenStateData={categoryOpenStateData}
+              />
+            </>
+          ) : (
+            <EmptyFeedList />
+          )}
         </div>
       </div>
-    )
-  },
-)
+    </div>
+  )
+}
 FeedListImpl.displayName = "FeedListImpl"
 
 export const FeedList = memo(FeedListImpl)

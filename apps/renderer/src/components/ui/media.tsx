@@ -46,6 +46,7 @@ export type MediaProps = BaseProps &
         previewImageUrl?: string
       })
   )
+
 const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,

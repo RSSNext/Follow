@@ -63,8 +63,6 @@
     </script>
     <script>
       const isMobile = window.innerWidth < 1024
-      if (isMobile) document.getElementById("app-skeleton")?.remove()
-
       document.documentElement.dataset.viewport = isMobile ? "mobile" : "desktop"
     </script>
   </head>
@@ -85,6 +83,9 @@
           position: fixed;
           inset: 0;
           z-index: 1000;
+        }
+        [data-viewport="mobile"] #app-skeleton {
+          display: none;
         }
         [data-theme="light"] {
           --background: 0 0% 100%;
