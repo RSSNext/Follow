@@ -207,7 +207,7 @@ const ViewTabs = () => {
         <MotionButtonBase
           className={clsx(
             "center flex transition-colors duration-200",
-            active === item.view && "text-theme-accent",
+            active === item.view && item.className,
           )}
           key={item.name}
           onClick={() => setActive(item.view)}
