@@ -10,24 +10,39 @@ export function createDependencyChunksPlugin(dependencies: string[][]): Plugin {
 
       const { output } = config.build.rollupOptions
       const outputConfig = Array.isArray(output) ? output[0] : output
-      outputConfig.manualChunks = outputConfig.manualChunks || {}
       outputConfig.assetFileNames = "assets/[name].[hash:6][extname]"
       outputConfig.chunkFileNames = (chunkInfo) => {
         return chunkInfo.name.startsWith("vendor/") ? "[name]-[hash].js" : "assets/[name]-[hash].js"
       }
 
-      const manualChunks = Array.isArray(output) ? output[0].manualChunks : output.manualChunks
-
-      if (typeof manualChunks !== "object") return
-
-      dependencies.forEach((dep, index) => {
-        if (Array.isArray(dep)) {
-          const chunkName = `vendor/${index}`
-          manualChunks[chunkName] = dep
-        } else {
-          manualChunks[`vendor/${dep}`] = [dep]
+      outputConfig.manualChunks = (id: string) => {
+        const matchedDep = dependencies.findIndex((dep) =>
+          dep.some((d) => id.includes(`/node_modules/${d}`)),
+        )
+        if (matchedDep !== -1) {
+          return `vendor/${matchedDep}`
         }
-      })
+        const chunkMap: Record<string, string[]> = {
+          modules: ["/src/modules"],
+          infra: [
+            "/src/store",
+            "/src/atoms",
+            "/src/database",
+            "/src/services",
+            "/src/initialize",
+            "/src/lib",
+            "/src/queries",
+          ],
+          components: ["/src/components", "/src/hooks"],
+          packages: ["@follow/"],
+          app: ["/src/pages", "/src/providers", "/src/constants", "/src/App", "/src/main"],
+        }
+        for (const [chunk, paths] of Object.entries(chunkMap)) {
+          if (paths.some((path) => id.includes(path))) {
+            return chunk
+          }
+        }
+      }
     },
   }
 }

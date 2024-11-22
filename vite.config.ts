@@ -222,7 +222,7 @@ export default ({ mode }) => {
           "@tanstack/query-sync-storage-persister",
         ],
         ["tldts"],
-        ["shiki", "@shikijs/transformers"],
+
         ["@sentry/react", "@openpanel/web"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
       ]),
