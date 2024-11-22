@@ -96,14 +96,21 @@ export default ({ mode }) => {
           globPatterns: [
             "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
           ],
+          manifestTransforms: [
+            (manifest) => {
+              return {
+                manifest,
+                warnings: [],
+                additionalManifestEntries: [
+                  {
+                    url: "/sw.js?pwa=true",
+                    revision: null,
+                  },
+                ],
+              }
+            },
+          ],
         },
-        // workbox: {
-        //   globPatterns: [
-        //     "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
-        //   ],
-        //   cleanupOutdatedCaches: true,
-        //   clientsClaim: true,
-        // },
 
         manifest: {
           theme_color: "#000000",
