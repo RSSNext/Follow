@@ -23,10 +23,12 @@ export const MobileFloatBar = ({
   scrollContainer,
   className,
   onLogoClick,
+  onViewChange,
 }: {
   scrollContainer: Nullable<HTMLDivElement>
   className?: string
   onLogoClick?: () => void
+  onViewChange?: (view: number) => void
 }) => {
   const [isScrollDown, setIsScrollDown] = useState(false)
   const prevScrollY = useRef(0)
@@ -80,7 +82,7 @@ export const MobileFloatBar = ({
           <Logo className="size-5 shrink-0" />
         </MotionButtonBase>
         <DividerVertical className="h-3/4 shrink-0" />
-        <ViewTabs />
+        <ViewTabs onViewChange={onViewChange} />
         <DividerVertical className="h-3/4 shrink-0" />
         <PlayerIcon />
         <ProfileButton />
@@ -89,7 +91,7 @@ export const MobileFloatBar = ({
   )
 }
 
-const ViewTabs = () => {
+const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) => {
   const [active, setActive] = useSidebarActiveView()
   return (
     <div
@@ -103,7 +105,10 @@ const ViewTabs = () => {
             active === item.view && item.className,
           )}
           key={item.name}
-          onClick={() => setActive(item.view)}
+          onClick={() => {
+            setActive(item.view)
+            onViewChange?.(item.view)
+          }}
         >
           {item.icon}
         </MotionButtonBase>

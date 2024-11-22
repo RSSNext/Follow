@@ -25,11 +25,12 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
   const [active, setActive_] = useSidebarActiveView()
 
   useLayoutEffect(() => {
+    if (asWidget) return
     const { view } = getRouteParams()
     if (view !== undefined) {
       setActive_(view)
     }
-  }, [setActive_])
+  }, [asWidget, setActive_])
 
   const [feedListScrollRef, setFeedListScrollRef] = useState<HTMLDivElement | null>()
 
