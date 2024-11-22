@@ -13,6 +13,9 @@ export default resolveConfig({
     "./apps/web/index.html",
     "./packages/**/*.{ts,tsx}",
   ],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     ...baseConfig.theme,
     extend: {

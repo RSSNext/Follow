@@ -21,6 +21,7 @@ import { FeedFoundCanBeFollowError } from "~/components/errors/FeedFoundCanBeFol
 import { FeedNotFound } from "~/components/errors/FeedNotFound"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "~/constants"
+import { ENTRY_COLUMN_LIST_SCROLLER_ID } from "~/constants/dom"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useFeed } from "~/queries/feed"
@@ -362,6 +363,7 @@ const ListGird = ({
   return (
     <>
       <VirtuosoGrid
+        id={ENTRY_COLUMN_LIST_SCROLLER_ID}
         listClassName={girdClassNames}
         {...virtuosoOptions}
         data={nextData}

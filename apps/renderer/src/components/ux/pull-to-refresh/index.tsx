@@ -2,6 +2,8 @@ import { clsx } from "clsx"
 import type { ReactNode } from "react"
 import { useEffect, useRef, useState } from "react"
 
+import { ENTRY_COLUMN_LIST_SCROLLER_ID } from "~/constants/dom"
+
 interface PullToRefreshProps {
   children: ReactNode
   onRefresh: () => Promise<any>
@@ -15,7 +17,7 @@ export function PullToRefresh({
   children,
   onRefresh,
   className,
-  scrollContainerSelector = "[data-virtuoso-scroller]",
+  scrollContainerSelector = `#${ENTRY_COLUMN_LIST_SCROLLER_ID}`,
 }: PullToRefreshProps) {
   const [startY, setStartY] = useState(0)
   const [pulling, setPulling] = useState(false)

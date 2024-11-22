@@ -6,15 +6,16 @@ import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { m, useAnimationControls } from "framer-motion"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { useEventListener } from "usehooks-ts"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { useSidebarActiveView } from "~/atoms/sidebar"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { CornerPlayer } from "~/modules/player/corner-player"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { feedIconSelector } from "~/store/feed/selector"
+import { useUnreadByView } from "~/store/unread/hooks"
 
 import { ProfileButton } from "../../user/ProfileButton"
 import styles from "./mobile.module.css"
@@ -32,10 +33,10 @@ export const MobileFloatBar = ({
 }) => {
   const [isScrollDown, setIsScrollDown] = useState(false)
   const prevScrollY = useRef(0)
-  useEventListener(
-    "scroll",
-    () => {
-      if (!scrollContainer) return
+  useEffect(() => {
+    if (!scrollContainer) return
+
+    const handler = () => {
       const currentY = scrollContainer.scrollTop
 
       if (currentY < 30) return
@@ -50,9 +51,11 @@ export const MobileFloatBar = ({
 
       setIsScrollDown(currentY > prevScrollY.current)
       prevScrollY.current = currentY
-    },
-    { current: scrollContainer! },
-  )
+    }
+    scrollContainer.addEventListener("scroll", handler)
+    return () => scrollContainer.removeEventListener("scroll", handler)
+  }, [scrollContainer])
+
   const animateController = useAnimationControls()
 
   useEffect(() => {
@@ -93,9 +96,11 @@ export const MobileFloatBar = ({
 
 const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) => {
   const [active, setActive] = useSidebarActiveView()
+  const unreadByView = useUnreadByView()
+  const showCount = useUISettingKey("sidebarShowUnreadCount")
   return (
     <div
-      className="flex w-full shrink items-center justify-between gap-4 overflow-auto text-xl text-theme-vibrancyFg"
+      className="flex w-full shrink items-center justify-between gap-4 overflow-x-auto overflow-y-hidden text-xl text-theme-vibrancyFg"
       onClick={stopPropagation}
     >
       {views.map((item) => (
@@ -110,7 +115,15 @@ const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) =
             onViewChange?.(item.view)
           }}
         >
-          {item.icon}
+          <div className="relative flex flex-col items-center">
+            {item.icon}
+
+            {showCount && unreadByView[item.view] > 0 && (
+              <span className="mt-px text-[8px] leading-none">
+                {unreadByView[item.view] > 99 ? "99+" : unreadByView[item.view]}
+              </span>
+            )}
+          </div>
         </MotionButtonBase>
       ))}
     </div>
