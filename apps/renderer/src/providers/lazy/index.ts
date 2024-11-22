@@ -22,18 +22,21 @@ const LazyExtensionExposeProvider = lazy(() =>
   })),
 )
 
-const ReloadPrompt = lazy(() =>
+const LazyReloadPrompt = lazy(() =>
   import("~/components/common/ReloadPrompt").then((module) => ({
     default: module.ReloadPrompt,
   })),
 )
+
+const LazyPWAPrompt = lazy(() => import("react-ios-pwa-prompt"))
 
 export {
   LazyContextMenuProvider,
   LazyExtensionExposeProvider,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
-  ReloadPrompt,
+  LazyPWAPrompt,
+  LazyReloadPrompt,
 }
 
 const LazyExternalJumpInProvider = lazy(() =>

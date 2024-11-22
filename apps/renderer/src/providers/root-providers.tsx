@@ -22,7 +22,8 @@ import {
   LazyExternalJumpInProvider,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
-  ReloadPrompt,
+  LazyPWAPrompt,
+  LazyReloadPrompt,
   // specific import should add `index` postfix
 } from "./lazy/index"
 import { ServerConfigsProvider } from "./server-configs-provider"
@@ -53,7 +54,8 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <LazyContextMenuProvider />
               <LazyLottieRenderContainer />
               <LazyExternalJumpInProvider />
-              <ReloadPrompt />
+              <LazyReloadPrompt />
+              <LazyPWAPrompt />
             </Suspense>
           </I18nProvider>
         </Provider>
