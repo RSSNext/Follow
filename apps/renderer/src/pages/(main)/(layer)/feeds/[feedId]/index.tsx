@@ -2,7 +2,7 @@ import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { redirect } from "react-router-dom"
 
 import { ROUTE_ENTRY_PENDING } from "~/constants"
-import { MobileCenterColumnScreen } from "~/modules/app-layout/center-column"
+import { MobileCenterColumnScreen } from "~/modules/app-layout/entry-column/index"
 
 export const Component = () => {
   return <MobileCenterColumnScreen />

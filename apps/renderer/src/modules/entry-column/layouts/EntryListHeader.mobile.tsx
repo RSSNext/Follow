@@ -15,9 +15,10 @@ import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/genera
 import { useWhoami } from "~/atoms/user"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_LIST } from "~/constants"
+import { LOGO_MOBILE_ID } from "~/constants/dom"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
-import { MainMobileLayout } from "~/modules/app-layout/left-sidebar/mobile"
+import { FeedColumnMobile } from "~/modules/app-layout/feed-column/mobile"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
@@ -173,11 +174,15 @@ const FollowSubscriptionButton = () => {
       zIndex={90}
       dismissableClassName="mb-0"
       triggerAsChild
-      content={<MainMobileLayout />}
-      modalClassName="bg-background pt-4"
-      contentClassName="p-0"
+      content={<FeedColumnMobile asWidget />}
+      modalClassName="bg-background pt-4 h-[calc(100svh-3rem)]"
+      contentClassName="p-0 overflow-visible"
     >
-      <ActionButton tooltip="Subscription" className="absolute left-3 translate-y-px text-zinc-500">
+      <ActionButton
+        id={LOGO_MOBILE_ID}
+        tooltip="Subscription"
+        className="absolute left-3 translate-y-px text-zinc-500"
+      >
         <FollowIcon className="size-4" />
       </ActionButton>
     </PresentSheet>

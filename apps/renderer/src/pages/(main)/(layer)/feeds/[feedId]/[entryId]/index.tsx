@@ -1,1 +1,1 @@
-export { RightContentLayout as Component } from "~/modules/app-layout/right-content/index"
+export { RightContentLayout as Component } from "~/modules/app-layout/entry-content/index"

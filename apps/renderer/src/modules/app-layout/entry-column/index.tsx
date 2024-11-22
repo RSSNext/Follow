@@ -7,7 +7,7 @@ const noop = () =>
   })
 export const CenterColumnLayout = withResponsiveComponent<object>(
   () =>
-    import("~/modules/app-layout/center-column/desktop").then((m) => ({
+    import("~/modules/app-layout/entry-column/desktop").then((m) => ({
       default: m.CenterColumnDesktop,
     })),
   () =>
@@ -17,7 +17,7 @@ export const CenterColumnLayout = withResponsiveComponent<object>(
 )
 
 export const MobileCenterColumnScreen = withResponsiveComponent<object>(noop, () =>
-  import("~/modules/app-layout/center-column/mobile").then((m) => ({
-    default: m.CenterColumnMobile,
+  import("~/modules/app-layout/entry-column/mobile").then((m) => ({
+    default: m.EntryColumnMobile,
   })),
 )

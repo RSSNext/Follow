@@ -1,4 +1,5 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
+import { RootPortal } from "@follow/components/ui/portal/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
@@ -216,7 +217,7 @@ const SortButton = () => {
         />
       </HoverCard.Trigger>
 
-      <HoverCard.Portal forceMount>
+      <RootPortal>
         <HoverCard.Content ref={ref} className="z-10 -translate-x-4" sideOffset={5} forceMount>
           <AnimatePresence>
             {open && (
@@ -259,7 +260,7 @@ const SortButton = () => {
             )}
           </AnimatePresence>
         </HoverCard.Content>
-      </HoverCard.Portal>
+      </RootPortal>
     </HoverCard.Root>
   )
 }
