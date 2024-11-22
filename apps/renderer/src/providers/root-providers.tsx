@@ -3,6 +3,7 @@ import { EventProvider } from "@follow/components/providers/event-provider.js"
 import { StableRouterProvider } from "@follow/components/providers/stable-router-provider.js"
 import { Toaster } from "@follow/components/ui/toast/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { Provider } from "jotai"
@@ -55,7 +56,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <LazyLottieRenderContainer />
               <LazyExternalJumpInProvider />
               <LazyReloadPrompt />
-              <LazyPWAPrompt />
+              <LazyPWAPrompt appIconPath={`${env.VITE_WEB_URL}/apple-touch-icon-180x180.png`} />
             </Suspense>
           </I18nProvider>
         </Provider>
