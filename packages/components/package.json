@@ -58,6 +58,7 @@
     "react-i18next": "^15.1.0",
     "sonner": "1.5.0",
     "use-context-selector": "2.0.0",
-    "usehooks-ts": "3.1.0"
+    "usehooks-ts": "3.1.0",
+    "vaul": "1.1.1"
   }
 }

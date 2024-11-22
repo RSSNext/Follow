@@ -1,12 +1,6 @@
 import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@follow/components/ui/select/index.jsx"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.js"
 import { cn, isASCII } from "@follow/utils/utils"
 import { keepPreviousData } from "@tanstack/react-query"
@@ -25,15 +19,15 @@ import { RecommendationCard } from "./recommendations-card"
 
 const LanguageOptions = [
   {
-    name: "All",
+    label: "All",
     value: "all",
   },
   {
-    name: "English",
+    label: "English",
     value: "en",
   },
   {
-    name: "中文",
+    label: "中文",
     value: "zh-CN",
   },
 ] as const
@@ -140,7 +134,7 @@ export function Recommendations({
   }
 
   return (
-    <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px] px-4")}>
+    <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px]")}>
       {!hideTitle && (
         <div className="relative text-center text-lg font-bold">
           <span>{t("discover.popular")}</span>
@@ -158,14 +152,14 @@ export function Recommendations({
 
       <div
         className={cn(
-          "z-[9] my-3 flex w-full items-center gap-4 bg-theme-background",
+          "z-[9] my-3 flex w-full flex-col items-end gap-4 bg-theme-background sm:flex-row sm:items-center",
           headerClassName,
         )}
       >
         <ScrollArea.ScrollArea
           ref={tabRef}
           orientation="horizontal"
-          rootClassName="grow min-w-0 overflow-visible"
+          rootClassName="grow min-w-0 max-w-full overflow-visible"
           scrollbarClassName="-mb-3 z-[100]"
         >
           <Tabs value={category} onValueChange={handleCategoryChange}>
@@ -178,19 +172,14 @@ export function Recommendations({
             </TabsList>
           </Tabs>
         </ScrollArea.ScrollArea>
-        <Select value={selectedLang} onValueChange={handleLangChange}>
-          <SelectTrigger size="sm" className="w-32">
-            <SelectValue />
-          </SelectTrigger>
 
-          <SelectContent className="z-[1]" position="item-aligned">
-            {LanguageOptions.map((lang) => (
-              <SelectItem key={lang.value} value={lang.value}>
-                {lang.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ResponsiveSelect
+          value={selectedLang}
+          onValueChange={handleLangChange}
+          triggerClassName="w-32"
+          size="sm"
+          items={LanguageOptions as any}
+        />
       </div>
 
       <div className={cn(styles["recommendations-grid"], "mt-6", className)}>

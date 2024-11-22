@@ -53,7 +53,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       onMouseEnter={() => setShowAction(true)}
       onMouseLeave={() => setShowAction(false)}
       className={cn(
-        "relative flex px-8 py-6",
+        "relative flex px-2 py-6 lg:px-8",
         "group",
         !asRead &&
           "before:absolute before:left-2 before:top-10 before:block before:size-2 before:rounded-full before:bg-accent",
@@ -177,7 +177,6 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
       {entryActions
         .filter(
           (item) =>
-            !item.hide &&
             item.id !== COMMAND_ID.entry.read &&
             item.id !== COMMAND_ID.entry.unread &&
             item.id !== COMMAND_ID.entry.openInBrowser,

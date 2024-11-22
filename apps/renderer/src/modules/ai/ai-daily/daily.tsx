@@ -33,7 +33,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { FlatMarkAllReadButton } from "~/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "~/modules/entry-column/star-icon"
-import { EntryContentRender } from "~/modules/entry-content"
+import { EntryContent } from "~/modules/entry-content"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
@@ -404,7 +404,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
 
 const EntryModalPreview = ({ entryId }: { entryId: string }) => (
   <Paper className="!p-0">
-    <EntryContentRender
+    <EntryContent
       className="h-auto [&_#entry-action-header-bar]:!bg-transparent"
       entryId={entryId}
     />

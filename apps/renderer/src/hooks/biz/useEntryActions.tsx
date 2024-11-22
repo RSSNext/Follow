@@ -1,5 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
-import { useCallback } from "react"
+import type { ReactNode } from "react"
+import { useCallback, useMemo } from "react"
 
 import {
   getReadabilityStatus,
@@ -13,6 +14,7 @@ import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useGetCommand, useRunCommandFn } from "~/modules/command/hooks/use-command"
+import type { FollowCommandId } from "~/modules/command/types"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -55,6 +57,15 @@ export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string
     }
   }, [id, url])
 
+export type EntryActionItem = {
+  id: FollowCommandId
+  name: string
+  icon?: ReactNode
+  active?: boolean
+  shortcut?: string
+  onClick: () => void
+}
+
 export const useEntryActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId, (feed) => {
@@ -72,107 +83,120 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   const isShowSourceContent = useShowSourceContent()
   const getCmd = useGetCommand()
   const runCmdFn = useRunCommandFn()
-  if (!entryId) return []
-  const actionConfigs = [
-    {
-      id: COMMAND_ID.integration.saveToEagle,
-      onClick: runCmdFn(COMMAND_ID.integration.saveToEagle, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.integration.saveToReadwise,
-      onClick: runCmdFn(COMMAND_ID.integration.saveToReadwise, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.integration.saveToInstapaper,
-      onClick: runCmdFn(COMMAND_ID.integration.saveToInstapaper, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.integration.saveToOmnivore,
-      onClick: runCmdFn(COMMAND_ID.integration.saveToOmnivore, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.integration.saveToObsidian,
-      onClick: runCmdFn(COMMAND_ID.integration.saveToObsidian, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.integration.saveToOutline,
-      onClick: runCmdFn(COMMAND_ID.integration.saveToOutline, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.entry.tip,
-      onClick: runCmdFn(COMMAND_ID.entry.tip, [{ entryId, feedId: feed?.id }]),
-      hide: isInbox || feed?.ownerUserId === whoami()?.id,
-      shortcut: shortcuts.entry.tip.key,
-    },
-    {
-      id: COMMAND_ID.entry.unstar,
-      onClick: runCmdFn(COMMAND_ID.entry.unstar, [{ entryId }]),
-      hide: !entry?.collections,
-      shortcut: shortcuts.entry.toggleStarred.key,
-    },
-    {
-      id: COMMAND_ID.entry.star,
-      onClick: runCmdFn(COMMAND_ID.entry.star, [{ entryId, view }]),
-      hide: !!entry?.collections,
-      shortcut: shortcuts.entry.toggleStarred.key,
-    },
-    {
-      id: COMMAND_ID.entry.delete,
-      onClick: runCmdFn(COMMAND_ID.entry.delete, [{ entryId }]),
-      hide: !isInbox,
-      shortcut: shortcuts.entry.copyLink.key,
-    },
-    {
-      id: COMMAND_ID.entry.copyLink,
-      onClick: runCmdFn(COMMAND_ID.entry.copyLink, [{ entryId }]),
-      hide: !entry?.entries.url,
-      shortcut: shortcuts.entry.copyTitle.key,
-    },
-    {
-      id: COMMAND_ID.entry.openInBrowser,
-      onClick: runCmdFn(COMMAND_ID.entry.openInBrowser, [{ entryId }]),
-    },
-    {
-      id: COMMAND_ID.entry.viewSourceContent,
-      onClick: runCmdFn(COMMAND_ID.entry.viewSourceContent, [{ entryId }]),
-      hide: isShowSourceContent || !entry?.entries.url,
-    },
-    {
-      id: COMMAND_ID.entry.viewEntryContent,
-      onClick: runCmdFn(COMMAND_ID.entry.viewEntryContent, []),
-      hide: !isShowSourceContent,
-      active: true,
-    },
-    {
-      id: COMMAND_ID.entry.share,
-      onClick: runCmdFn(COMMAND_ID.entry.share, [{ entryId }]),
-      hide: !entry?.entries.url || !("share" in navigator),
-      shortcut: shortcuts.entry.share.key,
-    },
-    {
-      id: COMMAND_ID.entry.read,
-      onClick: runCmdFn(COMMAND_ID.entry.read, [{ entryId }]),
-      hide: !entry || !!entry.read || !!entry.collections || !!inList,
-      shortcut: shortcuts.entry.toggleRead.key,
-    },
-    {
-      id: COMMAND_ID.entry.unread,
-      onClick: runCmdFn(COMMAND_ID.entry.unread, [{ entryId }]),
-      hide: !entry || !entry.read || !!entry.collections || !!inList,
-      shortcut: shortcuts.entry.toggleRead.key,
-    },
-  ]
-    .filter((config) => !config.hide)
-    .map((config) => {
-      const cmd = getCmd(config.id)
-      if (!cmd) return null
-      return {
-        ...config,
-        name: cmd.label.title,
-        icon: cmd.icon,
-      }
-    })
-    .filter((i) => i !== null)
+  const actionConfigs = useMemo(() => {
+    if (!entryId) return []
+    return [
+      {
+        id: COMMAND_ID.integration.saveToEagle,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToEagle, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.integration.saveToReadwise,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToReadwise, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.integration.saveToInstapaper,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToInstapaper, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.integration.saveToOmnivore,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToOmnivore, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.integration.saveToObsidian,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToObsidian, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.integration.saveToOutline,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToOutline, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.entry.tip,
+        onClick: runCmdFn(COMMAND_ID.entry.tip, [{ entryId, feedId: feed?.id }]),
+        hide: isInbox || feed?.ownerUserId === whoami()?.id,
+        shortcut: shortcuts.entry.tip.key,
+      },
+      {
+        id: COMMAND_ID.entry.unstar,
+        onClick: runCmdFn(COMMAND_ID.entry.unstar, [{ entryId }]),
+        hide: !entry?.collections,
+        shortcut: shortcuts.entry.toggleStarred.key,
+      },
+      {
+        id: COMMAND_ID.entry.star,
+        onClick: runCmdFn(COMMAND_ID.entry.star, [{ entryId, view }]),
+        hide: !!entry?.collections,
+        shortcut: shortcuts.entry.toggleStarred.key,
+      },
+      {
+        id: COMMAND_ID.entry.delete,
+        onClick: runCmdFn(COMMAND_ID.entry.delete, [{ entryId }]),
+        hide: !isInbox,
+        shortcut: shortcuts.entry.copyLink.key,
+      },
+      {
+        id: COMMAND_ID.entry.copyLink,
+        onClick: runCmdFn(COMMAND_ID.entry.copyLink, [{ entryId }]),
+        hide: !entry?.entries.url,
+        shortcut: shortcuts.entry.copyTitle.key,
+      },
+      {
+        id: COMMAND_ID.entry.openInBrowser,
+        onClick: runCmdFn(COMMAND_ID.entry.openInBrowser, [{ entryId }]),
+      },
+      {
+        id: COMMAND_ID.entry.viewSourceContent,
+        onClick: runCmdFn(COMMAND_ID.entry.viewSourceContent, [{ entryId }]),
+        hide: isShowSourceContent || !entry?.entries.url,
+      },
+      {
+        id: COMMAND_ID.entry.viewEntryContent,
+        onClick: runCmdFn(COMMAND_ID.entry.viewEntryContent, []),
+        hide: !isShowSourceContent,
+        active: true,
+      },
+      {
+        id: COMMAND_ID.entry.share,
+        onClick: runCmdFn(COMMAND_ID.entry.share, [{ entryId }]),
+        hide: !entry?.entries.url || !("share" in navigator),
+        shortcut: shortcuts.entry.share.key,
+      },
+      {
+        id: COMMAND_ID.entry.read,
+        onClick: runCmdFn(COMMAND_ID.entry.read, [{ entryId }]),
+        hide: !entry || !!entry.read || !!entry.collections || !!inList,
+        shortcut: shortcuts.entry.toggleRead.key,
+      },
+      {
+        id: COMMAND_ID.entry.unread,
+        onClick: runCmdFn(COMMAND_ID.entry.unread, [{ entryId }]),
+        hide: !entry || !entry.read || !!entry.collections || !!inList,
+        shortcut: shortcuts.entry.toggleRead.key,
+      },
+    ]
+      .filter((config) => !config.hide)
+      .map((config) => {
+        const cmd = getCmd(config.id)
+        if (!cmd) return null
+        return {
+          ...config,
+          name: cmd.label.title,
+          icon: cmd.icon,
+        }
+      })
+      .filter((i) => i !== null)
+  }, [
+    entry,
+    entryId,
+    feed?.id,
+    feed?.ownerUserId,
+    getCmd,
+    inList,
+    isInbox,
+    isShowSourceContent,
+    runCmdFn,
+    view,
+  ])
 
   return actionConfigs
 }

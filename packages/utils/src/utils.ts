@@ -215,3 +215,22 @@ export function isKeyForMultiSelectPressed(e: MouseEvent) {
   }
   return e.ctrlKey || e.shiftKey
 }
+
+export const toScientificNotation = (num: string, threshold: number) => {
+  const cleanNum = num.replaceAll(",", "")
+  const [intPart, decimalPart = ""] = cleanNum.split(".")
+  const numLength = intPart.replace(/^0+/, "").length
+
+  if (numLength > threshold) {
+    const fullNum = intPart + decimalPart
+    const firstDigit = fullNum.match(/[1-9]/)?.[0] || "0"
+    const position = fullNum.indexOf(firstDigit)
+    const exponent = intPart.length - position - 1
+
+    const significand = fullNum.slice(position, position + 3)
+    const formattedSignificand = `${significand[0]}.${significand.slice(1)}`
+
+    return `${formattedSignificand}e+${exponent}`
+  }
+  return num
+}

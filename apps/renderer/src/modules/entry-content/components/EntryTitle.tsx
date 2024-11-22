@@ -78,7 +78,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
       href={populatedFullHref || void 0}
       target="_blank"
       draggable="false"
-      className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
+      className="block min-w-0 cursor-button rounded-lg transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3 lg:-mx-6 lg:p-6"
       rel="noreferrer"
       onClick={(e) => {
         if (window.getSelection()?.toString()) {

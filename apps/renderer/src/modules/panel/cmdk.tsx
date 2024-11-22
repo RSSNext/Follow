@@ -34,7 +34,6 @@ import type { SearchInstance } from "~/store/search/types"
 import { getSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
-import { useRegisterFollowCommands } from "../command/use-register-follow-commands"
 import styles from "./cmdk.module.css"
 
 const SearchCmdKContext = React.createContext<Promise<SearchInstance> | null>(null)
@@ -69,7 +68,6 @@ export const SearchCmdK: React.FC = () => {
       $input.focus()
     }
   }, [open])
-  useRegisterFollowCommands()
 
   const { onCompositionEnd, onCompositionStart, isCompositionRef } =
     useInputComposition<HTMLInputElement>({})

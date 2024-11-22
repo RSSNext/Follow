@@ -6,12 +6,12 @@ import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
 
 import { IsInSettingIndependentWindowContext } from "./context"
-import { settings } from "./settings-glob"
+import { getMemoizedSettings } from "./settings-glob"
 import type { SettingPageConfig } from "./utils"
 
 export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
   const { t } = useTranslation("settings")
-  const tab = settings.find((t) => t.path === path)
+  const tab = getMemoizedSettings().find((t) => t.path === path)
 
   if (!tab) {
     return null

@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import {
@@ -7,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
@@ -45,6 +47,7 @@ const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
 
 export const SettingAppearance = () => {
   const { t } = useTranslation("settings")
+  const isMobile = useMobile()
   return (
     <div className="mt-4">
       <SettingBuilder
@@ -57,7 +60,7 @@ export const SettingAppearance = () => {
 
           defineItem("opaqueSidebar", {
             label: t("appearance.opaque_sidebars.label"),
-            hide: !window.api?.canWindowBlur,
+            hide: !window.api?.canWindowBlur || isMobile,
           }),
 
           {
@@ -67,7 +70,7 @@ export const SettingAppearance = () => {
 
           defineItem("showDockBadge", {
             label: t("appearance.show_dock_badge.label"),
-            hide: !IN_ELECTRON || !["macOS", "Linux"].includes(getOS()),
+            hide: !IN_ELECTRON || !["macOS", "Linux"].includes(getOS()) || isMobile,
           }),
 
           defineItem("sidebarShowUnreadCount", {
@@ -81,18 +84,20 @@ export const SettingAppearance = () => {
           defineItem("hideExtraBadge", {
             label: t("appearance.hide_extra_badge.label"),
             description: t("appearance.hide_extra_badge.description"),
+            hide: isMobile,
           }),
-          ZenMode,
+          !isMobile && ZenMode,
           ThumbnailRatio,
           CustomCSS,
 
           {
             type: "title",
             value: t("appearance.fonts"),
+            disabled: isMobile,
           },
-          TextSize,
-          UIFontSelector,
-          ContentFontSelector,
+          !isMobile && TextSize,
+          !isMobile && UIFontSelector,
+          !isMobile && ContentFontSelector,
           {
             type: "title",
             value: t("appearance.content"),
@@ -123,6 +128,7 @@ export const SettingAppearance = () => {
           defineItem("modalOverlay", {
             label: t("appearance.modal_overlay.label"),
             description: t("appearance.modal_overlay.description"),
+            hide: isMobile,
           }),
           defineItem("reduceMotion", {
             label: t("appearance.reduce_motion.label"),
@@ -131,6 +137,7 @@ export const SettingAppearance = () => {
           defineItem("usePointerCursor", {
             label: t("appearance.use_pointer_cursor.label"),
             description: t("appearance.use_pointer_cursor.description"),
+            hide: isMobile,
           }),
         ]}
       />
@@ -147,8 +154,11 @@ const ShikiTheme = () => {
   return (
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("appearance.code_highlight_theme")}</span>
-      <Select
-        defaultValue={isDark ? "github-dark" : "github-light"}
+
+      <ResponsiveSelect
+        items={bundledThemesInfo
+          .filter((theme) => theme.type === (isDark ? "dark" : "light"))
+          .map((theme) => ({ value: theme.id, label: theme.displayName }))}
         value={isDark ? codeHighlightThemeDark : codeHighlightThemeLight}
         onValueChange={(value) => {
           if (isDark) {
@@ -157,20 +167,10 @@ const ShikiTheme = () => {
             setUISetting("codeHighlightThemeLight", value)
           }
         }}
-      >
-        <SelectTrigger size="sm" className="w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent position="item-aligned">
-          {bundledThemesInfo
-            .filter((theme) => theme.type === (isDark ? "dark" : "light"))
-            .map((theme) => (
-              <SelectItem key={theme.id} value={theme.id}>
-                {theme.displayName}
-              </SelectItem>
-            ))}
-        </SelectContent>
-      </Select>
+        triggerClassName="w-48"
+        renderItem={(item) => <span className="capitalize">{item.label}</span>}
+        size="sm"
+      />
     </div>
   )
 }
@@ -273,24 +273,20 @@ const ThumbnailRatio = () => {
         <span className="shrink-0 text-sm font-medium">
           {t("appearance.thumbnail_ratio.title")}
         </span>
-        <Select
-          defaultValue="square"
+
+        <ResponsiveSelect
+          items={[
+            { value: "square", label: t("appearance.thumbnail_ratio.square") },
+            { value: "original", label: t("appearance.thumbnail_ratio.original") },
+          ]}
           value={thumbnailRatio}
           onValueChange={(value) => {
             setUISetting("thumbnailRatio", value as "square" | "original")
           }}
-        >
-          <SelectTrigger size="sm" className="w-48 translate-y-2">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent position="item-aligned">
-            {["square", "original"].map((ratio) => (
-              <SelectItem key={ratio} value={ratio}>
-                {t(`appearance.thumbnail_ratio.${ratio as "square" | "original"}`)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          renderValue={(value) => t(`appearance.thumbnail_ratio.${value as "square" | "original"}`)}
+          triggerClassName="w-48 lg:translate-y-2 -inset-8translate-y-1"
+          size="sm"
+        />
       </div>
       <SettingDescription>{t("appearance.thumbnail_ratio.description")}</SettingDescription>
     </SettingItemGroup>
@@ -363,7 +359,7 @@ const CustomCSSModal = () => {
     >
       <Suspense
         fallback={
-          <div className="center flex h-0 grow">
+          <div className="center flex grow lg:h-0">
             <LoadingCircle size="large" />
           </div>
         }
@@ -371,7 +367,7 @@ const CustomCSSModal = () => {
         <LazyCSSEditor
           defaultValue={initialCSS.current}
           key={key}
-          className="h-0 grow rounded-lg border p-3 font-mono"
+          className="h-[70vh] grow rounded-lg border p-3 font-mono lg:h-0"
           onChange={(value) => {
             setUISetting("customCSS", value)
           }}

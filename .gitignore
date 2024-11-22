@@ -20,3 +20,6 @@ vite.config.*.mjs
 
 .generated
 .turbo
+
+apps/renderer/dev-dist
+tsconfig.tsbuildinfo
