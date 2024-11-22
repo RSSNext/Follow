@@ -67,6 +67,7 @@
   "discover.feed_maintainers": "This feed is provided by RSSHub, with credit to <maintainers />",
   "discover.import.click_to_upload": "Click to upload OPML file",
   "discover.import.conflictItems": "Conflict Items",
+  "discover.import.new_import_opml": "If you have used RSS before, you can export your data config to an OPML file and import it here",
   "discover.import.noItems": "No items",
   "discover.import.opml": "OPML file",
   "discover.import.parsedErrorItems": "Parsed Error Items",

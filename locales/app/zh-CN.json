@@ -67,6 +67,7 @@
   "discover.feed_maintainers": "由 RSSHub 提供，感谢贡献者 <maintainers />",
   "discover.import.click_to_upload": "导入 OPML 文件",
   "discover.import.conflictItems": "冲突项目",
+  "discover.import.new_import_opml": "如果您以前使用过RSS,您可以将数据配置导出到 OPML 文件，并在此处导入",
   "discover.import.noItems": "没有项目",
   "discover.import.opml": "OPML 文件",
   "discover.import.parsedErrorItems": "解析错误项目",

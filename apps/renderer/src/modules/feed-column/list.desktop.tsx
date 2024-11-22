@@ -10,7 +10,7 @@ import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useCategoryOpenStateByView } from "~/store/subscription"
 
-import { setFeedAreaScrollProgressValue, useSelectedFeedIds } from "./atom"
+import { SELECT_NOTHING, setFeedAreaScrollProgressValue, useSelectedFeedIds } from "./atom"
 import { DraggableContext } from "./context"
 import { useShouldFreeUpSpace } from "./hook"
 import {
@@ -135,7 +135,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           }}
           onDragStart={(e) => {
             if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
-              setSelectedFeedIds([])
+              setSelectedFeedIds(SELECT_NOTHING)
             }
           }}
           selectableTargets={["[data-feed-id]"]}
@@ -212,7 +212,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           <StarredItem view={view} />
           {hasListData && (
             <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              <div className="text-theme-vibrancyFg mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors">
                 {t("words.lists")}
               </div>
               <SortByAlphabeticalList view={view} data={listsData} />
@@ -220,7 +220,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           )}
           {hasInboxData && (
             <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              <div className="text-theme-vibrancyFg mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors">
                 {t("words.inbox")}
               </div>
               <SortByAlphabeticalInbox view={view} data={inboxesData} />
@@ -232,7 +232,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
               {(hasListData || hasInboxData) && (
                 <div
                   className={cn(
-                    "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                    "text-theme-vibrancyFg mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold transition-colors",
                     Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
                   )}
                 >

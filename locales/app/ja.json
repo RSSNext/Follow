@@ -67,6 +67,7 @@
   "discover.feed_maintainers": "フィードは RSSHub が提供し <maintainers /> とともにクレジットされます。",
   "discover.import.click_to_upload": "OPML ファイルをアップロードするにはクリック",
   "discover.import.conflictItems": "重複アイテム",
+  "discover.import.new_import_opml": "以前にRSSを使用したことがある場合、データ構成をOPMLファイルにエクスポートし、ここでインポートすることができます。",
   "discover.import.noItems": "アイテムなし",
   "discover.import.opml": "OPML ファイル",
   "discover.import.parsedErrorItems": "パースエラーのアイテム",

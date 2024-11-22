@@ -65,9 +65,7 @@ const TipModalContent_: FC<{
 
   const { dismiss } = useCurrentModal()
 
-  const claimFeed = useFeedClaimModal({
-    feedId,
-  })
+  const claimFeed = useFeedClaimModal()
 
   const navigate = useNavigate()
 
@@ -78,7 +76,7 @@ const TipModalContent_: FC<{
   if (!myWalletData) {
     return (
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
-        <p className="text-sm text-theme-foreground/80">{t("tip_modal.no_wallet")}</p>
+        <p className="text-theme-foreground/80 text-sm">{t("tip_modal.no_wallet")}</p>
         <div className="flex justify-end">
           <Button variant="primary" onClick={() => nextFrame(() => navigate("/power"))}>
             {t("tip_modal.create_wallet")}
@@ -91,7 +89,7 @@ const TipModalContent_: FC<{
   if (tipMutation.isSuccess) {
     return (
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
-        <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_sent")}</p>
+        <p className="text-theme-foreground/80 text-sm">{t("tip_modal.tip_sent")}</p>
         <p>
           <Balance className="mr-1 text-sm" withSuffix>
             {amountBigInt}
@@ -122,19 +120,19 @@ const TipModalContent_: FC<{
       ) : (
         <>
           <p className="leading-none">
-            <span className="text-xs text-theme-foreground/80">
+            <span className="text-theme-foreground/80 text-xs">
               {t("tip_modal.unclaimed_feed")}
             </span>
           </p>
           <div className="text-center">
-            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed()}>
+            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed({ feedId })}>
               {t("tip_modal.claim_feed")}
             </Button>
           </div>
         </>
       )}
       <Divider className="my-2" />
-      <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_support")}</p>
+      <p className="text-theme-foreground/80 text-sm">{t("tip_modal.tip_support")}</p>
 
       <div className="flex flex-col justify-center gap-y-2">
         <div className="flex flex-row items-center gap-x-2 font-bold">

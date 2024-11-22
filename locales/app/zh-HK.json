@@ -42,6 +42,7 @@
   "discover.feed_maintainers": "此訂閱源由 RSSHub 提供，感謝 <maintainers />",
   "discover.import.click_to_upload": "上傳 OPML 文件",
   "discover.import.conflictItems": "衝突項目",
+  "discover.import.new_import_opml": "如果您以前使用過RSS,您可以將資料配置匯出到OPML文件,並在此處匯入",
   "discover.import.noItems": "沒有項目",
   "discover.import.opml": "OPML 文件",
   "discover.import.parsedErrorItems": "解析錯誤項目",

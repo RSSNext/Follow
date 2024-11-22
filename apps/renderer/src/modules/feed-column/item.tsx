@@ -90,7 +90,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
 
-  const { items } = useFeedActions({
+  const items = useFeedActions({
     feedIds: selectedFeedIds,
     feedId,
     view,
@@ -222,7 +222,7 @@ const ListItemImpl: Component<{
   const list = useListById(listId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
-  const { items } = useListActions({ listId, view })
+  const items = useListActions({ listId, view })
 
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
 
@@ -335,7 +335,7 @@ const InboxItemImpl: Component<{
       data-active={isActive || isContextMenuOpen}
       data-inbox-id={inboxId}
       className={cn(
-        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
+        "cursor-menu flex w-full items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
         feedColumnStyles.item,
         "py-[2px] pl-2.5",
         className,
