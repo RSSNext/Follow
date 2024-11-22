@@ -40,7 +40,7 @@ patchedDependencies:
     hash: 6s3tquyt5wnkqaogymn3mkivuq
     path: patches/sonner@1.5.0.patch
   workbox-precaching:
-    hash: sohczzebvzr4xx2mkxf4vzmcjm
+    hash: frtipzgil4wle57aliuhcr746e
     path: patches/workbox-precaching.patch
 
 importers:
@@ -22666,7 +22666,7 @@ snapshots:
       workbox-expiration: 7.3.0
       workbox-google-analytics: 7.3.0
       workbox-navigation-preload: 7.3.0
-      workbox-precaching: 7.3.0(patch_hash=sohczzebvzr4xx2mkxf4vzmcjm)
+      workbox-precaching: 7.3.0(patch_hash=frtipzgil4wle57aliuhcr746e)
       workbox-range-requests: 7.3.0
       workbox-recipes: 7.3.0
       workbox-routing: 7.3.0
@@ -22700,7 +22700,7 @@ snapshots:
     dependencies:
       workbox-core: 7.3.0
 
-  workbox-precaching@7.3.0(patch_hash=sohczzebvzr4xx2mkxf4vzmcjm):
+  workbox-precaching@7.3.0(patch_hash=frtipzgil4wle57aliuhcr746e):
     dependencies:
       workbox-core: 7.3.0
       workbox-routing: 7.3.0
@@ -22715,7 +22715,7 @@ snapshots:
       workbox-cacheable-response: 7.3.0
       workbox-core: 7.3.0
       workbox-expiration: 7.3.0
-      workbox-precaching: 7.3.0(patch_hash=sohczzebvzr4xx2mkxf4vzmcjm)
+      workbox-precaching: 7.3.0(patch_hash=frtipzgil4wle57aliuhcr746e)
       workbox-routing: 7.3.0
       workbox-strategies: 7.3.0
 

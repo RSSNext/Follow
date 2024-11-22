@@ -1,12 +1,12 @@
-diff --git a/node_modules/workbox-precaching/PrecacheController.js b/node_modules/workbox-precaching/PrecacheController.js
-index e00975e..7380049 100644
---- a/node_modules/workbox-precaching/PrecacheController.js
-+++ b/node_modules/workbox-precaching/PrecacheController.js
+diff --git a/PrecacheController.js b/PrecacheController.js
+index e00975e3762dc6382c39bebee04a89a651aae3d0..d2b9c0169d6e79e4e7dce6e0d59e97aa842fc97a 100644
+--- a/PrecacheController.js
++++ b/PrecacheController.js
 @@ -5,6 +5,7 @@
    license that can be found in the LICENSE file or at
    https://opensource.org/licenses/MIT.
  */
-+import eachLimit from 'async-es/eachLimit'
++import eachLimit from 'async-es/eachLimit';
  import { assert } from 'workbox-core/_private/assert.js';
  import { cacheNames } from 'workbox-core/_private/cacheNames.js';
  import { logger } from 'workbox-core/_private/logger.js';
