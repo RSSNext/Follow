@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.2.2-beta.0",
+  "version": "0.2.3-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow your favorites in one inbox",
@@ -114,7 +114,7 @@
     "vite-plugin-mkcert": "1.17.6",
     "vite-plugin-pwa": "0.21.0",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.0.5"
+    "vitest": "2.1.5"
   },
   "pnpm": {
     "patchedDependencies": {

@@ -22,3 +22,4 @@ vite.config.*.mjs
 .turbo
 
 apps/renderer/dev-dist
+tsconfig.tsbuildinfo
