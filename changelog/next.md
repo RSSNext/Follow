@@ -2,10 +2,6 @@
 
 ## New Features
 
-🎉 HUGE NEWS! Follow finally goes mobile!
-
-Ever wished you could Follow your favorite feeds while lounging on your couch? Well, now you can! We've made Follow fully responsive and mobile-friendly. Whether you're on your phone during your commute or browsing from bed (we won't judge), Follow's got your back!
-
 ## Improvements
 
 ## Bug Fixes
