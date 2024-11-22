@@ -28,7 +28,7 @@ import { useSubscriptionStore } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { WindowUnderBlur } from "../../components/ui/background"
-import { getSelectedFeedIds, setSelectedFeedIds } from "./atom"
+import { getSelectedFeedIds, SELECT_NOTHING, setSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
 import { useShouldFreeUpSpace } from "./hook"
 import { FeedList } from "./list"
@@ -85,9 +85,9 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       setActive_(args)
 
       navigateBackHome(nextActive)
-      setSelectedFeedIds([])
+      setSelectedFeedIds(SELECT_NOTHING)
     },
-    [active, navigateBackHome],
+    [active, navigateBackHome, setActive_],
   )
 
   useLayoutEffect(() => {

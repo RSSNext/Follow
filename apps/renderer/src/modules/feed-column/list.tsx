@@ -28,6 +28,7 @@ import { useFeedUnreadStore } from "~/store/unread"
 
 import {
   getFeedListSort,
+  SELECT_NOTHING,
   setFeedAreaScrollProgressValue,
   setFeedListSortBy,
   setFeedListSortOrder,
@@ -226,7 +227,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         }}
         onDragStart={(e) => {
           if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
-            setSelectedFeedIds([])
+            setSelectedFeedIds(SELECT_NOTHING)
           }
         }}
         selectableTargets={["[data-feed-id]"]}

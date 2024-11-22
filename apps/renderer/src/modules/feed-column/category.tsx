@@ -328,7 +328,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           </div>
         </div>
       )}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {open && (
           <m.div
             ref={itemsRef}

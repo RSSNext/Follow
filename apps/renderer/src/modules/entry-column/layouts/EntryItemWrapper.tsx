@@ -25,7 +25,7 @@ export const EntryItemWrapper: FC<
   } & PropsWithChildren
 > = ({ entry, view, children, itemClassName, style }) => {
   const actionConfigs = useEntryActions({ entryId: entry.entries.id })
-  const { items: feedItems } = useFeedActions({
+  const feedItems = useFeedActions({
     feedId: entry.feedId || entry.inboxId,
     view,
     type: "entryList",
