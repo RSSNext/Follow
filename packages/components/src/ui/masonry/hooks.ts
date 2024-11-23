@@ -14,7 +14,8 @@ export const useMasonryColumn = (gutter: number, customizeColumn: number, onRead
     const $warpper = containerRef.current
     if (!$warpper) return
     const handler = () => {
-      const column = customizeColumn !== 0 ? customizeColumn : getCurrentColumn($warpper.clientWidth)
+      const column =
+        customizeColumn !== 0 ? customizeColumn : getCurrentColumn($warpper.clientWidth)
 
       setCurrentItemWidth(Math.trunc(($warpper.clientWidth - gutter * (column - 1)) / column))
 
