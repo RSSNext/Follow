@@ -22,6 +22,8 @@ import {
   LazyExternalJumpInProvider,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
+  LazyPWAPrompt,
+  LazyReloadPrompt,
   // specific import should add `index` postfix
 } from "./lazy/index"
 import { ServerConfigsProvider } from "./server-configs-provider"
@@ -52,6 +54,8 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <LazyContextMenuProvider />
               <LazyLottieRenderContainer />
               <LazyExternalJumpInProvider />
+              <LazyReloadPrompt />
+              <LazyPWAPrompt />
             </Suspense>
           </I18nProvider>
         </Provider>
@@ -64,7 +68,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 
 const Devtools = () =>
   !IN_ELECTRON && (
-    <div className="print:hidden">
+    <div className="hidden lg:block print:hidden">
       <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />
     </div>
   )

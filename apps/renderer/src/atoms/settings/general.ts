@@ -7,6 +7,8 @@ const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
   language: "en",
+  // mobile app
+  startupScreen: "timeline",
   // Data control
   dataPersist: true,
   sendAnonymousData: true,

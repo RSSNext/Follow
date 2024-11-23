@@ -35,6 +35,7 @@ export const setFeedListSortOrder = (order: FeedListSortOrder) => {
   })
 }
 
+export const SELECT_NOTHING = []
 export const [
   ,
   useSelectedFeedIds,
@@ -43,7 +44,7 @@ export const [
   getSelectedFeedIds,
   setSelectedFeedIds,
   useSelectedFeedIdsSelector,
-] = createAtomHooks(atom<string[]>([]))
+] = createAtomHooks(atom<string[]>(SELECT_NOTHING))
 
 export const [, , useFeedAreaScrollProgressValue, , , setFeedAreaScrollProgressValue] =
   createAtomHooks(atom(0))

@@ -104,7 +104,9 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         },
         {
           title: t.app("new_user_guide.step.migrate.title"),
-          content: createElement(DiscoverImport),
+          content: createElement(DiscoverImport, {
+            isInit: true,
+          }),
           icon: "i-mgc-file-import-cute-re",
         },
         {

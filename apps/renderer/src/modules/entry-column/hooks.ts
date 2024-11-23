@@ -222,8 +222,9 @@ export const useEntriesByView = ({
 
     hasUpdate,
     refetch: useCallback(() => {
-      query.refetch()
+      const promise = query.refetch()
       feedUnreadActions.fetchUnreadByView(view)
+      return promise
     }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,

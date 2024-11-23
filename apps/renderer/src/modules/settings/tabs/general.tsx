@@ -1,11 +1,13 @@
-import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@follow/components/ui/select/index.jsx"
+} from "@follow/components/ui/select/index.js"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -49,6 +51,8 @@ export const SettingGeneral = () => {
     setGeneralSetting("appLaunchOnStartup", checked)
   }, [])
 
+  const isMobile = useMobile()
+
   return (
     <div className="mt-4">
       <SettingBuilder
@@ -66,6 +70,7 @@ export const SettingGeneral = () => {
             },
           }),
           IN_ELECTRON && MinimizeToTraySetting,
+          isMobile && StartupScreenSelector,
           LanguageSelector,
 
           {
@@ -100,10 +105,11 @@ export const SettingGeneral = () => {
             label: t("general.mark_as_read.scroll.label"),
             description: t("general.mark_as_read.scroll.description"),
           }),
-          defineSettingItem("hoverMarkUnread", {
-            label: t("general.mark_as_read.hover.label"),
-            description: t("general.mark_as_read.hover.description"),
-          }),
+          !isMobile &&
+            defineSettingItem("hoverMarkUnread", {
+              label: t("general.mark_as_read.hover.label"),
+              description: t("general.mark_as_read.hover.description"),
+            }),
           defineSettingItem("renderMarkUnread", {
             label: t("general.mark_as_read.render.label"),
             description: t("general.mark_as_read.render.description"),
@@ -176,26 +182,25 @@ export const LanguageSelector = ({
 
   const [loadingLanguageLockMap] = useAtom(langLoadingLockMapAtom)
 
+  const isMobile = useMobile()
+
   return (
     <div className={cn("mb-3 mt-4 flex items-center justify-between", containerClassName)}>
       <span className="shrink-0 text-sm font-medium">{t("general.language")}</span>
-      <Select
+
+      <ResponsiveSelect
+        size="sm"
+        triggerClassName="w-48"
+        contentClassName={contentClassName}
         defaultValue={finalRenderLanguage}
         value={finalRenderLanguage}
         disabled={loadingLanguageLockMap[finalRenderLanguage]}
         onValueChange={(value) => {
           setGeneralSetting("language", value as string)
         }}
-      >
-        <SelectTrigger
-          size="sm"
-          className={cn("w-48", loadingLanguageLockMap[finalRenderLanguage] && "opacity-50")}
-        >
-          <SelectValue />
-          {loadingLanguageLockMap[finalRenderLanguage] && <LoadingCircle size="small" />}
-        </SelectTrigger>
-        <SelectContent position="item-aligned" className={contentClassName}>
-          {currentSupportedLanguages.map((lang) => {
+        renderItem={useTypeScriptHappyCallback(
+          (item) => {
+            const lang = item.value
             const percent = I18N_COMPLETENESS_MAP[lang]
 
             const languageName =
@@ -204,8 +209,12 @@ export const LanguageSelector = ({
                 : langT(`langs.${lang}` as any)
 
             const originalLanguageName = defaultResources[lang].lang.name
+
+            if (isMobile) {
+              return `${languageName} - ${originalLanguageName} (${percent}%)`
+            }
             return (
-              <SelectItem className="group" key={lang} value={lang}>
+              <span className="group" key={lang}>
                 <span
                   className={cn(originalLanguageName !== languageName && "group-hover:invisible")}
                 >
@@ -220,11 +229,16 @@ export const LanguageSelector = ({
                     {originalLanguageName}
                   </span>
                 )}
-              </SelectItem>
+              </span>
             )
-          })}
-        </SelectContent>
-      </Select>
+          },
+          [langT],
+        )}
+        items={currentSupportedLanguages.map((lang) => ({
+          label: langT(`langs.${lang}` as any),
+          value: lang,
+        }))}
+      />
     </div>
   )
 }
@@ -262,5 +276,35 @@ const MinimizeToTraySetting = () => {
       />
       <SettingDescription>{t("general.minimize_to_tray.description")}</SettingDescription>
     </SettingItemGroup>
+  )
+}
+
+const StartupScreenSelector = () => {
+  const { t } = useTranslation("settings")
+  const startupScreen = useGeneralSettingKey("startupScreen")
+
+  return (
+    <div className="mb-3 mt-4 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("general.startup_screen.title")}</span>
+      <ResponsiveSelect
+        size="sm"
+        items={[
+          {
+            label: t("general.startup_screen.timeline"),
+            value: "timeline",
+          },
+          {
+            label: t("general.startup_screen.subscription"),
+            value: "subscription",
+          },
+        ]}
+        triggerClassName="w-48"
+        defaultValue={startupScreen}
+        value={startupScreen}
+        onValueChange={(value) => {
+          setGeneralSetting("startupScreen", value as "subscription" | "timeline")
+        }}
+      />
+    </div>
   )
 }

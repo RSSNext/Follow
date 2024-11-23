@@ -9,6 +9,7 @@ import { GroupedVirtuoso, Virtuoso } from "react-virtuoso"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { m } from "~/components/common/Motion"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
+import { ENTRY_COLUMN_LIST_SCROLLER_ID } from "~/constants/dom"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry"
 import { isListSubscription } from "~/store/subscription"
@@ -77,7 +78,12 @@ export const EntryList: FC<EntryListProps> = memo(
             ref={virtuosoRef}
           />
         ) : (
-          <Virtuoso onKeyDown={handleKeyDown} {...virtuosoOptions} ref={virtuosoRef} />
+          <Virtuoso
+            id={ENTRY_COLUMN_LIST_SCROLLER_ID}
+            onKeyDown={handleKeyDown}
+            {...virtuosoOptions}
+            ref={virtuosoRef}
+          />
         )}
         <EntryColumnShortcutHandler
           refetch={refetch}
@@ -97,6 +103,7 @@ const EntryGroupedList = forwardRef<
     }
 >(({ groupCounts, itemContent, onKeyDown, data, totalCount, ...virtuosoOptions }, ref) => (
   <GroupedVirtuoso
+    id={ENTRY_COLUMN_LIST_SCROLLER_ID}
     className="z-0"
     ref={ref}
     groupContent={useCallback(

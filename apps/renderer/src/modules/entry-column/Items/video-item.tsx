@@ -9,6 +9,7 @@ import { AudioPlayer } from "~/atoms/player"
 import { m } from "~/components/common/Motion"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
+import { usePreviewMedia } from "~/components/ui/media/hooks"
 import type { ModalContentComponent } from "~/components/ui/modal"
 import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
@@ -35,6 +36,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     [entry?.entries.url],
   )
   const modalStack = useModalStack()
+  const previewMedia = usePreviewMedia()
 
   const ref = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
@@ -74,6 +76,12 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
               CustomModalComponent: PlainModal,
               overlay: true,
             })
+          } else {
+            const videoMediaList =
+              entry.entries.media?.filter((media) => media.type === "video") || []
+            if (videoMediaList.length > 0) {
+              previewMedia(videoMediaList)
+            }
           }
         }}
       >

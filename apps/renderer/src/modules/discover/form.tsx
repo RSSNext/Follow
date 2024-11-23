@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
 import { Card, CardContent, CardFooter, CardHeader } from "@follow/components/ui/card/index.jsx"
 import {
@@ -11,6 +12,7 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { Radio } from "@follow/components/ui/radio-group/index.js"
 import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.jsx"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import type { FeedViewType } from "@follow/constants"
 import { getBackgroundGradient } from "@follow/utils/color"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -191,12 +193,14 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
     [form],
   )
 
+  const isMobile = useMobile()
+
   return (
     <>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[540px] space-y-8"
+          className="w-full max-w-[540px] space-y-8"
           data-testid="discover-form"
         >
           <FormField
@@ -221,14 +225,26 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
                   <FormLabel>{t("discover.target.label")}</FormLabel>
                   <FormControl>
                     <div className="flex gap-4 text-sm">
-                      <RadioGroup
-                        className="flex items-center"
-                        value={field.value}
-                        onValueChange={handleTargetChange}
-                      >
-                        <Radio label={t("discover.target.feeds")} value="feeds" />
-                        <Radio label={t("discover.target.lists")} value="lists" />
-                      </RadioGroup>
+                      {isMobile ? (
+                        <ResponsiveSelect
+                          size="sm"
+                          value={field.value}
+                          onValueChange={handleTargetChange}
+                          items={[
+                            { label: t("discover.target.feeds"), value: "feeds" },
+                            { label: t("discover.target.lists"), value: "lists" },
+                          ]}
+                        />
+                      ) : (
+                        <RadioGroup
+                          className="flex items-center"
+                          value={field.value}
+                          onValueChange={handleTargetChange}
+                        >
+                          <Radio label={t("discover.target.feeds")} value="feeds" />
+                          <Radio label={t("discover.target.lists")} value="lists" />
+                        </RadioGroup>
+                      )}
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -244,7 +260,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="mt-8 max-w-lg">
+        <div className="mt-8 w-full max-w-lg">
           <div className="mb-4 text-zinc-500">
             Found {mutation.data?.length || 0} feed
             {mutation.data?.length > 1 && "s"}

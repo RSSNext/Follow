@@ -3,6 +3,8 @@ import resolveConfig from "tailwindcss/resolveConfig"
 
 import { baseConfig } from "./configs/tailwind.base.config"
 
+const isWebBuild = !!process.env.WEB_BUILD || !!process.env.VERCEL
+
 export default resolveConfig({
   ...baseConfig,
   content: [
@@ -13,6 +15,9 @@ export default resolveConfig({
     "./apps/web/index.html",
     "./packages/**/*.{ts,tsx}",
   ],
+  future: {
+    hoverOnlyWhenSupported: isWebBuild,
+  },
   theme: {
     ...baseConfig.theme,
     extend: {
@@ -21,6 +26,10 @@ export default resolveConfig({
         "safe-inset-top": "var(--fo-window-padding-top, 0)",
         "margin-macos-traffic-light-x": "var(--fo-macos-traffic-light-width, 0)",
         "margin-macos-traffic-light-y": "var(--fo-macos-traffic-light-height, 0)",
+      },
+
+      height: {
+        screen: "100svh",
       },
     },
   },
