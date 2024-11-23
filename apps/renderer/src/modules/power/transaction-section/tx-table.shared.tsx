@@ -78,12 +78,7 @@ export const UserRenderer = ({
       {name === APP_NAME ? (
         <Logo className={cn("aspect-square size-4", iconClassName)} />
       ) : (
-        <UserAvatar
-          userId={user?.id}
-          hideName={true}
-          className="h-auto p-0"
-          avatarClassName="size-4"
-        />
+        <UserAvatar userId={user?.id} hideName className="h-auto p-0" avatarClassName="size-4" />
       )}
 
       {!hideName && (
