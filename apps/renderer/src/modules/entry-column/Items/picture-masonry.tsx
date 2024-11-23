@@ -43,7 +43,7 @@ const FirstScreenReadyContext = createContext(false)
 const gutter = 24
 
 export const PictureMasonry: FC<MasonryProps> = (props) => {
-  const { data } = props
+  const { data, column } = props
   const cacheMap = useState(() => new Map<string, object>())[0]
   const [isInitDim, setIsInitDim] = useState(false)
   const [isInitLayout, setIsInitLayout] = useState(false)
@@ -66,7 +66,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     })
   }, [])
 
-  const { containerRef, currentColumn, currentItemWidth } = useMasonryColumn(gutter, () => {
+  const { containerRef, currentColumn, currentItemWidth } = useMasonryColumn(gutter, column, () => {
     setIsInitLayout(true)
   })
 
@@ -250,6 +250,7 @@ interface MasonryProps {
   data: string[]
   endReached: () => Promise<any>
   hasNextPage: boolean
+  column: number
 }
 
 const LoadingSkeletonItem = () => {

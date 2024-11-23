@@ -2,6 +2,7 @@ import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { MdiMeditation } from "@follow/components/icons/Meditation.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
+import { Slider } from "@follow/components/ui/slider/index.js"
 import { cn } from "@follow/utils/utils"
 import type { FC } from "react"
 import * as React from "react"
@@ -60,6 +61,7 @@ export const FilterNoImageButton = () => {
 
 export const SwitchToMasonryButton = () => {
   const isMasonry = useUISettingKey("pictureViewMasonry")
+  const masonryColumn = useUISettingKey("pictureViewMasonryColumn")
   const { t } = useTranslation()
   const isMobile = useMobile()
 
@@ -87,6 +89,22 @@ export const SwitchToMasonryButton = () => {
       >
         <i className={cn(!isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re")} />
       </ActionButton>
+      {isMasonry ? (
+        <>
+          <Slider
+            min={0}
+            max={10}
+            step={1}
+            defaultValue={[masonryColumn]}
+            onValueCommit={(value: number[]) => {
+              setUISetting("pictureViewMasonryColumn", value[0])
+            }}
+          />
+          <span>{masonryColumn}</span>
+        </>
+      ) : (
+        ""
+      )}
     </ImpressionView>
   )
 }

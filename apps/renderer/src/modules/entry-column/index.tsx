@@ -292,6 +292,7 @@ const ListGird = ({
 }) => {
   const isMobile = useMobile()
   const masonry = useUISettingKey("pictureViewMasonry") || isMobile
+  const masonryColumn = useUISettingKey("pictureViewMasonryColumn")
   const view = useRouteParamsSelector((s) => s.view)
   const feedId = useRouteParamsSelector((s) => s.feedId)
   const filterNoImage = useUISettingKey("pictureViewFilterNoImage")
@@ -349,6 +350,7 @@ const ListGird = ({
           hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
           endReached={virtuosoOptions.endReached}
           data={nextData}
+          column={masonryColumn}
         />
 
         {virtuosoOptions.components?.Footer &&

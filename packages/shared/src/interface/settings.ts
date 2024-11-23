@@ -42,6 +42,7 @@ export interface UISettings {
 
   // view
   pictureViewMasonry: boolean
+  pictureViewMasonryColumn: number
   pictureViewFilterNoImage: boolean
   wideMode: boolean
 }
