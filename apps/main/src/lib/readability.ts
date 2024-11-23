@@ -35,6 +35,12 @@ export async function readability(url: string) {
 
   document.querySelectorAll("a").forEach((a) => {
     a.href = replaceRelativeAddress(baseUrl, a.href)
+
+    // Remove the <a> tag enclosed the <img>, <image> element.
+    const child = a.querySelector("img, image")
+    if (child) {
+      a.replaceWith(child)
+    }
   })
   ;(["img", "audio", "video"] as const).forEach((tag) => {
     document.querySelectorAll(tag).forEach((img) => {
