@@ -1,5 +1,5 @@
 import { withResponsiveComponent } from "@follow/components/utils/selector.js"
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 const noop = () =>
   Promise.resolve({

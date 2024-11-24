@@ -9,7 +9,7 @@ import { repository } from "@pkg"
 import type { FC } from "react"
 import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 
 import { useUserRole } from "~/atoms/user"
 import {

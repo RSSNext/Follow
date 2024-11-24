@@ -13,7 +13,7 @@ import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router"
 
 export const Component = () => {
   const params = useParams()

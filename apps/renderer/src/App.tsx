@@ -2,7 +2,7 @@ import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn, getOS } from "@follow/utils/utils"
 import { useEffect } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 import { queryClient } from "~/lib/query-client"
 

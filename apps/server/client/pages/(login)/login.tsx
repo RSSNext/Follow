@@ -7,7 +7,7 @@ import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { SessionProvider, signIn, signOut, useSession } from "@hono/auth-js/react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router"
 
 export function Component() {
   return (

@@ -3,12 +3,7 @@ import { appSessionTraceId } from "@follow/utils/environment"
 import { version } from "@pkg"
 import { nanoid } from "nanoid"
 import { useEffect } from "react"
-import {
-  createRoutesFromChildren,
-  matchRoutes,
-  useLocation,
-  useNavigationType,
-} from "react-router-dom"
+import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from "react-router"
 
 import { whoami } from "~/atoms/user"
 

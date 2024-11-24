@@ -573,7 +573,7 @@ importers:
       react-resizable-layout:
         specifier: npm:@innei/react-resizable-layout@0.7.3-fork.1
         version: '@innei/react-resizable-layout@0.7.3-fork.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)'
-      react-router-dom:
+      react-router:
         specifier: 7.0.1
         version: 7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-selecto:
@@ -787,7 +787,7 @@ importers:
       react-photo-view:
         specifier: 1.2.6
         version: 1.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-router-dom:
+      react-router:
         specifier: 7.0.1
         version: 7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       satori:
@@ -9563,13 +9563,6 @@ packages:
       '@types/react':
         optional: true
 
-  react-router-dom@7.0.1:
-    resolution: {integrity: sha512-duBzwAAiIabhFPZfDjcYpJ+f08TMbPMETgq254GWne2NW1ZwRHhZLj7tpSp8KGb7JvZzlLcjGUnqLxpZQVEPng==}
-    engines: {node: '>=20.0.0'}
-    peerDependencies:
-      react: '>=18'
-      react-dom: '>=18'
-
   react-router@7.0.1:
     resolution: {integrity: sha512-WVAhv9oWCNsja5AkK6KLpXJDSJCQizOIyOd4vvB/+eHGbYx5vkhcmcmwWjQ9yqkRClogi+xjEg9fNEOd5EX/tw==}
     engines: {node: '>=20.0.0'}
@@ -10725,11 +10718,6 @@ packages:
   typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
-    hasBin: true
-
-  typescript@5.6.3:
-    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
-    engines: {node: '>=14.17'}
     hasBin: true
 
   typescript@5.7.2:
@@ -17179,7 +17167,7 @@ snapshots:
   config-file-ts@0.2.8-rc1:
     dependencies:
       glob: 10.4.5
-      typescript: 5.6.3
+      typescript: 5.7.2
 
   consola@3.2.3: {}
 
@@ -21913,12 +21901,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.12
 
-  react-router-dom@7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-router: 7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-
   react-router@7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@types/cookie': 0.6.0
@@ -23294,8 +23276,6 @@ snapshots:
       - supports-color
 
   typescript@4.9.5: {}
-
-  typescript@5.6.3: {}
 
   typescript@5.7.2: {}
 

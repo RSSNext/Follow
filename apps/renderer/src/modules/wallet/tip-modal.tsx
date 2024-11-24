@@ -7,7 +7,7 @@ import { nextFrame } from "@follow/utils/dom"
 import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"

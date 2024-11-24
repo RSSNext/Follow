@@ -8,7 +8,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import type { FC } from "react"
 import { useEffect, useLayoutEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link } from "react-router"
 
 import { useSetSidebarActiveView, useSidebarActiveView } from "~/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
