@@ -9,7 +9,7 @@ import type { FC, PropsWithChildren } from "react"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link } from "react-router"
 import { toast } from "sonner"
 
 import { setAppSearchOpen } from "~/atoms/app"

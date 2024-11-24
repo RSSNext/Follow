@@ -22,7 +22,7 @@ export const InboxEmail = ({ id }: { id: string }) => {
       </span>
       <CopyButton
         value={`${id}${env.VITE_INBOXES_EMAIL}`}
-        className="p-1 sm:absolute sm:-right-6 sm:opacity-0 sm:group-hover:opacity-100 [&_i]:size-3"
+        className="p-1 lg:absolute lg:-right-6 lg:opacity-0 lg:group-hover:opacity-100 [&_i]:size-3"
       />
     </div>
   )
@@ -34,7 +34,7 @@ export const InboxSecret = ({ secret }: { secret: string }) => {
       <span className="shrink-0">****</span>
       <CopyButton
         value={secret}
-        className="p-1 sm:absolute sm:-right-6 sm:opacity-0 sm:group-hover:opacity-100 [&_i]:size-3"
+        className="p-1 lg:absolute lg:-right-6 lg:opacity-0 lg:group-hover:opacity-100 [&_i]:size-3"
       />
     </div>
   )

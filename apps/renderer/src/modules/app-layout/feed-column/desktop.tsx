@@ -15,7 +15,7 @@ import { forwardRef, lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 import { setMainContainerElement, setRootContainerElement } from "~/atoms/dom"
 import { getIsZenMode, getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
