@@ -5,7 +5,7 @@ import { easeOut } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router"
 
 import { useRealInWideMode } from "~/atoms/settings/ui"
 import { useFeedColumnShow, useFeedColumnTempShow } from "~/atoms/sidebar"

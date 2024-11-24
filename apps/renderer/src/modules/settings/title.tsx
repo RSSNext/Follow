@@ -3,7 +3,7 @@ import { cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData } from "react-router"
 
 import { IsInSettingIndependentWindowContext } from "./context"
 import { getMemoizedSettings } from "./settings-glob"

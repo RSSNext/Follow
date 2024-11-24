@@ -4,7 +4,7 @@ import { UserRole } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import { createElement } from "react"
 import { useTranslation } from "react-i18next"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router"
 
 import { useUserRole } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"

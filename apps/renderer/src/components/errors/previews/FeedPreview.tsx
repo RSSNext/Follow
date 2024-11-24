@@ -5,7 +5,7 @@ import type { FeedModel } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router"
 
 import { getItemComponentByView } from "~/modules/entry-column/Items"
 import type { UniversalItemProps } from "~/modules/entry-column/types"

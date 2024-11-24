@@ -165,7 +165,7 @@ export default ({ mode }) => {
       createDependencyChunksPlugin([
         //  React framework
         ["react", "react-dom"],
-        ["react-error-boundary", "react-dom/server", "react-router-dom"],
+        ["react-error-boundary", "react-dom/server", "react-router"],
         // Data Statement
         ["zustand", "jotai", "use-context-selector", "immer", "dexie"],
         // Remark

@@ -2,11 +2,10 @@ import "@follow/components/tailwind"
 import "@follow/components/dayjs"
 import "./styles/index.css"
 
-// @ts-expect-error
 import { ClickToComponent } from "click-to-react-component"
 import * as React from "react"
 import ReactDOM from "react-dom/client"
-import { RouterProvider } from "react-router-dom"
+import { RouterProvider } from "react-router/dom"
 
 import { initialize } from "./initialize"
 import { router } from "./router"
