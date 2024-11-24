@@ -60,8 +60,10 @@ export const MobileFloatBar = ({
 
   useEffect(() => {
     if (isScrollDown) {
+      const computedStyle = getComputedStyle(document.documentElement)
+      const safeAreaBottom = computedStyle.getPropertyValue("--sab")
       animateController.start({
-        translateY: "calc(100% + 40px + env(safe-area-inset-bottom))",
+        translateY: `calc(100% + 40px + ${safeAreaBottom})`,
         transition: { type: "tween", duration: 0.1 },
       })
     } else {
