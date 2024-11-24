@@ -55,7 +55,8 @@ export const MarkAllReadWithOverlay = forwardRef<
         if (cancel) return
         cancel = true
       }
-      const id = toast(<ConfirmMarkAllReadInfo undo={undo} />, {
+      const id = toast("", {
+        description: <ConfirmMarkAllReadInfo undo={undo} />,
         duration: 3000,
         onAutoClose() {
           if (cancel) return
