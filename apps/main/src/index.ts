@@ -59,7 +59,7 @@ function bootstrap() {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
@@ -69,6 +69,14 @@ function bootstrap() {
 
     // Set app user model id for windows
     electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`)
+
+    // restore cookies
+    const cookies = store.get("cookies")
+    if (cookies) {
+      for (const cookie of cookies) {
+        await session.defaultSession.cookies.set(cookie)
+      }
+    }
 
     mainWindow = createMainWindow()
 
@@ -150,6 +158,10 @@ function bootstrap() {
       x: bounds.x,
       y: bounds.y,
     })
+    await session.defaultSession.cookies.flushStore()
+
+    const cookies = await session.defaultSession.cookies.get({})
+    store.set("cookies", cookies)
 
     await cleanupOldRender()
   })
