@@ -15,17 +15,11 @@ import { load } from "js-yaml"
 import { x } from "tar"
 
 import { GITHUB_OWNER, GITHUB_REPO, HOTUPDATE_RENDER_ENTRY_DIR } from "~/constants/app"
-import {
-  hotUpdateAppNotSupportTriggerTrack,
-  hotUpdateDownloadTrack,
-  hotUpdateRenderSuccessTrack,
-} from "~/tracker"
+import { hotUpdateDownloadTrack, hotUpdateRenderSuccessTrack } from "~/tracker"
 import { getMainWindow } from "~/window"
 
-import { checkForAppUpdates, downloadAppUpdate } from "."
 import { appUpdaterConfig } from "./configs"
 import type { GitHubReleasesItem } from "./types"
-import { shouldUpdateApp } from "./utils"
 
 const logger = log.scope("hot-updater")
 
@@ -81,35 +75,35 @@ const getLatestReleaseManifest = memoize(async () => {
 })
 const downloadTempDir = path.resolve(os.tmpdir(), "follow-render-update")
 
-const canUpdateRender = async () => {
+export const canUpdateRender = async () => {
   const manifest = await getLatestReleaseManifest()
 
   logger.info("fetched manifest", manifest)
 
   if (!manifest) return false
 
-  const isAppShouldUpdate = shouldUpdateApp(appVersion, manifest.version)
-  if (isAppShouldUpdate) {
-    logger.info(
-      "app should update, skip render update, app version: ",
-      appVersion,
-      ", the manifest version: ",
-      manifest.version,
-    )
-    return false
-  }
+  // const isAppShouldUpdate = shouldUpdateApp(appVersion, manifest.version)
+  // if (isAppShouldUpdate) {
+  //   logger.info(
+  //     "app should update, skip render update, app version: ",
+  //     appVersion,
+  //     ", the manifest version: ",
+  //     manifest.version,
+  //   )
+  //   return false
+  // }
 
   const appSupport = mainHash === manifest.mainHash
   if (!appSupport) {
-    logger.info("app not support, trigger app force update, app version: ", appVersion)
-    hotUpdateAppNotSupportTriggerTrack({
-      appVersion,
-      manifestVersion: manifest.version,
-    })
-    // Trigger app force update
-    checkForAppUpdates().then(() => {
-      downloadAppUpdate()
-    })
+    logger.info("app not support, should trigger app force update, app version: ", appVersion)
+    // hotUpdateAppNotSupportTriggerTrack({
+    //   appVersion,
+    //   manifestVersion: manifest.version,
+    // })
+    // // Trigger app force update
+    // checkForAppUpdates().then(() => {
+    //   downloadAppUpdate()
+    // })
     return false
   }
 

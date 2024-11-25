@@ -2,7 +2,7 @@ import { getRendererHandlers } from "@egoist/tipc/main"
 import { autoUpdater as defaultAutoUpdater } from "electron-updater"
 
 import { GITHUB_OWNER, GITHUB_REPO } from "~/constants/app"
-import { hotUpdateRender } from "~/updater/hot-updater"
+import { canUpdateRender, hotUpdateRender } from "~/updater/hot-updater"
 
 import { channel, isDev, isWindows } from "../env"
 import { logger } from "../logger"
@@ -10,7 +10,6 @@ import type { RendererHandlers } from "../renderer-handlers"
 import { destroyMainWindow, getMainWindow } from "../window"
 import { appUpdaterConfig } from "./configs"
 import { CustomGitHubProvider } from "./custom-github-provider"
-import { shouldUpdateApp } from "./utils"
 import { WindowsUpdater } from "./windows-updater"
 
 // skip auto update in dev mode
@@ -41,8 +40,12 @@ export const checkForAppUpdates = async () => {
 
   checkingUpdate = true
   try {
-    const [info] = await Promise.all([autoUpdater.checkForUpdates(), hotUpdateRender()])
-    return info
+    const hotUpdate = await canUpdateRender()
+    if (hotUpdate) {
+      await hotUpdateRender()
+      return
+    }
+    return autoUpdater.checkForUpdates()
   } catch (e) {
     logger.error("Error checking for updates", e)
   } finally {
@@ -96,19 +99,17 @@ export const registerUpdater = async () => {
   autoUpdater.on("checking-for-update", () => {
     logger.info("Checking for update")
   })
-  autoUpdater.on("update-available", (info) => {
+  autoUpdater.on("update-available", async (info) => {
     logger.info("Update available", info)
 
     // The app hotfix strategy is as follows:
     // Determine whether the app should be updated in full or only the renderer layer based on the version number.
     // https://www.notion.so/rss3/Follow-Hotfix-Electron-Renderer-layer-RFC-fe2444b9ac194c2cb38f9fa0bb1ef3c1?pvs=4#12e35ea049b480f1b268f1e605d86a62
     if (appUpdaterConfig.enableRenderHotUpdate) {
-      const currentVersion = autoUpdater.currentVersion?.version
-      const nextVersion = info.version
-
-      if (currentVersion) {
-        const shouldUpdate = shouldUpdateApp(currentVersion, nextVersion)
-        if (!shouldUpdate) return
+      const hotUpdate = await canUpdateRender()
+      if (hotUpdate) {
+        await hotUpdateRender()
+        return
       }
     }
 
