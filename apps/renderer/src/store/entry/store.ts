@@ -7,7 +7,7 @@ import type {
   InboxModel,
 } from "@follow/models/types"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
-import { isBizId, omitObjectUndefinedValue } from "@follow/utils/utils"
+import { omitObjectUndefinedValue } from "@follow/utils/utils"
 import { isNil, merge, omit } from "es-toolkit/compat"
 import { produce } from "immer"
 
@@ -162,16 +162,6 @@ class EntryActions {
 
     if (data.data) {
       this.upsertMany(data.data, { isArchived })
-    }
-
-    // Sync unread count if fetch unread feedId entries
-    if (
-      read === false &&
-      typeof feedId === "string" &&
-      isBizId(feedId) &&
-      typeof data.total === "number"
-    ) {
-      feedUnreadActions.updateByFeedId(feedId, data.total)
     }
     return data
   }

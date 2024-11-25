@@ -34,12 +34,7 @@ import {
 } from "./EntryListHeader.shared"
 import { TimelineTabs } from "./TimelineTabs"
 
-export const EntryListHeader: FC<EntryListHeaderProps> = ({
-  totalCount,
-  refetch,
-  isRefreshing,
-  hasUpdate,
-}) => {
+export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParams()
   const { t } = useTranslation()
 
@@ -62,10 +57,9 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
         </EllipsisHorizontalTextWithTooltip>
       </div>
       <div className="whitespace-nowrap text-xs font-medium leading-none text-zinc-400">
-        {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
         {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
         {t("space", { ns: "common" })}
-        {t("words.items", { ns: "common", count: totalCount })}
+        {t("words.items", { ns: "common", count: 2 })}
       </div>
     </div>
   )

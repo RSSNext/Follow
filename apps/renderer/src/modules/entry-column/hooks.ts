@@ -228,8 +228,6 @@ export const useEntriesByView = ({
     }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,
-    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries[view].length,
-    queryTotalCount: query.data?.pages?.[0]?.total,
   }
 }
 
