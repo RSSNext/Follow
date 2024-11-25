@@ -1,4 +1,5 @@
 import { useOnce } from "@follow/hooks"
+import { nextFrame } from "@follow/utils/dom"
 import { getStorageNS } from "@follow/utils/ns"
 import { repository } from "@pkg"
 import type { FC } from "react"
@@ -42,7 +43,7 @@ const AppNotificationContainer: FC = () => {
       }
 
       toast.info(payload.title, {
-        description: <Markdown>{payload.content}</Markdown>,
+        description: <Markdown className="text-sm">{payload.content}</Markdown>,
         duration: Infinity,
         closeButton: true,
       })
@@ -72,18 +73,20 @@ const AppNotificationContainer: FC = () => {
             ? {
                 label: "What's new?",
                 onClick: () => {
-                  present({
-                    clickOutsideToDismiss: true,
-                    title: "What's new?",
-                    autoFocus: false,
-                    modalClassName:
-                      "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
+                  nextFrame(() => {
+                    present({
+                      clickOutsideToDismiss: true,
+                      title: "What's new?",
+                      autoFocus: false,
+                      modalClassName:
+                        "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
 
-                    CustomModalComponent: ({ children }) => {
-                      return <PeekModal>{children}</PeekModal>
-                    },
-                    content: Changelog,
-                    overlay: true,
+                      CustomModalComponent: ({ children }) => {
+                        return <PeekModal>{children}</PeekModal>
+                      },
+                      content: Changelog,
+                      overlay: true,
+                    })
                   })
                 },
               }

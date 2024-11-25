@@ -1,5 +1,6 @@
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
+import { omit } from "es-toolkit/compat"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { createContext, memo, useContext, useMemo, useState } from "react"
@@ -45,6 +46,7 @@ export type MediaProps = BaseProps &
         previewImageUrl?: string
       })
   )
+
 const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,
@@ -175,7 +177,7 @@ const MediaImpl: FC<MediaProps> = ({
           <img
             height={finalHeight}
             width={finalWidth}
-            {...(rest as ImgHTMLAttributes<HTMLImageElement>)}
+            {...(omit(rest, "cacheDimensions") as ImgHTMLAttributes<HTMLImageElement>)}
             onError={errorHandle}
             className={cn(
               "size-full object-contain",

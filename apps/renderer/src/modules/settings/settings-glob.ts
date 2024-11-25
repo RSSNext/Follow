@@ -1,3 +1,5 @@
+import { memoize } from "es-toolkit/compat"
+
 import type { SettingPageConfig } from "./utils"
 
 function getSettings() {
@@ -42,4 +44,18 @@ function getSettings() {
   return settings.sort((a, b) => a.priority - b.priority)
 }
 
-export const settings = /* #__PURE__ */ getSettings()
+export const getMemoizedSettings = memoize(getSettings)
+
+export const getSettingPages = memoize(() => {
+  const pages = {}
+  const settings = getMemoizedSettings()
+  for (const setting of settings) {
+    const filename = setting.path
+
+    pages[filename] = {
+      Component: setting.Component,
+      loader: setting.loader,
+    }
+  }
+  return pages
+})

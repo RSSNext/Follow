@@ -1,5 +1,5 @@
 import { nextFrame } from "@follow/utils/dom"
-import { throttle } from "lodash-es"
+import { throttle } from "es-toolkit/compat"
 import { useLayoutEffect, useRef, useState } from "react"
 
 import { getCurrentColumn } from "./utils"
@@ -15,7 +15,8 @@ export const useMasonryColumn = (gutter: number, onReady?: () => any) => {
     if (!$warpper) return
     const handler = () => {
       const column = getCurrentColumn($warpper.clientWidth)
-      setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - gutter))
+
+      setCurrentItemWidth(Math.trunc(($warpper.clientWidth - gutter * (column - 1)) / column))
 
       setCurrentColumn(column)
 

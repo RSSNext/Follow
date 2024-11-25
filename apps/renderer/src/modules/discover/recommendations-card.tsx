@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/
 import { getDominantColor } from "@follow/utils/color"
 import { cn, getUrlIcon } from "@follow/utils/utils"
 import clsx from "clsx"
-import { upperFirst } from "lodash-es"
+import { upperFirst } from "es-toolkit/compat"
 import type { FC } from "react"
 import { memo, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"

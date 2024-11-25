@@ -2,17 +2,31 @@ html,
 #shadow-html {
   --fo-font-family: "SN Pro", system-ui, sans-serif;
 }
+:root {
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html[data-viewport="desktop"],
+html[data-viewport="desktop"] body,
+html[data-viewport="desktop"] #shadow-html,
+html[data-viewport="desktop"] #root {
+  overscroll-behavior: none;
+}
 
 body,
 #root {
-  @apply h-screen;
+  @apply h-auto lg:h-screen;
   @apply cursor-default;
   @apply select-none;
   /* @apply bg-white; */
 
   @apply font-theme;
-
-  overscroll-behavior: none;
 
   @apply print:overflow-auto print:h-auto;
 }

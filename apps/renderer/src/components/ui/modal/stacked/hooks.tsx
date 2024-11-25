@@ -1,7 +1,9 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { nextFrame } from "@follow/utils/dom"
 import type { DragControls } from "framer-motion"
+import { atom, useAtomValue } from "jotai"
 import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
-import { useCallback, useContext, useId, useRef, useState } from "react"
+import { useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useTranslation } from "react-i18next"
 import { useContextSelector } from "use-context-selector"
@@ -21,49 +23,49 @@ export const useModalStack = (options?: ModalStackOptions) => {
   const currentCount = useRef(0)
   const { wrapper } = options || {}
 
+  const presentSync = (props: ModalProps & { id?: string }) => {
+    const fallbackModelId = `${id}-${++currentCount.current}`
+    const modalId = props.id ?? fallbackModelId
+
+    const currentStack = jotaiStore.get(modalStackAtom)
+
+    const existingModal = currentStack.find((item) => item.id === modalId)
+    if (existingModal) {
+      // Move to top
+      jotaiStore.set(modalStackAtom, (p) => {
+        const index = p.indexOf(existingModal)
+        return [...p.slice(0, index), ...p.slice(index + 1), existingModal]
+      })
+    } else {
+      // NOTE: The props of the Command Modal are immutable, so we'll just take the store value and inject it.
+      // There is no need to inject `overlay` props, this is rendered responsively based on ui changes.
+      const uiSettings = getUISettings()
+      const modalConfig: Partial<ModalProps> = {
+        draggable: uiSettings.modalDraggable,
+        modal: true,
+      }
+      jotaiStore.set(modalStackAtom, (p) => {
+        const modalProps: ModalProps = {
+          ...modalConfig,
+          ...props,
+
+          wrapper,
+        }
+        modalIdToPropsMap[modalId] = modalProps
+        return p.concat({
+          id: modalId,
+          ...modalProps,
+        })
+      })
+    }
+
+    return () => {
+      jotaiStore.set(modalStackAtom, (p) => p.filter((item) => item.id !== modalId))
+    }
+  }
   return {
-    present: useCallback(
-      (props: ModalProps & { id?: string }) => {
-        const fallbackModelId = `${id}-${++currentCount.current}`
-        const modalId = props.id ?? fallbackModelId
-
-        const currentStack = jotaiStore.get(modalStackAtom)
-
-        const existingModal = currentStack.find((item) => item.id === modalId)
-        if (existingModal) {
-          // Move to top
-          jotaiStore.set(modalStackAtom, (p) => {
-            const index = p.indexOf(existingModal)
-            return [...p.slice(0, index), ...p.slice(index + 1), existingModal]
-          })
-        } else {
-          // NOTE: The props of the Command Modal are immutable, so we'll just take the store value and inject it.
-          // There is no need to inject `overlay` props, this is rendered responsively based on ui changes.
-          const uiSettings = getUISettings()
-          const modalConfig: Partial<ModalProps> = {
-            draggable: uiSettings.modalDraggable,
-            modal: true,
-          }
-          jotaiStore.set(modalStackAtom, (p) => {
-            const modalProps: ModalProps = {
-              ...modalConfig,
-              ...props,
-
-              wrapper,
-            }
-            modalIdToPropsMap[modalId] = modalProps
-            return p.concat({
-              id: modalId,
-              ...modalProps,
-            })
-          })
-        }
-
-        return () => {
-          jotaiStore.set(modalStackAtom, (p) => p.filter((item) => item.id !== modalId))
-        }
-      },
-      [id, wrapper],
+    present: useEventCallback((props: ModalProps & { id?: string }) =>
+      nextFrame(() => presentSync(props)),
     ),
 
     ...actions,
@@ -188,6 +190,7 @@ export const useDialog = (): DialogInstance => {
                   onClick={() => {
                     options.onConfirm?.()
                     resolve(true)
+                    dismiss()
                   }}
                 >
                   {options.confirmText ?? t("confirm", { ns: "common" })}
@@ -202,3 +205,6 @@ export const useDialog = (): DialogInstance => {
     }),
   }
 }
+
+const modalStackLengthAtom = atom((get) => get(modalStackAtom).length)
+export const useHasModal = () => useAtomValue(modalStackLengthAtom) > 0

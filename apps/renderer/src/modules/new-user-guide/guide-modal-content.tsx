@@ -1,5 +1,6 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
 import type { ComponentProps, FunctionComponentElement } from "react"
@@ -7,7 +8,6 @@ import { createElement, useCallback, useMemo, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { mountLottie } from "~/components/ui/lottie-container"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useI18n } from "~/hooks/common"
@@ -104,7 +104,9 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         },
         {
           title: t.app("new_user_guide.step.migrate.title"),
-          content: createElement(DiscoverImport),
+          content: createElement(DiscoverImport, {
+            isInit: true,
+          }),
           icon: "i-mgc-file-import-cute-re",
         },
         {

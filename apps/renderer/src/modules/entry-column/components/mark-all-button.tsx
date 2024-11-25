@@ -1,5 +1,6 @@
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { ActionButton, Button, IconButton } from "@follow/components/ui/button/index.js"
+import { Kbd, KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useCountdown } from "@follow/hooks"
 import { cn, getOS } from "@follow/utils/utils"
@@ -11,7 +12,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
-import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useI18n } from "~/hooks/common"
@@ -55,7 +55,8 @@ export const MarkAllReadWithOverlay = forwardRef<
         if (cancel) return
         cancel = true
       }
-      const id = toast(<ConfirmMarkAllReadInfo undo={undo} />, {
+      const id = toast("", {
+        description: <ConfirmMarkAllReadInfo undo={undo} />,
         duration: 3000,
         onAutoClose() {
           if (cancel) return
@@ -150,7 +151,7 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
           transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
+        className="shadow-modal absolute z-50 bg-background shadow lg:bg-theme-modal-background-opaque"
         style={{
           left: -paddingLeft,
           top: rect.top,

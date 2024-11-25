@@ -2,6 +2,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
+import { APP_PROTOCOL } from "@follow/shared"
 import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { app, BrowserWindow, screen, shell } from "electron"
@@ -107,15 +108,17 @@ export function createWindow(
 
   const handleExternalProtocol = async (e: Event, url: string, window: BrowserWindow) => {
     const { protocol } = new URL(url)
-    if (protocol === "http:" || protocol === "https:" || protocol === "follow:") {
+
+    const ignoreProtocols = ["http", "https", APP_PROTOCOL, "file", "code", "cursor"]
+    if (ignoreProtocols.includes(protocol.slice(0, -1))) {
       return
     }
     e.preventDefault()
 
     const caller = callWindowExpose(window)
     const confirm = await caller.dialog.ask({
-      title: "Open External App?",
-      message: t("dialog.openExternalApp", { url, interpolation: { escapeValue: false } }),
+      title: t("dialog.openExternalApp.title"),
+      message: t("dialog.openExternalApp.message", { url, interpolation: { escapeValue: false } }),
       confirmText: t("dialog.open"),
       cancelText: t("dialog.cancel"),
     })

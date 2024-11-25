@@ -5,15 +5,17 @@
     <meta name="referrer" content="no-referrer" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
     />
 
-    <meta name="theme-color" content="#ff5c00" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121212" />
     <!-- favicon -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <title>Follow</title>
-    <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Follow" />
     <meta property="og:url" content="https://app.follow.is" />
@@ -59,6 +61,10 @@
       const isElectron = navigator.userAgent.includes("Electron")
       document.documentElement.dataset.buildType = isElectron ? "electron" : "web"
     </script>
+    <script>
+      const isMobile = window.innerWidth < 1024
+      document.documentElement.dataset.viewport = isMobile ? "mobile" : "desktop"
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -78,6 +84,9 @@
           inset: 0;
           z-index: 1000;
         }
+        [data-viewport="mobile"] #app-skeleton {
+          display: none;
+        }
         [data-theme="light"] {
           --background: 0 0% 100%;
         }
@@ -90,6 +99,7 @@
           height: 100%;
           width: 100%;
         }
+
         .sidebar {
           width: 16rem;
           flex-shrink: 0;

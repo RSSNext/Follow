@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
@@ -28,8 +27,8 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
-import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Queries } from "~/queries"
 
 export const SettingInvitations = () => {
@@ -49,7 +48,7 @@ export const SettingInvitations = () => {
           Follow is currently in <strong>early access</strong> and requires an invitation code to
           use.
         </Trans>
-        <p className="flex items-center">
+        <p>
           <Trans
             ns="settings"
             values={{
@@ -57,7 +56,7 @@ export const SettingInvitations = () => {
             }}
             components={{
               PowerIcon: (
-                <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px text-base text-accent" />
+                <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px align-middle text-base text-accent" />
               ),
             }}
             i18nKey="invitation.generateCost"
@@ -73,20 +72,22 @@ export const SettingInvitations = () => {
           />
         </p>
       </div>
-      <Button
-        disabled={
-          !limitation.data || (invitations?.data && invitations?.data?.length >= limitation.data)
-        }
-        onClick={() => {
-          present({
-            title: t("invitation.confirmModal.title"),
-            content: ({ dismiss }) => <ConfirmModalContent dismiss={dismiss} />,
-          })
-        }}
-      >
-        <i className="i-mgc-love-cute-re mr-1 text-base" />
-        {t("invitation.generateButton")}
-      </Button>
+      <div className="flex justify-end lg:justify-start">
+        <Button
+          disabled={
+            !limitation.data || (invitations?.data && invitations?.data?.length >= limitation.data)
+          }
+          onClick={() => {
+            present({
+              title: t("invitation.confirmModal.title"),
+              content: ({ dismiss }) => <ConfirmModalContent dismiss={dismiss} />,
+            })
+          }}
+        >
+          <i className="i-mgc-love-cute-re mr-1 text-base" />
+          {t("invitation.generateButton")}
+        </Button>
+      </div>
       <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
         <ScrollArea.ScrollArea>
@@ -131,12 +132,12 @@ export const SettingInvitations = () => {
                                 presentUserProfile(row.users?.id)
                               }}
                             >
-                              <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
-                                <AvatarImage
-                                  src={replaceImgUrlIfNeed(row.users?.image || undefined)}
-                                />
-                                <AvatarFallback>{row.users?.name?.slice(0, 2)}</AvatarFallback>
-                              </Avatar>
+                              <UserAvatar
+                                userId={row.users.id}
+                                className="h-auto p-0"
+                                avatarClassName="size-5"
+                                hideName
+                              />
                             </button>
                           </TooltipTrigger>
                           {row.users?.name && (
@@ -186,14 +187,16 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
 
   return (
     <>
-      <div className="flex items-center text-sm">
+      <div className="text-sm">
         <Trans
           ns="settings"
           values={{
             INVITATION_PRICE: serverConfigs?.INVITATION_PRICE,
           }}
           components={{
-            PowerIcon: <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px text-accent" />,
+            PowerIcon: (
+              <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px align-middle text-base text-accent" />
+            ),
           }}
           i18nKey="invitation.generateCost"
         />

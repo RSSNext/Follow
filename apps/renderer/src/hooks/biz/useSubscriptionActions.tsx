@@ -1,9 +1,9 @@
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import { useMutation } from "@tanstack/react-query"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
@@ -14,7 +14,7 @@ import { feedUnreadActions } from "~/store/unread"
 import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
-export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { t } = useTranslation()
 
   return useMutation({
@@ -57,8 +57,9 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
           toast.dismiss(toastId)
         }
 
-        const toastId = toast(<UnfollowInfo title={feed.title!} undo={undo} />, {
+        const toastId = toast("", {
           duration: 3000,
+          description: <UnfollowInfo title={feed.title!} undo={undo} />,
           action: {
             label: (
               <span className="flex items-center gap-1">

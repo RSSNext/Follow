@@ -1,7 +1,7 @@
 import { getReadonlyRoute, useReadonlyRouteSelector } from "@follow/components/atoms/route.js"
 import { FeedViewType } from "@follow/constants"
-import type { Params } from "react-router-dom"
-import { useParams, useSearchParams } from "react-router-dom"
+import type { Params } from "react-router"
+import { useParams, useSearchParams } from "react-router"
 
 import {
   FEED_COLLECTION_LIST,

@@ -1,4 +1,5 @@
 import { useDroppable } from "@dnd-kit/core"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
@@ -13,7 +14,7 @@ import type { FC } from "react"
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
-import { useOnClickOutside } from "usehooks-ts"
+import { useEventCallback, useOnClickOutside } from "usehooks-ts"
 
 import type { MenuItemInput } from "~/atoms/context-menu"
 import { useShowContextMenu } from "~/atoms/context-menu"
@@ -22,6 +23,7 @@ import { ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { useAddFeedToFeedList } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useContextMenu } from "~/hooks/common/useContextMenu"
 import { createErrorToaster } from "~/lib/error-parser"
 import { getPreferredTitle, useFeedStore } from "~/store/feed"
 import { useOwnedListByView } from "~/store/list"
@@ -51,7 +53,17 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore(
-    useCallback((state) => ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)), [ids]),
+    useCallback(
+      (state) =>
+        ids.sort((a, b) => {
+          const unreadCompare = (state.data[b] || 0) - (state.data[a] || 0)
+          if (unreadCompare !== 0) {
+            return unreadCompare
+          }
+          return a.localeCompare(b)
+        }),
+      [ids],
+    ),
   )
 
   const navigate = useNavigateEntry()
@@ -110,15 +122,18 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
-  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
-    e.stopPropagation()
-    if (!isCategoryEditing) {
-      setCategoryActive()
-    }
-    if (view !== undefined && folderName) {
-      subscriptionActions.toggleCategoryOpenState(view, folderName)
-    }
-  }
+  const isMobile = useMobile()
+  const toggleCategoryOpenState = useEventCallback(
+    (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+      e.stopPropagation()
+      if (!isCategoryEditing && !isMobile) {
+        setCategoryActive()
+      }
+      if (view !== undefined && folderName) {
+        subscriptionActions.toggleCategoryOpenState(view, folderName)
+      }
+    },
+  )
 
   const setCategoryActive = () => {
     if (view !== undefined) {
@@ -169,6 +184,97 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
     },
   })
 
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
+      setIsContextMenuOpen(true)
+
+      await showContextMenu(
+        [
+          {
+            type: "text",
+            label: t("sidebar.feed_column.context_menu.mark_as_read"),
+            click: () => {
+              subscriptionActions.markReadByFeedIds({
+                feedIds: ids,
+              })
+            },
+          },
+          { type: "separator" },
+          {
+            type: "text",
+            label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
+
+            submenu: listList
+              ?.map(
+                (list) =>
+                  ({
+                    label: list.title || "",
+                    type: "text",
+                    click() {
+                      return addMutation.mutate({
+                        feedIds: ids,
+                        listId: list.id,
+                      })
+                    },
+                  }) as MenuItemInput,
+              )
+              .concat(listList?.length > 0 ? [{ type: "separator" as const }] : [])
+              .concat([
+                {
+                  label: t("sidebar.feed_actions.create_list"),
+                  type: "text" as const,
+
+                  click() {
+                    present({
+                      title: t("sidebar.feed_actions.create_list"),
+                      content: () => <ListCreationModalContent />,
+                    })
+                  },
+                },
+              ]),
+          },
+          { type: "separator" },
+          {
+            type: "text",
+            label: t("sidebar.feed_column.context_menu.change_to_other_view"),
+            submenu: views
+              .filter((v) => v.view !== view)
+              .map((v) => ({
+                label: t(v.name),
+                type: "text" as const,
+                shortcut: (v.view + 1).toString(),
+                icon: v.icon,
+                click() {
+                  return changeCategoryView(v.view)
+                },
+              })),
+          },
+          {
+            type: "text",
+            label: t("sidebar.feed_column.context_menu.rename_category"),
+            click: () => {
+              setIsCategoryEditing(true)
+            },
+          },
+          {
+            type: "text",
+            label: t("sidebar.feed_column.context_menu.delete_category"),
+            hide: !folderName || isAutoGroupedCategory,
+            click: () => {
+              present({
+                title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
+                  folderName,
+                }),
+                content: () => <CategoryRemoveDialogContent feedIdList={ids} />,
+              })
+            },
+          },
+        ],
+        e,
+      )
+      setIsContextMenuOpen(false)
+    },
+  })
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
@@ -176,8 +282,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           ref={setNodeRef}
           data-active={isActive || isContextMenuOpen}
           className={cn(
-            "my-px flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
             isOver && "border-theme-accent-400 bg-theme-accent-400/60",
+            "my-px px-2.5",
             feedColumnStyles.item,
           )}
           onClick={(e) => {
@@ -186,95 +292,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
               setCategoryActive()
             }
           }}
-          onContextMenu={async (e) => {
-            setIsContextMenuOpen(true)
-
-            await showContextMenu(
-              [
-                {
-                  type: "text",
-                  label: t("sidebar.feed_column.context_menu.mark_as_read"),
-                  click: () => {
-                    subscriptionActions.markReadByFeedIds({
-                      feedIds: ids,
-                    })
-                  },
-                },
-                { type: "separator" },
-                {
-                  type: "text",
-                  label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-
-                  submenu: listList
-                    ?.map(
-                      (list) =>
-                        ({
-                          label: list.title || "",
-                          type: "text",
-                          click() {
-                            return addMutation.mutate({
-                              feedIds: ids,
-                              listId: list.id,
-                            })
-                          },
-                        }) as MenuItemInput,
-                    )
-                    .concat(listList?.length > 0 ? [{ type: "separator" as const }] : [])
-                    .concat([
-                      {
-                        label: t("sidebar.feed_actions.create_list"),
-                        type: "text" as const,
-
-                        click() {
-                          present({
-                            title: t("sidebar.feed_actions.create_list"),
-                            content: () => <ListCreationModalContent />,
-                          })
-                        },
-                      },
-                    ]),
-                },
-                { type: "separator" },
-                {
-                  type: "text",
-                  label: t("sidebar.feed_column.context_menu.change_to_other_view"),
-                  submenu: views
-                    .filter((v) => v.view !== view)
-                    .map((v) => ({
-                      label: t(v.name),
-                      type: "text" as const,
-                      shortcut: (v.view + 1).toString(),
-                      icon: v.icon,
-                      click() {
-                        return changeCategoryView(v.view)
-                      },
-                    })),
-                },
-                {
-                  type: "text",
-                  label: t("sidebar.feed_column.context_menu.rename_category"),
-                  click: () => {
-                    setIsCategoryEditing(true)
-                  },
-                },
-                {
-                  type: "text",
-                  label: t("sidebar.feed_column.context_menu.delete_category"),
-                  hide: !folderName || isAutoGroupedCategory,
-                  click: () => {
-                    present({
-                      title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
-                        folderName,
-                      }),
-                      content: () => <CategoryRemoveDialogContent feedIdList={ids} />,
-                    })
-                  },
-                },
-              ],
-              e,
-            )
-            setIsContextMenuOpen(false)
-          }}
+          {...contextMenuProps}
         >
           <div className="flex w-full min-w-0 items-center" onDoubleClick={toggleCategoryOpenState}>
             <button
@@ -298,7 +316,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                   <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
                 </MotionButtonBase>
               ) : (
-                <div className="mr-2 size-[16px]">
+                <div className="center mr-2 size-[16px]">
                   <i className="i-mgc-right-cute-fi transition-transform" />
                 </div>
               )}
@@ -318,7 +336,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           </div>
         </div>
       )}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {open && (
           <m.div
             ref={itemsRef}

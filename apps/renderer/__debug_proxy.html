@@ -1,22 +1,6 @@
 <!doctype html>
 <html>
   <head>
-    <script type="module">
-      const host = "https://localhost:2233"
-
-      const createRefreshRuntimeScript = `
-import RefreshRuntime from "${host}/@react-refresh";
-RefreshRuntime.injectIntoGlobalHook(window);
-window.$RefreshReg$ = () => {};
-window.$RefreshSig$ = () => (type) => type;
-window.__vite_plugin_react_preamble_installed__ = true;
-`
-      const $script = document.createElement("script")
-      $script.innerHTML = createRefreshRuntimeScript
-      $script.type = "module"
-      document.head.appendChild($script)
-    </script>
-
     <title>Debug Proxy</title>
     <script type="module" src="./__debug_proxy.ts"></script>
   </head>

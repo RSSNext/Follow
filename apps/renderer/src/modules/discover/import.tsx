@@ -59,7 +59,7 @@ const list: {
   },
 ]
 
-export function DiscoverImport() {
+export function DiscoverImport({ isInit = false }: { isInit?: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -100,13 +100,15 @@ export function DiscoverImport() {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[540px] space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[540px] space-y-8">
           <FormField
             control={form.control}
             name="file"
             render={({ field: { value, onChange, ...fieldProps } }) => (
               <FormItem>
-                <FormLabel>{t("discover.import.opml")}</FormLabel>
+                <FormLabel>
+                  {isInit ? t("discover.import.new_import_opml") : t("discover.import.opml")}
+                </FormLabel>
                 <FormControl>
                   <label
                     className="center flex h-[100px] w-full rounded-md border border-dashed"
@@ -153,7 +155,7 @@ export function DiscoverImport() {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="mt-8 max-w-lg">
+        <div className="mt-8 w-full max-w-lg">
           <Card>
             <CardHeader className="block text-zinc-500">
               <Trans

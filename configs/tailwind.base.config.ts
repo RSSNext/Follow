@@ -141,6 +141,7 @@ export const baseConfig = {
     require("@tailwindcss/container-queries"),
     require("@tailwindcss/typography"),
     require("tailwindcss-motion"),
+    require("tailwindcss-safe-area"),
 
     require(resolve(__dirname, "./tailwind-extend.css")),
   ],

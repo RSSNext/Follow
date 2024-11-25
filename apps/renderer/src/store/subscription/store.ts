@@ -6,8 +6,8 @@ import type {
   SubscriptionModel,
 } from "@follow/models/types"
 import { capitalizeFirstLetter } from "@follow/utils/utils"
+import { omit } from "es-toolkit/compat"
 import { produce } from "immer"
-import { omit } from "lodash-es"
 import { parse } from "tldts"
 
 import { whoami } from "~/atoms/user"

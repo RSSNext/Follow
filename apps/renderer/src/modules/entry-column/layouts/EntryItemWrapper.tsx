@@ -13,6 +13,7 @@ import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useContextMenu } from "~/hooks/common/useContextMenu"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -24,15 +25,8 @@ export const EntryItemWrapper: FC<
     style?: React.CSSProperties
   } & PropsWithChildren
 > = ({ entry, view, children, itemClassName, style }) => {
-  const listId = useRouteParamsSelector((s) => s.listId)
-  const { items } = useEntryActions({
-    view,
-    entry,
-    type: "entryList",
-    inList: !!listId,
-  })
-
-  const { items: feedItems } = useFeedActions({
+  const actionConfigs = useEntryActions({ entryId: entry.entries.id })
+  const feedItems = useFeedActions({
     feedId: entry.feedId || entry.inboxId,
     view,
     type: "entryList",
@@ -76,20 +70,19 @@ export const EntryItemWrapper: FC<
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   const showContextMenu = useShowContextMenu()
-  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
-    async (e) => {
+
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
       e.preventDefault()
       setIsContextMenuOpen(true)
       await showContextMenu(
         [
-          ...items
-            .filter((item) => !item.hide)
-            .map((item) => ({
-              type: "text" as const,
-              label: item.name,
-              click: () => item.onClick(e),
-              shortcut: item.shortcut,
-            })),
+          ...actionConfigs.map((item) => ({
+            type: "text" as const,
+            label: item.name,
+            click: () => item.onClick(),
+            shortcut: item.shortcut,
+          })),
           {
             type: "separator" as const,
           },
@@ -110,8 +103,7 @@ export const EntryItemWrapper: FC<
       )
       setIsContextMenuOpen(false)
     },
-    [showContextMenu, items, feedItems, t, entry.entries.id],
-  )
+  })
 
   return (
     <div data-entry-id={entry.entries.id} style={style}>
@@ -128,7 +120,7 @@ export const EntryItemWrapper: FC<
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseEnter.cancel}
         onDoubleClick={handleDoubleClick}
-        onContextMenu={handleContextMenu}
+        {...contextMenuProps}
       >
         {children}
       </div>

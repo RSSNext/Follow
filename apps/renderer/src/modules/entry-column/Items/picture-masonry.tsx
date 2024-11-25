@@ -195,7 +195,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   }, [])
 
   return (
-    <div ref={containerRef} className="px-4 pt-2">
+    <div ref={containerRef} className="mx-4 pt-2">
       {isInitDim && deferIsInitLayout && (
         <MasonryItemWidthContext.Provider value={currentItemWidth}>
           <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>

@@ -7,7 +7,7 @@ import { getOS } from "@follow/utils/utils"
 import { ClickToComponent } from "click-to-react-component"
 import * as React from "react"
 import ReactDOM from "react-dom/client"
-import { RouterProvider } from "react-router-dom"
+import { RouterProvider } from "react-router/dom"
 
 import { setAppIsReady } from "./atoms/app"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "./constants"

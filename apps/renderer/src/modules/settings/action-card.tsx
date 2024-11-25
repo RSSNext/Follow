@@ -3,13 +3,8 @@ import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { Input } from "@follow/components/ui/input/index.js"
 import { Radio, RadioGroup } from "@follow/components/ui/radio-group/index.js"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@follow/components/ui/select/index.jsx"
+import { Select, SelectTrigger, SelectValue } from "@follow/components/ui/select/index.jsx"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { Switch } from "@follow/components/ui/switch/index.jsx"
 import {
   Table,
@@ -27,55 +22,77 @@ import type {
 } from "@follow/models/types"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
-import { useMemo, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Collapse, CollapseControlled } from "~/components/ui/collapse"
 import { ViewSelectContent } from "~/modules/feed/view-select-content"
 
-const TransitionOptions: {
-  name: string
-  value: SupportedLanguages
-}[] = [
-  {
-    name: "English",
-    value: "en",
-  },
-  {
-    name: "日本語",
-    value: "ja",
-  },
-  {
-    name: "简体中文",
-    value: "zh-CN",
-  },
-  {
-    name: "繁體中文",
-    value: "zh-TW",
-  },
-]
-
 const FieldTableHeader = () => {
   const { t } = useTranslation("settings")
   return (
-    <TableHeader>
+    <TableHeader className="max-sm:hidden">
       <TableRow>
-        <TableHead size="sm" />
         <TableHead size="sm">{t("actions.action_card.field")}</TableHead>
         <TableHead size="sm">{t("actions.action_card.operator")}</TableHead>
         <TableHead size="sm">{t("actions.action_card.value")}</TableHead>
+        <TableHead size="sm" />
       </TableRow>
     </TableHeader>
   )
 }
 
 const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: () => void }) => (
-  <TableCell size="sm" className="flex h-10 items-center pr-1">
-    <Button variant="ghost" className="w-full px-0" disabled={disabled} onClick={onClick}>
+  <TableCell size="sm" className="flex h-10 items-center">
+    <Button variant="ghost" className="w-full" disabled={disabled} onClick={onClick}>
       <i className="i-mgc-delete-2-cute-re text-zinc-600" />
     </Button>
   </TableCell>
 )
+
+const ActionTableCell = ({
+  disabled,
+  onAnd,
+  onDelete,
+}: {
+  disabled?: boolean
+  onAnd?: () => void
+  onDelete?: () => void
+}) => {
+  const { t } = useTranslation("settings")
+  return (
+    <>
+      <TableCell size="sm" className="max-sm:flex max-sm:space-x-2 max-sm:pr-0">
+        <Button variant="ghost" className="sm:w-full" disabled={disabled} onClick={onDelete}>
+          <i className="i-mgc-delete-2-cute-re text-zinc-600" />
+        </Button>
+        <Button className="w-full sm:hidden" variant="outline" disabled={disabled} onClick={onAnd}>
+          {t("actions.action_card.and")}
+        </Button>
+      </TableCell>
+      <TableCell size="sm" className="max-sm:hidden">
+        <Button variant="outline" className="w-full" disabled={disabled} onClick={onAnd}>
+          {t("actions.action_card.and")}
+        </Button>
+      </TableCell>
+    </>
+  )
+}
+
+const OrTableRow = ({ onClick, disabled }: { onClick?: () => void; disabled?: boolean }) => {
+  const { t } = useTranslation("settings")
+  return (
+    <Button
+      variant="outline"
+      className="mt-1 w-full gap-1"
+      buttonClassName="py-1"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {t("actions.action_card.or")}
+    </Button>
+  )
+}
 
 const AddTableRow = ({ onClick, disabled }: { onClick?: () => void; disabled?: boolean }) => {
   const { t } = useTranslation("settings")
@@ -108,37 +125,37 @@ const OperationTableCell = ({
   const OperationOptions = useMemo(() => {
     return [
       {
-        name: t("actions.action_card.operation_options.contains"),
+        label: t("actions.action_card.operation_options.contains"),
         value: "contains",
         types: ["text"],
       },
       {
-        name: t("actions.action_card.operation_options.does_not_contain"),
+        label: t("actions.action_card.operation_options.does_not_contain"),
         value: "not_contains",
         types: ["text"],
       },
       {
-        name: t("actions.action_card.operation_options.is_equal_to"),
+        label: t("actions.action_card.operation_options.is_equal_to"),
         value: "eq",
         types: ["number", "text", "view"],
       },
       {
-        name: t("actions.action_card.operation_options.is_not_equal_to"),
+        label: t("actions.action_card.operation_options.is_not_equal_to"),
         value: "not_eq",
         types: ["number", "text", "view"],
       },
       {
-        name: t("actions.action_card.operation_options.is_greater_than"),
+        label: t("actions.action_card.operation_options.is_greater_than"),
         value: "gt",
         types: ["number"],
       },
       {
-        name: t("actions.action_card.operation_options.is_less_than"),
+        label: t("actions.action_card.operation_options.is_less_than"),
         value: "lt",
         types: ["number"],
       },
       {
-        name: t("actions.action_card.operation_options.matches_regex"),
+        label: t("actions.action_card.operation_options.matches_regex"),
         value: "regex",
         types: ["text"],
       },
@@ -147,19 +164,18 @@ const OperationTableCell = ({
 
   const options = OperationOptions.filter((option) => option.types.includes(type))
   return (
-    <TableCell size="sm">
-      <Select disabled={disabled} value={value} onValueChange={onValueChange}>
-        <SelectTrigger className="h-8">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <TableCell
+      size="sm"
+      className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:pr-0"
+    >
+      <span className="sm:hidden">{t("actions.action_card.operator")}</span>
+      <ResponsiveSelect
+        disabled={disabled}
+        value={value}
+        onValueChange={(value) => onValueChange?.(value as ActionOperation)}
+        items={options}
+        triggerClassName="h-8 max-sm:w-fit"
+      />
     </TableCell>
   )
 }
@@ -214,46 +230,74 @@ export function ActionCard({
   const FeedOptions = useMemo(() => {
     return [
       {
-        name: t("actions.action_card.feed_options.subscription_view"),
+        label: t("actions.action_card.feed_options.subscription_view"),
         value: "view",
         type: "view",
       },
       {
-        name: t("actions.action_card.feed_options.feed_title"),
+        label: t("actions.action_card.feed_options.feed_title"),
         value: "title",
       },
       {
-        name: t("actions.action_card.feed_options.feed_category"),
+        label: t("actions.action_card.feed_options.feed_category"),
         value: "category",
       },
       {
-        name: t("actions.action_card.feed_options.site_url"),
+        label: t("actions.action_card.feed_options.site_url"),
         value: "site_url",
       },
       {
-        name: t("actions.action_card.feed_options.feed_url"),
+        label: t("actions.action_card.feed_options.feed_url"),
         value: "feed_url",
       },
       {
-        name: t("actions.action_card.feed_options.entry_title"),
+        label: t("actions.action_card.feed_options.entry_title"),
         value: "entry_title",
       },
       {
-        name: t("actions.action_card.feed_options.entry_content"),
+        label: t("actions.action_card.feed_options.entry_content"),
         value: "entry_content",
       },
       {
-        name: t("actions.action_card.feed_options.entry_url"),
+        label: t("actions.action_card.feed_options.entry_url"),
         value: "entry_url",
       },
       {
-        name: t("actions.action_card.feed_options.entry_author"),
+        label: t("actions.action_card.feed_options.entry_author"),
         value: "entry_author",
       },
       {
-        name: t("actions.action_card.feed_options.entry_media_length"),
+        label: t("actions.action_card.feed_options.entry_media_length"),
         value: "entry_media_length",
         type: "number",
+      },
+    ]
+  }, [t])
+
+  const TransitionOptions: {
+    label: string
+    value: SupportedLanguages
+  }[] = useMemo(() => {
+    return [
+      {
+        label: t("actions.action_card.no_translation"),
+        value: "none" as SupportedLanguages,
+      },
+      {
+        label: "English",
+        value: "en",
+      },
+      {
+        label: "日本語",
+        value: "ja",
+      },
+      {
+        label: "简体中文",
+        value: "zh-CN",
+      },
+      {
+        label: "繁體中文",
+        value: "zh-TW",
       },
     ]
   }, [t])
@@ -310,7 +354,7 @@ export function ActionCard({
                     if (value === "all") {
                       data.condition = []
                     } else {
-                      data.condition = [{}]
+                      data.condition = [[{}]]
                     }
                     onChange(data)
                   }}
@@ -329,77 +373,110 @@ export function ActionCard({
                   <Table>
                     <FieldTableHeader />
                     <TableBody>
-                      {data.condition.map((condition, conditionIdx) => {
-                        const change = (key: string, value: string | number) => {
-                          if (!data.condition[conditionIdx]) {
-                            data.condition[conditionIdx] = {}
+                      {data.condition.flatMap((orConditions, orConditionIdx) => {
+                        return orConditions.map((condition, conditionIdx) => {
+                          const change = (key: string, value: string | number) => {
+                            if (!data.condition[orConditionIdx]) {
+                              data.condition[orConditionIdx] = [{}]
+                            }
+                            data.condition[orConditionIdx][conditionIdx][key] = value
+                            onChange(data)
                           }
-                          data.condition[conditionIdx][key] = value
-                          onChange(data)
-                        }
-                        const type =
-                          FeedOptions.find((option) => option.value === condition.field)?.type ||
-                          "text"
-                        return (
-                          <TableRow key={conditionIdx}>
-                            <DeleteTableCell
-                              disabled={disabled}
-                              onClick={() => {
-                                data.condition.splice(conditionIdx, 1)
-                                onChange(data)
-                              }}
-                            />
-                            <TableCell size="sm">
-                              <Select
-                                disabled={disabled}
-                                value={condition.field}
-                                onValueChange={(value: ActionFeedField) => change("field", value)}
-                              >
-                                <CommonSelectTrigger />
-                                <SelectContent>
-                                  {FeedOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                      {option.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </TableCell>
-                            <OperationTableCell
-                              type={type}
-                              disabled={disabled}
-                              value={condition.operator}
-                              onValueChange={(value) => change("operator", value)}
-                            />
-                            <TableCell size="sm">
-                              {type === "view" ? (
-                                <Select
-                                  disabled={disabled}
-                                  onValueChange={(value) => change("value", value)}
-                                  value={condition.value}
-                                >
-                                  <CommonSelectTrigger />
-                                  <ViewSelectContent />
-                                </Select>
-                              ) : (
-                                <Input
-                                  disabled={disabled}
-                                  type={type}
-                                  value={condition.value}
-                                  className="h-8"
-                                  onChange={(e) => change("value", e.target.value)}
-                                />
+                          const type =
+                            FeedOptions.find((option) => option.value === condition.field)?.type ||
+                            "text"
+                          return (
+                            <Fragment key={`${orConditionIdx}${conditionIdx}`}>
+                              {conditionIdx === 0 && orConditionIdx !== 0 && (
+                                <TableRow className="flex h-16 items-center">
+                                  <Button disabled variant="outline">
+                                    Or
+                                  </Button>
+                                </TableRow>
                               )}
-                            </TableCell>
-                          </TableRow>
-                        )
+                              <TableRow className="max-sm:flex max-sm:flex-col">
+                                <TableCell
+                                  size="sm"
+                                  className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:pr-0"
+                                >
+                                  <span className="sm:hidden">
+                                    {t("actions.action_card.field")}
+                                  </span>
+                                  <ResponsiveSelect
+                                    disabled={disabled}
+                                    value={condition.field}
+                                    onValueChange={(value) =>
+                                      change("field", value as ActionFeedField)
+                                    }
+                                    items={FeedOptions}
+                                    triggerClassName="max-sm:w-fit"
+                                  />
+                                </TableCell>
+                                <OperationTableCell
+                                  type={type}
+                                  disabled={disabled}
+                                  value={condition.operator}
+                                  onValueChange={(value) => change("operator", value)}
+                                />
+                                <TableCell
+                                  size="sm"
+                                  className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:gap-4 max-sm:pr-0"
+                                >
+                                  <span className="sm:hidden">
+                                    {t("actions.action_card.value")}
+                                  </span>
+                                  {type === "view" ? (
+                                    <Select
+                                      disabled={disabled}
+                                      onValueChange={(value) => change("value", value)}
+                                      value={condition.value}
+                                    >
+                                      <CommonSelectTrigger className="max-sm:w-fit" />
+                                      <ViewSelectContent />
+                                    </Select>
+                                  ) : (
+                                    <Input
+                                      disabled={disabled}
+                                      type={type}
+                                      value={condition.value}
+                                      className="h-8"
+                                      onChange={(e) => change("value", e.target.value)}
+                                    />
+                                  )}
+                                </TableCell>
+                                <ActionTableCell
+                                  disabled={disabled}
+                                  onAnd={() => {
+                                    data.condition[orConditionIdx].push({})
+                                    onChange(data)
+                                  }}
+                                  onDelete={() => {
+                                    if (data.condition[orConditionIdx].length === 1) {
+                                      data.condition.splice(orConditionIdx, 1)
+                                    } else {
+                                      data.condition[orConditionIdx].splice(conditionIdx, 1)
+                                    }
+                                    onChange(data)
+                                  }}
+                                />
+                              </TableRow>
+                              {conditionIdx !== orConditions.length - 1 && (
+                                <TableRow className="relative flex items-center">
+                                  <Button disabled variant="outline">
+                                    And
+                                  </Button>
+                                </TableRow>
+                              )}
+                            </Fragment>
+                          )
+                        })
                       })}
                     </TableBody>
                   </Table>
-                  <AddTableRow
+                  <OrTableRow
                     disabled={disabled}
                     onClick={() => {
-                      data.condition.push({})
+                      data.condition.push([{}])
                       onChange(data)
                     }}
                   />
@@ -428,7 +505,7 @@ export function ActionCard({
                   <span className="w-0 shrink grow truncate">
                     {t("actions.action_card.translate_into")}
                   </span>
-                  <Select
+                  <ResponsiveSelect
                     disabled={disabled}
                     value={data.result.translation}
                     onValueChange={(value) => {
@@ -439,22 +516,9 @@ export function ActionCard({
                       }
                       onChange(data)
                     }}
-                  >
-                    <CommonSelectTrigger className="max-w-44" />
-                    <SelectContent>
-                      {[
-                        {
-                          name: t("actions.action_card.no_translation"),
-                          value: "none",
-                        },
-                        ...TransitionOptions,
-                      ].map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    items={TransitionOptions}
+                    triggerClassName="max-w-44"
+                  />
                 </div>
                 <Divider />
 
