@@ -25,7 +25,7 @@ import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { useUnreadByView } from "~/store/unread/hooks"
 
 import { WindowUnderBlur } from "../../components/ui/background"
-import { getSelectedFeedIds, SELECT_NOTHING, setSelectedFeedIds } from "./atom"
+import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
 import { useShouldFreeUpSpace } from "./hook"
 import { FeedList } from "./list"
@@ -59,7 +59,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       setActive_(args)
 
       navigateBackHome(nextActive)
-      setSelectedFeedIds(SELECT_NOTHING)
+      resetSelectedFeedIds()
     },
     [active, navigateBackHome, setActive_],
   )
@@ -169,7 +169,11 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         onPointerDown={useTypeScriptHappyCallback((e) => {
           if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
             const nextSelectedFeedIds = getSelectedFeedIds()
-            setSelectedFeedIds(nextSelectedFeedIds.length === 0 ? nextSelectedFeedIds : [])
+            if (nextSelectedFeedIds.length > 0) {
+              setSelectedFeedIds(nextSelectedFeedIds)
+            } else {
+              resetSelectedFeedIds()
+            }
           }
         }, [])}
       >

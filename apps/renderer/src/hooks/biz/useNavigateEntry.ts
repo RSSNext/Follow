@@ -1,7 +1,9 @@
 import { getReadonlyRoute, getStableRouterNavigate } from "@follow/components/atoms/route.js"
-import { isMobile } from "@follow/components/hooks/useMobile.js"
+import { isMobile, useMobile } from "@follow/components/hooks/useMobile.js"
+import { useSheetContext } from "@follow/components/ui/sheet/context.js"
 import { FeedViewType } from "@follow/constants"
 import { isUndefined } from "es-toolkit/compat"
+import { useCallback } from "react"
 
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
@@ -24,9 +26,19 @@ export type NavigateEntryOptions = Partial<{
 /**
  * @description a hook to navigate to `feedId`, `entryId`, add search for `view`, `level`
  */
-
-// eslint-disable-next-line @eslint-react/hooks-extra/no-redundant-custom-hook, @eslint-react/hooks-extra/ensure-custom-hooks-using-other-hooks
-export const useNavigateEntry = () => navigateEntry
+export const useNavigateEntry = () => {
+  const sheetContext = useSheetContext()
+  const isMobile = useMobile()
+  return useCallback(
+    (options: NavigateEntryOptions) => {
+      navigateEntry(options)
+      if (isMobile && sheetContext) {
+        sheetContext.dismiss()
+      }
+    },
+    [isMobile, sheetContext],
+  )
+}
 
 export const navigateEntry = (options: NavigateEntryOptions) => {
   const { entryId, feedId, view, folderName, inboxId, listId } = options || {}

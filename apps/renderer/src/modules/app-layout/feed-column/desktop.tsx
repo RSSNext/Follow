@@ -41,7 +41,7 @@ import { NetworkStatusIndicator } from "~/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 import { DebugRegistry } from "~/modules/debug/registry"
 import { FeedColumn } from "~/modules/feed-column"
-import { useSelectedFeedIds } from "~/modules/feed-column/atom"
+import { getSelectedFeedIds, resetSelectedFeedIds } from "~/modules/feed-column/atom"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
@@ -82,7 +82,6 @@ export function MainDestopLayout() {
       },
     }),
   )
-  const [selectedIds, setSelectedIds] = useSelectedFeedIds()
   const { mutate } = useBatchUpdateSubscription()
   const handleDragEnd = React.useCallback(
     (event: DragEndEvent) => {
@@ -95,11 +94,11 @@ export function MainDestopLayout() {
         view: FeedViewType
       }
 
-      mutate({ category, view, feedIdList: selectedIds })
+      mutate({ category, view, feedIdList: getSelectedFeedIds() })
 
-      setSelectedIds([])
+      resetSelectedFeedIds()
     },
-    [mutate, selectedIds, setSelectedIds],
+    [mutate],
   )
 
   return (
