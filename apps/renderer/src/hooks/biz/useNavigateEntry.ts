@@ -3,6 +3,7 @@ import { isMobile, useMobile } from "@follow/components/hooks/useMobile.js"
 import { useSheetContext } from "@follow/components/ui/sheet/context.js"
 import { FeedViewType } from "@follow/constants"
 import { isUndefined } from "es-toolkit/compat"
+import { useCallback } from "react"
 
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
@@ -28,12 +29,15 @@ export type NavigateEntryOptions = Partial<{
 export const useNavigateEntry = () => {
   const sheetContext = useSheetContext()
   const isMobile = useMobile()
-  return (navigateEntryOptions: NavigateEntryOptions) => {
-    navigateEntry(navigateEntryOptions)
-    if (isMobile) {
-      sheetContext?.dismiss()
-    }
-  }
+  return useCallback(
+    (options: NavigateEntryOptions) => {
+      navigateEntry(options)
+      if (isMobile && sheetContext) {
+        sheetContext.dismiss()
+      }
+    },
+    [isMobile, sheetContext],
+  )
 }
 
 export const navigateEntry = (options: NavigateEntryOptions) => {
