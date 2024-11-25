@@ -1,5 +1,4 @@
-import { getStorageNS } from "@follow/utils/ns"
-import { atomWithStorage } from "jotai/utils"
+import { atom } from "jotai"
 
 import { createAtomHooks } from "~/lib/jotai"
 
@@ -9,7 +8,5 @@ export type UpdaterStatusAtom = {
   status: UpdaterStatus
 } | null
 export const [, , useUpdaterStatus, , getUpdaterStatus, setUpdaterStatus] = createAtomHooks(
-  atomWithStorage(getStorageNS("update"), null as UpdaterStatusAtom, undefined, {
-    getOnInit: true,
-  }),
+  atom(null as UpdaterStatusAtom),
 )
