@@ -302,7 +302,7 @@ const RowRender = ({ feedId, listId }: { feedId: string; listId: string }) => {
           href={UrlBuilder.shareFeed(feed.id)}
           className="flex items-center gap-2 font-semibold"
         >
-          {feed.siteUrl && <FeedIcon className="mr-0" siteUrl={feed.siteUrl} />}
+          {feed.siteUrl && <FeedIcon noMargin siteUrl={feed.siteUrl} />}
           <span className="inline-block max-w-[200px] truncate">{feed.title}</span>
         </a>
       </TableCell>

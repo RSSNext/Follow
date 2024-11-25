@@ -50,7 +50,7 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
             enableModal
           />
         ) : (
-          <FeedIcon className="mr-0 w-40 flex-col gap-3 p-0" size={46} feed={feed} fallback />
+          <FeedIcon noMargin className="w-40 flex-col gap-3 p-0" size={46} feed={feed} fallback />
         )}
         <span className="-mt-6 text-lg font-medium">{feed.title}</span>
 
