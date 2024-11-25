@@ -1,38 +1,13 @@
 import { execSync } from "node:child_process"
 import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
-import { createRequire } from "node:module"
 import path from "node:path"
 
 import { dump } from "js-yaml"
 import * as tar from "tar"
 import type { Plugin } from "vite"
 
-const require = createRequire(import.meta.url)
-const glob = require("glob") as typeof import("glob")
-
-async function calculateMainHash(mainDir: string): Promise<string> {
-  // Get all TypeScript files in the main directory recursively
-  const files = glob.sync("**/*.{ts,tsx}", {
-    cwd: mainDir,
-    ignore: ["node_modules/**", "dist/**"],
-  })
-
-  // Sort files for consistent hash
-
-  files.sort()
-  files.push("package.json")
-
-  const hashSum = createHash("sha256")
-
-  // Read and update hash for each file
-  for (const file of files) {
-    const content = await fs.readFile(path.join(mainDir, file))
-    hashSum.update(content)
-  }
-
-  return hashSum.digest("hex")
-}
+import { calculateMainHash } from "./generate-main-hash"
 
 async function compressDirectory(sourceDir: string, outputFile: string) {
   await tar.c(

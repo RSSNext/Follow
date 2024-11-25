@@ -148,14 +148,15 @@
       "git add locales"
     ]
   },
-  "render": {
-    "minimum": "0.2.4"
-  },
   "bump": {
     "before": [
       "git pull --rebase",
       "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
-      "git add changelog"
+      "git add changelog",
+      "tsx plugins/vite/generate-main-hash.ts",
+      "eslint --fix package.json",
+      "prettier --ignore-unknown --write package.json",
+      "git add package.json"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
@@ -167,5 +168,6 @@
       "dev"
     ]
   },
-  "productName": "Follow"
+  "productName": "Follow",
+  "mainHash": "6eb4a98beeb46a96969eaf8f67be07e7fc2f600ca881f969b1bfccf21c1d0ed3"
 }

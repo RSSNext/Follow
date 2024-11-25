@@ -8,11 +8,10 @@ import os from "node:os"
 import path from "node:path"
 
 import { callWindowExpose } from "@follow/shared/bridge"
-import { version as appVersion } from "@pkg"
+import { mainHash, version as appVersion } from "@pkg"
 import log from "electron-log"
 import { memoize } from "es-toolkit/compat"
 import { load } from "js-yaml"
-import { gte } from "semver"
 import { x } from "tar"
 
 import { GITHUB_OWNER, GITHUB_REPO, HOTUPDATE_RENDER_ENTRY_DIR } from "~/constants/app"
@@ -65,8 +64,8 @@ type Manifest = {
   hash: string
   commit: string
   filename: string
-  /** Supported minimum app version */
-  minimum: string
+  /** Only electron main hash equal to this value, renderer will can be updated */
+  mainHash: string
 }
 const getLatestReleaseManifest = memoize(async () => {
   const url = await getFileDownloadUrl("manifest.yml")
@@ -90,7 +89,7 @@ const canUpdateRender = async () => {
   if (!manifest) return false
   if (!shouldUpdateApp(appVersion, manifest.version)) return false
 
-  const appSupport = gte(appVersion, manifest.minimum)
+  const appSupport = mainHash === manifest.mainHash
   if (!appSupport) {
     hotUpdateAppNotSupportTriggerTrack({
       appVersion,
