@@ -53,7 +53,7 @@ export const FeedClaimModalContent: FC<{
   }
 
   return (
-    <div className="w-[650px] max-w-full">
+    <div className="mx-auto max-w-[650px]">
       <Card className="mb-2">
         <CardHeader>
           <FollowSummary feed={feed} />
