@@ -159,14 +159,8 @@ const CornerPlayerImpl = () => {
     <>
       <div className="relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800">
         {/* play cover */}
-        <div className="relative h-full shrink-0">
-          <FeedIcon
-            feed={feed}
-            entry={entry.entries}
-            size={58}
-            fallback={false}
-            className="m-0 size-[3.625rem] rounded-none"
-          />
+        <div className="relative h-[3.625rem] shrink-0">
+          <FeedIcon feed={feed} entry={entry.entries} size={58} fallback={false} noMargin />
           <div
             className={cn(
               "center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100",
