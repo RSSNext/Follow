@@ -38,7 +38,8 @@
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
     "test": "CI=1 pnpm --recursive run test",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
   "devDependencies": {
     "@babel/generator": "7.26.2",

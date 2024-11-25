@@ -86,6 +86,9 @@ jobs:
           fi
           echo "Updated version to $NIGHTLY_VERSION"
 
+      - name: Update main hash
+        run: pnpm update:main-hash
+
       - name: Build
         if: matrix.os != 'macos-latest'
         run: pnpm build
