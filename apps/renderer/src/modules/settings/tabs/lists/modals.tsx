@@ -107,7 +107,7 @@ export const ListCreationModalContent = ({ id }: { id?: string }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[450px] space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 lg:w-[450px]">
         <FormField
           control={form.control}
           name="title"

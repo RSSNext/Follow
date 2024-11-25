@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
 import { UserProvider } from "~/providers/user-provider"

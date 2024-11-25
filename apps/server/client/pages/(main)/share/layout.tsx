@@ -2,7 +2,7 @@ import { Header } from "@client/components/layout/header"
 import { TeleportalDestination } from "@client/components/layout/main/teleportal"
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
 import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 export const Component = () => {
   return (

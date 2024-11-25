@@ -1,6 +1,6 @@
 import type { FC } from "react"
 import { createElement, useEffect, useRef } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation } from "react-router"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 

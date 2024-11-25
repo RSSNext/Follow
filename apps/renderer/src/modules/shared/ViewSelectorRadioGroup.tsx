@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.
 import { views } from "@follow/constants"
 import type { EntryModelSimple, FeedModel } from "@follow/models"
 import { cn } from "@follow/utils/utils"
-import { forwardRef } from "react"
+import { cloneElement, forwardRef } from "react"
 
 import { useI18n } from "~/hooks/common"
 
@@ -42,8 +42,10 @@ export const ViewSelectorRadioGroup = forwardRef<
                 "whitespace-nowrap",
               )}
             >
-              <span className="text-lg">{view.icon}</span>
-              {t(view.name)}
+              {cloneElement(view.icon, {
+                className: `text-lg ${view.icon?.props?.className ?? ""}`,
+              })}
+              <span className="hidden lg:inline">{t(view.name)}</span>
             </label>
           </div>
         ))}

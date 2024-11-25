@@ -1,9 +1,9 @@
+import type { AppType } from "@follow/shared"
 import { env } from "@follow/shared/env"
 import PKG from "@pkg"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"
 
-import type { AppType } from "../../../../packages/shared/src/hono"
 import { logger } from "../logger"
 import { getAuthSessionToken, getUser } from "./user"
 

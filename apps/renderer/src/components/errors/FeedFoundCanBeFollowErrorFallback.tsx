@@ -2,7 +2,7 @@ import { Button } from "@follow/components/ui/button/index.js"
 import type { FeedModel } from "@follow/models/types"
 import { nextFrame } from "@follow/utils/dom"
 import type { FC } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"

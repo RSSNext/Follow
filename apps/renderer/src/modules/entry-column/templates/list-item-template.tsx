@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn, isSafari } from "@follow/utils/utils"
 
@@ -50,16 +51,6 @@ export function ListItem({
 
   const inbox = useInboxById(entry?.inboxId)
 
-  // const handlePrefetchEntry = useDebounceCallback(
-  //   () => {
-  //     inbox
-  //       ? Queries.entries.byInboxId(entryId).prefetch()
-  //       : Queries.entries.byId(entryId).prefetch()
-  //   },
-  //   300,
-  //   { leading: false },
-  // )
-
   const settingWideMode = useRealInWideMode()
   const thumbnailRatio = useUISettingKey("thumbnailRatio")
   const rid = `list-item-${entryId}`
@@ -74,8 +65,6 @@ export function ListItem({
 
   return (
     <div
-      // onMouseEnter={handlePrefetchEntry}
-      // onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
         "group relative flex cursor-menu pl-3 pr-2",
         !asRead &&
@@ -218,7 +207,8 @@ function AudioCover({
 
   const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
 
-  const handleClickPlay = () => {
+  const handleClickPlay = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile()) e.stopPropagation()
     if (!playStatus) {
       // switch this to play
       AudioPlayer.mount({

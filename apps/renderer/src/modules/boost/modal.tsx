@@ -50,7 +50,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   }
 
   return (
-    <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
+    <div className="flex w-full flex-col gap-3 lg:w-[80vw] lg:max-w-[350px]">
       <div className="center flex flex-col gap-2">
         <FeedIcon className="mr-0" feed={feed} size={50} />
 

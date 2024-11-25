@@ -1,4 +1,10 @@
-import type { Command, CommandOptions, FollowCommand, FollowCommandId } from "../types"
+import type {
+  Command,
+  CommandOptions,
+  FollowCommand,
+  FollowCommandId,
+  FollowCommandMap,
+} from "../types"
 
 export function createCommand<
   T extends { id: string; fn: (...args: any[]) => unknown } = {
@@ -32,33 +38,7 @@ export function createFollowCommand<T extends FollowCommand>(
 }
 
 export function defineFollowCommand<T extends FollowCommandId>(
-  options: CommandOptions<{ id: T; fn: Extract<FollowCommand, { id: T }>["run"] }>,
+  options: CommandOptions<{ id: T; fn: FollowCommandMap[T]["run"] }>,
 ) {
   return options as CommandOptions
 }
-
-/**
- * @deprecated
- */
-export const defineFollowCommandArgs = <T extends FollowCommandId>(config: {
-  commandId: T
-  args: Parameters<Extract<FollowCommand, { id: T }>["run"]>
-}) => config
-
-/**
- * @deprecated
- */
-export const defineCommandArgsArray = <
-  Ext extends Record<string, unknown>,
-  T extends FollowCommandId[] = FollowCommandId[],
->(
-  config: [
-    ...{
-      [K in keyof T]: {
-        commandId: T[K]
-        args: Parameters<Extract<FollowCommand, { id: T[K] }>["run"]>
-        // [key: string]: unknown
-      } & Ext
-    },
-  ],
-) => config

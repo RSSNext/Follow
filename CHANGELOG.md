@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.2.2-beta.0](https://github.com/RSSNext/follow/compare/v0.2.0-beta.2...v0.2.2-beta.0) (2024-11-18)
+## [0.2.3-beta.0](https://github.com/RSSNext/follow/compare/v0.2.0-beta.2...v0.2.3-beta.0) (2024-11-21)
 
 
 ### Bug Fixes
@@ -16,10 +16,15 @@
 * add rsshub discover error boundary ([665c009](https://github.com/RSSNext/follow/commit/665c009bf8aec87ead601428410f56ba6756a8db))
 * add Supsense wrapper for app upgrade provider ([58f1791](https://github.com/RSSNext/follow/commit/58f1791526620f470aa11c776fd7b245d54c45ab))
 * add turbo build in ci ([7b848cd](https://github.com/RSSNext/follow/commit/7b848cd08aa4f97b1df35666166561d6fc30c5c9))
+* add type checking to test script ([#1666](https://github.com/RSSNext/follow/issues/1666)) ([518a32f](https://github.com/RSSNext/follow/commit/518a32f2ce1498f21cff87e0b95d0a4fd0a0f4a0))
 * adjust activation toast style ([e81245e](https://github.com/RSSNext/follow/commit/e81245e395ce1829f0c185a5a184c4cba8f8406c))
+* align notification skeleton to left ([fa08d1a](https://github.com/RSSNext/follow/commit/fa08d1a0cb8421ca40e38dddd0d74415389f7a80)), closes [#1672](https://github.com/RSSNext/follow/issues/1672)
 * allow click when selecting ([c514458](https://github.com/RSSNext/follow/commit/c51445873249ed7340d86bcb7901dbeca98d096e)), closes [#1512](https://github.com/RSSNext/follow/issues/1512)
+* allow collect entry from list ([706f484](https://github.com/RSSNext/follow/commit/706f4847576fbb0237925434d4dace5c22fdbf93))
 * allow select one feed ([3c21d92](https://github.com/RSSNext/follow/commit/3c21d92baf0a03373224ac9d5a7a416947788388)), closes [#1512](https://github.com/RSSNext/follow/issues/1512)
 * allow selecting when meta key is pressed ([6b8572c](https://github.com/RSSNext/follow/commit/6b8572c37aa287aa544e6ddb2847693ba597b0be))
+* always exclude routeParams ([1466886](https://github.com/RSSNext/follow/commit/1466886c426095aa59bbc06f93a44245bfa3b480))
+* app notification font size ([1b5f944](https://github.com/RSSNext/follow/commit/1b5f9448062bde224770dfe5129304d7a812585d))
 * app upgrade toast open link should in new window ([fc81546](https://github.com/RSSNext/follow/commit/fc81546bed6b07626215a57543a735001728f520))
 * app upgraded toast href error ([#1444](https://github.com/RSSNext/follow/issues/1444)) ([c875d69](https://github.com/RSSNext/follow/commit/c875d697b2a1cd9e49f3c91397531a82928e1bc8))
 * assets rewrite ([#1204](https://github.com/RSSNext/follow/issues/1204)) ([488e8ef](https://github.com/RSSNext/follow/commit/488e8effc6f00769df7dbf68d4e6d1e4e950b8e7))
@@ -65,8 +70,11 @@
 * dnd and scroll ([#1528](https://github.com/RSSNext/follow/issues/1528)) ([b1e28be](https://github.com/RSSNext/follow/commit/b1e28be2b0049eae73d51a18cd9180b077a512ca))
 * dnd responsive ([1f51abe](https://github.com/RSSNext/follow/commit/1f51abe3ed2fbca66e6d9ab2ab63ef71b7b9eda4))
 * do not exclude required path params ([f6cbace](https://github.com/RSSNext/follow/commit/f6cbacec853dd8aa901c93c8c86820bbbf1f8232)), closes [#1623](https://github.com/RSSNext/follow/issues/1623)
+* do not update action setting for archived query ([4adcded](https://github.com/RSSNext/follow/commit/4adcded02179b8d42f1a906b75b10fd403438f8d))
 * don't cache user session ([e8d7e6c](https://github.com/RSSNext/follow/commit/e8d7e6ce64d09bb1f2b8f3e26f7aba250c3cca84))
+* **dx:** merge script and fix host rewrite ([3fa3bd5](https://github.com/RSSNext/follow/commit/3fa3bd5fc5b730421f6abc4dd2938beea67322dc))
 * dynamic import dexie-export-import ([48aea7b](https://github.com/RSSNext/follow/commit/48aea7b88e4d72d20e52ce7a5037ef239d80611d))
+* enhance tray icon visual effect in Windows platform ([64c891f](https://github.com/RSSNext/follow/commit/64c891f30c27ff1c868a4ba8fb88adf2acda7dfd))
 * entry action deps ([4eba28b](https://github.com/RSSNext/follow/commit/4eba28b76fc62133ecd0e4746b3bb0b4d341b338))
 * entry thumbnail keep origin aspect ratio ([6e04e6e](https://github.com/RSSNext/follow/commit/6e04e6eacd6346bd2869c683ec417932a0d13807))
 * entry title bar margin-left in zen mode ([25abd8f](https://github.com/RSSNext/follow/commit/25abd8ff1c42a37b741676e1b3a3312f99decb8a))
@@ -95,6 +103,7 @@
 * html table to markdown error ([#1288](https://github.com/RSSNext/follow/issues/1288)) ([8d1ca24](https://github.com/RSSNext/follow/commit/8d1ca24f18859f5651559c77cef6fc30ce228f00))
 * **i18n:** remove `external` ns in renderer ([229b3e1](https://github.com/RSSNext/follow/commit/229b3e18f50c81c916f877a2a65325e3dcaa783a))
 * **i18n:** update label for notification badge settings in zh-CN locale and others ([#1455](https://github.com/RSSNext/follow/issues/1455)) ([ec82f03](https://github.com/RSSNext/follow/commit/ec82f036b44a3d0d463c48c1d793fc517def1d07))
+* ignore `file` and editor protocols ([2badb9b](https://github.com/RSSNext/follow/commit/2badb9b1c0bf6628d2a2fc177063fd0c7c7fb08b))
 * immer object extensible ([6ad35ad](https://github.com/RSSNext/follow/commit/6ad35ad6712a68db9e231bf5733a2956ccecda90))
 * improve multi select behavior ([24017df](https://github.com/RSSNext/follow/commit/24017dfb3190c91969ec68d3d88544e051880469))
 * initializeDayjs in server ([d408581](https://github.com/RSSNext/follow/commit/d408581a13ad78d5a871d98f3ff0ff9bb5e45ae5)), closes [#1198](https://github.com/RSSNext/follow/issues/1198)
@@ -113,6 +122,7 @@
 * **modal:** modal dismiss action ([b05ff50](https://github.com/RSSNext/follow/commit/b05ff50f14660f20ed881f6aeabb732d80c9539c))
 * **modal:** repeat user profile dialog ([#1155](https://github.com/RSSNext/follow/issues/1155)) ([ad86372](https://github.com/RSSNext/follow/commit/ad86372bfb345b6f921da783c401be30cdbe4b89))
 * not showing feed certification icon on the sidebar ([#1442](https://github.com/RSSNext/follow/issues/1442)) ([b395891](https://github.com/RSSNext/follow/commit/b395891b66a581254f24aae75d0d61869fb6fb33))
+* omit cacheDimensions from img attributes in MediaImpl ([ec12b35](https://github.com/RSSNext/follow/commit/ec12b3538f42c8596c4e700ae2284a02b4d7791e))
 * only show ComboboxOptions when there are suggestions ([136aa20](https://github.com/RSSNext/follow/commit/136aa205794b6193826d1839350e65228d2b4f20))
 * optimize print mode ([6f1eb26](https://github.com/RSSNext/follow/commit/6f1eb26eb110b8ad061473e05c451debc9c69074))
 * optimize some styles ([9b99bf4](https://github.com/RSSNext/follow/commit/9b99bf4428cf6f1ca3218a3074a944af4d014f57))
@@ -135,6 +145,7 @@
 * remove cache-control header ([#1202](https://github.com/RSSNext/follow/issues/1202)) ([c683bda](https://github.com/RSSNext/follow/commit/c683bdaef63716659ca78875022ff38350e50b82))
 * remove callbackUrl in electron ([10a217e](https://github.com/RSSNext/follow/commit/10a217e8c1262a7ab695f65e21087d96169930bb))
 * remove gcore icon ([#1220](https://github.com/RSSNext/follow/issues/1220)) ([486fa20](https://github.com/RSSNext/follow/commit/486fa202ee9488981a733f235f95c90a073e7166))
+* remove hardcode minfest ([0432618](https://github.com/RSSNext/follow/commit/04326186b71dc840e1454e6a1573257c97db32c8))
 * remove immer set to avoid object extensible ([7e5a791](https://github.com/RSSNext/follow/commit/7e5a79155a083a8242579dee18d019049b7ad6f5))
 * remove skeleton when app load but in 404 ([54d4e52](https://github.com/RSSNext/follow/commit/54d4e529c796e6cc22c36b2a9a1e949b1dad5b37))
 * remove vercel header rewrite ([#1463](https://github.com/RSSNext/follow/issues/1463)) ([#1480](https://github.com/RSSNext/follow/issues/1480)) ([94971da](https://github.com/RSSNext/follow/commit/94971dad4e1d828aa4c90d8f02445cc04a8500c9))
@@ -175,6 +186,7 @@
 * trial limit ([eee2bf8](https://github.com/RSSNext/follow/commit/eee2bf8771d2d30bba1f534984e3ca8d5e26cf04))
 * try fix dayjs init ([093f80d](https://github.com/RSSNext/follow/commit/093f80d9da223c567125285cc0f312f419bb4042))
 * try remove skeleton ([e0d9502](https://github.com/RSSNext/follow/commit/e0d9502b160928fa4d7b3fa870b948f17aa56eef))
+* try stable sort result for feed list ([677b2ea](https://github.com/RSSNext/follow/commit/677b2ea214cc116b748879628a8745ca17609043))
 * ts import ([14311dd](https://github.com/RSSNext/follow/commit/14311dde0a9cb14e797e1a0f654a11f8502e58f8))
 * turbo build cmd ([0b9c279](https://github.com/RSSNext/follow/commit/0b9c279fccd25231b90810359125571f817b7f7c))
 * tweak boost progress calculation ([#1594](https://github.com/RSSNext/follow/issues/1594)) ([bd2d9d1](https://github.com/RSSNext/follow/commit/bd2d9d1175e953b199d8d686ac83d124caffbfef))
@@ -190,6 +202,8 @@
 * **upgrade:** changelog container should w-full ([1551bf6](https://github.com/RSSNext/follow/commit/1551bf648c511cbf615f515b2e2d93077b0e42b4))
 * vercel do not support `__` prefix for api route ([45a66e0](https://github.com/RSSNext/follow/commit/45a66e0f972d18831795d92b1d3c1f3893f396dc))
 * vercel rewrite config ([#1203](https://github.com/RSSNext/follow/issues/1203)) ([c954d61](https://github.com/RSSNext/follow/commit/c954d61f074e282a9a86cbf1d1546748871c20e7))
+* video media can not play in video view ([4cbf8a5](https://github.com/RSSNext/follow/commit/4cbf8a54fcf11fb71ff935baee52c79a83f5035c)), closes [#1645](https://github.com/RSSNext/follow/issues/1645)
+* wrap with Ellipsis ([3ba9093](https://github.com/RSSNext/follow/commit/3ba90936931ad36790a68ee90a2c1582054bb90a))
 * zoom width limit ([eaf33d2](https://github.com/RSSNext/follow/commit/eaf33d272f8675cd929eb7227578b6364716e60a))
 
 
@@ -237,6 +251,7 @@
 * **mark-all-button:** add countdown to auto-confirm message ([#1414](https://github.com/RSSNext/follow/issues/1414)) ([e1a5fc6](https://github.com/RSSNext/follow/commit/e1a5fc63f20c941140071789c9b67685da19ea5c))
 * merge redirect page into login page ([2fa16b7](https://github.com/RSSNext/follow/commit/2fa16b75d376fe04472e6c91675c67e725da8633))
 * move hideExtraBadge ([2f14c30](https://github.com/RSSNext/follow/commit/2f14c30307a895bc866ac57989df1dc624eab4e6))
+* multi select with shift ([2158b1c](https://github.com/RSSNext/follow/commit/2158b1cc255baf3ff5e4e1a5806d85b7df64bd55)), closes [#1256](https://github.com/RSSNext/follow/issues/1256)
 * **obsidian:** use readability content when available ([b4a3197](https://github.com/RSSNext/follow/commit/b4a3197e6ebd39bb259a6bc67f408569354a205e))
 * prefer origin addresses for content images ([d4d4345](https://github.com/RSSNext/follow/commit/d4d43451dec839b64239e1835b2ac1a1aa2478be))
 * **reader:** support custom css, fixed [#256](https://github.com/RSSNext/follow/issues/256) ([b251fa9](https://github.com/RSSNext/follow/commit/b251fa9421417c75d71707c8f08850f2cc902e1a))
@@ -267,10 +282,17 @@
 
 * add code cache cleaner ([a0fd15f](https://github.com/RSSNext/follow/commit/a0fd15f4abbab340264da4281f2e4ca9f89ffffa))
 * batch profile ([#1464](https://github.com/RSSNext/follow/issues/1464)) ([a3e9c0e](https://github.com/RSSNext/follow/commit/a3e9c0edc83628d9c0ceb998d95184c5fd635f6f))
+* lazy show action, reduce lcp time ([fcf775c](https://github.com/RSSNext/follow/commit/fcf775c976591258f83dea6e34ca3161b539b15e))
 * modify some animations to CSS animations ([9ec3fe5](https://github.com/RSSNext/follow/commit/9ec3fe562bf3527ad4279a9a57c0b0bb5934dba1))
 * optmize masonry perfermance ([d1748c6](https://github.com/RSSNext/follow/commit/d1748c6ce93f7075270d8cc6e88cbd944d165d50))
 * reduce re-render zooming ([9b35074](https://github.com/RSSNext/follow/commit/9b350741d16cfd81770e82b866e92d732498ccf3))
+* reduce the number of items rendered on the first render ([6704d61](https://github.com/RSSNext/follow/commit/6704d61baac7f54368cedc0438845aaacfb98960))
 * resolve feed item select area performance problem ([f87c0ff](https://github.com/RSSNext/follow/commit/f87c0ff2abfc430719894765796ca457c3f8e7f0))
+
+
+### Reverts
+
+* Revert "perf: reduce the number of items rendered on the first render" ([9e45d04](https://github.com/RSSNext/follow/commit/9e45d0441ef16fb334af555c22276f7d77a72733)), closes [#1659](https://github.com/RSSNext/follow/issues/1659)
 
 
 

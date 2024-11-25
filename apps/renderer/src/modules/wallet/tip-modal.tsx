@@ -7,7 +7,7 @@ import { nextFrame } from "@follow/utils/dom"
 import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
@@ -65,9 +65,7 @@ const TipModalContent_: FC<{
 
   const { dismiss } = useCurrentModal()
 
-  const claimFeed = useFeedClaimModal({
-    feedId,
-  })
+  const claimFeed = useFeedClaimModal()
 
   const navigate = useNavigate()
 
@@ -109,7 +107,7 @@ const TipModalContent_: FC<{
   }
 
   return (
-    <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
+    <div className="flex w-full flex-col gap-3 lg:w-[80vw] lg:max-w-[350px]">
       {userId ? (
         <>
           <p className="text-sm font-medium">{t("tip_modal.feed_owner")}</p>
@@ -127,7 +125,7 @@ const TipModalContent_: FC<{
             </span>
           </p>
           <div className="text-center">
-            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed()}>
+            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed({ feedId })}>
               {t("tip_modal.claim_feed")}
             </Button>
           </div>

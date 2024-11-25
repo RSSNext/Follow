@@ -18,7 +18,7 @@ import { cn } from "@follow/utils/utils"
 import type { FC } from "react"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router"
 import { toast } from "sonner"
 
 const viewsRenderType = {

@@ -13,6 +13,7 @@
   "discover.feed_maintainers": "Bu besleme RSSHub tarafından sağlanmaktadır, <maintainers /> katkılarıyla",
   "discover.import.click_to_upload": "OPML dosyasını yüklemek için tıklayın",
   "discover.import.conflictItems": "Çakışan Öğeler",
+  "discover.import.new_import_opml": "Daha önce RSS kullandıysanız veri yapılandırmasını bir OPML dosyasına aktarabilir ve buraya aktarabilirsiniz.",
   "discover.import.noItems": "Öğe yok",
   "discover.import.opml": "OPML dosyası",
   "discover.import.parsedErrorItems": "Ayrıştırma Hatası Olan Öğeler",

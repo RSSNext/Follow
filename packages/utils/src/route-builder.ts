@@ -1,6 +1,6 @@
 import { get, omit } from "es-toolkit/compat"
 import { Fragment } from "react/jsx-runtime"
-import type { RouteObject } from "react-router-dom"
+import type { RouteObject } from "react-router"
 
 type NestedStructure = { [key: string]: NestedStructure }
 

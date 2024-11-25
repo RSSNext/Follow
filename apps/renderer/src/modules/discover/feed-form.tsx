@@ -140,6 +140,8 @@ export const FeedForm: Component<{
                       "```",
                     ].join("\n"),
                     title: `Error in fetching feed: ${id ?? url}`,
+                    target: "discussion",
+                    category: "feed-expired",
                   }),
                   "_blank",
                 )

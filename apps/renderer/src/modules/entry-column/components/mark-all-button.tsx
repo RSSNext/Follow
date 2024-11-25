@@ -55,7 +55,8 @@ export const MarkAllReadWithOverlay = forwardRef<
         if (cancel) return
         cancel = true
       }
-      const id = toast(<ConfirmMarkAllReadInfo undo={undo} />, {
+      const id = toast("", {
+        description: <ConfirmMarkAllReadInfo undo={undo} />,
         duration: 3000,
         onAutoClose() {
           if (cancel) return
@@ -150,7 +151,7 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
           transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
+        className="shadow-modal absolute z-50 bg-background shadow lg:bg-theme-modal-background-opaque"
         style={{
           left: -paddingLeft,
           top: rect.top,

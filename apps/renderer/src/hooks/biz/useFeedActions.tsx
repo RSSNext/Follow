@@ -5,7 +5,7 @@ import { env } from "@follow/shared/env"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { isBizId } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
-import { useMemo, useRef } from "react"
+import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
@@ -19,7 +19,7 @@ import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
 import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
-import { entries } from "~/queries/entries"
+import { useResetFeed } from "~/queries/feed"
 import { getFeedById, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { listActions, useListById, useOwnedListByView } from "~/store/list"
@@ -73,9 +73,7 @@ export const useFeedActions = ({
   const subscription = useSubscriptionByFeedId(feedId)
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
-  const claimFeed = useFeedClaimModal({
-    feedId,
-  })
+  const claimFeed = useFeedClaimModal()
 
   const navigateEntry = useNavigateEntry()
   const isEntryList = type === "entryList"
@@ -116,7 +114,7 @@ export const useFeedActions = ({
             : t("sidebar.feed_actions.claim"),
           shortcut: "C",
           click: () => {
-            claimFeed()
+            claimFeed({ feedId })
           },
         },
       ...(isFeedOwner
@@ -331,7 +329,7 @@ export const useFeedActions = ({
     view,
   ])
 
-  return { items }
+  return items
 }
 
 export const useListActions = ({ listId, view }: { listId: string; view: FeedViewType }) => {
@@ -424,7 +422,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
     return items
   }, [list, t, present, deleteSubscription, subscription, navigateEntry, listId, view])
 
-  return { items }
+  return items
 }
 
 export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
@@ -517,31 +515,6 @@ export const useRemoveFeedFromFeedList = (options?: {
     async onError() {
       toast.error(t("lists.feeds.delete.error"))
       options?.onError?.()
-    },
-  })
-}
-
-export const useResetFeed = () => {
-  const { t } = useTranslation()
-  const toastIDRef = useRef<string | number | null>(null)
-
-  return useMutation({
-    mutationFn: async (feedId: string) => {
-      toastIDRef.current = toast.loading(t("sidebar.feed_actions.resetting_feed"))
-      await apiClient.feeds.reset.$get({ query: { id: feedId } })
-    },
-    onSuccess: (_, feedId) => {
-      entries.entries({ feedId }).invalidateRoot()
-      toast.success(
-        t("sidebar.feed_actions.reset_feed_success"),
-        toastIDRef.current ? { id: toastIDRef.current } : undefined,
-      )
-    },
-    onError: () => {
-      toast.error(
-        t("sidebar.feed_actions.reset_feed_error"),
-        toastIDRef.current ? { id: toastIDRef.current } : undefined,
-      )
     },
   })
 }

@@ -1,4 +1,5 @@
 import { useFocusable } from "@follow/components/common/Focusable.jsx"
+import { useMobile } from "@follow/components/hooks/useMobile"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
@@ -177,19 +178,31 @@ const HotKeyTrigger = ({
   })
   return null
 }
+const motionBaseMap = {
+  pc: {
+    whileFocus: { scale: 1.02 },
+    whileTap: { scale: 0.95 },
+  },
+  mobile: {
+    whileFocus: { opacity: 0.8 },
+    whileTap: { opacity: 0.2 },
+  },
+} as const
 export const MotionButtonBase = React.forwardRef<HTMLButtonElement, HTMLMotionProps<"button">>(
-  ({ children, ...rest }, ref) => (
-    <m.button
-      layout="size"
-      initial
-      whileFocus={{ scale: 1.02 }}
-      whileTap={{ scale: 0.95 }}
-      {...rest}
-      ref={ref}
-    >
-      {children}
-    </m.button>
-  ),
+  ({ children, ...rest }, ref) => {
+    const isMobile = useMobile()
+    return (
+      <m.button
+        layout="size"
+        initial
+        {...motionBaseMap[isMobile ? "mobile" : "pc"]}
+        {...rest}
+        ref={ref}
+      >
+        {children}
+      </m.button>
+    )
+  },
 )
 
 MotionButtonBase.displayName = "MotionButtonBase"
