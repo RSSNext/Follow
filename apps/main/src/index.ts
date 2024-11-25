@@ -14,6 +14,7 @@ import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
 import { registerAppTray } from "./lib/tray"
 import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
+import { logger } from "./logger"
 import { registerUpdater } from "./updater"
 import { cleanupOldRender } from "./updater/hot-updater"
 import {
@@ -73,7 +74,9 @@ function bootstrap() {
     // restore cookies
     const cookies = store.get("cookies")
     if (cookies) {
+      logger.info("[main] restore cookies", cookies)
       for (const cookie of cookies) {
+        logger.info("[main] restore cookie", cookie)
         await session.defaultSession.cookies.set(cookie)
       }
     }
