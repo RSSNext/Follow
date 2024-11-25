@@ -63,7 +63,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const draggableContext = useContext(DraggableContext)
   const isMobile = useMobile()
   const isInMultipleSelection = !isMobile && selectedFeedIds.includes(feedId)
-  const isMultiSelectingButNotSelected = selectedFeedIds.length > 0 && !isInMultipleSelection
+  const isMultiSelectingButNotSelected =
+    !isMobile && selectedFeedIds.length > 0 && !isInMultipleSelection
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -151,7 +152,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         style={isInMultipleSelection ? draggableContext?.style : undefined}
         data-feed-id={feedId}
         data-active={
-          !isMobile && isMultiSelectingButNotSelected
+          isMultiSelectingButNotSelected
             ? false
             : isActive || isContextMenuOpen || isInMultipleSelection
         }
