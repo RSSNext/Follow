@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { useRevalidator } from "react-router"
+import { useLocation, useRevalidator } from "react-router"
 
 import { currentSupportedLanguages } from "~/@types/constants"
 import { defaultResources } from "~/@types/default-resource"
@@ -284,6 +284,7 @@ const StartupScreenSelector = () => {
   const { t } = useTranslation("settings")
   const startupScreen = useGeneralSettingKey("startupScreen")
   const revalidator = useRevalidator()
+  const { pathname } = useLocation()
 
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
@@ -305,7 +306,7 @@ const StartupScreenSelector = () => {
         value={startupScreen}
         onValueChange={(value) => {
           setGeneralSetting("startupScreen", value as "subscription" | "timeline")
-          if (value === "timeline") {
+          if (value === "timeline" && pathname === "/") {
             revalidator.revalidate()
           }
         }}
