@@ -75,10 +75,11 @@ export function ListItem({
       {!withAudio && <FeedIcon feed={related} fallback entry={entry.entries} />}
       <div
         className={cn(
-          "-mt-0.5 w-[calc(100%-88px)] flex-1 text-sm leading-tight",
+          "-mt-0.5 flex-1 text-sm leading-tight",
 
           // FIXME: Safari bug, not support line-clamp cross elements
           !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
+          withAudio && "max-w-[calc(100%-88px)]",
         )}
       >
         <div
