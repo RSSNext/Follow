@@ -149,7 +149,7 @@
     ]
   },
   "render": {
-    "minimum": "0.1.0"
+    "minimum": "0.2.4"
   },
   "bump": {
     "before": [
