@@ -151,7 +151,11 @@ const PlayerIcon = ({ onLogoClick }: { onLogoClick?: () => void }) => {
       </button>
 
       {isShowPlayer && (
-        <CornerPlayer className="absolute inset-x-0 bottom-12 mx-auto w-full max-w-[350px] overflow-hidden rounded-lg" />
+        <CornerPlayer
+          className="absolute inset-x-0 mx-auto w-full max-w-[350px] bottom-safe-or-12"
+          hideControls
+          rounded
+        />
       )}
     </>
   )

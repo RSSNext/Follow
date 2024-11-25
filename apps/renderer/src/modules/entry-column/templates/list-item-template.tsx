@@ -233,7 +233,8 @@ function AudioCover({
       <div
         className={cn(
           "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:-translate-y-2 group-hover:opacity-100",
-          isMobile || playStatus ? "opacity-100" : "opacity-0",
+          playStatus ? "opacity-100" : "opacity-0",
+          isMobile && "-translate-y-2 opacity-100",
         )}
         onClick={handleClickPlay}
       >
