@@ -74,12 +74,22 @@ const getLatestReleaseManifest = async () => {
 }
 const downloadTempDir = path.resolve(os.tmpdir(), "follow-render-update")
 
-export const canUpdateRender = async () => {
+export enum CanUpdateRenderState {
+  // If version is equal, no need to update
+  NO_NEEDED,
+  // Can be only update render layer, not fully upgrade app
+  NEEDED,
+  // App not support, should trigger app force update
+  APP_NOT_SUPPORT,
+  // Network error, can fetch manifest
+  NETWORK_ERROR,
+}
+export const canUpdateRender = async (): Promise<[CanUpdateRenderState, Manifest | null]> => {
   const manifest = await getLatestReleaseManifest()
 
   logger.info("fetched manifest", manifest)
 
-  if (!manifest) return false
+  if (!manifest) return [CanUpdateRenderState.NETWORK_ERROR, null]
 
   // const isAppShouldUpdate = shouldUpdateApp(appVersion, manifest.version)
   // if (isAppShouldUpdate) {
@@ -103,18 +113,18 @@ export const canUpdateRender = async () => {
     // checkForAppUpdates().then(() => {
     //   downloadAppUpdate()
     // })
-    return false
+    return [CanUpdateRenderState.APP_NOT_SUPPORT, null]
   }
 
   const isVersionEqual = appVersion === manifest.version
   if (isVersionEqual) {
     logger.info("version is equal, skip update")
-    return false
+    return [CanUpdateRenderState.NO_NEEDED, null]
   }
   const isCommitEqual = GIT_COMMIT_HASH === manifest.commit
   if (isCommitEqual) {
     logger.info("commit is equal, skip update")
-    return false
+    return [CanUpdateRenderState.NO_NEEDED, null]
   }
 
   const manifestFilePath = path.resolve(HOTUPDATE_RENDER_ENTRY_DIR, "manifest.yml")
@@ -127,14 +137,14 @@ export const canUpdateRender = async () => {
   if (oldManifest) {
     if (oldManifest.version === manifest.version) {
       logger.info("manifest version is equal, skip update")
-      return false
+      return [CanUpdateRenderState.NO_NEEDED, null]
     }
     if (oldManifest.commit === manifest.commit) {
       logger.info("manifest commit is equal, skip update")
-      return false
+      return [CanUpdateRenderState.NO_NEEDED, null]
     }
   }
-  return manifest
+  return [CanUpdateRenderState.NEEDED, manifest]
 }
 const downloadRenderAsset = async (manifest: Manifest) => {
   hotUpdateDownloadTrack(manifest.version)

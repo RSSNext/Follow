@@ -47,29 +47,26 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
         data-hide-in-print
       >
         <div className="pointer-events-none absolute inset-0 flex min-w-0 items-center">
-          <AnimatePresence>
-            {shouldShowMeta && (
-              <m.div
-                initial={{ opacity: 0.01, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0.01, y: 30 }}
-                className="pointer-events-auto flex w-full min-w-0 shrink gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground"
-              >
-                <div className="flex min-w-0 grow items-center">
-                  <div className="flex min-w-0 shrink items-end gap-1">
-                    <span className="min-w-0 shrink truncate font-bold">
-                      {entryTitleMeta.title}
-                    </span>
-                    <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
-                    <span className="shrink-0 truncate text-xs opacity-80">
-                      {entryTitleMeta.description}
-                    </span>
-                  </div>
+          {entryTitleMeta && (
+            <div
+              style={{
+                transform: shouldShowMeta ? "translateY(0)" : "translateY(30px)",
+                opacity: shouldShowMeta ? 1 : 0,
+              }}
+              className="pointer-events-auto flex w-full min-w-0 shrink gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground duration-200"
+            >
+              <div className="flex min-w-0 grow items-center">
+                <div className="flex min-w-0 shrink items-end gap-1">
+                  <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
+                  <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
+                  <span className="shrink-0 truncate text-xs opacity-80">
+                    {entryTitleMeta.description}
+                  </span>
                 </div>
-                <HeaderRightActions actions={actionConfigs} />
-              </m.div>
-            )}
-          </AnimatePresence>
+              </div>
+              <HeaderRightActions actions={actionConfigs} />
+            </div>
+          )}
         </div>
 
         <HeaderTopReturnBackButton className={"absolute left-0"} />
@@ -110,7 +107,7 @@ const HeaderRightActions = ({
   const [tocOpen, setTocOpen] = useState(false)
 
   const [markdownElement, setMarkdownElement] = useState<HTMLElement | null>(null)
-  const { toc, rootDepth } = useTocItems(markdownElement)
+  const { toc } = useTocItems(markdownElement)
 
   const getSetMarkdownElement = useEventCallback(() => {
     setMarkdownElement(
@@ -122,57 +119,11 @@ const HeaderRightActions = ({
     return () => clearTimeout(timeout)
   }, [getSetMarkdownElement])
 
-  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc, {})
-
   return (
     <div className={clsx(className, "flex items-center gap-2 text-zinc-500")}>
       <RootPortal>
         <AnimatePresence>
-          {tocOpen && (
-            <RemoveScroll>
-              <DismissableLayer onDismiss={() => setTocOpen(false)}>
-                <m.div
-                  initial={{ y: "-100%" }}
-                  animate={{ y: 0 }}
-                  exit={{ y: "-100%" }}
-                  transition={{
-                    type: "spring",
-                    damping: 20,
-                    stiffness: 150,
-                    mass: 0.8,
-                  }}
-                  className="fixed left-1/3 right-0 top-0 z-[1] mt-14 max-w-full rounded-bl-md border border-t-0 bg-background px-3 py-1.5 shadow-sm"
-                >
-                  <ul className="text-sm">
-                    {toc.map((heading, index) => (
-                      <li
-                        key={heading.anchorId}
-                        className={cn(
-                          "flex w-full items-center",
-                          currentScrollRange[0] === index && "text-accent",
-                        )}
-                        style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
-                      >
-                        <button
-                          className={cn("group flex w-full cursor-pointer justify-between py-1.5")}
-                          type="button"
-                          onClick={() => {
-                            handleScrollTo(index, heading.$heading, heading.anchorId)
-                          }}
-                        >
-                          <span className="text-left duration-200 group-hover:text-accent/80">
-                            {heading.title}
-                          </span>
-
-                          <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </m.div>
-              </DismissableLayer>
-            </RemoveScroll>
-          )}
+          {tocOpen && <TocPanel markdownElement={markdownElement} setTocOpen={setTocOpen} />}
         </AnimatePresence>
       </RootPortal>
 
@@ -260,5 +211,63 @@ const TableOfContentsIcon = ({ className = "size-6" }) => {
       <line x1="7" y1="12" x2="8" y2="12" strokeWidth="2.5" />
       <line x1="7" y1="18" x2="8" y2="18" strokeWidth="2.5" />
     </svg>
+  )
+}
+
+const TocPanel = ({
+  markdownElement,
+
+  setTocOpen,
+}: {
+  markdownElement: HTMLElement | null
+
+  setTocOpen: (v: boolean) => void
+}) => {
+  const { toc, rootDepth } = useTocItems(markdownElement)
+  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc, {})
+  return (
+    <RemoveScroll>
+      <DismissableLayer onDismiss={() => setTocOpen(false)}>
+        <m.div
+          initial={{ y: "-100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "-100%" }}
+          transition={{
+            type: "spring",
+            damping: 20,
+            stiffness: 150,
+            mass: 0.8,
+          }}
+          className="fixed left-1/3 right-0 top-0 z-[1] mt-14 max-h-[60svh] max-w-full overflow-auto rounded-bl-md border border-t-0 bg-background px-3 py-1.5 shadow-sm"
+        >
+          <ul className="text-sm">
+            {toc.map((heading, index) => (
+              <li
+                key={heading.anchorId}
+                className={cn(
+                  "flex w-full items-center",
+                  currentScrollRange[0] === index && "text-accent",
+                )}
+                style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
+              >
+                <button
+                  className={cn("group flex w-full cursor-pointer justify-between py-1.5")}
+                  type="button"
+                  onClick={() => {
+                    handleScrollTo(index, heading.$heading, heading.anchorId)
+                  }}
+                >
+                  <span className="text-left duration-200 group-hover:text-accent/80">
+                    {heading.title}
+                  </span>
+
+                  <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </m.div>
+      </DismissableLayer>
+    </RemoveScroll>
   )
 }
