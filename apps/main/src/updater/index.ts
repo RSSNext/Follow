@@ -40,9 +40,9 @@ export const checkForAppUpdates = async () => {
 
   checkingUpdate = true
   try {
-    const hotUpdate = await canUpdateRender()
-    if (hotUpdate) {
-      await hotUpdateRender()
+    const manifest = await canUpdateRender()
+    if (manifest) {
+      await hotUpdateRender(manifest)
       return
     }
     return autoUpdater.checkForUpdates()
@@ -106,9 +106,9 @@ export const registerUpdater = async () => {
     // Determine whether the app should be updated in full or only the renderer layer based on the version number.
     // https://www.notion.so/rss3/Follow-Hotfix-Electron-Renderer-layer-RFC-fe2444b9ac194c2cb38f9fa0bb1ef3c1?pvs=4#12e35ea049b480f1b268f1e605d86a62
     if (appUpdaterConfig.enableRenderHotUpdate) {
-      const hotUpdate = await canUpdateRender()
-      if (hotUpdate) {
-        await hotUpdateRender()
+      const manifest = await canUpdateRender()
+      if (manifest) {
+        await hotUpdateRender(manifest)
         return
       }
     }

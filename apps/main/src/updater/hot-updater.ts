@@ -158,9 +158,9 @@ const downloadRenderAsset = async (manifest: Manifest) => {
   }
   return filePath
 }
-export const hotUpdateRender = async () => {
+export const hotUpdateRender = async (manifest: Manifest) => {
   if (!appUpdaterConfig.enableRenderHotUpdate) return false
-  const manifest = await canUpdateRender()
+
   if (!manifest) return false
 
   const filePath = await downloadRenderAsset(manifest)
