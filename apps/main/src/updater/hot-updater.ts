@@ -9,13 +9,13 @@ import path from "node:path"
 
 import { callWindowExpose } from "@follow/shared/bridge"
 import { version as appVersion } from "@pkg"
+import log from "electron-log"
 import { memoize } from "es-toolkit/compat"
 import { load } from "js-yaml"
 import { gte } from "semver"
 import { x } from "tar"
 
 import { GITHUB_OWNER, GITHUB_REPO, HOTUPDATE_RENDER_ENTRY_DIR } from "~/constants/app"
-import { logger } from "~/logger"
 import {
   hotUpdateAppNotSupportTriggerTrack,
   hotUpdateDownloadTrack,
@@ -27,6 +27,8 @@ import { checkForAppUpdates, downloadAppUpdate } from "."
 import { appUpdaterConfig } from "./configs"
 import type { GitHubReleasesItem } from "./types"
 import { shouldUpdateApp } from "./utils"
+
+const logger = log.scope("hot-updater")
 
 const isNightlyBuild = appVersion.includes("nightly")
 
@@ -68,9 +70,15 @@ type Manifest = {
 }
 const getLatestReleaseManifest = memoize(async () => {
   const url = await getFileDownloadUrl("manifest.yml")
+  logger.info(`Fetching manifest from ${url}`)
   const res = await fetch(url)
   const text = await res.text()
-  return load(text) as Manifest
+  const manifest = load(text) as Manifest
+  if (typeof manifest !== "object") {
+    logger.error("Invalid manifest", text)
+    return null
+  }
+  return manifest
 })
 const downloadTempDir = path.resolve(os.tmpdir(), "follow-render-update")
 
@@ -163,7 +171,6 @@ export const hotUpdateRender = async () => {
   await mkdir(HOTUPDATE_RENDER_ENTRY_DIR, { recursive: true })
   await x({
     f: filePath,
-    gzip: true,
     cwd: HOTUPDATE_RENDER_ENTRY_DIR,
   })
   const manifest = await getLatestReleaseManifest()
