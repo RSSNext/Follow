@@ -4,6 +4,7 @@ import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { imageRefererMatches, selfRefererMatches } from "@follow/shared/image"
 import { app, BrowserWindow, session } from "electron"
+import type { Cookie } from "electron/main"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { DEVICE_ID } from "./constants/system"
@@ -14,7 +15,6 @@ import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
 import { registerAppTray } from "./lib/tray"
 import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
-import { logger } from "./logger"
 import { registerUpdater } from "./updater"
 import { cleanupOldRender } from "./updater/hot-updater"
 import {
@@ -72,13 +72,25 @@ function bootstrap() {
     electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`)
 
     // restore cookies
-    const cookies = store.get("cookies")
+    const cookies = store.get("cookies") as Cookie[]
     if (cookies) {
-      logger.info("[main] restore cookies", cookies)
-      for (const cookie of cookies) {
-        logger.info("[main] restore cookie", cookie)
-        await session.defaultSession.cookies.set(cookie)
-      }
+      await Promise.all(
+        cookies.map((cookie) => {
+          const setCookieDetails: Electron.CookiesSetDetails = {
+            url: `https://${cookie.domain}`,
+            name: cookie.name,
+            value: cookie.value,
+            domain: cookie.domain,
+            path: cookie.path,
+            secure: cookie.secure,
+            httpOnly: cookie.httpOnly,
+            expirationDate: cookie.expirationDate,
+            sameSite: cookie.sameSite as "unspecified" | "no_restriction" | "lax" | "strict",
+          }
+
+          return session.defaultSession.cookies.set(setCookieDetails)
+        }),
+      )
     }
 
     mainWindow = createMainWindow()
