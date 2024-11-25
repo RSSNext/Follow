@@ -17,7 +17,7 @@
   },
   "main": "./src/index.ts",
   "scripts": {
-    "build": "tsup --dts-only",
+    "build": "tsc",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
