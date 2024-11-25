@@ -10,7 +10,6 @@ import path from "node:path"
 import { callWindowExpose } from "@follow/shared/bridge"
 import { mainHash, version as appVersion } from "@pkg"
 import log from "electron-log"
-import { memoize } from "es-toolkit/compat"
 import { load } from "js-yaml"
 import { x } from "tar"
 
@@ -29,7 +28,7 @@ const url = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}`
 const releasesUrl = `${url}/releases`
 const releaseApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases`
 
-const getLatestReleaseTag = memoize(async () => {
+const getLatestReleaseTag = async () => {
   if (!isNightlyBuild) {
     const res = await fetch(`${releaseApiUrl}/latest`)
     const json = await res.json()
@@ -44,7 +43,7 @@ const getLatestReleaseTag = memoize(async () => {
     if (!nightlyRelease) return json[0].tag_name
     return nightlyRelease.tag_name
   }
-})
+}
 
 const getFileDownloadUrl = async (filename: string) => {
   const tag = await getLatestReleaseTag()
@@ -61,7 +60,7 @@ type Manifest = {
   /** Only electron main hash equal to this value, renderer will can be updated */
   mainHash: string
 }
-const getLatestReleaseManifest = memoize(async () => {
+const getLatestReleaseManifest = async () => {
   const url = await getFileDownloadUrl("manifest.yml")
   logger.info(`Fetching manifest from ${url}`)
   const res = await fetch(url)
@@ -72,7 +71,7 @@ const getLatestReleaseManifest = memoize(async () => {
     return null
   }
   return manifest
-})
+}
 const downloadTempDir = path.resolve(os.tmpdir(), "follow-render-update")
 
 export const canUpdateRender = async () => {
@@ -135,14 +134,9 @@ export const canUpdateRender = async () => {
       return false
     }
   }
-  return true
+  return manifest
 }
-const downloadRenderAsset = async () => {
-  const manifest = await getLatestReleaseManifest()
-  if (!manifest) {
-    logger.error("Failed to get latest release manifest")
-    return false
-  }
+const downloadRenderAsset = async (manifest: Manifest) => {
   hotUpdateDownloadTrack(manifest.version)
   const { filename } = manifest
   const url = await getFileDownloadUrl(filename)
@@ -166,9 +160,10 @@ const downloadRenderAsset = async () => {
 }
 export const hotUpdateRender = async () => {
   if (!appUpdaterConfig.enableRenderHotUpdate) return false
-  if (!(await canUpdateRender())) return false
+  const manifest = await canUpdateRender()
+  if (!manifest) return false
 
-  const filePath = await downloadRenderAsset()
+  const filePath = await downloadRenderAsset(manifest)
   if (!filePath) return false
 
   // Extract the tar.gz file
@@ -177,8 +172,6 @@ export const hotUpdateRender = async () => {
     f: filePath,
     cwd: HOTUPDATE_RENDER_ENTRY_DIR,
   })
-  const manifest = await getLatestReleaseManifest()
-  if (!manifest) return false
 
   // Rename `renderer` folder to `manifest.version`
   await rename(
