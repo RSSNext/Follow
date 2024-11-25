@@ -87,10 +87,11 @@ const canUpdateRender = async () => {
   logger.info("fetched manifest", manifest)
 
   if (!manifest) return false
-  if (!shouldUpdateApp(appVersion, manifest.version)) return false
+  if (shouldUpdateApp(appVersion, manifest.version)) return false
 
   const appSupport = mainHash === manifest.mainHash
   if (!appSupport) {
+    logger.info("app not support, trigger app force update, app version: ", appVersion)
     hotUpdateAppNotSupportTriggerTrack({
       appVersion,
       manifestVersion: manifest.version,
