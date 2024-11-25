@@ -18,7 +18,8 @@ export const initSentry = async () => {
     ...SentryConfig,
   })
 
-  Sentry.setTag("appVersion", APP_VERSION)
+  Sentry.setTag("app_version", APP_VERSION)
+  Sentry.setTag("build", "external-pages")
 }
 
 const ERROR_PATTERNS = [

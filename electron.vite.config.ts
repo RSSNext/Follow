@@ -5,6 +5,7 @@ import { defineConfig } from "electron-vite"
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import { cleanupUnnecessaryFilesPlugin } from "./plugins/vite/cleanup"
 import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
+import { getGitHash } from "./scripts/lib"
 
 export default defineConfig({
   main: {
@@ -24,6 +25,7 @@ export default defineConfig({
     },
     define: {
       ELECTRON: "true",
+      GIT_COMMIT_HASH: JSON.stringify(getGitHash()),
     },
   },
   preload: {
@@ -43,6 +45,19 @@ export default defineConfig({
   renderer: {
     ...viteRenderBaseConfig,
 
+    root: "apps/renderer",
+    build: {
+      outDir: "dist/renderer",
+      sourcemap: !!process.env.CI,
+      target: "esnext",
+      rollupOptions: {
+        input: {
+          main: resolve("./apps/renderer/index.html"),
+        },
+      },
+      minify: true,
+    },
+
     plugins: [
       ...viteRenderBaseConfig.plugins,
       createPlatformSpecificImportPlugin(true),
@@ -61,18 +76,6 @@ export default defineConfig({
       ]),
     ],
 
-    root: "apps/renderer",
-    build: {
-      outDir: "dist/renderer",
-      sourcemap: !!process.env.CI,
-      target: "esnext",
-      rollupOptions: {
-        input: {
-          main: resolve("./apps/renderer/index.html"),
-        },
-      },
-      minify: true,
-    },
     define: {
       ...viteRenderBaseConfig.define,
       ELECTRON: "true",

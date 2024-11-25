@@ -45,6 +45,8 @@ interface RenderGlobalContext {
 
   /// Utils
   toast: typeof toast
+
+  readyToUpdate: () => void
   dialog: typeof dialog
   // URL
   getWebUrl: () => string

@@ -72,25 +72,20 @@ jobs:
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
           # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-
           # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
           # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
-
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
       - name: Install dependencies
         run: pnpm i
 
@@ -115,6 +110,9 @@ jobs:
           fi
           echo "Updated version to $NIGHTLY_VERSION"
 
+      - name: Update main hash
+        run: pnpm update:main-hash
+
       - name: Build
         if: matrix.os != 'macos-latest'
         run: pnpm build
@@ -130,6 +128,10 @@ jobs:
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: pnpm build:macos
 
+      - name: Build (Render)
+        run: pnpm build:render
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -140,6 +142,9 @@ jobs:
             out/make/**/*.AppImage
             out/make/**/*.yml
             out/make/**/*.dmg
+            dist/manifest.yml
+            dist/*.tar.gz
+
           retention-days: 7
 
       - name: Generate artifact attestation
@@ -152,6 +157,8 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz
 
       - name: Create Nightly Release
         uses: softprops/action-gh-release@v2
@@ -159,16 +166,19 @@ jobs:
           name: Nightly ${{ env.NIGHTLY_VERSION }}
           draft: false
           prerelease: true
-          tag_name: nightly-${{ env.NIGHTLY_VERSION }}
+          tag_name: ${{ env.NIGHTLY_VERSION }}
           files: |
             out/make/**/*.dmg
             out/make/**/*.zip
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz
+
           body: |
             This is an automated nightly release for testing purposes.
-            Version: 0.0.0-nightly.${{ env.NIGHTLY_VERSION }}
+            Version: ${{ env.NIGHTLY_VERSION }}
 
             **Warning:** This build may be unstable and is not recommended for production use.
         env:
