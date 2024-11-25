@@ -19,8 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { produce } from "immer"
 import { atom, useAtomValue, useStore } from "jotai"
-import type { ClipboardEvent, FC } from "react"
-import { memo, useCallback, useEffect, useState } from "react"
+import type { ChangeEvent, FC } from "react"
+import { memo, useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
@@ -119,35 +119,9 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
     }
   }
 
-  const keyword = form.watch("keyword")
-  useEffect(() => {
-    const trimmedKeyword = keyword.trimStart()
-    if (!prefix) {
-      form.setValue("keyword", trimmedKeyword)
-      return
-    }
-    const isValidPrefix = prefix.find((p) => trimmedKeyword.startsWith(p))
-    if (!isValidPrefix) {
-      form.setValue("keyword", prefix[0])
-
-      return
-    }
-
-    if (trimmedKeyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
-      form.setValue("keyword", trimmedKeyword.slice(isValidPrefix.length))
-    }
-
-    form.setValue("keyword", trimmedKeyword)
-  }, [form, keyword, prefix])
-
-  const handlePasteKeyword = useCallback(
-    (event: ClipboardEvent<HTMLInputElement>) => {
-      event.preventDefault()
-
-      const clipboardData = event.clipboardData || window.Clipboard
-      const keywordInClipboard = clipboardData.getData("text")
-
-      const trimmedKeyword = keywordInClipboard.trimStart()
+  const handleKeywordChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const trimmedKeyword = event.target.value.trimStart()
       if (!prefix) {
         form.setValue("keyword", trimmedKeyword)
         return
@@ -155,14 +129,12 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       const isValidPrefix = prefix.find((p) => trimmedKeyword.startsWith(p))
       if (!isValidPrefix) {
         form.setValue("keyword", prefix[0])
-
         return
       }
-
       if (trimmedKeyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
         form.setValue("keyword", trimmedKeyword.slice(isValidPrefix.length))
+        return
       }
-
       form.setValue("keyword", trimmedKeyword)
     },
     [form, prefix],
@@ -238,7 +210,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
               <FormItem>
                 <FormLabel>{t(info[type]?.label)}</FormLabel>
                 <FormControl>
-                  <Input autoFocus {...field} onPaste={handlePasteKeyword} />
+                  <Input autoFocus {...field} onChange={handleKeywordChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
