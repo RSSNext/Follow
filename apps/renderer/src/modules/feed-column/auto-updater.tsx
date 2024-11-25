@@ -59,7 +59,7 @@ export const AutoUpdater = () => {
 
   const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, hsl(var(--fo-a)) 0%, transparent 65%)`
 
-  if (!updaterStatus) return null
+  if (!updaterStatus) return <div className="fixed left-0 top-8 size-10 bg-white" />
 
   return (
     <m.div
