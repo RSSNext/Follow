@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
@@ -11,9 +11,7 @@ import { EntryColumn } from "~/modules/entry-column"
 import { MobileFloatBar } from "../feed-column/float-bar.mobile"
 
 export const EntryColumnMobile = () => {
-  const { isPlaying } = useAudioPlayerAtomSelector(
-    useCallback((state) => ({ isPlaying: state.status === "playing" }), []),
-  )
+  const isShowingPlayer = useAudioPlayerAtomSelector((v) => v.show)
 
   const isStartupTimeline = useGeneralSettingKey("startupScreen") === "timeline"
 
@@ -33,7 +31,7 @@ export const EntryColumnMobile = () => {
 
       {isStartupTimeline && (
         <MobileFloatBar
-          className={isPlaying ? "!bottom-safe-offset-28" : "!bottom-safe-offset-10"}
+          className={isShowingPlayer ? "!bottom-safe-offset-28" : "!bottom-safe-offset-10"}
           scrollContainer={scrollContainer}
           onLogoClick={() => {
             ;(document.querySelector(`#${LOGO_MOBILE_ID}`) as HTMLElement)?.click()
