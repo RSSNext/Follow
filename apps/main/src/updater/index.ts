@@ -40,10 +40,12 @@ export const checkForAppUpdates = async () => {
 
   checkingUpdate = true
   try {
-    const manifest = await canUpdateRender()
-    if (manifest) {
-      await hotUpdateRender(manifest)
-      return
+    if (appUpdaterConfig.enableRenderHotUpdate) {
+      const manifest = await canUpdateRender()
+      if (manifest) {
+        await hotUpdateRender(manifest)
+        return
+      }
     }
     return autoUpdater.checkForUpdates()
   } catch (e) {

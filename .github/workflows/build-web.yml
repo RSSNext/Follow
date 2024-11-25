@@ -1,7 +1,7 @@
 on:
   pull_request:
   push:
-    branches: [innei-dev]
+    branches: [main, dev]
 
 name: CI Build web and SSR server
 concurrency:
