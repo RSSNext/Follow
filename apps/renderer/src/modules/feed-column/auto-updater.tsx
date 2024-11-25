@@ -24,7 +24,6 @@ export const AutoUpdater = () => {
   }, [])
 
   const handleClick = useCallback(() => {
-    setUpdaterStatus(null)
     const status = getUpdaterStatus()
     if (!status) return
     window.analytics?.capture("update_restart", {
@@ -40,6 +39,7 @@ export const AutoUpdater = () => {
         break
       }
     }
+    setUpdaterStatus(null)
   }, [])
 
   const playerIsShow = useAudioPlayerAtomSelector((s) => s.show)
@@ -59,7 +59,7 @@ export const AutoUpdater = () => {
 
   const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, hsl(var(--fo-a)) 0%, transparent 65%)`
 
-  if (!updaterStatus) return <div className="fixed left-0 top-8 size-10 bg-white" />
+  if (!updaterStatus) return null
 
   return (
     <m.div
