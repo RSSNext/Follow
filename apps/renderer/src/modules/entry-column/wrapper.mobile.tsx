@@ -29,7 +29,7 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
           </PullToRefresh>
         </div>
 
-        <CornerPlayer className="w-full md:w-[350px]" />
+        <CornerPlayer className="w-full !mb-safe md:w-[350px]" />
       </div>
     )
   },
