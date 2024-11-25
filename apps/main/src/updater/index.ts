@@ -2,7 +2,7 @@ import { getRendererHandlers } from "@egoist/tipc/main"
 import { autoUpdater as defaultAutoUpdater } from "electron-updater"
 
 import { GITHUB_OWNER, GITHUB_REPO } from "~/constants/app"
-import { canUpdateRender, hotUpdateRender } from "~/updater/hot-updater"
+import { canUpdateRender, CanUpdateRenderState, hotUpdateRender } from "~/updater/hot-updater"
 
 import { channel, isDev, isWindows } from "../env"
 import { logger } from "../logger"
@@ -33,6 +33,17 @@ export const quitAndInstall = () => {
 let downloading = false
 let checkingUpdate = false
 
+const upgradeRenderIfNeeded = async () => {
+  const [state, manifest] = await canUpdateRender()
+  if (state === CanUpdateRenderState.NO_NEEDED) {
+    return true
+  }
+  if (state === CanUpdateRenderState.NEEDED && manifest) {
+    await hotUpdateRender(manifest)
+    return true
+  }
+  return false
+}
 export const checkForAppUpdates = async () => {
   if (disabled || checkingUpdate) {
     return
@@ -41,9 +52,8 @@ export const checkForAppUpdates = async () => {
   checkingUpdate = true
   try {
     if (appUpdaterConfig.enableRenderHotUpdate) {
-      const manifest = await canUpdateRender()
-      if (manifest) {
-        await hotUpdateRender(manifest)
+      const isRenderUpgraded = await upgradeRenderIfNeeded()
+      if (isRenderUpgraded) {
         return
       }
     }
@@ -108,9 +118,8 @@ export const registerUpdater = async () => {
     // Determine whether the app should be updated in full or only the renderer layer based on the version number.
     // https://www.notion.so/rss3/Follow-Hotfix-Electron-Renderer-layer-RFC-fe2444b9ac194c2cb38f9fa0bb1ef3c1?pvs=4#12e35ea049b480f1b268f1e605d86a62
     if (appUpdaterConfig.enableRenderHotUpdate) {
-      const manifest = await canUpdateRender()
-      if (manifest) {
-        await hotUpdateRender(manifest)
+      const isRenderUpgraded = await upgradeRenderIfNeeded()
+      if (isRenderUpgraded) {
         return
       }
     }
