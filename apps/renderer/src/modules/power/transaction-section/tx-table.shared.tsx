@@ -1,13 +1,12 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
-import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
-import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Balance } from "~/modules/wallet/balance"
 import type { useWalletTransactions } from "~/queries/wallet"
 
@@ -79,12 +78,7 @@ export const UserRenderer = ({
       {name === APP_NAME ? (
         <Logo className={cn("aspect-square size-4", iconClassName)} />
       ) : (
-        <Avatar
-          className={cn("aspect-square size-4 duration-200 animate-in fade-in-0", iconClassName)}
-        >
-          <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
-          <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
-        </Avatar>
+        <UserAvatar userId={user?.id} hideName className="h-auto p-0" avatarClassName="size-4" />
       )}
 
       {!hideName && (
