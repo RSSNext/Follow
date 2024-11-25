@@ -97,7 +97,7 @@ jobs:
           # Remove any existing prerelease identifier (e.g., -alpha.1)
           BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[a-zA-Z]+\.[0-9]+)$//')
           # Generate the nightly version
-          NIGHTLY_DATE=$(date +%s)
+          NIGHTLY_DATE=$(date +'%Y%m%d')
           NIGHTLY_VERSION="${BASE_VERSION}-nightly.${NIGHTLY_DATE}"
           echo "NIGHTLY_VERSION=$NIGHTLY_VERSION" >> $GITHUB_ENV
           # Update version in package.json
