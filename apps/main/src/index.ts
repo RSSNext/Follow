@@ -77,7 +77,7 @@ function bootstrap() {
       await Promise.all(
         cookies.map((cookie) => {
           const setCookieDetails: Electron.CookiesSetDetails = {
-            url: `https://${cookie.domain}`,
+            url: `https://${cookie.domain?.startsWith(".") ? cookie.domain.slice(1) : cookie.domain}`,
             name: cookie.name,
             value: cookie.value,
             domain: cookie.domain,
