@@ -101,6 +101,10 @@ jobs:
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: pnpm build:macos
 
+      - name: Build (Render)
+        run: pnpm build:render
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -111,6 +115,9 @@ jobs:
             out/make/**/*.AppImage
             out/make/**/*.yml
             out/make/**/*.dmg
+            dist/manifest.yml
+            dist/*.tar.gz
+
           retention-days: 7
 
       - name: Generate artifact attestation
@@ -123,6 +130,8 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz
 
       - name: Create Nightly Release
         uses: softprops/action-gh-release@v2
@@ -137,6 +146,9 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz
+
           body: |
             This is an automated nightly release for testing purposes.
             Version: 0.0.0-nightly.${{ env.NIGHTLY_VERSION }}
