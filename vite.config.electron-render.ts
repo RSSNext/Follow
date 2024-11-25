@@ -8,8 +8,5 @@ import compressAndFingerprintPlugin from "./plugins/vite/compress"
 export default defineConfig({
   ...config,
   base: "./",
-  plugins: [
-    ...config.plugins,
-    compressAndFingerprintPlugin(resolve(import.meta.dirname, "dist"), {}),
-  ],
+  plugins: [...config.plugins, compressAndFingerprintPlugin(resolve(import.meta.dirname, "dist"))],
 })

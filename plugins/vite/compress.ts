@@ -3,7 +3,6 @@ import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 
-import { dump } from "js-yaml"
 import * as tar from "tar"
 import type { Plugin } from "vite"
 
@@ -20,10 +19,7 @@ async function compressDirectory(sourceDir: string, outputFile: string) {
   )
 }
 
-function compressAndFingerprintPlugin(
-  outDir: string,
-  customProperties: Record<string, string>,
-): Plugin {
+function compressAndFingerprintPlugin(outDir: string): Plugin {
   return {
     name: "compress-and-fingerprint",
     apply: "build",
@@ -60,7 +56,6 @@ hash: ${hex}
 mainHash: ${mainHash}
 commit: ${execSync("git rev-parse HEAD").toString().trim()}
 filename: ${path.basename(outputFile)}
-${dump(customProperties)}
 `
       console.info("Writing manifest file", manifestContent)
       await fs.writeFile(manifestFile, manifestContent.trim())
