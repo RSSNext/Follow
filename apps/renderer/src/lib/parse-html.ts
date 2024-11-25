@@ -60,6 +60,29 @@ function rehypeTrimEndBrElement() {
   return trim
 }
 
+/**
+ * rehype plugin to optionally unwrap <a> tags when their href matches the <img> src inside.
+ */
+function rehypeUnwrapImageLinks() {
+  return (tree) => {
+    visit(tree, "element", (node, index, parent) => {
+      if (node.tagName === "a" && node.children && node.children.length === 1) {
+        const child = node.children[0]
+        // Check if the child is an <img> element
+        if (
+          child.tagName === "img" &&
+          node.properties?.href &&
+          child.properties?.src &&
+          node.properties.href === child.properties.src
+        ) {
+          // Replace <a> with its <img> child
+          parent.children.splice(index, 1, child)
+        }
+      }
+    })
+  }
+}
+
 export const parseHtml = (
   content: string,
   options?: Partial<{
@@ -93,6 +116,7 @@ export const parseHtml = (
     .use(rehypeSanitize, rehypeSchema)
     .use(rehypeTrimEndBrElement)
     .use(rehypeInferDescriptionMeta)
+    .use(rehypeUnwrapImageLinks)
     .use(rehypeStringify)
 
   const tree = pipeline.parse(content)
