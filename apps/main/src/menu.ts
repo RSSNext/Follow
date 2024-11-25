@@ -168,6 +168,17 @@ export const registerAppMenu = () => {
           role: "front",
           label: t("menu.front"),
         },
+        {
+          label: "Always on top",
+          type: "checkbox",
+          checked: getMainWindow()?.isAlwaysOnTop(),
+          click: () => {
+            const mainWindow = getMainWindow()
+            if (!mainWindow) return
+            mainWindow.setAlwaysOnTop(!mainWindow.isAlwaysOnTop())
+            registerAppMenu()
+          },
+        },
       ],
     },
     {
