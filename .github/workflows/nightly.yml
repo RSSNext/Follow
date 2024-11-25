@@ -73,7 +73,7 @@ jobs:
           # Remove any existing prerelease identifier (e.g., -alpha.1)
           BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[a-zA-Z]+\.[0-9]+)$//')
           # Generate the nightly version
-          NIGHTLY_DATE=$(date +'%s')
+          NIGHTLY_DATE=$(date +%s)
           NIGHTLY_VERSION="${BASE_VERSION}-nightly.${NIGHTLY_DATE}"
           echo "NIGHTLY_VERSION=$NIGHTLY_VERSION" >> $GITHUB_ENV
           # Update version in package.json
@@ -142,7 +142,7 @@ jobs:
           name: Nightly ${{ env.NIGHTLY_VERSION }}
           draft: false
           prerelease: true
-          tag_name: nightly-${{ env.NIGHTLY_VERSION }}
+          tag_name: ${{ env.NIGHTLY_VERSION }}
           files: |
             out/make/**/*.dmg
             out/make/**/*.zip
@@ -154,7 +154,7 @@ jobs:
 
           body: |
             This is an automated nightly release for testing purposes.
-            Version: 0.0.0-nightly.${{ env.NIGHTLY_VERSION }}
+            Version: ${{ env.NIGHTLY_VERSION }}
 
             **Warning:** This build may be unstable and is not recommended for production use.
         env:
