@@ -26,6 +26,8 @@ import {
 
 if (isDev) console.info("[main] env loaded:", env)
 
+const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
+
 console.info("[main] device id:", DEVICE_ID)
 if (squirrelStartup) {
   app.quit()
@@ -71,13 +73,15 @@ function bootstrap() {
     // Set app user model id for windows
     electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`)
 
+    mainWindow = createMainWindow()
+
     // restore cookies
     const cookies = store.get("cookies") as Cookie[]
     if (cookies) {
-      await Promise.all(
+      Promise.all(
         cookies.map((cookie) => {
           const setCookieDetails: Electron.CookiesSetDetails = {
-            url: `https://${cookie.domain?.startsWith(".") ? cookie.domain.slice(1) : cookie.domain}`,
+            url: apiURL,
             name: cookie.name,
             value: cookie.value,
             domain: cookie.domain,
@@ -88,12 +92,10 @@ function bootstrap() {
             sameSite: cookie.sameSite as "unspecified" | "no_restriction" | "lax" | "strict",
           }
 
-          return session.defaultSession.cookies.set(setCookieDetails)
+          return mainWindow.webContents.session.cookies.set(setCookieDetails)
         }),
       )
     }
-
-    mainWindow = createMainWindow()
 
     updateProxy()
     registerUpdater()
@@ -190,7 +192,6 @@ function bootstrap() {
       const token = urlObj.searchParams.get("token")
       const userId = urlObj.searchParams.get("userId")
 
-      const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
       if (token && apiURL) {
         setAuthSessionToken(token)
         mainWindow.webContents.session.cookies.set({
