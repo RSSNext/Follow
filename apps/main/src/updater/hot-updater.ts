@@ -87,7 +87,17 @@ const canUpdateRender = async () => {
   logger.info("fetched manifest", manifest)
 
   if (!manifest) return false
-  if (shouldUpdateApp(appVersion, manifest.version)) return false
+
+  const isAppShouldUpdate = shouldUpdateApp(appVersion, manifest.version)
+  if (isAppShouldUpdate) {
+    logger.info(
+      "app should update, skip render update, app version: ",
+      appVersion,
+      ", the manifest version: ",
+      manifest.version,
+    )
+    return false
+  }
 
   const appSupport = mainHash === manifest.mainHash
   if (!appSupport) {
