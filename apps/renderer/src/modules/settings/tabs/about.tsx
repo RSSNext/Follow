@@ -30,7 +30,7 @@ export const SettingAbout = () => {
             <div className="text-lg font-bold">
               {APP_NAME} {!import.meta.env.PROD ? `(${import.meta.env.MODE})` : ""}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="rounded bg-muted px-2 py-1 text-xs">app: {APP_VERSION}</span>
               {renderVersion && (
                 <span className="rounded bg-muted px-2 py-1 text-xs">
