@@ -1,4 +1,4 @@
-import { isMobile } from "@follow/components/hooks/useMobile.js"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn, isSafari } from "@follow/utils/utils"
 
@@ -75,7 +75,7 @@ export function ListItem({
       {!withAudio && <FeedIcon feed={related} fallback entry={entry.entries} />}
       <div
         className={cn(
-          "-mt-0.5 flex-1 text-sm leading-tight",
+          "-mt-0.5 w-[calc(100%-88px)] flex-1 text-sm leading-tight",
 
           // FIXME: Safari bug, not support line-clamp cross elements
           !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
@@ -201,6 +201,7 @@ function AudioCover({
   durationInSeconds?: number
   feedIcon: React.ReactNode
 }) {
+  const isMobile = useMobile()
   const playStatus = useAudioPlayerAtomSelector((playerValue) =>
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
@@ -208,7 +209,7 @@ function AudioCover({
   const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
 
   const handleClickPlay = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile()) e.stopPropagation()
+    if (isMobile) e.stopPropagation()
     if (!playStatus) {
       // switch this to play
       AudioPlayer.mount({
@@ -230,7 +231,7 @@ function AudioCover({
       <div
         className={cn(
           "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:-translate-y-2 group-hover:opacity-100",
-          playStatus ? "opacity-100" : "opacity-0",
+          isMobile || playStatus ? "opacity-100" : "opacity-0",
         )}
         onClick={handleClickPlay}
       >
