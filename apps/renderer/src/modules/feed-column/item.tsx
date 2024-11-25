@@ -151,7 +151,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         style={isInMultipleSelection ? draggableContext?.style : undefined}
         data-feed-id={feedId}
         data-active={
-          isMultiSelectingButNotSelected
+          !isMobile && isMultiSelectingButNotSelected
             ? false
             : isActive || isContextMenuOpen || isInMultipleSelection
         }
