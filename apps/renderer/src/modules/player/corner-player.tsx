@@ -269,6 +269,7 @@ const CornerPlayerImpl = () => {
 
 const ONE_HOUR_IN_SECONDS = 60 * 60
 const PlayerProgress = () => {
+  const isMobile = useMobile()
   const playerValue = useAudioPlayerAtomValue()
 
   const { currentTime = 0, duration = 0 } = playerValue
@@ -299,7 +300,12 @@ const PlayerProgress = () => {
 
   return (
     <div className="relative mt-2">
-      <div className="absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100">
+      <div
+        className={cn(
+          "absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100",
+          isMobile && "opacity-100",
+        )}
+      >
         <div className="text-xs">{currentTimeIndicator}</div>
         {!!remainingTimeIndicator && <div className="text-xs">-{remainingTimeIndicator}</div>}
       </div>
