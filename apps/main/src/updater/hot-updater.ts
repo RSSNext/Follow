@@ -9,8 +9,8 @@ import path from "node:path"
 
 import { callWindowExpose } from "@follow/shared/bridge"
 import { version as appVersion } from "@pkg"
+import { memoize } from "es-toolkit/compat"
 import { load } from "js-yaml"
-import { memoize } from "lodash-es"
 import { gte } from "semver"
 import { x } from "tar"
 

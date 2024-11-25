@@ -51,7 +51,6 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
-    "@types/lodash-es": "4.17.12",
     "@types/node": "^22.9.3",
     "electron": "33.2.0",
     "electron-devtools-installer": "3.2.0",

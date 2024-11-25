@@ -360,9 +360,6 @@ importers:
       '@types/js-yaml':
         specifier: 4.0.9
         version: 4.0.9
-      '@types/lodash-es':
-        specifier: 4.17.12
-        version: 4.17.12
       '@types/node':
         specifier: ^22.9.3
         version: 22.9.3
@@ -4513,12 +4510,6 @@ packages:
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
-
-  '@types/lodash-es@4.17.12':
-    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
-
-  '@types/lodash@4.17.13':
-    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
@@ -15896,12 +15887,6 @@ snapshots:
   '@types/keyv@3.1.4':
     dependencies:
       '@types/node': 22.9.3
-
-  '@types/lodash-es@4.17.12':
-    dependencies:
-      '@types/lodash': 4.17.13
-
-  '@types/lodash@4.17.13': {}
 
   '@types/mdast@4.0.4':
     dependencies:
