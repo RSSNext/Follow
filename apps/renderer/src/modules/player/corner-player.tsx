@@ -1,4 +1,5 @@
 import { useFocusable } from "@follow/components/common/Focusable.js"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
@@ -92,6 +93,8 @@ const usePlayerTracker = () => {
   }, [show])
 }
 const CornerPlayerImpl = () => {
+  const isMobile = useMobile()
+
   const { t } = useTranslation()
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const status = useAudioPlayerAtomSelector((v) => v.status)
@@ -164,7 +167,12 @@ const CornerPlayerImpl = () => {
             fallback={false}
             className="m-0 size-[3.625rem] rounded-none"
           />
-          <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
+          <div
+            className={cn(
+              "center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100",
+              isMobile && "opacity-100",
+            )}
+          >
             <button
               type="button"
               className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-accent hover:text-white hover:opacity-100"
@@ -199,7 +207,12 @@ const CornerPlayerImpl = () => {
       </div>
 
       {/* advanced controls */}
-      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
+      <div
+        className={cn(
+          "absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100",
+          isMobile && "-translate-y-full opacity-100",
+        )}
+      >
         <div className="flex items-center">
           <ActionIcon
             className="i-mgc-close-cute-re"
@@ -256,6 +269,7 @@ const CornerPlayerImpl = () => {
 
 const ONE_HOUR_IN_SECONDS = 60 * 60
 const PlayerProgress = () => {
+  const isMobile = useMobile()
   const playerValue = useAudioPlayerAtomValue()
 
   const { currentTime = 0, duration = 0 } = playerValue
@@ -286,7 +300,12 @@ const PlayerProgress = () => {
 
   return (
     <div className="relative mt-2">
-      <div className="absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100">
+      <div
+        className={cn(
+          "absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100",
+          isMobile && "opacity-100",
+        )}
+      >
         <div className="text-xs">{currentTimeIndicator}</div>
         {!!remainingTimeIndicator && <div className="text-xs">-{remainingTimeIndicator}</div>}
       </div>

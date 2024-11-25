@@ -152,7 +152,7 @@ const PlayerIcon = () => {
       </button>
 
       {isShowPlayer && (
-        <CornerPlayer className="absolute bottom-12 left-0 w-full max-w-[350px] overflow-hidden rounded-r-lg" />
+        <CornerPlayer className="absolute inset-x-0 bottom-12 mx-auto w-full max-w-[350px] overflow-hidden rounded-lg" />
       )}
     </>
   )
