@@ -83,7 +83,9 @@ export const AutoUpdater = () => {
         }
       />
       <div className="font-medium">{t("notify.update_info", { app_name: APP_NAME })}</div>
-      <div className="text-xs text-zinc-500">{t("notify.update_info_1")}</div>
+      <div className="text-xs text-zinc-500">
+        {updaterStatus.type === "app" ? t("notify.update_info_1") : t("notify.update_info_2")}
+      </div>
     </m.div>
   )
 }
