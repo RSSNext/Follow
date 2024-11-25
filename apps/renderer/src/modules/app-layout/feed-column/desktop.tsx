@@ -11,7 +11,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "es-toolkit/compat"
 import type { PropsWithChildren } from "react"
 import * as React from "react"
-import { forwardRef, lazy, Suspense, useEffect, useRef, useState } from "react"
+import { forwardRef, Suspense, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -35,7 +35,7 @@ import { HotKeyScopeMap, isDev } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { useBatchUpdateSubscription } from "~/hooks/biz/useSubscriptionActions"
-import { useAuthQuery, useI18n } from "~/hooks/common"
+import { useI18n } from "~/hooks/common"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
 import { NetworkStatusIndicator } from "~/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
@@ -50,13 +50,9 @@ import { CmdNTrigger } from "~/modules/panel/cmdn"
 import { CornerPlayer } from "~/modules/player/corner-player"
 import { AppNotificationContainer } from "~/modules/upgrade/lazy/index"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
-import { settings } from "~/queries/settings"
 
 import { FooterInfo } from "./components/FooterInfo"
-
-const LazyNewUserGuideModal = lazy(() =>
-  import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
-)
+import { NewUserGuide } from "./index.shared"
 
 const errorTypes = [
   ErrorComponentType.Page,
@@ -71,9 +67,6 @@ export function MainDestopLayout() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useDailyTask()
-
-  const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
-  const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -139,11 +132,7 @@ export function MainDestopLayout() {
         </AppErrorBoundary>
       </main>
 
-      {user && isNewUser && (
-        <Suspense>
-          <LazyNewUserGuideModal />
-        </Suspense>
-      )}
+      <NewUserGuide />
 
       {isAuthFail && !user && (
         <RootPortal>

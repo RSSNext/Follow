@@ -1,7 +1,7 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
-import clsx from "clsx"
+import { cn } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { ComponentProps, FunctionComponentElement } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"
@@ -49,11 +49,11 @@ const variants = {
 function Intro() {
   const { t } = useTranslation("app")
   return (
-    <div className="w-[50ch] space-y-4 text-balance text-center">
+    <div className="max-w-[50ch] space-y-4 text-balance text-center">
       <Logo className="mx-auto size-20" />
       <p className="mt-5 text-xl font-bold">{t("new_user_guide.intro.title")}</p>
       <p className="text-lg">{t("new_user_guide.intro.description")}</p>
-      <LanguageSelector containerClassName="px-16" contentClassName="z-10" />
+      <LanguageSelector contentClassName="z-10" />
     </div>
   )
 }
@@ -61,7 +61,7 @@ function Intro() {
 function Outtro() {
   const { t } = useTranslation("app")
   return (
-    <div className="w-[50ch] space-y-4 text-balance text-center">
+    <div className="max-w-[50ch] space-y-4 text-balance text-center">
       <Logo className="mx-auto size-20" />
       <p className="mt-5 text-xl font-semibold">{t("new_user_guide.outro.title")}</p>
       <p className="text-lg">{t("new_user_guide.outro.description")}</p>
@@ -82,18 +82,23 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
       [
         {
           title: t.app("new_user_guide.step.migrate.profile"),
-          content: <ProfileSettingForm className="w-[500px]" buttonClassName="text-center !mt-8" />,
+          content: (
+            <ProfileSettingForm
+              className="w-full max-w-[500px]"
+              buttonClassName="text-center !mt-8"
+            />
+          ),
           icon: "i-mgc-user-setting-cute-re",
         },
         {
           title: t.app("new_user_guide.step.activation.title"),
           description: t.app("new_user_guide.step.activation.description"),
-          content: <ActivationModalContent className="w-[500px]" hideDescription />,
+          content: <ActivationModalContent className="w-full max-w-[500px]" hideDescription />,
           icon: "i-mgc-love-cute-re",
         },
         {
           title: t.app("new_user_guide.step.migrate.wallet"),
-          content: <MyWalletSection className="w-[600px]" />,
+          content: <MyWalletSection className="w-full max-w-[600px]" />,
           icon: <i className="i-mgc-power text-accent" />,
         },
         {
@@ -164,7 +169,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   return (
     <m.div
       layout
-      className="relative flex min-h-[80%] w-4/5 flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-background shadow-xl"
+      className="relative flex min-h-full w-full flex-col items-center justify-center overflow-hidden bg-theme-background sm:min-h-[80%] sm:w-4/5 sm:rounded-xl sm:shadow-xl"
     >
       <div className="center relative mx-auto w-full">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -179,13 +184,13 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.1 },
             }}
-            className="mt-12 min-w-0 px-20 pb-24"
+            className="min-w-0 px-6 sm:mt-12 sm:px-20 sm:pb-24"
           >
             {!!title && (
               <div className="mb-6">
                 <h1 className="mb-2 flex w-full items-center justify-center gap-2 text-xl font-bold">
                   {typeof guideSteps[step - 1].icon === "string" ? (
-                    <i className={clsx(guideSteps[step - 1].icon, "size-[22px]")} />
+                    <i className={cn(guideSteps[step - 1].icon, "size-[22px]")} />
                   ) : (
                     guideSteps[step - 1].icon
                   )}
@@ -210,13 +215,24 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
           </m.div>
         </AnimatePresence>
       </div>
+      <div
+        className={cn(
+          "absolute left-4 top-4 flex h-fit gap-3 sm:hidden",
+          step === 0 && "invisible",
+        )}
+      >
+        {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
+          <Step key={i} step={i} currentStep={step} />
+        ))}
+      </div>
 
       <div className="absolute inset-x-0 bottom-4 z-[1] flex w-full items-center justify-between px-6">
-        <div className={clsx("flex h-fit gap-3", step === 0 && "invisible")}>
+        <div className={cn("flex h-fit gap-3 max-sm:hidden", step === 0 && "invisible")}>
           {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
             <Step key={i} step={i} currentStep={step} />
           ))}
         </div>
+        <div className="grow" />
         <div className="flex gap-2">
           {step !== 0 && (
             <Button
