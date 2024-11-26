@@ -10,6 +10,7 @@ import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useShowAISummary } from "~/atoms/ai-summary"
 import { useEntryIsInReadability } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
@@ -67,13 +68,15 @@ export const EntryContent: Component<EntryContentProps> = ({
     },
   )
 
+  const showAISummary = useShowAISummary() || !!entry?.settings?.summary
+
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
       language: entry?.settings?.translation,
     }),
     {
-      enabled: !!entry?.settings?.summary,
+      enabled: showAISummary,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       meta: {
@@ -192,7 +195,7 @@ export const EntryContent: Component<EntryContentProps> = ({
               <WrappedElementProvider boundingDetection>
                 <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
                   <TitleMetaHandler entryId={entry.entries.id} />
-                  {(summary.isLoading || summary.data) && (
+                  {(summary.isLoading || summary.data) && showAISummary && (
                     <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                       <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
                         <i className="i-mgc-magic-2-cute-re align-middle" />

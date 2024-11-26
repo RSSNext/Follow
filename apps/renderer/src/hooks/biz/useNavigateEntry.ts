@@ -5,6 +5,7 @@ import { FeedViewType } from "@follow/constants"
 import { isUndefined } from "es-toolkit/compat"
 import { useCallback } from "react"
 
+import { disableShowAISummary } from "~/atoms/ai-summary"
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
 import {
@@ -69,6 +70,7 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     setSidebarActiveView(view)
   }
   resetShowSourceContent()
+  disableShowAISummary()
 
   const finalView = nextSearchParams.get("view")
 

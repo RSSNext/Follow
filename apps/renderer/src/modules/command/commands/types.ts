@@ -63,6 +63,11 @@ export type UnReadCommand = Command<{
   fn: ({ entryId }) => void
 }>
 
+export type ShowAISummaryCommand = Command<{
+  id: typeof COMMAND_ID.entry.showAISummary
+  fn: () => void
+}>
+
 export type EntryCommand =
   | TipCommand
   | StarCommand
@@ -76,6 +81,7 @@ export type EntryCommand =
   | ShareCommand
   | ReadCommand
   | UnReadCommand
+  | ShowAISummaryCommand
 
 // Integration commands
 

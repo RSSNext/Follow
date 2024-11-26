@@ -12,6 +12,7 @@ export const COMMAND_ID = {
     share: "entry:share",
     read: "entry:read",
     unread: "entry:unread",
+    showAISummary: "entry:show-ai-summary",
   },
   integration: {
     saveToEagle: "integration:save-to-eagle",

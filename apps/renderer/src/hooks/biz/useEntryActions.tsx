@@ -151,6 +151,10 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         hide: isMobile() || isShowSourceContent || !entry?.entries.url,
       },
       {
+        id: COMMAND_ID.entry.showAISummary,
+        onClick: runCmdFn(COMMAND_ID.entry.showAISummary, []),
+      },
+      {
         id: COMMAND_ID.entry.viewEntryContent,
         onClick: runCmdFn(COMMAND_ID.entry.viewEntryContent, []),
         hide: !isShowSourceContent,
