@@ -162,10 +162,9 @@ async function injectMetaToTemplate(document: Document, req: FastifyRequest, res
         const script = document.createElement("script")
         script.innerHTML = `
           window.__HYDRATE__ = window.__HYDRATE__ || {}
-          window.__HYDRATE__['${meta.key}'] = ${xss(JSON.stringify(meta.data))}
+          window.__HYDRATE__[${JSON.stringify(meta.key)}] = JSON.parse(${JSON.stringify(JSON.stringify(meta.data))})
         `
-        document.head.append(script)
-
+        document.head.prepend(script)
         break
       }
     }
