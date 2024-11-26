@@ -53,8 +53,6 @@
   "entry_list_header.show_all": "Mostra tutto",
   "entry_list_header.show_all_items": "Mostra tutte le voci",
   "entry_list_header.show_unread_only": "Mostra solo non letti",
-  "entry_list_header.switch_to_grid": "Passa alla griglia",
-  "entry_list_header.switch_to_masonry": "Passa a Masonry",
   "entry_list_header.unread": "non letto",
   "feed_claim_modal.choose_verification_method": "Ci sono tre modi tra cui scegliere, puoi sceglierne uno per verificare.",
   "feed_claim_modal.claim_button": "Reclama",
