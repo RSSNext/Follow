@@ -21,7 +21,7 @@ export const FeedTitle = ({
 
   return (
     <div className={cn("flex items-center truncate", className)}>
-      <div className="truncate">{getPreferredTitle(feed) || title}</div>
+      <div className="truncate text-wrap">{getPreferredTitle(feed) || title}</div>
       {!hideExtraBadge && (
         <>
           <FeedCertification feed={feed} />

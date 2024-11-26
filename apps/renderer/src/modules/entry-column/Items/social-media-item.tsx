@@ -62,7 +62,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
       <div ref={ref} className="ml-2 min-w-0 flex-1">
         <div className="-mt-0.5 flex-1 text-sm">
-          <div className="w-[calc(100%-10rem)] space-x-1 leading-6">
+          <div className="space-x-1 leading-6">
             <span className="inline-flex items-center gap-1 text-base font-semibold">
               <FeedTitle feed={feed} title={entry.entries.author || feed.title} />
               {parsed?.type === "x" && (
