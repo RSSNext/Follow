@@ -153,4 +153,104 @@ describe("createTransaction", () => {
       expect(error).toBe(specificError)
     }
   })
+
+  it("should support synchronous functions in optimistic phase", async () => {
+    const executionOrder: string[] = []
+    const snapshot = { value: 1 }
+
+    const transaction = createTransaction(snapshot)
+      .optimistic(() => {
+        executionOrder.push("optimistic")
+      })
+      .execute(async () => {
+        executionOrder.push("execute")
+      })
+
+    await transaction.run()
+    expect(executionOrder).toEqual(["optimistic", "execute"])
+  })
+
+  it("should support synchronous functions in execute phase", async () => {
+    const executionOrder: string[] = []
+    const snapshot = { value: 1 }
+
+    const transaction = createTransaction(snapshot)
+      .execute(() => {
+        executionOrder.push("execute")
+      })
+      .persist(async () => {
+        executionOrder.push("persist")
+      })
+
+    await transaction.run()
+    expect(executionOrder).toEqual(["execute", "persist"])
+  })
+
+  it("should support synchronous functions in persist phase", async () => {
+    const executionOrder: string[] = []
+    const snapshot = { value: 1 }
+
+    const transaction = createTransaction(snapshot)
+      .execute(async () => {
+        executionOrder.push("execute")
+      })
+      .persist(() => {
+        executionOrder.push("persist")
+      })
+
+    await transaction.run()
+    expect(executionOrder).toEqual(["execute", "persist"])
+  })
+
+  it("should support synchronous functions in rollback", async () => {
+    const executionOrder: string[] = []
+    const snapshot = { value: 1 }
+    const error = new Error("Execution failed")
+
+    const transaction = createTransaction(snapshot)
+      .rollback(() => {
+        executionOrder.push("rollback")
+      })
+      .execute(async () => {
+        throw error
+      })
+
+    await expect(transaction.run()).rejects.toThrow(error)
+    expect(executionOrder).toEqual(["rollback"])
+  })
+
+  it("should handle errors from synchronous functions", async () => {
+    const snapshot = { value: 1 }
+    const syncError = new Error("Sync error")
+    const rollbackMock = vi.fn()
+
+    const transaction = createTransaction(snapshot)
+      .rollback(rollbackMock)
+      .execute(() => {
+        throw syncError
+      })
+
+    await expect(transaction.run()).rejects.toThrow(syncError)
+    expect(rollbackMock).toHaveBeenCalledWith(snapshot, {})
+  })
+
+  it("should support mix of sync and async functions", async () => {
+    const executionOrder: string[] = []
+    const snapshot = { value: 1 }
+
+    const transaction = createTransaction(snapshot)
+      .optimistic(() => {
+        executionOrder.push("sync-optimistic")
+      })
+      .execute(async () => {
+        await Promise.resolve()
+        executionOrder.push("async-execute")
+      })
+      .persist(() => {
+        executionOrder.push("sync-persist")
+      })
+
+    await transaction.run()
+    expect(executionOrder).toEqual(["sync-optimistic", "async-execute", "sync-persist"])
+  })
 })

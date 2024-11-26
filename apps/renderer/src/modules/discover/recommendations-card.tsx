@@ -56,7 +56,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
           <CardTitle className="relative z-[1] flex items-center pt-[10px] text-base @[280px]:pt-10">
             <span className="center box-content flex aspect-square rounded-full bg-background p-1.5">
               <span className="overflow-hidden rounded-full">
-                <FeedIcon size={28} className="mr-0" siteUrl={`https://${data.url}`} />
+                <FeedIcon size={28} noMargin siteUrl={`https://${data.url}`} />
               </span>
             </span>
             <a

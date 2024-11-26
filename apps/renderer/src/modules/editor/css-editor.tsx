@@ -1,8 +1,9 @@
+import { TextArea } from "@follow/components/ui/input/TextArea.js"
 import { useInputComposition, useIsDark } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { createPlainShiki } from "plain-shiki"
-import { useLayoutEffect, useRef } from "react"
+import { useLayoutEffect, useMemo, useRef } from "react"
 import css from "shiki/langs/css.mjs"
 import githubDark from "shiki/themes/github-dark.mjs"
 import githubLight from "shiki/themes/github-light.mjs"
@@ -13,6 +14,7 @@ import { shiki } from "~/components/ui/code-highlighter/shiki/shared"
 shiki.loadLanguageSync(css)
 shiki.loadThemeSync(githubDark)
 shiki.loadThemeSync(githubLight)
+
 export const CSSEditor: Component<{
   onChange: (value: string) => void
   defaultValue?: string
@@ -74,6 +76,26 @@ export const CSSEditor: Component<{
     onChange(ref.current?.textContent ?? "")
   })
 
+  const isSupportPlainTextOnly = useIsSupportPlainTextOnly()
+  if (!isSupportPlainTextOnly) {
+    return (
+      <div className="flex size-full flex-col">
+        <div className="-mt-2 mb-1 text-center text-sm text-theme-placeholder-text">
+          <i className="i-mingcute-warning-line mr-0.5 translate-y-[2px]" />
+          Your browser does not support highlight CSS.
+        </div>
+        <div className="relative h-0 grow">
+          <div className="absolute inset-0">
+            <TextArea
+              className="font-mono"
+              defaultValue={defaultValue}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div
       className={cn(
@@ -88,9 +110,26 @@ export const CSSEditor: Component<{
       )}
       ref={ref}
       onInput={handleInput}
-      contentEditable="plaintext-only"
+      contentEditable={isSupportPlainTextOnly ? "plaintext-only" : "true"}
       tabIndex={0}
       {...props}
     />
   )
+}
+const useIsSupportPlainTextOnly = () => {
+  const isSupportPlainTextOnly = useMemo(() => {
+    if (typeof document === "undefined") return false
+
+    const div = document.createElement("div")
+
+    try {
+      div.contentEditable = "plaintext-only"
+    } catch {
+      return false
+    }
+
+    return div.contentEditable === "plaintext-only"
+  }, [])
+
+  return isSupportPlainTextOnly
 }

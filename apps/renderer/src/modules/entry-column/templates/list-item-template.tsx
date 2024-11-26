@@ -1,4 +1,4 @@
-import { isMobile } from "@follow/components/hooks/useMobile.js"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn, isSafari } from "@follow/utils/utils"
 
@@ -79,6 +79,7 @@ export function ListItem({
 
           // FIXME: Safari bug, not support line-clamp cross elements
           !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
+          withAudio && "max-w-[calc(100%-88px)]",
         )}
       >
         <div
@@ -159,6 +160,7 @@ export function ListItem({
               size={settingWideMode ? 65 : 80}
               className="m-0 rounded"
               useMedia
+              noMargin
             />
           }
         />
@@ -201,6 +203,7 @@ function AudioCover({
   durationInSeconds?: number
   feedIcon: React.ReactNode
 }) {
+  const isMobile = useMobile()
   const playStatus = useAudioPlayerAtomSelector((playerValue) =>
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
@@ -208,7 +211,7 @@ function AudioCover({
   const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
 
   const handleClickPlay = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile()) e.stopPropagation()
+    if (isMobile) e.stopPropagation()
     if (!playStatus) {
       // switch this to play
       AudioPlayer.mount({
@@ -231,6 +234,7 @@ function AudioCover({
         className={cn(
           "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:-translate-y-2 group-hover:opacity-100",
           playStatus ? "opacity-100" : "opacity-0",
+          isMobile && "-translate-y-2 opacity-100",
         )}
         onClick={handleClickPlay}
       >
@@ -250,8 +254,18 @@ function AudioCover({
 
       {!!estimatedMins && (
         <div className="absolute bottom-0 w-full overflow-hidden rounded-b-sm text-center ">
-          <div className="absolute left-0 top-0 size-full bg-white/50 opacity-0 duration-200 group-hover:opacity-100 dark:bg-neutral-900/70" />
-          <div className="text-[13px] opacity-0 backdrop-blur-none duration-200 group-hover:opacity-100 group-hover:backdrop-blur-sm">
+          <div
+            className={cn(
+              "absolute left-0 top-0 size-full bg-white/50 opacity-0 duration-200 group-hover:opacity-100 dark:bg-neutral-900/70",
+              isMobile && "opacity-100",
+            )}
+          />
+          <div
+            className={cn(
+              "text-[13px] opacity-0 backdrop-blur-none duration-200 group-hover:opacity-100 group-hover:backdrop-blur-sm",
+              isMobile && "opacity-100 backdrop-blur-sm",
+            )}
+          >
             {formatEstimatedMins(estimatedMins)}
           </div>
         </div>

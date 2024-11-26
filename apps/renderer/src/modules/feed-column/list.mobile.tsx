@@ -4,7 +4,7 @@ import { memo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useSidebarActiveViewValue } from "~/atoms/sidebar"
-import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useCategoryOpenStateByView } from "~/store/subscription"
@@ -46,11 +46,13 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
   // 2 => 1, 2, 3
   const shouldRender = view >= currentActiveView && view < currentActiveView + 2
 
+  const navigateEntry = useNavigateEntry()
+
   return (
     <div className={cn(className, "font-medium", !shouldRender && "hidden")}>
       <ListHeader view={view} />
 
-      <div className="h-full overflow-y-auto overflow-x-hidden px-3">
+      <div className="relative h-full overflow-y-auto overflow-x-hidden px-3">
         <StarredItem view={view} />
         {hasListData && (
           <>
@@ -87,6 +89,7 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
                 onClick={() => {
                   navigateEntry({
                     view,
+                    feedId: null,
                   })
                 }}
                 className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}

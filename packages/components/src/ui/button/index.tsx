@@ -1,5 +1,5 @@
 import { useFocusable } from "@follow/components/common/Focusable.jsx"
-import { useMobile } from "@follow/components/hooks/useMobile"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"

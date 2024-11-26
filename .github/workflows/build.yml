@@ -103,7 +103,8 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i
-
+      - name: Update main hash
+        run: pnpm update:main-hash
       - name: Build
         if: matrix.os != 'macos-latest'
         run: npm exec turbo run //#build

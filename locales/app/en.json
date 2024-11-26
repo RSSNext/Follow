@@ -263,6 +263,7 @@
   "notify.unfollow_feed_many": "All selected feeds have been unfollowed.",
   "notify.update_info": "{{app_name}} is ready to update!",
   "notify.update_info_1": "Click to restart",
+  "notify.update_info_2": "Click to reload page",
   "player.back_10s": "Back 10s",
   "player.close": "Close",
   "player.download": "Download",

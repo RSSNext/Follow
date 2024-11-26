@@ -149,7 +149,6 @@ export const AppendTaildingDivider = ({ children }: { children: React.ReactNode 
 )
 
 export interface EntryListHeaderProps {
-  totalCount: number
   refetch: () => void
   isRefreshing: boolean
   hasUpdate: boolean

@@ -77,7 +77,7 @@ injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_
 
     reply.type("text/html")
     reply.send(
-      minify(document.toString(), {
+      await minify(document.toString(), {
         removeComments: true,
         html5: true,
         minifyJS: true,
@@ -162,10 +162,9 @@ async function injectMetaToTemplate(document: Document, req: FastifyRequest, res
         const script = document.createElement("script")
         script.innerHTML = `
           window.__HYDRATE__ = window.__HYDRATE__ || {}
-          window.__HYDRATE__['${meta.key}'] = ${xss(JSON.stringify(meta.data))}
+          window.__HYDRATE__[${JSON.stringify(meta.key)}] = JSON.parse(${JSON.stringify(JSON.stringify(meta.data))})
         `
         document.head.append(script)
-
         break
       }
     }

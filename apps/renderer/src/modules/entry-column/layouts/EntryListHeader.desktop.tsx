@@ -30,11 +30,10 @@ import {
 } from "./EntryListHeader.shared"
 
 export const EntryListHeader: FC<{
-  totalCount: number
   refetch: () => void
   isRefreshing: boolean
   hasUpdate: boolean
-}> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
+}> = ({ refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParams()
   const { t } = useTranslation()
 
@@ -48,18 +47,10 @@ export const EntryListHeader: FC<{
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
-    <div className={"min-w-0 translate-y-1"}>
-      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
-        <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
-          <span className="relative -top-px">{headerTitle}</span>
-        </EllipsisHorizontalTextWithTooltip>
-      </div>
-      <div className="whitespace-nowrap text-xs font-medium leading-none text-zinc-400">
-        {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
-        {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
-        {t("space", { ns: "common" })}
-        {t("words.items", { ns: "common", count: totalCount })}
-      </div>
+    <div className="flex min-w-0 items-center break-all text-lg font-bold leading-tight">
+      <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
+        {headerTitle}
+      </EllipsisHorizontalTextWithTooltip>
     </div>
   )
   const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(feedId)

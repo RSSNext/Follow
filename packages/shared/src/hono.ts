@@ -5364,6 +5364,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/metrics/pools": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    totalCount: number;
+                    idleCount: number;
+                    waitingCount: number;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 } & {
     "/lists": {
         $get: {
@@ -6827,7 +6842,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 code: 0;
-                remaining: number;
                 data?: {
                     entries: {
                         description: string | null;
@@ -6912,7 +6926,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         webhooks?: string[] | undefined;
                     } | undefined;
                 }[] | undefined;
-                total?: number | undefined;
             };
             outputFormat: "json" | "text";
             status: 200;

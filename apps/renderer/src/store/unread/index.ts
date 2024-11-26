@@ -1,9 +1,10 @@
 import type { FeedViewType } from "@follow/constants"
 
+import { setFeedUnreadDirty } from "~/atoms/feed"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedUnreadService } from "~/services"
 
-import { createZustandStore } from "../utils/helper"
+import { createTransaction, createZustandStore } from "../utils/helper"
 
 interface UnreadState {
   data: Record<string, number>
@@ -27,16 +28,22 @@ class FeedUnreadActions {
     this.internal_reset()
   }
 
-  private internal_setValue(data: [string, number][]) {
-    set((state) => {
-      state.data = { ...state.data }
-      for (const [key, value] of data) {
-        state.data[key] = value
-      }
-      return { ...state }
+  private async internal_setValue(data: [string, number][]) {
+    const tx = createTransaction()
+    tx.optimistic(() => {
+      set((state) => {
+        state.data = { ...state.data }
+        for (const [key, value] of data) {
+          state.data[key] = value
+        }
+        return { ...state }
+      })
     })
 
-    FeedUnreadService.updateFeedUnread(data)
+    tx.persist(async () => {
+      await FeedUnreadService.updateFeedUnread(data)
+    })
+    await tx.run()
   }
 
   async fetchUnreadByView(view: FeedViewType | undefined) {
@@ -72,6 +79,7 @@ class FeedUnreadActions {
     const nextValue = Math.max(0, (cur || 0) + inc)
 
     this.internal_setValue([[feedId, nextValue]])
+    setFeedUnreadDirty(feedId)
     return cur
   }
 
