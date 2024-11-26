@@ -50,17 +50,10 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
-    <div className="min-w-0">
-      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
-        <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
-          <span className="relative -top-px">{headerTitle}</span>
-        </EllipsisHorizontalTextWithTooltip>
-      </div>
-      <div className="whitespace-nowrap text-xs font-medium leading-none text-zinc-400">
-        {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
-        {t("space", { ns: "common" })}
-        {t("words.items", { ns: "common", count: 2 })}
-      </div>
+    <div className="flex min-w-0 items-center break-all text-lg font-bold leading-tight">
+      <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
+        {headerTitle}
+      </EllipsisHorizontalTextWithTooltip>
     </div>
   )
   const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(feedId)
