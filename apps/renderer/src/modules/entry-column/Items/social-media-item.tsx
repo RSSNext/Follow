@@ -64,7 +64,11 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
         <div className="-mt-0.5 flex-1 text-sm">
           <div className="space-x-1 leading-6">
             <span className="inline-flex items-center gap-1 text-base font-semibold">
-              <FeedTitle feed={feed} title={entry.entries.author || feed.title} />
+              <FeedTitle
+                feed={feed}
+                title={entry.entries.author || feed.title}
+                titleClassName="max-w-[calc(100vw-8rem)]"
+              />
               {parsed?.type === "x" && (
                 <i className="i-mgc-twitter-cute-fi size-3 text-[#4A99E9]" />
               )}
