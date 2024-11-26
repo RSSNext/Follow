@@ -5,7 +5,7 @@ import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient, apiFetch } from "~/lib/api-fetch"
 import { entries, useEntries } from "~/queries/entries"
@@ -60,10 +60,11 @@ export const useEntriesByView = ({
   onReset?: () => void
   isArchived?: boolean
 }) => {
-  const routeParams = useRouteParams()
-  const unreadOnly = useGeneralSettingKey("unreadOnly")
+  const { feedId, isAllFeeds, view, isCollection, inboxId, listId } = useRouteParamsSelector(
+    (s) => s,
+  )
 
-  const { feedId, view, isAllFeeds, isCollection, listId, inboxId } = routeParams
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const folderIds = useFolderFeedsByFeedId({
     feedId,
