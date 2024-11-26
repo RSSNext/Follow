@@ -1,19 +1,29 @@
-import { getAnalytics } from "firebase/analytics"
+import { env } from "@follow/shared/env"
+import {
+  getAnalytics,
+  logEvent as firebaseLogEvent,
+  setUserId as firebaseSetUserId,
+  setUserProperties as firebaseSetUserProperties,
+} from "firebase/analytics"
 import { initializeApp } from "firebase/app"
 
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
-const firebaseConfig = {
-  apiKey: "AIzaSyDuM93019tp8VI7wsszJv8ChOs7b1EE5Hk",
-  authDomain: "follow-428106.firebaseapp.com",
-  projectId: "follow-428106",
-  storageBucket: "follow-428106.appspot.com",
-  messagingSenderId: "194977404578",
-  appId: "1:194977404578:web:1920bb0c9ea5e2373669fb",
-  measurementId: "G-SJE57D4F14",
-}
+const firebaseConfig = env.VITE_FIREBASE_CONFIG ? JSON.parse(env.VITE_FIREBASE_CONFIG) : undefined
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 
 // Initialize Analytics and get a reference to the service
-export const analytics = getAnalytics(app)
+const analytics = getAnalytics(app)
+
+export const logEvent = (event: string, eventParams?: Record<string, unknown>) => {
+  firebaseLogEvent(analytics, event, eventParams)
+}
+
+export const setUserId = (userId: string) => {
+  firebaseSetUserId(analytics, userId)
+}
+
+export const setUserProperties = (properties: Record<string, unknown>) => {
+  firebaseSetUserProperties(analytics, properties)
+}

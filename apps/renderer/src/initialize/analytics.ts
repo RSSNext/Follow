@@ -4,6 +4,7 @@ import type { TrackProperties } from "@openpanel/web"
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { whoami } from "~/atoms/user"
 
+import { logEvent, setUserId, setUserProperties } from "./firebase"
 import { op } from "./op"
 
 declare global {
@@ -34,10 +35,23 @@ export const initAnalytics = () => {
       }
       const me = whoami()
 
-      op.track(event_name, {
+      const props = {
         ...properties,
         user_id: me?.id,
-      } as TrackProperties)
+      } as TrackProperties
+
+      op.track(event_name, props)
+      logEvent(event_name, props)
     },
+  }
+
+  const me = whoami()
+  if (me?.id) {
+    setUserId(me.id)
+    setUserProperties({
+      email: me.email,
+      name: me.name,
+      image: me.image,
+    })
   }
 }
