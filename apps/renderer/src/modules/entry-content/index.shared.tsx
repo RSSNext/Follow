@@ -250,18 +250,20 @@ export function AISummary({ entryId }: { entryId: string }) {
       },
     },
   )
+
+  if (!showAISummary || (!summary.isLoading && !summary.data)) {
+    return null
+  }
+
   return (
-    (summary.isLoading || summary.data) &&
-    showAISummary && (
-      <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-        <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-          <i className="i-mgc-magic-2-cute-re align-middle" />
-          <span>{t("entry_content.ai_summary")}</span>
-        </div>
-        <AutoResizeHeight spring className="text-sm leading-relaxed">
-          {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
-        </AutoResizeHeight>
+    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+        <i className="i-mgc-magic-2-cute-re align-middle" />
+        <span>{t("entry_content.ai_summary")}</span>
       </div>
-    )
+      <AutoResizeHeight spring className="text-sm leading-relaxed">
+        {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
+      </AutoResizeHeight>
+    </div>
   )
 }
