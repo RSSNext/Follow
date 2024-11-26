@@ -10,7 +10,11 @@ import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useCategoryOpenStateByView } from "~/store/subscription"
 
-import { SELECT_NOTHING, setFeedAreaScrollProgressValue, useSelectedFeedIds } from "./atom"
+import {
+  resetSelectedFeedIds,
+  setFeedAreaScrollProgressValue,
+  useSelectedFeedIdsState,
+} from "./atom"
 import { DraggableContext } from "./context"
 import { useShouldFreeUpSpace } from "./hook"
 import {
@@ -45,7 +49,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
 
     const scrollerRef = useRef<HTMLDivElement>(null)
     const selectoRef = useRef<Selecto>(null)
-    const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
+    const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIdsState()
     const [currentStartFeedId, setCurrentStartFeedId] = useState<string | null>(null)
     useEffect(() => {
       if (selectedFeedIds.length <= 1) {
@@ -135,7 +139,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           }}
           onDragStart={(e) => {
             if (!isKeyForMultiSelectPressed(e.inputEvent as MouseEvent)) {
-              setSelectedFeedIds(SELECT_NOTHING)
+              resetSelectedFeedIds()
             }
           }}
           selectableTargets={["[data-feed-id]"]}

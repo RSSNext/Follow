@@ -1,5 +1,8 @@
 import * as Sentry from "@sentry/electron/main"
+import { app } from "electron"
 import { FetchError } from "ofetch"
+
+import { DEVICE_ID } from "./constants/system"
 
 export const initializeSentry = () => {
   Sentry.init({
@@ -32,4 +35,7 @@ export const initializeSentry = () => {
       return event
     },
   })
+  Sentry.setTag("device_id", DEVICE_ID)
+  Sentry.setTag("app_version", app.getVersion())
+  Sentry.setTag("build", "electron")
 }

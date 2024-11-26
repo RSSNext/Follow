@@ -17,6 +17,7 @@
     "analyze:web": "analyzer=1 vite build",
     "build": "electron-vite build && electron-forge make",
     "build:macos": "electron-vite build && electron-forge make --arch=x64 --platform=darwin && electron-forge make --arch=arm64 --platform=darwin && tsx scripts/merge-yml.ts",
+    "build:render": "vite build -c vite.config.electron-render.ts",
     "build:web": "rm -rf out/web && cross-env WEB_BUILD=1 vite build",
     "bump": "vv",
     "dedupe:locales": "eslint --fix locales/**/*.json",
@@ -37,7 +38,8 @@
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
     "test": "CI=1 pnpm --recursive run test",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
   "devDependencies": {
     "@babel/generator": "7.26.2",
@@ -65,6 +67,7 @@
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.15",
     "@types/html-minifier-terser": "7.0.2",
+    "@types/js-yaml": "4.0.9",
     "@types/node": "^22.9.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -104,6 +107,7 @@
     "tailwindcss-animate": "1.0.7",
     "tailwindcss-motion": "0.4.3-beta",
     "tailwindcss-safe-area": "0.6.0",
+    "tar": "7.4.3",
     "tsup": "8.3.5",
     "tsx": "4.19.2",
     "turbo": "2.3.1",
@@ -149,7 +153,11 @@
     "before": [
       "git pull --rebase",
       "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
-      "git add changelog"
+      "git add changelog",
+      "tsx plugins/vite/generate-main-hash.ts",
+      "eslint --fix package.json",
+      "prettier --ignore-unknown --write package.json",
+      "git add package.json"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
@@ -161,5 +169,6 @@
       "dev"
     ]
   },
-  "productName": "Follow"
+  "productName": "Follow",
+  "mainHash": "1"
 }

@@ -1,4 +1,5 @@
 import { useFocusable } from "@follow/components/common/Focusable.js"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
@@ -37,7 +38,13 @@ const setNowPlaying = (metadata: MediaMetadataInit) => {
   }
 }
 
-export const CornerPlayer: Component = ({ className }) => {
+interface ControlButtonProps {
+  className?: string
+  hideControls?: boolean
+  rounded?: boolean
+}
+
+export const CornerPlayer = ({ className, ...rest }: ControlButtonProps) => {
   const show = useAudioPlayerAtomSelector((v) => v.show)
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const entry = useEntry(entryId)
@@ -55,7 +62,7 @@ export const CornerPlayer: Component = ({ className }) => {
           transition={{ ...microReboundPreset, duration: 0.2 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <CornerPlayerImpl />
+          <CornerPlayerImpl {...rest} />
         </m.div>
       )}
     </AnimatePresence>
@@ -91,7 +98,9 @@ const usePlayerTracker = () => {
     }
   }, [show])
 }
-const CornerPlayerImpl = () => {
+const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
+  const isMobile = useMobile()
+
   const { t } = useTranslation()
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const status = useAudioPlayerAtomSelector((v) => v.status)
@@ -154,17 +163,21 @@ const CornerPlayerImpl = () => {
 
   return (
     <>
-      <div className="relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800">
+      <div
+        className={cn(
+          "relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800",
+          rounded && "overflow-hidden rounded-lg border",
+        )}
+      >
         {/* play cover */}
-        <div className="relative h-full shrink-0">
-          <FeedIcon
-            feed={feed}
-            entry={entry.entries}
-            size={58}
-            fallback={false}
-            className="m-0 size-[3.625rem] rounded-none"
-          />
-          <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
+        <div className="relative h-[3.625rem] shrink-0">
+          <FeedIcon feed={feed} entry={entry.entries} size={58} fallback={false} noMargin />
+          <div
+            className={cn(
+              "center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100",
+              isMobile && "opacity-100",
+            )}
+          >
             <button
               type="button"
               className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-accent hover:text-white hover:opacity-100"
@@ -199,63 +212,73 @@ const CornerPlayerImpl = () => {
       </div>
 
       {/* advanced controls */}
-      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
-        <div className="flex items-center">
-          <ActionIcon
-            className="i-mgc-close-cute-re"
-            onClick={() => AudioPlayer.close()}
-            label={t("player.close")}
-          />
-          <ActionIcon
-            className="i-mgc-external-link-cute-re"
-            onClick={() => {
-              if (navigateOptions) {
-                navigateToEntry(navigateOptions)
-              }
-            }}
-            label={t("player.open_entry")}
-          />
-          <ActionIcon
-            label={t("player.download")}
-            onClick={() => {
-              window.open(AudioPlayer.get().src, "_blank")
-            }}
-          >
-            <i className="i-mgc-download-2-cute-re" />
-          </ActionIcon>
+      {!hideControls && (
+        <div
+          className={cn(
+            "absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100",
+            isMobile && "-translate-y-full opacity-100",
+          )}
+        >
+          <div className="flex items-center">
+            <ActionIcon
+              className="i-mgc-close-cute-re"
+              onClick={() => AudioPlayer.close()}
+              label={t("player.close")}
+            />
+            <ActionIcon
+              className="i-mgc-external-link-cute-re"
+              onClick={() => {
+                if (navigateOptions) {
+                  navigateToEntry(navigateOptions)
+                }
+              }}
+              label={t("player.open_entry")}
+            />
+            <ActionIcon
+              label={t("player.download")}
+              onClick={() => {
+                window.open(AudioPlayer.get().src, "_blank")
+              }}
+            >
+              <i className="i-mgc-download-2-cute-re" />
+            </ActionIcon>
+          </div>
+          {/* audio control */}
+          <div className="flex items-center">
+            <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
+              <PlaybackRateButton />
+            </ActionIcon>
+            <ActionIcon
+              className={cn(
+                playerValue.isMute
+                  ? "i-mgc-volume-off-cute-re text-red-500"
+                  : "i-mgc-volume-cute-re",
+              )}
+              onClick={() => AudioPlayer.toggleMute()}
+              label={<CornerPlayerVolumeSlider />}
+              labelDelayDuration={0}
+            />
+            <ActionIcon
+              className="i-mgc-back-2-cute-re"
+              onClick={() => AudioPlayer.back(10)}
+              label={t("player.back_10s")}
+            />
+            <ActionIcon
+              className="i-mgc-forward-2-cute-re"
+              onClick={() => AudioPlayer.forward(10)}
+              label={t("player.forward_10s")}
+              tooltipAlign="end"
+            />
+          </div>
         </div>
-        {/* audio control */}
-        <div className="flex items-center">
-          <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
-            <PlaybackRateButton />
-          </ActionIcon>
-          <ActionIcon
-            className={cn(
-              playerValue.isMute ? "i-mgc-volume-off-cute-re text-red-500" : "i-mgc-volume-cute-re",
-            )}
-            onClick={() => AudioPlayer.toggleMute()}
-            label={<CornerPlayerVolumeSlider />}
-            labelDelayDuration={0}
-          />
-          <ActionIcon
-            className="i-mgc-back-2-cute-re"
-            onClick={() => AudioPlayer.back(10)}
-            label={t("player.back_10s")}
-          />
-          <ActionIcon
-            className="i-mgc-forward-2-cute-re"
-            onClick={() => AudioPlayer.forward(10)}
-            label={t("player.forward_10s")}
-            tooltipAlign="end"
-          />
-        </div>
-      </div>
+      )}
     </>
   )
 }
 
 const ONE_HOUR_IN_SECONDS = 60 * 60
 const PlayerProgress = () => {
+  const isMobile = useMobile()
   const playerValue = useAudioPlayerAtomValue()
 
   const { currentTime = 0, duration = 0 } = playerValue
@@ -286,7 +309,12 @@ const PlayerProgress = () => {
 
   return (
     <div className="relative mt-2">
-      <div className="absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100">
+      <div
+        className={cn(
+          "absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100",
+          isMobile && "opacity-100",
+        )}
+      >
         <div className="text-xs">{currentTimeIndicator}</div>
         {!!remainingTimeIndicator && <div className="text-xs">-{remainingTimeIndicator}</div>}
       </div>

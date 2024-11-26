@@ -30,11 +30,10 @@ import {
 } from "./EntryListHeader.shared"
 
 export const EntryListHeader: FC<{
-  totalCount: number
   refetch: () => void
   isRefreshing: boolean
   hasUpdate: boolean
-}> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
+}> = ({ refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParams()
   const { t } = useTranslation()
 
@@ -55,10 +54,9 @@ export const EntryListHeader: FC<{
         </EllipsisHorizontalTextWithTooltip>
       </div>
       <div className="whitespace-nowrap text-xs font-medium leading-none text-zinc-400">
-        {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
         {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
         {t("space", { ns: "common" })}
-        {t("words.items", { ns: "common", count: totalCount })}
+        {t("words.items", { ns: "common", count: 2 })}
       </div>
     </div>
   )

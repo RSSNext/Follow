@@ -6,7 +6,6 @@ import { forwardRef, useState } from "react"
 import { PullToRefresh } from "~/components/ux/pull-to-refresh"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 
-import { CornerPlayer } from "../player/corner-player"
 import type { EntryColumnWrapperProps } from "./wrapper.shared"
 import { styles } from "./wrapper.shared"
 
@@ -28,8 +27,6 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
             </ScrollElementContext.Provider>
           </PullToRefresh>
         </div>
-
-        <CornerPlayer className="w-full md:w-[350px]" />
       </div>
     )
   },

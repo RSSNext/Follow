@@ -6,6 +6,7 @@ import { toast } from "sonner"
 
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings, useToggleZenMode } from "~/atoms/settings/ui"
+import { setUpdaterStatus } from "~/atoms/updater"
 import { useDialog, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
@@ -39,6 +40,12 @@ export const ExtensionExposeProvider = () => {
 
       clearIfLoginOtherAccount(newUserId: string) {
         clearDataIfLoginOtherAccount(newUserId)
+      },
+      readyToUpdate() {
+        setUpdaterStatus({
+          type: "renderer",
+          status: "ready",
+        })
       },
     })
   }, [])

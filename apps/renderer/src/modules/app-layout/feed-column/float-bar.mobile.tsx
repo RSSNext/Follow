@@ -83,13 +83,10 @@ export const MobileFloatBar = ({
       animate={animateController}
     >
       <div className={styles["float-bar"]}>
-        <MotionButtonBase onClick={onLogoClick}>
-          <Logo className="size-5 shrink-0" />
-        </MotionButtonBase>
+        <PlayerIcon onLogoClick={onLogoClick} />
         <DividerVertical className="h-3/4 shrink-0" />
         <ViewTabs onViewChange={onViewChange} />
         <DividerVertical className="h-3/4 shrink-0" />
-        <PlayerIcon />
         <ProfileButton />
       </div>
     </m.div>
@@ -132,27 +129,33 @@ const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) =
   )
 }
 
-const PlayerIcon = () => {
+const PlayerIcon = ({ onLogoClick }: { onLogoClick?: () => void }) => {
   const { isPlaying, entryId } = useAudioPlayerAtomSelector(
     useCallback((state) => ({ isPlaying: state.status === "playing", entryId: state.entryId }), []),
   )
   const feedId = useEntry(entryId, (s) => s.feedId)
   const feed = useFeedById(feedId, feedIconSelector)
   const [isShowPlayer, setIsShowPlayer] = useState(false)
-  if (!feed) return null
-  if (!isPlaying) return null
+  if (!feed || !isPlaying) {
+    return (
+      <MotionButtonBase onClick={onLogoClick}>
+        <Logo className="size-5 shrink-0" />
+      </MotionButtonBase>
+    )
+  }
+
   return (
     <>
-      <button
-        type="button"
-        className="mr-3 size-5 shrink-0"
-        onClick={() => setIsShowPlayer((v) => !v)}
-      >
-        <FeedIcon feed={feed} />
+      <button type="button" className="size-5 shrink-0" onClick={() => setIsShowPlayer((v) => !v)}>
+        <FeedIcon feed={feed} noMargin />
       </button>
 
       {isShowPlayer && (
-        <CornerPlayer className="absolute bottom-12 left-0 w-full max-w-[350px] overflow-hidden rounded-r-lg" />
+        <CornerPlayer
+          className="absolute inset-x-0 mx-auto w-full max-w-[350px] bottom-safe-or-12"
+          hideControls
+          rounded
+        />
       )}
     </>
   )

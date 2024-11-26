@@ -121,8 +121,8 @@ function EntryColumnImpl() {
     !isArchived && !unreadOnly && !isCollection && routeFeedId !== ROUTE_FEED_PENDING
 
   // Determine if the archived button should be shown
-  const showArchivedButton = commonConditions && entries.totalCount < 40 && feed?.type === "feed"
-  const hasNoEntries = entries.queryTotalCount === 0 && !entries.isLoading
+  const showArchivedButton = commonConditions && feed?.type === "feed"
+  const hasNoEntries = entries.data?.pages?.[0].data?.length === 0 && !entries.isLoading
 
   // Determine if archived entries should be loaded
   const shouldLoadArchivedEntries =
@@ -173,13 +173,7 @@ function EntryColumnImpl() {
           } else {
             if (context?.onlyShowArchivedButton) return null
             return (
-              <EntryItemSkeleton
-                view={view}
-                count={Math.min(
-                  entries.data?.pages?.[0].data?.length || 20,
-                  entries.data?.pages.at(-1)?.remaining || 20,
-                )}
-              />
+              <EntryItemSkeleton view={view} count={entries.data?.pages?.[0].data?.length || 20} />
             )
           }
         },
@@ -196,13 +190,9 @@ function EntryColumnImpl() {
     customScrollParent: scrollRef.current!,
     initialScrollTop: prevScrollTopMap[routeFeedId || ""] || 0,
 
-    totalCount: entries.totalCount,
     endReached: useCallback(async () => {
-      if (!entries.isFetchingNextPage) {
-        const remaining = entries.data?.pages.at(-1)?.remaining
-        if (entries.hasNextPage && remaining) {
-          await entries.fetchNextPage()
-        }
+      if (!entries.isFetchingNextPage && entries.hasNextPage) {
+        await entries.fetchNextPage()
       }
     }, [entries]),
     data: finalEntriesIds,
@@ -233,9 +223,8 @@ function EntryColumnImpl() {
                 entryId: null,
               })
       }
-      data-total-count={virtuosoOptions.totalCount}
     >
-      {virtuosoOptions.totalCount === 0 &&
+      {virtuosoOptions.data.length === 0 &&
         !entries.isLoading &&
         !entries.error &&
         feed?.type === "feed" && <AddFeedHelper />}
@@ -243,7 +232,6 @@ function EntryColumnImpl() {
       <EntryListHeader
         refetch={entries.refetch}
         isRefreshing={isRefreshing}
-        totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
 
@@ -252,7 +240,7 @@ function EntryColumnImpl() {
         onPullToRefresh={entries.refetch}
         key={`${routeFeedId}-${view}`}
       >
-        {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
+        {virtuosoOptions.data.length === 0 && !showArchivedButton ? (
           entries.isLoading ? null : (
             <EntryEmptyList />
           )
