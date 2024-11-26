@@ -52,7 +52,7 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
     <div className={cn(className, "font-medium", !shouldRender && "hidden")}>
       <ListHeader view={view} />
 
-      <div className="h-full overflow-y-auto overflow-x-hidden px-3">
+      <div className="relative h-full overflow-y-auto overflow-x-hidden px-3">
         <StarredItem view={view} />
         {hasListData && (
           <>
