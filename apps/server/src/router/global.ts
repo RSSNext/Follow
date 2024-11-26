@@ -77,7 +77,7 @@ injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_
 
     reply.type("text/html")
     reply.send(
-      minify(document.toString(), {
+      await minify(document.toString(), {
         removeComments: true,
         html5: true,
         minifyJS: true,
