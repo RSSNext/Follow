@@ -5,9 +5,9 @@ import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { SessionProvider, signIn, signOut, useSession } from "@hono/auth-js/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useLocation, useNavigate } from "react-router"
+import { useLocation } from "react-router"
 
 export function Component() {
   return (
@@ -19,7 +19,7 @@ export function Component() {
 
 function Login() {
   const { status } = useSession()
-  const navigate = useNavigate()
+
   const [redirecting, setRedirecting] = useState(false)
 
   const location = useLocation()
@@ -39,13 +39,26 @@ function Login() {
     }
   }, [status])
 
-  const getCallbackUrl = async () => {
+  const getCallbackUrl = useCallback(async () => {
     const { data } = await apiClient["auth-app"]["new-session"].$post({})
     return {
       url: `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}&userId=${data.userId}`,
       userId: data.userId,
     }
-  }
+  }, [])
+
+  const handleOpenApp = useCallback(async () => {
+    const { url } = await getCallbackUrl()
+    window.open(url, "_top")
+  }, [getCallbackUrl])
+
+  const onceRef = useRef(false)
+  useEffect(() => {
+    if (isAuthenticated && !onceRef.current) {
+      handleOpenApp()
+    }
+    onceRef.current = true
+  }, [handleOpenApp, isAuthenticated])
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
@@ -80,19 +93,13 @@ function Login() {
                   variant="text"
                   className="h-14 text-base"
                   onClick={() => {
-                    navigate("/")
+                    window.location.href = "/"
                   }}
                 >
                   {t("redirect.continueInBrowser")}
                 </Button>
 
-                <Button
-                  className="h-14 !rounded-full px-5 text-lg"
-                  onClick={async () => {
-                    const { url } = await getCallbackUrl()
-                    window.open(url, "_top")
-                  }}
-                >
+                <Button className="h-14 !rounded-full px-5 text-lg" onClick={handleOpenApp}>
                   {t("redirect.openApp", { app_name: APP_NAME })}
                 </Button>
               </div>
