@@ -153,6 +153,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.showAISummary,
         onClick: runCmdFn(COMMAND_ID.entry.showAISummary, []),
+        hide: !!entry?.settings?.summary,
       },
       {
         id: COMMAND_ID.entry.viewEntryContent,
