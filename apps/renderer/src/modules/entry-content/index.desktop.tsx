@@ -1,5 +1,4 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel } from "@follow/models/types"
@@ -8,9 +7,7 @@ import { clearSelection, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useRef } from "react"
-import { useTranslation } from "react-i18next"
 
-import { useShowAISummary } from "~/atoms/ai-summary"
 import { useEntryIsInReadability } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
@@ -34,12 +31,12 @@ import { EntryHeader } from "./header"
 import { useFocusEntryContainerSubscriptions } from "./hooks"
 import type { EntryContentProps } from "./index.shared"
 import {
+  AISummary,
   ContainerToc,
   NoContent,
   ReadabilityAutoToggleEffect,
   ReadabilityContent,
   RenderError,
-  SummaryLoadingSkeleton,
   TitleMetaHandler,
   ViewSourceContentAutoToggleEffect,
 } from "./index.shared"
@@ -52,8 +49,6 @@ export const EntryContent: Component<EntryContentProps> = ({
   compact,
   classNames,
 }) => {
-  const { t } = useTranslation()
-
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
@@ -65,23 +60,6 @@ export const EntryContent: Component<EntryContentProps> = ({
     inbox ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
     {
       staleTime: 300_000,
-    },
-  )
-
-  const showAISummary = useShowAISummary() || !!entry?.settings?.summary
-
-  const summary = useAuthQuery(
-    Queries.ai.summary({
-      entryId,
-      language: entry?.settings?.translation,
-    }),
-    {
-      enabled: showAISummary,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      meta: {
-        persist: true,
-      },
     },
   )
 
@@ -195,17 +173,7 @@ export const EntryContent: Component<EntryContentProps> = ({
               <WrappedElementProvider boundingDetection>
                 <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
                   <TitleMetaHandler entryId={entry.entries.id} />
-                  {(summary.isLoading || summary.data) && showAISummary && (
-                    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                        <i className="i-mgc-magic-2-cute-re align-middle" />
-                        <span>{t("entry_content.ai_summary")}</span>
-                      </div>
-                      <AutoResizeHeight spring className="text-sm leading-relaxed">
-                        {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
-                      </AutoResizeHeight>
-                    </div>
-                  )}
+                  <AISummary entryId={entry.entries.id} />
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
                       <ShadowDOM injectHostStyles={!isInbox}>

@@ -1,4 +1,3 @@
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel } from "@follow/models/types"
@@ -6,7 +5,6 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useUISettingKey } from "~/atoms/settings/ui"
@@ -27,7 +25,7 @@ import { EntryReadHistory } from "./components/EntryReadHistory"
 import { EntryTitle } from "./components/EntryTitle"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
-import { NoContent, RenderError, SummaryLoadingSkeleton, TitleMetaHandler } from "./index.shared"
+import { AISummary, NoContent, RenderError, TitleMetaHandler } from "./index.shared"
 import { EntryContentLoading } from "./loading"
 
 export interface EntryContentClassNames {
@@ -40,8 +38,6 @@ export const EntryContent: Component<{
   compact?: boolean
   classNames?: EntryContentClassNames
 }> = ({ entryId, noMedia, compact, classNames }) => {
-  const { t } = useTranslation()
-
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
@@ -54,21 +50,6 @@ export const EntryContent: Component<{
     {
       enabled: !!entryId,
       staleTime: 300_000,
-    },
-  )
-
-  const summary = useAuthQuery(
-    Queries.ai.summary({
-      entryId,
-      language: entry?.settings?.translation,
-    }),
-    {
-      enabled: !!entry?.settings?.summary,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      meta: {
-        persist: true,
-      },
     },
   )
 
@@ -170,17 +151,7 @@ export const EntryContent: Component<{
                 <WrappedElementProvider boundingDetection>
                   <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
                     <TitleMetaHandler entryId={entry.entries.id} />
-                    {(summary.isLoading || summary.data) && (
-                      <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                        <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                          <i className="i-mgc-magic-2-cute-re align-middle" />
-                          <span>{t("entry_content.ai_summary")}</span>
-                        </div>
-                        <AutoResizeHeight spring className="text-sm leading-relaxed">
-                          {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
-                        </AutoResizeHeight>
-                      </div>
-                    )}
+                    <AISummary entryId={entry.entries.id} />
                     <ErrorBoundary fallback={RenderError}>
                       <ShadowDOM injectHostStyles={!isInbox}>
                         <EntryContentHTMLRenderer
