@@ -303,7 +303,7 @@ export const useRegisterEntryCommands = () => {
     {
       id: COMMAND_ID.entry.showAITranslation,
       label: "Show AI Translation",
-      icon: <i className="i-mgc-magic-2-cute-re" />,
+      icon: <i className="i-mgc-translate-2-cute-re" />,
       run: () => {
         toggleShowAITranslation()
       },

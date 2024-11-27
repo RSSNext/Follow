@@ -164,7 +164,11 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.showAISummary,
         onClick: runCmdFn(COMMAND_ID.entry.showAISummary, []),
-        hide: !!entry?.settings?.summary,
+        hide:
+          !!entry?.settings?.summary ||
+          ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
+            entry?.view,
+          ),
         active: isShowAISummary,
       },
       {
@@ -172,9 +176,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         onClick: runCmdFn(COMMAND_ID.entry.showAITranslation, []),
         hide:
           !!entry?.settings?.translation ||
-          ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
-            entry?.view,
-          ),
+          ([FeedViewType.Videos] as (number | undefined)[]).includes(entry?.view),
         active: isShowAITranslation,
       },
       {
