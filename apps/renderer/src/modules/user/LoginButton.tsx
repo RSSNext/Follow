@@ -1,8 +1,9 @@
+import { Capacitor } from "@capacitor/core"
 import { UserArrowLeftIcon } from "@follow/components/icons/user.jsx"
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import { env } from "@follow/shared/env"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router"
 
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 
@@ -37,5 +38,9 @@ export const LoginButton: FC<LoginProps> = (props) => {
       <UserArrowLeftIcon className="size-4" />
     </ActionButton>
   )
-  return method === "modal" ? Content : <Link to="/login">{Content}</Link>
+  return method === "modal" ? (
+    Content
+  ) : (
+    <a href={Capacitor.isNativePlatform() ? `${env.VITE_WEB_URL}/login` : "/login"}>{Content}</a>
+  )
 }
