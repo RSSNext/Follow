@@ -63,13 +63,13 @@ export type UnReadCommand = Command<{
   fn: ({ entryId }) => void
 }>
 
-export type ShowAISummaryCommand = Command<{
-  id: typeof COMMAND_ID.entry.showAISummary
+export type ToggleAISummaryCommand = Command<{
+  id: typeof COMMAND_ID.entry.toggleAISummary
   fn: () => void
 }>
 
-export type ShowAITranslationCommand = Command<{
-  id: typeof COMMAND_ID.entry.showAITranslation
+export type ToggleAITranslationCommand = Command<{
+  id: typeof COMMAND_ID.entry.toggleAITranslation
   fn: () => void
 }>
 
@@ -86,8 +86,8 @@ export type EntryCommand =
   | ShareCommand
   | ReadCommand
   | UnReadCommand
-  | ShowAISummaryCommand
-  | ShowAITranslationCommand
+  | ToggleAISummaryCommand
+  | ToggleAITranslationCommand
 
 // Integration commands
 

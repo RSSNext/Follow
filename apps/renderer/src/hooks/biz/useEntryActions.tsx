@@ -162,8 +162,8 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         active: true,
       },
       {
-        id: COMMAND_ID.entry.showAISummary,
-        onClick: runCmdFn(COMMAND_ID.entry.showAISummary, []),
+        id: COMMAND_ID.entry.toggleAISummary,
+        onClick: runCmdFn(COMMAND_ID.entry.toggleAISummary, []),
         hide:
           !!entry?.settings?.summary ||
           ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
@@ -172,8 +172,8 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         active: isShowAISummary,
       },
       {
-        id: COMMAND_ID.entry.showAITranslation,
-        onClick: runCmdFn(COMMAND_ID.entry.showAITranslation, []),
+        id: COMMAND_ID.entry.toggleAITranslation,
+        onClick: runCmdFn(COMMAND_ID.entry.toggleAITranslation, []),
         hide:
           !!entry?.settings?.translation ||
           ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(

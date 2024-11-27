@@ -293,16 +293,16 @@ export const useRegisterEntryCommands = () => {
       },
     },
     {
-      id: COMMAND_ID.entry.showAISummary,
-      label: "Show AI Summary",
+      id: COMMAND_ID.entry.toggleAISummary,
+      label: t("entry_actions.toggle_ai_summary"),
       icon: <i className="i-mgc-magic-2-cute-re" />,
       run: () => {
         toggleShowAISummary()
       },
     },
     {
-      id: COMMAND_ID.entry.showAITranslation,
-      label: "Show AI Translation",
+      id: COMMAND_ID.entry.toggleAITranslation,
+      label: t("entry_actions.toggle_ai_translation"),
       icon: <i className="i-mgc-translate-2-cute-re" />,
       run: () => {
         toggleShowAITranslation()
