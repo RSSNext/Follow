@@ -102,7 +102,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
     if (info[type].showModal) {
       const defaultView = getSidebarActiveView() as FeedViewType
       present({
-        title: "Add Feed",
+        title: t("feed_form.add_feed"),
         content: () => (
           <FeedForm
             asWidget

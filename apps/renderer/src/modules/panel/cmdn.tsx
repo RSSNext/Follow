@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useLayoutEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
@@ -18,6 +19,7 @@ import { tipcClient } from "~/lib/client"
 import { FeedForm } from "../discover/feed-form"
 
 const CmdNPanel = () => {
+  const { t } = useTranslation()
   const form = useForm({
     resolver: zodResolver(
       z.object({
@@ -47,7 +49,7 @@ const CmdNPanel = () => {
     window.analytics?.capture("quick_add_feed", { url, defaultView })
 
     present({
-      title: "Add Feed",
+      title: t("feed_form.add_feed"),
       content: () => (
         <FeedForm
           asWidget
@@ -80,8 +82,8 @@ const CmdNPanel = () => {
               <FormControl>
                 <input
                   {...field}
-                  placeholder="Quick follow a feed, typing feed url here..."
-                  className="w-full shrink-0 border-b border-zinc-200 bg-transparent p-4 px-5 text-lg leading-4 dark:border-neutral-700"
+                  placeholder={t("quick_add.placeholder")}
+                  className="w-full shrink-0 border-zinc-200 bg-transparent p-4 px-5 text-lg leading-4 dark:border-neutral-700"
                 />
               </FormControl>
             </FormItem>
@@ -103,10 +105,11 @@ const CmdNPanel = () => {
 }
 
 export const CmdNTrigger = () => {
+  const { t } = useTranslation()
   const { present } = useModalStack()
   const handler = () => {
     present({
-      title: "Quick Follow",
+      title: t("quick_add.title"),
       content: CmdNPanel,
       CustomModalComponent: PlainModal,
       overlay: false,
