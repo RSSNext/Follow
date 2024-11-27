@@ -9,6 +9,6 @@
     }
   },
   "dependencies": {
-    "electron-log": "5.2.2"
+    "electron-log": "5.2.3"
   }
 }
