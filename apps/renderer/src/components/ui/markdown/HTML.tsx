@@ -57,12 +57,8 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(props: HTMLProp
   const showAITranslation = useShowAITranslation()
 
   useEffect(() => {
-    if (!refElement) {
-      return
-    }
-
     translate?.(refElement)
-  }, [translate, refElement, showAITranslation])
+  }, [refElement, showAITranslation, translate])
 
   const markdownElement = useMemo(
     () =>
