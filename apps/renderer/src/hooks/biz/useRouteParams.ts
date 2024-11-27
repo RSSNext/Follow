@@ -76,18 +76,10 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
   }
 }
 
-/**
- * This hook is deprecated due to causing unnecessary re-renders.
- * see https://github.com/remix-run/react-router/issues/7318
- *
- * @deprecated Use {@link useRouteParamsSelector} instead.
- */
 export const useRouteParams = () => {
-  const params = useParams()
-  const [search] = useSearchParams()
-
-  return parseRouteParams(params, search)
+  return useRouteParamsSelector((s) => s)
 }
+
 const noop = [] as any[]
 
 export const useRouteParamsSelector = <T>(

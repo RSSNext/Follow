@@ -4,7 +4,7 @@ import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
-import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 
 import { useInboxStore } from "../inbox"
 import { useListStore } from "../list"
@@ -71,7 +71,7 @@ export const useInboxByIdSelector = <T>(
 
 export const useFeedHeaderTitle = () => {
   const { t } = useTranslation()
-  const { feedId: currentFeedId, view, inboxId, listId } = useRouteParamsSelector((s) => s)
+  const { feedId: currentFeedId, view, listId, inboxId } = useRouteParams()
 
   const listTitle = useListByIdSelector(listId, getPreferredTitle)
   const inboxTitle = useInboxByIdSelector(inboxId, getPreferredTitle)
