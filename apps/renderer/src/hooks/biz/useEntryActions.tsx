@@ -176,7 +176,9 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         onClick: runCmdFn(COMMAND_ID.entry.showAITranslation, []),
         hide:
           !!entry?.settings?.translation ||
-          ([FeedViewType.Videos] as (number | undefined)[]).includes(entry?.view),
+          ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
+            entry?.view,
+          ),
         active: isShowAITranslation,
       },
       {

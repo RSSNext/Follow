@@ -34,20 +34,19 @@ export function immersiveTranslate({
   }
   targetLanguage?: SupportedLanguages
 }) {
-  const translation = entry.settings?.translation ?? targetLanguage
-
   if (!html) {
     return
   }
 
   const immersiveTranslateMark = html.querySelectorAll("[data-immersive-translate-mark=true]")
-  if (immersiveTranslateMark) {
+  if (immersiveTranslateMark.length > 0) {
     for (const mark of immersiveTranslateMark) {
       mark.remove()
     }
     cache?.clear()
   }
 
+  const translation = entry.settings?.translation ?? targetLanguage
   if (!translation) {
     return
   }
@@ -70,8 +69,13 @@ export function immersiveTranslate({
 
       const p = document.createElement("p")
       p.append(document.createTextNode(textNode.textContent!))
-      p.append(document.createElement("br"))
-      p.append(document.createTextNode(transformed.content))
+
+      const fontTag = document.createElement("font")
+      fontTag.dataset["immersiveTranslateMark"] = "true"
+      fontTag.append(document.createElement("br"))
+      fontTag.append(document.createTextNode(transformed.content))
+
+      p.append(fontTag)
 
       textNode.replaceWith(p)
     })
