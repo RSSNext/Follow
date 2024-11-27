@@ -5,8 +5,8 @@ import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { toggleShowAISummary, useShowAISummary } from "~/atoms/ai-summary"
-import { toggleShowAITranslation, useShowAITranslation } from "~/atoms/ai-translation"
+import { toggleShowAISummary } from "~/atoms/ai-summary"
+import { toggleShowAITranslation } from "~/atoms/ai-translation"
 import { setShowSourceContent, useSourceContentModal } from "~/atoms/source-content"
 import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
@@ -88,8 +88,6 @@ export const useRegisterEntryCommands = () => {
   const openTipModal = useTipModal()
   const read = useRead()
   const unread = useUnread()
-  const showAISummary = useShowAISummary()
-  const showAITranslation = useShowAITranslation()
 
   useRegisterFollowCommand([
     {
@@ -294,35 +292,21 @@ export const useRegisterEntryCommands = () => {
         unread.mutate({ entryId, feedId: entry.feedId })
       },
     },
+    {
+      id: COMMAND_ID.entry.showAISummary,
+      label: "Show AI Summary",
+      icon: <i className="i-mgc-magic-2-cute-re" />,
+      run: () => {
+        toggleShowAISummary()
+      },
+    },
+    {
+      id: COMMAND_ID.entry.showAITranslation,
+      label: "Show AI Translation",
+      icon: <i className="i-mgc-magic-2-cute-re" />,
+      run: () => {
+        toggleShowAITranslation()
+      },
+    },
   ])
-
-  useRegisterFollowCommand(
-    [
-      {
-        id: COMMAND_ID.entry.showAISummary,
-        label: "Show AI Summary",
-        icon: <i className={showAISummary ? "i-mgc-magic-2-cute-fi" : "i-mgc-magic-2-cute-re"} />,
-        run: () => {
-          toggleShowAISummary()
-        },
-      },
-    ],
-    { deps: [showAISummary] },
-  )
-
-  useRegisterFollowCommand(
-    [
-      {
-        id: COMMAND_ID.entry.showAITranslation,
-        label: "Show AI Translation",
-        icon: (
-          <i className={showAITranslation ? "i-mgc-magic-2-cute-fi" : "i-mgc-magic-2-cute-re"} />
-        ),
-        run: () => {
-          toggleShowAITranslation()
-        },
-      },
-    ],
-    { deps: [showAITranslation] },
-  )
 }

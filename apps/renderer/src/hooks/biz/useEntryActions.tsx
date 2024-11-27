@@ -3,6 +3,8 @@ import { FeedViewType } from "@follow/constants"
 import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 
+import { useShowAISummary } from "~/atoms/ai-summary"
+import { useShowAITranslation } from "~/atoms/ai-translation"
 import {
   getReadabilityStatus,
   ReadabilityStatus,
@@ -82,6 +84,9 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   const isInbox = !!inbox
 
   const isShowSourceContent = useShowSourceContent()
+  const isShowAISummary = useShowAISummary()
+  const isShowAITranslation = useShowAITranslation()
+
   const getCmd = useGetCommand()
   const runCmdFn = useRunCommandFn()
   const actionConfigs = useMemo(() => {
@@ -151,9 +156,16 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         hide: isMobile() || isShowSourceContent || !entry?.entries.url,
       },
       {
+        id: COMMAND_ID.entry.viewEntryContent,
+        onClick: runCmdFn(COMMAND_ID.entry.viewEntryContent, []),
+        hide: !isShowSourceContent,
+        active: true,
+      },
+      {
         id: COMMAND_ID.entry.showAISummary,
         onClick: runCmdFn(COMMAND_ID.entry.showAISummary, []),
         hide: !!entry?.settings?.summary,
+        active: isShowAISummary,
       },
       {
         id: COMMAND_ID.entry.showAITranslation,
@@ -163,12 +175,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
           ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
             entry?.view,
           ),
-      },
-      {
-        id: COMMAND_ID.entry.viewEntryContent,
-        onClick: runCmdFn(COMMAND_ID.entry.viewEntryContent, []),
-        hide: !isShowSourceContent,
-        active: true,
+        active: isShowAITranslation,
       },
       {
         id: COMMAND_ID.entry.share,
@@ -208,6 +215,8 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
     getCmd,
     inList,
     isInbox,
+    isShowAISummary,
+    isShowAITranslation,
     isShowSourceContent,
     runCmdFn,
     view,

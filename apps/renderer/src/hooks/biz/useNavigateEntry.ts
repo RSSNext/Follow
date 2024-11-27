@@ -6,6 +6,7 @@ import { isUndefined } from "es-toolkit/compat"
 import { useCallback } from "react"
 
 import { disableShowAISummary } from "~/atoms/ai-summary"
+import { disableShowAITranslation } from "~/atoms/ai-translation"
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
 import {
@@ -71,6 +72,7 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
   }
   resetShowSourceContent()
   disableShowAISummary()
+  disableShowAITranslation()
 
   const finalView = nextSearchParams.get("view")
 
