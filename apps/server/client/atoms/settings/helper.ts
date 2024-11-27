@@ -4,6 +4,7 @@ import { getStorageNS } from "@follow/utils/ns"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
+import { shallow } from "zustand/shallow"
 
 export const createSettingAtom = <T extends object>(
   settingKey: string,
@@ -46,7 +47,7 @@ export const createSettingAtom = <T extends object>(
 
     return useAtomValue(
       // @ts-expect-error
-      useMemo(() => selectAtom(atom, stableSelector.current), [stableSelector]),
+      useMemo(() => selectAtom(atom, stableSelector.current, shallow), [stableSelector]),
     )
   }
 
