@@ -42,8 +42,14 @@
     "typecheck": "turbo typecheck",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/ios": "^6.2.0"
+  },
   "devDependencies": {
     "@babel/generator": "7.26.2",
+    "@capacitor/cli": "^6.2.0",
     "@clack/prompts": "0.8.2",
     "@egoist/tailwindcss-icons": "1.8.1",
     "@electron-forge/cli": "7.6.0",
