@@ -15,8 +15,6 @@
   "invitation.getCodeMessage": "Вы можете получить пригласительный код следующими способами:",
   "invitation.title": "Пригласительный код",
   "login.backToWebApp": "Вернуться к веб-приложению",
-  "login.continueWithGitHub": "Продолжить через GitHub",
-  "login.continueWithGoogle": "Продолжить через Google",
   "login.logInTo": "Войти в ",
   "login.openApp": "Открыть приложение",
   "login.redirecting": "Перенаправление",

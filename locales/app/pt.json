@@ -151,8 +151,6 @@
   "sidebar.feed_column.context_menu.mark_as_read": "既読にする",
   "sidebar.feed_column.context_menu.rename_category": "カテゴリーの名前を変更",
   "sidebar.select_sort_method": "並べ替え方法を選択",
-  "signin.continue_with_github": "GitHub で続ける",
-  "signin.continue_with_google": "Google で続ける",
   "signin.sign_in_to": "サインイン",
   "sync_indicator.disabled": "セキュリティ上の理由により、同期は無効になっています。",
   "sync_indicator.offline": "オフライン",

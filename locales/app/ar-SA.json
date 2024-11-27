@@ -151,8 +151,6 @@
   "sidebar.feed_column.context_menu.mark_as_read": "تمييز كمقروء",
   "sidebar.feed_column.context_menu.rename_category": "إعادة تسمية الفئة",
   "sidebar.select_sort_method": "اختر طريقة الفرز",
-  "signin.continue_with_github": "المتابعة مع GitHub",
-  "signin.continue_with_google": "المتابعة مع Google",
   "signin.sign_in_to": "تسجيل الدخول إلى",
   "sync_indicator.disabled": "لأسباب أمنية، تم تعطيل المزامنة.",
   "sync_indicator.offline": "غير متصل",

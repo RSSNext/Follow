@@ -15,8 +15,6 @@
   "invitation.getCodeMessage": "يمكنك الحصول على رمز دعوة من خلال الطرق التالية:",
   "invitation.title": "رمز الدعوة",
   "login.backToWebApp": "العودة إلى تطبيق الويب",
-  "login.continueWithGitHub": "تابع مع GitHub",
-  "login.continueWithGoogle": "تابع مع Google",
   "login.logInTo": "تسجيل الدخول إلى",
   "login.openApp": "افتح التطبيق",
   "login.redirecting": "إعادة التوجيه",

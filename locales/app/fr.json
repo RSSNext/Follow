@@ -151,8 +151,6 @@
   "sidebar.feed_column.context_menu.mark_as_read": "Marquer comme lu",
   "sidebar.feed_column.context_menu.rename_category": "Renommer la catégorie",
   "sidebar.select_sort_method": "Sélectionnez une méthode de tri",
-  "signin.continue_with_github": "Continuer avec GitHub",
-  "signin.continue_with_google": "Continuer avec Google",
   "signin.sign_in_to": "Se connecter à",
   "sync_indicator.disabled": "Pour des raisons de sécurité, la synchronisation est désactivée.",
   "sync_indicator.offline": "Hors ligne",
