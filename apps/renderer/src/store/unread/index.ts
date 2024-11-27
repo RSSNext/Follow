@@ -1,5 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 
+import { setFeedUnreadDirty } from "~/atoms/feed"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedUnreadService } from "~/services"
 
@@ -78,6 +79,7 @@ class FeedUnreadActions {
     const nextValue = Math.max(0, (cur || 0) + inc)
 
     this.internal_setValue([[feedId, nextValue]])
+    setFeedUnreadDirty(feedId)
     return cur
   }
 

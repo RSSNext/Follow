@@ -83,7 +83,7 @@ export const MobileFloatBar = ({
       animate={animateController}
     >
       <div className={styles["float-bar"]}>
-        <PlayerIcon onLogoClick={onLogoClick} />
+        <PlayerIcon isScrollDown={isScrollDown} onLogoClick={onLogoClick} />
         <DividerVertical className="h-3/4 shrink-0" />
         <ViewTabs onViewChange={onViewChange} />
         <DividerVertical className="h-3/4 shrink-0" />
@@ -129,7 +129,13 @@ const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) =
   )
 }
 
-const PlayerIcon = ({ onLogoClick }: { onLogoClick?: () => void }) => {
+const PlayerIcon = ({
+  isScrollDown,
+  onLogoClick,
+}: {
+  isScrollDown: boolean
+  onLogoClick?: () => void
+}) => {
   const { isPlaying, entryId } = useAudioPlayerAtomSelector(
     useCallback((state) => ({ isPlaying: state.status === "playing", entryId: state.entryId }), []),
   )
@@ -150,7 +156,7 @@ const PlayerIcon = ({ onLogoClick }: { onLogoClick?: () => void }) => {
         <FeedIcon feed={feed} noMargin />
       </button>
 
-      {isShowPlayer && (
+      {isShowPlayer && !isScrollDown && (
         <CornerPlayer
           className="absolute inset-x-0 mx-auto w-full max-w-[350px] bottom-safe-or-12"
           hideControls

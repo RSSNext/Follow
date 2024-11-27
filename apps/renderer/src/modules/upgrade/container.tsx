@@ -54,45 +54,45 @@ const AppNotificationContainer: FC = () => {
 
   useOnce(() => {
     const toaster = () => {
-      toast.success(
-        <div>
-          App is upgraded to{" "}
-          <a
-            href={`${repository.url}/releases/tag/v${APP_VERSION}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {APP_VERSION}
-          </a>
-          , enjoy the new features! 🎉
-        </div>,
-        {
-          closeButton: true,
-          duration: 5000,
-          action: CHANGELOG_CONTENT
-            ? {
-                label: "What's new?",
-                onClick: () => {
-                  nextFrame(() => {
-                    present({
-                      clickOutsideToDismiss: true,
-                      title: "What's new?",
-                      autoFocus: false,
-                      modalClassName:
-                        "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
+      toast.success("", {
+        description: (
+          <div>
+            App is upgraded to{" "}
+            <a
+              href={`${repository.url}/releases/tag/v${APP_VERSION}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {APP_VERSION}
+            </a>
+            , enjoy the new features! 🎉
+          </div>
+        ),
+        closeButton: true,
+        duration: 5000,
+        action: CHANGELOG_CONTENT
+          ? {
+              label: "What's new?",
+              onClick: () => {
+                nextFrame(() => {
+                  present({
+                    clickOutsideToDismiss: true,
+                    title: "What's new?",
+                    autoFocus: false,
+                    modalClassName:
+                      "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
 
-                      CustomModalComponent: ({ children }) => {
-                        return <PeekModal>{children}</PeekModal>
-                      },
-                      content: Changelog,
-                      overlay: true,
-                    })
+                    CustomModalComponent: ({ children }) => {
+                      return <PeekModal>{children}</PeekModal>
+                    },
+                    content: Changelog,
+                    overlay: true,
                   })
-                },
-              }
-            : undefined,
-        },
-      )
+                })
+              },
+            }
+          : undefined,
+      })
     }
     if (window.__app_is_upgraded__) {
       setTimeout(toaster)

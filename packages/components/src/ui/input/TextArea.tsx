@@ -53,8 +53,8 @@ export const TextArea = forwardRef<
         "group relative h-full border ring-0 ring-accent/20 duration-200",
         roundedMap[rounded],
 
-        "border-transparent",
-        isFocus && "border-accent/80 ring-2",
+        "border-transparent hover:border-accent/60",
+        isFocus && "!border-accent/80 ring-2",
 
         "placeholder:text-theme-placeholder-text dark:text-zinc-200",
         wrapperClassName,
