@@ -8,19 +8,29 @@ import { apiClient } from "./api-fetch"
 export const LanguageMap: Record<
   SupportedLanguages,
   {
+    label: string
+    value: string
     code: string
   }
 > = {
   en: {
+    value: "en",
+    label: "English",
     code: "eng",
   },
   ja: {
+    value: "ja",
+    label: "Japanese",
     code: "jpn",
   },
   "zh-CN": {
+    value: "zh-CN",
+    label: "Simplified Chinese",
     code: "cmn",
   },
   "zh-TW": {
+    value: "zh-TW",
+    label: "Traditional Chinese(Taiwan)",
     code: "cmn",
   },
 }
@@ -40,18 +50,17 @@ export async function translate({
   if (!language) {
     return null
   }
-  let fields =
-    entry.settings?.translation && view !== undefined ? views[view!].translation.split(",") : []
+  let fields = language && view !== undefined ? views[view!].translation.split(",") : []
   if (extraFields) {
     fields = [...fields, ...extraFields]
   }
   const { franc } = await import("franc-min")
 
   fields = fields.filter((field) => {
-    if (entry.settings?.translation && entry.entries[field]) {
+    if (language && entry.entries[field]) {
       const sourceLanguage = franc(entry.entries[field])
 
-      if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+      if (sourceLanguage === LanguageMap[language].code) {
         return false
       } else {
         return true

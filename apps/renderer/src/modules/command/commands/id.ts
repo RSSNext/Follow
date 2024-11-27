@@ -13,6 +13,7 @@ export const COMMAND_ID = {
     read: "entry:read",
     unread: "entry:unread",
     showAISummary: "entry:show-ai-summary",
+    showAITranslation: "entry:show-ai-translation",
   },
   integration: {
     saveToEagle: "integration:save-to-eagle",

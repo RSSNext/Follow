@@ -1,3 +1,4 @@
+import type { SupportedLanguages } from "@follow/models/types"
 import { franc } from "franc-min"
 
 import type { FlatEntryModel } from "~/store/entry"
@@ -22,15 +23,32 @@ export function immersiveTranslate({
   html,
   entry,
   cache,
+  targetLanguage,
 }: {
   html?: HTMLElement
   entry: FlatEntryModel
   cache?: {
     get: (key: string) => string | undefined
     set: (key: string, value: string) => void
+    clear: () => void
   }
+  targetLanguage?: SupportedLanguages
 }) {
-  if (!html || !entry.settings?.translation) {
+  const translation = entry.settings?.translation ?? targetLanguage
+
+  if (!html) {
+    return
+  }
+
+  const immersiveTranslateMark = html.querySelectorAll("[data-immersive-translate-mark=true]")
+  if (immersiveTranslateMark) {
+    for (const mark of immersiveTranslateMark) {
+      mark.remove()
+    }
+    cache?.clear()
+  }
+
+  if (!translation) {
     return
   }
 
@@ -42,7 +60,7 @@ export function immersiveTranslate({
 
     translate({
       entry,
-      language: entry.settings?.translation,
+      language: translation,
       part: textNode.textContent,
       extraFields: ["content"],
     }).then((transformed) => {
@@ -70,7 +88,7 @@ export function immersiveTranslate({
 
   for (const tag of tags) {
     const sourceLanguage = franc(tag.textContent ?? "")
-    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+    if (sourceLanguage === LanguageMap[translation].code) {
       return
     }
 
@@ -78,6 +96,7 @@ export function immersiveTranslate({
     tag.dataset.childCount = children.filter((child) => child.textContent).length.toString()
 
     const fontTag = document.createElement("font")
+    fontTag.dataset["immersiveTranslateMark"] = "true"
 
     if (children.length > 0) {
       fontTag.style.display = "none"
@@ -121,7 +140,7 @@ export function immersiveTranslate({
 
         translate({
           entry,
-          language: entry.settings?.translation,
+          language: translation,
           part: textContent,
           extraFields: ["content"],
         }).then((transformed) => {
@@ -140,6 +159,7 @@ export function immersiveTranslate({
     }
 
     const parentFontTag = document.createElement("font")
+    parentFontTag.dataset["immersiveTranslateMark"] = "true"
     parentFontTag.append(document.createElement("br"))
     parentFontTag.append(fontTag)
 

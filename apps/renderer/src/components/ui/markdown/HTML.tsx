@@ -1,7 +1,8 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import katexStyle from "katex/dist/katex.min.css?raw"
-import { createElement, Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
+import { createElement, Fragment, memo, useEffect, useMemo, useState } from "react"
 
+import { useShowAITranslation } from "~/atoms/ai-translation"
 import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import { parseHtml } from "~/lib/parse-html"
 import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
@@ -53,15 +54,15 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(props: HTMLProp
 
   const [refElement, setRefElement] = useState<HTMLElement | null>(null)
 
-  const onceRef = useRef(false)
+  const showAITranslation = useShowAITranslation()
+
   useEffect(() => {
-    if (onceRef.current || !refElement) {
+    if (!refElement) {
       return
     }
 
     translate?.(refElement)
-    onceRef.current = true
-  }, [translate, refElement])
+  }, [translate, refElement, showAITranslation])
 
   const markdownElement = useMemo(
     () =>

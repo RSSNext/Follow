@@ -68,6 +68,11 @@ export type ShowAISummaryCommand = Command<{
   fn: () => void
 }>
 
+export type ShowAITranslationCommand = Command<{
+  id: typeof COMMAND_ID.entry.showAITranslation
+  fn: () => void
+}>
+
 export type EntryCommand =
   | TipCommand
   | StarCommand
@@ -82,6 +87,7 @@ export type EntryCommand =
   | ReadCommand
   | UnReadCommand
   | ShowAISummaryCommand
+  | ShowAITranslationCommand
 
 // Integration commands
 

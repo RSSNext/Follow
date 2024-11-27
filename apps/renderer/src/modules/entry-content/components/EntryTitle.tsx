@@ -1,6 +1,9 @@
+import type { SupportedLanguages } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
 import { useMemo } from "react"
 
+import { useShowAITranslation } from "~/atoms/ai-translation"
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { useWhoami } from "~/atoms/user"
 import { RelativeTime } from "~/components/ui/datetime"
 import { useAuthQuery } from "~/hooks/common"
@@ -43,14 +46,17 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
     return href
   }, [entry?.entries.authorUrl, entry?.entries.url, feed?.siteUrl, feed?.type, inbox])
 
+  const showAITranslation = useShowAITranslation() || !!entry?.settings?.translation
+  const translationLanguage = useGeneralSettingSelector((s) => s.translationLanguage)
+
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry: entry!,
-      language: entry?.settings?.translation,
+      language: entry?.settings?.translation || (translationLanguage as SupportedLanguages),
       extraFields: ["title"],
     }),
     {
-      enabled: !!entry?.settings?.translation,
+      enabled: showAITranslation,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       meta: {
@@ -88,6 +94,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
     >
       <div className={cn("select-text break-words font-bold", compact ? "text-2xl" : "text-3xl")}>
         <EntryTranslation
+          showTranslation={showAITranslation}
           source={entry.entries.title}
           target={translation.data?.title}
           className="select-text"

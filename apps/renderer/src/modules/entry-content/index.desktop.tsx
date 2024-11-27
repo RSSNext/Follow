@@ -1,14 +1,16 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { useTitle } from "@follow/hooks"
-import type { FeedModel, InboxModel } from "@follow/models/types"
+import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { clearSelection, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useRef } from "react"
 
+import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useEntryIsInReadability } from "~/atoms/readability"
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
@@ -105,20 +107,25 @@ export const EntryContent: Component<EntryContentProps> = ({
     [entry?.entries.media, data?.entries.media],
   )
   const customCSS = useUISettingKey("customCSS")
+  const showAITranslation = useShowAITranslation()
+  const translationLanguage = useGeneralSettingSelector((s) => s.translationLanguage)
 
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
 
   const translate = async (html: HTMLElement | null) => {
-    if (!html || !entry || !entry.settings?.translation) return
+    if (!html || !entry) return
 
     const fullText = html.textContent ?? ""
     if (!fullText) return
 
     const { franc } = await import("franc-min")
+    const translation =
+      entry.settings?.translation ?? (showAITranslation ? translationLanguage : undefined)
+
     const sourceLanguage = franc(fullText)
-    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+    if (translation && sourceLanguage === LanguageMap[translation].code) {
       return
     }
 
@@ -126,10 +133,12 @@ export const EntryContent: Component<EntryContentProps> = ({
     immersiveTranslate({
       html,
       entry,
+      targetLanguage: translation as SupportedLanguages,
       cache: {
         get: (key: string) => getTranslationCache()[key],
         set: (key: string, value: string) =>
           setTranslationCache({ ...getTranslationCache(), [key]: value }),
+        clear: () => setTranslationCache({}),
       },
     })
   }

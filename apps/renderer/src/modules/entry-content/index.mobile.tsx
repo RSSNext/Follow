@@ -100,6 +100,9 @@ export const EntryContent: Component<{
         get: (key: string) => getTranslationCache()[key],
         set: (key: string, value: string) =>
           setTranslationCache({ ...getTranslationCache(), [key]: value }),
+        clear() {
+          setTranslationCache({})
+        },
       },
     })
   }

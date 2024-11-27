@@ -1,5 +1,5 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 
@@ -154,6 +154,15 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         id: COMMAND_ID.entry.showAISummary,
         onClick: runCmdFn(COMMAND_ID.entry.showAISummary, []),
         hide: !!entry?.settings?.summary,
+      },
+      {
+        id: COMMAND_ID.entry.showAITranslation,
+        onClick: runCmdFn(COMMAND_ID.entry.showAITranslation, []),
+        hide:
+          !!entry?.settings?.translation ||
+          ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
+            entry?.view,
+          ),
       },
       {
         id: COMMAND_ID.entry.viewEntryContent,
