@@ -6,10 +6,10 @@ PROXY_PORT="8080"
 enable_proxy() {
   echo "Enabling proxy on $PROXY_HOST:$PROXY_PORT..."
   networksetup -listallnetworkservices | grep -v '^*' | while IFS= read -r svc; do
-    sudo networksetup -setwebproxy "$svc" "$PROXY_HOST" "$PROXY_PORT"
-    sudo networksetup -setsecurewebproxy "$svc" "$PROXY_HOST" "$PROXY_PORT"
-    sudo networksetup -setwebproxystate "$svc" on
-    sudo networksetup -setsecurewebproxystate "$svc" on
+    networksetup -setwebproxy "$svc" "$PROXY_HOST" "$PROXY_PORT"
+    networksetup -setsecurewebproxy "$svc" "$PROXY_HOST" "$PROXY_PORT"
+    networksetup -setwebproxystate "$svc" on
+    networksetup -setsecurewebproxystate "$svc" on
   done
   echo "Proxy enabled."
 }
@@ -17,8 +17,8 @@ enable_proxy() {
 disable_proxy() {
   echo "Disabling proxy..."
   networksetup -listallnetworkservices | grep -v '^*' | while IFS= read -r svc; do
-    sudo networksetup -setwebproxystate "$svc" off
-    sudo networksetup -setsecurewebproxystate "$svc" off
+    networksetup -setwebproxystate "$svc" off
+    networksetup -setsecurewebproxystate "$svc" off
   done
   echo "Proxy disabled."
 }
