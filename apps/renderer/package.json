@@ -109,6 +109,7 @@
     "use-sync-external-store": "1.2.2",
     "usehooks-ts": "3.1.0",
     "vfile": "6.0.3",
+    "web-push": "3.6.7",
     "zod": "3.23.8",
     "zustand": "5.0.1"
   },
