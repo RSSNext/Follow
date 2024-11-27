@@ -30,7 +30,6 @@ export function immersiveTranslate({
   cache?: {
     get: (key: string) => string | undefined
     set: (key: string, value: string) => void
-    clear: () => void
   }
   targetLanguage?: SupportedLanguages
 }) {
@@ -43,7 +42,6 @@ export function immersiveTranslate({
     for (const mark of immersiveTranslateMark) {
       mark.remove()
     }
-    cache?.clear()
   }
 
   const translation = entry.settings?.translation ?? targetLanguage

@@ -30,6 +30,7 @@ import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTra
 import { fallbackLanguage } from "~/i18n"
 import { tipcClient } from "~/lib/client"
 import { LanguageMap } from "~/lib/translate"
+import { setTranslationCache } from "~/modules/entry-content/atoms"
 
 import { SettingDescription, SettingInput, SettingSwitch } from "../control"
 import { createSetting } from "../helper/builder"
@@ -258,6 +259,7 @@ const TranslateLanguageSelector = () => {
         value={translationLanguage}
         onValueChange={(value) => {
           setGeneralSetting("translationLanguage", value)
+          setTranslationCache({})
         }}
       >
         <SelectTrigger size="sm" className="w-48">

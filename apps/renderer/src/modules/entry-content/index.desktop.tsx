@@ -138,7 +138,6 @@ export const EntryContent: Component<EntryContentProps> = ({
         get: (key: string) => getTranslationCache()[key],
         set: (key: string, value: string) =>
           setTranslationCache({ ...getTranslationCache(), [key]: value }),
-        clear: () => setTranslationCache({}),
       },
     })
   }
