@@ -25,10 +25,10 @@ function Login() {
 
   const [redirecting, setRedirecting] = useState(false)
 
+  const { data: authProviders } = useAuthProviders()
   const location = useLocation()
   const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
-  const { data: authProviders } = useAuthProviders()
 
   const isAuthenticated = status === "authenticated"
 
