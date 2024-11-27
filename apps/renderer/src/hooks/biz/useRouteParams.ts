@@ -77,12 +77,11 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
 }
 
 export const useRouteParams = () => {
-  const params = useParams()
-  const [search] = useSearchParams()
-
-  return parseRouteParams(params, search)
+  return useRouteParamsSelector((s) => s)
 }
+
 const noop = [] as any[]
+
 export const useRouteParamsSelector = <T>(
   selector: (params: BizRouteParams) => T,
   deps = noop,

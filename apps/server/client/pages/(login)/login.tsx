@@ -107,7 +107,7 @@ function Login() {
           ) : (
             <>
               <Button
-                className="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80"
+                buttonClassName="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80"
                 onClick={() => {
                   loginHandler("github")
                 }}
@@ -115,7 +115,7 @@ function Login() {
                 <i className="i-mgc-github-cute-fi mr-2 text-xl" /> {t("login.continueWithGitHub")}
               </Button>
               <Button
-                className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
+                buttonClassName="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
                 onClick={() => {
                   loginHandler("google")
                 }}
