@@ -1,8 +1,13 @@
+import type { URLOpenListenerEvent } from "@capacitor/app"
+import { App as CapacitorApp } from "@capacitor/app"
+import { CapacitorHttp } from "@capacitor/core"
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { cn, getOS } from "@follow/utils/utils"
 import { useEffect } from "react"
 import { Outlet } from "react-router"
+import { toast } from "sonner"
 
 import { queryClient } from "~/lib/query-client"
 
@@ -30,6 +35,29 @@ function App() {
     })
 
     return cleanup
+  }, [])
+
+  useEffect(() => {
+    CapacitorApp.addListener("appUrlOpen", async (event: URLOpenListenerEvent) => {
+      const authUrl = new URL(event.url)
+      const token = authUrl.searchParams.get("token")
+      if (token) {
+        try {
+          await CapacitorHttp.get({
+            url: `${env.VITE_API_URL}/auth/session`,
+            headers: {
+              Cookie: `authjs.session-token=${token}`,
+            },
+          })
+        } catch (e) {
+          toast.error(`Login failed ${e}`)
+        }
+      }
+    })
+
+    return () => {
+      CapacitorApp.removeAllListeners()
+    }
   }, [])
 
   const windowsElectron = IN_ELECTRON && getOS() === "Windows"
