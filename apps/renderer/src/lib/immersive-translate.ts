@@ -37,14 +37,19 @@ export function immersiveTranslate({
     return
   }
 
+  const translation = entry.settings?.translation ?? targetLanguage
+
   const immersiveTranslateMark = html.querySelectorAll("[data-immersive-translate-mark=true]")
   if (immersiveTranslateMark.length > 0) {
+    if (translation) {
+      return
+    }
+
     for (const mark of immersiveTranslateMark) {
       mark.remove()
     }
   }
 
-  const translation = entry.settings?.translation ?? targetLanguage
   if (!translation) {
     return
   }
