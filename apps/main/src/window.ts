@@ -164,11 +164,7 @@ export function createWindow(
       // source-code-font: For code such as Elements panel
       // monospace-font: For sidebar such as Event Listener Panel
       const css = `
-        :root {
-            --source-code-font-family: consolas;
-            --source-code-font-size: 13px;
-            --monospace-font-family: consolas;
-            --monospace-font-size: 13px;
+        :root {--devtool-font-family: consolas, operator mono, Cascadia Code, monospace;--source-code-font-family: var(--devtool-font-family);--source-code-font-size: 13px;--monospace-font-family: var(--devtool-font-family);--monospace-font-size: 13px;
         }`
       window.webContents.devToolsWebContents?.executeJavaScript(`
         const overriddenStyle = document.createElement('style');
