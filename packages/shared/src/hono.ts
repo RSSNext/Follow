@@ -1,4 +1,5 @@
 import * as hono_hono_base from 'hono/hono-base';
+import * as hono_types from 'hono/types';
 import { HttpBindings } from '@hono/node-server';
 import * as zod from 'zod';
 import { z } from 'zod';
@@ -29,6 +30,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
@@ -45,6 +47,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         type: drizzle_orm_pg_core.PgColumn<{
@@ -61,6 +64,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: ["checking", "completed", "incomplete", "audit", "received"];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         actionId: drizzle_orm_pg_core.PgColumn<{
@@ -77,6 +81,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         progress: drizzle_orm_pg_core.PgColumn<{
@@ -93,6 +98,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         progressMax: drizzle_orm_pg_core.PgColumn<{
@@ -109,6 +115,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         done: drizzle_orm_pg_core.PgColumn<{
@@ -125,6 +132,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         doneAt: drizzle_orm_pg_core.PgColumn<{
@@ -141,6 +149,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         tx: drizzle_orm_pg_core.PgColumn<{
@@ -157,6 +166,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -229,6 +239,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         rules: drizzle_orm_pg_core.PgColumn<{
@@ -268,6 +279,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -438,10 +450,54 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
 declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     userId: z.ZodString;
     rules: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
 }, "rules">, {
     rules: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         name: z.ZodString;
@@ -789,6 +845,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: ["public_beta"];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
@@ -805,6 +862,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         amount: drizzle_orm_pg_core.PgColumn<{
@@ -821,6 +879,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         rank: drizzle_orm_pg_core.PgColumn<{
@@ -837,6 +896,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         detail: drizzle_orm_pg_core.PgColumn<{
@@ -882,6 +942,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         verify: drizzle_orm_pg_core.PgColumn<{
@@ -898,6 +959,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         tx: drizzle_orm_pg_core.PgColumn<{
@@ -914,6 +976,7 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -925,10 +988,54 @@ declare const airdropsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     amount: z.ZodString;
     rank: z.ZodNullable<z.ZodString>;
     detail: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     verify: z.ZodNullable<z.ZodString>;
     tx: z.ZodNullable<z.ZodString>;
 }, "detail">, {
@@ -1114,6 +1221,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
@@ -1130,6 +1238,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         entryId: drizzle_orm_pg_core.PgColumn<{
@@ -1146,6 +1255,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
@@ -1162,6 +1272,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
@@ -1178,6 +1289,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -1238,7 +1350,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>>>>>;
     title: drizzle_orm_pg_core.PgTextBuilder<{
         name: "title";
@@ -1247,7 +1358,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     url: drizzle_orm_pg_core.PgTextBuilder<{
         name: "url";
@@ -1256,7 +1366,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     content: drizzle_orm_pg_core.PgTextBuilder<{
         name: "content";
@@ -1265,7 +1374,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     description: drizzle_orm_pg_core.PgTextBuilder<{
         name: "description";
@@ -1274,7 +1382,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     guid: drizzle_orm.NotNull<drizzle_orm_pg_core.PgTextBuilder<{
         name: "guid";
@@ -1283,7 +1390,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>>;
     author: drizzle_orm_pg_core.PgTextBuilder<{
         name: "author";
@@ -1292,7 +1398,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     authorUrl: drizzle_orm_pg_core.PgTextBuilder<{
         name: "author_url";
@@ -1301,7 +1406,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     authorAvatar: drizzle_orm_pg_core.PgTextBuilder<{
         name: "author_avatar";
@@ -1310,7 +1414,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     insertedAt: drizzle_orm.NotNull<drizzle_orm_pg_core.PgTimestampBuilderInitial<"inserted_at">>;
     publishedAt: drizzle_orm.NotNull<drizzle_orm_pg_core.PgTimestampBuilderInitial<"published_at">>;
@@ -1322,7 +1425,6 @@ declare const CommonEntryFields: {
         data: string[];
         driverParam: string | string[];
         enumValues: [string, ...string[]];
-        generated: drizzle_orm.GeneratedColumnConfig<string>;
     }, {
         name: "categories";
         dataType: "string";
@@ -1330,7 +1432,6 @@ declare const CommonEntryFields: {
         data: string;
         enumValues: [string, ...string[]];
         driverParam: string;
-        generated: undefined;
     }>;
     attachments: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"attachments">, AttachmentsModel[]>;
     extra: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"extra">, ExtraModel>;
@@ -1353,6 +1454,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -1369,6 +1471,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         url: drizzle_orm_pg_core.PgColumn<{
@@ -1385,6 +1488,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         content: drizzle_orm_pg_core.PgColumn<{
@@ -1401,6 +1505,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         description: drizzle_orm_pg_core.PgColumn<{
@@ -1417,6 +1522,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         guid: drizzle_orm_pg_core.PgColumn<{
@@ -1433,6 +1539,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         author: drizzle_orm_pg_core.PgColumn<{
@@ -1449,6 +1556,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         authorUrl: drizzle_orm_pg_core.PgColumn<{
@@ -1465,6 +1573,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         authorAvatar: drizzle_orm_pg_core.PgColumn<{
@@ -1481,6 +1590,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         insertedAt: drizzle_orm_pg_core.PgColumn<{
@@ -1497,6 +1607,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         publishedAt: drizzle_orm_pg_core.PgColumn<{
@@ -1513,6 +1624,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         media: drizzle_orm_pg_core.PgColumn<{
@@ -1529,6 +1641,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         categories: drizzle_orm_pg_core.PgColumn<{
@@ -1558,8 +1671,10 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
                 hasRuntimeDefault: false;
                 enumValues: [string, ...string[]];
                 baseColumn: never;
+                identity: undefined;
                 generated: undefined;
             }, object, object>;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         attachments: drizzle_orm_pg_core.PgColumn<{
@@ -1576,6 +1691,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         extra: drizzle_orm_pg_core.PgColumn<{
@@ -1592,6 +1708,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
@@ -1608,6 +1725,7 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -1694,21 +1812,153 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     insertedAt: z.ZodString;
     publishedAt: z.ZodString;
     media: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     categories: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     attachments: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     extra: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     feedId: z.ZodString;
 }, "media" | "attachments" | "extra">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -1880,6 +2130,7 @@ declare const entryReadHistories: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userIds: drizzle_orm_pg_core.PgColumn<{
@@ -1909,8 +2160,10 @@ declare const entryReadHistories: drizzle_orm_pg_core.PgTableWithColumns<{
                 hasRuntimeDefault: false;
                 enumValues: [string, ...string[]];
                 baseColumn: never;
+                identity: undefined;
                 generated: undefined;
             }, object, object>;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         readCount: drizzle_orm_pg_core.PgColumn<{
@@ -1927,6 +2180,7 @@ declare const entryReadHistories: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -1968,6 +2222,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         url: drizzle_orm_pg_core.PgColumn<{
@@ -1984,6 +2239,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -2000,6 +2256,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         description: drizzle_orm_pg_core.PgColumn<{
@@ -2016,6 +2273,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         siteUrl: drizzle_orm_pg_core.PgColumn<{
@@ -2032,6 +2290,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         image: drizzle_orm_pg_core.PgColumn<{
@@ -2048,6 +2307,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         checkedAt: drizzle_orm_pg_core.PgColumn<{
@@ -2064,6 +2324,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         lastModifiedHeader: drizzle_orm_pg_core.PgColumn<{
@@ -2080,6 +2341,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         etagHeader: drizzle_orm_pg_core.PgColumn<{
@@ -2096,6 +2358,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         ttl: drizzle_orm_pg_core.PgColumn<{
@@ -2112,6 +2375,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         errorMessage: drizzle_orm_pg_core.PgColumn<{
@@ -2128,6 +2392,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         errorAt: drizzle_orm_pg_core.PgColumn<{
@@ -2144,6 +2409,7 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         ownerUserId: drizzle_orm_pg_core.PgColumn<{
@@ -2160,6 +2426,24 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        language: drizzle_orm_pg_core.PgColumn<{
+            name: "language";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -2179,12 +2463,14 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorMessage: zod.ZodNullable<zod.ZodString>;
     errorAt: zod.ZodNullable<zod.ZodString>;
     ownerUserId: zod.ZodNullable<zod.ZodString>;
+    language: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     description: string | null;
     title: string | null;
     id: string;
     image: string | null;
     url: string;
+    language: string | null;
     siteUrl: string | null;
     checkedAt: string;
     lastModifiedHeader: string | null;
@@ -2199,6 +2485,7 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     id: string;
     image: string | null;
     url: string;
+    language: string | null;
     siteUrl: string | null;
     checkedAt: string;
     lastModifiedHeader: string | null;
@@ -2233,6 +2520,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
@@ -2249,6 +2537,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
@@ -2265,6 +2554,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         category: drizzle_orm_pg_core.PgColumn<{
@@ -2281,6 +2571,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -2297,6 +2588,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         isPrivate: drizzle_orm_pg_core.PgColumn<{
@@ -2313,6 +2605,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -2364,6 +2657,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
@@ -2380,6 +2674,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         entryId: drizzle_orm_pg_core.PgColumn<{
@@ -2396,6 +2691,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         publishedAt: drizzle_orm_pg_core.PgColumn<{
@@ -2412,6 +2708,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         insertedAt: drizzle_orm_pg_core.PgColumn<{
@@ -2428,6 +2725,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
@@ -2444,6 +2742,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         read: drizzle_orm_pg_core.PgColumn<{
@@ -2460,6 +2759,7 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -2515,6 +2815,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -2531,6 +2832,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         url: drizzle_orm_pg_core.PgColumn<{
@@ -2547,6 +2849,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         content: drizzle_orm_pg_core.PgColumn<{
@@ -2563,6 +2866,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         description: drizzle_orm_pg_core.PgColumn<{
@@ -2579,6 +2883,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         guid: drizzle_orm_pg_core.PgColumn<{
@@ -2595,6 +2900,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         author: drizzle_orm_pg_core.PgColumn<{
@@ -2611,6 +2917,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         authorUrl: drizzle_orm_pg_core.PgColumn<{
@@ -2627,6 +2934,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         authorAvatar: drizzle_orm_pg_core.PgColumn<{
@@ -2643,6 +2951,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         insertedAt: drizzle_orm_pg_core.PgColumn<{
@@ -2659,6 +2968,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         publishedAt: drizzle_orm_pg_core.PgColumn<{
@@ -2675,6 +2985,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         media: drizzle_orm_pg_core.PgColumn<{
@@ -2691,6 +3002,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         categories: drizzle_orm_pg_core.PgColumn<{
@@ -2720,8 +3032,10 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
                 hasRuntimeDefault: false;
                 enumValues: [string, ...string[]];
                 baseColumn: never;
+                identity: undefined;
                 generated: undefined;
             }, object, object>;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         attachments: drizzle_orm_pg_core.PgColumn<{
@@ -2738,6 +3052,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         extra: drizzle_orm_pg_core.PgColumn<{
@@ -2754,6 +3069,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         inboxHandle: drizzle_orm_pg_core.PgColumn<{
@@ -2770,6 +3086,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         read: drizzle_orm_pg_core.PgColumn<{
@@ -2786,6 +3103,7 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -2804,21 +3122,153 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     insertedAt: z.ZodString;
     publishedAt: z.ZodString;
     media: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     categories: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     attachments: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     extra: z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     inboxHandle: z.ZodString;
     read: z.ZodNullable<z.ZodBoolean>;
 }, "media" | "attachments" | "extra">, {
@@ -2974,21 +3424,153 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     guid: z.ZodString;
     media: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
     categories: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodString, "many">>>;
     attachments: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
     extra: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
-        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null;
+    } | (string | number | boolean | {
+        [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
+    } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
     authorUrl: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     authorAvatar: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     insertedAt: z.ZodString;
@@ -3160,6 +3742,7 @@ declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         handle: drizzle_orm_pg_core.PgColumn<{
@@ -3176,6 +3759,7 @@ declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         secret: drizzle_orm_pg_core.PgColumn<{
@@ -3192,6 +3776,7 @@ declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -3208,6 +3793,7 @@ declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3253,6 +3839,7 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
@@ -3269,6 +3856,7 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         fromUserId: drizzle_orm_pg_core.PgColumn<{
@@ -3285,6 +3873,7 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         toUserId: drizzle_orm_pg_core.PgColumn<{
@@ -3301,6 +3890,7 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3344,6 +3934,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         feedIds: drizzle_orm_pg_core.PgColumn<{
@@ -3373,8 +3964,10 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
                 hasRuntimeDefault: false;
                 enumValues: [string, ...string[]];
                 baseColumn: never;
+                identity: undefined;
                 generated: undefined;
             }, object, object>;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -3391,6 +3984,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         description: drizzle_orm_pg_core.PgColumn<{
@@ -3407,6 +4001,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         image: drizzle_orm_pg_core.PgColumn<{
@@ -3423,6 +4018,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
@@ -3439,6 +4035,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         fee: drizzle_orm_pg_core.PgColumn<{
@@ -3455,6 +4052,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         timelineUpdatedAt: drizzle_orm_pg_core.PgColumn<{
@@ -3471,6 +4069,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         ownerUserId: drizzle_orm_pg_core.PgColumn<{
@@ -3487,6 +4086,7 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3546,6 +4146,7 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         listId: drizzle_orm_pg_core.PgColumn<{
@@ -3562,6 +4163,7 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
@@ -3578,6 +4180,7 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
@@ -3594,6 +4197,7 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         lastViewedAt: drizzle_orm_pg_core.PgColumn<{
@@ -3610,6 +4214,7 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         isPrivate: drizzle_orm_pg_core.PgColumn<{
@@ -3626,6 +4231,7 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3676,6 +4282,7 @@ declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
@@ -3692,6 +4299,7 @@ declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         entryId: drizzle_orm_pg_core.PgColumn<{
@@ -3708,6 +4316,7 @@ declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         insertedAt: drizzle_orm_pg_core.PgColumn<{
@@ -3724,6 +4333,7 @@ declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3768,6 +4378,7 @@ declare const messaging: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         token: drizzle_orm_pg_core.PgColumn<{
@@ -3784,6 +4395,7 @@ declare const messaging: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         channel: drizzle_orm_pg_core.PgColumn<{
@@ -3800,6 +4412,7 @@ declare const messaging: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3853,6 +4466,7 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
@@ -3869,6 +4483,7 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         tab: drizzle_orm_pg_core.PgColumn<{
@@ -3885,6 +4500,7 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: ["general", "appearance", "integration"];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         payload: drizzle_orm_pg_core.PgColumn<{
@@ -3901,6 +4517,7 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         updateAt: drizzle_orm_pg_core.PgColumn<{
@@ -3917,6 +4534,7 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         version: drizzle_orm_pg_core.PgColumn<{
@@ -3933,6 +4551,7 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -3957,6 +4576,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: true;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         name: drizzle_orm_pg_core.PgColumn<{
@@ -3973,6 +4593,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         email: drizzle_orm_pg_core.PgColumn<{
@@ -3989,6 +4610,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         emailVerified: drizzle_orm_pg_core.PgColumn<{
@@ -4005,6 +4627,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         image: drizzle_orm_pg_core.PgColumn<{
@@ -4021,6 +4644,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         handle: drizzle_orm_pg_core.PgColumn<{
@@ -4037,6 +4661,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
@@ -4053,6 +4678,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4100,6 +4726,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         type: drizzle_orm_pg_core.PgColumn<{
@@ -4116,6 +4743,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         provider: drizzle_orm_pg_core.PgColumn<{
@@ -4132,6 +4760,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         providerAccountId: drizzle_orm_pg_core.PgColumn<{
@@ -4148,6 +4777,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         refresh_token: drizzle_orm_pg_core.PgColumn<{
@@ -4164,6 +4794,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         access_token: drizzle_orm_pg_core.PgColumn<{
@@ -4180,6 +4811,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         expires_at: drizzle_orm_pg_core.PgColumn<{
@@ -4196,6 +4828,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         token_type: drizzle_orm_pg_core.PgColumn<{
@@ -4212,6 +4845,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         scope: drizzle_orm_pg_core.PgColumn<{
@@ -4228,6 +4862,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         id_token: drizzle_orm_pg_core.PgColumn<{
@@ -4244,6 +4879,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         session_state: drizzle_orm_pg_core.PgColumn<{
@@ -4260,6 +4896,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4283,6 +4920,7 @@ declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
@@ -4299,6 +4937,7 @@ declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         expires: drizzle_orm_pg_core.PgColumn<{
@@ -4315,6 +4954,7 @@ declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4338,6 +4978,7 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         token: drizzle_orm_pg_core.PgColumn<{
@@ -4354,6 +4995,7 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         expires: drizzle_orm_pg_core.PgColumn<{
@@ -4370,6 +5012,7 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4404,10 +5047,8 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: drizzle_orm.GeneratedColumnConfig<number> & {
-                as: any;
-                type: "always";
-            };
+            identity: "always";
+            generated: undefined;
         }, {}, {}>;
         address: drizzle_orm_pg_core.PgColumn<{
             name: "address";
@@ -4423,6 +5064,7 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
@@ -4439,6 +5081,7 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
@@ -4455,6 +5098,7 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
@@ -4471,6 +5115,7 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         dailyPowerToken: drizzle_orm_pg_core.PgColumn<{
@@ -4487,6 +5132,7 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         cashablePowerToken: drizzle_orm_pg_core.PgColumn<{
@@ -4503,6 +5149,7 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4558,6 +5205,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         type: drizzle_orm_pg_core.PgColumn<{
@@ -4574,6 +5222,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: ["tip", "mint", "burn", "withdraw", "purchase", "airdrop"];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         fromUserId: drizzle_orm_pg_core.PgColumn<{
@@ -4590,6 +5239,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         toUserId: drizzle_orm_pg_core.PgColumn<{
@@ -4606,6 +5256,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         toFeedId: drizzle_orm_pg_core.PgColumn<{
@@ -4622,6 +5273,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         toListId: drizzle_orm_pg_core.PgColumn<{
@@ -4638,6 +5290,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         toEntryId: drizzle_orm_pg_core.PgColumn<{
@@ -4654,6 +5307,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
@@ -4670,6 +5324,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         tax: drizzle_orm_pg_core.PgColumn<{
@@ -4686,6 +5341,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
@@ -4702,6 +5358,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         comment: drizzle_orm_pg_core.PgColumn<{
@@ -4718,6 +5375,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4785,6 +5443,7 @@ declare const feedPowerTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
@@ -4801,6 +5460,7 @@ declare const feedPowerTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4837,6 +5497,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         rank: drizzle_orm_pg_core.PgColumn<{
@@ -4853,6 +5514,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         level: drizzle_orm_pg_core.PgColumn<{
@@ -4869,6 +5531,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         prevActivityPoints: drizzle_orm_pg_core.PgColumn<{
@@ -4885,6 +5548,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         activityPoints: drizzle_orm_pg_core.PgColumn<{
@@ -4901,6 +5565,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
@@ -4917,6 +5582,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
@@ -4933,6 +5599,7 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
@@ -4985,6 +5652,7 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
         expiresAt: drizzle_orm_pg_core.PgColumn<{
@@ -5001,351 +5669,179 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
+            identity: undefined;
             generated: undefined;
         }, {}, {}>;
     };
     dialect: "pg";
 }>;
 
-declare const _routes: hono_hono_base.HonoBase<Env, {
-    "/probes/postgresql": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: number;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/probes/redis": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: number;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/probes/bullmq": {
+declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hono_types.MergeSchemaPath<{
+    "/": {
         $get: {
             input: {
                 query: {
-                    name: string | string[];
+                    type?: "received" | "checking" | "completed" | "incomplete" | "all" | "audit" | undefined;
                 };
             };
             output: {
-                code: 0;
+                code: number;
                 data: {
-                    completed: number;
-                    wait: number;
-                    failed: number;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    boosts: {
-        $get: {
-            input: {
-                query: {
-                    feedId: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    level: number;
-                    monthlyBoostCost: number;
-                    boostCount: number;
-                    remainingBoostsToLevelUp: number;
-                    lastValidBoost: {
-                        hash: string | null;
-                        expiresAt: string;
-                    } | null;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $post: {
-            input: {
-                json: {
-                    feedId: string;
-                    amount: string;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    transactionHash: string;
-                    expiresAt: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "boosts/boosters": {
-        $get: {
-            input: {
-                query: {
-                    feedId: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    name: string | null;
+                    type: "received" | "checking" | "completed" | "incomplete" | "audit";
                     id: string;
-                    emailVerified: string | null;
-                    image: string | null;
-                    handle: string | null;
-                    createdAt: string;
+                    userId: string;
+                    actionId: number;
+                    progress: number;
+                    progressMax: number;
+                    done: boolean;
+                    doneAt: string | null;
+                    tx: string | null;
+                    power: string;
                 }[];
+                done: number;
+                total: number;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
 } & {
-    "/status/configs": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    MAX_SUBSCRIPTIONS: number;
-                    MAX_LISTS: number;
-                    MAX_ACTIONS: number;
-                    MAX_WEBHOOKS_PER_ACTION: number;
-                    MAX_INBOXES: number;
-                    IMPORTING_TITLE: string;
-                    DAILY_POWER_PERCENTAGES: number[];
-                    LEVEL_PERCENTAGES: number[];
-                    DAILY_CLAIM_AMOUNT: {
-                        trial: number;
-                        normal: number;
-                    };
-                    TAX_POINT: string;
-                    INVITATION_INTERVAL_DAYS: number;
-                    INVITATION_PRICE: number;
-                    DAILY_POWER_SUPPLY: number;
-                    IS_RSS3_TESTNET: boolean;
-                    PRODUCT_HUNT_VOTE_URL: string;
-                    ANNOUNCEMENT: string;
-                    MAX_TRIAL_USER_FEED_SUBSCRIPTION: number;
-                    MAX_TRIAL_USER_LIST_SUBSCRIPTION: number;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/messaging": {
-        $post: {
-            input: {
-                json: {
-                    token: string;
-                    channel: "desktop" | "mobile";
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/messaging/test": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/inboxes": {
-        $delete: {
-            input: {
-                json: {
-                    handle: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $get: {
-            input: {
-                query: {
-                    handle: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    type: "inbox";
-                    id: string;
-                    secret: string;
-                    description?: string | null | undefined;
-                    title?: string | null | undefined;
-                    image?: string | null | undefined;
-                    ownerUserId?: string | null | undefined;
-                    owner?: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $post: {
-            input: {
-                json: {
-                    handle: string;
-                    title?: string | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
+    "/": {
         $put: {
             input: {
                 json: {
-                    title: string;
-                    handle: string;
+                    actionId: number;
                 };
             };
             output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/inboxes/webhook": {
-        $post: {
-            input: {
-                json: {
-                    guid: string;
-                    publishedAt: string;
-                    description?: string | null | undefined;
-                    title?: string | null | undefined;
-                    content?: string | null | undefined;
-                    author?: string | null | undefined;
-                    url?: string | null | undefined;
-                    media?: {
-                        type: "photo" | "video";
-                        url: string;
-                        width?: number | undefined;
-                        height?: number | undefined;
-                        preview_image_url?: string | undefined;
-                        blurhash?: string | undefined;
-                    }[] | null | undefined;
-                    categories?: string[] | null | undefined;
-                    attachments?: {
-                        url: string;
-                        title?: string | undefined;
-                        duration_in_seconds?: number | undefined;
-                        mime_type?: string | undefined;
-                        size_in_bytes?: number | undefined;
-                    }[] | null | undefined;
-                    extra?: {
-                        links?: {
-                            type: string;
-                            url: string;
-                            content_html?: string | undefined;
-                        }[] | null | undefined;
-                    } | null | undefined;
-                    authorUrl?: string | null | undefined;
-                    authorAvatar?: string | null | undefined;
-                    read?: boolean | null | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/inboxes/email": {
-        $post: {
-            input: {
-                json: {
-                    date: string;
-                    from: {
-                        name?: string | undefined;
-                        address?: string | undefined;
-                    };
-                    to: {
-                        address: string;
-                    };
-                    messageId: string;
-                    subject?: string | undefined;
-                    html?: string | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/inboxes/list": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
+                code: number;
                 data: {
-                    type: "inbox";
-                    id: string;
-                    secret: string;
-                    description?: string | null | undefined;
-                    title?: string | null | undefined;
-                    image?: string | null | undefined;
-                    ownerUserId?: string | null | undefined;
-                    owner?: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
-                }[];
+                    actionId: number;
+                    result: boolean;
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
 } & {
-    "/admin/clean": {
+    "/check": {
         $post: {
             input: {
                 json: {
-                    type: string;
+                    actionId: number;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    actionId: number;
+                    result: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/audit": {
+        $post: {
+            input: {
+                json: {
+                    actionId: number;
+                    payload?: any;
+                };
+            };
+            output: {
+                code: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/achievement"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data?: {
+                    userId: string;
+                    rules?: {
+                        name: string;
+                        result: {
+                            summary?: boolean | undefined;
+                            disabled?: boolean | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            readability?: boolean | undefined;
+                            sourceContent?: boolean | undefined;
+                            silence?: boolean | undefined;
+                            block?: boolean | undefined;
+                            newEntryNotification?: boolean | undefined;
+                            rewriteRules?: {
+                                from: string;
+                                to: string;
+                            }[] | undefined;
+                            blockRules?: {
+                                value: string | number;
+                                field: "title" | "all" | "content" | "author" | "url" | "order";
+                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                            }[] | undefined;
+                            webhooks?: string[] | undefined;
+                        };
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[] | {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[][];
+                    }[] | null | undefined;
+                } | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $put: {
+            input: {
+                json: {
+                    rules?: {
+                        name: string;
+                        result: {
+                            summary?: boolean | undefined;
+                            disabled?: boolean | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            readability?: boolean | undefined;
+                            sourceContent?: boolean | undefined;
+                            silence?: boolean | undefined;
+                            block?: boolean | undefined;
+                            newEntryNotification?: boolean | undefined;
+                            rewriteRules?: {
+                                from: string;
+                                to: string;
+                            }[] | undefined;
+                            blockRules?: {
+                                value: string | number;
+                                field: "title" | "all" | "content" | "author" | "url" | "order";
+                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                            }[] | undefined;
+                            webhooks?: string[] | undefined;
+                        };
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[] | {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[][];
+                    }[] | null | undefined;
                 };
             };
             output: {
@@ -5355,42 +5851,267 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-} & {
-    "/metrics": {
-        $get: {
-            input: {};
-            output: {};
-            outputFormat: string;
-            status: 200;
-        };
-    };
-    "/metrics/pools": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    totalCount: number;
-                    idleCount: number;
-                    waitingCount: number;
-                }[];
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/lists": {
+}, "/actions"> | hono_types.MergeSchemaPath<{
+    "/translation": {
         $get: {
             input: {
                 query: {
-                    listId: string | string[];
+                    id: string;
+                    language: "en" | "ja" | "zh-CN" | "zh-TW";
+                    fields: string;
+                    part?: string | undefined;
                 };
             };
             output: {
                 code: 0;
+                data?: {
+                    description?: string | undefined;
+                    title?: string | undefined;
+                    content?: string | undefined;
+                } | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/summary": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                    language?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data?: string | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/daily": {
+        $get: {
+            input: {
+                query: {
+                    view: "0" | "1";
+                    startDate: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: string;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/ai"> | hono_types.MergeSchemaPath<{
+    "/new-session": {
+        $post: {
+            input: {};
+            output: {
+                code: 0;
                 data: {
-                    list: {
+                    userId: string;
+                    sessionToken: string;
+                    expires: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/update-account": {
+        $patch: {
+            input: {
+                json: {
+                    name?: string | null | undefined;
+                    image?: string | null | undefined;
+                    handle?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/auth-app"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    view?: string | undefined;
+                };
+            };
+            output: {
+                data?: string[] | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    feedIdList: string[];
+                    deleteSubscriptions: boolean;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $patch: {
+            input: {
+                json: {
+                    category: string;
+                    feedIdList: string[];
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/categories"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    entryId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: boolean;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    entryId: string;
+                    view?: number | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    entryId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/collections"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    keyword: string;
+                    target?: "feeds" | "lists" | undefined;
+                };
+            };
+            output: {
+                data: {
+                    entries?: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        feedId: string;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[] | undefined;
+                    feed?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    } | undefined;
+                    list?: {
                         type: "list";
                         id: string;
                         view: number;
@@ -5437,227 +6158,602 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                             createdAt: string;
                         } | null | undefined;
-                    };
-                    subscriptionCount: number;
-                    readCount: number;
-                    feedCount: number;
-                    subscription?: {
-                        title: string | null;
-                        userId: string;
-                        view: number;
-                        isPrivate: boolean;
-                        listId: string;
-                        lastViewedAt: string | null;
                     } | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $post: {
-            input: {
-                json: {
-                    title: string;
-                    view: number;
-                    fee: number;
-                    description?: string | null | undefined;
-                    image?: string | null | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    type: "list";
-                    id: string;
-                    view: number;
-                    feedIds: string[];
-                    fee: number;
-                    timelineUpdatedAt: string;
-                    description?: string | null | undefined;
-                    title?: string | null | undefined;
-                    image?: string | null | undefined;
-                    feeds?: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    }[] | undefined;
-                    ownerUserId?: string | null | undefined;
-                    owner?: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $delete: {
-            input: {
-                json: {
-                    listId: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $patch: {
-            input: {
-                json: {
-                    title: string;
-                    view: number;
-                    fee: number;
-                    listId: string;
-                    description?: string | null | undefined;
-                    image?: string | null | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/lists/list": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    type: "list";
-                    id: string;
-                    view: number;
-                    feedIds: string[];
-                    fee: number;
-                    timelineUpdatedAt: string;
-                    description?: string | null | undefined;
-                    title?: string | null | undefined;
-                    image?: string | null | undefined;
-                    feeds?: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    }[] | undefined;
-                    ownerUserId?: string | null | undefined;
-                    owner?: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
+                    docs?: string | undefined;
+                    isSubscribed?: boolean | undefined;
                     subscriptionCount?: number | undefined;
-                    purchaseAmount?: number | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/lists/feeds": {
+} & {
+    "/rsshub": {
+        $get: {
+            input: {
+                query: {
+                    category?: string | undefined;
+                    categories?: string | undefined;
+                    namespace?: string | undefined;
+                    lang?: string | undefined;
+                };
+            };
+            output: {
+                data: {
+                    [x: string]: {
+                        description: string;
+                        name: string;
+                        url: string;
+                        lang: string;
+                        routes: {
+                            [x: string]: {
+                                description: string;
+                                parameters: {
+                                    [x: string]: string;
+                                };
+                                path: string;
+                                example: string;
+                                name: string;
+                                categories: string[];
+                                maintainers: string[];
+                                location: string;
+                                view?: number | undefined;
+                            };
+                        };
+                    };
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/rsshub/route": {
+        $get: {
+            input: {
+                query: {
+                    route: string;
+                };
+            };
+            output: {
+                data: {
+                    description: string;
+                    name: string;
+                    url: string;
+                    prefix: string;
+                    route?: any;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/discover"> | hono_types.MergeSchemaPath<hono_types.MergeSchemaPath<{
+    "/": {
         $post: {
             input: {
                 json: {
-                    feedId: string;
-                    listId: string;
-                } | {
-                    feedIds: string[];
-                    listId: string;
+                    inboxId: string;
+                    read?: boolean | undefined;
+                    limit?: number | undefined;
+                    publishedAfter?: string | undefined;
+                    publishedBefore?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                remaining: number;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        read: boolean | null;
+                        inboxHandle: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    };
+                    feeds: {
+                        type: "inbox";
+                        id: string;
+                        secret: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
+                    read: boolean | null;
+                    collections?: {
+                        createdAt: string;
+                    } | undefined;
+                    settings?: {
+                        summary?: boolean | undefined;
+                        disabled?: boolean | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        readability?: boolean | undefined;
+                        sourceContent?: boolean | undefined;
+                        silence?: boolean | undefined;
+                        block?: boolean | undefined;
+                        newEntryNotification?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                        webhooks?: string[] | undefined;
+                    } | undefined;
+                }[] | undefined;
+                total?: number | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        read: boolean | null;
+                        inboxHandle: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    };
+                    feeds: {
+                        type: "inbox";
+                        id: string;
+                        secret: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
+                } | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    entryId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/inbox"> & hono_types.MergeSchemaPath<{
+    "/:id": {
+        $get: {
+            input: {
+                param: {
+                    id?: any;
+                };
+            } & {
+                query: {
+                    page?: number | undefined;
+                    size?: number | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
-                    type: "feed";
+                    total: number;
+                    users: {
+                        [x: string]: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        };
+                    };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/read-histories"> & hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    insertedAfter: number;
+                    view?: number | undefined;
+                    feedIdList?: string[] | undefined;
+                    feedId?: string | undefined;
+                    read?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    has_new: boolean;
+                    entry_id?: string | undefined;
+                    lastest_at?: string | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/check-new"> & {
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    view?: number | undefined;
+                    feedIdList?: string[] | undefined;
+                    feedId?: string | undefined;
+                    read?: boolean | undefined;
+                    limit?: number | undefined;
+                    publishedAfter?: string | undefined;
+                    publishedBefore?: string | undefined;
+                    listId?: string | undefined;
+                    collected?: boolean | undefined;
+                    isCollection?: boolean | undefined;
+                    isArchived?: boolean | undefined;
+                    withContent?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    };
+                    feeds: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    };
+                    read: boolean | null;
+                    collections?: {
+                        createdAt: string;
+                    } | undefined;
+                    settings?: {
+                        summary?: boolean | undefined;
+                        disabled?: boolean | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        readability?: boolean | undefined;
+                        sourceContent?: boolean | undefined;
+                        silence?: boolean | undefined;
+                        block?: boolean | undefined;
+                        newEntryNotification?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                        webhooks?: string[] | undefined;
+                    } | undefined;
+                }[] | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $get: {
+            input: {
+                query: {
                     id: string;
-                    url: string;
-                    description?: string | null | undefined;
-                    title?: string | null | undefined;
-                    image?: string | null | undefined;
-                    siteUrl?: string | null | undefined;
-                    errorMessage?: string | null | undefined;
-                    errorAt?: string | null | undefined;
-                    ownerUserId?: string | null | undefined;
-                    owner?: {
-                        name: string | null;
+                };
+            };
+            output: {
+                code: 0;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
                         id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
-                    tipUsers?: {
-                        name: string | null;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    };
+                    feeds: {
+                        type: "feed";
                         id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    };
+                } | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/stream": {
+        $post: {
+            input: {
+                json: {
+                    ids: string[];
+                };
+            };
+            output: {};
+            outputFormat: string;
+            status: 200;
+        };
+    };
+} & {
+    "/preview": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    description: string | null;
+                    title: string | null;
+                    content: string | null;
+                    id: string;
+                    author: string | null;
+                    url: string | null;
+                    feedId: string;
+                    guid: string;
+                    categories: string[] | null;
+                    authorUrl: string | null;
+                    authorAvatar: string | null;
+                    insertedAt: string;
+                    publishedAt: string;
+                    media?: {
+                        type: "photo" | "video";
+                        url: string;
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        preview_image_url?: string | undefined;
+                        blurhash?: string | undefined;
                     }[] | null | undefined;
+                    attachments?: {
+                        url: string;
+                        title?: string | undefined;
+                        duration_in_seconds?: number | undefined;
+                        mime_type?: string | undefined;
+                        size_in_bytes?: number | undefined;
+                    }[] | null | undefined;
+                    extra?: {
+                        links?: {
+                            type: string;
+                            url: string;
+                            content_html?: string | undefined;
+                        }[] | null | undefined;
+                    } | null | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
             status: 200;
         };
-        $delete: {
+    };
+}, "/entries"> | hono_types.MergeSchemaPath<hono_types.MergeSchemaPath<{
+    "/message": {
+        $get: {
+            input: {
+                query: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    json: string;
+                    description: string;
+                    xml: string;
+                    content: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/challenge": {
+        $post: {
             input: {
                 json: {
                     feedId: string;
-                    listId: string;
                 };
             };
             output: {
@@ -5668,137 +6764,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/wallets/airdrop": {
-        $post: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    transactionHash: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
+    "/list": {
         $get: {
             input: {};
             output: {
                 code: 0;
                 data: {
-                    tx: string | null;
-                    rank: string | null;
-                    amount: string;
-                    detail: {
-                        "Invitations count": number;
-                        "Purchase lists cost": number;
-                        "Total tip amount": number;
-                        "Feeds subscriptions count": number;
-                        "Lists subscriptions count": number;
-                        "Inbox subscriptions count": number;
-                        "Recent read count in the last month": number;
-                        "Mint count": number;
-                        "Claimed feeds count": number;
-                        "Claimed feeds subscriptions count": number;
-                        "Lists with more than 1 feed count": number;
-                        "Created lists subscriptions count": number;
-                        "Created lists income amount": number;
-                        "GitHub Community Contributions": number;
-                        "Invitations count Rank": number;
-                        "Purchase lists cost Rank": number;
-                        "Total tip amount Rank": number;
-                        "Feeds subscriptions count Rank": number;
-                        "Lists subscriptions count Rank": number;
-                        "Inbox subscriptions count Rank": number;
-                        "Recent read count in the last month Rank": number;
-                        "Mint count Rank": number;
-                        "Claimed feeds count Rank": number;
-                        "Claimed feeds subscriptions count Rank": number;
-                        "Lists with more than 1 feed count Rank": number;
-                        "Created lists subscriptions count Rank": number;
-                        "Created lists income amount Rank": number;
-                        "GitHub Community Contributions Rank": number;
-                    } | null;
-                    verify: string | null;
-                } | null;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $put: {
-            input: {
-                json: {
-                    verify: string | null;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/wallets/transactions/tip": {
-        $post: {
-            input: {
-                json: {
-                    entryId: string;
-                    amount: string;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    transactionHash: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/wallets/transactions": {
-        $get: {
-            input: {
-                query: {
-                    type?: string | string[] | undefined;
-                    fromUserId?: string | string[] | undefined;
-                    toUserId?: string | string[] | undefined;
-                    hash?: string | string[] | undefined;
-                    fromOrToUserId?: string | string[] | undefined;
-                    toFeedId?: string | string[] | undefined;
-                    createdAfter?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
-                    createdAt: string;
-                    fromUserId: string | null;
-                    toUserId: string | null;
-                    hash: string;
-                    powerToken: string;
-                    toFeedId: string | null;
-                    toListId: string | null;
-                    toEntryId: string | null;
-                    tax: string;
-                    comment: string | null;
-                    fromUser?: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
-                    toUser?: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null | undefined;
-                    toFeed?: {
+                    feed: {
                         type: "feed";
                         id: string;
                         url: string;
@@ -5825,80 +6797,136 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                             createdAt: string;
                         }[] | null | undefined;
-                    } | null | undefined;
+                    };
+                    subscriptionCount: number;
+                    tipAmount: number;
                 }[];
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/wallets/transactions/claim_daily": {
-        $post: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    transactionHash: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/wallets/transactions/withdraw": {
-        $post: {
+}, "/claim"> & {
+    "/": {
+        $get: {
             input: {
-                json: {
-                    address: string;
-                    amount: string;
+                query: {
+                    id?: string | undefined;
+                    url?: string | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
-                    transactionHash: string;
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[];
+                    feed: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    };
+                    subscriptionCount: number;
+                    readCount: number;
+                    subscription?: {
+                        title: string | null;
+                        userId: string;
+                        view: number;
+                        category: string | null;
+                        feedId: string;
+                        isPrivate: boolean;
+                    } | undefined;
                 };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/wallets/transactions/claim-check": {
+} & {
+    "/refresh": {
         $get: {
-            input: {};
+            input: {
+                query: {
+                    id: string;
+                };
+            };
             output: {
                 code: 0;
-                data: boolean;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/wallets": {
+} & {
+    "/reset": {
         $get: {
-            input: {};
+            input: {
+                query: {
+                    id: string;
+                };
+            };
             output: {
                 code: 0;
-                data: {
-                    createdAt: string;
-                    userId: string;
-                    addressIndex: number;
-                    address: string | null;
-                    powerToken: string;
-                    dailyPowerToken: string;
-                    cashablePowerToken: string;
-                    level: {
-                        rank: number | null;
-                        level: number | null;
-                        prevActivityPoints: number | null;
-                        activityPoints: number | null;
-                    } | null;
-                    todayDailyPower: string;
-                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
         };
+    };
+}, "/feeds"> | hono_types.MergeSchemaPath<{
+    "/new": {
         $post: {
             input: {};
             output: {
@@ -5909,9 +6937,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/wallets/refresh": {
+} & {
+    "/use": {
         $post: {
-            input: {};
+            input: {
+                json: {
+                    code: string;
+                };
+            };
             output: {
                 code: 0;
             };
@@ -5919,27 +6952,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/wallets/ranking": {
+} & {
+    "/": {
         $get: {
             input: {};
             output: {
                 code: 0;
                 data: {
-                    user: {
+                    code: string;
+                    createdAt: string | null;
+                    users: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
                         image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    };
-                    userId: string;
-                    address: string;
-                    powerToken: string;
-                    rank: number | null;
-                    level: number | null;
-                    prevActivityPoints: number | null;
-                    activityPoints: number | null;
+                    } | null;
+                    toUserId: string | null;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -5947,12 +6974,197 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/subscriptions": {
+    "/limitation": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/invitations"> | hono_types.MergeSchemaPath<{
+    "/": {
         $get: {
             input: {
                 query: {
-                    userId?: string | string[] | undefined;
-                    view?: string | string[] | undefined;
+                    id?: string | undefined;
+                    handle?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    name: string | null;
+                    id: string;
+                    emailVerified: string | null;
+                    image: string | null;
+                    handle: string | null;
+                    createdAt: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/batch": {
+        $post: {
+            input: {
+                json: {
+                    ids: string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    [x: string]: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    };
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/profiles"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    entryIds: string[];
+                    isInbox?: boolean | undefined;
+                    readHistories?: string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    entryId: string;
+                    isInbox?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    view?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    [x: string]: number;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/all": {
+        $post: {
+            input: {
+                json: {
+                    view?: number | undefined;
+                    feedIdList?: string[] | undefined;
+                    feedId?: string | undefined;
+                    inboxId?: string | undefined;
+                    listId?: string | undefined;
+                    startTime?: number | undefined;
+                    endTime?: number | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/total-count": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    count: number;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/reads"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    tab?: "general" | "appearance" | "integration" | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                settings: {
+                    [x: string]: any;
+                };
+                updated: {
+                    [x: string]: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/:tab": {
+        $patch: {
+            input: {
+                param: {
+                    tab: string;
+                };
+            } & {
+                json: Record<string, any>;
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/settings"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    userId?: string | undefined;
+                    view?: string | undefined;
                 };
             };
             output: {
@@ -6089,6 +7301,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             outputFormat: "json" | "text";
             status: 200;
         };
+    };
+} & {
+    "/": {
         $post: {
             input: {
                 json: {
@@ -6106,6 +7321,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             outputFormat: "json" | "text";
             status: 200;
         };
+    };
+} & {
+    "/": {
         $delete: {
             input: {
                 json: {
@@ -6121,6 +7339,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             outputFormat: "json" | "text";
             status: 200;
         };
+    };
+} & {
+    "/": {
         $patch: {
             input: {
                 json: {
@@ -6139,7 +7360,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/subscriptions/export": {
+} & {
+    "/export": {
         $get: {
             input: {};
             output: {};
@@ -6147,7 +7369,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/subscriptions/import": {
+} & {
+    "/import": {
         $post: {
             input: {};
             output: {
@@ -6157,7 +7380,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/subscriptions/batch": {
+} & {
+    "/batch": {
         $patch: {
             input: {
                 json: {
@@ -6175,115 +7399,95 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-} & {
-    "/settings": {
-        $get: {
-            input: {
-                query: {
-                    tab?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                settings: {
-                    [x: string]: any;
-                };
-                updated: {
-                    [x: string]: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/settings/:tab": {
-        $patch: {
-            input: {
-                param: {
-                    tab: string;
-                };
-            } & {
-                json: Record<string, any>;
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/reads": {
+}, "/subscriptions"> | hono_types.MergeSchemaPath<hono_types.MergeSchemaPath<{
+    "/": {
         $post: {
-            input: {
-                json: {
-                    entryIds: string[];
-                    isInbox?: boolean | undefined;
-                    readHistories?: string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $delete: {
-            input: {
-                json: {
-                    entryId: string;
-                    isInbox?: boolean | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $get: {
-            input: {
-                query: {
-                    view?: string | string[] | undefined;
-                };
-            };
+            input: {};
             output: {
                 code: 0;
                 data: {
-                    [x: string]: number;
+                    transactionHash: string;
                 };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/reads/all": {
-        $post: {
-            input: {
-                json: {
-                    view?: number | undefined;
-                    feedIdList?: string[] | undefined;
-                    feedId?: string | undefined;
-                    inboxId?: string | undefined;
-                    listId?: string | undefined;
-                    startTime?: number | undefined;
-                    endTime?: number | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/reads/total-count": {
+} & {
+    "/": {
         $get: {
             input: {};
             output: {
                 code: 0;
                 data: {
-                    count: number;
+                    tx: string | null;
+                    rank: string | null;
+                    amount: string;
+                    detail: {
+                        "Invitations count": number;
+                        "Purchase lists cost": number;
+                        "Total tip amount": number;
+                        "Feeds subscriptions count": number;
+                        "Lists subscriptions count": number;
+                        "Inbox subscriptions count": number;
+                        "Recent read count in the last month": number;
+                        "Mint count": number;
+                        "Claimed feeds count": number;
+                        "Claimed feeds subscriptions count": number;
+                        "Lists with more than 1 feed count": number;
+                        "Created lists subscriptions count": number;
+                        "Created lists income amount": number;
+                        "GitHub Community Contributions": number;
+                        "Invitations count Rank": number;
+                        "Purchase lists cost Rank": number;
+                        "Total tip amount Rank": number;
+                        "Feeds subscriptions count Rank": number;
+                        "Lists subscriptions count Rank": number;
+                        "Inbox subscriptions count Rank": number;
+                        "Recent read count in the last month Rank": number;
+                        "Mint count Rank": number;
+                        "Claimed feeds count Rank": number;
+                        "Claimed feeds subscriptions count Rank": number;
+                        "Lists with more than 1 feed count Rank": number;
+                        "Created lists subscriptions count Rank": number;
+                        "Created lists income amount Rank": number;
+                        "GitHub Community Contributions Rank": number;
+                    } | null;
+                    verify: string | null;
+                } | null;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $put: {
+            input: {
+                json: {
+                    verify: string | null;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/airdrop"> & hono_types.MergeSchemaPath<{
+    "/tip": {
+        $post: {
+            input: {
+                json: {
+                    entryId: string;
+                    amount: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
                 };
             };
             outputFormat: "json" | "text";
@@ -6291,47 +7495,91 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/profiles": {
+    "/": {
         $get: {
             input: {
                 query: {
-                    id?: string | string[] | undefined;
-                    handle?: string | string[] | undefined;
+                    type?: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop" | undefined;
+                    fromUserId?: string | undefined;
+                    toUserId?: string | undefined;
+                    hash?: string | undefined;
+                    fromOrToUserId?: string | undefined;
+                    toFeedId?: string | undefined;
+                    createdAfter?: string | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
-                    name: string | null;
-                    id: string;
-                    emailVerified: string | null;
-                    image: string | null;
-                    handle: string | null;
+                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
                     createdAt: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/profiles/batch": {
-        $post: {
-            input: {
-                json: {
-                    ids: string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    [x: string]: {
+                    fromUserId: string | null;
+                    toUserId: string | null;
+                    hash: string;
+                    powerToken: string;
+                    toFeedId: string | null;
+                    toListId: string | null;
+                    toEntryId: string | null;
+                    tax: string;
+                    comment: string | null;
+                    fromUser?: {
                         name: string | null;
                         id: string;
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
-                    };
+                    } | null | undefined;
+                    toUser?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                    toFeed?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    } | null | undefined;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/claim_daily": {
+        $post: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
                 };
             };
             outputFormat: "json" | "text";
@@ -6339,7 +7587,65 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/invitations/new": {
+    "/withdraw": {
+        $post: {
+            input: {
+                json: {
+                    address: string;
+                    amount: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/claim-check": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: boolean;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/transactions"> & {
+    "/": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    createdAt: string;
+                    userId: string;
+                    addressIndex: number;
+                    address: string | null;
+                    powerToken: string;
+                    dailyPowerToken: string;
+                    cashablePowerToken: string;
+                    level: {
+                        rank: number | null;
+                        level: number | null;
+                        prevActivityPoints: number | null;
+                        activityPoints: number | null;
+                    } | null;
+                    todayDailyPower: string;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
         $post: {
             input: {};
             output: {
@@ -6350,13 +7656,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/invitations/use": {
+} & {
+    "/refresh": {
         $post: {
-            input: {
-                json: {
-                    code: string;
-                };
-            };
+            input: {};
             output: {
                 code: 0;
             };
@@ -6364,791 +7667,46 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/invitations": {
+} & {
+    "/ranking": {
         $get: {
             input: {};
             output: {
                 code: 0;
                 data: {
-                    code: string;
-                    createdAt: string | null;
-                    users: {
+                    user: {
                         name: string | null;
                         id: string;
+                        emailVerified: string | null;
                         image: string | null;
-                    } | null;
-                    toUserId: string | null;
-                }[];
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/invitations/limitation": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: number;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/feeds/claim/message": {
-        $get: {
-            input: {
-                query: {
-                    feedId: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    json: string;
-                    description: string;
-                    xml: string;
-                    content: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds/claim/challenge": {
-        $post: {
-            input: {
-                json: {
-                    feedId: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds/claim/list": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    feed: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    };
-                    subscriptionCount: number;
-                    tipAmount: number;
-                }[];
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds": {
-        $get: {
-            input: {
-                query: {
-                    id?: string | string[] | undefined;
-                    url?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        author: string | null;
-                        url: string | null;
-                        guid: string;
-                        categories: string[] | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        publishedAt: string;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                            blurhash?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                        extra?: {
-                            links?: {
-                                type: string;
-                                url: string;
-                                content_html?: string | undefined;
-                            }[] | null | undefined;
-                        } | null | undefined;
-                    }[];
-                    feed: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    };
-                    subscriptionCount: number;
-                    readCount: number;
-                    subscription?: {
-                        title: string | null;
-                        userId: string;
-                        view: number;
-                        category: string | null;
-                        feedId: string;
-                        isPrivate: boolean;
-                    } | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds/refresh": {
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds/reset": {
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/entries/inbox": {
-        $post: {
-            input: {
-                json: {
-                    inboxId: string;
-                    read?: boolean | undefined;
-                    limit?: number | undefined;
-                    publishedAfter?: string | undefined;
-                    publishedBefore?: string | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                remaining: number;
-                data?: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        author: string | null;
-                        url: string | null;
-                        guid: string;
-                        categories: string[] | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        read: boolean | null;
-                        inboxHandle: string;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                            blurhash?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                        extra?: {
-                            links?: {
-                                type: string;
-                                url: string;
-                                content_html?: string | undefined;
-                            }[] | null | undefined;
-                        } | null | undefined;
-                    };
-                    feeds: {
-                        type: "inbox";
-                        id: string;
-                        secret: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                    };
-                    read: boolean | null;
-                    collections?: {
+                        handle: string | null;
                         createdAt: string;
-                    } | undefined;
-                    settings?: {
-                        summary?: boolean | undefined;
-                        disabled?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                        readability?: boolean | undefined;
-                        sourceContent?: boolean | undefined;
-                        silence?: boolean | undefined;
-                        block?: boolean | undefined;
-                        newEntryNotification?: boolean | undefined;
-                        rewriteRules?: {
-                            from: string;
-                            to: string;
-                        }[] | undefined;
-                        webhooks?: string[] | undefined;
-                    } | undefined;
-                }[] | undefined;
-                total?: number | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data?: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        content: string | null;
-                        id: string;
-                        author: string | null;
-                        url: string | null;
-                        guid: string;
-                        categories: string[] | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        read: boolean | null;
-                        inboxHandle: string;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                            blurhash?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                        extra?: {
-                            links?: {
-                                type: string;
-                                url: string;
-                                content_html?: string | undefined;
-                            }[] | null | undefined;
-                        } | null | undefined;
                     };
-                    feeds: {
-                        type: "inbox";
-                        id: string;
-                        secret: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                    };
-                } | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $delete: {
-            input: {
-                json: {
-                    entryId: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/entries/read-histories/:id": {
-        $get: {
-            input: {
-                param: {
-                    id?: string | undefined;
-                };
-            } & {
-                query: {
-                    page?: string | string[] | undefined;
-                    size?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    total: number;
-                    users: {
-                        [x: string]: {
-                            name: string | null;
-                            id: string;
-                            image: string | null;
-                            handle: string | null;
-                        };
-                    };
-                    entryReadHistories: {
-                        userIds: string[];
-                        readCount: number;
-                    } | null;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/entries/check-new": {
-        $get: {
-            input: {
-                query: {
-                    insertedAfter: string | string[];
-                    view?: string | string[] | undefined;
-                    feedIdList?: string | string[] | undefined;
-                    feedId?: string | string[] | undefined;
-                    read?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    has_new: boolean;
-                    entry_id?: string | undefined;
-                    lastest_at?: string | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/entries": {
-        $post: {
-            input: {
-                json: {
-                    view?: number | undefined;
-                    feedIdList?: string[] | undefined;
-                    feedId?: string | undefined;
-                    read?: boolean | undefined;
-                    limit?: number | undefined;
-                    publishedAfter?: string | undefined;
-                    publishedBefore?: string | undefined;
-                    listId?: string | undefined;
-                    collected?: boolean | undefined;
-                    isCollection?: boolean | undefined;
-                    isArchived?: boolean | undefined;
-                    withContent?: boolean | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data?: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        author: string | null;
-                        url: string | null;
-                        guid: string;
-                        categories: string[] | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                            blurhash?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                        extra?: {
-                            links?: {
-                                type: string;
-                                url: string;
-                                content_html?: string | undefined;
-                            }[] | null | undefined;
-                        } | null | undefined;
-                    };
-                    feeds: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    };
-                    read: boolean | null;
-                    collections?: {
-                        createdAt: string;
-                    } | undefined;
-                    settings?: {
-                        summary?: boolean | undefined;
-                        disabled?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                        readability?: boolean | undefined;
-                        sourceContent?: boolean | undefined;
-                        silence?: boolean | undefined;
-                        block?: boolean | undefined;
-                        newEntryNotification?: boolean | undefined;
-                        rewriteRules?: {
-                            from: string;
-                            to: string;
-                        }[] | undefined;
-                        webhooks?: string[] | undefined;
-                    } | undefined;
-                }[] | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data?: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        content: string | null;
-                        id: string;
-                        author: string | null;
-                        url: string | null;
-                        guid: string;
-                        categories: string[] | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                            blurhash?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                        extra?: {
-                            links?: {
-                                type: string;
-                                url: string;
-                                content_html?: string | undefined;
-                            }[] | null | undefined;
-                        } | null | undefined;
-                    };
-                    feeds: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    };
-                } | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/entries/stream": {
-        $post: {
-            input: {
-                json: {
-                    ids: string[];
-                };
-            };
-            output: {};
-            outputFormat: string;
-            status: 200;
-        };
-    };
-    "/entries/preview": {
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    description: string | null;
-                    title: string | null;
-                    content: string | null;
-                    id: string;
-                    author: string | null;
-                    url: string | null;
-                    feedId: string;
-                    guid: string;
-                    categories: string[] | null;
-                    authorUrl: string | null;
-                    authorAvatar: string | null;
-                    insertedAt: string;
-                    publishedAt: string;
-                    media?: {
-                        type: "photo" | "video";
-                        url: string;
-                        width?: number | undefined;
-                        height?: number | undefined;
-                        preview_image_url?: string | undefined;
-                        blurhash?: string | undefined;
-                    }[] | null | undefined;
-                    attachments?: {
-                        url: string;
-                        title?: string | undefined;
-                        duration_in_seconds?: number | undefined;
-                        mime_type?: string | undefined;
-                        size_in_bytes?: number | undefined;
-                    }[] | null | undefined;
-                    extra?: {
-                        links?: {
-                            type: string;
-                            url: string;
-                            content_html?: string | undefined;
-                        }[] | null | undefined;
-                    } | null | undefined;
+                    userId: string;
+                    address: string;
+                    powerToken: string;
+                    rank: number | null;
+                    level: number | null;
+                    prevActivityPoints: number | null;
+                    activityPoints: number | null;
                 }[];
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-} & {
-    "/discover": {
-        $post: {
+}, "/wallets"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
             input: {
-                json: {
-                    keyword: string;
-                    target?: "feeds" | "lists" | undefined;
+                query: {
+                    listId: string;
                 };
             };
             output: {
+                code: 0;
                 data: {
-                    entries?: {
-                        description: string | null;
-                        title: string | null;
-                        content: string | null;
-                        id: string;
-                        author: string | null;
-                        url: string | null;
-                        feedId: string;
-                        guid: string;
-                        categories: string[] | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                            blurhash?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                        extra?: {
-                            links?: {
-                                type: string;
-                                url: string;
-                                content_html?: string | undefined;
-                            }[] | null | undefined;
-                        } | null | undefined;
-                    }[] | undefined;
-                    feed?: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    } | undefined;
-                    list?: {
+                    list: {
                         type: "list";
                         id: string;
                         view: number;
@@ -7195,69 +7753,18 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                             createdAt: string;
                         } | null | undefined;
-                    } | undefined;
-                    docs?: string | undefined;
-                    isSubscribed?: boolean | undefined;
-                    subscriptionCount?: number | undefined;
-                }[];
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/discover/rsshub": {
-        $get: {
-            input: {
-                query: {
-                    category?: string | string[] | undefined;
-                    categories?: string | string[] | undefined;
-                    namespace?: string | string[] | undefined;
-                    lang?: string | string[] | undefined;
-                };
-            };
-            output: {
-                data: {
-                    [x: string]: {
-                        description: string;
-                        name: string;
-                        url: string;
-                        lang: string;
-                        routes: {
-                            [x: string]: {
-                                description: string;
-                                parameters: {
-                                    [x: string]: string;
-                                };
-                                path: string;
-                                example: string;
-                                name: string;
-                                categories: string[];
-                                maintainers: string[];
-                                location: string;
-                                view?: number | undefined;
-                            };
-                        };
                     };
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/discover/rsshub/route": {
-        $get: {
-            input: {
-                query: {
-                    route: string | string[];
-                };
-            };
-            output: {
-                data: {
-                    description: string;
-                    name: string;
-                    url: string;
-                    prefix: string;
-                    route?: any;
+                    subscriptionCount: number;
+                    readCount: number;
+                    feedCount: number;
+                    subscription?: {
+                        title: string | null;
+                        userId: string;
+                        view: number;
+                        isPrivate: boolean;
+                        listId: string;
+                        lastViewedAt: string | null;
+                    } | undefined;
                 };
             };
             outputFormat: "json" | "text";
@@ -7265,110 +7772,78 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/collections": {
-        $get: {
-            input: {
-                query: {
-                    entryId: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: boolean;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
+    "/": {
         $post: {
             input: {
                 json: {
-                    entryId: string;
-                    view?: number | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $delete: {
-            input: {
-                json: {
-                    entryId: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/categories": {
-        $get: {
-            input: {
-                query: {
-                    view?: string | string[] | undefined;
-                };
-            };
-            output: {
-                data?: string[] | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $delete: {
-            input: {
-                json: {
-                    feedIdList: string[];
-                    deleteSubscriptions: boolean;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $patch: {
-            input: {
-                json: {
-                    category: string;
-                    feedIdList: string[];
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/auth-app/new-session": {
-        $post: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    userId: string;
-                    sessionToken: string;
-                    expires: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/auth-app/update-account": {
-        $patch: {
-            input: {
-                json: {
-                    name?: string | null | undefined;
+                    title: string;
+                    view: number;
+                    fee: number;
+                    description?: string | null | undefined;
                     image?: string | null | undefined;
-                    handle?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    type: "list";
+                    id: string;
+                    view: number;
+                    feedIds: string[];
+                    fee: number;
+                    timelineUpdatedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    feeds?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    listId: string;
                 };
             };
             output: {
@@ -7379,140 +7854,195 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/ai/translation": {
-        $get: {
+    "/": {
+        $patch: {
             input: {
-                query: {
-                    id: string | string[];
-                    language: string | string[];
-                    fields: string | string[];
-                    part?: string | string[] | undefined;
+                json: {
+                    title: string;
+                    view: number;
+                    fee: number;
+                    listId: string;
+                    description?: string | null | undefined;
+                    image?: string | null | undefined;
                 };
             };
             output: {
                 code: 0;
-                data?: {
-                    description?: string | undefined;
-                    title?: string | undefined;
-                    content?: string | undefined;
-                } | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/ai/summary": {
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                    language?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data?: string | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/ai/daily": {
-        $get: {
-            input: {
-                query: {
-                    view: string | string[];
-                    startDate: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: string;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
 } & {
-    "/actions": {
+    "/list": {
         $get: {
             input: {};
             output: {
                 code: 0;
-                data?: {
-                    userId: string;
-                    rules?: {
-                        name: string;
-                        result: {
-                            summary?: boolean | undefined;
-                            disabled?: boolean | undefined;
-                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                            readability?: boolean | undefined;
-                            sourceContent?: boolean | undefined;
-                            silence?: boolean | undefined;
-                            block?: boolean | undefined;
-                            newEntryNotification?: boolean | undefined;
-                            rewriteRules?: {
-                                from: string;
-                                to: string;
-                            }[] | undefined;
-                            blockRules?: {
-                                value: string | number;
-                                field: "title" | "all" | "content" | "author" | "url" | "order";
-                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                            }[] | undefined;
-                            webhooks?: string[] | undefined;
-                        };
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[] | {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[][];
-                    }[] | null | undefined;
-                } | undefined;
+                data: {
+                    type: "list";
+                    id: string;
+                    view: number;
+                    feedIds: string[];
+                    fee: number;
+                    timelineUpdatedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    feeds?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                    subscriptionCount?: number | undefined;
+                    purchaseAmount?: number | undefined;
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
         };
-        $put: {
+    };
+} & {
+    "/feeds": {
+        $post: {
             input: {
                 json: {
-                    rules?: {
-                        name: string;
-                        result: {
-                            summary?: boolean | undefined;
-                            disabled?: boolean | undefined;
-                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                            readability?: boolean | undefined;
-                            sourceContent?: boolean | undefined;
-                            silence?: boolean | undefined;
-                            block?: boolean | undefined;
-                            newEntryNotification?: boolean | undefined;
-                            rewriteRules?: {
-                                from: string;
-                                to: string;
-                            }[] | undefined;
-                            blockRules?: {
-                                value: string | number;
-                                field: "title" | "all" | "content" | "author" | "url" | "order";
-                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                            }[] | undefined;
-                            webhooks?: string[] | undefined;
-                        };
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[] | {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[][];
+                    feedId: string;
+                    listId: string;
+                } | {
+                    feedIds: string[];
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    type: "feed";
+                    id: string;
+                    url: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    siteUrl?: string | null | undefined;
+                    errorMessage?: string | null | undefined;
+                    errorAt?: string | null | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                    tipUsers?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
                     }[] | null | undefined;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/feeds": {
+        $delete: {
+            input: {
+                json: {
+                    feedId: string;
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/lists"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {};
+            output: {};
+            outputFormat: string;
+            status: 200;
+        };
+    };
+} & {
+    "/pools": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    totalCount: number;
+                    idleCount: number;
+                    waitingCount: number;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/metrics"> | hono_types.MergeSchemaPath<{
+    "/clean": {
+        $post: {
+            input: {
+                json: {
+                    type: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/admin"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    handle: string;
                 };
             };
             output: {
@@ -7523,84 +8053,343 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/achievement": {
+    "/": {
         $get: {
             input: {
                 query: {
-                    type?: string | string[] | undefined;
+                    handle: string;
                 };
             };
             output: {
-                code: number;
+                code: 0;
                 data: {
-                    type: "received" | "checking" | "completed" | "incomplete" | "audit";
+                    type: "inbox";
                     id: string;
-                    userId: string;
-                    actionId: number;
-                    progress: number;
-                    progressMax: number;
-                    done: boolean;
-                    doneAt: string | null;
-                    tx: string | null;
-                    power: string;
-                }[];
-                done: number;
-                total: number;
+                    secret: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
+    };
+} & {
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    handle: string;
+                    title?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/webhook": {
+        $post: {
+            input: {
+                json: {
+                    guid: string;
+                    publishedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    content?: string | null | undefined;
+                    author?: string | null | undefined;
+                    url?: string | null | undefined;
+                    media?: {
+                        type: "photo" | "video";
+                        url: string;
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        preview_image_url?: string | undefined;
+                        blurhash?: string | undefined;
+                    }[] | null | undefined;
+                    categories?: string[] | null | undefined;
+                    attachments?: {
+                        url: string;
+                        title?: string | undefined;
+                        duration_in_seconds?: number | undefined;
+                        mime_type?: string | undefined;
+                        size_in_bytes?: number | undefined;
+                    }[] | null | undefined;
+                    extra?: {
+                        links?: {
+                            type: string;
+                            url: string;
+                            content_html?: string | undefined;
+                        }[] | null | undefined;
+                    } | null | undefined;
+                    authorUrl?: string | null | undefined;
+                    authorAvatar?: string | null | undefined;
+                    read?: boolean | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/email": {
+        $post: {
+            input: {
+                json: {
+                    date: string;
+                    from: {
+                        name?: string | undefined;
+                        address?: string | undefined;
+                    };
+                    to: {
+                        address: string;
+                    };
+                    messageId: string;
+                    subject?: string | undefined;
+                    html?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
         $put: {
             input: {
                 json: {
-                    actionId: number;
+                    title: string;
+                    handle: string;
                 };
             };
             output: {
-                code: number;
-                data: {
-                    actionId: number;
-                    result: boolean;
-                };
+                code: 0;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/achievement/check": {
+} & {
+    "/list": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    type: "inbox";
+                    id: string;
+                    secret: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/inboxes"> | hono_types.MergeSchemaPath<{
+    "/": {
         $post: {
             input: {
                 json: {
-                    actionId: number;
+                    token: string;
+                    channel: "desktop" | "mobile";
                 };
             };
             output: {
-                code: number;
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/test": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/messaging"> | hono_types.MergeSchemaPath<{
+    "/configs": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
                 data: {
-                    actionId: number;
-                    result: boolean;
+                    MAX_SUBSCRIPTIONS: number;
+                    MAX_LISTS: number;
+                    MAX_ACTIONS: number;
+                    MAX_WEBHOOKS_PER_ACTION: number;
+                    MAX_INBOXES: number;
+                    IMPORTING_TITLE: string;
+                    DAILY_POWER_PERCENTAGES: number[];
+                    LEVEL_PERCENTAGES: number[];
+                    DAILY_CLAIM_AMOUNT: {
+                        trial: number;
+                        normal: number;
+                    };
+                    TAX_POINT: string;
+                    INVITATION_INTERVAL_DAYS: number;
+                    INVITATION_PRICE: number;
+                    DAILY_POWER_SUPPLY: number;
+                    IS_RSS3_TESTNET: boolean;
+                    PRODUCT_HUNT_VOTE_URL: string;
+                    ANNOUNCEMENT: string;
+                    MAX_TRIAL_USER_FEED_SUBSCRIPTION: number;
+                    MAX_TRIAL_USER_LIST_SUBSCRIPTION: number;
                 };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/achievement/audit": {
+}, "/status"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    level: number;
+                    monthlyBoostCost: number;
+                    boostCount: number;
+                    remainingBoostsToLevelUp: number;
+                    lastValidBoost: {
+                        hash: string | null;
+                        expiresAt: string;
+                    } | null;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/boosters": {
+        $get: {
+            input: {
+                query: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    name: string | null;
+                    id: string;
+                    emailVerified: string | null;
+                    image: string | null;
+                    handle: string | null;
+                    createdAt: string;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
         $post: {
             input: {
                 json: {
-                    actionId: number;
-                    payload?: any;
+                    feedId: string;
+                    amount: string;
                 };
             };
             output: {
-                code: number;
+                code: 0;
+                data: {
+                    transactionHash: string;
+                    expiresAt: string;
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-}, "/">;
+}, "boosts"> | hono_types.MergeSchemaPath<{
+    "/postgresql": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/redis": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/bullmq": {
+        $get: {
+            input: {
+                query: {
+                    name: "follow-queue" | "admin-wallet-queue";
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    completed: number;
+                    wait: number;
+                    failed: number;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+}, "/probes">, "/">;
 type AppType = typeof _routes;
 
 export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

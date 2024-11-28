@@ -25,7 +25,7 @@ import { ENTRY_COLUMN_LIST_SCROLLER_ID } from "~/constants/dom"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useFeed } from "~/queries/feed"
-import { getEntry } from "~/store/entry"
+import { entryActions, getEntry, useEntry } from "~/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 
@@ -72,15 +72,35 @@ function EntryColumnImpl() {
     }
   }, [entriesIds])
 
-  const { view, feedId: routeFeedId, isCollection, inboxId, listId } = useRouteParams()
+  const {
+    entryId: activeEntryId,
+    view,
+    feedId: routeFeedId,
+    isPendingEntry,
+    isCollection,
+    inboxId,
+    listId,
+  } = useRouteParams()
 
   useEffect(() => {
     setIsArchived(false)
   }, [view, routeFeedId])
 
+  const activeEntry = useEntry(activeEntryId)
   const feed = useFeedById(routeFeedId)
   const title = useFeedHeaderTitle()
   useTitle(title)
+
+  useEffect(() => {
+    if (!activeEntryId) return
+
+    if (isCollection || isPendingEntry) return
+
+    const feedId = activeEntry?.feedId
+    if (!feedId) return
+
+    entryActions.markRead({ feedId, entryId: activeEntryId, read: true })
+  }, [activeEntry?.feedId, activeEntryId, isCollection, isPendingEntry])
 
   const isInteracted = useRef(false)
 

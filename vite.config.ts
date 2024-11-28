@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import legacy from "@vitejs/plugin-legacy"
 import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
+import { parseHTML } from "linkedom"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
 import { analyzer } from "vite-bundle-analyzer"
@@ -65,17 +66,54 @@ export default ({ mode }) => {
       watch: {
         ignored: ["**/dist/**", "**/out/**", "**/public/**", ".git/**"],
       },
-      ...(env.VITE_DEV_PROXY
-        ? {
-            proxy: {
+      proxy: {
+        "/login": {
+          target: "http://localhost:2234",
+          changeOrigin: true,
+          selfHandleResponse: true,
+          configure: (proxy, _options) => {
+            proxy.on("proxyRes", (proxyRes, req, res) => {
+              const body = [] as any[]
+              proxyRes.on("data", (chunk: any) => body.push(chunk))
+              proxyRes.on("end", () => {
+                const html = parseHTML(Buffer.concat(body).toString())
+                const doc = html.document
+
+                const $scripts = doc.querySelectorAll("script")
+                $scripts.forEach((script) => {
+                  const src = script.getAttribute("src")
+                  if (src) {
+                    script.setAttribute("src", `http://localhost:2234${src}`)
+                  }
+                })
+
+                const $links = doc.querySelectorAll("link")
+                $links.forEach((link) => {
+                  const href = link.getAttribute("href")
+                  if (href) {
+                    link.setAttribute("href", `http://localhost:2234${href}`)
+                  }
+                })
+
+                res.setHeader("Content-Type", "text/html; charset=utf-8")
+
+                const modifiedHtml = doc.toString()
+                res.end(modifiedHtml)
+              })
+            })
+          },
+        },
+
+        ...(env.VITE_DEV_PROXY
+          ? {
               [env.VITE_DEV_PROXY]: {
                 target: env.VITE_DEV_PROXY_TARGET,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(new RegExp(`^${env.VITE_DEV_PROXY}`), ""),
               },
-            },
-          }
-        : {}),
+            }
+          : {}),
+      },
     },
     resolve: {
       alias: {

@@ -3,6 +3,7 @@ import { atom, useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 import type { Location, NavigateFunction, Params } from "react-router"
+import { shallow } from "zustand/shallow"
 
 interface RouteAtom {
   params: Readonly<Params<string>>
@@ -29,7 +30,8 @@ const noop = []
 export const useReadonlyRouteSelector = <T>(
   selector: (route: RouteAtom) => T,
   deps: any[] = noop,
-): T => useAtomValue(useMemo(() => selectAtom(routeAtom, (route) => selector(route)), deps))
+): T =>
+  useAtomValue(useMemo(() => selectAtom(routeAtom, (route) => selector(route), shallow), deps))
 
 // Vite HMR will create new router instance, but RouterProvider always stable
 

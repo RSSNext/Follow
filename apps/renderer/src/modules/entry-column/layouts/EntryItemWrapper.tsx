@@ -58,14 +58,11 @@ export const EntryItemWrapper: FC<
     (e) => {
       e.stopPropagation()
 
-      if (!asRead) {
-        entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
-      }
       navigate({
         entryId: entry.entries.id,
       })
     },
-    [asRead, entry.entries.id, entry.feedId, navigate],
+    [entry.entries.id, navigate],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     () => entry.entries.url && window.open(entry.entries.url, "_blank"),

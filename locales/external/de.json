@@ -15,8 +15,6 @@
   "invitation.getCodeMessage": "You can get an invitation code through the following ways:",
   "invitation.title": "Invitation Code",
   "login.backToWebApp": "Back to the web app",
-  "login.continueWithGitHub": "Continue with GitHub",
-  "login.continueWithGoogle": "Continue with Google",
   "login.logInTo": "Log in to ",
   "login.openApp": "Open app",
   "login.redirecting": "Redirecting",
