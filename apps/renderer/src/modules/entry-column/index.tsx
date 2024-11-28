@@ -64,13 +64,6 @@ function EntryColumnImpl() {
 
   const { entriesIds, isFetchingNextPage, groupedCounts } = entries
   useSnapEntryIdList(entriesIds)
-  const prevEntriesIdsRef = useRef(entriesIds)
-
-  useEffect(() => {
-    if (entriesIds.length > 0) {
-      prevEntriesIdsRef.current = entriesIds
-    }
-  }, [entriesIds])
 
   const {
     entryId: activeEntryId,
@@ -135,9 +128,6 @@ function EntryColumnImpl() {
     }
   }, [shouldLoadArchivedEntries])
 
-  const finalEntriesIds =
-    hasNoEntries && !isArchived ? prevEntriesIdsRef.current || entriesIds : entriesIds
-
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const handleScroll = useCallback(
@@ -195,7 +185,7 @@ function EntryColumnImpl() {
         await entries.fetchNextPage()
       }
     }, [entries]),
-    data: finalEntriesIds,
+    data: entriesIds,
     onScroll: handleScroll,
     itemContent: useTypeScriptHappyCallback(
       (_, entryId) => {
