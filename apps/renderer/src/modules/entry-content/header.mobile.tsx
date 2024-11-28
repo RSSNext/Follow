@@ -16,6 +16,7 @@ import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useEntry } from "~/store/entry/hooks"
 
+import { COMMAND_ID } from "../command/commands/id"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import type { EntryHeaderProps } from "./header.shared"
 
@@ -168,20 +169,31 @@ const HeaderRightActions = ({
                   className="shadow-modal fixed right-1 top-1 z-[1] mt-14 max-w-full rounded-lg border bg-theme-modal-background-opaque"
                 >
                   <div className="flex flex-col items-center py-2">
-                    {actions.map((item) => (
-                      <MotionButtonBase
-                        onClick={() => {
-                          setCtxOpen(false)
-                          item.onClick?.()
-                        }}
-                        key={item.name}
-                        layout={false}
-                        className="flex w-full items-center gap-2 px-4 py-2"
-                      >
-                        {item.icon}
-                        {item.name}
-                      </MotionButtonBase>
-                    ))}
+                    {actions
+                      .filter(
+                        (item) =>
+                          !(
+                            [
+                              COMMAND_ID.entry.read,
+                              COMMAND_ID.entry.unread,
+                              COMMAND_ID.entry.copyLink,
+                            ] as string[]
+                          ).includes(item.id),
+                      )
+                      .map((item) => (
+                        <MotionButtonBase
+                          onClick={() => {
+                            setCtxOpen(false)
+                            item.onClick?.()
+                          }}
+                          key={item.name}
+                          layout={false}
+                          className="flex w-full items-center gap-2 px-4 py-2"
+                        >
+                          {item.icon}
+                          {item.name}
+                        </MotionButtonBase>
+                      ))}
                   </div>
                 </m.div>
               </DismissableLayer>
