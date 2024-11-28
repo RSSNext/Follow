@@ -1,0 +1,62 @@
+import time
+import random
+import threading
+
+class Process:
+    def __init__(self, pid, name):
+        self.pid = pid
+        self.name = name
+        self.state = "Ready"
+
+    def run(self):
+        self.state = "Running"
+        print(f"Process {self.pid} ({self.name}) is now running.")
+        time.sleep(random.randint(1, 3))  # Simulate process running time
+        self.state = "Terminated"
+        print(f"Process {self.pid} ({self.name}) has terminated.")
+
+class OperatingSystem:
+    def __init__(self):
+        self.processes = []
+        self.process_count = 0
+
+    def create_process(self, name):
+        self.process_count += 1
+        new_process = Process(self.process_count, name)
+        self.processes.append(new_process)
+        print(f"Created process {new_process.pid} ({new_process.name})")
+        return new_process
+
+    def schedule_processes(self):
+        print("Scheduling processes...")
+        threads = []
+        for process in self.processes:
+            thread = threading.Thread(target=process.run)
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()  # Wait for all threads to complete
+
+    def list_processes(self):
+        print("Current processes:")
+        for process in self.processes:
+            print(f"PID: {process.pid}, Name: {process.name}, State: {process.state}")
+
+# Example usage
+if __name__ == "__main__":
+    os = OperatingSystem()
+    
+    # Create some processes
+    os.create_process("Process A")
+    os.create_process("Process B")
+    os.create_process("Process C")
+
+    # List processes
+    os.list_processes()
+
+    # Schedule processes
+    os.schedule_processes()
+
+    # List processes after scheduling
+    os.list_processes()
