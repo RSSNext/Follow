@@ -102,8 +102,8 @@ export const entries = {
         }
         return apiClient.entries["check-new"].$get({
           query: {
-            insertedAfter: `${query.insertedAfter}`,
-            view: `${query.view}`,
+            insertedAfter: query.insertedAfter,
+            view: query.view,
             feedId: query.feedId,
             read: typeof query.read === "boolean" ? JSON.stringify(query.read) : undefined,
             feedIdList: query.feedIdList,

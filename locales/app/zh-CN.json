@@ -333,8 +333,6 @@
   "sidebar.feed_column.context_menu.rename_category_error": "重命名分类失败",
   "sidebar.feed_column.context_menu.rename_category_success": "分类重命名成功",
   "sidebar.select_sort_method": "选择排序方法",
-  "signin.continue_with_github": "使用 GitHub 登录",
-  "signin.continue_with_google": "使用 Google 登录",
   "signin.sign_in_to": "登录到",
   "sync_indicator.disabled": "出于安全原因，已禁用同步",
   "sync_indicator.offline": "离线",

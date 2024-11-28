@@ -158,8 +158,6 @@
   "sidebar.feed_column.context_menu.mark_as_read": "Als gelesen markieren",
   "sidebar.feed_column.context_menu.rename_category": "Kategorie umbenennen",
   "sidebar.select_sort_method": "Sortiermethode auswählen",
-  "signin.continue_with_github": "Mit GitHub fortfahren",
-  "signin.continue_with_google": "Mit Google fortfahren",
   "signin.sign_in_to": "Anmelden bei",
   "sync_indicator.disabled": "Aus Sicherheitsgründen ist die Synchronisierung deaktiviert.",
   "sync_indicator.offline": "Offline",

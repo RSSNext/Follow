@@ -17,8 +17,6 @@
   "invitation.getCodeMessage": "Vous pouvez obtenir un code d'invitation de la manière suivante :",
   "invitation.title": "Code d'invitation",
   "login.backToWebApp": "Retour à l'application web",
-  "login.continueWithGitHub": "Continuer avec GitHub",
-  "login.continueWithGoogle": "Continuer avec Google",
   "login.logInTo": "Se connecter à",
   "login.openApp": "Ouvrir l'application",
   "login.redirecting": "Redirection",

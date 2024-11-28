@@ -10,12 +10,19 @@ import ReactDOM from "react-dom/client"
 import { RouterProvider } from "react-router/dom"
 
 import { setAppIsReady } from "./atoms/app"
-import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "./constants"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isWebBuild } from "./constants"
 import { initializeApp } from "./initialize"
 import { registerAppGlobalShortcuts } from "./initialize/global-shortcuts"
+import { registerWebPushNotifications } from "./push-notification"
 import { router } from "./router"
 
 initializeApp().finally(() => {
+  import("./push-notification").then(({ registerWebPushNotifications }) => {
+    registerWebPushNotifications()
+  })
+  if (navigator.serviceWorker && isWebBuild) {
+    registerWebPushNotifications()
+  }
   setAppIsReady(true)
 })
 

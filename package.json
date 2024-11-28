@@ -33,6 +33,7 @@
     "hotfix": "vv -c bump.hotfix.config.js",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "mitproxy": "bash scripts/run-proxy.sh",
     "polyfill-optimize": "pnpx nolyfill install",
     "prepare": "pnpm exec simple-git-hooks && shx test -f .env || shx cp .env.example .env",
     "publish": "electron-vite build && electron-forge publish",

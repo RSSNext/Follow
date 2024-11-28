@@ -182,8 +182,6 @@
   "sidebar.feed_column.context_menu.mark_as_read": "Okundu olarak işaretle",
   "sidebar.feed_column.context_menu.rename_category": "Kategoriyi yeniden adlandır",
   "sidebar.select_sort_method": "Bir sıralama yöntemi seçin",
-  "signin.continue_with_github": "GitHub ile devam et",
-  "signin.continue_with_google": "Google ile devam et",
   "signin.sign_in_to": "Giriş yap",
   "sync_indicator.disabled": "Güvenlik nedeniyle senkronizasyon devre dışı bırakıldı.",
   "sync_indicator.offline": "Çevrimdışı",

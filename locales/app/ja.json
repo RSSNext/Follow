@@ -334,8 +334,6 @@
   "sidebar.feed_column.context_menu.rename_category_error": "カテゴリーのリネームに失敗しました",
   "sidebar.feed_column.context_menu.rename_category_success": "カテゴリーのリネームに成功しました",
   "sidebar.select_sort_method": "並べ替え方法を選択",
-  "signin.continue_with_github": "GitHub で続ける",
-  "signin.continue_with_google": "Google で続ける",
   "signin.sign_in_to": "サインイン",
   "sync_indicator.disabled": "セキュリティ上の理由により、同期は無効になっています。",
   "sync_indicator.offline": "オフライン",

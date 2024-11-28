@@ -106,8 +106,6 @@
   "sidebar.feed_column.context_menu.mark_as_read": "Marcar como leído",
   "sidebar.feed_column.context_menu.rename_category": "Renombrar categoría",
   "sidebar.select_sort_method": "Seleccionar método de ordenamiento",
-  "signin.continue_with_github": "Iniciar sesión con GitHub",
-  "signin.continue_with_google": "Iniciar sesión con Google",
   "signin.sign_in_to": "Iniciar sesión en",
   "sync_indicator.offline": "Sin conexión",
   "sync_indicator.synced": "Sincronizado con el servidor",
