@@ -1,5 +1,5 @@
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
-import { FeedViewType, views } from "@follow/constants"
+import { views } from "@follow/constants"
 import { clsx } from "clsx"
 import { forwardRef, useState } from "react"
 
@@ -25,8 +25,7 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
               <div
                 className="h-full overflow-y-auto"
                 ref={setScrollElement}
-                // PictureMasonry do not have this id from VirtuosoGrid
-                id={view === FeedViewType.Pictures ? ENTRY_COLUMN_LIST_SCROLLER_ID : undefined}
+                id={ENTRY_COLUMN_LIST_SCROLLER_ID}
               >
                 {children}
               </div>

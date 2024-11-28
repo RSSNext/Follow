@@ -1,21 +1,10 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
-import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
-import { throttle } from "es-toolkit/compat"
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
-import {
-  cloneElement,
-  memo,
-  useCallback,
-  useId,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { cloneElement, memo, useCallback, useId, useMemo, useRef, useState } from "react"
 import { Trans } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
@@ -27,6 +16,20 @@ import { isListSubscription } from "~/store/subscription"
 
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
 
+interface DateItemInnerProps {
+  date: Date
+  startTime: number
+  endTime: number
+  className?: string
+  Wrapper?: FC<PropsWithChildren>
+  isSticky?: boolean
+}
+
+type DateItemProps = Pick<DateItemInnerProps, "isSticky"> & {
+  view: FeedViewType
+  date: string
+  className?: string
+}
 const useParseDate = (date: string) =>
   useMemo(() => {
     const dateObj = new Date(date)
@@ -37,57 +40,36 @@ const useParseDate = (date: string) =>
     }
   }, [date])
 
-const useSticky = () => {
-  const $scroller = useScrollViewElement()
-  const itemRef = useRef<HTMLDivElement>(null)
-
-  const [isSticky, setIsSticky] = useState(false)
-  useLayoutEffect(() => {
-    const $ = itemRef.current?.parentElement
-    if (!$) return
-    const handler = throttle((e: HTMLElementEventMap["scroll"]) => {
-      if ((e.target as HTMLElement).scrollTop < 10) {
-        setIsSticky(false)
-        return
-      }
-      const isSticky = $.offsetTop <= 0
-
-      setIsSticky(isSticky)
-    }, 16)
-    $scroller?.addEventListener("scroll", handler)
-    return () => {
-      $scroller?.removeEventListener("scroll", handler)
-    }
-  }, [$scroller])
-
-  return { isSticky, itemRef }
-}
-export const DateItem = memo(({ date, view }: { date: string; view: FeedViewType }) => {
-  const className = cn(
-    "lg:pt-2",
-    `relative -mx-2 flex items-center gap-1 bg-background px-4 text-base font-bold text-zinc-800 dark:text-neutral-400`,
-  )
+export const DateItem = memo(({ date, view, isSticky }: DateItemProps) => {
+  const className = tw`relative flex items-center text-sm lg:text-base gap-1 bg-background px-4 font-bold text-zinc-800 dark:text-neutral-400 h-7`
 
   if (view === FeedViewType.SocialMedia) {
     return <SocialMediaDateItem date={date} className={className} />
   }
-  return <UniversalDateItem date={date} className={className} />
+  return <UniversalDateItem date={date} className={className} isSticky={isSticky} />
 })
-const UniversalDateItem = ({ date, className }: { date: string; className?: string }) => {
+const UniversalDateItem = ({ date, className, isSticky }: Omit<DateItemProps, "view">) => {
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   return (
-    <DateItemInner className={className} date={dateObj} startTime={startOfDay} endTime={endOfDay} />
+    <DateItemInner
+      className={className}
+      date={dateObj}
+      startTime={startOfDay}
+      endTime={endOfDay}
+      isSticky={isSticky}
+    />
   )
 }
 
-const DateItemInner: FC<{
-  date: Date
-  startTime: number
-  endTime: number
-  className?: string
-  Wrapper?: FC<PropsWithChildren>
-}> = ({ date, endTime, startTime, className, Wrapper }) => {
+const DateItemInner: FC<DateItemInnerProps> = ({
+  date,
+  endTime,
+  startTime,
+  className,
+  Wrapper,
+  isSticky,
+}) => {
   const rid = useId()
   const RelativeElement = useMemo(
     () => (
@@ -102,7 +84,6 @@ const DateItemInner: FC<{
     startTime,
     endTime,
   })
-  const { isSticky, itemRef } = useSticky()
 
   const [confirmMark, setConfirmMark] = useState(false)
   const removeConfirm = useDebounceCallback(
@@ -125,7 +106,6 @@ const DateItemInner: FC<{
   return (
     <div
       className={cn(className, isSticky && "border-b")}
-      ref={itemRef}
       onClick={stopPropagation}
       onMouseEnter={removeConfirm.cancel}
       onMouseLeave={removeConfirm}

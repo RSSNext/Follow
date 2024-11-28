@@ -1,22 +1,35 @@
 import { EmptyIcon } from "@follow/components/icons/empty.jsx"
+import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
+import type { FeedViewType } from "@follow/constants"
+import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { LRUCache } from "@follow/utils/lru-cache"
+import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
+import { defaultRangeExtractor, useVirtualizer } from "@tanstack/react-virtual"
+import clsx from "clsx"
 import type { HTMLMotionProps } from "framer-motion"
-import type { DOMAttributes, FC } from "react"
-import { forwardRef, memo, useCallback } from "react"
+import type { FC, ReactNode } from "react"
+import {
+  forwardRef,
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useTranslation } from "react-i18next"
-import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
-import { GroupedVirtuoso, Virtuoso } from "react-virtuoso"
+import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { m } from "~/components/common/Motion"
-import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
-import { ENTRY_COLUMN_LIST_SCROLLER_ID } from "~/constants/dom"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry"
 import { isListSubscription } from "~/store/subscription"
 
 import { DateItem } from "./components/DateItem"
 import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
-import type { VirtuosoComponentProps } from "./index"
+import { EntryItem, EntryItemSkeleton } from "./item"
 
 export const EntryListContent = forwardRef<HTMLDivElement>((props, ref) => (
   <div className="px-2" {...props} ref={ref} />
@@ -46,20 +59,36 @@ export const EntryEmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>
   )
 })
 
-type BaseEntryProps = {
-  virtuosoRef: React.RefObject<VirtuosoHandle>
+type EntryListProps = {
+  feedId: string
+  entriesIds: string[]
+  view: FeedViewType
+
+  hasNextPage: boolean
+  fetchNextPage: () => void
   refetch: () => void
-}
-type EntryListProps = VirtuosoProps<string, VirtuosoComponentProps> & {
+
   groupCounts?: number[]
-} & BaseEntryProps
+
+  Footer?: FC | ReactNode
+
+  onRangeChange?: (range: Range) => void
+}
+
+const capacity = 3
+const offsetCache = new LRUCache<string, number>(capacity)
+const measurementsCache = new LRUCache<string, VirtualItem[]>(capacity)
 export const EntryList: FC<EntryListProps> = memo(
   ({
-    virtuosoRef,
+    feedId,
+    view,
+    entriesIds,
+    fetchNextPage,
     refetch,
+    hasNextPage,
     groupCounts,
-
-    ...virtuosoOptions
+    Footer,
+    onRangeChange,
   }) => {
     // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
     const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback((e) => {
@@ -68,89 +97,196 @@ export const EntryList: FC<EntryListProps> = memo(
       }
     }, [])
 
+    const scrollRef = useScrollViewElement()
+
+    const stickyIndexes = useMemo(
+      () =>
+        groupCounts
+          ? groupCounts.reduce(
+              (acc, count, index) => {
+                acc[index + 1] = acc[index] + count
+                return acc
+              },
+              [0],
+            )
+          : [],
+      [groupCounts],
+    )
+
+    const rowVirtualizer = useVirtualizer({
+      count: entriesIds.length + 1,
+      estimateSize: () => 112,
+      overscan: 5,
+      getScrollElement: () => scrollRef,
+      initialOffset: offsetCache.get(feedId) ?? 0,
+      initialMeasurementsCache: measurementsCache.get(feedId) ?? [],
+      onChange: useTypeScriptHappyCallback(
+        (virtualizer: Virtualizer<HTMLElement, Element>) => {
+          if (!virtualizer.isScrolling) {
+            measurementsCache.put(feedId, virtualizer.measurementsCache)
+            offsetCache.put(feedId, virtualizer.scrollOffset ?? 0)
+          }
+
+          onRangeChange?.(virtualizer.range as Range)
+        },
+        [feedId],
+      ),
+      rangeExtractor: useTypeScriptHappyCallback(
+        (range: Range) => {
+          activeStickyIndexRef.current =
+            [...stickyIndexes].reverse().find((index) => range.startIndex >= index) ?? 0
+
+          const next = new Set([activeStickyIndexRef.current, ...defaultRangeExtractor(range)])
+
+          return [...next].sort((a, b) => a - b)
+        },
+        [stickyIndexes],
+      ),
+    })
+
+    const handleScrollTo = useEventCallback((index: number) => {
+      rowVirtualizer.scrollToIndex(index)
+    })
+
+    const activeStickyIndexRef = useRef(0)
+    const isActiveSticky = (index: number) => activeStickyIndexRef.current === index
+    const isSticky = (index: number) => stickyIndexes.includes(index)
+
+    const virtualItems = rowVirtualizer.getVirtualItems()
+    useEffect(() => {
+      const lastItem = virtualItems.at(-1)
+
+      if (!lastItem) {
+        return
+      }
+
+      const isPlaceholderRow = lastItem.index === entriesIds.length
+
+      if (isPlaceholderRow && hasNextPage) {
+        fetchNextPage()
+      }
+    }, [entriesIds.length, fetchNextPage, hasNextPage, virtualItems])
+
+    const [isScrollTop, setIsScrollTop] = useState(true)
+
+    useEffect(() => {
+      const $scrollRef = scrollRef
+      if (!$scrollRef) return
+      const handleScroll = () => {
+        setIsScrollTop($scrollRef.scrollTop === 0)
+      }
+      $scrollRef.addEventListener("scroll", handleScroll)
+
+      return () => {
+        $scrollRef.removeEventListener("scroll", handleScroll)
+      }
+    }, [scrollRef])
+
     return (
       <>
-        {groupCounts ? (
-          <EntryGroupedList
-            groupCounts={groupCounts}
-            onKeyDown={handleKeyDown}
-            {...virtuosoOptions}
-            ref={virtuosoRef}
-          />
-        ) : (
-          <Virtuoso
-            id={ENTRY_COLUMN_LIST_SCROLLER_ID}
-            onKeyDown={handleKeyDown}
-            {...virtuosoOptions}
-            ref={virtuosoRef}
-          />
-        )}
+        <div
+          onKeyDown={handleKeyDown}
+          className={"relative w-full"}
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            // Last placeholder row
+            const isLoaderRow = virtualRow.index === entriesIds.length
+
+            const transform = `translateY(${virtualRow.start}px)`
+            if (isLoaderRow) {
+              const Content = hasNextPage ? (
+                <EntryItemSkeleton view={view} count={6} />
+              ) : Footer ? (
+                typeof Footer === "function" ? (
+                  <Footer />
+                ) : (
+                  Footer
+                )
+              ) : null
+
+              return (
+                <div
+                  ref={rowVirtualizer.measureElement}
+                  className="absolute left-0 top-0 w-full will-change-transform"
+                  key={virtualRow.key}
+                  style={{
+                    transform,
+                  }}
+                >
+                  {Content}
+                </div>
+              )
+            }
+            const activeSticky = isActiveSticky(virtualRow.index)
+            const sticky = isSticky(virtualRow.index)
+            return (
+              <Fragment key={virtualRow.key}>
+                {sticky && (
+                  <div
+                    className={clsx(
+                      "bg-background",
+                      activeSticky
+                        ? "sticky top-0 z-[1]"
+                        : "absolute left-0 top-0 z-[2] w-full will-change-transform",
+                    )}
+                    style={
+                      !activeSticky
+                        ? {
+                            transform,
+                          }
+                        : undefined
+                    }
+                  >
+                    <EntryHeadDateItem
+                      entryId={entriesIds[virtualRow.index]}
+                      isSticky={!isScrollTop && activeSticky}
+                    />
+                  </div>
+                )}
+                <div
+                  className="absolute left-0 top-0 w-full will-change-transform"
+                  style={{
+                    transform,
+                    paddingTop: sticky ? "1.75rem" : undefined,
+                  }}
+                  ref={rowVirtualizer.measureElement}
+                  data-index={virtualRow.index}
+                >
+                  <EntryItem entryId={entriesIds[virtualRow.index]} view={view} />
+                </div>
+              </Fragment>
+            )
+          })}
+        </div>
+
         <EntryColumnShortcutHandler
           refetch={refetch}
-          data={virtuosoOptions.data!}
-          virtuosoRef={virtuosoRef}
+          data={entriesIds}
+          handleScrollTo={handleScrollTo}
         />
       </>
     )
   },
 )
 
-const EntryGroupedList = forwardRef<
-  VirtuosoHandle,
-  VirtuosoProps<string, VirtuosoComponentProps> &
-    DOMAttributes<HTMLDivElement> & {
-      groupCounts: number[]
-    }
->(({ groupCounts, itemContent, onKeyDown, data, totalCount, ...virtuosoOptions }, ref) => (
-  <GroupedVirtuoso
-    id={ENTRY_COLUMN_LIST_SCROLLER_ID}
-    className="z-0"
-    ref={ref}
-    groupContent={useCallback(
-      (index: number) => {
-        const entryId = getGetGroupDataIndex(groupCounts!, index, data!)
-
-        return <EntryHeadDateItem entryId={entryId} />
-      },
-      [groupCounts, data],
-    )}
-    groupCounts={groupCounts}
-    onKeyDown={onKeyDown}
-    {...virtuosoOptions}
-    itemContent={useCallback(
-      (index: number, _: number, __: string, c: any) => {
-        const entryId = data![index]
-        return itemContent?.(index, entryId, c)
-      },
-      [itemContent, JSON.stringify(data)],
-    )}
-  />
-))
-
-function getGetGroupDataIndex<T>(groupCounts: number[], groupIndex: number, data: readonly T[]) {
-  // Get first grouped of data index
-  //
-  let sum = 0
-  for (let i = 0; i < groupIndex; i++) {
-    sum += groupCounts[i]
-  }
-  return data[sum]
-}
-
 const EntryHeadDateItem: FC<{
   entryId: string
-}> = memo(({ entryId }) => {
+  isSticky?: boolean
+}> = memo(({ entryId, isSticky }) => {
   const entry = useEntry(entryId)
 
   const routeParams = useRouteParams()
   const { feedId, view } = routeParams
   const isList = isListSubscription(feedId)
 
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   const date = new Date(
     isList ? entry.entries.insertedAt : entry.entries.publishedAt,
   ).toDateString()
-  return <DateItem date={date} view={view} />
+  return <DateItem isSticky={isSticky} date={date} view={view} />
 })
 
 EntryHeadDateItem.displayName = "EntryHeadDateItem"

@@ -1,7 +1,7 @@
 import { views } from "@follow/constants"
 import { useMutation } from "@tanstack/react-query"
+import type { Range } from "@tanstack/react-virtual"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
@@ -19,8 +19,8 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   const feedView = useRouteParamsSelector((params) => params.view)
 
   const handleMarkReadInRange = useDebounceCallback(
-    async ({ startIndex }: ListRange) => {
-      const idSlice = entriesIds?.slice(0, startIndex)
+    ({ startIndex, endIndex }: Range) => {
+      const idSlice = entriesIds?.slice(startIndex, endIndex)
 
       if (!idSlice) return
       batchMarkRead(idSlice)
@@ -30,7 +30,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   )
 
   const handleRenderAsRead = useCallback(
-    async ({ startIndex, endIndex }: ListRange, enabled?: boolean) => {
+    async ({ startIndex, endIndex }: Range, enabled?: boolean) => {
       if (!enabled) return
       const idSlice = entriesIds?.slice(startIndex, endIndex)
 
