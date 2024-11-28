@@ -14,6 +14,7 @@ import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useContextMenu } from "~/hooks/common/useContextMenu"
+import { COMMAND_ID } from "~/modules/command/commands/id"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -58,14 +59,11 @@ export const EntryItemWrapper: FC<
     (e) => {
       e.stopPropagation()
 
-      if (!asRead) {
-        entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
-      }
       navigate({
         entryId: entry.entries.id,
       })
     },
-    [asRead, entry.entries.id, entry.feedId, navigate],
+    [entry.entries.id, navigate],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     () => entry.entries.url && window.open(entry.entries.url, "_blank"),
@@ -80,12 +78,23 @@ export const EntryItemWrapper: FC<
       setIsContextMenuOpen(true)
       await showContextMenu(
         [
-          ...actionConfigs.map((item) => ({
-            type: "text" as const,
-            label: item.name,
-            click: () => item.onClick(),
-            shortcut: item.shortcut,
-          })),
+          ...actionConfigs
+            .filter(
+              (item) =>
+                !(
+                  [
+                    COMMAND_ID.entry.viewSourceContent,
+                    COMMAND_ID.entry.toggleAISummary,
+                    COMMAND_ID.entry.toggleAITranslation,
+                  ] as string[]
+                ).includes(item.id),
+            )
+            .map((item) => ({
+              type: "text" as const,
+              label: item.name,
+              click: () => item.onClick(),
+              shortcut: item.shortcut,
+            })),
           {
             type: "separator" as const,
           },

@@ -23,7 +23,7 @@ export const TransactionsSection: Component = ({ className }) => {
 
   const transactions = useWalletTransactions({
     fromOrToUserId: user?.id,
-    type: type === "all" ? undefined : type,
+    type: type === "all" ? undefined : (type as (typeof TransactionTypes)[number]),
   })
 
   const serverConfigs = useServerConfigs()

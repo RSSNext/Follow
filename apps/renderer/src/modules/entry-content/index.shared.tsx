@@ -1,3 +1,4 @@
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -8,6 +9,7 @@ import type { FC } from "react"
 import { memo, useEffect, useLayoutEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useShowAISummary } from "~/atoms/ai-summary"
 import {
   ReadabilityStatus,
   setReadabilityStatus,
@@ -19,8 +21,10 @@ import { Toc } from "~/components/ui/markdown/components/Toc"
 import { isWebBuild } from "~/constants"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useAuthQuery } from "~/hooks/common/useBizQuery"
 import { getNewIssueUrl } from "~/lib/issues"
 import { useIsSoFWrappedElement, useWrappedElement } from "~/providers/wrapped-element-provider"
+import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -227,3 +231,39 @@ export const ContainerToc: FC = memo(() => {
     </RootPortal>
   )
 })
+
+export function AISummary({ entryId }: { entryId: string }) {
+  const { t } = useTranslation()
+  const entry = useEntry(entryId)
+  const showAISummary = useShowAISummary() || !!entry?.settings?.summary
+  const summary = useAuthQuery(
+    Queries.ai.summary({
+      entryId,
+      language: entry?.settings?.translation,
+    }),
+    {
+      enabled: showAISummary,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      meta: {
+        persist: true,
+      },
+    },
+  )
+
+  if (!showAISummary || (!summary.isLoading && !summary.data)) {
+    return null
+  }
+
+  return (
+    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+        <i className="i-mgc-magic-2-cute-re align-middle" />
+        <span>{t("entry_content.ai_summary")}</span>
+      </div>
+      <AutoResizeHeight spring className="text-sm leading-relaxed">
+        {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
+      </AutoResizeHeight>
+    </div>
+  )
+}

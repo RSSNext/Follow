@@ -1,8 +1,10 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 
+import { useShowAISummary } from "~/atoms/ai-summary"
+import { useShowAITranslation } from "~/atoms/ai-translation"
 import {
   getReadabilityStatus,
   ReadabilityStatus,
@@ -82,6 +84,9 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   const isInbox = !!inbox
 
   const isShowSourceContent = useShowSourceContent()
+  const isShowAISummary = useShowAISummary()
+  const isShowAITranslation = useShowAITranslation()
+
   const getCmd = useGetCommand()
   const runCmdFn = useRunCommandFn()
   const actionConfigs = useMemo(() => {
@@ -157,6 +162,26 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         active: true,
       },
       {
+        id: COMMAND_ID.entry.toggleAISummary,
+        onClick: runCmdFn(COMMAND_ID.entry.toggleAISummary, []),
+        hide:
+          !!entry?.settings?.summary ||
+          ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
+            entry?.view,
+          ),
+        active: isShowAISummary,
+      },
+      {
+        id: COMMAND_ID.entry.toggleAITranslation,
+        onClick: runCmdFn(COMMAND_ID.entry.toggleAITranslation, []),
+        hide:
+          !!entry?.settings?.translation ||
+          ([FeedViewType.SocialMedia, FeedViewType.Videos] as (number | undefined)[]).includes(
+            entry?.view,
+          ),
+        active: isShowAITranslation,
+      },
+      {
         id: COMMAND_ID.entry.share,
         onClick: runCmdFn(COMMAND_ID.entry.share, [{ entryId }]),
         hide: !entry?.entries.url || !("share" in navigator),
@@ -194,6 +219,8 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
     getCmd,
     inList,
     isInbox,
+    isShowAISummary,
+    isShowAITranslation,
     isShowSourceContent,
     runCmdFn,
     view,

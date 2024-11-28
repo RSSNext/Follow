@@ -18,6 +18,7 @@ import { unified } from "unified"
 import { VFile } from "vfile"
 
 import { MarkdownLink } from "~/components/ui/markdown/renderers/MarkdownLink"
+import { VideoPlayer } from "~/components/ui/media/VideoPlayer"
 
 export interface RemarkOptions {
   components: Partial<Components>
@@ -78,6 +79,16 @@ export const parseMarkdown = (content: string, options?: Partial<RemarkOptions>)
       passNode: true,
       components: {
         a: ({ node, ...props }) => createElement(MarkdownLink, { ...props } as any),
+        img: ({ node, ...props }) => {
+          const { src } = props
+          const isVideo = src?.endsWith(".mp4")
+          if (isVideo) {
+            return createElement(VideoPlayer, {
+              src: src as string,
+            })
+          }
+          return createElement("img", { ...props } as any)
+        },
         ...components,
       },
     }),

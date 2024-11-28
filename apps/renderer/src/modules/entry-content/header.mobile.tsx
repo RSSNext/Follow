@@ -16,12 +16,18 @@ import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useEntry } from "~/store/entry/hooks"
 
+import { COMMAND_ID } from "../command/commands/id"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import type { EntryHeaderProps } from "./header.shared"
 
 function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
   const entry = useEntry(entryId)
-  const actionConfigs = useEntryActions({ entryId, view })
+  const actionConfigs = useEntryActions({ entryId, view }).filter(
+    (item) =>
+      !(
+        [COMMAND_ID.entry.read, COMMAND_ID.entry.unread, COMMAND_ID.entry.copyLink] as string[]
+      ).includes(item.id),
+  )
 
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()

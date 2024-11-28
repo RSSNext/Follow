@@ -60,6 +60,7 @@ const ModalToSheet = (props: ModalProps & { index: number; id: string }) => {
     () => ({
       dismiss: () => {
         sheetRef.current?.dismiss()
+        close()
       },
       getIndex: () => props.index,
       setClickOutSideToDismiss: (v) => {

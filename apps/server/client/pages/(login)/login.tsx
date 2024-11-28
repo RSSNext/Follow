@@ -1,9 +1,12 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
 import { apiClient } from "@client/lib/api-fetch"
 import { LOGIN_CALLBACK_URL, loginHandler } from "@client/lib/auth"
+import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { authProvidersConfig } from "@follow/constants"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
+import { cn } from "@follow/utils/utils"
 import { SessionProvider, signIn, signOut, useSession } from "@hono/auth-js/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -22,6 +25,7 @@ function Login() {
 
   const [redirecting, setRedirecting] = useState(false)
 
+  const { data: authProviders } = useAuthProviders()
   const location = useLocation()
   const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
@@ -106,22 +110,21 @@ function Login() {
             </div>
           ) : (
             <>
-              <Button
-                className="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80"
-                onClick={() => {
-                  loginHandler("github")
-                }}
-              >
-                <i className="i-mgc-github-cute-fi mr-2 text-xl" /> {t("login.continueWithGitHub")}
-              </Button>
-              <Button
-                className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
-                onClick={() => {
-                  loginHandler("google")
-                }}
-              >
-                <i className="i-mgc-google-cute-fi mr-2 text-xl" /> {t("login.continueWithGoogle")}
-              </Button>
+              {Object.entries(authProviders || []).map(([key, provider]) => (
+                <Button
+                  key={key}
+                  buttonClassName={cn(
+                    "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
+                    authProvidersConfig[key]?.buttonClassName,
+                  )}
+                  onClick={() => {
+                    loginHandler(key)
+                  }}
+                >
+                  <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                  {t("login.continueWith", { provider: provider.name })}
+                </Button>
+              ))}
             </>
           )}
         </div>

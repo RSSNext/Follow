@@ -228,12 +228,18 @@ export const cleanupOldRender = async () => {
 }
 
 export const loadDynamicRenderEntry = () => {
+  if (!appUpdaterConfig.enableRenderHotUpdate) return
   const manifest = getCurrentRenderManifest()
   if (!manifest) return
+  // check main hash is equal to manifest.mainHash
+  const appSupport = mainHash === manifest.mainHash
+  if (!appSupport) return
+
   const currentRenderVersion = manifest.version
   const dir = path.resolve(HOTUPDATE_RENDER_ENTRY_DIR, currentRenderVersion)
   const entryFile = path.resolve(dir, "index.html")
   const entryFileExists = existsSync(entryFile)
+
   if (!entryFileExists) return
   return entryFile
 }

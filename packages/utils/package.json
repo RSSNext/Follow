@@ -30,8 +30,8 @@
     "@follow/types": "workspace:*",
     "clsx": "2.1.1",
     "framer-motion": "11.11.17",
-    "nanoid": "5.0.8",
-    "tailwind-merge": "2.5.4",
+    "nanoid": "5.0.9",
+    "tailwind-merge": "2.5.5",
     "tldts": "6.1.64",
     "uniqolor": "1.1.1"
   }

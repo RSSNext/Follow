@@ -13,7 +13,7 @@ import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
 import { store, StoreKey } from "~/lib/store"
 import { registerAppTray } from "~/lib/tray"
-import { logger } from "~/logger"
+import { logger, revealLogFile } from "~/logger"
 import {
   cleanupOldRender,
   getCurrentRenderManifest,
@@ -347,6 +347,10 @@ ${content}
     } else {
       store.set(StoreKey.CacheSizeLimit, input)
     }
+  }),
+
+  revealLogFile: t.procedure.action(async () => {
+    return revealLogFile()
   }),
 }
 

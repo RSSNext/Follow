@@ -1,3 +1,4 @@
+import type { SupportedLanguages } from "@follow/models/types"
 import { franc } from "franc-min"
 
 import type { FlatEntryModel } from "~/store/entry"
@@ -22,6 +23,7 @@ export function immersiveTranslate({
   html,
   entry,
   cache,
+  targetLanguage,
 }: {
   html?: HTMLElement
   entry: FlatEntryModel
@@ -29,8 +31,26 @@ export function immersiveTranslate({
     get: (key: string) => string | undefined
     set: (key: string, value: string) => void
   }
+  targetLanguage?: SupportedLanguages
 }) {
-  if (!html || !entry.settings?.translation) {
+  if (!html) {
+    return
+  }
+
+  const translation = entry.settings?.translation ?? targetLanguage
+
+  const immersiveTranslateMark = html.querySelectorAll("[data-immersive-translate-mark=true]")
+  if (immersiveTranslateMark.length > 0) {
+    if (translation) {
+      return
+    }
+
+    for (const mark of immersiveTranslateMark) {
+      mark.remove()
+    }
+  }
+
+  if (!translation) {
     return
   }
 
@@ -42,7 +62,7 @@ export function immersiveTranslate({
 
     translate({
       entry,
-      language: entry.settings?.translation,
+      language: translation,
       part: textNode.textContent,
       extraFields: ["content"],
     }).then((transformed) => {
@@ -52,8 +72,13 @@ export function immersiveTranslate({
 
       const p = document.createElement("p")
       p.append(document.createTextNode(textNode.textContent!))
-      p.append(document.createElement("br"))
-      p.append(document.createTextNode(transformed.content))
+
+      const fontTag = document.createElement("font")
+      fontTag.dataset["immersiveTranslateMark"] = "true"
+      fontTag.append(document.createElement("br"))
+      fontTag.append(document.createTextNode(transformed.content))
+
+      p.append(fontTag)
 
       textNode.replaceWith(p)
     })
@@ -70,7 +95,7 @@ export function immersiveTranslate({
 
   for (const tag of tags) {
     const sourceLanguage = franc(tag.textContent ?? "")
-    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+    if (sourceLanguage === LanguageMap[translation].code) {
       return
     }
 
@@ -78,6 +103,7 @@ export function immersiveTranslate({
     tag.dataset.childCount = children.filter((child) => child.textContent).length.toString()
 
     const fontTag = document.createElement("font")
+    fontTag.dataset["immersiveTranslateMark"] = "true"
 
     if (children.length > 0) {
       fontTag.style.display = "none"
@@ -121,7 +147,7 @@ export function immersiveTranslate({
 
         translate({
           entry,
-          language: entry.settings?.translation,
+          language: translation,
           part: textContent,
           extraFields: ["content"],
         }).then((transformed) => {
@@ -140,6 +166,7 @@ export function immersiveTranslate({
     }
 
     const parentFontTag = document.createElement("font")
+    parentFontTag.dataset["immersiveTranslateMark"] = "true"
     parentFontTag.append(document.createElement("br"))
     parentFontTag.append(fontTag)
 

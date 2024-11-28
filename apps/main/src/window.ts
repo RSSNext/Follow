@@ -163,19 +163,37 @@ export function createWindow(
     window.webContents.on("devtools-opened", () => {
       // source-code-font: For code such as Elements panel
       // monospace-font: For sidebar such as Event Listener Panel
-      const css = `
-        :root {
-            --source-code-font-family: consolas;
-            --source-code-font-size: 13px;
-            --monospace-font-family: consolas;
-            --monospace-font-size: 13px;
-        }`
+      const css = `:root {--devtool-font-family: consolas, operator mono, Cascadia Code, OperatorMonoSSmLig Nerd Font,"Agave Nerd Font","Cascadia Code PL", monospace;--source-code-font-family:var(--devtool-font-family);--source-code-font-size: 13px;--monospace-font-family: var(--devtool-font-family);--monospace-font-size: 13px;}`
       window.webContents.devToolsWebContents?.executeJavaScript(`
         const overriddenStyle = document.createElement('style');
         overriddenStyle.innerHTML = '${css.replaceAll("\n", " ")}';
         document.body.append(overriddenStyle);
-        document.body.classList.remove('platform-windows');
-      `)
+        document.querySelectorAll('.platform-windows').forEach(el => el.classList.remove('platform-windows'));
+        addStyleToAutoComplete();
+        const observer = new MutationObserver((mutationList, observer) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === 'childList') {
+                    for (let i = 0; i < mutation.addedNodes.length; i++) {
+                        const item = mutation.addedNodes[i];
+                        if (item.classList.contains('editor-tooltip-host')) {
+                            addStyleToAutoComplete();
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(document.body, {childList: true});
+        function addStyleToAutoComplete() {
+            document.querySelectorAll('.editor-tooltip-host').forEach(element => {
+                if (element.shadowRoot.querySelectorAll('[data-key="overridden-dev-tools-font"]').length === 0) {
+                    const overriddenStyle = document.createElement('style');
+                    overriddenStyle.setAttribute('data-key', 'overridden-dev-tools-font');
+                    overriddenStyle.innerHTML = '.cm-tooltip-autocomplete ul[role=listbox] {font-family: consolas !important;}';
+                    element.shadowRoot.append(overriddenStyle);
+                }
+            });
+        }
+    `)
     })
   }
 

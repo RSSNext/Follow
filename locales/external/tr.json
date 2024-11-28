@@ -21,8 +21,6 @@
   "invitation.getCodeMessage": "Aşağıdaki yollarla bir davet kodu alabilirsiniz:",
   "invitation.title": "Davet Kodu",
   "login.backToWebApp": "Web Uygulamasına Geri Dön",
-  "login.continueWithGitHub": "GitHub ile devam et",
-  "login.continueWithGoogle": "Google ile devam et",
   "login.logInTo": "Giriş yap ",
   "login.openApp": "Uygulamayı Aç",
   "login.redirecting": "Yönlendiriliyor",

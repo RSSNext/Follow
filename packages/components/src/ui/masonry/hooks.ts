@@ -1,10 +1,12 @@
 import { nextFrame } from "@follow/utils/dom"
 import { throttle } from "es-toolkit/compat"
-import { useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useLayoutEffect, useRef, useState } from "react"
 
 import { getCurrentColumn } from "./utils"
 
-export const useMasonryColumn = (gutter: number, onReady?: () => any) => {
+const calItemWidth = (clientWidth: number, gutter: number, column: number) =>
+  Math.trunc(clientWidth - gutter * (column - 1)) / column
+export const useMasonryColumn = (gutter: number, onReady?: (column: number) => any) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentColumn, setCurrentColumn] = useState(1)
   const [currentItemWidth, setCurrentItemWidth] = useState(0)
@@ -16,14 +18,14 @@ export const useMasonryColumn = (gutter: number, onReady?: () => any) => {
     const handler = () => {
       const column = getCurrentColumn($warpper.clientWidth)
 
-      setCurrentItemWidth(Math.trunc(($warpper.clientWidth - gutter * (column - 1)) / column))
+      setCurrentItemWidth(calItemWidth($warpper.clientWidth, gutter, column))
 
       setCurrentColumn(column)
 
       nextFrame(() => {
         if (readyCallOnce) return
         readyCallOnce = true
-        onReady?.()
+        onReady?.(column)
       })
     }
     const recal = throttle(handler, 1000 / 12)
@@ -51,5 +53,13 @@ export const useMasonryColumn = (gutter: number, onReady?: () => any) => {
     containerRef,
     currentColumn,
     currentItemWidth,
+    calcItemWidth: useCallback(
+      (column: number) => {
+        const $warpper = containerRef.current
+        if (!$warpper) return 0
+        return calItemWidth($warpper.clientWidth, gutter, column)
+      },
+      [gutter],
+    ),
   }
 }
