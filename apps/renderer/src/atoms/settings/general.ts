@@ -7,6 +7,8 @@ const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
   language: "en",
+  translationLanguage: "zh-CN",
+
   // mobile app
   startupScreen: "timeline",
   // Data control

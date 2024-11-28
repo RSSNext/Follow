@@ -5,6 +5,8 @@ import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
+import { toggleShowAISummary } from "~/atoms/ai-summary"
+import { toggleShowAITranslation } from "~/atoms/ai-translation"
 import { setShowSourceContent, useSourceContentModal } from "~/atoms/source-content"
 import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
@@ -288,6 +290,22 @@ export const useRegisterEntryCommands = () => {
           return
         }
         unread.mutate({ entryId, feedId: entry.feedId })
+      },
+    },
+    {
+      id: COMMAND_ID.entry.toggleAISummary,
+      label: t("entry_actions.toggle_ai_summary"),
+      icon: <i className="i-mgc-magic-2-cute-re" />,
+      run: () => {
+        toggleShowAISummary()
+      },
+    },
+    {
+      id: COMMAND_ID.entry.toggleAITranslation,
+      label: t("entry_actions.toggle_ai_translation"),
+      icon: <i className="i-mgc-translate-2-cute-re" />,
+      run: () => {
+        toggleShowAITranslation()
       },
     },
   ])

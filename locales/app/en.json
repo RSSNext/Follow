@@ -134,6 +134,8 @@
   "entry_actions.star": "Star",
   "entry_actions.starred": "Starred.",
   "entry_actions.tip": "Tip",
+  "entry_actions.toggle_ai_summary": "Toggle AI Summary",
+  "entry_actions.toggle_ai_translation": "Toggle AI Translation",
   "entry_actions.unstar": "Unstar",
   "entry_actions.unstarred": "Unstarred.",
   "entry_actions.view_source_content": "View Source Content",

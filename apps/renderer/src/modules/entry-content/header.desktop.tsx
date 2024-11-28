@@ -46,7 +46,17 @@ const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: FeedVie
   })
 
   return actionConfigs
-    .filter((config) => config.id !== COMMAND_ID.entry.openInBrowser)
+    .filter(
+      (item) =>
+        !(
+          [
+            COMMAND_ID.entry.read,
+            COMMAND_ID.entry.unread,
+            COMMAND_ID.entry.copyLink,
+            COMMAND_ID.entry.openInBrowser,
+          ] as string[]
+        ).includes(item.id),
+    )
     .map((config) => {
       return (
         <ActionButton
