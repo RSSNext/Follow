@@ -104,7 +104,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
       <div className="mt-2 text-[13px] font-medium text-zinc-500">
         {getPreferredTitle(feed || inbox, entry.entries)}
       </div>
-      <div className="flex items-center gap-2 text-[13px] text-zinc-500">
+      <div className="flex select-none items-center gap-2 text-[13px] text-zinc-500">
         {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
 
         <div className="flex items-center gap-1">

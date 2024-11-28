@@ -3,7 +3,7 @@ import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { clearSelection, stopPropagation } from "@follow/utils/dom"
+import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useRef } from "react"
@@ -166,9 +166,8 @@ export const EntryContent: Component<EntryContentProps> = ({
           ref={scrollerRef}
         >
           <div
-            onPointerDown={clearSelection}
             style={stableRenderStyle}
-            className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
+            className="select-text duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
             key={entry.entries.id}
           >
             <article
@@ -179,7 +178,7 @@ export const EntryContent: Component<EntryContentProps> = ({
               <EntryTitle entryId={entryId} compact={compact} />
 
               <WrappedElementProvider boundingDetection>
-                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
+                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto text-[0.94rem]">
                   <TitleMetaHandler entryId={entry.entries.id} />
                   <AISummary entryId={entry.entries.id} />
                   <ErrorBoundary fallback={RenderError}>
