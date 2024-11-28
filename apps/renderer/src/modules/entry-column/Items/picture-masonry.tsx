@@ -262,7 +262,7 @@ const MasonryRender: React.ComponentType<
 }
 interface MasonryProps {
   data: string[]
-  endReached: () => Promise<any>
+  endReached: () => any
   hasNextPage: boolean
 }
 

@@ -59,7 +59,7 @@ export const EntryEmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>
   )
 })
 
-type EntryListProps = {
+export type EntryListProps = {
   feedId: string
   entriesIds: string[]
   view: FeedViewType
