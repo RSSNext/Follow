@@ -129,7 +129,7 @@
   "general.log_file.label": "日志文件",
   "general.mark_as_read.hover.description": "当鼠标悬停在条目时自动将其标记为已读。",
   "general.mark_as_read.hover.label": "悬停时标记为已读",
-  "general.mark_as_read.render.description": "当单级条目（例如社交媒体贴文、图片查看、视频观看）进入可视区域时自动将其标记为已读。",
+  "general.mark_as_read.render.description": "当单级条目（例如社交媒体贴文、图片、视频观看）进入可视区域时自动将其标记为已读。",
   "general.mark_as_read.render.label": "在可视区域中时标记为已读",
   "general.mark_as_read.scroll.description": "当条目滚动出可视区域时自动将其标记为已读。",
   "general.mark_as_read.scroll.label": "滚动时标记为已读",
