@@ -275,7 +275,7 @@ const ListItemImpl: Component<{
       }}
       {...contextMenuProps}
     >
-      <div className={"flex min-w-0 items-center"}>
+      <div className="flex min-w-0 flex-1 items-center">
         <FeedIcon fallback feed={list} size={iconSize} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
           {getPreferredTitle(list)}
