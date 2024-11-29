@@ -28,26 +28,32 @@
     "@eneris/push-receiver": "4.3.0",
     "@follow/shared": "workspace:*",
     "@mozilla/readability": "^0.5.0",
+    "@openpanel/web": "1.0.1",
     "@sentry/electron": "5.7.0",
     "builder-util-runtime": "9.2.10",
     "electron-context-menu": "4.0.4",
-    "electron-log": "5.2.0",
+    "electron-log": "5.2.3",
     "electron-squirrel-startup": "1.0.1",
     "electron-updater": "^6.3.9",
+    "es-toolkit": "1.27.0",
     "fast-folder-size": "2.3.0",
     "font-list": "1.5.1",
-    "i18next": "^23.16.4",
+    "i18next": "^24.0.2",
+    "js-yaml": "4.1.0",
     "linkedom": "^0.18.5",
     "lowdb": "7.0.1",
     "msedge-tts": "1.3.4",
+    "node-machine-id": "1.1.12",
     "ofetch": "1.4.1",
     "semver": "7.6.3",
+    "tar": "7.4.3",
     "vscode-languagedetection": "npm:@vscode/vscode-languagedetection@^1.0.22"
   },
   "devDependencies": {
-    "@types/node": "^22.8.7",
-    "electron": "33.0.2",
+    "@types/js-yaml": "4.0.9",
+    "@types/node": "^22.10.0",
+    "electron": "33.2.0",
     "electron-devtools-installer": "3.2.0",
-    "hono": "4.6.8"
+    "hono": "4.6.11"
   }
 }

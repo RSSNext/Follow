@@ -58,7 +58,6 @@ export const initializeAppStage1 = () => {
   // code. You can also put them in separate files and require them here.
 
   registerMenuAndContextMenu()
-
   registerPushNotifications()
   clearCacheCronJob()
   checkAndCleanCodeCache()

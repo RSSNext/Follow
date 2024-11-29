@@ -1,6 +1,6 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
-import { redirect } from "react-router-dom"
+import { redirect } from "react-router"
 
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "~/constants"

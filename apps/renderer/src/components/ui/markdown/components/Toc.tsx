@@ -163,11 +163,13 @@ const TocHoverCard: React.FC<TocHoverCardProps> = ({
                             handleScrollTo(index, heading.$heading, heading.anchorId)
                           }}
                         >
-                          <span className="duration-200 group-hover:text-accent/80">
+                          <span className="select-none duration-200 group-hover:text-accent/80">
                             {heading.title}
                           </span>
 
-                          <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
+                          <span className="ml-4 select-none text-[8px] opacity-50">
+                            H{heading.depth}
+                          </span>
                         </button>
                       </li>
                     ))}

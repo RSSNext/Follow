@@ -32,11 +32,10 @@ export const createApiClient = () => {
 
   const apiFetch = ofetch.create({
     credentials: "include",
-
     retry: false,
 
     onRequest(context) {
-      // console.debug(`request: ${context.request}`)
+      if (isDev) console.info(`request: ${context.request}`)
 
       context.options.headers.set("User-Agent", `Follow External Server Api Client/${PKG.version}`)
     },

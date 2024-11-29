@@ -200,7 +200,7 @@ export const DiscoverFeedForm = ({
         const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
         present({
-          title: "Add Feed",
+          title: t("feed_form.add_feed"),
           content: () => (
             <FeedForm
               asWidget

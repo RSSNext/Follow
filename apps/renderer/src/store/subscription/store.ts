@@ -10,6 +10,7 @@ import { omit } from "es-toolkit/compat"
 import { produce } from "immer"
 import { parse } from "tldts"
 
+import { setFeedUnreadDirty } from "~/atoms/feed"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
@@ -270,6 +271,11 @@ class SubscriptionActions {
       await feedUnreadActions.fetchUnreadByView(view)
     })
     await tx.run()
+
+    const feedIdsInView = get().feedIdByView[view]
+    for (const feedId of feedIdsInView) {
+      setFeedUnreadDirty(feedId)
+    }
   }
 
   async markReadByFeedIds({
@@ -307,7 +313,7 @@ class SubscriptionActions {
         },
       })
     })
-    tx.optimistic(async () => {
+    tx.optimistic(() => {
       if (listId) {
         feedUnreadActions.updateByFeedId(listId, 0)
       } else if (inboxId) {
@@ -331,6 +337,10 @@ class SubscriptionActions {
     })
 
     await tx.run()
+
+    for (const feedId of stableFeedIds) {
+      setFeedUnreadDirty(feedId)
+    }
   }
 
   clear() {

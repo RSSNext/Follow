@@ -1,4 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
+import type { TransactionTypes } from "@follow/models"
 import dayjs from "dayjs"
 import { useTranslation } from "react-i18next"
 
@@ -33,7 +34,7 @@ export const TxTable = ({ type }: TxTableProps) => {
   const user = useWhoami()
   const transactions = useWalletTransactions({
     fromOrToUserId: user?.id,
-    type: type === "all" ? undefined : type,
+    type: type === "all" ? undefined : (type as (typeof TransactionTypes)[number]),
   })
   return (
     <ul className="mt-4 flex flex-col gap-2">

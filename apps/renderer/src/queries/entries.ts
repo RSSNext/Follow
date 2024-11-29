@@ -1,3 +1,4 @@
+import { useFeedUnreadIsDirty } from "~/atoms/feed"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthInfiniteQuery, useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
@@ -101,8 +102,8 @@ export const entries = {
         }
         return apiClient.entries["check-new"].$get({
           query: {
-            insertedAfter: `${query.insertedAfter}`,
-            view: `${query.view}`,
+            insertedAfter: query.insertedAfter,
+            view: query.view,
             feedId: query.feedId,
             read: typeof query.read === "boolean" ? JSON.stringify(query.read) : undefined,
             feedIdList: query.feedIdList,
@@ -144,6 +145,9 @@ export const useEntries = ({
   isArchived?: boolean
 }) => {
   const reduceRefetch = useGeneralSettingKey("reduceRefetch")
+  const fetchUnread = read === false
+  const feedUnreadDirty = useFeedUnreadIsDirty((feedId as string) || "")
+
   return useAuthInfiniteQuery(
     entries.entries({ feedId, inboxId, listId, view, read, isArchived }),
     {
@@ -155,8 +159,16 @@ export const useEntries = ({
       initialPageParam: undefined,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
+      refetchOnMount: fetchUnread && feedUnreadDirty ? "always" : false,
 
-      staleTime: reduceRefetch ? maxStaleTime : defaultStaleTime,
+      staleTime:
+        // Force refetch unread entries when feed is dirty
+        fetchUnread && feedUnreadDirty
+          ? 0
+          : // Keep reduce data fetch logic
+            reduceRefetch
+            ? maxStaleTime
+            : defaultStaleTime,
     },
   )
 }

@@ -3,6 +3,7 @@ import type { ExtractAtomValue } from "jotai"
 import { useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useCallback } from "react"
+import { shallow } from "zustand/shallow"
 
 import { viewportAtom } from "../atoms/viewport"
 
@@ -11,6 +12,7 @@ export const useViewport = <T>(selector: (value: ExtractAtomValue<typeof viewpor
     selectAtom(
       viewportAtom,
       useCallback((atomValue) => selector(atomValue), []),
+      shallow,
     ),
   )
 

@@ -12,12 +12,14 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
+import { getSidebarActiveView } from "~/atoms/sidebar"
 import { useWhoami } from "~/atoms/user"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_LIST } from "~/constants"
 import { LOGO_MOBILE_ID } from "~/constants/dom"
 import { shortcuts } from "~/constants/shortcuts"
-import { useRouteParams } from "~/hooks/biz/useRouteParams"
+import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { getRouteParams, useRouteParams } from "~/hooks/biz/useRouteParams"
 import { FeedColumnMobile } from "~/modules/app-layout/feed-column/mobile"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
@@ -32,12 +34,7 @@ import {
 } from "./EntryListHeader.shared"
 import { TimelineTabs } from "./TimelineTabs"
 
-export const EntryListHeader: FC<EntryListHeaderProps> = ({
-  totalCount,
-  refetch,
-  isRefreshing,
-  hasUpdate,
-}) => {
+export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParams()
   const { t } = useTranslation()
 
@@ -53,18 +50,10 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({
     feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
 
   const titleInfo = !!headerTitle && (
-    <div className="min-w-0">
-      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
-        <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
-          <span className="relative -top-px">{headerTitle}</span>
-        </EllipsisHorizontalTextWithTooltip>
-      </div>
-      <div className="whitespace-nowrap text-xs font-medium leading-none text-zinc-400">
-        {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
-        {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
-        {t("space", { ns: "common" })}
-        {t("words.items", { ns: "common", count: totalCount })}
-      </div>
+    <div className="flex min-w-0 items-center break-all text-lg font-bold leading-tight">
+      <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
+        {headerTitle}
+      </EllipsisHorizontalTextWithTooltip>
     </div>
   )
   const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(feedId)
@@ -177,6 +166,18 @@ const FollowSubscriptionButton = () => {
       content={<FeedColumnMobile asWidget />}
       modalClassName="bg-background pt-4 h-[calc(100svh-3rem)]"
       contentClassName="p-0 overflow-visible"
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          const sidebarActiveView = getSidebarActiveView()
+          const { view } = getRouteParams()
+          if (sidebarActiveView !== view) {
+            navigateEntry({
+              view: sidebarActiveView,
+              feedId: null,
+            })
+          }
+        }
+      }}
     >
       <ActionButton
         id={LOGO_MOBILE_ID}

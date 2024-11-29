@@ -3,18 +3,39 @@ import * as SliderPrimitive from "@radix-ui/react-slider"
 import * as React from "react"
 
 export const Slider = React.forwardRef<
-  React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => (
+  React.ElementRef<typeof SliderPrimitive.Root> & {
+    variant?: "primary" | "secondary"
+  },
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+    variant?: "primary" | "secondary"
+  }
+>(({ className, variant = "primary", ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
     className={cn("relative flex w-full touch-none select-none items-center", className)}
     {...props}
   >
-    <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-accent/20">
-      <SliderPrimitive.Range className="absolute h-full bg-accent" />
+    <SliderPrimitive.Track
+      className={cn(
+        "relative h-1.5 w-full grow overflow-hidden rounded-full",
+        variant === "primary" ? "bg-accent/20" : "bg-zinc-200 dark:bg-zinc-700",
+      )}
+    >
+      <SliderPrimitive.Range
+        className={cn(
+          "absolute h-full",
+          variant === "primary" ? "bg-accent" : "bg-zinc-400 dark:bg-zinc-500",
+        )}
+      />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className="block size-4 rounded-full border border-accent/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50" />
+    <SliderPrimitive.Thumb
+      className={cn(
+        "block size-4 rounded-full border bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50",
+        variant === "primary"
+          ? "border-accent/50 focus-visible:ring-accent"
+          : "border-zinc-400 focus-visible:ring-zinc-400 dark:border-zinc-500 dark:focus-visible:ring-zinc-500",
+      )}
+    />
   </SliderPrimitive.Root>
 ))
 Slider.displayName = SliderPrimitive.Root.displayName

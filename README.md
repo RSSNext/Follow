@@ -28,9 +28,9 @@ Whether for users or professional developers, Follow will be your open informati
 
 Feel free to try it using the following methods:
 
-| [![](https://img.shields.io/badge/Try%20Web%20App-Online-55b467?labelColor=black&logo=vercel&style=flat-square)](https://app.follow.is)                                                     | No installation necessary! Visit our web app to experience it firsthand.                 |
-| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
-| [![](https://img.shields.io/github/v/release/RSSNext/Follow?color=369eff&labelColor=black&logo=github&style=flat-square&label=Releases)](https://github.com/RSSNext/Follow/releases/latest) | Download and install the desktop client for a smoother experience and enhanced features. |
+| [![](https://img.shields.io/badge/Try%20Web%20App-Online-55b467?labelColor=black&logo=vercel&style=flat-square)](https://app.follow.is)                                                                                                                                                                                                                                                        | No installation necessary! Visit our web app to experience it firsthand.                 |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| [![](https://img.shields.io/github/v/release/RSSNext/Follow?color=369eff&labelColor=black&logo=github&style=flat-square&label=Releases)](https://github.com/RSSNext/Follow/releases/latest) [![](https://img.shields.io/github/downloads/RSSNext/Follow/total?color=369eff&labelColor=black&logo=github&style=flat-square&label=Downloads)](https://github.com/RSSNext/Follow/releases/latest) | Download and install the desktop client for a smoother experience and enhanced features. |
 
 You can also install using the following methods maintained by our community:
 

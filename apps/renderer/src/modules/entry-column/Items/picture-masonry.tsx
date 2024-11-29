@@ -32,6 +32,7 @@ import { MediaContainerWidthProvider } from "~/components/ui/media"
 import { getEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 
+import { getMasonryColumnValue, setMasonryColumnValue, useMasonryColumnValue } from "../atoms"
 import { batchMarkRead } from "../hooks"
 import { PictureWaterFallItem } from "./picture-item"
 
@@ -66,9 +67,22 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     })
   }, [])
 
-  const { containerRef, currentColumn, currentItemWidth } = useMasonryColumn(gutter, () => {
-    setIsInitLayout(true)
-  })
+  const customizeColumn = useMasonryColumnValue()
+  const { containerRef, currentColumn, currentItemWidth, calcItemWidth } = useMasonryColumn(
+    gutter,
+    (column) => {
+      setIsInitLayout(true)
+      if (getMasonryColumnValue() === -1) {
+        setMasonryColumnValue(column)
+      }
+    },
+  )
+
+  const finalColumn = customizeColumn !== -1 ? customizeColumn : currentColumn
+  const finalItemWidth = useMemo(
+    () => (customizeColumn !== -1 ? calcItemWidth(finalColumn) : currentItemWidth),
+    [calcItemWidth, currentItemWidth, customizeColumn, finalColumn],
+  )
 
   const items = useMemo(() => {
     const result = data.map((entryId) => {
@@ -197,17 +211,17 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   return (
     <div ref={containerRef} className="mx-4 pt-2">
       {isInitDim && deferIsInitLayout && (
-        <MasonryItemWidthContext.Provider value={currentItemWidth}>
+        <MasonryItemWidthContext.Provider value={finalItemWidth}>
           <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
             <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
               <MasonryIntersectionContext.Provider value={intersectionObserver}>
-                <MediaContainerWidthProvider width={currentItemWidth}>
+                <MediaContainerWidthProvider width={finalItemWidth}>
                   <FirstScreenReadyContext.Provider value={firstScreenReady}>
                     <Masonry
                       items={firstScreenReady ? items : items.slice(0, FirstScreenItemCount)}
                       columnGutter={gutter}
-                      columnWidth={currentItemWidth}
-                      columnCount={currentColumn}
+                      columnWidth={finalItemWidth}
+                      columnCount={finalColumn}
                       overscanBy={2}
                       render={MasonryRender}
                       onRender={handleRender}

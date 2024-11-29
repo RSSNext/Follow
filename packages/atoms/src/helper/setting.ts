@@ -5,6 +5,7 @@ import { getStorageNS } from "@follow/utils/ns"
 import { atom as jotaiAtom, useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
+import { shallow } from "zustand/shallow"
 
 declare module "@follow/utils/event-bus" {
   interface CustomEvent {
@@ -107,7 +108,7 @@ export const createSettingAtom = <T extends object>(
 
     return useAtomValue(
       // @ts-expect-error
-      useMemo(() => selectAtom(atom, stableSelector.current), [stableSelector]),
+      useMemo(() => selectAtom(atom, stableSelector.current, shallow), [stableSelector]),
     )
   }
 

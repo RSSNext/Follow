@@ -15,8 +15,6 @@
   "invitation.getCodeMessage": "Voit saada kutsukoodin seuraavilla tavoilla:",
   "invitation.title": "Kutsukoodi",
   "login.backToWebApp": "Takaisin verkkosovellukseen",
-  "login.continueWithGitHub": "Jatka GitHubilla",
-  "login.continueWithGoogle": "Jatka Googlella",
   "login.logInTo": "Kirjaudu sisään ",
   "login.openApp": "Avaa sovellus",
   "login.redirecting": "Uudelleenohjataan",

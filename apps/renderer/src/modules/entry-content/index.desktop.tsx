@@ -1,16 +1,16 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { useTitle } from "@follow/hooks"
-import type { FeedModel, InboxModel } from "@follow/models/types"
+import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { clearSelection, stopPropagation } from "@follow/utils/dom"
+import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useRef } from "react"
-import { useTranslation } from "react-i18next"
 
+import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useEntryIsInReadability } from "~/atoms/readability"
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
@@ -33,12 +33,12 @@ import { EntryHeader } from "./header"
 import { useFocusEntryContainerSubscriptions } from "./hooks"
 import type { EntryContentProps } from "./index.shared"
 import {
+  AISummary,
   ContainerToc,
   NoContent,
   ReadabilityAutoToggleEffect,
   ReadabilityContent,
   RenderError,
-  SummaryLoadingSkeleton,
   TitleMetaHandler,
   ViewSourceContentAutoToggleEffect,
 } from "./index.shared"
@@ -51,8 +51,6 @@ export const EntryContent: Component<EntryContentProps> = ({
   compact,
   classNames,
 }) => {
-  const { t } = useTranslation()
-
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
@@ -64,21 +62,6 @@ export const EntryContent: Component<EntryContentProps> = ({
     inbox ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
     {
       staleTime: 300_000,
-    },
-  )
-
-  const summary = useAuthQuery(
-    Queries.ai.summary({
-      entryId,
-      language: entry?.settings?.translation,
-    }),
-    {
-      enabled: !!entry?.settings?.summary,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      meta: {
-        persist: true,
-      },
     },
   )
 
@@ -124,20 +107,25 @@ export const EntryContent: Component<EntryContentProps> = ({
     [entry?.entries.media, data?.entries.media],
   )
   const customCSS = useUISettingKey("customCSS")
+  const showAITranslation = useShowAITranslation()
+  const translationLanguage = useGeneralSettingSelector((s) => s.translationLanguage)
 
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
 
   const translate = async (html: HTMLElement | null) => {
-    if (!html || !entry || !entry.settings?.translation) return
+    if (!html || !entry) return
 
     const fullText = html.textContent ?? ""
     if (!fullText) return
 
     const { franc } = await import("franc-min")
+    const translation =
+      entry.settings?.translation ?? (showAITranslation ? translationLanguage : undefined)
+
     const sourceLanguage = franc(fullText)
-    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+    if (translation && sourceLanguage === LanguageMap[translation].code) {
       return
     }
 
@@ -145,6 +133,7 @@ export const EntryContent: Component<EntryContentProps> = ({
     immersiveTranslate({
       html,
       entry,
+      targetLanguage: translation as SupportedLanguages,
       cache: {
         get: (key: string) => getTranslationCache()[key],
         set: (key: string, value: string) =>
@@ -177,9 +166,8 @@ export const EntryContent: Component<EntryContentProps> = ({
           ref={scrollerRef}
         >
           <div
-            onPointerDown={clearSelection}
             style={stableRenderStyle}
-            className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
+            className="select-text duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
             key={entry.entries.id}
           >
             <article
@@ -190,19 +178,9 @@ export const EntryContent: Component<EntryContentProps> = ({
               <EntryTitle entryId={entryId} compact={compact} />
 
               <WrappedElementProvider boundingDetection>
-                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text text-[0.94rem]">
+                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto text-[0.94rem]">
                   <TitleMetaHandler entryId={entry.entries.id} />
-                  {(summary.isLoading || summary.data) && (
-                    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                        <i className="i-mgc-magic-2-cute-re align-middle" />
-                        <span>{t("entry_content.ai_summary")}</span>
-                      </div>
-                      <AutoResizeHeight spring className="text-sm leading-relaxed">
-                        {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
-                      </AutoResizeHeight>
-                    </div>
-                  )}
+                  <AISummary entryId={entry.entries.id} />
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
                       <ShadowDOM injectHostStyles={!isInbox}>

@@ -6,13 +6,23 @@ interface IssueOptions {
   body: string
   label: string
   error?: Error
+  target: "issue" | "discussion"
+  category: string
 }
 
-export const getNewIssueUrl = ({ body, label, title, error }: Partial<IssueOptions> = {}) => {
-  const baseUrl = `${repository.url}/discussions/new`
+export const getNewIssueUrl = ({
+  body,
+  label,
+  title,
+  error,
+  target = "issue",
+  category,
+}: Partial<IssueOptions> = {}) => {
+  const baseUrl =
+    target === "discussion" ? `${repository.url}/discussions/new` : `${repository.url}/issues/new`
 
   const searchParams = new URLSearchParams()
-  searchParams.set("category", "feed-expired")
+  if (category) searchParams.set("category", category)
 
   let nextBody = [body || "", "", ...getCurrentEnvironment()].join("\n")
   if (label) searchParams.set("label", label)

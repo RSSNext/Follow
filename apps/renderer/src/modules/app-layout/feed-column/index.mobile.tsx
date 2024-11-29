@@ -1,8 +1,16 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 
+import { NewUserGuide } from "./index.shared"
+
 export const MobileRootLayout = () => {
   useDailyTask()
-  return <Outlet />
+
+  return (
+    <>
+      <Outlet />
+      <NewUserGuide />
+    </>
+  )
 }

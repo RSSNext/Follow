@@ -112,6 +112,18 @@ export const SettingDataControl = () => {
           },
           isElectronBuild && AppCacheLimit,
           isElectronBuild && CleanCache,
+          isElectronBuild && {
+            type: "title",
+            value: t("general.data_file.label"),
+          },
+          isElectronBuild && {
+            label: t("general.log_file.label"),
+            description: t("general.log_file.description"),
+            buttonText: t("general.log_file.button"),
+            action: () => {
+              tipcClient?.revealLogFile()
+            },
+          },
         ]}
       />
     </div>

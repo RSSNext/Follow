@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import type { TransactionTypes } from "@follow/models"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
@@ -29,7 +30,7 @@ export const TxTable = ({ className, type }: ComponentType<TxTableProps>) => {
   const user = useWhoami()
   const transactions = useWalletTransactions({
     fromOrToUserId: user?.id,
-    type: type === "all" ? undefined : type,
+    type: type === "all" ? undefined : (type as (typeof TransactionTypes)[number]),
   })
 
   return (

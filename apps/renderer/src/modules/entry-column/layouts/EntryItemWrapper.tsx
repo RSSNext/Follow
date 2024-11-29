@@ -14,6 +14,7 @@ import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useContextMenu } from "~/hooks/common/useContextMenu"
+import { COMMAND_ID } from "~/modules/command/commands/id"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -77,12 +78,23 @@ export const EntryItemWrapper: FC<
       setIsContextMenuOpen(true)
       await showContextMenu(
         [
-          ...actionConfigs.map((item) => ({
-            type: "text" as const,
-            label: item.name,
-            click: () => item.onClick(),
-            shortcut: item.shortcut,
-          })),
+          ...actionConfigs
+            .filter(
+              (item) =>
+                !(
+                  [
+                    COMMAND_ID.entry.viewSourceContent,
+                    COMMAND_ID.entry.toggleAISummary,
+                    COMMAND_ID.entry.toggleAITranslation,
+                  ] as string[]
+                ).includes(item.id),
+            )
+            .map((item) => ({
+              type: "text" as const,
+              label: item.name,
+              click: () => item.onClick(),
+              shortcut: item.shortcut,
+            })),
           {
             type: "separator" as const,
           },

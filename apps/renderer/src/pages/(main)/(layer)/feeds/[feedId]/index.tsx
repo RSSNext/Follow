@@ -1,5 +1,5 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
-import { redirect } from "react-router-dom"
+import { redirect } from "react-router"
 
 import { ROUTE_ENTRY_PENDING } from "~/constants"
 import { MobileCenterColumnScreen } from "~/modules/app-layout/entry-column/index"

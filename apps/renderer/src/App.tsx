@@ -2,7 +2,7 @@ import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn, getOS } from "@follow/utils/utils"
 import { useEffect } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router"
 
 import { queryClient } from "~/lib/query-client"
 
@@ -13,7 +13,6 @@ import { applyAfterReadyCallbacks } from "./initialize/queue"
 import { removeAppSkeleton } from "./lib/app"
 import { appLog } from "./lib/log"
 import { Titlebar } from "./modules/app/Titlebar"
-import { useRegisterFollowCommands } from "./modules/command/use-register-follow-commands"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
@@ -55,7 +54,6 @@ function App() {
 const AppLayer = () => {
   const appIsReady = useAppIsReady()
 
-  useRegisterFollowCommands()
   useEffect(() => {
     removeAppSkeleton()
 

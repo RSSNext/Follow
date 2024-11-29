@@ -1,6 +1,7 @@
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
+import { authProvidersConfig } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
@@ -11,6 +12,7 @@ import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import type { LoginRuntime } from "~/lib/auth"
 import { loginHandler } from "~/lib/auth"
+import { useAuthProviders } from "~/queries/users"
 
 interface LoginModalContentProps {
   runtime?: LoginRuntime
@@ -22,6 +24,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
   const { canClose = true, runtime } = props
 
   const { t } = useTranslation()
+  const { data: authProviders } = useAuthProviders()
 
   const [loadingLockSet, _setLoadingLockSet] = useState<string>("")
 
@@ -60,46 +63,30 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
           </span>
         </div>
         <div className="flex flex-col gap-4">
-          <MotionButtonBase
-            className={clsx(
-              "center h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base font-medium text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-              disabled && "pointer-events-none opacity-50",
-              "overflow-hidden",
-            )}
-            disabled={disabled}
-            onClick={() => {
-              loginHandler("github", runtime)
-              setLoadingLockSet("github")
-              window.analytics?.capture("login", {
-                type: "github",
-              })
-            }}
-          >
-            <LoginButtonContent isLoading={loadingLockSet === "github"}>
-              <i className="i-mgc-github-cute-fi mr-2 text-xl" />
-              {t("signin.continue_with_github")}
-            </LoginButtonContent>
-          </MotionButtonBase>
-          <MotionButtonBase
-            disabled={disabled}
-            className={clsx(
-              "center h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base font-medium text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80",
-              disabled && "pointer-events-none opacity-50",
-              "overflow-hidden",
-            )}
-            onClick={() => {
-              loginHandler("google", runtime)
-              setLoadingLockSet("google")
-              window.analytics?.capture("login", {
-                type: "google",
-              })
-            }}
-          >
-            <LoginButtonContent isLoading={loadingLockSet === "google"}>
-              <i className="i-mgc-google-cute-fi mr-2 text-xl" />
-              {t("signin.continue_with_google")}
-            </LoginButtonContent>
-          </MotionButtonBase>
+          {Object.entries(authProviders || []).map(([key, provider]) => (
+            <MotionButtonBase
+              key={key}
+              className={clsx(
+                "center h-[48px] w-[320px] rounded-[8px] font-sans text-base font-medium text-white",
+                disabled && "pointer-events-none opacity-50",
+                "overflow-hidden",
+                authProvidersConfig[key]?.buttonClassName,
+              )}
+              disabled={disabled}
+              onClick={() => {
+                loginHandler(key, runtime)
+                setLoadingLockSet(key)
+                window.analytics?.capture("login", {
+                  type: key,
+                })
+              }}
+            >
+              <LoginButtonContent isLoading={loadingLockSet === key}>
+                <i className={clsx("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                {t("signin.continue_with", { provider: provider.name })}
+              </LoginButtonContent>
+            </MotionButtonBase>
+          ))}
         </div>
       </m.div>
     </div>

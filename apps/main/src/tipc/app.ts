@@ -1,19 +1,21 @@
+/* eslint-disable @typescript-eslint/require-await */
 import fs from "node:fs"
 import fsp from "node:fs/promises"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
-import type { BrowserWindow } from "electron"
-import { app, clipboard, dialog, screen, shell } from "electron"
+import { app, BrowserWindow, clipboard, dialog, screen, shell } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
 import { store, StoreKey } from "~/lib/store"
 import { registerAppTray } from "~/lib/tray"
-import { logger } from "~/logger"
+import { logger, revealLogFile } from "~/logger"
+import { cleanupOldRender, loadDynamicRenderEntry } from "~/updater/hot-updater"
 
-import { isWindows11 } from "../env"
+import { isDev, isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
 import { i18n } from "../lib/i18n"
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
@@ -272,6 +274,33 @@ ${content}
       }
     }),
 
+  getAppVersion: t.procedure.action(async () => {
+    return app.getVersion()
+  }),
+  rendererUpdateReload: t.procedure.action(async () => {
+    const __dirname = fileURLToPath(new URL(".", import.meta.url))
+    const allWindows = BrowserWindow.getAllWindows()
+    const dynamicRenderEntry = loadDynamicRenderEntry()
+
+    const appLoadEntry = dynamicRenderEntry || path.resolve(__dirname, "../../renderer/index.html")
+    logger.info("appLoadEntry", appLoadEntry)
+    const mainWindow = getMainWindow()
+
+    for (const window of allWindows) {
+      if (window === mainWindow) {
+        if (isDev) {
+          logger.verbose("[rendererUpdateReload]: skip reload in dev")
+          break
+        }
+        window.loadFile(appLoadEntry)
+      } else window.destroy()
+    }
+
+    setTimeout(() => {
+      cleanupOldRender()
+    }, 1000)
+  }),
+
   getCacheSize: t.procedure.action(async () => {
     return getCacheSize()
   }),
@@ -312,6 +341,10 @@ ${content}
     } else {
       store.set(StoreKey.CacheSizeLimit, input)
     }
+  }),
+
+  revealLogFile: t.procedure.action(async () => {
+    return revealLogFile()
   }),
 }
 

@@ -40,5 +40,5 @@ export const useMarkAllByRoute = (filter?: MarkAllFilter) => {
         filter,
       })
     }
-  }, [routerParams, folderIds, view, filter])
+  }, [routerParams, inboxId, folderIds, view, filter])
 }

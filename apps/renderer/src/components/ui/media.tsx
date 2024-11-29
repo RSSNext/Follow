@@ -135,6 +135,7 @@ const MediaImpl: FC<MediaProps> = ({
   const isError = currentState === "error"
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
+    e.preventDefault()
     if (popper && src) {
       const width = Number.parseInt(props.width as string)
       const height = Number.parseInt(props.height as string)

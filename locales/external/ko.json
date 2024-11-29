@@ -21,8 +21,6 @@
   "invitation.getCodeMessage": "다음 방법을 통해 초대 코드를 얻을 수 있습니다:",
   "invitation.title": "초대 코드",
   "login.backToWebApp": "웹 앱으로 돌아가기",
-  "login.continueWithGitHub": "GitHub 으로 계속",
-  "login.continueWithGoogle": "Google 로 계속",
   "login.logInTo": "로그인",
   "login.openApp": "앱 열기",
   "login.redirecting": "리디렉션 중",

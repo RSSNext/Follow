@@ -11,11 +11,13 @@ async function fetchFeedById(id: string) {
   })
   return res.data
 }
-export const useFeed = ({ id }: { id: string }) =>
-  useQuery({
+
+export const useFeed = ({ id }: { id: string }) => {
+  return useQuery({
     queryKey: ["feed", id],
     queryFn: () => fetchFeedById(id),
     initialData: getHydrateData(`feeds.$get,query:id=${id}`) as FeedHydrateData,
   })
+}
 
 export type Feed = Awaited<ReturnType<typeof fetchFeedById>>

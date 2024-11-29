@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
@@ -28,8 +27,8 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
-import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Queries } from "~/queries"
 
 export const SettingInvitations = () => {
@@ -133,12 +132,12 @@ export const SettingInvitations = () => {
                                 presentUserProfile(row.users?.id)
                               }}
                             >
-                              <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
-                                <AvatarImage
-                                  src={replaceImgUrlIfNeed(row.users?.image || undefined)}
-                                />
-                                <AvatarFallback>{row.users?.name?.slice(0, 2)}</AvatarFallback>
-                              </Avatar>
+                              <UserAvatar
+                                userId={row.users.id}
+                                className="h-auto p-0"
+                                avatarClassName="size-5"
+                                hideName
+                              />
                             </button>
                           </TooltipTrigger>
                           {row.users?.name && (

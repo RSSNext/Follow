@@ -60,10 +60,9 @@ export const useEntriesByView = ({
   onReset?: () => void
   isArchived?: boolean
 }) => {
-  const routeParams = useRouteParams()
-  const unreadOnly = useGeneralSettingKey("unreadOnly")
+  const { feedId, isAllFeeds, view, isCollection, inboxId, listId } = useRouteParams()
 
-  const { feedId, view, isAllFeeds, isCollection, listId, inboxId } = routeParams
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const folderIds = useFolderFeedsByFeedId({
     feedId,
@@ -228,8 +227,6 @@ export const useEntriesByView = ({
     }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,
-    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries[view].length,
-    queryTotalCount: query.data?.pages?.[0]?.total,
   }
 }
 

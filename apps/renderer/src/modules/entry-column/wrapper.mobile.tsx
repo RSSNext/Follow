@@ -1,12 +1,12 @@
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
-import { views } from "@follow/constants"
+import { FeedViewType, views } from "@follow/constants"
 import { clsx } from "clsx"
 import { forwardRef, useState } from "react"
 
 import { PullToRefresh } from "~/components/ux/pull-to-refresh"
+import { ENTRY_COLUMN_LIST_SCROLLER_ID } from "~/constants/dom"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 
-import { CornerPlayer } from "../player/corner-player"
 import type { EntryColumnWrapperProps } from "./wrapper.shared"
 import { styles } from "./wrapper.shared"
 
@@ -22,14 +22,17 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
         <div ref={ref} className={clsx("grow overflow-hidden", views[view].wideMode ? "mt-2" : "")}>
           <PullToRefresh className="h-full" onRefresh={onPullToRefresh || noop}>
             <ScrollElementContext.Provider value={scrollElement}>
-              <div className="h-full overflow-y-auto" ref={setScrollElement}>
+              <div
+                className="h-full overflow-y-auto"
+                ref={setScrollElement}
+                // PictureMasonry do not have this id from VirtuosoGrid
+                id={view === FeedViewType.Pictures ? ENTRY_COLUMN_LIST_SCROLLER_ID : undefined}
+              >
                 {children}
               </div>
             </ScrollElementContext.Provider>
           </PullToRefresh>
         </div>
-
-        <CornerPlayer className="w-full md:w-[350px]" />
       </div>
     )
   },

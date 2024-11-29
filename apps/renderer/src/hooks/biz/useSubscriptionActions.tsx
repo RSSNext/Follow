@@ -57,8 +57,9 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void } 
           toast.dismiss(toastId)
         }
 
-        const toastId = toast(<UnfollowInfo title={feed.title!} undo={undo} />, {
+        const toastId = toast("", {
           duration: 3000,
+          description: <UnfollowInfo title={feed.title!} undo={undo} />,
           action: {
             label: (
               <span className="flex items-center gap-1">

@@ -9,7 +9,7 @@ import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useTitle } from "@follow/hooks"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router"
 import { toast } from "sonner"
 
 const numberFormatter = new Intl.NumberFormat()

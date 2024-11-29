@@ -1,6 +1,6 @@
 import { buildGlobRoutes } from "@follow/utils/route-builder"
 import { wrapCreateBrowserRouter } from "@sentry/react"
-import { createBrowserRouter, createHashRouter } from "react-router-dom"
+import { createBrowserRouter, createHashRouter } from "react-router"
 
 import { NotFound } from "./components/common/NotFound"
 

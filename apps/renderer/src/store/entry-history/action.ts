@@ -10,8 +10,8 @@ class EntryHistoryActions {
         id: entryId,
       },
       query: {
-        page: "1",
-        size: "100",
+        page: 1,
+        size: 100,
       },
     })
 

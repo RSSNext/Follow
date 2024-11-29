@@ -71,7 +71,6 @@ export const useInboxByIdSelector = <T>(
 
 export const useFeedHeaderTitle = () => {
   const { t } = useTranslation()
-
   const { feedId: currentFeedId, view, listId, inboxId } = useRouteParams()
 
   const listTitle = useListByIdSelector(listId, getPreferredTitle)

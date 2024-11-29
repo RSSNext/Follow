@@ -1,7 +1,7 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { buildGlobRoutes } from "@follow/utils/route-builder"
 import { wrapCreateBrowserRouter } from "@sentry/react"
-import { createBrowserRouter, createHashRouter } from "react-router-dom"
+import { createBrowserRouter, createHashRouter } from "react-router"
 
 import { Component as App } from "./App"
 import { ErrorElement } from "./components/common/ErrorElement"
