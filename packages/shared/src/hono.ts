@@ -1435,6 +1435,14 @@ declare const CommonEntryFields: {
     }>;
     attachments: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"attachments">, AttachmentsModel[]>;
     extra: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"extra">, ExtraModel>;
+    language: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "language";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+    }>;
 };
 declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "entries";
@@ -1711,6 +1719,23 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        language: drizzle_orm_pg_core.PgColumn<{
+            name: "language";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
             name: "feed_id";
             tableName: "entries";
@@ -1959,6 +1984,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     } | (string | number | boolean | {
         [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
     } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    language: z.ZodNullable<z.ZodString>;
     feedId: z.ZodString;
 }, "media" | "attachments" | "extra">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -2036,6 +2062,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     id: string;
     author: string | null;
     url: string | null;
+    language: string | null;
     feedId: string;
     guid: string;
     categories: string[] | null;
@@ -2072,6 +2099,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     id: string;
     author: string | null;
     url: string | null;
+    language: string | null;
     feedId: string;
     guid: string;
     categories: string[] | null;
@@ -3072,6 +3100,23 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        language: drizzle_orm_pg_core.PgColumn<{
+            name: "language";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         inboxHandle: drizzle_orm_pg_core.PgColumn<{
             name: "inbox_handle";
             tableName: "inboxes_entries";
@@ -3269,6 +3314,7 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     } | (string | number | boolean | {
         [key: string]: string | number | boolean | /*elided*/ any | /*elided*/ any | null;
     } | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    language: z.ZodNullable<z.ZodString>;
     inboxHandle: z.ZodString;
     read: z.ZodNullable<z.ZodBoolean>;
 }, "media" | "attachments" | "extra">, {
@@ -3347,6 +3393,7 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     id: string;
     author: string | null;
     url: string | null;
+    language: string | null;
     guid: string;
     categories: string[] | null;
     authorUrl: string | null;
@@ -3384,6 +3431,7 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     id: string;
     author: string | null;
     url: string | null;
+    language: string | null;
     guid: string;
     categories: string[] | null;
     authorUrl: string | null;
@@ -3422,6 +3470,7 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     id: z.ZodOptional<z.ZodString>;
     author: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    language: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     guid: z.ZodString;
     media: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
         [key: string]: string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | (string | number | boolean | /*elided*/ any | /*elided*/ any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
@@ -3655,6 +3704,7 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     content?: string | null | undefined;
     author?: string | null | undefined;
     url?: string | null | undefined;
+    language?: string | null | undefined;
     media?: {
         type: "photo" | "video";
         url: string;
@@ -3689,6 +3739,7 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     content?: string | null | undefined;
     author?: string | null | undefined;
     url?: string | null | undefined;
+    language?: string | null | undefined;
     media?: {
         type: "photo" | "video";
         url: string;
@@ -4072,6 +4123,23 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        language: drizzle_orm_pg_core.PgColumn<{
+            name: "language";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         ownerUserId: drizzle_orm_pg_core.PgColumn<{
             name: "owner_user_id";
             tableName: "lists";
@@ -4101,6 +4169,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     view: zod.ZodNumber;
     fee: zod.ZodNumber;
     timelineUpdatedAt: zod.ZodString;
+    language: zod.ZodNullable<zod.ZodString>;
     ownerUserId: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     description: string | null;
@@ -4108,6 +4177,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     id: string;
     image: string | null;
     view: number;
+    language: string | null;
     ownerUserId: string;
     feedIds: string[];
     fee: number;
@@ -4118,6 +4188,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     id: string;
     image: string | null;
     view: number;
+    language: string | null;
     ownerUserId: string;
     feedIds: string[];
     fee: number;
@@ -6053,6 +6124,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         id: string;
                         author: string | null;
                         url: string | null;
+                        language: string | null;
                         feedId: string;
                         guid: string;
                         categories: string[] | null;
@@ -6251,6 +6323,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         id: string;
                         author: string | null;
                         url: string | null;
+                        language: string | null;
                         guid: string;
                         categories: string[] | null;
                         authorUrl: string | null;
@@ -6343,6 +6416,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         id: string;
                         author: string | null;
                         url: string | null;
+                        language: string | null;
                         guid: string;
                         categories: string[] | null;
                         authorUrl: string | null;
@@ -6499,6 +6573,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         id: string;
                         author: string | null;
                         url: string | null;
+                        language: string | null;
                         guid: string;
                         categories: string[] | null;
                         authorUrl: string | null;
@@ -6599,6 +6674,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         id: string;
                         author: string | null;
                         url: string | null;
+                        language: string | null;
                         guid: string;
                         categories: string[] | null;
                         authorUrl: string | null;
@@ -6692,6 +6768,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                     id: string;
                     author: string | null;
                     url: string | null;
+                    language: string | null;
                     feedId: string;
                     guid: string;
                     categories: string[] | null;
@@ -6823,6 +6900,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         title: string | null;
                         author: string | null;
                         url: string | null;
+                        language: string | null;
                         guid: string;
                         categories: string[] | null;
                         authorUrl: string | null;
@@ -8112,6 +8190,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                     content?: string | null | undefined;
                     author?: string | null | undefined;
                     url?: string | null | undefined;
+                    language?: string | null | undefined;
                     media?: {
                         type: "photo" | "video";
                         url: string;
