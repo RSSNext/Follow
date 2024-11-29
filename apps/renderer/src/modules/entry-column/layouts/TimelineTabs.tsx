@@ -31,7 +31,7 @@ export const TimelineTabs = () => {
 
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-2 flex overflow-x-auto overflow-y-hidden scrollbar-none"
+      className="-ml-6 -mr-4 mt-2 flex overflow-x-auto overflow-y-hidden pl-3 scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {
@@ -43,9 +43,9 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList className="justify-start border-b-0">
+      <TabsList className="justify-start border-b-0 [&_span]:text-xs">
         <TabsTrigger variant={"rounded"} className="p-0" value="">
-          Yours
+          <span>Yours</span>
         </TabsTrigger>
         {listsData.map((s) => (
           <TabsTrigger variant={"rounded"} className="p-0" key={s.listId} value={s.listId!}>

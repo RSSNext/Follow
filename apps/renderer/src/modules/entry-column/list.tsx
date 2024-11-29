@@ -182,7 +182,7 @@ export const EntryList: FC<EntryListProps> = memo(
       const $scrollRef = scrollRef
       if (!$scrollRef) return
       const handleScroll = () => {
-        setIsScrollTop($scrollRef.scrollTop === 0)
+        setIsScrollTop($scrollRef.scrollTop <= 0)
       }
       $scrollRef.addEventListener("scroll", handleScroll)
 

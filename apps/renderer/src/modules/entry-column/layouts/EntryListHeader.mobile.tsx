@@ -70,7 +70,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
     <div
       ref={containerRef}
       className={cn(
-        "mb-2 flex w-full flex-col pr-4 transition-[padding] duration-300 ease-in-out",
+        "flex w-full flex-col pb-2 pr-4 transition-[padding] duration-300 ease-in-out",
         "pl-6 pt-safe-offset-2.5",
         "bg-background",
       )}

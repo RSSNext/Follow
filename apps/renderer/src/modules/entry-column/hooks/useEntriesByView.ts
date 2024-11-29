@@ -103,19 +103,10 @@ export const useEntriesByView = ({
     }
     if (!isFetchingFirstPage) {
       prevEntryIdsRef.current = entryIds
-      setMergedEntries({ ...mergedEntries, [view]: entryIds })
+
       onReset?.()
     }
   }, [isFetchingFirstPage, isArchived])
-
-  const [mergedEntries, setMergedEntries] = useState<Record<number, string[]>>({
-    0: [],
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-  })
 
   const entryIdsAsDeps = entryIds.toString()
 
@@ -125,23 +116,22 @@ export const useEntriesByView = ({
   useEffect(() => {
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds
-      setMergedEntries({ ...mergedEntries, [view]: entryIds })
+
       return
     }
     // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
-    setMergedEntries({ ...mergedEntries, [view]: entryIds })
   }, [entryIdsAsDeps])
 
   const sortEntries = useMemo(
     () =>
       isCollection
-        ? sortEntriesIdByStarAt(mergedEntries[view])
+        ? sortEntriesIdByStarAt(entryIds)
         : listId
-          ? sortEntriesIdByEntryInsertedAt(mergedEntries[view])
-          : sortEntriesIdByEntryPublishedAt(mergedEntries[view]),
-    [isCollection, listId, mergedEntries, view],
+          ? sortEntriesIdByEntryInsertedAt(entryIds)
+          : sortEntriesIdByEntryPublishedAt(entryIds),
+    [entryIds, isCollection, listId],
   )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
