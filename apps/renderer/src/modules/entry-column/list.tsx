@@ -7,7 +7,7 @@ import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
 import { defaultRangeExtractor, useVirtualizer } from "@tanstack/react-virtual"
 import clsx from "clsx"
 import type { HTMLMotionProps } from "framer-motion"
-import type { FC, ReactNode } from "react"
+import type { FC, MutableRefObject, ReactNode } from "react"
 import {
   forwardRef,
   Fragment,
@@ -73,6 +73,8 @@ export type EntryListProps = {
   Footer?: FC | ReactNode
 
   onRangeChange?: (range: Range) => void
+
+  listRef?: MutableRefObject<Virtualizer<HTMLElement, Element> | undefined>
 }
 
 const capacity = 3
@@ -88,6 +90,7 @@ export const EntryList: FC<EntryListProps> = memo(
     hasNextPage,
     groupCounts,
     Footer,
+    listRef,
     onRangeChange,
   }) => {
     // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
@@ -143,6 +146,11 @@ export const EntryList: FC<EntryListProps> = memo(
         [stickyIndexes],
       ),
     })
+
+    useEffect(() => {
+      if (!listRef) return
+      listRef.current = rowVirtualizer
+    }, [rowVirtualizer, listRef])
 
     const handleScrollTo = useEventCallback((index: number) => {
       rowVirtualizer.scrollToIndex(index)

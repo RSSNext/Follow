@@ -97,7 +97,8 @@ const offsetCache = new LRUCache<string, number>(capacity)
 const measurementsCache = new LRUCache<string, VirtualItem[]>(capacity)
 
 const VirtualGrid: FC<EntryListProps> = (props) => {
-  const { entriesIds, feedId, onRangeChange, fetchNextPage, view, Footer, hasNextPage } = props
+  const { entriesIds, feedId, onRangeChange, fetchNextPage, view, Footer, hasNextPage, listRef } =
+    props
   const scrollRef = useScrollViewElement()
 
   const [containerWidth, setContainerWidth] = useState(0)
@@ -176,6 +177,11 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
       [rowCacheKey, columns.length],
     ),
   })
+
+  useEffect(() => {
+    if (!listRef) return
+    listRef.current = rowVirtualizer
+  }, [rowVirtualizer, listRef])
 
   useEffect(() => {
     if (!scrollRef) return

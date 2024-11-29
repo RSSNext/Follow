@@ -4,10 +4,9 @@ import { views } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
 import { isBizId } from "@follow/utils/utils"
-import type { Range } from "@tanstack/react-virtual"
+import type { Range, Virtualizer } from "@tanstack/react-virtual"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import type { VirtuosoHandle } from "react-virtuoso"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { FeedFoundCanBeFollowError } from "~/components/errors/FeedFoundCanBeFollowErrorFallback"
@@ -30,14 +29,12 @@ import { EntryColumnWrapper } from "./wrapper"
 
 function EntryColumnImpl() {
   const { t } = useTranslation()
-  const virtuosoRef = useRef<VirtuosoHandle>(null)
   const [isArchived, setIsArchived] = useState(false)
   const unreadOnly = useGeneralSettingKey("unreadOnly")
+  const listRef = useRef<Virtualizer<HTMLElement, Element>>()
   const entries = useEntriesByView({
     onReset: useCallback(() => {
-      virtuosoRef.current?.scrollTo({
-        top: 0,
-      })
+      listRef.current?.scrollToIndex(0)
     }, []),
     isArchived,
   })
@@ -190,6 +187,7 @@ function EntryColumnImpl() {
           )
         ) : (
           <ListComponent
+            listRef={listRef}
             onRangeChange={handleRangeChange}
             hasNextPage={entries.hasNextPage}
             view={view}
