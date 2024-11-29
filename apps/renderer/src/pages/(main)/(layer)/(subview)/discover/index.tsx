@@ -81,10 +81,13 @@ export function Component() {
       <Tabs
         value={search.get("type") || "search"}
         onValueChange={(val) => {
-          setSearch((search) => {
-            search.set("type", val)
-            return new URLSearchParams(search)
-          })
+          setSearch(
+            (search) => {
+              search.set("type", val)
+              return new URLSearchParams(search)
+            },
+            { replace: true },
+          )
         }}
         className="max-w-full"
       >
