@@ -24,8 +24,9 @@ export const EntryColumnMobile = () => {
     return () => clearTimeout(timer)
   }, [view])
   usePreventOverscrollBounce()
+
   return (
-    <div className="flex h-screen min-w-0 grow">
+    <div className="flex h-screen min-w-0 grow overflow-hidden">
       <EntryColumn />
 
       {isStartupTimeline && (

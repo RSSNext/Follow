@@ -18,6 +18,9 @@ patchedDependencies:
   '@mozilla/readability':
     hash: 43niildbdafdxi7qfcwhpkkxwa
     path: patches/@mozilla__readability.patch
+  '@tanstack/react-virtual@3.10.9':
+    hash: fpkworxfwphev7q33sgiutu7aq
+    path: patches/@tanstack__react-virtual@3.10.9.patch
   daisyui:
     hash: igsntdatmoaxzwxof4bkkh35fy
     path: patches/daisyui.patch
@@ -456,6 +459,9 @@ importers:
       '@tanstack/react-query-persist-client':
         specifier: 5.61.4
         version: 5.61.4(@tanstack/react-query@5.61.4(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-virtual':
+        specifier: 3.10.9
+        version: 3.10.9(patch_hash=fpkworxfwphev7q33sgiutu7aq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@use-gesture/react':
         specifier: 10.3.1
         version: 10.3.1(react@18.3.1)
@@ -606,9 +612,6 @@ importers:
       react-shadow:
         specifier: 20.5.0
         version: 20.5.0(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-virtuoso:
-        specifier: 4.12.2
-        version: 4.12.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-zoom-pan-pinch:
         specifier: ^3.6.1
         version: 3.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4330,14 +4333,14 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@tanstack/react-virtual@3.10.8':
-    resolution: {integrity: sha512-VbzbVGSsZlQktyLrP5nxE+vE1ZR+U0NFAWPbJLoG2+DKPwd2D7dVICTVIIaYlJqX1ZCEnYDbaOpmMwbsyhBoIA==}
+  '@tanstack/react-virtual@3.10.9':
+    resolution: {integrity: sha512-OXO2uBjFqA4Ibr2O3y0YMnkrRWGVNqcvHQXmGvMu6IK8chZl3PrDxFXdGZ2iZkSrKh3/qUYoFqYe+Rx23RoU0g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  '@tanstack/virtual-core@3.10.8':
-    resolution: {integrity: sha512-PBu00mtt95jbKFi6Llk9aik8bnR3tR/oQP1o3TSi+iG//+Q2RTIzCEgKkHG8BB86kxMNW6O8wku+Lmi+QFR6jA==}
+  '@tanstack/virtual-core@3.10.9':
+    resolution: {integrity: sha512-kBknKOKzmeR7lN+vSadaKWXaLS0SZZG+oqpQ/k80Q6g9REn6zRHS/ZYdrIzHnpHgy/eWs00SujveUN/GJT2qTw==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -9522,13 +9525,6 @@ packages:
       '@types/react':
         optional: true
 
-  react-virtuoso@4.12.2:
-    resolution: {integrity: sha512-9KiEc3uxD07qNrwb09PhPJKWfeNQ/Fw/TNKdZS7D3v4cDa6M/jg5lKLAUlRL7RluO8870cgLGM1T5pPKYEnprg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: '>=16 || >=17 || >= 18'
-      react-dom: '>=16 || >=17 || >= 18'
-
   react-zoom-pan-pinch@3.6.1:
     resolution: {integrity: sha512-SdPqdk7QDSV7u/WulkFOi+cnza8rEZ0XX4ZpeH7vx3UZEg7DoyuAy3MCmm+BWv/idPQL2Oe73VoC0EhfCN+sZQ==}
     engines: {node: '>=8', npm: '>=5'}
@@ -13309,7 +13305,7 @@ snapshots:
       '@floating-ui/react': 0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/focus': 3.18.4(react@18.3.1)
       '@react-aria/interactions': 3.22.4(react@18.3.1)
-      '@tanstack/react-virtual': 3.10.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-virtual': 3.10.9(patch_hash=fpkworxfwphev7q33sgiutu7aq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
@@ -15095,13 +15091,13 @@ snapshots:
       '@tanstack/query-core': 5.61.4
       react: 18.3.1
 
-  '@tanstack/react-virtual@3.10.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-virtual@3.10.9(patch_hash=fpkworxfwphev7q33sgiutu7aq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/virtual-core': 3.10.8
+      '@tanstack/virtual-core': 3.10.9
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@tanstack/virtual-core@3.10.8': {}
+  '@tanstack/virtual-core@3.10.9': {}
 
   '@tootallnate/once@2.0.0': {}
 
@@ -21260,11 +21256,6 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.3.12
-
-  react-virtuoso@4.12.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   react-zoom-pan-pinch@3.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

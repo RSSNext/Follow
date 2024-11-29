@@ -1,9 +1,0 @@
-.float-bar {
-  @apply min-w-0 mx-4 rounded-full border bg-background dark:border-neutral-800 shadow-sm shadow-zinc-100 border-neutral-200 h-10 inline-flex items-center pl-4 pr-2;
-
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-[data-theme="dark"] .float-bar {
-  box-shadow: 0px 8px 30px rgba(122, 122, 122, 0.2);
-}

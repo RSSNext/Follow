@@ -58,7 +58,7 @@ export function ArticleItemStateLess({ entry, feed }: EntryItemStatelessProps) {
 }
 
 export const ArticleItemSkeleton = (
-  <div className="relative h-[120px] rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+  <div className="relative h-[120px] rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
     <div className="relative">
       <div className="group relative flex py-4 pl-3 pr-2">
         <Skeleton className="mr-2 size-5 rounded-sm" />
