@@ -12,7 +12,6 @@ import { useRouteEntryId } from "~/hooks/biz/useRouteParams"
 export const EntryColumnShortcutHandler: FC<{
   refetch: () => void
   data: readonly string[]
-  // virtuosoRef: React.RefObject<VirtuosoHandle>
   handleScrollTo: (index: number) => void
 }> = memo(({ data, refetch, handleScrollTo }) => {
   const dataRef = useRefValue(data!)

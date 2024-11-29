@@ -96,6 +96,11 @@ const capacity = 3 * 2
 const offsetCache = new LRUCache<string, number>(capacity)
 const measurementsCache = new LRUCache<string, VirtualItem[]>(capacity)
 
+const ratioMap = {
+  [FeedViewType.Pictures]: 1,
+  //  16:9
+  [FeedViewType.Videos]: 16 / 9,
+}
 const VirtualGrid: FC<EntryListProps> = (props) => {
   const { entriesIds, feedId, onRangeChange, fetchNextPage, view, Footer, hasNextPage, listRef } =
     props
@@ -150,7 +155,9 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length + 1,
-    estimateSize: () => columns[0] + 58,
+    estimateSize: () => {
+      return columns[0] / ratioMap[view] + 58
+    },
     overscan: 5,
     gap: 8,
     getScrollElement: () => scrollRef,
