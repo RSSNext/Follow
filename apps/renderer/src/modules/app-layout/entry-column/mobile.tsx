@@ -15,6 +15,8 @@ export const EntryColumnMobile = () => {
 
   const [scrollContainer, setScrollContainer] = useState<null | HTMLDivElement>(null)
   const view = useRouteParamsSelector((s) => s.view)
+  const folderName = useRouteParamsSelector((s) => s.folderName)
+  const listId = useRouteParamsSelector((s) => s.listId)
   useEffect(() => {
     const timer = setTimeout(() => {
       setScrollContainer(
@@ -22,7 +24,7 @@ export const EntryColumnMobile = () => {
       )
     }, 1000)
     return () => clearTimeout(timer)
-  }, [view])
+  }, [view, folderName, listId])
   usePreventOverscrollBounce()
 
   return (

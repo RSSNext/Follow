@@ -81,7 +81,7 @@ export const MobileFloatBar = ({
     >
       <m.div
         className={clsx(
-          "mx-4 inline-flex h-10 min-w-0 items-center rounded-full border border-neutral-200 bg-background pl-4 pr-2 shadow-sm shadow-zinc-100 dark:border-neutral-800",
+          "mx-auto inline-flex h-10 min-w-0 items-center rounded-full border border-neutral-200 bg-background pl-4 pr-2 shadow-sm shadow-zinc-100 dark:border-neutral-800",
           "[box-shadow:0px_8px_30px_rgba(122,122,122,0.2)] dark:[box-shadow:0px_8px_30px_rgba(122,122,122,0.2)]",
           "pointer-events-auto",
         )}
