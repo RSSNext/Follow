@@ -38,7 +38,7 @@ export const SubscriptionItems = ({
 }) => {
   const storeUser = useUserById(userId)!
   const user = useAuthQuery(users.profile({ userId }))
-  const userInfo = user.data ||storeUser
+  const userInfo = user.data || storeUser
 
   const subscriptions = useUserSubscriptionsQuery(userId)
   return subscriptions.isLoading ? (
