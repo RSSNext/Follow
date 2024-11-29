@@ -7,6 +7,7 @@ import {
 } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { FeedViewType } from "@follow/constants"
+import { getNameInitials } from "@follow/utils/cjk"
 import { m } from "framer-motion"
 import { memo } from "react"
 import { useTranslation } from "react-i18next"
@@ -51,7 +52,7 @@ export const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => 
     >
       <Avatar className="block aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
         <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
-        <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+        <AvatarFallback>{getNameInitials(user.name || "")}</AvatarFallback>
       </Avatar>
 
       {user.name && (
@@ -94,7 +95,7 @@ export const EntryUser: Component<{
               src={replaceImgUrlIfNeed(user?.image || undefined)}
               className="bg-theme-placeholder-image"
             />
-            <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+            <AvatarFallback>{getNameInitials(user.name || "")}</AvatarFallback>
           </Avatar>
         </m.button>
       </TooltipTrigger>
