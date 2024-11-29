@@ -12,6 +12,7 @@ import {
   forwardRef,
   Fragment,
   memo,
+  startTransition,
   useCallback,
   useEffect,
   useMemo,
@@ -190,6 +191,14 @@ export const EntryList: FC<EntryListProps> = memo(
       }
     }, [scrollRef])
 
+    const [ready, setReady] = useState(false)
+
+    useEffect(() => {
+      startTransition(() => {
+        setReady(true)
+      })
+    }, [])
+
     return (
       <>
         <div
@@ -200,6 +209,7 @@ export const EntryList: FC<EntryListProps> = memo(
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            if (!ready) return null
             // Last placeholder row
             const isLoaderRow = virtualRow.index === entriesIds.length
 
