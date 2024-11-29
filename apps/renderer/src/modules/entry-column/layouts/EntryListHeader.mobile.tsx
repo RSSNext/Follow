@@ -160,7 +160,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
 const FollowSubscriptionButton = () => {
   return (
     <PresentSheet
-      zIndex={90}
+      zIndex={50}
       dismissableClassName="mb-0"
       triggerAsChild
       content={<FeedColumnMobile asWidget />}
