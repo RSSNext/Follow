@@ -14,10 +14,11 @@ import { useEventCallback } from "usehooks-ts"
 
 import { m } from "~/components/common/Motion"
 import { useFollow } from "~/hooks/biz/useFollow"
-import { useI18n } from "~/hooks/common"
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
+import { users } from "~/queries/users"
 import { useSubscriptionStore } from "~/store/subscription"
 import { useUserById } from "~/store/user"
 
@@ -35,9 +36,11 @@ export const SubscriptionItems = ({
   userId: string
   itemStyle: ItemVariant
 }) => {
-  const userInfo = useUserById(userId)
+  const storeUser = useUserById(userId)!
+  const user = useAuthQuery(users.profile({ userId }))
+  const userInfo = user.data ||storeUser
+
   const subscriptions = useUserSubscriptionsQuery(userId)
-  if (!userInfo) return null
   return subscriptions.isLoading ? (
     <LoadingWithIcon
       size="large"
