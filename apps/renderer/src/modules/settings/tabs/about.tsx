@@ -3,7 +3,7 @@ import { Button } from "@follow/components/ui/button/index.js"
 import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { getCurrentEnvironment } from "@follow/utils/environment"
-import { license, repository } from "@pkg"
+import PKG, { license, repository } from "@pkg"
 import { useQuery } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
@@ -15,10 +15,12 @@ import { getNewIssueUrl } from "~/lib/issues"
 export const SettingAbout = () => {
   const { t } = useTranslation("settings")
   const currentEnvironment = getCurrentEnvironment().join("\n")
-  const { data: renderVersion } = useQuery({
-    queryKey: ["renderVersion"],
-    queryFn: () => tipcClient?.getRenderVersion() || "",
+  const { data: appVersion } = useQuery({
+    queryKey: ["appVersion"],
+    queryFn: () => tipcClient?.getAppVersion() || "",
   })
+
+  const rendererVersion = PKG.version
 
   return (
     <div>
@@ -31,16 +33,16 @@ export const SettingAbout = () => {
               {APP_NAME} {!import.meta.env.PROD ? `(${import.meta.env.MODE})` : ""}
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded bg-muted px-2 py-1 text-xs">app: {APP_VERSION}</span>
-              {renderVersion && (
+              <span className="rounded bg-muted px-2 py-1 text-xs">app: {appVersion}</span>
+              {rendererVersion && (
                 <span className="rounded bg-muted px-2 py-1 text-xs">
-                  renderer: {renderVersion}
+                  renderer: {rendererVersion}
                 </span>
               )}
               <CopyButton
                 value={
-                  renderVersion
-                    ? `${currentEnvironment}\n**Renderer**: ${renderVersion}`
+                  rendererVersion
+                    ? `${currentEnvironment}\n**Renderer**: ${rendererVersion}`
                     : currentEnvironment
                 }
                 className="border-0 bg-transparent p-1 text-foreground/80 hover:bg-theme-item-hover hover:text-foreground active:bg-theme-item-active [&_i]:size-3"

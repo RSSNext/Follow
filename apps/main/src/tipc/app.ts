@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
-import pkg from "@pkg"
 import { app, BrowserWindow, clipboard, dialog, screen, shell } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
@@ -14,11 +13,7 @@ import { clearAllData, getCacheSize } from "~/lib/cleaner"
 import { store, StoreKey } from "~/lib/store"
 import { registerAppTray } from "~/lib/tray"
 import { logger, revealLogFile } from "~/logger"
-import {
-  cleanupOldRender,
-  getCurrentRenderManifest,
-  loadDynamicRenderEntry,
-} from "~/updater/hot-updater"
+import { cleanupOldRender, loadDynamicRenderEntry } from "~/updater/hot-updater"
 
 import { isDev, isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
@@ -279,9 +274,8 @@ ${content}
       }
     }),
 
-  getRenderVersion: t.procedure.action(async () => {
-    const manifest = getCurrentRenderManifest()
-    return manifest?.version || pkg.version
+  getAppVersion: t.procedure.action(async () => {
+    return app.getVersion()
   }),
   rendererUpdateReload: t.procedure.action(async () => {
     const __dirname = fileURLToPath(new URL(".", import.meta.url))
