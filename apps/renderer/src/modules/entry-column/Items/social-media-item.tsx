@@ -1,8 +1,9 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { cn } from "@follow/utils/utils"
 import { atom } from "jotai"
-import { useLayoutEffect, useRef, useState } from "react"
+import { useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
@@ -34,6 +35,17 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 
   const ref = useRef<HTMLDivElement>(null)
   const [showAction, setShowAction] = useState(false)
+
+  const isMobile = useMobile()
+  const handleMouseEnter = useMemo(() => {
+    if (isMobile) return
+    return () => setShowAction(true)
+  }, [isMobile])
+  const handleMouseLeave = useMemo(() => {
+    if (isMobile) return
+    return () => setShowAction(false)
+  }, [isMobile])
+
   useLayoutEffect(() => {
     if (ref.current) {
       jotaiStore.set(socialMediaContentWidthAtom, ref.current.offsetWidth)
@@ -50,8 +62,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 
   return (
     <div
-      onMouseEnter={() => setShowAction(true)}
-      onMouseLeave={() => setShowAction(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={cn(
         "relative flex px-2 py-6 lg:px-8",
         "group",
