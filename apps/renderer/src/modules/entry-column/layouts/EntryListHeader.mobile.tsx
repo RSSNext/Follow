@@ -64,6 +64,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
   const feed = useFeedById(feedId)
   const isList = !!listId
 
+  const showQuickTimeline = useGeneralSettingKey("showQuickTimeline")
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   return (
@@ -152,7 +153,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
         </div>
       </div>
 
-      <TimelineTabs />
+      {showQuickTimeline && <TimelineTabs />}
     </div>
   )
 }

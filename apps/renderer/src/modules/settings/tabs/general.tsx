@@ -98,6 +98,11 @@ export const SettingGeneral = () => {
             label: t("general.group_by_date.label"),
             description: t("general.group_by_date.description"),
           }),
+          isMobile &&
+            defineSettingItem("showQuickTimeline", {
+              label: t("general.show_quick_timeline.label"),
+              description: t("general.show_quick_timeline.description"),
+            }),
 
           defineSettingItem("reduceRefetch", {
             label: t("general.reduce_refetch.label"),
@@ -252,7 +257,7 @@ const TranslateLanguageSelector = () => {
   const translationLanguage = useGeneralSettingKey("translationLanguage")
 
   return (
-    <div className="-mt-1 mb-3 flex items-center justify-between">
+    <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("general.translation_language")}</span>
       <Select
         defaultValue={translationLanguage}

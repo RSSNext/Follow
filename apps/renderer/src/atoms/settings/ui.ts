@@ -60,7 +60,7 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "uiFontFamily",
   "readerFontFamily",
   "opaqueSidebar",
-  "customCSS",
+  // "customCSS",
 ]
 
 export const useIsZenMode = () => useAtomValue(zenModeAtom)

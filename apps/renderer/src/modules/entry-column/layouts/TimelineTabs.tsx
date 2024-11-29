@@ -8,7 +8,7 @@ import { useSubscriptionStore } from "~/store/subscription"
 
 export const TimelineTabs = () => {
   const routerParams = useRouteParams()
-  const { view, listId, inboxId } = routerParams
+  const { view, listId, inboxId, folderName } = routerParams
 
   const listsData = useSubscriptionStore(
     useCallback(
@@ -22,9 +22,24 @@ export const TimelineTabs = () => {
       [view],
     ),
   )
+  const categoriesData = useSubscriptionStore(
+    useCallback(
+      (state) => {
+        const categoryNames = new Set<string>()
+        for (const subId of state.feedIdByView[view]) {
+          const sub = state.data[subId]
+          if (sub.category) {
+            categoryNames.add(sub.category)
+          }
+        }
+        return Array.from(categoryNames)
+      },
+      [view],
+    ),
+  )
   const hasData = listsData.length > 0 || inboxData.length > 0
 
-  const timeline = listId || inboxId || ""
+  const timeline = listId || inboxId || folderName || ""
 
   const navigate = useNavigateEntry()
   if (!hasData) return null
@@ -55,6 +70,23 @@ export const TimelineTabs = () => {
               iconSize={16}
               className="h-5 !bg-transparent p-0"
             />
+          </TabsTrigger>
+        ))}
+        {categoriesData.map((s) => (
+          <TabsTrigger
+            variant={"rounded"}
+            key={s}
+            value={s}
+            onClick={() => {
+              navigate({
+                folderName: s,
+              })
+            }}
+          >
+            <span className="flex h-5 items-center gap-1">
+              <i className="i-mgc-folder-open-cute-re" />
+              {s}
+            </span>
           </TabsTrigger>
         ))}
         {inboxData.map((s) => (
