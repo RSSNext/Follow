@@ -1,11 +1,9 @@
 import { views } from "@follow/constants"
 import { useMutation } from "@tanstack/react-query"
-import type { Range } from "@tanstack/react-virtual"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient, apiFetch } from "~/lib/api-fetch"
 import { entries, useEntries } from "~/queries/entries"
@@ -13,46 +11,7 @@ import { entryActions, getEntry, useEntryIdsByFeedIdOrView } from "~/store/entry
 import { useFolderFeedsByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
-export const useEntryMarkReadHandler = (entriesIds: string[]) => {
-  const renderAsRead = useGeneralSettingKey("renderMarkUnread")
-  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
-  const feedView = useRouteParamsSelector((params) => params.view)
-
-  const handleMarkReadInRange = useDebounceCallback(
-    ({ startIndex, endIndex }: Range) => {
-      const idSlice = entriesIds?.slice(startIndex, endIndex)
-
-      if (!idSlice) return
-      batchMarkRead(idSlice)
-    },
-    500,
-    { leading: false },
-  )
-
-  const handleRenderAsRead = useCallback(
-    async ({ startIndex, endIndex }: Range, enabled?: boolean) => {
-      if (!enabled) return
-      const idSlice = entriesIds?.slice(startIndex, endIndex)
-
-      if (!idSlice) return
-      batchMarkRead(idSlice)
-    },
-    [entriesIds],
-  )
-
-  return useMemo(() => {
-    if (views[feedView].wideMode && renderAsRead) {
-      return handleRenderAsRead
-    }
-
-    if (scrollMarkUnread) {
-      return handleMarkReadInRange
-    }
-    return
-  }, [feedView, handleMarkReadInRange, handleRenderAsRead, renderAsRead, scrollMarkUnread])
-}
 const anyString = [] as string[]
-
 export const useEntriesByView = ({
   onReset,
   isArchived,
@@ -227,26 +186,6 @@ export const useEntriesByView = ({
     }, [query, view]),
     entriesIds: sortEntries,
     groupedCounts,
-  }
-}
-
-export function batchMarkRead(ids: string[]) {
-  const batchLikeIds = [] as [string, string][]
-  const entriesId2Map = entryActions.getFlattenMapEntries()
-  for (const id of ids) {
-    const entry = entriesId2Map[id]
-
-    if (!entry) continue
-    const isRead = entry.read
-    if (!isRead) {
-      batchLikeIds.push([entry.feedId, id])
-    }
-  }
-
-  if (batchLikeIds.length > 0) {
-    for (const [feedId, id] of batchLikeIds) {
-      entryActions.markRead({ feedId, entryId: id, read: true })
-    }
   }
 }
 

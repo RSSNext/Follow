@@ -7,15 +7,15 @@ import { LRUCache } from "@follow/utils/lru-cache"
 import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import type { FC } from "react"
-import { Fragment, useEffect, useMemo, useState } from "react"
+import { Fragment, startTransition, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import { getEntry } from "~/store/entry"
 
-import { EntryItem } from "./item"
+import { EntryItem, EntryItemSkeleton } from "./item"
 import { PictureMasonry } from "./Items/picture-masonry"
-import type { EntryListProps } from "./lists"
+import type { EntryListProps } from "./list"
 
 export const EntryColumnGrid: FC<EntryListProps> = (props) => {
   const { entriesIds, feedId, hasNextPage, view, fetchNextPage } = props
@@ -97,7 +97,7 @@ const offsetCache = new LRUCache<string, number>(capacity)
 const measurementsCache = new LRUCache<string, VirtualItem[]>(capacity)
 
 const VirtualGrid: FC<EntryListProps> = (props) => {
-  const { entriesIds, feedId, onRangeChange, fetchNextPage, view } = props
+  const { entriesIds, feedId, onRangeChange, fetchNextPage, view, Footer, hasNextPage } = props
   const scrollRef = useScrollViewElement()
 
   const [containerWidth, setContainerWidth] = useState(0)
@@ -128,27 +128,6 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
   const rowCacheKey = `${feedId}-row`
   const columnCacheKey = `${feedId}-column`
 
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    estimateSize: () => columns[0] + 58,
-    overscan: 5,
-    getScrollElement: () => scrollRef,
-    initialOffset: offsetCache.get(rowCacheKey) ?? 0,
-    initialMeasurementsCache: measurementsCache.get(rowCacheKey) ?? [],
-    paddingEnd: 32,
-    onChange: useTypeScriptHappyCallback(
-      (virtualizer: Virtualizer<HTMLElement, Element>) => {
-        if (!virtualizer.isScrolling) {
-          measurementsCache.put(rowCacheKey, virtualizer.measurementsCache)
-          offsetCache.put(rowCacheKey, virtualizer.scrollOffset ?? 0)
-        }
-
-        onRangeChange?.(virtualizer.range as Range)
-      },
-      [rowCacheKey],
-    ),
-  })
-
   const columnVirtualizer = useVirtualizer({
     horizontal: true,
     count: columns.length,
@@ -168,11 +147,41 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
     ),
   })
 
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length + 1,
+    estimateSize: () => columns[0] + 58,
+    overscan: 5,
+    gap: 8,
+    getScrollElement: () => scrollRef,
+    initialOffset: offsetCache.get(rowCacheKey) ?? 0,
+    initialMeasurementsCache: measurementsCache.get(rowCacheKey) ?? [],
+    paddingEnd: 32,
+    onChange: useTypeScriptHappyCallback(
+      (virtualizer: Virtualizer<HTMLElement, Element>) => {
+        if (!virtualizer.isScrolling) {
+          measurementsCache.put(rowCacheKey, virtualizer.measurementsCache)
+          offsetCache.put(rowCacheKey, virtualizer.scrollOffset ?? 0)
+        }
+
+        if (!virtualizer.range) return
+
+        const columnCount = columns.length
+        const realRange = {
+          startIndex: virtualizer.range.startIndex * columnCount,
+          endIndex: virtualizer.range.endIndex * columnCount,
+        }
+
+        onRangeChange?.(realRange as Range)
+      },
+      [rowCacheKey, columns.length],
+    ),
+  })
+
   useEffect(() => {
     if (!scrollRef) return
     const handler = () => {
       const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
-      const width = scrollRef.clientWidth - 1 * rem
+      const width = scrollRef.clientWidth - 2 * rem
       setContainerWidth(width)
 
       rowVirtualizer.measure()
@@ -186,45 +195,79 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
     }
   }, [columnVirtualizer, rowVirtualizer, scrollRef])
 
+  const virtualItems = rowVirtualizer.getVirtualItems()
   useEffect(() => {
-    if (!scrollRef) return
-    scrollRef.onscrollend = () => {
-      fetchNextPage?.()
+    const lastItem = virtualItems.at(-1)
+
+    if (!lastItem) {
+      return
     }
-    return () => {
-      scrollRef.onscrollend = null
+
+    const isPlaceholderRow = lastItem.index === rows.length
+
+    if (isPlaceholderRow && hasNextPage) {
+      fetchNextPage()
     }
-  }, [fetchNextPage, scrollRef])
+  }, [fetchNextPage, hasNextPage, rows.length, virtualItems])
+
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    startTransition(() => {
+      setReady(true)
+    })
+  }, [])
+
   return (
     <div
-      className="relative mx-2"
+      className="relative mx-4"
       style={{
         height: `${rowVirtualizer.getTotalSize()}px`,
         width: `${columnVirtualizer.getTotalSize()}px`,
       }}
     >
-      {rowVirtualizer.getVirtualItems().map((virtualRow) => (
-        <Fragment key={virtualRow.index}>
-          {columnVirtualizer.getVirtualItems().map((virtualColumn) => (
+      {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+        const isLoaderRow = virtualRow.key === rows.length
+        if (isLoaderRow && ready) {
+          return (
             <div
-              ref={columnVirtualizer.measureElement}
-              key={virtualColumn.index}
-              className="absolute left-0 top-0"
+              key={virtualRow.key}
+              className="absolute left-0 top-0 w-full"
               style={{
                 height: `${virtualRow.size}px`,
-                width: `${virtualColumn.size}px`,
-
-                transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
+                transform: `translateY(${virtualRow.start}px)`,
               }}
             >
-              <EntryItem
-                entryId={entriesIds[virtualRow.index * columns.length + virtualColumn.index]}
-                view={view}
-              />
+              {Footer ? typeof Footer === "function" ? <Footer /> : Footer : null}
+              {hasNextPage && <EntryItemSkeleton view={view} count={6} />}
             </div>
-          ))}
-        </Fragment>
-      ))}
+          )
+        }
+        return (
+          <Fragment key={virtualRow.key}>
+            {columnVirtualizer.getVirtualItems().map((virtualColumn) => (
+              <div
+                ref={columnVirtualizer.measureElement}
+                key={virtualColumn.index}
+                className="absolute left-0 top-0"
+                style={{
+                  height: `${virtualRow.size}px`,
+                  width: `${virtualColumn.size}px`,
+
+                  transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
+                }}
+              >
+                {ready && (
+                  <EntryItem
+                    entryId={entriesIds[virtualRow.index * columns.length + virtualColumn.index]}
+                    view={view}
+                  />
+                )}
+              </div>
+            ))}
+          </Fragment>
+        )
+      })}
     </div>
   )
 }

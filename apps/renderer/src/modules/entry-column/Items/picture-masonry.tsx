@@ -33,7 +33,7 @@ import { getEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 
 import { getMasonryColumnValue, setMasonryColumnValue, useMasonryColumnValue } from "../atoms"
-import { batchMarkRead } from "../hooks"
+import { batchMarkRead } from "../hooks/useEntryMarkReadHandler"
 import { PictureWaterFallItem } from "./picture-item"
 
 // grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5

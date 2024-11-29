@@ -21,10 +21,11 @@ import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 
 import { EntryColumnGrid } from "./grid"
-import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
+import { useEntriesByView } from "./hooks/useEntriesByView"
 import { useSnapEntryIdList } from "./hooks/useEntryIdListSnap"
+import { useEntryMarkReadHandler } from "./hooks/useEntryMarkReadHandler"
 import { EntryListHeader } from "./layouts/EntryListHeader"
-import { EntryEmptyList, EntryList } from "./lists"
+import { EntryEmptyList, EntryList } from "./list"
 import { EntryColumnWrapper } from "./wrapper"
 
 function EntryColumnImpl() {
@@ -113,15 +114,38 @@ function EntryColumnImpl() {
     }
 
     if (!routeFeedId) return
-  }, [routeFeedId])
+
+    const [first, second] = rangeQueueRef.current
+    if (first && second && second.startIndex - first.startIndex > 0) {
+      handleMarkReadInRange?.(
+        {
+          startIndex: first.startIndex,
+          endIndex: second.startIndex,
+        } as Range,
+        isInteracted.current,
+      )
+    }
+  }, [handleMarkReadInRange, routeFeedId])
 
   const navigate = useNavigateEntry()
+  const rangeQueueRef = useRef<Range[]>([])
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
+  const renderAsRead = useGeneralSettingKey("renderMarkUnread")
   const handleRangeChange = useCallback(
     (e: Range) => {
+      rangeQueueRef.current.push(e)
+      if (rangeQueueRef.current.length > 2) {
+        rangeQueueRef.current.shift()
+      }
+
+      if (!renderAsRead) return
+      if (!views[view].wideMode) {
+        return
+      }
+      // For gird, render as mark read logic
       handleMarkReadInRange?.(e, isInteracted.current)
     },
-    [handleMarkReadInRange],
+    [handleMarkReadInRange, renderAsRead, view],
   )
 
   const fetchNextPage = useCallback(() => {
@@ -130,6 +154,8 @@ function EntryColumnImpl() {
     }
   }, [entries])
   const isMobile = useMobile()
+
+  const ListComponent = views[view].gridMode ? EntryColumnGrid : EntryList
   return (
     <div
       data-hide-in-print
@@ -162,28 +188,8 @@ function EntryColumnImpl() {
           entries.isLoading ? null : (
             <EntryEmptyList />
           )
-        ) : view && views[view].gridMode ? (
-          <EntryColumnGrid
-            onRangeChange={handleRangeChange}
-            hasNextPage={entries.hasNextPage}
-            view={view}
-            feedId={routeFeedId || ""}
-            entriesIds={entriesIds}
-            fetchNextPage={fetchNextPage}
-            refetch={entries.refetch}
-            groupCounts={groupedCounts}
-            Footer={
-              !isFetchingNextPage && showArchivedButton ? (
-                <div className="flex justify-center py-4">
-                  <Button variant="outline" onClick={() => setIsArchived(true)}>
-                    {t("words.load_archived_entries")}
-                  </Button>
-                </div>
-              ) : null
-            }
-          />
         ) : (
-          <EntryList
+          <ListComponent
             onRangeChange={handleRangeChange}
             hasNextPage={entries.hasNextPage}
             view={view}

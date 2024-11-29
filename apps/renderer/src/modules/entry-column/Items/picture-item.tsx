@@ -46,7 +46,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
             media={entry.entries.media}
             className={cn(
               "aspect-square",
-              "w-full shrink-0 rounded-md",
+              "w-full shrink-0 rounded-md [&_img]:rounded-md",
               isActive && "rounded-b-none",
             )}
             imgClassName="object-cover"
