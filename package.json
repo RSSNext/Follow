@@ -131,7 +131,8 @@
       "@mozilla/readability": "patches/@mozilla__readability.patch",
       "daisyui": "patches/daisyui.patch",
       "jsonpointer": "patches/jsonpointer.patch",
-      "workbox-precaching": "patches/workbox-precaching.patch"
+      "workbox-precaching": "patches/workbox-precaching.patch",
+      "@tanstack/react-virtual@3.10.9": "patches/@tanstack__react-virtual@3.10.9.patch"
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",

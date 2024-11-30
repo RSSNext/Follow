@@ -59,11 +59,14 @@ export const EntryItemWrapper: FC<
     (e) => {
       e.stopPropagation()
 
+      if (!asRead) {
+        entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
+      }
       navigate({
         entryId: entry.entries.id,
       })
     },
-    [entry.entries.id, navigate],
+    [asRead, entry.entries.id, entry.feedId, navigate],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     () => entry.entries.url && window.open(entry.entries.url, "_blank"),
@@ -123,7 +126,7 @@ export const EntryItemWrapper: FC<
         className={cn(
           "relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
-          views[view as FeedViewType]?.wideMode ? "rounded-md" : "-mx-2 px-2",
+          views[view as FeedViewType]?.wideMode ? "rounded-md" : "px-2",
           "duration-200 hover:bg-theme-item-hover",
           (isActive || isContextMenuOpen) && "!bg-theme-item-active",
           itemClassName,

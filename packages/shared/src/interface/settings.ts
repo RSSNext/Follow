@@ -15,6 +15,10 @@ export interface GeneralSettings {
   voice: string
   reduceRefetch: boolean
   autoGroup: boolean
+  /**
+   * Top timeline for mobile
+   */
+  showQuickTimeline: boolean
 }
 
 export interface UISettings {

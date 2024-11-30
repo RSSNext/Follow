@@ -8,7 +8,7 @@ import { useSubscriptionStore } from "~/store/subscription"
 
 export const TimelineTabs = () => {
   const routerParams = useRouteParams()
-  const { view, listId, inboxId } = routerParams
+  const { view, listId, inboxId, folderName } = routerParams
 
   const listsData = useSubscriptionStore(
     useCallback(
@@ -22,16 +22,31 @@ export const TimelineTabs = () => {
       [view],
     ),
   )
+  const categoriesData = useSubscriptionStore(
+    useCallback(
+      (state) => {
+        const categoryNames = new Set<string>()
+        for (const subId of state.feedIdByView[view]) {
+          const sub = state.data[subId]
+          if (sub.category) {
+            categoryNames.add(sub.category)
+          }
+        }
+        return Array.from(categoryNames)
+      },
+      [view],
+    ),
+  )
   const hasData = listsData.length > 0 || inboxData.length > 0
 
-  const timeline = listId || inboxId || ""
+  const timeline = listId || inboxId || folderName || ""
 
   const navigate = useNavigateEntry()
   if (!hasData) return null
 
   return (
     <Tabs
-      className="-ml-3 -mr-4 mt-2 flex overflow-x-auto overflow-y-hidden scrollbar-none"
+      className="-ml-6 -mr-4 mt-2 flex overflow-x-auto overflow-y-hidden pl-3 scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
         if (!val) {
@@ -43,9 +58,9 @@ export const TimelineTabs = () => {
         }
       }}
     >
-      <TabsList className="justify-start border-b-0">
+      <TabsList className="justify-start border-b-0 [&_span]:text-xs">
         <TabsTrigger variant={"rounded"} className="p-0" value="">
-          Yours
+          <span>Yours</span>
         </TabsTrigger>
         {listsData.map((s) => (
           <TabsTrigger variant={"rounded"} className="p-0" key={s.listId} value={s.listId!}>
@@ -55,6 +70,23 @@ export const TimelineTabs = () => {
               iconSize={16}
               className="h-5 !bg-transparent p-0"
             />
+          </TabsTrigger>
+        ))}
+        {categoriesData.map((s) => (
+          <TabsTrigger
+            variant={"rounded"}
+            key={s}
+            value={s}
+            onClick={() => {
+              navigate({
+                folderName: s,
+              })
+            }}
+          >
+            <span className="flex h-5 items-center gap-1">
+              <i className="i-mgc-folder-open-cute-re" />
+              {s}
+            </span>
           </TabsTrigger>
         ))}
         {inboxData.map((s) => (

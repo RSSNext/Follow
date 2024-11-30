@@ -9,3 +9,8 @@ export function useRegisterFollowCommands() {
   useRegisterEntryCommands()
   useRegisterIntegrationCommands()
 }
+
+export const FollowCommandManager = () => {
+  useRegisterFollowCommands()
+  return null
+}

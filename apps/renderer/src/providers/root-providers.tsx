@@ -13,6 +13,7 @@ import { HotkeysProvider } from "react-hotkeys-hook"
 import { HotKeyScopeMap } from "~/constants/hotkeys"
 import { jotaiStore } from "~/lib/jotai"
 import { persistConfig, queryClient } from "~/lib/query-client"
+import { FollowCommandManager } from "~/modules/command/command-manager"
 
 import { I18nProvider } from "./i18n-provider"
 import { InvalidateQueryProvider } from "./invalidate-query-provider"
@@ -44,7 +45,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 
             <StableRouterProvider />
             <SettingSync />
-
+            <FollowCommandManager />
             {import.meta.env.DEV && <Devtools />}
             {children}
 

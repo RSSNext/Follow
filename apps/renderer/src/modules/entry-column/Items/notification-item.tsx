@@ -33,7 +33,7 @@ export function NotificationItemStateLess({ entry, feed }: EntryItemStatelessPro
 export const NotificationItemSkeleton = (
   <div className="relative w-full max-w-lg">
     <div className="group relative flex py-4 pl-3 pr-2">
-      <Skeleton className="mr-2 size-5 shrink-0 overflow-hidden rounded-sm " />
+      <Skeleton className="mr-2 size-5 shrink-0 overflow-hidden rounded-sm" />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
         <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">
           <Skeleton className="h-3 w-32 truncate " />

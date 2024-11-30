@@ -6,14 +6,14 @@ import { forwardRef } from "react"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 
 import type { EntryColumnWrapperProps } from "./wrapper.shared"
-import { styles } from "./wrapper.shared"
+import { animationStyles, styles } from "./wrapper.shared"
 
 export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperProps>(
   ({ children, onScroll }, ref) => {
     const view = useRouteParamsSelector((state) => state.view)
 
     return (
-      <div className={clsx(styles, "mt-2")}>
+      <div className={clsx(styles, animationStyles, "mt-2")}>
         <ScrollArea
           scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
           mask={false}

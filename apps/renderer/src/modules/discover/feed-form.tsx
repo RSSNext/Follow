@@ -76,7 +76,9 @@ export const FeedForm: Component<{
     <div
       className={cn(
         "flex h-full flex-col",
-        asWidget ? "mx-auto min-h-[420px] w-full max-w-[550px]" : "px-[18px] pb-[18px] pt-12",
+        asWidget
+          ? "mx-auto min-h-[420px] w-full max-w-[550px] lg:min-w-[550px]"
+          : "px-[18px] pb-[18px] pt-12",
       )}
     >
       {!asWidget && (

@@ -102,9 +102,6 @@ const TabsTrigger = React.forwardRef<HTMLDivElement, TabsTriggerProps>(
           "inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-theme-foreground",
           "group relative z-[1]",
           tabsTriggerVariants({ variant }),
-          // !isSelect &&
-          //   "hover:before:bg-theme-item-hover before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:inset-x-1 before:duration-200 before:opacity-60 before:rounded-lg",
-          // className,
         )}
         {...props}
       >

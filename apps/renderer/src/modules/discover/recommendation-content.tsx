@@ -8,7 +8,7 @@ export const RecommendationContent = ({
   route: RSSHubRoute
   routePrefix: string
 }) => (
-  <div className="w-full max-w-[700px] sm:min-w-[550px]">
+  <div className="mx-auto w-full max-w-[700px] sm:min-w-[550px]">
     <DiscoverFeedForm route={route} routePrefix={routePrefix} />
   </div>
 )

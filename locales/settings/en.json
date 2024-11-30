@@ -149,6 +149,8 @@
   "general.reduce_refetch.label": "Reduce timeline refetch",
   "general.send_anonymous_data.description": "By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Follow.",
   "general.send_anonymous_data.label": "Send anonymous data",
+  "general.show_quick_timeline.description": "Show the quick timeline at the top of the feed list.",
+  "general.show_quick_timeline.label": "Show feed list timeline",
   "general.show_unread_on_launch.description": "Show unread content on launch",
   "general.show_unread_on_launch.label": "Show unread content on launch",
   "general.sidebar": "Sidebar",
