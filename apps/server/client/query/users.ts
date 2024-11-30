@@ -1,7 +1,6 @@
 import { apiClient } from "@client/lib/api-fetch"
 import { getHydrateData } from "@client/lib/helper"
 import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils/utils"
-import { getProviders } from "@hono/auth-js/react"
 import { useQuery } from "@tanstack/react-query"
 
 export const useUserSubscriptionsQuery = (userId: string | undefined) => {
@@ -60,7 +59,7 @@ export const useUserQuery = (handleOrId: string | undefined) => {
 export const useAuthProviders = () => {
   return useQuery({
     queryKey: ["providers"],
-    queryFn: () => getProviders(),
+    queryFn: () => apiClient["auth-app"].providers.$get(),
     placeholderData: {
       google: {
         id: "google",
@@ -70,6 +69,6 @@ export const useAuthProviders = () => {
         id: "github",
         name: "GitHub",
       },
-    } as Awaited<ReturnType<typeof getProviders>>,
+    },
   })
 }

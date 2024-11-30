@@ -1,13 +1,13 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
 import { apiClient } from "@client/lib/api-fetch"
-import { LOGIN_CALLBACK_URL, loginHandler } from "@client/lib/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { authProvidersConfig } from "@follow/constants"
+import { loginHandler } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
-import { SessionProvider, signIn, signOut, useSession } from "@hono/auth-js/react"
+import { SessionProvider, signOut, useSession } from "@hono/auth-js/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router"
@@ -36,9 +36,7 @@ function Login() {
 
   useEffect(() => {
     if (provider && status === "unauthenticated") {
-      signIn(provider, {
-        callbackUrl: LOGIN_CALLBACK_URL,
-      })
+      loginHandler(provider)
       setRedirecting(true)
     }
   }, [status])

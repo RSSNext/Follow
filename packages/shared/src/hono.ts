@@ -1,4 +1,5 @@
 import * as hono_hono_base from 'hono/hono-base';
+import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono_types from 'hono/types';
 import { HttpBindings } from '@hono/node-server';
 import * as zod from 'zod';
@@ -4629,6 +4630,149 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
     dialect: "pg";
 }>;
 
+declare const user: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "user";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        name: drizzle_orm_pg_core.PgColumn<{
+            name: "name";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        email: drizzle_orm_pg_core.PgColumn<{
+            name: "email";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        emailVerified: drizzle_orm_pg_core.PgColumn<{
+            name: "emailVerified";
+            tableName: "user";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        image: drizzle_orm_pg_core.PgColumn<{
+            name: "image";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        handle: drizzle_orm_pg_core.PgColumn<{
+            name: "handle";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "user";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "user";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
 declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "user";
     schema: undefined;
@@ -4752,6 +4896,23 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "user";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -4764,6 +4925,7 @@ declare const usersOpenApiSchema: z.ZodObject<Omit<{
     image: z.ZodNullable<z.ZodString>;
     handle: z.ZodNullable<z.ZodString>;
     createdAt: z.ZodDate;
+    updatedAt: z.ZodDate;
 }, "email">, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     id: string;
@@ -4771,6 +4933,7 @@ declare const usersOpenApiSchema: z.ZodObject<Omit<{
     image: string | null;
     handle: string | null;
     createdAt: Date;
+    updatedAt: Date;
 }, {
     name: string | null;
     id: string;
@@ -4778,11 +4941,29 @@ declare const usersOpenApiSchema: z.ZodObject<Omit<{
     image: string | null;
     handle: string | null;
     createdAt: Date;
+    updatedAt: Date;
 }>;
-declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
+declare const account: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "account";
     schema: undefined;
     columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         userId: drizzle_orm_pg_core.PgColumn<{
             name: "userId";
             tableName: "account";
@@ -4800,24 +4981,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        type: drizzle_orm_pg_core.PgColumn<{
-            name: "type";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        provider: drizzle_orm_pg_core.PgColumn<{
+        providerId: drizzle_orm_pg_core.PgColumn<{
             name: "provider";
             tableName: "account";
             dataType: "string";
@@ -4834,7 +4998,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        providerAccountId: drizzle_orm_pg_core.PgColumn<{
+        accountId: drizzle_orm_pg_core.PgColumn<{
             name: "providerAccountId";
             tableName: "account";
             dataType: "string";
@@ -4851,7 +5015,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        refresh_token: drizzle_orm_pg_core.PgColumn<{
+        refreshToken: drizzle_orm_pg_core.PgColumn<{
             name: "refresh_token";
             tableName: "account";
             dataType: "string";
@@ -4868,7 +5032,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        access_token: drizzle_orm_pg_core.PgColumn<{
+        accessToken: drizzle_orm_pg_core.PgColumn<{
             name: "access_token";
             tableName: "account";
             dataType: "string";
@@ -4885,13 +5049,13 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        expires_at: drizzle_orm_pg_core.PgColumn<{
+        accessTokenExpiresAt: drizzle_orm_pg_core.PgColumn<{
             name: "expires_at";
             tableName: "account";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
@@ -4902,19 +5066,19 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        token_type: drizzle_orm_pg_core.PgColumn<{
-            name: "token_type";
+        refreshTokenExpiresAt: drizzle_orm_pg_core.PgColumn<{
+            name: "refreshTokenExpiresAt";
             tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
             driverParam: string;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
@@ -4936,7 +5100,7 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        id_token: drizzle_orm_pg_core.PgColumn<{
+        idToken: drizzle_orm_pg_core.PgColumn<{
             name: "id_token";
             tableName: "account";
             dataType: "string";
@@ -4953,8 +5117,8 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        session_state: drizzle_orm_pg_core.PgColumn<{
-            name: "session_state";
+        password: drizzle_orm_pg_core.PgColumn<{
+            name: "password";
             tableName: "account";
             dataType: "string";
             columnType: "PgText";
@@ -4970,23 +5134,74 @@ declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "createdAt";
+            tableName: "account";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "account";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
-declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
+declare const session: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "session";
     schema: undefined;
     columns: {
-        sessionToken: drizzle_orm_pg_core.PgColumn<{
-            name: "sessionToken";
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
             tableName: "session";
             dataType: "string";
             columnType: "PgText";
             data: string;
             driverParam: string;
             notNull: true;
-            hasDefault: false;
+            hasDefault: true;
             isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        token: drizzle_orm_pg_core.PgColumn<{
+            name: "sessionToken";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
@@ -5011,7 +5226,7 @@ declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        expires: drizzle_orm_pg_core.PgColumn<{
+        expiresAt: drizzle_orm_pg_core.PgColumn<{
             name: "expires";
             tableName: "session";
             dataType: "date";
@@ -5028,13 +5243,98 @@ declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "createdAt";
+            tableName: "session";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "session";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        ipAddress: drizzle_orm_pg_core.PgColumn<{
+            name: "ipAddress";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userAgent: drizzle_orm_pg_core.PgColumn<{
+            name: "userAgent";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
-declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
+declare const verification: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "verificationToken";
     schema: undefined;
     columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "verificationToken";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         identifier: drizzle_orm_pg_core.PgColumn<{
             name: "identifier";
             tableName: "verificationToken";
@@ -5052,7 +5352,7 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        token: drizzle_orm_pg_core.PgColumn<{
+        value: drizzle_orm_pg_core.PgColumn<{
             name: "token";
             tableName: "verificationToken";
             dataType: "string";
@@ -5069,7 +5369,7 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        expires: drizzle_orm_pg_core.PgColumn<{
+        expiresAt: drizzle_orm_pg_core.PgColumn<{
             name: "expires";
             tableName: "verificationToken";
             dataType: "date";
@@ -5078,6 +5378,40 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
             driverParam: string;
             notNull: true;
             hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "createdAt";
+            tableName: "verificationToken";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "verificationToken";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: true;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
@@ -5747,7 +6081,25 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
     dialect: "pg";
 }>;
 
-declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hono_types.MergeSchemaPath<{
+declare const _routes: hono_hono_base.HonoBase<Env, ({
+    "/better-auth/*": {
+        $get: {
+            input: {};
+            output: {};
+            outputFormat: hono_types.ResponseFormat;
+            status: hono_utils_http_status.StatusCode;
+        };
+    };
+} & {
+    "/better-auth/*": {
+        $post: {
+            input: {};
+            output: {};
+            outputFormat: hono_types.ResponseFormat;
+            status: hono_utils_http_status.StatusCode;
+        };
+    };
+}) | hono_types.MergeSchemaPath<{
     "/": {
         $get: {
             input: {
@@ -6012,6 +6364,20 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
             status: 200;
         };
     };
+} & {
+    "/providers": {
+        $get: {
+            input: {};
+            output: {
+                [x: string]: {
+                    name: string;
+                    id: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 }, "/auth-app"> | hono_types.MergeSchemaPath<{
     "/": {
         $get: {
@@ -6173,6 +6539,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -6181,6 +6548,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     } | undefined;
                     list?: {
@@ -6211,6 +6579,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
+                                updatedAt: string;
                             } | null | undefined;
                             tipUsers?: {
                                 name: string | null;
@@ -6219,6 +6588,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
+                                updatedAt: string;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
@@ -6229,6 +6599,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                     } | undefined;
                     docs?: string | undefined;
@@ -6370,6 +6741,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                     };
                     read: boolean | null;
@@ -6463,6 +6835,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                     };
                 } | undefined;
@@ -6621,6 +6994,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -6629,6 +7003,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     };
                     read: boolean | null;
@@ -6722,6 +7097,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -6730,6 +7106,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     };
                 } | undefined;
@@ -6865,6 +7242,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -6873,6 +7251,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
@@ -6947,6 +7326,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -6955,6 +7335,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
@@ -7081,6 +7462,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
+                    updatedAt: string;
                 };
             };
             outputFormat: "json" | "text";
@@ -7105,6 +7487,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     };
                 };
             };
@@ -7270,6 +7653,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -7278,6 +7662,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     };
                     feedId: string;
@@ -7290,6 +7675,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[];
                     };
                 } | {
@@ -7325,6 +7711,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
+                                updatedAt: string;
                             } | null | undefined;
                             tipUsers?: {
                                 name: string | null;
@@ -7333,6 +7720,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
+                                updatedAt: string;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
@@ -7343,6 +7731,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                     };
                     isPrivate: boolean;
@@ -7372,6 +7761,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                     };
                 })[];
@@ -7607,6 +7997,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                     toUser?: {
                         name: string | null;
@@ -7615,6 +8006,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                     toFeed?: {
                         type: "feed";
@@ -7634,6 +8026,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -7642,6 +8035,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     } | null | undefined;
                 }[];
@@ -7759,6 +8153,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     };
                     userId: string;
                     address: string;
@@ -7812,6 +8207,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
+                                updatedAt: string;
                             } | null | undefined;
                             tipUsers?: {
                                 name: string | null;
@@ -7820,6 +8216,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
+                                updatedAt: string;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
@@ -7830,6 +8227,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                     };
                     subscriptionCount: number;
@@ -7891,6 +8289,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -7899,6 +8298,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     }[] | undefined;
                     ownerUserId?: string | null | undefined;
@@ -7909,6 +8309,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                 };
             };
@@ -7985,6 +8386,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         } | null | undefined;
                         tipUsers?: {
                             name: string | null;
@@ -7993,6 +8395,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
+                            updatedAt: string;
                         }[] | null | undefined;
                     }[] | undefined;
                     ownerUserId?: string | null | undefined;
@@ -8003,6 +8406,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                     subscriptionCount?: number | undefined;
                     purchaseAmount?: number | undefined;
@@ -8044,6 +8448,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                     tipUsers?: {
                         name: string | null;
@@ -8052,6 +8457,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     }[] | null | undefined;
                 }[];
             };
@@ -8155,6 +8561,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                 };
             };
@@ -8288,6 +8695,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
+                        updatedAt: string;
                     } | null | undefined;
                 }[];
             };
@@ -8398,6 +8806,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
+                    updatedAt: string;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -8471,4 +8880,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, hono_types.BlankSchema | hon
 }, "/probes">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
