@@ -34,7 +34,7 @@
     "@hono/node-server": "^1.13.7",
     "@t3-oss/env-core": "^0.11.1",
     "drizzle-orm": "^0.36.4",
-    "electron": "^33.2.0",
+    "electron": "^33.2.1",
     "hono": "^4.6.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

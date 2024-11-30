@@ -164,9 +164,6 @@ importers:
       drizzle-orm:
         specifier: 0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(react@18.3.1)
-      electron:
-        specifier: 33.2.0
-        version: 33.2.0
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
@@ -264,8 +261,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1(@types/node@22.10.0)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1)
       vite-bundle-analyzer:
-        specifier: 0.14.3
-        version: 0.14.3
+        specifier: 0.15.2
+        version: 0.15.2
       vite-plugin-mkcert:
         specifier: 1.17.6
         version: 1.17.6(vite@6.0.1(@types/node@22.10.0)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))
@@ -283,13 +280,13 @@ importers:
     dependencies:
       '@egoist/tipc':
         specifier: 0.3.2
-        version: 0.3.2(electron@33.2.0)(react@18.3.1)
+        version: 0.3.2(electron@33.2.1)(react@18.3.1)
       '@electron-toolkit/preload':
         specifier: ^3.0.1
-        version: 3.0.1(electron@33.2.0)
+        version: 3.0.1(electron@33.2.1)
       '@electron-toolkit/utils':
         specifier: ^3.0.0
-        version: 3.0.0(electron@33.2.0)
+        version: 3.0.0(electron@33.2.1)
       '@eneris/push-receiver':
         specifier: 4.3.0
         version: 4.3.0
@@ -367,8 +364,8 @@ importers:
         specifier: ^22.10.0
         version: 22.10.0
       electron:
-        specifier: 33.2.0
-        version: 33.2.0
+        specifier: 33.2.1
+        version: 33.2.1
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
@@ -383,10 +380,10 @@ importers:
         version: 6.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@egoist/tipc':
         specifier: 0.3.2
-        version: 0.3.2(electron@33.2.0)(react@18.3.1)
+        version: 0.3.2(electron@33.2.1)(react@18.3.1)
       '@electron-toolkit/preload':
         specifier: ^3.0.1
-        version: 3.0.1(electron@33.2.0)
+        version: 3.0.1(electron@33.2.1)
       '@follow/electron-main':
         specifier: workspace:*
         version: link:../main
@@ -1117,7 +1114,7 @@ importers:
     dependencies:
       '@electron-toolkit/preload':
         specifier: ^3.0.1
-        version: 3.0.1(electron@33.2.0)
+        version: 3.0.1(electron@33.2.1)
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@22.10.0)
@@ -1131,8 +1128,8 @@ importers:
         specifier: ^0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(react@18.3.1)
       electron:
-        specifier: ^33.2.0
-        version: 33.2.0
+        specifier: ^33.2.1
+        version: 33.2.1
       hono:
         specifier: ^4.6.11
         version: 4.6.11(patch_hash=qptujxncoai6tukc4qaqsrqk24)
@@ -1929,8 +1926,8 @@ packages:
     resolution: {integrity: sha512-F+nKc0xW+kVbBRhFzaMgPy3KwmuNTYX1fx6+FxxoSnNgwYX6LD7AKBTWkU0MQ6IBoe7dz069CNkR673sPAgkCQ==}
     engines: {node: '>=14'}
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
-    resolution: {tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
+    resolution: {commit: 06b29aafb7708acef8b3669835c8a7857ebc92d2, repo: git@github.com:electron/node-gyp.git, type: git}
     version: 10.2.0-electron.1
     engines: {node: '>=12.13.0'}
     hasBin: true
@@ -6109,8 +6106,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@33.2.0:
-    resolution: {integrity: sha512-PVw1ICAQDPsnnsmpNFX/b1i/49h67pbSPxuIENd9K9WpGO1tsRaQt+K2bmXqTuoMJsbzIc75Ce8zqtuwBPqawA==}
+  electron@33.2.1:
+    resolution: {integrity: sha512-SG/nmSsK9Qg1p6wAW+ZfqU+AV8cmXMTIklUL18NnOKfZLlum4ZsDoVdmmmlL39ZmeCaq27dr7CgslRPahfoVJg==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -10887,8 +10884,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite-bundle-analyzer@0.14.3:
-    resolution: {integrity: sha512-gtYPRahkEdo7TRDLHqq+ZRE8Xfz5dt3UAl0NhkZBBYaGRd3EOyWJz9+WAqRSALf4szFhq5AS0TKvL9nVWiAkqw==}
+  vite-bundle-analyzer@0.15.2:
+    resolution: {integrity: sha512-AwFOewhvf7EkTACa9c/inbxMrJOWwyVF4nUMITwN26lM5TAYkcnJC4KFgZXym3sYRAWe1Qgvk8X4OFTw4HPaJw==}
     hasBin: true
 
   vite-node@2.1.6:
@@ -12059,9 +12056,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@egoist/tipc@0.3.2(electron@33.2.0)(react@18.3.1)':
+  '@egoist/tipc@0.3.2(electron@33.2.1)(react@18.3.1)':
     dependencies:
-      electron: 33.2.0
+      electron: 33.2.1
     optionalDependencies:
       '@tanstack/react-query': 5.61.4(react@18.3.1)
     transitivePeerDependencies:
@@ -12286,17 +12283,17 @@ snapshots:
     dependencies:
       chrome-trace-event: 1.0.4
 
-  '@electron-toolkit/preload@3.0.1(electron@33.2.0)':
+  '@electron-toolkit/preload@3.0.1(electron@33.2.1)':
     dependencies:
-      electron: 33.2.0
+      electron: 33.2.1
 
   '@electron-toolkit/tsconfig@1.0.1(@types/node@22.10.0)':
     dependencies:
       '@types/node': 22.10.0
 
-  '@electron-toolkit/utils@3.0.0(electron@33.2.0)':
+  '@electron-toolkit/utils@3.0.0(electron@33.2.1)':
     dependencies:
-      electron: 33.2.0
+      electron: 33.2.1
 
   '@electron/asar@3.2.17':
     dependencies:
@@ -12338,7 +12335,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.1
@@ -12438,7 +12435,7 @@ snapshots:
 
   '@electron/rebuild@3.7.1':
     dependencies:
-      '@electron/node-gyp': https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2
+      '@electron/node-gyp': git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
       debug: 4.3.7
@@ -17224,7 +17221,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@33.2.0:
+  electron@33.2.1:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.17.8
@@ -22848,7 +22845,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-bundle-analyzer@0.14.3: {}
+  vite-bundle-analyzer@0.15.2: {}
 
   vite-node@2.1.6(@types/node@22.10.0)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1):
     dependencies:
