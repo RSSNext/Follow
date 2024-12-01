@@ -9035,6 +9035,7 @@ declare const auth: {
             }): Promise<any>;
             options: better_auth_adapters_drizzle.DrizzleAdapterConfig;
         };
+        baseUrl: string | undefined;
         basePath: string;
         trustedOrigins: string[];
         user: {

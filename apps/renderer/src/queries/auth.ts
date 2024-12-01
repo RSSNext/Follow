@@ -35,7 +35,7 @@ export const useSession = (options?: { enabled?: boolean }) => {
     ...rest,
     status: isLoading
       ? "loading"
-      : data
+      : data?.data
         ? "authenticated"
         : fetchError
           ? "error"
