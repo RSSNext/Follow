@@ -17,7 +17,7 @@ export function Component() {
 }
 
 function Login() {
-  const { status } = useSession()
+  const { status, refetch } = useSession()
 
   const [redirecting, setRedirecting] = useState(false)
 
@@ -76,7 +76,13 @@ function Login() {
               <div className="relative flex items-center justify-center">
                 <UserAvatar className="gap-4 px-10 py-4 text-2xl" />
                 <div className="absolute right-0">
-                  <Button variant="ghost" onClick={() => signOut()}>
+                  <Button
+                    variant="ghost"
+                    onClick={async () => {
+                      await signOut()
+                      await refetch()
+                    }}
+                  >
                     <i className="i-mingcute-exit-line text-xl" />
                   </Button>
                 </div>
