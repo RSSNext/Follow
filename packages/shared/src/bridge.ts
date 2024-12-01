@@ -89,7 +89,12 @@ function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path:
 
       try {
         return await window.webContents.executeJavaScript(
-          `globalThis.${PREFIX}?.${methodPath}?.(${args.map((arg) => JSON.stringify(arg) ?? "undefined").join(",")})`,
+          `globalThis.${PREFIX}?.${methodPath}?.(${args
+            .map((arg) => {
+              if (arg === undefined) return "undefined"
+              return JSON.stringify(arg)
+            })
+            .join(",")})`,
         )
       } catch (err) {
         console.error(`Failed to executeJavaScript: ${methodPath}`, err)
