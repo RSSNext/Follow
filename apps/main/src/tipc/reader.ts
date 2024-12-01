@@ -68,7 +68,8 @@ export const readerRoute = {
     }
 
     await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS).catch((error) => {
-      return callWindowExpose(window).toast.error(error.message, {
+      const msg = typeof error === "string" ? error : error.message
+      return callWindowExpose(window).toast.error(msg || "unknown set voice error", {
         duration: 1000,
       })
     })
