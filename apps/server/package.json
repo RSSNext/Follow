@@ -10,7 +10,6 @@
     "@fastify/middie": "9.0.2",
     "@fastify/request-context": "6.0.1",
     "@fontsource/sn-pro": "5.1.0",
-    "@hono/auth-js": "1.0.15",
     "@openpanel/web": "1.0.1",
     "@resvg/resvg-js": "2.6.2",
     "@sentry/react": "8.40.0",

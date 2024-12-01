@@ -399,9 +399,6 @@ importers:
       '@headlessui/react':
         specifier: 2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@hono/auth-js':
-        specifier: 1.0.15
-        version: 1.0.15(@auth/core@0.37.4)(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))(react@18.3.1)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@18.3.1))
@@ -754,9 +751,6 @@ importers:
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
-      '@hono/auth-js':
-        specifier: 1.0.15
-        version: 1.0.15(@auth/core@0.37.4)(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))(react@18.3.1)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -2812,14 +2806,6 @@ packages:
 
   '@hexagon/base64@1.1.28':
     resolution: {integrity: sha512-lhqDEAvWixy3bZ+UOYbPwUbBkwBq5C1LAJ/xPC8Oi+lL54oyakv/npbA0aU2hgCsx/1NUd4IBvV03+aUBWxerw==}
-
-  '@hono/auth-js@1.0.15':
-    resolution: {integrity: sha512-nuTP9zZBjJnHTCybQhC3cbTgboElhnlSuPFFogRcDUs9uqBd1mC2EM2jFlaErqim3laU325jP4j2tRCqiZnRHQ==}
-    engines: {node: '>=18.4.0'}
-    peerDependencies:
-      '@auth/core': 0.*
-      hono: '>=3.*'
-      react: ^18 || ^19 || ^19.0.0-rc
 
   '@hono/node-server@1.13.7':
     resolution: {integrity: sha512-kTfUMsoloVKtRA2fLiGSd9qBddmru9KadNyhJCwgKBxTiNkaAJEwkVN9KV/rS4HtmmNRtUh6P+YpmjRMl0d9vQ==}
@@ -13600,12 +13586,6 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@hexagon/base64@1.1.28': {}
-
-  '@hono/auth-js@1.0.15(@auth/core@0.37.4)(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))(react@18.3.1)':
-    dependencies:
-      '@auth/core': 0.37.4
-      hono: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
-      react: 18.3.1
 
   '@hono/node-server@1.13.7(hono@4.6.11(patch_hash=qptujxncoai6tukc4qaqsrqk24))':
     dependencies:

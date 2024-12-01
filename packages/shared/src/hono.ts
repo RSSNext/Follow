@@ -1,6 +1,6 @@
 import * as hono_hono_base from 'hono/hono-base';
-import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono_types from 'hono/types';
+import * as hono_utils_http_status from 'hono/utils/http-status';
 import { HttpBindings } from '@hono/node-server';
 import * as zod from 'zod';
 import { z } from 'zod';
@@ -8,6 +8,9 @@ import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
 import { AnyPgColumn } from 'drizzle-orm/pg-core';
 import * as drizzle_orm from 'drizzle-orm';
 import { InferInsertModel, SQL } from 'drizzle-orm';
+import * as better_auth_adapters_drizzle from 'better-auth/adapters/drizzle';
+import * as better_auth from 'better-auth';
+import * as better_call from 'better-call';
 
 type Env = {
     Bindings: HttpBindings;
@@ -338,18 +341,18 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         }, "strip", z.ZodTypeAny, {
             value: string | number;
-            field: "title" | "all" | "content" | "author" | "url" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }, {
             value: string | number;
-            field: "title" | "all" | "content" | "author" | "url" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">>;
         webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
-        summary?: boolean | undefined;
         disabled?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
@@ -361,14 +364,14 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "all" | "content" | "author" | "url" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
     }, {
-        summary?: boolean | undefined;
         disabled?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
@@ -380,17 +383,26 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "all" | "content" | "author" | "url" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     name: string;
+    condition: {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[] | {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[][];
     result: {
-        summary?: boolean | undefined;
         disabled?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
@@ -402,26 +414,26 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "all" | "content" | "author" | "url" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
     };
-    condition: {
-        value: string;
-        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[] | {
-        value: string;
-        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[][];
 }, {
     name: string;
+    condition: {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[] | {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[][];
     result: {
-        summary?: boolean | undefined;
         disabled?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
@@ -433,20 +445,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "all" | "content" | "author" | "url" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
     };
-    condition: {
-        value: string;
-        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[] | {
-        value: string;
-        field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[][];
 }>;
 declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     userId: z.ZodString;
@@ -552,18 +555,18 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }, {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }>, "many">>;
             webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
-            summary?: boolean | undefined;
             disabled?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
@@ -575,14 +578,14 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
         }, {
-            summary?: boolean | undefined;
             disabled?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
@@ -594,17 +597,26 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
         result: {
-            summary?: boolean | undefined;
             disabled?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
@@ -616,26 +628,26 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
         };
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[] | {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[][];
     }, {
         name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
         result: {
-            summary?: boolean | undefined;
             disabled?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
@@ -647,29 +659,29 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
         };
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[] | {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[][];
     }>, "many">>>;
 }>, "strip", z.ZodTypeAny, {
     userId: string;
     rules?: {
         name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
         result: {
-            summary?: boolean | undefined;
             disabled?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
@@ -681,29 +693,29 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
         };
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[] | {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[][];
     }[] | null | undefined;
 }, {
     userId: string;
     rules?: {
         name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[][];
         result: {
-            summary?: boolean | undefined;
             disabled?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
@@ -715,20 +727,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "all" | "content" | "author" | "url" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
         };
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[] | {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[][];
     }[] | null | undefined;
 }>;
 declare const actionsRelations: drizzle_orm.Relations<"actions", {
@@ -1131,9 +1134,9 @@ declare const airdropsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
 }>, "strip", z.ZodTypeAny, {
     userId: string;
     tx: string | null;
-    rank: string | null;
-    amount: string;
     activity: "public_beta";
+    amount: string;
+    rank: string | null;
     detail: {
         "Invitations count": number;
         "Purchase lists cost": number;
@@ -1168,9 +1171,9 @@ declare const airdropsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
 }, {
     userId: string;
     tx: string | null;
-    rank: string | null;
-    amount: string;
     activity: "public_beta";
+    amount: string;
+    rank: string | null;
     detail: {
         "Invitations count": number;
         "Purchase lists cost": number;
@@ -2499,7 +2502,6 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     id: string;
     image: string | null;
     url: string;
-    language: string | null;
     siteUrl: string | null;
     checkedAt: string;
     lastModifiedHeader: string | null;
@@ -2508,13 +2510,13 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorMessage: string | null;
     errorAt: string | null;
     ownerUserId: string | null;
+    language: string | null;
 }, {
     description: string | null;
     title: string | null;
     id: string;
     image: string | null;
     url: string;
-    language: string | null;
     siteUrl: string | null;
     checkedAt: string;
     lastModifiedHeader: string | null;
@@ -2523,6 +2525,7 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorMessage: string | null;
     errorAt: string | null;
     ownerUserId: string | null;
+    language: string | null;
 }>;
 declare const feedsRelations: drizzle_orm.Relations<"feeds", {
     subscriptions: drizzle_orm.Many<"subscriptions">;
@@ -4178,8 +4181,8 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     id: string;
     image: string | null;
     view: number;
-    language: string | null;
     ownerUserId: string;
+    language: string | null;
     feedIds: string[];
     fee: number;
     timelineUpdatedAt: string;
@@ -4189,8 +4192,8 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     id: string;
     image: string | null;
     view: number;
-    language: string | null;
     ownerUserId: string;
+    language: string | null;
     feedIds: string[];
     fee: number;
     timelineUpdatedAt: string;
@@ -5171,6 +5174,234 @@ declare const account: drizzle_orm_pg_core.PgTableWithColumns<{
     };
     dialect: "pg";
 }>;
+declare const accountAuthjs: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "account";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        refreshTokenExpiresAt: drizzle_orm_pg_core.PgColumn<{
+            name: "refreshTokenExpiresAt";
+            tableName: "account";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        scope: drizzle_orm_pg_core.PgColumn<{
+            name: "scope";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        password: drizzle_orm_pg_core.PgColumn<{
+            name: "password";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "createdAt";
+            tableName: "account";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "account";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        provider: drizzle_orm_pg_core.PgColumn<{
+            name: "provider";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        providerAccountId: drizzle_orm_pg_core.PgColumn<{
+            name: "providerAccountId";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        refresh_token: drizzle_orm_pg_core.PgColumn<{
+            name: "refresh_token";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        access_token: drizzle_orm_pg_core.PgColumn<{
+            name: "access_token";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        expires_at: drizzle_orm_pg_core.PgColumn<{
+            name: "expires_at";
+            tableName: "account";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        id_token: drizzle_orm_pg_core.PgColumn<{
+            name: "id_token";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
 declare const session: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "session";
     schema: undefined;
@@ -5307,6 +5538,149 @@ declare const session: drizzle_orm_pg_core.PgTableWithColumns<{
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const sessionAuthjs: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "session";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "createdAt";
+            tableName: "session";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "updatedAt";
+            tableName: "session";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        ipAddress: drizzle_orm_pg_core.PgColumn<{
+            name: "ipAddress";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userAgent: drizzle_orm_pg_core.PgColumn<{
+            name: "userAgent";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        sessionToken: drizzle_orm_pg_core.PgColumn<{
+            name: "sessionToken";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        expires: drizzle_orm_pg_core.PgColumn<{
+            name: "expires";
+            tableName: "session";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
@@ -5571,17 +5945,17 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     createdAt: string;
     userId: string;
+    powerToken: string;
     addressIndex: number;
     address: string | null;
-    powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }, {
     createdAt: string;
     userId: string;
+    powerToken: string;
     addressIndex: number;
     address: string | null;
-    powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }>;
@@ -5801,10 +6175,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
+    powerToken: string;
     fromUserId: string | null;
     toUserId: string | null;
     hash: string;
-    powerToken: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
@@ -5813,10 +6187,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
+    powerToken: string;
     fromUserId: string | null;
     toUserId: string | null;
     hash: string;
-    powerToken: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
@@ -6020,17 +6394,17 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     userId: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     userId: string;
-    address: string;
-    powerToken: string;
     rank: number | null;
+    powerToken: string;
+    address: string;
     level: number | null;
     prevActivityPoints: number | null;
     activityPoints: number | null;
 }, {
     userId: string;
-    address: string;
-    powerToken: string;
     rank: number | null;
+    powerToken: string;
+    address: string;
     level: number | null;
     prevActivityPoints: number | null;
     activityPoints: number | null;
@@ -6081,12 +6455,2702 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
     dialect: "pg";
 }>;
 
+declare const auth: {
+    handler: (request: Request) => Promise<Response>;
+    api: {
+        getSession: ((context: {
+            headers: Headers;
+            query?: {
+                disableCookieCache?: boolean;
+            } | undefined;
+        }) => Promise<{
+            user: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                emailVerified: boolean;
+                name: string;
+                image?: string | null | undefined | undefined;
+            };
+            session: {
+                id: string;
+                userId: string;
+                createdAt: Date;
+                updatedAt: Date;
+                expiresAt: Date;
+                token: string;
+                ipAddress?: string | null | undefined | undefined;
+                userAgent?: string | null | undefined | undefined;
+            };
+            invitation: {
+                code: string;
+                createdAt: Date | null;
+                fromUserId: string;
+                toUserId: string | null;
+            } | undefined;
+            role: "user" | "trial";
+        } | null>) & {
+            options: {
+                method: "GET";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    disableCookieCache: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    disableCookieCache?: boolean | undefined;
+                }, {
+                    disableCookieCache?: boolean | undefined;
+                }>>;
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                    properties: {
+                                                        token: {
+                                                            type: string;
+                                                        };
+                                                        userId: {
+                                                            type: string;
+                                                        };
+                                                        expiresAt: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                                user: {
+                                                    type: string;
+                                                    $ref: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            } & {
+                method: "GET";
+                metadata: {
+                    CUSTOM_SESSION: boolean;
+                };
+            };
+            path: "/get-session";
+        };
+    } & {
+        signInSocial: {
+            <C extends [better_call.Context<"/sign-in/social", {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    errorCallbackURL: zod.ZodOptional<zod.ZodString>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                    disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
+                    idToken: zod.ZodOptional<zod.ZodObject<{
+                        token: zod.ZodString;
+                        nonce: zod.ZodOptional<zod.ZodString>;
+                        accessToken: zod.ZodOptional<zod.ZodString>;
+                        refreshToken: zod.ZodOptional<zod.ZodString>;
+                        expiresAt: zod.ZodOptional<zod.ZodNumber>;
+                    }, "strip", zod.ZodTypeAny, {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    }, {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    }>>;
+                }, "strip", zod.ZodTypeAny, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    idToken?: {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    idToken?: {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                };
+                                                user: {
+                                                    type: string;
+                                                };
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                url: string;
+                redirect: boolean;
+            }>;
+            path: "/sign-in/social";
+            options: {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    errorCallbackURL: zod.ZodOptional<zod.ZodString>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                    disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
+                    idToken: zod.ZodOptional<zod.ZodObject<{
+                        token: zod.ZodString;
+                        nonce: zod.ZodOptional<zod.ZodString>;
+                        accessToken: zod.ZodOptional<zod.ZodString>;
+                        refreshToken: zod.ZodOptional<zod.ZodString>;
+                        expiresAt: zod.ZodOptional<zod.ZodNumber>;
+                    }, "strip", zod.ZodTypeAny, {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    }, {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    }>>;
+                }, "strip", zod.ZodTypeAny, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    idToken?: {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    idToken?: {
+                        token: string;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        expiresAt?: number | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                };
+                                                user: {
+                                                    type: string;
+                                                };
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        signOut: {
+            <C extends [better_call.Context<"/sign-out", {
+                method: "POST";
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                success: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                success: boolean;
+            }>;
+            path: "/sign-out";
+            options: {
+                method: "POST";
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                success: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        signUpEmail: {
+            <C extends [better_call.Context<"/sign-up/email", {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    name: zod.ZodString;
+                    email: zod.ZodString;
+                    password: zod.ZodString;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    password: string;
+                    email: string;
+                    name: string;
+                }, {
+                    password: string;
+                    email: string;
+                    name: string;
+                }> & zod.ZodObject<{
+                    handle: zod.ZodString;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    handle: string;
+                }, {
+                    handle: string;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            name: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            email: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            password: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            callbackURL: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                        };
+                                        required: string[];
+                                    };
+                                };
+                            };
+                        };
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                                session: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                user: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image?: string | null | undefined | undefined;
+                    handle: string;
+                };
+                session: null;
+            } | {
+                user: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image?: string | null | undefined | undefined;
+                    handle: string;
+                };
+                session: {
+                    id: string;
+                    userId: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined | undefined;
+                    userAgent?: string | null | undefined | undefined;
+                };
+            }>;
+            path: "/sign-up/email";
+            options: {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    name: zod.ZodString;
+                    email: zod.ZodString;
+                    password: zod.ZodString;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    password: string;
+                    email: string;
+                    name: string;
+                }, {
+                    password: string;
+                    email: string;
+                    name: string;
+                }> & zod.ZodObject<{
+                    handle: zod.ZodString;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    handle: string;
+                }, {
+                    handle: string;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            name: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            email: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            password: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            callbackURL: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                        };
+                                        required: string[];
+                                    };
+                                };
+                            };
+                        };
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                                session: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        signInEmail: {
+            <C extends [better_call.Context<"/sign-in/email", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    email: zod.ZodString;
+                    password: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    rememberMe: zod.ZodOptional<zod.ZodDefault<zod.ZodBoolean>>;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                    email: string;
+                    callbackURL?: string | undefined;
+                    rememberMe?: boolean | undefined;
+                }, {
+                    password: string;
+                    email: string;
+                    callbackURL?: string | undefined;
+                    rememberMe?: boolean | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                };
+                                                user: {
+                                                    type: string;
+                                                };
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                user: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image?: string | null | undefined;
+                };
+                session: {
+                    id: string;
+                    userId: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined;
+                    userAgent?: string | null | undefined;
+                };
+                redirect: boolean;
+                url: string | undefined;
+            }>;
+            path: "/sign-in/email";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    email: zod.ZodString;
+                    password: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    rememberMe: zod.ZodOptional<zod.ZodDefault<zod.ZodBoolean>>;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                    email: string;
+                    callbackURL?: string | undefined;
+                    rememberMe?: boolean | undefined;
+                }, {
+                    password: string;
+                    email: string;
+                    callbackURL?: string | undefined;
+                    rememberMe?: boolean | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                };
+                                                user: {
+                                                    type: string;
+                                                };
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        forgetPassword: {
+            <C extends [better_call.Context<"/forget-password", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    email: zod.ZodString;
+                    redirectTo: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    email: string;
+                    redirectTo?: string | undefined;
+                }, {
+                    email: string;
+                    redirectTo?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/forget-password";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    email: zod.ZodString;
+                    redirectTo: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    email: string;
+                    redirectTo?: string | undefined;
+                }, {
+                    email: string;
+                    redirectTo?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        resetPassword: {
+            <C extends [better_call.Context<"/reset-password", {
+                query: zod.ZodOptional<zod.ZodObject<{
+                    token: zod.ZodOptional<zod.ZodString>;
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    token?: string | undefined;
+                    currentURL?: string | undefined;
+                }, {
+                    token?: string | undefined;
+                    currentURL?: string | undefined;
+                }>>;
+                method: "POST";
+                body: zod.ZodObject<{
+                    newPassword: zod.ZodString;
+                    token: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    newPassword: string;
+                    token?: string | undefined;
+                }, {
+                    newPassword: string;
+                    token?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/reset-password";
+            options: {
+                query: zod.ZodOptional<zod.ZodObject<{
+                    token: zod.ZodOptional<zod.ZodString>;
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    token?: string | undefined;
+                    currentURL?: string | undefined;
+                }, {
+                    token?: string | undefined;
+                    currentURL?: string | undefined;
+                }>>;
+                method: "POST";
+                body: zod.ZodObject<{
+                    newPassword: zod.ZodString;
+                    token: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    newPassword: string;
+                    token?: string | undefined;
+                }, {
+                    newPassword: string;
+                    token?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        verifyEmail: {
+            <C extends [better_call.Context<"/verify-email", {
+                method: "GET";
+                query: zod.ZodObject<{
+                    token: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    token: string;
+                    callbackURL?: string | undefined;
+                }, {
+                    token: string;
+                    callbackURL?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : void | {
+                user: any;
+                status: boolean;
+            }>;
+            path: "/verify-email";
+            options: {
+                method: "GET";
+                query: zod.ZodObject<{
+                    token: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    token: string;
+                    callbackURL?: string | undefined;
+                }, {
+                    token: string;
+                    callbackURL?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        sendVerificationEmail: {
+            <C extends [better_call.Context<"/send-verification-email", {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    email: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    email: string;
+                    callbackURL?: string | undefined;
+                }, {
+                    email: string;
+                    callbackURL?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            email: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            callbackURL: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                        };
+                                        required: string[];
+                                    };
+                                };
+                            };
+                        };
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/send-verification-email";
+            options: {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    email: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    email: string;
+                    callbackURL?: string | undefined;
+                }, {
+                    email: string;
+                    callbackURL?: string | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            email: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            callbackURL: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                        };
+                                        required: string[];
+                                    };
+                                };
+                            };
+                        };
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        changeEmail: {
+            <C extends [better_call.Context<"/change-email", {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    newEmail: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    newEmail: string;
+                    callbackURL?: string | undefined;
+                }, {
+                    newEmail: string;
+                    callbackURL?: string | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                user: any;
+                status: boolean;
+            }>;
+            path: "/change-email";
+            options: {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    newEmail: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    newEmail: string;
+                    callbackURL?: string | undefined;
+                }, {
+                    newEmail: string;
+                    callbackURL?: string | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        changePassword: {
+            <C extends [better_call.Context<"/change-password", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    newPassword: zod.ZodString;
+                    currentPassword: zod.ZodString;
+                    revokeOtherSessions: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    newPassword: string;
+                    currentPassword: string;
+                    revokeOtherSessions?: boolean | undefined;
+                }, {
+                    newPassword: string;
+                    currentPassword: string;
+                    revokeOtherSessions?: boolean | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    description: string;
+                                                    $ref: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : Record<string, any> & {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                emailVerified: boolean;
+                name: string;
+                image?: string | null | undefined;
+            }>;
+            path: "/change-password";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    newPassword: zod.ZodString;
+                    currentPassword: zod.ZodString;
+                    revokeOtherSessions: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    newPassword: string;
+                    currentPassword: string;
+                    revokeOtherSessions?: boolean | undefined;
+                }, {
+                    newPassword: string;
+                    currentPassword: string;
+                    revokeOtherSessions?: boolean | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    description: string;
+                                                    $ref: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        setPassword: {
+            <C extends [better_call.Context<"/set-password", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    newPassword: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    newPassword: string;
+                }, {
+                    newPassword: string;
+                }>;
+                metadata: {
+                    SERVER_ONLY: true;
+                };
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : Record<string, any> & {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                emailVerified: boolean;
+                name: string;
+                image?: string | null | undefined;
+            }>;
+            path: "/set-password";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    newPassword: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    newPassword: string;
+                }, {
+                    newPassword: string;
+                }>;
+                metadata: {
+                    SERVER_ONLY: true;
+                };
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        updateUser: {
+            <C extends [better_call.Context<"/update-user", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    name: zod.ZodOptional<zod.ZodString>;
+                    image: zod.ZodOptional<zod.ZodString>;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    name?: string | undefined;
+                    image?: string | undefined;
+                }, {
+                    name?: string | undefined;
+                    image?: string | undefined;
+                }> & zod.ZodObject<{
+                    handle: zod.ZodString;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    handle: string;
+                }, {
+                    handle: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            name: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            image: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                user: any;
+            }>;
+            path: "/update-user";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    name: zod.ZodOptional<zod.ZodString>;
+                    image: zod.ZodOptional<zod.ZodString>;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    name?: string | undefined;
+                    image?: string | undefined;
+                }, {
+                    name?: string | undefined;
+                    image?: string | undefined;
+                }> & zod.ZodObject<{
+                    handle: zod.ZodString;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    handle: string;
+                }, {
+                    handle: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            name: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                            image: {
+                                                type: string;
+                                                description: string;
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        deleteUser: {
+            <C extends [better_call.Context<"/delete-user", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : null>;
+            path: "/delete-user";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        forgetPasswordCallback: {
+            <C extends [better_call.Context<"/reset-password/:token", {
+                method: "GET";
+                query: zod.ZodObject<{
+                    callbackURL: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    callbackURL: string;
+                }, {
+                    callbackURL: string;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                token: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : never>;
+            path: "/reset-password/:token";
+            options: {
+                method: "GET";
+                query: zod.ZodObject<{
+                    callbackURL: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    callbackURL: string;
+                }, {
+                    callbackURL: string;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                token: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        listSessions: {
+            <C extends [better_call.Context<"/list-sessions", {
+                method: "GET";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "array";
+                                            items: {
+                                                type: string;
+                                                properties: {
+                                                    token: {
+                                                        type: string;
+                                                    };
+                                                    userId: {
+                                                        type: string;
+                                                    };
+                                                    expiresAt: {
+                                                        type: string;
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : better_auth.Prettify<{
+                id: string;
+                userId: string;
+                createdAt: Date;
+                updatedAt: Date;
+                expiresAt: Date;
+                token: string;
+                ipAddress?: string | null | undefined | undefined;
+                userAgent?: string | null | undefined | undefined;
+            }>[]>;
+            path: "/list-sessions";
+            options: {
+                method: "GET";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "array";
+                                            items: {
+                                                type: string;
+                                                properties: {
+                                                    token: {
+                                                        type: string;
+                                                    };
+                                                    userId: {
+                                                        type: string;
+                                                    };
+                                                    expiresAt: {
+                                                        type: string;
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        revokeSession: {
+            <C extends [better_call.Context<"/revoke-session", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    token: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    token: string;
+                }, {
+                    token: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            token: {
+                                                type: string;
+                                            };
+                                        };
+                                        required: string[];
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/revoke-session";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    token: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    token: string;
+                }, {
+                    token: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        requestBody: {
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object";
+                                        properties: {
+                                            token: {
+                                                type: string;
+                                            };
+                                        };
+                                        required: string[];
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        revokeSessions: {
+            <C extends [better_call.Context<"/revoke-sessions", {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/revoke-sessions";
+            options: {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                requireHeaders: true;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        revokeOtherSessions: {
+            <C extends [better_call.Context<"/revoke-other-sessions", {
+                method: "POST";
+                requireHeaders: true;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/revoke-other-sessions";
+            options: {
+                method: "POST";
+                requireHeaders: true;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        linkSocialAccount: {
+            <C extends [better_call.Context<"/link-social", {
+                method: "POST";
+                requireHeaders: true;
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                }, "strip", zod.ZodTypeAny, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    callbackURL?: string | undefined;
+                }, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    callbackURL?: string | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                url: string;
+                redirect: boolean;
+            }>;
+            path: "/link-social";
+            options: {
+                method: "POST";
+                requireHeaders: true;
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                }, "strip", zod.ZodTypeAny, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    callbackURL?: string | undefined;
+                }, {
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    callbackURL?: string | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        listUserAccounts: {
+            <C extends [(better_call.Context<"/list-accounts", {
+                method: "GET";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "array";
+                                            items: {
+                                                type: string;
+                                                properties: {
+                                                    id: {
+                                                        type: string;
+                                                    };
+                                                    provider: {
+                                                        type: string;
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                provider: string;
+            }[]>;
+            path: "/list-accounts";
+            options: {
+                method: "GET";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "array";
+                                            items: {
+                                                type: string;
+                                                properties: {
+                                                    id: {
+                                                        type: string;
+                                                    };
+                                                    provider: {
+                                                        type: string;
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    };
+    options: {
+        appName: string;
+        database: (options: better_auth.BetterAuthOptions) => {
+            id: string;
+            create<T extends Record<string, any>, R = T>(data: {
+                model: string;
+                data: T;
+                select?: string[];
+            }): Promise<any>;
+            findOne<T>(data: {
+                model: string;
+                where: better_auth.Where[];
+                select?: string[];
+            }): Promise<any>;
+            findMany<T>(data: {
+                model: string;
+                where?: better_auth.Where[];
+                limit?: number;
+                sortBy?: {
+                    field: string;
+                    direction: "asc" | "desc";
+                };
+                offset?: number;
+            }): Promise<any[]>;
+            update<T>(data: {
+                model: string;
+                where: better_auth.Where[];
+                update: Record<string, any>;
+            }): Promise<any>;
+            updateMany(data: {
+                model: string;
+                where: better_auth.Where[];
+                update: Record<string, any>;
+            }): Promise<any>;
+            delete<T>(data: {
+                model: string;
+                where: better_auth.Where[];
+            }): Promise<void>;
+            deleteMany(data: {
+                model: string;
+                where: better_auth.Where[];
+            }): Promise<any>;
+            options: better_auth_adapters_drizzle.DrizzleAdapterConfig;
+        };
+        basePath: string;
+        trustedOrigins: string[];
+        user: {
+            additionalFields: {
+                handle: {
+                    type: "string";
+                };
+            };
+        };
+        accounts: {
+            accountLinking: {
+                enabled: boolean;
+                trustedProviders: string[];
+            };
+        };
+        socialProviders: {
+            google: {
+                clientId: string;
+                clientSecret: string;
+            };
+            github: {
+                clientId: string;
+                clientSecret: string;
+            };
+            apple: {
+                clientId: string;
+                clientSecret: string;
+            } | undefined;
+        };
+        plugins: {
+            id: "custom-session";
+            endpoints: {
+                getSession: {
+                    <C extends [(better_call.Context<"/get-session", {
+                        method: "GET";
+                        metadata: {
+                            CUSTOM_SESSION: boolean;
+                        };
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        user: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image?: string | null | undefined | undefined;
+                        };
+                        session: {
+                            id: string;
+                            userId: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined | undefined;
+                            userAgent?: string | null | undefined | undefined;
+                        };
+                        invitation: {
+                            code: string;
+                            createdAt: Date | null;
+                            fromUserId: string;
+                            toUserId: string | null;
+                        } | undefined;
+                        role: "user" | "trial";
+                    } | null>;
+                    path: "/get-session";
+                    options: {
+                        method: "GET";
+                        metadata: {
+                            CUSTOM_SESSION: boolean;
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        }[];
+    };
+    $context: Promise<better_auth.AuthContext>;
+    $Infer: {
+        Session: {
+            session: {
+                id: string;
+                userId: string;
+                createdAt: Date;
+                updatedAt: Date;
+                expiresAt: Date;
+                token: string;
+                ipAddress?: string | null | undefined | undefined;
+                userAgent?: string | null | undefined | undefined;
+            };
+            user: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                emailVerified: boolean;
+                name: string;
+                image?: string | null | undefined | undefined;
+                handle: string;
+            };
+        };
+    };
+};
+
+type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
+
 declare const _routes: hono_hono_base.HonoBase<Env, ({
     "/better-auth/*": {
         $get: {
             input: {};
             output: {};
-            outputFormat: hono_types.ResponseFormat;
+            outputFormat: string;
             status: hono_utils_http_status.StatusCode;
         };
     };
@@ -6095,7 +9159,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $post: {
             input: {};
             output: {};
-            outputFormat: hono_types.ResponseFormat;
+            outputFormat: string;
             status: hono_utils_http_status.StatusCode;
         };
     };
@@ -6104,7 +9168,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $get: {
             input: {
                 query: {
-                    type?: "received" | "checking" | "completed" | "incomplete" | "all" | "audit" | undefined;
+                    type?: "received" | "checking" | "completed" | "incomplete" | "audit" | "all" | undefined;
                 };
             };
             output: {
@@ -6192,10 +9256,19 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     userId: string;
                     rules?: {
                         name: string;
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[] | {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[][];
                         result: {
-                            summary?: boolean | undefined;
                             disabled?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            summary?: boolean | undefined;
                             readability?: boolean | undefined;
                             sourceContent?: boolean | undefined;
                             silence?: boolean | undefined;
@@ -6207,20 +9280,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "all" | "content" | "author" | "url" | "order";
+                                field: "title" | "content" | "all" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                             webhooks?: string[] | undefined;
                         };
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[] | {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[][];
                     }[] | null | undefined;
                 } | undefined;
             };
@@ -6235,10 +9299,19 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     rules?: {
                         name: string;
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[] | {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[][];
                         result: {
-                            summary?: boolean | undefined;
                             disabled?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            summary?: boolean | undefined;
                             readability?: boolean | undefined;
                             sourceContent?: boolean | undefined;
                             silence?: boolean | undefined;
@@ -6250,20 +9323,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "all" | "content" | "author" | "url" | "order";
+                                field: "title" | "content" | "all" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                             webhooks?: string[] | undefined;
                         };
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[] | {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category" | "entry_title" | "entry_content" | "entry_url" | "entry_author" | "entry_media_length";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[][];
                     }[] | null | undefined;
                 };
             };
@@ -6631,14 +9695,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         lang: string;
                         routes: {
                             [x: string]: {
+                                path: string;
+                                example: string;
                                 description: string;
+                                name: string;
+                                categories: string[];
                                 parameters: {
                                     [x: string]: string;
                                 };
-                                path: string;
-                                example: string;
-                                name: string;
-                                categories: string[];
                                 maintainers: string[];
                                 location: string;
                                 view?: number | undefined;
@@ -6749,9 +9813,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         createdAt: string;
                     } | undefined;
                     settings?: {
-                        summary?: boolean | undefined;
                         disabled?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        summary?: boolean | undefined;
                         readability?: boolean | undefined;
                         sourceContent?: boolean | undefined;
                         silence?: boolean | undefined;
@@ -6875,7 +9939,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    total: number;
                     users: {
                         [x: string]: {
                             name: string | null;
@@ -6888,6 +9951,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         userIds: string[];
                         readCount: number;
                     } | null;
+                    total: number;
                 };
             };
             outputFormat: "json" | "text";
@@ -6901,9 +9965,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 query: {
                     insertedAfter: number;
                     view?: number | undefined;
-                    feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
                     read?: string | undefined;
+                    feedIdList?: string[] | undefined;
                 };
             };
             output: {
@@ -6924,13 +9988,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     view?: number | undefined;
-                    feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
                     read?: boolean | undefined;
+                    listId?: string | undefined;
                     limit?: number | undefined;
+                    feedIdList?: string[] | undefined;
                     publishedAfter?: string | undefined;
                     publishedBefore?: string | undefined;
-                    listId?: string | undefined;
                     collected?: boolean | undefined;
                     isCollection?: boolean | undefined;
                     isArchived?: boolean | undefined;
@@ -7011,9 +10075,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         createdAt: string;
                     } | undefined;
                     settings?: {
-                        summary?: boolean | undefined;
                         disabled?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        summary?: boolean | undefined;
                         readability?: boolean | undefined;
                         sourceContent?: boolean | undefined;
                         silence?: boolean | undefined;
@@ -7193,8 +10257,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: {
                     json: string;
-                    description: string;
                     xml: string;
+                    description: string;
                     content: string;
                 };
             };
@@ -7308,6 +10372,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             }[] | null | undefined;
                         } | null | undefined;
                     }[];
+                    readCount: number;
                     feed: {
                         type: "feed";
                         id: string;
@@ -7339,7 +10404,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
-                    readCount: number;
                     subscription?: {
                         title: string | null;
                         userId: string;
@@ -7552,10 +10616,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     view?: number | undefined;
-                    feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
-                    inboxId?: string | undefined;
                     listId?: string | undefined;
+                    feedIdList?: string[] | undefined;
+                    inboxId?: string | undefined;
                     startTime?: number | undefined;
                     endTime?: number | undefined;
                 };
@@ -7683,6 +10747,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     userId: string;
                     view: number;
                     feedId: string;
+                    isPrivate: boolean;
                     lists: {
                         type: "list";
                         id: string;
@@ -7734,7 +10799,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             updatedAt: string;
                         } | null | undefined;
                     };
-                    isPrivate: boolean;
                     listId: string;
                     lastViewedAt: string | null;
                     category?: string | undefined;
@@ -7744,7 +10808,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     view: number;
                     category: string | null;
                     feedId: string;
-                    inboxId: string;
                     isPrivate: boolean;
                     inboxes: {
                         type: "inbox";
@@ -7764,6 +10827,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             updatedAt: string;
                         } | null | undefined;
                     };
+                    inboxId: string;
                 })[];
             };
             outputFormat: "json" | "text";
@@ -7796,9 +10860,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     url?: string | undefined;
-                    feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
                     listId?: string | undefined;
+                    feedIdList?: string[] | undefined;
                 };
             };
             output: {
@@ -7889,8 +10953,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: {
                     tx: string | null;
-                    rank: string | null;
                     amount: string;
+                    rank: string | null;
                     detail: {
                         "Invitations count": number;
                         "Purchase lists cost": number;
@@ -7948,8 +11012,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $post: {
             input: {
                 json: {
-                    entryId: string;
                     amount: string;
+                    entryId: string;
                 };
             };
             output: {
@@ -7971,8 +11035,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     fromUserId?: string | undefined;
                     toUserId?: string | undefined;
                     hash?: string | undefined;
-                    fromOrToUserId?: string | undefined;
                     toFeedId?: string | undefined;
+                    fromOrToUserId?: string | undefined;
                     createdAfter?: string | undefined;
                 };
             };
@@ -7981,10 +11045,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
                     createdAt: string;
+                    powerToken: string;
                     fromUserId: string | null;
                     toUserId: string | null;
                     hash: string;
-                    powerToken: string;
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
@@ -8063,8 +11127,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $post: {
             input: {
                 json: {
-                    address: string;
                     amount: string;
+                    address: string;
                 };
             };
             output: {
@@ -8098,9 +11162,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 data: {
                     createdAt: string;
                     userId: string;
+                    powerToken: string;
                     addressIndex: number;
                     address: string | null;
-                    powerToken: string;
                     dailyPowerToken: string;
                     cashablePowerToken: string;
                     level: {
@@ -8156,9 +11220,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         updatedAt: string;
                     };
                     userId: string;
-                    address: string;
-                    powerToken: string;
                     rank: number | null;
+                    powerToken: string;
+                    address: string;
                     level: number | null;
                     prevActivityPoints: number | null;
                     activityPoints: number | null;
@@ -8179,6 +11243,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
+                    readCount: number;
                     list: {
                         type: "list";
                         id: string;
@@ -8231,7 +11296,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         } | null | undefined;
                     };
                     subscriptionCount: number;
-                    readCount: number;
                     feedCount: number;
                     subscription?: {
                         title: string | null;
@@ -8818,15 +11882,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $post: {
             input: {
                 json: {
-                    feedId: string;
                     amount: string;
+                    feedId: string;
                 };
             };
             output: {
                 code: 0;
                 data: {
-                    transactionHash: string;
                     expiresAt: string;
+                    transactionHash: string;
                 };
             };
             outputFormat: "json" | "text";
@@ -8880,4 +11944,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/probes">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, accountAuthjs, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, sessionAuthjs, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

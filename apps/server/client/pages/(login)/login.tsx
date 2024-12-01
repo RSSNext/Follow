@@ -1,23 +1,19 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
 import { apiClient } from "@client/lib/api-fetch"
+import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { authProvidersConfig } from "@follow/constants"
-import { loginHandler } from "@follow/shared/auth"
+import { loginHandler, signOut } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
-import { SessionProvider, signOut, useSession } from "@hono/auth-js/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router"
 
 export function Component() {
-  return (
-    <SessionProvider>
-      <Login />
-    </SessionProvider>
-  )
+  return <Login />
 }
 
 function Login() {

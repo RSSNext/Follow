@@ -1,4 +1,5 @@
 import { getSession } from "@follow/shared/auth"
+import type { AuthSession } from "@follow/shared/hono"
 import type { FetchError } from "ofetch"
 
 import { useAuthQuery } from "~/hooks/common"
@@ -30,7 +31,7 @@ export const useSession = (options?: { enabled?: boolean }) => {
   const fetchError = error as FetchError
 
   return {
-    session: data?.data,
+    session: data?.data as AuthSession,
     ...rest,
     status: isLoading
       ? "loading"

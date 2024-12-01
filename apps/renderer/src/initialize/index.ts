@@ -1,8 +1,6 @@
 import { initializeDayjs } from "@follow/components/dayjs"
 import { registerGlobalContext } from "@follow/shared/bridge"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { env } from "@follow/shared/env"
-import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { enableMapSet } from "immer"
 
@@ -63,12 +61,6 @@ export const initializeApp = async () => {
   window.version = APP_VERSION
 
   const now = Date.now()
-  // Initialize the auth config first
-  authConfigManager.setConfig({
-    baseUrl: env.VITE_API_URL,
-    basePath: "/auth",
-    credentials: "include",
-  })
   initializeDayjs()
   registerHistoryStack()
 

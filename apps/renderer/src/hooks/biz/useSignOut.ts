@@ -1,10 +1,9 @@
-import { env } from "@follow/shared/env"
+import { signOut } from "@follow/shared/auth"
 import { clearStorage } from "@follow/utils/ns"
-import { signOut } from "@hono/auth-js/react"
 import { useCallback } from "react"
 
 import { setWhoami } from "~/atoms/user"
-import { isWebBuild, QUERY_PERSIST_KEY } from "~/constants"
+import { QUERY_PERSIST_KEY } from "~/constants"
 import { tipcClient } from "~/lib/client"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
@@ -22,7 +21,5 @@ export const useSignOut = () =>
     // clear local store data
     await Promise.allSettled([clearLocalPersistStoreData(), tipcClient?.cleanAuthSessionToken()])
     // Sign out
-    await signOut({
-      callbackUrl: isWebBuild ? env.VITE_WEB_URL : undefined,
-    })
+    await signOut()
   }, [])
