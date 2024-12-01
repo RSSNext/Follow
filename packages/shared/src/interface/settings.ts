@@ -64,11 +64,6 @@ export interface IntegrationSettings {
   instapaperUsername: string
   instapaperPassword: string
 
-  // omnivore
-  enableOmnivore: boolean
-  omnivoreEndpoint: string
-  omnivoreToken: string
-
   // obsidian
   enableObsidian: boolean
   obsidianVaultPath: string

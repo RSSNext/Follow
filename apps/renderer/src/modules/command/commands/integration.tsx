@@ -2,7 +2,6 @@ import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
-  SimpleIconsOmnivore,
   SimpleIconsOutline,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
@@ -29,7 +28,6 @@ export const useRegisterIntegrationCommands = () => {
   useRegisterEagleCommands()
   useRegisterReadwiseCommands()
   useRegisterInstapaperCommands()
-  useRegisterOmnivoreCommands()
   useRegisterObsidianCommands()
   useRegisterOutlineCommands()
 }
@@ -232,90 +230,6 @@ const useRegisterInstapaperCommands = () => {
         }),
     {
       deps: [isInstapaperAvailable],
-    },
-  )
-}
-
-const useRegisterOmnivoreCommands = () => {
-  const { t } = useTranslation()
-
-  const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
-  const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
-  const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
-
-  const isOmnivoreAvailable = enableOmnivore && !!omnivoreToken && !!omnivoreEndpoint
-
-  useRegisterCommandEffect(
-    !isOmnivoreAvailable
-      ? []
-      : defineFollowCommand({
-          id: COMMAND_ID.integration.saveToOmnivore,
-          label: t("entry_actions.save_to_omnivore"),
-          icon: <SimpleIconsOmnivore />,
-          run: async ({ entryId }) => {
-            const entry = useEntryStore.getState().flatMapEntries[entryId]
-            if (!entry) {
-              toast.error("Failed to save to Omnivore: entry is not available", { duration: 3000 })
-              return
-            }
-            const saveUrlQuery = `
-  mutation SaveUrl($input: SaveUrlInput!) {
-    saveUrl(input: $input) {
-      ... on SaveSuccess {
-        url
-        clientRequestId
-      }
-      ... on SaveError {
-        errorCodes
-        message
-      }
-    }
-  }
-`
-
-            window.analytics?.capture("integration", {
-              type: "omnivore",
-              event: "save",
-            })
-            try {
-              const data = await ofetch(omnivoreEndpoint, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: omnivoreToken,
-                },
-                body: {
-                  query: saveUrlQuery,
-                  variables: {
-                    input: {
-                      url: entry.entries.url,
-                      source: "Follow",
-                      clientRequestId: globalThis.crypto.randomUUID(),
-                      publishedAt: new Date(entry.entries.publishedAt),
-                    },
-                  },
-                },
-              })
-              toast.success(
-                <>
-                  {t("entry_actions.saved_to_omnivore")},{" "}
-                  <a target="_blank" className="underline" href={data.data.saveUrl.url}>
-                    view
-                  </a>
-                </>,
-                {
-                  duration: 3000,
-                },
-              )
-            } catch {
-              toast.error(t("entry_actions.failed_to_save_to_omnivore"), {
-                duration: 3000,
-              })
-            }
-          },
-        }),
-    {
-      deps: [isOmnivoreAvailable],
     },
   )
 }
