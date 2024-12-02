@@ -13,7 +13,7 @@ import { styles } from "./wrapper.shared"
 const noop = async () => {}
 
 export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperProps>(
-  ({ children, onPullToRefresh }, ref) => {
+  ({ children, onPullToRefresh, onScroll }, ref) => {
     const view = useRouteParamsSelector((state) => state.view)
 
     const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null)
@@ -26,6 +26,7 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
                 className="h-full overflow-y-auto"
                 ref={setScrollElement}
                 id={ENTRY_COLUMN_LIST_SCROLLER_ID}
+                onScroll={onScroll}
               >
                 {children}
               </div>
