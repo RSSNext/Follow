@@ -21,7 +21,7 @@ export const FeedDailyModalContent = () => {
         ))}
       </TabsList>
 
-      <div className="flex grow flex-col items-center overflow-auto">
+      <div className="-mx-2 flex grow flex-col items-center overflow-auto lg:mx-0">
         {tabs.map((tab: any) => (
           <TabsContent
             key={tab}
