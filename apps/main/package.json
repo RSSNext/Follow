@@ -35,7 +35,7 @@
     "electron-log": "5.2.3",
     "electron-squirrel-startup": "1.0.1",
     "electron-updater": "^6.3.9",
-    "es-toolkit": "1.27.0",
+    "es-toolkit": "1.29.0",
     "fast-folder-size": "2.3.0",
     "font-list": "1.5.1",
     "i18next": "^24.0.2",
@@ -51,9 +51,9 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
-    "@types/node": "^22.10.0",
+    "@types/node": "^22.10.1",
     "electron": "33.2.1",
     "electron-devtools-installer": "3.2.0",
-    "hono": "4.6.11"
+    "hono": "4.6.12"
   }
 }

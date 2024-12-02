@@ -15,7 +15,7 @@ export const EntryTranslation: Component<{
 
   useOverlay?: boolean
   isHTML?: boolean
-}> = ({ source, target, showTranslation, className, side, useOverlay, isHTML }) => {
+}> = ({ source, target, showTranslation = true, className, side, useOverlay, isHTML }) => {
   let nextTarget = target
   if (source === target) {
     nextTarget = undefined

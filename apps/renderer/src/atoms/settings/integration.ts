@@ -14,11 +14,6 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   instapaperUsername: "",
   instapaperPassword: "",
 
-  // omnivore
-  enableOmnivore: false,
-  omnivoreEndpoint: "",
-  omnivoreToken: "",
-
   // obsidian
   enableObsidian: false,
   obsidianVaultPath: "",

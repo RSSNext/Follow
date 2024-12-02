@@ -36,7 +36,7 @@
     "better-auth": "1.0.7",
     "drizzle-orm": "^0.36.4",
     "electron": "^33.2.1",
-    "hono": "^4.6.11",
+    "hono": "^4.6.12",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sonner": "1.7.0",
