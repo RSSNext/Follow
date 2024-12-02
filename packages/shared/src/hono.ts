@@ -2,6 +2,7 @@ import * as hono_hono_base from 'hono/hono-base';
 import * as hono_types from 'hono/types';
 import * as hono_utils_http_status from 'hono/utils/http-status';
 import { HttpBindings } from '@hono/node-server';
+import * as better_call from 'better-call';
 import * as zod from 'zod';
 import { z } from 'zod';
 import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
@@ -10,11 +11,34 @@ import * as drizzle_orm from 'drizzle-orm';
 import { InferInsertModel, SQL } from 'drizzle-orm';
 import * as better_auth_adapters_drizzle from 'better-auth/adapters/drizzle';
 import * as better_auth from 'better-auth';
-import * as better_call from 'better-call';
 
 type Env = {
     Bindings: HttpBindings;
 };
+
+declare const authPlugins: {
+    id: "getProviders";
+    endpoints: {
+        getProviders: {
+            <C extends [(better_call.Context<"/get-providers", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                [k: string]: {
+                    id: string;
+                    name: string;
+                };
+            }>;
+            path: "/get-providers";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    };
+}[];
 
 declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "achievements";
@@ -6547,6 +6571,24 @@ declare const auth: {
             path: "/get-session";
         };
     } & {
+        getProviders: {
+            <C extends [(better_call.Context<"/get-providers", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                [k: string]: {
+                    id: string;
+                    name: string;
+                };
+            }>;
+            path: "/get-providers";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
         signInSocial: {
             <C extends [better_call.Context<"/sign-in/social", {
                 method: "POST";
@@ -9065,7 +9107,29 @@ declare const auth: {
                 clientSecret: string;
             } | undefined;
         };
-        plugins: {
+        plugins: ({
+            id: "getProviders";
+            endpoints: {
+                getProviders: {
+                    <C extends [(better_call.Context<"/get-providers", {
+                        method: "GET";
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        [k: string]: {
+                            id: string;
+                            name: string;
+                        };
+                    }>;
+                    path: "/get-providers";
+                    options: {
+                        method: "GET";
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        } | {
             id: "custom-session";
             endpoints: {
                 getSession: {
@@ -9115,7 +9179,7 @@ declare const auth: {
                     headers: Headers;
                 };
             };
-        }[];
+        })[];
     };
     $context: Promise<better_auth.AuthContext>;
     $Infer: {
@@ -11945,4 +12009,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/probes">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, accountAuthjs, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, sessionAuthjs, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, accountAuthjs, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, sessionAuthjs, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
