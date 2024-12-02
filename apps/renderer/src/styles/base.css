@@ -51,3 +51,7 @@ button {
 ::selection {
   @apply bg-accent/80 text-white;
 }
+
+#react-scan-toolbar {
+  @apply !hidden lg:!block;
+}

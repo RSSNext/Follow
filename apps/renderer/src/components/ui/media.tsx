@@ -257,7 +257,11 @@ const MediaImpl: FC<MediaProps> = ({
       )
     } else {
       return (
-        <div className={cn("relative rounded", className)} style={props.style}>
+        <div
+          className={cn("relative rounded", className)}
+          data-state={mediaLoadState}
+          style={props.style}
+        >
           <span
             className={cn(
               "relative inline-block max-w-full bg-theme-placeholder-image",

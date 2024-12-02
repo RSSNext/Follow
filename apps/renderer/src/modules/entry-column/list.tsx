@@ -70,6 +70,7 @@ export type EntryListProps = {
   refetch: () => void
 
   groupCounts?: number[]
+  gap?: number
 
   Footer?: FC | ReactNode
 
@@ -93,6 +94,7 @@ export const EntryList: FC<EntryListProps> = memo(
     Footer,
     listRef,
     onRangeChange,
+    gap,
   }) => {
     // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
     const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback((e) => {
@@ -121,6 +123,7 @@ export const EntryList: FC<EntryListProps> = memo(
       count: entriesIds.length + 1,
       estimateSize: () => 112,
       overscan: 5,
+      gap,
       getScrollElement: () => scrollRef,
       initialOffset: offsetCache.get(feedId) ?? 0,
       initialMeasurementsCache: measurementsCache.get(feedId) ?? [],

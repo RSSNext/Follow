@@ -21,6 +21,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
       const idSlice = entriesIds?.slice(startIndex, endIndex)
 
       indexKeyIsCalled.add(`${startIndex}-${endIndex}`)
+
       if (!idSlice) return
 
       batchMarkRead(idSlice)

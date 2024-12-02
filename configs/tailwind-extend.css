@@ -395,3 +395,27 @@
     animation: rocketAnimation 1s infinite ease-out;
   }
 }
+
+@layer components {
+  .mask-b {
+    mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 20px), rgba(255, 255, 255, 0) 100%);
+  }
+
+  .mask-b-lg {
+    mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 50px), rgba(255, 255, 255, 0) 100%);
+  }
+
+  .mask-b-xl {
+    mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 70px), rgba(255, 255, 255, 0) 100%);
+  }
+
+  .mask-horizontal {
+    mask-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 14%,
+      rgba(255, 255, 255, 1) 86%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+}

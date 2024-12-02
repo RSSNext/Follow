@@ -241,6 +241,14 @@ export const parseHtml = (
               language: language.toLowerCase(),
             })
           },
+          figure: ({ node, ...props }) =>
+            createElement(
+              "figure",
+              {
+                className: "max-w-full",
+              },
+              props.children,
+            ),
           table: ({ node, ...props }) =>
             createElement(
               "div",

@@ -23,6 +23,11 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   outlineEndpoint: "",
   outlineToken: "",
   outlineCollection: "",
+
+  // readeck
+  enableReadeck: false,
+  readeckEndpoint: "",
+  readeckToken: "",
 })
 
 export const {

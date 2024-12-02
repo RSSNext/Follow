@@ -152,7 +152,7 @@ export function Recommendations({
 
       <div
         className={cn(
-          "z-[9] my-3 flex w-full flex-col items-end gap-4 bg-theme-background sm:flex-row sm:items-center",
+          "z-[9] my-3 flex w-full flex-col items-end gap-4 sm:flex-row sm:items-center",
           headerClassName,
         )}
       >
