@@ -46,6 +46,22 @@ export const readerRoute = {
       }
     }),
 
+  getVoices: t.procedure.action(async ({ context: { sender } }) => {
+    const window = BrowserWindow.fromWebContents(sender)
+    try {
+      const voices = await tts.getVoices()
+      return voices
+    } catch (error) {
+      console.error("Failed to get voices", error)
+      if (!window) return
+      if (error instanceof Error) {
+        void callWindowExpose(window).toast.error(error.message, { duration: 1000 })
+        return
+      }
+      callWindowExpose(window).toast.error("Failed to get voices", { duration: 1000 })
+    }
+  }),
+
   setVoice: t.procedure.input<string>().action(async ({ input, context: { sender } }) => {
     const window = BrowserWindow.fromWebContents(sender)
     if (!window) return
@@ -63,22 +79,6 @@ export const readerRoute = {
           duration: 1000,
         })
       })
-  }),
-
-  getVoices: t.procedure.action(async ({ context: { sender } }) => {
-    const window = BrowserWindow.fromWebContents(sender)
-    try {
-      const voices = await tts.getVoices()
-      return voices
-    } catch (error) {
-      console.error("Failed to get voices", error)
-      if (!window) return
-      if (error instanceof Error) {
-        void callWindowExpose(window).toast.error(error.message, { duration: 1000 })
-        return
-      }
-      callWindowExpose(window).toast.error("Failed to get voices", { duration: 1000 })
-    }
   }),
 
   detectCodeStringLanguage: t.procedure
