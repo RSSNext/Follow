@@ -39,7 +39,7 @@ export const TransactionsSection: Component = ({ className }) => {
         })}
       </p>
       <Tabs value={type} onValueChange={(val) => setType(val)}>
-        <TabsList className="relative -ml-2 border-b-transparent">
+        <TabsList className="relative border-b-transparent">
           {tabs.map((tab) => (
             <TabsTrigger key={tab} value={tab} className="py-0">
               {t(`wallet.transactions.types.${tab}`)}

@@ -75,3 +75,7 @@
     @apply print:!hidden;
   }
 }
+
+i {
+  @apply select-none;
+}

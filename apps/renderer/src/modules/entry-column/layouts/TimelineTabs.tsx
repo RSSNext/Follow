@@ -46,6 +46,7 @@ export const TimelineTabs = () => {
 
   return (
     <Tabs
+      variant={"rounded"}
       className="-ml-6 -mr-4 mt-2 flex overflow-x-auto overflow-y-hidden pl-3 scrollbar-none"
       value={timeline}
       onValueChange={(val) => {
@@ -59,11 +60,11 @@ export const TimelineTabs = () => {
       }}
     >
       <TabsList className="justify-start border-b-0 [&_span]:text-xs">
-        <TabsTrigger variant={"rounded"} className="p-0" value="">
+        <TabsTrigger className="p-0" value="">
           <span>Yours</span>
         </TabsTrigger>
         {listsData.map((s) => (
-          <TabsTrigger variant={"rounded"} className="p-0" key={s.listId} value={s.listId!}>
+          <TabsTrigger className="p-0" key={s.listId} value={s.listId!}>
             <ListItem
               listId={s.listId!}
               view={view}
@@ -74,7 +75,6 @@ export const TimelineTabs = () => {
         ))}
         {categoriesData.map((s) => (
           <TabsTrigger
-            variant={"rounded"}
             key={s}
             value={s}
             onClick={() => {
@@ -90,7 +90,7 @@ export const TimelineTabs = () => {
           </TabsTrigger>
         ))}
         {inboxData.map((s) => (
-          <TabsTrigger variant={"rounded"} key={s.inboxId} value={s.inboxId!}>
+          <TabsTrigger key={s.inboxId} value={s.inboxId!}>
             <InboxItem
               inboxId={s.inboxId!}
               view={view}
