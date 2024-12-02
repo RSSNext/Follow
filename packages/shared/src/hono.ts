@@ -47,14 +47,8 @@ declare const authPlugins: ({
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                id: string;
+                ck: string;
                 userId: string;
-                createdAt: Date;
-                updatedAt: Date;
-                expiresAt: Date;
-                token: string;
-                ipAddress?: string | null | undefined;
-                userAgent?: string | null | undefined;
             } | null>;
             path: "/create-session";
             options: {
@@ -6621,14 +6615,8 @@ declare const auth: {
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                id: string;
+                ck: string;
                 userId: string;
-                createdAt: Date;
-                updatedAt: Date;
-                expiresAt: Date;
-                token: string;
-                ipAddress?: string | null | undefined;
-                userAgent?: string | null | undefined;
             } | null>;
             path: "/create-session";
             options: {
@@ -9236,14 +9224,8 @@ declare const auth: {
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
                     }] ? Response : {
-                        id: string;
+                        ck: string;
                         userId: string;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        expiresAt: Date;
-                        token: string;
-                        ipAddress?: string | null | undefined;
-                        userAgent?: string | null | undefined;
                     } | null>;
                     path: "/create-session";
                     options: {

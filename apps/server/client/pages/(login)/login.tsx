@@ -40,7 +40,7 @@ function Login() {
     const { data } = await createSession()
     if (!data) return null
     return {
-      url: `${DEEPLINK_SCHEME}auth?token=${data.token}&userId=${data.userId}`,
+      url: `${DEEPLINK_SCHEME}auth?ck=${data.ck}&userId=${data.userId}`,
       userId: data.userId,
     }
   }, [])

@@ -19,7 +19,10 @@ export const useSignOut = () =>
     clearStorage()
     window.analytics?.reset()
     // clear local store data
-    await Promise.allSettled([clearLocalPersistStoreData(), tipcClient?.cleanAuthSessionToken()])
+    await Promise.allSettled([
+      clearLocalPersistStoreData(),
+      tipcClient?.cleanBetterAuthSessionCookie(),
+    ])
     // Sign out
     await signOut()
   }, [])

@@ -14,7 +14,7 @@ import { updateProxy } from "./lib/proxy"
 import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
 import { registerAppTray } from "./lib/tray"
-import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
+import { setBetterAuthSessionCookie, updateNotificationsToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { cleanupOldRender } from "./updater/hot-updater"
 import {
@@ -189,15 +189,16 @@ function bootstrap() {
     const urlObj = new URL(url)
 
     if (urlObj.hostname === "auth" || urlObj.pathname === "//auth") {
-      const token = urlObj.searchParams.get("token")
+      const ck = urlObj.searchParams.get("ck")
       const userId = urlObj.searchParams.get("userId")
 
-      if (token && apiURL) {
-        setAuthSessionToken(token)
+      if (ck && apiURL) {
+        setBetterAuthSessionCookie(ck)
+        const cookie = atob(ck)
         mainWindow.webContents.session.cookies.set({
           url: apiURL,
-          name: "authjs.session-token",
-          value: token,
+          name: cookie.split("=")[0],
+          value: cookie.split("=")[1],
           secure: true,
           httpOnly: true,
           domain: new URL(apiURL).hostname,
