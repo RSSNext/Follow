@@ -40,13 +40,11 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 
   const isMobile = useMobile()
   const handleMouseEnter = useMemo(() => {
-    if (isMobile) return
     return () => setShowAction(true)
-  }, [isMobile])
+  }, [])
   const handleMouseLeave = useMemo(() => {
-    if (isMobile) return
     return () => setShowAction(false)
-  }, [isMobile])
+  }, [])
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -67,10 +65,10 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative flex px-2 py-4 lg:px-8",
+        "relative flex px-5 py-4 lg:px-8",
         "group",
         !asRead &&
-          "before:absolute before:left-0 before:top-10 before:block before:size-2 before:rounded-full before:bg-accent md:before:-left-2 lg:before:left-2",
+          "before:absolute before:left-1 before:top-8 before:block before:size-2 before:rounded-full before:bg-accent md:before:-left-2 lg:before:left-2",
       )}
     >
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
@@ -117,7 +115,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
         {!!media?.length && <SocialMediaGallery media={media} />}
       </div>
 
-      {showAction && (
+      {showAction && !isMobile && (
         <div className={"absolute right-1 top-1.5"}>
           <ActionBar entryId={entryId} />
         </div>
@@ -391,7 +389,8 @@ const CollapsedSocialMediaItem: Component<{
         <div className="absolute inset-x-0 bottom-0 flex justify-center py-2 duration-200">
           <MotionButtonBase
             type="button"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               setIsShowMore(true)
               collapsedItemCache.put(entryId, true)
             }}
