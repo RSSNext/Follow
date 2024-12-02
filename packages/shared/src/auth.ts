@@ -10,6 +10,10 @@ const serverPlugins = [
     id: "getProviders",
     $InferServerPlugin: {} as (typeof authPlugins)[0],
   },
+  {
+    id: "createSession",
+    $InferServerPlugin: {} as (typeof authPlugins)[1],
+  },
 ] satisfies BetterAuthClientPlugin[]
 
 const authClient = createAuthClient({
@@ -17,7 +21,7 @@ const authClient = createAuthClient({
   plugins: serverPlugins,
 })
 
-export const { signIn, signOut, getSession, getProviders } = authClient
+export const { signIn, signOut, getSession, getProviders, createSession } = authClient
 
 export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
 export type LoginRuntime = "browser" | "app"

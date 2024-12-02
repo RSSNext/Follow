@@ -1,11 +1,10 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
-import { apiClient } from "@client/lib/api-fetch"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { authProvidersConfig } from "@follow/constants"
-import { loginHandler, signOut } from "@follow/shared/auth"
+import { createSession, loginHandler, signOut } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -38,16 +37,18 @@ function Login() {
   }, [status])
 
   const getCallbackUrl = useCallback(async () => {
-    const { data } = await apiClient["auth-app"]["new-session"].$post({})
+    const { data } = await createSession()
+    if (!data) return null
     return {
-      url: `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}&userId=${data.userId}`,
+      url: `${DEEPLINK_SCHEME}auth?token=${data.token}&userId=${data.userId}`,
       userId: data.userId,
     }
   }, [])
 
   const handleOpenApp = useCallback(async () => {
-    const { url } = await getCallbackUrl()
-    window.open(url, "_top")
+    const callbackUrl = await getCallbackUrl()
+    if (!callbackUrl) return
+    window.open(callbackUrl.url, "_top")
   }, [getCallbackUrl])
 
   const onceRef = useRef(false)

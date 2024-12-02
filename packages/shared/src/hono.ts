@@ -16,7 +16,7 @@ type Env = {
     Bindings: HttpBindings;
 };
 
-declare const authPlugins: {
+declare const authPlugins: ({
     id: "getProviders";
     endpoints: {
         getProviders: {
@@ -38,7 +38,33 @@ declare const authPlugins: {
             headers: Headers;
         };
     };
-}[];
+} | {
+    id: "createSession";
+    endpoints: {
+        createSession: {
+            <C extends [(better_call.Context<"/create-session", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                userId: string;
+                createdAt: Date;
+                updatedAt: Date;
+                expiresAt: Date;
+                token: string;
+                ipAddress?: string | null | undefined;
+                userAgent?: string | null | undefined;
+            } | null>;
+            path: "/create-session";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    };
+})[];
 
 declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "achievements";
@@ -6589,6 +6615,28 @@ declare const auth: {
             method: better_call.Method | better_call.Method[];
             headers: Headers;
         };
+        createSession: {
+            <C extends [(better_call.Context<"/create-session", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                userId: string;
+                createdAt: Date;
+                updatedAt: Date;
+                expiresAt: Date;
+                token: string;
+                ipAddress?: string | null | undefined;
+                userAgent?: string | null | undefined;
+            } | null>;
+            path: "/create-session";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
         signInSocial: {
             <C extends [better_call.Context<"/sign-in/social", {
                 method: "POST";
@@ -9108,28 +9156,6 @@ declare const auth: {
             } | undefined;
         };
         plugins: ({
-            id: "getProviders";
-            endpoints: {
-                getProviders: {
-                    <C extends [(better_call.Context<"/get-providers", {
-                        method: "GET";
-                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
-                        asResponse: true;
-                    }] ? Response : {
-                        [k: string]: {
-                            id: string;
-                            name: string;
-                        };
-                    }>;
-                    path: "/get-providers";
-                    options: {
-                        method: "GET";
-                    };
-                    method: better_call.Method | better_call.Method[];
-                    headers: Headers;
-                };
-            };
-        } | {
             id: "custom-session";
             endpoints: {
                 getSession: {
@@ -9174,6 +9200,54 @@ declare const auth: {
                         metadata: {
                             CUSTOM_SESSION: boolean;
                         };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        } | {
+            id: "getProviders";
+            endpoints: {
+                getProviders: {
+                    <C extends [(better_call.Context<"/get-providers", {
+                        method: "GET";
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        [k: string]: {
+                            id: string;
+                            name: string;
+                        };
+                    }>;
+                    path: "/get-providers";
+                    options: {
+                        method: "GET";
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        } | {
+            id: "createSession";
+            endpoints: {
+                createSession: {
+                    <C extends [(better_call.Context<"/create-session", {
+                        method: "GET";
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        id: string;
+                        userId: string;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        expiresAt: Date;
+                        token: string;
+                        ipAddress?: string | null | undefined;
+                        userAgent?: string | null | undefined;
+                    } | null>;
+                    path: "/create-session";
+                    options: {
+                        method: "GET";
                     };
                     method: better_call.Method | better_call.Method[];
                     headers: Headers;

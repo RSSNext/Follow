@@ -1,3 +1,4 @@
+import { getProviders } from "@follow/shared/auth"
 import { useQuery } from "@tanstack/react-query"
 
 import { apiClient } from "~/lib/api-fetch"
@@ -16,7 +17,7 @@ export const users = {
 export const useAuthProviders = () => {
   return useQuery({
     queryKey: ["providers"],
-    queryFn: () => apiClient["auth-app"].providers.$get(),
+    queryFn: async () => (await getProviders()).data,
     placeholderData: {
       google: {
         id: "google",
