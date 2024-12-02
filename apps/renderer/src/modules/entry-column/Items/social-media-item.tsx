@@ -1,7 +1,9 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
-import { ActionButton } from "@follow/components/ui/button/index.js"
+import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
+import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import type { MediaModel } from "@follow/shared/hono"
+import { LRUCache } from "@follow/utils/lru-cache"
 import { cn } from "@follow/utils/utils"
 import { atom } from "jotai"
 import { useLayoutEffect, useMemo, useRef, useState } from "react"
@@ -50,7 +52,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
     if (ref.current) {
       jotaiStore.set(socialMediaContentWidthAtom, ref.current.offsetWidth)
     }
-  }, [ref.current])
+  }, [])
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
@@ -101,12 +103,14 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             </span>
           </div>
           <div className={cn("relative mt-1 text-base", !!entry.collections && "pr-5")}>
-            <EntryTranslation
-              className="cursor-auto select-text text-sm leading-relaxed prose-blockquote:mt-0 [&_br:last-child]:hidden"
-              source={content}
-              target={translation?.content}
-              isHTML
-            />
+            <CollapsedSocialMediaItem entryId={entryId}>
+              <EntryTranslation
+                className="cursor-auto select-text text-sm leading-relaxed prose-blockquote:mt-0 [&_br:last-child]:hidden"
+                source={content}
+                target={translation?.content}
+                isHTML
+              />
+            </CollapsedSocialMediaItem>
             {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
           </div>
         </div>
@@ -353,5 +357,52 @@ const SocialMediaGallery = ({ media }: { media: MediaModel[] }) => {
         })}
       </div>
     </div>
+  )
+}
+
+const collapsedHeight = 300
+const collapsedItemCache = new LRUCache<string, boolean>(100)
+const CollapsedSocialMediaItem: Component<{
+  entryId: string
+}> = ({ children, entryId }) => {
+  const [isOverflow, setIsOverflow] = useState(false)
+  const [isShowMore, setIsShowMore] = useState(() => collapsedItemCache.get(entryId) ?? false)
+  const ref = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    if (ref.current) {
+      setIsOverflow(ref.current.scrollHeight > collapsedHeight)
+    }
+  }, [children])
+
+  return (
+    <AutoResizeHeight spring className="relative">
+      <div
+        className={cn(
+          "relative",
+          !isShowMore && "max-h-[300px] overflow-hidden",
+          isShowMore && "h-auto",
+          !isShowMore && isOverflow && "mask-b-xl",
+        )}
+        ref={ref}
+      >
+        {children}
+      </div>
+      {isOverflow && !isShowMore && (
+        <div className="absolute inset-x-0 bottom-0 flex justify-center py-2 duration-200">
+          <MotionButtonBase
+            type="button"
+            onClick={() => {
+              setIsShowMore(true)
+              collapsedItemCache.put(entryId, true)
+            }}
+            aria-hidden
+            className="flex items-center justify-center text-xs"
+          >
+            <i className="i-mingcute-arrow-to-down-line" />
+            <span className="ml-2">Show more</span>
+          </MotionButtonBase>
+        </div>
+      )}
+    </AutoResizeHeight>
   )
 }
