@@ -44,7 +44,7 @@ export const DateItem = memo(({ date, view, isSticky }: DateItemProps) => {
   const className = tw`relative flex items-center text-sm lg:text-base gap-1 bg-background px-4 font-bold text-zinc-800 dark:text-neutral-400 h-7`
 
   if (view === FeedViewType.SocialMedia) {
-    return <SocialMediaDateItem date={date} className={className} />
+    return <SocialMediaDateItem date={date} className={className} isSticky={isSticky} />
   }
   return <UniversalDateItem date={date} className={className} isSticky={isSticky} />
 })
@@ -159,7 +159,15 @@ const DateItemInner: FC<DateItemInnerProps> = ({
     </div>
   )
 }
-const SocialMediaDateItem = ({ date, className }: { date: string; className?: string }) => {
+const SocialMediaDateItem = ({
+  date,
+  className,
+  isSticky,
+}: {
+  date: string
+  className?: string
+  isSticky?: boolean
+}) => {
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   return (
@@ -175,6 +183,7 @@ const SocialMediaDateItem = ({ date, className }: { date: string; className?: st
       date={dateObj}
       startTime={startOfDay}
       endTime={endOfDay}
+      isSticky={isSticky}
     />
   )
 }
