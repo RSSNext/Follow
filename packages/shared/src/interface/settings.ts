@@ -73,4 +73,9 @@ export interface IntegrationSettings {
   outlineEndpoint: string
   outlineToken: string
   outlineCollection: string
+
+  // readeck
+  enableReadeck: boolean
+  readeckEndpoint: string
+  readeckToken: string
 }
