@@ -116,11 +116,17 @@ export type SaveToOutlineCommand = Command<{
   fn: (payload: { entryId: string }) => void
 }>
 
+export type SaveToReadeckCommand = Command<{
+  id: typeof COMMAND_ID.integration.saveToReadeck
+  fn: (payload: { entryId: string }) => void
+}>
+
 export type IntegrationCommand =
   | SaveToEagleCommand
   | SaveToReadwiseCommand
   | SaveToInstapaperCommand
   | SaveToObsidianCommand
   | SaveToOutlineCommand
+  | SaveToReadeckCommand
 
 export type BasicCommand = EntryCommand | IntegrationCommand

@@ -4,6 +4,7 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
   SimpleIconsOutline,
+  SimpleIconsReadeck,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { useEffect } from "react"
@@ -149,7 +150,30 @@ export const SettingIntegration = () => {
             vertical: true,
             description: t("integration.outline.collection.description"),
           }),
-
+          {
+            type: "title",
+            value: (
+              <span className="flex items-center gap-2 font-bold">
+                <SimpleIconsReadeck />
+                {t("integration.readeck.title")}
+              </span>
+            ),
+          },
+          defineSettingItem("enableReadeck", {
+            label: t("integration.readeck.enable.label"),
+            description: t("integration.readeck.enable.description"),
+          }),
+          defineSettingItem("readeckEndpoint", {
+            label: t("integration.readeck.endpoint.label"),
+            vertical: true,
+            description: t("integration.readeck.endpoint.description"),
+          }),
+          defineSettingItem("readeckToken", {
+            label: t("integration.readeck.token.label"),
+            vertical: true,
+            type: "password",
+            description: t("integration.readeck.token.description"),
+          }),
           BottomTip,
         ]}
       />

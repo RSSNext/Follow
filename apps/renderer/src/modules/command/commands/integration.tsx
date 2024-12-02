@@ -3,6 +3,7 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
   SimpleIconsOutline,
+  SimpleIconsReadeck,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -30,6 +31,7 @@ export const useRegisterIntegrationCommands = () => {
   useRegisterInstapaperCommands()
   useRegisterObsidianCommands()
   useRegisterOutlineCommands()
+  useRegisterReadeckCommands()
 }
 
 const useRegisterEagleCommands = () => {
@@ -377,6 +379,74 @@ const useRegisterOutlineCommands = () => {
         }),
     {
       deps: [outlineAvailable],
+    },
+  )
+}
+
+const useRegisterReadeckCommands = () => {
+  const { t } = useTranslation()
+
+  const enableReadeck = useIntegrationSettingKey("enableReadeck")
+  const readeckEndpoint = useIntegrationSettingKey("readeckEndpoint")
+  const readeckToken = useIntegrationSettingKey("readeckToken")
+  const readeckAvailable = enableReadeck && !!readeckEndpoint && !!readeckToken
+
+  useRegisterCommandEffect(
+    !readeckAvailable
+      ? []
+      : defineFollowCommand({
+          id: COMMAND_ID.integration.saveToReadeck,
+          label: t("entry_actions.save_to_readeck"),
+          icon: <SimpleIconsReadeck />,
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Readeck: entry is not available", { duration: 3000 })
+              return
+            }
+            try {
+              window.analytics?.capture("integration", {
+                type: "readeck",
+                event: "save",
+              })
+              const data = new FormData()
+              if (entry.entries.url) {
+                data.set("url", entry.entries.url)
+              }
+              if (entry.entries.title) {
+                data.set("title", entry.entries.title)
+              }
+              const response = await ofetch.raw(
+                `${readeckEndpoint.replace(/\/$/, "")}/api/bookmarks`,
+                {
+                  method: "POST",
+                  body: data,
+                  headers: {
+                    Authorization: `Bearer ${readeckToken}`,
+                  },
+                },
+              )
+
+              toast.success(
+                <>
+                  {t("entry_actions.saved_to_readeck")},{" "}
+                  <a target="_blank" className="underline" href={response.headers.get("Location")!}>
+                    view
+                  </a>
+                </>,
+                {
+                  duration: 3000,
+                },
+              )
+            } catch {
+              toast.error(t("entry_actions.failed_to_save_to_readeck"), {
+                duration: 3000,
+              })
+            }
+          },
+        }),
+    {
+      deps: [readeckAvailable],
     },
   )
 }

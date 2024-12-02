@@ -113,6 +113,10 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         onClick: runCmdFn(COMMAND_ID.integration.saveToOutline, [{ entryId }]),
       },
       {
+        id: COMMAND_ID.integration.saveToReadeck,
+        onClick: runCmdFn(COMMAND_ID.integration.saveToReadeck, [{ entryId }]),
+      },
+      {
         id: COMMAND_ID.entry.tip,
         onClick: runCmdFn(COMMAND_ID.entry.tip, [{ entryId, feedId: feed?.id }]),
         hide: isInbox || feed?.ownerUserId === whoami()?.id,

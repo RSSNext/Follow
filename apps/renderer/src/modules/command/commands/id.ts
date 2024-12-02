@@ -21,6 +21,7 @@ export const COMMAND_ID = {
     saveToInstapaper: "integration:save-to-instapaper",
     saveToObsidian: "integration:save-to-obsidian",
     saveToOutline: "integration:save-to-outline",
+    saveToReadeck: "integration:save-to-readeck",
   },
   list: {
     edit: "list:edit",
