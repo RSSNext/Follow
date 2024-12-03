@@ -255,7 +255,7 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0(rollup@2.79.2)
       vite:
-        specifier: ^6.0.2
+        specifier: 6.0.2
         version: 6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1)
       vite-bundle-analyzer:
         specifier: 0.15.2
@@ -1011,13 +1011,13 @@ importers:
         specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
       react:
-        specifier: ^18.0.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-blurhash:
         specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-dom:
-        specifier: ^18.0.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-fast-marquee:
         specifier: 1.6.5
@@ -1068,10 +1068,10 @@ importers:
         specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
       react:
-        specifier: ^18.0.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.0.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       usehooks-ts:
         specifier: 3.1.0
@@ -1110,7 +1110,7 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(@types/node@22.10.1)
       '@hono/node-server':
-        specifier: ^1.13.7
+        specifier: 1.13.7
         version: 1.13.7(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@t3-oss/env-core':
         specifier: ^0.11.1
@@ -1119,13 +1119,13 @@ importers:
         specifier: 1.0.7
         version: 1.0.7(encoding@0.1.13)
       drizzle-orm:
-        specifier: ^0.36.4
+        specifier: 0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(kysely@0.27.4)(react@18.3.1)
       electron:
-        specifier: ^33.2.0
+        specifier: 33.2.0
         version: 33.2.0
       hono:
-        specifier: ^4.6.12
+        specifier: 4.6.12
         version: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
       react:
         specifier: ^18.3.1
@@ -1137,7 +1137,7 @@ importers:
         specifier: 1.7.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
-        specifier: ^3.23.8
+        specifier: 3.23.8
         version: 3.23.8
 
   packages/types: {}
