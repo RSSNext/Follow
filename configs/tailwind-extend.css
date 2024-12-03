@@ -409,6 +409,10 @@
     mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 70px), rgba(255, 255, 255, 0) 100%);
   }
 
+  .mask-b-2xl {
+    mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 90px), rgba(255, 255, 255, 0) 100%);
+  }
+
   .mask-horizontal {
     mask-image: linear-gradient(
       90deg,

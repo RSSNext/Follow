@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
-import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import type { MediaModel } from "@follow/shared/hono"
 import { LRUCache } from "@follow/utils/lru-cache"
@@ -379,15 +379,15 @@ const CollapsedSocialMediaItem: Component<{
           "relative",
           !isShowMore && "max-h-[300px] overflow-hidden",
           isShowMore && "h-auto",
-          !isShowMore && isOverflow && "mask-b-xl",
+          !isShowMore && isOverflow && "mask-b-2xl",
         )}
         ref={ref}
       >
         {children}
       </div>
       {isOverflow && !isShowMore && (
-        <div className="absolute inset-x-0 bottom-0 flex justify-center py-2 duration-200">
-          <MotionButtonBase
+        <div className="absolute inset-x-0 -bottom-2 flex justify-center py-2 duration-200">
+          <button
             type="button"
             onClick={(e) => {
               e.stopPropagation()
@@ -395,11 +395,11 @@ const CollapsedSocialMediaItem: Component<{
               collapsedItemCache.put(entryId, true)
             }}
             aria-hidden
-            className="flex items-center justify-center text-xs"
+            className="flex items-center justify-center text-xs duration-200 hover:text-foreground"
           >
             <i className="i-mingcute-arrow-to-down-line" />
             <span className="ml-2">Show more</span>
-          </MotionButtonBase>
+          </button>
         </div>
       )}
     </AutoResizeHeight>
