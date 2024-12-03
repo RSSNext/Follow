@@ -73,7 +73,7 @@ const DateItemInner: FC<DateItemInnerProps> = ({
   const rid = useId()
   const RelativeElement = useMemo(
     () => (
-      <m.span key="b" layout layoutId={rid}>
+      <m.span key="b" className="inline-flex items-center" layout layoutId={rid}>
         <RelativeDay date={date} />
       </m.span>
     ),
@@ -175,7 +175,9 @@ const SocialMediaDateItem = ({
       // @ts-expect-error
       Wrapper={useCallback(
         ({ children }) => (
-          <div className="m-auto flex w-[645px] gap-3 pl-5 text-lg">{children}</div>
+          <div className="m-auto flex w-[645px] max-w-full gap-3 pl-5 text-base lg:text-lg">
+            {children}
+          </div>
         ),
         [],
       )}
