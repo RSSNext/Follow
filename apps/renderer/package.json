@@ -18,7 +18,6 @@
     "@follow/shared": "workspace:*",
     "@fontsource/sn-pro": "5.1.0",
     "@headlessui/react": "2.2.0",
-    "@hono/auth-js": "1.0.15",
     "@hookform/resolvers": "3.9.1",
     "@lottiefiles/dotlottie-react": "0.10.1",
     "@microflash/remark-callout-directives": "4.3.2",

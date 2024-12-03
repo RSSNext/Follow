@@ -2,6 +2,8 @@ import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { authProvidersConfig } from "@follow/constants"
+import type { LoginRuntime } from "@follow/shared/auth"
+import { loginHandler } from "@follow/shared/auth"
 import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
@@ -10,8 +12,6 @@ import { useTranslation } from "react-i18next"
 
 import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
-import type { LoginRuntime } from "~/lib/auth"
-import { loginHandler } from "~/lib/auth"
 import { useAuthProviders } from "~/queries/users"
 
 interface LoginModalContentProps {

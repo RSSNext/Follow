@@ -28,7 +28,7 @@ export function SwipeMedia({
     height: number
   }
 }) {
-  const uniqMedia = uniqBy(media, "url")
+  const uniqMedia = media ? uniqBy(media, "url") : []
 
   const hoverRef = useRef<HTMLDivElement>(null)
 

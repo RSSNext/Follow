@@ -18,7 +18,7 @@ import { cleanupOldRender, loadDynamicRenderEntry } from "~/updater/hot-updater"
 import { isDev, isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
 import { i18n } from "../lib/i18n"
-import { cleanAuthSessionToken, cleanUser } from "../lib/user"
+import { cleanBetterAuthSessionCookie, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
 import { quitAndInstall } from "../updater"
 import { getMainWindow } from "../window"
@@ -167,8 +167,8 @@ export const appRoute = {
     quitAndInstall()
   }),
 
-  cleanAuthSessionToken: t.procedure.action(async () => {
-    cleanAuthSessionToken()
+  cleanBetterAuthSessionCookie: t.procedure.action(async () => {
+    cleanBetterAuthSessionCookie()
     cleanUser()
   }),
   /// clipboard
