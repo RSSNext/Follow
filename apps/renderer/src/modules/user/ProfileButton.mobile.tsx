@@ -95,6 +95,7 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
             />
 
             <Divider className="mx-auto h-px w-[50px] !bg-border/80" />
+
             <Item
               label={t("user_button.preferences")}
               onClick={() => {
