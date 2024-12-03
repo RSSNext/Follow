@@ -1,4 +1,5 @@
 import { WindowState } from "@follow/shared/bridge"
+import { preventDefault } from "@follow/utils/dom"
 
 import { useWindowState } from "~/atoms/app"
 import { useUISettingKey } from "~/atoms/settings/ui"
@@ -12,6 +13,7 @@ export const Titlebar = () => {
 
   return (
     <div
+      onContextMenu={preventDefault}
       className="drag-region absolute right-0 flex items-center justify-end overflow-hidden"
       style={{
         height: `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
