@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { APP_PROTOCOL } from "@follow/shared"
-import { callWindowExpose } from "@follow/shared/bridge"
+import { callWindowExpose, WindowState } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { app, BrowserWindow, screen, shell } from "electron"
 import type { Event } from "electron/main"
@@ -196,6 +196,27 @@ export function createWindow(
     `)
     })
   }
+
+  // async render and main state
+  window.on("maximize", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.MAXIMIZED)
+  })
+
+  window.on("unmaximize", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.NORMAL)
+  })
+
+  window.on("minimize", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.MINIMIZED)
+  })
+
+  window.on("restore", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.NORMAL)
+  })
 
   return window
 }
