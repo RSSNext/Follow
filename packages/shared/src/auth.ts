@@ -23,12 +23,15 @@ const authClient = createAuthClient({
 
 export const { signIn, signOut, getSession, getProviders, createSession } = authClient
 
-export const loginHandler = (provider: string) => {
+export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
+export type LoginRuntime = "browser" | "app"
+export const loginHandler = (provider: string, runtime: LoginRuntime = "app") => {
   if (IN_ELECTRON) {
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
     signIn.social({
       provider: provider as "google" | "github" | "apple",
+      callbackURL: runtime === "app" ? LOGIN_CALLBACK_URL : WEB_URL,
     })
   }
 }

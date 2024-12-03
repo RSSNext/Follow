@@ -2,6 +2,7 @@ import { Logo } from "@follow/components/icons/logo.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { views } from "@follow/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import type { FC } from "react"
@@ -83,7 +84,7 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
             canClose={false}
             clickOutsideToDismiss={false}
           >
-            <LoginModalContent canClose={false} />
+            <LoginModalContent canClose={false} runtime={IN_ELECTRON ? "app" : "browser"} />
           </DeclarativeModal>
         </RootPortal>
       )}
