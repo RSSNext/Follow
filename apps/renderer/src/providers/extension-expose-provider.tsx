@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
+import { setWindowState } from "~/atoms/app"
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings, useToggleZenMode } from "~/atoms/settings/ui"
 import { setUpdaterStatus } from "~/atoms/updater"
@@ -85,5 +86,15 @@ export const ExtensionExposeProvider = () => {
       dialog,
     })
   }, [dialog])
+
+  useBindElectronBridge()
   return null
+}
+
+const useBindElectronBridge = () => {
+  useEffect(() => {
+    registerGlobalContext({
+      setWindowState,
+    })
+  }, [])
 }

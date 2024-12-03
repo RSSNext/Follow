@@ -20,7 +20,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         <StableRouterProvider />
         <ModalStackContainer>
           <OpenInAppDetector />
-          {/* <MobileDetector /> */}
+
           <UserProvider />
           <Toaster />
           {children}

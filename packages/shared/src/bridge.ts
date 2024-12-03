@@ -17,6 +17,12 @@ declare const dialog: {
     cancelText?: string
   }) => Promise<boolean>
 }
+
+export enum WindowState {
+  MINIMIZED = "minimized",
+  MAXIMIZED = "maximized",
+  NORMAL = "normal",
+}
 interface RenderGlobalContext {
   /// Access Settings
   showSetting: (path?: string) => void
@@ -45,6 +51,9 @@ interface RenderGlobalContext {
 
   /// Utils
   toast: typeof toast
+
+  /// Electron State
+  setWindowState: (state: WindowState) => void
 
   readyToUpdate: () => void
   dialog: typeof dialog
