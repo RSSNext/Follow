@@ -81,7 +81,10 @@ export const AudioPlayer = {
       listId: routeParams.listId,
     })
 
-    if (this.audio.src !== v.src) {
+    const currentUrl = new URL(this.audio.src, window.location.href).toString()
+    const newUrl = new URL(v.src, window.location.href).toString()
+
+    if (currentUrl !== newUrl) {
       this.audio.src = v.src
       this.audio.currentTime = v.currentTime ?? curV.currentTime ?? 0
     }
