@@ -4,7 +4,6 @@ import { PanelSplitter } from "@follow/components/ui/divider/index.js"
 import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import type { FeedViewType } from "@follow/constants"
-import { IN_ELECTRON } from "@follow/shared/constants"
 import { preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
@@ -145,7 +144,7 @@ export function MainDestopLayout() {
             canClose={false}
             clickOutsideToDismiss={false}
           >
-            <LoginModalContent canClose={false} runtime={IN_ELECTRON ? "app" : "browser"} />
+            <LoginModalContent canClose={false} />
           </DeclarativeModal>
         </RootPortal>
       )}

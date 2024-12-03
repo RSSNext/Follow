@@ -2,7 +2,6 @@ import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { authProvidersConfig } from "@follow/constants"
-import type { LoginRuntime } from "@follow/shared/auth"
 import { loginHandler } from "@follow/shared/auth"
 import { stopPropagation } from "@follow/utils/dom"
 import clsx from "clsx"
@@ -15,13 +14,12 @@ import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import { useAuthProviders } from "~/queries/users"
 
 interface LoginModalContentProps {
-  runtime?: LoginRuntime
   canClose?: boolean
 }
 export const LoginModalContent = (props: LoginModalContentProps) => {
   const modal = useCurrentModal()
 
-  const { canClose = true, runtime } = props
+  const { canClose = true } = props
 
   const { t } = useTranslation()
   const { data: authProviders } = useAuthProviders()
@@ -74,7 +72,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               )}
               disabled={disabled}
               onClick={() => {
-                loginHandler(key, runtime)
+                loginHandler(key)
                 setLoadingLockSet(key)
                 window.analytics?.capture("login", {
                   type: key,

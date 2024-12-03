@@ -25,7 +25,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
                 CustomModalComponent: PlainModal,
                 title: "Login",
                 id: "login",
-                content: () => <LoginModalContent runtime={window.electron ? "app" : "browser"} />,
+                content: () => <LoginModalContent />,
                 clickOutsideToDismiss: true,
               })
             }
