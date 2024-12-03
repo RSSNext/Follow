@@ -80,9 +80,10 @@ export const AudioPlayer = {
       show: true,
       listId: routeParams.listId,
     })
-
-    const currentUrl = new URL(this.audio.src, window.location.href).toString()
-    const newUrl = new URL(v.src, window.location.href).toString()
+    const currentUrl = URL.canParse(this.audio.src)
+      ? new URL(this.audio.src).toString()
+      : this.audio.src
+    const newUrl = URL.canParse(v.src) ? new URL(v.src).toString() : v.src
 
     if (currentUrl !== newUrl) {
       this.audio.src = v.src
