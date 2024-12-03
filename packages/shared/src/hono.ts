@@ -6516,6 +6516,9 @@ declare const auth: {
                 emailVerified: boolean;
                 name: string;
                 image?: string | null | undefined | undefined;
+            } & {
+                image: string | null;
+                handle: string | null;
             };
             session: {
                 id: string;
@@ -9163,6 +9166,9 @@ declare const auth: {
                             emailVerified: boolean;
                             name: string;
                             image?: string | null | undefined | undefined;
+                        } & {
+                            image: string | null;
+                            handle: string | null;
                         };
                         session: {
                             id: string;
