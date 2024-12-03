@@ -50,7 +50,7 @@
     "chokidar": "4.0.1",
     "daisyui": "4.12.14",
     "dotenv-flow": "4.1.0",
-    "es-toolkit": "catalog:",
+    "es-toolkit": "1.29.0",
     "foxact": "0.2.42",
     "glob": "11.0.0",
     "html-minifier-terser": "7.2.0",
@@ -59,7 +59,7 @@
     "nanoid": "5.0.9",
     "path-to-regexp": "8.2.0",
     "react-dom": "^18.3.1",
-    "tailwindcss": "3.4.14",
+    "tailwindcss": "3.4.15",
     "tsup": "8.3.5",
     "tsx": "4.19.2",
     "vite": "6.0.2"

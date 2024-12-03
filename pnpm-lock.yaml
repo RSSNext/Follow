@@ -4,12 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  default:
-    es-toolkit:
-      specifier: ^1.27.0
-      version: 1.29.0
-
 overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
   isarray: npm:@nolyfill/isarray@^1
@@ -502,7 +496,7 @@ importers:
         specifier: 8.0.1
         version: 8.0.1(embla-carousel@8.5.1)
       es-toolkit:
-        specifier: 'catalog:'
+        specifier: 1.29.0
         version: 1.29.0
       firebase:
         specifier: 11.0.2
@@ -867,7 +861,7 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       es-toolkit:
-        specifier: 'catalog:'
+        specifier: 1.29.0
         version: 1.29.0
       foxact:
         specifier: 0.2.42
@@ -3523,8 +3517,8 @@ packages:
   '@radix-ui/react-avatar@1.1.1':
     resolution: {integrity: sha512-eoOtThOmxeoizxpX6RiEsQZ2wj5r4+zoeqAwO0cBaFQGjJwIH3dIX0OCxNrCyrrdxG+vBweMETh3VziQG7c1kw==}
     peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
+      '@types/react': npm:types-react@19.0.0-rc.1
+      '@types/react-dom': npm:types-react-dom@19.0.0-rc.1
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
