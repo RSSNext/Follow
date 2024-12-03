@@ -14,10 +14,10 @@
     }
   },
   "dependencies": {
-    "@auth/core": "0.37.4",
+    "@auth/core": "catalog:",
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
-    "hono": "4.6.12"
+    "hono": "catalog:"
   }
 }

@@ -28,11 +28,11 @@
   "dependencies": {
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
-    "clsx": "2.1.1",
-    "framer-motion": "11.12.0",
-    "nanoid": "5.0.9",
-    "tailwind-merge": "2.5.5",
-    "tldts": "6.1.65",
-    "uniqolor": "1.1.1"
+    "clsx": "catalog:",
+    "framer-motion": "catalog:",
+    "nanoid": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tldts": "catalog:",
+    "uniqolor": "catalog:"
   }
 }
