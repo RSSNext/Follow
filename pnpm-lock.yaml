@@ -165,8 +165,8 @@ importers:
         specifier: 0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(kysely@0.27.4)(react@18.3.1)
       electron:
-        specifier: 33.2.1
-        version: 33.2.1
+        specifier: 33.2.0
+        version: 33.2.0
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
@@ -366,9 +366,6 @@ importers:
       '@types/node':
         specifier: ^22.10.1
         version: 22.10.1
-      electron:
-        specifier: 33.2.1
-        version: 33.2.1
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
@@ -1127,9 +1124,6 @@ importers:
       drizzle-orm:
         specifier: ^0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(kysely@0.27.4)(react@18.3.1)
-      electron:
-        specifier: ^33.2.1
-        version: 33.2.1
       hono:
         specifier: ^4.6.12
         version: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
@@ -6425,6 +6419,11 @@ packages:
   electron-winstaller@5.4.0:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
+
+  electron@33.2.0:
+    resolution: {integrity: sha512-PVw1ICAQDPsnnsmpNFX/b1i/49h67pbSPxuIENd9K9WpGO1tsRaQt+K2bmXqTuoMJsbzIc75Ce8zqtuwBPqawA==}
+    engines: {node: '>= 12.20.55'}
+    hasBin: true
 
   electron@33.2.1:
     resolution: {integrity: sha512-SG/nmSsK9Qg1p6wAW+ZfqU+AV8cmXMTIklUL18NnOKfZLlum4ZsDoVdmmmlL39ZmeCaq27dr7CgslRPahfoVJg==}
@@ -17872,6 +17871,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
     optional: true
+
+  electron@33.2.0:
+    dependencies:
+      '@electron/get': 2.0.3
+      '@types/node': 20.17.9
+      extract-zip: 2.0.1
+    transitivePeerDependencies:
+      - supports-color
 
   electron@33.2.1:
     dependencies:
