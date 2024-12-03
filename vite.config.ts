@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync } from "node:fs"
+import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -288,7 +288,7 @@ function checkBrowserSupport() {
   }
 }
 
-const htmlPlugin: (env: any) => PluginOption = () => {
+const htmlPlugin: (env: any) => PluginOption = (env) => {
   let config: ResolvedConfig
   return {
     name: "html-transform",
@@ -302,7 +302,13 @@ const htmlPlugin: (env: any) => PluginOption = () => {
       const debugProxyHtml = resolve(root, "debug_proxy.html")
 
       if (existsSync(debugProxyHtml)) {
-        copyFileSync(debugProxyHtml, resolve(dist, "__debug_proxy.html"))
+        const content = readFileSync(debugProxyHtml, "utf-8")
+
+        writeFileSync(
+          resolve(dist, "__debug_proxy.html"),
+
+          content.replace("import.meta.env.VITE_API_URL", `"${env.VITE_API_URL}"`),
+        )
       }
     },
     transformIndexHtml(html) {
