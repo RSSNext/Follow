@@ -6,669 +6,9 @@ settings:
 
 catalogs:
   default:
-    '@auth/core':
-      specifier: 0.37.4
-      version: 0.37.4
-    '@babel/generator':
-      specifier: 7.26.2
-      version: 7.26.2
-    '@clack/prompts':
-      specifier: 0.8.2
-      version: 0.8.2
-    '@dnd-kit/core':
-      specifier: ^6.2.0
-      version: 6.2.0
-    '@egoist/tailwindcss-icons':
-      specifier: 1.8.1
-      version: 1.8.1
-    '@egoist/tipc':
-      specifier: 0.3.2
-      version: 0.3.2
-    '@electron-forge/cli':
-      specifier: 7.6.0
-      version: 7.6.0
-    '@electron-forge/maker-dmg':
-      specifier: 7.6.0
-      version: 7.6.0
-    '@electron-forge/maker-squirrel':
-      specifier: 7.6.0
-      version: 7.6.0
-    '@electron-forge/maker-zip':
-      specifier: 7.6.0
-      version: 7.6.0
-    '@electron-forge/plugin-fuses':
-      specifier: 7.6.0
-      version: 7.6.0
-    '@electron-forge/publisher-github':
-      specifier: 7.6.0
-      version: 7.6.0
-    '@electron-toolkit/preload':
-      specifier: ^3.0.1
-      version: 3.0.1
-    '@electron-toolkit/tsconfig':
-      specifier: ^1.0.1
-      version: 1.0.1
-    '@electron-toolkit/utils':
-      specifier: ^3.0.0
-      version: 3.0.0
-    '@eneris/push-receiver':
-      specifier: 4.3.0
-      version: 4.3.0
-    '@essentials/request-timeout':
-      specifier: 1.3.0
-      version: 1.3.0
-    '@fastify/middie':
-      specifier: 9.0.2
-      version: 9.0.2
-    '@fastify/request-context':
-      specifier: 6.0.1
-      version: 6.0.1
-    '@fontsource/sn-pro':
-      specifier: 5.1.0
-      version: 5.1.0
-    '@headlessui/react':
-      specifier: 2.2.0
-      version: 2.2.0
-    '@hono/node-server':
-      specifier: 1.13.7
-      version: 1.13.7
-    '@hookform/resolvers':
-      specifier: 3.9.1
-      version: 3.9.1
-    '@iconify-json/logos':
-      specifier: 1.2.3
-      version: 1.2.3
-    '@iconify-json/mingcute':
-      specifier: 1.2.1
-      version: 1.2.1
-    '@iconify-json/simple-icons':
-      specifier: ^1.2.13
-      version: 1.2.13
-    '@iconify/tools':
-      specifier: 4.0.7
-      version: 4.0.7
-    '@lottiefiles/dotlottie-react':
-      specifier: 0.10.1
-      version: 0.10.1
-    '@microflash/remark-callout-directives':
-      specifier: 4.3.2
-      version: 4.3.2
-    '@mozilla/readability':
-      specifier: ^0.5.0
-      version: 0.5.0
-    '@openpanel/web':
-      specifier: 1.0.1
-      version: 1.0.1
-    '@pengx17/electron-forge-maker-appimage':
-      specifier: 1.2.1
-      version: 1.2.1
-    '@radix-ui/react-avatar':
-      specifier: 1.1.1
-      version: 1.1.1
-    '@radix-ui/react-checkbox':
-      specifier: 1.1.2
-      version: 1.1.2
-    '@radix-ui/react-context-menu':
-      specifier: 2.2.2
-      version: 2.2.2
-    '@radix-ui/react-dialog':
-      specifier: 1.1.2
-      version: 1.1.2
-    '@radix-ui/react-dropdown-menu':
-      specifier: 2.1.2
-      version: 2.1.2
-    '@radix-ui/react-hover-card':
-      specifier: 1.1.2
-      version: 1.1.2
-    '@radix-ui/react-label':
-      specifier: 2.1.0
-      version: 2.1.0
-    '@radix-ui/react-navigation-menu':
-      specifier: 1.2.1
-      version: 1.2.1
-    '@radix-ui/react-popover':
-      specifier: 1.1.2
-      version: 1.1.2
-    '@radix-ui/react-radio-group':
-      specifier: 1.2.1
-      version: 1.2.1
-    '@radix-ui/react-scroll-area':
-      specifier: 1.2.1
-      version: 1.2.1
-    '@radix-ui/react-select':
-      specifier: 2.1.2
-      version: 2.1.2
-    '@radix-ui/react-slider':
-      specifier: ^1.2.1
-      version: 1.2.1
-    '@radix-ui/react-slot':
-      specifier: 1.1.0
-      version: 1.1.0
-    '@radix-ui/react-switch':
-      specifier: 1.1.1
-      version: 1.1.1
-    '@radix-ui/react-tabs':
-      specifier: 1.1.1
-      version: 1.1.1
-    '@radix-ui/react-toast':
-      specifier: 1.2.2
-      version: 1.2.2
-    '@radix-ui/react-tooltip':
-      specifier: 1.1.4
-      version: 1.1.4
-    '@react-hook/window-size':
-      specifier: 3.1.1
-      version: 3.1.1
-    '@resvg/resvg-js':
-      specifier: 2.6.2
-      version: 2.6.2
-    '@sentry/electron':
-      specifier: 5.7.0
-      version: 5.7.0
-    '@sentry/react':
-      specifier: 8.41.0
-      version: 8.41.0
-    '@sentry/vite-plugin':
-      specifier: 2.22.6
-      version: 2.22.6
-    '@shikijs/transformers':
-      specifier: 1.24.0
-      version: 1.24.0
-    '@t3-oss/env-core':
-      specifier: ^0.11.1
-      version: 0.11.1
-    '@tailwindcss/container-queries':
-      specifier: 0.1.1
-      version: 0.1.1
-    '@tailwindcss/typography':
-      specifier: 0.5.15
-      version: 0.5.15
-    '@tanstack/query-sync-storage-persister':
-      specifier: 5.62.0
-      version: 5.62.0
-    '@tanstack/react-query':
-      specifier: 5.62.0
-      version: 5.62.0
-    '@tanstack/react-query-devtools':
-      specifier: 5.62.0
-      version: 5.62.0
-    '@tanstack/react-query-persist-client':
-      specifier: 5.62.0
-      version: 5.62.0
-    '@tanstack/react-virtual':
-      specifier: 3.10.9
-      version: 3.10.9
-    '@types/html-minifier-terser':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@types/js-yaml':
-      specifier: 4.0.9
-      version: 4.0.9
-    '@types/katex':
-      specifier: 0.16.7
-      version: 0.16.7
-    '@types/node':
-      specifier: ^22.10.1
-      version: 22.10.1
-    '@types/react':
-      specifier: ^18.3.12
-      version: 18.3.12
-    '@types/react-dom':
-      specifier: ^18.3.1
-      version: 18.3.1
-    '@use-gesture/react':
-      specifier: 10.3.1
-      version: 10.3.1
-    '@vercel/node':
-      specifier: 3.2.27
-      version: 3.2.27
-    '@vite-pwa/assets-generator':
-      specifier: ^0.2.6
-      version: 0.2.6
-    '@vitejs/plugin-legacy':
-      specifier: 6.0.0
-      version: 6.0.0
-    '@vitejs/plugin-react':
-      specifier: ^4.3.4
-      version: 4.3.4
-    '@welldone-software/why-did-you-render':
-      specifier: 8.0.3
-      version: 8.0.3
-    '@yornaath/batshit':
-      specifier: 0.10.1
-      version: 0.10.1
-    async-es:
-      specifier: ^3.2.6
-      version: 3.2.6
-    autoprefixer:
-      specifier: 10.4.20
-      version: 10.4.20
-    better-auth:
-      specifier: 1.0.7
-      version: 1.0.7
-    blurhash:
-      specifier: 2.0.5
-      version: 2.0.5
-    builder-util-runtime:
-      specifier: 9.2.10
-      version: 9.2.10
-    camelcase-keys:
-      specifier: 9.1.3
-      version: 9.1.3
-    chokidar:
-      specifier: 4.0.1
-      version: 4.0.1
-    class-variance-authority:
-      specifier: 0.7.1
-      version: 0.7.1
-    click-to-react-component:
-      specifier: 1.1.2
-      version: 1.1.2
-    clsx:
-      specifier: 2.1.1
-      version: 2.1.1
-    cmdk:
-      specifier: 1.0.4
-      version: 1.0.4
-    cross-env:
-      specifier: 7.0.3
-      version: 7.0.3
-    cssnano:
-      specifier: 7.0.6
-      version: 7.0.6
-    daisyui:
-      specifier: 4.12.14
-      version: 4.12.14
-    dayjs:
-      specifier: 1.11.13
-      version: 1.11.13
-    dexie:
-      specifier: 4.0.10
-      version: 4.0.10
-    dexie-export-import:
-      specifier: ^4.1.4
-      version: 4.1.4
-    dnum:
-      specifier: ^2.14.0
-      version: 2.14.0
-    dotenv:
-      specifier: 16.4.5
-      version: 16.4.5
-    dotenv-flow:
-      specifier: 4.1.0
-      version: 4.1.0
-    drizzle-orm:
-      specifier: 0.36.4
-      version: 0.36.4
-    electron:
-      specifier: 33.2.0
-      version: 33.2.0
-    electron-context-menu:
-      specifier: 4.0.4
-      version: 4.0.4
-    electron-devtools-installer:
-      specifier: 3.2.0
-      version: 3.2.0
-    electron-log:
-      specifier: 5.2.3
-      version: 5.2.3
-    electron-packager-languages:
-      specifier: 0.5.0
-      version: 0.5.0
-    electron-squirrel-startup:
-      specifier: 1.0.1
-      version: 1.0.1
-    electron-updater:
-      specifier: ^6.3.9
-      version: 6.3.9
-    electron-vite:
-      specifier: ^2.3.0
-      version: 2.3.0
-    embla-carousel-react:
-      specifier: 8.5.1
-      version: 8.5.1
-    embla-carousel-wheel-gestures:
-      specifier: 8.0.1
-      version: 8.0.1
     es-toolkit:
-      specifier: 1.29.0
+      specifier: ^1.27.0
       version: 1.29.0
-    eslint:
-      specifier: ^9.16.0
-      version: 9.16.0
-    eslint-config-hyoban:
-      specifier: ^3.1.14
-      version: 3.1.14
-    fake-indexeddb:
-      specifier: 6.0.0
-      version: 6.0.0
-    fast-folder-size:
-      specifier: 2.3.0
-      version: 2.3.0
-    fastify:
-      specifier: 5.1.0
-      version: 5.1.0
-    firebase:
-      specifier: 11.0.2
-      version: 11.0.2
-    font-list:
-      specifier: 1.5.1
-      version: 1.5.1
-    foxact:
-      specifier: 0.2.42
-      version: 0.2.42
-    framer-motion:
-      specifier: 11.12.0
-      version: 11.12.0
-    franc-min:
-      specifier: 6.2.0
-      version: 6.2.0
-    fuse.js:
-      specifier: 7.0.0
-      version: 7.0.0
-    glob:
-      specifier: 11.0.0
-      version: 11.0.0
-    happy-dom:
-      specifier: 15.11.7
-      version: 15.11.7
-    hast-util-to-jsx-runtime:
-      specifier: 2.3.2
-      version: 2.3.2
-    hast-util-to-mdast:
-      specifier: ^10.1.1
-      version: 10.1.1
-    hast-util-to-text:
-      specifier: 4.0.2
-      version: 4.0.2
-    hono:
-      specifier: 4.6.12
-      version: 4.6.12
-    html-minifier-terser:
-      specifier: 7.2.0
-      version: 7.2.0
-    i18next:
-      specifier: ^24.0.2
-      version: 24.0.2
-    i18next-browser-languagedetector:
-      specifier: 8.0.0
-      version: 8.0.0
-    idb-keyval:
-      specifier: 6.2.1
-      version: 6.2.1
-    immer:
-      specifier: 10.1.1
-      version: 10.1.1
-    jotai:
-      specifier: 2.10.3
-      version: 2.10.3
-    js-yaml:
-      specifier: 4.1.0
-      version: 4.1.0
-    katex:
-      specifier: 0.16.11
-      version: 0.16.11
-    kose-font:
-      specifier: 1.0.0
-      version: 1.0.0
-    lethargy:
-      specifier: 1.0.9
-      version: 1.0.9
-    lightningcss:
-      specifier: 1.28.2
-      version: 1.28.2
-    linkedom:
-      specifier: ^0.18.5
-      version: 0.18.5
-    lint-staged:
-      specifier: 15.2.10
-      version: 15.2.10
-    lowdb:
-      specifier: 7.0.1
-      version: 7.0.1
-    masonic:
-      specifier: 4.0.1
-      version: 4.0.1
-    mdast-util-gfm-table:
-      specifier: ^2.0.0
-      version: 2.0.0
-    mdast-util-to-markdown:
-      specifier: ^2.1.2
-      version: 2.1.2
-    msedge-tts:
-      specifier: 1.3.4
-      version: 1.3.4
-    nanoid:
-      specifier: 5.0.9
-      version: 5.0.9
-    nbump:
-      specifier: 2.0.7
-      version: 2.0.7
-    node-machine-id:
-      specifier: 1.1.12
-      version: 1.1.12
-    ofetch:
-      specifier: 1.4.1
-      version: 1.4.1
-    path-to-regexp:
-      specifier: 8.2.0
-      version: 8.2.0
-    plain-shiki:
-      specifier: 0.0.12
-      version: 0.0.12
-    postcss:
-      specifier: 8.4.49
-      version: 8.4.49
-    postcss-js:
-      specifier: 4.0.1
-      version: 4.0.1
-    prettier:
-      specifier: 3.4.1
-      version: 3.4.1
-    raw-body:
-      specifier: 3.0.0
-      version: 3.0.0
-    rc-modal-sheet:
-      specifier: 0.3.2
-      version: 0.3.2
-    re-resizable:
-      specifier: 6.10.1
-      version: 6.10.1
-    react:
-      specifier: ^18.3.1
-      version: 18.3.1
-    react-blurhash:
-      specifier: ^0.3.0
-      version: 0.3.0
-    react-dom:
-      specifier: ^18.3.1
-      version: 18.3.1
-    react-error-boundary:
-      specifier: 4.1.2
-      version: 4.1.2
-    react-fast-marquee:
-      specifier: 1.6.5
-      version: 1.6.5
-    react-hook-form:
-      specifier: 7.53.2
-      version: 7.53.2
-    react-hotkeys-hook:
-      specifier: 4.6.1
-      version: 4.6.1
-    react-i18next:
-      specifier: ^15.1.3
-      version: 15.1.3
-    react-intersection-observer:
-      specifier: 9.13.1
-      version: 9.13.1
-    react-ios-pwa-prompt:
-      specifier: ^2.0.6
-      version: 2.0.6
-    react-photo-view:
-      specifier: 1.2.6
-      version: 1.2.6
-    react-resizable-layout:
-      specifier: npm:@innei/react-resizable-layout@0.7.3-fork.1
-      version: 0.7.3-fork.1
-    react-router:
-      specifier: 7.0.1
-      version: 7.0.1
-    react-scan:
-      specifier: 0.0.35
-      version: 0.0.35
-    react-selecto:
-      specifier: ^1.26.3
-      version: 1.26.3
-    react-shadow:
-      specifier: 20.5.0
-      version: 20.5.0
-    react-zoom-pan-pinch:
-      specifier: ^3.6.1
-      version: 3.6.1
-    rehype-infer-description-meta:
-      specifier: 2.0.0
-      version: 2.0.0
-    rehype-parse:
-      specifier: 9.0.1
-      version: 9.0.1
-    rehype-sanitize:
-      specifier: 6.0.0
-      version: 6.0.0
-    rehype-stringify:
-      specifier: 10.0.1
-      version: 10.0.1
-    remark-directive:
-      specifier: 3.0.0
-      version: 3.0.0
-    remark-gfm:
-      specifier: 4.0.0
-      version: 4.0.0
-    remark-gh-alerts:
-      specifier: 0.0.3
-      version: 0.0.3
-    remark-parse:
-      specifier: 11.0.0
-      version: 11.0.0
-    remark-rehype:
-      specifier: 11.1.1
-      version: 11.1.1
-    rimraf:
-      specifier: 6.0.1
-      version: 6.0.1
-    satori:
-      specifier: 0.12.0
-      version: 0.12.0
-    semver:
-      specifier: 7.6.3
-      version: 7.6.3
-    shiki:
-      specifier: 1.24.0
-      version: 1.24.0
-    shx:
-      specifier: ^0.3.4
-      version: 0.3.4
-    simple-git-hooks:
-      specifier: 2.11.1
-      version: 2.11.1
-    sonner:
-      specifier: 1.7.0
-      version: 1.7.0
-    tailwind-merge:
-      specifier: 2.5.5
-      version: 2.5.5
-    tailwindcss:
-      specifier: 3.4.15
-      version: 3.4.15
-    tailwindcss-animate:
-      specifier: 1.0.7
-      version: 1.0.7
-    tailwindcss-motion:
-      specifier: 0.4.3-beta
-      version: 0.4.3-beta
-    tailwindcss-safe-area:
-      specifier: 0.6.0
-      version: 0.6.0
-    tar:
-      specifier: 7.4.3
-      version: 7.4.3
-    tldts:
-      specifier: 6.1.65
-      version: 6.1.65
-    tsup:
-      specifier: 8.3.5
-      version: 8.3.5
-    tsx:
-      specifier: 4.19.2
-      version: 4.19.2
-    turbo:
-      specifier: 2.3.3
-      version: 2.3.3
-    typescript:
-      specifier: 5.7.2
-      version: 5.7.2
-    unified:
-      specifier: 11.0.5
-      version: 11.0.5
-    uniqolor:
-      specifier: 1.1.1
-      version: 1.1.1
-    unist-util-visit-parents:
-      specifier: ^6.0.1
-      version: 6.0.1
-    unplugin-ast:
-      specifier: ^0.12.0
-      version: 0.12.0
-    use-context-selector:
-      specifier: 2.0.0
-      version: 2.0.0
-    use-pull-to-refresh:
-      specifier: 2.4.1
-      version: 2.4.1
-    use-sync-external-store:
-      specifier: 1.2.2
-      version: 1.2.2
-    usehooks-ts:
-      specifier: 3.1.0
-      version: 3.1.0
-    vaul:
-      specifier: 1.1.1
-      version: 1.1.1
-    vfile:
-      specifier: 6.0.3
-      version: 6.0.3
-    vite:
-      specifier: 6.0.2
-      version: 6.0.2
-    vite-bundle-analyzer:
-      specifier: 0.15.2
-      version: 0.15.2
-    vite-plugin-mkcert:
-      specifier: 1.17.6
-      version: 1.17.6
-    vite-plugin-pwa:
-      specifier: 0.21.1
-      version: 0.21.1
-    vite-tsconfig-paths:
-      specifier: 5.1.3
-      version: 5.1.3
-    vitest:
-      specifier: 2.1.6
-      version: 2.1.6
-    vscode-languagedetection:
-      specifier: npm:@vscode/vscode-languagedetection@^1.0.22
-      version: 1.0.22
-    web-push:
-      specifier: 3.6.7
-      version: 3.6.7
-    xss:
-      specifier: 1.0.15
-      version: 1.0.15
-    zod:
-      specifier: 3.23.8
-      version: 3.23.8
-    zustand:
-      specifier: 5.0.1
-      version: 5.0.1
 
 overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
@@ -708,344 +48,344 @@ importers:
   .:
     devDependencies:
       '@babel/generator':
-        specifier: 'catalog:'
+        specifier: 7.26.2
         version: 7.26.2
       '@clack/prompts':
-        specifier: 'catalog:'
+        specifier: 0.8.2
         version: 0.8.2
       '@egoist/tailwindcss-icons':
-        specifier: 'catalog:'
+        specifier: 1.8.1
         version: 1.8.1(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       '@electron-forge/cli':
-        specifier: 'catalog:'
+        specifier: 7.6.0
         version: 7.6.0(encoding@0.1.13)
       '@electron-forge/maker-dmg':
-        specifier: 'catalog:'
+        specifier: 7.6.0
         version: 7.6.0
       '@electron-forge/maker-squirrel':
-        specifier: 'catalog:'
+        specifier: 7.6.0
         version: 7.6.0
       '@electron-forge/maker-zip':
-        specifier: 'catalog:'
+        specifier: 7.6.0
         version: 7.6.0
       '@electron-forge/plugin-fuses':
-        specifier: 'catalog:'
+        specifier: 7.6.0
         version: 7.6.0(@electron/fuses@1.8.0)
       '@electron-forge/publisher-github':
-        specifier: 'catalog:'
+        specifier: 7.6.0
         version: 7.6.0(encoding@0.1.13)
       '@electron-toolkit/tsconfig':
-        specifier: 'catalog:'
+        specifier: ^1.0.1
         version: 1.0.1(@types/node@22.10.1)
       '@fontsource/sn-pro':
-        specifier: 'catalog:'
+        specifier: 5.1.0
         version: 5.1.0
       '@hono/node-server':
-        specifier: 'catalog:'
+        specifier: 1.13.7
         version: 1.13.7(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@hookform/resolvers':
-        specifier: 'catalog:'
+        specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@18.3.1))
       '@iconify-json/logos':
-        specifier: 'catalog:'
+        specifier: 1.2.3
         version: 1.2.3
       '@iconify-json/mingcute':
-        specifier: 'catalog:'
+        specifier: 1.2.1
         version: 1.2.1
       '@iconify-json/simple-icons':
-        specifier: 'catalog:'
+        specifier: ^1.2.13
         version: 1.2.13
       '@iconify/tools':
-        specifier: 'catalog:'
+        specifier: 4.0.7
         version: 4.0.7
       '@microflash/remark-callout-directives':
-        specifier: 'catalog:'
+        specifier: 4.3.2
         version: 4.3.2
       '@mozilla/readability':
-        specifier: 'catalog:'
+        specifier: ^0.5.0
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@pengx17/electron-forge-maker-appimage':
-        specifier: 'catalog:'
+        specifier: 1.2.1
         version: 1.2.1(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       '@sentry/vite-plugin':
-        specifier: 'catalog:'
+        specifier: 2.22.6
         version: 2.22.6(encoding@0.1.13)
       '@t3-oss/env-core':
-        specifier: 'catalog:'
+        specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.2)(zod@3.23.8)
       '@tailwindcss/container-queries':
-        specifier: 'catalog:'
+        specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       '@tailwindcss/typography':
-        specifier: 'catalog:'
+        specifier: 0.5.15
         version: 0.5.15(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       '@types/html-minifier-terser':
-        specifier: 'catalog:'
+        specifier: 7.0.2
         version: 7.0.2
       '@types/js-yaml':
-        specifier: 'catalog:'
+        specifier: 4.0.9
         version: 4.0.9
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.10.1
         version: 22.10.1
       '@types/react':
-        specifier: 'catalog:'
+        specifier: ^18.3.12
         version: 18.3.12
       '@types/react-dom':
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1
       '@vercel/node':
-        specifier: 'catalog:'
+        specifier: 3.2.27
         version: 3.2.27(encoding@0.1.13)
       '@vitejs/plugin-legacy':
-        specifier: 'catalog:'
+        specifier: 6.0.0
         version: 6.0.0(terser@5.35.0)(vite@6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))
       '@vitejs/plugin-react':
-        specifier: 'catalog:'
+        specifier: ^4.3.4
         version: 4.3.4(vite@6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))
       async-es:
-        specifier: 'catalog:'
+        specifier: ^3.2.6
         version: 3.2.6
       autoprefixer:
-        specifier: 'catalog:'
+        specifier: 10.4.20
         version: 10.4.20(postcss@8.4.49)
       cross-env:
-        specifier: 'catalog:'
+        specifier: 7.0.3
         version: 7.0.3
       cssnano:
-        specifier: 'catalog:'
+        specifier: 7.0.6
         version: 7.0.6(postcss@8.4.49)
       dnum:
-        specifier: 'catalog:'
+        specifier: ^2.14.0
         version: 2.14.0
       dotenv:
-        specifier: 'catalog:'
+        specifier: 16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: 'catalog:'
+        specifier: 0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(kysely@0.27.4)(react@18.3.1)
       electron:
-        specifier: 'catalog:'
+        specifier: 33.2.0
         version: 33.2.0
       electron-devtools-installer:
-        specifier: 'catalog:'
+        specifier: 3.2.0
         version: 3.2.0
       electron-packager-languages:
-        specifier: 'catalog:'
+        specifier: 0.5.0
         version: 0.5.0
       electron-vite:
-        specifier: 'catalog:'
+        specifier: ^2.3.0
         version: 2.3.0(vite@6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))
       eslint:
-        specifier: 'catalog:'
+        specifier: ^9.16.0
         version: 9.16.0(jiti@2.3.3)
       eslint-config-hyoban:
-        specifier: 'catalog:'
+        specifier: ^3.1.14
         version: 3.1.14(@typescript-eslint/eslint-plugin@8.16.0(@typescript-eslint/parser@8.16.0(eslint@9.16.0(jiti@2.3.3))(typescript@5.7.2))(eslint@9.16.0(jiti@2.3.3))(typescript@5.7.2))(eslint@9.16.0(jiti@2.3.3))(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2)
       fake-indexeddb:
-        specifier: 'catalog:'
+        specifier: 6.0.0
         version: 6.0.0
       happy-dom:
-        specifier: 'catalog:'
+        specifier: 15.11.7
         version: 15.11.7
       hono:
-        specifier: 'catalog:'
+        specifier: 4.6.12
         version: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
       html-minifier-terser:
-        specifier: 'catalog:'
+        specifier: 7.2.0
         version: 7.2.0
       js-yaml:
-        specifier: 'catalog:'
+        specifier: 4.1.0
         version: 4.1.0
       lint-staged:
-        specifier: 'catalog:'
+        specifier: 15.2.10
         version: 15.2.10
       nbump:
-        specifier: 'catalog:'
+        specifier: 2.0.7
         version: 2.0.7(conventional-commits-filter@5.0.0)
       postcss:
-        specifier: 'catalog:'
+        specifier: 8.4.49
         version: 8.4.49
       postcss-js:
-        specifier: 'catalog:'
+        specifier: 4.0.1
         version: 4.0.1(postcss@8.4.49)
       prettier:
-        specifier: 'catalog:'
+        specifier: 3.4.1
         version: 3.4.1
       raw-body:
-        specifier: 'catalog:'
+        specifier: 3.0.0
         version: 3.0.0
       react:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       rimraf:
-        specifier: 'catalog:'
+        specifier: 6.0.1
         version: 6.0.1
       shx:
-        specifier: 'catalog:'
+        specifier: ^0.3.4
         version: 0.3.4
       simple-git-hooks:
-        specifier: 'catalog:'
+        specifier: 2.11.1
         version: 2.11.1
       tailwindcss:
-        specifier: 'catalog:'
+        specifier: 3.4.15
         version: 3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))
       tailwindcss-animate:
-        specifier: 'catalog:'
+        specifier: 1.0.7
         version: 1.0.7(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       tailwindcss-motion:
-        specifier: 'catalog:'
+        specifier: 0.4.3-beta
         version: 0.4.3-beta(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       tailwindcss-safe-area:
-        specifier: 'catalog:'
+        specifier: 0.6.0
         version: 0.6.0(tailwindcss@3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       tar:
-        specifier: 'catalog:'
+        specifier: 7.4.3
         version: 7.4.3
       tsup:
-        specifier: 'catalog:'
+        specifier: 8.3.5
         version: 8.3.5(jiti@2.3.3)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.6.1)
       tsx:
-        specifier: 'catalog:'
+        specifier: 4.19.2
         version: 4.19.2
       turbo:
-        specifier: 'catalog:'
+        specifier: 2.3.3
         version: 2.3.3
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.7.2
         version: 5.7.2
       unplugin-ast:
-        specifier: 'catalog:'
+        specifier: ^0.12.0
         version: 0.12.0(rollup@2.79.2)
       vite:
-        specifier: 'catalog:'
+        specifier: ^6.0.2
         version: 6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1)
       vite-bundle-analyzer:
-        specifier: 'catalog:'
+        specifier: 0.15.2
         version: 0.15.2
       vite-plugin-mkcert:
-        specifier: 'catalog:'
+        specifier: 1.17.6
         version: 1.17.6(vite@6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))
       vite-plugin-pwa:
-        specifier: 'catalog:'
+        specifier: 0.21.1
         version: 0.21.1(@vite-pwa/assets-generator@0.2.6)(vite@6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
       vite-tsconfig-paths:
-        specifier: 'catalog:'
+        specifier: 5.1.3
         version: 5.1.3(typescript@5.7.2)(vite@6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1))
       vitest:
-        specifier: 'catalog:'
+        specifier: 2.1.6
         version: 2.1.6(@edge-runtime/vm@3.2.0)(@types/node@22.10.1)(happy-dom@15.11.7)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1)
 
   apps/main:
     dependencies:
       '@egoist/tipc':
-        specifier: 'catalog:'
+        specifier: 0.3.2
         version: 0.3.2(electron@33.2.0)(react@18.3.1)
       '@electron-toolkit/preload':
-        specifier: 'catalog:'
+        specifier: ^3.0.1
         version: 3.0.1(electron@33.2.0)
       '@electron-toolkit/utils':
-        specifier: 'catalog:'
+        specifier: ^3.0.0
         version: 3.0.0(electron@33.2.0)
       '@eneris/push-receiver':
-        specifier: 'catalog:'
+        specifier: 4.3.0
         version: 4.3.0
       '@follow/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@mozilla/readability':
-        specifier: 'catalog:'
+        specifier: ^0.5.0
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@openpanel/web':
-        specifier: 'catalog:'
+        specifier: 1.0.1
         version: 1.0.1
       '@sentry/electron':
-        specifier: 'catalog:'
+        specifier: 5.7.0
         version: 5.7.0
       builder-util-runtime:
-        specifier: 'catalog:'
+        specifier: 9.2.10
         version: 9.2.10
       electron-context-menu:
-        specifier: 'catalog:'
+        specifier: 4.0.4
         version: 4.0.4(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
       electron-log:
-        specifier: 'catalog:'
+        specifier: 5.2.3
         version: 5.2.3
       electron-squirrel-startup:
-        specifier: 'catalog:'
+        specifier: 1.0.1
         version: 1.0.1
       electron-updater:
-        specifier: 'catalog:'
+        specifier: ^6.3.9
         version: 6.3.9
       es-toolkit:
-        specifier: 'catalog:'
+        specifier: 1.29.0
         version: 1.29.0
       fast-folder-size:
-        specifier: 'catalog:'
+        specifier: 2.3.0
         version: 2.3.0
       font-list:
-        specifier: 'catalog:'
+        specifier: 1.5.1
         version: 1.5.1
       i18next:
-        specifier: 'catalog:'
+        specifier: ^24.0.2
         version: 24.0.2(typescript@5.7.2)
       js-yaml:
-        specifier: 'catalog:'
+        specifier: 4.1.0
         version: 4.1.0
       linkedom:
-        specifier: 'catalog:'
+        specifier: ^0.18.5
         version: 0.18.5
       lowdb:
-        specifier: 'catalog:'
+        specifier: 7.0.1
         version: 7.0.1
       msedge-tts:
-        specifier: 'catalog:'
+        specifier: 1.3.4
         version: 1.3.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       node-machine-id:
-        specifier: 'catalog:'
+        specifier: 1.1.12
         version: 1.1.12
       ofetch:
-        specifier: 'catalog:'
+        specifier: 1.4.1
         version: 1.4.1
       semver:
-        specifier: 'catalog:'
+        specifier: 7.6.3
         version: 7.6.3
       tar:
-        specifier: 'catalog:'
+        specifier: 7.4.3
         version: 7.4.3
       vscode-languagedetection:
-        specifier: 'catalog:'
+        specifier: npm:@vscode/vscode-languagedetection@^1.0.22
         version: '@vscode/vscode-languagedetection@1.0.22'
     devDependencies:
       '@types/js-yaml':
-        specifier: 'catalog:'
+        specifier: 4.0.9
         version: 4.0.9
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.10.1
         version: 22.10.1
       electron:
-        specifier: 'catalog:'
+        specifier: 33.2.0
         version: 33.2.0
       electron-devtools-installer:
-        specifier: 'catalog:'
+        specifier: 3.2.0
         version: 3.2.0
       hono:
-        specifier: 'catalog:'
+        specifier: 4.6.12
         version: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
 
   apps/renderer:
     dependencies:
       '@dnd-kit/core':
-        specifier: 'catalog:'
+        specifier: ^6.2.0
         version: 6.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@egoist/tipc':
-        specifier: 'catalog:'
+        specifier: 0.3.2
         version: 0.3.2(electron@33.2.0)(react@18.3.1)
       '@electron-toolkit/preload':
-        specifier: 'catalog:'
+        specifier: ^3.0.1
         version: 3.0.1(electron@33.2.0)
       '@follow/electron-main':
         specifier: workspace:*
@@ -1054,293 +394,293 @@ importers:
         specifier: workspace:*
         version: link:../../packages/shared
       '@fontsource/sn-pro':
-        specifier: 'catalog:'
+        specifier: 5.1.0
         version: 5.1.0
       '@headlessui/react':
-        specifier: 'catalog:'
+        specifier: 2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@hookform/resolvers':
-        specifier: 'catalog:'
+        specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@18.3.1))
       '@lottiefiles/dotlottie-react':
-        specifier: 'catalog:'
+        specifier: 0.10.1
         version: 0.10.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@microflash/remark-callout-directives':
-        specifier: 'catalog:'
+        specifier: 4.3.2
         version: 4.3.2
       '@openpanel/web':
-        specifier: 'catalog:'
+        specifier: 1.0.1
         version: 1.0.1
       '@radix-ui/react-avatar':
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-context-menu':
-        specifier: 'catalog:'
+        specifier: 2.2.2
         version: 2.2.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dialog':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dropdown-menu':
-        specifier: 'catalog:'
+        specifier: 2.1.2
         version: 2.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-hover-card':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-label':
-        specifier: 'catalog:'
+        specifier: 2.1.0
         version: 2.1.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-popover':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slider':
-        specifier: 'catalog:'
+        specifier: ^1.2.1
         version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
-        specifier: 'catalog:'
+        specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
       '@sentry/react':
-        specifier: 'catalog:'
+        specifier: 8.41.0
         version: 8.41.0(react@18.3.1)
       '@shikijs/transformers':
-        specifier: 'catalog:'
+        specifier: 1.24.0
         version: 1.24.0
       '@tanstack/query-sync-storage-persister':
-        specifier: 'catalog:'
+        specifier: 5.62.0
         version: 5.62.0
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: 5.62.0
         version: 5.62.0(react@18.3.1)
       '@tanstack/react-query-devtools':
-        specifier: 'catalog:'
+        specifier: 5.62.0
         version: 5.62.0(@tanstack/react-query@5.62.0(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query-persist-client':
-        specifier: 'catalog:'
+        specifier: 5.62.0
         version: 5.62.0(@tanstack/react-query@5.62.0(react@18.3.1))(react@18.3.1)
       '@tanstack/react-virtual':
-        specifier: 'catalog:'
+        specifier: 3.10.9
         version: 3.10.9(patch_hash=fpkworxfwphev7q33sgiutu7aq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@use-gesture/react':
-        specifier: 'catalog:'
+        specifier: 10.3.1
         version: 10.3.1(react@18.3.1)
       '@welldone-software/why-did-you-render':
-        specifier: 'catalog:'
+        specifier: 8.0.3
         version: 8.0.3(react@18.3.1)
       '@yornaath/batshit':
-        specifier: 'catalog:'
+        specifier: 0.10.1
         version: 0.10.1
       camelcase-keys:
-        specifier: 'catalog:'
+        specifier: 9.1.3
         version: 9.1.3
       click-to-react-component:
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx:
-        specifier: 'catalog:'
+        specifier: 2.1.1
         version: 2.1.1
       cmdk:
-        specifier: 'catalog:'
+        specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       dayjs:
-        specifier: 'catalog:'
+        specifier: 1.11.13
         version: 1.11.13
       dexie:
-        specifier: 'catalog:'
+        specifier: 4.0.10
         version: 4.0.10
       dexie-export-import:
-        specifier: 'catalog:'
+        specifier: ^4.1.4
         version: 4.1.4(dexie@4.0.10)
       dnum:
-        specifier: 'catalog:'
+        specifier: ^2.14.0
         version: 2.14.0
       electron-log:
-        specifier: 'catalog:'
+        specifier: 5.2.3
         version: 5.2.3
       embla-carousel-react:
-        specifier: 'catalog:'
+        specifier: 8.5.1
         version: 8.5.1(react@18.3.1)
       embla-carousel-wheel-gestures:
-        specifier: 'catalog:'
+        specifier: 8.0.1
         version: 8.0.1(embla-carousel@8.5.1)
       es-toolkit:
         specifier: 'catalog:'
         version: 1.29.0
       firebase:
-        specifier: 'catalog:'
+        specifier: 11.0.2
         version: 11.0.2
       foxact:
-        specifier: 'catalog:'
+        specifier: 0.2.42
         version: 0.2.42(react@18.3.1)
       framer-motion:
-        specifier: 'catalog:'
+        specifier: 11.12.0
         version: 11.12.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       franc-min:
-        specifier: 'catalog:'
+        specifier: 6.2.0
         version: 6.2.0
       fuse.js:
-        specifier: 'catalog:'
+        specifier: 7.0.0
         version: 7.0.0
       hast-util-to-jsx-runtime:
-        specifier: 'catalog:'
+        specifier: 2.3.2
         version: 2.3.2
       hast-util-to-mdast:
-        specifier: 'catalog:'
+        specifier: ^10.1.1
         version: 10.1.1
       hast-util-to-text:
-        specifier: 'catalog:'
+        specifier: 4.0.2
         version: 4.0.2
       i18next:
-        specifier: 'catalog:'
+        specifier: ^24.0.2
         version: 24.0.2(typescript@5.7.2)
       i18next-browser-languagedetector:
-        specifier: 'catalog:'
+        specifier: 8.0.0
         version: 8.0.0
       idb-keyval:
-        specifier: 'catalog:'
+        specifier: 6.2.1
         version: 6.2.1
       immer:
-        specifier: 'catalog:'
+        specifier: 10.1.1
         version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
       katex:
-        specifier: 'catalog:'
+        specifier: 0.16.11
         version: 0.16.11
       lethargy:
-        specifier: 'catalog:'
+        specifier: 1.0.9
         version: 1.0.9
       masonic:
-        specifier: 'catalog:'
+        specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
       mdast-util-gfm-table:
-        specifier: 'catalog:'
+        specifier: ^2.0.0
         version: 2.0.0
       mdast-util-to-markdown:
-        specifier: 'catalog:'
+        specifier: ^2.1.2
         version: 2.1.2
       nanoid:
-        specifier: 'catalog:'
+        specifier: 5.0.9
         version: 5.0.9
       ofetch:
-        specifier: 'catalog:'
+        specifier: 1.4.1
         version: 1.4.1
       path-to-regexp:
-        specifier: 'catalog:'
+        specifier: 8.2.0
         version: 8.2.0
       plain-shiki:
-        specifier: 'catalog:'
+        specifier: 0.0.12
         version: 0.0.12(shiki@1.24.0)
       re-resizable:
-        specifier: 'catalog:'
+        specifier: 6.10.1
         version: 6.10.1(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-blurhash:
-        specifier: 'catalog:'
+        specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-error-boundary:
-        specifier: 'catalog:'
+        specifier: 4.1.2
         version: 4.1.2(react@18.3.1)
       react-fast-marquee:
-        specifier: 'catalog:'
+        specifier: 1.6.5
         version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: 7.53.2
         version: 7.53.2(react@18.3.1)
       react-hotkeys-hook:
-        specifier: 'catalog:'
+        specifier: 4.6.1
         version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-i18next:
-        specifier: 'catalog:'
+        specifier: ^15.1.3
         version: 15.1.3(i18next@24.0.2(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-intersection-observer:
-        specifier: 'catalog:'
+        specifier: 9.13.1
         version: 9.13.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-ios-pwa-prompt:
-        specifier: 'catalog:'
+        specifier: ^2.0.6
         version: 2.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-resizable-layout:
-        specifier: 'catalog:'
+        specifier: npm:@innei/react-resizable-layout@0.7.3-fork.1
         version: '@innei/react-resizable-layout@0.7.3-fork.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)'
       react-router:
-        specifier: 'catalog:'
+        specifier: 7.0.1
         version: 7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-selecto:
-        specifier: 'catalog:'
+        specifier: ^1.26.3
         version: 1.26.3
       react-shadow:
-        specifier: 'catalog:'
+        specifier: 20.5.0
         version: 20.5.0(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-zoom-pan-pinch:
-        specifier: 'catalog:'
+        specifier: ^3.6.1
         version: 3.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       rehype-infer-description-meta:
-        specifier: 'catalog:'
+        specifier: 2.0.0
         version: 2.0.0
       rehype-parse:
-        specifier: 'catalog:'
+        specifier: 9.0.1
         version: 9.0.1
       rehype-sanitize:
-        specifier: 'catalog:'
+        specifier: 6.0.0
         version: 6.0.0
       rehype-stringify:
-        specifier: 'catalog:'
+        specifier: 10.0.1
         version: 10.0.1
       remark-directive:
-        specifier: 'catalog:'
+        specifier: 3.0.0
         version: 3.0.0
       remark-gfm:
-        specifier: 'catalog:'
+        specifier: 4.0.0
         version: 4.0.0
       remark-gh-alerts:
-        specifier: 'catalog:'
+        specifier: 0.0.3
         version: 0.0.3(@types/mdast@4.0.4)(unified@11.0.5)
       remark-parse:
-        specifier: 'catalog:'
+        specifier: 11.0.0
         version: 11.0.0
       remark-rehype:
-        specifier: 'catalog:'
+        specifier: 11.1.1
         version: 11.1.1
       shiki:
-        specifier: 'catalog:'
+        specifier: 1.24.0
         version: 1.24.0
       sonner:
-        specifier: 'catalog:'
+        specifier: 1.7.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tldts:
-        specifier: 'catalog:'
+        specifier: 6.1.65
         version: 6.1.65
       unified:
-        specifier: 'catalog:'
+        specifier: 11.0.5
         version: 11.0.5
       unist-util-visit-parents:
-        specifier: 'catalog:'
+        specifier: ^6.0.1
         version: 6.0.1
       use-context-selector:
-        specifier: 'catalog:'
+        specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.23.2)
       use-pull-to-refresh:
-        specifier: 'catalog:'
+        specifier: 2.4.1
         version: 2.4.1(react@18.3.1)
       use-sync-external-store:
-        specifier: 'catalog:'
+        specifier: 1.2.2
         version: 1.2.2(react@18.3.1)
       usehooks-ts:
-        specifier: 'catalog:'
+        specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
       vfile:
-        specifier: 'catalog:'
+        specifier: 6.0.3
         version: 6.0.3
       web-push:
-        specifier: 'catalog:'
+        specifier: 3.6.7
         version: 3.6.7
       zod:
-        specifier: 'catalog:'
+        specifier: 3.23.8
         version: 3.23.8
       zustand:
-        specifier: 'catalog:'
+        specifier: 5.0.1
         version: 5.0.1(@types/react@18.3.12)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.2.2(react@18.3.1))
     devDependencies:
       '@babel/generator':
-        specifier: 'catalog:'
+        specifier: 7.26.2
         version: 7.26.2
       '@follow/atoms':
         specifier: workspace:*
@@ -1367,127 +707,127 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       '@hono/node-server':
-        specifier: 'catalog:'
+        specifier: 1.13.7
         version: 1.13.7(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@types/katex':
-        specifier: 'catalog:'
+        specifier: 0.16.7
         version: 0.16.7
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.10.1
         version: 22.10.1
       '@types/react':
-        specifier: 'catalog:'
+        specifier: ^18.3.12
         version: 18.3.12
       '@types/react-dom':
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1
       '@vite-pwa/assets-generator':
-        specifier: 'catalog:'
+        specifier: ^0.2.6
         version: 0.2.6
       fake-indexeddb:
-        specifier: 'catalog:'
+        specifier: 6.0.0
         version: 6.0.0
       happy-dom:
-        specifier: 'catalog:'
+        specifier: 15.11.7
         version: 15.11.7
       react:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-scan:
-        specifier: 'catalog:'
+        specifier: 0.0.35
         version: 0.0.35
 
   apps/server:
     dependencies:
       '@fastify/middie':
-        specifier: 'catalog:'
+        specifier: 9.0.2
         version: 9.0.2
       '@fastify/request-context':
-        specifier: 'catalog:'
+        specifier: 6.0.1
         version: 6.0.1
       '@fontsource/sn-pro':
-        specifier: 'catalog:'
+        specifier: 5.1.0
         version: 5.1.0
       '@openpanel/web':
-        specifier: 'catalog:'
+        specifier: 1.0.1
         version: 1.0.1
       '@resvg/resvg-js':
-        specifier: 'catalog:'
+        specifier: 2.6.2
         version: 2.6.2
       '@sentry/react':
-        specifier: 'catalog:'
+        specifier: 8.41.0
         version: 8.41.0(react@18.3.1)
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: 5.62.0
         version: 5.62.0(react@18.3.1)
       blurhash:
-        specifier: 'catalog:'
+        specifier: 2.0.5
         version: 2.0.5
       click-to-react-component:
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       dayjs:
-        specifier: 'catalog:'
+        specifier: 1.11.13
         version: 1.11.13
       fastify:
-        specifier: 'catalog:'
+        specifier: 5.1.0
         version: 5.1.0
       framer-motion:
-        specifier: 'catalog:'
+        specifier: 11.12.0
         version: 11.12.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       i18next:
-        specifier: 'catalog:'
+        specifier: ^24.0.2
         version: 24.0.2(typescript@5.7.2)
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
       kose-font:
-        specifier: 'catalog:'
+        specifier: 1.0.0
         version: 1.0.0
       linkedom:
-        specifier: 'catalog:'
+        specifier: ^0.18.5
         version: 0.18.5
       ofetch:
-        specifier: 'catalog:'
+        specifier: 1.4.1
         version: 1.4.1
       rc-modal-sheet:
-        specifier: 'catalog:'
+        specifier: 0.3.2
         version: 0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.12.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.5)(vaul@1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       react:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1
       react-blurhash:
-        specifier: 'catalog:'
+        specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-hotkeys-hook:
-        specifier: 'catalog:'
+        specifier: 4.6.1
         version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-i18next:
-        specifier: 'catalog:'
+        specifier: ^15.1.3
         version: 15.1.3(i18next@24.0.2(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-photo-view:
-        specifier: 'catalog:'
+        specifier: 1.2.6
         version: 1.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router:
-        specifier: 'catalog:'
+        specifier: 7.0.1
         version: 7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       satori:
-        specifier: 'catalog:'
+        specifier: 0.12.0
         version: 0.12.0
       sonner:
-        specifier: 'catalog:'
+        specifier: 1.7.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
-        specifier: 'catalog:'
+        specifier: 3.4.15
         version: 3.4.15(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))
       use-context-selector:
-        specifier: 'catalog:'
+        specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.23.2)
       xss:
-        specifier: 'catalog:'
+        specifier: 1.0.15
         version: 1.0.15
     devDependencies:
       '@follow/components':
@@ -1512,55 +852,55 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       '@radix-ui/react-avatar':
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/html-minifier-terser':
-        specifier: 'catalog:'
+        specifier: 7.0.2
         version: 7.0.2
       chokidar:
-        specifier: 'catalog:'
+        specifier: 4.0.1
         version: 4.0.1
       daisyui:
-        specifier: 'catalog:'
+        specifier: 4.12.14
         version: 4.12.14(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.4.49)
       dotenv-flow:
-        specifier: 'catalog:'
+        specifier: 4.1.0
         version: 4.1.0
       es-toolkit:
         specifier: 'catalog:'
         version: 1.29.0
       foxact:
-        specifier: 'catalog:'
+        specifier: 0.2.42
         version: 0.2.42(react@18.3.1)
       glob:
-        specifier: 'catalog:'
+        specifier: 11.0.0
         version: 11.0.0
       html-minifier-terser:
-        specifier: 'catalog:'
+        specifier: 7.2.0
         version: 7.2.0
       lightningcss:
-        specifier: 'catalog:'
+        specifier: 1.28.2
         version: 1.28.2
       masonic:
-        specifier: 'catalog:'
+        specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
       nanoid:
-        specifier: 'catalog:'
+        specifier: 5.0.9
         version: 5.0.9
       path-to-regexp:
-        specifier: 'catalog:'
+        specifier: 8.2.0
         version: 8.2.0
       react-dom:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       tsup:
-        specifier: 'catalog:'
+        specifier: 8.3.5
         version: 8.3.5(jiti@2.3.3)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.6.1)
       tsx:
-        specifier: 'catalog:'
+        specifier: 4.19.2
         version: 4.19.2
       vite:
-        specifier: 'catalog:'
+        specifier: 6.0.2
         version: 6.0.2(@types/node@22.10.1)(jiti@2.3.3)(lightningcss@1.28.2)(terser@5.35.0)(tsx@4.19.2)(yaml@2.6.1)
 
   packages/atoms:
@@ -1575,13 +915,13 @@ importers:
         specifier: workspace:*
         version: link:../utils
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
 
   packages/components:
     dependencies:
       '@essentials/request-timeout':
-        specifier: 'catalog:'
+        specifier: 1.3.0
         version: 1.3.0
       '@follow/hooks':
         specifier: workspace:*
@@ -1599,112 +939,112 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@headlessui/react':
-        specifier: 'catalog:'
+        specifier: 2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-avatar':
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-checkbox':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-context-menu':
-        specifier: 'catalog:'
+        specifier: 2.2.2
         version: 2.2.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dialog':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dropdown-menu':
-        specifier: 'catalog:'
+        specifier: 2.1.2
         version: 2.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-hover-card':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-label':
-        specifier: 'catalog:'
+        specifier: 2.1.0
         version: 2.1.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-navigation-menu':
-        specifier: 'catalog:'
+        specifier: 1.2.1
         version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-popover':
-        specifier: 'catalog:'
+        specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-radio-group':
-        specifier: 'catalog:'
+        specifier: 1.2.1
         version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-scroll-area':
-        specifier: 'catalog:'
+        specifier: 1.2.1
         version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-select':
-        specifier: 'catalog:'
+        specifier: 2.1.2
         version: 2.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slider':
-        specifier: 'catalog:'
+        specifier: ^1.2.1
         version: 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
-        specifier: 'catalog:'
+        specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
       '@radix-ui/react-switch':
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-tabs':
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-toast':
-        specifier: 'catalog:'
+        specifier: 1.2.2
         version: 1.2.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-tooltip':
-        specifier: 'catalog:'
+        specifier: 1.1.4
         version: 1.1.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-hook/window-size':
-        specifier: 'catalog:'
+        specifier: 3.1.1
         version: 3.1.1(react@18.3.1)
       class-variance-authority:
-        specifier: 'catalog:'
+        specifier: 0.7.1
         version: 0.7.1
       dayjs:
-        specifier: 'catalog:'
+        specifier: 1.11.13
         version: 1.11.13
       foxact:
-        specifier: 'catalog:'
+        specifier: 0.2.42
         version: 0.2.42(react@18.3.1)
       framer-motion:
-        specifier: 'catalog:'
+        specifier: 11.12.0
         version: 11.12.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
       masonic:
-        specifier: 'catalog:'
+        specifier: 4.0.1
         version: 4.0.1(react@18.3.1)
       react:
         specifier: ^18.0.0
         version: 18.3.1
       react-blurhash:
-        specifier: 'catalog:'
+        specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-dom:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
       react-fast-marquee:
-        specifier: 'catalog:'
+        specifier: 1.6.5
         version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: 7.53.2
         version: 7.53.2(react@18.3.1)
       react-i18next:
-        specifier: 'catalog:'
+        specifier: ^15.1.3
         version: 15.1.3(i18next@24.0.2(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
-        specifier: 'catalog:'
+        specifier: 1.7.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       use-context-selector:
-        specifier: 'catalog:'
+        specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.23.2)
       usehooks-ts:
-        specifier: 'catalog:'
+        specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
       vaul:
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/constants:
@@ -1728,10 +1068,10 @@ importers:
         specifier: workspace:*
         version: link:../utils
       foxact:
-        specifier: 'catalog:'
+        specifier: 0.2.42
         version: 0.2.42(react@18.3.1)
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
       react:
         specifier: ^18.0.0
@@ -1740,19 +1080,19 @@ importers:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
       usehooks-ts:
-        specifier: 'catalog:'
+        specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
 
   packages/logger:
     dependencies:
       electron-log:
-        specifier: 'catalog:'
+        specifier: 5.2.3
         version: 5.2.3
 
   packages/models:
     dependencies:
       '@auth/core':
-        specifier: 'catalog:'
+        specifier: 0.37.4
         version: 0.37.4
       '@follow/shared':
         specifier: workspace:*
@@ -1764,46 +1104,46 @@ importers:
         specifier: workspace:*
         version: link:../utils
       hono:
-        specifier: 'catalog:'
+        specifier: 4.6.12
         version: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
 
   packages/shared:
     dependencies:
       '@electron-toolkit/preload':
-        specifier: 'catalog:'
+        specifier: ^3.0.1
         version: 3.0.1(electron@33.2.0)
       '@electron-toolkit/tsconfig':
-        specifier: 'catalog:'
+        specifier: ^1.0.1
         version: 1.0.1(@types/node@22.10.1)
       '@hono/node-server':
-        specifier: 'catalog:'
+        specifier: ^1.13.7
         version: 1.13.7(hono@4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@t3-oss/env-core':
-        specifier: 'catalog:'
+        specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.2)(zod@3.23.8)
       better-auth:
-        specifier: 'catalog:'
+        specifier: 1.0.7
         version: 1.0.7(encoding@0.1.13)
       drizzle-orm:
-        specifier: 'catalog:'
+        specifier: ^0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(kysely@0.27.4)(react@18.3.1)
       electron:
-        specifier: 'catalog:'
+        specifier: ^33.2.0
         version: 33.2.0
       hono:
-        specifier: 'catalog:'
+        specifier: ^4.6.12
         version: 4.6.12(patch_hash=qptujxncoai6tukc4qaqsrqk24)
       react:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: 'catalog:'
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       sonner:
-        specifier: 'catalog:'
+        specifier: 1.7.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
-        specifier: 'catalog:'
+        specifier: ^3.23.8
         version: 3.23.8
 
   packages/types: {}
@@ -1817,22 +1157,22 @@ importers:
         specifier: workspace:*
         version: link:../types
       clsx:
-        specifier: 'catalog:'
+        specifier: 2.1.1
         version: 2.1.1
       framer-motion:
-        specifier: 'catalog:'
+        specifier: 11.12.0
         version: 11.12.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nanoid:
-        specifier: 'catalog:'
+        specifier: 5.0.9
         version: 5.0.9
       tailwind-merge:
-        specifier: 'catalog:'
+        specifier: 2.5.5
         version: 2.5.5
       tldts:
-        specifier: 'catalog:'
+        specifier: 6.1.65
         version: 6.1.65
       uniqolor:
-        specifier: 'catalog:'
+        specifier: 1.1.1
         version: 1.1.1
 
 packages:
@@ -4183,8 +3523,8 @@ packages:
   '@radix-ui/react-avatar@1.1.1':
     resolution: {integrity: sha512-eoOtThOmxeoizxpX6RiEsQZ2wj5r4+zoeqAwO0cBaFQGjJwIH3dIX0OCxNrCyrrdxG+vBweMETh3VziQG7c1kw==}
     peerDependencies:
-      '@types/react': npm:types-react@19.0.0-rc.1
-      '@types/react-dom': npm:types-react-dom@19.0.0-rc.1
+      '@types/react': '*'
+      '@types/react-dom': '*'
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
