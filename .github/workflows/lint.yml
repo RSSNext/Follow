@@ -3,6 +3,10 @@ on:
   push:
     branches: [main, dev]
 
+env:
+  VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
+  VITE_API_URL: ${{ vars.VITE_API_URL }}
+
 name: CI Format, Typecheck and Lint
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-lint
