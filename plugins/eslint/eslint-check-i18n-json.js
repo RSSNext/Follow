@@ -72,7 +72,7 @@ export default {
           category: "Possible Errors",
           recommended: true,
         },
-        fixable: "code", // 将 fixable 设置为 "code"
+        fixable: "code", // Set fixable to "code"
       },
       create(context) {
         return {
