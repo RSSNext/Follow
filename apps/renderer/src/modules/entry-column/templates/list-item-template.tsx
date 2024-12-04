@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { cn, isSafari } from "@follow/utils/utils"
+import { clsx, cn, isSafari } from "@follow/utils/utils"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useRealInWideMode, useUISettingKey } from "~/atoms/settings/ui"
@@ -63,6 +63,8 @@ export function ListItem({
 
   const related = feed || inbox
 
+  const hasAudio = entry.entries?.attachments?.[0].url
+
   return (
     <div
       className={cn(
@@ -79,7 +81,7 @@ export function ListItem({
 
           // FIXME: Safari bug, not support line-clamp cross elements
           !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
-          withAudio && "max-w-[calc(100%-88px)]",
+          withAudio && !!hasAudio && "max-w-[calc(100%-88px)]",
         )}
       >
         <div
@@ -144,17 +146,26 @@ export function ListItem({
         )}
       </div>
 
-      {withAudio && entry.entries?.attachments?.[0].url && (
+      {withAudio && !!hasAudio && (
         <AudioCover
           entryId={entryId}
-          src={entry.entries?.attachments?.[0].url}
+          src={entry.entries!.attachments![0].url}
           durationInSeconds={Number.parseInt(
-            String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0),
+            String(entry.entries!.attachments![0].duration_in_seconds ?? 0),
             10,
           )}
           feedIcon={
             <FeedIcon
-              fallback={false}
+              fallback={true}
+              fallbackElement={
+                <div
+                  className={clsx(
+                    "bg-theme-placeholder-image",
+                    settingWideMode ? "size-[65px]" : "size-[80px]",
+                    "rounded",
+                  )}
+                />
+              }
               feed={feed || inbox}
               entry={entry.entries}
               size={settingWideMode ? 65 : 80}

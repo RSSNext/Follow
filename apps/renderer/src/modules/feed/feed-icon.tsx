@@ -85,6 +85,7 @@ export function FeedIcon({
   className,
   size = 20,
   fallback = true,
+  fallbackElement,
   siteUrl,
   useMedia,
   disableFadeIn,
@@ -100,6 +101,7 @@ export function FeedIcon({
    * Image loading error fallback to site icon
    */
   fallback?: boolean
+  fallbackElement?: ReactNode
 
   useMedia?: boolean
   disableFadeIn?: boolean
@@ -251,7 +253,7 @@ export function FeedIcon({
           {ImageElement}
         </AvatarImage>
         <AvatarFallback delayMs={200} asChild>
-          {fallbackIcon}
+          {fallbackElement || fallbackIcon}
         </AvatarFallback>
       </Avatar>
     )
