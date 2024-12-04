@@ -56,8 +56,8 @@ export function ListItem({
   const thumbnailRatio = useUISettingKey("thumbnailRatio")
   const rid = `list-item-${entryId}`
 
-  const envIsSafari = isSafari()
   const lineClamp = useMemo(() => {
+    const envIsSafari = isSafari()
     let lineClampTitle = settingWideMode ? 1 : 2
     let lineClampDescription = settingWideMode ? 1 : 2
     if (translation?.title) {
@@ -76,7 +76,7 @@ export function ListItem({
       title: envIsSafari ? `line-clamp-[${lineClampTitle}]` : "",
       description: envIsSafari ? `line-clamp-[${lineClampDescription}]` : "",
     }
-  }, [envIsSafari, translation?.title, translation?.description, settingWideMode])
+  }, [translation?.title, translation?.description, settingWideMode])
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
