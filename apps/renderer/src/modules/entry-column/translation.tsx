@@ -16,7 +16,7 @@ export const EntryTranslation: Component<{
     return target
   }, [source, target, showTranslation])
 
-  const content = useMemo(() => (source + nextTarget ? ` ${nextTarget}` : ""), [source, nextTarget])
+  const content = useMemo(() => source + (nextTarget ? ` ${nextTarget}` : ""), [source, nextTarget])
 
   if (!source) {
     return null
