@@ -1,6 +1,7 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { clsx, cn, isSafari } from "@follow/utils/utils"
+import { useMemo } from "react"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useRealInWideMode, useUISettingKey } from "~/atoms/settings/ui"
@@ -55,11 +56,32 @@ export function ListItem({
   const thumbnailRatio = useUISettingKey("thumbnailRatio")
   const rid = `list-item-${entryId}`
 
+  const envIsSafari = isSafari()
+  const lineClamp = useMemo(() => {
+    let lineClampTitle = settingWideMode ? 1 : 2
+    let lineClampDescription = settingWideMode ? 1 : 2
+    if (translation?.title) {
+      lineClampTitle += settingWideMode ? 1 : 2
+    }
+    if (translation?.description) {
+      lineClampDescription += settingWideMode ? 1 : 2
+    }
+
+    // for tailwind
+    // line-clamp-[1] line-clamp-[2] line-clamp-[3] line-clamp-[4] line-clamp-[5] line-clamp-[6] line-clamp-[7] line-clamp-[8]
+
+    // FIXME: Safari bug, not support line-clamp cross elements
+    return {
+      global: !envIsSafari ? `line-clamp-[${lineClampTitle + lineClampDescription}]` : "",
+      title: envIsSafari ? `line-clamp-[${lineClampTitle}]` : "",
+      description: envIsSafari ? `line-clamp-[${lineClampDescription}]` : "",
+    }
+  }, [envIsSafari, translation?.title, translation?.description, settingWideMode])
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
 
   const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
-  const envIsSafari = isSafari()
 
   const related = feed || inbox
 
@@ -78,9 +100,7 @@ export function ListItem({
       <div
         className={cn(
           "-mt-0.5 flex-1 text-sm leading-tight",
-
-          // FIXME: Safari bug, not support line-clamp cross elements
-          !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
+          lineClamp.global,
           withAudio && !!hasAudio && "max-w-[calc(100%-88px)]",
         )}
       >
@@ -110,16 +130,13 @@ export function ListItem({
         >
           {entry.entries.title ? (
             <EntryTranslation
-              useOverlay
-              side="top"
-              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
+              className={cn("break-all", lineClamp.title)}
               source={entry.entries.title}
               target={translation?.title}
             />
           ) : (
             <EntryTranslation
-              useOverlay
-              side="top"
+              className={cn("break-all", lineClamp.description)}
               source={entry.entries.description}
               target={translation?.description}
             />
@@ -136,9 +153,7 @@ export function ListItem({
             )}
           >
             <EntryTranslation
-              useOverlay
-              side="top"
-              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
+              className={cn("break-all", lineClamp.description)}
               source={entry.entries.description}
               target={translation?.description}
             />

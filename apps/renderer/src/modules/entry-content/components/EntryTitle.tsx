@@ -98,7 +98,6 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
           source={entry.entries.title}
           target={translation.data?.title}
           className="select-text"
-          useOverlay
         />
       </div>
       <div className="mt-2 text-[13px] font-medium text-zinc-500">
