@@ -206,7 +206,7 @@ export const EntryList: FC<EntryListProps> = memo(
       <>
         <div
           onKeyDown={handleKeyDown}
-          className={"relative w-full"}
+          className={"relative w-full select-text"}
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
           }}

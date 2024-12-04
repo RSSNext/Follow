@@ -74,7 +74,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
       <div ref={ref} className="ml-2 min-w-0 flex-1">
         <div className="-mt-0.5 flex-1 text-sm">
-          <div className="space-x-1 leading-6">
+          <div className="select-none space-x-1 leading-6">
             <span className="inline-flex items-center gap-1 text-base font-semibold">
               <FeedTitle
                 feed={feed}
@@ -151,7 +151,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
 
 export function SocialMediaItemStateLess({ entry, feed }: EntryItemStatelessProps) {
   return (
-    <div className="relative m-auto rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
+    <div className="relative m-auto select-none rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
       <div className="relative">
         <div className="group relative flex px-8 py-6">
           <FeedIcon className="mr-2 size-9" feed={feed} fallback />
@@ -386,7 +386,7 @@ const CollapsedSocialMediaItem: Component<{
         {children}
       </div>
       {isOverflow && !isShowMore && (
-        <div className="absolute inset-x-0 -bottom-2 flex justify-center py-2 duration-200">
+        <div className="absolute inset-x-0 -bottom-2 flex select-none justify-center py-2 duration-200">
           <button
             type="button"
             onClick={(e) => {

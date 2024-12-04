@@ -77,6 +77,17 @@ export const EntryItemWrapper: FC<
 
   const contextMenuProps = useContextMenu({
     onContextMenu: async (e) => {
+      const $target = e.target as HTMLElement
+      const selection = window.getSelection()
+      if (selection) {
+        const targetHasSelection =
+          selection?.toString().length > 0 && $target.contains(selection?.anchorNode)
+        if (targetHasSelection) {
+          e.stopPropagation()
+          return
+        }
+      }
+
       e.preventDefault()
       setIsContextMenuOpen(true)
       await showContextMenu(

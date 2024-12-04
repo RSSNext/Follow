@@ -175,7 +175,7 @@ const SocialMediaDateItem = ({
       // @ts-expect-error
       Wrapper={useCallback(
         ({ children }) => (
-          <div className="m-auto flex w-[645px] max-w-full gap-3 pl-5 text-base lg:text-lg">
+          <div className="m-auto flex w-[645px] max-w-full select-none gap-3 pl-5 text-base lg:text-lg">
             {children}
           </div>
         ),
