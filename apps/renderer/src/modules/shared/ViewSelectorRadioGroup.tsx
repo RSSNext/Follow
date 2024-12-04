@@ -6,7 +6,7 @@ import { cloneElement, forwardRef } from "react"
 
 import { useI18n } from "~/hooks/common"
 
-import { EntryItemStateless } from "../entry-column/item"
+import { EntryItemStateless } from "../entry-column/item-stateless"
 
 export const ViewSelectorRadioGroup = forwardRef<
   HTMLInputElement,
