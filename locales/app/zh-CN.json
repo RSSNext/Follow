@@ -201,6 +201,7 @@
   "feed_form.fee_description": "如需订阅此列表，需支付订阅费用。",
   "feed_form.feed_not_found": "未找到订阅源",
   "feed_form.feedback": "反馈",
+  "feed_form.fill_default": "填充",
   "feed_form.follow": "订阅",
   "feed_form.follow_with_fee": "使用 {{fee}} Power 订阅",
   "feed_form.followed": "🎉 订阅成功",
