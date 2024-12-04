@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
 
+import { DropZone } from "~/components/ui/drop-zone"
 import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { Queries } from "~/queries"
@@ -110,26 +111,21 @@ export function DiscoverImport({ isInit = false }: { isInit?: boolean }) {
                   {isInit ? t("discover.import.new_import_opml") : t("discover.import.opml")}
                 </FormLabel>
                 <FormControl>
-                  <label
-                    className="center flex h-[100px] w-full rounded-md border border-dashed"
-                    htmlFor="upload-file"
-                  >
+                  <DropZone onDrop={(fileList) => onChange(fileList[0])}>
                     {form.formState.dirtyFields.file ? (
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
-
                         <span className="ml-2 text-sm font-semibold opacity-80">{value.name}</span>
                       </Fragment>
                     ) : (
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
-
                         <span className="ml-2 text-sm opacity-80">
                           {t("discover.import.click_to_upload")}
                         </span>
                       </Fragment>
                     )}
-                  </label>
+                  </DropZone>
                 </FormControl>
                 <Input
                   {...fieldProps}
