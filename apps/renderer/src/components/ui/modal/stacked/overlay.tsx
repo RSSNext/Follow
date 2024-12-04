@@ -21,7 +21,7 @@ export const ModalOverlay = forwardRef(
     },
     ref: ForwardedRef<HTMLDivElement>,
   ) => (
-    <Dialog.Overlay asChild>
+    <Dialog.Overlay>
       <AnimatePresence>
         {!hidden && (
           <m.div
