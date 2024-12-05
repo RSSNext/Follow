@@ -31,9 +31,14 @@ type FeedResponseList = {
 }[]
 
 const formSchema = z.object({
-  file: z.instanceof(File).refine((file) => file.size < 500_000, {
-    message: "Your OPML file must be less than 500KB.",
-  }),
+  file: z
+    .instanceof(File)
+    .refine((file) => file.size < 500_000, {
+      message: "Your OPML file must be less than 500KB.",
+    })
+    .refine((file) => file.name.endsWith(".opml") || file.name.endsWith(".xml"), {
+      message: "Your OPML file must be in OPML or XML format.",
+    }),
 })
 
 const NumberDisplay = ({ value }) => <span className="font-bold text-zinc-800">{value ?? 0}</span>
