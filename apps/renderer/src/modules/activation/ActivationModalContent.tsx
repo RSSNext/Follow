@@ -84,7 +84,7 @@ export const ActivationModalContent = ({
               )}
               <FormControl>
                 <Input
-                  className="font-mono placeholder:font-default"
+                  className="placeholder:text-theme-placeholder-text dark:text-zinc-200"
                   placeholder={t("activation.title")}
                   {...field}
                 />

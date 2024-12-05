@@ -1,11 +1,4 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@follow/components/ui/select/index.js"
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -29,6 +22,8 @@ import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTraySetting"
 import { fallbackLanguage } from "~/i18n"
 import { tipcClient } from "~/lib/client"
+import { LanguageMap } from "~/lib/translate"
+import { setTranslationCache } from "~/modules/entry-content/atoms"
 
 import { SettingDescription, SettingInput, SettingSwitch } from "../control"
 import { createSetting } from "../helper/builder"
@@ -73,6 +68,7 @@ export const SettingGeneral = () => {
           IN_ELECTRON && MinimizeToTraySetting,
           isMobile && StartupScreenSelector,
           LanguageSelector,
+          TranslateLanguageSelector,
 
           {
             type: "title",
@@ -95,6 +91,11 @@ export const SettingGeneral = () => {
             label: t("general.group_by_date.label"),
             description: t("general.group_by_date.description"),
           }),
+          isMobile &&
+            defineSettingItem("showQuickTimeline", {
+              label: t("general.show_quick_timeline.label"),
+              description: t("general.show_quick_timeline.description"),
+            }),
 
           defineSettingItem("reduceRefetch", {
             label: t("general.reduce_refetch.label"),
@@ -144,24 +145,21 @@ const VoiceSelector = () => {
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("general.voices")}</span>
-      <Select
+      <ResponsiveSelect
+        size="sm"
+        triggerClassName="w-48"
         defaultValue={voice}
         value={voice}
         onValueChange={(value) => {
           setGeneralSetting("voice", value)
         }}
-      >
-        <SelectTrigger size="sm" className="w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent position="item-aligned">
-          {data?.map((item) => (
-            <SelectItem key={item.ShortName} value={item.ShortName}>
-              {item.FriendlyName}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        items={
+          data?.map((item) => ({
+            label: item.FriendlyName,
+            value: item.ShortName,
+          })) ?? []
+        }
+      />
     </div>
   )
 }
@@ -239,6 +237,28 @@ export const LanguageSelector = ({
           label: langT(`langs.${lang}` as any),
           value: lang,
         }))}
+      />
+    </div>
+  )
+}
+
+const TranslateLanguageSelector = () => {
+  const { t } = useTranslation("settings")
+  const translationLanguage = useGeneralSettingKey("translationLanguage")
+
+  return (
+    <div className="mb-3 mt-4 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("general.translation_language")}</span>
+      <ResponsiveSelect
+        size="sm"
+        triggerClassName="w-48"
+        defaultValue={translationLanguage}
+        value={translationLanguage}
+        onValueChange={(value) => {
+          setGeneralSetting("translationLanguage", value)
+          setTranslationCache({})
+        }}
+        items={Object.values(LanguageMap)}
       />
     </div>
   )

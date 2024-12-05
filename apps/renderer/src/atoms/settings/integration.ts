@@ -14,11 +14,6 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   instapaperUsername: "",
   instapaperPassword: "",
 
-  // omnivore
-  enableOmnivore: false,
-  omnivoreEndpoint: "",
-  omnivoreToken: "",
-
   // obsidian
   enableObsidian: false,
   obsidianVaultPath: "",
@@ -28,6 +23,11 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   outlineEndpoint: "",
   outlineToken: "",
   outlineCollection: "",
+
+  // readeck
+  enableReadeck: false,
+  readeckEndpoint: "",
+  readeckToken: "",
 })
 
 export const {

@@ -13,6 +13,7 @@ import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 
+import { TrendingButton } from "../trending"
 import { RSSHubCategories } from "./constants"
 import styles from "./recommendations.module.css"
 import { RecommendationCard } from "./recommendations-card"
@@ -42,6 +43,7 @@ const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
     lang,
   })
 }
+let firstLoad = true
 export function Recommendations({
   hideTitle,
   className,
@@ -62,8 +64,12 @@ export function Recommendations({
     meta: {
       persist: true,
     },
+    staleTime: 1000 * 60 * 60 * 24, // 1 day
+    refetchOnMount: firstLoad ? "always" : true,
     placeholderData: keepPreviousData,
   })
+
+  firstLoad = false
 
   const { data, isLoading, isFetching } = rsshubPopular
 
@@ -136,14 +142,18 @@ export function Recommendations({
   return (
     <div className={cn(!hideTitle && "mt-8 w-full max-w-[1200px]")}>
       {!hideTitle && (
-        <div className="relative text-center text-lg font-bold">
+        <div className="center relative flex text-lg font-bold">
           <span>{t("discover.popular")}</span>
 
+          <div className="absolute bottom-0 right-0">
+            <TrendingButton language={selectedLang} />
+          </div>
           {isFetching && (
             <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-center gap-8">
               <span className="opacity-0" aria-hidden>
                 {t("discover.popular")}
               </span>
+
               <LoadingCircle size="small" className="center flex" />
             </div>
           )}
@@ -152,7 +162,7 @@ export function Recommendations({
 
       <div
         className={cn(
-          "z-[9] my-3 flex w-full flex-col items-end gap-4 bg-theme-background sm:flex-row sm:items-center",
+          "z-[9] my-3 flex w-full flex-col items-end gap-4 sm:flex-row sm:items-center",
           headerClassName,
         )}
       >

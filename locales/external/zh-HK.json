@@ -31,6 +31,7 @@
   "invitation.getCodeMessage": "你可以通過以下方式獲取邀請碼：",
   "invitation.title": "邀請碼",
   "login.backToWebApp": "返回網頁應用程式",
+  "login.continueWith": "繼續使用 {{provider}}",
   "login.logInTo": "登錄到",
   "login.openApp": "打開應用程式",
   "login.redirecting": "重定向中",

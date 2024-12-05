@@ -12,14 +12,16 @@ export const COMMAND_ID = {
     share: "entry:share",
     read: "entry:read",
     unread: "entry:unread",
+    toggleAISummary: "entry:toggle-ai-summary",
+    toggleAITranslation: "entry:toggle-ai-translation",
   },
   integration: {
     saveToEagle: "integration:save-to-eagle",
     saveToReadwise: "integration:save-to-readwise",
     saveToInstapaper: "integration:save-to-instapaper",
-    saveToOmnivore: "integration:save-to-omnivore",
     saveToObsidian: "integration:save-to-obsidian",
     saveToOutline: "integration:save-to-outline",
+    saveToReadeck: "integration:save-to-readeck",
   },
   list: {
     edit: "list:edit",

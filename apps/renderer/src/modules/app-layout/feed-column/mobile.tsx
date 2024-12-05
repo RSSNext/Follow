@@ -1,8 +1,6 @@
 import { Logo } from "@follow/components/icons/logo.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
-import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { views } from "@follow/constants"
-import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import type { FC } from "react"
@@ -11,11 +9,7 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router"
 
 import { useSetSidebarActiveView, useSidebarActiveView } from "~/atoms/sidebar"
-import { useLoginModalShow, useWhoami } from "~/atoms/user"
-import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
-import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
-import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 
 import { FeedList } from "../../feed-column/list"
 import { FooterInfo } from "./components/FooterInfo"
@@ -33,9 +27,6 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
   }, [asWidget, setActive_])
 
   const [feedListScrollRef, setFeedListScrollRef] = useState<HTMLDivElement | null>()
-
-  const isAuthFail = useLoginModalShow()
-  const user = useWhoami()
 
   const { t } = useTranslation()
 
@@ -72,22 +63,6 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
           ))}
         </SwipeWrapper>
       </div>
-
-      {isAuthFail && !user && (
-        <RootPortal>
-          <DeclarativeModal
-            id="login"
-            CustomModalComponent={PlainModal}
-            open
-            overlay
-            title="Login"
-            canClose={false}
-            clickOutsideToDismiss={false}
-          >
-            <LoginModalContent canClose={false} runtime={IN_ELECTRON ? "app" : "browser"} />
-          </DeclarativeModal>
-        </RootPortal>
-      )}
 
       <FooterInfo />
       <MobileFloatBar

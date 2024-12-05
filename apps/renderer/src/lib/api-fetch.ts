@@ -1,6 +1,5 @@
 import { env } from "@follow/shared/env"
 import type { AppType } from "@follow/shared/hono"
-import { getCsrfToken } from "@hono/auth-js/react"
 import PKG from "@pkg"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
@@ -13,27 +12,15 @@ import { isDev } from "~/constants"
 import { NeedActivationToast } from "~/modules/activation/NeedActivationToast"
 import { DebugRegistry } from "~/modules/debug/registry"
 
-let csrfTokenPromise: Promise<string> | null = null
-
-const getPromisedCsrfToken = async () => {
-  if (!csrfTokenPromise) {
-    csrfTokenPromise = getCsrfToken()
-  }
-
-  return await csrfTokenPromise
-}
 export const apiFetch = ofetch.create({
   baseURL: env.VITE_API_URL,
   credentials: "include",
   retry: false,
-  onRequest: async ({ options }) => {
-    const csrfToken = await getPromisedCsrfToken()
-
+  onRequest: ({ options }) => {
     const header = new Headers(options.headers)
 
     header.set("x-app-version", PKG.version)
     header.set("X-App-Dev", process.env.NODE_ENV === "development" ? "1" : "0")
-    header.set("X-Csrf-Token", csrfToken)
     options.headers = header
   },
   onResponse() {
@@ -92,11 +79,10 @@ export const apiClient = hc<AppType>(env.VITE_API_URL, {
       }
       throw err
     }),
-  async headers() {
+  headers() {
     return {
       "X-App-Version": PKG.version,
       "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
-      "X-Csrf-Token": await getPromisedCsrfToken(),
     }
   },
 })

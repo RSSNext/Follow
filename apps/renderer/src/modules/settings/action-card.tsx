@@ -390,7 +390,7 @@ export function ActionCard({
                               {conditionIdx === 0 && orConditionIdx !== 0 && (
                                 <TableRow className="flex h-16 items-center">
                                   <Button disabled variant="outline">
-                                    Or
+                                    {t("actions.action_card.or")}
                                   </Button>
                                 </TableRow>
                               )}
@@ -463,7 +463,7 @@ export function ActionCard({
                               {conditionIdx !== orConditions.length - 1 && (
                                 <TableRow className="relative flex items-center">
                                   <Button disabled variant="outline">
-                                    And
+                                    {t("actions.action_card.and")}
                                   </Button>
                                 </TableRow>
                               )}

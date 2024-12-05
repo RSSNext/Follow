@@ -10,20 +10,18 @@ const benefits = [
       },
       { icon: "i-mgc-star-cute-re", text: "Support feed owner" },
       { icon: "i-mgc-trophy-cute-re", text: "Booster achievement" },
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" },
     ],
   },
   {
     level: 2,
-    benefits: [
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
-    ],
+    benefits: [{ icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" }],
   },
   {
     level: 3,
     benefits: [
       { icon: "i-mgc-eye-2-cute-re", text: "More developer attention" },
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" },
     ],
   },
   {
@@ -31,7 +29,7 @@ const benefits = [
     benefits: [
       { icon: "i-mgc-eye-2-cute-re", text: "More developer attention" },
       { icon: "i-mgc-magic-2-cute-re", text: "AI summary for feed", comingSoon: true },
-      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time", comingSoon: true },
+      { icon: "i-mgc-rocket-cute-re", text: "Faster feed refresh time" },
     ],
   },
 ]

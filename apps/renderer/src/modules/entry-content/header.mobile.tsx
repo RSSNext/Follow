@@ -16,12 +16,18 @@ import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useEntry } from "~/store/entry/hooks"
 
+import { COMMAND_ID } from "../command/commands/id"
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import type { EntryHeaderProps } from "./header.shared"
 
 function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
   const entry = useEntry(entryId)
-  const actionConfigs = useEntryActions({ entryId, view })
+  const actionConfigs = useEntryActions({ entryId, view }).filter(
+    (item) =>
+      !(
+        [COMMAND_ID.entry.read, COMMAND_ID.entry.unread, COMMAND_ID.entry.copyLink] as string[]
+      ).includes(item.id),
+  )
 
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()
@@ -56,10 +62,12 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
               className="pointer-events-auto flex w-full min-w-0 shrink gap-2 truncate px-1.5 pl-10 text-sm leading-tight text-theme-foreground duration-200"
             >
               <div className="flex min-w-0 grow items-center">
-                <div className="flex min-w-0 shrink items-end gap-1">
-                  <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
+                <div className="flex min-w-0 shrink items-end gap-1 truncate">
+                  <span className="min-w-[50%] shrink truncate font-bold">
+                    {entryTitleMeta.title}
+                  </span>
                   <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
-                  <span className="shrink-0 truncate text-xs opacity-80">
+                  <span className="shrink truncate text-xs opacity-80">
                     {entryTitleMeta.description}
                   </span>
                 </div>

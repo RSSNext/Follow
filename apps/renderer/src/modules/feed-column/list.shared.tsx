@@ -167,16 +167,16 @@ export const ListHeader = ({ view }: { view: number }) => {
 }
 
 const SORT_LIST = [
-  { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
-  { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
+  { icon: tw`i-mgc-numbers-90-sort-ascending-cute-re`, by: "count", order: "asc" },
+  { icon: tw`i-mgc-numbers-90-sort-descending-cute-re`, by: "count", order: "desc" },
 
   {
-    icon: "i-mgc-az-sort-descending-letters-cute-re",
+    icon: tw`i-mgc-az-sort-descending-letters-cute-re`,
     by: "alphabetical",
     order: "asc",
   },
   {
-    icon: "i-mgc-az-sort-ascending-letters-cute-re",
+    icon: tw`i-mgc-az-sort-ascending-letters-cute-re`,
     by: "alphabetical",
     order: "desc",
   },
@@ -207,8 +207,8 @@ const SortButton = () => {
         <IconOpacityTransition
           icon2={
             order === "asc"
-              ? tw`i-mgc-az-sort-descending-letters-cute-re`
-              : tw`i-mgc-az-sort-ascending-letters-cute-re`
+              ? tw`i-mgc-numbers-90-sort-ascending-cute-re`
+              : tw`i-mgc-numbers-90-sort-descending-cute-re`
           }
           icon1={
             order === "asc" ? tw`i-mgc-sort-ascending-cute-re` : tw`i-mgc-sort-descending-cute-re`

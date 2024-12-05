@@ -169,7 +169,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         onPointerDown={useTypeScriptHappyCallback((e) => {
           if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
             const nextSelectedFeedIds = getSelectedFeedIds()
-            if (nextSelectedFeedIds.length > 0) {
+            if (nextSelectedFeedIds.length === 0) {
               setSelectedFeedIds(nextSelectedFeedIds)
             } else {
               resetSelectedFeedIds()

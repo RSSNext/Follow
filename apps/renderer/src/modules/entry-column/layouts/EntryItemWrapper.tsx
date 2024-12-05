@@ -14,6 +14,7 @@ import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useContextMenu } from "~/hooks/common/useContextMenu"
+import { COMMAND_ID } from "~/modules/command/commands/id"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -58,11 +59,14 @@ export const EntryItemWrapper: FC<
     (e) => {
       e.stopPropagation()
 
+      if (!asRead) {
+        entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
+      }
       navigate({
         entryId: entry.entries.id,
       })
     },
-    [entry.entries.id, navigate],
+    [asRead, entry.entries.id, entry.feedId, navigate],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     () => entry.entries.url && window.open(entry.entries.url, "_blank"),
@@ -73,16 +77,38 @@ export const EntryItemWrapper: FC<
 
   const contextMenuProps = useContextMenu({
     onContextMenu: async (e) => {
+      const $target = e.target as HTMLElement
+      const selection = window.getSelection()
+      if (selection) {
+        const targetHasSelection =
+          selection?.toString().length > 0 && $target.contains(selection?.anchorNode)
+        if (targetHasSelection) {
+          e.stopPropagation()
+          return
+        }
+      }
+
       e.preventDefault()
       setIsContextMenuOpen(true)
       await showContextMenu(
         [
-          ...actionConfigs.map((item) => ({
-            type: "text" as const,
-            label: item.name,
-            click: () => item.onClick(),
-            shortcut: item.shortcut,
-          })),
+          ...actionConfigs
+            .filter(
+              (item) =>
+                !(
+                  [
+                    COMMAND_ID.entry.viewSourceContent,
+                    COMMAND_ID.entry.toggleAISummary,
+                    COMMAND_ID.entry.toggleAITranslation,
+                  ] as string[]
+                ).includes(item.id),
+            )
+            .map((item) => ({
+              type: "text" as const,
+              label: item.name,
+              click: () => item.onClick(),
+              shortcut: item.shortcut,
+            })),
           {
             type: "separator" as const,
           },
@@ -111,7 +137,7 @@ export const EntryItemWrapper: FC<
         className={cn(
           "relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
-          views[view as FeedViewType]?.wideMode ? "rounded-md" : "-mx-2 px-2",
+          views[view as FeedViewType]?.wideMode ? "rounded-md" : "px-2",
           "duration-200 hover:bg-theme-item-hover",
           (isActive || isContextMenuOpen) && "!bg-theme-item-active",
           itemClassName,

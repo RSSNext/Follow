@@ -59,7 +59,9 @@ const ModalToSheet = (props: ModalProps & { index: number; id: string }) => {
   const ModalProps: ModalActionsInternal = useMemo(
     () => ({
       dismiss: () => {
-        sheetRef.current?.dismiss()
+        sheetRef.current?.dismiss().then(() => {
+          close()
+        })
       },
       getIndex: () => props.index,
       setClickOutSideToDismiss: (v) => {
@@ -73,7 +75,7 @@ const ModalToSheet = (props: ModalProps & { index: number; id: string }) => {
         )
       },
     }),
-    [id, props.index, setStack],
+    [close, id, props.index, setStack],
   )
   const modalContentRef = useRef<HTMLDivElement>(null)
   const ModalContextProps = useMemo<CurrentModalContentProps>(

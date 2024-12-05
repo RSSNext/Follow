@@ -1,10 +1,10 @@
 import type { User } from "@auth/core/types"
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { PhUsersBold } from "@follow/components/icons/users.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { FeedModel, Models } from "@follow/models"
 import { stopPropagation } from "@follow/utils/dom"
@@ -22,38 +22,34 @@ import { FeedIcon } from "~/modules/feed/feed-icon"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 
-export const Trend = ({ className }: { className?: string }) => {
+interface TrendingProps {
+  language: string
+}
+export const TrendingButton = ({ language, className }: TrendingProps & { className?: string }) => {
   const { present } = useModalStack()
   const { t } = useTranslation()
   return (
-    <Tooltip>
-      <TooltipContent>{t("words.trending")}</TooltipContent>
-      <TooltipTrigger asChild>
-        <ActionButton
-          onClick={() => {
-            present({
-              title: "Trending",
-              content: TrendContent,
-              CustomModalComponent: DrawerModalLayout,
-            })
-          }}
-          className={cn(
-            "size-6 text-accent duration-200 hover:shadow-none",
-            "absolute bottom-1 right-3",
-            className,
-          )}
-        >
-          <i className="i-mgc-trending-up-cute-re" />
-        </ActionButton>
-      </TooltipTrigger>
-    </Tooltip>
+    <Button
+      variant={"outline"}
+      onClick={() => {
+        present({
+          title: t("words.trending"),
+          content: () => <TrendContent language={language} />,
+          CustomModalComponent: !isMobile() ? DrawerModalLayout : undefined,
+        })
+      }}
+      buttonClassName={cn("px-2", className)}
+    >
+      <i className="i-mgc-trending-up-cute-re mr-1" />
+      {t("words.trending")}
+    </Button>
   )
 }
-const TrendContent = () => {
+const TrendContent: FC<TrendingProps> = ({ language }) => {
   const { data } = useQuery({
     queryKey: ["trending"],
     queryFn: () => {
-      return getTrendingAggregates()
+      return getTrendingAggregates({ language })
     },
   })
 
