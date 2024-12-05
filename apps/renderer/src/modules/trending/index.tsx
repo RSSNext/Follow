@@ -47,7 +47,7 @@ export const TrendingButton = ({ language, className }: TrendingProps & { classN
 }
 const TrendContent: FC<TrendingProps> = ({ language }) => {
   const { data } = useQuery({
-    queryKey: ["trending"],
+    queryKey: ["trending", language],
     queryFn: () => {
       return getTrendingAggregates({ language })
     },
@@ -246,11 +246,10 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
               <a
                 target="_blank"
                 href={UrlBuilder.shareFeed(feed.id)}
-                className="flex grow items-center gap-2 py-1"
+                className="flex grow items-center gap-1 py-1"
               >
-                <div>
-                  <FeedIcon feed={feed} size={24} className="rounded" />
-                </div>
+                <FeedIcon feed={feed} size={24} className="rounded" />
+
                 <div className="flex w-full min-w-0 grow items-center">
                   <div className={"truncate"}>{feed.title}</div>
                 </div>
