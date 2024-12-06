@@ -7,6 +7,7 @@ import { LRUCache } from "@follow/utils/lru-cache"
 import { cn } from "@follow/utils/utils"
 import { atom } from "jotai"
 import { useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
@@ -363,6 +364,7 @@ const collapsedItemCache = new LRUCache<string, boolean>(100)
 const CollapsedSocialMediaItem: Component<{
   entryId: string
 }> = ({ children, entryId }) => {
+  const { t } = useTranslation()
   const [isOverflow, setIsOverflow] = useState(false)
   const [isShowMore, setIsShowMore] = useState(() => collapsedItemCache.get(entryId) ?? false)
   const ref = useRef<HTMLDivElement>(null)
@@ -398,7 +400,7 @@ const CollapsedSocialMediaItem: Component<{
             className="flex items-center justify-center text-xs duration-200 hover:text-foreground"
           >
             <i className="i-mingcute-arrow-to-down-line" />
-            <span className="ml-2">Show more</span>
+            <span className="ml-2">{t("words.show_more")}</span>
           </button>
         </div>
       )}
