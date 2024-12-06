@@ -8,6 +8,17 @@ import { isDev } from "~/env"
 
 const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 ${name}/${version}`
 
+// For avoiding xss attack from readability, the raw document string should be sanitized.
+// The xss attack in electron may lead to more serious outcomes than browser environment.
+// It may allows remotely execute malicious scripts in main process.
+// Before the sanitizing, the DOMPurify requires a `window` environment provided by linkedom.
+function sanitizeHTMLString(dirty: string) {
+  const parser = parseHTML(dirty)
+  const purify = DOMPurify(parser.window)
+  const sanitizedDocumentString = purify.sanitize(dirty)
+  return sanitizedDocumentString
+}
+
 export async function readability(url: string) {
   const dirtyDocumentString = await fetch(url, {
     headers: {
@@ -27,15 +38,13 @@ export async function readability(url: string) {
     return res.text()
   })
 
-  // For avoid xss attack from readability, the raw document string should be purified.
-  const cleanedDocumentString = DOMPurify.sanitize(dirtyDocumentString)
+  const sanitizedDocumentString = sanitizeHTMLString(dirtyDocumentString)
+  const baseUrl = new URL(url).origin
 
   // FIXME: linkedom does not handle relative addresses in strings. Refer to
   // @see https://github.com/WebReflection/linkedom/issues/153
   // JSDOM handles it correctly, but JSDOM introduces canvas binding.
-
-  const { document } = parseHTML(cleanedDocumentString)
-  const baseUrl = new URL(url).origin
+  const { document } = parseHTML(sanitizedDocumentString)
 
   document.querySelectorAll("a").forEach((a) => {
     a.href = replaceRelativeAddress(baseUrl, a.href)
