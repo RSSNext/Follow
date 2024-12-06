@@ -1,3 +1,4 @@
+import { MdiMeditation } from "@follow/components/icons/Meditation.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/EllipsisWithTooltip.js"
@@ -11,6 +12,7 @@ import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 
+import { useIsZenMode, useSetZenMode } from "~/atoms/settings/ui"
 import { useUserRole } from "~/atoms/user"
 import {
   DropdownMenu,
@@ -57,6 +59,8 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
   const { isLoading: isLoadingWallet } = wallet
   const myWallet = wallet.data?.[0]
   const presentActivationModal = useActivationModal()
+  const zenModeSetting = useIsZenMode()
+  const setZenMode = useSetZenMode()
 
   if (status !== "authenticated") {
     return <LoginButton {...props} />
@@ -139,7 +143,18 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-
+          {/* NOTE: The shortcut needs to be grouped, but there is only one currently, so no separator line has been added. */}
+          {!zenModeSetting && (
+            <DropdownMenuItem
+              className="pl-3"
+              onClick={() => {
+                setZenMode(true)
+              }}
+              icon={<MdiMeditation className="size-4" />}
+            >
+              {t("user_button.zen_mode")}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             className="pl-3"
             onClick={() => {

@@ -3,8 +3,8 @@ import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
-  SimpleIconsOmnivore,
   SimpleIconsOutline,
+  SimpleIconsReadeck,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { useEffect } from "react"
@@ -107,56 +107,6 @@ export const SettingIntegration = () => {
             type: "title",
             value: (
               <span className="flex items-center gap-2 font-bold">
-                <SimpleIconsOmnivore />
-                {t("integration.omnivore.title")}
-              </span>
-            ),
-          },
-          defineSettingItem("enableOmnivore", {
-            label: t("integration.omnivore.enable.label"),
-            description: t("integration.omnivore.enable.description"),
-          }),
-          defineSettingItem("omnivoreEndpoint", {
-            label: t("integration.omnivore.endpoint.label"),
-            vertical: true,
-            description: (
-              <>
-                {t("integration.omnivore.endpoint.description")}{" "}
-                <a
-                  target="_blank"
-                  className="underline"
-                  rel="noreferrer noopener"
-                  href="https://api-prod.omnivore.app/api/graphql"
-                >
-                  https://api-prod.omnivore.app/api/graphql
-                </a>
-                .
-              </>
-            ),
-          }),
-          defineSettingItem("omnivoreToken", {
-            label: t("integration.omnivore.token.label"),
-            vertical: true,
-            type: "password",
-            description: (
-              <>
-                {t("integration.omnivore.token.description")}{" "}
-                <a
-                  target="_blank"
-                  className="underline"
-                  rel="noreferrer noopener"
-                  href="https://omnivore.app/settings/api"
-                >
-                  omnivore.app/settings/api
-                </a>
-                .
-              </>
-            ),
-          }),
-          {
-            type: "title",
-            value: (
-              <span className="flex items-center gap-2 font-bold">
                 <SimpleIconsObsidian />
                 {t("integration.obsidian.title")}
               </span>
@@ -200,7 +150,30 @@ export const SettingIntegration = () => {
             vertical: true,
             description: t("integration.outline.collection.description"),
           }),
-
+          {
+            type: "title",
+            value: (
+              <span className="flex items-center gap-2 font-bold">
+                <SimpleIconsReadeck />
+                {t("integration.readeck.title")}
+              </span>
+            ),
+          },
+          defineSettingItem("enableReadeck", {
+            label: t("integration.readeck.enable.label"),
+            description: t("integration.readeck.enable.description"),
+          }),
+          defineSettingItem("readeckEndpoint", {
+            label: t("integration.readeck.endpoint.label"),
+            vertical: true,
+            description: t("integration.readeck.endpoint.description"),
+          }),
+          defineSettingItem("readeckToken", {
+            label: t("integration.readeck.token.label"),
+            vertical: true,
+            type: "password",
+            description: t("integration.readeck.token.description"),
+          }),
           BottomTip,
         ]}
       />

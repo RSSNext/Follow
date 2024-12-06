@@ -16,7 +16,7 @@ export function ArticleItem({ entryId, entryPreview, translation }: UniversalIte
 
 export function ArticleItemStateLess({ entry, feed }: EntryItemStatelessProps) {
   return (
-    <div className="relative rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
+    <div className="relative select-none rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
       <div className="relative">
         <div className="group relative flex py-4 pl-3 pr-2">
           <FeedIcon className="mr-2 size-5 rounded-sm" feed={feed} fallback />

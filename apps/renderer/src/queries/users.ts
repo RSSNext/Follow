@@ -1,4 +1,4 @@
-import { getProviders } from "@hono/auth-js/react"
+import { getProviders } from "@follow/shared/auth"
 import { useQuery } from "@tanstack/react-query"
 
 import { apiClient } from "~/lib/api-fetch"
@@ -14,19 +14,15 @@ export const users = {
     }),
 }
 
+export interface AuthProvider {
+  name: string
+  id: string
+  color: string
+  icon: string
+}
 export const useAuthProviders = () => {
   return useQuery({
     queryKey: ["providers"],
-    queryFn: () => getProviders(),
-    placeholderData: {
-      google: {
-        id: "google",
-        name: "Google",
-      },
-      github: {
-        id: "github",
-        name: "GitHub",
-      },
-    } as Awaited<ReturnType<typeof getProviders>>,
+    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
   })
 }

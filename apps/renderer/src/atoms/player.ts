@@ -80,8 +80,12 @@ export const AudioPlayer = {
       show: true,
       listId: routeParams.listId,
     })
+    const currentUrl = URL.canParse(this.audio.src)
+      ? new URL(this.audio.src).toString()
+      : this.audio.src
+    const newUrl = URL.canParse(v.src) ? new URL(v.src).toString() : v.src
 
-    if (this.audio.src !== v.src) {
+    if (currentUrl !== newUrl) {
       this.audio.src = v.src
       this.audio.currentTime = v.currentTime ?? curV.currentTime ?? 0
     }

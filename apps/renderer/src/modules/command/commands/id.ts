@@ -19,9 +19,9 @@ export const COMMAND_ID = {
     saveToEagle: "integration:save-to-eagle",
     saveToReadwise: "integration:save-to-readwise",
     saveToInstapaper: "integration:save-to-instapaper",
-    saveToOmnivore: "integration:save-to-omnivore",
     saveToObsidian: "integration:save-to-obsidian",
     saveToOutline: "integration:save-to-outline",
+    saveToReadeck: "integration:save-to-readeck",
   },
   list: {
     edit: "list:edit",

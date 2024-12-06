@@ -86,13 +86,22 @@ export const ModalInternal = memo(
     const setStack = useSetAtom(modalStackAtom)
 
     const [currentIsClosing, setCurrentIsClosing] = useState(false)
+    const { noticeModal, animateController, dismissing } = useModalAnimate(!!isTop)
 
     const close = useEventCallback((forceClose = false) => {
       if (!canClose && !forceClose) return
       setCurrentIsClosing(true)
-      nextFrame(() => {
-        setStack((p) => p.filter((modal) => modal.id !== item.id))
-      })
+
+      if (!CustomModalComponent) {
+        dismissing().then(() => {
+          setStack((p) => p.filter((modal) => modal.id !== item.id))
+          setCurrentIsClosing(false)
+        })
+      } else {
+        nextFrame(() => {
+          setStack((p) => p.filter((modal) => modal.id !== item.id))
+        })
+      }
       onPropsClose?.(false)
     })
 
@@ -132,8 +141,6 @@ export const ModalInternal = memo(
       resizeable,
       draggable,
     })
-
-    const { noticeModal, animateController } = useModalAnimate(!!isTop)
 
     const getIndex = useEventCallback(() => index)
     const [modalContentRef, setModalContentRef] = useState<HTMLDivElement | null>(null)
@@ -298,6 +305,7 @@ export const ModalInternal = memo(
             >
               <div
                 ref={setEdgeElementRef}
+                onContextMenu={preventDefault}
                 className={cn(
                   "fixed flex",
                   modal ? "inset-0 overflow-auto" : "left-0 top-0",

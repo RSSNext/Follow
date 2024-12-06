@@ -48,7 +48,7 @@ If you prefer to develop in Electron, follow these steps:
    pnpm run dev
    ```
 
-> **Tip:** If you encounter login issues, copy the `authjs.session-token` from your browser's cookies into the app.
+> **Tip:** If you encounter login issues, copy the `better-auth.session_token` from your browser's cookies into the app.
 
 ## Contribution Guidelines
 

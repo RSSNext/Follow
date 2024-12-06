@@ -106,11 +106,6 @@ export type SaveToInstapaperCommand = Command<{
   fn: (payload: { entryId: string }) => void
 }>
 
-export type SaveToOmnivoreCommand = Command<{
-  id: typeof COMMAND_ID.integration.saveToOmnivore
-  fn: (payload: { entryId: string }) => void
-}>
-
 export type SaveToObsidianCommand = Command<{
   id: typeof COMMAND_ID.integration.saveToObsidian
   fn: (payload: { entryId: string }) => void
@@ -121,12 +116,17 @@ export type SaveToOutlineCommand = Command<{
   fn: (payload: { entryId: string }) => void
 }>
 
+export type SaveToReadeckCommand = Command<{
+  id: typeof COMMAND_ID.integration.saveToReadeck
+  fn: (payload: { entryId: string }) => void
+}>
+
 export type IntegrationCommand =
   | SaveToEagleCommand
   | SaveToReadwiseCommand
   | SaveToInstapaperCommand
-  | SaveToOmnivoreCommand
   | SaveToObsidianCommand
   | SaveToOutlineCommand
+  | SaveToReadeckCommand
 
 export type BasicCommand = EntryCommand | IntegrationCommand

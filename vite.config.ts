@@ -1,3 +1,4 @@
+import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -5,7 +6,7 @@ import legacy from "@vitejs/plugin-legacy"
 import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import { parseHTML } from "linkedom"
-import type { PluginOption, ViteDevServer } from "vite"
+import type { PluginOption, ResolvedConfig, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
 import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
@@ -57,7 +58,6 @@ export default ({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve(ROOT, "/index.html"),
-          __debug_proxy: resolve(ROOT, "/__debug_proxy.html"),
         },
       },
     },
@@ -134,6 +134,7 @@ export default ({ mode }) => {
           globPatterns: [
             "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
           ],
+
           manifestTransforms: [
             (manifest) => {
               return {
@@ -287,10 +288,29 @@ function checkBrowserSupport() {
   }
 }
 
-const htmlPlugin: (env: any) => PluginOption = () => {
+const htmlPlugin: (env: any) => PluginOption = (env) => {
+  let config: ResolvedConfig
   return {
     name: "html-transform",
+    configResolved(resolvedConfig) {
+      config = resolvedConfig
+    },
     enforce: "post",
+    closeBundle() {
+      const { root } = config
+      const dist = config.build.outDir
+      const debugProxyHtml = resolve(root, "debug_proxy.html")
+
+      if (existsSync(debugProxyHtml)) {
+        const content = readFileSync(debugProxyHtml, "utf-8")
+
+        writeFileSync(
+          resolve(dist, "__debug_proxy.html"),
+
+          content.replace("import.meta.env.VITE_API_URL", `"${env.VITE_API_URL}"`),
+        )
+      }
+    },
     transformIndexHtml(html) {
       return htmlMinify(
         html.replace(

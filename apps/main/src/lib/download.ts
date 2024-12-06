@@ -7,7 +7,7 @@ const streamPipeline = promisify(pipeline)
 export async function downloadFile(url: string, dest: string) {
   const res = await fetch(url)
 
-  // 检查响应是否成功
+  // Check whether it responds successfully.
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.statusText}`)
   }

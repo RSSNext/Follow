@@ -163,7 +163,8 @@ export const useEntries = ({
 
       staleTime:
         // Force refetch unread entries when feed is dirty
-        fetchUnread && feedUnreadDirty
+        // HACK: disable refetch when the router is pop to previous page
+        fetchUnread && feedUnreadDirty && !history.isPop
           ? 0
           : // Keep reduce data fetch logic
             reduceRefetch

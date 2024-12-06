@@ -1,27 +1,22 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
-import { apiClient } from "@client/lib/api-fetch"
-import { LOGIN_CALLBACK_URL, loginHandler } from "@client/lib/auth"
+import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { authProvidersConfig } from "@follow/constants"
+import { createSession, loginHandler, signOut } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
-import { SessionProvider, signIn, signOut, useSession } from "@hono/auth-js/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router"
 
 export function Component() {
-  return (
-    <SessionProvider>
-      <Login />
-    </SessionProvider>
-  )
+  return <Login />
 }
 
 function Login() {
-  const { status } = useSession()
+  const { status, refetch } = useSession()
 
   const [redirecting, setRedirecting] = useState(false)
 
@@ -36,24 +31,24 @@ function Login() {
 
   useEffect(() => {
     if (provider && status === "unauthenticated") {
-      signIn(provider, {
-        callbackUrl: LOGIN_CALLBACK_URL,
-      })
+      loginHandler(provider)
       setRedirecting(true)
     }
   }, [status])
 
   const getCallbackUrl = useCallback(async () => {
-    const { data } = await apiClient["auth-app"]["new-session"].$post({})
+    const { data } = await createSession()
+    if (!data) return null
     return {
-      url: `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}&userId=${data.userId}`,
+      url: `${DEEPLINK_SCHEME}auth?ck=${data.ck}&userId=${data.userId}`,
       userId: data.userId,
     }
   }, [])
 
   const handleOpenApp = useCallback(async () => {
-    const { url } = await getCallbackUrl()
-    window.open(url, "_top")
+    const callbackUrl = await getCallbackUrl()
+    if (!callbackUrl) return
+    window.open(callbackUrl.url, "_top")
   }, [getCallbackUrl])
 
   const onceRef = useRef(false)
@@ -82,7 +77,13 @@ function Login() {
               <div className="relative flex items-center justify-center">
                 <UserAvatar className="gap-4 px-10 py-4 text-2xl" />
                 <div className="absolute right-0">
-                  <Button variant="ghost" onClick={() => signOut()}>
+                  <Button
+                    variant="ghost"
+                    onClick={async () => {
+                      await signOut()
+                      await refetch()
+                    }}
+                  >
                     <i className="i-mingcute-exit-line text-xl" />
                   </Button>
                 </div>

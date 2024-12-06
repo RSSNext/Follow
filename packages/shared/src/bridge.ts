@@ -17,6 +17,12 @@ declare const dialog: {
     cancelText?: string
   }) => Promise<boolean>
 }
+
+export enum WindowState {
+  MINIMIZED = "minimized",
+  MAXIMIZED = "maximized",
+  NORMAL = "normal",
+}
 interface RenderGlobalContext {
   /// Access Settings
   showSetting: (path?: string) => void
@@ -45,6 +51,9 @@ interface RenderGlobalContext {
 
   /// Utils
   toast: typeof toast
+
+  /// Electron State
+  setWindowState: (state: WindowState) => void
 
   readyToUpdate: () => void
   dialog: typeof dialog
@@ -89,7 +98,12 @@ function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path:
 
       try {
         return await window.webContents.executeJavaScript(
-          `globalThis.${PREFIX}?.${methodPath}?.(${args.map((arg) => JSON.stringify(arg)).join(",")})`,
+          `globalThis.${PREFIX}?.${methodPath}?.(${args
+            .map((arg) => {
+              if (arg === undefined) return "undefined"
+              return JSON.stringify(arg)
+            })
+            .join(",")})`,
         )
       } catch (err) {
         console.error(`Failed to executeJavaScript: ${methodPath}`, err)

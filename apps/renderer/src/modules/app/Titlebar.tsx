@@ -1,19 +1,19 @@
-import { useQuery } from "@tanstack/react-query"
+import { WindowState } from "@follow/shared/bridge"
+import { preventDefault } from "@follow/utils/dom"
 
+import { useWindowState } from "~/atoms/app"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { tipcClient } from "~/lib/client"
 
 export const Titlebar = () => {
-  const { data: isMaximized, refetch } = useQuery({
-    queryFn: () => tipcClient?.getWindowIsMaximized(),
-    queryKey: ["windowIsMaximized"],
-  })
+  const isMaximized = useWindowState() === WindowState.MAXIMIZED
 
   const feedColWidth = useUISettingKey("feedColWidth")
 
   return (
     <div
+      onContextMenu={preventDefault}
       className="drag-region absolute right-0 flex items-center justify-end overflow-hidden"
       style={{
         height: `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
@@ -35,7 +35,6 @@ export const Titlebar = () => {
         className="no-drag-region pointer-events-auto flex h-full w-[50px] items-center justify-center duration-200 hover:bg-theme-item-active"
         onClick={async () => {
           await tipcClient?.windowAction({ action: "maximum" })
-          refetch()
         }}
       >
         {isMaximized ? (

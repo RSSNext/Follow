@@ -8,7 +8,7 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { preventDefault } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { Slot } from "@radix-ui/react-slot"
-import { throttle } from "es-toolkit/compat"
+import { debounce } from "es-toolkit/compat"
 import type { PropsWithChildren } from "react"
 import * as React from "react"
 import { forwardRef, Suspense, useEffect, useRef, useState } from "react"
@@ -208,22 +208,29 @@ const FeedResponsiveResizerContainer = ({
       setFeedColumnTempShow(false)
       return
     }
-    const handler = throttle((e: MouseEvent) => {
-      const mouseX = e.clientX
-      const mouseY = e.clientY
+    const handler = debounce(
+      (e: MouseEvent) => {
+        const mouseX = e.clientX
+        const mouseY = e.clientY
 
-      const uiSettings = getUISettings()
-      const feedColumnTempShow = getFeedColumnTempShow()
-      const isInEntryContentWideMode = uiSettings.wideMode || getIsZenMode()
-      if (mouseY < 200 && isInEntryContentWideMode) return
-      const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
+        const uiSettings = getUISettings()
+        const feedColumnTempShow = getFeedColumnTempShow()
+        const isInEntryContentWideMode = uiSettings.wideMode || getIsZenMode()
+        const feedWidth = uiSettings.feedColWidth
+        if (mouseY < 200 && isInEntryContentWideMode && mouseX < feedWidth) return
+        const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
-      if (mouseX < threshold) {
-        setFeedColumnTempShow(true)
-      } else {
-        setFeedColumnTempShow(false)
-      }
-    }, 300)
+        if (mouseX < threshold) {
+          setFeedColumnTempShow(true)
+        } else {
+          setFeedColumnTempShow(false)
+        }
+      },
+      36,
+      {
+        leading: true,
+      },
+    )
 
     document.addEventListener("mousemove", handler)
     return () => {
@@ -269,7 +276,7 @@ const FeedResponsiveResizerContainer = ({
           "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-[2]",
           feedColumnTempShow && !feedColumnShow && "shadow-drawer-to-right z-[12]",
-          !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
+          !feedColumnShow && !feedColumnTempShow ? "-translate-x-full" : "",
           !isDragging ? "duration-200" : "",
         )}
         style={{

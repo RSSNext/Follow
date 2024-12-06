@@ -47,6 +47,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
             <SettingSync />
             <FollowCommandManager />
             {import.meta.env.DEV && <Devtools />}
+
             {children}
 
             <Suspense>

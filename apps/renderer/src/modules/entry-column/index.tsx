@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
-import { views } from "@follow/constants"
+import { FeedViewType, views } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
 import { isBizId } from "@follow/utils/utils"
@@ -187,6 +187,7 @@ function EntryColumnImpl() {
           )
         ) : (
           <ListComponent
+            gap={view === FeedViewType.SocialMedia ? 10 : undefined}
             listRef={listRef}
             onRangeChange={handleRangeChange}
             hasNextPage={entries.hasNextPage}

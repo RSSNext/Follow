@@ -165,7 +165,7 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
     <>
       <div
         className={cn(
-          "relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800",
+          "relative flex w-full border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800",
           rounded && "overflow-hidden rounded-lg border",
         )}
       >
@@ -194,7 +194,7 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
           </div>
         </div>
 
-        <div className="relative truncate px-2 py-1 text-center text-sm">
+        <div className="relative grow truncate px-2 py-1 text-center text-sm">
           <Marquee
             play={playerValue.status === "playing"}
             className="mask-horizontal font-medium"

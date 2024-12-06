@@ -30,7 +30,7 @@ export const LanguageMap: Record<
   },
   "zh-TW": {
     value: "zh-TW",
-    label: "Traditional Chinese(Taiwan)",
+    label: "Traditional Chinese (Taiwan)",
     code: "cmn",
   },
 }
