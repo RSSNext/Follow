@@ -51,27 +51,34 @@ export const readerRoute = {
     try {
       const voices = await tts.getVoices()
       return voices
-    } catch (error: any) {
-      if (!window) {
+    } catch (error) {
+      console.error("Failed to get voices", error)
+      if (!window) return
+      if (error instanceof Error) {
+        void callWindowExpose(window).toast.error(error.message, { duration: 1000 })
         return
       }
-      void callWindowExpose(window).toast.error(error.message, {
-        duration: 1000,
-      })
+      callWindowExpose(window).toast.error("Failed to get voices", { duration: 1000 })
     }
   }),
 
   setVoice: t.procedure.input<string>().action(async ({ input, context: { sender } }) => {
     const window = BrowserWindow.fromWebContents(sender)
-    if (!window) {
-      return
-    }
+    if (!window) return
 
-    await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS).catch((error) => {
-      return callWindowExpose(window).toast.error(error.message, {
-        duration: 1000,
+    await tts
+      .setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS)
+      .catch((error: unknown) => {
+        console.error("Failed to set voice", error)
+        if (error instanceof Error) {
+          return callWindowExpose(window).toast.error(error.message, {
+            duration: 1000,
+          })
+        }
+        return callWindowExpose(window).toast.error("Failed to set voice", {
+          duration: 1000,
+        })
       })
-    })
   }),
 
   detectCodeStringLanguage: t.procedure

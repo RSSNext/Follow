@@ -130,7 +130,7 @@ export const EntryContent: Component<{
             compact={compact}
           />
           <div
-            className="relative flex h-0 min-w-0 grow flex-col overflow-auto px-4 pt-12 @container print:!size-auto print:!overflow-visible"
+            className="relative flex h-0 min-w-0 grow flex-col overflow-y-auto overflow-x-hidden px-4 pt-12 @container print:!size-auto print:!overflow-visible"
             ref={setScrollElement}
           >
             {!hideRecentReader && (

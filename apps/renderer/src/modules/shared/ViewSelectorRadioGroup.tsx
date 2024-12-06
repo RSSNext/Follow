@@ -6,7 +6,7 @@ import { cloneElement, forwardRef } from "react"
 
 import { useI18n } from "~/hooks/common"
 
-import { EntryItemStateless } from "../entry-column/item"
+import { EntryItemStateless } from "../entry-column/item-stateless"
 
 export const ViewSelectorRadioGroup = forwardRef<
   HTMLInputElement,
@@ -45,7 +45,7 @@ export const ViewSelectorRadioGroup = forwardRef<
               {cloneElement(view.icon, {
                 className: `text-lg ${view.icon?.props?.className ?? ""}`,
               })}
-              <span className="hidden lg:inline">{t(view.name)}</span>
+              <span className="mt-1 hidden text-xs lg:inline">{t(view.name)}</span>
             </label>
           </div>
         ))}

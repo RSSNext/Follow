@@ -103,12 +103,12 @@ export function PullToRefresh({
     isRefreshing,
   ])
 
-  // 计算实际的下拉距离
+  // Calculate the actual pull-down distance
   const actualPullDistance = isRefreshing
-    ? THRESHOLD // 刷新时保持在阈值位置
+    ? THRESHOLD // Stay at threshold position when refreshing
     : pullDistance
 
-  // 计算下拉进度 (0-1)
+  // Calculate the pull-down progress (0-1)
   const pullProgress = Math.max(Math.min(pullDistance / THRESHOLD - 0.2, 1), 0)
   const SIZE = 24
   const STROKE_WIDTH = 2

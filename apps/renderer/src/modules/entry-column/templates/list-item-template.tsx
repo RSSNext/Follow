@@ -1,6 +1,7 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { cn, isSafari } from "@follow/utils/utils"
+import { clsx, cn, isSafari } from "@follow/utils/utils"
+import { useMemo } from "react"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useRealInWideMode, useUISettingKey } from "~/atoms/settings/ui"
@@ -55,13 +56,36 @@ export function ListItem({
   const thumbnailRatio = useUISettingKey("thumbnailRatio")
   const rid = `list-item-${entryId}`
 
+  const lineClamp = useMemo(() => {
+    const envIsSafari = isSafari()
+    let lineClampTitle = settingWideMode ? 1 : 2
+    let lineClampDescription = settingWideMode ? 1 : 2
+    if (translation?.title) {
+      lineClampTitle += settingWideMode ? 1 : 2
+    }
+    if (translation?.description) {
+      lineClampDescription += settingWideMode ? 1 : 2
+    }
+
+    // for tailwind
+    // line-clamp-[1] line-clamp-[2] line-clamp-[3] line-clamp-[4] line-clamp-[5] line-clamp-[6] line-clamp-[7] line-clamp-[8]
+
+    // FIXME: Safari bug, not support line-clamp cross elements
+    return {
+      global: !envIsSafari ? `line-clamp-[${lineClampTitle + lineClampDescription}]` : "",
+      title: envIsSafari ? `line-clamp-[${lineClampTitle}]` : "",
+      description: envIsSafari ? `line-clamp-[${lineClampDescription}]` : "",
+    }
+  }, [translation?.title, translation?.description, settingWideMode])
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
 
   const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
-  const envIsSafari = isSafari()
 
   const related = feed || inbox
+
+  const hasAudio = entry.entries?.attachments?.[0].url
 
   return (
     <div
@@ -76,10 +100,8 @@ export function ListItem({
       <div
         className={cn(
           "-mt-0.5 flex-1 text-sm leading-tight",
-
-          // FIXME: Safari bug, not support line-clamp cross elements
-          !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
-          withAudio && "max-w-[calc(100%-88px)]",
+          lineClamp.global,
+          withAudio && !!hasAudio && "max-w-[calc(100%-88px)]",
         )}
       >
         <div
@@ -108,16 +130,13 @@ export function ListItem({
         >
           {entry.entries.title ? (
             <EntryTranslation
-              useOverlay
-              side="top"
-              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
+              className={cn("break-all", lineClamp.title)}
               source={entry.entries.title}
               target={translation?.title}
             />
           ) : (
             <EntryTranslation
-              useOverlay
-              side="top"
+              className={cn("break-all", lineClamp.description)}
               source={entry.entries.description}
               target={translation?.description}
             />
@@ -134,9 +153,7 @@ export function ListItem({
             )}
           >
             <EntryTranslation
-              useOverlay
-              side="top"
-              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
+              className={cn("break-all", lineClamp.description)}
               source={entry.entries.description}
               target={translation?.description}
             />
@@ -144,17 +161,26 @@ export function ListItem({
         )}
       </div>
 
-      {withAudio && entry.entries?.attachments?.[0].url && (
+      {withAudio && !!hasAudio && (
         <AudioCover
           entryId={entryId}
-          src={entry.entries?.attachments?.[0].url}
+          src={entry.entries!.attachments![0].url}
           durationInSeconds={Number.parseInt(
-            String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0),
+            String(entry.entries!.attachments![0].duration_in_seconds ?? 0),
             10,
           )}
           feedIcon={
             <FeedIcon
-              fallback={false}
+              fallback={true}
+              fallbackElement={
+                <div
+                  className={clsx(
+                    "bg-theme-placeholder-image",
+                    settingWideMode ? "size-[65px]" : "size-[80px]",
+                    "rounded",
+                  )}
+                />
+              }
               feed={feed || inbox}
               entry={entry.entries}
               size={settingWideMode ? 65 : 80}

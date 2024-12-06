@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
-import { app, BrowserWindow, clipboard, dialog, screen, shell } from "electron"
+import { app, BrowserWindow, clipboard, dialog, shell } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
@@ -15,10 +15,10 @@ import { registerAppTray } from "~/lib/tray"
 import { logger, revealLogFile } from "~/logger"
 import { cleanupOldRender, loadDynamicRenderEntry } from "~/updater/hot-updater"
 
-import { isDev, isWindows11 } from "../env"
+import { isDev } from "../env"
 import { downloadFile } from "../lib/download"
 import { i18n } from "../lib/i18n"
-import { cleanAuthSessionToken, cleanUser } from "../lib/user"
+import { cleanBetterAuthSessionCookie, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
 import { quitAndInstall } from "../updater"
 import { getMainWindow } from "../window"
@@ -144,31 +144,13 @@ export const appRoute = {
         }
       }
     }),
-  getWindowIsMaximized: t.procedure.input<void>().action(async ({ context }) => {
-    const window: BrowserWindow | null = (context.sender as Sender).getOwnerBrowserWindow()
 
-    if (isWindows11 && window) {
-      const size = screen.getDisplayMatching(window.getBounds()).workAreaSize
-
-      const windowSize = window.getSize()
-      const windowPosition = window.getPosition()
-      const isMaximized =
-        windowSize[0] === size.width &&
-        windowSize[1] === size.height &&
-        windowPosition[0] === 0 &&
-        windowPosition[1] === 0
-
-      return !!isMaximized
-    }
-
-    return window?.isMaximized()
-  }),
   quitAndInstall: t.procedure.action(async () => {
     quitAndInstall()
   }),
 
-  cleanAuthSessionToken: t.procedure.action(async () => {
-    cleanAuthSessionToken()
+  cleanBetterAuthSessionCookie: t.procedure.action(async () => {
+    cleanBetterAuthSessionCookie()
     cleanUser()
   }),
   /// clipboard

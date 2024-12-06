@@ -126,7 +126,7 @@ pnpm run dev
 Since it is not very convenient to develop in Electron, the first way to develop and contribute is recommended at this stage.
 
 > [!TIP]
-> If you can't log in to the app, copy the `authjs.session-token` in the cookie from your browser into the app.
+> If you can't log in to the app, copy the `better-auth.session_token` in the cookie from your browser into the app.
 
 ## 📝 License
 

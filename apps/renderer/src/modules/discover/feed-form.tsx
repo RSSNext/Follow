@@ -18,7 +18,7 @@ import type { EntryModelSimple, FeedModel } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -76,7 +76,9 @@ export const FeedForm: Component<{
     <div
       className={cn(
         "flex h-full flex-col",
-        asWidget ? "mx-auto min-h-[420px] w-full max-w-[550px]" : "px-[18px] pb-[18px] pt-12",
+        asWidget
+          ? "mx-auto min-h-[420px] w-full max-w-[550px] lg:min-w-[550px]"
+          : "px-[18px] pb-[18px] pt-12",
       )}
     >
       {!asWidget && (
@@ -273,6 +275,10 @@ const FeedInnerForm = ({
     [categories.data],
   )
 
+  const fillDefaultTitle = useCallback(() => {
+    form.setValue("title", feed.title || "")
+  }, [feed.title, form])
+
   return (
     <div className="flex flex-1 flex-col gap-y-4">
       <Card>
@@ -292,7 +298,18 @@ const FeedInnerForm = ({
                   <FormDescription>{t("feed_form.title_description")}</FormDescription>
                 </div>
                 <FormControl>
-                  <Input {...field} />
+                  <div className="flex gap-2">
+                    <Input {...field} />
+                    <Button
+                      buttonClassName="shrink-0"
+                      type="button"
+                      variant="outline"
+                      onClick={fillDefaultTitle}
+                      disabled={field.value === feed.title}
+                    >
+                      {t("feed_form.fill_default")}
+                    </Button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

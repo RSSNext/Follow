@@ -18,7 +18,6 @@ import { feedIconSelector } from "~/store/feed/selector"
 import { useUnreadByView } from "~/store/unread/hooks"
 
 import { ProfileButton } from "../../user/ProfileButton"
-import styles from "./mobile.module.css"
 
 export const MobileFloatBar = ({
   scrollContainer,
@@ -74,22 +73,28 @@ export const MobileFloatBar = ({
   }, [isScrollDown, animateController])
 
   return (
-    <m.div
+    <div
       className={clsx(
-        "absolute inset-x-0 flex h-10 justify-center will-change-transform bottom-safe-offset-8",
+        "pointer-events-none absolute inset-x-0 bottom-0 flex h-36 items-end overflow-hidden pb-safe-offset-6",
         className,
       )}
-      transition={{ type: "spring" }}
-      animate={animateController}
     >
-      <div className={styles["float-bar"]}>
+      <m.div
+        className={clsx(
+          "mx-auto inline-flex h-10 min-w-0 items-center rounded-full border border-neutral-200 bg-background pl-4 pr-2 shadow-sm shadow-zinc-100 dark:border-neutral-800",
+          "[box-shadow:0px_8px_30px_rgba(122,122,122,0.2)] dark:[box-shadow:0px_8px_30px_rgba(122,122,122,0.2)]",
+          "pointer-events-auto",
+        )}
+        transition={{ type: "spring" }}
+        animate={animateController}
+      >
         <PlayerIcon isScrollDown={isScrollDown} onLogoClick={onLogoClick} />
         <DividerVertical className="h-3/4 shrink-0" />
         <ViewTabs onViewChange={onViewChange} />
         <DividerVertical className="h-3/4 shrink-0" />
         <ProfileButton />
-      </div>
-    </m.div>
+      </m.div>
+    </div>
   )
 }
 

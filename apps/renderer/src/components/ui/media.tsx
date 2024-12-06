@@ -22,6 +22,8 @@ type BaseProps = {
   inline?: boolean
   fitContent?: boolean
 }
+
+const isImageLoadedSet = new Set<string>()
 export type MediaProps = BaseProps &
   (
     | (ImgHTMLAttributes<HTMLImageElement> & {
@@ -103,7 +105,12 @@ const MediaImpl: FC<MediaProps> = ({
     [currentState, previewImageUrl, proxy?.width, proxy?.height],
   )
 
-  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded">("loading")
+  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded">(() => {
+    if (imgSrc) {
+      return isImageLoadedSet.has(imgSrc) ? "loaded" : "loading"
+    }
+    return "loading"
+  })
 
   const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback(() => {
     switch (currentState) {
@@ -158,6 +165,10 @@ const MediaImpl: FC<MediaProps> = ({
   const handleOnLoad: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
     setMediaLoadState("loaded")
     rest.onLoad?.(e as any)
+
+    if (imgSrc) {
+      isImageLoadedSet.add(imgSrc)
+    }
     if ("cacheDimensions" in props && props.cacheDimensions && src) {
       saveImageDimensionsToDb(src, {
         src,
@@ -246,7 +257,11 @@ const MediaImpl: FC<MediaProps> = ({
       )
     } else {
       return (
-        <div className={cn("relative rounded", className)} style={props.style}>
+        <div
+          className={cn("relative rounded", className)}
+          data-state={mediaLoadState}
+          style={props.style}
+        >
           <span
             className={cn(
               "relative inline-block max-w-full bg-theme-placeholder-image",

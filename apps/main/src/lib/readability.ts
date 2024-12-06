@@ -1,5 +1,6 @@
 import { Readability } from "@mozilla/readability"
 import { name, version } from "@pkg"
+import DOMPurify from "dompurify"
 import { parseHTML } from "linkedom"
 import { fetch } from "ofetch"
 
@@ -8,7 +9,7 @@ import { isDev } from "~/env"
 const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 ${name}/${version}`
 
 export async function readability(url: string) {
-  const documentString = await fetch(url, {
+  const dirtyDocumentString = await fetch(url, {
     headers: {
       "User-Agent": userAgents,
       Accept: "text/html",
@@ -26,11 +27,14 @@ export async function readability(url: string) {
     return res.text()
   })
 
+  // For avoid xss attack from readability, the raw document string should be purified.
+  const cleanedDocumentString = DOMPurify.sanitize(dirtyDocumentString)
+
   // FIXME: linkedom does not handle relative addresses in strings. Refer to
   // @see https://github.com/WebReflection/linkedom/issues/153
   // JSDOM handles it correctly, but JSDOM introduces canvas binding.
 
-  const { document } = parseHTML(documentString)
+  const { document } = parseHTML(cleanedDocumentString)
   const baseUrl = new URL(url).origin
 
   document.querySelectorAll("a").forEach((a) => {

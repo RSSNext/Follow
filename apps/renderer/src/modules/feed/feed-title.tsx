@@ -22,7 +22,7 @@ export const FeedTitle = ({
   if (!feed) return null
 
   return (
-    <div className={cn("flex items-center truncate", className)}>
+    <div className={cn("flex select-none items-center truncate", className)}>
       <div className={cn("truncate", titleClassName)}>{getPreferredTitle(feed) || title}</div>
       {!hideExtraBadge && (
         <>

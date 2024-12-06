@@ -64,13 +64,14 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
   const feed = useFeedById(feedId)
   const isList = !!listId
 
+  const showQuickTimeline = useGeneralSettingKey("showQuickTimeline")
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "mb-2 flex w-full flex-col pr-4 transition-[padding] duration-300 ease-in-out",
+        "flex w-full flex-col pb-2 pr-4 transition-[padding] duration-300 ease-in-out",
         "pl-6 pt-safe-offset-2.5",
         "bg-background",
       )}
@@ -152,7 +153,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
         </div>
       </div>
 
-      <TimelineTabs />
+      {showQuickTimeline && <TimelineTabs />}
     </div>
   )
 }
@@ -160,7 +161,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
 const FollowSubscriptionButton = () => {
   return (
     <PresentSheet
-      zIndex={90}
+      zIndex={50}
       dismissableClassName="mb-0"
       triggerAsChild
       content={<FeedColumnMobile asWidget />}

@@ -15,6 +15,10 @@ export interface GeneralSettings {
   voice: string
   reduceRefetch: boolean
   autoGroup: boolean
+  /**
+   * Top timeline for mobile
+   */
+  showQuickTimeline: boolean
 }
 
 export interface UISettings {
@@ -60,11 +64,6 @@ export interface IntegrationSettings {
   instapaperUsername: string
   instapaperPassword: string
 
-  // omnivore
-  enableOmnivore: boolean
-  omnivoreEndpoint: string
-  omnivoreToken: string
-
   // obsidian
   enableObsidian: boolean
   obsidianVaultPath: string
@@ -74,4 +73,9 @@ export interface IntegrationSettings {
   outlineEndpoint: string
   outlineToken: string
   outlineCollection: string
+
+  // readeck
+  enableReadeck: boolean
+  readeckEndpoint: string
+  readeckToken: string
 }

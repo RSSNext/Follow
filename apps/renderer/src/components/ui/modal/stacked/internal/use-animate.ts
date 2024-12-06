@@ -1,6 +1,7 @@
 import { nextFrame } from "@follow/utils/dom"
 import { useAnimationControls } from "framer-motion"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useLayoutEffect } from "react"
+import { useEventCallback } from "usehooks-ts"
 
 import { modalMontionConfig } from "../constants"
 
@@ -30,7 +31,7 @@ export const useModalAnimate = (isTop: boolean) => {
       })
   }, [animateController])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isTop) return
     animateController.start({
       scale: 0.96,
@@ -52,5 +53,8 @@ export const useModalAnimate = (isTop: boolean) => {
   return {
     noticeModal,
     animateController,
+    dismissing: useEventCallback(async () => {
+      await animateController.start(modalMontionConfig.exit)
+    }),
   }
 }

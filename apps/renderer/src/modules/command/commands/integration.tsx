@@ -2,8 +2,8 @@ import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
   SimpleIconsObsidian,
-  SimpleIconsOmnivore,
   SimpleIconsOutline,
+  SimpleIconsReadeck,
   SimpleIconsReadwise,
 } from "@follow/components/ui/platform-icon/icons.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -29,9 +29,9 @@ export const useRegisterIntegrationCommands = () => {
   useRegisterEagleCommands()
   useRegisterReadwiseCommands()
   useRegisterInstapaperCommands()
-  useRegisterOmnivoreCommands()
   useRegisterObsidianCommands()
   useRegisterOutlineCommands()
+  useRegisterReadeckCommands()
 }
 
 const useRegisterEagleCommands = () => {
@@ -236,90 +236,6 @@ const useRegisterInstapaperCommands = () => {
   )
 }
 
-const useRegisterOmnivoreCommands = () => {
-  const { t } = useTranslation()
-
-  const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
-  const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
-  const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
-
-  const isOmnivoreAvailable = enableOmnivore && !!omnivoreToken && !!omnivoreEndpoint
-
-  useRegisterCommandEffect(
-    !isOmnivoreAvailable
-      ? []
-      : defineFollowCommand({
-          id: COMMAND_ID.integration.saveToOmnivore,
-          label: t("entry_actions.save_to_omnivore"),
-          icon: <SimpleIconsOmnivore />,
-          run: async ({ entryId }) => {
-            const entry = useEntryStore.getState().flatMapEntries[entryId]
-            if (!entry) {
-              toast.error("Failed to save to Omnivore: entry is not available", { duration: 3000 })
-              return
-            }
-            const saveUrlQuery = `
-  mutation SaveUrl($input: SaveUrlInput!) {
-    saveUrl(input: $input) {
-      ... on SaveSuccess {
-        url
-        clientRequestId
-      }
-      ... on SaveError {
-        errorCodes
-        message
-      }
-    }
-  }
-`
-
-            window.analytics?.capture("integration", {
-              type: "omnivore",
-              event: "save",
-            })
-            try {
-              const data = await ofetch(omnivoreEndpoint, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: omnivoreToken,
-                },
-                body: {
-                  query: saveUrlQuery,
-                  variables: {
-                    input: {
-                      url: entry.entries.url,
-                      source: "Follow",
-                      clientRequestId: globalThis.crypto.randomUUID(),
-                      publishedAt: new Date(entry.entries.publishedAt),
-                    },
-                  },
-                },
-              })
-              toast.success(
-                <>
-                  {t("entry_actions.saved_to_omnivore")},{" "}
-                  <a target="_blank" className="underline" href={data.data.saveUrl.url}>
-                    view
-                  </a>
-                </>,
-                {
-                  duration: 3000,
-                },
-              )
-            } catch {
-              toast.error(t("entry_actions.failed_to_save_to_omnivore"), {
-                duration: 3000,
-              })
-            }
-          },
-        }),
-    {
-      deps: [isOmnivoreAvailable],
-    },
-  )
-}
-
 const getEntryContentAsMarkdown = async (entry: FlatEntryModel) => {
   const isReadabilityReady = getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
   const content =
@@ -463,6 +379,74 @@ const useRegisterOutlineCommands = () => {
         }),
     {
       deps: [outlineAvailable],
+    },
+  )
+}
+
+const useRegisterReadeckCommands = () => {
+  const { t } = useTranslation()
+
+  const enableReadeck = useIntegrationSettingKey("enableReadeck")
+  const readeckEndpoint = useIntegrationSettingKey("readeckEndpoint")
+  const readeckToken = useIntegrationSettingKey("readeckToken")
+  const readeckAvailable = enableReadeck && !!readeckEndpoint && !!readeckToken
+
+  useRegisterCommandEffect(
+    !readeckAvailable
+      ? []
+      : defineFollowCommand({
+          id: COMMAND_ID.integration.saveToReadeck,
+          label: t("entry_actions.save_to_readeck"),
+          icon: <SimpleIconsReadeck />,
+          run: async ({ entryId }) => {
+            const entry = useEntryStore.getState().flatMapEntries[entryId]
+            if (!entry) {
+              toast.error("Failed to save to Readeck: entry is not available", { duration: 3000 })
+              return
+            }
+            try {
+              window.analytics?.capture("integration", {
+                type: "readeck",
+                event: "save",
+              })
+              const data = new FormData()
+              if (entry.entries.url) {
+                data.set("url", entry.entries.url)
+              }
+              if (entry.entries.title) {
+                data.set("title", entry.entries.title)
+              }
+              const response = await ofetch.raw(
+                `${readeckEndpoint.replace(/\/$/, "")}/api/bookmarks`,
+                {
+                  method: "POST",
+                  body: data,
+                  headers: {
+                    Authorization: `Bearer ${readeckToken}`,
+                  },
+                },
+              )
+
+              toast.success(
+                <>
+                  {t("entry_actions.saved_to_readeck")},{" "}
+                  <a target="_blank" className="underline" href={response.headers.get("Location")!}>
+                    view
+                  </a>
+                </>,
+                {
+                  duration: 3000,
+                },
+              )
+            } catch {
+              toast.error(t("entry_actions.failed_to_save_to_readeck"), {
+                duration: 3000,
+              })
+            }
+          },
+        }),
+    {
+      deps: [readeckAvailable],
     },
   )
 }

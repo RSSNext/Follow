@@ -5,9 +5,11 @@ import type { z } from "zod"
 declare const _apiClient: ReturnType<typeof hc<AppType>>
 
 export type UserModel = Omit<
-  Omit<Omit<typeof users.$inferSelect, "emailVerified">, "email">,
-  "createdAt"
->
+  typeof users.$inferSelect,
+  "createdAt" | "updatedAt" | "email" | "emailVerified"
+> & {
+  email?: string
+}
 
 export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
   Awaited<ReturnType<T>>,

@@ -53,7 +53,7 @@ export const createApiClient = () => {
         "X-App-Version": PKG.version,
         "X-App-Dev": isDev ? "1" : "0",
         "User-Agent": `Follow External Server Api Client/${PKG.version}`,
-        Cookie: authSessionToken ? `authjs.session-token=${authSessionToken}` : "",
+        Cookie: authSessionToken ? `better-auth.session_token=${authSessionToken}` : "",
       }
     },
   })
@@ -72,7 +72,7 @@ export const getTokenFromCookie = (cookie: string) => {
       },
       {} as Record<string, string>,
     )
-  return parsedCookieMap["authjs.session-token"]
+  return parsedCookieMap["better-auth.session_token"]
 }
 
 export type ApiClient = ReturnType<typeof createApiClient>

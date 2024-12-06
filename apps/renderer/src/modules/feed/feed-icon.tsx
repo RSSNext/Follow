@@ -76,6 +76,8 @@ const fadeInVariant = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
 }
+
+const isIconLoadedSet = new Set<string>()
 export function FeedIcon({
   feed,
   entry,
@@ -83,6 +85,7 @@ export function FeedIcon({
   className,
   size = 20,
   fallback = true,
+  fallbackElement,
   siteUrl,
   useMedia,
   disableFadeIn,
@@ -98,6 +101,7 @@ export function FeedIcon({
    * Image loading error fallback to site icon
    */
   fallback?: boolean
+  fallbackElement?: ReactNode
 
   useMedia?: boolean
   disableFadeIn?: boolean
@@ -163,9 +167,12 @@ export function FeedIcon({
       })
       finalSrc = src
 
+      const isIconLoaded = isIconLoadedSet.has(src)
+      isIconLoadedSet.add(src)
+
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center", className)}>
-          <m.img style={sizeStyle} {...(disableFadeIn ? {} : fadeInVariant)} />
+          <m.img style={sizeStyle} {...(disableFadeIn || isIconLoaded ? {} : fadeInVariant)} />
         </PlatformIcon>
       )
       break
@@ -176,12 +183,15 @@ export function FeedIcon({
         width: size * 2,
         height: size * 2,
       })
+      const isIconLoaded = isIconLoadedSet.has(finalSrc)
+      isIconLoadedSet.add(finalSrc)
+
       ImageElement = (
         <PlatformIcon url={image} style={sizeStyle} className={cn("center", className)}>
           <m.img
             className={cn(marginClassName, className)}
             style={sizeStyle}
-            {...(disableFadeIn ? {} : fadeInVariant)}
+            {...(disableFadeIn || isIconLoaded ? {} : fadeInVariant)}
           />
         </PlatformIcon>
       )
@@ -243,7 +253,7 @@ export function FeedIcon({
           {ImageElement}
         </AvatarImage>
         <AvatarFallback delayMs={200} asChild>
-          {fallbackIcon}
+          {fallbackElement || fallbackIcon}
         </AvatarFallback>
       </Avatar>
     )
