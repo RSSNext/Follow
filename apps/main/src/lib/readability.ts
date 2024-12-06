@@ -15,6 +15,8 @@ const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
 function sanitizeHTMLString(dirty: string) {
   const parser = parseHTML(dirty)
   const purify = DOMPurify(parser.window)
+  // How do DOMPurify changes the origin html structure,
+  // You can refer its document https://github.com/cure53/DOMPurify?tab=readme-ov-file#can-i-configure-dompurify
   const sanitizedDocumentString = purify.sanitize(dirty)
   return sanitizedDocumentString
 }
