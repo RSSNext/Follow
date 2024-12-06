@@ -12,12 +12,12 @@ const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
 // The xss attack in electron may lead to more serious outcomes than browser environment.
 // It may allows remotely execute malicious scripts in main process.
 // Before the sanitizing, the DOMPurify requires a `window` environment provided by linkedom.
-function sanitizeHTMLString(dirty: string) {
-  const parser = parseHTML(dirty)
+function sanitizeHTMLString(dirtyDocumentString: string) {
+  const parser = parseHTML(dirtyDocumentString)
   const purify = DOMPurify(parser.window)
   // How do DOMPurify changes the origin html structure,
   // You can refer its document https://github.com/cure53/DOMPurify?tab=readme-ov-file#can-i-configure-dompurify
-  const sanitizedDocumentString = purify.sanitize(dirty)
+  const sanitizedDocumentString = purify.sanitize(dirtyDocumentString)
   return sanitizedDocumentString
 }
 
