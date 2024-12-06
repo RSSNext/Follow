@@ -136,7 +136,10 @@
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
-      "isarray": "npm:@nolyfill/isarray@^1"
+      "isarray": "npm:@nolyfill/isarray@^1",
+      "@types/react": "^19.0.0",
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
     }
   },
   "simple-git-hooks": {

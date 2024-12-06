@@ -47,13 +47,13 @@ export type VideoPlayerRef = {
     unmute: () => void
   }
 
-  wrapperRef: React.RefObject<HTMLDivElement>
+  wrapperRef: React.RefObject<HTMLDivElement | null>
 }
 
 interface VideoPlayerContextValue {
   state: HTMLMediaState
   controls: VideoPlayerRef["controls"]
-  wrapperRef: React.RefObject<HTMLDivElement>
+  wrapperRef: React.RefObject<HTMLDivElement | null>
   src: string
   variant: "preview" | "player" | "thumbnail"
 }

@@ -31,7 +31,7 @@ function EntryColumnImpl() {
   const { t } = useTranslation()
   const [isArchived, setIsArchived] = useState(false)
   const unreadOnly = useGeneralSettingKey("unreadOnly")
-  const listRef = useRef<Virtualizer<HTMLElement, Element>>()
+  const listRef = useRef<Virtualizer<HTMLElement, Element>>(undefined)
   const entries = useEntriesByView({
     onReset: useCallback(() => {
       listRef.current?.scrollToIndex(0)

@@ -1,7 +1,7 @@
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { m, useAnimationControls } from "framer-motion"
-import type { FC, PropsWithChildren } from "react"
+import type { FC, JSX, PropsWithChildren } from "react"
 import { useEffect, useState } from "react"
 
 import { ModalClose } from "./components"

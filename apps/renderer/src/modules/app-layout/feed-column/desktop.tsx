@@ -186,7 +186,7 @@ const FeedResponsiveResizerContainer = ({
   containerRef,
   children,
 }: {
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
 } & PropsWithChildren) => {
   const { isDragging, position, separatorProps, separatorCursor } = useResizable({
     axis: "x",

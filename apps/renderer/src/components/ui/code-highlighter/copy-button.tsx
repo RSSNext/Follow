@@ -26,7 +26,7 @@ export const CopyButton: Component<{
   style?: React.CSSProperties
 }> = ({ value, className, style }) => {
   const [copied, setCopied] = useState(false)
-  const copiedTimerRef = useRef<any>()
+  const copiedTimerRef = useRef<any>(undefined)
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(value)
     setCopied(true)
