@@ -1610,7 +1610,7 @@
 * window memo object and markdown link render style ([70d0808](https://github.com/RSSNext/follow/commit/70d0808d75ad5ae754da3e84299566bbb55eec14))
 * windows rounded left ([bf07c5e](https://github.com/RSSNext/follow/commit/bf07c5e2bfa740c02c6ca834e9935565098ca2a5))
 * z-index ([d69df8b](https://github.com/RSSNext/follow/commit/d69df8bbacb159fb5bd5251a66c08fb58bec9d52))
-
+* hotfix fix the bug of sanitizing that causes readability failed to fetch document content. ([db83710](https://github.com/RSSNext/follow/commit/db83710ee86eafa75052e80bc2c0e9927ea46560))
 
 ### Features
 
