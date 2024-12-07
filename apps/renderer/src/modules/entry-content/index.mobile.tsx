@@ -5,13 +5,13 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery, usePreventOverscrollBounce } from "~/hooks/common"
 import { LanguageMap } from "~/lib/translate"
@@ -41,13 +41,14 @@ export const EntryContent: Component<{
   compact?: boolean
   classNames?: EntryContentClassNames
 }> = ({ entryId, noMedia, compact, classNames }) => {
-  const navigate = useNavigate()
+  const navigateEntry = useNavigateEntry()
+  const { entryId: _, ...params } = useRouteParamsSelector((route) => route)
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       event.preventDefault()
       // This is triggered when the back button is pressed
-      navigate("/feeds/all/pending")
+      navigateEntry({ entryId: null, ...params })
     }
 
     // Listen to the popstate event (back button)
@@ -57,7 +58,7 @@ export const EntryContent: Component<{
     return () => {
       window.removeEventListener("popstate", handlePopState)
     }
-  }, [navigate])
+  }, [navigateEntry, params])
 
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
