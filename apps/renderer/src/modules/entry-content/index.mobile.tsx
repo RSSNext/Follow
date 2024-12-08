@@ -4,13 +4,14 @@ import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/t
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery, usePreventOverscrollBounce } from "~/hooks/common"
 import { LanguageMap } from "~/lib/translate"
@@ -40,6 +41,25 @@ export const EntryContent: Component<{
   compact?: boolean
   classNames?: EntryContentClassNames
 }> = ({ entryId, noMedia, compact, classNames }) => {
+  const navigateEntry = useNavigateEntry()
+  const { entryId: _, ...params } = useRouteParamsSelector((route) => route)
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      event.preventDefault()
+      // This is triggered when the back button is pressed
+      navigateEntry({ entryId: null, ...params })
+    }
+
+    // Listen to the popstate event (back button)
+    window.addEventListener("popstate", handlePopState)
+
+    // Clean up the event listener on unmount
+    return () => {
+      window.removeEventListener("popstate", handlePopState)
+    }
+  }, [navigateEntry, params])
+
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
