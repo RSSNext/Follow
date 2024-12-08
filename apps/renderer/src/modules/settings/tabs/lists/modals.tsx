@@ -230,7 +230,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
       }))
   }, [allFeeds, list?.feedIds])
 
-  const selectedFeedIdRef = useRef<string | null>()
+  const selectedFeedIdRef = useRef<string | null>(undefined)
   if (!list) return null
   return (
     <>

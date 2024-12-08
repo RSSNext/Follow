@@ -116,7 +116,7 @@ export const useScrollTracking = (
     })
   }, [toc, h, headingRangeParserEvent])
 
-  const throttleCallerRef = useRef<DebouncedFuncLeading<() => void>>()
+  const throttleCallerRef = useRef<DebouncedFuncLeading<() => void>>(undefined)
 
   useEffect(() => {
     if (!scrollContainerElement) return

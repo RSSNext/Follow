@@ -6,7 +6,7 @@ import satori from "satori"
 import fonts from "./fonts"
 
 export async function renderToImage(
-  node: ReactElement,
+  node: ReactElement<any>,
   options: {
     width?: number
     height: number

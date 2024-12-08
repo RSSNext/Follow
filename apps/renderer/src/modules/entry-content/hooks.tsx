@@ -7,7 +7,9 @@ declare module "@follow/utils/event-bus" {
   }
 }
 
-export const useFocusEntryContainerSubscriptions = (ref: React.RefObject<HTMLDivElement>) => {
+export const useFocusEntryContainerSubscriptions = (
+  ref: React.RefObject<HTMLDivElement | null>,
+) => {
   useEffect(() => {
     return EventBus.subscribe("FOCUS_ENTRY_CONTAINER", () => {
       ref.current?.focus()
