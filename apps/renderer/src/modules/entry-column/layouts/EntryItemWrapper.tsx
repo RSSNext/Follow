@@ -35,7 +35,10 @@ export const EntryItemWrapper: FC<
 
   const { t } = useTranslation("common")
 
-  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
+  const isActive = useRouteParamsSelector(
+    ({ entryId }) => entryId === entry.entries.id,
+    [entry.entries.id],
+  )
 
   const asRead = useAsRead(entry)
   const hoverMarkUnread = useGeneralSettingKey("hoverMarkUnread")
