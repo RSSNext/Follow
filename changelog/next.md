@@ -2,6 +2,8 @@
 
 ## New Features
 
+- New `Move to Category` operation in feed subscription context menu
+
 ## Improvements
 
 ## Bug Fixes
