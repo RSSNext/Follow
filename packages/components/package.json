@@ -49,7 +49,7 @@
     "class-variance-authority": "0.7.1",
     "dayjs": "1.11.13",
     "foxact": "0.2.43",
-    "framer-motion": "11.13.1",
+    "framer-motion": "11.13.3",
     "jotai": "2.10.3",
     "masonic": "4.0.1",
     "react-blurhash": "^0.3.0",
