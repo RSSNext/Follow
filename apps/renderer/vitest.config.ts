@@ -31,7 +31,9 @@ export default defineProject({
   },
 
   plugins: [
+    // @ts-expect-error
     astPlugin,
+    // @ts-expect-error
     tsconfigPath({
       projects: ["./tsconfig.json"],
     }),
