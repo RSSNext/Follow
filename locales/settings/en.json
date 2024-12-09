@@ -259,6 +259,7 @@
   "lists.view": "View",
   "profile.avatar.label": "Avatar",
   "profile.current_password.label": "Current Password",
+  "profile.email.label": "Email",
   "profile.handle.description": "Your unique identifier.",
   "profile.handle.label": "Handle",
   "profile.name.description": "Your public display name.",
