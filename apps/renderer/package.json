@@ -126,13 +126,13 @@
     "@hono/node-server": "1.13.7",
     "@types/katex": "0.16.7",
     "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vite-pwa/assets-generator": "^0.2.6",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.11.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-scan": "0.0.42"
   }
 }

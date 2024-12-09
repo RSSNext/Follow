@@ -71,8 +71,8 @@
     "@types/html-minifier-terser": "7.0.2",
     "@types/js-yaml": "4.0.9",
     "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vercel/node": "3.2.28",
     "@vitejs/plugin-legacy": "6.0.0",
     "@vitejs/plugin-react": "^4.3.4",
@@ -100,8 +100,8 @@
     "postcss-js": "4.0.1",
     "prettier": "3.4.2",
     "raw-body": "3.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "rimraf": "6.0.1",
     "shx": "^0.3.4",
     "simple-git-hooks": "2.11.1",
@@ -135,8 +135,8 @@
       "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch"
     },
     "overrides": {
-      "@types/react": "npm:@types/react@^18.3.12",
-      "@types/react-dom": "npm:@types/react-dom@^18.3.1",
+      "@types/react": "npm:@types/react@^19.0.0",
+      "@types/react-dom": "npm:@types/react-dom@^19.0.0",
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
       "isarray": "npm:@nolyfill/isarray@^1"
     }
