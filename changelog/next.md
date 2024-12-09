@@ -3,6 +3,7 @@
 ## New Features
 
 - New `Move to Category` operation in feed subscription context menu
+- New `Expand long social media` setting to automatically expand social media entries containing long text.
 
 ## Improvements
 

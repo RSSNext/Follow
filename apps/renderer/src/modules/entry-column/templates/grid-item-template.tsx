@@ -2,7 +2,6 @@ import { TitleMarquee } from "@follow/components/ui/marquee/index.jsx"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
 
-import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { EntryTranslation } from "~/modules/entry-column/translation"
 import { FeedIcon } from "~/modules/feed/feed-icon"
@@ -21,7 +20,7 @@ export function GridItem(props: GridItemProps) {
   const { entryId, entryPreview, wrapperClassName, children, translation } = props
   const entry = useEntry(entryId) || entryPreview
 
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return (
     <div className={cn("p-1.5", wrapperClassName)}>
       {children}

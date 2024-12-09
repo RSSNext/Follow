@@ -20,7 +20,6 @@ import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { GridItem } from "../templates/grid-item-template"
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
@@ -62,7 +61,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     }
   }, [hovered])
 
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
