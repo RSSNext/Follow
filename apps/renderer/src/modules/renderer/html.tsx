@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import type { JSX } from "react"
 import { useMemo } from "react"
 
 import {

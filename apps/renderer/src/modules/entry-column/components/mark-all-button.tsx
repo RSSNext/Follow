@@ -29,7 +29,7 @@ interface MarkAllButtonProps {
 export const MarkAllReadWithOverlay = forwardRef<
   HTMLButtonElement,
   MarkAllButtonProps & {
-    containerRef: React.RefObject<HTMLDivElement>
+    containerRef: React.RefObject<HTMLDivElement | null>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
   const { t } = useTranslation()

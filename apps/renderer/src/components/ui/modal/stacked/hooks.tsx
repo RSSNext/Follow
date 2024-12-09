@@ -101,7 +101,7 @@ const actions = {
 export const useCurrentModal = () => useContext(CurrentModalContext)
 
 export const useResizeableModal = (
-  modalElementRef: React.RefObject<HTMLDivElement>,
+  modalElementRef: React.RefObject<HTMLDivElement | null>,
   {
     enableResizeable,
     dragControls,

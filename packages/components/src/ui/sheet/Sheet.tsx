@@ -19,7 +19,7 @@ export interface PresentSheetProps {
   defaultOpen?: boolean
 
   triggerAsChild?: boolean
-  contentRef?: RefObject<HTMLDivElement>
+  contentRef?: RefObject<HTMLDivElement | null>
   dismissableClassName?: string
   modalClassName?: string
   contentClassName?: string

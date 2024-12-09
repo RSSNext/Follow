@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "preserve",
-    "declaration": true,
+    "declaration": false,
     "types": ["@follow/types/react", "@follow/types/global", "vite/client"],
     "paths": {
       "@follow/components/*": ["./src/*"],

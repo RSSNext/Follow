@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { useLayoutEffect, useState } from "react"
 
 const NOT_RESOLVED = Symbol("NOT_RESOLVED")

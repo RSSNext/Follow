@@ -30,7 +30,7 @@ export const SettingItemGroup: FC<PropsWithChildren> = ({ children }) => {
 
     if (child === null) return child
 
-    const compType = (child as React.ReactElement).type
+    const compType = (child as React.ReactElement<any>).type
     if (compType === SettingDescription) {
       const prevIndex = index - 1
       const prevChild = childrenArray[prevIndex]
@@ -38,12 +38,12 @@ export const SettingItemGroup: FC<PropsWithChildren> = ({ children }) => {
 
       switch (prevType) {
         case SettingSwitch: {
-          return cloneElement(child as React.ReactElement, {
+          return cloneElement(child as React.ReactElement<any>, {
             className: "!-mt-2",
           })
         }
         case SettingActionItem: {
-          return cloneElement(child as React.ReactElement, {
+          return cloneElement(child as React.ReactElement<any>, {
             className: "!-mt-2",
           })
         }
@@ -62,5 +62,5 @@ const getChildType = (child: ReactNode) => {
 
   if (child === null) return null
 
-  return (child as React.ReactElement).type
+  return (child as React.ReactElement<any>).type
 }
