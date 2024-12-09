@@ -1,8 +1,10 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
+import { queryClient } from "@client/lib/query-client"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Input } from "@follow/components/ui/input/index.js"
 import { authProvidersConfig } from "@follow/constants"
 import { createSession, loginHandler, signOut } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
@@ -30,11 +32,11 @@ function Login() {
   const { t } = useTranslation("external")
 
   useEffect(() => {
-    if (provider && status === "unauthenticated") {
+    if (provider && provider !== "credential" && status === "unauthenticated") {
       loginHandler(provider)
       setRedirecting(true)
     }
-  }, [status])
+  }, [provider, status])
 
   const getCallbackUrl = useCallback(async () => {
     const { data } = await createSession()
@@ -58,6 +60,9 @@ function Login() {
     }
     onceRef.current = true
   }, [handleOpenApp, isAuthenticated])
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
@@ -111,21 +116,49 @@ function Login() {
             </div>
           ) : (
             <>
-              {Object.entries(authProviders || []).map(([key, provider]) => (
-                <Button
-                  key={key}
-                  buttonClassName={cn(
-                    "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-                    authProvidersConfig[key]?.buttonClassName,
-                  )}
-                  onClick={() => {
-                    loginHandler(key)
-                  }}
-                >
-                  <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
-                  {t("login.continueWith", { provider: provider.name })}
-                </Button>
-              ))}
+              <Input
+                type="email"
+                placeholder={t("login.email")}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                type="password"
+                placeholder={t("login.password")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {[
+                [
+                  "credential",
+                  {
+                    id: "credential",
+                    name: "Password",
+                  },
+                ] as [string, { id: string; name: string }],
+              ]
+                .concat(Object.entries(authProviders || []) as any)
+                .map(([key, provider]) => (
+                  <Button
+                    key={key}
+                    buttonClassName={cn(
+                      "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
+                      authProvidersConfig[key]?.buttonClassName,
+                    )}
+                    disabled={key === "credential" && (!email || !password)}
+                    onClick={async () => {
+                      if (key === "credential") {
+                        await loginHandler(key, { email, password })
+                        queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
+                        return
+                      }
+                      loginHandler(key)
+                    }}
+                  >
+                    <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                    {t("login.continueWith", { provider: provider.name })}
+                  </Button>
+                ))}
             </>
           )}
         </div>
