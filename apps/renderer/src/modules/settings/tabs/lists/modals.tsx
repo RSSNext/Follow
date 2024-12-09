@@ -319,21 +319,19 @@ const RowRender = ({ feedId, listId }: { feedId: string; listId: string }) => {
     </TableRow>
   )
 }
-
+const categoryFormSchema = z.object({
+  categoryName: z.string().min(1),
+})
 export const CategoryCreationModalContent = ({
   onSubmit,
 }: {
   onSubmit: (category: string) => void
 }) => {
-  const formSchema = z.object({
-    categoryName: z.string().min(1),
-  })
-
   const { dismiss } = useCurrentModal()
   const { t } = useTranslation()
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof categoryFormSchema>>({
+    resolver: zodResolver(categoryFormSchema),
     defaultValues: {
       categoryName: "",
     },

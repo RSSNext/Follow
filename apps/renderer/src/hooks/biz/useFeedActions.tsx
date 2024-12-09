@@ -80,7 +80,10 @@ export const useFeedActions = ({
   const inbox = useInboxById(feedId)
   const isInbox = !!inbox
   const subscription = useSubscriptionByFeedId(feedId)
-  const subscriptions = useSubscriptionsByFeedIds(feedIds || [feedId])
+
+  const subscriptions = useSubscriptionsByFeedIds(
+    useMemo(() => feedIds || [feedId], [feedId, feedIds]),
+  )
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
   const claimFeed = useFeedClaimModal()
