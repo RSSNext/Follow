@@ -132,7 +132,8 @@
       "daisyui": "patches/daisyui.patch",
       "jsonpointer": "patches/jsonpointer.patch",
       "workbox-precaching": "patches/workbox-precaching.patch",
-      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch"
+      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch",
+      "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch"
     },
     "overrides": {
       "@types/react": "npm:@types/react@^18.3.12",
