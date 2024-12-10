@@ -4,17 +4,85 @@ import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
 import { authProvidersConfig } from "@follow/constants"
 import { createSession, loginHandler, signOut } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router"
+import { z } from "zod"
 
 export function Component() {
   return <Login />
+}
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(128),
+})
+
+async function onSubmit(values: z.infer<typeof formSchema>) {
+  await loginHandler("credential", values)
+  queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
+}
+
+function LoginWithPassword() {
+  const { t } = useTranslation("external")
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  return (
+    <div className="mt-4 space-y-2">
+      <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="email" placeholder={t("login.email")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="password" placeholder={t("login.password")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" variant="outline" className="w-full">
+            {t("login.logIn")}
+          </Button>
+        </form>
+      </Form>
+    </div>
+  )
 }
 
 function Login() {
@@ -60,9 +128,6 @@ function Login() {
     }
     onceRef.current = true
   }, [handleOpenApp, isAuthenticated])
-
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
@@ -116,49 +181,22 @@ function Login() {
             </div>
           ) : (
             <>
-              <Input
-                type="email"
-                placeholder={t("login.email")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Input
-                type="password"
-                placeholder={t("login.password")}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {[
-                [
-                  "credential",
-                  {
-                    id: "credential",
-                    name: "Password",
-                  },
-                ] as [string, { id: string; name: string }],
-              ]
-                .concat(Object.entries(authProviders || []) as any)
-                .map(([key, provider]) => (
-                  <Button
-                    key={key}
-                    buttonClassName={cn(
-                      "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-                      authProvidersConfig[key]?.buttonClassName,
-                    )}
-                    disabled={key === "credential" && (!email || !password)}
-                    onClick={async () => {
-                      if (key === "credential") {
-                        await loginHandler(key, { email, password })
-                        queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
-                        return
-                      }
-                      loginHandler(key)
-                    }}
-                  >
-                    <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
-                    {t("login.continueWith", { provider: provider.name })}
-                  </Button>
-                ))}
+              {Object.entries(authProviders || []).map(([key, provider]) => (
+                <Button
+                  key={key}
+                  buttonClassName={cn(
+                    "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white focus:!border-black/80 focus:!ring-black/80 enabled:hover:!bg-black/80",
+                    authProvidersConfig[key]?.buttonClassName,
+                  )}
+                  onClick={() => {
+                    loginHandler(key)
+                  }}
+                >
+                  <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                  {t("login.continueWith", { provider: provider.name })}
+                </Button>
+              ))}
+              <LoginWithPassword />
             </>
           )}
         </div>

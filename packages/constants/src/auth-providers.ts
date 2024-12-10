@@ -13,11 +13,6 @@ export const authProvidersConfig = {
       "bg-gray-800 hover:!bg-gray-800/90 focus:!border-gray-800/80 focus:!ring-gray-800/80",
     iconClassName: "i-mgc-apple-cute-fi",
   },
-  credential: {
-    buttonClassName:
-      "bg-neutral-800 hover:!bg-neutral-800/90 focus:!border-neutral-800/80 focus:!ring-neutral-800/80",
-    iconClassName: "i-mgc-user-3-cute-re",
-  },
 } as Record<
   string,
   {
