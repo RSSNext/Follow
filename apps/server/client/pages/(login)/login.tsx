@@ -37,17 +37,18 @@ function Login() {
   const location = useLocation()
   const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
+  const isCredentialProvider = provider === "credential"
 
   const isAuthenticated = status === "authenticated"
 
   const { t } = useTranslation("external")
 
   useEffect(() => {
-    if (provider && provider !== "credential" && status === "unauthenticated") {
+    if (provider && !isCredentialProvider && status === "unauthenticated") {
       loginHandler(provider)
       setRedirecting(true)
     }
-  }, [provider, status])
+  }, [isCredentialProvider, provider, status])
 
   const getCallbackUrl = useCallback(async () => {
     const { data } = await createSession()
@@ -124,22 +125,32 @@ function Login() {
             </div>
           ) : (
             <>
-              {Object.entries(authProviders || []).map(([key, provider]) => (
-                <Button
-                  key={key}
-                  buttonClassName={cn(
-                    "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-                    authProvidersConfig[key]?.buttonClassName,
+              {!isCredentialProvider &&
+                Object.entries(authProviders || [])
+                  .filter(([key]) => key !== "credential")
+                  .map(([key, provider]) => (
+                    <Button
+                      key={key}
+                      buttonClassName={cn(
+                        "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
+                        authProvidersConfig[key]?.buttonClassName,
+                      )}
+                      onClick={() => {
+                        loginHandler(key)
+                      }}
+                    >
+                      <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                      {t("login.continueWith", { provider: provider.name })}
+                    </Button>
+                  ))}
+              {!!authProviders?.credential && (
+                <div className="w-[320px] space-y-2">
+                  {!isCredentialProvider && (
+                    <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
                   )}
-                  onClick={() => {
-                    loginHandler(key)
-                  }}
-                >
-                  <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
-                  {t("login.continueWith", { provider: provider.name })}
-                </Button>
-              ))}
-              <LoginWithPassword />
+                  <LoginWithPassword />
+                </div>
+              )}
             </>
           )}
         </div>
@@ -173,39 +184,36 @@ function LoginWithPassword() {
   })
 
   return (
-    <div className="mt-4 space-y-2">
-      <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input type="email" placeholder={t("login.email")} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input type="password" placeholder={t("login.password")} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" variant="outline" className="w-full">
-            {t("login.logIn")}
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input type="email" placeholder={t("login.email")} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input type="password" placeholder={t("login.password")} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" variant="outline" className="w-full">
+          {t("login.logIn")}
+        </Button>
+      </form>
+    </Form>
   )
 }
