@@ -161,8 +161,8 @@ importers:
         specifier: 0.37.0
         version: 0.37.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.14)(kysely@0.27.5)(react@18.3.1)
       electron:
-        specifier: 33.2.1
-        version: 33.2.1
+        specifier: 33.3.0
+        version: 33.3.0
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
@@ -279,13 +279,13 @@ importers:
     dependencies:
       '@egoist/tipc':
         specifier: 0.3.2
-        version: 0.3.2(electron@33.2.1)(react@19.0.0)
+        version: 0.3.2(electron@33.3.0)(react@19.0.0)
       '@electron-toolkit/preload':
         specifier: ^3.0.1
-        version: 3.0.1(electron@33.2.1)
+        version: 3.0.1(electron@33.3.0)
       '@electron-toolkit/utils':
         specifier: ^3.0.0
-        version: 3.0.0(electron@33.2.1)
+        version: 3.0.0(electron@33.3.0)
       '@eneris/push-receiver':
         specifier: 4.3.0
         version: 4.3.0
@@ -366,8 +366,8 @@ importers:
         specifier: ^22.10.1
         version: 22.10.1
       electron:
-        specifier: 33.2.1
-        version: 33.2.1
+        specifier: 33.3.0
+        version: 33.3.0
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
@@ -382,10 +382,10 @@ importers:
         version: 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@egoist/tipc':
         specifier: 0.3.2
-        version: 0.3.2(electron@33.2.1)(react@18.3.1)
+        version: 0.3.2(electron@33.3.0)(react@18.3.1)
       '@electron-toolkit/preload':
         specifier: ^3.0.1
-        version: 3.0.1(electron@33.2.1)
+        version: 3.0.1(electron@33.3.0)
       '@follow/electron-main':
         specifier: workspace:*
         version: link:../main
@@ -6467,6 +6467,11 @@ packages:
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
+  electron@33.3.0:
+    resolution: {integrity: sha512-316ZlFUHJmzGrhRj87tVStxyYvknDqVR9eYSsGKAHY7auhVWFLIcPPGxcnbD/H1mez8CpDjXvEjcz76zpWxsXw==}
+    engines: {node: '>= 12.20.55'}
+    hasBin: true
+
   elliptic@6.5.7:
     resolution: {integrity: sha512-ESVCtTwiA+XhY3wyh24QqRGBoP3rEdDUl3EDUUo9tft074fi19IrdpH7hLCMMP3CIj7jb3W96rn8lt/BqIlt5Q==}
 
@@ -12508,17 +12513,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@egoist/tipc@0.3.2(electron@33.2.1)(react@18.3.1)':
+  '@egoist/tipc@0.3.2(electron@33.3.0)(react@18.3.1)':
     dependencies:
-      electron: 33.2.1
+      electron: 33.3.0
     optionalDependencies:
       '@tanstack/react-query': 5.62.0(react@18.3.1)
     transitivePeerDependencies:
       - react
 
-  '@egoist/tipc@0.3.2(electron@33.2.1)(react@19.0.0)':
+  '@egoist/tipc@0.3.2(electron@33.3.0)(react@19.0.0)':
     dependencies:
-      electron: 33.2.1
+      electron: 33.3.0
     optionalDependencies:
       '@tanstack/react-query': 5.62.0(react@19.0.0)
     transitivePeerDependencies:
@@ -12747,13 +12752,17 @@ snapshots:
     dependencies:
       electron: 33.2.1
 
+  '@electron-toolkit/preload@3.0.1(electron@33.3.0)':
+    dependencies:
+      electron: 33.3.0
+
   '@electron-toolkit/tsconfig@1.0.1(@types/node@22.10.1)':
     dependencies:
       '@types/node': 22.10.1
 
-  '@electron-toolkit/utils@3.0.0(electron@33.2.1)':
+  '@electron-toolkit/utils@3.0.0(electron@33.3.0)':
     dependencies:
-      electron: 33.2.1
+      electron: 33.3.0
 
   '@electron/asar@3.2.17':
     dependencies:
@@ -18016,6 +18025,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  electron@33.3.0:
+    dependencies:
+      '@electron/get': 2.0.3
+      '@types/node': 20.17.9
+      extract-zip: 2.0.1
+    transitivePeerDependencies:
+      - supports-color
+
   elliptic@6.5.7:
     dependencies:
       bn.js: 4.12.0
@@ -18971,7 +18988,7 @@ snapshots:
 
   flora-colossus@2.0.0:
     dependencies:
-      debug: 4.3.7
+      debug: 4.4.0
       fs-extra: 10.1.0
     transitivePeerDependencies:
       - supports-color
@@ -22116,7 +22133,7 @@ snapshots:
 
   read-binary-file-arch@1.0.6:
     dependencies:
-      debug: 4.3.7
+      debug: 4.4.0
     transitivePeerDependencies:
       - supports-color
 
