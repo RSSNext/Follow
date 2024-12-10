@@ -9353,6 +9353,7 @@ declare const auth: {
 };
 
 type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
+type AuthUser = NonNullable<AuthSession>["user"];
 
 declare const _routes: hono_hono_base.HonoBase<Env, ({
     "/better-auth/*": {
@@ -9646,21 +9647,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     name: string;
                     id: string;
                 };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/init-password": {
-        $patch: {
-            input: {
-                json: {
-                    password: string;
-                };
-            };
-            output: {
-                code: 0;
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -10778,6 +10764,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         updatedAt: string;
                     };
                 };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/init-password": {
+        $patch: {
+            input: {
+                json: {
+                    password: string;
+                };
+            };
+            output: {
+                code: 0;
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -12168,4 +12169,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/probes">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, accountAuthjs, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, sessionAuthjs, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, accountAuthjs, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, sessionAuthjs, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

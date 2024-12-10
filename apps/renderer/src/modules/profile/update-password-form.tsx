@@ -45,10 +45,8 @@ const InitPasswordForm = () => {
 
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof initPasswordFormSchema>) => {
-      await apiClient["auth-app"]["init-password"].$patch({
-        json: {
-          password: values.newPassword,
-        },
+      await apiClient.profiles["init-password"].$patch({
+        json: { password: values.newPassword },
       })
       await Queries.auth.getAccounts().invalidate()
     },
