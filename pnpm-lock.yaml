@@ -570,8 +570,8 @@ importers:
         specifier: 0.0.12
         version: 0.0.12(shiki@1.24.1)
       re-resizable:
-        specifier: 6.10.1
-        version: 6.10.1(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 6.10.3
+        version: 6.10.3(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-blurhash:
         specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@19.0.0)
@@ -9772,11 +9772,11 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  re-resizable@6.10.1:
-    resolution: {integrity: sha512-m33nSWRH57UZLmep5M/LatkZ2NRqimVD/bOOpvymw5Zf33+eTSEixsUugscOZzAtK0/nx+OSuOf8VbKJx/4ptw==}
+  re-resizable@6.10.3:
+    resolution: {integrity: sha512-zvWb7X3RJMA4cuSrqoxgs3KR+D+pEXnGrD2FAD6BMYAULnZsSF4b7AOVyG6pC3VVNVOtlagGDCDmZSwWLjjBBw==}
     peerDependencies:
-      react: ^16.13.1 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+      react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-blurhash@0.3.0:
     resolution: {integrity: sha512-XlKr4Ns1iYFRnk6DkAblNbAwN/bTJvxTVoxMvmTcURdc5oLoXZwqAF9N3LZUh/HT+QFlq5n6IS6VsDGsviYAiQ==}
@@ -21951,7 +21951,7 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  re-resizable@6.10.1(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  re-resizable@6.10.3(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
