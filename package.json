@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.2.6-beta.0",
   "private": true,
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@9.15.0",
   "description": "Follow your favorites in one inbox",
   "author": "Follow Team",
   "license": "GPL-3.0-only",
