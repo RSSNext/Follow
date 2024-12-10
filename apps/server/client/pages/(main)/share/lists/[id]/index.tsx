@@ -115,8 +115,9 @@ const FeedRow = ({ feed }: { feed: Feed["feed"] }) => {
       key={feed.id}
     >
       <FeedIcon fallback feed={feed} className="mask-squircle mask mr-2 shrink-0" size={20} />
-      {feed.title}
+      <div className="shrink-0">{feed.title}</div>
       <FeedCertification feed={feed} />
+      <div className="ml-8 truncate text-sm text-zinc-500">{feed.description}</div>
     </a>
   )
 }
