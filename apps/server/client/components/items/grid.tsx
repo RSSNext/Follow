@@ -11,7 +11,7 @@ import { LazyImage } from "../ui/image"
 
 export const GridList: FC<{
   entries: EntriesPreview
-  feed: Feed
+  feed?: Feed
 }> = ({ entries, feed }) => {
   return (
     <TeleportalTakeOff>
@@ -53,7 +53,7 @@ const Wrapper: FC<{
 }
 
 const GridItemFooter: FC<{
-  feed: Feed
+  feed?: Feed
   entryId: string
   entryPreview: EntriesPreview[number]
 }> = ({ feed, entryPreview }) => {
@@ -68,11 +68,11 @@ const GridItemFooter: FC<{
         <FeedIcon
           fallback
           className="mr-0.5 flex"
-          feed={feed.feed}
+          feed={feed?.feed || entryPreview.feeds!}
           entry={entryPreview}
           size={18}
         />
-        <span className={"min-w-0 truncate"}>{feed.feed.title}</span>
+        <span className={"min-w-0 truncate"}>{feed?.feed.title || entryPreview.feeds?.title}</span>
         <span className={"text-zinc-500"}>·</span>
         <span className={"text-zinc-500"}>
           {dayjs
