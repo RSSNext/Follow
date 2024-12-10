@@ -32,7 +32,7 @@ export const EntryColumnGrid: FC<EntryListProps> = (props) => {
   const masonry = useUISettingKey("pictureViewMasonry") || isMobile
 
   const filterNoImage = useUISettingKey("pictureViewFilterNoImage")
-  const nextData = useMemo(() => {
+  const nextEntriesIds = useMemo(() => {
     if (filterNoImage) {
       return entriesIds.filter((entryId) => {
         const entry = getEntry(entryId)
@@ -42,7 +42,7 @@ export const EntryColumnGrid: FC<EntryListProps> = (props) => {
     return entriesIds
   }, [entriesIds, filterNoImage])
   const { t } = useTranslation()
-  if (nextData.length === 0 && entriesIds.length > 0) {
+  if (nextEntriesIds.length === 0 && entriesIds.length > 0) {
     return (
       <div className="center absolute inset-x-0 inset-y-12 -translate-y-12 flex-col gap-5">
         <i className="i-mgc-photo-album-cute-fi size-12" />
@@ -61,7 +61,7 @@ export const EntryColumnGrid: FC<EntryListProps> = (props) => {
     )
   }
 
-  const hasFilteredContent = nextData.length < entriesIds.length
+  const hasFilteredContent = nextEntriesIds.length < entriesIds.length
 
   const FilteredContentTip = hasFilteredContent && !hasNextPage && (
     <div className="center mb-6 flex flex-col gap-5">
@@ -85,7 +85,7 @@ export const EntryColumnGrid: FC<EntryListProps> = (props) => {
           key={feedId}
           hasNextPage={hasNextPage}
           endReached={fetchNextPage}
-          data={entriesIds}
+          data={nextEntriesIds}
         />
 
         {FilteredContentTip}
@@ -94,7 +94,7 @@ export const EntryColumnGrid: FC<EntryListProps> = (props) => {
   }
   return (
     <>
-      <VirtualGrid {...props} />
+      <VirtualGrid {...props} entriesIds={nextEntriesIds} />
       {FilteredContentTip}
     </>
   )
