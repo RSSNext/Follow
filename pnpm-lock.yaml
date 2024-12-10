@@ -1121,8 +1121,8 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.2)(zod@3.23.8)
       better-auth:
-        specifier: 1.0.14
-        version: 1.0.14(encoding@0.1.13)
+        specifier: 1.0.15
+        version: 1.0.15(encoding@0.1.13)
       drizzle-orm:
         specifier: 0.38.0
         version: 0.38.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0)
@@ -5295,8 +5295,8 @@ packages:
   before-after-hook@2.2.3:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
 
-  better-auth@1.0.14:
-    resolution: {integrity: sha512-34TmHJArkhceQzZfKYXUmtbP1pO0NtUcSz9fmqtoYerE7k643alyfs1FeyU0KZEpvwoH2Oa2rovLWqKpDPxblQ==}
+  better-auth@1.0.15:
+    resolution: {integrity: sha512-hBP4huYOZWrKQsb7PId9a/bvNPJhTDaZWT7Q9gBFEwbHVvqhs7WBy4GT2+oELFOPClUP7fYtGDUut07lDtNG9Q==}
 
   better-call@0.3.3-beta.4:
     resolution: {integrity: sha512-txigUTFsjOlE4dfkfhDhu6Gk0I1Xo3S4Nye+nfMKJXknb+WsymcWtqoRUSUGdhOMumM3LT9R3QttTUxwny9lWQ==}
@@ -16670,7 +16670,7 @@ snapshots:
 
   before-after-hook@2.2.3: {}
 
-  better-auth@1.0.14(encoding@0.1.13):
+  better-auth@1.0.15(encoding@0.1.13):
     dependencies:
       '@better-fetch/fetch': 1.1.12
       '@noble/ciphers': 0.6.0
