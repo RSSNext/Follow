@@ -8,7 +8,6 @@ import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useTitle } from "@follow/hooks"
-import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
@@ -35,10 +34,7 @@ export const Component = () => {
       ) : (
         <Fragment>
           <Avatar className="aspect-square size-16">
-            <AvatarImage
-              className="duration-200 animate-in fade-in-0"
-              src={replaceImgUrlIfNeed(user.data?.image || undefined)}
-            />
+            <AvatarImage className="duration-200 animate-in fade-in-0" src={user.data?.image} />
             <AvatarFallback>{user.data?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="mb-8 flex flex-col items-center">
