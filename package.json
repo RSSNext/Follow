@@ -73,7 +73,7 @@
     "@types/node": "^22.10.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vercel/node": "3.2.28",
+    "@vercel/node": "3.2.29",
     "@vitejs/plugin-legacy": "6.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "async-es": "^3.2.6",
