@@ -6,8 +6,16 @@ import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { LRUCache } from "@follow/utils/lru-cache"
 import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
 import { useVirtualizer } from "@tanstack/react-virtual"
-import type { FC } from "react"
-import { Fragment, startTransition, useEffect, useMemo, useState } from "react"
+import type { FC, MutableRefObject } from "react"
+import {
+  Fragment,
+  startTransition,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useTranslation } from "react-i18next"
 
 import { setUISetting, useUISettingKey } from "~/atoms/settings/ui"
@@ -101,16 +109,57 @@ const ratioMap = {
   //  16:9
   [FeedViewType.Videos]: 16 / 9,
 }
-const VirtualGrid: FC<EntryListProps> = (props) => {
-  const { entriesIds, feedId, onRangeChange, fetchNextPage, view, Footer, hasNextPage, listRef } =
-    props
-  const scrollRef = useScrollViewElement()
 
+const VirtualGrid: FC<EntryListProps> = (props) => {
+  const scrollRef = useScrollViewElement()
   const [containerWidth, setContainerWidth] = useState(0)
 
-  const columns = useMemo(() => {
-    if (!scrollRef) return [0]
+  useEffect(() => {
+    if (!scrollRef) return
+    const handler = () => {
+      const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
+      const width = scrollRef.clientWidth - 2 * rem
+      setContainerWidth(width)
 
+      measureRef.current?.()
+    }
+
+    const observer = new ResizeObserver(handler)
+    handler()
+    observer.observe(scrollRef)
+    return () => {
+      observer.disconnect()
+    }
+  }, [scrollRef])
+
+  const measureRef = useRef<() => void>()
+
+  if (!containerWidth) return null
+
+  return <VirtualGridImpl {...props} containerWidth={containerWidth} measureRef={measureRef} />
+}
+
+const VirtualGridImpl: FC<
+  EntryListProps & {
+    containerWidth: number
+    measureRef: MutableRefObject<(() => void) | undefined>
+  }
+> = (props) => {
+  const {
+    entriesIds,
+    feedId,
+    onRangeChange,
+    fetchNextPage,
+    view,
+    Footer,
+    hasNextPage,
+    listRef,
+    measureRef,
+    containerWidth,
+  } = props
+  const scrollRef = useScrollViewElement()
+
+  const columns = useMemo(() => {
     const width = containerWidth
     const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
     let columnCount = 1 // default (grid-cols-1)
@@ -120,7 +169,7 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
     if (width >= 80 * rem) columnCount = 5 // @8xl (80rem)
 
     return Array.from({ length: columnCount }).fill(width / columnCount) as number[]
-  }, [containerWidth, scrollRef])
+  }, [containerWidth])
 
   // Calculate rows based on entries
   const rows = useMemo(() => {
@@ -190,23 +239,12 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
     listRef.current = rowVirtualizer
   }, [rowVirtualizer, listRef])
 
-  useEffect(() => {
-    if (!scrollRef) return
-    const handler = () => {
-      const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
-      const width = scrollRef.clientWidth - 2 * rem
-      setContainerWidth(width)
-
+  useLayoutEffect(() => {
+    measureRef.current = () => {
       rowVirtualizer.measure()
       columnVirtualizer.measure()
     }
-
-    const observer = new ResizeObserver(handler)
-    observer.observe(scrollRef)
-    return () => {
-      observer.disconnect()
-    }
-  }, [columnVirtualizer, rowVirtualizer, scrollRef])
+  }, [columnVirtualizer, measureRef, rowVirtualizer])
 
   const virtualItems = rowVirtualizer.getVirtualItems()
   useEffect(() => {
@@ -233,10 +271,9 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
 
   return (
     <div
-      className="relative mx-4"
+      className="relative mx-4 w-full"
       style={{
         height: `${rowVirtualizer.getTotalSize()}px`,
-        width: `${columnVirtualizer.getTotalSize()}px`,
       }}
     >
       {rowVirtualizer.getVirtualItems().map((virtualRow) => {
