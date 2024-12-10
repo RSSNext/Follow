@@ -7,7 +7,6 @@ import {
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
 import type { FeedOrListRespModel } from "@follow/models/types"
-import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
@@ -60,7 +59,7 @@ export const FeedCertification = ({
               <span>{t("feed_item.claimed_by_owner")}</span>
               {feed.owner ? (
                 <Avatar className="inline-flex aspect-square size-5 rounded-full">
-                  <AvatarImage src={replaceImgUrlIfNeed(feed.owner.image || undefined)} />
+                  <AvatarImage src={feed.owner.image || undefined} />
                   <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
                 </Avatar>
               ) : (
