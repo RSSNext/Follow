@@ -41,7 +41,7 @@ index 389100d510dd90c10b28d3f3ee0996c01a7714d9..7fa2bfd46bbf7b7d10e4b0190fda6a3f
 +  }: MakerOptions): Promise<string[]>
  }
 diff --git a/dist/src/MakerAppimage.js b/dist/src/MakerAppimage.js
-index a57b183ad759c91aa36691a430e87c385ba63f62..a0bce031399f4dbc7cefab9a5c4460ee4cd88518 100644
+index a57b183ad759c91aa36691a430e87c385ba63f62..032877c9fd3fe2dd6905e75de76c17936b19534e 100644
 --- a/dist/src/MakerAppimage.js
 +++ b/dist/src/MakerAppimage.js
 @@ -48,7 +48,7 @@ const isIForgeResolvableMaker = (maker) => {
@@ -53,3 +53,15 @@ index a57b183ad759c91aa36691a430e87c385ba63f62..a0bce031399f4dbc7cefab9a5c4460ee
          this.defaultPlatforms = ["linux"];
      }
      isSupportedOnCurrentPlatform() {
+@@ -65,9 +65,9 @@ class MakerAppImage extends maker_base_1.default {
+             const executableName = forgeConfig.packagerConfig.executableName || appName;
+             // Check for any optional configuration data passed in from forge config, specific to this maker.
+             let config;
+-            const maker = forgeConfig.makers.find((maker) => isIForgeResolvableMaker(maker) && maker.name === makerPackageName);
++            const maker = forgeConfig.makers.find((maker) => maker?.name === makerPackageName);
+             if (maker !== undefined && isIForgeResolvableMaker(maker)) {
+-                config = maker.config;
++                config = maker.configOrConfigFetcher?.config;
+             }
+             const appFileName = `${appName}-${packageJSON.version}.AppImage`;
+             const appPath = path_1.default.join(makeDir, appFileName);
