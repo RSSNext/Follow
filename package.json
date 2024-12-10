@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.2.5-beta.0",
+  "version": "0.2.6-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow your favorites in one inbox",
@@ -44,7 +44,7 @@
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
   "devDependencies": {
-    "@babel/generator": "7.26.2",
+    "@babel/generator": "7.26.3",
     "@clack/prompts": "0.8.2",
     "@egoist/tailwindcss-icons": "1.8.1",
     "@electron-forge/cli": "7.6.0",
@@ -59,12 +59,12 @@
     "@hookform/resolvers": "3.9.1",
     "@iconify-json/logos": "1.2.3",
     "@iconify-json/mingcute": "1.2.1",
-    "@iconify-json/simple-icons": "^1.2.13",
+    "@iconify-json/simple-icons": "^1.2.15",
     "@iconify/tools": "4.0.7",
     "@microflash/remark-callout-directives": "4.3.2",
     "@mozilla/readability": "^0.5.0",
     "@pengx17/electron-forge-maker-appimage": "1.2.1",
-    "@sentry/vite-plugin": "2.22.6",
+    "@sentry/vite-plugin": "2.22.7",
     "@t3-oss/env-core": "^0.11.1",
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.15",
@@ -73,7 +73,7 @@
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vercel/node": "3.2.27",
+    "@vercel/node": "3.2.28",
     "@vitejs/plugin-legacy": "6.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "async-es": "^3.2.6",
@@ -81,31 +81,31 @@
     "cross-env": "7.0.3",
     "cssnano": "7.0.6",
     "dnum": "^2.14.0",
-    "dotenv": "16.4.5",
-    "drizzle-orm": "0.36.4",
-    "electron": "33.2.0",
+    "dotenv": "16.4.7",
+    "drizzle-orm": "0.37.0",
+    "electron": "33.2.1",
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
     "eslint": "^9.16.0",
-    "eslint-config-hyoban": "^3.1.14",
+    "eslint-config-hyoban": "^3.1.15",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.11.7",
-    "hono": "4.6.12",
+    "hono": "4.6.13",
     "html-minifier-terser": "7.2.0",
     "js-yaml": "4.1.0",
     "lint-staged": "15.2.10",
     "nbump": "2.0.7",
     "postcss": "8.4.49",
     "postcss-js": "4.0.1",
-    "prettier": "3.4.1",
+    "prettier": "3.4.2",
     "raw-body": "3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rimraf": "6.0.1",
     "shx": "^0.3.4",
     "simple-git-hooks": "2.11.1",
-    "tailwindcss": "3.4.15",
+    "tailwindcss": "3.4.16",
     "tailwindcss-animate": "1.0.7",
     "tailwindcss-motion": "0.4.3-beta",
     "tailwindcss-safe-area": "0.6.0",
@@ -115,12 +115,12 @@
     "turbo": "2.3.3",
     "typescript": "5.7.2",
     "unplugin-ast": "^0.12.0",
-    "vite": "6.0.2",
+    "vite": "6.0.3",
     "vite-bundle-analyzer": "0.15.2",
     "vite-plugin-mkcert": "1.17.6",
     "vite-plugin-pwa": "0.21.1",
-    "vite-tsconfig-paths": "5.1.3",
-    "vitest": "2.1.6"
+    "vite-tsconfig-paths": "5.1.4",
+    "vitest": "2.1.8"
   },
   "pnpm": {
     "patchedDependencies": {
@@ -132,11 +132,13 @@
       "daisyui": "patches/daisyui.patch",
       "jsonpointer": "patches/jsonpointer.patch",
       "workbox-precaching": "patches/workbox-precaching.patch",
-      "@tanstack/react-virtual@3.10.9": "patches/@tanstack__react-virtual@3.10.9.patch"
+      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch"
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
-      "isarray": "npm:@nolyfill/isarray@^1"
+      "isarray": "npm:@nolyfill/isarray@^1",
+      "@types/react": "npm:@types/react@^18.3.12",
+      "@types/react-dom": "npm:@types/react-dom@^18.3.1"
     }
   },
   "simple-git-hooks": {
@@ -173,5 +175,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "d84fb4ff5722eed7d018b6e65af20dd449be0a6a8a4e5f9c31933f89e4e5bdd1"
+  "mainHash": "a17b3455d95c59da9a9724da5c9a04332f454caf2391c53ac32fc54184965658"
 }

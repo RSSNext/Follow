@@ -93,5 +93,9 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
   } else {
     if (!isMobile()) path += `/${ROUTE_ENTRY_PENDING}`
   }
-  return getStableRouterNavigate()?.(`${path}?${nextSearchParams.toString()}`)
+
+  const finalPath = `${path}?${nextSearchParams.toString()}`
+  const currentPath = getReadonlyRoute().location.pathname + getReadonlyRoute().location.search
+  if (finalPath === currentPath) return
+  return getStableRouterNavigate()?.(finalPath)
 }

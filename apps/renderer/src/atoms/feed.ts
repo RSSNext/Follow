@@ -20,6 +20,7 @@ export const useFeedUnreadIsDirty = (feedId: string) => {
       () =>
         selectAtom(feedUnreadDirtySetAtom, (set) => {
           const isRealFeedId = isBizId(feedId)
+
           if (isRealFeedId) return set.has(feedId)
 
           if (feedId.startsWith(ROUTE_FEED_IN_LIST) || feedId.startsWith(INBOX_PREFIX_ID)) {
@@ -66,4 +67,8 @@ export const clearFeedUnreadDirty = (feedId: string) => {
     newSet.delete(feedId)
     return newSet
   })
+}
+
+export const clearAllFeedUnreadDirty = () => {
+  jotaiStore.set(feedUnreadDirtySetAtom, new Set())
 }

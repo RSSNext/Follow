@@ -40,6 +40,26 @@ interface FeedItemProps {
   view?: number
   className?: string
 }
+
+const DraggableItemWrapper: Component<
+  {
+    className?: string
+    isInMultipleSelection: boolean
+  } & React.HTMLAttributes<HTMLDivElement>
+> = ({ children, isInMultipleSelection, ...props }) => {
+  const draggableContext = useContext(DraggableContext)
+
+  return (
+    <div
+      {...draggableContext?.attributes}
+      {...draggableContext?.listeners}
+      style={isInMultipleSelection ? draggableContext?.style : undefined}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
 const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
@@ -60,7 +80,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   })
 
   const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIdsState()
-  const draggableContext = useContext(DraggableContext)
+
   const isMobile = useMobile()
   const isInMultipleSelection = !isMobile && selectedFeedIds.includes(feedId)
   const isMultiSelectingButNotSelected =
@@ -141,79 +161,71 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const isFeed = feed.type === "feed" || !feed.type
 
   return (
-    <>
+    <DraggableItemWrapper
+      isInMultipleSelection={isInMultipleSelection}
+      data-feed-id={feedId}
+      data-active={
+        isMultiSelectingButNotSelected
+          ? false
+          : isActive || isContextMenuOpen || isInMultipleSelection
+      }
+      className={cn(
+        feedColumnStyles.item,
+        isFeed ? "py-[2px]" : "py-1.5",
+        "justify-between py-[2px]",
+        className,
+      )}
+      onClick={handleClick}
+      onDoubleClick={() => {
+        window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
+      }}
+      {...contextMenuProps}
+    >
       <div
-        {...(isInMultipleSelection && draggableContext?.attributes
-          ? draggableContext.attributes
-          : {})}
-        {...(isInMultipleSelection && draggableContext?.listeners
-          ? draggableContext.listeners
-          : {})}
-        style={isInMultipleSelection ? draggableContext?.style : undefined}
-        data-feed-id={feedId}
-        data-active={
-          isMultiSelectingButNotSelected
-            ? false
-            : isActive || isContextMenuOpen || isInMultipleSelection
-        }
         className={cn(
-          feedColumnStyles.item,
-          isFeed ? "py-[2px]" : "py-1.5",
-          "justify-between py-[2px]",
-          className,
+          "flex min-w-0 items-center",
+          isFeed && feed.errorAt && "text-red-900 dark:text-red-500",
         )}
-        onClick={handleClick}
-        onDoubleClick={() => {
-          window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
-        }}
-        {...contextMenuProps}
       >
-        <div
-          className={cn(
-            "flex min-w-0 items-center",
-            isFeed && feed.errorAt && "text-red-900 dark:text-red-500",
-          )}
-        >
-          <FeedIcon fallback feed={feed} size={16} />
-          <FeedTitle feed={feed} />
-          {isFeed && feed.errorAt && (
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger asChild>
-                <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
-              </TooltipTrigger>
-              <TooltipPortal>
-                <TooltipContent>
+        <FeedIcon fallback feed={feed} size={16} />
+        <FeedTitle feed={feed} />
+        {isFeed && feed.errorAt && (
+          <Tooltip delayDuration={300}>
+            <TooltipTrigger asChild>
+              <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent>
+                <div className="flex items-center gap-1">
+                  <i className="i-mgc-time-cute-re" />
+                  {t("feed_item.error_since")}{" "}
+                  {dayjs
+                    .duration(dayjs(feed.errorAt).diff(dayjs(), "minute"), "minute")
+                    .humanize(true)}
+                </div>
+                {!!feed.errorMessage && (
                   <div className="flex items-center gap-1">
-                    <i className="i-mgc-time-cute-re" />
-                    {t("feed_item.error_since")}{" "}
-                    {dayjs
-                      .duration(dayjs(feed.errorAt).diff(dayjs(), "minute"), "minute")
-                      .humanize(true)}
+                    <i className="i-mgc-bug-cute-re" />
+                    {feed.errorMessage}
                   </div>
-                  {!!feed.errorMessage && (
-                    <div className="flex items-center gap-1">
-                      <i className="i-mgc-bug-cute-re" />
-                      {feed.errorMessage}
-                    </div>
-                  )}
-                </TooltipContent>
-              </TooltipPortal>
-            </Tooltip>
-          )}
-          {subscription.isPrivate && (
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger>
-                <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
-              </TooltipTrigger>
-              <TooltipPortal>
-                <TooltipContent>{t("feed_item.not_publicly_visible")}</TooltipContent>
-              </TooltipPortal>
-            </Tooltip>
-          )}
-        </div>
-        <UnreadNumber unread={feedUnread} className="ml-2" />
+                )}
+              </TooltipContent>
+            </TooltipPortal>
+          </Tooltip>
+        )}
+        {subscription.isPrivate && (
+          <Tooltip delayDuration={300}>
+            <TooltipTrigger>
+              <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent>{t("feed_item.not_publicly_visible")}</TooltipContent>
+            </TooltipPortal>
+          </Tooltip>
+        )}
       </div>
-    </>
+      <UnreadNumber unread={feedUnread} className="ml-2" />
+    </DraggableItemWrapper>
   )
 }
 

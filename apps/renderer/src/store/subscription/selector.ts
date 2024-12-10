@@ -25,6 +25,8 @@ export const subscriptionByViewSelector = (view: FeedViewType) => (state: State)
   state.feedIdByView[view].map((id) => state.data[id])
 
 export const subscriptionByFeedIdSelector = (feedId: string) => (state: State) => state.data[feedId]
+export const subscriptionsByFeedIsdSelector = (feedIds: string[]) => (state: State) =>
+  feedIds.map((id) => state.data[id])
 
 export const folderFeedsByFeedIdSelector =
   ({ feedId, view }: { feedId?: string; view: FeedViewType }) =>

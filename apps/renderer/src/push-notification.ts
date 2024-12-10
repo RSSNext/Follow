@@ -13,13 +13,10 @@ export async function registerWebPushNotifications() {
   }
   try {
     const existingRegistration = await navigator.serviceWorker.getRegistration()
-    let registration = existingRegistration
+    const registration = existingRegistration
 
-    const isPWA = window.matchMedia("(display-mode: standalone)").matches
     if (!registration) {
-      registration = await navigator.serviceWorker.register(`/sw.js${isPWA ? "?pwa=true" : ""}`, {
-        scope: "/",
-      })
+      return
     }
 
     await navigator.serviceWorker.ready

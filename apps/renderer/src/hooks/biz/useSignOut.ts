@@ -24,5 +24,7 @@ export const useSignOut = () =>
       tipcClient?.cleanBetterAuthSessionCookie(),
     ])
     // Sign out
-    await signOut()
+    await signOut().then(() => {
+      window.location.reload()
+    })
   }, [])

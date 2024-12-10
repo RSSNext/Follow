@@ -301,6 +301,7 @@ const FeedInnerForm = ({
                   <div className="flex gap-2">
                     <Input {...field} />
                     <Button
+                      buttonClassName="shrink-0"
                       type="button"
                       variant="outline"
                       onClick={fillDefaultTitle}

@@ -27,7 +27,7 @@ export const clearLocalPersistStoreData = async () => {
   clearUISettings()
 
   await clearImageDimensionsDb()
-  await browserDB.delete().catch(() => null)
+  await Promise.all(browserDB.tables.map((table) => table.clear()))
 }
 
 const storedUserId = getStorageNS("user_id")

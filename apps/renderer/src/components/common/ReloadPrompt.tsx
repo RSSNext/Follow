@@ -42,9 +42,6 @@ export function ReloadPrompt() {
   // }, [offlineReady, close])
 
   useEffect(() => {
-    const isPwa = window.matchMedia("(display-mode: standalone)").matches
-    if (!isPwa) return
-
     if (needRefresh) {
       toast.info("New version available", {
         action: {
