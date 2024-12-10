@@ -589,7 +589,7 @@ importers:
         version: 4.6.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-i18next:
         specifier: ^15.1.3
-        version: 15.1.3(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 15.1.4(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-intersection-observer:
         specifier: 9.13.1
         version: 9.13.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -806,7 +806,7 @@ importers:
         version: 4.6.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-i18next:
         specifier: ^15.1.3
-        version: 15.1.3(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 15.1.4(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-photo-view:
         specifier: 1.2.6
         version: 1.2.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1032,7 +1032,7 @@ importers:
         version: 7.54.0(react@19.0.0)
       react-i18next:
         specifier: ^15.1.3
-        version: 15.1.3(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 15.1.4(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       sonner:
         specifier: 1.7.1
         version: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -9817,8 +9817,8 @@ packages:
       react: '>=16.8.1'
       react-dom: '>=16.8.1'
 
-  react-i18next@15.1.3:
-    resolution: {integrity: sha512-J11oA30FbM3NZegUZjn8ySK903z6PLBz/ZuBYyT1JMR0QPrW6PFXvl1WoUhortdGi9dM0m48/zJQlPskVZXgVw==}
+  react-i18next@15.1.4:
+    resolution: {integrity: sha512-2tai71gmehbvl9ZIqPMqlCCkm/cbeV1G4STpmM3C8Uzo6T2l8jDvZxEVSsQKt8blP9X34iRFP/k1ROqG2296MQ==}
     peerDependencies:
       i18next: '>= 23.2.3'
       react: '>= 16.8.0'
@@ -21992,7 +21992,7 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  react-i18next@15.1.3(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-i18next@15.1.4(i18next@24.0.5(typescript@5.7.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@babel/runtime': 7.26.0
       html-parse-stringify: 3.0.1
