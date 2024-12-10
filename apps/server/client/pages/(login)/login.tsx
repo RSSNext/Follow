@@ -185,7 +185,7 @@ function Login() {
                 <Button
                   key={key}
                   buttonClassName={cn(
-                    "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white focus:!border-black/80 focus:!ring-black/80 enabled:hover:!bg-black/80",
+                    "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
                     authProvidersConfig[key]?.buttonClassName,
                   )}
                   onClick={() => {
