@@ -149,7 +149,7 @@ jobs:
 
       - name: Generate artifact attestation
         continue-on-error: true
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
             out/make/**/*.dmg
