@@ -1,3 +1,4 @@
+import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
 import { cn } from "@follow/utils/utils"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 import * as React from "react"
@@ -21,6 +22,7 @@ export const AvatarImage = React.forwardRef<
   <AvatarPrimitive.Image
     ref={ref}
     className={cn("aspect-square size-full", className)}
+    src={replaceImgUrlIfNeed(props.src)}
     {...props}
   />
 ))
