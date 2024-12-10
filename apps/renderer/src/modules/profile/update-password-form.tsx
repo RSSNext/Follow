@@ -133,7 +133,11 @@ const UpdateExistingPasswordForm = () => {
 
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof updatePasswordFormSchema>) => {
-      const res = await changePassword(values)
+      const res = await changePassword({
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+        revokeOtherSessions: true,
+      })
       if (res.error) {
         throw new Error(res.error.message)
       }
