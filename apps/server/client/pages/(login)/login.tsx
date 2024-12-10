@@ -21,6 +21,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router"
+import { toast } from "sonner"
 import { z } from "zod"
 
 export function Component() {
@@ -33,7 +34,11 @@ const formSchema = z.object({
 })
 
 async function onSubmit(values: z.infer<typeof formSchema>) {
-  await loginHandler("credential", values)
+  const res = await loginHandler("credential", values)
+  if (res?.error) {
+    toast.error(res.error.message)
+    return
+  }
   queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
 }
 
