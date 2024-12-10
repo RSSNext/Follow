@@ -21,14 +21,36 @@ const authClient = createAuthClient({
   plugins: serverPlugins,
 })
 
-export const { signIn, signOut, getSession, getProviders, createSession } = authClient
+export const {
+  signIn,
+  signOut,
+  getSession,
+  getProviders,
+  createSession,
+  linkSocial,
+  listAccounts,
+  changePassword,
+} = authClient
 
 export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
 export type LoginRuntime = "browser" | "app"
-export const loginHandler = (provider: string, runtime: LoginRuntime = "app") => {
+export const loginHandler = async (
+  provider: string,
+  args?: {
+    runtime?: LoginRuntime
+    email?: string
+    password?: string
+  },
+) => {
+  const { runtime = "app", email, password } = args ?? {}
   if (IN_ELECTRON) {
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
+    if (provider === "credential") {
+      if (!email || !password) return
+      return signIn.email({ email, password })
+    }
+
     signIn.social({
       provider: provider as "google" | "github" | "apple",
       callbackURL: runtime === "app" ? LOGIN_CALLBACK_URL : undefined,

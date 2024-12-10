@@ -1,18 +1,93 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
+import { queryClient } from "@client/lib/query-client"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@follow/components/ui/form/index.jsx"
+import { Input } from "@follow/components/ui/input/index.js"
 import { authProvidersConfig } from "@follow/constants"
 import { createSession, loginHandler, signOut } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router"
+import { toast } from "sonner"
+import { z } from "zod"
 
 export function Component() {
   return <Login />
+}
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(128),
+})
+
+async function onSubmit(values: z.infer<typeof formSchema>) {
+  const res = await loginHandler("credential", values)
+  if (res?.error) {
+    toast.error(res.error.message)
+    return
+  }
+  queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
+}
+
+function LoginWithPassword() {
+  const { t } = useTranslation("external")
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  return (
+    <div className="mt-4 space-y-2">
+      <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="email" placeholder={t("login.email")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="password" placeholder={t("login.password")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" variant="outline" className="w-full">
+            {t("login.logIn")}
+          </Button>
+        </form>
+      </Form>
+    </div>
+  )
 }
 
 function Login() {
@@ -30,11 +105,11 @@ function Login() {
   const { t } = useTranslation("external")
 
   useEffect(() => {
-    if (provider && status === "unauthenticated") {
+    if (provider && provider !== "credential" && status === "unauthenticated") {
       loginHandler(provider)
       setRedirecting(true)
     }
-  }, [status])
+  }, [provider, status])
 
   const getCallbackUrl = useCallback(async () => {
     const { data } = await createSession()
@@ -126,6 +201,7 @@ function Login() {
                   {t("login.continueWith", { provider: provider.name })}
                 </Button>
               ))}
+              <LoginWithPassword />
             </>
           )}
         </div>
