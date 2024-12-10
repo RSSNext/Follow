@@ -82,7 +82,7 @@
     "cssnano": "7.0.6",
     "dnum": "^2.14.0",
     "dotenv": "16.4.7",
-    "drizzle-orm": "0.37.0",
+    "drizzle-orm": "0.38.0",
     "electron": "33.2.1",
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",

@@ -158,8 +158,8 @@ importers:
         specifier: 16.4.7
         version: 16.4.7
       drizzle-orm:
-        specifier: 0.37.0
-        version: 0.37.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0)
+        specifier: 0.38.0
+        version: 0.38.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0)
       electron:
         specifier: 33.2.1
         version: 33.2.1
@@ -1124,8 +1124,8 @@ importers:
         specifier: 1.0.14
         version: 1.0.14(encoding@0.1.13)
       drizzle-orm:
-        specifier: 0.37.0
-        version: 0.37.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0)
+        specifier: 0.38.0
+        version: 0.38.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0)
       electron:
         specifier: 33.2.1
         version: 33.2.1
@@ -6283,8 +6283,8 @@ packages:
     resolution: {integrity: sha512-I9OvvrHp4pIARv4+x9iuewrWycX6CcZtoAu1XrzPxc5UygMJXJZYmBsynku8IkrJwgypE5DGNjDPmPRhDCptUg==}
     engines: {node: '>=10'}
 
-  drizzle-orm@0.37.0:
-    resolution: {integrity: sha512-AsCNACQ/T2CyZUkrBRUqFT2ibHJ9ZHz3+lzYJFFn3hnj7ylIeItMz5kacRG89uSE74nXYShqehr6u+6ks4JR1A==}
+  drizzle-orm@0.38.0:
+    resolution: {integrity: sha512-Ev1UYKOUxiVwLZZfos4hoNDMDkp313FqF0CHelhR+BeOdb76z/a6pKF6SgYQSrmj6EXH4cy6QIkmuxl2KIFW0A==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -17831,7 +17831,7 @@ snapshots:
 
   dotenv@9.0.2: {}
 
-  drizzle-orm@0.37.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0):
+  drizzle-orm@0.38.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@19.0.1)(kysely@0.27.5)(react@19.0.0):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.10
