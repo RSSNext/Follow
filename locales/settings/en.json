@@ -258,6 +258,8 @@
   "lists.title": "Title",
   "lists.view": "View",
   "profile.avatar.label": "Avatar",
+  "profile.change_password.label": "Change Password",
+  "profile.confirm_password.label": "Confirm Password",
   "profile.current_password.label": "Current Password",
   "profile.email.label": "Email",
   "profile.handle.description": "Your unique identifier.",

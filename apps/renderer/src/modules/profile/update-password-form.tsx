@@ -22,9 +22,15 @@ import { Queries } from "~/queries"
 import { useHasPassword } from "~/queries/auth"
 
 const passwordSchema = z.string().min(8).max(128)
-const initPasswordFormSchema = z.object({
-  password: passwordSchema,
-})
+const initPasswordFormSchema = z
+  .object({
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
 
 const InitPasswordForm = () => {
   const { t } = useTranslation("settings")
@@ -32,14 +38,17 @@ const InitPasswordForm = () => {
   const form = useForm<z.infer<typeof initPasswordFormSchema>>({
     resolver: zodResolver(initPasswordFormSchema),
     defaultValues: {
-      password: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   })
 
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof initPasswordFormSchema>) => {
       await apiClient["auth-app"]["init-password"].$patch({
-        json: values,
+        json: {
+          password: values.newPassword,
+        },
       })
       await Queries.auth.getAccounts().invalidate()
     },
@@ -63,12 +72,28 @@ const InitPasswordForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
         <FormField
           control={form.control}
-          name="password"
+          name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("profile.new_password.label")}</FormLabel>
+              <FormLabel>{t("profile.change_password.label")}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input type="password" placeholder={t("profile.new_password.label")} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder={t("profile.confirm_password.label")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,10 +110,16 @@ const InitPasswordForm = () => {
   )
 }
 
-const updatePasswordFormSchema = z.object({
-  currentPassword: passwordSchema,
-  newPassword: passwordSchema,
-})
+const updatePasswordFormSchema = z
+  .object({
+    currentPassword: passwordSchema,
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
 
 const UpdateExistingPasswordForm = () => {
   const { t } = useTranslation("settings")
@@ -98,6 +129,7 @@ const UpdateExistingPasswordForm = () => {
     defaultValues: {
       currentPassword: "",
       newPassword: "",
+      confirmPassword: "",
     },
   })
 
@@ -131,11 +163,14 @@ const UpdateExistingPasswordForm = () => {
           name="currentPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("profile.current_password.label")}</FormLabel>
+              <FormLabel>{t("profile.change_password.label")}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input
+                  type="password"
+                  placeholder={t("profile.current_password.label")}
+                  {...field}
+                />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -145,11 +180,25 @@ const UpdateExistingPasswordForm = () => {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("profile.new_password.label")}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input type="password" placeholder={t("profile.new_password.label")} {...field} />
               </FormControl>
-
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder={t("profile.confirm_password.label")}
+                  {...field}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
