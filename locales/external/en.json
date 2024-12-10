@@ -9,6 +9,7 @@
   "feed.follower_other": "followers",
   "feed.followsAndFeeds": "{{subscriptionCount}} {{subscriptionNoun}} and {{feedsCount}} {{feedsNoun}} on {{appName}}",
   "feed.followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} with {{readCount}} recent {{readNoun}} on {{appName}}",
+  "feed.madeby": "Made by",
   "feed.read_one": "read",
   "feed.read_other": "reads",
   "feed.view_feed_url": "View Feed URL",

@@ -4,6 +4,7 @@ import { askOpenInFollowApp } from "@client/lib/helper"
 import type { Feed } from "@client/query/feed"
 import { useList } from "@client/query/list"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
@@ -53,12 +54,22 @@ export function Component() {
               className="mask-squircle mask shrink-0"
               size={64}
             />
-            <div className="flex max-w-prose flex-col items-center">
+            <div className="mb-6 flex max-w-prose flex-col items-center">
               <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
                 <h1>{list.data.list.title}</h1>
-                <FeedCertification feed={list.data.list} />
               </div>
-              <div className="mb-8 text-sm text-zinc-500">{list.data.list.description}</div>
+              <div className="mb-2 text-sm text-zinc-500">{list.data.list.description}</div>
+              <a
+                href={`/share/users/${list.data.list.owner?.id}`}
+                target="_blank"
+                className="flex items-center gap-1 text-sm text-zinc-500"
+              >
+                <span>{t("feed.madeby")}</span>
+                <Avatar className="inline-flex aspect-square size-5 rounded-full">
+                  <AvatarImage src={list.data.list.owner?.image || undefined} />
+                  <AvatarFallback>{list.data.list.owner?.name?.slice(0, 2)}</AvatarFallback>
+                </Avatar>
+              </a>
             </div>
             <div className="mb-4 text-sm">
               {t("feed.followsAndFeeds", {
