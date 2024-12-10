@@ -35,7 +35,6 @@
   "5002": "Invitation code already used.",
   "5003": "Invitation code does not exist.",
   "6000": "User not found",
-  "6001": "User already has password",
   "7000": "Setting not found",
   "7001": "Invalid setting tab",
   "7002": "Invalid setting payload",
