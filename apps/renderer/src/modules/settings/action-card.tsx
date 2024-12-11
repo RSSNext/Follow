@@ -715,9 +715,9 @@ function ActionList({
       <p className="font-medium text-zinc-500">{t("actions.action_card.then_do")}</p>
       <div className="w-full space-y-4">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild disabled={disabled}>
             <Button variant="outline" className={cn(notEnabledActions.length === 0 && "hidden")}>
-              Add Action
+              {t("actions.action_card.add_action")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
