@@ -107,8 +107,6 @@ export function Component() {
                 {t(tab.name)}
               </TabsTrigger>
             ))}
-
-            {/* <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" /> */}
           </TabsList>
         </ScrollArea.ScrollArea>
         {currentTabs.map((tab) => (

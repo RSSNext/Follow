@@ -15,6 +15,7 @@ export default defineProject({
   },
 
   plugins: [
+    // @ts-expect-error
     tsconfigPath({
       projects: ["./tsconfig.json"],
     }),

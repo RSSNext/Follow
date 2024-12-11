@@ -10,7 +10,6 @@ import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { getItemComponentByView, getSkeletonItemComponentByView } from "./Items"
 import { EntryItemWrapper } from "./layouts/EntryItemWrapper"
 import { girdClassNames } from "./styles"
@@ -49,7 +48,7 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
 export const EntryItem: FC<EntryItemProps> = memo(({ entryId, view }) => {
   const entry = useEntry(entryId)
 
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return <EntryItemImpl entry={entry} view={view} />
 })
 

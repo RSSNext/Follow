@@ -17,7 +17,6 @@ import { useEntry } from "~/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 
-import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { StarIcon } from "../star-icon"
 import type { UniversalItemProps } from "../types"
 
@@ -79,7 +78,7 @@ export function ListItem({
   }, [translation?.title, translation?.description, settingWideMode])
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
-  if (!entry || !(feed || inbox)) return <ReactVirtuosoItemPlaceholder />
+  if (!entry || !(feed || inbox)) return null
 
   const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
 

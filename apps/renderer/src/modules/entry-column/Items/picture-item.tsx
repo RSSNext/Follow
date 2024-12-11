@@ -13,7 +13,6 @@ import { memo, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
-import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { filterSmallMedia } from "~/lib/utils"
 import { EntryContent } from "~/modules/entry-content"
@@ -33,7 +32,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
   const { t } = useTranslation()
   const entryContent = useMemo(() => <EntryContent entryId={entryId} noMedia compact />, [entryId])
   const previewMedia = usePreviewMedia(entryContent)
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div className="relative flex gap-2 overflow-x-auto">

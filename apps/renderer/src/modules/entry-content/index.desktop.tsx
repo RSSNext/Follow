@@ -215,7 +215,7 @@ export const EntryContent: Component<EntryContentProps> = ({
               )}
               {entry.settings?.sourceContent && <ViewSourceContentAutoToggleEffect />}
 
-              {!content && (
+              {!content && !isInReadabilityMode && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
                     <EntryContentLoading

@@ -31,7 +31,7 @@ export const loginHandler = (provider: string, runtime: LoginRuntime = "app") =>
   } else {
     signIn.social({
       provider: provider as "google" | "github" | "apple",
-      callbackURL: runtime === "app" ? LOGIN_CALLBACK_URL : WEB_URL,
+      callbackURL: runtime === "app" ? LOGIN_CALLBACK_URL : undefined,
     })
   }
 }
