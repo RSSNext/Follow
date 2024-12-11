@@ -478,228 +478,237 @@ function ActionList({
     ]
   }, [t])
 
-  const availableActions: Action[] = [
-    {
-      title: t("actions.action_card.generate_summary"),
-      enabled: !!data.result.summary,
-      onInit: () => {
-        data.result.summary = true
+  const availableActions: Action[] = useMemo(
+    () => [
+      {
+        title: t("actions.action_card.generate_summary"),
+        enabled: !!data.result.summary,
+        onInit: () => {
+          data.result.summary = true
+        },
+        onRemove: () => {
+          delete data.result.summary
+        },
       },
-      onRemove: () => {
-        delete data.result.summary
+      {
+        title: t("actions.action_card.translate_into"),
+        enabled: !!data.result.translation,
+        onInit: () => {
+          data.result.translation = "none"
+        },
+        onRemove: () => {
+          delete data.result.translation
+        },
+        config: () => (
+          <ResponsiveSelect
+            disabled={disabled}
+            value={data.result.translation}
+            onValueChange={(value) => {
+              if (value === "none") {
+                delete data.result.translation
+              } else {
+                data.result.translation = value
+              }
+              onChange(data)
+            }}
+            items={TransitionOptions}
+            triggerClassName="w-fit max-w-44"
+          />
+        ),
+        configInline: true,
       },
-    },
-    {
-      title: t("actions.action_card.translate_into"),
-      config: () => (
-        <ResponsiveSelect
-          disabled={disabled}
-          value={data.result.translation}
-          onValueChange={(value) => {
-            if (value === "none") {
-              delete data.result.translation
-            } else {
-              data.result.translation = value
-            }
-            onChange(data)
-          }}
-          items={TransitionOptions}
-          triggerClassName="w-fit max-w-44"
-        />
-      ),
-      configInline: true,
-      enabled: !!data.result.translation,
-      onInit: () => {
-        data.result.translation = "none"
+      {
+        title: t("actions.action_card.enable_readability"),
+        enabled: !!data.result.readability,
+        onInit: () => {
+          data.result.readability = true
+        },
+        onRemove: () => {
+          delete data.result.readability
+        },
       },
-      onRemove: () => {
-        delete data.result.translation
+      {
+        title: t("actions.action_card.source_content"),
+        enabled: !!data.result.sourceContent,
+        onInit: () => {
+          data.result.sourceContent = true
+        },
+        onRemove: () => {
+          delete data.result.sourceContent
+        },
       },
-    },
-    {
-      title: t("actions.action_card.enable_readability"),
-      enabled: !!data.result.readability,
-      onInit: () => {
-        data.result.readability = true
+      {
+        title: t("actions.action_card.new_entry_notification"),
+        enabled: !!data.result.newEntryNotification,
+        onInit: () => {
+          data.result.newEntryNotification = true
+        },
+        onRemove: () => {
+          delete data.result.newEntryNotification
+        },
       },
-      onRemove: () => {
-        delete data.result.readability
+      {
+        title: t("actions.action_card.silence"),
+        enabled: !!data.result.silence,
+        onInit: () => {
+          data.result.silence = true
+        },
+        onRemove: () => {
+          delete data.result.silence
+        },
       },
-    },
-    {
-      title: t("actions.action_card.source_content"),
-      enabled: !!data.result.sourceContent,
-      onInit: () => {
-        data.result.sourceContent = true
+      {
+        title: t("actions.action_card.block"),
+        enabled: !!data.result.block,
+        onInit: () => {
+          data.result.block = true
+        },
+        onRemove: () => {
+          delete data.result.block
+        },
       },
-      onRemove: () => {
-        delete data.result.sourceContent
-      },
-    },
-    {
-      title: t("actions.action_card.new_entry_notification"),
-      enabled: !!data.result.newEntryNotification,
-      onInit: () => {
-        data.result.newEntryNotification = true
-      },
-      onRemove: () => {
-        delete data.result.newEntryNotification
-      },
-    },
-    {
-      title: t("actions.action_card.silence"),
-      enabled: !!data.result.silence,
-      onInit: () => {
-        data.result.silence = true
-      },
-      onRemove: () => {
-        delete data.result.silence
-      },
-    },
-    {
-      title: t("actions.action_card.block"),
-      enabled: !!data.result.block,
-      onInit: () => {
-        data.result.block = true
-      },
-      onRemove: () => {
-        delete data.result.block
-      },
-    },
-    {
-      title: t("actions.action_card.rewrite_rules"),
-      config: () => (
-        <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead size="sm" />
-                <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
-                <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.result.rewriteRules?.map((rule, rewriteIdx) => {
-                const change = (key: string, value: string) => {
-                  data.result.rewriteRules![rewriteIdx][key] = value
-                  onChange(data)
+      {
+        title: t("actions.action_card.rewrite_rules"),
+        enabled: !!data.result.rewriteRules,
+        onInit: () => {
+          data.result.rewriteRules = [
+            {
+              from: "",
+              to: "",
+            },
+          ]
+        },
+        onRemove: () => {
+          delete data.result.rewriteRules
+        },
+        config: () => (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead size="sm" />
+                  <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
+                  <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.result.rewriteRules?.map((rule, rewriteIdx) => {
+                  const change = (key: string, value: string) => {
+                    data.result.rewriteRules![rewriteIdx][key] = value
+                    onChange(data)
+                  }
+                  return (
+                    <TableRow key={rewriteIdx}>
+                      <DeleteTableCell
+                        disabled={disabled}
+                        onClick={() => {
+                          if (data.result.rewriteRules?.length === 1) {
+                            delete data.result.rewriteRules
+                          } else {
+                            data.result.rewriteRules?.splice(rewriteIdx, 1)
+                          }
+                          onChange(data)
+                        }}
+                      />
+                      <TableCell size="sm">
+                        <Input
+                          disabled={disabled}
+                          value={rule.from}
+                          className="h-8"
+                          onChange={(e) => change("from", e.target.value)}
+                        />
+                      </TableCell>
+                      <TableCell size="sm">
+                        <Input
+                          disabled={disabled}
+                          value={rule.to}
+                          className="h-8"
+                          onChange={(e) => change("to", e.target.value)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+            <AddTableRow
+              disabled={disabled}
+              onClick={() => {
+                if (!data.result.rewriteRules) {
+                  data.result.rewriteRules = []
                 }
-                return (
-                  <TableRow key={rewriteIdx}>
-                    <DeleteTableCell
-                      disabled={disabled}
-                      onClick={() => {
-                        if (data.result.rewriteRules?.length === 1) {
-                          delete data.result.rewriteRules
-                        } else {
-                          data.result.rewriteRules?.splice(rewriteIdx, 1)
-                        }
-                        onChange(data)
-                      }}
-                    />
-                    <TableCell size="sm">
-                      <Input
-                        disabled={disabled}
-                        value={rule.from}
-                        className="h-8"
-                        onChange={(e) => change("from", e.target.value)}
-                      />
-                    </TableCell>
-                    <TableCell size="sm">
-                      <Input
-                        disabled={disabled}
-                        value={rule.to}
-                        className="h-8"
-                        onChange={(e) => change("to", e.target.value)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-          <AddTableRow
-            disabled={disabled}
-            onClick={() => {
-              if (!data.result.rewriteRules) {
-                data.result.rewriteRules = []
-              }
-              data.result.rewriteRules!.push({
-                from: "",
-                to: "",
-              })
-              onChange(data)
-            }}
-          />
-        </>
-      ),
-      enabled: !!data.result.rewriteRules,
-      onInit: () => {
-        data.result.rewriteRules = [
-          {
-            from: "",
-            to: "",
-          },
-        ]
+                data.result.rewriteRules!.push({
+                  from: "",
+                  to: "",
+                })
+                onChange(data)
+              }}
+            />
+          </>
+        ),
       },
-      onRemove: () => {
-        delete data.result.rewriteRules
+      {
+        title: t("actions.action_card.webhooks"),
+        enabled: !!data.result.webhooks,
+        onInit: () => {
+          data.result.webhooks = [""]
+        },
+        onRemove: () => {
+          delete data.result.webhooks
+        },
+        config: () => (
+          <>
+            {data.result.webhooks?.map((webhook, rewriteIdx) => {
+              return (
+                <div key={rewriteIdx} className="flex items-center gap-2">
+                  <DeleteTableCell
+                    disabled={disabled}
+                    onClick={() => {
+                      if (data.result.webhooks?.length === 1) {
+                        delete data.result.webhooks
+                      } else {
+                        data.result.webhooks?.splice(rewriteIdx, 1)
+                      }
+                      onChange(data)
+                    }}
+                  />
+                  <Input
+                    disabled={disabled}
+                    value={webhook}
+                    className="h-8"
+                    placeholder="https://"
+                    onChange={(e) => {
+                      data.result.webhooks![rewriteIdx] = e.target.value
+                      onChange(data)
+                    }}
+                  />
+                </div>
+              )
+            })}
+            <AddTableRow
+              disabled={disabled}
+              onClick={() => {
+                if (!data.result.webhooks) {
+                  data.result.webhooks = []
+                }
+                data.result.webhooks!.push("")
+                onChange(data)
+              }}
+            />
+          </>
+        ),
       },
-    },
-    {
-      title: t("actions.action_card.webhooks"),
-      enabled: !!data.result.webhooks,
-      config: () => (
-        <>
-          {data.result.webhooks?.map((webhook, rewriteIdx) => {
-            return (
-              <div key={rewriteIdx} className="flex items-center gap-2">
-                <DeleteTableCell
-                  disabled={disabled}
-                  onClick={() => {
-                    if (data.result.webhooks?.length === 1) {
-                      delete data.result.webhooks
-                    } else {
-                      data.result.webhooks?.splice(rewriteIdx, 1)
-                    }
-                    onChange(data)
-                  }}
-                />
-                <Input
-                  disabled={disabled}
-                  value={webhook}
-                  className="h-8"
-                  placeholder="https://"
-                  onChange={(e) => {
-                    data.result.webhooks![rewriteIdx] = e.target.value
-                    onChange(data)
-                  }}
-                />
-              </div>
-            )
-          })}
-          <AddTableRow
-            disabled={disabled}
-            onClick={() => {
-              if (!data.result.webhooks) {
-                data.result.webhooks = []
-              }
-              data.result.webhooks!.push("")
-              onChange(data)
-            }}
-          />
-        </>
-      ),
-      onInit: () => {
-        data.result.webhooks = [""]
-      },
-      onRemove: () => {
-        delete data.result.webhooks
-      },
-    },
-  ]
-  const enabledActions = availableActions.filter((action) => action.enabled)
-  const notEnabledActions = availableActions.filter((action) => !action.enabled)
+    ],
+    [TransitionOptions, data, disabled, onChange, t],
+  )
+  const enabledActions = useMemo(
+    () => availableActions.filter((action) => action.enabled),
+    [availableActions],
+  )
+  const notEnabledActions = useMemo(
+    () => availableActions.filter((action) => !action.enabled),
+    [availableActions],
+  )
 
   return (
     <div className="min-w-[270px] shrink grow space-y-4">
