@@ -1,6 +1,6 @@
 import { useInputComposition } from "@follow/hooks"
-import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { stopPropagation } from "@follow/utils"
+import { cn } from "@follow/utils"
 import type { DetailedHTMLProps, InputHTMLAttributes } from "react"
 import { forwardRef } from "react"
 

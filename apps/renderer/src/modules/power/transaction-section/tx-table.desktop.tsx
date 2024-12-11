@@ -14,7 +14,7 @@ import {
 } from "@follow/components/ui/tooltip/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { TransactionTypes } from "@follow/models"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"

@@ -1,5 +1,5 @@
 import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "@follow/models/types"
-import { sleep } from "@follow/utils/utils"
+import { sleep } from "@follow/utils"
 
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"

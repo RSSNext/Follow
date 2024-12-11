@@ -1,4 +1,4 @@
-import { WEB_URL } from "@follow/shared/constants"
+import { WEB_URL } from "@follow/shared"
 
 class UrlBuilderStatic {
   private join(path: string, query?: Record<string, string>) {

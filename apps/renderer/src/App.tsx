@@ -1,6 +1,6 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { cn, getOS } from "@follow/utils/utils"
+import { cn, getOS } from "@follow/utils"
 import { useEffect } from "react"
 import { Outlet } from "react-router"
 

@@ -1,6 +1,6 @@
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
 

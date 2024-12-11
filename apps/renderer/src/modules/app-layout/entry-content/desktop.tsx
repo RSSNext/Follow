@@ -1,5 +1,5 @@
 import { FeedViewType, views } from "@follow/constants"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useWheel } from "@use-gesture/react"
 import { easeOut } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"

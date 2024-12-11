@@ -1,5 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS, isEmptyObject } from "@follow/utils/utils"
+import { getOS, isEmptyObject } from "@follow/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"

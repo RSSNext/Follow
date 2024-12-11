@@ -1,7 +1,7 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import clsx from "clsx"
 import { m, useDragControls } from "framer-motion"
 import { useCallback, useEffect } from "react"

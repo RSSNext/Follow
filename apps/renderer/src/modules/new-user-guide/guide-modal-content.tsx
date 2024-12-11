@@ -1,7 +1,7 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { ComponentProps, FunctionComponentElement } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"

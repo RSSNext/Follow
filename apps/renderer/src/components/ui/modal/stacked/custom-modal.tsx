@@ -1,5 +1,5 @@
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { m, useAnimationControls } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect, useState } from "react"

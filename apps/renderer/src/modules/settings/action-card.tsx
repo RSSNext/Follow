@@ -21,7 +21,7 @@ import type {
   SupportedLanguages,
 } from "@follow/models/types"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { Fragment, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 

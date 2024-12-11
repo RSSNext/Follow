@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
-import { cn, isBizId } from "@follow/utils/utils"
+import { cn, isBizId } from "@follow/utils"
 import type { Variant } from "framer-motion"
 import { m, useAnimationControls } from "framer-motion"
 import type { Components } from "hast-util-to-jsx-runtime"

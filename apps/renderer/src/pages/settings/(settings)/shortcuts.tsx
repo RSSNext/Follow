@@ -1,5 +1,5 @@
 import { KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useTranslation } from "react-i18next"
 
 import { shortcuts, shortcutsType } from "~/constants/shortcuts"

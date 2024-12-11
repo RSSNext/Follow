@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
-import { cn, toScientificNotation } from "@follow/utils/utils"
+import { cn, toScientificNotation } from "@follow/utils"
 import { format } from "dnum"
 
 export const Balance = ({

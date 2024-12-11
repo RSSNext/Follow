@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { Variants } from "framer-motion"
 import { AnimatePresence, m } from "framer-motion"
 import * as React from "react"

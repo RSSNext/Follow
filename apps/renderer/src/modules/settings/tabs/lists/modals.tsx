@@ -23,7 +23,7 @@ import {
 import { views } from "@follow/constants"
 import type { FeedModel } from "@follow/models/types"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { isBizId } from "@follow/utils/utils"
+import { isBizId } from "@follow/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useMemo, useRef, useState } from "react"

@@ -1,5 +1,5 @@
-import { nextFrame } from "@follow/utils/dom"
-import { jotaiStore } from "@follow/utils/jotai"
+import { nextFrame } from "@follow/utils"
+import { jotaiStore } from "@follow/utils"
 import { useAtomValue } from "jotai"
 import { useCallback, useLayoutEffect } from "react"
 

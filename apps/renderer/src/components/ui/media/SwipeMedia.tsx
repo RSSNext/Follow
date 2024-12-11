@@ -1,5 +1,5 @@
 import type { MediaModel } from "@follow/shared/hono"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
 import { uniqBy } from "es-toolkit/compat"

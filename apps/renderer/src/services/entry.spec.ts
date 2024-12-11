@@ -1,4 +1,4 @@
-import { sleep } from "@follow/utils/utils"
+import { sleep } from "@follow/utils"
 import { beforeAll, beforeEach, describe, expect, test } from "vitest"
 
 import { browserDB } from "~/database"

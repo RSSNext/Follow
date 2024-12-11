@@ -1,5 +1,5 @@
 import type { SupportedLanguages } from "@follow/models/types"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useMemo } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"

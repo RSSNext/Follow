@@ -6,7 +6,7 @@ import {
 } from "@follow/components/ui/masonry/contexts.jsx"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { FeedViewType } from "@follow/constants"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import { memo, useContext, useEffect, useMemo, useState } from "react"

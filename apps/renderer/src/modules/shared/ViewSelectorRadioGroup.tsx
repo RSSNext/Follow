@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.jsx"
 import { views } from "@follow/constants"
 import type { EntryModelSimple, FeedModel } from "@follow/models"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { cloneElement, forwardRef } from "react"
 
 import { useI18n } from "~/hooks/common"

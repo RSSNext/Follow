@@ -1,31 +1,39 @@
-import { StyleSheet, Text } from "react-native"
+import { useAtomValue } from "jotai"
+import { createContext } from "react"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import {
+  SafeAreaInsetsContext,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context"
 
+import { jotaiStore, testAtom } from "~/atoms"
 import ParallaxScrollView from "~/components/ParallaxScrollView"
 import { ThemedText } from "~/components/ThemedText"
 import { ThemedView } from "~/components/ThemedView"
 import WebContainer from "~/web/Container"
 
+export const context = createContext({ a: 2 })
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets()
+  const a = useAtomValue(testAtom, { store: jotaiStore })
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={<></>}
-    >
-      <WebContainer>
-        <Text>1111111111111111</Text>
-      </WebContainer>
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <context.Provider value={{}}>
+      {/* <TouchableOpacity
+        onPress={() => {
+          jotaiStore.set(testAtom, 2)
+        }}
+      >
+        <View
+          style={{
+            marginTop: insets.top,
+          }}
+        >
+          <Text>123 {a}</Text>
+        </View>
+      </TouchableOpacity> */}
+      <WebContainer />
+    </context.Provider>
   )
 }
 

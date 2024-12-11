@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { getColorScheme, stringToHue } from "@follow/utils/color"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { forwardRef } from "react"
 
 import { useAuthQuery } from "~/hooks/common"

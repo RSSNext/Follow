@@ -11,7 +11,7 @@ import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { EventBus } from "@follow/utils/event-bus"
 import { springScrollTo } from "@follow/utils/scroller"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { FallbackRender } from "@sentry/react"
 import type { FC } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"

@@ -1,5 +1,5 @@
 import { getStorageNS } from "@follow/utils/ns"
-import { parseSafeUrl } from "@follow/utils/utils"
+import { parseSafeUrl } from "@follow/utils"
 import { noop } from "foxact/noop"
 import { atomWithStorage, createJSONStorage } from "jotai/utils"
 import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage"

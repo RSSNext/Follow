@@ -1,7 +1,7 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { preventDefault } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { Outlet, useLocation } from "react-router"
 
 import { WindowUnderBlur } from "~/components/ui/background"

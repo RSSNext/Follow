@@ -1,5 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS } from "@follow/utils/utils"
+import { getOS } from "@follow/utils"
 import { atom } from "jotai"
 import { useCallback } from "react"
 

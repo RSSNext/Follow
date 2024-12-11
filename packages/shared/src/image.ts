@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { env } from "./env"
 
 export const IMAGE_PROXY_URL = "https://webp.follow.is"
 

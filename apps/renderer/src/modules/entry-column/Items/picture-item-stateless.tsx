@@ -1,5 +1,5 @@
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"

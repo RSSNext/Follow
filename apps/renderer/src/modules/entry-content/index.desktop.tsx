@@ -4,7 +4,7 @@ import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useRef } from "react"
 

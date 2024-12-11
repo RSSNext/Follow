@@ -1,7 +1,7 @@
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useHover } from "@use-gesture/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 

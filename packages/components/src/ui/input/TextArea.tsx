@@ -1,6 +1,6 @@
 import { useInputComposition } from "@follow/hooks"
-import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { stopPropagation } from "@follow/utils"
+import { cn } from "@follow/utils"
 import clsx from "clsx"
 import { useMotionValue } from "framer-motion"
 import type { DetailedHTMLProps, PropsWithChildren, TextareaHTMLAttributes } from "react"

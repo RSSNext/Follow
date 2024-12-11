@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { easeOut, m, useScroll, useTransform } from "framer-motion"
 import { Outlet } from "react-router"
 

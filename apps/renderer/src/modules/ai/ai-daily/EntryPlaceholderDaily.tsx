@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useEffect } from "react"
 
 import { CollapseGroup } from "~/components/ui/collapse"

@@ -1,7 +1,7 @@
 import { Logo } from "@follow/components/icons/logo.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { views } from "@follow/constants"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import type { FC } from "react"
 import { useEffect, useLayoutEffect, useState } from "react"

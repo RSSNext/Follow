@@ -1,4 +1,4 @@
-import { stopPropagation } from "@follow/utils/dom"
+import { stopPropagation } from "@follow/utils"
 import dayjs from "dayjs"
 import type { FC } from "react"
 import { useEffect, useRef, useState } from "react"

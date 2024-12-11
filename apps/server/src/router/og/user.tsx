@@ -1,4 +1,4 @@
-import { isBizId } from "@follow/utils/utils"
+import { isBizId } from "@follow/utils"
 import * as React from "react"
 
 import type { ApiClient } from "~/lib/api-client"

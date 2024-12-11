@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 import { m } from "framer-motion"
 import * as React from "react"

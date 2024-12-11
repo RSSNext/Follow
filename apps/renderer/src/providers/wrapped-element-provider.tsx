@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { createContextState } from "foxact/create-context-state"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { PrimitiveAtom } from "jotai"

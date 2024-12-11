@@ -1,5 +1,5 @@
 import { useIsDark } from "@follow/hooks"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
 import { useInsertionEffect, useMemo, useRef, useState } from "react"

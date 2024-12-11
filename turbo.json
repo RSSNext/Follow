@@ -3,25 +3,64 @@
   "envMode": "loose",
   "tasks": {
     "//#build": {
-      "outputs": ["dist/**", "out/**"]
+      "outputs": [
+        "dist/**",
+        "out/**"
+      ]
     },
     "//#build:web": {
-      "outputs": ["out/**"]
+      "outputs": [
+        "out/**"
+      ]
     },
     "//#build:macos": {
-      "outputs": ["dist/**", "out/**"]
+      "outputs": [
+        "dist/**",
+        "out/**"
+      ]
     },
     "//#format:check": {},
     "//#lint": {},
     "test": {},
+    "@follow/shared#build": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "@follow/components#build": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "@follow/hooks#build": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "@follow/constants#build": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "@follow/utils#build": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
     "@follow/electron-main#build": {
-      "outputs": ["dist/**"]
+      "outputs": [
+        "dist/**"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["@follow/electron-main#build"]
+      "dependsOn": [
+        "@follow/electron-main#build"
+      ]
     },
     "@follow/server#build": {
-      "outputs": ["dist/**"]
+      "outputs": [
+        "dist/**"
+      ]
     },
     "dev": {
       "persistent": true,

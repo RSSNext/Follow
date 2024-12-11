@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { useId, useMemo, useState } from "react"

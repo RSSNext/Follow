@@ -1,7 +1,7 @@
 import { RelativeTime } from "@follow/components/ui/datetime/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { memo } from "react"
 
 import { LazyImage } from "../ui/image"

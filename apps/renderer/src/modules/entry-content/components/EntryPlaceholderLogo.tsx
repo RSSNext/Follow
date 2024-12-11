@@ -1,6 +1,6 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 import { useFeedHeaderTitle } from "~/store/feed"
 

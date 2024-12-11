@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useTranslation } from "react-i18next"
 
 export const FixedModalCloseButton: Component<{

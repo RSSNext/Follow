@@ -1,3 +1,4 @@
+import "@follow/components/assets/tailwind.css"
 import "react-native-reanimated"
 
 import { Stack } from "expo-router"

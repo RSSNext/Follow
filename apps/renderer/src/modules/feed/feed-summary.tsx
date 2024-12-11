@@ -2,7 +2,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import type { FeedOrListRespModel } from "@follow/models/types"
 import { env } from "@follow/shared/env"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"

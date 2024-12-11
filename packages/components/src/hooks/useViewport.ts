@@ -1,4 +1,4 @@
-import { jotaiStore } from "@follow/utils/jotai"
+import { jotaiStore } from "@follow/utils"
 import type { ExtractAtomValue } from "jotai"
 import { useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"

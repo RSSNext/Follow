@@ -1,6 +1,6 @@
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import clsx from "clsx"
 import { typescriptHappyForwardRef } from "foxact/typescript-happy-forward-ref"
 import type { HTMLMotionProps } from "framer-motion"

@@ -1,4 +1,4 @@
-import { sortByAlphabet } from "@follow/utils/utils"
+import { sortByAlphabet } from "@follow/utils"
 import { Fragment, useCallback } from "react"
 
 import { INBOX_PREFIX_ID } from "~/constants"

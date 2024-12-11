@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
 

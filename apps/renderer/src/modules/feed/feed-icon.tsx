@@ -1,7 +1,7 @@
 import { PlatformIcon } from "@follow/components/ui/platform-icon/index.jsx"
 import type { CombinedEntryModel, FeedModel, FeedOrListRespModel } from "@follow/models/types"
 import { getBackgroundGradient } from "@follow/utils/color"
-import { cn, getUrlIcon } from "@follow/utils/utils"
+import { cn, getUrlIcon } from "@follow/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { m } from "framer-motion"
 import type { ReactNode } from "react"

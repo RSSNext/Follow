@@ -9,6 +9,10 @@
       "require": "./src/index.js"
     }
   },
+  "main": "./dist/index.mjs",
+  "scripts": {
+    "build": "tsup"
+  },
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

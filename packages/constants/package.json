@@ -5,6 +5,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "peerDependencies": {
     "react": "^18.3.1"
   },

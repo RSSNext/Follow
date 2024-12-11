@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 import { NetworkStatus, useApiStatus, useNetworkStatus } from "~/atoms/network"
 import { useGeneralSettingKey } from "~/atoms/settings/general"

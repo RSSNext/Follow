@@ -9,7 +9,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import type { FeedModel, Models } from "@follow/models"
 import { stopPropagation } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useQuery } from "@tanstack/react-query"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"

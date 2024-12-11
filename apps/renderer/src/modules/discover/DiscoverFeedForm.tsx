@@ -10,7 +10,7 @@ import {
 } from "@follow/components/ui/select/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { omit } from "es-toolkit/compat"
 import type { FC } from "react"

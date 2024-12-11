@@ -1,5 +1,5 @@
 import { TitleMarquee } from "@follow/components/ui/marquee/index.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import dayjs from "dayjs"
 
 import { useAsRead } from "~/hooks/biz/useAsRead"

@@ -1,5 +1,5 @@
 import { useMeasure } from "@follow/hooks"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as React from "react"
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"

@@ -1,6 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS } from "@follow/utils/utils"
+import { getOS } from "@follow/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"

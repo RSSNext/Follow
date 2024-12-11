@@ -1,4 +1,4 @@
-import { formatXml } from "@follow/utils/utils"
+import { formatXml } from "@follow/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useRef } from "react"
 import { useTranslation } from "react-i18next"

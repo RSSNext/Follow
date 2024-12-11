@@ -17,6 +17,7 @@
     "analyze:web": "analyzer=1 vite build",
     "build": "electron-vite build && electron-forge make",
     "build:macos": "electron-vite build && electron-forge make --arch=x64 --platform=darwin && electron-forge make --arch=arm64 --platform=darwin && tsx scripts/merge-yml.ts",
+    "build:packages": "turbo run @follow/components#build @follow/hooks#build @follow/constants#build @follow/utils#build @follow/shared#build",
     "build:render": "vite build -c vite.config.electron-render.ts",
     "build:web": "rm -rf out/web && cross-env WEB_BUILD=1 vite build",
     "bump": "vv",

@@ -1,5 +1,5 @@
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu"
 import * as React from "react"
 

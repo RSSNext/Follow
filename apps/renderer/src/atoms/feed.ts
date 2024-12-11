@@ -1,5 +1,5 @@
 import { jotaiStore } from "@follow/utils/jotai"
-import { isBizId } from "@follow/utils/utils"
+import { isBizId } from "@follow/utils"
 import { atom, useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useMemo } from "react"

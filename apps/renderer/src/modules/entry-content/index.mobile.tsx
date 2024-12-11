@@ -2,7 +2,7 @@ import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useState } from "react"
 

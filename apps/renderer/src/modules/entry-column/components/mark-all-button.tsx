@@ -3,7 +3,7 @@ import { ActionButton, Button, IconButton } from "@follow/components/ui/button/i
 import { Kbd, KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useCountdown } from "@follow/hooks"
-import { cn, getOS } from "@follow/utils/utils"
+import { cn, getOS } from "@follow/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { forwardRef, Fragment, useState } from "react"

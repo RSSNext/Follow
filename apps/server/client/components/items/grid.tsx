@@ -2,7 +2,7 @@ import type { EntriesPreview } from "@client/query/entries"
 import type { Feed } from "@client/query/feed"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { TitleMarquee } from "@follow/components/ui/marquee/index.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import dayjs from "dayjs"
 import type { FC } from "react"
 

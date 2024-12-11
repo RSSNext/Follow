@@ -4,7 +4,7 @@ import { Input } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.jsx"
 import { SegmentGroup, SegmentItem } from "@follow/components/ui/segment/index.jsx"
 import { Switch } from "@follow/components/ui/switch/index.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { ChangeEventHandler, ReactNode } from "react"
 import { useId, useState } from "react"
 

@@ -1,5 +1,5 @@
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/EllipsisWithTooltip.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { Target, TargetAndTransition } from "framer-motion"
 import { m } from "framer-motion"
 

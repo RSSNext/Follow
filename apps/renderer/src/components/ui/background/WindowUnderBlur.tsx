@@ -1,6 +1,6 @@
 import { Focusable } from "@follow/components/common/Focusable.js"
 import { SYSTEM_CAN_UNDER_BLUR_WINDOW } from "@follow/shared/constants"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 

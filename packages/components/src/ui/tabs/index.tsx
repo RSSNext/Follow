@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { TabsProps } from "@radix-ui/react-tabs"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 import { cva } from "class-variance-authority"

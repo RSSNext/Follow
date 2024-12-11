@@ -1,4 +1,4 @@
-import { sleep } from "@follow/utils/utils"
+import { sleep } from "@follow/utils"
 
 import { initializeDefaultGeneralSettings } from "~/atoms/settings/general"
 import { initializeDefaultIntegrationSettings } from "~/atoms/settings/integration"

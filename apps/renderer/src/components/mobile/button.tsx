@@ -1,5 +1,5 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 export const HeaderTopReturnBackButton: Component<{ to?: string }> = ({ className, to }) => (
   <MotionButtonBase

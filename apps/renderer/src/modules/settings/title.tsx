@@ -1,5 +1,5 @@
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { Slot } from "@radix-ui/react-slot"
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"

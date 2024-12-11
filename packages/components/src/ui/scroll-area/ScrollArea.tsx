@@ -1,5 +1,5 @@
-import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { stopPropagation } from "@follow/utils"
+import { cn } from "@follow/utils"
 import * as ScrollAreaBase from "@radix-ui/react-scroll-area"
 import * as React from "react"
 

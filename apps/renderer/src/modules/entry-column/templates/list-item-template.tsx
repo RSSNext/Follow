@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { clsx, cn, isSafari } from "@follow/utils/utils"
+import { clsx, cn, isSafari } from "@follow/utils"
 import { useMemo } from "react"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"

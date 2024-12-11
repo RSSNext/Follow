@@ -1,5 +1,5 @@
 import type { FeedOrListRespModel } from "@follow/models/types"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { BoostCertification } from "~/modules/boost/boost-certification"

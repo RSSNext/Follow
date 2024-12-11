@@ -5,7 +5,7 @@ import type {
   ListModelPoplutedFeeds,
   SubscriptionModel,
 } from "@follow/models/types"
-import { capitalizeFirstLetter } from "@follow/utils/utils"
+import { capitalizeFirstLetter } from "@follow/utils"
 import { omit } from "es-toolkit/compat"
 import { produce } from "immer"
 import { parse } from "tldts"

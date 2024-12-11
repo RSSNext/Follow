@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/t
 import { useOnce } from "@follow/hooks"
 import type { ExtractBizResponse } from "@follow/models/types"
 import { Chain } from "@follow/utils/chain"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useStore } from "jotai"

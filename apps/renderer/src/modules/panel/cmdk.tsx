@@ -11,7 +11,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { useInputComposition } from "@follow/hooks"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import clsx from "clsx"
 import { Command } from "cmdk"
 import type { FC } from "react"

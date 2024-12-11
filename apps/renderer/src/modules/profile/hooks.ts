@@ -1,5 +1,5 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
-import { capitalizeFirstLetter } from "@follow/utils/utils"
+import { capitalizeFirstLetter } from "@follow/utils"
 import { createElement, lazy, useCallback } from "react"
 import { parse } from "tldts"
 

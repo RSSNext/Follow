@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as Dialog from "@radix-ui/react-dialog"
 import { AnimatePresence } from "framer-motion"
 import type { ForwardedRef } from "react"

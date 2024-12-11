@@ -3,7 +3,7 @@ import "@follow/components/tailwind"
 import "./styles/main.css"
 
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS } from "@follow/utils/utils"
+import { getOS } from "@follow/utils"
 import { ClickToComponent } from "click-to-react-component"
 import * as React from "react"
 import ReactDOM from "react-dom/client"

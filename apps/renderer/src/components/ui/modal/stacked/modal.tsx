@@ -4,7 +4,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import { ZIndexProvider } from "@follow/components/ui/z-index/index.js"
 import { useRefValue } from "@follow/hooks"
 import { nextFrame, preventDefault, stopPropagation } from "@follow/utils/dom"
-import { cn, getOS } from "@follow/utils/utils"
+import { cn, getOS } from "@follow/utils"
 import * as Dialog from "@radix-ui/react-dialog"
 import type { BoundingBox } from "framer-motion"
 import { produce } from "immer"

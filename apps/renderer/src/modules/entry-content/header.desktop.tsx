@@ -1,5 +1,5 @@
 import { views } from "@follow/constants"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { AnimatePresence, m } from "framer-motion"
 import { memo } from "react"
 

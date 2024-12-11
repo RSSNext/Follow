@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useStore } from "jotai"
 import type { FC, PropsWithChildren, ReactNode, RefObject } from "react"
 import * as React from "react"

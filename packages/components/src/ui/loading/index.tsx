@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { m, useAnimation } from "framer-motion"
 import * as React from "react"
 import { cloneElement, useEffect } from "react"

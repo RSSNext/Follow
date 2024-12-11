@@ -1,7 +1,7 @@
 import { useWhoami } from "@client/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { getBackgroundGradient } from "@follow/utils/color"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useMemo } from "react"
 
 export const UserAvatar = ({ className }: { className?: string }) => {

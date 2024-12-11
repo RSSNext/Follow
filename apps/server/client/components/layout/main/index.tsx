@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 
 export const MainContainer: Component = (props) => {
   return (

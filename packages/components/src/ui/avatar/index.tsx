@@ -1,5 +1,5 @@
-import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
-import { cn } from "@follow/utils/utils"
+import { replaceImgUrlIfNeed } from "@follow/utils"
+import { cn } from "@follow/utils"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 import * as React from "react"
 

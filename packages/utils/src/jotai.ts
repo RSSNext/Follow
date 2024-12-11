@@ -4,7 +4,7 @@ import { selectAtom } from "jotai/utils"
 import { useCallback } from "react"
 import { shallow } from "zustand/shallow"
 
-export const jotaiStore = createStore()
+export const jotaiStore = createStore() as ReturnType<typeof createStore>
 
 export const createAtomAccessor = <T>(atom: PrimitiveAtom<T>) =>
   [() => jotaiStore.get(atom), (value: T) => jotaiStore.set(atom, value)] as const

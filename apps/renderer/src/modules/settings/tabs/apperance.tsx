@@ -11,7 +11,7 @@ import {
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS } from "@follow/utils/utils"
+import { getOS } from "@follow/utils"
 import { useForceUpdate } from "framer-motion"
 import { lazy, Suspense, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"

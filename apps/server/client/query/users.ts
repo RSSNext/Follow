@@ -1,7 +1,7 @@
 import { apiClient } from "@client/lib/api-fetch"
 import { getHydrateData } from "@client/lib/helper"
 import { getProviders } from "@follow/shared/auth"
-import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils/utils"
+import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils"
 import { useQuery } from "@tanstack/react-query"
 
 export const useUserSubscriptionsQuery = (userId: string | undefined) => {

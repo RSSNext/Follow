@@ -7,7 +7,7 @@ import {
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
 import type { FeedOrListRespModel } from "@follow/models/types"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useTranslation } from "react-i18next"
 
 export const FeedCertification = ({

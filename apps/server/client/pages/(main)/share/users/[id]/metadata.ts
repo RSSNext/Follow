@@ -1,4 +1,4 @@
-import { isBizId } from "@follow/utils/utils"
+import { isBizId } from "@follow/utils"
 
 import { defineMetadata } from "~/meta-handler"
 

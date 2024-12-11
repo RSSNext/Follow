@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { t } from "i18next"
 import { FetchError } from "ofetch"
 import { createElement } from "react"

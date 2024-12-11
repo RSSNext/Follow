@@ -1,4 +1,4 @@
-import { getStorageNS } from "@follow/utils/ns"
+import { getStorageNS } from "@follow/utils"
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { useMediaQuery } from "usehooks-ts"

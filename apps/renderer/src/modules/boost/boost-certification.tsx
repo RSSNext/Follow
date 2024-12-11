@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.js"
 import type { FeedOrListRespModel } from "@follow/models/types"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useTranslation } from "react-i18next"
 
 import { useBoostModal, useIsFeedBoosted } from "./hooks"

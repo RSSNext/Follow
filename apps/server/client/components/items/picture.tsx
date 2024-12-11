@@ -16,7 +16,7 @@ import {
 } from "@follow/components/ui/masonry/contexts.jsx"
 import { Masonry } from "@follow/components/ui/masonry/index.jsx"
 import { nextFrame } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import dayjs from "dayjs"
 import { throttle } from "es-toolkit/compat"
 import { AnimatePresence, m } from "framer-motion"

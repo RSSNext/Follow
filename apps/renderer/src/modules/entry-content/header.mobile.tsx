@@ -1,7 +1,7 @@
 import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { findElementInShadowDOM } from "@follow/utils/dom"
-import { clsx, cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"

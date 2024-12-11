@@ -5,7 +5,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import { UserRole } from "@follow/constants"
 import { useMeasure } from "@follow/hooks"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { repository } from "@pkg"
 import type { FC } from "react"
 import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"

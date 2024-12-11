@@ -1,7 +1,7 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { cloneElement, memo, useCallback, useId, useMemo, useRef, useState } from "react"

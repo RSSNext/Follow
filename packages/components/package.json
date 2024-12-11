@@ -15,6 +15,10 @@
     "./ui/*": "./src/ui/*",
     "./utils/*": "./src/utils/*"
   },
+  "main": "./dist/exports.mjs",
+  "scripts": {
+    "build": "tsup"
+  },
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -60,5 +64,8 @@
     "use-context-selector": "2.0.0",
     "usehooks-ts": "3.1.0",
     "vaul": "1.1.1"
+  },
+  "devDependencies": {
+    "esbuild-css-modules-plugin": "3.1.2"
   }
 }

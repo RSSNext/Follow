@@ -19,7 +19,7 @@ import {
 } from "@follow/components/ui/tooltip/index.jsx"
 import { views } from "@follow/constants"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { toast } from "sonner"

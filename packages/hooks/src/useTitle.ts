@@ -1,4 +1,4 @@
-import { IN_ELECTRON } from "@follow/shared/constants"
+import { IN_ELECTRON } from "@follow/shared"
 import { useEffect, useRef } from "react"
 
 const titleTemplate = IN_ELECTRON ? `%s` : `%s | ${APP_NAME}`

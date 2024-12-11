@@ -1,5 +1,5 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { Variants } from "framer-motion"
 import { AnimatePresence } from "framer-motion"
 import { useCallback, useRef, useState } from "react"

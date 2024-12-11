@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
 import * as React from "react"
 

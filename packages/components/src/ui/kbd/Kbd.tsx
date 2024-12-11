@@ -1,4 +1,4 @@
-import { cn, getOS } from "@follow/utils/utils"
+import { cn, getOS } from "@follow/utils"
 import type { FC } from "react"
 import * as React from "react"
 import { Fragment, memo } from "react"

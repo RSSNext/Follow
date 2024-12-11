@@ -6,7 +6,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import { FeedViewType } from "@follow/constants"
 import { useIsOnline } from "@follow/hooks"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn, isBizId } from "@follow/utils/utils"
+import { cn, isBizId } from "@follow/utils"
 import type { FC } from "react"
 import * as React from "react"
 import { useTranslation } from "react-i18next"

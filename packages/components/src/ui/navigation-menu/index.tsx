@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import * as React from "react"
 

@@ -1,4 +1,4 @@
-import * as validator from "@follow/utils/link-parser"
+import * as validator from "@follow/utils"
 
 export const getSupportedPlatformIconName = (url: string) => {
   const safeUrl = parseSafeUrl(url)

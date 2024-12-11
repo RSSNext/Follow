@@ -22,7 +22,9 @@
       "types": "./src/*.ts"
     }
   },
+  "main": "./dist/index.js",
   "scripts": {
+    "build": "tsup",
     "test": "vitest"
   },
   "dependencies": {

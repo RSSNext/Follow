@@ -3,7 +3,7 @@ import { ActionButton, MotionButtonBase } from "@follow/components/ui/button/ind
 import type { HTMLMediaState } from "@follow/hooks"
 import { useRefValue, useVideo } from "@follow/hooks"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
-import { clsx, cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils"
 import * as Slider from "@radix-ui/react-slider"
 import { m, useDragControls, useSpring } from "framer-motion"
 import type { PropsWithChildren } from "react"

@@ -1,7 +1,7 @@
 import { Input } from "@follow/components/ui/input/index.js"
 import { useCorrectZIndex } from "@follow/components/ui/z-index/ctx.js"
 import { stopPropagation } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react"
 import { AnimatePresence, m } from "framer-motion"
 import Fuse from "fuse.js"

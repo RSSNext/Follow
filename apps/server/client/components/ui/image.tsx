@@ -1,5 +1,5 @@
 import { getImageProxyUrl } from "@follow/utils/img-proxy"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import * as Avatar from "@radix-ui/react-avatar"
 import type { MouseEvent, PropsWithChildren } from "react"
 import { forwardRef, useMemo } from "react"

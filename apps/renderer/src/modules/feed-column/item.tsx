@@ -10,7 +10,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typogra
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils"
 import dayjs from "dayjs"
 import { memo, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"

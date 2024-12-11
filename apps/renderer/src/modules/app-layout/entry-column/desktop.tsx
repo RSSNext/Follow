@@ -1,6 +1,6 @@
 import { PanelSplitter } from "@follow/components/ui/divider/index.js"
 import { views } from "@follow/constants"
-import { cn, isSafari } from "@follow/utils/utils"
+import { cn, isSafari } from "@follow/utils"
 import { useMemo, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router"

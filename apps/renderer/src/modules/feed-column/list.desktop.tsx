@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
-import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
+import { cn, isKeyForMultiSelectPressed } from "@follow/utils"
 import { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import Selecto from "react-selecto"

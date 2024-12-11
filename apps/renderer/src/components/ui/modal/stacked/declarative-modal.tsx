@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { AnimatePresence } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { useId, useMemo } from "react"

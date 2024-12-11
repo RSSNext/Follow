@@ -1,7 +1,7 @@
 import { Form, FormControl, FormField, FormItem } from "@follow/components/ui/form/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useLayoutEffect } from "react"
 import { useForm } from "react-hook-form"

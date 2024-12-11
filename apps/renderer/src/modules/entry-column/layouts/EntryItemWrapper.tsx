@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"

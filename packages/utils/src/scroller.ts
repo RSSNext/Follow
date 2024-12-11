@@ -42,7 +42,18 @@ export const springScrollTo = (
     el.removeEventListener("touchmove", stopSpringScrollHandler)
   })
 
-  return animation
+  return animation as {
+    play: () => void
+    pause: () => void
+    /**
+     * This method is bound to the instance to fix a pattern where
+     * animation.stop is returned as a reference from a useEffect.
+     */
+    stop: () => void
+    complete: () => void
+    finish: () => void
+    cancel: () => void
+  }
 }
 
 export const springScrollToElement = (

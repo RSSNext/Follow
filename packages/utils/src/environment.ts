@@ -1,4 +1,4 @@
-import { IN_ELECTRON } from "@follow/shared/constants"
+import { IN_ELECTRON } from "@follow/shared"
 import { nanoid } from "nanoid"
 
 import { detectBrowser, getOS } from "./utils"

@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { Spring } from "framer-motion"
 import { m } from "framer-motion"
 import { useEffect, useRef, useState } from "react"

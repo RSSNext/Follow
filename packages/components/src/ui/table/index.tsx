@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import type { VariantProps } from "class-variance-authority"
 import * as React from "react"
 

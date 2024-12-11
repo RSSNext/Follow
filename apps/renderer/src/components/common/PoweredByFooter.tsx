@@ -1,5 +1,5 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import pkg from "@pkg"
 
 export const PoweredByFooter: Component = ({ className }) => (

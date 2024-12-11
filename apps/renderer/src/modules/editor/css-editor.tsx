@@ -1,7 +1,7 @@
 import { TextArea } from "@follow/components/ui/input/TextArea.js"
 import { useInputComposition, useIsDark } from "@follow/hooks"
 import { nextFrame } from "@follow/utils/dom"
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import { createPlainShiki } from "plain-shiki"
 import { useLayoutEffect, useMemo, useRef } from "react"
 import css from "shiki/langs/css.mjs"

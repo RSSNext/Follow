@@ -1,7 +1,7 @@
 import type { GeneralSettings, UISettings } from "@follow/shared/interface/settings"
 import { EventBus } from "@follow/utils/event-bus"
 import { getStorageNS } from "@follow/utils/ns"
-import { isEmptyObject, sleep } from "@follow/utils/utils"
+import { isEmptyObject, sleep } from "@follow/utils"
 import { omit } from "es-toolkit/compat"
 import type { PrimitiveAtom } from "jotai"
 

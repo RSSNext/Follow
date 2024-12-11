@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import { cn } from "@follow/utils"
 import pkg from "@pkg"
 
 import { Logo } from "../icons/logo"

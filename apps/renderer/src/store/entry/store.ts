@@ -7,7 +7,7 @@ import type {
   InboxModel,
 } from "@follow/models/types"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
-import { omitObjectUndefinedValue } from "@follow/utils/utils"
+import { omitObjectUndefinedValue } from "@follow/utils"
 import { isNil, merge, omit } from "es-toolkit/compat"
 import { produce } from "immer"
 

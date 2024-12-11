@@ -5,7 +5,7 @@ import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
 import { SegmentGroup, SegmentItem } from "@follow/components/ui/segment/index.js"
 import { Slider } from "@follow/components/ui/slider/index.js"
-import { clsx, cn } from "@follow/utils/utils"
+import { clsx, cn } from "@follow/utils"
 import {
   HoverCard,
   HoverCardContent,
