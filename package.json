@@ -83,7 +83,7 @@
     "dnum": "^2.14.0",
     "dotenv": "16.4.7",
     "drizzle-orm": "0.37.0",
-    "electron": "33.2.1",
+    "electron": "33.3.0",
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
@@ -132,13 +132,14 @@
       "daisyui": "patches/daisyui.patch",
       "jsonpointer": "patches/jsonpointer.patch",
       "workbox-precaching": "patches/workbox-precaching.patch",
-      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch"
+      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch",
+      "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch"
     },
     "overrides": {
-      "is-core-module": "npm:@nolyfill/is-core-module@^1",
-      "isarray": "npm:@nolyfill/isarray@^1",
       "@types/react": "npm:@types/react@^18.3.12",
-      "@types/react-dom": "npm:@types/react-dom@^18.3.1"
+      "@types/react-dom": "npm:@types/react-dom@^18.3.1",
+      "is-core-module": "npm:@nolyfill/is-core-module@^1",
+      "isarray": "npm:@nolyfill/isarray@^1"
     }
   },
   "simple-git-hooks": {

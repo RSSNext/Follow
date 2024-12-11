@@ -107,6 +107,8 @@
   "feeds.tableHeaders.subscriptionCount": "購読者",
   "feeds.tableHeaders.tipAmount": "受け取った報酬",
   "general.app": "アプリ",
+  "general.auto_expand_long_social_media.description": "ソーシャルメディアに含まれる長いテキストを展開して表示します。",
+  "general.auto_expand_long_social_media.label": "ソーシャルメディアを展開",
   "general.auto_group.description": "サイトのドメインごとに自動でグループ化する。",
   "general.auto_group.label": "自動グループ化",
   "general.cache": "キャッシュ",
