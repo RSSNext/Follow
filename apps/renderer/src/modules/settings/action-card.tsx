@@ -702,7 +702,7 @@ function ActionList({
   const notEnabledActions = availableActions.filter((action) => !action.enabled)
 
   return (
-    <div className="min-w-64 shrink grow space-y-4">
+    <div className="min-w-[270px] shrink grow space-y-4">
       <p className="font-medium text-zinc-500">{t("actions.action_card.then_do")}</p>
       <div className="w-full space-y-4">
         <DropdownMenu>
