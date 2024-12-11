@@ -504,7 +504,7 @@ function ActionList({
             onChange(data)
           }}
           items={TransitionOptions}
-          triggerClassName="min-w-36 w-fit max-w-44"
+          triggerClassName="w-fit max-w-44"
         />
       ),
       configInline: true,
