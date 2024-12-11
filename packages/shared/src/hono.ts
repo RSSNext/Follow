@@ -11117,6 +11117,74 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        feeds: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: boolean | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                                updatedAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: boolean | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                                updatedAt: string;
+                            }[] | null | undefined;
+                        };
+                        language: string | null;
+                        feedId: string;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[];
                     readCount: number;
                     list: {
                         type: "list";

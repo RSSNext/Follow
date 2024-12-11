@@ -158,9 +158,13 @@ const config: ForgeConfig = {
       iconUrl: "https://app.follow.is/favicon.ico",
     }),
     new MakerAppImage({
-      options: {
-        icon: "resources/icon.png",
-        mimeType: ["x-scheme-handler/follow"],
+      config: {
+        icons: [
+          {
+            file: "resources/icon.png",
+            size: 256,
+          },
+        ],
       },
     }),
   ],
