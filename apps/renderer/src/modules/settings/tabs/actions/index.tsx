@@ -69,15 +69,7 @@ export const ActionSetting = () => {
   })
 
   if (actions.isPending) {
-    return (
-      <div className="center flex lg:absolute lg:inset-0">
-        <LoadingWithIcon
-          icon={<i className="i-mgc-magic-2-cute-re" />}
-          size="large"
-          className="lg:-translate-y-full"
-        />
-      </div>
-    )
+    return <LoadingWithIcon icon={<i className="i-mgc-magic-2-cute-re" />} size="large" />
   }
 
   return (
