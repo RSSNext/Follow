@@ -42,7 +42,7 @@ export const FeedClaimModalContent: FC<{
 
   if (isLoading) {
     return (
-      <div className="center h-32 w-[650px]">
+      <div className="center h-32 lg:w-[650px]">
         <LoadingCircle size="large" />
       </div>
     )
@@ -53,7 +53,7 @@ export const FeedClaimModalContent: FC<{
   }
 
   return (
-    <div className="w-[650px] max-w-full">
+    <div className="mx-auto w-full max-w-[650px]">
       <Card className="mb-2">
         <CardHeader>
           <FollowSummary feed={feed} />
@@ -78,10 +78,8 @@ export const FeedClaimModalContent: FC<{
             <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="description">
-            <p className="mb-2 leading-none">
-              {t("feed_claim_modal.description_current")}
-              <span className="ml-2 text-xs text-zinc-500">{feed.description}</span>
-            </p>
+            <p className="mb-2 leading-none">{t("feed_claim_modal.description_current")}</p>
+            <p className="my-2 text-xs text-zinc-500">{feed.description}</p>
             <Trans
               i18nKey="feed_claim_modal.description_instructions"
               components={{ code: <code className="text-sm">{"<description />"}</code> }}

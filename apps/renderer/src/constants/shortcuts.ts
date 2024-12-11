@@ -4,7 +4,7 @@ type Shortcuts = Record<
   string,
   Record<string, { name: I18nKeysForShortcuts; key: string; extra?: string }>
 >
-export const shortcuts: Shortcuts = {
+export const shortcuts = {
   feeds: {
     add: {
       name: "keys.feeds.add",
@@ -31,6 +31,10 @@ export const shortcuts: Shortcuts = {
     toggleWideMode: {
       name: "keys.layout.toggleWideMode",
       key: "Meta+[",
+    },
+    zenMode: {
+      name: "keys.layout.zenMode",
+      key: "Control+Shift+Z",
     },
   },
   entries: {
@@ -104,7 +108,13 @@ export const shortcuts: Shortcuts = {
       key: "Space",
     },
   },
-}
+  misc: {
+    quickSearch: {
+      name: "keys.misc.quickSearch",
+      key: "Meta+K",
+    },
+  },
+} as const satisfies Shortcuts
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",
@@ -112,4 +122,5 @@ export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortc
   entries: "keys.type.entries",
   entry: "keys.type.entry",
   audio: "keys.type.audio",
+  misc: "keys.type.misc",
 }

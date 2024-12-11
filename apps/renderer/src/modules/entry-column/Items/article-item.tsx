@@ -4,6 +4,7 @@ import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { ListItem } from "~/modules/entry-column/templates/list-item-template"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
@@ -15,13 +16,13 @@ export function ArticleItem({ entryId, entryPreview, translation }: UniversalIte
 
 export function ArticleItemStateLess({ entry, feed }: EntryItemStatelessProps) {
   return (
-    <div className="relative rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
+    <div className="relative select-none rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
       <div className="relative">
         <div className="group relative flex py-4 pl-3 pr-2">
           <FeedIcon className="mr-2 size-5 rounded-sm" feed={feed} fallback />
           <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
             <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">
-              <span>{feed.title}</span>
+              <FeedTitle feed={feed} />
               <span>·</span>
               <span>{!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}</span>
             </div>
@@ -57,7 +58,7 @@ export function ArticleItemStateLess({ entry, feed }: EntryItemStatelessProps) {
 }
 
 export const ArticleItemSkeleton = (
-  <div className="relative h-[120px] rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+  <div className="relative h-[120px] rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
     <div className="relative">
       <div className="group relative flex py-4 pl-3 pr-2">
         <Skeleton className="mr-2 size-5 rounded-sm" />

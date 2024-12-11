@@ -7,7 +7,6 @@ import {
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
 import type { FeedOrListRespModel } from "@follow/models/types"
-import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
@@ -22,6 +21,8 @@ export const FeedCertification = ({
 
   const { t } = useTranslation()
 
+  const { type } = feed
+
   return (
     feed.ownerUserId &&
     (feed.ownerUserId === me?.id ? (
@@ -34,7 +35,7 @@ export const FeedCertification = ({
           <TooltipContent className="px-4 py-2">
             <div className="flex items-center text-base font-semibold">
               <i className="i-mgc-certificate-cute-fi mr-2 size-4 shrink-0 text-accent" />
-              {t("feed_item.claimed_feed")}
+              {type === "feed" ? t("feed_item.claimed_feed") : t("feed_item.claimed_list")}
             </div>
             <div>{t("feed_item.claimed_by_you")}</div>
           </TooltipContent>
@@ -52,13 +53,13 @@ export const FeedCertification = ({
           <TooltipContent className="px-4 py-2">
             <div className="flex items-center text-base font-semibold">
               <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-amber-500" />
-              {t("feed_item.claimed_feed")}
+              {type === "feed" ? t("feed_item.claimed_feed") : t("feed_item.claimed_list")}
             </div>
             <div className="mt-1 flex items-center gap-1.5">
               <span>{t("feed_item.claimed_by_owner")}</span>
               {feed.owner ? (
                 <Avatar className="inline-flex aspect-square size-5 rounded-full">
-                  <AvatarImage src={replaceImgUrlIfNeed(feed.owner.image || undefined)} />
+                  <AvatarImage src={feed.owner.image || undefined} />
                   <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
                 </Avatar>
               ) : (

@@ -1,13 +1,15 @@
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { RootPortalProvider } from "@follow/components/ui/portal/provider.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
+import { ZIndexProvider } from "@follow/components/ui/z-index/index.js"
 import { useRefValue } from "@follow/hooks"
-import { nextFrame, stopPropagation } from "@follow/utils/dom"
+import { nextFrame, preventDefault, stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
 import * as Dialog from "@radix-ui/react-dialog"
 import type { BoundingBox } from "framer-motion"
 import { produce } from "immer"
-import { useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
+import { selectAtom } from "jotai/utils"
 import { Resizable } from "re-resizable"
 import type { FC, PropsWithChildren, SyntheticEvent } from "react"
 import {
@@ -84,13 +86,22 @@ export const ModalInternal = memo(
     const setStack = useSetAtom(modalStackAtom)
 
     const [currentIsClosing, setCurrentIsClosing] = useState(false)
+    const { noticeModal, animateController, dismissing } = useModalAnimate(!!isTop)
 
     const close = useEventCallback((forceClose = false) => {
       if (!canClose && !forceClose) return
       setCurrentIsClosing(true)
-      nextFrame(() => {
-        setStack((p) => p.filter((modal) => modal.id !== item.id))
-      })
+
+      if (!CustomModalComponent) {
+        dismissing().then(() => {
+          setStack((p) => p.filter((modal) => modal.id !== item.id))
+          setCurrentIsClosing(false)
+        })
+      } else {
+        nextFrame(() => {
+          setStack((p) => p.filter((modal) => modal.id !== item.id))
+        })
+      }
       onPropsClose?.(false)
     })
 
@@ -131,10 +142,8 @@ export const ModalInternal = memo(
       draggable,
     })
 
-    const { noticeModal, animateController } = useModalAnimate(!!isTop)
-
     const getIndex = useEventCallback(() => index)
-    const modalContentRef = useRef<HTMLDivElement>(null)
+    const [modalContentRef, setModalContentRef] = useState<HTMLDivElement | null>(null)
     const ModalProps: ModalActionsInternal = useMemo(
       () => ({
         dismiss: close,
@@ -157,9 +166,9 @@ export const ModalInternal = memo(
     const ModalContextProps = useMemo<CurrentModalContentProps>(
       () => ({
         ...ModalProps,
-        ref: modalContentRef,
+        ref: { current: modalContentRef },
       }),
-      [ModalProps],
+      [ModalProps, modalContentRef],
     )
 
     const [edgeElementRef, setEdgeElementRef] = useState<HTMLDivElement | null>(null)
@@ -236,7 +245,13 @@ export const ModalInternal = memo(
             <Dialog.Portal>
               {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
-              <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
+              <Dialog.Content
+                ref={setModalContentRef}
+                asChild
+                aria-describedby={undefined}
+                onPointerDownOutside={preventDefault}
+                onOpenAutoFocus={openAutoFocus}
+              >
                 <div
                   ref={setEdgeElementRef}
                   className={cn(
@@ -281,9 +296,16 @@ export const ModalInternal = memo(
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
             {Overlay}
-            <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
+            <Dialog.Content
+              ref={setModalContentRef}
+              asChild
+              aria-describedby={undefined}
+              onPointerDownOutside={preventDefault}
+              onOpenAutoFocus={openAutoFocus}
+            >
               <div
                 ref={setEdgeElementRef}
+                onContextMenu={preventDefault}
                 className={cn(
                   "fixed flex",
                   modal ? "inset-0 overflow-auto" : "left-0 top-0",
@@ -394,6 +416,14 @@ const ModalContext: FC<
     isTop: boolean
   }
 > = ({ modalContextProps, isTop, children }) => {
+  const { getIndex } = modalContextProps
+  const zIndex = useAtomValue(
+    useMemo(
+      () => selectAtom(modalStackAtom, (v) => v.length + MODAL_STACK_Z_INDEX + getIndex() + 1),
+      [getIndex],
+    ),
+  )
+
   return (
     <CurrentModalContext.Provider value={modalContextProps}>
       <CurrentModalStateContext.Provider
@@ -404,7 +434,7 @@ const ModalContext: FC<
           [isTop],
         )}
       >
-        {children}
+        <ZIndexProvider zIndex={zIndex}>{children}</ZIndexProvider>
       </CurrentModalStateContext.Provider>
     </CurrentModalContext.Provider>
   )

@@ -8,9 +8,10 @@ const currentBranch = execSync("git rev-parse --abbrev-ref HEAD").toString().tri
 export default defineConfig({
   before: ["git pull --rebase"],
   after: [
-    `gh pr create --title 'chore: Hotfix to release v\${NEW_VERSION}' --body 'v\${NEW_VERSION}' --base main --head ${currentBranch}`,
+    `gh pr create --title 'chore: Release v\${NEW_VERSION} for hotfix' --body 'v\${NEW_VERSION}' --base main --head ${currentBranch}`,
   ],
   commit_message: "chore(release): hotfix to release v${NEW_VERSION}",
   tag: false,
   changelog: true,
+  allowedBranches: ["hotfix/*"],
 })

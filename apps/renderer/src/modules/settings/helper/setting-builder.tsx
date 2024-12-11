@@ -1,5 +1,5 @@
 /* eslint-disable @eslint-react/no-array-index-key */
-import { isNil } from "lodash-es"
+import { isNil } from "es-toolkit/compat"
 import type { FC, ReactNode } from "react"
 import * as React from "react"
 import { isValidElement } from "react"

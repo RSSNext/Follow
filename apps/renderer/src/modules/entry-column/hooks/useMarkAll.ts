@@ -27,7 +27,7 @@ export const useMarkAllByRoute = (filter?: MarkAllFilter) => {
         view,
         filter,
       })
-    } else if (folderIds) {
+    } else if (folderIds?.length) {
       subscriptionActions.markReadByFeedIds({
         feedIds: folderIds,
         view,
@@ -40,5 +40,5 @@ export const useMarkAllByRoute = (filter?: MarkAllFilter) => {
         filter,
       })
     }
-  }, [routerParams, folderIds, view, filter])
+  }, [routerParams, inboxId, folderIds, view, filter])
 }

@@ -44,12 +44,6 @@ const useUISettingSync = () => {
     }
     return
   }, [setting.showDockBadge])
-
-  useEffect(() => {
-    if (setting.voice) {
-      tipcClient?.setVoice(setting.voice)
-    }
-  }, [setting.voice])
 }
 
 const useUXSettingSync = () => {
@@ -78,9 +72,19 @@ const useLanguageSync = () => {
     }
   }, [language])
 }
+const useGeneralSettingSync = () => {
+  const voice = useGeneralSettingKey("voice")
+  useEffect(() => {
+    if (voice) {
+      tipcClient?.setVoice(voice)
+    }
+  }, [voice])
+}
+
 export const SettingSync = () => {
   useUISettingSync()
   useUXSettingSync()
   useLanguageSync()
+  useGeneralSettingSync()
   return null
 }

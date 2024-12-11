@@ -1,5 +1,6 @@
 import { Readability } from "@mozilla/readability"
 import { name, version } from "@pkg"
+import DOMPurify from "dompurify"
 import { parseHTML } from "linkedom"
 import { fetch } from "ofetch"
 
@@ -7,8 +8,21 @@ import { isDev } from "~/env"
 
 const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 ${name}/${version}`
 
+// For avoiding xss attack from readability, the raw document string should be sanitized.
+// The xss attack in electron may lead to more serious outcomes than browser environment.
+// It may allows remotely execute malicious scripts in main process.
+// Before the sanitizing, the DOMPurify requires a `window` environment provided by linkedom.
+function sanitizeHTMLString(dirtyDocumentString: string) {
+  const parser = parseHTML(dirtyDocumentString)
+  const purify = DOMPurify(parser.window)
+  // How do DOMPurify changes the origin html structure,
+  // You can refer its document https://github.com/cure53/DOMPurify?tab=readme-ov-file#can-i-configure-dompurify
+  const sanitizedDocumentString = purify.sanitize(dirtyDocumentString)
+  return sanitizedDocumentString
+}
+
 export async function readability(url: string) {
-  const documentString = await fetch(url, {
+  const dirtyDocumentString = await fetch(url, {
     headers: {
       "User-Agent": userAgents,
       Accept: "text/html",
@@ -26,12 +40,13 @@ export async function readability(url: string) {
     return res.text()
   })
 
+  const sanitizedDocumentString = sanitizeHTMLString(dirtyDocumentString)
+  const baseUrl = new URL(url).origin
+
   // FIXME: linkedom does not handle relative addresses in strings. Refer to
   // @see https://github.com/WebReflection/linkedom/issues/153
   // JSDOM handles it correctly, but JSDOM introduces canvas binding.
-
-  const { document } = parseHTML(documentString)
-  const baseUrl = new URL(url).origin
+  const { document } = parseHTML(sanitizedDocumentString)
 
   document.querySelectorAll("a").forEach((a) => {
     a.href = replaceRelativeAddress(baseUrl, a.href)

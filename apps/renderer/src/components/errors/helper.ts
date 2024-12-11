@@ -1,9 +1,6 @@
-import { nextFrame } from "@follow/utils/dom"
 import type { FC } from "react"
 import { createElement, useEffect, useRef } from "react"
-import { useLocation } from "react-router-dom"
-
-import { createErrorToaster } from "~/lib/error-parser"
+import { useLocation } from "react-router"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 
@@ -17,16 +14,6 @@ export const parseError = (error: unknown): { message?: string; stack?: string }
     return {
       message: String(error),
       stack: undefined,
-    }
-  }
-}
-
-// TODO: move this
-export class CustomSafeError extends Error {
-  constructor(message: string, toast?: boolean) {
-    super(message)
-    if (toast) {
-      nextFrame(() => createErrorToaster(message)(this))
     }
   }
 }

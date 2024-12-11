@@ -5,7 +5,7 @@ import type { FC, PropsWithChildren, ReactNode } from "react"
 import { createContext, createElement, useContext, useLayoutEffect, useMemo, useState } from "react"
 import root from "react-shadow"
 
-import { useUISettingKey } from "~/atoms/settings/ui"
+import { useUISettingKeys } from "~/atoms/settings/ui"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 
 const ShadowDOMContext = createContext(false)
@@ -84,9 +84,8 @@ export const ShadowDOM: FC<
 
   const dark = useIsDark()
 
-  const uiFont = useUISettingKey("uiFontFamily")
   const reduceMotion = useReduceMotion()
-  const usePointerCursor = useUISettingKey("usePointerCursor")
+  const [uiFont, usePointerCursor] = useUISettingKeys(["uiFontFamily", "usePointerCursor"])
 
   return (
     <root.div {...rest}>

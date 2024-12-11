@@ -1,14 +1,17 @@
+import type { FeedViewType } from "@follow/constants"
 import type {
   CombinedEntryModel,
   EntryModel,
   FeedModel,
   FeedOrListRespModel,
+  InboxModel,
 } from "@follow/models/types"
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 import { omitObjectUndefinedValue } from "@follow/utils/utils"
+import { isNil, merge, omit } from "es-toolkit/compat"
 import { produce } from "immer"
-import { isNil, merge, omit } from "lodash-es"
 
+import { clearAllFeedUnreadDirty, clearFeedUnreadDirty, setFeedUnreadDirty } from "~/atoms/feed"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams } from "~/lib/utils"
@@ -19,7 +22,7 @@ import { imageActions } from "../image"
 import { inboxActions } from "../inbox"
 import { getSubscriptionByFeedId } from "../subscription"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createTransaction, createZustandStore } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
@@ -58,6 +61,15 @@ class EntryActions {
     runTransactionInScope(() => EntryService.deleteEntries(entryIds))
   }
 
+  updateEntryContent(entryId: string, content: string) {
+    set((state) =>
+      produce(state, (draft) => {
+        if (!draft.flatMapEntries[entryId]) return
+        draft.flatMapEntries[entryId].entries.content = content
+      }),
+    )
+  }
+
   async fetchEntryById(entryId: string) {
     const { data } = await apiClient.entries.$get({
       query: {
@@ -82,11 +94,12 @@ class EntryActions {
       },
     })
     if (data) {
-      this.upsertMany([
-        // patch data, should omit `read` because the network race condition or server cache
-        omit(data, "read") as any,
-      ])
-      inboxActions.upsertMany([data.feeds])
+      // patch data, should omit `read` because the network race condition or server cache
+      const nextData = omit(data, "feeds", "read")
+      // Data compatibility
+      if (data.feeds && !(data as any).inboxes) (nextData as any).inboxes = data.feeds
+      this.upsertMany([nextData as any])
+      inboxActions.upsertMany([(nextData as any).inboxes])
     }
 
     return data
@@ -111,8 +124,9 @@ class EntryActions {
     pageParam?: string
     isArchived?: boolean
   }) {
-    const data = inboxId
-      ? await apiClient.entries.inbox.$post({
+    if (inboxId) {
+      const data = await apiClient.entries.inbox
+        .$post({
           json: {
             publishedAfter: pageParam,
             limit,
@@ -120,24 +134,56 @@ class EntryActions {
             read,
           },
         })
-      : await apiClient.entries.$post({
-          json: {
-            publishedAfter: pageParam,
-            read,
-            limit,
-            isArchived,
-            // withContent: true,
-            ...getEntriesParams({
-              feedId,
-              inboxId,
-              listId,
-              view,
+        .then((res) => {
+          return {
+            ...res,
+            data: res.data?.map(({ feeds, ...d }) => {
+              return {
+                ...d,
+                inboxes: feeds,
+              }
             }),
-          },
+          }
         })
 
+      if (data.data) {
+        this.upsertMany(structuredClone(data.data), { isArchived })
+      }
+      return data
+    }
+
+    const params = getEntriesParams({
+      feedId,
+      inboxId,
+      listId,
+      view,
+    })
+    const data = await apiClient.entries.$post({
+      json: {
+        publishedAfter: pageParam,
+        read,
+        limit,
+        isArchived,
+        ...params,
+      },
+    })
+
+    // Mark feed unread dirty, so re-fetch the unread data when view feed unread entires in the next time
+    if (read === false) {
+      if (typeof params.view === "number" && !params.feedId) {
+        clearAllFeedUnreadDirty()
+      }
+      if (params.feedId) {
+        clearFeedUnreadDirty(params.feedId as string)
+      }
+      if (params.feedIdList) {
+        params.feedIdList.forEach((feedId) => {
+          clearFeedUnreadDirty(feedId)
+        })
+      }
+    }
     if (data.data) {
-      this.upsertMany(data.data)
+      this.upsertMany(structuredClone(data.data), { isArchived })
     }
     return data
   }
@@ -217,9 +263,10 @@ class EntryActions {
     })
   }
 
-  upsertMany(data: CombinedEntryModel[]) {
+  upsertMany(data: CombinedEntryModel[], options?: { isArchived?: boolean }) {
     const feeds = [] as FeedOrListRespModel[]
     const entries = [] as EntryModel[]
+    const inboxes = [] as InboxModel[]
     const entry2Read = {} as Record<string, boolean>
     const entryFeedMap = {} as Record<string, string>
     const entryCollection = {} as Record<string, any>
@@ -233,38 +280,74 @@ class EntryActions {
             item.entries,
           )
 
-          if (!draft.entries[item.feeds.id]) {
-            draft.entries[item.feeds.id] = []
+          // Is related to feed
+          if (item.feeds) {
+            if (!draft.entries[item.feeds.id]) {
+              draft.entries[item.feeds.id] = []
+            }
+
+            if (!draft.internal_feedId2entryIdSet[item.feeds.id]) {
+              draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
+            }
+
+            if (!draft.internal_feedId2entryIdSet[item.feeds.id].has(item.entries.id)) {
+              draft.entries[item.feeds.id].push(item.entries.id)
+              draft.internal_feedId2entryIdSet[item.feeds.id].add(item.entries.id)
+            }
+
+            draft.flatMapEntries[item.entries.id] = merge(
+              draft.flatMapEntries[item.entries.id] || {},
+              {
+                feedId: item.feeds.id,
+                entries: mergedEntry,
+              },
+              omit(item, "feeds"),
+            )
+
+            // Push feed
+            feeds.push(item.feeds)
+            // Push entryFeedMap
+            entryFeedMap[item.entries.id] = item.feeds.id
           }
 
-          if (!draft.internal_feedId2entryIdSet[item.feeds.id]) {
-            draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
+          // Is related to inbox
+          if (item.inboxes) {
+            const inboxId = `inbox-${item.inboxes.id}`
+            if (!draft.entries[inboxId]) {
+              draft.entries[inboxId] = []
+            }
+
+            if (!draft.internal_feedId2entryIdSet[inboxId]) {
+              draft.internal_feedId2entryIdSet[inboxId] = new Set()
+            }
+
+            if (!draft.internal_feedId2entryIdSet[inboxId].has(item.entries.id)) {
+              draft.entries[inboxId].push(item.entries.id)
+              draft.internal_feedId2entryIdSet[inboxId].add(item.entries.id)
+            }
+
+            draft.flatMapEntries[item.entries.id] = merge(
+              draft.flatMapEntries[item.entries.id] || {},
+              {
+                inboxId: item.inboxes.id,
+                entries: mergedEntry,
+              },
+              omit(item, "inboxes"),
+            )
+
+            // Push entryFeedMap
+            entryFeedMap[item.entries.id] = inboxId
+
+            inboxes.push(item.inboxes)
           }
 
-          if (!draft.internal_feedId2entryIdSet[item.feeds.id].has(item.entries.id)) {
-            draft.entries[item.feeds.id].push(item.entries.id)
-            draft.internal_feedId2entryIdSet[item.feeds.id].add(item.entries.id)
-          }
-
-          draft.flatMapEntries[item.entries.id] = merge(
-            draft.flatMapEntries[item.entries.id] || {},
-            {
-              feedId: item.feeds.id,
-              entries: mergedEntry,
-            },
-            omit(item, "feeds"),
-          )
-
-          // Push feed
-          feeds.push(item.feeds)
           // Push entry
           entries.push(mergedEntry)
           // Push entry2Read
           if (!isNil(item.read)) {
             entry2Read[item.entries.id] = item.read
           }
-          // Push entryFeedMap
-          entryFeedMap[item.entries.id] = item.feeds.id
+
           // Push entryCollection
           if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
@@ -284,6 +367,10 @@ class EntryActions {
               ])
             }
           }
+
+          if (item.settings && draft.flatMapEntries[item.entries.id] && !options?.isArchived) {
+            draft.flatMapEntries[item.entries.id].settings = item.settings
+          }
         }
 
         return draft
@@ -291,6 +378,7 @@ class EntryActions {
     )
     // Insert to feed store
     feedActions.upsertMany(feeds as FeedModel[])
+    inboxActions.upsertMany(inboxes)
     const newStarIds = new Set(get().starIds)
     for (const entryId in entryCollection) {
       newStarIds.add(entryId)
@@ -363,81 +451,115 @@ class EntryActions {
       return
     }
 
-    feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+    const tx = createTransaction<unknown, { prevUnread: number }>({})
 
-    this.patch(entryId, {
-      read,
+    tx.optimistic((_, ctx) => {
+      const prevUnread = feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+      ctx.prevUnread = prevUnread
+
+      this.patch(entryId, {
+        read,
+      })
     })
-
-    await doMutationAndTransaction(
-      // Send api request
-      async () => {
-        if (read) {
-          await internal_batchMarkRead({
+    tx.execute(async (_) => {
+      if (read) {
+        await internal_batchMarkRead({
+          entryId,
+          isInbox,
+          isPrivate: subscription?.isPrivate,
+        })
+      } else {
+        await apiClient.reads.$delete({
+          json: {
             entryId,
             isInbox,
-            isPrivate: subscription?.isPrivate,
-          })
-        } else {
-          await apiClient.reads.$delete({
-            json: {
-              entryId,
-              isInbox,
-            },
-          })
-        }
-      },
-      async () =>
-        EntryService.bulkStoreReadStatus({
-          [entryId]: read,
-        }),
-    )
-  }
-
-  async markStar(entryId: string, star: boolean) {
-    this.patch(entryId, {
-      collections: star
-        ? {
-            createdAt: new Date().toISOString(),
-          }
-        : (null as unknown as undefined),
+          },
+        })
+      }
     })
 
-    set((state) =>
-      produce(state, (state) => {
-        star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
-      }),
-    )
+    tx.persist(() => {
+      EntryService.bulkStoreReadStatus({
+        [entryId]: read,
+      })
+    })
 
-    await doMutationAndTransaction(
-      // Send api request
-      async () => {
-        if (star) {
-          apiClient.collections.$post({
-            json: {
-              entryId,
-            },
-          })
-        } else {
-          await apiClient.collections.$delete({
-            json: {
-              entryId,
-            },
-          })
-        }
-      },
-      async () => {
-        if (star) {
-          return EntryService.bulkStoreCollection({
-            [entryId]: {
+    tx.rollback((_, ctx) => {
+      feedUnreadActions.updateByFeedId(feedId, ctx.prevUnread)
+      this.patch(entryId, {
+        read: !read,
+      })
+    })
+
+    await tx.run()
+
+    setFeedUnreadDirty(feedId)
+  }
+
+  async markStar(entryId: string, star: boolean, view?: FeedViewType) {
+    const tx = createTransaction<unknown, { prevIsStar: boolean }>({})
+
+    tx.optimistic((_, ctx) => {
+      ctx.prevIsStar = !!get().flatMapEntries[entryId]?.collections?.createdAt
+      this.patch(entryId, {
+        collections: star
+          ? {
               createdAt: new Date().toISOString(),
-            },
-          })
-        } else {
-          return EntryService.deleteCollection(entryId)
-        }
-      },
-    )
+            }
+          : (null as unknown as undefined),
+      })
+
+      set((state) =>
+        produce(state, (state) => {
+          star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
+        }),
+      )
+    })
+    tx.execute(async () => {
+      if (star) {
+        await apiClient.collections.$post({
+          json: {
+            entryId,
+            view,
+          },
+        })
+      } else {
+        await apiClient.collections.$delete({
+          json: {
+            entryId,
+          },
+        })
+      }
+    })
+
+    tx.rollback((_, ctx) => {
+      set((state) =>
+        produce(state, (state) => {
+          ctx.prevIsStar ? state.starIds.add(entryId) : state.starIds.delete(entryId)
+        }),
+      )
+      this.patch(entryId, {
+        collections: ctx.prevIsStar
+          ? {
+              createdAt: new Date().toISOString(),
+            }
+          : (null as unknown as undefined),
+      })
+    })
+
+    tx.persist(async () => {
+      if (star) {
+        await EntryService.bulkStoreCollection({
+          [entryId]: {
+            createdAt: new Date().toISOString(),
+          },
+        })
+      } else {
+        await EntryService.deleteCollection(entryId)
+      }
+    })
+
+    await tx.run()
   }
 
   updateReadHistory(entryId: string, readHistory: Omit<EntryReadHistoriesModel, "entryId">) {
@@ -453,26 +575,64 @@ class EntryActions {
   async deleteInboxEntry(entryId: string) {
     const entry = get().flatMapEntries[entryId]
     if (!entry) return
+    const tx = createTransaction(entry, {
+      deletedIndex: -1,
+    })
 
-    set((state) =>
-      produce(state, (draft) => {
-        delete draft.flatMapEntries[entryId]
-        for (const feedId in draft.entries) {
-          const index = draft.entries[feedId].indexOf(entryId)
-          if (index !== -1) {
-            draft.entries[feedId].splice(index, 1)
-          }
+    tx.optimistic((entry, ctx) => {
+      const { inboxId } = entry
+      const fullInboxId = `inbox-${inboxId}`
+
+      set((state) => {
+        const nextFlatMapEntries = { ...state.flatMapEntries }
+
+        delete nextFlatMapEntries[entryId]
+
+        const index = state.entries[fullInboxId].indexOf(entryId)
+
+        const nextState = {
+          ...state,
+          flatMapEntries: nextFlatMapEntries,
         }
-      }),
-    )
-    await doMutationAndTransaction(
-      async () => {
-        await apiClient.entries.inbox.$delete({ json: { entryId } })
-      },
-      async () => {
-        await EntryService.deleteEntries([entryId])
-      },
-    )
+        if (index !== -1) {
+          ctx.deletedIndex = index
+
+          const nextFeedEntries = {
+            ...state.entries,
+
+            [fullInboxId]: state.entries[fullInboxId].filter((id) => id !== entryId),
+          }
+
+          nextState.entries = nextFeedEntries
+        }
+
+        return nextState
+      })
+    })
+
+    tx.execute(async () => {
+      await apiClient.entries.inbox.$delete({ json: { entryId } })
+    })
+
+    tx.persist(async () => {
+      await EntryService.deleteEntries([entryId])
+    })
+
+    tx.rollback((entry, ctx) => {
+      set((state) => ({
+        ...state,
+        entries: {
+          ...state.entries,
+          [entry.feedId]: state.entries[entry.feedId].splice(ctx.deletedIndex, 0, entryId),
+        },
+        flatMapEntries: {
+          ...state.flatMapEntries,
+          [entryId]: entry,
+        },
+      }))
+    })
+
+    await tx.run()
   }
 }
 

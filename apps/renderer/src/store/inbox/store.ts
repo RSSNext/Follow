@@ -4,7 +4,7 @@ import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { InboxService } from "~/services/inbox"
 
-import { createImmerSetter, createZustandStore } from "../utils/helper"
+import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
 import type { InboxState } from "./types"
 
 export const useInboxStore = createZustandStore<InboxState>("inbox")(() => ({
@@ -12,7 +12,7 @@ export const useInboxStore = createZustandStore<InboxState>("inbox")(() => ({
 }))
 
 const set = createImmerSetter(useInboxStore)
-
+const get = useInboxStore.getState
 class InboxActionStatic {
   upsertMany(inboxes: InboxModel[]) {
     if (inboxes.length === 0) return
@@ -50,15 +50,20 @@ class InboxActionStatic {
   }
 
   async deleteInbox(inboxId: string) {
-    // TODO rollback
-    this.clearByInboxId(inboxId)
-    runTransactionInScope(() => InboxService.bulkDelete([inboxId]))
-
-    await apiClient.inboxes.$delete({
-      json: {
-        handle: inboxId,
-      },
+    const inbox = get().inboxes[inboxId]
+    const tx = createTransaction(inbox)
+    tx.execute(async () => {
+      await apiClient.inboxes.$delete({
+        json: {
+          handle: inboxId,
+        },
+      })
     })
+
+    tx.optimistic(async () => this.clearByInboxId(inboxId))
+    tx.persist(() => InboxService.bulkDelete([inboxId]))
+    tx.rollback(async (inbox) => this.upsertMany([inbox]))
+    await tx.run()
   }
 
   async fetchOwnedInboxes() {

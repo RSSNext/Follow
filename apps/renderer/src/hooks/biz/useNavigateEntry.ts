@@ -1,7 +1,12 @@
 import { getReadonlyRoute, getStableRouterNavigate } from "@follow/components/atoms/route.js"
+import { isMobile, useMobile } from "@follow/components/hooks/useMobile.js"
+import { useSheetContext } from "@follow/components/ui/sheet/context.js"
 import { FeedViewType } from "@follow/constants"
-import { isUndefined } from "lodash-es"
+import { isUndefined } from "es-toolkit/compat"
+import { useCallback } from "react"
 
+import { disableShowAISummary } from "~/atoms/ai-summary"
+import { disableShowAITranslation } from "~/atoms/ai-translation"
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
 import {
@@ -23,8 +28,19 @@ export type NavigateEntryOptions = Partial<{
 /**
  * @description a hook to navigate to `feedId`, `entryId`, add search for `view`, `level`
  */
-// eslint-disable-next-line @eslint-react/hooks-extra/ensure-custom-hooks-using-other-hooks
-export const useNavigateEntry = () => navigateEntry
+export const useNavigateEntry = () => {
+  const sheetContext = useSheetContext()
+  const isMobile = useMobile()
+  return useCallback(
+    (options: NavigateEntryOptions) => {
+      navigateEntry(options)
+      if (isMobile && sheetContext) {
+        sheetContext.dismiss()
+      }
+    },
+    [isMobile, sheetContext],
+  )
+}
 
 export const navigateEntry = (options: NavigateEntryOptions) => {
   const { entryId, feedId, view, folderName, inboxId, listId } = options || {}
@@ -55,6 +71,8 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     setSidebarActiveView(view)
   }
   resetShowSourceContent()
+  disableShowAISummary()
+  disableShowAITranslation()
 
   const finalView = nextSearchParams.get("view")
 
@@ -66,7 +84,18 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     })
   }
 
-  return getStableRouterNavigate()?.(
-    `/feeds/${finalFeedId}/${entryId || ROUTE_ENTRY_PENDING}?${nextSearchParams.toString()}`,
-  )
+  let path = `/feeds`
+  if (finalFeedId) {
+    path += `/${finalFeedId}`
+  }
+  if (entryId) {
+    path += `/${entryId}`
+  } else {
+    if (!isMobile()) path += `/${ROUTE_ENTRY_PENDING}`
+  }
+
+  const finalPath = `${path}?${nextSearchParams.toString()}`
+  const currentPath = getReadonlyRoute().location.pathname + getReadonlyRoute().location.search
+  if (finalPath === currentPath) return
+  return getStableRouterNavigate()?.(finalPath)
 }

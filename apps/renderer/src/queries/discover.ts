@@ -2,11 +2,21 @@ import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 
 export const discover = {
-  rsshubCategory: ({ category }: { category: string }) =>
-    defineQuery(["discover", "rsshub", "category", category], async () => {
+  rsshubCategory: ({
+    category,
+    categories,
+    lang,
+  }: {
+    category?: string
+    categories?: string
+    lang?: string
+  }) =>
+    defineQuery(["discover", "rsshub", "category", category, categories, lang], async () => {
       const res = await apiClient.discover.rsshub.$get({
         query: {
           category,
+          categories,
+          ...(lang !== "all" && { lang }),
         },
       })
       return res.data

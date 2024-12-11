@@ -34,7 +34,8 @@
     "./client/**/*.ts",
     "./client/**/*.tsx",
     "vite.config.mts",
-    "./tailwind.config.ts"
+    "./tailwind.config.ts",
+    "./helper/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

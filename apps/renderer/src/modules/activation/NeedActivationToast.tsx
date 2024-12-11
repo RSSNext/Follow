@@ -1,4 +1,3 @@
-import { Button } from "@follow/components/ui/button/index.js"
 import { stopPropagation } from "@follow/utils/dom"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
@@ -10,22 +9,22 @@ export const NeedActivationToast = (props: { dimiss: () => void }) => {
 
   const { t } = useTranslation()
   return (
-    <div className="flex flex-col justify-end">
+    <div className="flex justify-between gap-3">
       <div>{t("activation.description")}</div>
 
-      <div className="text-right">
-        <Button
-          // Prevent modal dismiss
-          onPointerDown={stopPropagation}
-          onClick={useCallback(() => {
-            presentActivationModal()
-            props.dimiss()
-          }, [presentActivationModal, props])}
-          buttonClassName="text-xs"
-        >
-          {t("activation.activate")}
-        </Button>
-      </div>
+      <button
+        className="shrink-0 bg-accent text-white"
+        type="button"
+        data-button="true"
+        data-action="true"
+        onPointerDown={stopPropagation}
+        onClick={useCallback(() => {
+          presentActivationModal()
+          props.dimiss()
+        }, [presentActivationModal, props])}
+      >
+        {t("activation.activate")}
+      </button>
     </div>
   )
 }

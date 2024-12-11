@@ -5,9 +5,11 @@ import type { z } from "zod"
 declare const _apiClient: ReturnType<typeof hc<AppType>>
 
 export type UserModel = Omit<
-  Omit<Omit<typeof users.$inferSelect, "emailVerified">, "email">,
-  "createdAt"
->
+  typeof users.$inferSelect,
+  "createdAt" | "updatedAt" | "email" | "emailVerified"
+> & {
+  email?: string
+}
 
 export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
   Awaited<ReturnType<T>>,
@@ -46,10 +48,12 @@ export type EntriesResponse = Array<
   | Exclude<Awaited<ReturnType<typeof _apiClient.entries.inbox.$post>>["data"], undefined>
 >[number]
 
-export type CombinedEntryModel = EntriesResponse[number] & {
+export type CombinedEntryModel = Omit<EntriesResponse[number], "feeds"> & {
   entries: {
     content?: string | null
   }
+  inboxes?: InboxModel
+  feeds?: EntriesResponse[number]["feeds"]
 }
 export type EntryModel = CombinedEntryModel["entries"]
 export type EntryModelSimple = Exclude<
@@ -89,7 +93,17 @@ export type RecommendationItem = ExtractBizResponse<
 
 export type ActionOperation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
 export type ActionEntryField = "all" | "title" | "content" | "author" | "url" | "order"
-export type ActionFeedField = "view" | "title" | "site_url" | "feed_url" | "category"
+export type ActionFeedField =
+  | "view"
+  | "title"
+  | "site_url"
+  | "feed_url"
+  | "category"
+  | "entry_title"
+  | "entry_content"
+  | "entry_url"
+  | "entry_author"
+  | "entry_media_length"
 
 export type MediaModel = Exclude<
   ExtractBizResponse<typeof _apiClient.entries.$get>["data"],
@@ -102,13 +116,14 @@ export type ActionsInput = {
     field?: ActionFeedField
     operator?: ActionOperation
     value?: string
-  }[]
+  }[][]
   result: {
     disabled?: boolean
     translation?: string
     summary?: boolean
     readability?: boolean
     silence?: boolean
+    block?: boolean
     sourceContent?: boolean
     newEntryNotification?: boolean
     rewriteRules?: {

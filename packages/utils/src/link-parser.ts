@@ -47,12 +47,6 @@ export const isXUrl = defineLinkParser({
   icon: "i-mgc-social-x-cute-li",
 })
 
-export const isGCoreUrl = defineLinkParser({
-  name: "gcore",
-  validator: (url) => url.hostname.includes("gcores.com"),
-  icon: "i-simple-icons-gcore text-[#f83055]",
-})
-
 export const isV2exUrl = defineLinkParser({
   name: "v2ex",
   validator: (url) => url.hostname.includes("v2ex.com"),

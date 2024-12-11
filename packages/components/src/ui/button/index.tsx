@@ -1,4 +1,5 @@
 import { useFocusable } from "@follow/components/common/Focusable.jsx"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn, getOS } from "@follow/utils/utils"
@@ -6,6 +7,7 @@ import type { VariantProps } from "class-variance-authority"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import * as React from "react"
+import { useState } from "react"
 import type { Options } from "react-hotkeys-hook"
 import { useHotkeys } from "react-hotkeys-hook"
 
@@ -19,7 +21,7 @@ export interface BaseButtonProps {
 
 // BIZ buttons
 
-interface ActionButtonProps {
+export interface ActionButtonProps {
   icon?: React.ReactNode | React.FC<ComponentType>
   tooltip?: React.ReactNode
   tooltipSide?: "top" | "bottom"
@@ -27,6 +29,7 @@ interface ActionButtonProps {
   disabled?: boolean
   shortcut?: string
   disableTriggerShortcut?: boolean
+  enableHoverableContent?: boolean
   size?: "sm" | "md" | "base"
 
   /**
@@ -58,8 +61,10 @@ export const ActionButton = React.forwardRef<
       shortcut,
       disabled,
       disableTriggerShortcut,
+      enableHoverableContent,
       size = "base",
       shortcutOnlyFocusWithIn,
+      onClick,
       ...rest
     },
     ref,
@@ -68,6 +73,8 @@ export const ActionButton = React.forwardRef<
       getOS() === "Windows" ? shortcut?.replace("meta", "ctrl").replace("Meta", "Ctrl") : shortcut
     const buttonRef = React.useRef<HTMLButtonElement>(null)
     React.useImperativeHandle(ref, () => buttonRef.current!)
+
+    const [loading, setLoading] = useState(false)
 
     const Trigger = (
       <button
@@ -84,13 +91,30 @@ export const ActionButton = React.forwardRef<
         )}
         type="button"
         disabled={disabled}
+        onClick={
+          typeof onClick === "function"
+            ? async (e) => {
+                if (loading) return
+                setLoading(true)
+                try {
+                  await (onClick(e) as void | Promise<void>)
+                } finally {
+                  setLoading(false)
+                }
+              }
+            : onClick
+        }
         {...rest}
       >
-        {typeof icon === "function"
-          ? React.createElement(icon, {
-              className: "size-4 grayscale text-current",
-            })
-          : icon}
+        {loading ? (
+          <i className="i-mgc-loading-3-cute-re animate-spin" />
+        ) : typeof icon === "function" ? (
+          React.createElement(icon, {
+            className: "size-4 grayscale text-current",
+          })
+        ) : (
+          icon
+        )}
 
         {children}
       </button>
@@ -106,7 +130,7 @@ export const ActionButton = React.forwardRef<
           />
         )}
         {tooltip ? (
-          <Tooltip disableHoverableContent>
+          <Tooltip disableHoverableContent={!enableHoverableContent}>
             <TooltipTrigger aria-label={typeof tooltip === "string" ? tooltip : undefined} asChild>
               {Trigger}
             </TooltipTrigger>
@@ -154,19 +178,31 @@ const HotKeyTrigger = ({
   })
   return null
 }
+const motionBaseMap = {
+  pc: {
+    whileFocus: { scale: 1.02 },
+    whileTap: { scale: 0.95 },
+  },
+  mobile: {
+    whileFocus: { opacity: 0.8 },
+    whileTap: { opacity: 0.2 },
+  },
+} as const
 export const MotionButtonBase = React.forwardRef<HTMLButtonElement, HTMLMotionProps<"button">>(
-  ({ children, ...rest }, ref) => (
-    <m.button
-      layout="size"
-      initial
-      whileFocus={{ scale: 1.02 }}
-      whileTap={{ scale: 0.95 }}
-      {...rest}
-      ref={ref}
-    >
-      {children}
-    </m.button>
-  ),
+  ({ children, ...rest }, ref) => {
+    const isMobile = useMobile()
+    return (
+      <m.button
+        layout="size"
+        initial
+        {...motionBaseMap[isMobile ? "mobile" : "pc"]}
+        {...rest}
+        ref={ref}
+      >
+        {children}
+      </m.button>
+    )
+  },
 )
 
 MotionButtonBase.displayName = "MotionButtonBase"

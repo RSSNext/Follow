@@ -5,7 +5,7 @@ on:
 
 name: CI Build web and SSR server
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-ssr
   cancel-in-progress: true
 jobs:
   build:
@@ -42,4 +42,4 @@ jobs:
         run: pnpm install
       - name: Build web and SSR server
         run: |
-          npm exec turbo run build:web @follow/server#build
+          npm exec turbo run //#build:web @follow/server#build

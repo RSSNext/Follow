@@ -1,7 +1,7 @@
 import { viewportAtom } from "@follow/components/atoms/viewport.js"
+import { throttle } from "es-toolkit/compat"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { useStore } from "jotai"
-import { throttle } from "lodash-es"
 import type { FC } from "react"
 
 export const EventProvider: FC = () => {
@@ -23,6 +23,9 @@ export const EventProvider: FC = () => {
         h,
         w,
       })
+
+      const isMobile = window.innerWidth < 1024
+      document.documentElement.dataset.viewport = isMobile ? "mobile" : "desktop"
     }, 16)
 
     readViewport()

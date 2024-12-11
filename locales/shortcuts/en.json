@@ -22,10 +22,13 @@
   "keys.layout.showShortcuts": "Show/Hide Shortcuts",
   "keys.layout.toggleSidebar": "Show/Hide Feed Sidebar",
   "keys.layout.toggleWideMode": "Toggle Wide Mode",
+  "keys.layout.zenMode": "Zen Mode",
+  "keys.misc.quickSearch": "Quick Search",
   "keys.type.audio": "audio",
   "keys.type.entries": "entries",
   "keys.type.entry": "entry",
   "keys.type.feeds": "feeds",
   "keys.type.layout": "layout",
+  "keys.type.misc": "misc",
   "sidebar_title": "Shortcuts"
 }

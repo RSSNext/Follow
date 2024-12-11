@@ -4,10 +4,6 @@ import { setDockCount } from "../lib/dock"
 import { sleep } from "../lib/utils"
 import { t } from "./_instance"
 
-const timerMap = {
-  unread: undefined as any,
-}
-
 const pollingMap = {
   unread: false,
 }
@@ -27,8 +23,8 @@ async function updateUnreadCount() {
 }
 
 export async function pollingUpdateUnreadCount() {
-  if (timerMap.unread) {
-    timerMap.unread = clearTimeout(timerMap.unread)
+  if (pollingMap.unread) {
+    return
   }
 
   pollingMap.unread = true
@@ -42,5 +38,4 @@ export async function pollingUpdateUnreadCount() {
 
 export async function cancelPollingUpdateUnreadCount() {
   pollingMap.unread = false
-  timerMap.unread = clearTimeout(timerMap.unread)
 }

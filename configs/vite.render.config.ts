@@ -7,17 +7,29 @@ import react from "@vitejs/plugin-react"
 import { prerelease } from "semver"
 import type { UserConfig } from "vite"
 
+import { astPlugin } from "../plugins/vite/ast"
 import { circularImportRefreshPlugin } from "../plugins/vite/hmr"
 import { customI18nHmrPlugin } from "../plugins/vite/i18n-hmr"
 import { localesPlugin } from "../plugins/vite/locales"
-import { twMacro } from "../plugins/vite/tw-macro"
 import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
 
-const pkgDir = dirname(fileURLToPath(import.meta.url))
-const pkg = JSON.parse(readFileSync(resolve(pkgDir, "../package.json"), "utf8"))
+const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "..")
+const pkg = JSON.parse(readFileSync(resolve(pkgDir, "./package.json"), "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
 
+const getChangelogFileContent = () => {
+  const { version: pkgVersion } = pkg
+  const isDev = process.env.NODE_ENV === "development"
+  // get major-minor-patch, e.g. 0.2.0-beta.2 -> 0.2.0
+  const version = pkgVersion.split("-")[0]
+  try {
+    return readFileSync(resolve(pkgDir, "./changelog", `${isDev ? "next" : version}.md`), "utf8")
+  } catch {
+    return ""
+  }
+}
+const changelogFile = getChangelogFileContent()
 export const viteRenderBaseConfig = {
   resolve: {
     alias: {
@@ -53,12 +65,17 @@ export const viteRenderBaseConfig = {
         electron: false,
       },
       sourcemaps: {
-        filesToDeleteAfterUpload: ["out/web/assets/*.js.map", "dist/renderer/assets/*.js.map"],
+        filesToDeleteAfterUpload: [
+          "out/web/assets/*.js.map",
+          "out/web/vendor/*.js.map",
+          "dist/renderer/assets/*.js.map",
+          "dist/renderer/vendor/*.css.map",
+        ],
       },
     }),
 
     localesPlugin(),
-    twMacro(),
+    astPlugin,
     customI18nHmrPlugin(),
   ],
   define: {
@@ -73,5 +90,6 @@ export const viteRenderBaseConfig = {
     DEBUG: process.env.DEBUG === "true",
 
     I18N_COMPLETENESS_MAP: JSON.stringify({ ...i18nCompleteness, en: 100 }),
+    CHANGELOG_CONTENT: JSON.stringify(changelogFile),
   },
 } satisfies UserConfig

@@ -1,13 +1,18 @@
 import { createSettingAtom } from "@follow/atoms/helper/setting.js"
 import type { UISettings } from "@follow/shared/interface/settings"
+import { jotaiStore } from "@follow/utils/jotai"
+import { atom, useAtomValue, useSetAtom } from "jotai"
+import { useEventCallback } from "usehooks-ts"
 
 export const createDefaultSettings = (): UISettings => ({
   // Sidebar
   entryColWidth: 356,
   feedColWidth: 256,
+  hideExtraBadge: false,
 
   opaqueSidebar: false,
   sidebarShowUnreadCount: true,
+  thumbnailRatio: "square",
 
   // Global UI
   uiTextSize: 16,
@@ -29,19 +34,20 @@ export const createDefaultSettings = (): UISettings => ({
   codeHighlightThemeDark: "github-dark",
   guessCodeLanguage: true,
   hideRecentReader: false,
+  customCSS: "",
 
   // View
   pictureViewMasonry: true,
   pictureViewFilterNoImage: false,
   wideMode: false,
-
-  // TTS
-  voice: "en-US-AndrewMultilingualNeural",
 })
+
+const zenModeAtom = atom(false)
 
 export const {
   useSettingKey: useUISettingKey,
   useSettingSelector: useUISettingSelector,
+  useSettingKeys: useUISettingKeys,
   setSetting: setUISetting,
   clearSettings: clearUISettings,
   initializeDefaultSettings: initializeDefaultUISettings,
@@ -54,5 +60,31 @@ export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
   "uiFontFamily",
   "readerFontFamily",
   "opaqueSidebar",
-  "voice",
+  // "customCSS",
 ]
+
+export const useIsZenMode = () => useAtomValue(zenModeAtom)
+export const getIsZenMode = () => jotaiStore.get(zenModeAtom)
+
+export const useSetZenMode = () => {
+  const setZenMode = useSetAtom(zenModeAtom)
+  return useEventCallback((checked: boolean) => {
+    setZenMode(checked)
+  })
+}
+
+export const useToggleZenMode = () => {
+  const setZenMode = useSetZenMode()
+  const isZenMode = useIsZenMode()
+  return useEventCallback(() => {
+    const newIsZenMode = !isZenMode
+    document.documentElement.dataset.zenMode = newIsZenMode.toString()
+    setZenMode(newIsZenMode)
+  })
+}
+
+export const useRealInWideMode = () => {
+  const wideMode = useUISettingKey("wideMode")
+  const isZenMode = useIsZenMode()
+  return wideMode || isZenMode
+}

@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
 
+import { DropZone } from "~/components/ui/drop-zone"
 import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { Queries } from "~/queries"
@@ -30,9 +31,14 @@ type FeedResponseList = {
 }[]
 
 const formSchema = z.object({
-  file: z.instanceof(File).refine((file) => file.size < 500_000, {
-    message: "Your OPML file must be less than 500KB.",
-  }),
+  file: z
+    .instanceof(File)
+    .refine((file) => file.size < 500_000, {
+      message: "Your OPML file must be less than 500KB.",
+    })
+    .refine((file) => file.name.endsWith(".opml") || file.name.endsWith(".xml"), {
+      message: "Your OPML file must be in OPML or XML format.",
+    }),
 })
 
 const NumberDisplay = ({ value }) => <span className="font-bold text-zinc-800">{value ?? 0}</span>
@@ -59,7 +65,7 @@ const list: {
   },
 ]
 
-export function DiscoverImport() {
+export function DiscoverImport({ isInit = false }: { isInit?: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -100,34 +106,31 @@ export function DiscoverImport() {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[540px] space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[540px] space-y-8">
           <FormField
             control={form.control}
             name="file"
             render={({ field: { value, onChange, ...fieldProps } }) => (
               <FormItem>
-                <FormLabel>{t("discover.import.opml")}</FormLabel>
+                <FormLabel>
+                  {isInit ? t("discover.import.new_import_opml") : t("discover.import.opml")}
+                </FormLabel>
                 <FormControl>
-                  <label
-                    className="center flex h-[100px] w-full rounded-md border border-dashed"
-                    htmlFor="upload-file"
-                  >
+                  <DropZone onDrop={(fileList) => onChange(fileList[0])}>
                     {form.formState.dirtyFields.file ? (
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
-
                         <span className="ml-2 text-sm font-semibold opacity-80">{value.name}</span>
                       </Fragment>
                     ) : (
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
-
                         <span className="ml-2 text-sm opacity-80">
                           {t("discover.import.click_to_upload")}
                         </span>
                       </Fragment>
                     )}
-                  </label>
+                  </DropZone>
                 </FormControl>
                 <Input
                   {...fieldProps}
@@ -153,7 +156,7 @@ export function DiscoverImport() {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="mt-8 max-w-lg">
+        <div className="mt-8 w-full max-w-lg">
           <Card>
             <CardHeader className="block text-zinc-500">
               <Trans

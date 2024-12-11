@@ -1,12 +1,10 @@
 import { initializeDayjs } from "@follow/components/dayjs"
 import { registerGlobalContext } from "@follow/shared/bridge"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { env } from "@follow/shared/env"
-import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { enableMapSet } from "immer"
 
-import { isElectronBuild } from "~/constants"
+import { isDev, isElectronBuild } from "~/constants"
 import { browserDB } from "~/database"
 import { initI18n } from "~/i18n"
 import { settingSyncQueue } from "~/modules/settings/helper/sync-queue"
@@ -17,6 +15,7 @@ import { subscribeNetworkStatus } from "../atoms/network"
 import { getGeneralSettings, subscribeShouldUseIndexedDB } from "../atoms/settings/general"
 import { appLog } from "../lib/log"
 import { initAnalytics } from "./analytics"
+import { registerHistoryStack } from "./history"
 import { hydrateDatabaseToStore, hydrateSettings, setHydrated } from "./hydrate"
 import { doMigration } from "./migrates"
 import { initSentry } from "./sentry"
@@ -39,18 +38,31 @@ declare global {
 }
 
 export const initializeApp = async () => {
-  appLog(`${APP_NAME}: Next generation information browser`, repository.url)
+  appLog(`${APP_NAME}: Follow your favorites in one inbox`, repository.url)
+
+  if (isDev) {
+    const favicon = await import("/favicon-dev.ico?url")
+
+    const url = new URL(favicon.default, import.meta.url).href
+
+    // Change favicon
+    const $icon = document.head.querySelector("link[rel='icon']")
+    if ($icon) {
+      $icon.setAttribute("href", url)
+    } else {
+      const icon = document.createElement("link")
+      icon.setAttribute("rel", "icon")
+      icon.setAttribute("href", url)
+      document.head.append(icon)
+    }
+  }
+
   appLog(`Initialize ${APP_NAME}...`)
   window.version = APP_VERSION
 
   const now = Date.now()
-  // Initialize the auth config first
-  authConfigManager.setConfig({
-    baseUrl: env.VITE_API_URL,
-    basePath: "/auth",
-    credentials: "include",
-  })
   initializeDayjs()
+  registerHistoryStack()
 
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"

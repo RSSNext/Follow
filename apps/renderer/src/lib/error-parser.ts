@@ -7,6 +7,8 @@ import { toast } from "sonner"
 
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Markdown } from "~/components/ui/markdown/Markdown"
+import { isDev } from "~/constants"
+import { DebugRegistry } from "~/modules/debug/registry"
 
 export const getFetchErrorMessage = (error: Error) => {
   if (error instanceof FetchError) {
@@ -40,7 +42,10 @@ export const toastFetchError = (
 
   if (error instanceof FetchError) {
     try {
-      const json = JSON.parse(error.response?._data)
+      const json =
+        typeof error.response?._data === "string"
+          ? JSON.parse(error.response?._data)
+          : error.response?._data
 
       const { reason, code, message: _message } = json
       message = _message
@@ -62,7 +67,7 @@ export const toastFetchError = (
     ..._toastOptions,
     classNames: {
       toast: "items-start bg-theme-background",
-      title: tw`-mt-0.5`, // to align with the icon (actually cut the top space from line-height)
+
       content: "w-full",
       ..._toastOptions.classNames,
     },
@@ -94,4 +99,20 @@ export const toastFetchError = (
       ]),
     })
   }
+}
+if (isDev) {
+  DebugRegistry.add("Simulate request error", () => {
+    createErrorToaster(
+      "Simulated request error",
+      {},
+    )({
+      response: {
+        _data: JSON.stringify({
+          code: 1000,
+          message: "Simulated request error",
+          reason: "Simulated reason",
+        }),
+      },
+    } as any)
+  })
 }

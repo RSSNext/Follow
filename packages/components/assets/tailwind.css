@@ -48,6 +48,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply text-theme-foreground;
   }
@@ -67,4 +68,14 @@
   }
 
   word-break: break-word;
+}
+
+@layer utilities {
+  [data-hide-in-print] {
+    @apply print:!hidden;
+  }
+}
+
+i {
+  @apply select-none;
 }

@@ -2,19 +2,22 @@ import { Button } from "@follow/components/ui/button/index.js"
 import type { FeedModel } from "@follow/models/types"
 import { nextFrame } from "@follow/utils/dom"
 import type { FC } from "react"
-import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { entries } from "~/queries/entries"
 
+import { CustomSafeError } from "../../errors/CustomSafeError"
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { useModalStack } from "../ui/modal/stacked/hooks"
-import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
+import { useResetErrorWhenRouteChange } from "./helper"
 import { FeedPreview } from "./previews/FeedPreview"
 
 const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetError, error }) => {
+  const { t } = useTranslation()
   if (!(error instanceof FeedFoundCanBeFollowError)) {
     throw error
   }
@@ -44,7 +47,7 @@ const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetErr
               <Button
                 onClick={() => {
                   present({
-                    title: "Add Feed",
+                    title: t("feed_form.add_feed"),
                     content: ({ dismiss }) => (
                       <FeedForm
                         asWidget

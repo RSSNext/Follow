@@ -5,10 +5,10 @@ import { feedActions } from "~/store/feed"
 
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
 type FeedModelWithId = FeedModel & { id: string }
-class ServiceStatic extends BaseService<FeedModelWithId> implements Hydable {
+class ServiceStatic extends BaseService<FeedModelWithId> implements Hydratable {
   constructor() {
     super(browserDB.feeds)
   }

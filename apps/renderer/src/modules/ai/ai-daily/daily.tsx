@@ -33,7 +33,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { FlatMarkAllReadButton } from "~/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "~/modules/entry-column/star-icon"
-import { EntryContentRender } from "~/modules/entry-content"
+import { EntryContent } from "~/modules/entry-content"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
@@ -189,30 +189,31 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   view,
 }) => {
   const content = useQueryData({ endDate, startDate, view })
-
-  const RelatedEntryLink = useState(() => createRelatedEntryLink("toast"))[0]
   const { t } = useTranslation()
+  const RelatedEntryLink = useState(() => createRelatedEntryLink("toast"))[0]
+
   if (!content.data && !content.isLoading)
     return (
-      <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
+      <div className="center pointer-events-none inset-0 my-8 flex-col gap-4 opacity-80 lg:absolute lg:my-0 lg:translate-y-6">
         <EmptyIcon />
         <p>{t("ai_daily.no_found")}</p>
       </div>
     )
+
   return (
     <div className="center grow flex-col">
       <div className="flex grow flex-col">
         {content.isLoading ? (
           <LoadingCircle
             size="large"
-            className="center pointer-events-none absolute inset-0 mt-8 text-center"
+            className="center pointer-events-none h-24 text-center lg:absolute lg:inset-0 lg:mt-8 lg:h-auto"
           />
         ) : content.data ? (
           <Markdown
             components={{
               a: RelatedEntryLink as Components["a"],
             }}
-            className="prose-sm mt-4 h-0 grow overflow-auto px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+            className="prose-sm mt-4 grow overflow-auto px-2 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent lg:h-0 lg:px-6"
           >
             {content.data}
           </Markdown>
@@ -404,7 +405,7 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
 
 const EntryModalPreview = ({ entryId }: { entryId: string }) => (
   <Paper className="!p-0">
-    <EntryContentRender
+    <EntryContent
       className="h-auto [&_#entry-action-header-bar]:!bg-transparent"
       entryId={entryId}
     />

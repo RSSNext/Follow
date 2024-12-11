@@ -49,7 +49,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
 
   const formSchema = z.object({
     address: z.string().startsWith("0x").length(42),
-    amount: z.number().min(0).max(cashablePowerTokenNumber),
+    amount: z.number().positive().max(cashablePowerTokenNumber),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -103,7 +103,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
         />
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-96 space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 lg:w-96">
           <FormField
             control={form.control}
             name="address"

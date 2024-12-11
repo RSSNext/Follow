@@ -1,6 +1,7 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
     "types": ["electron-vite/node"],
     "moduleResolution": "Bundler",

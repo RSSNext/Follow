@@ -4,13 +4,15 @@ import { useEffect, useLayoutEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
+import { setWindowState } from "~/atoms/app"
 import { getGeneralSettings } from "~/atoms/settings/general"
-import { getUISettings } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { getUISettings, useToggleZenMode } from "~/atoms/settings/ui"
+import { setUpdaterStatus } from "~/atoms/updater"
+import { useDialog, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { useSettingModal } from "~/modules/settings/modal/use-setting-modal"
 import { clearDataIfLoginOtherAccount } from "~/store/utils/clear"
 
 declare module "@follow/components/providers/stable-router-provider.js" {
@@ -40,6 +42,12 @@ export const ExtensionExposeProvider = () => {
       clearIfLoginOtherAccount(newUserId: string) {
         clearDataIfLoginOtherAccount(newUserId)
       },
+      readyToUpdate() {
+        setUpdaterStatus({
+          type: "renderer",
+          status: "ready",
+        })
+      },
     })
   }, [])
   useEffect(() => {
@@ -64,5 +72,29 @@ export const ExtensionExposeProvider = () => {
       },
     })
   }, [follow, present, presentDiscoverRSSHubRoute, presentUserProfile, t])
+
+  const toggleZenMode = useToggleZenMode()
+  useEffect(() => {
+    registerGlobalContext({
+      zenMode: toggleZenMode,
+    })
+  }, [toggleZenMode])
+
+  const dialog = useDialog()
+  useEffect(() => {
+    registerGlobalContext({
+      dialog,
+    })
+  }, [dialog])
+
+  useBindElectronBridge()
   return null
+}
+
+const useBindElectronBridge = () => {
+  useEffect(() => {
+    registerGlobalContext({
+      setWindowState,
+    })
+  }, [])
 }

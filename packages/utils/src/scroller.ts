@@ -24,7 +24,7 @@ export const springScrollTo = (
     autoplay: true,
     ...spring,
     onPlay() {
-      el.addEventListener("wheel", stopSpringScrollHandler)
+      el.addEventListener("wheel", stopSpringScrollHandler, { capture: true })
       el.addEventListener("touchmove", stopSpringScrollHandler)
     },
 
@@ -38,7 +38,7 @@ export const springScrollTo = (
   })
 
   animation.then(() => {
-    el.removeEventListener("wheel", stopSpringScrollHandler)
+    el.removeEventListener("wheel", stopSpringScrollHandler, { capture: true })
     el.removeEventListener("touchmove", stopSpringScrollHandler)
   })
 
@@ -55,7 +55,7 @@ export const springScrollToElement = (
 
   const to = y + delta
 
-  return springScrollTo(to, scrollerElement)
+  return springScrollTo(to, scrollerElement || document.documentElement)
 }
 
 const calculateElementTop = (el: HTMLElement) => {

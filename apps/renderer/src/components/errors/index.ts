@@ -9,6 +9,7 @@ const ErrorFallbackMap = {
     () => import("./FeedFoundCanBeFollowErrorFallback"),
   ),
   [ErrorComponentType.FeedNotFound]: lazy(() => import("./FeedNotFound")),
+  [ErrorComponentType.RSSHubDiscoverError]: lazy(() => import("./RSSHubError")),
 }
 
 export const getErrorFallback = (type: ErrorComponentType) => ErrorFallbackMap[type]

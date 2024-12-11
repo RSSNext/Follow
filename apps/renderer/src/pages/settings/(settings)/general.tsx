@@ -6,7 +6,7 @@ const iconName = "i-mgc-settings-7-cute-re"
 const priority = 1000
 
 export const loader = defineSettingPageData({
-  iconName,
+  icon: iconName,
   name: "titles.general",
   priority,
 })

@@ -1,6 +1,8 @@
 import { useViewport } from "@follow/components/hooks/useViewport.js"
 import { ActionButton, Button, IconButton } from "@follow/components/ui/button/index.js"
+import { Kbd, KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
+import { useCountdown } from "@follow/hooks"
 import { cn, getOS } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
@@ -10,7 +12,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
-import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useI18n } from "~/hooks/common"
@@ -31,6 +32,7 @@ export const MarkAllReadWithOverlay = forwardRef<
     containerRef: React.RefObject<HTMLDivElement>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
+  const { t } = useTranslation()
   const { t: commonT } = useTranslation("common")
 
   const [show, setShow] = useState(false)
@@ -53,7 +55,8 @@ export const MarkAllReadWithOverlay = forwardRef<
         if (cancel) return
         cancel = true
       }
-      const id = toast(<ConfirmMarkAllReadInfo undo={undo} />, {
+      const id = toast("", {
+        description: <ConfirmMarkAllReadInfo undo={undo} />,
         duration: 3000,
         onAutoClose() {
           if (cancel) return
@@ -62,7 +65,7 @@ export const MarkAllReadWithOverlay = forwardRef<
         action: {
           label: (
             <span className="flex items-center gap-1">
-              Undo
+              {t("mark_all_read_button.undo")}
               <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
                 Meta+Z
               </Kbd>
@@ -86,7 +89,7 @@ export const MarkAllReadWithOverlay = forwardRef<
             <Trans
               i18nKey="mark_all_read_button.mark_as_read"
               components={{
-                which: commonT(`words.which.${which}` as any),
+                which: <>{commonT(`words.which.${which}` as any)}</>,
               }}
             />
             {shortcut && (
@@ -139,16 +142,16 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
       <m.div
         ref={setPopoverRef}
         initial={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         animate={{
-          y: isElectronWindows ? -10 : 0,
+          transform: `translateY(${isElectronWindows ? "-10px" : "0px"})`,
         }}
         exit={{
-          y: isElectronWindows ? -95 : -70,
+          transform: `translateY(${isElectronWindows ? "-95px" : "-70px"})`,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
+        className="shadow-modal absolute z-50 bg-background shadow lg:bg-theme-modal-background-opaque"
         style={{
           left: -paddingLeft,
           top: rect.top,
@@ -162,7 +165,7 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
               <Trans
                 i18nKey="mark_all_read_button.confirm_mark_all"
                 components={{
-                  which: commonT(`words.which.${which}` as any),
+                  which: <>{commonT(`words.which.${which}` as any)}</>,
                 }}
               />
             </span>
@@ -186,14 +189,19 @@ const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRea
 
 const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
   const { t } = useTranslation()
+  const [countdown] = useCountdown({ countStart: 3 })
+
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
+
   return (
     <div>
       <p>{t("mark_all_read_button.confirm_mark_all_info")}</p>
-      <small className="opacity-50">{t("mark_all_read_button.auto_confirm_info")}</small>
+      <small className="opacity-50">
+        {t("mark_all_read_button.auto_confirm_info", { countdown })}
+      </small>
     </div>
   )
 }

@@ -10,15 +10,10 @@ import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import {
-  getItemComponentByView,
-  getSkeletonItemComponentByView,
-  getStatelessItemComponentByView,
-} from "./Items"
+import { getItemComponentByView, getSkeletonItemComponentByView } from "./Items"
 import { EntryItemWrapper } from "./layouts/EntryItemWrapper"
 import { girdClassNames } from "./styles"
-import type { EntryItemStatelessProps, EntryListItemFC } from "./types"
+import type { EntryListItemFC } from "./types"
 
 interface EntryItemProps {
   entryId: string
@@ -52,14 +47,9 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
 
 export const EntryItem: FC<EntryItemProps> = memo(({ entryId, view }) => {
   const entry = useEntry(entryId)
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+
+  if (!entry) return null
   return <EntryItemImpl entry={entry} view={view} />
-})
-
-export const EntryItemStateless: FC<EntryItemStatelessProps> = memo((props) => {
-  const Item = getStatelessItemComponentByView(props.view as FeedViewType)
-
-  return <Item {...props} />
 })
 
 const LoadingCircleFallback = (

@@ -2,16 +2,22 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
-import { callWindowExpose } from "@follow/shared/bridge"
-import { IMAGE_PROXY_URL, imageRefererMatches } from "@follow/shared/image"
+import { APP_PROTOCOL } from "@follow/shared"
+import { callWindowExpose, WindowState } from "@follow/shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { BrowserWindow, screen, shell } from "electron"
+import { app, BrowserWindow, screen, shell } from "electron"
+import type { Event } from "electron/main"
 
+import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
+import { t } from "./lib/i18n"
 import { store } from "./lib/store"
+import { getTrayConfig } from "./lib/tray"
+import { refreshBound } from "./lib/utils"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
+import { loadDynamicRenderEntry } from "./updater/hot-updater"
 
 const windows = {
   settingWindow: null as BrowserWindow | null,
@@ -83,27 +89,51 @@ export function createWindow(
   })
 
   window.on("leave-html-full-screen", () => {
-    function refreshBound(timeout = 0) {
-      setTimeout(() => {
-        // FIXME: workaround for theme bug in full screen mode
-        const size = window?.getSize()
-        window?.setSize(size[0] + 1, size[1] + 1)
-        window?.setSize(size[0], size[1])
-      }, timeout)
-    }
     // To solve the vibrancy losing issue when leaving full screen mode
     // @see https://github.com/toeverything/AFFiNE/blob/280e24934a27557529479a70ab38c4f5fc65cb00/packages/frontend/electron/src/main/windows-manager/main-window.ts:L157
-    refreshBound()
-    refreshBound(1000)
+    refreshBound(window)
+    refreshBound(window, 1000)
   })
 
   window.on("ready-to-show", () => {
-    window?.show()
+    const shouldShowWindow =
+      !app.getLoginItemSettings().wasOpenedAsHidden && !process.argv.includes(START_IN_TRAY_ARGS)
+    if (shouldShowWindow) window.show()
   })
 
   window.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: "deny" }
+  })
+
+  const handleExternalProtocol = async (e: Event, url: string, window: BrowserWindow) => {
+    const { protocol } = new URL(url)
+
+    const ignoreProtocols = ["http", "https", APP_PROTOCOL, "file", "code", "cursor"]
+    if (ignoreProtocols.includes(protocol.slice(0, -1))) {
+      return
+    }
+    e.preventDefault()
+
+    const caller = callWindowExpose(window)
+    const confirm = await caller.dialog.ask({
+      title: t("dialog.openExternalApp.title"),
+      message: t("dialog.openExternalApp.message", { url, interpolation: { escapeValue: false } }),
+      confirmText: t("dialog.open"),
+      cancelText: t("dialog.cancel"),
+    })
+    if (!confirm) {
+      return
+    }
+    shell.openExternal(url)
+  }
+
+  // Handle main window external links
+  window.webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
+
+  // Handle webview external links
+  window.webContents.on("did-attach-webview", (_, webContents) => {
+    webContents.on("will-navigate", (e, url) => handleExternalProtocol(e, url, window))
   })
 
   // HMR for renderer base on electron-vite cli.
@@ -113,27 +143,18 @@ export function createWindow(
 
     logger.log(process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""))
   } else {
-    const openPath = path.resolve(__dirname, "../renderer/index.html")
-    window.loadFile(openPath, {
+    // Production entry
+    const dynamicRenderEntry = loadDynamicRenderEntry()
+    logger.info("load dynamic render entry", dynamicRenderEntry)
+    const appLoadEntry = dynamicRenderEntry || path.resolve(__dirname, "../renderer/index.html")
+
+    window.loadFile(appLoadEntry, {
       hash: options?.extraPath,
     })
-    logger.log(openPath, {
+    logger.log(appLoadEntry, {
       hash: options?.extraPath,
     })
   }
-
-  window.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    const trueUrl = details.url.startsWith(IMAGE_PROXY_URL)
-      ? new URL(details.url).searchParams.get("url") || details.url
-      : details.url
-    const refererMatch = imageRefererMatches.find((item) => item.url.test(trueUrl))
-    callback({
-      requestHeaders: {
-        ...details.requestHeaders,
-        Referer: refererMatch?.referer || trueUrl,
-      },
-    })
-  })
 
   if (isWindows) {
     // Change the default font-family and font-size of the devtools.
@@ -142,21 +163,60 @@ export function createWindow(
     window.webContents.on("devtools-opened", () => {
       // source-code-font: For code such as Elements panel
       // monospace-font: For sidebar such as Event Listener Panel
-      const css = `
-        :root {
-            --source-code-font-family: consolas;
-            --source-code-font-size: 13px;
-            --monospace-font-family: consolas;
-            --monospace-font-size: 13px;
-        }`
+      const css = `:root {--devtool-font-family: consolas, operator mono, Cascadia Code, OperatorMonoSSmLig Nerd Font,"Agave Nerd Font","Cascadia Code PL", monospace;--source-code-font-family:var(--devtool-font-family);--source-code-font-size: 13px;--monospace-font-family: var(--devtool-font-family);--monospace-font-size: 13px;}`
       window.webContents.devToolsWebContents?.executeJavaScript(`
         const overriddenStyle = document.createElement('style');
         overriddenStyle.innerHTML = '${css.replaceAll("\n", " ")}';
         document.body.append(overriddenStyle);
-        document.body.classList.remove('platform-windows');
-      `)
+        document.querySelectorAll('.platform-windows').forEach(el => el.classList.remove('platform-windows'));
+        addStyleToAutoComplete();
+        const observer = new MutationObserver((mutationList, observer) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === 'childList') {
+                    for (let i = 0; i < mutation.addedNodes.length; i++) {
+                        const item = mutation.addedNodes[i];
+                        if (item.classList.contains('editor-tooltip-host')) {
+                            addStyleToAutoComplete();
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(document.body, {childList: true});
+        function addStyleToAutoComplete() {
+            document.querySelectorAll('.editor-tooltip-host').forEach(element => {
+                if (element.shadowRoot.querySelectorAll('[data-key="overridden-dev-tools-font"]').length === 0) {
+                    const overriddenStyle = document.createElement('style');
+                    overriddenStyle.setAttribute('data-key', 'overridden-dev-tools-font');
+                    overriddenStyle.innerHTML = '.cm-tooltip-autocomplete ul[role=listbox] {font-family: consolas !important;}';
+                    element.shadowRoot.append(overriddenStyle);
+                }
+            });
+        }
+    `)
     })
   }
+
+  // async render and main state
+  window.on("maximize", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.MAXIMIZED)
+  })
+
+  window.on("unmaximize", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.NORMAL)
+  })
+
+  window.on("minimize", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.MINIMIZED)
+  })
+
+  window.on("restore", async () => {
+    const caller = callWindowExpose(window)
+    await caller.setWindowState(WindowState.NORMAL)
+  })
 
   return window
 }
@@ -228,7 +288,8 @@ export const createMainWindow = () => {
   windows.mainWindow = window
 
   window.on("close", (event) => {
-    if (isMacOS) {
+    const minimizeToTray = getTrayConfig()
+    if (isMacOS || minimizeToTray) {
       event.preventDefault()
       if (window.isFullScreen()) {
         window.once("leave-full-screen", () => {
@@ -258,7 +319,7 @@ export const createMainWindow = () => {
     const caller = callWindowExpose(window)
     const settings = await caller.getUISettings()
 
-    if (settings.showDockBadge) {
+    if (settings?.showDockBadge) {
       pollingUpdateUnreadCount()
     }
   })
@@ -296,7 +357,7 @@ export const getMainWindow = () => windows.mainWindow
 
 export const getMainWindowOrCreate = () => {
   if (!windows.mainWindow) {
-    createMainWindow()
+    return createMainWindow()
   }
   return windows.mainWindow
 }

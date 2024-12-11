@@ -1,6 +1,6 @@
 import { useWhoami } from "@client/atoms/user"
 import { MainContainer } from "@client/components/layout/main"
-import { openInFollowApp } from "@client/lib/helper"
+import { askOpenInFollowApp } from "@client/lib/helper"
 import { useUserQuery, useUserSubscriptionsQuery } from "@client/query/users"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -8,12 +8,11 @@ import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useTitle } from "@follow/hooks"
-import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router"
 
 export const Component = () => {
   const params = useParams()
@@ -35,10 +34,7 @@ export const Component = () => {
       ) : (
         <Fragment>
           <Avatar className="aspect-square size-16">
-            <AvatarImage
-              className="duration-200 animate-in fade-in-0"
-              src={replaceImgUrlIfNeed(user.data?.image || undefined)}
-            />
+            <AvatarImage className="duration-200 animate-in fade-in-0" src={user.data?.image} />
             <AvatarFallback>{user.data?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="mb-8 flex flex-col items-center">
@@ -51,9 +47,7 @@ export const Component = () => {
             {user.data?.id && (
               <Button
                 onClick={() => {
-                  openInFollowApp(`add?url=rsshub://follow/profile/${user.data?.id}`, () => {
-                    window.location.href = `rsshub://follow/profile/${user.data?.id}`
-                  })
+                  askOpenInFollowApp(`add?url=rsshub://follow/profile/${user.data?.id}`)
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
@@ -109,8 +103,8 @@ export const Component = () => {
                               <Button
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  openInFollowApp(`add?id=${subscription.feedId}`, () => {
-                                    window.location.href = `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
+                                  askOpenInFollowApp(`add?id=${subscription.feedId}`, () => {
+                                    return `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
                                   })
                                 }}
                               >

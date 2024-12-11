@@ -5,8 +5,9 @@ import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { toastFetchError } from "~/lib/error-parser"
+import { userActions } from "~/store/user"
 
-import { updateFeedBoostStatus } from "./hooks"
+import { updateFeedBoostStatus } from "./atom"
 
 const query = {
   getStatus: ({ feedId }: { feedId: string }) =>
@@ -20,12 +21,7 @@ const query = {
     }),
   getBoosters: ({ feedId }: { feedId: string }) =>
     defineQuery(["boosters", feedId], async () => {
-      const res = await apiClient.boosts.boosters.$get({
-        query: {
-          feedId,
-        },
-      })
-      return res.data
+      return userActions.getBoosters(feedId)
     }),
 }
 

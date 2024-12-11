@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 import tsconfigPath from "vite-tsconfig-paths"
 import { defineProject } from "vitest/config"
 
-import { twMacro } from "../../plugins/vite/tw-macro"
+import { astPlugin } from "../../plugins/vite/ast"
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
@@ -31,11 +31,11 @@ export default defineProject({
   },
 
   plugins: [
-    twMacro(),
+    // @ts-expect-error
+    astPlugin,
+    // @ts-expect-error
     tsconfigPath({
       projects: ["./tsconfig.json"],
     }),
-
-    twMacro(),
   ],
 })

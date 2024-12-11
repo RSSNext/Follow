@@ -1,3 +1,6 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
+import { Button } from "@follow/components/ui/button/index.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import {
   Select,
   SelectContent,
@@ -5,24 +8,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
+import { useForceUpdate } from "framer-motion"
+import { lazy, Suspense, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
 import {
+  getUISettings,
   setUISetting,
+  useIsZenMode,
+  useToggleZenMode,
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
 } from "~/atoms/settings/ui"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { isElectronBuild } from "~/constants"
 import { useSetTheme } from "~/hooks/common"
 
-import { SettingTabbedSegment } from "../control"
+import { SETTING_MODAL_ID } from "../constants"
+import {
+  SettingActionItem,
+  SettingDescription,
+  SettingSwitch,
+  SettingTabbedSegment,
+} from "../control"
 import { createDefineSettingItem } from "../helper/builder"
 import { createSettingBuilder } from "../helper/setting-builder"
+import { SettingItemGroup } from "../section"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
@@ -30,6 +47,7 @@ const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
 
 export const SettingAppearance = () => {
   const { t } = useTranslation("settings")
+  const isMobile = useMobile()
   return (
     <div className="mt-4">
       <SettingBuilder
@@ -42,7 +60,7 @@ export const SettingAppearance = () => {
 
           defineItem("opaqueSidebar", {
             label: t("appearance.opaque_sidebars.label"),
-            hide: !window.api?.canWindowBlur,
+            hide: !window.api?.canWindowBlur || isMobile,
           }),
 
           {
@@ -52,7 +70,7 @@ export const SettingAppearance = () => {
 
           defineItem("showDockBadge", {
             label: t("appearance.show_dock_badge.label"),
-            hide: !IN_ELECTRON || !["macOS", "Linux"].includes(getOS()),
+            hide: !IN_ELECTRON || !["macOS", "Linux"].includes(getOS()) || isMobile,
           }),
 
           defineItem("sidebarShowUnreadCount", {
@@ -61,11 +79,25 @@ export const SettingAppearance = () => {
 
           {
             type: "title",
-            value: t("appearance.fonts"),
+            value: t("appearance.sidebar"),
           },
-          TextSize,
-          UIFontSelector,
-          ContentFontSelector,
+          defineItem("hideExtraBadge", {
+            label: t("appearance.hide_extra_badge.label"),
+            description: t("appearance.hide_extra_badge.description"),
+            hide: isMobile,
+          }),
+          !isMobile && ZenMode,
+          ThumbnailRatio,
+          CustomCSS,
+
+          {
+            type: "title",
+            value: t("appearance.fonts"),
+            disabled: isMobile,
+          },
+          !isMobile && TextSize,
+          !isMobile && UIFontSelector,
+          !isMobile && ContentFontSelector,
           {
             type: "title",
             value: t("appearance.content"),
@@ -96,6 +128,7 @@ export const SettingAppearance = () => {
           defineItem("modalOverlay", {
             label: t("appearance.modal_overlay.label"),
             description: t("appearance.modal_overlay.description"),
+            hide: isMobile,
           }),
           defineItem("reduceMotion", {
             label: t("appearance.reduce_motion.label"),
@@ -104,6 +137,7 @@ export const SettingAppearance = () => {
           defineItem("usePointerCursor", {
             label: t("appearance.use_pointer_cursor.label"),
             description: t("appearance.use_pointer_cursor.description"),
+            hide: isMobile,
           }),
         ]}
       />
@@ -120,8 +154,11 @@ const ShikiTheme = () => {
   return (
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("appearance.code_highlight_theme")}</span>
-      <Select
-        defaultValue={isDark ? "github-dark" : "github-light"}
+
+      <ResponsiveSelect
+        items={bundledThemesInfo
+          .filter((theme) => theme.type === (isDark ? "dark" : "light"))
+          .map((theme) => ({ value: theme.id, label: theme.displayName }))}
         value={isDark ? codeHighlightThemeDark : codeHighlightThemeLight}
         onValueChange={(value) => {
           if (isDark) {
@@ -130,20 +167,10 @@ const ShikiTheme = () => {
             setUISetting("codeHighlightThemeLight", value)
           }
         }}
-      >
-        <SelectTrigger size="sm" className="w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent position="item-aligned">
-          {bundledThemesInfo
-            .filter((theme) => theme.type === (isDark ? "dark" : "light"))
-            .map((theme) => (
-              <SelectItem key={theme.id} value={theme.id}>
-                {theme.displayName}
-              </SelectItem>
-            ))}
-        </SelectContent>
-      </Select>
+        triggerClassName="w-48"
+        renderItem={(item) => <span className="capitalize">{item.label}</span>}
+        size="sm"
+      />
     </div>
   )
 }
@@ -215,5 +242,153 @@ export const AppThemeSegment = () => {
         setTheme(value as "light" | "dark" | "system")
       }}
     />
+  )
+}
+
+const ZenMode = () => {
+  const { t } = useTranslation("settings")
+  const isZenMode = useIsZenMode()
+  const toggleZenMode = useToggleZenMode()
+  return (
+    <SettingItemGroup>
+      <SettingSwitch
+        checked={isZenMode}
+        className="mt-4"
+        onCheckedChange={toggleZenMode}
+        label={t("appearance.zen_mode.label")}
+      />
+      <SettingDescription>{t("appearance.zen_mode.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const ThumbnailRatio = () => {
+  const { t } = useTranslation("settings")
+
+  const thumbnailRatio = useUISettingKey("thumbnailRatio")
+
+  return (
+    <SettingItemGroup>
+      <div className="mt-4 flex items-center justify-between">
+        <span className="shrink-0 text-sm font-medium">
+          {t("appearance.thumbnail_ratio.title")}
+        </span>
+
+        <ResponsiveSelect
+          items={[
+            { value: "square", label: t("appearance.thumbnail_ratio.square") },
+            { value: "original", label: t("appearance.thumbnail_ratio.original") },
+          ]}
+          value={thumbnailRatio}
+          onValueChange={(value) => {
+            setUISetting("thumbnailRatio", value as "square" | "original")
+          }}
+          renderValue={(value) => t(`appearance.thumbnail_ratio.${value as "square" | "original"}`)}
+          triggerClassName="w-48 lg:translate-y-2 -inset-8translate-y-1"
+          size="sm"
+        />
+      </div>
+      <SettingDescription>{t("appearance.thumbnail_ratio.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const CustomCSS = () => {
+  const { t } = useTranslation("settings")
+  const { present } = useModalStack()
+  return (
+    <SettingItemGroup>
+      <SettingActionItem
+        label={t("appearance.custom_css.label")}
+        action={() => {
+          present({
+            title: t("appearance.custom_css.label"),
+            content: CustomCSSModal,
+            clickOutsideToDismiss: false,
+            overlay: false,
+            resizeable: true,
+            resizeDefaultSize: {
+              width: 700,
+              height: window.innerHeight - 200,
+            },
+          })
+        }}
+        buttonText={t("appearance.custom_css.button")}
+      />
+      <SettingDescription>{t("appearance.custom_css.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+const LazyCSSEditor = lazy(() =>
+  import("../../editor/css-editor").then((m) => ({ default: m.CSSEditor })),
+)
+
+const CustomCSSModal = () => {
+  const initialCSS = useRef(getUISettings().customCSS)
+  const { t } = useTranslation("common")
+  const { dismiss } = useCurrentModal()
+  useEffect(() => {
+    return () => {
+      setUISetting("customCSS", initialCSS.current)
+    }
+  }, [])
+  useEffect(() => {
+    const modal = document.querySelector(`#${SETTING_MODAL_ID}`) as HTMLDivElement
+    if (!modal) return
+    const prevOverlay = getUISettings().modalOverlay
+    setUISetting("modalOverlay", false)
+
+    modal.style.display = "none"
+    return () => {
+      setUISetting("modalOverlay", prevOverlay)
+
+      modal.style.display = ""
+    }
+  }, [])
+  const [forceUpdate, key] = useForceUpdate()
+  return (
+    <form
+      className="relative flex h-full max-w-full flex-col"
+      onSubmit={(e) => {
+        e.preventDefault()
+        if (initialCSS.current !== getUISettings().customCSS) {
+          initialCSS.current = getUISettings().customCSS
+        }
+        dismiss()
+      }}
+    >
+      <Suspense
+        fallback={
+          <div className="center flex grow lg:h-0">
+            <LoadingCircle size="large" />
+          </div>
+        }
+      >
+        <LazyCSSEditor
+          defaultValue={initialCSS.current}
+          key={key}
+          className="h-[70vh] grow rounded-lg border p-3 font-mono lg:h-0"
+          onChange={(value) => {
+            setUISetting("customCSS", value)
+          }}
+        />
+      </Suspense>
+
+      <div className="mt-2 flex shrink-0 justify-end gap-2">
+        <Button
+          variant="outline"
+          onClick={(e) => {
+            e.preventDefault()
+
+            setUISetting("customCSS", initialCSS.current)
+
+            forceUpdate()
+          }}
+        >
+          {t("words.reset")}
+        </Button>
+        <Button type="submit">{t("words.save")}</Button>
+      </div>
+    </form>
   )
 }

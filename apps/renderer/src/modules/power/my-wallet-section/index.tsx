@@ -11,7 +11,6 @@ import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
-import { useServerConfigs } from "~/atoms/server-configs"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { apiClient } from "~/lib/api-fetch"
 import { getBlockchainExplorerUrl } from "~/lib/utils"
@@ -30,7 +29,6 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
   const { t } = useTranslation("settings")
   const wallet = useWallet()
   const myWallet = wallet.data?.[0]
-  const serverConfigs = useServerConfigs()
 
   const rewardDescriptionModal = useRewardDescriptionModal()
 
@@ -61,7 +59,7 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
   return (
     <div className={cn(className)}>
       <div className="text-sm">
-        <i className="i-mgc-power mr-0.5 size-3.5 translate-y-px text-accent" />
+        <i className="i-mgc-power mr-0.5 size-3.5 translate-y-px align-text-top text-accent" />
         <Trans
           i18nKey="wallet.power.description2"
           ns="settings"
@@ -100,6 +98,7 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
               {BigInt(myWallet.powerToken || 0n)}
             </Balance>
             <Button
+              buttonClassName={tw`rounded-full`}
               variant="ghost"
               onClick={() => refreshMutation.mutate()}
               disabled={refreshMutation.isPending}
@@ -136,11 +135,6 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
       </div>
       <Divider className="my-8" />
       <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
-      {serverConfigs?.DISABLE_PERSONAL_DAILY_POWER && (
-        <div className="my-2 text-[15px] leading-tight text-orange-500">
-          {t("wallet.power.rewardDescription3")}
-        </div>
-      )}
       <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
       <div className="my-1 text-sm">
         <Trans

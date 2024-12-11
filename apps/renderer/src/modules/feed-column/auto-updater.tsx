@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
-import { setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
+import { getUpdaterStatus, setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
 import { softBouncePreset } from "~/components/ui/constants/spring"
 import { tipcClient } from "~/lib/client"
 import { handlers } from "~/tipc"
@@ -15,16 +15,31 @@ export const AutoUpdater = () => {
 
   useEffect(() => {
     const unlisten = handlers?.updateDownloaded.listen(() => {
-      setUpdaterStatus(true)
+      setUpdaterStatus({
+        type: "app",
+        status: "ready",
+      })
     })
     return unlisten
   }, [])
 
   const handleClick = useCallback(() => {
-    setUpdaterStatus(false)
-    window.analytics?.capture("update_restart")
-
-    tipcClient?.quitAndInstall()
+    const status = getUpdaterStatus()
+    if (!status) return
+    window.analytics?.capture("update_restart", {
+      type: status.type,
+    })
+    switch (status.type) {
+      case "app": {
+        tipcClient?.quitAndInstall()
+        break
+      }
+      case "renderer": {
+        tipcClient?.rendererUpdateReload()
+        break
+      }
+    }
+    setUpdaterStatus(null)
   }, [])
 
   const playerIsShow = useAudioPlayerAtomSelector((s) => s.show)
@@ -68,7 +83,9 @@ export const AutoUpdater = () => {
         }
       />
       <div className="font-medium">{t("notify.update_info", { app_name: APP_NAME })}</div>
-      <div className="text-xs text-zinc-500">{t("notify.update_info_1")}</div>
+      <div className="text-xs text-zinc-500">
+        {updaterStatus.type === "app" ? t("notify.update_info_1") : t("notify.update_info_2")}
+      </div>
     </m.div>
   )
 }

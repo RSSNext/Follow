@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
-import { memoize } from "lodash-es"
+import { memoize } from "es-toolkit/compat"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
@@ -199,3 +199,38 @@ export { parse as parseUrl } from "tldts"
 
 export const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max)
+
+export function shallowCopy<T>(input: T): T {
+  if (Array.isArray(input)) {
+    return [...input] as T
+  } else if (input && typeof input === "object") {
+    return { ...input } as T
+  }
+  return input
+}
+
+export function isKeyForMultiSelectPressed(e: MouseEvent) {
+  if (getOS() === "macOS") {
+    return e.metaKey || e.shiftKey
+  }
+  return e.ctrlKey || e.shiftKey
+}
+
+export const toScientificNotation = (num: string, threshold: number) => {
+  const cleanNum = num.replaceAll(",", "")
+  const [intPart, decimalPart = ""] = cleanNum.split(".")
+  const numLength = intPart.replace(/^0+/, "").length
+
+  if (numLength > threshold) {
+    const fullNum = intPart + decimalPart
+    const firstDigit = fullNum.match(/[1-9]/)?.[0] || "0"
+    const position = fullNum.indexOf(firstDigit)
+    const exponent = intPart.length - position - 1
+
+    const significand = fullNum.slice(position, position + 3)
+    const formattedSignificand = `${significand[0]}.${significand.slice(1)}`
+
+    return `${formattedSignificand}e+${exponent}`
+  }
+  return num
+}

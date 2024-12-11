@@ -37,7 +37,7 @@ export const renderFeedOG = async (apiClient: ApiClient, feedId: string) => {
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
-            width: "45%",
+            width: "40%",
           }}
         >
           <OGAvatar base64={imageBase64} title={title!} />
@@ -47,7 +47,7 @@ export const renderFeedOG = async (apiClient: ApiClient, feedId: string) => {
             display: "flex",
             flexGrow: 1,
             flexShrink: 1,
-            width: "52%",
+            width: "60%",
             flexDirection: "column",
             overflow: "hidden",
             textAlign: "left",
@@ -67,7 +67,7 @@ export const renderFeedOG = async (apiClient: ApiClient, feedId: string) => {
             <p
               style={{
                 fontSize: "1.8rem",
-                height: "5.8rem",
+                height: "5.6rem",
                 overflow: "hidden",
                 lineClamp: 2,
                 color: "#000000",

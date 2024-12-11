@@ -10,16 +10,15 @@
     }
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "dependencies": {
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
-    "foxact": "0.2.39",
-    "jotai": "2.10.1",
-    "lodash-es": "4.17.21",
+    "foxact": "0.2.43",
+    "jotai": "2.10.3",
     "usehooks-ts": "3.1.0"
   }
 }

@@ -1,36 +1,20 @@
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { repository } from "@pkg"
-import i18next from "i18next"
 import type { FC } from "react"
-import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
+import { Suspense, useDeferredValue, useLayoutEffect, useState } from "react"
 import { Trans } from "react-i18next"
 
 import { ModalClose } from "~/components/ui/modal/stacked/components"
 import { SettingsTitle } from "~/modules/settings/title"
 
-import { settings } from "../constants"
+import { getSettingPages } from "../settings-glob"
 import { SettingTabProvider, useSettingTab } from "./context"
 import { SettingModalLayout } from "./layout"
 
-const pages = (() => {
-  const pages = {}
-  for (const setting of settings) {
-    const filename = setting.path
-
-    pages[filename] = {
-      Component: setting.Component,
-      loader: setting.loader,
-    }
-  }
-  return pages
-})()
 export const SettingModalContent: FC<{
   initialTab?: string
 }> = ({ initialTab }) => {
-  useEffect(() => {
-    // load i18n
-    i18next.loadNamespaces("settings")
-  }, [])
+  const pages = getSettingPages()
   return (
     <SettingTabProvider>
       <SettingModalLayout
@@ -44,6 +28,7 @@ export const SettingModalContent: FC<{
 
 const Content = () => {
   const key = useDeferredValue(useSettingTab() || "general")
+  const pages = getSettingPages()
   const { Component, loader } = pages[key]
 
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null)

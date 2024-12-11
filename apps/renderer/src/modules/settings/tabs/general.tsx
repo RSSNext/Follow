@@ -1,37 +1,31 @@
-import { Button } from "@follow/components/ui/button/index.js"
-import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@follow/components/ui/select/index.jsx"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
+import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { env } from "@follow/shared/env"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
+import { useLocation, useRevalidator } from "react-router"
 
 import { currentSupportedLanguages } from "~/@types/constants"
 import { defaultResources } from "~/@types/default-resource"
 import { langLoadingLockMapAtom } from "~/atoms/lang"
 import {
   setGeneralSetting,
+  useGeneralSettingKey,
   useGeneralSettingSelector,
   useGeneralSettingValue,
 } from "~/atoms/settings/general"
-import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
+import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTraySetting"
 import { fallbackLanguage } from "~/i18n"
-import { initAnalytics } from "~/initialize/analytics"
 import { tipcClient } from "~/lib/client"
-import { clearLocalPersistStoreData } from "~/store/utils/clear"
+import { LanguageMap } from "~/lib/translate"
+import { setTranslationCache } from "~/modules/entry-content/atoms"
 
-import { SettingDescription, SettingInput } from "../control"
+import { SettingDescription, SettingInput, SettingSwitch } from "../control"
 import { createSetting } from "../helper/builder"
 import { SettingItemGroup } from "../section"
 
@@ -53,7 +47,7 @@ export const SettingGeneral = () => {
     setGeneralSetting("appLaunchOnStartup", checked)
   }, [])
 
-  const { present } = useModalStack()
+  const isMobile = useMobile()
 
   return (
     <div className="mt-4">
@@ -71,7 +65,20 @@ export const SettingGeneral = () => {
               saveLoginSetting(value)
             },
           }),
+          IN_ELECTRON && MinimizeToTraySetting,
+          isMobile && StartupScreenSelector,
           LanguageSelector,
+          TranslateLanguageSelector,
+
+          {
+            type: "title",
+            value: t("general.sidebar"),
+          },
+          defineSettingItem("autoGroup", {
+            label: t("general.auto_group.label"),
+            description: t("general.auto_group.description"),
+          }),
+
           {
             type: "title",
             value: t("general.timeline"),
@@ -85,16 +92,31 @@ export const SettingGeneral = () => {
             description: t("general.group_by_date.description"),
           }),
 
+          defineSettingItem("autoExpandLongSocialMedia", {
+            label: t("general.auto_expand_long_social_media.label"),
+            description: t("general.auto_expand_long_social_media.description"),
+          }),
+          isMobile &&
+            defineSettingItem("showQuickTimeline", {
+              label: t("general.show_quick_timeline.label"),
+              description: t("general.show_quick_timeline.description"),
+            }),
+
+          defineSettingItem("reduceRefetch", {
+            label: t("general.reduce_refetch.label"),
+            description: t("general.reduce_refetch.description"),
+          }),
           { type: "title", value: t("general.unread") },
 
           defineSettingItem("scrollMarkUnread", {
             label: t("general.mark_as_read.scroll.label"),
             description: t("general.mark_as_read.scroll.description"),
           }),
-          defineSettingItem("hoverMarkUnread", {
-            label: t("general.mark_as_read.hover.label"),
-            description: t("general.mark_as_read.hover.description"),
-          }),
+          !isMobile &&
+            defineSettingItem("hoverMarkUnread", {
+              label: t("general.mark_as_read.hover.label"),
+              description: t("general.mark_as_read.hover.description"),
+            }),
           defineSettingItem("renderMarkUnread", {
             label: t("general.mark_as_read.render.label"),
             description: t("general.mark_as_read.render.description"),
@@ -104,74 +126,6 @@ export const SettingGeneral = () => {
 
           IN_ELECTRON && VoiceSelector,
 
-          // { type: "title", value: "Secure" },
-          // defineSettingItem("jumpOutLinkWarn", {
-          //   label: "Warn when opening external links",
-          //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
-          // }),
-          {
-            type: "title",
-            value: t("general.privacy_data"),
-          },
-
-          defineSettingItem("dataPersist", {
-            label: t("general.data_persist.label"),
-            description: t("general.data_persist.description"),
-          }),
-
-          defineSettingItem("sendAnonymousData", {
-            label: t("general.send_anonymous_data.label"),
-            description: t("general.send_anonymous_data.description"),
-            onChange(value) {
-              setGeneralSetting("sendAnonymousData", value)
-              if (value) {
-                initAnalytics()
-              } else {
-                window.analytics?.reset()
-                delete window.analytics
-              }
-            },
-          }),
-          {
-            label: t("general.rebuild_database.label"),
-            action: () => {
-              present({
-                title: t("general.rebuild_database.title"),
-                clickOutsideToDismiss: true,
-                content: () => (
-                  <div className="text-sm">
-                    <p>{t("general.rebuild_database.warning.line1")}</p>
-                    <p>{t("general.rebuild_database.warning.line2")}</p>
-                    <div className="mt-4 flex justify-end">
-                      <Button
-                        className="bg-red-500 px-3 text-white"
-                        onClick={async () => {
-                          await clearLocalPersistStoreData()
-                          window.location.reload()
-                        }}
-                      >
-                        {t("ok", { ns: "common" })}
-                      </Button>
-                    </div>
-                  </div>
-                ),
-              })
-            },
-            description: t("general.rebuild_database.description"),
-            buttonText: t("general.rebuild_database.button"),
-          },
-          {
-            label: t("general.export.label"),
-            description: t("general.export.description"),
-            buttonText: t("general.export.button"),
-            action: () => {
-              const link = document.createElement("a")
-              link.href = `${env.VITE_API_URL}/subscriptions/export`
-              link.download = "follow.opml"
-              link.click()
-            },
-          },
-
           { type: "title", value: t("general.network"), disabled: !IN_ELECTRON },
           IN_ELECTRON && NettingSetting,
         ]}
@@ -180,7 +134,7 @@ export const SettingGeneral = () => {
   )
 }
 
-export const VoiceSelector = () => {
+const VoiceSelector = () => {
   const { t } = useTranslation("settings")
 
   const { data } = useQuery({
@@ -190,29 +144,27 @@ export const VoiceSelector = () => {
       persist: true,
     },
   })
-  const voice = useUISettingSelector((state) => state.voice)
+
+  const voice = useGeneralSettingKey("voice")
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("general.voices")}</span>
-      <Select
-        defaultValue={createDefaultSettings().voice}
+      <ResponsiveSelect
+        size="sm"
+        triggerClassName="w-48"
+        defaultValue={voice}
         value={voice}
         onValueChange={(value) => {
-          setUISetting("voice", value)
+          setGeneralSetting("voice", value)
         }}
-      >
-        <SelectTrigger size="sm" className="w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent position="item-aligned">
-          {data?.map((item) => (
-            <SelectItem key={item.ShortName} value={item.ShortName}>
-              {item.FriendlyName}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        items={
+          data?.map((item) => ({
+            label: item.FriendlyName,
+            value: item.ShortName,
+          })) ?? []
+        }
+      />
     </div>
   )
 }
@@ -234,26 +186,25 @@ export const LanguageSelector = ({
 
   const [loadingLanguageLockMap] = useAtom(langLoadingLockMapAtom)
 
+  const isMobile = useMobile()
+
   return (
     <div className={cn("mb-3 mt-4 flex items-center justify-between", containerClassName)}>
       <span className="shrink-0 text-sm font-medium">{t("general.language")}</span>
-      <Select
+
+      <ResponsiveSelect
+        size="sm"
+        triggerClassName="w-48"
+        contentClassName={contentClassName}
         defaultValue={finalRenderLanguage}
         value={finalRenderLanguage}
         disabled={loadingLanguageLockMap[finalRenderLanguage]}
         onValueChange={(value) => {
           setGeneralSetting("language", value as string)
         }}
-      >
-        <SelectTrigger
-          size="sm"
-          className={cn("w-48", loadingLanguageLockMap[finalRenderLanguage] && "opacity-50")}
-        >
-          <SelectValue />
-          {loadingLanguageLockMap[finalRenderLanguage] && <LoadingCircle size="small" />}
-        </SelectTrigger>
-        <SelectContent position="item-aligned" className={contentClassName}>
-          {currentSupportedLanguages.map((lang) => {
+        renderItem={useTypeScriptHappyCallback(
+          (item) => {
+            const lang = item.value
             const percent = I18N_COMPLETENESS_MAP[lang]
 
             const languageName =
@@ -262,8 +213,12 @@ export const LanguageSelector = ({
                 : langT(`langs.${lang}` as any)
 
             const originalLanguageName = defaultResources[lang].lang.name
+
+            if (isMobile) {
+              return `${languageName} - ${originalLanguageName} (${percent}%)`
+            }
             return (
-              <SelectItem className="group" key={lang} value={lang}>
+              <span className="group" key={lang}>
                 <span
                   className={cn(originalLanguageName !== languageName && "group-hover:invisible")}
                 >
@@ -278,11 +233,38 @@ export const LanguageSelector = ({
                     {originalLanguageName}
                   </span>
                 )}
-              </SelectItem>
+              </span>
             )
-          })}
-        </SelectContent>
-      </Select>
+          },
+          [langT],
+        )}
+        items={currentSupportedLanguages.map((lang) => ({
+          label: langT(`langs.${lang}` as any),
+          value: lang,
+        }))}
+      />
+    </div>
+  )
+}
+
+const TranslateLanguageSelector = () => {
+  const { t } = useTranslation("settings")
+  const translationLanguage = useGeneralSettingKey("translationLanguage")
+
+  return (
+    <div className="mb-3 mt-4 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("general.translation_language")}</span>
+      <ResponsiveSelect
+        size="sm"
+        triggerClassName="w-48"
+        defaultValue={translationLanguage}
+        value={translationLanguage}
+        onValueChange={(value) => {
+          setGeneralSetting("translationLanguage", value)
+          setTranslationCache({})
+        }}
+        items={Object.values(LanguageMap)}
+      />
     </div>
   )
 }
@@ -303,5 +285,57 @@ const NettingSetting = () => {
       />
       <SettingDescription>{t("general.proxy.description")}</SettingDescription>
     </SettingItemGroup>
+  )
+}
+
+const MinimizeToTraySetting = () => {
+  const { t } = useTranslation("settings")
+  const minimizeToTray = useMinimizeToTrayValue()
+  const setMinimizeToTray = useSetMinimizeToTray()
+  return (
+    <SettingItemGroup>
+      <SettingSwitch
+        checked={minimizeToTray}
+        className="mt-4"
+        onCheckedChange={setMinimizeToTray}
+        label={t("general.minimize_to_tray.label")}
+      />
+      <SettingDescription>{t("general.minimize_to_tray.description")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const StartupScreenSelector = () => {
+  const { t } = useTranslation("settings")
+  const startupScreen = useGeneralSettingKey("startupScreen")
+  const revalidator = useRevalidator()
+  const { pathname } = useLocation()
+
+  return (
+    <div className="mb-3 mt-4 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("general.startup_screen.title")}</span>
+      <ResponsiveSelect
+        size="sm"
+        items={[
+          {
+            label: t("general.startup_screen.timeline"),
+            value: "timeline",
+          },
+          {
+            label: t("general.startup_screen.subscription"),
+            value: "subscription",
+          },
+        ]}
+        triggerClassName="w-48"
+        defaultValue={startupScreen}
+        value={startupScreen}
+        onValueChange={(value) => {
+          setGeneralSetting("startupScreen", value as "subscription" | "timeline")
+          if (value === "timeline" && pathname === "/") {
+            revalidator.revalidate()
+          }
+        }}
+      />
+    </div>
   )
 }

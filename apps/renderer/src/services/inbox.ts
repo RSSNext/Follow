@@ -5,9 +5,9 @@ import { inboxActions } from "~/store/inbox"
 
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
-class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
+class ServiceStatic extends BaseService<{ id: string }> implements Hydratable {
   constructor() {
     super(browserDB.inboxes)
   }

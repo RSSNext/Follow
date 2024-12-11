@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
-import { cn } from "@follow/utils/utils"
+import { cn, toScientificNotation } from "@follow/utils/utils"
 import { format } from "dnum"
 
 export const Balance = ({
@@ -9,6 +9,7 @@ export const Balance = ({
   precision = 2,
   withSuffix = false,
   withTooltip = false,
+  scientificThreshold = 6,
 }: {
   /** The token balance in wei. */
   children: bigint | string
@@ -17,6 +18,7 @@ export const Balance = ({
   precision?: number
   withSuffix?: boolean
   withTooltip?: boolean
+  scientificThreshold?: number
 }) => {
   const n = [BigInt(children || 0n) || BigInt(value || 0n), 18] as const
   const formatted = format(n, { digits: precision, trailingZeros: true })
@@ -24,10 +26,8 @@ export const Balance = ({
 
   const Content = (
     <span className={cn("tabular-nums", className)}>
-      {withSuffix && (
-        <i className="i-mgc-power mr-1 translate-y-[-3px] align-text-bottom text-accent" />
-      )}
-      <span>{formatted}</span>
+      {withSuffix && <i className="i-mgc-power mr-1 -translate-y-px align-middle text-accent" />}
+      <span>{withTooltip ? toScientificNotation(formatted, scientificThreshold) : formatted}</span>
     </span>
   )
 

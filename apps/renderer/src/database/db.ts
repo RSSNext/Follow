@@ -10,6 +10,7 @@ import {
   dbSchemaV5,
   dbSchemaV6,
   dbSchemaV7,
+  dbSchemaV8,
 } from "./db_schema"
 import type { DB_Cleaner } from "./schemas/cleaner"
 import type { DB_Entry, DB_EntryRelated } from "./schemas/entry"
@@ -49,6 +50,7 @@ class BrowserDB extends Dexie {
     this.version(5).stores(dbSchemaV5)
     this.version(6).stores(dbSchemaV6)
     this.version(7).stores(dbSchemaV7)
+    this.version(8).stores(dbSchemaV8).upgrade(this.upgradeToV8)
 
     this.entries = this.table("entries")
     this.feeds = this.table("feeds")
@@ -64,9 +66,28 @@ class BrowserDB extends Dexie {
     const session = trans.table("feedUnreads")
     session.delete("feedId")
   }
+
+  async upgradeToV8(trans: Transaction) {
+    // Fix https://github.com/RSSNext/Follow/issues/1308
+    const session = trans.table("feeds")
+    return session.toCollection().modify((feed) => {
+      if (!feed.tipUsers || Array.isArray(feed.tipUsers)) return
+      feed.tipUsers = []
+    })
+  }
 }
 
 export const browserDB = new BrowserDB()
+
+export const exportDB = async () => {
+  await import("dexie-export-import")
+  const blob = await browserDB.export({ prettyJson: true })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `${LOCAL_DB_NAME}.json`
+  a.click()
+}
 
 // ================================================ //
 // ================================================ //

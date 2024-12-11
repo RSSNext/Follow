@@ -2,7 +2,7 @@ import fs from "node:fs"
 import path, { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { set } from "lodash-es"
+import { set } from "es-toolkit/compat"
 import type { Plugin } from "vite"
 
 export function localesPlugin(): Plugin {

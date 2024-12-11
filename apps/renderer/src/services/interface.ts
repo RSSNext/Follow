@@ -1,3 +1,3 @@
-export interface Hydable {
+export interface Hydratable {
   hydrate: () => Promise<void>
 }

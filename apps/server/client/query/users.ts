@@ -1,5 +1,6 @@
 import { apiClient } from "@client/lib/api-fetch"
 import { getHydrateData } from "@client/lib/helper"
+import { getProviders } from "@follow/shared/auth"
 import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 
@@ -53,5 +54,22 @@ export const useUserQuery = (handleOrId: string | undefined) => {
     queryFn: () => fetchUser(handleOrId),
     enabled: !!handleOrId,
     initialData: getHydrateData(`profiles.$get,query:id=${handleOrId}`),
+  })
+}
+
+export const useAuthProviders = () => {
+  return useQuery({
+    queryKey: ["providers"],
+    queryFn: async () => (await getProviders()).data,
+    placeholderData: {
+      google: {
+        id: "google",
+        name: "Google",
+      },
+      github: {
+        id: "github",
+        name: "GitHub",
+      },
+    },
   })
 }

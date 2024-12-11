@@ -14,7 +14,7 @@ export function LottieRenderContainer() {
 
   return (
     <RootPortal>
-      <div className="pointer-events-none fixed z-[999]" data-testid="lottie-render-container">
+      <div className="pointer-events-none fixed z-[9999]" data-testid="lottie-render-container">
         {elements.map((element) => element)}
       </div>
     </RootPortal>

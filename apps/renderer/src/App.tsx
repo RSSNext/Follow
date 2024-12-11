@@ -1,7 +1,8 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn, getOS } from "@follow/utils/utils"
-import { useEffect, useLayoutEffect } from "react"
-import { Outlet } from "react-router-dom"
+import { useEffect } from "react"
+import { Outlet } from "react-router"
 
 import { queryClient } from "~/lib/query-client"
 
@@ -9,6 +10,7 @@ import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
 import { navigateEntry } from "./hooks/biz/useNavigateEntry"
 import { applyAfterReadyCallbacks } from "./initialize/queue"
+import { removeAppSkeleton } from "./lib/app"
 import { appLog } from "./lib/log"
 import { Titlebar } from "./modules/app/Titlebar"
 import { RootProviders } from "./providers/root-providers"
@@ -27,22 +29,6 @@ function App() {
     })
 
     return cleanup
-  }, [])
-
-  useLayoutEffect(() => {
-    // Electron app register in app scope, but web app should register in window scope
-    if (IN_ELECTRON) return
-    const handleOpenSettings = (e) => {
-      if (e.key === "," && (e.metaKey || e.ctrlKey)) {
-        window.router.showSettings()
-        e.preventDefault()
-      }
-    }
-    document.addEventListener("keydown", handleOpenSettings)
-
-    return () => {
-      document.removeEventListener("keydown", handleOpenSettings)
-    }
   }, [])
 
   const windowsElectron = IN_ELECTRON && getOS() === "Windows"
@@ -69,6 +55,8 @@ const AppLayer = () => {
   const appIsReady = useAppIsReady()
 
   useEffect(() => {
+    removeAppSkeleton()
+
     const doneTime = Math.trunc(performance.now())
     window.analytics?.capture("ui_render_init", {
       time: doneTime,
@@ -76,6 +64,17 @@ const AppLayer = () => {
     appLog("App is ready", `${doneTime}ms`)
 
     applyAfterReadyCallbacks()
+
+    if (isMobile()) {
+      const handler = (e: MouseEvent) => {
+        e.preventDefault()
+      }
+      document.addEventListener("contextmenu", handler)
+
+      return () => {
+        document.removeEventListener("contextmenu", handler)
+      }
+    }
   }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />

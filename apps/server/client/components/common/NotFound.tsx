@@ -1,7 +1,7 @@
 import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
-import { useLocation } from "react-router-dom"
+import { useLocation } from "react-router"
 
 export const NotFound = () => {
   const location = useLocation()

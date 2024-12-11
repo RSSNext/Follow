@@ -20,7 +20,6 @@ const getFeedIconSrc = ({
   fallback?: boolean
   proxy?: { height: number; width: number }
 } = {}) => {
-  // src ? getProxyUrl(src) : "";
   if (src) {
     if (proxy) {
       return [
@@ -64,6 +63,21 @@ const FallbackableImage = forwardRef<
     />
   )
 })
+
+type FeedIconFeed =
+  | (Pick<FeedModel, "ownerUserId" | "id" | "title" | "url" | "image"> & {
+      type: FeedOrListRespModel["type"]
+      siteUrl?: string
+    })
+  | FeedOrListRespModel
+
+type FeedIconEntry = Pick<CombinedEntryModel["entries"], "media" | "authorAvatar">
+const fadeInVariant = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+}
+
+const isIconLoadedSet = new Set<string>()
 export function FeedIcon({
   feed,
   entry,
@@ -71,11 +85,14 @@ export function FeedIcon({
   className,
   size = 20,
   fallback = true,
+  fallbackElement,
   siteUrl,
   useMedia,
+  disableFadeIn,
+  noMargin,
 }: {
-  feed?: FeedOrListRespModel | null
-  entry?: CombinedEntryModel["entries"]
+  feed?: FeedIconFeed | null
+  entry?: FeedIconEntry | null
   fallbackUrl?: string
   className?: string
   size?: number
@@ -84,9 +101,13 @@ export function FeedIcon({
    * Image loading error fallback to site icon
    */
   fallback?: boolean
+  fallbackElement?: ReactNode
 
   useMedia?: boolean
+  disableFadeIn?: boolean
+  noMargin?: boolean
 }) {
+  const marginClassName = noMargin ? "" : "mr-2"
   const image =
     (useMedia
       ? entry?.media?.find((i) => i.type === "photo")?.url || entry?.authorAvatar
@@ -113,8 +134,8 @@ export function FeedIcon({
   const colorfulStyle: React.CSSProperties = useMemo(() => {
     const [, , , bgAccent, bgAccentLight, bgAccentUltraLight] = colors
     return {
-      // Create a bottom-left to top-right avatar fallback background gradient
-      backgroundImage: `linear-gradient(to top right, ${bgAccent} 20%, ${bgAccentLight} 80%, ${bgAccentUltraLight} 95%)`,
+      backgroundImage: `linear-gradient(to top, ${bgAccent} 0%, ${bgAccentLight} 99%, ${bgAccentUltraLight} 100%)`,
+
       ...sizeStyle,
     }
   }, [colors, sizeStyle])
@@ -125,7 +146,7 @@ export function FeedIcon({
       className={cn(
         "flex shrink-0 items-center justify-center rounded-sm",
         "text-white",
-        "mr-2",
+        marginClassName,
         className,
       )}
     >
@@ -146,9 +167,12 @@ export function FeedIcon({
       })
       finalSrc = src
 
+      const isIconLoaded = isIconLoadedSet.has(src)
+      isIconLoadedSet.add(src)
+
       ImageElement = (
-        <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
-          <m.img style={sizeStyle} initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
+        <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center", className)}>
+          <m.img style={sizeStyle} {...(disableFadeIn || isIconLoaded ? {} : fadeInVariant)} />
         </PlatformIcon>
       )
       break
@@ -159,13 +183,15 @@ export function FeedIcon({
         width: size * 2,
         height: size * 2,
       })
+      const isIconLoaded = isIconLoadedSet.has(finalSrc)
+      isIconLoadedSet.add(finalSrc)
+
       ImageElement = (
-        <PlatformIcon url={image} style={sizeStyle} className={cn("center mr-2", className)}>
+        <PlatformIcon url={image} style={sizeStyle} className={cn("center", className)}>
           <m.img
-            className={cn("mr-2", className)}
+            className={cn(marginClassName, className)}
             style={sizeStyle}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            {...(disableFadeIn || isIconLoaded ? {} : fadeInVariant)}
           />
         </PlatformIcon>
       )
@@ -187,10 +213,10 @@ export function FeedIcon({
         <PlatformIcon
           url={(feed as FeedModel)?.siteUrl || fallbackUrl}
           style={sizeStyle}
-          className={cn("center mr-2", className)}
+          className={cn("center", className)}
         >
           <FallbackableImage
-            className={cn("mr-2", className)}
+            className={cn(marginClassName, className)}
             style={sizeStyle}
             fallbackUrl={fallbackSrc}
           />
@@ -199,7 +225,9 @@ export function FeedIcon({
       break
     }
     case feed?.type === "inbox": {
-      ImageElement = <i className="i-mgc-inbox-cute-fi mr-2 shrink-0" style={sizeStyle} />
+      ImageElement = (
+        <i className={cn("i-mgc-inbox-cute-fi shrink-0", marginClassName)} style={sizeStyle} />
+      )
       break
     }
     case !!feed?.title && !!feed.title[0]: {
@@ -207,7 +235,9 @@ export function FeedIcon({
       break
     }
     default: {
-      ImageElement = <i className="i-mgc-link-cute-re mr-2 shrink-0" style={sizeStyle} />
+      ImageElement = (
+        <i className={cn("i-mgc-link-cute-re shrink-0", marginClassName)} style={sizeStyle} />
+      )
       break
     }
   }
@@ -218,11 +248,13 @@ export function FeedIcon({
 
   if (fallback && !!finalSrc) {
     return (
-      <Avatar className="shrink-0">
+      <Avatar className={cn("shrink-0", marginClassName)} style={sizeStyle}>
         <AvatarImage className="rounded-sm object-cover" asChild src={finalSrc}>
           {ImageElement}
         </AvatarImage>
-        <AvatarFallback asChild>{fallbackIcon}</AvatarFallback>
+        <AvatarFallback delayMs={200} asChild>
+          {fallbackElement || fallbackIcon}
+        </AvatarFallback>
       </Avatar>
     )
   }
@@ -231,12 +263,12 @@ export function FeedIcon({
   if (!finalSrc) return ImageElement
   // Else
   return (
-    <Avatar className="shrink-0">
+    <Avatar className={cn("shrink-0", marginClassName)} style={sizeStyle}>
       <AvatarImage asChild src={finalSrc}>
         {ImageElement}
       </AvatarImage>
-      <AvatarFallback>
-        <div className={cn("mr-2", className)} style={sizeStyle} data-placeholder={finalSrc} />
+      <AvatarFallback delayMs={200}>
+        <div className={className} style={sizeStyle} data-placeholder={finalSrc} />
       </AvatarFallback>
     </Avatar>
   )

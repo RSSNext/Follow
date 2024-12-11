@@ -1,15 +1,15 @@
-import { uniq } from "lodash-es"
+import { uniq } from "es-toolkit/compat"
 
 import { browserDB } from "~/database"
 import type { SubscriptionFlatModel } from "~/store/subscription"
 import { subscriptionActions } from "~/store/subscription/store"
 
 import { BaseService } from "./base"
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
 type SubscriptionModelWithId = SubscriptionFlatModel & { id: string }
 
-class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> implements Hydable {
+class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> implements Hydratable {
   constructor() {
     super(browserDB.subscriptions)
   }
@@ -49,6 +49,16 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> imp
 
   async changeView(feedId: string, view: number) {
     return this.table.where("feedId").equals(feedId).modify({ view })
+  }
+  async changeViews(feedIdList: string[], view: number) {
+    return this.table.where("feedId").anyOf(feedIdList).modify({ view })
+  }
+
+  async updateCategory(feedId: string, category?: string | null) {
+    return this.table.where("feedId").equals(feedId).modify({ category })
+  }
+  async updateCategories(feedIdList: string[], category?: string | null) {
+    return this.table.where("feedId").anyOf(feedIdList).modify({ category })
   }
 
   async removeSubscription(userId: string, feedId: string): Promise<void>

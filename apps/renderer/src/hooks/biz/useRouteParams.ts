@@ -1,7 +1,7 @@
 import { getReadonlyRoute, useReadonlyRouteSelector } from "@follow/components/atoms/route.js"
 import { FeedViewType } from "@follow/constants"
-import type { Params } from "react-router-dom"
-import { useParams, useSearchParams } from "react-router-dom"
+import type { Params } from "react-router"
+import { useParams, useSearchParams } from "react-router"
 
 import {
   FEED_COLLECTION_LIST,
@@ -77,12 +77,11 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
 }
 
 export const useRouteParams = () => {
-  const params = useParams()
-  const [search] = useSearchParams()
-
-  return parseRouteParams(params, search)
+  return useRouteParamsSelector((s) => s)
 }
+
 const noop = [] as any[]
+
 export const useRouteParamsSelector = <T>(
   selector: (params: BizRouteParams) => T,
   deps = noop,

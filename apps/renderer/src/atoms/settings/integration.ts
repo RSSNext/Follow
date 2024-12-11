@@ -14,14 +14,20 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   instapaperUsername: "",
   instapaperPassword: "",
 
-  // omnivore
-  enableOmnivore: false,
-  omnivoreEndpoint: "",
-  omnivoreToken: "",
-
   // obsidian
   enableObsidian: false,
   obsidianVaultPath: "",
+
+  // outline
+  enableOutline: false,
+  outlineEndpoint: "",
+  outlineToken: "",
+  outlineCollection: "",
+
+  // readeck
+  enableReadeck: false,
+  readeckEndpoint: "",
+  readeckToken: "",
 })
 
 export const {

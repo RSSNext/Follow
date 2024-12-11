@@ -45,8 +45,6 @@ export type DefinedQuery<TQueryKey extends QueryKey, TData> = Readonly<{
     restore: () => void
     invalidate: () => void
   }>
-
-  structuralSharing?: boolean
 }>
 
 export type DefinedQueryOptions<TData> = {
@@ -60,8 +58,6 @@ export type DefinedQueryOptions<TData> = {
   onRefetchRoot?: () => void
   onOptimisticUpdate?: () => void
   onOptimisticUpdateRestore?: () => void
-
-  structuralSharing?: boolean
 }
 
 export function defineQuery<
@@ -171,8 +167,6 @@ export function defineQuery<
     optimisticInfiniteUpdate(updater) {
       return queryDefine.optimisticUpdate<InfiniteData<TData>>(updater)
     },
-
-    structuralSharing: options?.structuralSharing,
   }
 
   return Object.freeze(queryDefine)

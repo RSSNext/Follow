@@ -1,19 +1,20 @@
 import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
-import { useAnyPointDown } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
+import { useShowContextMenu } from "~/atoms/context-menu"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { showNativeMenu } from "~/lib/native-menu"
+import { useContextMenu } from "~/hooks/common/useContextMenu"
+import { COMMAND_ID } from "~/modules/command/commands/id"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -25,21 +26,19 @@ export const EntryItemWrapper: FC<
     style?: React.CSSProperties
   } & PropsWithChildren
 > = ({ entry, view, children, itemClassName, style }) => {
-  const { items } = useEntryActions({
-    view,
-    entry,
-    type: "entryList",
-  })
-
-  const { items: feedItems } = useFeedActions({
-    feedId: entry.feedId,
+  const actionConfigs = useEntryActions({ entryId: entry.entries.id })
+  const feedItems = useFeedActions({
+    feedId: entry.feedId || entry.inboxId,
     view,
     type: "entryList",
   })
 
   const { t } = useTranslation("common")
 
-  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
+  const isActive = useRouteParamsSelector(
+    ({ entryId }) => entryId === entry.entries.id,
+    [entry.entries.id],
+  )
 
   const asRead = useAsRead(entry)
   const hoverMarkUnread = useGeneralSettingKey("hoverMarkUnread")
@@ -63,30 +62,54 @@ export const EntryItemWrapper: FC<
     (e) => {
       e.stopPropagation()
 
+      if (!asRead) {
+        entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
+      }
       navigate({
         entryId: entry.entries.id,
       })
     },
-    [entry.entries.id, navigate],
+    [asRead, entry.entries.id, entry.feedId, navigate],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     () => entry.entries.url && window.open(entry.entries.url, "_blank"),
     [entry.entries.url],
   )
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => isContextMenuOpen && setIsContextMenuOpen(false))
-  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
+  const showContextMenu = useShowContextMenu()
+
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
+      const $target = e.target as HTMLElement
+      const selection = window.getSelection()
+      if (selection) {
+        const targetHasSelection =
+          selection?.toString().length > 0 && $target.contains(selection?.anchorNode)
+        if (targetHasSelection) {
+          e.stopPropagation()
+          return
+        }
+      }
+
       e.preventDefault()
       setIsContextMenuOpen(true)
-      showNativeMenu(
+      await showContextMenu(
         [
-          ...items
-            .filter((item) => !item.hide)
+          ...actionConfigs
+            .filter(
+              (item) =>
+                !(
+                  [
+                    COMMAND_ID.entry.viewSourceContent,
+                    COMMAND_ID.entry.toggleAISummary,
+                    COMMAND_ID.entry.toggleAITranslation,
+                  ] as string[]
+                ).includes(item.id),
+            )
             .map((item) => ({
               type: "text" as const,
               label: item.name,
-              click: () => item.onClick(e),
+              click: () => item.onClick(),
               shortcut: item.shortcut,
             })),
           {
@@ -107,9 +130,9 @@ export const EntryItemWrapper: FC<
         ],
         e,
       )
+      setIsContextMenuOpen(false)
     },
-    [items, feedItems, t, entry.entries.id],
-  )
+  })
 
   return (
     <div data-entry-id={entry.entries.id} style={style}>
@@ -117,7 +140,7 @@ export const EntryItemWrapper: FC<
         className={cn(
           "relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
-          views[view as FeedViewType]?.wideMode ? "rounded-md" : "-mx-2 px-2",
+          views[view as FeedViewType]?.wideMode ? "rounded-md" : "px-2",
           "duration-200 hover:bg-theme-item-hover",
           (isActive || isContextMenuOpen) && "!bg-theme-item-active",
           itemClassName,
@@ -126,7 +149,7 @@ export const EntryItemWrapper: FC<
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseEnter.cancel}
         onDoubleClick={handleDoubleClick}
-        onContextMenu={handleContextMenu}
+        {...contextMenuProps}
       >
         {children}
       </div>

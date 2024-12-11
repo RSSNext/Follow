@@ -1,5 +1,6 @@
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
+import { omit } from "es-toolkit/compat"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { createContext, memo, useContext, useMemo, useState } from "react"
@@ -13,8 +14,6 @@ import { usePreviewMedia } from "./media/hooks"
 import type { VideoPlayerRef } from "./media/VideoPlayer"
 import { VideoPlayer } from "./media/VideoPlayer"
 
-const failedList = new Set<string | undefined>()
-
 type BaseProps = {
   mediaContainerClassName?: string
   showFallback?: boolean
@@ -23,6 +22,8 @@ type BaseProps = {
   inline?: boolean
   fitContent?: boolean
 }
+
+const isImageLoadedSet = new Set<string>()
 export type MediaProps = BaseProps &
   (
     | (ImgHTMLAttributes<HTMLImageElement> & {
@@ -30,6 +31,7 @@ export type MediaProps = BaseProps &
           width: number
           height: number
         }
+        preferOrigin?: boolean
         popper?: boolean
         type: "photo"
         previewImageUrl?: string
@@ -40,14 +42,17 @@ export type MediaProps = BaseProps &
           width: number
           height: number
         }
+        preferOrigin?: boolean
         popper?: boolean
         type: "video"
         previewImageUrl?: string
       })
   )
+
 const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,
+  preferOrigin,
   popper = false,
   mediaContainerClassName,
   thumbnail,
@@ -74,43 +79,70 @@ const MediaImpl: FC<MediaProps> = ({
   const finalHeight = height || ctxHeight
   const finalWidth = width || ctxWidth
 
+  const [currentState, setCurrentState] = useState<"proxy" | "origin" | "error">(() =>
+    proxy && !preferOrigin ? "proxy" : "origin",
+  )
+
   const [imgSrc, setImgSrc] = useState(() =>
-    proxy && src && !failedList.has(src)
+    currentState === "proxy" && src
       ? getImageProxyUrl({
           url: src,
-          width: proxy.width,
-          height: proxy.height,
+          width: proxy?.width || 0,
+          height: proxy?.height || 0,
         })
       : src,
   )
 
   const previewImageSrc = useMemo(
     () =>
-      proxy && previewImageUrl
+      currentState === "proxy" && previewImageUrl
         ? getImageProxyUrl({
             url: previewImageUrl,
-            width: proxy.width,
-            height: proxy.height,
+            width: proxy?.width || 0,
+            height: proxy?.height || 0,
           })
         : previewImageUrl,
-    [previewImageUrl, proxy],
+    [currentState, previewImageUrl, proxy?.width, proxy?.height],
   )
 
-  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
-  const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
-    if (imgSrc !== props.src) {
-      setImgSrc(props.src)
-      failedList.add(props.src)
-    } else {
-      setMediaLoadState("error")
+  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded">(() => {
+    if (imgSrc) {
+      return isImageLoadedSet.has(imgSrc) ? "loaded" : "loading"
+    }
+    return "loading"
+  })
 
-      props.onError?.(e as any)
+  const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback(() => {
+    switch (currentState) {
+      case "proxy": {
+        if (imgSrc !== props.src && props.src) {
+          setImgSrc(props.src)
+        } else {
+          setCurrentState("error")
+        }
+        break
+      }
+      case "origin": {
+        if (imgSrc === props.src && props.src) {
+          setImgSrc(
+            getImageProxyUrl({
+              url: props.src,
+              width: proxy?.width || 0,
+              height: proxy?.height || 0,
+            }),
+          )
+        } else {
+          setCurrentState("error")
+        }
+        break
+      }
     }
   })
 
-  const isError = mediaLoadState === "error"
+  const isError = currentState === "error"
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
+    e.preventDefault()
     if (popper && src) {
       const width = Number.parseInt(props.width as string)
       const height = Number.parseInt(props.height as string)
@@ -133,6 +165,10 @@ const MediaImpl: FC<MediaProps> = ({
   const handleOnLoad: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
     setMediaLoadState("loaded")
     rest.onLoad?.(e as any)
+
+    if (imgSrc) {
+      isImageLoadedSet.add(imgSrc)
+    }
     if ("cacheDimensions" in props && props.cacheDimensions && src) {
       saveImageDimensionsToDb(src, {
         src,
@@ -153,11 +189,11 @@ const MediaImpl: FC<MediaProps> = ({
           <img
             height={finalHeight}
             width={finalWidth}
-            {...(rest as ImgHTMLAttributes<HTMLImageElement>)}
+            {...(omit(rest, "cacheDimensions") as ImgHTMLAttributes<HTMLImageElement>)}
             onError={errorHandle}
             className={cn(
               "size-full object-contain",
-              // "bg-gray-200 dark:bg-neutral-800",
+              inline && "size-auto",
               popper && "cursor-zoom-in",
               "duration-200",
               mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
@@ -204,6 +240,7 @@ const MediaImpl: FC<MediaProps> = ({
     src,
     thumbnail,
     type,
+    inline,
   ])
 
   if (!type || !src) return null
@@ -220,7 +257,11 @@ const MediaImpl: FC<MediaProps> = ({
       )
     } else {
       return (
-        <div className={cn("relative rounded", className)} style={props.style}>
+        <div
+          className={cn("relative rounded", className)}
+          data-state={mediaLoadState}
+          style={props.style}
+        >
           <span
             className={cn(
               "relative inline-block max-w-full bg-theme-placeholder-image",
@@ -246,7 +287,7 @@ const MediaImpl: FC<MediaProps> = ({
   return (
     <span
       data-state={type !== "video" ? mediaLoadState : undefined}
-      className={cn("relative block overflow-hidden rounded", className)}
+      className={cn("relative overflow-hidden rounded", inline ? "inline" : "block", className)}
       style={style}
     >
       {!!props.width && !!props.height && !!containerWidth ? (

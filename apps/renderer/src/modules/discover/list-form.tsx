@@ -74,7 +74,7 @@ export const ListForm: Component<{
     <div
       className={cn(
         "flex h-full flex-col",
-        asWidget ? "min-h-[420px] w-[550px] max-w-full" : "px-[18px] pb-[18px] pt-12",
+        asWidget ? "mx-auto min-h-[420px] w-full max-w-[550px]" : "px-[18px] pb-[18px] pt-12",
       )}
     >
       {!asWidget && (
@@ -327,7 +327,7 @@ const ListInnerForm = ({
               <FormDescription className="mt-0.5">{t("feed_form.fee_description")}</FormDescription>
             </div>
           )}
-          <div className="flex flex-1 items-end justify-end gap-4">
+          <div className="flex flex-1 items-center justify-end gap-4">
             {isSubscribed && (
               <Button
                 type="button"

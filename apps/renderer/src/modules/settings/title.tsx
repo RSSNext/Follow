@@ -1,16 +1,17 @@
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import { cn } from "@follow/utils/utils"
+import { Slot } from "@radix-ui/react-slot"
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData } from "react-router"
 
-import { settings } from "./constants"
 import { IsInSettingIndependentWindowContext } from "./context"
+import { getMemoizedSettings } from "./settings-glob"
 import type { SettingPageConfig } from "./utils"
 
 export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
   const { t } = useTranslation("settings")
-  const tab = settings.find((t) => t.path === path)
+  const tab = getMemoizedSettings().find((t) => t.path === path)
 
   if (!tab) {
     return null
@@ -18,7 +19,11 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
 
   return (
     <div className={cn("flex min-w-0 items-center gap-2 text-[0.94rem] font-medium", className)}>
-      <i className={`${tab.iconName} shrink-0 text-[19px]`} />
+      {typeof tab.icon === "string" ? (
+        <i className={`${tab.icon} shrink-0 text-[19px]`} />
+      ) : (
+        <Slot className="shrink-0 text-[19px]">{tab.icon}</Slot>
+      )}
       <EllipsisHorizontalTextWithTooltip>{t(tab.name as any)}</EllipsisHorizontalTextWithTooltip>
     </div>
   )
@@ -33,11 +38,12 @@ export const SettingsTitle = ({
 }) => {
   const { t } = useTranslation("settings")
   const {
-    iconName,
+    icon: iconName,
     name: title,
     headerIcon,
-  } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
+  } = (useLoaderData() || loader || {}) as SettingPageConfig
 
+  const usedIcon = headerIcon || iconName
   const isInSettingIndependentWindow = useContext(IsInSettingIndependentWindowContext)
   if (!title) {
     return null
@@ -51,7 +57,7 @@ export const SettingsTitle = ({
         className,
       )}
     >
-      <i className={headerIcon || iconName} />
+      {typeof usedIcon === "string" ? <i className={usedIcon} /> : usedIcon}
       <span>{t(title as any)}</span>
     </div>
   )

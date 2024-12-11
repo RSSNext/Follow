@@ -1,36 +1,18 @@
-import { GridList } from "@client/components/items/grid"
-import { NormalListItem } from "@client/components/items/normal"
-import { PictureList } from "@client/components/items/picture"
+import { Item } from "@client/components/items"
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
-import { openInFollowApp } from "@client/lib/helper"
-import type { EntriesPreview } from "@client/query/entries"
+import { askOpenInFollowApp } from "@client/lib/helper"
 import { useEntriesPreview } from "@client/query/entries"
-import type { Feed } from "@client/query/feed"
 import { useFeed } from "@client/query/feed"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
-import { FeedViewType } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
-import type { FC } from "react"
-import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router"
 import { toast } from "sonner"
-
-const viewsRenderType = {
-  Normal: [
-    FeedViewType.Articles,
-    FeedViewType.Audios,
-    FeedViewType.Notifications,
-    FeedViewType.SocialMedia,
-  ],
-  Picture: [FeedViewType.Pictures],
-  Grid: [FeedViewType.Videos],
-}
 
 const numberFormatter = new Intl.NumberFormat()
 export function Component() {
@@ -51,19 +33,7 @@ export function Component() {
   })
 
   useTitle(feed.data?.feed.title)
-  const renderContent = useMemo(() => {
-    switch (true) {
-      case viewsRenderType.Normal.includes(view): {
-        return <NormalList entries={entries.data!} feed={feed.data} />
-      }
-      case viewsRenderType.Picture.includes(view): {
-        return <PictureList entries={entries.data!} feed={feed.data} />
-      }
-      case viewsRenderType.Grid.includes(view): {
-        return <GridList entries={entries.data!} feed={feed.data} />
-      }
-    }
-  }, [entries.data, feed.data, view])
+
   if (feed.isLoading || !feed.data?.feed || !feedData) {
     return (
       <>
@@ -118,8 +88,8 @@ export function Component() {
         <Button
           variant={isSubscribed ? "outline" : undefined}
           onClick={() => {
-            openInFollowApp(`add?id=${id}`, () => {
-              window.location.href = `/feeds/${id}/pending?view=${view}`
+            askOpenInFollowApp(`add?id=${id}`, () => {
+              return `/feeds/${id}/pending?view=${view}`
             })
           }}
         >
@@ -131,30 +101,9 @@ export function Component() {
         {entries.isLoading && !entries.data ? (
           <LoadingCircle size="large" className="center mt-12" />
         ) : (
-          renderContent
+          <Item entries={entries.data} feed={feed.data} view={view} />
         )}
       </div>
     </MainContainer>
-  )
-}
-const NormalList: FC<{
-  entries: EntriesPreview
-
-  feed: Feed
-}> = ({ entries, feed }) => {
-  return (
-    <>
-      {entries?.map((entry) => (
-        <a className="relative" href={entry.url || void 0} target="_blank" key={entry.id}>
-          <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-hover">
-            <NormalListItem
-              withDetails
-              entryId={entry.id}
-              entryPreview={{ entries: entry, feeds: feed.feed, read: true, feedId: feed.feed.id! }}
-            />
-          </div>
-        </a>
-      ))}
-    </>
   )
 }

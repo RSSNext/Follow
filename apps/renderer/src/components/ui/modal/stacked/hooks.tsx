@@ -1,9 +1,11 @@
+import { Button } from "@follow/components/ui/button/index.js"
+import { nextFrame } from "@follow/utils/dom"
 import type { DragControls } from "framer-motion"
-import { useAtomValue } from "jotai"
-import { selectAtom } from "jotai/utils"
+import { atom, useAtomValue } from "jotai"
 import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
-import { useCallback, useContext, useId, useMemo, useRef, useState } from "react"
+import { useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
+import { useTranslation } from "react-i18next"
 import { useContextSelector } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
@@ -12,9 +14,8 @@ import { jotaiStore } from "~/lib/jotai"
 
 import { modalStackAtom } from "./atom"
 import { ModalEventBus } from "./bus"
-import { MODAL_STACK_Z_INDEX } from "./constants"
 import { CurrentModalContext, CurrentModalStateContext } from "./context"
-import type { ModalProps, ModalStackOptions } from "./types"
+import type { DialogInstance, ModalProps, ModalStackOptions } from "./types"
 
 export const modalIdToPropsMap = {} as Record<string, ModalProps>
 export const useModalStack = (options?: ModalStackOptions) => {
@@ -23,14 +24,15 @@ export const useModalStack = (options?: ModalStackOptions) => {
   const { wrapper } = options || {}
 
   return {
-    present: useCallback(
-      (props: ModalProps & { id?: string }) => {
+    present: useEventCallback((props: ModalProps & { id?: string }) => {
+      const presentSync = (props: ModalProps & { id?: string }) => {
         const fallbackModelId = `${id}-${++currentCount.current}`
         const modalId = props.id ?? fallbackModelId
 
         const currentStack = jotaiStore.get(modalStackAtom)
 
         const existingModal = currentStack.find((item) => item.id === modalId)
+
         if (existingModal) {
           // Move to top
           jotaiStore.set(modalStackAtom, (p) => {
@@ -63,9 +65,10 @@ export const useModalStack = (options?: ModalStackOptions) => {
         return () => {
           jotaiStore.set(modalStackAtom, (p) => p.filter((item) => item.id !== modalId))
         }
-      },
-      [id, wrapper],
-    ),
+      }
+
+      return nextFrame(() => presentSync(props))
+    }),
 
     ...actions,
   }
@@ -162,16 +165,48 @@ export const useResizeableModal = (
 
 export const useIsTopModal = () => useContextSelector(CurrentModalStateContext, (v) => v.isTop)
 
-export const useCorrectZIndex = (fallbackZIndex = 0) => {
-  const inModal = useCurrentModal()
+export const useDialog = (): DialogInstance => {
+  const { present } = useModalStack()
+  const { t } = useTranslation()
+  return {
+    ask: useEventCallback((options) => {
+      return new Promise<boolean>((resolve) => {
+        present({
+          title: options.title,
+          content: ({ dismiss }) => (
+            <div className="flex max-w-[75ch] flex-col gap-3">
+              {options.message}
 
-  return useAtomValue(
-    useMemo(
-      () =>
-        selectAtom(modalStackAtom, (v) =>
-          inModal ? v.length + MODAL_STACK_Z_INDEX + inModal.getIndex() + 1 : fallbackZIndex,
-        ),
-      [fallbackZIndex, inModal],
-    ),
-  )
+              <div className="flex items-center justify-end gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    options.onCancel?.()
+                    resolve(false)
+                    dismiss()
+                  }}
+                >
+                  {options.cancelText ?? t("cancel", { ns: "common" })}
+                </Button>
+                <Button
+                  onClick={() => {
+                    options.onConfirm?.()
+                    resolve(true)
+                    dismiss()
+                  }}
+                >
+                  {options.confirmText ?? t("confirm", { ns: "common" })}
+                </Button>
+              </div>
+            </div>
+          ),
+          canClose: true,
+          clickOutsideToDismiss: false,
+        })
+      })
+    }),
+  }
 }
+
+const modalStackLengthAtom = atom((get) => get(modalStackAtom).length)
+export const useHasModal = () => useAtomValue(modalStackLengthAtom) > 0

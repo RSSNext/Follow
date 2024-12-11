@@ -1,13 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { getColorScheme, stringToHue } from "@follow/utils/color"
 import { cn } from "@follow/utils/utils"
 import { forwardRef } from "react"
 
 import { useAuthQuery } from "~/hooks/common"
-import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSession } from "~/queries/auth"
+import { userActions } from "~/store/user"
 
 import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
@@ -34,10 +35,7 @@ export const UserAvatar = forwardRef<
 
     const profile = useAuthQuery(
       defineQuery(["profiles", userId], async () => {
-        const res = await apiClient.profiles.$get({
-          query: { id: userId! },
-        })
-        return res.data
+        return userActions.getOrFetchProfile(userId!)
       }),
       {
         enabled: !!userId,
@@ -49,6 +47,7 @@ export const UserAvatar = forwardRef<
     }
 
     const renderUserData = userId ? profile.data : session?.user
+    const randomColor = stringToHue(renderUserData?.name || "")
     return (
       <div
         style={style}
@@ -75,7 +74,12 @@ export const UserAvatar = forwardRef<
             className="duration-200 animate-in fade-in-0"
             src={replaceImgUrlIfNeed(renderUserData?.image || undefined)}
           />
-          <AvatarFallback>{renderUserData?.name?.slice(0, 2)}</AvatarFallback>
+          <AvatarFallback
+            style={{ backgroundColor: getColorScheme(randomColor, true).light.accent }}
+            className="text-xs text-white"
+          >
+            {renderUserData?.name?.[0]}
+          </AvatarFallback>
         </Avatar>
         {!hideName && <div>{renderUserData?.name}</div>}
       </div>

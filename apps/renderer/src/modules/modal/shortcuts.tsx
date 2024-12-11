@@ -1,4 +1,5 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
+import { KbdCombined } from "@follow/components/ui/kbd/Kbd.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { cn } from "@follow/utils/utils"
 import clsx from "clsx"
@@ -7,7 +8,6 @@ import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts, shortcutsType } from "~/constants/shortcuts"

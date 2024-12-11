@@ -3,10 +3,10 @@ import { t } from "i18next"
 import { useCallback } from "react"
 import { useEventCallback } from "usehooks-ts"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { useUserRole } from "~/atoms/user"
-import { CustomSafeError } from "~/components/errors/helper"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { MAX_TRIAL_USER_FEED_SUBSCRIPTION } from "~/constants/limit"
+import { CustomSafeError } from "~/errors/CustomSafeError"
 import { useActivationModal } from "~/modules/activation"
 import type { FeedFormDataValuesType } from "~/modules/discover/feed-form"
 import { FeedForm } from "~/modules/discover/feed-form"
@@ -23,11 +23,14 @@ const useCanFollowMoreInboxAndNotify = () => {
   const listCurrentCount = useListSubscriptionCount()
   const feedCurrentCount = useFeedSubscriptionCount()
   const presentActivationModal = useActivationModal()
+  const serverConfigs = useServerConfigs()
 
   return useEventCallback((type: "list" | "feed") => {
     if (role === UserRole.Trial) {
       const LIMIT =
-        type !== "list" ? MAX_TRIAL_USER_FEED_SUBSCRIPTION : MAX_TRIAL_USER_FEED_SUBSCRIPTION
+        (type !== "list"
+          ? serverConfigs?.MAX_TRIAL_USER_FEED_SUBSCRIPTION
+          : serverConfigs?.MAX_TRIAL_USER_LIST_SUBSCRIPTION) || 50
       const CURRENT = type === "list" ? listCurrentCount : feedCurrentCount
       const can = CURRENT < LIMIT
       if (!can) {

@@ -1,10 +1,11 @@
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import type { FC } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 
+import { CustomSafeError } from "../../errors/CustomSafeError"
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
-import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
+import { useResetErrorWhenRouteChange } from "./helper"
 
 const FeedNotFoundErrorFallback: FC<AppErrorFallbackProps> = ({ resetError, error }) => {
   if (!(error instanceof FeedNotFound)) {

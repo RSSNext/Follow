@@ -1,12 +1,16 @@
+import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
 import { UserRole } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import { createElement } from "react"
 import { useTranslation } from "react-i18next"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router"
 
 import { useUserRole } from "~/atoms/user"
+import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
+import { ErrorComponentType } from "~/components/errors/enum"
 import { useActivationModal } from "~/modules/activation"
+import { useSubViewTitle } from "~/modules/app-layout/subview/hooks"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
 import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
@@ -14,9 +18,6 @@ import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
-import { Trend } from "~/modules/trending"
-
-import { useSubViewTitle } from "../hooks"
 
 const tabs: {
   name: I18nKeys
@@ -75,35 +76,39 @@ export function Component() {
   })
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="relative flex w-full flex-col items-center gap-8 px-4 pb-8 lg:pb-4">
       <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
       <Tabs
         value={search.get("type") || "search"}
         onValueChange={(val) => {
-          setSearch((search) => {
-            search.set("type", val)
-            return new URLSearchParams(search)
-          })
+          setSearch(
+            (search) => {
+              search.set("type", val)
+              return new URLSearchParams(search)
+            },
+            { replace: true },
+          )
         }}
+        className="max-w-full"
       >
-        <TabsList className="relative w-full">
-          {currentTabs.map((tab) => (
-            <TabsTrigger
-              key={tab.name}
-              value={tab.value}
-              className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
-              onClick={() => {
-                if (tab.disabled) {
-                  presentActivationModal()
-                }
-              }}
-            >
-              {t(tab.name)}
-            </TabsTrigger>
-          ))}
-
-          <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" />
-        </TabsList>
+        <ScrollArea.ScrollArea orientation="horizontal" rootClassName="max-w-full">
+          <TabsList className="relative w-full">
+            {currentTabs.map((tab) => (
+              <TabsTrigger
+                key={tab.name}
+                value={tab.value}
+                className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
+                onClick={() => {
+                  if (tab.disabled) {
+                    presentActivationModal()
+                  }
+                }}
+              >
+                {t(tab.name)}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </ScrollArea.ScrollArea>
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
             <div className={tab.value === "inbox" ? "" : "center flex flex-col"}>
@@ -114,12 +119,14 @@ export function Component() {
           </TabsContent>
         ))}
       </Tabs>
-      <Recommendations />
+      <AppErrorBoundary errorType={ErrorComponentType.RSSHubDiscoverError}>
+        <Recommendations />
+      </AppErrorBoundary>
     </div>
   )
 }
 
-const TabComponent: Record<string, React.FC<{ type?: string }>> = {
+const TabComponent: Record<string, React.FC<{ type?: string; isInit?: boolean }>> = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
   inbox: DiscoverInboxList,

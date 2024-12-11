@@ -32,9 +32,13 @@ export const createApiClient = () => {
 
   const apiFetch = ofetch.create({
     credentials: "include",
-
     retry: false,
 
+    onRequest(context) {
+      if (isDev) console.info(`request: ${context.request}`)
+
+      context.options.headers.set("User-Agent", `Follow External Server Api Client/${PKG.version}`)
+    },
     onRequestError(context) {
       if (context.error.name === "AbortError") {
         return
@@ -48,7 +52,8 @@ export const createApiClient = () => {
       return {
         "X-App-Version": PKG.version,
         "X-App-Dev": isDev ? "1" : "0",
-        Cookie: authSessionToken ? `authjs.session-token=${authSessionToken}` : "",
+        "User-Agent": `Follow External Server Api Client/${PKG.version}`,
+        Cookie: authSessionToken ? `better-auth.session_token=${authSessionToken}` : "",
       }
     },
   })
@@ -67,7 +72,7 @@ export const getTokenFromCookie = (cookie: string) => {
       },
       {} as Record<string, string>,
     )
-  return parsedCookieMap["authjs.session-token"]
+  return parsedCookieMap["better-auth.session_token"]
 }
 
 export type ApiClient = ReturnType<typeof createApiClient>

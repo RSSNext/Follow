@@ -1,5 +1,5 @@
+import { signOut } from "@follow/shared/auth"
 import { clearStorage } from "@follow/utils/ns"
-import { signOut } from "@hono/auth-js/react"
 import { useCallback } from "react"
 
 import { setWhoami } from "~/atoms/user"
@@ -19,7 +19,12 @@ export const useSignOut = () =>
     clearStorage()
     window.analytics?.reset()
     // clear local store data
-    await Promise.allSettled([clearLocalPersistStoreData(), tipcClient?.cleanAuthSessionToken()])
+    await Promise.allSettled([
+      clearLocalPersistStoreData(),
+      tipcClient?.cleanBetterAuthSessionCookie(),
+    ])
     // Sign out
-    await signOut()
+    await signOut().then(() => {
+      window.location.reload()
+    })
   }, [])

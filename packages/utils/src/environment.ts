@@ -1,8 +1,11 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { nanoid } from "nanoid"
 
 import { detectBrowser, getOS } from "./utils"
 
 declare const APP_VERSION: string
+export const appSessionTraceId = nanoid()
+
 export const getCurrentEnvironment = () => {
   const ua = navigator.userAgent
   const appVersion = APP_VERSION
@@ -18,5 +21,6 @@ export const getCurrentEnvironment = () => {
     `**User Agent**: ${ua}`,
     `**Env**: ${env}`,
     `**Browser**: ${browser}`,
+    `**Session Trace Id**: \`${appSessionTraceId}\``,
   ]
 }

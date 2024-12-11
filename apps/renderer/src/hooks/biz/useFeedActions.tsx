@@ -4,31 +4,38 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { UrlBuilder } from "@follow/utils/url-builder"
 import { isBizId } from "@follow/utils/utils"
+import { useMutation } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 
+import type { FollowMenuItem, MenuItemInput } from "~/atoms/context-menu"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { apiClient } from "~/lib/api-fetch"
 import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
-import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
 import {
-  getFeedById,
-  useAddFeedToFeedList,
-  useFeedById,
-  useRemoveFeedFromFeedList,
-} from "~/store/feed"
+  CategoryCreationModalContent,
+  ListCreationModalContent,
+} from "~/modules/settings/tabs/lists/modals"
+import { useResetFeed } from "~/queries/feed"
+import { getFeedById, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
-import { useListById, useOwnedList } from "~/store/list"
-import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+import { listActions, useListById, useOwnedListByView } from "~/store/list"
+import {
+  subscriptionActions,
+  useCategoriesByView,
+  useSubscriptionByFeedId,
+  useSubscriptionsByFeedIds,
+} from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
-import { useDeleteSubscription } from "./useSubscriptionActions"
+import { useBatchUpdateSubscription, useDeleteSubscription } from "./useSubscriptionActions"
 
 const ConfirmDestroyModalContent = ({ onConfirm }: { onConfirm: () => void }) => {
   const { t } = useTranslation()
@@ -60,30 +67,48 @@ export const useFeedActions = ({
   type?: "feedList" | "entryList"
 }) => {
   const { t } = useTranslation()
-  const feed = useFeedById(feedId)
-  const isInbox = feed?.type === "inbox"
+  const feed = useFeedById(feedId, (feed) => {
+    return {
+      type: feed.type,
+      ownerUserId: feed.ownerUserId,
+      id: feed.id,
+      url: feed.url,
+      siteUrl: feed.siteUrl,
+    }
+  })
+
+  const inbox = useInboxById(feedId)
+  const isInbox = !!inbox
   const subscription = useSubscriptionByFeedId(feedId)
+
+  const subscriptions = useSubscriptionsByFeedIds(
+    useMemo(() => feedIds || [feedId], [feedId, feedIds]),
+  )
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
-  const claimFeed = useFeedClaimModal({
-    feedId,
-  })
+  const claimFeed = useFeedClaimModal()
 
   const navigateEntry = useNavigateEntry()
   const isEntryList = type === "entryList"
 
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
+  const { mutateAsync: resetFeed } = useResetFeed()
+  const { mutate: addFeedsToCategoryMutation } = useBatchUpdateSubscription()
   const openBoostModal = useBoostModal()
 
-  const listByView = useOwnedList(view!)
+  const listByView = useOwnedListByView(view!)
+  const categories = useCategoriesByView(view!)
 
-  const isMultipleSelection = feedIds && feedIds.length > 0
+  const isMultipleSelection = feedIds && feedIds.length > 1 && feedIds.includes(feedId)
 
   const items = useMemo(() => {
-    if (!feed) return []
+    const related = feed || inbox
+    if (!related) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const isFeedOwner = related.ownerUserId === whoami()?.id
+
+    const items: MenuItemInput[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.mark_all_as_read"),
@@ -95,23 +120,30 @@ export const useFeedActions = ({
           }),
         supportMultipleSelection: true,
       },
-      !feed.ownerUserId &&
-        !!isBizId(feed.id) &&
-        feed.type === "feed" && {
+      !related.ownerUserId &&
+        !!isBizId(related.id) &&
+        related.type === "feed" && {
           type: "text" as const,
           label: isEntryList
             ? t("sidebar.feed_actions.claim_feed")
             : t("sidebar.feed_actions.claim"),
           shortcut: "C",
           click: () => {
-            claimFeed()
+            claimFeed({ feedId })
           },
         },
-      ...(feed.ownerUserId === whoami()?.id
+      ...(isFeedOwner
         ? [
             {
               type: "text" as const,
               label: t("sidebar.feed_actions.feed_owned_by_you"),
+            },
+            {
+              type: "text" as const,
+              label: t("sidebar.feed_actions.reset_feed"),
+              click: () => {
+                resetFeed(feedId)
+              },
             },
           ]
         : []),
@@ -170,6 +202,53 @@ export const useFeedActions = ({
               present({
                 title: t("sidebar.feed_actions.create_list"),
                 content: () => <ListCreationModalContent />,
+              })
+            },
+          },
+        ],
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_column.context_menu.add_feeds_to_category"),
+        disabled: isInbox,
+        supportMultipleSelection: true,
+        submenu: [
+          ...categories.values().map((category) => {
+            const isIncluded = isMultipleSelection
+              ? subscriptions.every((s) => s.category === category)
+              : subscription?.category === category
+            return {
+              label: category,
+              type: "text" as const,
+              checked: isIncluded,
+              click() {
+                addFeedsToCategoryMutation({
+                  feedIdList: isMultipleSelection ? feedIds : [feedId],
+                  category: isIncluded ? null : category, // if already included, remove it
+                  view: view!,
+                })
+              },
+            }
+          }),
+          listByView.length > 0 && { type: "separator" as const },
+          {
+            label: t("sidebar.feed_column.context_menu.create_category"),
+            type: "text" as const,
+            icon: <i className="i-mgc-add-cute-re" />,
+            click() {
+              present({
+                title: t("sidebar.feed_column.context_menu.title"),
+                content: () => (
+                  <CategoryCreationModalContent
+                    onSubmit={(category: string) => {
+                      addFeedsToCategoryMutation({
+                        feedIdList: isMultipleSelection ? feedIds : [feedId],
+                        category,
+                        view: view!,
+                      })
+                    }}
+                  />
+                ),
               })
             },
           },
@@ -265,10 +344,10 @@ export const useFeedActions = ({
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => {
-          // @ts-expect-error
-          const { url } = feed || {}
-          if (!url) return
-          navigator.clipboard.writeText(url)
+          const { url, siteUrl } = feed || {}
+          const copied = url || siteUrl
+          if (!copied) return
+          navigator.clipboard.writeText(copied)
         },
       },
       {
@@ -282,17 +361,26 @@ export const useFeedActions = ({
       },
     ]
 
-    return items
+    return items.filter(
+      (item) =>
+        !isMultipleSelection ||
+        (typeof item === "object" &&
+          item !== null &&
+          "supportMultipleSelection" in item &&
+          item.supportMultipleSelection),
+    )
   }, [
     feed,
+    inbox,
     t,
     isEntryList,
     isInbox,
     listByView,
-    feedId,
     isMultipleSelection,
+    feedId,
     feedIds,
     claimFeed,
+    resetFeed,
     openBoostModal,
     addFeedToListMutation,
     removeFeedFromListMutation,
@@ -303,7 +391,7 @@ export const useFeedActions = ({
     view,
   ])
 
-  return { items }
+  return items
 }
 
 export const useListActions = ({ listId, view }: { listId: string; view: FeedViewType }) => {
@@ -319,7 +407,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
   const items = useMemo(() => {
     if (!list) return []
 
-    const items: NullableNativeMenuItem[] = [
+    const items: MenuItemInput[] = [
       list.ownerUserId === whoami()?.id && {
         type: "text" as const,
         label: t("sidebar.feed_actions.list_owned_by_you"),
@@ -396,7 +484,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
     return items
   }, [list, t, present, deleteSubscription, subscription, navigateEntry, listId, view])
 
-  return { items }
+  return items
 }
 
 export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
@@ -407,7 +495,7 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
   const items = useMemo(() => {
     if (!inbox) return []
 
-    const items: NativeMenuItem[] = [
+    const items: FollowMenuItem[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.edit"),
@@ -438,4 +526,57 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
   }, [inbox, t, inboxId, present])
 
   return { items }
+}
+
+export const useAddFeedToFeedList = (options?: {
+  onSuccess?: () => void
+  onError?: () => void
+}) => {
+  const { t } = useTranslation("settings")
+  return useMutation({
+    mutationFn: async (
+      payload: { feedId: string; listId: string } | { feedIds: string[]; listId: string },
+    ) => {
+      const feeds = await apiClient.lists.feeds.$post({
+        json: payload,
+      })
+
+      feeds.data.forEach((feed) => listActions.addFeedToFeedList(payload.listId, feed))
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.add.success"))
+
+      options?.onSuccess?.()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.add.error"))
+      options?.onError?.()
+    },
+  })
+}
+
+export const useRemoveFeedFromFeedList = (options?: {
+  onSuccess: () => void
+  onError: () => void
+}) => {
+  const { t } = useTranslation("settings")
+  return useMutation({
+    mutationFn: async (payload: { feedId: string; listId: string }) => {
+      listActions.removeFeedFromFeedList(payload.listId, payload.feedId)
+      await apiClient.lists.feeds.$delete({
+        json: {
+          listId: payload.listId,
+          feedId: payload.feedId,
+        },
+      })
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.delete.success"))
+      options?.onSuccess?.()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.delete.error"))
+      options?.onError?.()
+    },
+  })
 }

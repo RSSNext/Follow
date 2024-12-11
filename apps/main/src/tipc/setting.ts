@@ -2,6 +2,9 @@ import { createRequire } from "node:module"
 
 import { app, nativeTheme } from "electron"
 
+import { START_IN_TRAY_ARGS } from "~/constants/app"
+import { getTrayConfig, setTrayConfig } from "~/lib/tray"
+
 import { setDockCount } from "../lib/dock"
 import { setProxyConfig, updateProxy } from "../lib/proxy"
 import { store } from "../lib/store"
@@ -10,12 +13,12 @@ import { t } from "./_instance"
 
 const require = createRequire(import.meta.url)
 export const settingRoute = {
-  getLoginItemSettings: t.procedure
-    .input<void>()
-    .action(async () => await app.getLoginItemSettings()),
+  getLoginItemSettings: t.procedure.input<void>().action(async () => app.getLoginItemSettings()),
   setLoginItemSettings: t.procedure.input<boolean>().action(async ({ input }) => {
     app.setLoginItemSettings({
       openAtLogin: input,
+      openAsHidden: true,
+      args: [START_IN_TRAY_ARGS],
     })
   }),
   openSettingWindow: t.procedure.action(async () => createSettingWindow()),
@@ -37,6 +40,8 @@ export const settingRoute = {
 
     store.set("appearance", input)
   }),
+  getMinimizeToTray: t.procedure.action(async () => getTrayConfig()),
+  setMinimizeToTray: t.procedure.input<boolean>().action(async ({ input }) => setTrayConfig(input)),
   setDockBadge: t.procedure.input<number>().action(async ({ input }) => {
     setDockCount(input)
   }),

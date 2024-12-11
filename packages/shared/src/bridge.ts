@@ -1,10 +1,28 @@
 import type { BrowserWindow } from "electron"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import type { toast } from "sonner"
 
 import type { GeneralSettings, UISettings } from "./interface/settings"
 
 const PREFIX = "__follow"
 
+// eslint-disable-next-line unused-imports/no-unused-vars
+declare const dialog: {
+  ask: (options: {
+    title: string
+    message: string
+    onConfirm?: () => void
+    onCancel?: () => void
+    confirmText?: string
+    cancelText?: string
+  }) => Promise<boolean>
+}
+
+export enum WindowState {
+  MINIMIZED = "minimized",
+  MAXIMIZED = "maximized",
+  NORMAL = "normal",
+}
 interface RenderGlobalContext {
   /// Access Settings
   showSetting: (path?: string) => void
@@ -23,16 +41,28 @@ interface RenderGlobalContext {
   /// Actions
   follow: (options?: { isList: boolean; id?: string; url?: string }) => void
   profile: (id: string, variant?: "drawer" | "dialog") => void
+  quickAdd: () => void
   rsshubRoute: (route: string) => void
+  // Navigate
+  goToDiscover: () => void
 
   // user data
   clearIfLoginOtherAccount: (newUserId: string) => void
 
   /// Utils
   toast: typeof toast
+
+  /// Electron State
+  setWindowState: (state: WindowState) => void
+
+  readyToUpdate: () => void
+  dialog: typeof dialog
   // URL
   getWebUrl: () => string
   getApiUrl: () => string
+
+  // View
+  zenMode: () => void
 }
 
 export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => {
@@ -40,6 +70,20 @@ export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => 
     ...globalThis[PREFIX],
     ...context,
   }
+}
+
+export const useRegisterGlobalContext = <K extends keyof RenderGlobalContext>(
+  key: K,
+  fn: RenderGlobalContext[K],
+) => {
+  const eventCallbackRef = useRef(fn)
+  useLayoutEffect(() => {
+    eventCallbackRef.current = fn
+  }, [fn])
+
+  useEffect(() => {
+    registerGlobalContext({ [key]: eventCallbackRef.current })
+  }, [key])
 }
 
 function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path: string[] = []): T {
@@ -54,7 +98,12 @@ function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path:
 
       try {
         return await window.webContents.executeJavaScript(
-          `globalThis.${PREFIX}?.${methodPath}?.(${args.map((arg) => JSON.stringify(arg)).join(",")})`,
+          `globalThis.${PREFIX}?.${methodPath}?.(${args
+            .map((arg) => {
+              if (arg === undefined) return "undefined"
+              return JSON.stringify(arg)
+            })
+            .join(",")})`,
         )
       } catch (err) {
         console.error(`Failed to executeJavaScript: ${methodPath}`, err)
@@ -66,7 +115,7 @@ type AddPromise<T> = T extends (...args: infer A) => Promise<infer R>
   ? (...args: A) => Promise<R>
   : T extends (...args: infer A) => infer R
     ? (...args: A) => Promise<Awaited<R>>
-    : any
+    : unknown
 
 type Fn<T> = {
   [K in keyof T]: AddPromise<T[K]> &
@@ -74,4 +123,8 @@ type Fn<T> = {
 }
 export function callWindowExpose<T extends RenderGlobalContext>(window: BrowserWindow) {
   return createProxy(window) as Fn<T>
+}
+
+export function callWindowExposeRenderer() {
+  return globalThis[PREFIX] as Fn<RenderGlobalContext>
 }

@@ -12,7 +12,7 @@ import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { omit } from "lodash-es"
+import { omit } from "es-toolkit/compat"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
@@ -122,8 +122,9 @@ export const DiscoverFeedForm = ({
           "lang",
           "sort",
         ],
+        forceExcludeNames: routeParams ? ["routeParams"] : [],
       }),
-    [route.path],
+    [route.path, routeParams],
   )
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {
@@ -199,7 +200,7 @@ export const DiscoverFeedForm = ({
         const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
         present({
-          title: "Add Feed",
+          title: t("feed_form.add_feed"),
           content: () => (
             <FeedForm
               asWidget
@@ -303,16 +304,17 @@ export const DiscoverFeedForm = ({
           )
         })}
         {routeParams && (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {Object.entries(routeParams).map(([key, value]) => (
               <FormItem key={`${routeParamsKeyPrefix}${key}`} className="flex flex-col space-y-2">
                 <FormLabel className="capitalize">{key}</FormLabel>
                 <Input
                   {...form.register(`${routeParamsKeyPrefix}${key}`)}
                   placeholder={value.default}
+                  className="grow-0"
                 />
                 {!!value.description && (
-                  <Markdown className="w-full max-w-full text-xs text-theme-foreground/5">
+                  <Markdown className="w-full max-w-full text-xs text-theme-foreground/50">
                     {value.description}
                   </Markdown>
                 )}
@@ -328,7 +330,7 @@ export const DiscoverFeedForm = ({
         )}
         <div
           className={cn(
-            "sticky bottom-0 -mt-4 mb-1 flex w-full translate-y-3 justify-end py-3",
+            "sticky bottom-0 -mt-4 mb-1 flex w-full justify-end py-3",
             submitButtonClassName,
           )}
         >

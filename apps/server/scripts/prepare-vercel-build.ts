@@ -2,30 +2,7 @@ import { mkdirSync } from "node:fs"
 import fs from "node:fs/promises"
 import path from "node:path"
 
-// const fontDepsPath = require.resolve("@fontsource/sn-pro")
-// const fontsDirPath = resolve(fontDepsPath, "../files")
-// const fontsDir = readdirSync(fontsDirPath).filter(
-//   (name) => !name.endsWith(".woff2") && !name.includes("italic"),
-// )
-
 mkdirSync(path.join(__dirname, "../.generated"), { recursive: true })
-// async function generateFontData() {
-//   const files = {} as Record<string, string>
-//   await Promise.all(
-//     fontsDir.map(async (file) => {
-//       const r = await fs.readFile(path.join(fontsDirPath, file))
-
-//       const base64 = r.toString("base64")
-
-//       files[file] = base64
-//     }),
-//   )
-
-//   writeFileSync(
-//     path.join(__dirname, "../.generated/fonts-data.ts"),
-//     `export default ${JSON.stringify(files, null, 2)}`,
-//   )
-// }
 
 async function generateIndexHtmlData() {
   const indexHtml = await fs.readFile(path.join(__dirname, "../dist/index.html"), "utf-8")

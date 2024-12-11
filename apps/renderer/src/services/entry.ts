@@ -8,12 +8,12 @@ import { entryActions, useEntryStore } from "~/store/entry"
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
 import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
-import type { Hydable } from "./interface"
+import type { Hydratable } from "./interface"
 
 type EntryCollection = {
   createdAt: string
 }
-class EntryServiceStatic extends BaseService<EntryModel> implements Hydable {
+class EntryServiceStatic extends BaseService<EntryModel> implements Hydratable {
   constructor() {
     super(browserDB.entries)
   }
@@ -21,19 +21,16 @@ class EntryServiceStatic extends BaseService<EntryModel> implements Hydable {
   // @ts-expect-error
   override async upsertMany(data: EntryModel[], entryFeedMap: Record<string, string>) {
     const renewList = [] as { type: "entry"; id: string }[]
-    const nextData = [] as (EntryModel & { feedId: string })[]
+    const nextData = [] as (EntryModel & { feedId?: string; inboxId?: string })[]
 
-    for (const item of data) {
-      const feedId = entryFeedMap[item.id]
+    for (const entry of data) {
+      const feedId = entryFeedMap[entry.id]
       if (!feedId) {
-        console.error("EntryService.upsertMany: feedId not found", item)
+        console.error("EntryService.upsertMany: feedId not found", entry)
         continue
       }
-      renewList.push({ type: "entry", id: item.id })
-      nextData.push({
-        ...item,
-        feedId,
-      })
+      renewList.push({ type: "entry", id: entry.id })
+      nextData.push(Object.assign({}, entry, feedId ? { feedId } : { inboxId: feedId }))
     }
 
     CleanerService.reset(renewList)
@@ -62,7 +59,7 @@ class EntryServiceStatic extends BaseService<EntryModel> implements Hydable {
   }
 
   override async findAll() {
-    return super.findAll() as Promise<(EntryModel & { feedId: string })[]>
+    return super.findAll() as Promise<(EntryModel & { feedId: string; inboxId: string })[]>
   }
 
   bulkStoreReadStatus(record: Record<string, boolean>) {
@@ -121,6 +118,7 @@ class EntryServiceStatic extends BaseService<EntryModel> implements Hydable {
         collections: collections[entry.id] as {
           createdAt: string
         },
+        inboxId: entry.inboxId,
       })
     }
     entryActions.hydrate(storeValue)

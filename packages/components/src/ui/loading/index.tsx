@@ -122,14 +122,14 @@ export const RotatingRefreshIcon: React.FC<{
 
   useEffect(() => {
     if (isRefreshing) {
-      controls.set({ rotate: 0 })
+      controls.set({ transform: `rotate(0deg)` })
       controls.start({
-        rotate: 360,
+        transform: `rotate(360deg)`,
         transition: { duration: 1, repeat: Infinity, ease: "linear" },
       })
     } else {
       controls.start({
-        rotate: 360,
+        transform: `rotate(0deg)`,
         transition: { type: "spring" },
       })
     }

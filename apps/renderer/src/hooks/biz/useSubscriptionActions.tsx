@@ -1,9 +1,9 @@
+import { Kbd } from "@follow/components/ui/kbd/Kbd.js"
 import { useMutation } from "@tanstack/react-query"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { Kbd } from "~/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
@@ -14,7 +14,7 @@ import { feedUnreadActions } from "~/store/unread"
 import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
-export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { t } = useTranslation()
 
   return useMutation({
@@ -26,14 +26,14 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
       feedIdList?: string[]
     }) => {
       if (feedIdList) {
-        await subscriptionActions.unfollowMany(feedIdList)
+        await subscriptionActions.unfollow(feedIdList)
         toast.success(t("notify.unfollow_feed_many"))
         return
       }
 
       if (!subscription) return
 
-      subscriptionActions.unfollow(subscription.feedId).then((feed) => {
+      subscriptionActions.unfollow([subscription.feedId]).then(([feed]) => {
         subscriptionQuery.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
@@ -57,8 +57,9 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
           toast.dismiss(toastId)
         }
 
-        const toastId = toast(<UnfollowInfo title={feed.title!} undo={undo} />, {
+        const toastId = toast("", {
           duration: 3000,
+          description: <UnfollowInfo title={feed.title!} undo={undo} />,
           action: {
             label: (
               <span className="flex items-center gap-1">
@@ -105,4 +106,24 @@ const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
       />
     </>
   )
+}
+
+export const useBatchUpdateSubscription = () => {
+  return useMutation({
+    mutationFn: async ({
+      feedIdList,
+      category,
+      view,
+    }: {
+      feedIdList: string[]
+      category?: string | null
+      view: number
+    }) => {
+      await subscriptionActions.batchUpdateSubscription({
+        category,
+        feedIdList,
+        view,
+      })
+    },
+  })
 }

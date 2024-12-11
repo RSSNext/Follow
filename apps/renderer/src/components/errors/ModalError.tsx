@@ -45,7 +45,7 @@ const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
           </Button>
         </div>
 
-        <FeedbackIssue message={message!} stack={stack} />
+        <FeedbackIssue message={message!} stack={stack} error={props.error} />
       </div>
     </m.div>
   )

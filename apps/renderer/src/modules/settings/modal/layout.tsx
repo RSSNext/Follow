@@ -16,6 +16,7 @@ import { useResizeableModal } from "~/components/ui/modal/stacked/hooks"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { useActivationModal } from "~/modules/activation"
 
+import { SETTING_MODAL_ID } from "../constants"
 import { SettingSyncIndicator } from "../helper/SyncIndicator"
 import { useAvailableSettings, useSettingPageContext } from "../hooks/use-setting-ctx"
 import { SettingsSidebarTitle } from "../title"
@@ -82,7 +83,11 @@ export function SettingModalLayout(
   }, [])
 
   return (
-    <div className={cn("h-full", !isResizeable && "center")} ref={edgeElementRef}>
+    <div
+      id={SETTING_MODAL_ID}
+      className={cn("h-full", !isResizeable && "center")}
+      ref={edgeElementRef}
+    >
       <m.div
         exit={{
           opacity: 0,
@@ -118,7 +123,7 @@ export function SettingModalLayout(
             minHeight={500}
             minWidth={600}
             maxWidth="95vw"
-            className="flex flex-col"
+            className="flex !select-none flex-col"
           >
             {draggable && (
               <div className="absolute inset-x-0 top-0 z-[1] h-8" onPointerDown={handleDrag} />
@@ -155,8 +160,10 @@ const SettingItemButtonImpl = (props: {
   setTab: (tab: string) => void
   item: SettingPageConfig
   path: string
+
+  onChange?: (tab: string) => void
 }) => {
-  const { tab, setTab, item, path } = props
+  const { tab, setTab, item, path, onChange } = props
   const { disableIf } = item
 
   const ctx = useSettingPageContext()
@@ -174,19 +181,20 @@ const SettingItemButtonImpl = (props: {
       )}
       type="button"
       onClick={useCallback(() => {
-        setTab(path)
         if (disabled) {
           switch (why) {
             case DisableWhy.NotActivation: {
               presentActivationModal()
-              break
+              return
             }
             case DisableWhy.Noop: {
               break
             }
           }
         }
-      }, [disabled, why, presentActivationModal, setTab, path])}
+        setTab(path)
+        onChange?.(path)
+      }, [disabled, why, presentActivationModal, setTab, path, onChange])}
     >
       <SettingsSidebarTitle path={path} className="text-[0.94rem] font-medium" />
     </button>
@@ -195,13 +203,21 @@ const SettingItemButtonImpl = (props: {
 
 const SettingItemButton = memo(SettingItemButtonImpl)
 
-const SidebarItems = memo(
-  () => {
+export const SidebarItems = memo(
+  (props: { onChange?: (tab: string) => void }) => {
+    const { onChange } = props
     const setTab = useSetSettingTab()
     const tab = useSettingTab()
     const availableSettings = useAvailableSettings()
     return availableSettings.map((t) => (
-      <SettingItemButton key={t.path} tab={tab} setTab={setTab} item={t} path={t.path} />
+      <SettingItemButton
+        key={t.path}
+        tab={tab}
+        setTab={setTab}
+        item={t}
+        path={t.path}
+        onChange={onChange}
+      />
     ))
   },
   () => true,

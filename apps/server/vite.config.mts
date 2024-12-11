@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
 import { viteRenderBaseConfig } from "../../configs/vite.render.config"
-import { twMacro } from "../../plugins/vite/tw-macro"
+import { astPlugin } from "../../plugins/vite/ast"
 
 export default () => {
   return defineConfig({
@@ -21,13 +21,13 @@ export default () => {
     build: {
       rollupOptions: {
         output: {
-          assetFileNames: "dist-external/[name]-[hash].[ext]",
-          chunkFileNames: "dist-external/[name]-[hash].js",
-          entryFileNames: "dist-external/[name]-[hash].js",
+          assetFileNames: "dist-external/[name].[hash].[ext]",
+          chunkFileNames: "dist-external/[name].[hash].js",
+          entryFileNames: "dist-external/[name].[hash].js",
         },
       },
     },
-    plugins: [react(), twMacro()],
+    plugins: [react(), astPlugin],
 
     server: {
       proxy: {

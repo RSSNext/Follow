@@ -9,6 +9,7 @@ import { app, nativeTheme, Notification, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
+import { checkAndCleanCodeCache, clearCacheCronJob } from "./lib/cleaner"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { updateNotificationsToken } from "./lib/user"
@@ -57,8 +58,9 @@ export const initializeAppStage1 = () => {
   // code. You can also put them in separate files and require them here.
 
   registerMenuAndContextMenu()
-
   registerPushNotifications()
+  clearCacheCronJob()
+  checkAndCleanCodeCache()
 }
 
 let contextMenuDisposer: () => void

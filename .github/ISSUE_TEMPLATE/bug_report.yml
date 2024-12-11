@@ -1,6 +1,7 @@
 name: 🐞 Bug report
 description: Report an issue
 labels: [pending triage]
+type: Bug
 body:
   - type: markdown
     attributes:
@@ -12,6 +13,7 @@ body:
       label: Describe the bug
       description: A clear and concise description of what the bug is. If you intend to submit a PR for this issue, tell us in the description. Thanks!
       placeholder: Bug description
+
     validations:
       required: true
   - type: textarea
@@ -29,41 +31,12 @@ body:
       description: If possible, please provide a video that demonstrates the bug.
     validations:
       required: false
-  - type: dropdown
-    id: app-type
-    attributes:
-      label: App Type
-      options:
-        - Web
-        - Electron / App
-    validations:
-      required: true
-  - type: input
-    id: version
-    attributes:
-      label: Version
-      description: The version of the app you are using.
-      placeholder: 1.0.0
-    validations:
-      required: true
 
-  - type: dropdown
-    id: os
+  - type: textarea
+    id: environment
     attributes:
-      label: Operating System
-      options:
-        - Windows 11
-        - Windows 10
-        - macOS
-        - Linux
-    validations:
-      required: true
-  - type: input
-    id: browser-info
-    attributes:
-      label: Browser Info
-      description: If you are using the web version, please provide your browser info.
-      placeholder: Browser name and version
+      label: Environment
+      description: Please provide the environment in which you are using the application. You can find this information by going to Settings > About and clicking the copy button next to the version tag.
 
   - type: checkboxes
     id: checkboxes
@@ -74,6 +47,8 @@ body:
         - label: Check that there isn't already an issue that reports the same bug to avoid creating a duplicate.
           required: true
         - label: Check that this is a concrete bug. For Q&A, please open a GitHub Discussion instead.
+          required: true
+        - label: This issue is valid
           required: true
   - type: checkboxes
     id: contributions

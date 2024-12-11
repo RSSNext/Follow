@@ -1,7 +1,6 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { AnimatePresence } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
 
 import { useShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
@@ -14,17 +13,6 @@ const variants = {
   hidden: { x: "100%" },
   visible: { x: 0 },
   exit: { x: "100%" },
-}
-
-const Banner = () => {
-  const { t } = useTranslation()
-  return (
-    <div className="z-50 w-full bg-yellow-600 p-3 text-white">
-      <div className="text-center">
-        <p>{t("notify.unSupportDisplay")}</p>
-      </div>
-    </div>
-  )
 }
 
 export const SourceContentView = ({ src }: { src: string }) => {
@@ -50,7 +38,6 @@ export const SourceContentView = ({ src }: { src: string }) => {
 
   return (
     <>
-      {!IN_ELECTRON && <Banner />}
       <div className="relative flex size-full flex-col">
         {loading && (
           <div className="center mt-16 min-w-0">
@@ -83,6 +70,7 @@ export const SourceContentPanel = ({ src }: { src: string | null }) => {
     <AnimatePresence>
       {showSourceContent && src && (
         <m.div
+          data-hide-in-print
           className="absolute left-0 top-0 z-[1] size-full bg-theme-background"
           initial="hidden"
           animate="visible"

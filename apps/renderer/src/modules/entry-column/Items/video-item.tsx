@@ -9,6 +9,7 @@ import { AudioPlayer } from "~/atoms/player"
 import { m } from "~/components/common/Motion"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
+import { usePreviewMedia } from "~/components/ui/media/hooks"
 import type { ModalContentComponent } from "~/components/ui/modal"
 import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
@@ -16,9 +17,9 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { urlToIframe } from "~/lib/url-to-iframe"
 import { FeedIcon } from "~/modules/feed/feed-icon"
+import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { GridItem } from "../templates/grid-item-template"
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
@@ -34,6 +35,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     [entry?.entries.url],
   )
   const modalStack = useModalStack()
+  const previewMedia = usePreviewMedia()
 
   const ref = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
@@ -59,7 +61,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     }
   }, [hovered])
 
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
@@ -73,6 +75,12 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
               CustomModalComponent: PlainModal,
               overlay: true,
             })
+          } else {
+            const videoMediaList =
+              entry.entries.media?.filter((media) => media.type === "video") || []
+            if (videoMediaList.length > 0) {
+              previewMedia(videoMediaList)
+            }
           }
         }}
       >
@@ -137,7 +145,7 @@ const PreviewVideoModalContent: ModalContentComponent<{
         exit={{
           opacity: 0,
         }}
-        className="fixed right-3 flex items-center gap-4 safe-inset-top-2"
+        className="fixed right-4 flex items-center safe-inset-top-4"
       >
         <FixedModalCloseButton onClick={dismiss} />
       </m.div>
@@ -182,7 +190,7 @@ export function VideoItemStateLess({ entry, feed }: EntryItemStatelessProps) {
             </div>
             <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
               <FeedIcon feed={feed} fallback className="size-4" />
-              <span>{feed.title}</span>
+              <FeedTitle feed={feed} />
               <span className="text-zinc-500">·</span>
               {!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}
             </div>

@@ -5,8 +5,11 @@ import { fastifyRequestContext } from "@fastify/request-context"
 import { env } from "@follow/shared/env"
 import type { FastifyRequest } from "fastify"
 import Fastify from "fastify"
+import { nanoid } from "nanoid"
+import { FetchError } from "ofetch"
 
 import { isDev } from "~/lib/env"
+import { MetaError } from "~/meta-handler"
 
 import { globalRoute } from "./src/router/global"
 import { ogRoute } from "./src/router/og"
@@ -28,6 +31,24 @@ export const createApp = async () => {
   app.register(fastifyRequestContext)
   await app.register(middie, {
     hook: "onRequest",
+  })
+
+  app.setErrorHandler(function (err, req, reply) {
+    this.log.error(err)
+
+    const traceId = nanoid(8)
+
+    if (err instanceof FetchError) {
+      reply
+        .status((err as FetchError).response?.status || 500)
+        .send({ ok: false, traceId, message: err.message })
+    } else if (err instanceof MetaError) {
+      reply.status(err.status).send({ ok: false, traceId, message: err.metaMessage })
+    } else {
+      const message = err.message || "Internal Server Error"
+      const status = Number.parseInt(err.code as string) || 500
+      reply.status(status).send({ ok: false, message, traceId })
+    }
   })
 
   app.addHook("onRequest", (req, reply, done) => {

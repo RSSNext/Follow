@@ -13,6 +13,7 @@ export const EntryPlaceholderLogo = () => {
 
   return (
     <div
+      data-hide-in-print
       onContextMenu={stopPropagation}
       className={cn(
         "flex w-full min-w-0 flex-col items-center justify-center gap-1 px-12 pb-6 text-center text-lg font-medium text-zinc-400 duration-500",

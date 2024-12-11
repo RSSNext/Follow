@@ -52,7 +52,7 @@
         @apply mr-5;
       }
 
-      /* 撑开没有内容的行 */
+      /* Expand the row without content */
       &::after {
         content: " ";
       }

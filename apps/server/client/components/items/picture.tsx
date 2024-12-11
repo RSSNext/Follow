@@ -1,8 +1,3 @@
-import {
-  MasonryItemsAspectRatioContext,
-  MasonryItemsAspectRatioSetterContext,
-  MasonryItemWidthContext,
-} from "@client/components/items/picture-masonry-context"
 import { TeleportalTakeOff } from "@client/components/layout/main/teleportal"
 import { LazyImage } from "@client/components/ui/image"
 import { getPreferredTitle } from "@client/lib/helper"
@@ -11,24 +6,25 @@ import type { Feed } from "@client/query/feed"
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { TitleMarquee } from "@follow/components/ui/marquee/index.jsx"
+import {
+  MasonryItemsAspectRatioContext,
+  MasonryItemsAspectRatioSetterContext,
+  MasonryItemWidthContext,
+  useMasonryItemRatio,
+  useMasonryItemWidth,
+  useSetStableMasonryItemRatio,
+} from "@follow/components/ui/masonry/contexts.jsx"
 import { Masonry } from "@follow/components/ui/masonry/index.jsx"
-import type { EntryModel } from "@follow/models/types"
 import { nextFrame } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
+import { throttle } from "es-toolkit/compat"
 import { AnimatePresence, m } from "framer-motion"
-import { throttle } from "lodash-es"
 import type { RenderComponentProps } from "masonic"
 import type { FC, PropsWithChildren } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { PhotoProvider, PhotoView } from "react-photo-view"
 import inlineStyle from "react-photo-view/dist/react-photo-view.css?raw"
-
-import {
-  useMasonryItemRatio,
-  useMasonryItemWidth,
-  useSetStableMasonryItemRatio,
-} from "./picture-masonry-context"
 
 const MasonryItemFixedDimensionWrapper = (
   props: PropsWithChildren<{
@@ -103,7 +99,7 @@ const getCurrentColumn = (w: number) => {
 export const PictureList: FC<{
   entries: EntriesPreview
 
-  feed: Feed
+  feed?: Feed
 }> = ({ entries, feed }) => {
   const [masonryItemsRadio, setMasonryItemsRadio] = useState<Record<string, number>>({})
   const [currentItemWidth, setCurrentItemWidth] = useState(0)
@@ -214,8 +210,8 @@ const render: React.ComponentType<
     width: number | undefined
     blurhash: string | undefined
     id: string
-    entry: EntryModel
-    feed: Feed
+    entry: EntriesPreview[number]
+    feed?: Feed
   }>
 > = memo(({ data }) => {
   const [isHovered, setIsHovered] = useState(false)
@@ -276,8 +272,8 @@ const GridItemFooter = ({
   timeClassName,
   feed,
 }: {
-  entry: EntryModel
-  feed: Feed
+  entry: EntriesPreview[number]
+  feed?: Feed
   titleClassName?: string
   descriptionClassName?: string
   timeClassName?: string
@@ -296,9 +292,15 @@ const GridItemFooter = ({
         </div>
       </div>
       <div className="flex items-center gap-1 truncate text-[13px]">
-        <FeedIcon fallback className="mr-0.5 flex" feed={feed.feed} entry={entry} size={18} />
+        <FeedIcon
+          fallback
+          className="mr-0.5 flex"
+          feed={feed?.feed || entry.feeds}
+          entry={entry}
+          size={18}
+        />
         <span className={cn("min-w-0 truncate", descriptionClassName)}>
-          {getPreferredTitle(feed.feed)}
+          {getPreferredTitle(feed?.feed || entry.feeds)}
         </span>
         <span className={cn("text-zinc-500", timeClassName)}>·</span>
         <span className={cn("text-zinc-500", timeClassName)}>

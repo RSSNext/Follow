@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import type { ListModel } from "@follow/models/types"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 
 import { useWhoami } from "~/atoms/user"
 
@@ -10,14 +10,26 @@ export const useListById = (listId: Nullable<string>): ListModel | null =>
   useListStore((state) => (listId ? state.lists[listId] : null))
 
 export const useListByView = (view: FeedViewType) => {
-  return useListStore((state) => Object.values(state.lists).filter((list) => list.view === view))
+  return useListStore(
+    useCallback((state) => Object.values(state.lists).filter((list) => list.view === view), [view]),
+  )
 }
 
-export const useOwnedList = (view: FeedViewType) => {
+export const useOwnedListByView = (view: FeedViewType) => {
   const whoami = useWhoami()
   const viewLists = useListByView(view)
   return useMemo(
     () => viewLists.filter((list) => list.ownerUserId === whoami?.id),
     [viewLists, whoami],
+  )
+}
+
+export const useOwnedLists = () => {
+  const whoami = useWhoami()
+  return useListStore(
+    useCallback(
+      (state) => Object.values(state.lists).filter((list) => list.ownerUserId === whoami?.id),
+      [whoami?.id],
+    ),
   )
 }

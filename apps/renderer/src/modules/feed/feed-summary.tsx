@@ -5,8 +5,7 @@ import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 
 import { FeedIcon } from "~/modules/feed/feed-icon"
-
-import { FeedCertification } from "./feed-certification"
+import { FeedTitle } from "~/modules/feed/feed-title"
 
 export function FollowSummary({
   feed,
@@ -19,7 +18,6 @@ export function FollowSummary({
 }) {
   let siteLink: string | undefined
   let feedLink: string | undefined
-  let feedTitle = feed.title
   let feedText: string | undefined
 
   switch (feed.type) {
@@ -33,7 +31,6 @@ export function FollowSummary({
       siteLink = void 0
       feedLink = siteLink
       feedText = `${feed.id}${env.VITE_INBOXES_EMAIL}`
-      feedTitle = feed.title || `${feed.id}'s Inbox`
       break
     }
     default: {
@@ -53,11 +50,8 @@ export function FollowSummary({
           className="mask-squircle mask mr-3 shrink-0 rounded-none"
           size={32}
         />
-        <div className="truncate text-base font-semibold leading-tight">
-          <div className="flex items-center">
-            {feedTitle}
-            <FeedCertification className="center" feed={feed} />
-          </div>
+        <div className="min-w-0 leading-tight">
+          <FeedTitle feed={feed} className="text-base font-semibold" />
           <EllipsisHorizontalTextWithTooltip className="truncate text-xs font-normal text-zinc-500">
             {feed.description}
           </EllipsisHorizontalTextWithTooltip>

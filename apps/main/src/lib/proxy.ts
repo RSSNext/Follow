@@ -43,12 +43,12 @@ const normalizeProxyUri = (userProxy: string) => {
 
   try {
     const proxyUrl = new URL(firstInput)
-    if (!URL_SCHEME.has(proxyUrl.protocol) || !proxyUrl.hostname || !proxyUrl.port) {
+    if (!URL_SCHEME.has(proxyUrl.protocol) || !proxyUrl.hostname) {
       return
     }
     // There are multiple ways to specify a proxy in Electron,
     // but for security reasons, we only support simple proxy URLs for now.
-    return `${proxyUrl.protocol}//${proxyUrl.hostname}:${proxyUrl.port}`
+    return `${proxyUrl.protocol}//${proxyUrl.hostname}${proxyUrl.port ? `:${proxyUrl.port}` : ""}`
   } catch {
     return
   }

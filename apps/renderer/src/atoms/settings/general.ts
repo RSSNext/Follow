@@ -7,26 +7,38 @@ const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
   language: "en",
+  translationLanguage: "zh-CN",
+
+  // mobile app
+  startupScreen: "timeline",
   // Data control
   dataPersist: true,
   sendAnonymousData: true,
+  reduceRefetch: true,
+  showQuickTimeline: true,
+
+  autoGroup: true,
 
   // view
-  unreadOnly: false,
+  unreadOnly: true,
   // mark unread
   scrollMarkUnread: true,
   hoverMarkUnread: true,
   renderMarkUnread: false,
   // UX
-  // autoHideFeedColumn: true,
   groupByDate: true,
+  autoExpandLongSocialMedia: false,
+
   // Secure
   jumpOutLinkWarn: true,
+  // TTS
+  voice: "en-US-AndrewMultilingualNeural",
 })
 
 export const {
   useSettingKey: useGeneralSettingKey,
   useSettingSelector: useGeneralSettingSelector,
+  useSettingKeys: useGeneralSettingKeys,
   setSetting: setGeneralSetting,
   clearSettings: clearGeneralSettings,
   initializeDefaultSettings: initializeDefaultGeneralSettings,
@@ -44,4 +56,5 @@ export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
   "dataPersist",
   "sendAnonymousData",
   "language",
+  "voice",
 ]
