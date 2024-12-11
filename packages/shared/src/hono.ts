@@ -10415,6 +10415,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             status: 200;
         };
     };
+} & {
+    "/init-password": {
+        $patch: {
+            input: {
+                json: {
+                    password: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 }, "/profiles"> | hono_types.MergeSchemaPath<{
     "/": {
         $post: {
