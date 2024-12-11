@@ -10,7 +10,7 @@ import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { queryClient } from "~/lib/query-client"
-import { ActionCard } from "~/modules/settings/action-card"
+import { ActionCard } from "~/modules/action/action-card"
 import { Queries } from "~/queries"
 
 export const ActionSetting = () => {

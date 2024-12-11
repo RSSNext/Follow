@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
+import { ActionSetting } from "~/modules/action/action-setting"
 import { useSubViewTitle } from "~/modules/app-layout/subview/hooks"
-import { ActionSetting } from "~/modules/settings/tabs/actions"
 
 export function Component() {
   const { t } = useTranslation()
