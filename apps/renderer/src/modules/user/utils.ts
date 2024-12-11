@@ -1,7 +1,7 @@
 export interface User {
   name: string | null
   id: string
-  emailVerified: string | null
+  emailVerified: boolean | null
   image: string | null
   handle: string | null
   createdAt: string
