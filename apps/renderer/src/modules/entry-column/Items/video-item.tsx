@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
@@ -66,7 +67,12 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
         className="w-full cursor-card"
-        onClick={() => {
+        onClick={(e) => {
+          if (isMobile() && entry.entries.url) {
+            window.open(entry.entries.url, "_blank")
+            e.stopPropagation()
+            return
+          }
           if (iframeSrc) {
             modalStack.present({
               title: "",
