@@ -20,12 +20,16 @@ import type {
   ActionsInput,
   SupportedLanguages,
 } from "@follow/models/types"
-import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
-import { Fragment, useMemo, useState } from "react"
+import { Fragment, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Collapse, CollapseControlled } from "~/components/ui/collapse"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu/dropdown-menu"
 import { ViewSelectContent } from "~/modules/feed/view-select-content"
 
 const FieldTableHeader = () => {
@@ -180,45 +184,71 @@ const OperationTableCell = ({
   )
 }
 
-const SettingCollapsible = ({
-  title,
-  onOpenChange,
-  children,
-}: {
-  title: string
-  children: React.ReactNode
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-}) => {
-  const [open, setOpen] = useState(false)
-
-  const toggleOpen = () => {
-    setOpen((pre) => !pre)
-    onOpenChange && onOpenChange(!open)
-  }
-
-  if (typeof open === "boolean" && typeof onOpenChange === "function") {
-    return (
-      <CollapseControlled isOpened={open} onOpenChange={toggleOpen} title={title}>
-        <div className="px-1 pt-2">{children}</div>
-      </CollapseControlled>
-    )
-  }
-
-  return (
-    <Collapse title={title}>
-      <div className="pt-2">{children}</div>
-    </Collapse>
-  )
-}
-
 const CommonSelectTrigger = ({ className }: { className?: string }) => (
   <SelectTrigger className={cn("h-8", className)}>
     <SelectValue />
   </SelectTrigger>
 )
 
+type Action = {
+  title: string
+  config?: () => React.ReactNode
+  configInline?: boolean
+  enabled: boolean
+  onInit: () => void
+  onRemove: () => void
+}
+
 export function ActionCard({
+  data,
+  onChange,
+}: {
+  data: ActionsInput[number]
+  onChange: (data: ActionsInput[number] | null) => void
+}) {
+  const { t } = useTranslation("settings")
+
+  return (
+    <Card>
+      <CardHeader className="space-y-4 px-6 py-4">
+        <div className="flex w-full items-center gap-2 pr-2">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              onChange(null)
+            }}
+          >
+            <i className="i-mgc-delete-2-cute-re text-zinc-600" />
+          </Button>
+          <p className="shrink-0 font-medium text-zinc-500">{t("actions.action_card.name")}</p>
+          <Input
+            value={data.name}
+            className="h-8 max-w-64"
+            onChange={(e) => {
+              data.name = e.target.value
+              onChange(data)
+            }}
+          />
+          <div className="grow" />
+
+          <Switch
+            checked={!data.result.disabled}
+            onCheckedChange={(checked) => {
+              data.result.disabled = !checked
+              onChange(data)
+            }}
+          />
+        </div>
+        <div className="mt-4 flex flex-wrap justify-between gap-x-10 gap-y-5 px-1">
+          <FeedFilter data={data} onChange={onChange} />
+          <ActionList data={data} onChange={onChange} />
+        </div>
+      </CardHeader>
+    </Card>
+  )
+}
+
+function FeedFilter({
   data,
   onChange,
 }: {
@@ -274,6 +304,152 @@ export function ActionCard({
     ]
   }, [t])
 
+  const { disabled } = data.result
+  return (
+    <div className="shrink grow space-y-3 overflow-auto">
+      <p className="font-medium text-zinc-500">{t("actions.action_card.when_feeds_match")}</p>
+      <div className="flex flex-col gap-2">
+        <RadioGroup
+          value={data.condition.length > 0 ? "filter" : "all"}
+          onValueChange={(value) => {
+            if (value === "all") {
+              data.condition = []
+            } else {
+              data.condition = [[{}]]
+            }
+            onChange(data)
+          }}
+        >
+          <Radio disabled={disabled} label={t("actions.action_card.all")} value="all" />
+          <Radio
+            disabled={disabled}
+            label={t("actions.action_card.custom_filters")}
+            value="filter"
+          />
+        </RadioGroup>
+      </div>
+
+      {data.condition.length > 0 && (
+        <div>
+          <Table>
+            <FieldTableHeader />
+            <TableBody>
+              {data.condition.flatMap((orConditions, orConditionIdx) => {
+                return orConditions.map((condition, conditionIdx) => {
+                  const change = (key: string, value: string | number) => {
+                    if (!data.condition[orConditionIdx]) {
+                      data.condition[orConditionIdx] = [{}]
+                    }
+                    data.condition[orConditionIdx][conditionIdx][key] = value
+                    onChange(data)
+                  }
+                  const type =
+                    FeedOptions.find((option) => option.value === condition.field)?.type || "text"
+                  return (
+                    <Fragment key={`${orConditionIdx}${conditionIdx}`}>
+                      {conditionIdx === 0 && orConditionIdx !== 0 && (
+                        <TableRow className="flex h-16 items-center">
+                          <Button disabled variant="outline">
+                            {t("actions.action_card.or")}
+                          </Button>
+                        </TableRow>
+                      )}
+                      <TableRow className="max-sm:flex max-sm:flex-col">
+                        <TableCell
+                          size="sm"
+                          className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:pr-0"
+                        >
+                          <span className="sm:hidden">{t("actions.action_card.field")}</span>
+                          <ResponsiveSelect
+                            disabled={disabled}
+                            value={condition.field}
+                            onValueChange={(value) => change("field", value as ActionFeedField)}
+                            items={FeedOptions}
+                            triggerClassName="max-sm:w-fit"
+                          />
+                        </TableCell>
+                        <OperationTableCell
+                          type={type}
+                          disabled={disabled}
+                          value={condition.operator}
+                          onValueChange={(value) => change("operator", value)}
+                        />
+                        <TableCell
+                          size="sm"
+                          className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:gap-4 max-sm:pr-0"
+                        >
+                          <span className="sm:hidden">{t("actions.action_card.value")}</span>
+                          {type === "view" ? (
+                            <Select
+                              disabled={disabled}
+                              onValueChange={(value) => change("value", value)}
+                              value={condition.value}
+                            >
+                              <CommonSelectTrigger className="max-sm:w-fit" />
+                              <ViewSelectContent />
+                            </Select>
+                          ) : (
+                            <Input
+                              disabled={disabled}
+                              type={type}
+                              value={condition.value}
+                              className="h-8"
+                              onChange={(e) => change("value", e.target.value)}
+                            />
+                          )}
+                        </TableCell>
+                        <ActionTableCell
+                          disabled={disabled}
+                          onAnd={() => {
+                            data.condition[orConditionIdx].push({})
+                            onChange(data)
+                          }}
+                          onDelete={() => {
+                            if (data.condition[orConditionIdx].length === 1) {
+                              data.condition.splice(orConditionIdx, 1)
+                            } else {
+                              data.condition[orConditionIdx].splice(conditionIdx, 1)
+                            }
+                            onChange(data)
+                          }}
+                        />
+                      </TableRow>
+                      {conditionIdx !== orConditions.length - 1 && (
+                        <TableRow className="relative flex items-center">
+                          <Button disabled variant="outline">
+                            {t("actions.action_card.and")}
+                          </Button>
+                        </TableRow>
+                      )}
+                    </Fragment>
+                  )
+                })
+              })}
+            </TableBody>
+          </Table>
+          <OrTableRow
+            disabled={disabled}
+            onClick={() => {
+              data.condition.push([{}])
+              onChange(data)
+            }}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ActionList({
+  data,
+  onChange,
+}: {
+  data: ActionsInput[number]
+  onChange: (data: ActionsInput[number] | null) => void
+}) {
+  const { disabled } = data.result
+  const { t } = useTranslation("settings")
+
   const TransitionOptions: {
     label: string
     value: SupportedLanguages
@@ -302,437 +478,280 @@ export function ActionCard({
     ]
   }, [t])
 
-  const { disabled } = data.result
+  const availableActions: Action[] = [
+    {
+      title: t("actions.action_card.generate_summary"),
+      enabled: !!data.result.summary,
+      onInit: () => {
+        data.result.summary = true
+      },
+      onRemove: () => {
+        delete data.result.summary
+      },
+    },
+    {
+      title: t("actions.action_card.translate_into"),
+      config: () => (
+        <ResponsiveSelect
+          disabled={disabled}
+          value={data.result.translation}
+          onValueChange={(value) => {
+            if (value === "none") {
+              delete data.result.translation
+            } else {
+              data.result.translation = value
+            }
+            onChange(data)
+          }}
+          items={TransitionOptions}
+          triggerClassName="min-w-36 w-fit max-w-44"
+        />
+      ),
+      configInline: true,
+      enabled: !!data.result.translation,
+      onInit: () => {
+        data.result.translation = "none"
+      },
+      onRemove: () => {
+        delete data.result.translation
+      },
+    },
+    {
+      title: t("actions.action_card.enable_readability"),
+      enabled: !!data.result.readability,
+      onInit: () => {
+        data.result.readability = true
+      },
+      onRemove: () => {
+        delete data.result.readability
+      },
+    },
+    {
+      title: t("actions.action_card.source_content"),
+      enabled: !!data.result.sourceContent,
+      onInit: () => {
+        data.result.sourceContent = true
+      },
+      onRemove: () => {
+        delete data.result.sourceContent
+      },
+    },
+    {
+      title: t("actions.action_card.new_entry_notification"),
+      enabled: !!data.result.newEntryNotification,
+      onInit: () => {
+        data.result.newEntryNotification = true
+      },
+      onRemove: () => {
+        delete data.result.newEntryNotification
+      },
+    },
+    {
+      title: t("actions.action_card.silence"),
+      enabled: !!data.result.silence,
+      onInit: () => {
+        data.result.silence = true
+      },
+      onRemove: () => {
+        delete data.result.silence
+      },
+    },
+    {
+      title: t("actions.action_card.block"),
+      enabled: !!data.result.block,
+      onInit: () => {
+        data.result.block = true
+      },
+      onRemove: () => {
+        delete data.result.block
+      },
+    },
+    {
+      title: t("actions.action_card.rewrite_rules"),
+      config: () => (
+        <>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead size="sm" />
+                <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
+                <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.result.rewriteRules?.map((rule, rewriteIdx) => {
+                const change = (key: string, value: string) => {
+                  data.result.rewriteRules![rewriteIdx][key] = value
+                  onChange(data)
+                }
+                return (
+                  <TableRow key={rewriteIdx}>
+                    <DeleteTableCell
+                      disabled={disabled}
+                      onClick={() => {
+                        if (data.result.rewriteRules?.length === 1) {
+                          delete data.result.rewriteRules
+                        } else {
+                          data.result.rewriteRules?.splice(rewriteIdx, 1)
+                        }
+                        onChange(data)
+                      }}
+                    />
+                    <TableCell size="sm">
+                      <Input
+                        disabled={disabled}
+                        value={rule.from}
+                        className="h-8"
+                        onChange={(e) => change("from", e.target.value)}
+                      />
+                    </TableCell>
+                    <TableCell size="sm">
+                      <Input
+                        disabled={disabled}
+                        value={rule.to}
+                        className="h-8"
+                        onChange={(e) => change("to", e.target.value)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+          <AddTableRow
+            disabled={disabled}
+            onClick={() => {
+              if (!data.result.rewriteRules) {
+                data.result.rewriteRules = []
+              }
+              data.result.rewriteRules!.push({
+                from: "",
+                to: "",
+              })
+              onChange(data)
+            }}
+          />
+        </>
+      ),
+      enabled: !!data.result.rewriteRules,
+      onInit: () => {
+        data.result.rewriteRules = [
+          {
+            from: "",
+            to: "",
+          },
+        ]
+      },
+      onRemove: () => {
+        delete data.result.rewriteRules
+      },
+    },
+    {
+      title: t("actions.action_card.webhooks"),
+      enabled: !!data.result.webhooks,
+      config: () => (
+        <>
+          {data.result.webhooks?.map((webhook, rewriteIdx) => {
+            return (
+              <div key={rewriteIdx} className="flex items-center gap-2">
+                <DeleteTableCell
+                  disabled={disabled}
+                  onClick={() => {
+                    if (data.result.webhooks?.length === 1) {
+                      delete data.result.webhooks
+                    } else {
+                      data.result.webhooks?.splice(rewriteIdx, 1)
+                    }
+                    onChange(data)
+                  }}
+                />
+                <Input
+                  disabled={disabled}
+                  value={webhook}
+                  className="h-8"
+                  placeholder="https://"
+                  onChange={(e) => {
+                    data.result.webhooks![rewriteIdx] = e.target.value
+                    onChange(data)
+                  }}
+                />
+              </div>
+            )
+          })}
+          <AddTableRow
+            disabled={disabled}
+            onClick={() => {
+              if (!data.result.webhooks) {
+                data.result.webhooks = []
+              }
+              data.result.webhooks!.push("")
+              onChange(data)
+            }}
+          />
+        </>
+      ),
+      onInit: () => {
+        data.result.webhooks = [""]
+      },
+      onRemove: () => {
+        delete data.result.webhooks
+      },
+    },
+  ]
+  const enabledActions = availableActions.filter((action) => action.enabled)
+  const notEnabledActions = availableActions.filter((action) => !action.enabled)
 
   return (
-    <Card>
-      <CardHeader className="space-y-4 px-6 py-4">
-        <Collapse
-          className="[&_.name-placeholder]:data-[state=open]:hidden [&_input.name-input]:data-[state=open]:block"
-          title={
-            <div className="flex w-full items-center gap-2 pr-2">
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  onChange(null)
-                }}
-              >
-                <i className="i-mgc-delete-2-cute-re text-zinc-600" />
-              </Button>
-              <p className="shrink-0 font-medium text-zinc-500">{t("actions.action_card.name")}</p>
-              <Input
-                value={data.name}
-                className="name-input hidden h-8"
-                onClick={stopPropagation}
-                onChange={(e) => {
-                  data.name = e.target.value
-                  onChange(data)
-                }}
-              />
-
-              <div className="name-placeholder flex-1 text-sm">{data.name}</div>
-              <Switch
-                checked={!data.result.disabled}
-                onCheckedChange={(checked) => {
-                  data.result.disabled = !checked
-                  onChange(data)
-                }}
-                onClick={stopPropagation}
-              />
-            </div>
-          }
-        >
-          <div className="mt-4 space-y-4 px-1">
-            <div className="space-y-3">
-              <p className="font-medium text-zinc-500">
-                {t("actions.action_card.when_feeds_match")}
-              </p>
-              <div className="flex flex-col gap-2">
-                <RadioGroup
-                  value={data.condition.length > 0 ? "filter" : "all"}
-                  onValueChange={(value) => {
-                    if (value === "all") {
-                      data.condition = []
-                    } else {
-                      data.condition = [[{}]]
-                    }
+    <div className="min-w-64 shrink grow space-y-4">
+      <p className="font-medium text-zinc-500">{t("actions.action_card.then_do")}</p>
+      <div className="w-full space-y-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className={cn(notEnabledActions.length === 0 && "hidden")}>
+              Add Action
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {notEnabledActions.map((action) => {
+              return (
+                <DropdownMenuItem
+                  key={action.title}
+                  onClick={() => {
+                    action.onInit()
                     onChange(data)
                   }}
                 >
-                  <Radio disabled={disabled} label={t("actions.action_card.all")} value="all" />
-                  <Radio
-                    disabled={disabled}
-                    label={t("actions.action_card.custom_filters")}
-                    value="filter"
-                  />
-                </RadioGroup>
-              </div>
+                  {action.title}
+                </DropdownMenuItem>
+              )
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-              {data.condition.length > 0 && (
-                <div>
-                  <Table>
-                    <FieldTableHeader />
-                    <TableBody>
-                      {data.condition.flatMap((orConditions, orConditionIdx) => {
-                        return orConditions.map((condition, conditionIdx) => {
-                          const change = (key: string, value: string | number) => {
-                            if (!data.condition[orConditionIdx]) {
-                              data.condition[orConditionIdx] = [{}]
-                            }
-                            data.condition[orConditionIdx][conditionIdx][key] = value
-                            onChange(data)
-                          }
-                          const type =
-                            FeedOptions.find((option) => option.value === condition.field)?.type ||
-                            "text"
-                          return (
-                            <Fragment key={`${orConditionIdx}${conditionIdx}`}>
-                              {conditionIdx === 0 && orConditionIdx !== 0 && (
-                                <TableRow className="flex h-16 items-center">
-                                  <Button disabled variant="outline">
-                                    {t("actions.action_card.or")}
-                                  </Button>
-                                </TableRow>
-                              )}
-                              <TableRow className="max-sm:flex max-sm:flex-col">
-                                <TableCell
-                                  size="sm"
-                                  className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:pr-0"
-                                >
-                                  <span className="sm:hidden">
-                                    {t("actions.action_card.field")}
-                                  </span>
-                                  <ResponsiveSelect
-                                    disabled={disabled}
-                                    value={condition.field}
-                                    onValueChange={(value) =>
-                                      change("field", value as ActionFeedField)
-                                    }
-                                    items={FeedOptions}
-                                    triggerClassName="max-sm:w-fit"
-                                  />
-                                </TableCell>
-                                <OperationTableCell
-                                  type={type}
-                                  disabled={disabled}
-                                  value={condition.operator}
-                                  onValueChange={(value) => change("operator", value)}
-                                />
-                                <TableCell
-                                  size="sm"
-                                  className="max-sm:flex max-sm:items-center max-sm:justify-between max-sm:gap-4 max-sm:pr-0"
-                                >
-                                  <span className="sm:hidden">
-                                    {t("actions.action_card.value")}
-                                  </span>
-                                  {type === "view" ? (
-                                    <Select
-                                      disabled={disabled}
-                                      onValueChange={(value) => change("value", value)}
-                                      value={condition.value}
-                                    >
-                                      <CommonSelectTrigger className="max-sm:w-fit" />
-                                      <ViewSelectContent />
-                                    </Select>
-                                  ) : (
-                                    <Input
-                                      disabled={disabled}
-                                      type={type}
-                                      value={condition.value}
-                                      className="h-8"
-                                      onChange={(e) => change("value", e.target.value)}
-                                    />
-                                  )}
-                                </TableCell>
-                                <ActionTableCell
-                                  disabled={disabled}
-                                  onAnd={() => {
-                                    data.condition[orConditionIdx].push({})
-                                    onChange(data)
-                                  }}
-                                  onDelete={() => {
-                                    if (data.condition[orConditionIdx].length === 1) {
-                                      data.condition.splice(orConditionIdx, 1)
-                                    } else {
-                                      data.condition[orConditionIdx].splice(conditionIdx, 1)
-                                    }
-                                    onChange(data)
-                                  }}
-                                />
-                              </TableRow>
-                              {conditionIdx !== orConditions.length - 1 && (
-                                <TableRow className="relative flex items-center">
-                                  <Button disabled variant="outline">
-                                    {t("actions.action_card.and")}
-                                  </Button>
-                                </TableRow>
-                              )}
-                            </Fragment>
-                          )
-                        })
-                      })}
-                    </TableBody>
-                  </Table>
-                  <OrTableRow
-                    disabled={disabled}
-                    onClick={() => {
-                      data.condition.push([{}])
-                      onChange(data)
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="space-y-4">
-              <p className="font-medium text-zinc-500">{t("actions.action_card.then_do")}</p>
-              <div className="w-full space-y-4">
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.generate_summary")}
-                  </span>
-                  <Switch
-                    disabled={disabled}
-                    checked={data.result.summary}
-                    onCheckedChange={(checked) => {
-                      data.result.summary = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.translate_into")}
-                  </span>
-                  <ResponsiveSelect
-                    disabled={disabled}
-                    value={data.result.translation}
-                    onValueChange={(value) => {
-                      if (value === "none") {
-                        delete data.result.translation
-                      } else {
-                        data.result.translation = value
-                      }
-                      onChange(data)
-                    }}
-                    items={TransitionOptions}
-                    triggerClassName="max-w-44"
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.enable_readability")}
-                  </span>
-                  <Switch
-                    disabled={disabled}
-                    checked={data.result.readability}
-                    onCheckedChange={(checked) => {
-                      data.result.readability = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.source_content")}
-                  </span>
-                  <Switch
-                    disabled={disabled}
-                    checked={data.result.sourceContent}
-                    onCheckedChange={(checked) => {
-                      data.result.sourceContent = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.new_entry_notification")}
-                  </span>
-                  <Switch
-                    disabled={disabled}
-                    checked={data.result.newEntryNotification}
-                    onCheckedChange={(checked) => {
-                      data.result.newEntryNotification = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.silence")}
-                  </span>
-                  <Switch
-                    disabled={disabled}
-                    checked={data.result.silence}
-                    onCheckedChange={(checked) => {
-                      data.result.silence = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">{t("actions.action_card.block")}</span>
-                  <Switch
-                    disabled={disabled}
-                    checked={data.result.block}
-                    onCheckedChange={(checked) => {
-                      data.result.block = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <SettingCollapsible
-                  title={t("actions.action_card.rewrite_rules")}
-                  onOpenChange={(open) => {
-                    if (
-                      open &&
-                      (!data.result.rewriteRules || data.result.rewriteRules?.length === 0)
-                    ) {
-                      data.result.rewriteRules = [
-                        {
-                          from: "",
-                          to: "",
-                        },
-                      ]
-                    }
-                    onChange(data)
-                  }}
-                >
-                  {data.result.rewriteRules && data.result.rewriteRules.length > 0 && (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead size="sm" />
-                          <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
-                          <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {data.result.rewriteRules.map((rule, rewriteIdx) => {
-                          const change = (key: string, value: string) => {
-                            data.result.rewriteRules![rewriteIdx][key] = value
-                            onChange(data)
-                          }
-                          return (
-                            <TableRow key={rewriteIdx}>
-                              <DeleteTableCell
-                                disabled={disabled}
-                                onClick={() => {
-                                  if (data.result.rewriteRules?.length === 1) {
-                                    delete data.result.rewriteRules
-                                  } else {
-                                    data.result.rewriteRules?.splice(rewriteIdx, 1)
-                                  }
-                                  onChange(data)
-                                }}
-                              />
-                              <TableCell size="sm">
-                                <Input
-                                  disabled={disabled}
-                                  value={rule.from}
-                                  className="h-8"
-                                  onChange={(e) => change("from", e.target.value)}
-                                />
-                              </TableCell>
-                              <TableCell size="sm">
-                                <Input
-                                  disabled={disabled}
-                                  value={rule.to}
-                                  className="h-8"
-                                  onChange={(e) => change("to", e.target.value)}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          )
-                        })}
-                      </TableBody>
-                    </Table>
-                  )}
-                  <AddTableRow
-                    disabled={disabled}
-                    onClick={() => {
-                      if (!data.result.rewriteRules) {
-                        data.result.rewriteRules = []
-                      }
-                      data.result.rewriteRules!.push({
-                        from: "",
-                        to: "",
-                      })
-                      onChange(data)
-                    }}
-                  />
-                </SettingCollapsible>
-                <Divider />
-                <SettingCollapsible
-                  title={t("actions.action_card.webhooks")}
-                  onOpenChange={(open) => {
-                    if (open && (!data.result.webhooks || data.result.webhooks?.length === 0)) {
-                      data.result.webhooks = [""]
-                    }
-                    onChange(data)
-                  }}
-                >
-                  {data.result.webhooks && data.result.webhooks.length > 0 && (
-                    <>
-                      {data.result.webhooks.map((webhook, rewriteIdx) => {
-                        return (
-                          <div key={rewriteIdx} className="flex items-center gap-2">
-                            <DeleteTableCell
-                              disabled={disabled}
-                              onClick={() => {
-                                if (data.result.webhooks?.length === 1) {
-                                  delete data.result.webhooks
-                                } else {
-                                  data.result.webhooks?.splice(rewriteIdx, 1)
-                                }
-                                onChange(data)
-                              }}
-                            />
-                            <Input
-                              disabled={disabled}
-                              value={webhook}
-                              className="h-8"
-                              placeholder="https://"
-                              onChange={(e) => {
-                                data.result.webhooks![rewriteIdx] = e.target.value
-                                onChange(data)
-                              }}
-                            />
-                          </div>
-                        )
-                      })}
-                    </>
-                  )}
-                  <AddTableRow
-                    disabled={disabled}
-                    onClick={() => {
-                      if (!data.result.webhooks) {
-                        data.result.webhooks = []
-                      }
-                      data.result.webhooks!.push("")
-                      onChange(data)
-                    }}
-                  />
-                </SettingCollapsible>
-              </div>
-            </div>
-          </div>
-        </Collapse>
-      </CardHeader>
-    </Card>
+        <section>
+          {enabledActions
+            .filter((action) => action.enabled)
+            .map((action, index) => {
+              return (
+                <Fragment key={action.title}>
+                  <div className="flex w-full items-center justify-between">
+                    <span className="w-0 shrink grow truncate">{action.title}</span>
+                    {action.configInline && action.config && action.config()}
+                    <DeleteTableCell
+                      disabled={disabled}
+                      onClick={() => {
+                        action.onRemove()
+                        onChange(data)
+                      }}
+                    />
+                  </div>
+                  {!action.configInline && action.config && action.config()}
+                  {index !== enabledActions.length - 1 && <Divider className="my-2" />}
+                </Fragment>
+              )
+            })}
+        </section>
+      </div>
+    </div>
   )
 }
