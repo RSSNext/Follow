@@ -435,7 +435,7 @@ const FallbackableImage: FC<
       )}
       {isAllError && (
         <div
-          className="center pointer-events-none absolute inset-0 flex-col gap-6 text-white/80"
+          className="center pointer-events-none absolute inset-0 flex-col gap-6"
           onClick={stopPropagation}
           tabIndex={-1}
         >
