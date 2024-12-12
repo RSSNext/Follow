@@ -30,6 +30,7 @@ export const {
   linkSocial,
   listAccounts,
   changePassword,
+  forgetPassword,
 } = authClient
 
 export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
