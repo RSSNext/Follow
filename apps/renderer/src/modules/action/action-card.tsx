@@ -1,5 +1,5 @@
 import { Button } from "@follow/components/ui/button/index.js"
-import { Card, CardHeader } from "@follow/components/ui/card/index.jsx"
+import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.jsx"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { Input } from "@follow/components/ui/input/index.js"
 import { Radio, RadioGroup } from "@follow/components/ui/radio-group/index.js"
@@ -16,8 +16,8 @@ import {
 } from "@follow/components/ui/table/index.jsx"
 import type {
   ActionFeedField,
+  ActionModel,
   ActionOperation,
-  ActionsInput,
   SupportedLanguages,
 } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu/dropdown-menu"
 import { ViewSelectContent } from "~/modules/feed/view-select-content"
+import { actionActions, useActionByIndex } from "~/store/action"
 
 const FieldTableHeader = () => {
   const { t } = useTranslation("settings")
@@ -195,66 +196,66 @@ type Action = {
   config?: () => React.ReactNode
   configInline?: boolean
   enabled: boolean
-  onInit: () => void
-  onRemove: () => void
+  onInit: (data: ActionModel) => void
+  onRemove: (data: ActionModel) => void
 }
 
-export function ActionCard({
-  data,
-  onChange,
-}: {
-  data: ActionsInput[number]
-  onChange: (data: ActionsInput[number] | null) => void
-}) {
-  const { t } = useTranslation("settings")
-
+export const ActionCard = ({ index }: { index: number }) => {
   return (
     <Card>
-      <CardHeader className="space-y-4 px-6 py-4">
-        <div className="flex w-full items-center gap-2 pr-2">
-          <Button
-            variant="ghost"
-            onClick={() => {
-              onChange(null)
-            }}
-          >
-            <i className="i-mgc-delete-2-cute-re text-zinc-600" />
-          </Button>
-          <p className="shrink-0 font-medium text-zinc-500">{t("actions.action_card.name")}</p>
-          <Input
-            value={data.name}
-            className="h-8 max-w-64"
-            onChange={(e) => {
-              data.name = e.target.value
-              onChange(data)
-            }}
-          />
-          <div className="grow" />
-
-          <Switch
-            checked={!data.result.disabled}
-            onCheckedChange={(checked) => {
-              data.result.disabled = !checked
-              onChange(data)
-            }}
-          />
-        </div>
-        <div className="mt-4 flex flex-wrap justify-between gap-x-10 gap-y-5 px-1">
-          <FeedFilter data={data} onChange={onChange} />
-          <ActionList data={data} onChange={onChange} />
-        </div>
+      <CardHeader>
+        <ActionCardToolbar index={index} />
       </CardHeader>
+      <CardContent className="flex flex-wrap justify-between gap-x-10 gap-y-5">
+        <FeedFilter index={index} />
+        <ActionList index={index} />
+      </CardContent>
     </Card>
   )
 }
 
-function FeedFilter({
-  data,
-  onChange,
-}: {
-  data: ActionsInput[number]
-  onChange: (data: ActionsInput[number] | null) => void
-}) {
+const ActionCardToolbar = ({ index }: { index: number }) => {
+  const { t } = useTranslation("settings")
+
+  const name = useActionByIndex(index, (a) => a.name)
+  const disabled = useActionByIndex(index, (a) => a.result.disabled)
+
+  const onChange = actionActions.updateByIndex.bind(null, index)
+  return (
+    <div className="flex w-full items-center gap-2">
+      <Button
+        variant="ghost"
+        onClick={() => {
+          actionActions.removeByIndex(index)
+        }}
+      >
+        <i className="i-mgc-delete-2-cute-re text-zinc-600" />
+      </Button>
+      <p className="shrink-0 font-medium text-zinc-500">{t("actions.action_card.name")}</p>
+      <Input
+        value={name}
+        className="h-8 max-w-64"
+        onChange={(e) => {
+          onChange((data) => {
+            data.name = e.target.value
+          })
+        }}
+      />
+      <div className="grow" />
+
+      <Switch
+        checked={!disabled}
+        onCheckedChange={(checked) => {
+          onChange((data) => {
+            data.result.disabled = !checked
+          })
+        }}
+      />
+    </div>
+  )
+}
+
+const FeedFilter = ({ index }: { index: number }) => {
   const { t } = useTranslation("settings")
 
   const FeedOptions = useMemo(() => {
@@ -304,20 +305,24 @@ function FeedFilter({
     ]
   }, [t])
 
-  const { disabled } = data.result
+  const disabled = useActionByIndex(index, (a) => a.result.disabled)
+  const condition = useActionByIndex(index, (a) => a.condition)
+
+  const onChange = actionActions.updateByIndex.bind(null, index)
   return (
     <div className="shrink grow space-y-3 overflow-auto">
       <p className="font-medium text-zinc-500">{t("actions.action_card.when_feeds_match")}</p>
       <div className="flex flex-col gap-2">
         <RadioGroup
-          value={data.condition.length > 0 ? "filter" : "all"}
+          value={condition.length > 0 ? "filter" : "all"}
           onValueChange={(value) => {
-            if (value === "all") {
-              data.condition = []
-            } else {
-              data.condition = [[{}]]
-            }
-            onChange(data)
+            onChange((data) => {
+              if (value === "all") {
+                data.condition = []
+              } else {
+                data.condition = [[{}]]
+              }
+            })
           }}
         >
           <Radio disabled={disabled} label={t("actions.action_card.all")} value="all" />
@@ -329,19 +334,20 @@ function FeedFilter({
         </RadioGroup>
       </div>
 
-      {data.condition.length > 0 && (
+      {condition.length > 0 && (
         <div>
           <Table>
             <FieldTableHeader />
             <TableBody>
-              {data.condition.flatMap((orConditions, orConditionIdx) => {
+              {condition.flatMap((orConditions, orConditionIdx) => {
                 return orConditions.map((condition, conditionIdx) => {
                   const change = (key: string, value: string | number) => {
-                    if (!data.condition[orConditionIdx]) {
-                      data.condition[orConditionIdx] = [{}]
-                    }
-                    data.condition[orConditionIdx][conditionIdx][key] = value
-                    onChange(data)
+                    onChange((data) => {
+                      if (!data.condition[orConditionIdx]) {
+                        data.condition[orConditionIdx] = [{}]
+                      }
+                      data.condition[orConditionIdx][conditionIdx][key] = value
+                    })
                   }
                   const type =
                     FeedOptions.find((option) => option.value === condition.field)?.type || "text"
@@ -401,16 +407,18 @@ function FeedFilter({
                         <ActionTableCell
                           disabled={disabled}
                           onAnd={() => {
-                            data.condition[orConditionIdx].push({})
-                            onChange(data)
+                            onChange((data) => {
+                              data.condition[orConditionIdx].push({})
+                            })
                           }}
                           onDelete={() => {
-                            if (data.condition[orConditionIdx].length === 1) {
-                              data.condition.splice(orConditionIdx, 1)
-                            } else {
-                              data.condition[orConditionIdx].splice(conditionIdx, 1)
-                            }
-                            onChange(data)
+                            onChange((data) => {
+                              if (data.condition[orConditionIdx].length === 1) {
+                                data.condition.splice(orConditionIdx, 1)
+                              } else {
+                                data.condition[orConditionIdx].splice(conditionIdx, 1)
+                              }
+                            })
                           }}
                         />
                       </TableRow>
@@ -430,8 +438,9 @@ function FeedFilter({
           <OrTableRow
             disabled={disabled}
             onClick={() => {
-              data.condition.push([{}])
-              onChange(data)
+              onChange((data) => {
+                data.condition.push([{}])
+              })
             }}
           />
         </div>
@@ -440,14 +449,18 @@ function FeedFilter({
   )
 }
 
-function ActionList({
-  data,
-  onChange,
-}: {
-  data: ActionsInput[number]
-  onChange: (data: ActionsInput[number] | null) => void
-}) {
-  const { disabled } = data.result
+const ActionList = ({ index }: { index: number }) => {
+  const summary = useActionByIndex(index, (a) => a.result.summary)
+  const translation = useActionByIndex(index, (a) => a.result.translation)
+  const readability = useActionByIndex(index, (a) => a.result.readability)
+  const sourceContent = useActionByIndex(index, (a) => a.result.sourceContent)
+  const newEntryNotification = useActionByIndex(index, (a) => a.result.newEntryNotification)
+  const silence = useActionByIndex(index, (a) => a.result.silence)
+  const block = useActionByIndex(index, (a) => a.result.block)
+  const rewriteRules = useActionByIndex(index, (a) => a.result.rewriteRules)
+  const webhooks = useActionByIndex(index, (a) => a.result.webhooks)
+
+  const disabled = useActionByIndex(index, (a) => a.result.disabled)
   const { t } = useTranslation("settings")
 
   const TransitionOptions: {
@@ -478,38 +491,41 @@ function ActionList({
     ]
   }, [t])
 
+  const onChange = actionActions.updateByIndex.bind(null, index)
+
   const availableActions: Action[] = useMemo(
     () => [
       {
         title: t("actions.action_card.generate_summary"),
-        enabled: !!data.result.summary,
-        onInit: () => {
+        enabled: !!summary,
+        onInit: (data) => {
           data.result.summary = true
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.summary
         },
       },
       {
         title: t("actions.action_card.translate_into"),
-        enabled: !!data.result.translation,
-        onInit: () => {
+        enabled: !!translation,
+        onInit: (data) => {
           data.result.translation = "none"
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.translation
         },
         config: () => (
           <ResponsiveSelect
             disabled={disabled}
-            value={data.result.translation}
+            value={translation}
             onValueChange={(value) => {
-              if (value === "none") {
-                delete data.result.translation
-              } else {
-                data.result.translation = value
-              }
-              onChange(data)
+              onChange((data) => {
+                if (value === "none") {
+                  delete data.result.translation
+                } else {
+                  data.result.translation = value
+                }
+              })
             }}
             items={TransitionOptions}
             triggerClassName="w-fit max-w-44"
@@ -519,58 +535,58 @@ function ActionList({
       },
       {
         title: t("actions.action_card.enable_readability"),
-        enabled: !!data.result.readability,
-        onInit: () => {
+        enabled: !!readability,
+        onInit: (data) => {
           data.result.readability = true
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.readability
         },
       },
       {
         title: t("actions.action_card.source_content"),
-        enabled: !!data.result.sourceContent,
-        onInit: () => {
+        enabled: !!sourceContent,
+        onInit: (data) => {
           data.result.sourceContent = true
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.sourceContent
         },
       },
       {
         title: t("actions.action_card.new_entry_notification"),
-        enabled: !!data.result.newEntryNotification,
-        onInit: () => {
+        enabled: !!newEntryNotification,
+        onInit: (data) => {
           data.result.newEntryNotification = true
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.newEntryNotification
         },
       },
       {
         title: t("actions.action_card.silence"),
-        enabled: !!data.result.silence,
-        onInit: () => {
+        enabled: !!silence,
+        onInit: (data) => {
           data.result.silence = true
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.silence
         },
       },
       {
         title: t("actions.action_card.block"),
-        enabled: !!data.result.block,
-        onInit: () => {
+        enabled: !!block,
+        onInit: (data) => {
           data.result.block = true
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.block
         },
       },
       {
         title: t("actions.action_card.rewrite_rules"),
-        enabled: !!data.result.rewriteRules,
-        onInit: () => {
+        enabled: !!rewriteRules,
+        onInit: (data) => {
           data.result.rewriteRules = [
             {
               from: "",
@@ -578,7 +594,7 @@ function ActionList({
             },
           ]
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.rewriteRules
         },
         config: () => (
@@ -592,22 +608,24 @@ function ActionList({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.result.rewriteRules?.map((rule, rewriteIdx) => {
+                {rewriteRules?.map((rule, rewriteIdx) => {
                   const change = (key: string, value: string) => {
-                    data.result.rewriteRules![rewriteIdx][key] = value
-                    onChange(data)
+                    onChange((data) => {
+                      data.result.rewriteRules![rewriteIdx][key] = value
+                    })
                   }
                   return (
                     <TableRow key={rewriteIdx}>
                       <DeleteTableCell
                         disabled={disabled}
                         onClick={() => {
-                          if (data.result.rewriteRules?.length === 1) {
-                            delete data.result.rewriteRules
-                          } else {
-                            data.result.rewriteRules?.splice(rewriteIdx, 1)
-                          }
-                          onChange(data)
+                          onChange((data) => {
+                            if (data.result.rewriteRules?.length === 1) {
+                              delete data.result.rewriteRules
+                            } else {
+                              data.result.rewriteRules?.splice(rewriteIdx, 1)
+                            }
+                          })
                         }}
                       />
                       <TableCell size="sm">
@@ -634,14 +652,15 @@ function ActionList({
             <AddTableRow
               disabled={disabled}
               onClick={() => {
-                if (!data.result.rewriteRules) {
-                  data.result.rewriteRules = []
-                }
-                data.result.rewriteRules!.push({
-                  from: "",
-                  to: "",
+                onChange((data) => {
+                  if (!data.result.rewriteRules) {
+                    data.result.rewriteRules = []
+                  }
+                  data.result.rewriteRules!.push({
+                    from: "",
+                    to: "",
+                  })
                 })
-                onChange(data)
               }}
             />
           </>
@@ -649,27 +668,28 @@ function ActionList({
       },
       {
         title: t("actions.action_card.webhooks"),
-        enabled: !!data.result.webhooks,
-        onInit: () => {
+        enabled: !!webhooks,
+        onInit: (data) => {
           data.result.webhooks = [""]
         },
-        onRemove: () => {
+        onRemove: (data) => {
           delete data.result.webhooks
         },
         config: () => (
           <>
-            {data.result.webhooks?.map((webhook, rewriteIdx) => {
+            {webhooks?.map((webhook, rewriteIdx) => {
               return (
                 <div key={rewriteIdx} className="flex items-center gap-2">
                   <DeleteTableCell
                     disabled={disabled}
                     onClick={() => {
-                      if (data.result.webhooks?.length === 1) {
-                        delete data.result.webhooks
-                      } else {
-                        data.result.webhooks?.splice(rewriteIdx, 1)
-                      }
-                      onChange(data)
+                      onChange((data) => {
+                        if (data.result.webhooks?.length === 1) {
+                          delete data.result.webhooks
+                        } else {
+                          data.result.webhooks?.splice(rewriteIdx, 1)
+                        }
+                      })
                     }}
                   />
                   <Input
@@ -678,8 +698,9 @@ function ActionList({
                     className="h-8"
                     placeholder="https://"
                     onChange={(e) => {
-                      data.result.webhooks![rewriteIdx] = e.target.value
-                      onChange(data)
+                      onChange((data) => {
+                        data.result.webhooks![rewriteIdx] = e.target.value
+                      })
                     }}
                   />
                 </div>
@@ -688,18 +709,33 @@ function ActionList({
             <AddTableRow
               disabled={disabled}
               onClick={() => {
-                if (!data.result.webhooks) {
-                  data.result.webhooks = []
-                }
-                data.result.webhooks!.push("")
-                onChange(data)
+                onChange((data) => {
+                  if (!data.result.webhooks) {
+                    data.result.webhooks = []
+                  }
+                  data.result.webhooks!.push("")
+                })
               }}
             />
           </>
         ),
       },
     ],
-    [TransitionOptions, data, disabled, onChange, t],
+    [
+      TransitionOptions,
+      block,
+      disabled,
+      newEntryNotification,
+      onChange,
+      readability,
+      rewriteRules,
+      silence,
+      sourceContent,
+      summary,
+      t,
+      translation,
+      webhooks,
+    ],
   )
   const enabledActions = useMemo(
     () => availableActions.filter((action) => action.enabled),
@@ -726,8 +762,9 @@ function ActionList({
                 <DropdownMenuItem
                   key={action.title}
                   onClick={() => {
-                    action.onInit()
-                    onChange(data)
+                    onChange((data) => {
+                      action.onInit(data)
+                    })
                   }}
                 >
                   {action.title}
@@ -749,8 +786,9 @@ function ActionList({
                     <DeleteTableCell
                       disabled={disabled}
                       onClick={() => {
-                        action.onRemove()
-                        onChange(data)
+                        onChange((data) => {
+                          action.onRemove(data)
+                        })
                       }}
                     />
                   </div>
