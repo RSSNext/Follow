@@ -75,7 +75,7 @@ export const MobileFloatBar = ({
   return (
     <div
       className={clsx(
-        "pointer-events-none absolute inset-x-0 bottom-0 flex h-36 items-end overflow-hidden pb-safe-offset-6",
+        "pointer-events-none absolute inset-x-0 bottom-0 flex h-36 items-end pb-safe-offset-6",
         className,
       )}
     >

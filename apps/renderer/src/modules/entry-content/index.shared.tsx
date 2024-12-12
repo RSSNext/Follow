@@ -273,21 +273,26 @@ export const ContainerToc: FC = memo(() => {
             )}
           />
 
-          <BackTopIndicator />
+          <BackTopIndicator
+            className={
+              "@[700px]:-translate-x-4 @[800px]:-translate-x-8 @[900px]:translate-x-0 @[900px]:items-start"
+            }
+          />
         </div>
       </div>
     </RootPortal>
   )
 })
 
-const BackTopIndicator = memo(() => {
+const BackTopIndicator: Component = memo(({ className }) => {
   const [readPercent] = useReadPercent()
   const scrollElement = useScrollViewElement()
   return (
     <span
-      className={
-        "mt-2 flex grow flex-col px-2 font-sans text-sm text-gray-800 dark:text-neutral-300"
-      }
+      className={cn(
+        "mt-2 flex grow flex-col px-2 font-sans text-sm text-gray-800 dark:text-neutral-300",
+        className,
+      )}
     >
       <div className="flex items-center gap-2 tabular-nums">
         <IconOpacityTransition

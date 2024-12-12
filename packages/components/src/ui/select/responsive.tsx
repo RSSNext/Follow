@@ -13,7 +13,7 @@ export interface ResponsiveSelectProps {
   defaultValue?: string
   value?: string
   onValueChange?: (value: string) => void
-
+  placeholder?: string
   items: ResponsiveSelectItem[]
   renderValue?: (value: string) => React.ReactNode
   renderItem?: (item: ResponsiveSelectItem) => React.ReactNode
@@ -34,6 +34,7 @@ export const ResponsiveSelect = ({
   size = "default",
   triggerClassName,
   contentClassName,
+  placeholder,
 }: ResponsiveSelectProps) => {
   const [valueInner] = useControlled(value, defaultValue ?? "", onValueChange)
 
@@ -67,7 +68,11 @@ export const ResponsiveSelect = ({
           triggerClassName,
         )}
       >
-        <span className="flex">{renderValue?.(valueInner) ?? valueToLabelMap[valueInner]}</span>
+        <span className="flex">
+          {(renderValue?.(valueInner) ?? valueToLabelMap[valueInner]) || (
+            <span className="text-theme-placeholder-text">{placeholder}</span>
+          )}
+        </span>
         <i className="i-mingcute-down-line ml-2 size-4 shrink-0 opacity-50" />
         <select
           ref={setRealSelectRef}
