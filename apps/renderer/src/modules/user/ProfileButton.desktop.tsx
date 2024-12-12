@@ -143,7 +143,7 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-          {/* NOTE: The shortcut needs to be grouped, but there is only one currently, so no separator line has been added. */}
+
           {!zenModeSetting && (
             <DropdownMenuItem
               className="pl-3"
@@ -164,6 +164,8 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           >
             {t("words.actions")}
           </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="pl-3"
             onClick={() => {
