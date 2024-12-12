@@ -1,9 +1,8 @@
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { PresentSheet } from "@follow/components/ui/sheet/Sheet.js"
 import { Outlet } from "react-router"
 
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
-import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
-import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 
@@ -20,17 +19,13 @@ export const MobileRootLayout = () => {
 
       {isAuthFail && !user && (
         <RootPortal>
-          <DeclarativeModal
-            id="login"
-            CustomModalComponent={PlainModal}
+          <PresentSheet
             open
-            overlay
+            contentClassName="overflow-visible pb-safe"
             title="Login"
-            canClose={false}
-            clickOutsideToDismiss={false}
-          >
-            <LoginModalContent canClose={false} runtime={"browser"} />
-          </DeclarativeModal>
+            hideHeader
+            content={<LoginModalContent canClose={false} runtime={"browser"} />}
+          />
         </RootPortal>
       )}
     </>

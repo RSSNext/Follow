@@ -19,6 +19,10 @@ export interface GeneralSettings {
    * Top timeline for mobile
    */
   showQuickTimeline: boolean
+  /**
+   * Auto expand long social media
+   */
+  autoExpandLongSocialMedia: boolean
 }
 
 export interface UISettings {

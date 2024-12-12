@@ -1,3 +1,4 @@
+import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
@@ -20,7 +21,6 @@ import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { GridItem } from "../templates/grid-item-template"
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
@@ -62,12 +62,17 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     }
   }, [hovered])
 
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
         className="w-full cursor-card"
-        onClick={() => {
+        onClick={(e) => {
+          if (isMobile() && entry.entries.url) {
+            window.open(entry.entries.url, "_blank")
+            e.stopPropagation()
+            return
+          }
           if (iframeSrc) {
             modalStack.present({
               title: "",

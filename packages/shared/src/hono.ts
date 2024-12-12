@@ -24,12 +24,7 @@ declare const authPlugins: ({
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
-            }] ? Response : {
-                [k: string]: {
-                    id: string;
-                    name: string;
-                };
-            }>;
+            }] ? Response : any>;
             path: "/get-providers";
             options: {
                 method: "GET";
@@ -53,6 +48,23 @@ declare const authPlugins: ({
             path: "/create-session";
             options: {
                 method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    };
+} | {
+    id: "updateUserccc";
+    endpoints: {
+        updateUserccc: {
+            <C extends [(better_call.Context<"/update-user-ccc", {
+                method: "POST";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : string | null>;
+            path: "/update-user-ccc";
+            options: {
+                method: "POST";
             };
             method: better_call.Method | better_call.Method[];
             headers: Headers;
@@ -2667,6 +2679,23 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "subscriptions";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         isPrivate: drizzle_orm_pg_core.PgColumn<{
             name: "is_private";
             tableName: "subscriptions";
@@ -2693,9 +2722,11 @@ declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     view: zod.ZodNumber;
     category: zod.ZodNullable<zod.ZodString>;
     title: zod.ZodNullable<zod.ZodString>;
+    createdAt: zod.ZodString;
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     title: string | null;
+    createdAt: string;
     userId: string;
     view: number;
     category: string | null;
@@ -2703,6 +2734,7 @@ declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     isPrivate: boolean;
 }, {
     title: string | null;
+    createdAt: string;
     userId: string;
     view: number;
     category: string | null;
@@ -3958,6 +3990,23 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        usedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "used_at";
+            tableName: "invitations";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         fromUserId: drizzle_orm_pg_core.PgColumn<{
             name: "from_user_id";
             tableName: "invitations";
@@ -3998,16 +4047,19 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
 declare const invitationsOpenAPISchema: zod.ZodObject<{
     code: zod.ZodString;
     createdAt: zod.ZodNullable<zod.ZodString>;
+    usedAt: zod.ZodNullable<zod.ZodString>;
     fromUserId: zod.ZodString;
     toUserId: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     code: string;
     createdAt: string | null;
+    usedAt: string | null;
     fromUserId: string;
     toUserId: string | null;
 }, {
     code: string;
     createdAt: string | null;
+    usedAt: string | null;
     fromUserId: string;
     toUserId: string | null;
 }>;
@@ -4336,6 +4388,23 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "lists_subscriptions";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         isPrivate: drizzle_orm_pg_core.PgColumn<{
             name: "is_private";
             tableName: "lists_subscriptions";
@@ -4362,9 +4431,11 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     view: zod.ZodNumber;
     title: zod.ZodNullable<zod.ZodString>;
     lastViewedAt: zod.ZodNullable<zod.ZodString>;
+    createdAt: zod.ZodString;
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     title: string | null;
+    createdAt: string;
     userId: string;
     view: number;
     isPrivate: boolean;
@@ -4372,6 +4443,7 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     lastViewedAt: string | null;
 }, {
     title: string | null;
+    createdAt: string;
     userId: string;
     view: number;
     isPrivate: boolean;
@@ -4735,10 +4807,10 @@ declare const user: drizzle_orm_pg_core.PgTableWithColumns<{
         emailVerified: drizzle_orm_pg_core.PgColumn<{
             name: "emailVerified";
             tableName: "user";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
@@ -4878,10 +4950,10 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
         emailVerified: drizzle_orm_pg_core.PgColumn<{
             name: "emailVerified";
             tableName: "user";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
@@ -4968,7 +5040,7 @@ declare const usersOpenApiSchema: z.ZodObject<Omit<{
     id: z.ZodString;
     name: z.ZodNullable<z.ZodString>;
     email: z.ZodString;
-    emailVerified: z.ZodNullable<z.ZodString>;
+    emailVerified: z.ZodNullable<z.ZodBoolean>;
     image: z.ZodNullable<z.ZodString>;
     handle: z.ZodNullable<z.ZodString>;
     createdAt: z.ZodDate;
@@ -4976,7 +5048,7 @@ declare const usersOpenApiSchema: z.ZodObject<Omit<{
 }, "email">, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     id: string;
-    emailVerified: string | null;
+    emailVerified: boolean | null;
     image: string | null;
     handle: string | null;
     createdAt: Date;
@@ -4984,7 +5056,7 @@ declare const usersOpenApiSchema: z.ZodObject<Omit<{
 }, {
     name: string | null;
     id: string;
-    emailVerified: string | null;
+    emailVerified: boolean | null;
     image: string | null;
     handle: string | null;
     createdAt: Date;
@@ -5218,234 +5290,6 @@ declare const account: drizzle_orm_pg_core.PgTableWithColumns<{
     };
     dialect: "pg";
 }>;
-declare const accountAuthjs: drizzle_orm_pg_core.PgTableWithColumns<{
-    name: "account";
-    schema: undefined;
-    columns: {
-        id: drizzle_orm_pg_core.PgColumn<{
-            name: "id";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: true;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        userId: drizzle_orm_pg_core.PgColumn<{
-            name: "userId";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        refreshTokenExpiresAt: drizzle_orm_pg_core.PgColumn<{
-            name: "refreshTokenExpiresAt";
-            tableName: "account";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        scope: drizzle_orm_pg_core.PgColumn<{
-            name: "scope";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        password: drizzle_orm_pg_core.PgColumn<{
-            name: "password";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        createdAt: drizzle_orm_pg_core.PgColumn<{
-            name: "createdAt";
-            tableName: "account";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        updatedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "updatedAt";
-            tableName: "account";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        provider: drizzle_orm_pg_core.PgColumn<{
-            name: "provider";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        providerAccountId: drizzle_orm_pg_core.PgColumn<{
-            name: "providerAccountId";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        refresh_token: drizzle_orm_pg_core.PgColumn<{
-            name: "refresh_token";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        access_token: drizzle_orm_pg_core.PgColumn<{
-            name: "access_token";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        expires_at: drizzle_orm_pg_core.PgColumn<{
-            name: "expires_at";
-            tableName: "account";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        id_token: drizzle_orm_pg_core.PgColumn<{
-            name: "id_token";
-            tableName: "account";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
-}>;
 declare const session: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "session";
     schema: undefined;
@@ -5582,149 +5426,6 @@ declare const session: drizzle_orm_pg_core.PgTableWithColumns<{
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
-}>;
-declare const sessionAuthjs: drizzle_orm_pg_core.PgTableWithColumns<{
-    name: "session";
-    schema: undefined;
-    columns: {
-        id: drizzle_orm_pg_core.PgColumn<{
-            name: "id";
-            tableName: "session";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: true;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        userId: drizzle_orm_pg_core.PgColumn<{
-            name: "userId";
-            tableName: "session";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        createdAt: drizzle_orm_pg_core.PgColumn<{
-            name: "createdAt";
-            tableName: "session";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        updatedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "updatedAt";
-            tableName: "session";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        ipAddress: drizzle_orm_pg_core.PgColumn<{
-            name: "ipAddress";
-            tableName: "session";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        userAgent: drizzle_orm_pg_core.PgColumn<{
-            name: "userAgent";
-            tableName: "session";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        sessionToken: drizzle_orm_pg_core.PgColumn<{
-            name: "sessionToken";
-            tableName: "session";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        expires: drizzle_orm_pg_core.PgColumn<{
-            name: "expires";
-            tableName: "session";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
@@ -6533,6 +6234,7 @@ declare const auth: {
             invitation: {
                 code: string;
                 createdAt: Date | null;
+                usedAt: Date | null;
                 fromUserId: string;
                 toUserId: string | null;
             } | undefined;
@@ -6542,10 +6244,13 @@ declare const auth: {
                 method: "GET";
                 query: zod.ZodOptional<zod.ZodObject<{
                     disableCookieCache: zod.ZodOptional<zod.ZodBoolean>;
+                    disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
                 }, "strip", zod.ZodTypeAny, {
                     disableCookieCache?: boolean | undefined;
+                    disableRefresh?: boolean | undefined;
                 }, {
                     disableCookieCache?: boolean | undefined;
+                    disableRefresh?: boolean | undefined;
                 }>>;
                 requireHeaders: true;
                 metadata: {
@@ -6599,12 +6304,7 @@ declare const auth: {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
-            }] ? Response : {
-                [k: string]: {
-                    id: string;
-                    name: string;
-                };
-            }>;
+            }] ? Response : any>;
             path: "/get-providers";
             options: {
                 method: "GET";
@@ -6624,6 +6324,19 @@ declare const auth: {
             path: "/create-session";
             options: {
                 method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        updateUserccc: {
+            <C extends [(better_call.Context<"/update-user-ccc", {
+                method: "POST";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : string | null>;
+            path: "/update-user-ccc";
+            options: {
+                method: "POST";
             };
             method: better_call.Method | better_call.Method[];
             headers: Headers;
@@ -6722,6 +6435,28 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
+                session: {
+                    id: string;
+                    userId: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined;
+                    userAgent?: string | null | undefined;
+                };
+                user: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image?: string | null | undefined;
+                };
+                url: undefined;
+                redirect: boolean;
+            } | {
                 url: string;
                 redirect: boolean;
             }>;
@@ -7989,20 +7724,20 @@ declare const auth: {
             <C extends [better_call.Context<"/update-user", {
                 method: "POST";
                 body: zod.ZodObject<{
-                    name: zod.ZodOptional<zod.ZodString>;
-                    image: zod.ZodOptional<zod.ZodString>;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    name?: string | undefined;
-                    image?: string | undefined;
-                }, {
-                    name?: string | undefined;
-                    image?: string | undefined;
-                }> & zod.ZodObject<{
                     handle: zod.ZodString;
                 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
                     handle: string;
                 }, {
                     handle: string;
+                }> & zod.ZodObject<{
+                    name: zod.ZodOptional<zod.ZodString>;
+                    image: zod.ZodOptional<zod.ZodString | zod.ZodNull>;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    name?: string | undefined;
+                    image?: string | null | undefined;
+                }, {
+                    name?: string | undefined;
+                    image?: string | null | undefined;
                 }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
@@ -8077,20 +7812,20 @@ declare const auth: {
             options: {
                 method: "POST";
                 body: zod.ZodObject<{
-                    name: zod.ZodOptional<zod.ZodString>;
-                    image: zod.ZodOptional<zod.ZodString>;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    name?: string | undefined;
-                    image?: string | undefined;
-                }, {
-                    name?: string | undefined;
-                    image?: string | undefined;
-                }> & zod.ZodObject<{
                     handle: zod.ZodString;
                 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
                     handle: string;
                 }, {
                     handle: string;
+                }> & zod.ZodObject<{
+                    name: zod.ZodOptional<zod.ZodString>;
+                    image: zod.ZodOptional<zod.ZodString | zod.ZodNull>;
+                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+                    name?: string | undefined;
+                    image?: string | null | undefined;
+                }, {
+                    name?: string | undefined;
+                    image?: string | null | undefined;
                 }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
@@ -8161,15 +7896,8 @@ declare const auth: {
             headers: Headers;
         };
         deleteUser: {
-            <C extends [better_call.Context<"/delete-user", {
+            <C extends [(better_call.Context<"/delete-user", {
                 method: "POST";
-                body: zod.ZodObject<{
-                    password: zod.ZodString;
-                }, "strip", zod.ZodTypeAny, {
-                    password: string;
-                }, {
-                    password: string;
-                }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
@@ -8210,19 +7938,15 @@ declare const auth: {
                         };
                     };
                 };
-            }>]>(...ctx: C): Promise<C extends [{
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
-            }] ? Response : null>;
+            }] ? Response : {
+                success: boolean;
+                message: string;
+            }>;
             path: "/delete-user";
             options: {
                 method: "POST";
-                body: zod.ZodObject<{
-                    password: zod.ZodString;
-                }, "strip", zod.ZodTypeAny, {
-                    password: string;
-                }, {
-                    password: string;
-                }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
@@ -9071,6 +8795,36 @@ declare const auth: {
             method: better_call.Method | better_call.Method[];
             headers: Headers;
         };
+        deleteUserCallback: {
+            <C extends [better_call.Context<"/delete-user/callback", {
+                method: "GET";
+                query: zod.ZodObject<{
+                    token: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    token: string;
+                }, {
+                    token: string;
+                }>;
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                success: boolean;
+                message: string;
+            }>;
+            path: "/delete-user/callback";
+            options: {
+                method: "GET";
+                query: zod.ZodObject<{
+                    token: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    token: string;
+                }, {
+                    token: string;
+                }>;
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
     };
     options: {
         appName: string;
@@ -9116,7 +8870,6 @@ declare const auth: {
             }): Promise<any>;
             options: better_auth_adapters_drizzle.DrizzleAdapterConfig;
         };
-        baseUrl: string | undefined;
         basePath: string;
         trustedOrigins: string[];
         user: {
@@ -9126,25 +8879,32 @@ declare const auth: {
                 };
             };
         };
-        accounts: {
+        account: {
             accountLinking: {
-                enabled: boolean;
-                trustedProviders: string[];
+                enabled: true;
+                trustedProviders: ("github" | "apple" | "google")[];
             };
         };
         socialProviders: {
             google: {
                 clientId: string;
                 clientSecret: string;
+                redirectURI: string;
             };
             github: {
                 clientId: string;
                 clientSecret: string;
+                redirectURI: string;
             };
             apple: {
+                enabled: boolean;
                 clientId: string;
                 clientSecret: string;
-            } | undefined;
+                redirectURI: string;
+            };
+        };
+        emailAndPassword: {
+            enabled: true;
         };
         plugins: ({
             id: "custom-session";
@@ -9183,6 +8943,7 @@ declare const auth: {
                         invitation: {
                             code: string;
                             createdAt: Date | null;
+                            usedAt: Date | null;
                             fromUserId: string;
                             toUserId: string | null;
                         } | undefined;
@@ -9207,12 +8968,7 @@ declare const auth: {
                         method: "GET";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
-                    }] ? Response : {
-                        [k: string]: {
-                            id: string;
-                            name: string;
-                        };
-                    }>;
+                    }] ? Response : any>;
                     path: "/get-providers";
                     options: {
                         method: "GET";
@@ -9236,6 +8992,23 @@ declare const auth: {
                     path: "/create-session";
                     options: {
                         method: "GET";
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        } | {
+            id: "updateUserccc";
+            endpoints: {
+                updateUserccc: {
+                    <C extends [(better_call.Context<"/update-user-ccc", {
+                        method: "POST";
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : string | null>;
+                    path: "/update-user-ccc";
+                    options: {
+                        method: "POST";
                     };
                     method: better_call.Method | better_call.Method[];
                     headers: Headers;
@@ -9271,6 +9044,7 @@ declare const auth: {
 };
 
 type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
+type AuthUser = NonNullable<AuthSession>["user"];
 
 declare const _routes: hono_hono_base.HonoBase<Env, ({
     "/better-auth/*": {
@@ -9523,53 +9297,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         };
     };
 }, "/ai"> | hono_types.MergeSchemaPath<{
-    "/new-session": {
-        $post: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    userId: string;
-                    sessionToken: string;
-                    expires: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/update-account": {
-        $patch: {
-            input: {
-                json: {
-                    name?: string | null | undefined;
-                    image?: string | null | undefined;
-                    handle?: string | null | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/providers": {
-        $get: {
-            input: {};
-            output: {
-                [x: string]: {
-                    name: string;
-                    id: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-}, "/auth-app"> | hono_types.MergeSchemaPath<{
     "/": {
         $get: {
             input: {
@@ -9726,7 +9453,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -9735,7 +9462,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -9766,7 +9493,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             owner?: {
                                 name: string | null;
                                 id: string;
-                                emailVerified: string | null;
+                                emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
@@ -9775,7 +9502,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             tipUsers?: {
                                 name: string | null;
                                 id: string;
-                                emailVerified: string | null;
+                                emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
@@ -9786,7 +9513,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -9928,7 +9655,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10022,7 +9749,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10181,7 +9908,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10190,7 +9917,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10284,7 +10011,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10293,7 +10020,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10429,7 +10156,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10438,7 +10165,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10514,7 +10241,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10523,7 +10250,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10533,6 +10260,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     subscriptionCount: number;
                     subscription?: {
                         title: string | null;
+                        createdAt: string;
                         userId: string;
                         view: number;
                         category: string | null;
@@ -10616,6 +10344,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         id: string;
                         image: string | null;
                     } | null;
+                    usedAt: string | null;
                     toUserId: string | null;
                 }[];
             };
@@ -10649,7 +10378,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 data: {
                     name: string | null;
                     id: string;
-                    emailVerified: string | null;
+                    emailVerified: boolean | null;
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
@@ -10674,7 +10403,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     [x: string]: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -10823,6 +10552,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: ({
                     title: string | null;
+                    createdAt: string;
                     userId: string;
                     view: number;
                     category: string | null;
@@ -10840,7 +10570,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10849,7 +10579,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10862,7 +10592,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         boosters: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10871,6 +10601,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     };
                 } | {
                     title: string | null;
+                    createdAt: string;
                     userId: string;
                     view: number;
                     feedId: string;
@@ -10899,7 +10630,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             owner?: {
                                 name: string | null;
                                 id: string;
-                                emailVerified: string | null;
+                                emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
@@ -10908,7 +10639,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             tipUsers?: {
                                 name: string | null;
                                 id: string;
-                                emailVerified: string | null;
+                                emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
@@ -10919,7 +10650,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -10931,6 +10662,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     category?: string | undefined;
                 } | {
                     title: string | null;
+                    createdAt: string;
                     userId: string;
                     view: number;
                     category: string | null;
@@ -10947,7 +10679,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11184,7 +10916,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     fromUser?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11193,7 +10925,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     toUser?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11213,7 +10945,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11222,7 +10954,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11340,7 +11072,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     user: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11370,6 +11102,74 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        feeds: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: boolean | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                                updatedAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: boolean | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                                updatedAt: string;
+                            }[] | null | undefined;
+                        };
+                        language: string | null;
+                        feedId: string;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[];
                     readCount: number;
                     list: {
                         type: "list";
@@ -11395,7 +11195,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             owner?: {
                                 name: string | null;
                                 id: string;
-                                emailVerified: string | null;
+                                emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
@@ -11404,7 +11204,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             tipUsers?: {
                                 name: string | null;
                                 id: string;
-                                emailVerified: string | null;
+                                emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
@@ -11415,7 +11215,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11426,6 +11226,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     feedCount: number;
                     subscription?: {
                         title: string | null;
+                        createdAt: string;
                         userId: string;
                         view: number;
                         isPrivate: boolean;
@@ -11476,7 +11277,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11485,7 +11286,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11496,7 +11297,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     owner?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11573,7 +11374,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         owner?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11582,7 +11383,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         tipUsers?: {
                             name: string | null;
                             id: string;
-                            emailVerified: string | null;
+                            emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
@@ -11593,7 +11394,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     owner?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11635,7 +11436,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     owner?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11644,7 +11445,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     tipUsers?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11748,7 +11549,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     owner?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11882,7 +11683,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     owner?: {
                         name: string | null;
                         id: string;
-                        emailVerified: string | null;
+                        emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
@@ -11993,7 +11794,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 data: {
                     name: string | null;
                     id: string;
-                    emailVerified: string | null;
+                    emailVerified: boolean | null;
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
@@ -12071,4 +11872,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/probes">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, accountAuthjs, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, sessionAuthjs, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

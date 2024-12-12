@@ -1,3 +1,4 @@
+import { PassviseFragment } from "@follow/components/common/Fragment.js"
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
 import { ActionButton } from "@follow/components/ui/button/index.js"
@@ -7,7 +8,9 @@ import { LRUCache } from "@follow/utils/lru-cache"
 import { cn } from "@follow/utils/utils"
 import { atom } from "jotai"
 import { useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
@@ -22,7 +25,6 @@ import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
-import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { filterSmallMedia } from "../../../lib/utils"
 import { StarIcon } from "../star-icon"
 import { EntryTranslation } from "../translation"
@@ -51,14 +53,17 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       jotaiStore.set(socialMediaContentWidthAtom, ref.current.offsetWidth)
     }
   }, [])
-  // NOTE: prevent 0 height element, react virtuoso will not stop render any more
-  if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
+  const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
+
+  if (!entry || !feed) return null
 
   const content = entry.entries.content || entry.entries.description
 
   const parsed = parseSocialMedia(entry.entries)
-
   const media = filterSmallMedia(entry.entries.media)
+  const EntryContentWrapper = autoExpandLongSocialMedia
+    ? PassviseFragment
+    : CollapsedSocialMediaItem
 
   return (
     <div
@@ -101,14 +106,14 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             </span>
           </div>
           <div className={cn("relative mt-1 text-base", !!entry.collections && "pr-5")}>
-            <CollapsedSocialMediaItem entryId={entryId}>
+            <EntryContentWrapper entryId={entryId}>
               <EntryTranslation
                 className="cursor-auto select-text text-sm leading-relaxed prose-blockquote:mt-0 [&_br:last-child]:hidden"
                 source={content}
                 target={translation?.content}
                 isHTML
               />
-            </CollapsedSocialMediaItem>
+            </EntryContentWrapper>
             {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
           </div>
         </div>
@@ -363,9 +368,11 @@ const collapsedItemCache = new LRUCache<string, boolean>(100)
 const CollapsedSocialMediaItem: Component<{
   entryId: string
 }> = ({ children, entryId }) => {
+  const { t } = useTranslation()
   const [isOverflow, setIsOverflow] = useState(false)
   const [isShowMore, setIsShowMore] = useState(() => collapsedItemCache.get(entryId) ?? false)
   const ref = useRef<HTMLDivElement>(null)
+
   useLayoutEffect(() => {
     if (ref.current) {
       setIsOverflow(ref.current.scrollHeight > collapsedHeight)
@@ -398,7 +405,7 @@ const CollapsedSocialMediaItem: Component<{
             className="flex items-center justify-center text-xs duration-200 hover:text-foreground"
           >
             <i className="i-mingcute-arrow-to-down-line" />
-            <span className="ml-2">Show more</span>
+            <span className="ml-2">{t("words.show_more")}</span>
           </button>
         </div>
       )}

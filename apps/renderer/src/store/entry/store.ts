@@ -11,7 +11,7 @@ import { omitObjectUndefinedValue } from "@follow/utils/utils"
 import { isNil, merge, omit } from "es-toolkit/compat"
 import { produce } from "immer"
 
-import { clearFeedUnreadDirty, setFeedUnreadDirty } from "~/atoms/feed"
+import { clearAllFeedUnreadDirty, clearFeedUnreadDirty, setFeedUnreadDirty } from "~/atoms/feed"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams } from "~/lib/utils"
@@ -147,7 +147,7 @@ class EntryActions {
         })
 
       if (data.data) {
-        this.upsertMany(data.data, { isArchived })
+        this.upsertMany(structuredClone(data.data), { isArchived })
       }
       return data
     }
@@ -170,6 +170,9 @@ class EntryActions {
 
     // Mark feed unread dirty, so re-fetch the unread data when view feed unread entires in the next time
     if (read === false) {
+      if (typeof params.view === "number" && !params.feedId) {
+        clearAllFeedUnreadDirty()
+      }
       if (params.feedId) {
         clearFeedUnreadDirty(params.feedId as string)
       }
@@ -180,7 +183,7 @@ class EntryActions {
       }
     }
     if (data.data) {
-      this.upsertMany(data.data, { isArchived })
+      this.upsertMany(structuredClone(data.data), { isArchived })
     }
     return data
   }

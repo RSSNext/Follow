@@ -1,4 +1,4 @@
-import type { Target } from "framer-motion"
+import type { MotionProps, Target } from "framer-motion"
 
 import { microReboundPreset } from "../../constants/spring"
 
@@ -14,9 +14,15 @@ const initialStyle: Target = {
 export const modalMontionConfig = {
   initial: initialStyle,
   animate: enterStyle,
-  exit: initialStyle,
+  exit: {
+    ...initialStyle,
+    // no spring
+    transition: {
+      type: "tween",
+    },
+  },
   transition: microReboundPreset,
-}
+} satisfies MotionProps
 
 // Radix context menu z-index 999
 export const MODAL_STACK_Z_INDEX = 1001
