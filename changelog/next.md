@@ -2,13 +2,21 @@
 
 ## New Features
 
-- New `Move to Category` operation in feed subscription context menu
-- New `Expand long social media` setting to automatically expand social media entries containing long text.
-- New `Back Top` button and read progress indicator in entry content
-- Independent Action page
+1. New `Move to Category` operation in feed subscription context menu
 
-## Improvements
+![](https://github.com/RSSNext/assets/blob/main/0.2.7/move-category.png?raw=true)
+
+2. New `Expand long social media` setting to automatically expand social media entries containing long text.
+
+![](https://github.com/RSSNext/assets/blob/main/0.2.7/expand-long-social-media.png?raw=true)
+
+3. New `Back Top` button and read progress indicator in entry content
+
+![](https://github.com/RSSNext/assets/blob/main/0.2.7/read-indicator.png?raw=true)
+
+4. Independent Action page
 
 ## Bug Fixes
 
 - Resolved issue where back navigation to the pending view would not behave correctly after changing orientation in some device.
+- Fixed issue can't filter entries with no picture in the picture view.
