@@ -67,33 +67,24 @@ class ActionActionStatic {
   }
 
   async updateRemoteActions() {
-    const actionsData = get().actions
-    actionsData.forEach((action) => {
-      if (action.condition.length > 0) {
+    set((state) => {
+      state.actions.forEach((action) => {
         action.condition = action.condition
           .map((condition) => {
             return condition.filter((c) => c.field && c.operator && c.value)
           })
           .filter((c) => c.length > 0)
-      }
-
-      if (action.result.rewriteRules && action.result.rewriteRules.length > 0) {
         action.result.rewriteRules = action.result.rewriteRules?.filter((r) => r.from && r.to)
-      }
-
-      if (action.result.blockRules && action.result.blockRules.length > 0) {
         action.result.blockRules = action.result.blockRules?.filter(
           (r) => r.field && r.operator && r.value,
         )
-      }
-
-      if (action.result.webhooks && action.result.webhooks.length > 0) {
         action.result.webhooks = action.result.webhooks?.filter((w) => w)
-      }
+      })
     })
+
     await apiClient.actions.$put({
       json: {
-        rules: actionsData as ActionsResponse,
+        rules: get().actions as ActionsResponse,
       },
     })
     set((state) => {
