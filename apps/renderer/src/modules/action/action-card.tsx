@@ -449,6 +449,28 @@ const FeedFilter = ({ index }: { index: number }) => {
   )
 }
 
+const TransitionOptions: {
+  label: string
+  value: SupportedLanguages
+}[] = [
+  {
+    label: "English",
+    value: "en",
+  },
+  {
+    label: "日本語",
+    value: "ja",
+  },
+  {
+    label: "简体中文",
+    value: "zh-CN",
+  },
+  {
+    label: "繁體中文",
+    value: "zh-TW",
+  },
+]
+
 const ActionList = ({ index }: { index: number }) => {
   const summary = useActionByIndex(index, (a) => a.result.summary)
   const translation = useActionByIndex(index, (a) => a.result.translation)
@@ -462,34 +484,6 @@ const ActionList = ({ index }: { index: number }) => {
 
   const disabled = useActionByIndex(index, (a) => a.result.disabled)
   const { t } = useTranslation("settings")
-
-  const TransitionOptions: {
-    label: string
-    value: SupportedLanguages
-  }[] = useMemo(() => {
-    return [
-      {
-        label: t("actions.action_card.no_translation"),
-        value: "none" as SupportedLanguages,
-      },
-      {
-        label: "English",
-        value: "en",
-      },
-      {
-        label: "日本語",
-        value: "ja",
-      },
-      {
-        label: "简体中文",
-        value: "zh-CN",
-      },
-      {
-        label: "繁體中文",
-        value: "zh-TW",
-      },
-    ]
-  }, [t])
 
   const onChange = actionActions.updateByIndex.bind(null, index)
 
@@ -509,7 +503,7 @@ const ActionList = ({ index }: { index: number }) => {
         title: t("actions.action_card.translate_into"),
         enabled: !!translation,
         onInit: (data) => {
-          data.result.translation = "none"
+          data.result.translation = "zh-CN"
         },
         onRemove: (data) => {
           delete data.result.translation
@@ -520,11 +514,7 @@ const ActionList = ({ index }: { index: number }) => {
             value={translation}
             onValueChange={(value) => {
               onChange((data) => {
-                if (value === "none") {
-                  delete data.result.translation
-                } else {
-                  data.result.translation = value
-                }
+                data.result.translation = value
               })
             }}
             items={TransitionOptions}
@@ -722,7 +712,6 @@ const ActionList = ({ index }: { index: number }) => {
       },
     ],
     [
-      TransitionOptions,
       block,
       disabled,
       newEntryNotification,
