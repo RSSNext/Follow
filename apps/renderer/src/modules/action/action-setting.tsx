@@ -8,12 +8,13 @@ import { toastFetchError } from "~/lib/error-parser"
 import { queryClient } from "~/lib/query-client"
 import { ActionCard } from "~/modules/action/action-card"
 import { useActionsQuery } from "~/queries/actions"
-import { actionActions, useActions } from "~/store/action"
+import { actionActions, useActions, useIsActionDataDirty } from "~/store/action"
 
 export const ActionSetting = () => {
   const { t } = useTranslation("settings")
   const actionQuery = useActionsQuery()
   const actionLength = useActions((actions) => actions.length)
+  const isDirty = useIsActionDataDirty()
 
   const mutation = useMutation({
     mutationFn: () => actionActions.updateRemoteActions(),
@@ -49,7 +50,12 @@ export const ActionSetting = () => {
         <span>{t("actions.newRule")}</span>
       </Button>
       <div className="text-right">
-        <Button variant="primary" isLoading={mutation.isPending} onClick={() => mutation.mutate()}>
+        <Button
+          variant="primary"
+          disabled={!isDirty}
+          isLoading={mutation.isPending}
+          onClick={() => mutation.mutate()}
+        >
           {t("actions.save")}
         </Button>
       </div>

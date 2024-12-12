@@ -15,3 +15,7 @@ export function useActionByIndex<T>(index: number, selector?: (action: ActionMod
     selector ? selector(state.actions[index]) : state.actions[index],
   )
 }
+
+export function useIsActionDataDirty() {
+  return useActionStore((state) => state.isDirty)
+}

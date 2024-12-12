@@ -7,6 +7,7 @@ import type { ActionState } from "./types"
 
 export const useActionStore = createZustandStore<ActionState>("action")(() => ({
   actions: [],
+  isDirty: false,
 }))
 
 const set = createImmerSetter(useActionStore)
@@ -26,24 +27,21 @@ class ActionActionStatic {
         condition: [],
         result: {},
       })
+      state.isDirty = true
     })
   }
 
   removeByIndex(index: number) {
     set((state) => {
       state.actions.splice(index, 1)
+      state.isDirty = true
     })
   }
 
   updateByIndex(index: number, update: (action: ActionModel) => void) {
     set((state) => {
       update(state.actions[index])
-    })
-  }
-
-  clear() {
-    set((state) => {
-      state.actions = []
+      state.isDirty = true
     })
   }
 
@@ -97,6 +95,9 @@ class ActionActionStatic {
       json: {
         rules: actionsData as ActionsResponse,
       },
+    })
+    set((state) => {
+      state.isDirty = false
     })
   }
 }
