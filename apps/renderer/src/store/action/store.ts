@@ -67,6 +67,10 @@ class ActionActionStatic {
   }
 
   async updateRemoteActions() {
+    if (!get().isDirty) {
+      return
+    }
+
     set((state) => {
       state.actions.forEach((action) => {
         action.condition = action.condition
