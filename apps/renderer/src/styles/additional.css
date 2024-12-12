@@ -69,7 +69,7 @@
     content: "";
     border-radius: var(--border-radius);
 
-    @apply absolute inset-0 pointer-events-none z-[-1] opacity-20 !transform-none;
+    @apply absolute inset-0 pointer-events-none z-[-1] dark:opacity-20 opacity-10 !transform-none;
   }
 
   &[data-type="success"]::before {
