@@ -53,7 +53,7 @@
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
     "@types/node": "^22.10.1",
-    "electron": "33.3.0",
+    "electron": "33.2.0",
     "electron-devtools-installer": "3.2.0",
     "hono": "4.6.13"
   }

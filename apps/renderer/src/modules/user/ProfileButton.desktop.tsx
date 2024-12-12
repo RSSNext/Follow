@@ -158,6 +158,15 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           <DropdownMenuItem
             className="pl-3"
             onClick={() => {
+              navigate("/action")
+            }}
+            icon={<i className="i-mgc-magic-2-cute-re" />}
+          >
+            {t("words.actions")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
               settingModalPresent()
             }}
             icon={<i className="i-mgc-settings-7-cute-re" />}
