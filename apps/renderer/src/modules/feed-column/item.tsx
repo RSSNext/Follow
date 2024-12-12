@@ -235,7 +235,7 @@ const ListItemImpl: Component<{
   listId: string
   view: FeedViewType
   iconSize?: number
-}> = ({ view, listId, className, iconSize = 28 }) => {
+}> = ({ view, listId, className, iconSize = 22 }) => {
   const list = useListById(listId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
@@ -280,7 +280,7 @@ const ListItemImpl: Component<{
     <div
       data-list-id={listId}
       data-active={isActive || isContextMenuOpen}
-      className={cn(feedColumnStyles.item, "py-1.5 pl-2.5", className)}
+      className={cn(feedColumnStyles.item, "py-1 pl-2.5", className)}
       onClick={handleNavigate}
       onDoubleClick={() => {
         window.open(UrlBuilder.shareList(listId, view), "_blank")
