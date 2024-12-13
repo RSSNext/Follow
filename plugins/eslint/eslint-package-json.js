@@ -73,7 +73,7 @@ export default {
 
             context.report({
               node,
-              message: `Inconsistent versions of ${packageName}: ${versions.map((v) => v.version).join(", ")}`,
+              message: `Inconsistent versions of ${packageName}: ${Array.from(new Set(versions.map((v) => v.version))).join(", ")}`,
               suggest: versions.map((version) => ({
                 desc: `Follow the version ${version.version} in ${version.filePath}`,
                 fix: (fixer) => fixer.replaceText(node.value, `"${version.version}"`),
