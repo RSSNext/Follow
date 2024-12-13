@@ -21,7 +21,7 @@ const authClient = createAuthClient({
   plugins: serverPlugins,
 })
 
-export const { signIn, signOut, getSession, getProviders, createSession } = authClient
+export const { signIn, signOut, getSession, getProviders, createSession, updateUser } = authClient
 
 export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
 export type LoginRuntime = "browser" | "app"
