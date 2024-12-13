@@ -90,6 +90,7 @@
     "eslint": "^9.16.0",
     "eslint-config-hyoban": "^3.1.15",
     "fake-indexeddb": "6.0.0",
+    "fast-glob": "^3.3.2",
     "happy-dom": "15.11.7",
     "hono": "4.6.13",
     "html-minifier-terser": "7.2.0",

@@ -1,14 +1,12 @@
 import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
-import { createRequire } from "node:module"
 import path from "node:path"
 
-const require = createRequire(import.meta.url)
-const glob = require("glob") as typeof import("glob")
+import fg from "fast-glob"
 
 export async function calculateMainHash(mainDir: string): Promise<string> {
   // Get all TypeScript files in the main directory recursively
-  const files = glob.sync("**/*.{ts,tsx}", {
+  const files = fg.globSync("**/*.{ts,tsx}", {
     cwd: mainDir,
     ignore: ["node_modules/**", "dist/**"],
   })

@@ -120,7 +120,6 @@
     "@follow/hooks": "workspace:*",
     "@follow/logger": "workspace:*",
     "@follow/models": "workspace:*",
-    "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
     "@hono/node-server": "1.13.7",

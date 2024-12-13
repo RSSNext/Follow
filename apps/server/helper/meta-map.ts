@@ -4,12 +4,12 @@ import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import chokidar from "chokidar"
-import { glob } from "glob"
+import fg from "fast-glob"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 async function generateMetaMap() {
-  const files = await glob("./client/pages/(main)/**/metadata.ts", {
+  const files = await fg.glob("./client/pages/(main)/**/metadata.ts", {
     cwd: path.resolve(__dirname, ".."),
   })
 
