@@ -74,9 +74,9 @@ export const FeedFilter = ({ index }: { index: number }) => {
 
   const onChange = actionActions.updateByIndex.bind(null, index)
   return (
-    <div className="shrink grow space-y-3 overflow-auto">
+    <div className="w-full shrink space-y-3 overflow-auto">
       <p className="font-medium text-zinc-500">{t("actions.action_card.when_feeds_match")}</p>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 pl-4">
         <RadioGroup
           value={condition.length > 0 ? "filter" : "all"}
           onValueChange={(value) => {
@@ -99,7 +99,7 @@ export const FeedFilter = ({ index }: { index: number }) => {
       </div>
 
       {condition.length > 0 && (
-        <div>
+        <div className="pl-6">
           <Table>
             <FieldTableHeader />
             <TableBody>
@@ -131,6 +131,7 @@ export const FeedFilter = ({ index }: { index: number }) => {
                         >
                           <span className="sm:hidden">{t("actions.action_card.field")}</span>
                           <ResponsiveSelect
+                            placeholder="Select Field"
                             disabled={disabled}
                             value={condition.field}
                             onValueChange={(value) => change("field", value as ActionFeedField)}
@@ -168,6 +169,7 @@ export const FeedFilter = ({ index }: { index: number }) => {
                             />
                           )}
                         </TableCell>
+
                         <ActionTableCell
                           disabled={disabled}
                           onAnd={() => {
@@ -274,6 +276,7 @@ const OperationTableCell = ({
     >
       <span className="sm:hidden">{t("actions.action_card.operator")}</span>
       <ResponsiveSelect
+        placeholder="Select Field"
         disabled={disabled}
         value={value}
         onValueChange={(value) => onValueChange?.(value as ActionOperation)}
@@ -302,17 +305,17 @@ const ActionTableCell = ({
   const { t } = useTranslation("settings")
   return (
     <>
-      <TableCell size="sm" className="max-sm:flex max-sm:space-x-2 max-sm:pr-0">
-        <Button variant="ghost" className="sm:w-full" disabled={disabled} onClick={onDelete}>
-          <i className="i-mgc-delete-2-cute-re text-zinc-600" />
-        </Button>
-        <Button className="w-full sm:hidden" variant="outline" disabled={disabled} onClick={onAnd}>
-          {t("actions.action_card.and")}
-        </Button>
-      </TableCell>
       <TableCell size="sm" className="max-sm:hidden">
         <Button variant="outline" className="w-full" disabled={disabled} onClick={onAnd}>
           {t("actions.action_card.and")}
+        </Button>
+      </TableCell>
+      <TableCell size="sm" className="w-full max-sm:flex max-sm:space-x-2 max-sm:pr-0 lg:w-8">
+        <Button className="w-full sm:hidden" variant="outline" disabled={disabled} onClick={onAnd}>
+          {t("actions.action_card.and")}
+        </Button>
+        <Button variant="ghost" disabled={disabled} onClick={onDelete}>
+          <i className="i-mgc-delete-2-cute-re size-5 text-zinc-600" />
         </Button>
       </TableCell>
     </>

@@ -44,7 +44,7 @@ export const SupportCreator = ({ entryId }: { entryId: string }) => {
       <div className="my-16 flex flex-col items-center gap-8" data-hide-in-print>
         {feed.ownerUserId ? (
           <UserAvatar
-            className="w-40 flex-col gap-3 p-0"
+            className="h-fit w-40 flex-col gap-3 whitespace-nowrap p-0"
             avatarClassName="size-12"
             userId={feed.ownerUserId}
             enableModal

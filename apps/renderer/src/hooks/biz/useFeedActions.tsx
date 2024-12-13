@@ -213,7 +213,7 @@ export const useFeedActions = ({
         disabled: isInbox,
         supportMultipleSelection: true,
         submenu: [
-          ...categories.values().map((category) => {
+          ...Array.from(categories.values()).map((category) => {
             const isIncluded = isMultipleSelection
               ? subscriptions.every((s) => s.category === category)
               : subscription?.category === category

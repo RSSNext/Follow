@@ -49,27 +49,25 @@ function ActionSettingOperations() {
   })
 
   return (
-    <>
+    <div className="flex justify-end gap-x-2">
       <Button
         variant="outline"
-        className="center w-full gap-1"
         onClick={() => {
           actionActions.insertNewEmptyAction(t("actions.actionName", { number: actionLength + 1 }))
         }}
       >
-        <i className="i-mgc-add-cute-re" />
+        <i className="i-mgc-add-cute-re mr-1" />
         <span>{t("actions.newRule")}</span>
       </Button>
-      <div className="text-right">
-        <Button
-          variant="primary"
-          disabled={!isDirty}
-          isLoading={mutation.isPending}
-          onClick={() => mutation.mutate()}
-        >
-          {t("actions.save")}
-        </Button>
-      </div>
-    </>
+      <Button
+        variant="primary"
+        disabled={!isDirty}
+        isLoading={mutation.isPending}
+        onClick={() => mutation.mutate()}
+      >
+        <i className="i-mgc-check-circle-cute-re mr-1" />
+        {t("actions.save")}
+      </Button>
+    </div>
   )
 }

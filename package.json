@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.2.6-beta.0",
+  "version": "0.2.7-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow your favorites in one inbox",
@@ -83,12 +83,14 @@
     "dnum": "^2.14.0",
     "dotenv": "16.4.7",
     "drizzle-orm": "0.37.0",
+    "electron": "33.2.0",
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
     "eslint": "^9.16.0",
     "eslint-config-hyoban": "^3.1.15",
     "fake-indexeddb": "6.0.0",
+    "fast-glob": "^3.3.2",
     "happy-dom": "15.11.7",
     "hono": "4.6.13",
     "html-minifier-terser": "7.2.0",
@@ -175,5 +177,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "a17b3455d95c59da9a9724da5c9a04332f454caf2391c53ac32fc54184965658"
+  "mainHash": "eff966f43f885985e456a48c734d2cabe9fe30723d6cdc45e2f8ba75cecd0c80"
 }

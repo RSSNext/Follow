@@ -1,4 +1,4 @@
-import { Button } from "@follow/components/ui/button/index.js"
+import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { Input } from "@follow/components/ui/input/index.js"
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
 import type { ActionModel, SupportedLanguages } from "@follow/models/types"
-import { cn } from "@follow/utils/utils"
 import { Fragment, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -64,16 +63,16 @@ const AddTableRow = ({ onClick, disabled }: { onClick?: () => void; disabled?: b
       onClick={onClick}
       disabled={disabled}
     >
-      <i className="i-mgc-add-cute-re" /> {t("actions.action_card.add")}
+      {t("actions.action_card.add")}
     </Button>
   )
 }
 
 const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: () => void }) => (
   <TableCell size="sm" className="flex h-10 items-center">
-    <Button variant="ghost" className="w-full" disabled={disabled} onClick={onClick}>
+    <ActionButton disabled={disabled} onClick={onClick}>
       <i className="i-mgc-delete-2-cute-re text-zinc-600" />
-    </Button>
+    </ActionButton>
   </TableCell>
 )
 
@@ -117,6 +116,7 @@ export const TargetActionList = ({ index }: { index: number }) => {
         config: () => (
           <ResponsiveSelect
             disabled={disabled}
+            size="sm"
             value={translation}
             onValueChange={(value) => {
               onChange((data) => {
@@ -124,7 +124,7 @@ export const TargetActionList = ({ index }: { index: number }) => {
               })
             }}
             items={TransitionOptions}
-            triggerClassName="w-fit max-w-44"
+            triggerClassName="w-fit max-w-44 text-sm"
           />
         ),
         configInline: true,
@@ -195,12 +195,12 @@ export const TargetActionList = ({ index }: { index: number }) => {
         },
         config: () => (
           <>
-            <Table>
+            <Table className="mt-2">
               <TableHeader>
                 <TableRow>
-                  <TableHead size="sm" />
                   <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
                   <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
+                  <TableHead size="sm" className="w-8" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -212,18 +212,6 @@ export const TargetActionList = ({ index }: { index: number }) => {
                   }
                   return (
                     <TableRow key={rewriteIdx}>
-                      <DeleteTableCell
-                        disabled={disabled}
-                        onClick={() => {
-                          onChange((data) => {
-                            if (data.result.rewriteRules?.length === 1) {
-                              delete data.result.rewriteRules
-                            } else {
-                              data.result.rewriteRules?.splice(rewriteIdx, 1)
-                            }
-                          })
-                        }}
-                      />
                       <TableCell size="sm">
                         <Input
                           disabled={disabled}
@@ -240,6 +228,18 @@ export const TargetActionList = ({ index }: { index: number }) => {
                           onChange={(e) => change("to", e.target.value)}
                         />
                       </TableCell>
+                      <DeleteTableCell
+                        disabled={disabled}
+                        onClick={() => {
+                          onChange((data) => {
+                            if (data.result.rewriteRules?.length === 1) {
+                              delete data.result.rewriteRules
+                            } else {
+                              data.result.rewriteRules?.splice(rewriteIdx, 1)
+                            }
+                          })
+                        }}
+                      />
                     </TableRow>
                   )
                 })}
@@ -276,6 +276,17 @@ export const TargetActionList = ({ index }: { index: number }) => {
             {webhooks?.map((webhook, rewriteIdx) => {
               return (
                 <div key={rewriteIdx} className="flex items-center gap-2">
+                  <Input
+                    disabled={disabled}
+                    value={webhook}
+                    className="h-8"
+                    placeholder="https://"
+                    onChange={(e) => {
+                      onChange((data) => {
+                        data.result.webhooks![rewriteIdx] = e.target.value
+                      })
+                    }}
+                  />
                   <DeleteTableCell
                     disabled={disabled}
                     onClick={() => {
@@ -285,17 +296,6 @@ export const TargetActionList = ({ index }: { index: number }) => {
                         } else {
                           data.result.webhooks?.splice(rewriteIdx, 1)
                         }
-                      })
-                    }}
-                  />
-                  <Input
-                    disabled={disabled}
-                    value={webhook}
-                    className="h-8"
-                    placeholder="https://"
-                    onChange={(e) => {
-                      onChange((data) => {
-                        data.result.webhooks![rewriteIdx] = e.target.value
                       })
                     }}
                   />
@@ -342,16 +342,16 @@ export const TargetActionList = ({ index }: { index: number }) => {
   )
 
   return (
-    <div className="min-w-[270px] shrink grow space-y-4">
+    <div className="w-full shrink grow space-y-4">
       <p className="font-medium text-zinc-500">{t("actions.action_card.then_do")}</p>
-      <div className="w-full space-y-4">
+      <div className="relative w-full space-y-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild disabled={disabled}>
-            <Button variant="outline" className={cn(notEnabledActions.length === 0 && "hidden")}>
-              {t("actions.action_card.add_action")}
-            </Button>
+            <ActionButton className="absolute right-0 top-0 -translate-y-11 text-zinc-500 duration-200 hover:text-foreground">
+              <i className="i-mgc-add-cute-re" />
+            </ActionButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent side="left" align="start">
             {notEnabledActions.map((action) => {
               return (
                 <DropdownMenuItem
@@ -369,23 +369,28 @@ export const TargetActionList = ({ index }: { index: number }) => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <section>
+        <section className="pl-6">
           {enabledActions
             .filter((action) => action.enabled)
             .map((action, index) => {
               return (
                 <Fragment key={action.title}>
-                  <div className="flex w-full items-center justify-between">
+                  <div className="group/action mt-3 flex w-full items-center justify-between">
                     <span className="w-0 shrink grow truncate">{action.title}</span>
                     {action.configInline && action.config && action.config()}
-                    <DeleteTableCell
+
+                    <Button
+                      buttonClassName="absolute opacity-100 group-hover/action:opacity-70 hover:!opacity-100 duration-200 lg:opacity-0 left-0 z-[1] size-5 rounded-full border"
+                      variant={"ghost"}
                       disabled={disabled}
                       onClick={() => {
                         onChange((data) => {
                           action.onRemove(data)
                         })
                       }}
-                    />
+                    >
+                      <i className="i-mgc-close-cute-re size-3" />
+                    </Button>
                   </div>
                   {!action.configInline && action.config && action.config()}
                   {index !== enabledActions.length - 1 && <Divider className="my-2" />}

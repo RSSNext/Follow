@@ -5,6 +5,7 @@ import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
+import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -23,7 +24,7 @@ import {
   useCategoryOpenStateByView,
   useSubscriptionByView,
 } from "~/store/subscription"
-import { useFeedUnreadStore } from "~/store/unread"
+import { feedUnreadActions, useFeedUnreadStore } from "~/store/unread"
 
 import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
 import { feedColumnStyles } from "./styles"
@@ -110,6 +111,15 @@ export const ListHeader = ({ view }: { view: number }) => {
   const categoryOpenStateData = useCategoryOpenStateByView(view)
   const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
   useUpdateUnreadCount()
+
+  useQuery({
+    queryKey: ["fetchUnreadByView", view],
+    queryFn: () => feedUnreadActions.fetchUnreadByView(view),
+    // 10 minute
+    refetchInterval: 1000 * 60 * 10,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+  })
 
   const totalUnread = useFeedUnreadStore(
     useCallback(
