@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-import colors from "tailwindcss/colors"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 export default resolveConfig({
@@ -11,49 +10,18 @@ export default resolveConfig({
     extend: {
       colors: {
         accent: "#FF5C00",
-
-        red: {
-          ...colors.red,
-          DEFAULT: "rgb(var(--color-red) / <alpha-value>)",
-        },
-        orange: {
-          ...colors.orange,
-          DEFAULT: "rgb(var(--color-orange) / <alpha-value>)",
-        },
-        yellow: {
-          ...colors.yellow,
-          DEFAULT: "rgb(var(--color-yellow) / <alpha-value>)",
-        },
-        green: {
-          ...colors.green,
-          DEFAULT: "rgb(var(--color-green) / <alpha-value>)",
-        },
-        blue: {
-          ...colors.blue,
-          DEFAULT: "rgb(var(--color-blue) / <alpha-value>)",
-        },
-        indigo: {
-          ...colors.indigo,
-          DEFAULT: "rgb(var(--color-indigo) / <alpha-value>)",
-        },
-        purple: {
-          ...colors.purple,
-          DEFAULT: "rgb(var(--color-purple) / <alpha-value>)",
-        },
-        pink: {
-          ...colors.pink,
-          DEFAULT: "rgb(var(--color-pink) / <alpha-value>)",
-        },
-
+        // Palette colors
+        red: "rgb(var(--color-red) / <alpha-value>)",
+        orange: "rgb(var(--color-orange) / <alpha-value>)",
+        yellow: "rgb(var(--color-yellow) / <alpha-value>)",
+        green: "rgb(var(--color-green) / <alpha-value>)",
         mint: "rgb(var(--color-mint) / <alpha-value>)",
-        teal: {
-          ...colors.teal,
-          DEFAULT: "rgb(var(--color-teal) / <alpha-value>)",
-        },
-        cyan: {
-          ...colors.cyan,
-          DEFAULT: "rgb(var(--color-cyan) / <alpha-value>)",
-        },
+        teal: "rgb(var(--color-teal) / <alpha-value>)",
+        cyan: "rgb(var(--color-cyan) / <alpha-value>)",
+        blue: "rgb(var(--color-blue) / <alpha-value>)",
+        indigo: "rgb(var(--color-indigo) / <alpha-value>)",
+        purple: "rgb(var(--color-purple) / <alpha-value>)",
+        pink: "rgb(var(--color-pink) / <alpha-value>)",
         brown: "rgb(var(--color-brown) / <alpha-value>)",
         gray: {
           DEFAULT: "rgb(var(--color-gray) / <alpha-value>)",

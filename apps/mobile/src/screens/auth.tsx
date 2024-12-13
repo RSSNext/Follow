@@ -37,21 +37,15 @@ export default function AuthPage() {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <SafeAreaView className="flex-1 items-center justify-center">
       {typeof token === "string" ? (
         <Text>{token}</Text>
       ) : (
         <TouchableOpacity
-          className="bg-system-background rounded-md p-4 text-5xl"
+          className="rounded-md p-4 text-5xl dark:bg-white"
           onPress={obtainAuthToken}
         >
-          <Text className=" text-system-background">Sign in</Text>
+          <Text className=" text-placeholder-text">Sign in</Text>
         </TouchableOpacity>
       )}
     </SafeAreaView>
