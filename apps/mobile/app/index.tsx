@@ -1,9 +1,11 @@
+import { Redirect } from "expo-router"
 import { useRef } from "react"
 import { View } from "react-native"
 import { WebView } from "react-native-webview"
 
 export default function Index() {
   const webViewRef = useRef<WebView>()
+  return <Redirect href="/auth" />
 
   return (
     <View

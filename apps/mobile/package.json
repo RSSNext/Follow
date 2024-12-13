@@ -9,6 +9,7 @@
     "ios:device": "expo run:ios --device",
     "lint": "expo lint",
     "start": "expo start",
+    "start:client": "expo start --dev-client",
     "test": "jest --watchAll",
     "web": "expo start --web"
   },
