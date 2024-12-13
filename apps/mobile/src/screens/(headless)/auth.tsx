@@ -49,8 +49,10 @@ export default function AuthPage() {
         </TouchableOpacity>
       )}
 
-      <Link href="/home" className="mt-4 rounded-md p-4 text-5xl dark:bg-white">
-        <Text className="text-placeholder-text">Home</Text>
+      <Link href="/home" asChild>
+        <TouchableOpacity className="mt-4 rounded-md p-4 text-5xl dark:bg-white">
+          <Text className="text-placeholder-text">Home</Text>
+        </TouchableOpacity>
       </Link>
     </SafeAreaView>
   )

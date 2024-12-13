@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, View } from "react-native"
+
+import { AppleCuteFiIcon } from "@/src/components/icons/apple_cute_fi"
 
 export default function Tab() {
   return (
     <View style={styles.container}>
-      <Text>Tab [Home|Settings]</Text>
+      <AppleCuteFiIcon />
     </View>
   )
 }
