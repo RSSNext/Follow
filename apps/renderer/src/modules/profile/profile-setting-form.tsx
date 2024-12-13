@@ -50,7 +50,6 @@ export const ProfileSettingForm = ({
   const updateMutation = useMutation({
     mutationFn: (values: z.infer<typeof formSchema>) =>
       updateUser({
-        // @ts-expect-error
         handle: values.handle,
         image: values.image,
         name: values.name,
