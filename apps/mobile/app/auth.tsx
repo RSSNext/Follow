@@ -1,5 +1,5 @@
 import * as Linking from "expo-linking"
-import { useLocalSearchParams } from "expo-router"
+import { Redirect, useLocalSearchParams } from "expo-router"
 import * as WebBrowser from "expo-web-browser"
 import { useMemo } from "react"
 import { Button, Text } from "react-native"
@@ -31,6 +31,10 @@ export default function AuthPage() {
     const token = cookie.split("=")[1]
     return token
   }, [ck])
+
+  if (token) {
+    return <Redirect href={`/?token=${token}`} />
+  }
 
   return (
     <SafeAreaView

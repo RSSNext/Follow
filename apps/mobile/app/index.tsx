@@ -1,11 +1,15 @@
-import { Redirect } from "expo-router"
+import { Redirect, useLocalSearchParams } from "expo-router"
 import { useRef } from "react"
 import { View } from "react-native"
 import { WebView } from "react-native-webview"
 
 export default function Index() {
   const webViewRef = useRef<WebView>()
-  return <Redirect href="/auth" />
+  const searchParams = useLocalSearchParams()
+
+  if (!searchParams?.token) {
+    return <Redirect href="/auth" />
+  }
 
   return (
     <View
@@ -17,6 +21,8 @@ export default function Index() {
     >
       <WebView
         source={{ uri: "https://app.follow.is" }}
+        injectedJavaScriptBeforeContentLoaded={`
+          document.cookie="better-auth.session_token=${searchParams.token};domain=.follow.is;path=/"`}
         onContentProcessDidTerminate={() => webViewRef.current?.reload()}
         startInLoadingState={true}
         style={{ flex: 1 }}
