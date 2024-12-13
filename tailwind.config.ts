@@ -1,12 +1,12 @@
 import plugin from "tailwindcss/plugin"
 import resolveConfig from "tailwindcss/resolveConfig"
 
-import { baseConfig } from "./configs/tailwind.base.config"
+import { baseTwConfig } from "./configs/tailwind.base.config"
 
 const isWebBuild = !!process.env.WEB_BUILD || !!process.env.VERCEL
 
 export default resolveConfig({
-  ...baseConfig,
+  ...baseTwConfig,
   content: [
     "./apps/renderer/src/**/*.{ts,tsx}",
     "./apps/web/src/**/*.{ts,tsx}",
@@ -19,9 +19,9 @@ export default resolveConfig({
     hoverOnlyWhenSupported: isWebBuild,
   },
   theme: {
-    ...baseConfig.theme,
+    ...baseTwConfig.theme,
     extend: {
-      ...baseConfig.theme?.extend,
+      ...baseTwConfig.theme?.extend,
       spacing: {
         "safe-inset-top": "var(--fo-window-padding-top, 0)",
         "margin-macos-traffic-light-x": "var(--fo-macos-traffic-light-width, 0)",
@@ -34,7 +34,7 @@ export default resolveConfig({
     },
   },
   plugins: [
-    ...baseConfig.plugins,
+    ...baseTwConfig.plugins,
     plugin(({ addVariant }) => {
       addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
       addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')

@@ -2,7 +2,7 @@ import * as Linking from "expo-linking"
 import { Redirect, useLocalSearchParams } from "expo-router"
 import * as WebBrowser from "expo-web-browser"
 import { useMemo } from "react"
-import { Button, Text } from "react-native"
+import { Text, TouchableOpacity } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 function obtainAuthToken() {
@@ -47,7 +47,12 @@ export default function AuthPage() {
       {typeof token === "string" ? (
         <Text>{token}</Text>
       ) : (
-        <Button title="Sign in" onPress={obtainAuthToken} />
+        <TouchableOpacity
+          className="bg-system-background rounded-md p-4 text-5xl"
+          onPress={obtainAuthToken}
+        >
+          <Text className=" text-system-background">Sign in</Text>
+        </TouchableOpacity>
       )}
     </SafeAreaView>
   )
