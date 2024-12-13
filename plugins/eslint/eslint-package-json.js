@@ -76,7 +76,7 @@ export default {
               message: `Inconsistent versions of ${packageName}: ${versions.map((v) => v.version).join(", ")}`,
               suggest: versions.map((version) => ({
                 desc: `Follow the version ${version.version} in ${version.filePath}`,
-                fix: (fixer) => fixer.replaceText(node.value, version.version),
+                fix: (fixer) => fixer.replaceText(node.value, `"${version.version}"`),
               })),
             })
           },

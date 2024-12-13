@@ -3,7 +3,7 @@ import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
 import noDebug from "./plugins/eslint/eslint-no-debug.js"
-import packageJson from "./plugins/eslint/eslint-package-json.js"
+import packageJsonExtend from "./plugins/eslint/eslint-package-json.js"
 import recursiveSort from "./plugins/eslint/eslint-recursive-sort.js"
 
 const isCI = process.env.CI === "true" || process.env.CI === "1"
@@ -84,13 +84,13 @@ export default defineConfig(
     },
   },
   {
-    files: ["apps/**/package.json", "packages/**/package.json"],
+    files: ["package.json", "apps/**/package.json", "packages/**/package.json"],
     plugins: {
-      "ensure-package-json": packageJson,
+      "package-json-extend": packageJsonExtend,
     },
     rules: {
-      "ensure-package-json/ensure-package-version": "error",
-      "ensure-package-json/no-duplicate-package": "error",
+      "package-json-extend/ensure-package-version": "error",
+      "package-json-extend/no-duplicate-package": "error",
     },
   },
 )
