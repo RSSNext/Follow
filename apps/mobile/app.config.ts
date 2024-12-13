@@ -27,7 +27,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: "../../resources/icon.png",
   },
   plugins: [
-    "expo-router",
+    [
+      "expo-router",
+      {
+        root: "./src/screens",
+      },
+    ],
     [
       "expo-splash-screen",
       {
