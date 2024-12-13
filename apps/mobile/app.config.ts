@@ -1,12 +1,15 @@
+import { resolve } from "node:path"
+
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
+const iconPath = resolve(__dirname, "../../resources/icon.png")
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Follow",
   slug: "follow",
   version: "1.0.0",
   orientation: "portrait",
-  icon: "../../resources/icon.png",
+  icon: iconPath,
   scheme: "follow",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
@@ -17,14 +20,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     package: "is.follow.app",
     adaptiveIcon: {
-      foregroundImage: "../../resources/icon.png",
+      foregroundImage: iconPath,
       backgroundColor: "#ffffff",
     },
   },
   web: {
     bundler: "metro",
     output: "static",
-    favicon: "../../resources/icon.png",
+    favicon: iconPath,
   },
   plugins: [
     [
@@ -36,7 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        image: "../../resources/icon.png",
+        image: iconPath,
         imageWidth: 200,
         resizeMode: "contain",
         backgroundColor: "#ffffff",

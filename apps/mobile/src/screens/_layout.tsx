@@ -22,7 +22,10 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: systemBackgroundColor },
           headerShown: false,
         }}
-      />
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(headless)" options={{ headerShown: false }} />
+      </Stack>
       <TouchableOpacity
         onPress={() => {
           const current = colorScheme.get()
