@@ -1,5 +1,5 @@
 import * as Linking from "expo-linking"
-import { Link, Redirect, useLocalSearchParams } from "expo-router"
+import { Redirect, useLocalSearchParams } from "expo-router"
 import * as WebBrowser from "expo-web-browser"
 import { useMemo } from "react"
 import { Text, TouchableOpacity } from "react-native"
@@ -16,6 +16,7 @@ function obtainAuthToken() {
         subscription.remove()
       }
     })
+
     WebBrowser.openBrowserAsync(process.env.EXPO_PUBLIC_FOLLOW_LOGIN_URL)
   })
 }
@@ -48,12 +49,6 @@ export default function AuthPage() {
           <Text className="text-placeholder-text">Sign in</Text>
         </TouchableOpacity>
       )}
-
-      <Link href="/home" asChild>
-        <TouchableOpacity className="mt-4 rounded-md p-4 text-5xl dark:bg-white">
-          <Text className="text-placeholder-text">Home</Text>
-        </TouchableOpacity>
-      </Link>
     </SafeAreaView>
   )
 }

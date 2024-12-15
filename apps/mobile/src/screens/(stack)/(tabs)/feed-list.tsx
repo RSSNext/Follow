@@ -1,6 +1,6 @@
 import { List, Text } from "swiftui-react-native"
 
-export function FeedList() {
+export default function FeedList() {
   return (
     <List>
       <Text>Feed</Text>

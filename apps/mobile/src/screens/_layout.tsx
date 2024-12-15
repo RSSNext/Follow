@@ -1,15 +1,15 @@
 import "../global.css"
 
 import { Link, Stack } from "expo-router"
-import { colorScheme, useColorScheme } from "nativewind"
-import { Text, TouchableOpacity, View } from "react-native"
+import { useColorScheme } from "nativewind"
+import { TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { getCurrentColors, getSystemBackgroundColor } from "../theme/colors"
 
 export default function RootLayout() {
   const insets = useSafeAreaInsets()
-  const current = useColorScheme()
+  useColorScheme()
 
   const currentThemeColors = getCurrentColors()!
 
@@ -27,29 +27,17 @@ export default function RootLayout() {
         <Stack.Screen name="(headless)" options={{ headerShown: false }} />
       </Stack>
 
-      <Link asChild href={"/(headless)/debug"}>
+      <Link asChild href={"/_sitemap"}>
         <TouchableOpacity
+          hitSlop={{ top: 10, bottom: 22, left: 10, right: 10 }}
           style={{
             position: "absolute",
             left: insets.left,
-            top: insets.top,
+            top: insets.top - 24,
           }}
-          className="absolute size-5 bg-accent"
+          className="absolute size-5 rounded-r-md bg-accent"
         />
       </Link>
-      <TouchableOpacity
-        onPress={() => {
-          const current = colorScheme.get()
-          colorScheme.set(current === "dark" ? "light" : "dark")
-        }}
-        style={{
-          position: "absolute",
-          bottom: insets.bottom + 33,
-          right: insets.right,
-        }}
-      >
-        <Text className="text-accent">Toggle Color mode ({current.colorScheme})</Text>
-      </TouchableOpacity>
     </View>
   )
 }
