@@ -3,12 +3,13 @@ import { Tabs } from "expo-router"
 import { FollowIcon } from "@/src/components/logo"
 import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
 import { Settings7CuteReIcon } from "@/src/icons/settings_7_cute_re"
+import { accentColor } from "@/src/theme/colors"
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#FF5C00",
+        tabBarActiveTintColor: accentColor,
       }}
     >
       <Tabs.Screen

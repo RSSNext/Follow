@@ -1,5 +1,6 @@
 import "../global.css"
 
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native"
 import { Link, Stack } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { TouchableOpacity, View } from "react-native"
@@ -9,7 +10,7 @@ import { getCurrentColors, getSystemBackgroundColor } from "../theme/colors"
 
 export default function RootLayout() {
   const insets = useSafeAreaInsets()
-  useColorScheme()
+  const { colorScheme } = useColorScheme()
 
   const currentThemeColors = getCurrentColors()!
 
@@ -17,15 +18,17 @@ export default function RootLayout() {
 
   return (
     <View style={[{ flex: 1 }, currentThemeColors]}>
-      <Stack
-        screenOptions={{
-          contentStyle: { backgroundColor: systemBackgroundColor },
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(headless)" options={{ headerShown: false }} />
-      </Stack>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack
+          screenOptions={{
+            contentStyle: { backgroundColor: systemBackgroundColor },
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(headless)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
 
       <Link asChild href={"/_sitemap"}>
         <TouchableOpacity
