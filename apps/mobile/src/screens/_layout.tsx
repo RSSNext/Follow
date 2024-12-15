@@ -1,12 +1,13 @@
 import "../global.css"
 
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native"
+import { ThemeProvider } from "@react-navigation/native"
 import { Link, Stack } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { getCurrentColors, getSystemBackgroundColor } from "../theme/colors"
+import { DarkTheme, DefaultTheme } from "../theme/navigation"
 
 export default function RootLayout() {
   const insets = useSafeAreaInsets()
