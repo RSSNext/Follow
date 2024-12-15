@@ -1,24 +1,78 @@
+import { FeedViewType } from "@follow/constants"
 import { Link, Stack } from "expo-router"
-import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { atom, useAtom, useAtomValue } from "jotai"
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
+import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
+import { useScaleWidth } from "@/src/lib/responsive"
 import { accentColor } from "@/src/theme/colors"
 
+const viewAtom = atom<FeedViewType>(FeedViewType.Articles)
 export default function FeedList() {
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          title: "Subscriptions",
-          headerLeft: LeftAction,
-          headerRight: RightAction,
-        }}
-      />
+    <>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            title: "Subscriptions",
+            headerLeft: LeftAction,
+            headerRight: RightAction,
+            headerBackground: () => <ThemedBlurView intensity={100} />,
+          }}
+        />
 
-      <Text>Feed</Text>
-    </ScrollView>
+        <SubscriptionList />
+      </ScrollView>
+      <ViewTab />
+    </>
+  )
+}
+
+const ViewTab = () => {
+  const scaleWidth = useScaleWidth()
+
+  const paddingHorizontal = 4
+  const [currentView, setCurrentView] = useAtom(viewAtom)
+
+  return (
+    <ThemedBlurView
+      style={{
+        bottom: 0,
+        left: 0,
+        position: "absolute",
+        width: "100%",
+        borderTopColor: "rgba(0,0,0,0.2)",
+        borderTopWidth: StyleSheet.hairlineWidth,
+      }}
+    >
+      <View className="flex-row items-center justify-between py-2" style={{ paddingHorizontal }}>
+        {views.map((view) => (
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setCurrentView(view.view)}
+            key={view.name}
+            className="items-center justify-center"
+            style={{ width: scaleWidth((375 - paddingHorizontal * 2) / views.length) }}
+          >
+            <view.icon
+              color={currentView === view.view ? view.activeColor : "gray"}
+              height={18}
+              width={22}
+            />
+            <Text
+              style={{ color: currentView === view.view ? view.activeColor : "gray" }}
+              className="text-xs"
+            >
+              {view.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ThemedBlurView>
   )
 }
 
@@ -51,6 +105,15 @@ function RightAction() {
           <AddCuteReIcon color={accentColor} />
         </TouchableOpacity>
       </Link>
+    </View>
+  )
+}
+
+const SubscriptionList = () => {
+  const currentView = useAtomValue(viewAtom)
+  return (
+    <View>
+      <Text>{currentView}</Text>
     </View>
   )
 }

@@ -1,18 +1,22 @@
 import { Tabs } from "expo-router"
 
-import { FollowIcon } from "@/src/components/logo"
+import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
+import { FollowIcon } from "@/src/components/ui/logo"
 import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
 import { Settings7CuteReIcon } from "@/src/icons/settings_7_cute_re"
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarBackground: () => <ThemedBlurView intensity={100} />,
+      }}
+    >
       <Tabs.Screen
         name="feed-list"
         options={{
           title: "Subscriptions",
           headerShown: false,
-
           tabBarIcon: ({ color }) => <FollowIcon color={color} style={{ width: 20, height: 20 }} />,
         }}
       />
@@ -36,5 +40,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    // </View>
   )
 }
