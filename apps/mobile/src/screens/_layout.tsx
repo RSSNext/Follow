@@ -1,6 +1,6 @@
 import "../global.css"
 
-import { Stack } from "expo-router"
+import { Link, Stack } from "expo-router"
 import { colorScheme, useColorScheme } from "nativewind"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -26,6 +26,17 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(headless)" options={{ headerShown: false }} />
       </Stack>
+
+      <Link asChild href={"/(headless)/debug"}>
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            left: insets.left,
+            top: insets.top,
+          }}
+          className="absolute size-5 bg-accent"
+        />
+      </Link>
       <TouchableOpacity
         onPress={() => {
           const current = colorScheme.get()
@@ -33,7 +44,7 @@ export default function RootLayout() {
         }}
         style={{
           position: "absolute",
-          bottom: insets.bottom,
+          bottom: insets.bottom + 33,
           right: insets.right,
         }}
       >
