@@ -3,7 +3,7 @@ import type { StyleProp, ViewStyle } from "react-native"
 import { Appearance, StyleSheet } from "react-native"
 
 const varPrefix = "--color"
-
+export const accentColor = "#FF5C00"
 const buildVars = (_vars: Record<string, string>) => {
   const cssVars = {} as Record<`${typeof varPrefix}-${string}`, string>
   for (const [key, value] of Object.entries(_vars)) {
