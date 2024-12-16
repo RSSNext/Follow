@@ -55,9 +55,10 @@
   "redirect.openApp": "Open {{app_name}}",
   "redirect.successMessage": "You have successfully connected to {{app_name}} Account.",
   "register.confirm_password": "Confirm Password",
-  "register.description": "Enter your email and password to create an account",
   "register.email": "Email",
-  "register.label": "Register",
+  "register.label": "Create a {{app_name}} account",
+  "register.login": "Log in",
+  "register.note": "Already have an account? <Login />",
   "register.password": "Password",
-  "register.submit": "Submit"
+  "register.submit": "Create account"
 }
