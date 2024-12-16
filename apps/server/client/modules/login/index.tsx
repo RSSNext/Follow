@@ -30,6 +30,7 @@ import { z } from "zod"
 
 const overrideProviderIconMap: Record<string, React.ReactNode> = {
   apple: <i className="i-mgc-apple-cute-fi size-5 text-black dark:text-white" />,
+  github: <i className="i-mgc-github-cute-fi size-5 text-black dark:text-white" />,
 }
 
 export function Login() {
@@ -221,7 +222,7 @@ export function Login() {
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8).max(128),
+  password: z.string().max(128),
 })
 
 async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -242,6 +243,7 @@ function LoginWithPassword() {
       password: "",
     },
   })
+  const { isValid } = form.formState
   const navigate = useNavigate()
 
   return (
@@ -276,7 +278,12 @@ function LoginWithPassword() {
         <Link to="/forget-password" className="block py-1 text-xs text-accent hover:underline">
           {t("login.forget_password.note")}
         </Link>
-        <Button type="submit" className="w-full" buttonClassName="text-base">
+        <Button
+          type="submit"
+          className="w-full"
+          buttonClassName="text-base !mt-3"
+          disabled={!isValid}
+        >
           {t("login.continueWith", { provider: "email" })}
         </Button>
         <Button
