@@ -11,6 +11,7 @@ export const getCommand = <T extends FollowCommandId>(id: T) => {
   return id in commands ? commands[id] : null
 }
 
+export const useCommands = () => useAtomValue(CommandRegistry.atom)
 export function useCommand<T extends FollowCommandId>(id: T): FollowCommandMap[T] | null {
   const commands = useAtomValue(
     useMemo(() => selectAtom(CommandRegistry.atom, (commands) => commands[id]), [id]),
