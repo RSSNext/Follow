@@ -20,6 +20,7 @@ import { z } from "zod"
 import { useWhoami } from "~/atoms/user"
 import { useHasPassword } from "~/queries/auth"
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const ForgetPasswordButton = () => {
   const { t } = useTranslation("settings")
   const user = useWhoami()
@@ -170,12 +171,12 @@ const UpdateExistingPasswordForm = () => {
 export const UpdatePasswordForm = () => {
   const { data: hasPassword, isLoading } = useHasPassword()
 
-  if (isLoading) {
+  if (isLoading || !hasPassword) {
     return null
   }
 
-  if (!hasPassword) {
-    return <ForgetPasswordButton />
-  }
+  // if (!hasPassword) {
+  //   return <ForgetPasswordButton />
+  // }
   return <UpdateExistingPasswordForm />
 }
