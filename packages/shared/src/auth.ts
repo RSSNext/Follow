@@ -61,7 +61,10 @@ export const loginHandler = async (
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
     if (provider === "credential") {
-      if (!email || !password) return
+      if (!email || !password) {
+        window.location.href = "/login"
+        return
+      }
       return signIn.email({ email, password })
     }
 
