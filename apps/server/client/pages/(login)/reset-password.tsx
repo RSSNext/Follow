@@ -1,4 +1,4 @@
-import { Button } from "@follow/components/ui/button/index.jsx"
+import { Button, MotionButtonBase } from "@follow/components/ui/button/index.jsx"
 import {
   Card,
   CardContent,
@@ -45,6 +45,8 @@ export function Component() {
     },
   })
 
+  const { isValid } = form.formState
+
   const navigate = useNavigate()
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof initPasswordFormSchema>) => {
@@ -69,12 +71,22 @@ export function Component() {
 
   return (
     <div className="flex h-full items-center justify-center">
-      <Card className="w-[350px]">
+      <Card className="w-[350px] max-w-full">
         <CardHeader>
-          <CardTitle>{t("login.reset_password.label")}</CardTitle>
-          <CardDescription>{t("login.reset_password.description")}</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <MotionButtonBase
+              onClick={() => {
+                history.length > 1 ? history.back() : navigate("/login")
+              }}
+              className="-ml-1 inline-flex cursor-pointer items-center"
+            >
+              <i className="i-mingcute-left-line" />
+            </MotionButtonBase>
+            <span>{t("login.forget_password.label")}</span>
+          </CardTitle>
         </CardHeader>
         <CardContent>
+          <CardDescription>{t("login.reset_password.description")}</CardDescription>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
               <FormField
@@ -105,7 +117,7 @@ export function Component() {
               />
 
               <div className="text-right">
-                <Button type="submit" isLoading={updateMutation.isPending}>
+                <Button disabled={!isValid} type="submit" isLoading={updateMutation.isPending}>
                   {t("login.submit")}
                 </Button>
               </div>

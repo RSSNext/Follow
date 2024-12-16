@@ -49,6 +49,8 @@ function RegisterForm() {
     },
   })
 
+  const { isValid } = form.formState
+
   const navigate = useNavigate()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -69,9 +71,11 @@ function RegisterForm() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-3xl font-bold">{t("register.label", { app_name: APP_NAME })}</h1>
-      <p className="text-center text-muted-foreground">
+    <div className="relative">
+      <h1 className="center flex text-2xl font-bold">
+        {t("register.label", { app_name: APP_NAME })}
+      </h1>
+      <div className="mt-2 text-center text-muted-foreground">
         <Trans
           ns="external"
           i18nKey="register.note"
@@ -83,9 +87,9 @@ function RegisterForm() {
             ),
           }}
         />
-      </p>
+      </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
           <FormField
             control={form.control}
             name="email"
@@ -125,7 +129,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" variant="outline">
+          <Button disabled={!isValid} type="submit" className="w-full">
             {t("register.submit")}
           </Button>
         </form>

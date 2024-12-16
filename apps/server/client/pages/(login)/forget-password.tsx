@@ -38,6 +38,7 @@ export function Component() {
     },
   })
 
+  const { isValid } = form.formState
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof forgetPasswordFormSchema>) => {
       const res = await forgetPassword({
@@ -64,14 +65,14 @@ export function Component() {
 
   return (
     <div className="flex h-full items-center justify-center">
-      <Card className="w-[350px]">
+      <Card className="w-[350px] max-w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MotionButtonBase
               onClick={() => {
                 history.length > 1 ? history.back() : navigate("/login")
               }}
-              className="inline-flex cursor-pointer items-center"
+              className="-ml-1 inline-flex cursor-pointer items-center"
             >
               <i className="i-mingcute-left-line" />
             </MotionButtonBase>
@@ -98,7 +99,7 @@ export function Component() {
                 )}
               />
               <div className="text-right">
-                <Button type="submit" isLoading={updateMutation.isPending}>
+                <Button disabled={!isValid} type="submit" isLoading={updateMutation.isPending}>
                   {t("login.submit")}
                 </Button>
               </div>
