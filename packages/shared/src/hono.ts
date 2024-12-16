@@ -9038,6 +9038,14 @@ declare const auth: {
                 token: string;
             }): Promise<void>;
         };
+        emailVerification: {
+            sendOnSignUp: true;
+            sendVerificationEmail({ user, url }: {
+                user: better_auth.User;
+                url: string;
+                token: string;
+            }): Promise<void>;
+        };
         plugins: ({
             id: "custom-session";
             endpoints: {
