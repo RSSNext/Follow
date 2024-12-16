@@ -1,3 +1,4 @@
+import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import {
   Card,
@@ -24,7 +25,8 @@ import { z } from "zod"
 
 export function Component() {
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex h-full flex-col items-center justify-center gap-10">
+      <Logo className="size-20" />
       <RegisterForm />
     </div>
   )
@@ -72,10 +74,8 @@ function RegisterForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg md:text-xl">{t("register.label")}</CardTitle>
-        <CardDescription className="text-xs md:text-sm">
-          {t("register.description")}
-        </CardDescription>
+        <CardTitle>{t("register.label")}</CardTitle>
+        <CardDescription>{t("register.description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
