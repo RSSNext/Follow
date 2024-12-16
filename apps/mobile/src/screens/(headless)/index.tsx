@@ -1,10 +1,12 @@
 import { Redirect, useLocalSearchParams } from "expo-router"
 import { useRef } from "react"
-import { View } from "react-native"
-import { WebView } from "react-native-webview"
+import { Button, View } from "react-native"
+import type { WebView } from "react-native-webview"
+
+import { FollowWebView } from "@/src/components/common/FollowWebView"
 
 export default function Index() {
-  const webViewRef = useRef<WebView>()
+  const webViewRef = useRef<WebView>(null)
   const searchParams = useLocalSearchParams()
 
   if (!searchParams?.token) {
@@ -19,15 +21,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <WebView
-        source={{ uri: "https://app.follow.is" }}
-        injectedJavaScriptBeforeContentLoaded={`
-          document.cookie="better-auth.session_token=${searchParams.token};domain=.follow.is;path=/"`}
-        onContentProcessDidTerminate={() => webViewRef.current?.reload()}
-        startInLoadingState={true}
-        style={{ flex: 1 }}
-        containerStyle={{ width: "100%" }}
-      />
+      <FollowWebView webViewRef={webViewRef} />
+      <Button title="Reload" onPress={() => webViewRef.current?.reload()} />
     </View>
   )
 }
