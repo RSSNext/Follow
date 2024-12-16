@@ -19,6 +19,7 @@ const serverPlugins = [
     user: {
       handle: {
         type: "string",
+        required: false,
       },
     },
   }),
@@ -29,18 +30,20 @@ const authClient = createAuthClient({
   plugins: serverPlugins,
 })
 
+// @keep-sorted
 export const {
-  signIn,
-  signOut,
-  getSession,
-  getProviders,
+  changePassword,
   createSession,
-  updateUser,
+  forgetPassword,
+  getProviders,
+  getSession,
   linkSocial,
   listAccounts,
-  changePassword,
-  forgetPassword,
   resetPassword,
+  signIn,
+  signOut,
+  signUp,
+  updateUser,
 } = authClient
 
 export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
