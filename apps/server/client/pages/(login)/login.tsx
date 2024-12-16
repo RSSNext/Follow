@@ -4,6 +4,7 @@ import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
+import { Divider } from "@follow/components/ui/divider/index.js"
 import {
   Form,
   FormControl,
@@ -21,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
-import { Link, useLocation } from "react-router"
+import { Link, useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -78,25 +79,10 @@ function Login() {
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
       <Logo className="size-20" />
       {!isAuthenticated && (
-        <div className="space-y-3 text-center">
-          <h1 className="text-3xl font-bold">
-            {t("login.logInTo")}
-            {` ${APP_NAME}`}
-          </h1>
-          <p className="text-center text-muted-foreground">
-            <Trans
-              ns="external"
-              i18nKey="login.note"
-              components={{
-                RegisterLink: (
-                  <Link to="/register" className="text-accent hover:underline">
-                    {t("login.register")}
-                  </Link>
-                ),
-              }}
-            />
-          </p>
-        </div>
+        <h1 className="text-3xl font-bold">
+          {t("login.logInTo")}
+          {` ${APP_NAME}`}
+        </h1>
       )}
       {redirecting ? (
         <div>{t("login.redirecting")}</div>
@@ -141,12 +127,6 @@ function Login() {
             </div>
           ) : (
             <>
-              {!!authProviders?.credential && (
-                <div className="w-[320px] space-y-2">
-                  <LoginWithPassword />
-                  <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
-                </div>
-              )}
               {Object.entries(authProviders || [])
                 .filter(([key]) => key !== "credential")
                 .map(([key, provider]) => (
@@ -164,6 +144,18 @@ function Login() {
                     {t("login.continueWith", { provider: provider.name })}
                   </Button>
                 ))}
+              {!!authProviders?.credential && (
+                <div className="mt-2 w-[320px] space-y-2">
+                  <div className="flex items-center justify-center">
+                    <Divider className="flex-1" />
+                    <p className="px-4 text-center text-sm text-muted-foreground">
+                      {t("login.or")}
+                    </p>
+                    <Divider className="flex-1" />
+                  </div>
+                  <LoginWithPassword />
+                </div>
+              )}
             </>
           )}
         </div>
@@ -195,10 +187,11 @@ function LoginWithPassword() {
       password: "",
     },
   })
+  const navigate = useNavigate()
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
         <FormField
           control={form.control}
           name="email"
@@ -217,12 +210,7 @@ function LoginWithPassword() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center justify-between">
-                {t("login.password")}
-                <Link to="/forget-password" className="text-xs text-accent hover:underline">
-                  {t("login.forget_password.note")}
-                </Link>
-              </FormLabel>
+              <FormLabel>{t("login.password")}</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -230,8 +218,21 @@ function LoginWithPassword() {
             </FormItem>
           )}
         />
-        <Button type="submit" variant="outline" className="w-full">
-          {t("login.logIn")}
+        <Link to="/forget-password" className="block py-1 text-xs text-accent hover:underline">
+          {t("login.forget_password.note")}
+        </Link>
+        <Button type="submit" className="w-full">
+          {t("login.continueWith", { provider: "email" })}
+        </Button>
+        <Button
+          buttonClassName="!mt-3"
+          className="w-full"
+          variant="outline"
+          onClick={() => {
+            navigate("/register")
+          }}
+        >
+          <Trans ns="external" i18nKey="login.signUp" />
         </Button>
       </form>
     </Form>
