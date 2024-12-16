@@ -319,3 +319,56 @@ const RowRender = ({ feedId, listId }: { feedId: string; listId: string }) => {
     </TableRow>
   )
 }
+const categoryFormSchema = z.object({
+  categoryName: z.string().min(1),
+})
+export const CategoryCreationModalContent = ({
+  onSubmit,
+}: {
+  onSubmit: (category: string) => void
+}) => {
+  const { dismiss } = useCurrentModal()
+  const { t } = useTranslation()
+
+  const form = useForm<z.infer<typeof categoryFormSchema>>({
+    resolver: zodResolver(categoryFormSchema),
+    defaultValues: {
+      categoryName: "",
+    },
+  })
+
+  const handleSubmit = form.handleSubmit(({ categoryName }) => {
+    onSubmit(categoryName)
+    dismiss()
+  })
+
+  return (
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="space-y-4 lg:w-[450px]">
+        <FormField
+          control={form.control}
+          name="categoryName"
+          render={({ field }) => (
+            <FormItem>
+              <div>
+                <FormLabel>
+                  {t("sidebar.feed_column.context_menu.new_category_modal.category_name")}
+                  <sup className="ml-1 align-sub text-red-500">*</sup>
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Input autoFocus {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex justify-end">
+          <Button type="submit">
+            {t("sidebar.feed_column.context_menu.new_category_modal.create")}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  )
+}

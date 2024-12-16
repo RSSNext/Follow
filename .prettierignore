@@ -4,3 +4,4 @@ pnpm-lock.yaml
 CHANGELOG.md
 
 apps/external/postcss.config.cjs
+apps/renderer/.env

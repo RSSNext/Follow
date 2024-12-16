@@ -1,12 +1,20 @@
+import { getViewport } from "@follow/components/hooks/useViewport.js"
+import {
+  CircleProgress,
+  MaterialSymbolsProgressActivity,
+} from "@follow/components/icons/Progress.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
+import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
+import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { EventBus } from "@follow/utils/event-bus"
+import { springScrollTo } from "@follow/utils/scroller"
 import { cn } from "@follow/utils/utils"
 import type { FallbackRender } from "@sentry/react"
 import type { FC } from "react"
-import { memo, useEffect, useLayoutEffect, useRef } from "react"
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useShowAISummary } from "~/atoms/ai-summary"
@@ -18,12 +26,17 @@ import {
 } from "~/atoms/readability"
 import { enableShowSourceContent } from "~/atoms/source-content"
 import { Toc } from "~/components/ui/markdown/components/Toc"
+import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { isWebBuild } from "~/constants"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common/useBizQuery"
 import { getNewIssueUrl } from "~/lib/issues"
-import { useIsSoFWrappedElement, useWrappedElement } from "~/providers/wrapped-element-provider"
+import {
+  useIsSoFWrappedElement,
+  useWrappedElement,
+  useWrappedElementSize,
+} from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
@@ -183,29 +196,62 @@ export const RenderError: FallbackRender = ({ error }) => {
       <span className="font-sans text-sm">
         {t("entry_content.render_error")} {nextError.message}
       </span>
-      <a
-        href={getNewIssueUrl({
-          body: [
-            "### Error",
-            "",
-            nextError.message,
-            "",
-            "### Stack",
-            "",
-            "```",
-            nextError.stack,
-            "```",
-          ].join("\n"),
-          label: "bug",
-          title: "Render error",
-        })}
-        target="_blank"
-        rel="noreferrer"
+      <Button
+        variant={"outline"}
+        onClick={() => {
+          window.open(
+            getNewIssueUrl({
+              body: [
+                "### Error",
+                "",
+                nextError.message,
+                "",
+                "### Stack",
+                "",
+                "```",
+                nextError.stack,
+                "```",
+              ].join("\n"),
+              label: "bug",
+              title: "Render error",
+            }),
+          )
+        }}
       >
         {t("entry_content.report_issue")}
-      </a>
+      </Button>
     </div>
   )
+}
+
+const useReadPercent = () => {
+  const y = 55
+  const { h } = useWrappedElementSize()
+
+  const scrollElement = useScrollViewElement()
+  const [scrollTop, setScrollTop] = useState(0)
+
+  useEffect(() => {
+    const handler = () => {
+      if (scrollElement) {
+        setScrollTop(scrollElement.scrollTop)
+      }
+    }
+    handler()
+    scrollElement?.addEventListener("scroll", handler)
+    return () => {
+      scrollElement?.removeEventListener("scroll", handler)
+    }
+  }, [scrollElement])
+
+  const readPercent = useMemo(() => {
+    const winHeight = getViewport().h
+    const deltaHeight = Math.min(scrollTop, winHeight)
+
+    return Math.floor(Math.min(Math.max(0, ((scrollTop - y + deltaHeight) / h) * 100), 100)) || 0
+  }, [y, h, scrollTop])
+
+  return [readPercent, scrollTop]
 }
 
 export const ContainerToc: FC = memo(() => {
@@ -226,9 +272,49 @@ export const ContainerToc: FC = memo(() => {
               "@[700px]:-translate-x-12 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
             )}
           />
+
+          <BackTopIndicator
+            className={
+              "@[700px]:-translate-x-4 @[800px]:-translate-x-8 @[900px]:translate-x-0 @[900px]:items-start"
+            }
+          />
         </div>
       </div>
     </RootPortal>
+  )
+})
+
+const BackTopIndicator: Component = memo(({ className }) => {
+  const [readPercent] = useReadPercent()
+  const scrollElement = useScrollViewElement()
+  return (
+    <span
+      className={cn(
+        "mt-2 flex grow flex-col px-2 font-sans text-sm text-gray-800 dark:text-neutral-300",
+        className,
+      )}
+    >
+      <div className="flex items-center gap-2 tabular-nums">
+        <IconOpacityTransition
+          icon1={<MaterialSymbolsProgressActivity />}
+          icon2={<CircleProgress percent={readPercent} size={14} strokeWidth={2} />}
+          status={readPercent === 0 ? "init" : "done"}
+        />
+        {readPercent}%<br />
+      </div>
+      <MotionButtonBase
+        onClick={() => {
+          springScrollTo(0, scrollElement!)
+        }}
+        className={cn(
+          "mt-1 flex flex-nowrap items-center gap-2 opacity-50 transition-all duration-500 hover:opacity-100",
+          readPercent > 10 ? "" : "pointer-events-none opacity-0",
+        )}
+      >
+        <i className="i-mingcute-arrow-up-circle-line" />
+        <span className="whitespace-nowrap">Back Top</span>
+      </MotionButtonBase>
+    </span>
   )
 })
 

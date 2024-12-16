@@ -15,7 +15,7 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
     return (
       <div className={clsx(styles, animationStyles, "mt-2")}>
         <ScrollArea
-          scrollbarClassName={!views[view].wideMode ? "w-[5px] p-0" : ""}
+          scrollbarClassName={clsx(!views[view].wideMode ? "w-[5px] p-0" : "", "z-[3]")}
           mask={false}
           ref={ref}
           rootClassName={clsx("h-full", views[view].wideMode ? "mt-2" : "")}

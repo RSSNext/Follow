@@ -91,6 +91,11 @@ export const SettingGeneral = () => {
             label: t("general.group_by_date.label"),
             description: t("general.group_by_date.description"),
           }),
+
+          defineSettingItem("autoExpandLongSocialMedia", {
+            label: t("general.auto_expand_long_social_media.label"),
+            description: t("general.auto_expand_long_social_media.description"),
+          }),
           isMobile &&
             defineSettingItem("showQuickTimeline", {
               label: t("general.show_quick_timeline.label"),

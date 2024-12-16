@@ -143,7 +143,7 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-          {/* NOTE: The shortcut needs to be grouped, but there is only one currently, so no separator line has been added. */}
+
           {!zenModeSetting && (
             <DropdownMenuItem
               className="pl-3"
@@ -155,6 +155,17 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
               {t("user_button.zen_mode")}
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              navigate("/action")
+            }}
+            icon={<i className="i-mgc-magic-2-cute-re" />}
+          >
+            {t("words.actions")}
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="pl-3"
             onClick={() => {

@@ -13,6 +13,7 @@ export interface PresentSheetProps {
   open?: boolean
   onOpenChange?: (value: boolean) => void
   title?: ReactNode
+  hideHeader?: boolean
   zIndex?: number
   dismissible?: boolean
   defaultOpen?: boolean
@@ -35,6 +36,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
       children,
       zIndex = MODAL_STACK_Z_INDEX,
       title,
+      hideHeader,
       dismissible = true,
       defaultOpen,
       triggerAsChild,
@@ -123,7 +125,12 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             )}
 
             {title ? (
-              <Drawer.Title className="-mt-4 mb-4 flex justify-center px-4 text-lg font-medium">
+              <Drawer.Title
+                className={cn(
+                  "-mt-4 mb-4 flex justify-center px-4 text-lg font-medium",
+                  hideHeader && "sr-only",
+                )}
+              >
                 {title}
               </Drawer.Title>
             ) : (

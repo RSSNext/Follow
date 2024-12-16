@@ -26,8 +26,9 @@ const createDefaultSettings = (): GeneralSettings => ({
   hoverMarkUnread: true,
   renderMarkUnread: false,
   // UX
-
   groupByDate: true,
+  autoExpandLongSocialMedia: false,
+
   // Secure
   jumpOutLinkWarn: true,
   // TTS
