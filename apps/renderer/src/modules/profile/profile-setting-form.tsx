@@ -11,6 +11,7 @@ import {
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
+import { updateUser } from "@follow/shared/auth"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -20,7 +21,6 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
-import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 
 const formSchema = z.object({
@@ -49,9 +49,11 @@ export const ProfileSettingForm = ({
   })
 
   const updateMutation = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) =>
-      apiClient["auth-app"]["update-account"].$patch({
-        json: values,
+    mutationFn: (values: z.infer<typeof formSchema>) =>
+      updateUser({
+        handle: values.handle,
+        image: values.image,
+        name: values.name,
       }),
     onError: (error) => {
       toastFetchError(error)

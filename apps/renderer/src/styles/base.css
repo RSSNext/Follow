@@ -53,5 +53,5 @@ button {
 }
 
 #react-scan-toolbar {
-  @apply max-lg:!hidden;
+  @apply max-lg:!hidden no-drag-region;
 }

@@ -29,8 +29,8 @@ function EntryHeaderImpl({ view, entryId, className, compact }: EntryHeaderProps
     <div
       data-hide-in-print
       className={cn(
-        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
-        shouldShowMeta && "border-b border-border",
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden border-b border-transparent text-lg text-zinc-500 duration-200 zen-mode-macos:ml-margin-macos-traffic-light-x",
+        shouldShowMeta && "border-border",
         className,
       )}
     >

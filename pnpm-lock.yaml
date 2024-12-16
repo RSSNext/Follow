@@ -184,6 +184,9 @@ importers:
       fake-indexeddb:
         specifier: 6.0.0
         version: 6.0.0
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
       happy-dom:
         specifier: 15.11.7
         version: 15.11.7
@@ -825,9 +828,6 @@ importers:
       sonner:
         specifier: 1.7.1
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      tailwindcss:
-        specifier: 3.4.16
-        version: 3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))
       use-context-selector:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.25.0)
@@ -877,12 +877,12 @@ importers:
       es-toolkit:
         specifier: 1.29.0
         version: 1.29.0
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
       foxact:
         specifier: 0.2.43
         version: 0.2.43(react@18.3.1)
-      glob:
-        specifier: 11.0.0
-        version: 11.0.0
       html-minifier-terser:
         specifier: 7.2.0
         version: 7.2.0
@@ -901,6 +901,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      tailwindcss:
+        specifier: 3.4.16
+        version: 3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))
       tsup:
         specifier: 8.3.5
         version: 8.3.5(jiti@2.3.3)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.6.1)

@@ -1,6 +1,7 @@
 import { env } from "@follow/shared/env"
 import type { authPlugins } from "@follow/shared/hono"
 import type { BetterAuthClientPlugin } from "better-auth/client"
+import { inferAdditionalFields } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
 
 import { IN_ELECTRON, WEB_URL } from "./constants"
@@ -14,6 +15,13 @@ const serverPlugins = [
     id: "createSession",
     $InferServerPlugin: {} as (typeof authPlugins)[1],
   },
+  inferAdditionalFields({
+    user: {
+      handle: {
+        type: "string",
+      },
+    },
+  }),
 ] satisfies BetterAuthClientPlugin[]
 
 const authClient = createAuthClient({
@@ -27,6 +35,7 @@ export const {
   getSession,
   getProviders,
   createSession,
+  updateUser,
   linkSocial,
   listAccounts,
   changePassword,
