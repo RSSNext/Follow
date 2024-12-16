@@ -197,7 +197,7 @@ const SortButton = () => {
   const { t } = useTranslation()
 
   const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null!)
   useOnClickOutside(ref, () => {
     setOpen(false)
   })

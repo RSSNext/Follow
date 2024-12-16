@@ -11,7 +11,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { debounce } from "es-toolkit/compat"
 import type { PropsWithChildren } from "react"
 import * as React from "react"
-import { forwardRef, Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -64,7 +64,7 @@ export function MainDestopLayout() {
   const isAuthFail = useLoginModalShow()
   const user = useWhoami()
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLElement>(null!)
 
   useDailyTask()
 
@@ -157,7 +157,7 @@ export function MainDestopLayout() {
   )
 }
 
-const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
+const RootContainer: ComponentWithRef<object, HTMLElement> = ({ children, ref }) => {
   const feedColWidth = useUISettingKey("feedColWidth")
 
   const [elementRef, _setElementRef] = useState<HTMLDivElement | null>(null)
@@ -180,13 +180,13 @@ const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children 
       {children}
     </div>
   )
-})
+}
 
 const FeedResponsiveResizerContainer = ({
   containerRef,
   children,
 }: {
-  containerRef: React.RefObject<HTMLDivElement | null>
+  containerRef: React.RefObject<HTMLElement>
 } & PropsWithChildren) => {
   const { isDragging, position, separatorProps, separatorCursor } = useResizable({
     axis: "x",

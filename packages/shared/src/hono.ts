@@ -8,7 +8,7 @@ import { z } from 'zod';
 import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
 import { AnyPgColumn } from 'drizzle-orm/pg-core';
 import * as drizzle_orm from 'drizzle-orm';
-import { InferInsertModel, SQL } from 'drizzle-orm';
+import { InferInsertModel, SQL, type ColumnBuilderBaseConfig, type ColumnDataType } from 'drizzle-orm';
 import * as better_auth_adapters_drizzle from 'better-auth/adapters/drizzle';
 import * as better_auth from 'better-auth';
 
@@ -1485,6 +1485,8 @@ declare const CommonEntryFields: {
         data: string[];
         driverParam: string | string[];
         enumValues: [string, ...string[]];
+        size: number | undefined;
+        baseBuilder: ColumnBuilderBaseConfig<ColumnDataType, string>;
     }, {
         name: "categories";
         dataType: "string";

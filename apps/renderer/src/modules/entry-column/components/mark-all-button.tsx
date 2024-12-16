@@ -40,7 +40,7 @@ export const MarkAllReadWithOverlay = forwardRef<
   const handleMarkAllAsRead = useMarkAllByRoute(filter)
 
   const [popoverRef, setPopoverRef] = useState<HTMLDivElement | null>(null)
-  useOnClickOutside({ current: popoverRef }, () => {
+  useOnClickOutside({ current: popoverRef! }, () => {
     setShow(false)
   })
 
