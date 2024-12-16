@@ -54,7 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         },
       },
     ],
-    [require("./scripts/withFollowAssets.js")],
+    [require("./scripts/with-follow-assets.js")],
   ],
   experiments: {
     typedRoutes: true,
