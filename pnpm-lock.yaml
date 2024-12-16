@@ -807,6 +807,9 @@ importers:
       react-blurhash:
         specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
+      react-hook-form:
+        specifier: 7.54.0
+        version: 7.54.0(react@18.3.1)
       react-hotkeys-hook:
         specifier: 4.6.1
         version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -831,6 +834,9 @@ importers:
       xss:
         specifier: 1.0.15
         version: 1.0.15
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       '@follow/components':
         specifier: workspace:*
