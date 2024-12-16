@@ -111,7 +111,7 @@ export const SettingDataControl = () => {
             value: t("general.cache"),
           },
           isElectronBuild && AppCacheLimit,
-          isElectronBuild && CleanCache,
+          isElectronBuild ? CleanElectronCache : CleanCacheStorage,
           isElectronBuild && {
             type: "title",
             value: t("general.data_file.label"),
@@ -129,7 +129,36 @@ export const SettingDataControl = () => {
     </div>
   )
 }
-const CleanCache = () => {
+
+/**
+ * @description clean web app service worker cache
+ */
+const CleanCacheStorage = () => {
+  const { t } = useTranslation("settings")
+
+  return (
+    <SettingItemGroup>
+      <SettingActionItem
+        label={
+          <span className="flex items-center gap-1">{t("data_control.clean_cache.button")}</span>
+        }
+        action={async () => {
+          const keys = await caches.keys()
+          return Promise.all(
+            keys.map((key) => {
+              if (key.startsWith("workbox-precache-")) return null
+              return caches.delete(key)
+            }),
+          )
+        }}
+        buttonText={t("data_control.clean_cache.button")}
+      />
+      <SettingDescription>{t("data_control.clean_cache.description_web")}</SettingDescription>
+    </SettingItemGroup>
+  )
+}
+
+const CleanElectronCache = () => {
   const { t } = useTranslation("settings")
 
   return (

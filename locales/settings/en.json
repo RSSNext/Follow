@@ -101,6 +101,7 @@
   "data_control.app_cache_limit.label": "App Cache Limit",
   "data_control.clean_cache.button": "Clean Cache",
   "data_control.clean_cache.description": "Clean the app cache to free up space.",
+  "data_control.clean_cache.description_web": "Clean the web app service worker cache to free up space.",
   "feeds.claimTips": "To claim your feeds and receive tips, right-click on the feed in your subscription list and select Claim.",
   "feeds.noFeeds": "No claimed feeds",
   "feeds.tableHeaders.name": "Name",
