@@ -9,6 +9,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
@@ -19,8 +20,8 @@ import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { useLocation } from "react-router"
+import { Trans, useTranslation } from "react-i18next"
+import { Link, useLocation } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -77,10 +78,25 @@ function Login() {
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
       <Logo className="size-20" />
       {!isAuthenticated && (
-        <h1 className="text-3xl font-bold">
-          {t("login.logInTo")}
-          {` ${APP_NAME}`}
-        </h1>
+        <div className="space-y-3 text-center">
+          <h1 className="text-3xl font-bold">
+            {t("login.logInTo")}
+            {` ${APP_NAME}`}
+          </h1>
+          <p className="text-center text-muted-foreground">
+            <Trans
+              ns="external"
+              i18nKey="login.note"
+              components={{
+                RegisterLink: (
+                  <Link to="/register" className="text-primary hover:underline">
+                    {t("login.register")}
+                  </Link>
+                ),
+              }}
+            />
+          </p>
+        </div>
       )}
       {redirecting ? (
         <div>{t("login.redirecting")}</div>
@@ -188,8 +204,9 @@ function LoginWithPassword() {
           name="email"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>{t("login.email")}</FormLabel>
               <FormControl>
-                <Input type="email" placeholder={t("login.email")} {...field} />
+                <Input type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -200,8 +217,9 @@ function LoginWithPassword() {
           name="password"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>{t("login.password")}</FormLabel>
               <FormControl>
-                <Input type="password" placeholder={t("login.password")} {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -20,10 +20,8 @@ import { z } from "zod"
 export function Component() {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-10">
-      <div className="max-w-sm space-y-6">
-        <Logo className="size-12" />
-        <RegisterForm />
-      </div>
+      <Logo className="size-20" />
+      <RegisterForm />
     </div>
   )
 }
@@ -70,24 +68,20 @@ function RegisterForm() {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <h3 className="text-2xl font-semibold leading-none tracking-tight">
-          {t("register.label", { app_name: APP_NAME })}
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          <Trans
-            ns="external"
-            i18nKey="register.note"
-            components={{
-              Login: (
-                <Link to="/login" className="text-primary hover:underline">
-                  {t("register.login")}
-                </Link>
-              ),
-            }}
-          />
-        </p>
-      </div>
+      <h1 className="text-3xl font-bold">{t("register.label", { app_name: APP_NAME })}</h1>
+      <p className="text-center text-muted-foreground">
+        <Trans
+          ns="external"
+          i18nKey="register.note"
+          components={{
+            LoginLink: (
+              <Link to="/login" className="text-primary hover:underline">
+                {t("register.login")}
+              </Link>
+            ),
+          }}
+        />
+      </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
