@@ -50,6 +50,7 @@ export default ({ mode }) => {
   return defineConfig({
     ...viteRenderBaseConfig,
     root: ROOT,
+    base: "./",
     envDir: resolve(__dirname, "."),
     build: {
       outDir: resolve(__dirname, "out/web"),
