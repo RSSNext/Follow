@@ -40,6 +40,7 @@ export const {
   linkSocial,
   listAccounts,
   resetPassword,
+  sendVerificationEmail,
   signIn,
   signOut,
   signUp,
