@@ -21,8 +21,7 @@ async function generateMetaMap() {
       .replace("client/pages/", "")
       .replace("/metadata.ts", "")
       .replaceAll(/\[([^\]]+)\]/g, ":$1")
-
-      .replaceAll(/\(([^)]+)\)\//g, "")
+      .replaceAll(/\([^)]+\)\//g, "")
       .replace(/^\./, "")
 
     const importName = `i${index}`
