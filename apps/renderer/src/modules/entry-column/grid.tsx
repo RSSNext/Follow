@@ -6,7 +6,7 @@ import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { LRUCache } from "@follow/utils/lru-cache"
 import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
 import { useVirtualizer } from "@tanstack/react-virtual"
-import type { FC, MutableRefObject } from "react"
+import type { FC, RefObject } from "react"
 import {
   Fragment,
   startTransition,
@@ -132,7 +132,7 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
     }
   }, [scrollRef])
 
-  const measureRef = useRef<() => void>()
+  const measureRef = useRef<() => void>(undefined)
 
   if (!containerWidth) return null
 
@@ -142,7 +142,7 @@ const VirtualGrid: FC<EntryListProps> = (props) => {
 const VirtualGridImpl: FC<
   EntryListProps & {
     containerWidth: number
-    measureRef: MutableRefObject<(() => void) | undefined>
+    measureRef: RefObject<(() => void) | undefined>
   }
 > = (props) => {
   const {

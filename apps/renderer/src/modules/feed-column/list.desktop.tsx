@@ -47,7 +47,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
     const hasListData = Object.keys(listsData).length > 0
     const hasInboxData = Object.keys(inboxesData).length > 0
 
-    const scrollerRef = useRef<HTMLDivElement>(null)
+    const scrollerRef = useRef<HTMLDivElement>(null!)
     const selectoRef = useRef<Selecto>(null)
     const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIdsState()
     const [currentStartFeedId, setCurrentStartFeedId] = useState<string | null>(null)

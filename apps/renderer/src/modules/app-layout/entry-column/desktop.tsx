@@ -16,7 +16,7 @@ import { EntryColumn } from "~/modules/entry-column"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 
 export function CenterColumnDesktop() {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null!)
 
   // Memo this initial value to avoid re-render
 

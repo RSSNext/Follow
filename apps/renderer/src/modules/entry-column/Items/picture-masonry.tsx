@@ -114,7 +114,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     threshold: 3,
   })
 
-  const currentRange = useRef<{ start: number; end: number }>()
+  const currentRange = useRef<{ start: number; end: number }>(undefined)
   const handleRender = useCallback(
     (startIndex: number, stopIndex: number, items: any[]) => {
       currentRange.current = { start: startIndex, end: stopIndex }

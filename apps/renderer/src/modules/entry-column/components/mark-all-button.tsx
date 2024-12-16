@@ -29,7 +29,7 @@ interface MarkAllButtonProps {
 export const MarkAllReadWithOverlay = forwardRef<
   HTMLButtonElement,
   MarkAllButtonProps & {
-    containerRef: React.RefObject<HTMLDivElement>
+    containerRef: React.RefObject<HTMLDivElement | null>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
   const { t } = useTranslation()
@@ -40,7 +40,7 @@ export const MarkAllReadWithOverlay = forwardRef<
   const handleMarkAllAsRead = useMarkAllByRoute(filter)
 
   const [popoverRef, setPopoverRef] = useState<HTMLDivElement | null>(null)
-  useOnClickOutside({ current: popoverRef }, () => {
+  useOnClickOutside({ current: popoverRef! }, () => {
     setShow(false)
   })
 

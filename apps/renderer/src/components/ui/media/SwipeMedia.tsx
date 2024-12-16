@@ -3,7 +3,7 @@ import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
 import { uniqBy } from "es-toolkit/compat"
-import { useCallback, useRef } from "react"
+import { useCallback, useMemo, useRef } from "react"
 
 import { Media } from "~/components/ui/media"
 
@@ -11,7 +11,6 @@ const defaultProxySize = {
   width: 600,
   height: 0,
 }
-
 export function SwipeMedia({
   media,
   className,
@@ -28,11 +27,14 @@ export function SwipeMedia({
     height: number
   }
 }) {
-  const uniqMedia = media ? uniqBy(media, "url") : []
+  const uniqMedia = useMemo(() => (media ? uniqBy(media, "url") : []), [media])
 
   const hoverRef = useRef<HTMLDivElement>(null)
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [WheelGesturesPlugin()])
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true },
+    useMemo(() => [WheelGesturesPlugin()], []),
+  )
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev()
@@ -54,7 +56,12 @@ export function SwipeMedia({
       )}
     >
       {uniqMedia?.length ? (
-        <div ref={emblaRef} className="size-full overflow-hidden">
+        <div
+          ref={(ref) => {
+            emblaRef(ref)
+          }}
+          className="size-full overflow-hidden"
+        >
           <div className="flex size-full">
             {uniqMedia?.slice(0, 5).map((med, i) => (
               <div className="mr-2 size-full flex-none" key={med.url}>

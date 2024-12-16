@@ -29,19 +29,19 @@
     "@follow/shared": "workspace:*",
     "@mozilla/readability": "^0.5.0",
     "@openpanel/web": "1.0.1",
-    "@sentry/electron": "5.7.0",
+    "@sentry/electron": "5.8.0",
     "builder-util-runtime": "9.2.10",
-    "dompurify": "~3.2.2",
+    "dompurify": "~3.2.3",
     "electron-context-menu": "4.0.4",
     "electron-log": "5.2.4",
     "electron-squirrel-startup": "1.0.1",
     "electron-updater": "^6.3.9",
-    "es-toolkit": "1.29.0",
+    "es-toolkit": "1.30.1",
     "fast-folder-size": "2.3.0",
     "font-list": "1.5.1",
-    "i18next": "^24.0.5",
+    "i18next": "^24.1.0",
     "js-yaml": "4.1.0",
-    "linkedom": "^0.18.5",
+    "linkedom": "^0.18.6",
     "lowdb": "7.0.1",
     "msedge-tts": "1.3.4",
     "node-machine-id": "1.1.12",
@@ -52,9 +52,9 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "electron": "33.2.0",
     "electron-devtools-installer": "3.2.0",
-    "hono": "4.6.13"
+    "hono": "4.6.14"
   }
 }

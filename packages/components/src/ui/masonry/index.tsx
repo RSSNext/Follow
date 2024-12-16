@@ -150,7 +150,7 @@ function MasonryScroller<Item>(
 }
 
 function useContainerPosition(
-  elementRef: React.MutableRefObject<HTMLElement | null>,
+  elementRef: React.RefObject<HTMLElement | null>,
   deps: React.DependencyList = [],
 ): ContainerPosition & {
   height: number

@@ -96,7 +96,7 @@ const DateItemInner: FC<DateItemInnerProps> = ({
     },
   )
 
-  const timerRef = useRef<any>()
+  const timerRef = useRef<any>(undefined)
   const W = Wrapper ?? SafeFragment
 
   const { feedId } = useRouteParams()
