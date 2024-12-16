@@ -1,4 +1,6 @@
 // @ts-check
+import path from "node:path"
+
 import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
@@ -62,6 +64,14 @@ export default defineConfig(
             "You can use `useLocaltion` or `getReadonlyRoute` to get the route info.",
         },
       ],
+    },
+  },
+  {
+    files: ["apps/server/**/*"],
+    settings: {
+      tailwindcss: {
+        config: path.join(import.meta.dirname, "apps/server/tailwind.config.ts"),
+      },
     },
   },
   {
