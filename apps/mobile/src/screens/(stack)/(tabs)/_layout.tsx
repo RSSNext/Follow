@@ -2,7 +2,9 @@ import { Tabs } from "expo-router"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { FollowIcon } from "@/src/components/ui/logo"
+import { SafariCuteFi } from "@/src/icons/safari_cute_fi"
 import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
+import { Setting7CuteFi } from "@/src/icons/setting_7_cute_fi"
 import { Settings7CuteReIcon } from "@/src/icons/settings_7_cute_re"
 
 export default function TabLayout() {
@@ -25,9 +27,10 @@ export default function TabLayout() {
         options={{
           title: "Discover",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <SafariCuteIcon color={color} style={{ width: 20, height: 20 }} />
-          ),
+          tabBarIcon: ({ color, focused }) => {
+            const Icon = !focused ? SafariCuteIcon : SafariCuteFi
+            return <Icon color={color} width={24} height={24} />
+          },
         }}
       />
 
@@ -36,10 +39,12 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Settings7CuteReIcon color={color} width={24} height={24} />,
+          tabBarIcon: ({ color, focused }) => {
+            const Icon = !focused ? Settings7CuteReIcon : Setting7CuteFi
+            return <Icon color={color} width={24} height={24} />
+          },
         }}
       />
     </Tabs>
-    // </View>
   )
 }
