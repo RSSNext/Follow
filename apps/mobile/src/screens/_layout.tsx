@@ -26,7 +26,7 @@ export default function RootLayout() {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(stack)" options={{ headerShown: false }} />
           <Stack.Screen name="(headless)" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>

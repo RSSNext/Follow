@@ -13,6 +13,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@bottom-tabs/react-navigation": "^0.7.6",
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
     "@react-navigation/bottom-tabs": "^7.0.0",
@@ -20,6 +21,7 @@
     "@shopify/flash-list": "1.7.1",
     "expo": "52.0.18",
     "expo-blur": "~14.0.1",
+    "expo-build-properties": "^0.13.1",
     "expo-constants": "~17.0.3",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
@@ -37,6 +39,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "0.76.5",
+    "react-native-bottom-tabs": "^0.7.6",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-reanimated": "~3.16.5",
     "react-native-safe-area-context": "4.12.0",
