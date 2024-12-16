@@ -13,7 +13,7 @@ import { signUp } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -37,23 +37,6 @@ const formSchema = z
     path: ["confirmPassword"],
   })
 
-function onSubmit(values: z.infer<typeof formSchema>) {
-  return signUp.email({
-    email: values.email,
-    password: values.password,
-    name: values.email.split("@")[0],
-    callbackURL: "/",
-    fetchOptions: {
-      onSuccess() {
-        window.location.href = "/"
-      },
-      onError(context) {
-        toast.error(context.error.message)
-      },
-    },
-  })
-}
-
 function RegisterForm() {
   const { t } = useTranslation("external")
 
@@ -65,6 +48,25 @@ function RegisterForm() {
       confirmPassword: "",
     },
   })
+
+  const navigate = useNavigate()
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    return signUp.email({
+      email: values.email,
+      password: values.password,
+      name: values.email.split("@")[0],
+      callbackURL: "/",
+      fetchOptions: {
+        onSuccess() {
+          navigate("/login")
+        },
+        onError(context) {
+          toast.error(context.error.message)
+        },
+      },
+    })
+  }
 
   return (
     <div className="space-y-4">
