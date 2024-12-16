@@ -108,7 +108,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             )}
             disabled={disabled}
             onClick={() => {
-              loginHandler(provider.id, { runtime })
+              loginHandler(provider.id, runtime)
               setLoadingLockSet(provider.id)
               window.analytics?.capture("login", {
                 type: provider.id,
@@ -202,7 +202,7 @@ export const AuthProvidersRender: FC<{
                 disabled={authProcessingLockSet.has(provider.id)}
                 onClick={() => {
                   if (authProcessingLockSet.has(provider.id)) return
-                  loginHandler(provider.id, { runtime })
+                  loginHandler(provider.id, runtime)
 
                   setAuthProcessingLockSet((prev) => {
                     prev.add(provider.id)

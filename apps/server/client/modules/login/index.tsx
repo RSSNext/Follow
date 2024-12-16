@@ -226,7 +226,7 @@ const formSchema = z.object({
 })
 
 async function onSubmit(values: z.infer<typeof formSchema>) {
-  const res = await loginHandler("credential", values)
+  const res = await loginHandler("credential", "browser", values)
   if (res?.error) {
     toast.error(res.error.message)
     return

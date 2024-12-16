@@ -50,13 +50,13 @@ export const LOGIN_CALLBACK_URL = `${WEB_URL}/login`
 export type LoginRuntime = "browser" | "app"
 export const loginHandler = async (
   provider: string,
+  runtime?: LoginRuntime,
   args?: {
-    runtime?: LoginRuntime
     email?: string
     password?: string
   },
 ) => {
-  const { runtime = "app", email, password } = args ?? {}
+  const { email, password } = args ?? {}
   if (IN_ELECTRON) {
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
