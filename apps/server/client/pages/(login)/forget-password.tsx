@@ -1,4 +1,4 @@
-import { Button } from "@follow/components/ui/button/index.jsx"
+import { Button, MotionButtonBase } from "@follow/components/ui/button/index.jsx"
 import {
   Card,
   CardContent,
@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -59,14 +60,28 @@ export function Component() {
     updateMutation.mutate(values)
   }
 
+  const navigate = useNavigate()
+
   return (
     <div className="flex h-full items-center justify-center">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>{t("login.forget_password.label")}</CardTitle>
-          <CardDescription>{t("login.forget_password.description")}</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <MotionButtonBase
+              onClick={() => {
+                history.length > 1 ? history.back() : navigate("/login")
+              }}
+              className="inline-flex cursor-pointer items-center"
+            >
+              <i className="i-mingcute-left-line" />
+            </MotionButtonBase>
+            <span>{t("login.forget_password.label")}</span>
+          </CardTitle>
         </CardHeader>
         <CardContent>
+          <CardDescription className="mb-4">
+            {t("login.forget_password.description")}
+          </CardDescription>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
