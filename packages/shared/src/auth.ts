@@ -1,6 +1,7 @@
 import { env } from "@follow/shared/env"
 import type { authPlugins } from "@follow/shared/hono"
 import type { BetterAuthClientPlugin } from "better-auth/client"
+import { inferAdditionalFields } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
 
 import { IN_ELECTRON, WEB_URL } from "./constants"
