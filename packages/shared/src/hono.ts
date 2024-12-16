@@ -9039,7 +9039,6 @@ declare const auth: {
             }): Promise<void>;
         };
         emailVerification: {
-            sendOnSignUp: true;
             sendVerificationEmail({ user, url }: {
                 user: better_auth.User;
                 url: string;
