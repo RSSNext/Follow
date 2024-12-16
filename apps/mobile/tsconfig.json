@@ -4,7 +4,8 @@
     "strict": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "jsx": "preserve"
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"]
 }
