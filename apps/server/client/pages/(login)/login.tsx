@@ -89,7 +89,7 @@ function Login() {
               i18nKey="login.note"
               components={{
                 RegisterLink: (
-                  <Link to="/register" className="text-primary hover:underline">
+                  <Link to="/register" className="text-accent hover:underline">
                     {t("login.register")}
                   </Link>
                 ),
@@ -217,7 +217,12 @@ function LoginWithPassword() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("login.password")}</FormLabel>
+              <FormLabel className="flex items-center justify-between">
+                {t("login.password")}
+                <Link to="/forget-password" className="text-xs text-accent hover:underline">
+                  {t("login.forget_password.note")}
+                </Link>
+              </FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>

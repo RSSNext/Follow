@@ -77,7 +77,7 @@ function RegisterForm() {
           i18nKey="register.note"
           components={{
             LoginLink: (
-              <Link to="/login" className="text-primary hover:underline">
+              <Link to="/login" className="text-accent hover:underline">
                 {t("register.login")}
               </Link>
             ),
