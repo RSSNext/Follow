@@ -125,32 +125,29 @@ function Login() {
             </div>
           ) : (
             <>
-              {!isCredentialProvider &&
-                Object.entries(authProviders || [])
-                  .filter(([key]) => key !== "credential")
-                  .map(([key, provider]) => (
-                    <Button
-                      key={key}
-                      buttonClassName={cn(
-                        "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-                        authProvidersConfig[key]?.buttonClassName,
-                      )}
-                      onClick={() => {
-                        loginHandler(key)
-                      }}
-                    >
-                      <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
-                      {t("login.continueWith", { provider: provider.name })}
-                    </Button>
-                  ))}
               {!!authProviders?.credential && (
                 <div className="w-[320px] space-y-2">
-                  {!isCredentialProvider && (
-                    <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
-                  )}
                   <LoginWithPassword />
+                  <p className="text-center text-sm text-muted-foreground">{t("login.or")}</p>
                 </div>
               )}
+              {Object.entries(authProviders || [])
+                .filter(([key]) => key !== "credential")
+                .map(([key, provider]) => (
+                  <Button
+                    key={key}
+                    buttonClassName={cn(
+                      "h-[48px] w-[320px] rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
+                      authProvidersConfig[key]?.buttonClassName,
+                    )}
+                    onClick={() => {
+                      loginHandler(key)
+                    }}
+                  >
+                    <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                    {t("login.continueWith", { provider: provider.name })}
+                  </Button>
+                ))}
             </>
           )}
         </div>

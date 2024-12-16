@@ -129,7 +129,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" variant="outline">
             {t("register.submit")}
           </Button>
         </form>
