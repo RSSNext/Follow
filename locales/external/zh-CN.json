@@ -62,7 +62,7 @@
   "redirect.successMessage": "已成功连接到 {{app_name}} 账户。",
   "register.confirm_password": "确认密码",
   "register.email": "邮件地址",
-  "register.label": "创建一个 {{app_name}} 账户",
+  "register.label": "创建 {{app_name}} 账户",
   "register.login": "登入",
   "register.note": "已有账户？<LoginLink />",
   "register.password": "密码",
