@@ -263,7 +263,6 @@
   "profile.confirm_password.label": "Confirm Password",
   "profile.current_password.label": "Current Password",
   "profile.email.label": "Email",
-  "profile.forget_password": "Forget Password",
   "profile.handle.description": "Your unique identifier.",
   "profile.handle.label": "Handle",
   "profile.name.description": "Your public display name.",

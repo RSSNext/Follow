@@ -11,6 +11,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
@@ -19,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -43,6 +45,7 @@ export function Component() {
     },
   })
 
+  const navigate = useNavigate()
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof initPasswordFormSchema>) => {
       const res = await resetPassword({ newPassword: values.newPassword })
@@ -56,6 +59,7 @@ export function Component() {
     },
     onSuccess: () => {
       toast.success(t("login.reset_password.success"))
+      navigate("/login")
     },
   })
 
@@ -78,12 +82,9 @@ export function Component() {
                 name="newPassword"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>{t("login.new_password.label")}</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t("login.new_password.label")}
-                        {...field}
-                      />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -94,12 +95,9 @@ export function Component() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>{t("login.confirm_password.label")}</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t("login.confirm_password.label")}
-                        {...field}
-                      />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

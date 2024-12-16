@@ -8,8 +8,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { changePassword, forgetPassword } from "@follow/shared/auth"
-import { env } from "@follow/shared/env"
+import { changePassword } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -17,47 +16,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { useWhoami } from "~/atoms/user"
 import { useHasPassword } from "~/queries/auth"
-
-// eslint-disable-next-line unused-imports/no-unused-vars
-const ForgetPasswordButton = () => {
-  const { t } = useTranslation("settings")
-  const user = useWhoami()
-  const forgetPasswordMutation = useMutation({
-    mutationFn: async () => {
-      if (!user) {
-        throw new Error("No user found")
-      }
-      const res = await forgetPassword({
-        email: user.email,
-        redirectTo: `${env.VITE_WEB_URL}/reset-password`,
-      })
-      if (res.error) {
-        throw new Error(res.error.message)
-      }
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-    onSuccess: () => {
-      toast(t("profile.reset_password_mail_sent"), {
-        duration: 3000,
-      })
-    },
-  })
-
-  return (
-    <Button
-      onClick={() => {
-        forgetPasswordMutation.mutate()
-      }}
-      isLoading={forgetPasswordMutation.isPending}
-    >
-      {t("profile.forget_password")}
-    </Button>
-  )
-}
 
 const passwordSchema = z.string().min(8).max(128)
 
@@ -175,8 +134,5 @@ export const UpdatePasswordForm = () => {
     return null
   }
 
-  // if (!hasPassword) {
-  //   return <ForgetPasswordButton />
-  // }
   return <UpdateExistingPasswordForm />
 }
