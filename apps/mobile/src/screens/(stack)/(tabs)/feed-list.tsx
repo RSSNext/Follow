@@ -2,7 +2,6 @@ import { FeedViewType } from "@follow/constants"
 import { Link, Stack } from "expo-router"
 import { atom, useAtom, useAtomValue } from "jotai"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { useBottomTabBarHeight } from "react-native-bottom-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
@@ -35,7 +34,6 @@ export default function FeedList() {
 
 const ViewTab = () => {
   const scaleWidth = useScaleWidth()
-  const bottomHeight = useBottomTabBarHeight()
 
   const paddingHorizontal = 4
   const [currentView, setCurrentView] = useAtom(viewAtom)
@@ -43,7 +41,7 @@ const ViewTab = () => {
   return (
     <ThemedBlurView
       style={{
-        bottom: bottomHeight,
+        bottom: 0,
         left: 0,
         position: "absolute",
         width: "100%",

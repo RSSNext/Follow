@@ -1,14 +1,23 @@
-import { Tabs } from "@/src/components/common/BottomTabs"
+import { Tabs } from "expo-router"
+
+import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
+import { FollowIcon } from "@/src/components/ui/logo"
+import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
+import { Settings7CuteReIcon } from "@/src/icons/settings_7_cute_re"
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarBackground: () => <ThemedBlurView intensity={100} />,
+      }}
+    >
       <Tabs.Screen
         name="feed-list"
         options={{
           title: "Subscriptions",
           headerShown: false,
-          tabBarIcon: () => require("@/src/icons/tab/follow.svg"),
+          tabBarIcon: ({ color }) => <FollowIcon color={color} style={{ width: 20, height: 20 }} />,
         }}
       />
       <Tabs.Screen
@@ -16,7 +25,9 @@ export default function TabLayout() {
         options={{
           title: "Discover",
           headerShown: false,
-          tabBarIcon: () => require("@/src/icons/tab/safari.svg"),
+          tabBarIcon: ({ color }) => (
+            <SafariCuteIcon color={color} style={{ width: 20, height: 20 }} />
+          ),
         }}
       />
 
@@ -25,7 +36,7 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           headerShown: false,
-          tabBarIcon: () => require("@/src/icons/tab/settings.svg"),
+          tabBarIcon: ({ color }) => <Settings7CuteReIcon color={color} width={24} height={24} />,
         }}
       />
     </Tabs>
