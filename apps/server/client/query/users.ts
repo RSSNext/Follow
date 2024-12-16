@@ -56,20 +56,15 @@ export const useUserQuery = (handleOrId: string | undefined) => {
     initialData: getHydrateData(`profiles.$get,query:id=${handleOrId}`),
   })
 }
-
+export interface AuthProvider {
+  name: string
+  id: string
+  color: string
+  icon: string
+}
 export const useAuthProviders = () => {
   return useQuery({
     queryKey: ["providers"],
-    queryFn: async () => (await getProviders()).data,
-    placeholderData: {
-      google: {
-        id: "google",
-        name: "Google",
-      },
-      github: {
-        id: "github",
-        name: "GitHub",
-      },
-    },
+    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
   })
 }

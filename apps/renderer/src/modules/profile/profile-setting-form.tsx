@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
+import { Label } from "@follow/components/ui/label/index.js"
 import { updateUser } from "@follow/shared/auth"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -74,6 +75,10 @@ export const ProfileSettingForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("mt-4 space-y-4", className)}>
+        <div className="space-y-2">
+          <Label>{t("profile.email.label")}</Label>
+          <p className="text-sm text-muted-foreground">{user?.email}</p>
+        </div>
         <FormField
           control={form.control}
           name="handle"

@@ -1,4 +1,5 @@
 import { ProfileSettingForm } from "~/modules/profile/profile-setting-form"
+import { UpdatePasswordForm } from "~/modules/profile/update-password-form"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
 
@@ -15,6 +16,7 @@ export function Component() {
     <>
       <SettingsTitle />
       <ProfileSettingForm />
+      <UpdatePasswordForm />
     </>
   )
 }
