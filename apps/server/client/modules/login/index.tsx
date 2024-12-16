@@ -4,7 +4,7 @@ import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
-import { Button } from "@follow/components/ui/button/index.js"
+import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import {
   Form,
@@ -28,12 +28,17 @@ import { Link, useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
+const overrideProviderIconMap: Record<string, React.ReactNode> = {
+  apple: <i className="i-mgc-apple-cute-fi size-5 text-black dark:text-white" />,
+}
+
 export function Login() {
   const { status, refetch } = useSession()
 
   const [redirecting, setRedirecting] = useState(false)
 
   const { data: authProviders, isLoading } = useAuthProviders()
+
   const location = useLocation()
   const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
@@ -116,37 +121,70 @@ export function Login() {
         )
       }
       default: {
-        return (
-          <>
-            {Object.entries(authProviders || [])
-              .filter(([key]) => key !== "credential")
-              .map(([key, provider]) => (
-                <Button
-                  key={key}
-                  buttonClassName={cn(
-                    "h-[48px] w-full rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-                    authProvidersConfig[key]?.buttonClassName,
-                  )}
-                  onClick={() => {
-                    loginHandler(key)
-                  }}
-                >
-                  <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
-                  {t("login.continueWith", { provider: provider.name })}
-                </Button>
-              ))}
-            {!!authProviders?.credential && (
+        if (!authProviders?.credential) {
+          return (
+            <div className="flex w-[350px] max-w-full flex-col gap-3">
+              {Object.entries(authProviders || [])
+                .filter(([key]) => key !== "credential")
+                .map(([key, provider]) => (
+                  <Button
+                    key={key}
+                    buttonClassName={cn(
+                      "h-[48px] w-full rounded-[8px] font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
+                      authProvidersConfig[key]?.buttonClassName,
+                    )}
+                    onClick={() => {
+                      loginHandler(key)
+                    }}
+                  >
+                    <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                    {t("login.continueWith", { provider: provider.name })}
+                  </Button>
+                ))}
+            </div>
+          )
+        } else {
+          return (
+            <>
+              <LoginWithPassword />
               <div className="mt-2 w-full space-y-2">
                 <div className="flex items-center justify-center">
                   <Divider className="flex-1" />
                   <p className="px-4 text-center text-sm text-muted-foreground">{t("login.or")}</p>
                   <Divider className="flex-1" />
                 </div>
-                <LoginWithPassword />
               </div>
-            )}
-          </>
-        )
+              <div className="flex items-center justify-center gap-4">
+                {Object.entries(authProviders || [])
+                  .filter(([key]) => key !== "credential")
+                  .map(([key, provider]) => (
+                    <MotionButtonBase
+                      key={key}
+                      onClick={() => {
+                        loginHandler(key)
+                      }}
+                    >
+                      {overrideProviderIconMap[provider.id] ? (
+                        <div className="center box-content inline-flex size-5 rounded-full border p-2 duration-200 hover:bg-muted">
+                          {overrideProviderIconMap[provider.id]}
+                        </div>
+                      ) : (
+                        <div
+                          className="center inline-flex rounded-full border p-2 duration-200 hover:bg-muted [&_svg]:size-5"
+                          dangerouslySetInnerHTML={{
+                            __html: provider.icon,
+                          }}
+                          style={{
+                            color: provider.color,
+                          }}
+                        />
+                      )}
+                    </MotionButtonBase>
+                  ))}
+              </div>
+            </>
+          )
+        }
       }
     }
   }, [authProviders, handleOpenApp, isAuthenticated, refetch, t])
