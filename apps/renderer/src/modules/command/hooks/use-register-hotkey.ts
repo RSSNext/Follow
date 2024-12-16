@@ -1,7 +1,7 @@
 import { useHotkeys } from "react-hotkeys-hook"
 
 import type { FollowCommand, FollowCommandId } from "../types"
-import { useGetCommand } from "./use-command"
+import { getCommand } from "./use-command"
 
 interface RegisterHotkeyOptions<T extends FollowCommandId> {
   shortcut: string
@@ -17,7 +17,6 @@ export const useCommandHotkey = <T extends FollowCommandId>({
   when,
   args,
 }: RegisterHotkeyOptions<T>) => {
-  const getCommand = useGetCommand()
   useHotkeys(
     shortcut,
     () => {
