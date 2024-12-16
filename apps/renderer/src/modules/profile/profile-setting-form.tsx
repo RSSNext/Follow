@@ -10,6 +10,8 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
+import { Label } from "@follow/components/ui/label/index.js"
+import { sendVerificationEmail } from "@follow/shared/auth"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -65,6 +67,18 @@ export const ProfileSettingForm = ({
     },
   })
 
+  const verifyEmailMutation = useMutation({
+    mutationFn: async () => {
+      if (!user?.email) return
+      return sendVerificationEmail({
+        email: user.email,
+      })
+    },
+    onSuccess: () => {
+      toast.success(t("profile.email.verification_sent"))
+    },
+  })
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateMutation.mutate(values)
   }
@@ -72,6 +86,27 @@ export const ProfileSettingForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("mt-4 space-y-4", className)}>
+        <div className="space-y-2">
+          <Label>{t("profile.email.label")}</Label>
+          <p className="flex gap-2 text-sm text-muted-foreground">
+            {user?.email}
+            <span className={cn(user?.emailVerified ? "text-green-500" : "text-red-500")}>
+              {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
+            </span>
+          </p>
+          {!user?.emailVerified && (
+            <Button
+              variant="outline"
+              type="button"
+              isLoading={verifyEmailMutation.isPending}
+              onClick={() => {
+                verifyEmailMutation.mutate()
+              }}
+            >
+              {t("profile.email.send_verification")}
+            </Button>
+          )}
+        </div>
         <FormField
           control={form.control}
           name="handle"
