@@ -1,11 +1,12 @@
+import CookieManager from "@react-native-cookies/cookies"
 import { Redirect } from "expo-router"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { TouchableOpacity, View } from "react-native"
+import { useMMKVString } from "react-native-mmkv"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import type { WebView } from "react-native-webview"
 
 import { FollowWebView } from "@/src/components/common/FollowWebView"
-import { useAuthCookie } from "@/src/hooks/auth"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { Refresh2CuteReIcon } from "@/src/icons/refresh_2_cute_re"
 import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
@@ -13,11 +14,26 @@ import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
 export default function Index() {
   const webViewRef = useRef<WebView>(null)
   const insets = useSafeAreaInsets()
+  const [authToken] = useMMKVString("auth.token")
+  const [isCookieReady, setIsCookieReady] = useState(false)
+  useEffect(() => {
+    if (!authToken) {
+      return
+    }
 
-  const { data, isLoading } = useAuthCookie()
-  if (!data && !isLoading) {
+    CookieManager.set(process.env.EXPO_PUBLIC_API_URL, {
+      name: "better-auth.session_token",
+      value: authToken,
+      httpOnly: true,
+    }).then(() => {
+      setIsCookieReady(true)
+    })
+  }, [authToken])
+
+  if (!authToken) {
     return <Redirect href="/auth" />
   }
+
   return (
     <View
       style={{
@@ -26,7 +42,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <FollowWebView webViewRef={webViewRef} />
+      {isCookieReady && <FollowWebView webViewRef={webViewRef} />}
+
       {__DEV__ && (
         <View
           style={{ paddingBottom: Math.max(insets.bottom - 12, 0), paddingHorizontal: 12 }}
