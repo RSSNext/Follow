@@ -1,6 +1,6 @@
-import { ActionButton } from "@follow/components/ui/button/index.js"
 import type { FeedViewType } from "@follow/constants"
 
+import { CommandActionButton } from "~/components/ui/button/command-button"
 import { useHasModal } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
@@ -36,14 +36,13 @@ export const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: 
     )
     .map((config) => {
       return (
-        <ActionButton
+        <CommandActionButton
+          active={config.active}
           key={config.id}
-          tooltip={config.name}
-          icon={config.icon}
+          disableTriggerShortcut={hasModal}
+          commandId={config.id}
           onClick={config.onClick}
           shortcut={config.shortcut}
-          active={config.active}
-          disableTriggerShortcut={hasModal}
         />
       )
     })
