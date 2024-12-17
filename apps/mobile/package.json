@@ -42,6 +42,7 @@
     "expo-system-ui": "~4.0.6",
     "expo-web-browser": "~14.0.1",
     "hono": "4.6.13",
+    "immer": "10.1.1",
     "jotai": "2.10.3",
     "nativewind": "4.1.23",
     "ofetch": "1.4.1",
