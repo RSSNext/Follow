@@ -1,4 +1,3 @@
-import { useLocalSearchParams } from "expo-router"
 import { Platform } from "react-native"
 import type { WebViewProps } from "react-native-webview"
 import { WebView } from "react-native-webview"
@@ -18,14 +17,11 @@ export const FollowWebView = ({
   customUrl,
   ...props
 }: { webViewRef: React.RefObject<WebView> } & FollowWebViewProps) => {
-  const searchParams = useLocalSearchParams()
   return (
     <WebView
       ref={webViewRef}
       source={{ uri: customUrl ?? presetUri }}
-      injectedJavaScript={`window.__RN__ = true;
-document.cookie = 'better-auth.session_token=${searchParams.token};domain=.follow.is;path=/';
-`}
+      injectedJavaScriptBeforeContentLoaded="window.__RN__ = true;"
       sharedCookiesEnabled
       originWhitelist={["*"]}
       allowUniversalAccessFromFileURLs

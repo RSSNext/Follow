@@ -17,11 +17,9 @@ function obtainAuthToken() {
         const cookie = atob(ck)
         const token = cookie.split("=")[1]
 
-        CookieManager.set("https://api.follow.is", {
+        CookieManager.set(process.env.EXPO_PUBLIC_API_URL, {
           name: "better-auth.session_token",
           value: token,
-          domain: ".api.follow.is",
-          path: "/",
           httpOnly: true,
         }).then((done) => {
           if (done) {
