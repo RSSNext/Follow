@@ -200,7 +200,7 @@ export default ({ mode }) => {
           ],
         }),
       htmlInjectPlugin(typedEnv),
-      mkcert(),
+      process.env.NO_SSL ? false : mkcert(),
       devPrint(),
       createDependencyChunksPlugin([
         //  React framework
