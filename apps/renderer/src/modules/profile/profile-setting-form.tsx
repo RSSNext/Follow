@@ -80,18 +80,6 @@ export const ProfileSettingForm = ({
     },
   })
 
-  const verifyEmailMutation = useMutation({
-    mutationFn: async () => {
-      if (!user?.email) return
-      return sendVerificationEmail({
-        email: user.email,
-      })
-    },
-    onSuccess: () => {
-      toast.success(t("profile.email.verification_sent"))
-    },
-  })
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateMutation.mutate(values)
   }
