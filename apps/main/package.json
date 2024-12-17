@@ -41,7 +41,7 @@
     "font-list": "1.5.1",
     "i18next": "^24.0.5",
     "js-yaml": "4.1.0",
-    "linkedom": "^0.18.5",
+    "linkedom": "^0.18.6",
     "lowdb": "7.0.1",
     "msedge-tts": "1.3.4",
     "node-machine-id": "1.1.12",
