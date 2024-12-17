@@ -47,6 +47,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         backgroundColor: "#ffffff",
       },
     ],
+    [
+      "expo-secure-store",
+      {
+        configureAndroidBackup: true,
+        faceIDPermission: "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
+      },
+    ],
     "react-native-bottom-tabs",
     [
       "expo-build-properties",

@@ -11,4 +11,5 @@ const authClient = createAuthClient({
   ],
 })
 
-export const { signIn } = authClient
+// @keep-sorted
+export const { getCookie, signIn, useSession } = authClient
