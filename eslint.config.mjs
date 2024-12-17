@@ -75,6 +75,14 @@ export default defineConfig(
     },
   },
   {
+    files: ["apps/mobile/**/*"],
+    settings: {
+      tailwindcss: {
+        config: path.join(import.meta.dirname, "apps/mobile/tailwind.config.ts"),
+      },
+    },
+  },
+  {
     files: ["**/*.tsx"],
     rules: {
       "@stylistic/jsx-self-closing-comp": "error",
