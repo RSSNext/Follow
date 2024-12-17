@@ -107,6 +107,8 @@
   "feeds.tableHeaders.subscriptionCount": "訂閱數",
   "feeds.tableHeaders.tipAmount": "收到的贊助",
   "general.app": "App",
+  "general.auto_expand_long_social_media.description": "自動擴展包含長文字的社群媒體條目。",
+  "general.auto_expand_long_social_media.label": "拓展長社群媒體",
   "general.auto_group.description": "自動依照網址域名分類訂閱源。",
   "general.auto_group.label": "自動分類",
   "general.cache": "快取",

@@ -9,7 +9,7 @@ import fg from "fast-glob"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 async function generateMetaMap() {
-  const files = await fg.glob("./client/pages/(main)/**/metadata.ts", {
+  const files = await fg.glob("./client/pages/**/*/metadata.ts", {
     cwd: path.resolve(__dirname, ".."),
   })
 
@@ -18,9 +18,14 @@ async function generateMetaMap() {
 
   files.forEach((file, index) => {
     const routePath = file
-      .replace("client/pages/(main)", "")
+      .replace("client/pages/", "")
       .replace("/metadata.ts", "")
       .replaceAll(/\[([^\]]+)\]/g, ":$1")
+      .replaceAll(/\([^)]+\)\//g, "")
+      .replace(/^\./, "")
+
+      .replaceAll(/\([^)]+\)\//g, "")
+      .replace(/^\./, "")
 
     const importName = `i${index}`
     imports.push(`import ${importName} from "../${file.replace(".ts", "")}"`)
@@ -47,7 +52,7 @@ ${Object.entries(routes)
 }
 
 async function watch() {
-  const watchPath = path.resolve(__dirname, "..", "./client/pages/(main)")
+  const watchPath = path.resolve(__dirname, "..", "./client/pages")
   console.info("Watching metadata files...")
 
   await generateMetaMap()

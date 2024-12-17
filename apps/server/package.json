@@ -22,11 +22,12 @@
     "i18next": "^24.0.5",
     "jotai": "2.10.3",
     "kose-font": "1.0.0",
-    "linkedom": "^0.18.5",
+    "linkedom": "^0.18.6",
     "ofetch": "1.4.1",
     "rc-modal-sheet": "0.3.2",
     "react": "^18.3.1",
     "react-blurhash": "^0.3.0",
+    "react-hook-form": "7.54.0",
     "react-hotkeys-hook": "4.6.1",
     "react-i18next": "^15.1.3",
     "react-photo-view": "1.2.6",
@@ -34,7 +35,8 @@
     "satori": "0.12.0",
     "sonner": "1.7.1",
     "use-context-selector": "2.0.0",
-    "xss": "1.0.15"
+    "xss": "1.0.15",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@follow/components": "workspace:*",

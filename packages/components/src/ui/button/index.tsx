@@ -216,17 +216,17 @@ export const Button = React.forwardRef<
         buttonClassName?: string
       }
   >
->(({ className, buttonClassName, isLoading, variant, status, ...props }, ref) => {
+>(({ className, buttonClassName, disabled, isLoading, variant, status, ...props }, ref) => {
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
     (e) => {
-      if (isLoading || props.disabled) {
+      if (isLoading || disabled) {
         e.preventDefault()
         return
       }
 
       props.onClick?.(e)
     },
-    [isLoading, props],
+    [disabled, isLoading, props],
   )
   return (
     <MotionButtonBase
@@ -234,11 +234,12 @@ export const Button = React.forwardRef<
       className={cn(
         styledButtonVariant({
           variant,
-          status: isLoading || props.disabled ? "disabled" : undefined,
+          status: isLoading || disabled ? "disabled" : undefined,
         }),
         className,
         buttonClassName,
       )}
+      disabled={isLoading || disabled}
       {...props}
       onClick={handleClick}
     >

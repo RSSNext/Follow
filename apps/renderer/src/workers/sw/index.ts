@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
-import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
+import { CacheableResponsePlugin } from "workbox-cacheable-response"
+import { ExpirationPlugin } from "workbox-expiration"
+import { precacheAndRoute } from "workbox-precaching"
 import { registerRoute } from "workbox-routing"
 import { CacheFirst } from "workbox-strategies"
 
@@ -19,9 +21,17 @@ registerRoute(
   ({ request }) => request.destination === "image",
   new CacheFirst({
     cacheName: "image-assets",
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 300,
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+        purgeOnQuotaError: true,
+      }),
+    ],
   }),
 )
 
 precacheAndRoute(precacheManifest)
-
-cleanupOutdatedCaches()

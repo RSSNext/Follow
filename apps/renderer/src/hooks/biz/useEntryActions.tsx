@@ -16,7 +16,7 @@ import { whoami } from "~/atoms/user"
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
-import { useGetCommand, useRunCommandFn } from "~/modules/command/hooks/use-command"
+import { getCommand, useCommands, useRunCommandFn } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
@@ -87,9 +87,11 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   const isShowAISummary = useShowAISummary()
   const isShowAITranslation = useShowAITranslation()
 
-  const getCmd = useGetCommand()
+  const commands = useCommands()
+
   const runCmdFn = useRunCommandFn()
   const actionConfigs = useMemo(() => {
+    void commands
     if (!entryId) return []
     return [
       {
@@ -202,7 +204,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
     ]
       .filter((config) => !config.hide)
       .map((config) => {
-        const cmd = getCmd(config.id)
+        const cmd = getCommand(config.id)
         if (!cmd) return null
         return {
           ...config,
@@ -216,7 +218,6 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
     entryId,
     feed?.id,
     feed?.ownerUserId,
-    getCmd,
     inList,
     isInbox,
     isShowAISummary,
@@ -224,6 +225,8 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
     isShowSourceContent,
     runCmdFn,
     view,
+
+    commands,
   ])
 
   return actionConfigs
