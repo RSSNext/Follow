@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
+import { CopyButton } from "~/components/ui/code-highlighter"
 import { toastFetchError } from "~/lib/error-parser"
 
 const formSchema = z.object({
@@ -89,29 +90,15 @@ export const ProfileSettingForm = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("mt-4 space-y-4", className)}>
         <div className="space-y-2">
           <Label>{t("profile.email.label")}</Label>
-          <p className="flex gap-2 text-sm text-muted-foreground">
+          <p className="group flex gap-2 text-sm text-muted-foreground">
             {user?.email}
-            <span className={cn(user?.emailVerified ? "text-green-500" : "text-red-500")}>
-              {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
-            </span>
-          </p>
-          {!user?.emailVerified && (
-            <Button
-              variant="outline"
-              type="button"
-              isLoading={verifyEmailMutation.isPending}
-              onClick={() => {
-                verifyEmailMutation.mutate()
-              }}
-            >
-              {t("profile.email.send_verification")}
-            </Button>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label>{t("profile.email.label")}</Label>
-          <p className="flex gap-2 text-sm text-muted-foreground">
-            {user?.email}
+
+            {user?.email && (
+              <CopyButton
+                value={user.email}
+                className="size-5 p-1 opacity-0 duration-300 group-hover:opacity-100"
+              />
+            )}
             <span className={cn(user?.emailVerified ? "text-green-500" : "text-red-500")}>
               {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
             </span>
