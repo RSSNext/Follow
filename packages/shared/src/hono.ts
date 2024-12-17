@@ -341,7 +341,32 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: {
+                name: string;
+                condition: ConditionItem[] | ConditionItem[][];
+                result: {
+                    disabled?: boolean;
+                    translation?: z.infer<typeof languageSchema>;
+                    summary?: boolean;
+                    readability?: boolean;
+                    sourceContent?: boolean;
+                    silence?: boolean;
+                    block?: boolean;
+                    newEntryNotification?: boolean;
+                    rewriteRules?: {
+                        from: string;
+                        to: string;
+                    }[];
+                    blockRules?: {
+                        field: z.infer<typeof ruleFieldSchema>;
+                        operator: z.infer<typeof ruleOperatorSchema>;
+                        value: string | number;
+                    }[];
+                    webhooks?: string[];
+                };
+            }[];
+        }>;
     };
     dialect: "pg";
 }>;
@@ -1004,7 +1029,38 @@ declare const airdrops: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: {
+                "Invitations count": number;
+                "Purchase lists cost": number;
+                "Total tip amount": number;
+                "Feeds subscriptions count": number;
+                "Lists subscriptions count": number;
+                "Inbox subscriptions count": number;
+                "Recent read count in the last month": number;
+                "Mint count": number;
+                "Claimed feeds count": number;
+                "Claimed feeds subscriptions count": number;
+                "Lists with more than 1 feed count": number;
+                "Created lists subscriptions count": number;
+                "Created lists income amount": number;
+                "GitHub Community Contributions": number;
+                "Invitations count Rank": number;
+                "Purchase lists cost Rank": number;
+                "Total tip amount Rank": number;
+                "Feeds subscriptions count Rank": number;
+                "Lists subscriptions count Rank": number;
+                "Inbox subscriptions count Rank": number;
+                "Recent read count in the last month Rank": number;
+                "Mint count Rank": number;
+                "Claimed feeds count Rank": number;
+                "Claimed feeds subscriptions count Rank": number;
+                "Lists with more than 1 feed count Rank": number;
+                "Created lists subscriptions count Rank": number;
+                "Created lists income amount Rank": number;
+                "GitHub Community Contributions Rank": number;
+            } | null;
+        }>;
         verify: drizzle_orm_pg_core.PgColumn<{
             name: "verify";
             tableName: "airdrops";
@@ -1485,6 +1541,15 @@ declare const CommonEntryFields: {
         data: string[];
         driverParam: string | string[];
         enumValues: [string, ...string[]];
+        size: undefined;
+        baseBuilder: {
+            name: "categories";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            enumValues: [string, ...string[]];
+            driverParam: string;
+        };
     }, {
         name: "categories";
         dataType: "string";
@@ -1711,7 +1776,9 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: MediaModel[];
+        }>;
         categories: drizzle_orm_pg_core.PgColumn<{
             name: "categories";
             tableName: "entries";
@@ -1741,10 +1808,20 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, object, object>;
+            }, {}, {}>;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            baseBuilder: drizzle_orm_pg_core.PgColumnBuilder<{
+                name: "categories";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                enumValues: [string, ...string[]];
+                driverParam: string;
+            }, {}, {}, drizzle_orm.ColumnBuilderExtraConfig>;
+            size: undefined;
+        }>;
         attachments: drizzle_orm_pg_core.PgColumn<{
             name: "attachments";
             tableName: "entries";
@@ -1761,7 +1838,9 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: AttachmentsModel[];
+        }>;
         extra: drizzle_orm_pg_core.PgColumn<{
             name: "extra";
             tableName: "entries";
@@ -1778,7 +1857,9 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: ExtraModel;
+        }>;
         language: drizzle_orm_pg_core.PgColumn<{
             name: "language";
             tableName: "entries";
@@ -2250,10 +2331,20 @@ declare const entryReadHistories: drizzle_orm_pg_core.PgTableWithColumns<{
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, object, object>;
+            }, {}, {}>;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            baseBuilder: drizzle_orm_pg_core.PgColumnBuilder<{
+                name: "user_ids";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                enumValues: [string, ...string[]];
+                driverParam: string;
+            }, {}, {}, drizzle_orm.ColumnBuilderExtraConfig>;
+            size: undefined;
+        }>;
         readCount: drizzle_orm_pg_core.PgColumn<{
             name: "read_count";
             tableName: "entryReadHistories";
@@ -3112,7 +3203,9 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: MediaModel[];
+        }>;
         categories: drizzle_orm_pg_core.PgColumn<{
             name: "categories";
             tableName: "inboxes_entries";
@@ -3142,10 +3235,20 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, object, object>;
+            }, {}, {}>;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            baseBuilder: drizzle_orm_pg_core.PgColumnBuilder<{
+                name: "categories";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                enumValues: [string, ...string[]];
+                driverParam: string;
+            }, {}, {}, drizzle_orm.ColumnBuilderExtraConfig>;
+            size: undefined;
+        }>;
         attachments: drizzle_orm_pg_core.PgColumn<{
             name: "attachments";
             tableName: "inboxes_entries";
@@ -3162,7 +3265,9 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: AttachmentsModel[];
+        }>;
         extra: drizzle_orm_pg_core.PgColumn<{
             name: "extra";
             tableName: "inboxes_entries";
@@ -3179,7 +3284,9 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: ExtraModel;
+        }>;
         language: drizzle_orm_pg_core.PgColumn<{
             name: "language";
             tableName: "inboxes_entries";
@@ -4117,10 +4224,20 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
                 baseColumn: never;
                 identity: undefined;
                 generated: undefined;
-            }, object, object>;
+            }, {}, {}>;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            baseBuilder: drizzle_orm_pg_core.PgColumnBuilder<{
+                name: "feed_ids";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                enumValues: [string, ...string[]];
+                driverParam: string;
+            }, {}, {}, drizzle_orm.ColumnBuilderExtraConfig>;
+            size: undefined;
+        }>;
         title: drizzle_orm_pg_core.PgColumn<{
             name: "title";
             tableName: "lists";
@@ -4710,7 +4827,9 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             identity: undefined;
             generated: undefined;
-        }, {}, {}>;
+        }, {}, {
+            $type: Record<string, any>;
+        }>;
         updateAt: drizzle_orm_pg_core.PgColumn<{
             name: "update_at";
             tableName: "settings";
@@ -5036,16 +5155,16 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
     dialect: "pg";
 }>;
 declare function lower(handle: AnyPgColumn): SQL;
-declare const usersOpenApiSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
-    name: z.ZodNullable<z.ZodString>;
-    email: z.ZodString;
-    emailVerified: z.ZodNullable<z.ZodBoolean>;
-    image: z.ZodNullable<z.ZodString>;
-    handle: z.ZodNullable<z.ZodString>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
-}, "email">, z.UnknownKeysParam, z.ZodTypeAny, {
+declare const usersOpenApiSchema: zod.ZodObject<Omit<{
+    id: zod.ZodString;
+    name: zod.ZodNullable<zod.ZodString>;
+    email: zod.ZodString;
+    emailVerified: zod.ZodNullable<zod.ZodBoolean>;
+    image: zod.ZodNullable<zod.ZodString>;
+    handle: zod.ZodNullable<zod.ZodString>;
+    createdAt: zod.ZodDate;
+    updatedAt: zod.ZodDate;
+}, "email">, "strip", zod.ZodTypeAny, {
     name: string | null;
     id: string;
     emailVerified: boolean | null;
@@ -6203,12 +6322,13 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
 declare const auth: {
     handler: (request: Request) => Promise<Response>;
     api: {
-        getSession: ((context: {
+        getSession: <R extends boolean>(context: {
             headers: Headers;
             query?: {
                 disableCookieCache?: boolean;
             } | undefined;
-        }) => Promise<{
+            asResponse?: R | undefined;
+        }) => false extends R ? Promise<{
             user: {
                 id: string;
                 createdAt: Date;
@@ -6239,17 +6359,17 @@ declare const auth: {
                 toUserId: string | null;
             } | undefined;
             role: "user" | "trial";
-        } | null>) & {
+        } | null> & {
             options: {
                 method: "GET";
                 query: zod.ZodOptional<zod.ZodObject<{
-                    disableCookieCache: zod.ZodOptional<zod.ZodBoolean>;
+                    disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
                     disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
                 }, "strip", zod.ZodTypeAny, {
                     disableCookieCache?: boolean | undefined;
                     disableRefresh?: boolean | undefined;
                 }, {
-                    disableCookieCache?: boolean | undefined;
+                    disableCookieCache?: string | boolean | undefined;
                     disableRefresh?: boolean | undefined;
                 }>>;
                 requireHeaders: true;
@@ -6295,9 +6415,19 @@ declare const auth: {
                 metadata: {
                     CUSTOM_SESSION: boolean;
                 };
+                query: zod.ZodOptional<zod.ZodObject<{
+                    disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
+                    disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    disableCookieCache?: boolean | undefined;
+                    disableRefresh?: boolean | undefined;
+                }, {
+                    disableCookieCache?: string | boolean | undefined;
+                    disableRefresh?: boolean | undefined;
+                }>>;
             };
             path: "/get-session";
-        };
+        } : Promise<Response>;
     } & {
         getProviders: {
             <C extends [(better_call.Context<"/get-providers", {
@@ -6353,8 +6483,9 @@ declare const auth: {
                 }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
+                    newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
                     errorCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
                     disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
                     idToken: zod.ZodOptional<zod.ZodObject<{
                         token: zod.ZodString;
@@ -6376,7 +6507,7 @@ declare const auth: {
                         nonce?: string | undefined;
                     }>>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     idToken?: {
                         token: string;
                         accessToken?: string | undefined;
@@ -6385,10 +6516,11 @@ declare const auth: {
                         nonce?: string | undefined;
                     } | undefined;
                     callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
                     errorCallbackURL?: string | undefined;
                     disableRedirect?: boolean | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     idToken?: {
                         token: string;
                         accessToken?: string | undefined;
@@ -6397,6 +6529,7 @@ declare const auth: {
                         nonce?: string | undefined;
                     } | undefined;
                     callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
                     errorCallbackURL?: string | undefined;
                     disableRedirect?: boolean | undefined;
                 }>;
@@ -6472,8 +6605,9 @@ declare const auth: {
                 }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
+                    newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
                     errorCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
                     disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
                     idToken: zod.ZodOptional<zod.ZodObject<{
                         token: zod.ZodString;
@@ -6495,7 +6629,7 @@ declare const auth: {
                         nonce?: string | undefined;
                     }>>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     idToken?: {
                         token: string;
                         accessToken?: string | undefined;
@@ -6504,10 +6638,11 @@ declare const auth: {
                         nonce?: string | undefined;
                     } | undefined;
                     callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
                     errorCallbackURL?: string | undefined;
                     disableRedirect?: boolean | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     idToken?: {
                         token: string;
                         accessToken?: string | undefined;
@@ -6516,6 +6651,7 @@ declare const auth: {
                         nonce?: string | undefined;
                     } | undefined;
                     callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
                     errorCallbackURL?: string | undefined;
                     disableRedirect?: boolean | undefined;
                 }>;
@@ -6684,11 +6820,25 @@ declare const auth: {
                                         schema: {
                                             type: "object";
                                             properties: {
-                                                user: {
+                                                id: {
                                                     type: string;
+                                                    description: string;
                                                 };
-                                                session: {
+                                                email: {
                                                     type: string;
+                                                    description: string;
+                                                };
+                                                name: {
+                                                    type: string;
+                                                    description: string;
+                                                };
+                                                image: {
+                                                    type: string;
+                                                    description: string;
+                                                };
+                                                emailVerified: {
+                                                    type: string;
+                                                    description: string;
                                                 };
                                             };
                                         };
@@ -6701,38 +6851,11 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                user: {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    email: string;
-                    emailVerified: boolean;
-                    name: string;
-                    image?: string | null | undefined | undefined;
-                    handle: string;
-                };
-                session: null;
-            } | {
-                user: {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    email: string;
-                    emailVerified: boolean;
-                    name: string;
-                    image?: string | null | undefined | undefined;
-                    handle: string;
-                };
-                session: {
-                    id: string;
-                    userId: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    expiresAt: Date;
-                    token: string;
-                    ipAddress?: string | null | undefined | undefined;
-                    userAgent?: string | null | undefined | undefined;
-                };
+                id: string;
+                email: string;
+                name: string;
+                image: string | null | undefined;
+                emailVerified: boolean;
             }>;
             path: "/sign-up/email";
             options: {
@@ -6802,11 +6925,25 @@ declare const auth: {
                                         schema: {
                                             type: "object";
                                             properties: {
-                                                user: {
+                                                id: {
                                                     type: string;
+                                                    description: string;
                                                 };
-                                                session: {
+                                                email: {
                                                     type: string;
+                                                    description: string;
+                                                };
+                                                name: {
+                                                    type: string;
+                                                    description: string;
+                                                };
+                                                image: {
+                                                    type: string;
+                                                    description: string;
+                                                };
+                                                emailVerified: {
+                                                    type: string;
+                                                    description: string;
                                                 };
                                             };
                                         };
@@ -6850,9 +6987,6 @@ declare const auth: {
                                         schema: {
                                             type: "object";
                                             properties: {
-                                                session: {
-                                                    type: string;
-                                                };
                                                 user: {
                                                     type: string;
                                                 };
@@ -6876,22 +7010,12 @@ declare const auth: {
             }] ? Response : {
                 user: {
                     id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
                     email: string;
-                    emailVerified: boolean;
                     name: string;
-                    image?: string | null | undefined;
-                };
-                session: {
-                    id: string;
-                    userId: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
                     createdAt: Date;
                     updatedAt: Date;
-                    expiresAt: Date;
-                    token: string;
-                    ipAddress?: string | null | undefined;
-                    userAgent?: string | null | undefined;
                 };
                 redirect: boolean;
                 url: string | undefined;
@@ -6926,9 +7050,6 @@ declare const auth: {
                                         schema: {
                                             type: "object";
                                             properties: {
-                                                session: {
-                                                    type: string;
-                                                };
                                                 user: {
                                                     type: string;
                                                 };
@@ -7806,7 +7927,13 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                user: any;
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                emailVerified: boolean;
+                name: string;
+                image?: string | null | undefined;
             }>;
             path: "/update-user";
             options: {
@@ -8540,12 +8667,12 @@ declare const auth: {
                 }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
@@ -8616,12 +8743,12 @@ declare const auth: {
                 }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab")[]]>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
@@ -8905,6 +9032,18 @@ declare const auth: {
         };
         emailAndPassword: {
             enabled: true;
+            sendResetPassword({ user, url }: {
+                user: better_auth.User;
+                url: string;
+                token: string;
+            }): Promise<void>;
+        };
+        emailVerification: {
+            sendVerificationEmail({ user, url }: {
+                user: better_auth.User;
+                url: string;
+                token: string;
+            }): Promise<void>;
         };
         plugins: ({
             id: "custom-session";
@@ -8915,6 +9054,16 @@ declare const auth: {
                         metadata: {
                             CUSTOM_SESSION: boolean;
                         };
+                        query: zod.ZodOptional<zod.ZodObject<{
+                            disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
+                            disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
+                        }, "strip", zod.ZodTypeAny, {
+                            disableCookieCache?: boolean | undefined;
+                            disableRefresh?: boolean | undefined;
+                        }, {
+                            disableCookieCache?: string | boolean | undefined;
+                            disableRefresh?: boolean | undefined;
+                        }>>;
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
                     }] ? Response : {
@@ -8955,6 +9104,16 @@ declare const auth: {
                         metadata: {
                             CUSTOM_SESSION: boolean;
                         };
+                        query: zod.ZodOptional<zod.ZodObject<{
+                            disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
+                            disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
+                        }, "strip", zod.ZodTypeAny, {
+                            disableCookieCache?: boolean | undefined;
+                            disableRefresh?: boolean | undefined;
+                        }, {
+                            disableCookieCache?: string | boolean | undefined;
+                            disableRefresh?: boolean | undefined;
+                        }>>;
                     };
                     method: better_call.Method | better_call.Method[];
                     headers: Headers;
@@ -9041,6 +9200,28 @@ declare const auth: {
             };
         };
     };
+    $ErrorCodes: {
+        USER_NOT_FOUND: string;
+        FAILED_TO_CREATE_USER: string;
+        FAILED_TO_CREATE_SESSION: string;
+        FAILED_TO_UPDATE_USER: string;
+        FAILED_TO_GET_SESSION: string;
+        INVALID_PASSWORD: string;
+        INVALID_EMAIL: string;
+        INVALID_EMAIL_OR_PASSWORD: string;
+        SOCIAL_ACCOUNT_ALREADY_LINKED: string;
+        PROVIDER_NOT_FOUND: string;
+        INVALID_TOKEN: string;
+        ID_TOKEN_NOT_SUPPORTED: string;
+        FAILED_TO_GET_USER_INFO: string;
+        USER_EMAIL_NOT_FOUND: string;
+        EMAIL_NOT_VERIFIED: string;
+        PASSWORD_TOO_SHORT: string;
+        PASSWORD_TOO_LONG: string;
+        USER_ALREADY_EXISTS: string;
+        EMAIL_CAN_NOT_BE_UPDATED: string;
+        CREDENTIAL_ACCOUNT_NOT_FOUND: string;
+    };
 };
 
 type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
@@ -9089,7 +9270,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 done: number;
                 total: number;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9108,7 +9289,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     result: boolean;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9127,7 +9308,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     result: boolean;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9143,7 +9324,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: number;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9189,7 +9370,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     }[] | null | undefined;
                 } | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9235,7 +9416,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9258,7 +9439,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     content?: string | undefined;
                 } | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9275,7 +9456,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data?: string | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9292,7 +9473,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: string;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9307,7 +9488,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 data?: string[] | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9323,7 +9504,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9339,7 +9520,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9355,7 +9536,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: boolean;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9371,7 +9552,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9386,7 +9567,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9525,7 +9706,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     subscriptionCount?: number | undefined;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9565,7 +9746,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     };
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9586,7 +9767,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     route?: any;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9684,7 +9865,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 }[] | undefined;
                 total?: number | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9758,7 +9939,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     };
                 } | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9773,7 +9954,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9786,8 +9967,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 };
             } & {
                 query: {
-                    page?: number | undefined;
                     size?: number | undefined;
+                    page?: number | undefined;
                 };
             };
             output: {
@@ -9808,7 +9989,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     total: number;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9832,7 +10013,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     lastest_at?: string | undefined;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -9945,7 +10126,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                 }[] | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10029,7 +10210,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     };
                 } | undefined;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10042,7 +10223,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 };
             };
             output: {};
-            outputFormat: string;
+            outputFormat: "text";
             status: 200;
         };
     };
@@ -10095,7 +10276,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | null | undefined;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10116,7 +10297,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     content: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10131,7 +10312,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10176,7 +10357,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     tipAmount: number;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10269,7 +10450,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10284,7 +10465,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10299,7 +10480,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10311,7 +10492,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: string;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10326,7 +10507,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10348,7 +10529,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     toUserId: string | null;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10360,7 +10541,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: number;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10385,7 +10566,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     updatedAt: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10411,7 +10592,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     };
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10428,7 +10609,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10444,7 +10625,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10462,7 +10643,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     [x: string]: number;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10483,7 +10664,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10497,7 +10678,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     count: number;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10518,7 +10699,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     [x: string]: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10535,7 +10716,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10689,7 +10870,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     inboxId: string;
                 })[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10709,7 +10890,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10727,7 +10908,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10747,7 +10928,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10767,7 +10948,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10786,7 +10967,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10800,7 +10981,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     transactionHash: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10847,7 +11028,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     verify: string | null;
                 } | null;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10862,7 +11043,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10881,7 +11062,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     transactionHash: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10963,7 +11144,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | null | undefined;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10977,7 +11158,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     transactionHash: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -10996,7 +11177,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     transactionHash: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11008,7 +11189,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: boolean;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11035,7 +11216,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     todayDailyPower: string;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11047,7 +11228,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: string;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11058,7 +11239,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11087,7 +11268,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     activityPoints: number | null;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11235,7 +11416,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11305,7 +11486,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | null | undefined;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11320,7 +11501,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11340,7 +11521,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11404,7 +11585,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     purchaseAmount?: number | undefined;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11453,7 +11634,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     }[] | null | undefined;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11469,7 +11650,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11478,7 +11659,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $get: {
             input: {};
             output: {};
-            outputFormat: string;
+            outputFormat: "text";
             status: 200;
         };
     };
@@ -11494,7 +11675,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     waitingCount: number;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11509,7 +11690,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11524,7 +11705,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11557,7 +11738,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | null | undefined;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11573,7 +11754,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11621,7 +11802,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11646,7 +11827,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11662,7 +11843,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11691,7 +11872,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | null | undefined;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11707,7 +11888,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11718,7 +11899,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11752,7 +11933,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     MAX_TRIAL_USER_LIST_SUBSCRIPTION: number;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11777,7 +11958,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | null;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11801,7 +11982,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     updatedAt: string;
                 }[];
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11821,7 +12002,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     transactionHash: string;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11833,7 +12014,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: number;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11845,7 +12026,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: number;
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };
@@ -11865,7 +12046,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     failed: number;
                 };
             };
-            outputFormat: "json" | "text";
+            outputFormat: "json";
             status: 200;
         };
     };

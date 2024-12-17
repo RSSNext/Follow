@@ -44,13 +44,11 @@ const createIconTransition =
               exit={exit}
             />
           ) : (
-            cloneElement(icon1, {
-              className: cn(icon1ClassName, className),
-              key: "1",
-              initial,
-              animate,
-              exit,
-            })
+            <m.span key="1" initial={initial} animate={animate} exit={exit}>
+              {cloneElement(icon1, {
+                className: cn(icon1ClassName, className),
+              })}
+            </m.span>
           )
         ) : typeof icon2 === "string" ? (
           <m.i
@@ -61,13 +59,11 @@ const createIconTransition =
             exit={exit}
           />
         ) : (
-          cloneElement(icon2, {
-            className: cn(icon2ClassName, className),
-            key: "2",
-            initial,
-            animate,
-            exit,
-          })
+          <m.span key="2" initial={initial} animate={animate} exit={exit}>
+            {cloneElement(icon2, {
+              className: cn(icon2ClassName, className),
+            })}
+          </m.span>
         )}
       </AnimatePresence>
     )

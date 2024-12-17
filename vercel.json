@@ -21,6 +21,18 @@
       "destination": "https://follow-external-ssr.vercel.app/login"
     },
     {
+      "source": "/register",
+      "destination": "https://follow-external-ssr.vercel.app/register"
+    },
+    {
+      "source": "/forget-password",
+      "destination": "https://follow-external-ssr.vercel.app/forget-password"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "https://follow-external-ssr.vercel.app/reset-password"
+    },
+    {
       "source": "/external-dist/:path*",
       "destination": "https://follow-external-ssr.vercel.app/external-dist/:path*"
     },

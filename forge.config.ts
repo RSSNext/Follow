@@ -62,7 +62,7 @@ async function cleanSources(buildPath, electronVersion, platform, arch, callback
 
   // copy needed node_modules to be included in the app
   await Promise.all(
-    keepModules.values().map((item) => {
+    Array.from(keepModules.values()).map((item) => {
       // Check is exist
       if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
         // eslint-disable-next-line array-callback-return

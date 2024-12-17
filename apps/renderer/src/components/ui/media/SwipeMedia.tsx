@@ -54,10 +54,10 @@ export function SwipeMedia({
       )}
     >
       {uniqMedia?.length ? (
-        <div ref={emblaRef} className="w-full overflow-hidden">
-          <div className="flex">
+        <div ref={emblaRef} className="size-full overflow-hidden">
+          <div className="flex size-full">
             {uniqMedia?.slice(0, 5).map((med, i) => (
-              <div className="mr-2 w-full flex-none" key={med.url}>
+              <div className="mr-2 size-full flex-none" key={med.url}>
                 <Media
                   className={cn(imgClassName, "size-full rounded-none")}
                   alt="cover"
