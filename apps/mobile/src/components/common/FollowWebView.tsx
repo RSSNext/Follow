@@ -21,6 +21,7 @@ export const FollowWebView = ({
     <WebView
       ref={webViewRef}
       source={{ uri: customUrl ?? presetUri }}
+      injectedJavaScript="window.__RN__ = true"
       sharedCookiesEnabled
       originWhitelist={["*"]}
       allowUniversalAccessFromFileURLs
