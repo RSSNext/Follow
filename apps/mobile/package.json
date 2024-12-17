@@ -8,8 +8,7 @@
     "ios": "expo run:ios",
     "ios:device": "expo run:ios --device",
     "lint": "expo lint",
-    "start": "expo start",
-    "start:client": "expo start --dev-client",
+    "start": "expo start --dev-client",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -31,6 +30,7 @@
     "expo-router": "4.0.11",
     "expo-sharing": "~13.0.0",
     "expo-splash-screen": "~0.29.18",
+    "expo-sqlite": "15.0.3",
     "expo-status-bar": "~2.0.0",
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.6",

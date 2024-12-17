@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1734426310305,
+      "tag": "0000_bitter_bloodstrike",
+      "breakpoints": true
+    }
+  ]
+}

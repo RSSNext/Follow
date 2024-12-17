@@ -31,7 +31,7 @@ export default function RootLayout() {
         </Stack>
       </ThemeProvider>
 
-      <Link asChild href={"/_sitemap"}>
+      <Link asChild href={"/debug"}>
         <TouchableOpacity
           hitSlop={{ top: 10, bottom: 22, left: 10, right: 10 }}
           style={{

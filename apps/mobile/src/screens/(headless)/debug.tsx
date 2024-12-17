@@ -1,50 +1,54 @@
-import { Link } from "expo-router"
-import { Text, View } from "react-native"
+import { sql } from "drizzle-orm"
+import { Sitemap } from "expo-router/build/views/Sitemap"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { List, Slider, TextField, useBinding, VStack } from "swiftui-react-native"
+
+import { db } from "@/src/database"
 
 export default function DebugPanel() {
-  const sliderValue = useBinding(0)
   const insets = useSafeAreaInsets()
-  const text = useBinding("")
 
   return (
-    <View className="flex-1" style={{ paddingTop: insets.top }}>
-      <VStack alignment="leading" background="blue" padding={{ leading: 30 }}>
-        <Text>Some cool text</Text>
-        <TextField text={text} placeholder="Name" />
-      </VStack>
-      <Text>2</Text>
-      <List>
-        <Text>2</Text>
-      </List>
-      <Text>2</Text>
-      <Slider value={sliderValue} range={[0, 10]} />
-      <Text>2</Text>
-      <VStack>
-        <List style={{ backgroundColor: "red", flex: 1 }}>
-          <Link asChild href={"/(stack)/feed-list"}>
-            <Text>FeedList</Text>
-          </Link>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          <Text>FeedList</Text>
-          {/* </Link> */}
-        </List>
-      </VStack>
+    <View className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
+      <Text className="mt-4 px-8 text-2xl font-medium text-white">Data Control</Text>
+      <View style={styles.container}>
+        <View style={styles.itemContainer}>
+          <TouchableOpacity
+            style={styles.itemPressable}
+            onPress={() => {
+              const query = sql`DROP TABLE IF EXISTS feeds;`
+              db.transaction((tx) => {
+                tx.run(query)
+              })
+            }}
+          >
+            <Text style={styles.filename}>Clear Sqlite Data</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
+      <Sitemap />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: { paddingHorizontal: "5%", paddingVertical: 16 },
+  itemContainer: {
+    borderWidth: 1,
+    borderColor: "#313538",
+    backgroundColor: "#151718",
+    borderRadius: 12,
+    marginBottom: 12,
+    overflow: "hidden",
+  },
+  itemPressable: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  filename: { color: "white", fontSize: 20, marginLeft: 12 },
+})
