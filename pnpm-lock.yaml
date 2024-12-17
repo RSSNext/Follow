@@ -386,6 +386,9 @@ importers:
 
   apps/mobile:
     dependencies:
+      '@better-auth/expo':
+        specifier: ^1.0.22
+        version: 1.0.22(better-auth@1.0.14(encoding@0.1.13))
       '@bottom-tabs/react-navigation':
         specifier: ^0.7.6
         version: 0.7.6(@react-navigation/native@7.0.14(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native-bottom-tabs@0.7.6(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
@@ -410,6 +413,9 @@ importers:
       '@tanstack/react-query':
         specifier: 5.62.3
         version: 5.62.3(react@18.3.1)
+      better-auth:
+        specifier: 1.0.14
+        version: 1.0.14(encoding@0.1.13)
       expo:
         specifier: 52.0.18
         version: 52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@expo/metro-runtime@4.0.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)))(bufferutil@4.0.8)(encoding@0.1.13)(react-native-webview@13.12.5(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
@@ -2097,6 +2103,11 @@ packages:
   '@babel/types@7.26.3':
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
+
+  '@better-auth/expo@1.0.22':
+    resolution: {integrity: sha512-cf6YMldYXg1lJp4Q6vnuhsqmOFcWSrUciVXCViv7bdnbROPnaJHyXihuFkeLJ7ts1Fv+2Ee+5NtB+Aq6esTJ+w==}
+    peerDependencies:
+      better-auth: 1.0.22
 
   '@better-fetch/fetch@1.1.12':
     resolution: {integrity: sha512-B3bfloI/2UBQWIATRN6qmlORrvx3Mp0kkNjmXLv0b+DtbtR+pP4/I5kQA/rDUv+OReLywCCldf6co4LdDmh8JA==}
@@ -6149,6 +6160,9 @@ packages:
 
   better-auth@1.0.14:
     resolution: {integrity: sha512-34TmHJArkhceQzZfKYXUmtbP1pO0NtUcSz9fmqtoYerE7k643alyfs1FeyU0KZEpvwoH2Oa2rovLWqKpDPxblQ==}
+
+  better-call@0.2.15:
+    resolution: {integrity: sha512-IVT8Mraf+eu6hyCJNMyFVMWhvsmNyHjM4K2h7pZg1LEwZUkTpsfjIghjTq6YiGaooMUmTLK1C9eCEYMM2obW9w==}
 
   better-call@0.3.3-beta.4:
     resolution: {integrity: sha512-txigUTFsjOlE4dfkfhDhu6Gk0I1Xo3S4Nye+nfMKJXknb+WsymcWtqoRUSUGdhOMumM3LT9R3QttTUxwny9lWQ==}
@@ -15014,6 +15028,12 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
+  '@better-auth/expo@1.0.22(better-auth@1.0.14(encoding@0.1.13))':
+    dependencies:
+      better-auth: 1.0.14(encoding@0.1.13)
+      better-call: 0.2.15
+      zod: 3.23.8
+
   '@better-fetch/fetch@1.1.12': {}
 
   '@bottom-tabs/react-navigation@0.7.6(@react-navigation/native@7.0.14(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native-bottom-tabs@0.7.6(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)':
@@ -20157,6 +20177,14 @@ snapshots:
       zod: 3.23.8
     transitivePeerDependencies:
       - encoding
+
+  better-call@0.2.15:
+    dependencies:
+      '@better-fetch/fetch': 1.1.12
+      rou3: 0.5.1
+      set-cookie-parser: 2.7.1
+      uncrypto: 0.1.3
+      zod: 3.23.8
 
   better-call@0.3.3-beta.4:
     dependencies:

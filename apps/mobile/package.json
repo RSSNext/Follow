@@ -12,6 +12,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@better-auth/expo": "^1.0.22",
     "@bottom-tabs/react-navigation": "^0.7.6",
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
@@ -20,6 +21,7 @@
     "@react-navigation/native": "^7.0.0",
     "@shopify/flash-list": "1.7.1",
     "@tanstack/react-query": "5.62.3",
+    "better-auth": "1.0.14",
     "expo": "52.0.18",
     "expo-blur": "~14.0.1",
     "expo-build-properties": "^0.13.1",
