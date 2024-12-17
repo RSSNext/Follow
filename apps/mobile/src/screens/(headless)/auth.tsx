@@ -6,6 +6,8 @@ import { useMemo } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import { queryClient } from "@/src/lib/query-client"
+
 function obtainAuthToken() {
   return new Promise<string>((resolve, reject) => {
     const subscription = Linking.addEventListener("url", ({ url }) => {
@@ -24,6 +26,7 @@ function obtainAuthToken() {
         }).then((done) => {
           if (done) {
             resolve(ck)
+            queryClient.invalidateQueries({ queryKey: ["auth-cookie"] })
           } else {
             reject(new Error("Failed to set cookie"))
           }
