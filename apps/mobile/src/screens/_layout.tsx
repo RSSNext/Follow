@@ -1,38 +1,31 @@
 import "../global.css"
 
-import { ThemeProvider } from "@react-navigation/native"
-import { QueryClientProvider } from "@tanstack/react-query"
 import { Link, Stack } from "expo-router"
-import { useColorScheme } from "nativewind"
 import { TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { queryClient } from "../lib/query-client"
+import { RootProviders } from "../providers"
 import { getCurrentColors, getSystemBackgroundColor } from "../theme/colors"
-import { DarkTheme, DefaultTheme } from "../theme/navigation"
 
 export default function RootLayout() {
   const insets = useSafeAreaInsets()
-  const { colorScheme } = useColorScheme()
 
   const currentThemeColors = getCurrentColors()!
 
   const systemBackgroundColor = getSystemBackgroundColor()
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <RootProviders>
       <View style={[{ flex: 1 }, currentThemeColors]}>
-        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-          <Stack
-            screenOptions={{
-              contentStyle: { backgroundColor: systemBackgroundColor },
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="(stack)" options={{ headerShown: false }} />
-            <Stack.Screen name="(headless)" options={{ headerShown: false }} />
-          </Stack>
-        </ThemeProvider>
+        <Stack
+          screenOptions={{
+            contentStyle: { backgroundColor: systemBackgroundColor },
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="(stack)" options={{ headerShown: false }} />
+          <Stack.Screen name="(headless)" options={{ headerShown: false }} />
+        </Stack>
 
         <Link asChild href={"/debug"}>
           <TouchableOpacity
@@ -46,6 +39,6 @@ export default function RootLayout() {
           />
         </Link>
       </View>
-    </QueryClientProvider>
+    </RootProviders>
   )
 }

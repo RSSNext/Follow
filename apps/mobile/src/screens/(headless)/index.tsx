@@ -1,4 +1,3 @@
-import CookieManager from "@react-native-cookies/cookies"
 import { parse } from "cookie-es"
 import { Redirect } from "expo-router"
 import { useEffect, useRef, useState } from "react"
@@ -11,12 +10,12 @@ import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { Refresh2CuteReIcon } from "@/src/icons/refresh_2_cute_re"
 import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
 import { getCookie, useSession } from "@/src/lib/auth"
+import { setSessionToken } from "@/src/lib/cookie"
 
 export default function Index() {
   const webViewRef = useRef<WebView>(null)
   const insets = useSafeAreaInsets()
 
-  // const [authToken] = useMMKVString("auth.token")
   const { data: session, isPending } = useSession()
 
   const [isCookieReady, setIsCookieReady] = useState(false)
@@ -28,11 +27,7 @@ export default function Index() {
     const cookie = getCookie()
     const token = parse(cookie)["better-auth.session_token"]
 
-    CookieManager.set(process.env.EXPO_PUBLIC_API_URL, {
-      name: "better-auth.session_token",
-      value: token,
-      httpOnly: true,
-    }).then(() => {
+    setSessionToken(token).then(() => {
       setIsCookieReady(true)
     })
   }, [session])

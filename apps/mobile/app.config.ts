@@ -54,7 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         faceIDPermission: "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
       },
     ],
-    "react-native-bottom-tabs",
+
     [
       "expo-build-properties",
       {
