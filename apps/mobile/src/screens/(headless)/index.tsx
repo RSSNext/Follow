@@ -1,4 +1,5 @@
 import CookieManager from "@react-native-cookies/cookies"
+import { parse } from "cookie-es"
 import { Redirect } from "expo-router"
 import { useEffect, useRef, useState } from "react"
 import { TouchableOpacity, View } from "react-native"
@@ -25,8 +26,7 @@ export default function Index() {
     }
 
     const cookie = getCookie()
-    // ; better-auth.session_token=U1I_6EnpknoBJrw6wti0E7Vkkl6nd4Pu.9wM0KckvILRajy%2BCjJSVJ1vfCwOk00gOZaQ1AFXLjNM%3D
-    const token = cookie.split("=")[1]
+    const token = parse(cookie)["better-auth.session_token"]
 
     CookieManager.set(process.env.EXPO_PUBLIC_API_URL, {
       name: "better-auth.session_token",
