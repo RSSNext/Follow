@@ -1,3 +1,4 @@
+// NOTE: use better-auth expo
 import { useMutation } from "@tanstack/react-query"
 import * as Linking from "expo-linking"
 import { useRouter } from "expo-router"

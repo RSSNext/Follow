@@ -14,6 +14,7 @@ import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
 export default function Index() {
   const webViewRef = useRef<WebView>(null)
   const insets = useSafeAreaInsets()
+  // NOTE: use better-auth expo
   const [authToken] = useMMKVString("auth.token")
   const [isCookieReady, setIsCookieReady] = useState(false)
   useEffect(() => {
