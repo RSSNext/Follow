@@ -16,6 +16,7 @@
     "@bottom-tabs/react-navigation": "^0.7.6",
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
+    "@react-native-cookies/cookies": "^6.2.1",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "@shopify/flash-list": "1.7.1",

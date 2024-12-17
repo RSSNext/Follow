@@ -105,7 +105,7 @@ importers:
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
-        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       '@sentry/vite-plugin':
         specifier: 2.22.7
         version: 2.22.7(encoding@0.1.13)
@@ -395,6 +395,9 @@ importers:
       '@follow/constants':
         specifier: workspace:*
         version: link:../../packages/constants
+      '@react-native-cookies/cookies':
+        specifier: ^6.2.1
+        version: 6.2.1(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4))
       '@react-navigation/bottom-tabs':
         specifier: ^7.0.0
         version: 7.2.0(@react-navigation/native@7.0.14(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4))(react@18.3.1))(react-native-safe-area-context@4.12.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4))(react@18.3.1))(react-native-screens@4.1.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4))(react@18.3.1)
@@ -4566,6 +4569,11 @@ packages:
     resolution: {integrity: sha512-yWnVS5LKnOUIrEsI44oz3bIIUYqflamPL27n+k/PC//PsX/YeWBky09oPeAoc9As6jSH16Wgo8plI+ECZaHk3g==}
     peerDependencies:
       react: '>=16.8'
+
+  '@react-native-cookies/cookies@6.2.1':
+    resolution: {integrity: sha512-D17wCA0DXJkGJIxkL74Qs9sZ3sA+c+kCoGmXVknW7bVw/W+Vv1m/7mWTNi9DLBZSRddhzYw8SU0aJapIaM/g5w==}
+    peerDependencies:
+      react-native: '>= 0.60.2'
 
   '@react-native/assets-registry@0.76.5':
     resolution: {integrity: sha512-MN5dasWo37MirVcKWuysRkRr4BjNc81SXwUtJYstwbn8oEkfnwR9DaqdDTo/hHOnTdhafffLIa2xOOHcjDIGEw==}
@@ -17496,11 +17504,11 @@ snapshots:
       pvtsutils: 1.3.6
       tslib: 2.8.1
 
-  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))':
+  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)':
     dependencies:
       '@electron-forge/maker-base': 7.6.0
       '@electron-forge/shared-types': 7.6.0
-      app-builder-lib: 24.13.3(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+      app-builder-lib: 24.13.3(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
     transitivePeerDependencies:
       - bluebird
       - dmg-builder
@@ -18170,6 +18178,11 @@ snapshots:
       '@react-hook/event': 1.2.6(react@18.3.1)
       '@react-hook/throttle': 2.2.0(react@18.3.1)
       react: 18.3.1
+
+  '@react-native-cookies/cookies@6.2.1(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4))':
+    dependencies:
+      invariant: 2.2.4
+      react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@6.0.4)
 
   '@react-native/assets-registry@0.76.5': {}
 
@@ -19698,7 +19711,7 @@ snapshots:
 
   app-builder-bin@5.0.0-alpha.10: {}
 
-  app-builder-lib@24.13.3(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8)):
+  app-builder-lib@24.13.3(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/notarize': 2.2.1
@@ -19732,7 +19745,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  app-builder-lib@25.1.8(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8)):
+  app-builder-lib@25.1.8(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/notarize': 2.5.0
@@ -21424,7 +21437,7 @@ snapshots:
 
   dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8):
     dependencies:
-      app-builder-lib: 25.1.8(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+      app-builder-lib: 25.1.8(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       builder-util: 25.1.7
       builder-util-runtime: 9.2.10
       fs-extra: 10.1.0
@@ -21556,7 +21569,7 @@ snapshots:
 
   electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8):
     dependencies:
-      app-builder-lib: 25.1.8(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+      app-builder-lib: 25.1.8(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       archiver: 5.3.2
       builder-util: 25.1.7
       fs-extra: 10.1.0

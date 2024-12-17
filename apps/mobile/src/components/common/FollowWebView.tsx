@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/no-document-cookie */
-import { useLocalSearchParams } from "expo-router"
 import { Platform } from "react-native"
 import type { WebViewProps } from "react-native-webview"
 import { WebView } from "react-native-webview"
@@ -14,30 +12,16 @@ interface FollowWebViewProps extends WebViewProps {
   customUrl?: string
 }
 
-const injectedJavaScript = function injectedJavaScript(token: string) {
-  "show source"
-
-  document.cookie = `better-auth.session_token=${token};domain=.follow.is;path=/`
-  // @ts-expect-error
-  window.__RN__ = true
-}
-
 export const FollowWebView = ({
   webViewRef,
   customUrl,
   ...props
 }: { webViewRef: React.RefObject<WebView> } & FollowWebViewProps) => {
-  const searchParams = useLocalSearchParams()
-
   return (
     <WebView
       ref={webViewRef}
       source={{ uri: customUrl ?? presetUri }}
-      injectedJavaScriptBeforeContentLoaded={
-        !customUrl
-          ? `${injectedJavaScript.toString()};injectedJavaScript(${searchParams.token})`
-          : ""
-      }
+      sharedCookiesEnabled
       originWhitelist={["*"]}
       allowUniversalAccessFromFileURLs
       startInLoadingState

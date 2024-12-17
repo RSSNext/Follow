@@ -1,3 +1,4 @@
+import { Redirect, useLocalSearchParams } from "expo-router"
 import { useRef } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -10,13 +11,11 @@ import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
 
 export default function Index() {
   const webViewRef = useRef<WebView>(null)
-  // const searchParams = useLocalSearchParams()
-
-  // if (!searchParams?.token) {
-  //   return <Redirect href="/auth" />
-  // }
-
+  const searchParams = useLocalSearchParams()
   const insets = useSafeAreaInsets()
+  if (!searchParams?.token) {
+    return <Redirect href="/auth" />
+  }
   return (
     <View
       style={{
