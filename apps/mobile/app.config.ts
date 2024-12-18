@@ -54,15 +54,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         faceIDPermission: "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
       },
     ],
-
-    [
-      "expo-build-properties",
-      {
-        ios: {
-          useFrameworks: "static",
-        },
-      },
-    ],
     [require("./scripts/with-follow-assets.js")],
   ],
   experiments: {
