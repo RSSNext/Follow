@@ -5,6 +5,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config"
 const roundedIconPath = resolve(__dirname, "../../resources/icon.png")
 const iconPath = resolve(__dirname, "./assets/icon.png")
 const adaptiveIconPath = resolve(__dirname, "./assets/adaptive-icon.png")
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Follow",
@@ -45,13 +46,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         imageWidth: 200,
         resizeMode: "contain",
         backgroundColor: "#ffffff",
-      },
-    ],
-    [
-      "expo-secure-store",
-      {
-        configureAndroidBackup: true,
-        faceIDPermission: "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
       },
     ],
     [require("./scripts/with-follow-assets.js")],
