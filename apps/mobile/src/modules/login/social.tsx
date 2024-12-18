@@ -33,30 +33,26 @@ const provider: Record<
 export function SocialLogin() {
   const { data } = useAuthProviders()
 
-  if (!data) {
-    return null
-  }
-
   return (
     <View className="flex flex-row gap-4">
-      {Object.keys(data)
-        .filter((key) => provider[key])
-        .map((key) => {
-          const providerInfo = provider[key]
-          return (
-            <TouchableOpacity
-              key={key}
-              onPress={() => {
-                signIn.social({
-                  provider: providerInfo.id as any,
-                  callbackURL: "/",
-                })
-              }}
-            >
-              <providerInfo.icon width={32} height={32} color={providerInfo.color} />
-            </TouchableOpacity>
-          )
-        })}
+      {Object.keys(provider).map((key) => {
+        const providerInfo = provider[key]
+        return (
+          <TouchableOpacity
+            key={key}
+            onPress={() => {
+              if (!data?.[providerInfo.id]) return
+              signIn.social({
+                provider: providerInfo.id as any,
+                callbackURL: "/",
+              })
+            }}
+            disabled={!data?.[providerInfo.id]}
+          >
+            <providerInfo.icon width={32} height={32} color={providerInfo.color} />
+          </TouchableOpacity>
+        )
+      })}
     </View>
   )
 }
