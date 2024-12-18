@@ -10,6 +10,8 @@ import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useScaleWidth } from "@/src/lib/responsive"
 import { accentColor } from "@/src/theme/colors"
 
+import { usePrefetchSubscription, useSubscriptionByView } from "../../../store/subscription/hooks"
+
 const viewAtom = atom<FeedViewType>(FeedViewType.Articles)
 export default function FeedList() {
   return (
@@ -111,9 +113,12 @@ function RightAction() {
 
 const SubscriptionList = () => {
   const currentView = useAtomValue(viewAtom)
+  usePrefetchSubscription(currentView)
+  const subscriptionIds = useSubscriptionByView(currentView)
   return (
     <View>
       <Text>{currentView}</Text>
+      <Text>{subscriptionIds.length}</Text>
     </View>
   )
 }

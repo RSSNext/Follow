@@ -1,7 +1,7 @@
 /**
  * @copy from renderer/src/store/utils/helper.ts
  */
-import { isDraft, original, produce } from "immer"
+import { enableMapSet, isDraft, original, produce } from "immer"
 import type { StateCreator, StoreApi, UseBoundStore } from "zustand"
 import { shallow } from "zustand/shallow"
 import type { UseBoundStoreWithEqualityFn } from "zustand/traditional"
@@ -9,6 +9,7 @@ import { createWithEqualityFn } from "zustand/traditional"
 
 const storeMap = {} as Record<string, UseBoundStoreWithEqualityFn<any>>
 
+enableMapSet()
 declare const globalThis: any
 export const createZustandStore =
   <S, T extends StateCreator<S, [], []> = StateCreator<S, [], []>>(name: string) =>
@@ -67,7 +68,12 @@ export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
   return (updater: (state: T) => void) =>
     useStore.setState((state) =>
       produce(state, (draft) => {
-        updater(draft as T)
+        try {
+          return updater(draft as T)
+        } catch (error) {
+          console.error(error)
+          throw error
+        }
       }),
     )
 }

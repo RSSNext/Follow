@@ -1,15 +1,15 @@
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { string } from "zod"
 
 export const feedsTable = sqliteTable("feeds", {
   id: text("id").primaryKey(),
   title: text("title"),
-  url: text("url"),
+  url: text("url").notNull(),
   description: text("description"),
   image: text("image"),
-  error: text("error"),
   errorAt: text("error_at"),
   siteUrl: text("site_url"),
-  type: text("type"),
+  type: text("type").notNull(),
   ownerUserId: text("owner_user_id"),
   errorMessage: text("error_message"),
 })
@@ -17,13 +17,13 @@ export const feedsTable = sqliteTable("feeds", {
 export const subscriptionsTable = sqliteTable(
   "subscriptions",
   {
-    feedId: text("feed_id"),
-    userId: text("user_id"),
-    view: integer("view"),
-    isPrivate: integer("is_private"),
+    feedId: text("feed_id").notNull(),
+    userId: text("user_id").notNull(),
+    view: integer("view").notNull(),
+    isPrivate: integer("is_private").notNull(),
     title: text("title"),
     category: text("category"),
-    createdAt: integer("created_at"),
+    createdAt: text("created_at"),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.feedId, table.userId] }),
