@@ -1,3 +1,4 @@
+import { parseSafeUrl, transformVideoUrl } from "@follow/utils"
 import type { RefObject } from "react"
 import { useCallback } from "react"
 import { Platform } from "react-native"
@@ -19,14 +20,6 @@ interface FollowWebViewProps extends WebViewProps {
   customUrl?: string
 }
 
-const parseSafeUrl = (url: string) => {
-  try {
-    return new URL(url)
-  } catch {
-    return null
-  }
-}
-
 export const FollowWebView = ({
   webViewRef,
   customUrl,
@@ -42,6 +35,12 @@ export const FollowWebView = ({
       if (allowHosts.has(url.host)) return
 
       webViewRef.current?.stopLoading()
+
+      const formattedUrl = transformVideoUrl(urlStr)
+      if (formattedUrl) {
+        openLink(formattedUrl)
+        return
+      }
       openLink(urlStr)
     },
     [openLink, webViewRef],

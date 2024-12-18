@@ -16,6 +16,7 @@
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
     "@follow/shared": "workspace:*",
+    "@follow/utils": "workspace:*",
     "@hookform/resolvers": "3.9.1",
     "@react-native-cookies/cookies": "^6.2.1",
     "@react-navigation/bottom-tabs": "^7.0.0",
