@@ -1,5 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useHeaderHeight } from "@react-navigation/elements"
 import { Link, Stack } from "expo-router"
 import { atom, useAtom, useAtomValue } from "jotai"
 import { memo } from "react"
@@ -23,9 +24,19 @@ const viewAtom = atom<FeedViewType>(FeedViewType.Articles)
 const bottomViewTabHeight = 45
 export default function FeedList() {
   const tabHeight = useBottomTabBarHeight()
+  const headerHeight = useHeaderHeight()
+
+  const insets = useSafeAreaInsets()
   return (
     <>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        scrollIndicatorInsets={{
+          top: headerHeight - insets.top,
+          bottom: tabHeight + bottomViewTabHeight - insets.bottom,
+        }}
+      >
+        <View style={{ height: headerHeight - insets.top }} />
         <SubscriptionList />
         <View style={{ height: tabHeight + bottomViewTabHeight }} />
       </ScrollView>
