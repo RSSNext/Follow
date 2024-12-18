@@ -58,6 +58,7 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   categories: new Set(),
   subscriptionIdSet: new Set(),
 }))
+// const get = useSubscriptionStore.getState
 
 const immerSet = createImmerSetter(useSubscriptionStore)
 class SubscriptionActions {
@@ -90,13 +91,13 @@ class SubscriptionSyncService {
 
     subscriptionActions.reset(view)
 
-    const { subscriptions, feed } = morph.toSubscription(res.data)
-    feed && feedActions.upsertMany([feed])
+    const { subscriptions, feeds } = morph.toSubscription(res.data)
+    feedActions.upsertMany(feeds)
     subscriptionActions.upsertMany(subscriptions)
 
     return {
       subscriptions,
-      feed,
+      feeds,
     }
   }
 }

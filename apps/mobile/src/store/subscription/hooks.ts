@@ -1,7 +1,7 @@
 import type { FeedViewType } from "@follow/constants"
 import { useQuery } from "@tanstack/react-query"
 
-import { subscriptionActions, subscriptionSyncService, useSubscriptionStore } from "./store"
+import { subscriptionSyncService, useSubscriptionStore } from "./store"
 
 export const usePrefetchSubscription = (view: FeedViewType) => {
   return useQuery({
@@ -14,5 +14,11 @@ export const usePrefetchSubscription = (view: FeedViewType) => {
 export const useSubscriptionByView = (view: FeedViewType) => {
   return useSubscriptionStore((state) => {
     return state.feedIdByView[view]
+  })
+}
+
+export const useSubscription = (id: string) => {
+  return useSubscriptionStore((state) => {
+    return state.data[id]
   })
 }

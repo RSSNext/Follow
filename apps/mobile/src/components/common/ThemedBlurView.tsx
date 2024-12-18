@@ -5,5 +5,10 @@ import type { FC } from "react"
 
 export const ThemedBlurView: FC<BlurViewProps> = ({ tint, ...rest }) => {
   const { colorScheme } = useColorScheme()
-  return <BlurView tint={colorScheme === "light" ? "light" : "dark"} {...rest} />
+  return (
+    <BlurView
+      tint={colorScheme === "light" ? "systemMaterialLight" : "systemMaterialDark"}
+      {...rest}
+    />
+  )
 }

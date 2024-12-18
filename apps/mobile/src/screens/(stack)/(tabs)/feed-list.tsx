@@ -1,6 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { Link, Stack } from "expo-router"
 import { atom, useAtom, useAtomValue } from "jotai"
+import { memo } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -8,25 +9,20 @@ import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useScaleWidth } from "@/src/lib/responsive"
+import { useFeed } from "@/src/store/feed/hooks"
 import { accentColor } from "@/src/theme/colors"
 
-import { usePrefetchSubscription, useSubscriptionByView } from "../../../store/subscription/hooks"
+import {
+  usePrefetchSubscription,
+  useSubscription,
+  useSubscriptionByView,
+} from "../../../store/subscription/hooks"
 
 const viewAtom = atom<FeedViewType>(FeedViewType.Articles)
 export default function FeedList() {
   return (
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <Stack.Screen
-          options={{
-            headerShown: true,
-            title: "Subscriptions",
-            headerLeft: LeftAction,
-            headerRight: RightAction,
-            headerBackground: () => <ThemedBlurView intensity={100} />,
-          }}
-        />
-
         <SubscriptionList />
       </ScrollView>
       <ViewTab />
@@ -115,10 +111,41 @@ const SubscriptionList = () => {
   const currentView = useAtomValue(viewAtom)
   usePrefetchSubscription(currentView)
   const subscriptionIds = useSubscriptionByView(currentView)
+
   return (
     <View>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: views[currentView].name,
+          headerLeft: LeftAction,
+          headerRight: RightAction,
+          headerBackground: () => <ThemedBlurView />,
+        }}
+      />
       <Text>{currentView}</Text>
       <Text>{subscriptionIds.length}</Text>
+      {subscriptionIds.map((id) => {
+        return (
+          <Text key={id} id={id}>
+            {id}
+          </Text>
+        )
+      })}
+      {subscriptionIds.map((id) => {
+        return <SubscriptionItem key={id} id={id} />
+      })}
     </View>
   )
 }
+
+const SubscriptionItem = memo(({ id }: { id: string }) => {
+  const subscription = useSubscription(id)
+  const feed = useFeed(id)
+  if (!subscription || !feed) return null
+  return (
+    <TouchableOpacity>
+      <Text>{subscription.title || feed.title}</Text>
+    </TouchableOpacity>
+  )
+})

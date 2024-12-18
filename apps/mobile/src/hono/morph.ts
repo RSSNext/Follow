@@ -6,8 +6,10 @@ class Morph {
     const subscriptions: SubscriptionModel[] = []
 
     // TODO list inbox
-    const collections = {} as {
-      feed: FeedModel | null
+    const collections = {
+      feeds: [],
+    } as {
+      feeds: FeedModel[]
     }
 
     for (const item of data) {
@@ -23,7 +25,7 @@ class Morph {
 
       if ("feeds" in item) {
         const feed = item.feeds
-        collections.feed = {
+        collections.feeds.push({
           description: feed.description!,
           id: feed.id,
           errorAt: feed.errorAt!,
@@ -34,7 +36,7 @@ class Morph {
           title: feed.title!,
           type: feed.type!,
           url: feed.url,
-        }
+        })
       }
     }
     return { subscriptions, ...collections }
