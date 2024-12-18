@@ -1,21 +1,24 @@
-import { useRouter } from "expo-router"
+import { Redirect } from "expo-router"
 import { useState } from "react"
 import { Button, TextInput } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import { signIn } from "@/src/lib/auth"
+import { signIn, useAuthToken } from "@/src/lib/auth"
 
 export default function App() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const router = useRouter()
+  const { data: token } = useAuthToken()
 
   const handleLogin = async () => {
     await signIn.email({
       email,
       password,
     })
-    router.replace("/")
+  }
+
+  if (token) {
+    return <Redirect href="/" />
   }
 
   return (

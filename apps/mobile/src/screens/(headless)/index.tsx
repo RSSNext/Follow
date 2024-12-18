@@ -1,4 +1,3 @@
-import { parse } from "cookie-es"
 import { Redirect } from "expo-router"
 import { useEffect, useRef, useState } from "react"
 import { TouchableOpacity, View } from "react-native"
@@ -10,30 +9,27 @@ import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { ExitCuteReIcon } from "@/src/icons/exit_cute_re"
 import { Refresh2CuteReIcon } from "@/src/icons/refresh_2_cute_re"
 import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
-import { getCookie, signOut, useSession } from "@/src/lib/auth"
+import { signOut, useAuthToken } from "@/src/lib/auth"
 import { setSessionToken } from "@/src/lib/cookie"
 
 export default function Index() {
   const webViewRef = useRef<WebView>(null)
   const insets = useSafeAreaInsets()
 
-  const { data: session, isPending } = useSession()
+  const { data: token, isPending } = useAuthToken()
 
   const [isCookieReady, setIsCookieReady] = useState(false)
   useEffect(() => {
-    if (!session) {
+    if (!token) {
       return
     }
-
-    const cookie = getCookie()
-    const token = parse(cookie)["better-auth.session_token"]
 
     setSessionToken(token).then(() => {
       setIsCookieReady(true)
     })
-  }, [session])
+  }, [token])
 
-  if (!session && !isPending) {
+  if (!token && !isPending) {
     return <Redirect href="/login" />
   }
 
