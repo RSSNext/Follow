@@ -108,11 +108,14 @@ class Transaction<S, Ctx> {
     return this
   }
 
-  optimistic(executor: ExecutorFn<S, Ctx>): this {
+  store(executor: ExecutorFn<S, Ctx>): this {
     this.optimisticExecutor = executor
     return this
   }
 
+  get optimistic() {
+    return this.store.bind(this)
+  }
   persist(fn: ExecutorFn<S, Ctx>): this {
     this.onPersist = fn
     return this

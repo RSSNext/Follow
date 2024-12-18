@@ -3,9 +3,10 @@ import { FeedViewType } from "@follow/constants"
 import type { SubscriptionModel } from "@/src/database/schemas/types"
 import { morph } from "@/src/hono/morph"
 import { apiClient } from "@/src/lib/api-fetch"
+import { subscriptionService } from "@/src/services/subscription"
 
 import { feedActions } from "../feed/store"
-import { createImmerSetter, createZustandStore } from "../internal/helper"
+import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 
 type FeedId = string
 
@@ -62,16 +63,25 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
 
 const immerSet = createImmerSetter(useSubscriptionStore)
 class SubscriptionActions {
-  upsertMany(subscriptions: SubscriptionModel[]) {
-    immerSet((draft) => {
-      for (const subscription of subscriptions) {
-        if (subscription.feedId) {
-          draft.data[subscription.feedId] = subscription
-          draft.subscriptionIdSet.add(`feed/${subscription.feedId}`)
-          draft.feedIdByView[subscription.view as FeedViewType].push(subscription.feedId)
+  async upsertMany(subscriptions: SubscriptionModel[]) {
+    const tx = createTransaction()
+    tx.store(() => {
+      immerSet((draft) => {
+        for (const subscription of subscriptions) {
+          if (subscription.feedId) {
+            draft.data[subscription.feedId] = subscription
+            draft.subscriptionIdSet.add(`feed/${subscription.feedId}`)
+            draft.feedIdByView[subscription.view as FeedViewType].push(subscription.feedId)
+          }
         }
-      }
+      })
     })
+
+    tx.persist(() => {
+      return subscriptionService.upsertMany(subscriptions)
+    })
+
+    await tx.run()
   }
 
   reset(view: FeedViewType) {
