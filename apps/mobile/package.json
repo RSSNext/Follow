@@ -67,6 +67,7 @@
     "@babel/core": "^7.25.2",
     "@types/react": "^18.3.12",
     "@types/react-test-renderer": "^18.3.0",
+    "babel-plugin-module-resolver": "5.0.2",
     "react-test-renderer": "18.3.1"
   }
 }
