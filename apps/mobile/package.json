@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.0.22",
-    "@bottom-tabs/react-navigation": "^0.7.6",
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
     "@follow/shared": "workspace:*",
