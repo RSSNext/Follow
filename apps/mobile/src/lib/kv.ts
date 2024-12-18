@@ -18,7 +18,7 @@ class KV {
   }
 
   delete(key: string) {
-    Storage.removeItem(key)
+    return Storage.removeItem(key)
   }
 
   clear() {
