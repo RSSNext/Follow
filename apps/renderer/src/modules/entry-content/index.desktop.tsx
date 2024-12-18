@@ -173,7 +173,7 @@ export const EntryContent: Component<EntryContentProps> = ({
             <article
               data-testid="entry-render"
               onContextMenu={stopPropagation}
-              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
+              className="relative m-auto min-w-0 max-w-[550px] @[47.5rem]:max-w-[70ch] @7xl:max-w-[80ch]"
             >
               <EntryTitle entryId={entryId} compact={compact} />
 
@@ -215,7 +215,7 @@ export const EntryContent: Component<EntryContentProps> = ({
               )}
               {entry.settings?.sourceContent && <ViewSourceContentAutoToggleEffect />}
 
-              {!content && (
+              {!content && !isInReadabilityMode && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
                     <EntryContentLoading

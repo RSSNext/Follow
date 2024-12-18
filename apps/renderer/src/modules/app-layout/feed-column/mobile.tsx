@@ -12,7 +12,6 @@ import { useSetSidebarActiveView, useSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 
 import { FeedList } from "../../feed-column/list"
-import { FooterInfo } from "./components/FooterInfo"
 import { MobileFloatBar } from "./float-bar.mobile"
 
 export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
@@ -33,7 +32,7 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
   return (
     <div
       className={cn(
-        "relative flex flex-col space-y-3 bg-background",
+        "relative flex flex-col space-y-3 bg-background pb-11",
         asWidget ? "grow" : "h-screen",
       )}
     >
@@ -50,7 +49,7 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
           </Link>
         </div>
       </div>
-      <div className={"relative flex size-full h-0 grow"}>
+      <div className="relative flex size-full h-0 grow pb-safe-offset-2">
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
             <section key={item.name} className="size-full flex-none shrink-0 snap-center">
@@ -63,10 +62,8 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
           ))}
         </SwipeWrapper>
       </div>
-
-      <FooterInfo />
       <MobileFloatBar
-        className={asWidget ? "!bottom-0" : undefined}
+        className={asWidget ? "!bottom-0 pb-safe-offset-2" : undefined}
         scrollContainer={feedListScrollRef}
       />
     </div>

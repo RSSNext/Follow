@@ -123,7 +123,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
     (event: ChangeEvent<HTMLInputElement>) => {
       const trimmedKeyword = event.target.value.trimStart()
       if (!prefix) {
-        form.setValue("keyword", trimmedKeyword)
+        form.setValue("keyword", trimmedKeyword, { shouldValidate: true })
         return
       }
       const isValidPrefix = prefix.find((p) => trimmedKeyword.startsWith(p))

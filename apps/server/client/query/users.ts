@@ -1,5 +1,6 @@
 import { apiClient } from "@client/lib/api-fetch"
 import { getHydrateData } from "@client/lib/helper"
+import type { LoginHydrateData } from "@client/pages/(login)/login/metadata"
 import { getProviders } from "@follow/shared/auth"
 import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -56,20 +57,22 @@ export const useUserQuery = (handleOrId: string | undefined) => {
     initialData: getHydrateData(`profiles.$get,query:id=${handleOrId}`),
   })
 }
-
+export interface AuthProvider {
+  name: string
+  id: string
+  color: string
+  icon: string
+}
+const getTypedProviders = async () => {
+  const providers = await getProviders()
+  return providers.data as Record<string, AuthProvider>
+}
 export const useAuthProviders = () => {
   return useQuery({
     queryKey: ["providers"],
-    queryFn: async () => (await getProviders()).data,
-    placeholderData: {
-      google: {
-        id: "google",
-        name: "Google",
-      },
-      github: {
-        id: "github",
-        name: "GitHub",
-      },
-    },
+    queryFn: async () => getTypedProviders(),
+    initialData: getHydrateData(`betterAuth`) as LoginHydrateData,
   })
 }
+
+export { getTypedProviders as getAuthProviders }

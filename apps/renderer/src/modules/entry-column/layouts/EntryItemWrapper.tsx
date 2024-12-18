@@ -15,6 +15,7 @@ import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useContextMenu } from "~/hooks/common/useContextMenu"
 import { COMMAND_ID } from "~/modules/command/commands/id"
+import { getCommand } from "~/modules/command/hooks/use-command"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 
@@ -35,7 +36,10 @@ export const EntryItemWrapper: FC<
 
   const { t } = useTranslation("common")
 
-  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
+  const isActive = useRouteParamsSelector(
+    ({ entryId }) => entryId === entry.entries.id,
+    [entry.entries.id],
+  )
 
   const asRead = useAsRead(entry)
   const hoverMarkUnread = useGeneralSettingKey("hoverMarkUnread")
@@ -103,12 +107,18 @@ export const EntryItemWrapper: FC<
                   ] as string[]
                 ).includes(item.id),
             )
-            .map((item) => ({
-              type: "text" as const,
-              label: item.name,
-              click: () => item.onClick(),
-              shortcut: item.shortcut,
-            })),
+            .map((item) => {
+              const cmd = getCommand(item.id)
+
+              if (!cmd) return null
+
+              return {
+                type: "text" as const,
+                label: cmd?.label.title || "aa",
+                click: () => item.onClick(),
+                shortcut: item.shortcut,
+              }
+            }),
           {
             type: "separator" as const,
           },

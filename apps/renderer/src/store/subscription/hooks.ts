@@ -12,6 +12,7 @@ import {
   subscriptionByFeedIdSelector,
   subscriptionByViewSelector,
   subscriptionCategoryExistSelector,
+  subscriptionsByFeedIsdSelector,
 } from "./selector"
 import { useSubscriptionStore } from "./store"
 
@@ -30,9 +31,30 @@ export const useSubscriptionByView = (view: FeedViewType) =>
     useCallback((state) => subscriptionByViewSelector(view)(state) || [], [view]),
   )
 
+export const useCategories = () =>
+  useSubscriptionStore(useCallback((state) => state.categories || [], []))
+
+export const useCategoriesByView = (view: FeedViewType) =>
+  useSubscriptionStore(
+    useCallback(
+      (state) =>
+        new Set(
+          subscriptionByViewSelector(view)(state)
+            .map((subscription) => subscription.category)
+            .filter((category) => category !== null && category !== undefined)
+            .filter(Boolean),
+        ),
+      [view],
+    ),
+  )
+
 export const useSubscriptionByFeedId = (feedId: FeedId) =>
   useSubscriptionStore(
     useCallback((state) => subscriptionByFeedIdSelector(feedId)(state) || null, [feedId]),
+  )
+export const useSubscriptionsByFeedIds = (feedIds: FeedId[]) =>
+  useSubscriptionStore(
+    useCallback((state) => subscriptionsByFeedIsdSelector(feedIds)(state) || null, [feedIds]),
   )
 
 export const useFolderFeedsByFeedId = ({ feedId, view }: { feedId?: string; view: FeedViewType }) =>

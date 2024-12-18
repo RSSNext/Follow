@@ -18,16 +18,24 @@ import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
-import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
+import {
+  CategoryCreationModalContent,
+  ListCreationModalContent,
+} from "~/modules/settings/tabs/lists/modals"
 import { useResetFeed } from "~/queries/feed"
 import { getFeedById, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { listActions, useListById, useOwnedListByView } from "~/store/list"
-import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+import {
+  subscriptionActions,
+  useCategoriesByView,
+  useSubscriptionByFeedId,
+  useSubscriptionsByFeedIds,
+} from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
-import { useDeleteSubscription } from "./useSubscriptionActions"
+import { useBatchUpdateSubscription, useDeleteSubscription } from "./useSubscriptionActions"
 
 const ConfirmDestroyModalContent = ({ onConfirm }: { onConfirm: () => void }) => {
   const { t } = useTranslation()
@@ -68,9 +76,14 @@ export const useFeedActions = ({
       siteUrl: feed.siteUrl,
     }
   })
+
   const inbox = useInboxById(feedId)
   const isInbox = !!inbox
   const subscription = useSubscriptionByFeedId(feedId)
+
+  const subscriptions = useSubscriptionsByFeedIds(
+    useMemo(() => feedIds || [feedId], [feedId, feedIds]),
+  )
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
   const claimFeed = useFeedClaimModal()
@@ -81,9 +94,11 @@ export const useFeedActions = ({
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
   const { mutateAsync: resetFeed } = useResetFeed()
+  const { mutate: addFeedsToCategoryMutation } = useBatchUpdateSubscription()
   const openBoostModal = useBoostModal()
 
   const listByView = useOwnedListByView(view!)
+  const categories = useCategoriesByView(view!)
 
   const isMultipleSelection = feedIds && feedIds.length > 1 && feedIds.includes(feedId)
 
@@ -187,6 +202,53 @@ export const useFeedActions = ({
               present({
                 title: t("sidebar.feed_actions.create_list"),
                 content: () => <ListCreationModalContent />,
+              })
+            },
+          },
+        ],
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_column.context_menu.add_feeds_to_category"),
+        disabled: isInbox,
+        supportMultipleSelection: true,
+        submenu: [
+          ...Array.from(categories.values()).map((category) => {
+            const isIncluded = isMultipleSelection
+              ? subscriptions.every((s) => s.category === category)
+              : subscription?.category === category
+            return {
+              label: category,
+              type: "text" as const,
+              checked: isIncluded,
+              click() {
+                addFeedsToCategoryMutation({
+                  feedIdList: isMultipleSelection ? feedIds : [feedId],
+                  category: isIncluded ? null : category, // if already included, remove it
+                  view: view!,
+                })
+              },
+            }
+          }),
+          listByView.length > 0 && { type: "separator" as const },
+          {
+            label: t("sidebar.feed_column.context_menu.create_category"),
+            type: "text" as const,
+            icon: <i className="i-mgc-add-cute-re" />,
+            click() {
+              present({
+                title: t("sidebar.feed_column.context_menu.title"),
+                content: () => (
+                  <CategoryCreationModalContent
+                    onSubmit={(category: string) => {
+                      addFeedsToCategoryMutation({
+                        feedIdList: isMultipleSelection ? feedIds : [feedId],
+                        category,
+                        view: view!,
+                      })
+                    }}
+                  />
+                ),
               })
             },
           },

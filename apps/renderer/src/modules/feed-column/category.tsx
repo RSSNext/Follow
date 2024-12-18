@@ -455,7 +455,7 @@ type SortListProps = {
   view: FeedViewType
   showCollapse: boolean
 }
-const SortedFeedItems = (props: SortListProps) => {
+const SortedFeedItems = memo((props: SortListProps) => {
   const by = useFeedListSortSelector((s) => s.by)
   switch (by) {
     case "count": {
@@ -469,7 +469,7 @@ const SortedFeedItems = (props: SortListProps) => {
       return <SortByUnreadList {...props} />
     }
   }
-}
+})
 
 const SortByAlphabeticalList = (props: SortListProps) => {
   const { ids, showCollapse, view } = props

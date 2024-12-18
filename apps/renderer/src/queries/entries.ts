@@ -159,17 +159,20 @@ export const useEntries = ({
       initialPageParam: undefined,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      refetchOnMount: fetchUnread && feedUnreadDirty ? "always" : false,
+      // DON'T refetch when the router is pop to previous page
+      refetchOnMount: fetchUnread && feedUnreadDirty && !history.isPop ? "always" : false,
 
       staleTime:
         // Force refetch unread entries when feed is dirty
         // HACK: disable refetch when the router is pop to previous page
-        fetchUnread && feedUnreadDirty && !history.isPop
-          ? 0
-          : // Keep reduce data fetch logic
-            reduceRefetch
-            ? maxStaleTime
-            : defaultStaleTime,
+        history.isPop
+          ? Infinity
+          : fetchUnread && feedUnreadDirty
+            ? 0
+            : // Keep reduce data fetch logic
+              reduceRefetch
+              ? maxStaleTime
+              : defaultStaleTime,
     },
   )
 }

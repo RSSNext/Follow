@@ -9,13 +9,9 @@ import { ofetch } from "ofetch"
 import PKG from "../../../../package.json"
 import { isDev } from "./env"
 
-export const createApiClient = () => {
-  const authSessionToken = getTokenFromCookie(requestContext.get("req")?.headers.cookie || "")
-
+const getBaseURL = () => {
   const req = requestContext.get("req")!
-
   const { host } = req.headers
-
   let baseURL = env.VITE_EXTERNAL_API_URL || env.VITE_API_URL
 
   if (env.VITE_EXTERNAL_API_URL?.startsWith("/")) {
@@ -29,11 +25,14 @@ export const createApiClient = () => {
   if (upstreamEnv === "prod" && env.VITE_EXTERNAL_PROD_API_URL) {
     baseURL = env.VITE_EXTERNAL_PROD_API_URL
   }
+  return baseURL
+}
+export const createApiFetch = () => {
+  const baseURL = getBaseURL()
 
-  const apiFetch = ofetch.create({
+  return ofetch.create({
     credentials: "include",
     retry: false,
-
     onRequest(context) {
       if (isDev) console.info(`request: ${context.request}`)
 
@@ -44,7 +43,14 @@ export const createApiClient = () => {
         return
       }
     },
+    baseURL,
   })
+}
+export const createApiClient = () => {
+  const authSessionToken = getTokenFromCookie(requestContext.get("req")?.headers.cookie || "")
+
+  const baseURL = getBaseURL()
+  const apiFetch = createApiFetch()
 
   const apiClient = hc<AppType>(baseURL, {
     fetch: async (input: any, options = {}) => apiFetch(input.toString(), options),

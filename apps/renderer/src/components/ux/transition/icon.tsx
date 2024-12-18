@@ -1,7 +1,8 @@
 import { cn } from "@follow/utils/utils"
 import type { Target } from "framer-motion"
 import { AnimatePresence, m } from "framer-motion"
-import { useEffect, useState } from "react"
+import * as React from "react"
+import { cloneElement, useEffect, useState } from "react"
 
 type TransitionType = {
   initial: Target | boolean
@@ -10,8 +11,8 @@ type TransitionType = {
 }
 
 type IconTransitionProps = {
-  icon1: string
-  icon2: string
+  icon1: string | React.JSX.Element
+  icon2: string | React.JSX.Element
   status: "init" | "done"
   className?: string
   icon1ClassName?: string
@@ -34,14 +35,22 @@ const createIconTransition =
     return (
       <AnimatePresence mode="popLayout">
         {status === "init" ? (
-          <m.i
-            className={cn(icon1ClassName, className, icon1)}
-            key="1"
-            initial={initial}
-            animate={animate}
-            exit={exit}
-          />
-        ) : (
+          typeof icon1 === "string" ? (
+            <m.i
+              className={cn(icon1ClassName, className, icon1)}
+              key="1"
+              initial={initial}
+              animate={animate}
+              exit={exit}
+            />
+          ) : (
+            <m.span key="1" initial={initial} animate={animate} exit={exit}>
+              {cloneElement(icon1, {
+                className: cn(icon1ClassName, className),
+              })}
+            </m.span>
+          )
+        ) : typeof icon2 === "string" ? (
           <m.i
             className={cn(icon2ClassName, className, icon2)}
             key="2"
@@ -49,6 +58,12 @@ const createIconTransition =
             animate={animate}
             exit={exit}
           />
+        ) : (
+          <m.span key="2" initial={initial} animate={animate} exit={exit}>
+            {cloneElement(icon2, {
+              className: cn(icon2ClassName, className),
+            })}
+          </m.span>
         )}
       </AnimatePresence>
     )

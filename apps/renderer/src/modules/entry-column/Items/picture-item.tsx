@@ -9,11 +9,10 @@ import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
-import { memo, useContext, useEffect, useMemo, useState } from "react"
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
-import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { filterSmallMedia } from "~/lib/utils"
 import { EntryContent } from "~/modules/entry-content"
@@ -33,7 +32,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
   const { t } = useTranslation()
   const entryContent = useMemo(() => <EntryContent entryId={entryId} noMedia compact />, [entryId])
   const previewMedia = usePreviewMedia(entryContent)
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry) return null
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div className="relative flex gap-2 overflow-x-auto">
@@ -65,6 +64,9 @@ const proxySize = {
   width: 600,
   height: 0,
 }
+
+const footerAnimate = { opacity: 1, y: 0 }
+const footerExit = { opacity: 0, y: 10 }
 export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryId,
   entryPreview,
@@ -94,19 +96,26 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 
   const [isMouseEnter, setIsMouseEnter] = useState(false)
 
-  if (!entry) return null
+  const media = useMemo(() => filterSmallMedia(entry?.entries.media || []), [entry?.entries.media])
 
-  const media = filterSmallMedia(entry.entries.media)
+  const handleMouseEnter = useCallback(() => {
+    setIsMouseEnter(true)
+  }, [])
+  const handleMouseLeave = useCallback(() => {
+    setIsMouseEnter(false)
+  }, [])
+  if (media?.length === 0) return null
+  if (!entry) return null
 
   return (
     <div
       ref={setRef}
       data-entry-id={entryId}
       data-index={index}
-      onMouseEnter={() => setIsMouseEnter(true)}
-      onMouseLeave={() => setIsMouseEnter(false)}
-      onTouchMove={() => setIsMouseEnter(true)}
-      onTouchEnd={() => setIsMouseEnter(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchMove={handleMouseEnter}
+      onTouchEnd={handleMouseLeave}
       className={className}
     >
       <EntryItemWrapper
@@ -130,9 +139,9 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
             <AnimatePresence>
               {isMouseEnter && (
                 <m.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
+                  initial={footerExit}
+                  animate={footerAnimate}
+                  exit={footerExit}
                   className="absolute inset-x-0 -bottom-px z-[3] overflow-hidden rounded-b-md pb-1"
                   key="footer"
                 >
@@ -199,6 +208,10 @@ const MasonryItemFixedDimensionWrapper = (
       {children}
     </div>
   )
+}
+
+MasonryItemFixedDimensionWrapper.whyDidYouRender = {
+  logOnDifferentValues: true,
 }
 
 export const PictureItemSkeleton = (

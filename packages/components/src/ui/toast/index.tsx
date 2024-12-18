@@ -14,6 +14,7 @@ export const Toaster = ({ ...props }: ToasterProps) => (
         classNames: {
           content: "min-w-0",
           icon: tw`self-start translate-y-[2px]`,
+          actionButton: tw`font-sans font-medium`,
           closeButton: tw`!border-border !bg-background transition-opacity will-change-opacity duration-200 opacity-0 group-hover:opacity-100`,
         },
       }}

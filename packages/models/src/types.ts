@@ -110,7 +110,7 @@ export type MediaModel = Exclude<
   undefined
 >["entries"]["media"]
 
-export type ActionsInput = {
+export type ActionModel = {
   name: string
   condition: {
     field?: ActionFeedField
@@ -137,7 +137,9 @@ export type ActionsInput = {
     }[]
     webhooks?: string[]
   }
-}[]
+}
+
+export type ActionsInput = ActionModel[]
 
 export const TransactionTypes = ["mint", "purchase", "tip", "withdraw", "airdrop"] as const
 
