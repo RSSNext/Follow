@@ -1,35 +1,46 @@
-import { sql } from "drizzle-orm"
+import * as Clipboard from "expo-clipboard"
+import * as FileSystem from "expo-file-system"
 import { Sitemap } from "expo-router/build/views/Sitemap"
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { db } from "@/src/database"
+import { getDbPath } from "@/src/database"
 
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
 
   return (
-    <View className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
+    <ScrollView className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Data Control</Text>
       <View style={styles.container}>
         <View style={styles.itemContainer}>
           <TouchableOpacity
             style={styles.itemPressable}
-            onPress={() => {
-              const query = sql`DROP TABLE IF EXISTS feeds;`
-              db.transaction((tx) => {
-                tx.run(query)
-              })
+            onPress={async () => {
+              const dbPath = getDbPath()
+              await FileSystem.deleteAsync(dbPath)
+              // Reload the app
+              await expo.reloadAppAsync("Clear Sqlite Data")
             }}
           >
             <Text style={styles.filename}>Clear Sqlite Data</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.itemPressable}
+            onPress={async () => {
+              const dbPath = getDbPath()
+              await Clipboard.setStringAsync(dbPath)
+            }}
+          >
+            <Text style={styles.filename}>Copy Sqlite File Location</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
       <Sitemap />
-    </View>
+    </ScrollView>
   )
 }
 
