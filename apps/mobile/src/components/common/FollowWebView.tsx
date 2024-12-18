@@ -1,8 +1,11 @@
+import type { RefObject } from "react"
+import { useCallback } from "react"
 import { Platform } from "react-native"
-import type { WebViewProps } from "react-native-webview"
+import type { WebViewNavigation, WebViewProps } from "react-native-webview"
 import { WebView } from "react-native-webview"
 
 import { signOut } from "@/src/lib/auth"
+import { useOpenLink } from "@/src/lib/hooks/useOpenLink"
 
 const presetUri = Platform.select({
   ios: "web/index.html",
@@ -10,15 +13,40 @@ const presetUri = Platform.select({
   default: "https://app.follow.is",
 })
 
+const allowHosts = new Set(["app.follow.is"])
+
 interface FollowWebViewProps extends WebViewProps {
   customUrl?: string
+}
+
+const parseSafeUrl = (url: string) => {
+  try {
+    return new URL(url)
+  } catch {
+    return null
+  }
 }
 
 export const FollowWebView = ({
   webViewRef,
   customUrl,
   ...props
-}: { webViewRef: React.RefObject<WebView> } & FollowWebViewProps) => {
+}: { webViewRef: RefObject<WebView> } & FollowWebViewProps) => {
+  const openLink = useOpenLink()
+  const onNavigationStateChange = useCallback(
+    (newNavState: WebViewNavigation) => {
+      const { url: urlStr } = newNavState
+      const url = parseSafeUrl(urlStr)
+      if (!url) return
+      if (url.protocol === "file:") return
+      if (allowHosts.has(url.host)) return
+
+      webViewRef.current?.stopLoading()
+      openLink(urlStr)
+    },
+    [openLink, webViewRef],
+  )
+
   return (
     <WebView
       ref={webViewRef}
@@ -32,6 +60,7 @@ export const FollowWebView = ({
       /* Open chrome://inspect/#devices , or Development menu on Safari to debug the WebView. https://github.com/react-native-webview/react-native-webview/blob/master/docs/Debugging.md#debugging-webview-contents */
       webviewDebuggingEnabled={__DEV__}
       containerStyle={{ width: "100%" }}
+      onNavigationStateChange={onNavigationStateChange}
       // onLoadProgress={({ nativeEvent }) => setProgress(nativeEvent.progress)}
       onError={(e) => {
         console.error("WebView error:", e)
