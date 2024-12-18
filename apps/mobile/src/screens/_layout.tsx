@@ -5,6 +5,7 @@ import { useColorScheme } from "nativewind"
 import { TouchableOpacity } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { BugCuteReIcon } from "../icons/bug_cute_re"
 import { RootProviders } from "../providers"
 import { getSystemBackgroundColor } from "../theme/colors"
 
@@ -34,8 +35,10 @@ export default function RootLayout() {
             left: insets.left,
             top: insets.top - 24,
           }}
-          className="absolute size-5 rounded-r-md bg-accent"
-        />
+          className="absolute flex size-5 items-center justify-center rounded-r-md bg-accent"
+        >
+          <BugCuteReIcon height={16} width={16} color="#fff" />
+        </TouchableOpacity>
       </Link>
     </RootProviders>
   )
