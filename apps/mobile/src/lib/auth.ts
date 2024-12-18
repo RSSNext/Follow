@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import type * as better_call from "better-call"
 import { parse } from "cookie-es"
 
 import { kv } from "./kv"
@@ -14,6 +15,10 @@ const storagePrefix = "follow_auth"
 const authClient = createAuthClient({
   baseURL: `${process.env.EXPO_PUBLIC_API_URL}/better-auth`,
   plugins: [
+    {
+      id: "getProviders",
+      $InferServerPlugin: {} as (typeof authPlugins)[0],
+    },
     expoClient({
       scheme: "follow",
       storagePrefix,
@@ -33,7 +38,21 @@ const authClient = createAuthClient({
 })
 
 // @keep-sorted
-export const { getCookie, signIn, signOut, useSession } = authClient
+export const { getCookie, getProviders, signIn, signOut, useSession } = authClient
+
+export interface AuthProvider {
+  name: string
+  id: string
+  color: string
+  icon: string
+}
+
+export const useAuthProviders = () => {
+  return useQuery({
+    queryKey: ["providers"],
+    queryFn: async () => (await getProviders()).data,
+  })
+}
 
 export const useAuthToken = () => {
   const query = useQuery({
@@ -45,3 +64,41 @@ export const useAuthToken = () => {
     data: query.data ? parse(query.data)["better-auth.session_token"] : null,
   }
 }
+
+// eslint-disable-next-line unused-imports/no-unused-vars
+declare const authPlugins: {
+  id: "getProviders"
+  endpoints: {
+    getProviders: {
+      <
+        C extends [
+          (
+            | better_call.Context<
+                "/get-providers",
+                {
+                  method: "GET"
+                }
+              >
+            | undefined
+          )?,
+        ],
+      >(
+        ...ctx: C
+      ): Promise<
+        C extends [
+          {
+            asResponse: true
+          },
+        ]
+          ? Response
+          : Record<string, AuthProvider>
+      >
+      path: "/get-providers"
+      options: {
+        method: "GET"
+      }
+      method: better_call.Method | better_call.Method[]
+      headers: Headers
+    }
+  }
+}[]
