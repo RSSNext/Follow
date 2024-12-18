@@ -1,13 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import { Redirect } from "expo-router"
 import * as React from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { Button, TextInput } from "react-native"
+import { ActivityIndicator, Button, Text, TextInput, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { z } from "zod"
 
+import { Logo } from "@/src/components/ui/logo"
 import { signIn, useAuthToken } from "@/src/lib/auth"
 
 const formSchema = z.object({
@@ -50,30 +52,48 @@ export default function App() {
     },
   })
 
+  const submitMutation = useMutation({
+    mutationFn: onSubmit,
+  })
+
   if (token) {
     return <Redirect href="/" />
   }
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-center">
-      <Input
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="email-address"
-        autoComplete="email"
-        placeholder="Email"
-        control={control}
-        name="email"
-      />
-      <Input
-        autoCapitalize="none"
-        autoCorrect={false}
-        autoComplete="current-password"
-        placeholder="Password"
-        control={control}
-        name="password"
-      />
-      <Button title="Login" onPress={handleSubmit(onSubmit)} />
+    <SafeAreaView className="flex-1 items-center justify-center gap-10">
+      <Logo style={{ width: 100, height: 100 }} />
+      <Text className="text-2xl font-bold">Login to Follow</Text>
+      <View className="w-full max-w-sm gap-4 px-10">
+        <Input
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="email-address"
+          autoComplete="email"
+          placeholder="Email"
+          control={control}
+          name="email"
+          className="rounded-lg border border-gray-6 px-3 py-2"
+        />
+        <Input
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="current-password"
+          placeholder="Password"
+          control={control}
+          name="password"
+          className="rounded-lg border border-gray-6 px-3 py-2"
+        />
+      </View>
+      {submitMutation.isPending ? (
+        <ActivityIndicator />
+      ) : (
+        <Button
+          title="Login"
+          disabled={submitMutation.isPending}
+          onPress={handleSubmit((values) => submitMutation.mutate(values))}
+        />
+      )}
     </SafeAreaView>
   )
 }
