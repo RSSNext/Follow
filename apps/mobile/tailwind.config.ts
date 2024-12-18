@@ -8,6 +8,9 @@ export default resolveConfig({
 
   theme: {
     extend: {
+      fontFamily: {
+        sn: "SN Pro",
+      },
       colors: {
         accent: "#FF5C00",
         // Palette colors
