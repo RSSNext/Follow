@@ -401,6 +401,9 @@ importers:
       '@follow/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@hookform/resolvers':
+        specifier: 3.9.1
+        version: 3.9.1(react-hook-form@7.54.0(react@18.3.1))
       '@react-native-cookies/cookies':
         specifier: ^6.2.1
         version: 6.2.1(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))
@@ -491,6 +494,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: 7.54.0
+        version: 7.54.0(react@18.3.1)
       react-native:
         specifier: 0.76.5
         version: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)
@@ -521,6 +527,9 @@ importers:
       tailwindcss:
         specifier: 3.4.16
         version: 3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
       zustand:
         specifier: 5.0.2
         version: 5.0.2(@types/react@18.3.14)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
