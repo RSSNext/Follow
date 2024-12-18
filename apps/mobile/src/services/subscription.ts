@@ -10,8 +10,7 @@ class SubscriptionServiceStatic implements Hydratable {
   }
   async hydrate() {
     const subscriptions = await db.query.subscriptionsTable.findMany()
-
     subscriptionActions.upsertMany(subscriptions)
   }
 }
-export const subscriptionService = new SubscriptionServiceStatic()
+export const SubscriptionService = new SubscriptionServiceStatic()

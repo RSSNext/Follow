@@ -1,18 +1,10 @@
 import type { Hydratable } from "../services/base"
 import { FeedService } from "../services/feed"
+import { SubscriptionService } from "../services/subscription"
 
+const hydrates: Hydratable[] = [FeedService, SubscriptionService]
 export const hydrateDatabaseToStore = async () => {
-  async function hydrate() {
-    const now = Date.now()
-
-    const hydrates: Hydratable[] = [FeedService]
-    await Promise.all(hydrates.map((h) => h.hydrate()))
-
-    const costTime = Date.now() - now
-
-    return costTime
-  }
-  return hydrate()
+  await Promise.all(hydrates.map((h) => h.hydrate()))
 }
 
 export const hydrateSettings = () => {}

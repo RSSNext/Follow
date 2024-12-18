@@ -1,5 +1,4 @@
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
-import { string } from "zod"
 
 export const feedsTable = sqliteTable("feeds", {
   id: text("id").primaryKey(),

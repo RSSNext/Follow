@@ -3,7 +3,7 @@ import { FeedViewType } from "@follow/constants"
 import type { SubscriptionModel } from "@/src/database/schemas/types"
 import { morph } from "@/src/hono/morph"
 import { apiClient } from "@/src/lib/api-fetch"
-import { subscriptionService } from "@/src/services/subscription"
+import { SubscriptionService } from "@/src/services/subscription"
 
 import { feedActions } from "../feed/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
@@ -78,7 +78,7 @@ class SubscriptionActions {
     })
 
     tx.persist(() => {
-      return subscriptionService.upsertMany(subscriptions)
+      return SubscriptionService.upsertMany(subscriptions)
     })
 
     await tx.run()

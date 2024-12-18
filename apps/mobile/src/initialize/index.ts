@@ -1,5 +1,5 @@
 import { initializeDayjs } from "./dayjs"
-import { hydrateSettings } from "./hydrate"
+import { hydrateDatabaseToStore, hydrateSettings } from "./hydrate"
 /* eslint-disable no-console */
 export const initializeApp = async () => {
   console.log(`Initialize...`)
@@ -7,7 +7,8 @@ export const initializeApp = async () => {
   const now = Date.now()
   initializeDayjs()
 
-  apm("hydrateSettings", hydrateSettings)
+  await apm("hydrateSettings", hydrateSettings)
+  await apm("hydrateDatabaseToStore", hydrateDatabaseToStore)
 
   const loadingTime = Date.now() - now
   console.log(`Initialize done,`, `${loadingTime}ms`)

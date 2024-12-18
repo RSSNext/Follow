@@ -10,6 +10,7 @@ export default resolveConfig({
     extend: {
       fontFamily: {
         sn: "SN Pro",
+        mono: "monospace",
       },
       colors: {
         accent: "#FF5C00",
