@@ -2,6 +2,8 @@ import { Platform } from "react-native"
 import type { WebViewProps } from "react-native-webview"
 import { WebView } from "react-native-webview"
 
+import { signOut } from "@/src/lib/auth"
+
 const presetUri = Platform.select({
   ios: "web/index.html",
   android: "file:///android_asset/raw/index.html",
@@ -35,6 +37,12 @@ export const FollowWebView = ({
         console.error("WebView error:", e)
       }}
       onContentProcessDidTerminate={() => webViewRef.current?.reload()}
+      onMessage={(e) => {
+        const message = e.nativeEvent.data
+        if (message === "sign-out") {
+          signOut()
+        }
+      }}
       {...props}
     />
   )
