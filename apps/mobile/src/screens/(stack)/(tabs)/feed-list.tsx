@@ -1,13 +1,15 @@
 import { FeedViewType } from "@follow/constants"
+import { cn } from "@follow/utils"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { Link, Stack } from "expo-router"
 import { atom, useAtom, useAtomValue } from "jotai"
-import { memo } from "react"
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { memo, useState } from "react"
+import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
+import { FeedIcon } from "@/src/components/ui/feed-icon"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useScaleWidth } from "@/src/lib/responsive"
@@ -150,15 +152,7 @@ const SubscriptionList = () => {
           headerTransparent: true,
         }}
       />
-      <Text>{currentView}</Text>
-      <Text>{subscriptionIds.length}</Text>
-      {subscriptionIds.map((id) => {
-        return (
-          <Text key={id} id={id}>
-            {id}
-          </Text>
-        )
-      })}
+
       {subscriptionIds.map((id) => {
         return <SubscriptionItem key={id} id={id} />
       })}
@@ -169,11 +163,27 @@ const SubscriptionList = () => {
 const SubscriptionItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(id)
   const feed = useFeed(id)
+  const [isPressing, setIsPressing] = useState(false)
   if (!subscription || !feed) return null
   return (
-    <TouchableOpacity>
-      <Text>{subscription.title || feed.title}</Text>
-    </TouchableOpacity>
+    <Pressable
+      onPressIn={() => {
+        setIsPressing(true)
+      }}
+      onPressOut={() => {
+        setIsPressing(false)
+      }}
+      className={cn(
+        "flex h-9 flex-row items-center px-4",
+
+        isPressing ? "bg-tertiary-system-background" : "bg-system-background",
+      )}
+    >
+      <View className="mr-2 overflow-hidden rounded-full">
+        <FeedIcon feed={feed} />
+      </View>
+      <Text className="text-text">{subscription.title || feed.title}</Text>
+    </Pressable>
   )
 })
 
