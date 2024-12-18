@@ -1,4 +1,5 @@
 import { Tabs } from "expo-router"
+import { StyleSheet } from "react-native"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { FollowIcon } from "@/src/components/ui/logo"
@@ -11,7 +12,19 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarBackground: () => <ThemedBlurView intensity={100} />,
+        tabBarBackground: () => (
+          <ThemedBlurView
+            intensity={80}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              overflow: "hidden",
+              backgroundColor: "transparent",
+            }}
+          />
+        ),
+        tabBarStyle: {
+          position: "absolute",
+        },
       }}
     >
       <Tabs.Screen

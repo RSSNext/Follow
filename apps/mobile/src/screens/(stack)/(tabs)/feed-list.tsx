@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { Link, Stack } from "expo-router"
 import { atom, useAtom, useAtomValue } from "jotai"
 import { memo } from "react"
@@ -19,12 +20,16 @@ import {
 } from "../../../store/subscription/hooks"
 
 const viewAtom = atom<FeedViewType>(FeedViewType.Articles)
+const bottomViewTabHeight = 45
 export default function FeedList() {
+  const tabHeight = useBottomTabBarHeight()
   return (
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <SubscriptionList />
+        <View style={{ height: tabHeight + bottomViewTabHeight }} />
       </ScrollView>
+
       <ViewTab />
     </>
   )
@@ -33,19 +38,20 @@ export default function FeedList() {
 const ViewTab = () => {
   const scaleWidth = useScaleWidth()
 
+  const tabHeight = useBottomTabBarHeight()
   const paddingHorizontal = 4
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
   return (
     <ThemedBlurView
-      style={{
-        bottom: 0,
-        left: 0,
-        position: "absolute",
-        width: "100%",
-        borderTopColor: "rgba(0,0,0,0.2)",
-        borderTopWidth: StyleSheet.hairlineWidth,
-      }}
+      intensity={100}
+      style={[
+        styles.tabContainer,
+        {
+          backgroundColor: "transparent",
+          bottom: tabHeight,
+        },
+      ]}
     >
       <View className="flex-row items-center justify-between py-2" style={{ paddingHorizontal }}>
         {views.map((view) => (
@@ -120,7 +126,17 @@ const SubscriptionList = () => {
           title: views[currentView].name,
           headerLeft: LeftAction,
           headerRight: RightAction,
-          headerBackground: () => <ThemedBlurView />,
+          headerBackground: () => (
+            <ThemedBlurView
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                overflow: "hidden",
+                backgroundColor: "transparent",
+              }}
+            />
+          ),
+
+          headerTransparent: true,
         }}
       />
       <Text>{currentView}</Text>
@@ -148,4 +164,16 @@ const SubscriptionItem = memo(({ id }: { id: string }) => {
       <Text>{subscription.title || feed.title}</Text>
     </TouchableOpacity>
   )
+})
+
+const styles = StyleSheet.create({
+  tabContainer: {
+    bottom: 0,
+    left: 0,
+    position: "absolute",
+    width: "100%",
+    borderTopColor: "rgba(0,0,0,0.2)",
+    borderTopWidth: StyleSheet.hairlineWidth,
+    height: bottomViewTabHeight,
+  },
 })
