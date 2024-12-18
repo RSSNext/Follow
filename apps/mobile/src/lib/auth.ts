@@ -15,4 +15,4 @@ const authClient = createAuthClient({
 })
 
 // @keep-sorted
-export const { getCookie, signIn, useSession } = authClient
+export const { getCookie, signIn, signOut, useSession } = authClient

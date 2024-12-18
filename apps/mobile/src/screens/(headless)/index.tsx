@@ -7,9 +7,10 @@ import type { WebView } from "react-native-webview"
 
 import { FollowWebView } from "@/src/components/common/FollowWebView"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
+import { ExitCuteReIcon } from "@/src/icons/exit_cute_re"
 import { Refresh2CuteReIcon } from "@/src/icons/refresh_2_cute_re"
 import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
-import { getCookie, useSession } from "@/src/lib/auth"
+import { getCookie, signOut, useSession } from "@/src/lib/auth"
 import { setSessionToken } from "@/src/lib/cookie"
 
 export default function Index() {
@@ -72,6 +73,14 @@ export default function Index() {
 
           <TouchableOpacity onPress={() => webViewRef.current?.reload()}>
             <Refresh2CuteReIcon />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              signOut()
+            }}
+          >
+            <ExitCuteReIcon />
           </TouchableOpacity>
         </View>
       )}
