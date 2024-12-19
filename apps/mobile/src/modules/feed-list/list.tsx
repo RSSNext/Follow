@@ -148,7 +148,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         className,
       )}
     >
-      <View className="mr-2 overflow-hidden rounded-full border border-transparent dark:border-tertiary-system-background">
+      <View className="dark:border-tertiary-system-background mr-2 overflow-hidden rounded-full border border-transparent">
         <FeedIcon feed={feed} />
       </View>
       <Text className="text-text">{subscription.title || feed.title}</Text>
