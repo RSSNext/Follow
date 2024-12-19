@@ -13,8 +13,7 @@ import { DarkTheme, DefaultTheme } from "../theme/navigation"
 import { MigrationProvider } from "./migration"
 
 export const RootProviders = ({ children }: { children: ReactNode }) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  __DEV__ && useDrizzleStudio(sqlite)
+  useDrizzleStudio(sqlite)
   const { colorScheme } = useColorScheme()
 
   const currentThemeColors = getCurrentColors()!
