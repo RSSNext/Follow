@@ -105,7 +105,7 @@ importers:
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
-        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       '@sentry/vite-plugin':
         specifier: 2.22.7
         version: 2.22.7(encoding@0.1.13)
@@ -310,6 +310,9 @@ importers:
       builder-util-runtime:
         specifier: 9.2.10
         version: 9.2.10
+      cookie-es:
+        specifier: ^1.2.2
+        version: 1.2.2
       dompurify:
         specifier: ~3.2.2
         version: 3.2.2
@@ -5858,6 +5861,9 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  cookie-es@1.2.2:
+    resolution: {integrity: sha512-+W7VmiVINB+ywl1HGXJXmrqkOhpKrIiVZV6tQuV54ZyQC7MMuBt81Vc336GMLoHBq5hV/F9eXgt5Mnx0Rha5Fg==}
 
   cookie@0.7.1:
     resolution: {integrity: sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w==}
@@ -14566,11 +14572,11 @@ snapshots:
       pvtsutils: 1.3.6
       tslib: 2.8.1
 
-  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))':
+  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)':
     dependencies:
       '@electron-forge/maker-base': 7.6.0
       '@electron-forge/shared-types': 7.6.0
-      app-builder-lib: 24.13.3(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+      app-builder-lib: 24.13.3(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
     transitivePeerDependencies:
       - bluebird
       - dmg-builder
@@ -16389,7 +16395,7 @@ snapshots:
 
   app-builder-bin@5.0.0-alpha.10: {}
 
-  app-builder-lib@24.13.3(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8)):
+  app-builder-lib@24.13.3(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/notarize': 2.2.1
@@ -16423,7 +16429,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  app-builder-lib@25.1.8(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8)):
+  app-builder-lib@25.1.8(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/notarize': 2.5.0
@@ -17378,6 +17384,8 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
+  cookie-es@1.2.2: {}
+
   cookie@0.7.1: {}
 
   cookie@1.0.2: {}
@@ -17785,7 +17793,7 @@ snapshots:
 
   dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8):
     dependencies:
-      app-builder-lib: 25.1.8(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+      app-builder-lib: 25.1.8(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       builder-util: 25.1.7
       builder-util-runtime: 9.2.10
       fs-extra: 10.1.0
@@ -17910,7 +17918,7 @@ snapshots:
 
   electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8):
     dependencies:
-      app-builder-lib: 25.1.8(dmg-builder@25.1.8(electron-builder-squirrel-windows@25.1.8))(electron-builder-squirrel-windows@25.1.8(dmg-builder@25.1.8))
+      app-builder-lib: 25.1.8(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       archiver: 5.3.2
       builder-util: 25.1.7
       fs-extra: 10.1.0
