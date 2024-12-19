@@ -61,7 +61,7 @@ export const useAuthToken = () => {
   })
   return {
     ...query,
-    data: query.data ? parse(query.data)["better-auth.session_token"] : null,
+    data: query.data ? parse(query.data)["__Secure-better-auth.session_token"] : null,
   }
 }
 
