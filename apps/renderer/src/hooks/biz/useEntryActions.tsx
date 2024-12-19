@@ -1,6 +1,5 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
-import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 
 import { useShowAISummary } from "~/atoms/ai-summary"
@@ -16,7 +15,7 @@ import { whoami } from "~/atoms/user"
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
-import { useGetCommand, useRunCommandFn } from "~/modules/command/hooks/use-command"
+import { useRunCommandFn } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
@@ -62,11 +61,10 @@ export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string
 
 export type EntryActionItem = {
   id: FollowCommandId
-  name: string
-  icon?: ReactNode
-  active?: boolean
-  shortcut?: string
   onClick: () => void
+  hide?: boolean
+  shortcut?: string
+  active?: boolean
 }
 
 export const useEntryActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
@@ -87,10 +85,11 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   const isShowAISummary = useShowAISummary()
   const isShowAITranslation = useShowAITranslation()
 
-  const getCmd = useGetCommand()
   const runCmdFn = useRunCommandFn()
-  const actionConfigs = useMemo(() => {
-    if (!entryId) return []
+  const hasEntry = !!entry
+
+  const actionConfigs: EntryActionItem[] = useMemo(() => {
+    if (!hasEntry) return []
     return [
       {
         id: COMMAND_ID.integration.saveToEagle,
@@ -190,33 +189,27 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.read,
         onClick: runCmdFn(COMMAND_ID.entry.read, [{ entryId }]),
-        hide: !entry || !!entry.read || !!entry.collections || !!inList,
+        hide: !hasEntry || !entry.read || !!entry.collections || !!inList,
         shortcut: shortcuts.entry.toggleRead.key,
       },
       {
         id: COMMAND_ID.entry.unread,
         onClick: runCmdFn(COMMAND_ID.entry.unread, [{ entryId }]),
-        hide: !entry || !entry.read || !!entry.collections || !!inList,
+        hide: !hasEntry || !entry.read || !!entry.collections || !!inList,
         shortcut: shortcuts.entry.toggleRead.key,
       },
-    ]
-      .filter((config) => !config.hide)
-      .map((config) => {
-        const cmd = getCmd(config.id)
-        if (!cmd) return null
-        return {
-          ...config,
-          name: cmd.label.title,
-          icon: cmd.icon,
-        }
-      })
-      .filter((i) => i !== null)
+    ].filter((config) => !config.hide)
   }, [
-    entry,
+    entry?.collections,
+    entry?.entries.url,
+    entry?.read,
+    entry?.settings?.summary,
+    entry?.settings?.translation,
+    entry?.view,
     entryId,
     feed?.id,
     feed?.ownerUserId,
-    getCmd,
+    hasEntry,
     inList,
     isInbox,
     isShowAISummary,

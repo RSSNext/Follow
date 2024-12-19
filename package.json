@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.2.7-beta.1",
+  "version": "0.2.8-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow your favorites in one inbox",
@@ -90,6 +90,7 @@
     "eslint": "^9.16.0",
     "eslint-config-hyoban": "^3.1.15",
     "fake-indexeddb": "6.0.0",
+    "fast-glob": "^3.3.2",
     "happy-dom": "15.11.7",
     "hono": "4.6.13",
     "html-minifier-terser": "7.2.0",
@@ -176,5 +177,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "eff966f43f885985e456a48c734d2cabe9fe30723d6cdc45e2f8ba75cecd0c80"
+  "mainHash": "b2130db8e4fffd333fbc79e0bf9ddd4d93a5158289f61a36e968d791b6595c49"
 }

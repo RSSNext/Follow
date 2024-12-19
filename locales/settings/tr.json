@@ -2,7 +2,6 @@
   "about.changelog": "Değişiklik Günlüğü",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) geliştirmenin erken aşamalarındadır. Herhangi bir geri bildiriminiz veya öneriniz varsa, lütfen GitHub'ımızda <OpenIssueLink>bir konu açmaktan</OpenIssueLink> <ExternalLinkIcon /> çekinmeyin.",
   "about.iconLibrary": "Kullanılan simge kütüphanesi <IconLibraryLink /> <ExternalLinkIcon /> tarafından telif hakkıyla korunmaktadır ve yeniden dağıtılamaz.",
-  "about.licenseInfo": "{{appName}} her zaman ücretsiz ve açık kaynaklı bir proje olacaktır. {{license}} lisansı altında lisanslanmıştır.",
   "about.sidebar_title": "Hakkında",
   "about.socialMedia": "Sosyal Medya",
   "actions.actionName": "Eylem {{number}}",

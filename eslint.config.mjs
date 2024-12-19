@@ -1,9 +1,14 @@
 // @ts-check
+import path from "node:path"
+
 import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
 import noDebug from "./plugins/eslint/eslint-no-debug.js"
+import packageJsonExtend from "./plugins/eslint/eslint-package-json.js"
 import recursiveSort from "./plugins/eslint/eslint-recursive-sort.js"
+
+const isCI = process.env.CI === "true" || process.env.CI === "1"
 
 export default defineConfig(
   {
@@ -16,13 +21,15 @@ export default defineConfig(
       "resources/**",
     ],
     preferESM: false,
-    projectService: {
-      allowDefaultProject: ["apps/main/preload/index.d.ts"],
-      defaultProject: "tsconfig.json",
-    },
-    typeChecked: "essential",
+    projectService: isCI
+      ? {
+          allowDefaultProject: ["apps/main/preload/index.d.ts"],
+          defaultProject: "tsconfig.json",
+        }
+      : undefined,
+    typeChecked: isCI ? "essential" : false,
   },
-  {
+  isCI && {
     files: GLOB_TS_SRC,
     rules: {
       "require-await": "off",
@@ -60,6 +67,14 @@ export default defineConfig(
     },
   },
   {
+    files: ["apps/server/**/*"],
+    settings: {
+      tailwindcss: {
+        config: path.join(import.meta.dirname, "apps/server/tailwind.config.ts"),
+      },
+    },
+  },
+  {
     files: ["**/*.tsx"],
     rules: {
       "@stylistic/jsx-self-closing-comp": "error",
@@ -76,6 +91,16 @@ export default defineConfig(
       "recursive-sort/recursive-sort": "error",
       "check-i18n-json/valid-i18n-keys": "error",
       "check-i18n-json/no-extra-keys": "error",
+    },
+  },
+  {
+    files: ["package.json", "apps/**/package.json", "packages/**/package.json"],
+    plugins: {
+      "package-json-extend": packageJsonExtend,
+    },
+    rules: {
+      "package-json-extend/ensure-package-version": "error",
+      "package-json-extend/no-duplicate-package": "error",
     },
   },
 )

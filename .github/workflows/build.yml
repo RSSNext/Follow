@@ -120,6 +120,12 @@ jobs:
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: npm exec turbo run //#build:macos
 
+      - name: Build Renderer
+        if: matrix.os == 'ubuntu-latest'
+        run: pnpm build:render
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       - name: Upload file
         uses: actions/upload-artifact@v4
         env:
@@ -133,6 +139,8 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz
           retention-days: 90
 
       - name: Upload file (arm64.dmg)
@@ -157,6 +165,8 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz
 
       - run: npx changelogithub
         if: github.ref_type == 'tag' || github.event.inputs.tag_version != ''
@@ -182,3 +192,5 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            dist/manifest.yml
+            dist/*.tar.gz

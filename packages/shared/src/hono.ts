@@ -9016,18 +9016,15 @@ declare const auth: {
             google: {
                 clientId: string;
                 clientSecret: string;
-                redirectURI: string;
             };
             github: {
                 clientId: string;
                 clientSecret: string;
-                redirectURI: string;
             };
             apple: {
                 enabled: boolean;
                 clientId: string;
                 clientSecret: string;
-                redirectURI: string;
             };
         };
         emailAndPassword: {
@@ -9039,14 +9036,13 @@ declare const auth: {
             }): Promise<void>;
         };
         emailVerification: {
-            sendOnSignUp: true;
             sendVerificationEmail({ user, url }: {
                 user: better_auth.User;
                 url: string;
                 token: string;
             }): Promise<void>;
         };
-        plugins: ({
+        plugins: (better_auth.BetterAuthPlugin | {
             id: "custom-session";
             endpoints: {
                 getSession: {

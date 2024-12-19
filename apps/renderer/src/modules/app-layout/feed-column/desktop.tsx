@@ -42,12 +42,12 @@ import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 import { DebugRegistry } from "~/modules/debug/registry"
 import { FeedColumn } from "~/modules/feed-column"
 import { getSelectedFeedIds, resetSelectedFeedIds } from "~/modules/feed-column/atom"
-import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
 import { CornerPlayer } from "~/modules/player/corner-player"
+import { UpdateNotice } from "~/modules/update-notice/UpdateNotice"
 import { AppNotificationContainer } from "~/modules/upgrade/lazy/index"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 
@@ -113,7 +113,7 @@ export function MainDestopLayout() {
               <CornerPlayer />
               <FooterInfo />
 
-              {ELECTRON && <AutoUpdater />}
+              <UpdateNotice />
 
               <NetworkStatusIndicator />
             </FeedColumn>

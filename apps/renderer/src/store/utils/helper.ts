@@ -60,7 +60,16 @@ export const createZustandStore =
         {
           get(_, prop) {
             if (prop in storeMap) {
-              return storeMap[prop as string].getState()
+              return new Proxy(() => {}, {
+                get() {
+                  return storeMap[prop as string].getState()
+                },
+                apply(target, thisArg, argumentsList) {
+                  return storeMap[prop as string].setState(
+                    produce(storeMap[prop as string].getState(), ...argumentsList),
+                  )
+                },
+              })
             }
             return
           },

@@ -21,6 +21,8 @@ async function generateMetaMap() {
       .replace("client/pages/", "")
       .replace("/metadata.ts", "")
       .replaceAll(/\[([^\]]+)\]/g, ":$1")
+      .replaceAll(/\([^)]+\)\//g, "")
+      .replace(/^\./, "")
 
       .replaceAll(/\([^)]+\)\//g, "")
       .replace(/^\./, "")

@@ -2,12 +2,10 @@ import { assertType, expectTypeOf, test } from "vitest"
 
 import { COMMAND_ID } from "../commands/id"
 import type { TipCommand } from "../commands/types"
-import { useCommand, useGetCommand, useRunCommandFn } from "./use-command"
+import { getCommand, useCommand, useRunCommandFn } from "./use-command"
 
-test("useGetCommand types work properly", () => {
-  const getCmd = useGetCommand()
-  expectTypeOf(getCmd).toBeFunction()
-  expectTypeOf(getCmd(COMMAND_ID.entry.tip)).toMatchTypeOf<TipCommand | null>()
+test("getCommand types work properly", () => {
+  expectTypeOf(getCommand(COMMAND_ID.entry.tip)).toMatchTypeOf<TipCommand | null>()
 
   // @ts-expect-error - get an unknown command should throw an error
   assertType(getCmd("unknown command"))
