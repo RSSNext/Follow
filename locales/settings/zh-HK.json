@@ -2,7 +2,6 @@
   "about.changelog": "更新日誌",
   "about.feedbackInfo": "{{appName}}（{{commitSha}}）仍處於開發初期階段。如果你有任何意見或建議，歡迎到我們的 GitHub <OpenIssueLink>提交問題</OpenIssueLink> <ExternalLinkIcon />。",
   "about.iconLibrary": "所使用的圖示庫受 <IconLibraryLink /> <ExternalLinkIcon /> 版權保護，不能轉發。",
-  "about.licenseInfo": "{{appName}} 永遠會是一個免費和開源的項目，並根據 {{license}} 授權使用。",
   "about.sidebar_title": "關於",
   "about.socialMedia": "社交媒體",
   "actions.actionName": "動作 {{number}}",
