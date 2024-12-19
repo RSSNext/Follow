@@ -137,7 +137,7 @@ const CategoryGrouped = memo(
     const rotateValue = useAnimatedValue(0)
     return (
       <View>
-        <View className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-2">
+        <View className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-2">
           <AnimatedTouchableOpacity
             onPress={() => {
               isExpanded.value = !isExpanded.value
@@ -162,7 +162,7 @@ const CategoryGrouped = memo(
           >
             <MingcuteRightLine color="gray" height={18} width={18} />
           </AnimatedTouchableOpacity>
-          <Text className="ml-1 font-medium text-text">{category}</Text>
+          <Text className="text-text ml-1 font-medium">{category}</Text>
         </View>
         <AccordionItem isExpanded={isExpanded} viewKey={category}>
           <GroupedContext.Provider value={category}>
@@ -192,7 +192,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         "flex h-12 flex-row items-center",
         inGrouped ? "px-8" : "px-4",
         isPressing ? "bg-tertiary-system-background" : "bg-system-background",
-        "border-b border-secondary-system-grouped-background",
+        "border-secondary-system-grouped-background border-b",
         className,
       )}
     >
