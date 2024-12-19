@@ -18,6 +18,13 @@ declare global {
   export const ELECTRON: boolean
   export interface Window {
     SENTRY_RELEASE: typeof SENTRY_RELEASE
+    /**
+     * @link apps/mobile/src/components/common/FollowWebView.tsx
+     */
+    __RN__?: boolean
+    ReactNativeWebView?: {
+      postMessage: (message: string) => void
+    }
   }
 
   export const FEATURES: {

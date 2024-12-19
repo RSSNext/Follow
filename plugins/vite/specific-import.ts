@@ -1,6 +1,7 @@
 import type { Plugin } from "vite"
 
-export function createPlatformSpecificImportPlugin(isElectron = false): Plugin {
+type Platform = "electron" | "web" | "rn"
+export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
   return {
     name: "platform-specific-import",
     enforce: "pre",
@@ -17,9 +18,25 @@ export function createPlatformSpecificImportPlugin(isElectron = false): Plugin {
       const [path, query] = source.split("?")
 
       if (path.startsWith(".") || path.startsWith("/")) {
-        const priorities = isElectron
-          ? [".electron.ts", ".electron.tsx", ".electron.js", ".electron.jsx"]
-          : [".web.ts", ".web.tsx", ".web.js", ".web.jsx"]
+        let priorities: string[] = []
+        switch (platform) {
+          case "electron": {
+            priorities = [".electron.ts", ".electron.tsx", ".electron.js", ".electron.jsx"]
+
+            break
+          }
+          case "web": {
+            priorities = [".web.ts", ".web.tsx", ".web.js", ".web.jsx"]
+
+            break
+          }
+          case "rn": {
+            priorities = [".rn.ts", ".rn.tsx", ".rn.js", ".rn.jsx"]
+
+            break
+          }
+          // No default
+        }
 
         for (const ext of priorities) {
           const resolvedPath = await this.resolve(

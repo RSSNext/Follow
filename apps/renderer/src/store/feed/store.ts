@@ -15,7 +15,7 @@ import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
 import { userActions } from "../user"
-import { createImmerSetter, createZustandStore } from "../utils/helper"
+import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -31,47 +31,52 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: FeedModel[]) {
-    runTransactionInScope(() => {
+  async upsertMany(feeds: FeedModel[]) {
+    const tx = createTransaction()
+
+    tx.optimistic(() => {
+      immerSet((state) => {
+        for (const feed of feeds) {
+          if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - distanceTime) {
+            feed.errorAt = null
+          }
+          if (feed.id) {
+            if (feed.owner) {
+              userActions.upsert(feed.owner as UserModel)
+            }
+            if (feed.tipUsers) {
+              userActions.upsert(feed.tipUsers)
+            }
+
+            // Not all API return these fields, so merging is needed here.
+            const targetFeed = state.feeds[feed.id]
+
+            if (targetFeed?.owner) {
+              feed.owner = { ...targetFeed.owner }
+            }
+            if (
+              targetFeed &&
+              "tipUsers" in targetFeed &&
+              targetFeed.tipUsers &&
+              // Workaround for type issue
+              Array.isArray(targetFeed.tipUsers)
+            ) {
+              feed.tipUsers = [...targetFeed.tipUsers]
+            }
+
+            state.feeds[feed.id] = omit(feed, "feeds") as FeedModel
+          } else {
+            // Store temp feed in memory
+            const nonce = feed["nonce"] || nanoid(8)
+            state.feeds[nonce] = { ...feed, id: nonce }
+          }
+        }
+      })
+    })
+    tx.persist(() => {
       FeedService.upsertMany(feeds)
     })
-    immerSet((state) => {
-      for (const feed of feeds) {
-        if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - distanceTime) {
-          feed.errorAt = null
-        }
-        if (feed.id) {
-          if (feed.owner) {
-            userActions.upsert(feed.owner as UserModel)
-          }
-          if (feed.tipUsers) {
-            userActions.upsert(feed.tipUsers)
-          }
-
-          // Not all API return these fields, so merging is needed here.
-          const targetFeed = state.feeds[feed.id]
-
-          if (targetFeed?.owner) {
-            feed.owner = { ...targetFeed.owner }
-          }
-          if (
-            targetFeed &&
-            "tipUsers" in targetFeed &&
-            targetFeed.tipUsers &&
-            // Workaround for type issue
-            Array.isArray(targetFeed.tipUsers)
-          ) {
-            feed.tipUsers = [...targetFeed.tipUsers]
-          }
-
-          state.feeds[feed.id] = omit(feed, "feeds") as FeedModel
-        } else {
-          // Store temp feed in memory
-          const nonce = feed["nonce"] || nanoid(8)
-          state.feeds[nonce] = { ...feed, id: nonce }
-        }
-      }
-    })
+    await tx.run()
   }
 
   private patch(feedId: string, patch: Partial<FeedOrListRespModel>) {

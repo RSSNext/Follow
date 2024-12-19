@@ -27,6 +27,7 @@
       "import": "./src/interface/*.ts"
     }
   },
+  "main": "./exports.ts",
   "scripts": {},
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",

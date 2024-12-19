@@ -4,3 +4,6 @@ pnpm-lock.yaml
 CHANGELOG.md
 
 apps/external/postcss.config.cjs
+
+apps/mobile/android
+apps/mobile/ios

@@ -2,6 +2,7 @@ import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
+import { transformVideoUrl } from "@follow/utils/url-for-video"
 import { cn } from "@follow/utils/utils"
 import { useHover } from "@use-gesture/react"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -16,7 +17,6 @@ import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { urlToIframe } from "~/lib/url-to-iframe"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
@@ -32,7 +32,10 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const [miniIframeSrc, iframeSrc] = useMemo(
-    () => [urlToIframe(entry?.entries.url, true), urlToIframe(entry?.entries.url)],
+    () => [
+      transformVideoUrl(entry?.entries.url ?? "", true),
+      transformVideoUrl(entry?.entries.url ?? ""),
+    ],
     [entry?.entries.url],
   )
   const modalStack = useModalStack()

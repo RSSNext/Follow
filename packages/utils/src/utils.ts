@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
-import { memoize } from "es-toolkit/compat"
+import { memoize } from "es-toolkit"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
@@ -75,7 +75,7 @@ export function detectBrowser() {
 export const isSafari = memoize(() => {
   if (ELECTRON) return false
   const ua = window.navigator.userAgent
-  return ua.includes("Safari") && !ua.includes("Chrome")
+  return (ua.includes("Safari") || ua.includes("AppleWebKit")) && !ua.includes("Chrome")
 })
 
 // eslint-disable-next-line no-control-regex
