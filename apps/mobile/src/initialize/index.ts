@@ -1,10 +1,14 @@
+import { initializeDb } from "../database"
 import { initializeDayjs } from "./dayjs"
 import { hydrateDatabaseToStore, hydrateSettings } from "./hydrate"
+import { migrateDatabase } from "./migration"
 /* eslint-disable no-console */
 export const initializeApp = async () => {
   console.log(`Initialize...`)
 
   const now = Date.now()
+  initializeDb()
+  await apm("migrateDatabase", migrateDatabase)
   initializeDayjs()
 
   await apm("hydrateSettings", hydrateSettings)
