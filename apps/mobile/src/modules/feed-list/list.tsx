@@ -55,7 +55,7 @@ function RightAction() {
 export const SubscriptionList = () => {
   const currentView = useAtomValue(viewAtom)
   usePrefetchSubscription(currentView)
-  const subscriptionIds = useSubscriptionByView(currentView)
+  const subscriptionIds = useSubscriptionByView(currentView, "alphabet")
 
   return (
     <View>
