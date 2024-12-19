@@ -12,7 +12,6 @@ import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { FeedIcon } from "@/src/components/ui/feed-icon"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
-import { useScaleWidth } from "@/src/lib/responsive"
 import { useFeed } from "@/src/store/feed/hooks"
 import { accentColor } from "@/src/theme/colors"
 
@@ -23,7 +22,7 @@ import {
 } from "../../../store/subscription/hooks"
 
 const viewAtom = atom<FeedViewType>(FeedViewType.Articles)
-const bottomViewTabHeight = 45
+const bottomViewTabHeight = 35
 export default function FeedList() {
   const tabHeight = useBottomTabBarHeight()
   const headerHeight = useHeaderHeight()
@@ -31,63 +30,66 @@ export default function FeedList() {
   const insets = useSafeAreaInsets()
   return (
     <>
-      <ViewTab />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         scrollIndicatorInsets={{
-          top: headerHeight - insets.top,
-          bottom: tabHeight + bottomViewTabHeight - insets.bottom,
+          top: bottomViewTabHeight + headerHeight - insets.top,
+          bottom: tabHeight - insets.bottom,
         }}
       >
-        <View style={{ height: headerHeight - insets.top }} />
+        <View style={{ height: headerHeight - insets.top + bottomViewTabHeight }} />
         <SubscriptionList />
-        <View style={{ height: tabHeight + bottomViewTabHeight }} />
+        <View style={{ height: tabHeight }} />
       </ScrollView>
+      <ViewTab />
     </>
   )
 }
 
 const ViewTab = () => {
-  const scaleWidth = useScaleWidth()
-
-  const tabHeight = useBottomTabBarHeight()
+  const headerHeight = useHeaderHeight()
   const paddingHorizontal = 4
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
   return (
     <ThemedBlurView
-      intensity={100}
       style={[
         styles.tabContainer,
         {
           backgroundColor: "transparent",
-          bottom: tabHeight,
+          top: headerHeight - StyleSheet.hairlineWidth,
         },
       ]}
     >
-      <View className="flex-row items-center justify-between py-2" style={{ paddingHorizontal }}>
-        {views.map((view) => (
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => setCurrentView(view.view)}
-            key={view.name}
-            className="items-center justify-center"
-            style={{ width: scaleWidth((375 - paddingHorizontal * 2) / views.length) }}
-          >
-            <view.icon
-              color={currentView === view.view ? view.activeColor : "gray"}
-              height={18}
-              width={22}
-            />
-            <Text
-              style={{ color: currentView === view.view ? view.activeColor : "gray" }}
-              className="text-xs"
+      <ScrollView
+        className="border-tertiary-system-background"
+        horizontal
+        contentContainerStyle={styles.tabScroller}
+        style={{ paddingHorizontal, borderTopWidth: StyleSheet.hairlineWidth }}
+      >
+        {views.map((view) => {
+          const isSelected = currentView === view.view
+          return (
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => setCurrentView(view.view)}
+              key={view.name}
+              className="mr-4 flex-row items-center justify-center"
             >
-              {view.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+              <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={22} />
+              <Text
+                style={{
+                  color: isSelected ? view.activeColor : "gray",
+                  fontWeight: isSelected ? "medium" : "normal",
+                }}
+                className="ml-2"
+              >
+                {view.name}
+              </Text>
+            </TouchableOpacity>
+          )
+        })}
+      </ScrollView>
     </ThemedBlurView>
   )
 }
@@ -195,5 +197,10 @@ const styles = StyleSheet.create({
     borderTopColor: "rgba(0,0,0,0.2)",
     borderTopWidth: StyleSheet.hairlineWidth,
     height: bottomViewTabHeight,
+  },
+  tabScroller: {
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: 4,
   },
 })
