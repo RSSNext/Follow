@@ -5,14 +5,14 @@ import { useMemo } from "react"
 import type { ImageProps } from "react-native"
 import { Image } from "react-native"
 
-import type { FeedModel } from "@/src/database/schemas/types"
+import type { FeedSchema } from "@/src/database/schemas/types"
 
 type FeedIconFeed =
-  | (Pick<FeedModel, "ownerUserId" | "id" | "title" | "url" | "image"> & {
+  | (Pick<FeedSchema, "ownerUserId" | "id" | "title" | "url" | "image"> & {
       type: FeedViewType
       siteUrl?: string
     })
-  | FeedModel
+  | FeedSchema
 
 const getFeedIconSrc = (siteUrl: string, fallback: boolean) => {
   const ret = getUrlIcon(siteUrl, fallback)

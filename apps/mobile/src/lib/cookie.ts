@@ -3,7 +3,7 @@ import CookieManager from "@react-native-cookies/cookies"
 import { kv } from "./kv"
 
 const keys = {
-  sessionToken: "__Secure-better-auth.session_token",
+  sessionToken: "better-auth.session_token",
 }
 export const setSessionToken = (token: string) => {
   kv.setSync(keys.sessionToken, token)

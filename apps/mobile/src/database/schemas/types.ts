@@ -1,5 +1,9 @@
-import type { feedsTable, subscriptionsTable } from "."
+import type { feedsTable, inboxesTable, listsTable, subscriptionsTable } from "."
 
-export type SubscriptionModel = typeof subscriptionsTable.$inferSelect
+export type SubscriptionSchema = typeof subscriptionsTable.$inferSelect
 
-export type FeedModel = typeof feedsTable.$inferSelect
+export type FeedSchema = typeof feedsTable.$inferSelect
+
+export type InboxSchema = typeof inboxesTable.$inferSelect
+
+export type ListSchema = typeof listsTable.$inferSelect

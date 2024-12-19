@@ -1,8 +1,8 @@
-import type { FeedModel } from "@/src/database/schemas/types"
+import type { FeedSchema } from "@/src/database/schemas/types"
 
 import { useFeedStore } from "./store"
 
 const get = useFeedStore.getState
-export const getFeed = (id: string): FeedModel | null => {
+export const getFeed = (id: string): FeedSchema | null => {
   return get().feeds[id] || null
 }

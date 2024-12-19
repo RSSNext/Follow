@@ -6,12 +6,17 @@ const { hc } = require("hono/dist/cjs/client/client") as typeof import("hono/cli
 
 export const apiFetch = ofetch.create({
   retry: false,
+
   baseURL: process.env.EXPO_PUBLIC_API_URL,
   onRequest: async ({ options, request }) => {
     const header = new Headers(options.headers)
 
     header.set("x-app-name", "Follow Mobile")
 
+    // const sessionToken = await getSessionToken()
+    // if (sessionToken.value) {
+    //   // header.set("cookie", `better-auth.session_token=${sessionToken.value};`)
+    // }
     if (__DEV__) {
       // Logger
       console.log(`---> ${options.method} ${request as string}`)

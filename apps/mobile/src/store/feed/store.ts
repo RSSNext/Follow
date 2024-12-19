@@ -1,9 +1,9 @@
-import type { FeedModel } from "@/src/database/schemas/types"
+import type { FeedSchema } from "@/src/database/schemas/types"
 
 import { createImmerSetter, createZustandStore } from "../internal/helper"
 
 interface FeedState {
-  feeds: Record<string, FeedModel>
+  feeds: Record<string, FeedSchema>
 }
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -12,14 +12,14 @@ export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
 
 const set = useFeedStore.setState
 const immerSet = createImmerSetter(useFeedStore)
-const get = useFeedStore.getState
-const distanceTime = 1000 * 60 * 60 * 9
+// const get = useFeedStore.getState
+// const distanceTime = 1000 * 60 * 60 * 9
 class FeedActions {
   clear() {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: FeedModel[]) {
+  upsertMany(feeds: FeedSchema[]) {
     immerSet((draft) => {
       for (const feed of feeds) {
         draft.feeds[feed.id] = feed
@@ -27,7 +27,7 @@ class FeedActions {
     })
   }
 
-  private patch(feedId: string, patch: Partial<FeedModel>) {
+  private patch(feedId: string, patch: Partial<FeedSchema>) {
     // set((state) =>
     //   produce(state, (state) => {
     //     const feed = state.feeds[feedId]

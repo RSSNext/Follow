@@ -1,7 +1,8 @@
 import { cn } from "@follow/utils"
 import { Link, Stack } from "expo-router"
 import { useAtomValue } from "jotai"
-import { memo, useState } from "react"
+import type { FC } from "react"
+import { createContext, memo, useContext, useState } from "react"
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -11,9 +12,11 @@ import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useFeed } from "@/src/store/feed/hooks"
 import {
+  useGroupedSubscription,
   usePrefetchSubscription,
+  useSortedGroupedSubscription,
+  useSortedUngroupedSubscription,
   useSubscription,
-  useSubscriptionByView,
 } from "@/src/store/subscription/hooks"
 import { accentColor } from "@/src/theme/colors"
 
@@ -55,7 +58,8 @@ function RightAction() {
 export const SubscriptionList = () => {
   const currentView = useAtomValue(viewAtom)
   usePrefetchSubscription(currentView)
-  const subscriptionIds = useSubscriptionByView(currentView, "alphabet")
+
+  const { grouped, unGrouped } = useGroupedSubscription(currentView)
 
   return (
     <View>
@@ -78,18 +82,55 @@ export const SubscriptionList = () => {
           headerTransparent: true,
         }}
       />
+      <CategoryList grouped={grouped} />
 
-      {subscriptionIds.map((id) => {
-        return <SubscriptionItem key={id} id={id} />
-      })}
+      <UnGroupedList subscriptionIds={unGrouped} />
     </View>
   )
 }
 
-const SubscriptionItem = memo(({ id }: { id: string }) => {
+const UnGroupedList: FC<{
+  subscriptionIds: string[]
+}> = ({ subscriptionIds }) => {
+  const sortedSubscriptionIds = useSortedUngroupedSubscription(subscriptionIds, "alphabet")
+  const lastSubscriptionId = sortedSubscriptionIds.at(-1)
+
+  return sortedSubscriptionIds.map((id) => {
+    return (
+      <SubscriptionItem
+        key={id}
+        id={id}
+        className={id === lastSubscriptionId ? "border-b-transparent" : ""}
+      />
+    )
+  })
+}
+
+const GroupedContext = createContext<string | null>(null)
+
+const CategoryList: FC<{
+  grouped: Record<string, string[]>
+}> = ({ grouped }) => {
+  const sortedGrouped = useSortedGroupedSubscription(grouped, "alphabet")
+  return sortedGrouped.map(({ category, subscriptionIds }) => {
+    return (
+      <View key={category}>
+        <View className="h-10 flex-row items-center px-4">
+          <Text className="font-medium text-text">{category}</Text>
+        </View>
+        <GroupedContext.Provider value={category}>
+          <UnGroupedList subscriptionIds={subscriptionIds} />
+        </GroupedContext.Provider>
+      </View>
+    )
+  })
+}
+
+const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const feed = useFeed(id)
   const [isPressing, setIsPressing] = useState(false)
+  const inGrouped = !!useContext(GroupedContext)
   if (!subscription || !feed) return null
   return (
     <Pressable
@@ -100,9 +141,11 @@ const SubscriptionItem = memo(({ id }: { id: string }) => {
         setIsPressing(false)
       }}
       className={cn(
-        "flex h-9 flex-row items-center px-4",
-
+        "flex h-12 flex-row items-center",
+        inGrouped ? "px-8" : "px-4",
         isPressing ? "bg-tertiary-system-background" : "bg-system-background",
+        "border-b border-secondary-system-grouped-background",
+        className,
       )}
     >
       <View className="mr-2 overflow-hidden rounded-full">

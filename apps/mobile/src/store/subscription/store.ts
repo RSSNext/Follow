@@ -1,15 +1,18 @@
 import { FeedViewType } from "@follow/constants"
 
-import type { SubscriptionModel } from "@/src/database/schemas/types"
-import { morph } from "@/src/hono/morph"
+import type { SubscriptionSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
+import { honoMorph } from "@/src/morph/hono"
 import { SubscriptionService } from "@/src/services/subscription"
 
 import { feedActions } from "../feed/store"
+import { inboxActions } from "../inbox/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
+import { listActions } from "../list/store"
 
 type FeedId = string
 
+export type SubscriptionModel = SubscriptionSchema
 interface SubscriptionState {
   /**
    * Key: feedId
@@ -68,9 +71,9 @@ class SubscriptionActions {
     tx.store(() => {
       immerSet((draft) => {
         for (const subscription of subscriptions) {
-          if (subscription.feedId) {
+          if (subscription.feedId && subscription.type === "feed") {
             draft.data[subscription.feedId] = subscription
-            draft.subscriptionIdSet.add(`feed/${subscription.feedId}`)
+            draft.subscriptionIdSet.add(`${subscription.type}/${subscription.feedId}`)
             draft.feedIdByView[subscription.view as FeedViewType].push(subscription.feedId)
           }
         }
@@ -101,9 +104,11 @@ class SubscriptionSyncService {
 
     subscriptionActions.reset(view)
 
-    const { subscriptions, feeds } = morph.toSubscription(res.data)
+    const { subscriptions, feeds, lists, inboxes } = honoMorph.toSubscription(res.data)
     feedActions.upsertMany(feeds)
     subscriptionActions.upsertMany(subscriptions)
+    listActions.upsertMany(lists)
+    inboxActions.upsertMany(inboxes)
 
     return {
       subscriptions,

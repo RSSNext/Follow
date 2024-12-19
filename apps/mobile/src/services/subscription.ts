@@ -2,12 +2,15 @@ import { sql } from "drizzle-orm"
 
 import { db } from "../database"
 import { subscriptionsTable } from "../database/schemas"
-import type { SubscriptionModel } from "../database/schemas/types"
+import type { SubscriptionSchema } from "../database/schemas/types"
 import { subscriptionActions } from "../store/subscription/store"
-import type { Hydratable } from "./base"
+import type { Hydratable, Resetable } from "./internal/base"
 
-class SubscriptionServiceStatic implements Hydratable {
-  async upsertMany(subscriptions: SubscriptionModel[]) {
+class SubscriptionServiceStatic implements Hydratable, Resetable {
+  async reset() {
+    await db.delete(subscriptionsTable).execute()
+  }
+  async upsertMany(subscriptions: SubscriptionSchema[]) {
     await db
       .insert(subscriptionsTable)
       .values(subscriptions)

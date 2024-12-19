@@ -1,14 +1,22 @@
 import { db } from "../database"
 import { feedsTable } from "../database/schemas"
-import type { FeedModel } from "../database/schemas/types"
+import type { FeedSchema } from "../database/schemas/types"
 import { feedActions } from "../store/feed/store"
-import type { Hydratable } from "./base"
+import type { Hydratable, Resetable } from "./internal/base"
+import { conflictUpdateAllExcept } from "./internal/utils"
 
-class FeedServiceStatic implements Hydratable {
-  async upsertMany(feed: FeedModel[]) {
-    await db.transaction(async (tx) => {
-      await tx.insert(feedsTable).values(feed)
-    })
+class FeedServiceStatic implements Hydratable, Resetable {
+  async reset() {
+    await db.delete(feedsTable).execute()
+  }
+  async upsertMany(feed: FeedSchema[]) {
+    await db
+      .insert(feedsTable)
+      .values(feed)
+      .onConflictDoUpdate({
+        target: [feedsTable.id],
+        set: conflictUpdateAllExcept(feedsTable, ["id"]),
+      })
   }
 
   async hydrate() {
