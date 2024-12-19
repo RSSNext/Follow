@@ -14,13 +14,13 @@ const path = require("node:path")
 const followRoot = path.resolve(__dirname, "..", "..", "..")
 
 // Specify the source directory of your assets
-const ASSET_SOURCE_DIR = path.join("out", "web")
+const ASSET_SOURCE_DIR = path.join("out", "rn-web")
 
 const IOS_GROUP_NAME = "Assets"
 
 const withFollowAssets = (config) => {
   if (!fs.existsSync(path.resolve(followRoot, ASSET_SOURCE_DIR))) {
-    throw new Error("Assets source directory not found! Do you forget to run `pnpm build:web`?")
+    throw new Error("Assets source directory not found! Do you forget to run `pnpm build:rn-web`?")
   }
   config = addAndroidResources(config)
   config = addIOSResources(config)

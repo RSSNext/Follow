@@ -6,6 +6,7 @@
   "scripts": {
     "android": "expo run:android",
     "db:generate": "drizzle-kit generate",
+    "dev": "npm run start",
     "ios": "expo run:ios",
     "ios:device": "expo run:ios --device",
     "lint": "expo lint",
