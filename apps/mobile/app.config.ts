@@ -8,6 +8,11 @@ const adaptiveIconPath = resolve(__dirname, "./assets/adaptive-icon.png")
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+  extra: {
+    eas: {
+      projectId: "a6335b14-fb84-45aa-ba80-6f6ab8926920",
+    },
+  },
   name: "Follow",
   slug: "follow",
   version: "1.0.0",

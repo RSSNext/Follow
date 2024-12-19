@@ -75,6 +75,7 @@
     "babel-plugin-inline-import": "3.0.0",
     "babel-plugin-module-resolver": "5.0.2",
     "drizzle-kit": "0.30.1",
+    "eas-cli": "14.2.0",
     "react-test-renderer": "18.3.1"
   }
 }
