@@ -193,7 +193,7 @@ const MediaImpl: FC<MediaProps> = ({
             onError={errorHandle}
             className={cn(
               "size-full object-contain",
-              inline && "size-auto",
+              inline && "size-auto max-h-[1.3em] align-sub",
               popper && "cursor-zoom-in",
               "duration-200",
               mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
