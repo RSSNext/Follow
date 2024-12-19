@@ -75,7 +75,7 @@ export function detectBrowser() {
 export const isSafari = memoize(() => {
   if (ELECTRON) return false
   const ua = window.navigator.userAgent
-  return ua.includes("Safari") && !ua.includes("Chrome")
+  return (ua.includes("Safari") || ua.includes("AppleWebKit")) && !ua.includes("Chrome")
 })
 
 // eslint-disable-next-line no-control-regex
