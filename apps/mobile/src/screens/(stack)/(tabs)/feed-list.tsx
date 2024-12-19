@@ -20,6 +20,7 @@ export default function FeedList() {
         scrollIndicatorInsets={{
           top: bottomViewTabHeight + headerHeight - insets.top,
           bottom: tabHeight - insets.bottom,
+          right: 0,
         }}
       >
         <View style={{ height: headerHeight - insets.top + bottomViewTabHeight }} />
