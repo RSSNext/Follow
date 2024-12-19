@@ -14,7 +14,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@better-auth/expo": "^1.0.22",
+    "@better-auth/expo": "1.0.23-beta.2",
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
     "@follow/shared": "workspace:*",

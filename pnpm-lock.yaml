@@ -11,9 +11,6 @@ overrides:
   isarray: npm:@nolyfill/isarray@^1
 
 patchedDependencies:
-  '@better-auth/expo':
-    hash: jt2ubmuojyga3nqxapjzwyzdiu
-    path: patches/@better-auth__expo.patch
   '@mozilla/readability':
     hash: 43niildbdafdxi7qfcwhpkkxwa
     path: patches/@mozilla__readability.patch
@@ -390,8 +387,8 @@ importers:
   apps/mobile:
     dependencies:
       '@better-auth/expo':
-        specifier: ^1.0.22
-        version: 1.0.22(patch_hash=jt2ubmuojyga3nqxapjzwyzdiu)(better-auth@1.0.14(encoding@0.1.13))
+        specifier: 1.0.23-beta.2
+        version: 1.0.23-beta.2(better-auth@1.0.14(encoding@0.1.13))
       '@expo/vector-icons':
         specifier: ^14.0.2
         version: 14.0.4
@@ -2153,10 +2150,10 @@ packages:
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
 
-  '@better-auth/expo@1.0.22':
-    resolution: {integrity: sha512-cf6YMldYXg1lJp4Q6vnuhsqmOFcWSrUciVXCViv7bdnbROPnaJHyXihuFkeLJ7ts1Fv+2Ee+5NtB+Aq6esTJ+w==}
+  '@better-auth/expo@1.0.23-beta.2':
+    resolution: {integrity: sha512-K0gxAAwwB8aubVhuKYBk60xG6qmzg6ZCHirdCrzG30fGIrBsuTSg4f/BAWb6OaSqmM+ujWe74ZpUi/XXDgRKXw==}
     peerDependencies:
-      better-auth: 1.0.22
+      better-auth: 1.0.23-beta.2
 
   '@better-fetch/fetch@1.1.12':
     resolution: {integrity: sha512-B3bfloI/2UBQWIATRN6qmlORrvx3Mp0kkNjmXLv0b+DtbtR+pP4/I5kQA/rDUv+OReLywCCldf6co4LdDmh8JA==}
@@ -13888,7 +13885,7 @@ packages:
       '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
       postcss: ^8.4.12
-      typescript: 5.6.3
+      typescript: '>=4.5.0'
     peerDependenciesMeta:
       '@microsoft/api-extractor':
         optional: true
@@ -15814,7 +15811,7 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@better-auth/expo@1.0.22(patch_hash=jt2ubmuojyga3nqxapjzwyzdiu)(better-auth@1.0.14(encoding@0.1.13))':
+  '@better-auth/expo@1.0.23-beta.2(better-auth@1.0.14(encoding@0.1.13))':
     dependencies:
       better-auth: 1.0.14(encoding@0.1.13)
       better-call: 0.2.15
