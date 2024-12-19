@@ -567,6 +567,9 @@ importers:
       eas-cli:
         specifier: 14.2.0
         version: 14.2.0(@types/node@22.10.1)(encoding@0.1.13)(typescript@5.7.2)
+      expo-drizzle-studio-plugin:
+        specifier: 0.1.1
+        version: 0.1.1(vc5zx7mqwgzirpvpjamp5nboge)
       react-test-renderer:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -8671,6 +8674,11 @@ packages:
     peerDependencies:
       expo: '*'
       react-native: '*'
+
+  expo-drizzle-studio-plugin@0.1.1:
+    resolution: {integrity: sha512-OfV79+crmAIMK0jlwmVOMRXdss5rEHtA8vDALPLkjisDSAVEwElzx4OEGuUG/Pf8QlTGUEr7kK3WtCoQvWzo8g==}
+    peerDependencies:
+      expo: '*'
 
   expo-file-system@18.0.6:
     resolution: {integrity: sha512-gGEwIJCXV3/wpIJ/wRyhmieLOSAY7HeFFjb+wEfHs04aE63JYR+rXXV4b7rBpEh1ZgNV9U91zfet/iQG7J8HBQ==}
@@ -24018,6 +24026,14 @@ snapshots:
       react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)
     transitivePeerDependencies:
       - supports-color
+
+  expo-drizzle-studio-plugin@0.1.1(vc5zx7mqwgzirpvpjamp5nboge):
+    dependencies:
+      expo: 52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@expo/metro-runtime@4.0.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)))(bufferutil@4.0.8)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.12.5(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      expo-sqlite: 15.0.3(vc5zx7mqwgzirpvpjamp5nboge)
+    transitivePeerDependencies:
+      - react
+      - react-native
 
   expo-file-system@18.0.6(yviy5suycsk3aacmyts4vro3la):
     dependencies:
