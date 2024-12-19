@@ -3,6 +3,7 @@ import { FeedViewType } from "@follow/constants"
 import type { SubscriptionSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
 import { honoMorph } from "@/src/morph/hono"
+import { storeDbMorph } from "@/src/morph/store-db"
 import { SubscriptionService } from "@/src/services/subscription"
 
 import { feedActions } from "../feed/store"
@@ -12,7 +13,7 @@ import { listActions } from "../list/store"
 
 type FeedId = string
 
-export type SubscriptionModel = SubscriptionSchema
+export type SubscriptionModel = Omit<SubscriptionSchema, "id">
 interface SubscriptionState {
   /**
    * Key: feedId
@@ -81,7 +82,9 @@ class SubscriptionActions {
     })
 
     tx.persist(() => {
-      return SubscriptionService.upsertMany(subscriptions)
+      return SubscriptionService.upsertMany(
+        subscriptions.map((s) => storeDbMorph.toSubscriptionSchema(s)),
+      )
     })
 
     await tx.run()
@@ -108,6 +111,7 @@ class SubscriptionSyncService {
     feedActions.upsertMany(feeds)
     subscriptionActions.upsertMany(subscriptions)
     listActions.upsertMany(lists)
+
     inboxActions.upsertMany(inboxes)
 
     return {

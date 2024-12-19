@@ -19,6 +19,7 @@ class ListServiceStatic implements Hydratable, Resetable {
     )
   }
   async upsertMany(lists: ListSchema[]) {
+    if (lists.length === 0) return
     await db
       .insert(listsTable)
       .values(lists)

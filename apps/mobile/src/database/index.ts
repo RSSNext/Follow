@@ -14,6 +14,7 @@ let db: ExpoSQLiteDatabase<typeof schema> & {
 export function initializeDb() {
   db = drizzle(sqlite, {
     schema,
+    logger: true,
   })
 }
 

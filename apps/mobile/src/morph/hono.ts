@@ -50,12 +50,11 @@ class Morph {
         baseSubscription.inboxId = item.inboxId
         baseSubscription.type = "inbox"
         const inbox = item.inboxes
-        if (inbox.owner)
-          collections.inboxes.push({
-            id: inbox.id,
-            title: inbox.title!,
-            userId: inbox.owner.id,
-          })
+
+        collections.inboxes.push({
+          id: inbox.id,
+          title: inbox.title!,
+        })
       }
 
       if ("lists" in item) {

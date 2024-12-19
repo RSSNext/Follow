@@ -10,6 +10,7 @@ class FeedServiceStatic implements Hydratable, Resetable {
     await db.delete(feedsTable).execute()
   }
   async upsertMany(feed: FeedSchema[]) {
+    if (feed.length === 0) return
     await db
       .insert(feedsTable)
       .values(feed)

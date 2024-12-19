@@ -19,6 +19,7 @@ class InboxServiceStatic implements Hydratable, Resetable {
   }
 
   async upsertMany(inboxes: InboxSchema[]) {
+    if (inboxes.length === 0) return
     await db
       .insert(inboxesTable)
       .values(inboxes)

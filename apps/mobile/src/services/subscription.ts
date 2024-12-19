@@ -11,11 +11,12 @@ class SubscriptionServiceStatic implements Hydratable, Resetable {
     await db.delete(subscriptionsTable).execute()
   }
   async upsertMany(subscriptions: SubscriptionSchema[]) {
+    if (subscriptions.length === 0) return
     await db
       .insert(subscriptionsTable)
       .values(subscriptions)
       .onConflictDoUpdate({
-        target: [subscriptionsTable.userId, subscriptionsTable.feedId],
+        target: [subscriptionsTable.id],
         set: {
           category: sql`excluded.category`,
           createdAt: sql`excluded.created_at`,

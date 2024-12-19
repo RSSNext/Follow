@@ -26,6 +26,9 @@ export const migrateDatabase = () => {
     })
     .catch((error) => {
       migrateStore.error = error
+
+      console.error(error)
+
       storeChangeFn?.()
     })
 }

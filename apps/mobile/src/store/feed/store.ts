@@ -1,6 +1,7 @@
 import type { FeedSchema } from "@/src/database/schemas/types"
+import { FeedService } from "@/src/services/feed"
 
-import { createImmerSetter, createZustandStore } from "../internal/helper"
+import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 
 interface FeedState {
   feeds: Record<string, FeedSchema>
@@ -20,11 +21,22 @@ class FeedActions {
   }
 
   upsertMany(feeds: FeedSchema[]) {
-    immerSet((draft) => {
-      for (const feed of feeds) {
-        draft.feeds[feed.id] = feed
-      }
+    if (feeds.length === 0) return
+
+    const tx = createTransaction()
+    tx.store(() => {
+      immerSet((draft) => {
+        for (const feed of feeds) {
+          draft.feeds[feed.id] = feed
+        }
+      })
     })
+
+    tx.persist(async () => {
+      await FeedService.upsertMany(feeds)
+    })
+
+    tx.run()
   }
 
   private patch(feedId: string, patch: Partial<FeedSchema>) {
