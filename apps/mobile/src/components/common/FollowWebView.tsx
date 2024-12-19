@@ -9,7 +9,7 @@ import { signOut } from "@/src/lib/auth"
 import { useOpenLink } from "@/src/lib/hooks/useOpenLink"
 
 const presetUri = Platform.select({
-  ios: "web/index.html",
+  ios: "rn-web/index.html",
   android: "file:///android_asset/raw/index.html",
   default: "https://app.follow.is",
 })
