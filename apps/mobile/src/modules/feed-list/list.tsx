@@ -116,7 +116,7 @@ const CategoryList: FC<{
     return (
       <View key={category}>
         <View className="h-10 flex-row items-center px-4">
-          <Text className="font-medium text-text">{category}</Text>
+          <Text className="text-text font-medium">{category}</Text>
         </View>
         <GroupedContext.Provider value={category}>
           <UnGroupedList subscriptionIds={subscriptionIds} />
@@ -144,7 +144,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         "flex h-12 flex-row items-center",
         inGrouped ? "px-8" : "px-4",
         isPressing ? "bg-tertiary-system-background" : "bg-system-background",
-        "border-b border-secondary-system-grouped-background",
+        "border-secondary-system-grouped-background border-b",
         className,
       )}
     >

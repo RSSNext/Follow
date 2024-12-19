@@ -61,7 +61,7 @@ export function EmailLogin() {
           placeholder="Email"
           control={control}
           name="email"
-          className="rounded-lg border border-gray-6 px-3 py-2"
+          className="border-gray-6 rounded-lg border px-3 py-2"
         />
         <Input
           autoCapitalize="none"
@@ -70,7 +70,7 @@ export function EmailLogin() {
           placeholder="Password"
           control={control}
           name="password"
-          className="rounded-lg border border-gray-6 px-3 py-2"
+          className="border-gray-6 rounded-lg border px-3 py-2"
         />
       </View>
       {submitMutation.isPending ? (
