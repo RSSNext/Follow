@@ -1,12 +1,16 @@
-// import { IN_ELECTRON } from "@follow/shared/constants"
-
-export const transformVideoUrl = (url: string, mini = false) => {
+export const transformVideoUrl = ({
+  url,
+  mini = false,
+  isIframe = false,
+}: {
+  url: string
+  mini?: boolean
+  isIframe?: boolean
+}) => {
   if (url?.match(/\/\/www.bilibili.com\/video\/BV\w+/)) {
-    const player =
-      // TODO use IN_ELECTRON from @follow/shared/constants
-      !!globalThis["electron"] || !!globalThis["__RN__"]
-        ? "https://www.bilibili.com/blackboard/newplayer.html"
-        : "https://player.bilibili.com/player.html"
+    const player = isIframe
+      ? "https://player.bilibili.com/player.html"
+      : "https://www.bilibili.com/blackboard/newplayer.html"
     return `${player}?${new URLSearchParams({
       isOutside: "true",
       autoplay: "true",

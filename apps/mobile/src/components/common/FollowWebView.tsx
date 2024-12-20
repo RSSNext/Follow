@@ -36,7 +36,7 @@ export const FollowWebView = ({
 
       webViewRef.current?.stopLoading()
 
-      const formattedUrl = transformVideoUrl(urlStr)
+      const formattedUrl = transformVideoUrl({ url: urlStr })
       if (formattedUrl) {
         openLink(formattedUrl)
         return

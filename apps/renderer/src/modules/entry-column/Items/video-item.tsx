@@ -33,8 +33,15 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
 
   const [miniIframeSrc, iframeSrc] = useMemo(
     () => [
-      transformVideoUrl(entry?.entries.url ?? "", true),
-      transformVideoUrl(entry?.entries.url ?? ""),
+      transformVideoUrl({
+        url: entry?.entries.url ?? "",
+        mini: true,
+        isIframe: !IN_ELECTRON,
+      }),
+      transformVideoUrl({
+        url: entry?.entries.url ?? "",
+        isIframe: !IN_ELECTRON,
+      }),
     ],
     [entry?.entries.url],
   )
