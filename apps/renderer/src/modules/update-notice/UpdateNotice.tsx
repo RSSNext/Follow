@@ -9,7 +9,7 @@ import { softBouncePreset } from "~/components/ui/constants/spring"
 import { tipcClient } from "~/lib/client"
 import { handlers } from "~/tipc"
 
-export const AutoUpdater = () => {
+export const UpdateNotice = () => {
   const updaterStatus = useUpdaterStatus()
   const { t } = useTranslation()
 
@@ -36,6 +36,10 @@ export const AutoUpdater = () => {
       }
       case "renderer": {
         tipcClient?.rendererUpdateReload()
+        break
+      }
+      case "pwa": {
+        window.location.reload()
         break
       }
     }

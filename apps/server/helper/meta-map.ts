@@ -24,6 +24,9 @@ async function generateMetaMap() {
       .replaceAll(/\([^)]+\)\//g, "")
       .replace(/^\./, "")
 
+      .replaceAll(/\([^)]+\)\//g, "")
+      .replace(/^\./, "")
+
     const importName = `i${index}`
     imports.push(`import ${importName} from "../${file.replace(".ts", "")}"`)
     routes[routePath] = importName

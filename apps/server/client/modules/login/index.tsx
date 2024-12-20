@@ -138,7 +138,7 @@ export function Login() {
                       loginHandler(key)
                     }}
                   >
-                    <i className={cn("mr-2 text-xl", authProvidersConfig[key].iconClassName)} />{" "}
+                    <i className={cn("mr-2 text-xl", authProvidersConfig[key]?.iconClassName)} />{" "}
                     {t("login.continueWith", { provider: provider.name })}
                   </Button>
                 ))}

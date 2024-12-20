@@ -271,6 +271,7 @@
   "notify.update_info": "{{app_name}} は更新可能です！",
   "notify.update_info_1": "クリックして再起動",
   "notify.update_info_2": "クリックして再読み込み",
+  "notify.update_info_3": "タッチして再読み込み",
   "player.back_10s": "10 秒戻る",
   "player.close": "閉じる",
   "player.download": "ダウンロード",

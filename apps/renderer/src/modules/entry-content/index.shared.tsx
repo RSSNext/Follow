@@ -25,6 +25,7 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { enableShowSourceContent } from "~/atoms/source-content"
+import { CopyButton } from "~/components/ui/code-highlighter"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { isWebBuild } from "~/constants"
@@ -342,10 +343,18 @@ export function AISummary({ entryId }: { entryId: string }) {
   }
 
   return (
-    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-        <i className="i-mgc-magic-2-cute-re align-middle" />
-        <span>{t("entry_content.ai_summary")}</span>
+    <div className="group my-8 space-y-1 rounded-lg border px-4 py-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+          <i className="i-mgc-magic-2-cute-re align-middle" />
+          <span>{t("entry_content.ai_summary")}</span>
+        </div>
+        {summary.data && (
+          <CopyButton
+            value={summary.data}
+            className="sm:opacity-0 sm:duration-200 sm:group-hover:opacity-100"
+          />
+        )}
       </div>
       <AutoResizeHeight spring className="text-sm leading-relaxed">
         {summary.isLoading ? SummaryLoadingSkeleton : summary.data}

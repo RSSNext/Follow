@@ -1,4 +1,4 @@
-import type { MotionProps } from "framer-motion"
+import type { MotionProps, TargetAndTransition } from "framer-motion"
 import { m as M } from "framer-motion"
 import { createElement, forwardRef } from "react"
 
@@ -19,6 +19,7 @@ export const m: typeof M = new Proxy(M, {
         if (props.exit) {
           nextProps.exit = {
             opacity: 0,
+            transition: (props.exit as TargetAndTransition).transition,
           }
         }
 
