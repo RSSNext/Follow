@@ -1,5 +1,5 @@
-import "expo-router/entry"
-
 import { initializeApp } from "./initialize"
 
-initializeApp()
+initializeApp().then(() => {
+  require("expo-router/entry")
+})
