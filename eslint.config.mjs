@@ -1,7 +1,7 @@
 // @ts-check
 import path from "node:path"
 
-import { defineConfig } from "eslint-config-hyoban"
+import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
 import noDebug from "./plugins/eslint/eslint-no-debug.js"
@@ -17,8 +17,25 @@ export default defineConfig(
       "src/hono.ts",
       "packages/shared/src/hono.ts",
       "resources/**",
+      "apps/mobile/android/**",
+      "apps/mobile/ios/**",
+      "apps/mobile/.expo",
     ],
     preferESM: false,
+    projectService: {
+      allowDefaultProject: ["apps/main/preload/index.d.ts"],
+      defaultProject: "tsconfig.json",
+    },
+    typeChecked: "essential",
+  },
+  {
+    files: GLOB_TS_SRC,
+    rules: {
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/await-thenable": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-misused-promises": "off",
+    },
   },
   {
     settings: {
