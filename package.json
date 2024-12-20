@@ -27,7 +27,7 @@
     "dev:debug": "export DEBUG=true && vite --debug",
     "dev:expo": "pnpm --filter=mobile start",
     "dev:server": "pnpm run --filter=server dev",
-    "dev:web": "vite",
+    "dev:web": " WEB_BUILD=1 vite",
     "dev:web-with-server": "turbo run @follow/web#dev @follow/server#dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
