@@ -10,7 +10,7 @@ import { viewAtom } from "./atoms"
 
 export const ViewTab = () => {
   const headerHeight = useHeaderHeight()
-  const paddingHorizontal = 4
+  const paddingHorizontal = 6
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
   return (
@@ -22,6 +22,7 @@ export const ViewTab = () => {
           top: headerHeight - StyleSheet.hairlineWidth,
         },
       ]}
+      className="border-b border-system-fill/60"
     >
       <ScrollView
         className="border-tertiary-system-background"
@@ -38,7 +39,7 @@ export const ViewTab = () => {
               key={view.name}
               className="mr-4 flex-row items-center justify-center"
             >
-              <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={22} />
+              <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
               <Text
                 style={{
                   color: isSelected ? view.activeColor : "gray",

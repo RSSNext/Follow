@@ -23,6 +23,7 @@ import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
+import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useList } from "@/src/store/list/hooks"
 import {
@@ -98,8 +99,9 @@ export const SubscriptionList = () => {
           headerTransparent: true,
         }}
       />
+      <StarItem />
       <ListList />
-      <Text className="text-tertiary-label ml-2 mt-4 text-sm font-medium">Feeds</Text>
+      <Text className="mb-2 ml-3 mt-4 text-sm font-medium text-tertiary-label">Feeds</Text>
       <CategoryList grouped={grouped} />
 
       <UnGroupedList subscriptionIds={unGrouped} />
@@ -107,13 +109,28 @@ export const SubscriptionList = () => {
   )
 }
 
+const StarItem = () => {
+  return (
+    <ItemPressable
+      onPress={() => {
+        // TODO
+      }}
+      className="mt-4 h-12 w-full flex-row items-center px-3"
+    >
+      <StarCuteFiIcon color="rgb(245, 158, 11)" height={20} width={20} />
+      <Text className="ml-2 text-text">Collections</Text>
+    </ItemPressable>
+  )
+}
+
 const ListList = () => {
   const currentView = useAtomValue(viewAtom)
   const listIds = useListSubscription(currentView)
   const sortedListIds = useSortedListSubscription(listIds, "alphabet")
+  if (sortedListIds.length === 0) return null
   return (
     <View className="mt-4">
-      <Text className="text-tertiary-label ml-2 text-sm font-medium">Lists</Text>
+      <Text className="mb-2 ml-3 text-sm font-medium text-tertiary-label">Lists</Text>
       {sortedListIds.map((id) => {
         return <ListSubscriptionItem key={id} id={id} />
       })}
@@ -125,7 +142,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
   const list = useList(id)
   if (!list) return null
   return (
-    <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-2">
+    <ItemPressable className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-3">
       <View className="overflow-hidden rounded">
         {!!list.image && (
           <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
@@ -133,7 +150,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
         {!list.image && <FallbackIcon title={list.title} size={24} />}
       </View>
 
-      <Text className="text-text ml-2">{list.title}</Text>
+      <Text className="ml-2 text-text">{list.title}</Text>
     </ItemPressable>
   )
 })
@@ -179,7 +196,7 @@ const CategoryGrouped = memo(
           onPress={() => {
             // TODO navigate to category
           }}
-          className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-2"
+          className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-3"
         >
           <AnimatedTouchableOpacity
             onPress={() => {
@@ -193,6 +210,10 @@ const CategoryGrouped = memo(
               }).start()
             }}
             style={{
+              height: 20,
+              width: 20,
+              alignItems: "center",
+              justifyContent: "center",
               transform: [
                 {
                   rotate: rotateValue.interpolate({
@@ -205,7 +226,7 @@ const CategoryGrouped = memo(
           >
             <MingcuteRightLine color="gray" height={18} width={18} />
           </AnimatedTouchableOpacity>
-          <Text className="text-text ml-1 font-medium">{category}</Text>
+          <Text className="ml-3 text-text">{category}</Text>
         </ItemPressable>
         <AccordionItem isExpanded={isExpanded} viewKey={category}>
           <GroupedContext.Provider value={category}>
@@ -229,11 +250,11 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         "flex h-12 flex-row items-center",
         inGrouped ? "px-8" : "px-4",
 
-        "border-secondary-system-grouped-background border-b",
+        "border-b border-secondary-system-grouped-background",
         className,
       )}
     >
-      <View className="dark:border-tertiary-system-background mr-2 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
+      <View className="mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:border-tertiary-system-background dark:bg-[#222]">
         <FeedIcon feed={feed} />
       </View>
       <Text className="text-text">{subscription.title || feed.title}</Text>
