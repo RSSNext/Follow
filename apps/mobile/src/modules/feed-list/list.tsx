@@ -2,22 +2,15 @@ import { cn } from "@follow/utils"
 import { Link, Stack } from "expo-router"
 import { useAtomValue } from "jotai"
 import type { FC } from "react"
-import { createContext, memo, useContext, useState } from "react"
-import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useAnimatedValue,
-  View,
-} from "react-native"
+import { createContext, memo, useContext } from "react"
+import { Animated, StyleSheet, Text, TouchableOpacity, useAnimatedValue, View } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { AccordionItem } from "@/src/components/ui/accordion"
 import { FeedIcon } from "@/src/components/ui/feed-icon"
+import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
@@ -137,7 +130,12 @@ const CategoryGrouped = memo(
     const rotateValue = useAnimatedValue(0)
     return (
       <View>
-        <View className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-2">
+        <ItemPressable
+          onPress={() => {
+            // TODO navigate to category
+          }}
+          className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-2"
+        >
           <AnimatedTouchableOpacity
             onPress={() => {
               isExpanded.value = !isExpanded.value
@@ -162,8 +160,8 @@ const CategoryGrouped = memo(
           >
             <MingcuteRightLine color="gray" height={18} width={18} />
           </AnimatedTouchableOpacity>
-          <Text className="text-text ml-1 font-medium">{category}</Text>
-        </View>
+          <Text className="ml-1 font-medium text-text">{category}</Text>
+        </ItemPressable>
         <AccordionItem isExpanded={isExpanded} viewKey={category}>
           <GroupedContext.Provider value={category}>
             <UnGroupedList subscriptionIds={subscriptionIds} />
@@ -177,29 +175,23 @@ const CategoryGrouped = memo(
 const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const feed = useFeed(id)
-  const [isPressing, setIsPressing] = useState(false)
+
   const inGrouped = !!useContext(GroupedContext)
   if (!subscription || !feed) return null
   return (
-    <Pressable
-      onPressIn={() => {
-        setIsPressing(true)
-      }}
-      onPressOut={() => {
-        setIsPressing(false)
-      }}
+    <ItemPressable
       className={cn(
         "flex h-12 flex-row items-center",
         inGrouped ? "px-8" : "px-4",
-        isPressing ? "bg-tertiary-system-background" : "bg-system-background",
-        "border-secondary-system-grouped-background border-b",
+
+        "border-b border-secondary-system-grouped-background",
         className,
       )}
     >
-      <View className="dark:border-tertiary-system-background mr-2 overflow-hidden rounded-full border border-transparent">
+      <View className="mr-2 overflow-hidden rounded-full border border-transparent dark:border-tertiary-system-background">
         <FeedIcon feed={feed} />
       </View>
       <Text className="text-text">{subscription.title || feed.title}</Text>
-    </Pressable>
+    </ItemPressable>
   )
 })
