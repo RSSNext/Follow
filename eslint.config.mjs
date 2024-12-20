@@ -55,7 +55,6 @@ export default defineConfig(
       // NOTE: Disable this temporarily
       "react-compiler/react-compiler": 0,
       "no-restricted-syntax": 0,
-      "@eslint-react/no-leaked-conditional-rendering": "error",
       "no-restricted-globals": [
         "error",
         {
