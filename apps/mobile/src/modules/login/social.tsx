@@ -1,4 +1,5 @@
-import { TouchableOpacity, View } from "react-native"
+import * as AppleAuthentication from "expo-apple-authentication"
+import { Platform, TouchableOpacity, View } from "react-native"
 
 import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
 import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
@@ -35,24 +36,53 @@ export function SocialLogin() {
 
   return (
     <View className="flex flex-row gap-4">
-      {Object.keys(provider).map((key) => {
-        const providerInfo = provider[key]
-        return (
-          <TouchableOpacity
-            key={key}
-            onPress={() => {
-              if (!data?.[providerInfo.id]) return
-              signIn.social({
-                provider: providerInfo.id as any,
-                callbackURL: "/",
-              })
-            }}
-            disabled={!data?.[providerInfo.id]}
-          >
-            <providerInfo.icon width={32} height={32} color={providerInfo.color} />
-          </TouchableOpacity>
-        )
-      })}
+      {Object.keys(provider)
+        .filter((key) => key !== "apple" || (Platform.OS === "ios" && key === "apple"))
+        .map((key) => {
+          const providerInfo = provider[key]
+          return (
+            <TouchableOpacity
+              key={key}
+              onPress={async () => {
+                if (!data?.[providerInfo.id]) return
+
+                if (providerInfo.id === "apple") {
+                  try {
+                    const credential = await AppleAuthentication.signInAsync({
+                      requestedScopes: [
+                        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                      ],
+                    })
+
+                    if (credential.identityToken) {
+                      await signIn.social({
+                        provider: "apple",
+                        idToken: {
+                          token: credential.identityToken,
+                        },
+                      })
+                    } else {
+                      throw new Error("No identityToken.")
+                    }
+                  } catch (e) {
+                    console.error(e)
+                    // handle errors
+                  }
+                  return
+                }
+
+                signIn.social({
+                  provider: providerInfo.id as any,
+                  callbackURL: "/",
+                })
+              }}
+              disabled={!data?.[providerInfo.id]}
+            >
+              <providerInfo.icon width={32} height={32} color={providerInfo.color} />
+            </TouchableOpacity>
+          )
+        })}
     </View>
   )
 }

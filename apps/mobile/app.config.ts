@@ -23,10 +23,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   newArchEnabled: true,
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "is.follow.app",
+    bundleIdentifier: "is.follow",
+    usesAppleSignIn: true,
   },
   android: {
-    package: "is.follow.app",
+    package: "is.follow",
     adaptiveIcon: {
       foregroundImage: adaptiveIconPath,
       backgroundColor: "#FF5C00",
@@ -76,6 +77,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ],
       },
     ],
+    "expo-apple-authentication",
     [require("./scripts/with-follow-assets.js")],
   ],
   experiments: {
