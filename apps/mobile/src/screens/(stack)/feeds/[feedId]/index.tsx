@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from "expo-router"
 import { ScrollView, Text, View } from "react-native"
 
-import { HeaderBlur } from "@/src/components/common/headerBlur"
+import { HeaderBlur } from "@/src/components/common/HeaderBlur"
 
 export default function Feed() {
   const { feedId } = useLocalSearchParams()

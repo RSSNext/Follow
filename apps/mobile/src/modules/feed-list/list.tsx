@@ -1,17 +1,26 @@
 import { cn } from "@follow/utils"
 import { Link, router, Stack } from "expo-router"
-import { useAtomValue } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import type { FC } from "react"
 import { createContext, memo, useContext } from "react"
-import { Animated, Image, Text, TouchableOpacity, useAnimatedValue, View } from "react-native"
+import {
+  Animated,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useAnimatedValue,
+  View,
+} from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { HeaderBlur } from "@/src/components/common/headerBlur"
+import { HeaderBlur } from "@/src/components/common/HeaderBlur"
 import { AccordionItem } from "@/src/components/ui/accordion"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { bottomViewTabHeight } from "@/src/constants/ui"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
@@ -29,7 +38,13 @@ import {
 } from "@/src/store/subscription/hooks"
 import { accentColor } from "@/src/theme/colors"
 
+import { useHeaderHeight } from "@react-navigation/elements"
+
+import { FeedViewType } from "@follow/constants"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import PagerView from "react-native-pager-view"
 import { viewAtom } from "./atoms"
+import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
 const useActionPadding = () => {
   const insets = useSafeAreaInsets()
@@ -65,13 +80,15 @@ function RightAction() {
 }
 
 export const SubscriptionList = () => {
-  const currentView = useAtomValue(viewAtom)
-  usePrefetchSubscription(currentView)
+  const [currentView, setCurrentView] = useAtom(viewAtom)
 
-  const { grouped, unGrouped } = useGroupedSubscription(currentView)
+  const tabHeight = useBottomTabBarHeight()
+  const headerHeight = useHeaderHeight()
 
+  const insets = useSafeAreaInsets()
   return (
-    <View>
+    <>
+      <StarItem />
       <Stack.Screen
         options={{
           headerShown: true,
@@ -83,15 +100,48 @@ export const SubscriptionList = () => {
           headerTransparent: true,
         }}
       />
-      <StarItem />
-      <ListList />
-      <Text className="text-tertiary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
-      <CategoryList grouped={grouped} />
-
-      <UnGroupedList subscriptionIds={unGrouped} />
-    </View>
+      <PagerView
+        onPageSelected={({ nativeEvent }) => {
+          setCurrentView(nativeEvent.position)
+        }}
+        scrollEnabled
+        style={{ flex: 1 }}
+        initialPage={0}
+      >
+        {[
+          FeedViewType.Articles,
+          FeedViewType.SocialMedia,
+          FeedViewType.Pictures,
+          FeedViewType.Videos,
+          FeedViewType.Audios,
+          FeedViewType.Notifications,
+        ].map((view) => {
+          return (
+            <ScrollView key={view} automaticallyAdjustContentInsets>
+              <View style={{ height: headerHeight - insets.top + bottomViewTabHeight }} />
+              <ViewPage view={view} />
+              <View style={{ height: tabHeight }} />
+            </ScrollView>
+          )
+        })}
+      </PagerView>
+    </>
   )
 }
+
+const ViewPage = memo(({ view }: { view: FeedViewType }) => {
+  const { grouped, unGrouped } = useGroupedSubscription(view)
+  usePrefetchSubscription(view)
+  return (
+    <ViewPageCurrentViewProvider value={view}>
+      <StarItem />
+      <ListList />
+      <Text className="mb-2 ml-3 mt-4 text-sm font-medium text-tertiary-label">Feeds</Text>
+      <CategoryList grouped={grouped} />
+      <UnGroupedList subscriptionIds={unGrouped} />
+    </ViewPageCurrentViewProvider>
+  )
+})
 
 const StarItem = () => {
   return (
@@ -108,7 +158,7 @@ const StarItem = () => {
 }
 
 const ListList = () => {
-  const currentView = useAtomValue(viewAtom)
+  const currentView = useViewPageCurrentView()
   const listIds = useListSubscription(currentView)
   const sortedListIds = useSortedListSubscription(listIds, "alphabet")
   if (sortedListIds.length === 0) return null

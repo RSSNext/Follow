@@ -15,7 +15,7 @@ export default function FeedList() {
   const insets = useSafeAreaInsets()
   return (
     <>
-      <ScrollView
+      {/* <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         scrollIndicatorInsets={{
           top: bottomViewTabHeight + headerHeight - insets.top,
@@ -26,7 +26,8 @@ export default function FeedList() {
         <View style={{ height: headerHeight - insets.top + bottomViewTabHeight }} />
         <SubscriptionList />
         <View style={{ height: tabHeight }} />
-      </ScrollView>
+      </ScrollView> */}
+      <SubscriptionList />
       <ViewTab />
     </>
   )
