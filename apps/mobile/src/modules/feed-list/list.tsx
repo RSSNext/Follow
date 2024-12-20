@@ -99,7 +99,7 @@ export const SubscriptionList = () => {
         }}
       />
       <ListList />
-      <Text className="ml-2 mt-4 text-sm font-medium text-tertiary-label">Feeds</Text>
+      <Text className="text-tertiary-label ml-2 mt-4 text-sm font-medium">Feeds</Text>
       <CategoryList grouped={grouped} />
 
       <UnGroupedList subscriptionIds={unGrouped} />
@@ -113,7 +113,7 @@ const ListList = () => {
   const sortedListIds = useSortedListSubscription(listIds, "alphabet")
   return (
     <View className="mt-4">
-      <Text className="ml-2 text-sm font-medium text-tertiary-label">Lists</Text>
+      <Text className="text-tertiary-label ml-2 text-sm font-medium">Lists</Text>
       {sortedListIds.map((id) => {
         return <ListSubscriptionItem key={id} id={id} />
       })}
@@ -125,7 +125,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
   const list = useList(id)
   if (!list) return null
   return (
-    <ItemPressable className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-2">
+    <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-2">
       <View className="overflow-hidden rounded">
         {!!list.image && (
           <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
@@ -133,7 +133,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
         {!list.image && <FallbackIcon title={list.title} size={24} />}
       </View>
 
-      <Text className="ml-2 text-text">{list.title}</Text>
+      <Text className="text-text ml-2">{list.title}</Text>
     </ItemPressable>
   )
 })
@@ -233,7 +233,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         className,
       )}
     >
-      <View className="mr-2 items-center justify-center overflow-hidden rounded-full border border-transparent dark:border-tertiary-system-background dark:bg-[#222]">
+      <View className="dark:border-tertiary-system-background mr-2 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
         <FeedIcon feed={feed} />
       </View>
       <Text className="text-text">{subscription.title || feed.title}</Text>
