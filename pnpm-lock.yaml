@@ -76,6 +76,9 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@22.10.1)
+      '@eslint/compat':
+        specifier: ^1.2.4
+        version: 1.2.4(eslint@9.16.0(jiti@2.3.3))
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
@@ -181,6 +184,9 @@ importers:
       eslint-config-hyoban:
         specifier: ^3.1.15
         version: 3.1.15(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@2.3.3))(typescript@5.7.2))(eslint@9.16.0(jiti@2.3.3))(typescript@5.7.2))(eslint@9.16.0(jiti@2.3.3))(tailwindcss@3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2)
+      eslint-plugin-react-native:
+        specifier: ^4.1.0
+        version: 4.1.0(eslint@9.16.0(jiti@2.3.3))
       fake-indexeddb:
         specifier: 6.0.0
         version: 6.0.0
@@ -8495,6 +8501,14 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  eslint-plugin-react-native-globals@0.1.2:
+    resolution: {integrity: sha512-9aEPf1JEpiTjcFAmmyw8eiIXmcNZOqaZyHO77wgm0/dWfT/oxC1SrIq8ET38pMxHYrcB6Uew+TzUVsBeczF88g==}
+
+  eslint-plugin-react-native@4.1.0:
+    resolution: {integrity: sha512-QLo7rzTBOl43FvVqDdq5Ql9IoElIuTdjrz9SKAXCvULvBoRZ44JGSkx9z4999ZusCsb4rK3gjS8gOGyeYqZv2Q==}
+    peerDependencies:
+      eslint: ^3.17.0 || ^4 || ^5 || ^6 || ^7 || ^8
 
   eslint-plugin-react-refresh@0.4.16:
     resolution: {integrity: sha512-slterMlxAhov/DZO8NScf6mEeMBBXodFUolijDvrtTxyezyLoTQaa73FyYus/VbTdftd8wBgBxPMRk3poleXNQ==}
@@ -23920,6 +23934,13 @@ snapshots:
       typescript: 5.7.2
     transitivePeerDependencies:
       - supports-color
+
+  eslint-plugin-react-native-globals@0.1.2: {}
+
+  eslint-plugin-react-native@4.1.0(eslint@9.16.0(jiti@2.3.3)):
+    dependencies:
+      eslint: 9.16.0(jiti@2.3.3)
+      eslint-plugin-react-native-globals: 0.1.2
 
   eslint-plugin-react-refresh@0.4.16(eslint@9.16.0(jiti@2.3.3)):
     dependencies:

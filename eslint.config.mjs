@@ -1,7 +1,9 @@
 // @ts-check
 import path from "node:path"
 
+import { fixupPluginRules } from "@eslint/compat"
 import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
+import reactNative from "eslint-plugin-react-native"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
 import noDebug from "./plugins/eslint/eslint-no-debug.js"
@@ -108,6 +110,16 @@ export default defineConfig(
     rules: {
       "package-json-extend/ensure-package-version": "error",
       "package-json-extend/no-duplicate-package": "error",
+    },
+  },
+  {
+    plugins: {
+      // @ts-expect-error
+      "react-native": fixupPluginRules(reactNative),
+    },
+    files: ["apps/mobile/**/*"],
+    rules: {
+      "react-native/no-inline-styles": "warn",
     },
   },
 )
