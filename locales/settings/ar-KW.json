@@ -2,7 +2,6 @@
   "about.changelog": "سجل التغييرات",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) في المراحل الأولى من التطوير. إذا كانت لديك أي ملاحظات أو اقتراحات، لا تتردد في <OpenIssueLink>فتح مشكلة</OpenIssueLink> <ExternalLinkIcon /> على GitHub الخاص بنا.",
   "about.iconLibrary": "مكتبة الأيقونات المستخدمة محمية بحقوق الطبع والنشر بواسطة <IconLibraryLink /> <ExternalLinkIcon /> ولا يمكن إعادة توزيعها.",
-  "about.licenseInfo": "{{appName}} هو وسيظل دائمًا مشروعًا مجانيًا ومفتوح المصدر. وهو مرخص بموجب {{license}}.",
   "about.sidebar_title": "حول",
   "about.socialMedia": "وسائل التواصل الاجتماعي",
   "actions.actionName": "الإجراء {{number}}",

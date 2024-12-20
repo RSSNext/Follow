@@ -2,7 +2,6 @@
   "about.changelog": "سجل التغييرات",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) مازال فالمراحل الأولية ديال التطوير. إلى كان عندك شي ملاحظات ولا اقتراحات، مرحبا بك <OpenIssueLink>تفتح موضوع</OpenIssueLink> <ExternalLinkIcon /> على GitHub ديالنا.",
   "about.iconLibrary": "المكتبة ديال الأيقونات مستعملة محفوظة بحقوق الطبع والنشر من طرف <IconLibraryLink /> <ExternalLinkIcon /> وما يمكنش توزع من جديد.",
-  "about.licenseInfo": "{{appName}} هو غادي يبقى دائما مشروع مجاني ومفتوح المصدر. مرخص تحت {{license}}.",
   "about.sidebar_title": "حول",
   "about.socialMedia": "وسائل التواصل الاجتماعي",
   "actions.actionName": "الإجراء {{number}}",

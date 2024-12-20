@@ -1,7 +1,6 @@
 import { PassviseFragment } from "@follow/components/common/Fragment.js"
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
-import { ActionButton } from "@follow/components/ui/button/index.js"
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import type { MediaModel } from "@follow/shared/hono"
 import { LRUCache } from "@follow/utils/lru-cache"
@@ -11,6 +10,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
+import { CommandActionButton } from "~/components/ui/button/command-button"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
@@ -143,12 +143,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
             item.id !== COMMAND_ID.entry.openInBrowser,
         )
         .map((item) => (
-          <ActionButton
-            icon={item.icon}
-            onClick={item.onClick}
-            tooltip={item.name}
-            key={item.name}
-          />
+          <CommandActionButton commandId={item.id} onClick={item.onClick} key={item.id} />
         ))}
     </div>
   )

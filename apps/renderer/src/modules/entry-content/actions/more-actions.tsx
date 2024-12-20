@@ -10,6 +10,8 @@ import {
 } from "~/components/ui/dropdown-menu/dropdown-menu"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
+import { useCommand } from "~/modules/command/hooks/use-command"
+import type { FollowCommandId } from "~/modules/command/types"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const actionConfigs = useEntryActions({ entryId, view })
@@ -36,16 +38,25 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {availableActions.map((config) => (
-          <DropdownMenuItem
-            key={config.id}
-            className="pl-3"
-            icon={config.icon}
-            onSelect={config.onClick}
-          >
-            {config.name}
-          </DropdownMenuItem>
+          <CommandDropdownMenuItem key={config.id} commandId={config.id} onClick={config.onClick} />
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+const CommandDropdownMenuItem = ({
+  commandId,
+  onClick,
+}: {
+  commandId: FollowCommandId
+  onClick: () => void
+}) => {
+  const command = useCommand(commandId)
+  if (!command) return null
+  return (
+    <DropdownMenuItem key={command.id} className="pl-3" icon={command.icon} onSelect={onClick}>
+      {command.label.title}
+    </DropdownMenuItem>
   )
 }

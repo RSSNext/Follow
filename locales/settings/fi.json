@@ -2,7 +2,6 @@
   "about.changelog": "Muutosloki",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) on kehityksen alkuvaiheessa. Jos sinulla on palautetta tai ehdotuksia, voit vapaasti <OpenIssueLink>avata ongelmaraportin</OpenIssueLink> <ExternalLinkIcon /> GitHubissamme.",
   "about.iconLibrary": "Käytetty kuvakekirjasto on tekijänoikeuden alainen <IconLibraryLink /> <ExternalLinkIcon />, eikä sitä saa levittää uudelleen.",
-  "about.licenseInfo": "{{appName}} on ja tulee aina olemaan ilmainen ja avoimen lähdekoodin projekti. Se on lisensoitu {{license}}-lisenssillä.",
   "about.sidebar_title": "Tietoa",
   "about.socialMedia": "Sosiaalinen media",
   "actions.actionName": "Toiminto {{number}}",

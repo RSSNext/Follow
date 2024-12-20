@@ -133,7 +133,6 @@ const SubscriptionItem: FC<{
       isList: false,
       defaultValues: {
         view: defaultView.toString(),
-        category: subscription.category,
       },
     })
   })

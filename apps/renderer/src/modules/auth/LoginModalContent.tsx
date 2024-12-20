@@ -116,7 +116,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             }}
           >
             <LoginButtonContent isLoading={loadingLockSet === provider.id}>
-              <i className={clsx("mr-2 text-xl", authProvidersConfig[provider.id].iconClassName)} />{" "}
+              <i
+                className={clsx("mr-2 text-xl", authProvidersConfig[provider.id]?.iconClassName)}
+              />{" "}
               {t("signin.continue_with", { provider: provider.name })}
             </LoginButtonContent>
           </MotionButtonBase>

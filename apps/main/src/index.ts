@@ -3,6 +3,7 @@ import { callWindowExpose } from "@follow/shared/bridge"
 import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { imageRefererMatches, selfRefererMatches } from "@follow/shared/image"
+import { parse } from "cookie-es"
 import { app, BrowserWindow, session } from "electron"
 import type { Cookie } from "electron/main"
 import squirrelStartup from "electron-squirrel-startup"
@@ -194,16 +195,20 @@ function bootstrap() {
 
       if (ck && apiURL) {
         setBetterAuthSessionCookie(ck)
-        const cookie = atob(ck)
-        mainWindow.webContents.session.cookies.set({
-          url: apiURL,
-          name: cookie.split("=")[0],
-          value: cookie.split("=")[1],
-          secure: true,
-          httpOnly: true,
-          domain: new URL(apiURL).hostname,
-          sameSite: "no_restriction",
+        const cookie = parse(atob(ck))
+        Object.keys(cookie).forEach((name) => {
+          const value = cookie[name]
+          mainWindow.webContents.session.cookies.set({
+            url: apiURL,
+            name,
+            value,
+            secure: true,
+            httpOnly: true,
+            domain: new URL(apiURL).hostname,
+            sameSite: "no_restriction",
+          })
         })
+
         userId && (await callWindowExpose(mainWindow).clearIfLoginOtherAccount(userId))
         mainWindow.reload()
 
