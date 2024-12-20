@@ -1,6 +1,7 @@
 import { useHeaderHeight } from "@react-navigation/elements"
 import { useAtom } from "jotai"
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { useEffect, useRef, useState } from "react"
+import { Animated, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { bottomViewTabHeight } from "@/src/constants/ui"
@@ -13,6 +14,28 @@ export const ViewTab = () => {
   const paddingHorizontal = 6
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
+  const tabRef = useRef<ScrollView>(null)
+
+  const indicatorAnim = useRef(new Animated.Value(0)).current
+
+  const [tabWidths, setTabWidths] = useState<number[]>([])
+  const [tabPositions, setTabPositions] = useState<number[]>([])
+
+  useEffect(() => {
+    if (tabWidths.length > 0) {
+      Animated.spring(indicatorAnim, {
+        toValue: tabPositions[currentView] || 0,
+        useNativeDriver: true,
+        tension: 120,
+        friction: 8,
+      }).start()
+
+      if (tabRef.current) {
+        tabRef.current.scrollTo({ x: currentView * 60, y: 0, animated: true })
+      }
+    }
+  }, [currentView, tabWidths])
+
   return (
     <ThemedBlurView
       style={[
@@ -22,15 +45,17 @@ export const ViewTab = () => {
           top: headerHeight - StyleSheet.hairlineWidth,
         },
       ]}
-      className="border-system-fill/60 border-b"
+      className="border-b border-system-fill/60"
     >
       <ScrollView
+        showsHorizontalScrollIndicator={false}
         className="border-tertiary-system-background"
         horizontal
+        ref={tabRef}
         contentContainerStyle={styles.tabScroller}
         style={{ paddingHorizontal, borderTopWidth: StyleSheet.hairlineWidth }}
       >
-        {views.map((view) => {
+        {views.map((view, index) => {
           const isSelected = currentView === view.view
           return (
             <TouchableOpacity
@@ -38,6 +63,19 @@ export const ViewTab = () => {
               onPress={() => setCurrentView(view.view)}
               key={view.name}
               className="mr-4 flex-row items-center justify-center"
+              onLayout={(event) => {
+                const { width, x } = event.nativeEvent.layout
+                setTabWidths((prev) => {
+                  const newWidths = [...prev]
+                  newWidths[index] = width
+                  return newWidths
+                })
+                setTabPositions((prev) => {
+                  const newPositions = [...prev]
+                  newPositions[index] = x
+                  return newPositions
+                })
+              }}
             >
               <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
               <Text
@@ -52,12 +90,35 @@ export const ViewTab = () => {
             </TouchableOpacity>
           )
         })}
+        <Animated.View
+          style={[
+            styles.indicator,
+            {
+              transform: [
+                {
+                  translateX: Animated.add(
+                    indicatorAnim,
+                    10, // Left add 10px to center
+                  ),
+                },
+              ],
+              backgroundColor: views[currentView].activeColor,
+              width: (tabWidths[currentView] || 20) - 20, // Reduce 20px width
+            },
+          ]}
+        />
       </ScrollView>
     </ThemedBlurView>
   )
 }
 
 const styles = StyleSheet.create({
+  indicator: {
+    position: "absolute",
+    bottom: 0,
+    height: 2,
+    borderRadius: 1,
+  },
   tabContainer: {
     bottom: 0,
     left: 0,
