@@ -92,12 +92,13 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
         }
       }}
     >
-      <div className={cn("select-text break-words font-bold", compact ? "text-2xl" : "text-3xl")}>
+      <div className="select-text break-words font-bold">
         <EntryTranslation
           showTranslation={showAITranslation}
           source={entry.entries.title}
           target={translation.data?.title}
-          className="select-text"
+          className={cn("select-text", compact ? "text-2xl" : "text-3xl")}
+          isHTML
         />
       </div>
       <div className="mt-2 text-[13px] font-medium text-zinc-500">

@@ -129,9 +129,10 @@ export function ListItem({
         >
           {entry.entries.title ? (
             <EntryTranslation
-              className={cn("break-all", lineClamp.title)}
+              className={cn("break-all text-sm leading-tight", lineClamp.title)}
               source={entry.entries.title}
               target={translation?.title}
+              isHTML
             />
           ) : (
             <EntryTranslation
