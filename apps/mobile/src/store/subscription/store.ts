@@ -12,6 +12,7 @@ import { createImmerSetter, createTransaction, createZustandStore } from "../int
 import { listActions } from "../list/store"
 
 type FeedId = string
+type ListId = string
 
 export type SubscriptionModel = Omit<SubscriptionSchema, "id">
 interface SubscriptionState {
@@ -20,11 +21,10 @@ interface SubscriptionState {
    * Value: SubscriptionPlainModel
    */
   data: Record<FeedId, SubscriptionModel>
-  /**
-   * Key: FeedViewType
-   * Value: FeedId[]
-   */
-  feedIdByView: Record<FeedViewType, FeedId[]>
+
+  feedIdByView: Record<FeedViewType, Set<FeedId>>
+
+  listIdByView: Record<FeedViewType, Set<ListId>>
   /**
    * Key: FeedViewType
    * Value: Record<string, boolean>
@@ -40,13 +40,13 @@ interface SubscriptionState {
   subscriptionIdSet: Set<string>
 }
 
-const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
-  [FeedViewType.Articles]: [],
-  [FeedViewType.Audios]: [],
-  [FeedViewType.Notifications]: [],
-  [FeedViewType.Pictures]: [],
-  [FeedViewType.SocialMedia]: [],
-  [FeedViewType.Videos]: [],
+const emptyDataIdByView: Record<FeedViewType, Set<FeedId>> = {
+  [FeedViewType.Articles]: new Set(),
+  [FeedViewType.Audios]: new Set(),
+  [FeedViewType.Notifications]: new Set(),
+  [FeedViewType.Pictures]: new Set(),
+  [FeedViewType.SocialMedia]: new Set(),
+  [FeedViewType.Videos]: new Set(),
 }
 const emptyCategoryOpenStateByView: Record<FeedViewType, Record<string, boolean>> = {
   [FeedViewType.Articles]: {},
@@ -59,6 +59,7 @@ const emptyCategoryOpenStateByView: Record<FeedViewType, Record<string, boolean>
 export const useSubscriptionStore = createZustandStore<SubscriptionState>("subscription")(() => ({
   data: {},
   feedIdByView: { ...emptyDataIdByView },
+  listIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
   categories: new Set(),
   subscriptionIdSet: new Set(),
@@ -75,7 +76,12 @@ class SubscriptionActions {
           if (subscription.feedId && subscription.type === "feed") {
             draft.data[subscription.feedId] = subscription
             draft.subscriptionIdSet.add(`${subscription.type}/${subscription.feedId}`)
-            draft.feedIdByView[subscription.view as FeedViewType].push(subscription.feedId)
+            draft.feedIdByView[subscription.view as FeedViewType].add(subscription.feedId)
+          }
+          if (subscription.listId && subscription.type === "list") {
+            draft.data[subscription.listId] = subscription
+            draft.subscriptionIdSet.add(`${subscription.type}/${subscription.listId}`)
+            draft.listIdByView[subscription.view as FeedViewType].add(subscription.listId)
           }
         }
       })
@@ -92,7 +98,7 @@ class SubscriptionActions {
 
   reset(view: FeedViewType) {
     immerSet((draft) => {
-      draft.feedIdByView[view] = []
+      draft.feedIdByView[view] = new Set()
       draft.categoryOpenStateByView[view] = {}
     })
   }

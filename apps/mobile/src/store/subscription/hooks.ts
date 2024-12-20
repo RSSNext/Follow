@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
 
 import { getFeed } from "../feed/getter"
+import { getList } from "../list/getters"
 import { getSubscription } from "./getter"
 import { subscriptionSyncService, useSubscriptionStore } from "./store"
 
@@ -38,7 +39,7 @@ const sortUngroupedSubscriptionByAlphabet = (
 
 export const useSubscriptionByView = (view: FeedViewType) => {
   return useSubscriptionStore((state) => {
-    return state.feedIdByView[view]
+    return Array.from(state.feedIdByView[view])
   })
 }
 
@@ -116,5 +117,25 @@ export const useSortedUngroupedSubscription = (ids: string[], sortBy: "alphabet"
 export const useSubscription = (id: string) => {
   return useSubscriptionStore((state) => {
     return state.data[id]
+  })
+}
+
+export const useListSubscription = (view: FeedViewType) => {
+  return useSubscriptionStore((state) => {
+    return Array.from(state.listIdByView[view])
+  })
+}
+
+export const useSortedListSubscription = (ids: string[], sortBy: "alphabet" | "unread") => {
+  return useSubscriptionStore(() => {
+    return ids.concat().sort((a, b) => {
+      const leftList = getList(a)
+      const rightList = getList(b)
+      if (!leftList || !rightList) return 0
+      if (sortBy === "alphabet") {
+        return sortByAlphabet(leftList.title, rightList.title)
+      }
+      return sortByUnread(a, b)
+    })
   })
 }

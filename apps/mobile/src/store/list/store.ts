@@ -7,15 +7,18 @@ import { createTransaction, createZustandStore } from "../internal/helper"
 export type ListModel = Omit<ListSchema, "feedIds"> & {
   feedIds: string[]
 }
+type ListId = string
 interface ListState {
-  lists: ListModel[]
+  lists: Record<ListId, ListModel>
+  listIds: ListId[]
 }
 
 const defaultState: ListState = {
-  lists: [],
+  lists: {},
+  listIds: [],
 }
 
-const useListStore = createZustandStore<ListState>("list")(() => defaultState)
+export const useListStore = createZustandStore<ListState>("list")(() => defaultState)
 
 const get = useListStore.getState
 const set = useListStore.setState
@@ -25,7 +28,11 @@ class ListActions {
 
     const tx = createTransaction()
     tx.store(() => {
-      set({ ...state, lists: [...state.lists, ...lists] })
+      set({
+        ...state,
+        lists: { ...state.lists, ...Object.fromEntries(lists.map((list) => [list.id, list])) },
+        listIds: [...state.listIds, ...lists.map((list) => list.id)],
+      })
     })
 
     tx.persist(() => {
