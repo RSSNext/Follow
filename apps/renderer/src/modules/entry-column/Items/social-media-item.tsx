@@ -286,8 +286,7 @@ const SocialMediaGallery = ({ media }: { media: MediaModel[] }) => {
               className="size-28 shrink-0 data-[state=loading]:!bg-theme-placeholder-image"
               loading="lazy"
               proxy={proxySize}
-              onClick={(e) => {
-                e.stopPropagation()
+              onClick={() => {
                 previewMedia(
                   mediaList.map((m) => ({
                     url: m.url,
@@ -337,8 +336,7 @@ const SocialMediaGallery = ({ media }: { media: MediaModel[] }) => {
               className="aspect-square w-full rounded object-cover"
               loading="lazy"
               proxy={proxySize}
-              onClick={(e) => {
-                e.stopPropagation()
+              onClick={() => {
                 previewMedia(
                   media.map((m) => ({
                     url: m.url,
