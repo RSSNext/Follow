@@ -10,7 +10,7 @@ import { TwitterCuteFiIcon } from "../icons/twitter_cute_fi"
 import { VideoCuteFiIcon } from "../icons/video_cute_fi"
 import { accentColor } from "../theme/colors"
 
-interface ViewDefinition {
+export interface ViewDefinition {
   name: string
   icon: React.FC<{ color?: string; height?: number; width?: number }>
   activeColor: string

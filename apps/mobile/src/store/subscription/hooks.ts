@@ -38,9 +38,16 @@ const sortUngroupedSubscriptionByAlphabet = (
 }
 
 export const useSubscriptionByView = (view: FeedViewType) => {
-  return useSubscriptionStore((state) => {
-    return Array.from(state.feedIdByView[view])
-  })
+  return useSubscriptionStore(
+    useCallback(
+      (state) => {
+        return Array.from(state.feedIdByView[view])
+          .concat(Array.from(state.inboxIdByView[view]))
+          .concat(Array.from(state.listIdByView[view]))
+      },
+      [view],
+    ),
+  )
 }
 
 export const useGroupedSubscription = (view: FeedViewType) => {
@@ -121,9 +128,14 @@ export const useSubscription = (id: string) => {
 }
 
 export const useListSubscription = (view: FeedViewType) => {
-  return useSubscriptionStore((state) => {
-    return Array.from(state.listIdByView[view])
-  })
+  return useSubscriptionStore(
+    useCallback(
+      (state) => {
+        return Array.from(state.listIdByView[view])
+      },
+      [view],
+    ),
+  )
 }
 
 export const useSortedListSubscription = (ids: string[], sortBy: "alphabet" | "unread") => {
@@ -141,7 +153,12 @@ export const useSortedListSubscription = (ids: string[], sortBy: "alphabet" | "u
 }
 
 export const useInboxSubscription = (view: FeedViewType) => {
-  return useSubscriptionStore((state) => {
-    return Array.from(state.inboxIdByView[view])
-  })
+  return useSubscriptionStore(
+    useCallback(
+      (state) => {
+        return Array.from(state.inboxIdByView[view])
+      },
+      [view],
+    ),
+  )
 }

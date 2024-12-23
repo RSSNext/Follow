@@ -7,12 +7,14 @@ import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useCurrentView } from "@/src/modules/feed-list/atoms"
 import { SubscriptionList } from "@/src/modules/feed-list/list"
+import { usePrefetchUnread } from "@/src/store/unread/hooks"
 import { accentColor } from "@/src/theme/colors"
 
 import { ViewTab } from "../../../modules/feed-list/ViewTab"
 
 export default function FeedList() {
   const currentView = useCurrentView()
+  usePrefetchUnread()
   return (
     <>
       <Stack.Screen

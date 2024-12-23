@@ -41,6 +41,7 @@ import {
   useSubscription,
 } from "@/src/store/subscription/hooks"
 import { getInboxStoreId } from "@/src/store/subscription/utils"
+import { useUnreadCount, useUnreadCounts } from "@/src/store/unread/hooks"
 
 import { viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
@@ -97,6 +98,7 @@ export const SubscriptionList = memo(() => {
 const ViewPage = memo(({ view }: { view: FeedViewType }) => {
   const { grouped, unGrouped } = useGroupedSubscription(view)
   usePrefetchSubscription(view)
+
   return (
     <ViewPageCurrentViewProvider value={view}>
       <StarItem />
@@ -124,6 +126,7 @@ const InboxList = () => {
 
 const InboxItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(getInboxStoreId(id))
+  const unreadCount = useUnreadCount(id)
   if (!subscription) return null
   return (
     <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3">
@@ -132,6 +135,7 @@ const InboxItem = memo(({ id }: { id: string }) => {
       </View>
 
       <Text className="text-text ml-2.5">{subscription.title}</Text>
+      {!!unreadCount && <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>}
     </ItemPressable>
   )
 })
@@ -215,6 +219,7 @@ const CategoryList: FC<{
 
 const CategoryGrouped = memo(
   ({ category, subscriptionIds }: { category: string; subscriptionIds: string[] }) => {
+    const unreadCounts = useUnreadCounts(subscriptionIds)
     const isExpanded = useSharedValue(false)
     const rotateValue = useAnimatedValue(1)
     return (
@@ -254,6 +259,9 @@ const CategoryGrouped = memo(
             <MingcuteRightLine color="gray" height={18} width={18} />
           </AnimatedTouchableOpacity>
           <Text className="text-text ml-3">{category}</Text>
+          {!!unreadCounts && (
+            <Text className="text-tertiary-label ml-auto text-xs">{unreadCounts}</Text>
+          )}
         </ItemPressable>
         <AccordionItem isExpanded={isExpanded} viewKey={category}>
           <GroupedContext.Provider value={category}>
@@ -267,6 +275,7 @@ const CategoryGrouped = memo(
 
 const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
+  const unreadCount = useUnreadCount(id)
   const feed = useFeed(id)
 
   const inGrouped = !!useContext(GroupedContext)
@@ -275,7 +284,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
     <ItemPressable
       className={cn(
         "flex h-12 flex-row items-center",
-        inGrouped ? "px-8" : "px-4",
+        inGrouped ? "pl-8 pr-4" : "px-4",
 
         "border-secondary-system-grouped-background border-b",
         className,
@@ -293,6 +302,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         <FeedIcon feed={feed} />
       </View>
       <Text className="text-text">{subscription.title || feed.title}</Text>
+      {!!unreadCount && <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>}
     </ItemPressable>
   )
 })

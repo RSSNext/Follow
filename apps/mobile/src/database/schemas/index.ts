@@ -43,3 +43,8 @@ export const listsTable = sqliteTable("lists", {
   fee: integer("fee"),
   ownerUserId: text("owner_user_id"),
 })
+
+export const unreadTable = sqliteTable("unread", {
+  subscriptionId: text("subscription_id").notNull().primaryKey(),
+  count: integer("count").notNull(),
+})

@@ -15,7 +15,7 @@ class InboxServiceStatic implements Hydratable, Resetable {
   }
   async hydrate() {
     const inboxes = await db.query.inboxesTable.findMany()
-    inboxActions.upsertMany(inboxes)
+    inboxActions.upsertManyInSession(inboxes)
   }
 
   async upsertMany(inboxes: InboxSchema[]) {

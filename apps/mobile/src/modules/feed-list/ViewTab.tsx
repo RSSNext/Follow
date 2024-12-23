@@ -1,7 +1,8 @@
 import { useHeaderHeight } from "@react-navigation/elements"
-import { useAtom, useAtomValue } from "jotai"
-import { useEffect, useRef, useState } from "react"
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { useAtomValue } from "jotai"
+import { memo, useEffect, useRef, useState } from "react"
+import type { TouchableOpacityProps } from "react-native"
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import type { WithSpringConfig } from "react-native-reanimated"
 import Animated, {
   interpolateColor,
@@ -12,14 +13,16 @@ import Animated, {
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { bottomViewTabHeight } from "@/src/constants/ui"
+import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
+import { useUnreadCountByView } from "@/src/store/unread/hooks"
 
-import { offsetAtom, viewAtom } from "./atoms"
+import { offsetAtom, setCurrentView, viewAtom } from "./atoms"
 
 export const ViewTab = () => {
   const headerHeight = useHeaderHeight()
   const offset = useAtomValue(offsetAtom)
-  const [currentView, setCurrentView] = useAtom(viewAtom)
+  const currentView = useAtomValue(viewAtom)
   const tabRef = useRef<ScrollView>(null)
 
   const indicatorPosition = useSharedValue(0)
@@ -108,11 +111,10 @@ export const ViewTab = () => {
         {views.map((view, index) => {
           const isSelected = currentView === view.view
           return (
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => setCurrentView(view.view)}
+            <TabItem
+              isSelected={isSelected}
               key={view.name}
-              className="mr-4 flex-row items-center justify-center"
+              view={view}
               onLayout={(event) => {
                 const { width, x } = event.nativeEvent.layout
                 setTabWidths((prev) => {
@@ -126,18 +128,7 @@ export const ViewTab = () => {
                   return newPositions
                 })
               }}
-            >
-              <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
-              <Text
-                style={{
-                  color: isSelected ? view.activeColor : "gray",
-                  fontWeight: isSelected ? "medium" : "normal",
-                }}
-                className="ml-2"
-              >
-                {view.name}
-              </Text>
-            </TouchableOpacity>
+            />
           )
         })}
         <Animated.View style={[styles.indicator, indicatorStyle]} />
@@ -146,6 +137,41 @@ export const ViewTab = () => {
   )
 }
 
+const TabItem = memo(
+  ({
+    isSelected,
+    view,
+    onLayout,
+  }: { isSelected: boolean; view: ViewDefinition } & Pick<TouchableOpacityProps, "onLayout">) => {
+    const unreadCount = useUnreadCountByView(view.view)
+    return (
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => setCurrentView(view.view)}
+        className="relative mr-4 flex-row items-center justify-center"
+        onLayout={onLayout}
+      >
+        <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
+        <Text
+          style={{
+            color: isSelected ? view.activeColor : "gray",
+            fontWeight: isSelected ? "medium" : "normal",
+          }}
+          className="ml-2"
+        >
+          {view.name}
+        </Text>
+        {unreadCount > 0 && (
+          <View className={"bg-red ml-1 rounded-full px-1"}>
+            <Text className="text-xs font-medium text-white">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
+    )
+  },
+)
 const styles = StyleSheet.create({
   indicator: {
     position: "absolute",

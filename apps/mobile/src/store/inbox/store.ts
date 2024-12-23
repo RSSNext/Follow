@@ -13,15 +13,18 @@ export const useInboxStore = createZustandStore<{
 // const get = useInboxStore.getState
 const set = useInboxStore.setState
 class InboxActions {
-  async upsertMany(inboxes: InboxSchema[]) {
+  async upsertManyInSession(inboxes: InboxSchema[]) {
     const state = useInboxStore.getState()
+    const nextInboxes = [...state.inboxes, ...inboxes]
+    set({
+      ...state,
+      inboxes: nextInboxes,
+    })
+  }
+  async upsertMany(inboxes: InboxSchema[]) {
     const tx = createTransaction()
     tx.store(() => {
-      const nextInboxes = [...state.inboxes, ...inboxes]
-      set({
-        ...state,
-        inboxes: nextInboxes,
-      })
+      this.upsertManyInSession(inboxes)
     })
     tx.persist(() => {
       return InboxService.upsertMany(inboxes)
