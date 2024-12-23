@@ -1,9 +1,11 @@
+import { jotaiStore } from "@follow/utils"
 import { ThemeProvider } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
+import { Provider } from "jotai"
 import { useColorScheme } from "nativewind"
 import type { ReactNode } from "react"
-import { View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 
 import { sqlite } from "../database"
@@ -20,13 +22,19 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
 
   return (
     <KeyboardProvider>
-      <View style={[{ flex: 1 }, currentThemeColors]}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-            <MigrationProvider>{children}</MigrationProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </View>
+      <Provider store={jotaiStore}>
+        <View style={[styles.flex, currentThemeColors]}>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+              <MigrationProvider>{children}</MigrationProvider>
+            </ThemeProvider>
+          </QueryClientProvider>
+        </View>
+      </Provider>
     </KeyboardProvider>
   )
 }
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+})

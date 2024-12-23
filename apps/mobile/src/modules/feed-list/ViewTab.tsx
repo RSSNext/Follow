@@ -1,47 +1,97 @@
 import { useHeaderHeight } from "@react-navigation/elements"
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useEffect, useRef, useState } from "react"
-import { Animated, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
+import type { WithSpringConfig } from "react-native-reanimated"
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { bottomViewTabHeight } from "@/src/constants/ui"
 import { views } from "@/src/constants/views"
 
-import { viewAtom } from "./atoms"
+import { offsetAtom, viewAtom } from "./atoms"
 
 export const ViewTab = () => {
   const headerHeight = useHeaderHeight()
-  const paddingHorizontal = 6
+  const offset = useAtomValue(offsetAtom)
   const [currentView, setCurrentView] = useAtom(viewAtom)
-
   const tabRef = useRef<ScrollView>(null)
 
-  const indicatorAnim = useRef(new Animated.Value(0)).current
+  const indicatorPosition = useSharedValue(0)
 
   const [tabWidths, setTabWidths] = useState<number[]>([])
   const [tabPositions, setTabPositions] = useState<number[]>([])
 
+  const springConfig: WithSpringConfig = {
+    damping: 20,
+    mass: 1,
+    stiffness: 120,
+  }
+
   useEffect(() => {
     if (tabWidths.length > 0) {
-      Animated.spring(indicatorAnim, {
-        toValue: tabPositions[currentView] || 0,
-        useNativeDriver: true,
-        tension: 120,
-        friction: 8,
-      }).start()
+      indicatorPosition.value = withSpring(tabPositions[currentView] || 0, springConfig)
 
       if (tabRef.current) {
         tabRef.current.scrollTo({ x: currentView * 60, y: 0, animated: true })
       }
     }
-  }, [currentView, tabWidths])
+  }, [currentView, tabPositions, tabWidths])
+
+  const nextTabPosition = tabPositions[currentView + 1] || tabPositions[currentView]
+  const prevTabPosition = tabPositions[currentView - 1] || tabPositions[currentView]
+
+  const nextTabWidth = tabWidths[currentView + 1] || tabWidths[currentView]
+  const prevTabWidth = tabWidths[currentView - 1] || tabWidths[currentView]
+
+  const indicatorStyle = useAnimatedStyle(() => {
+    if (offset === 0) {
+      return {
+        transform: [{ translateX: indicatorPosition.value }],
+        backgroundColor: views[currentView].activeColor,
+        width: tabWidths[currentView] || 20,
+      }
+    }
+    const targetPosition =
+      offset > 0
+        ? nextTabPosition - tabPositions[currentView]
+        : prevTabPosition - tabPositions[currentView]
+
+    const targetWidth =
+      offset >= 0 ? nextTabWidth - tabWidths[currentView] : prevTabWidth - tabWidths[currentView]
+
+    const nextColor =
+      offset > 0
+        ? views[currentView + 1]?.activeColor || views[currentView].activeColor
+        : views[currentView - 1]?.activeColor || views[currentView].activeColor
+
+    const backgroundColor = interpolateColor(
+      Math.abs(offset),
+      [0, 1],
+      [views[currentView].activeColor, nextColor],
+    )
+
+    return {
+      transform: [
+        {
+          translateX: indicatorPosition.value + 10 + Math.abs(offset) * targetPosition,
+        },
+      ],
+      backgroundColor,
+      width: (tabWidths[currentView] || 20) - 20 + Math.abs(offset) * targetWidth,
+    }
+  })
 
   return (
     <ThemedBlurView
       style={[
         styles.tabContainer,
         {
-          backgroundColor: "transparent",
           top: headerHeight - StyleSheet.hairlineWidth,
         },
       ]}
@@ -53,7 +103,7 @@ export const ViewTab = () => {
         horizontal
         ref={tabRef}
         contentContainerStyle={styles.tabScroller}
-        style={{ paddingHorizontal, borderTopWidth: StyleSheet.hairlineWidth }}
+        style={styles.root}
       >
         {views.map((view, index) => {
           const isSelected = currentView === view.view
@@ -90,23 +140,7 @@ export const ViewTab = () => {
             </TouchableOpacity>
           )
         })}
-        <Animated.View
-          style={[
-            styles.indicator,
-            {
-              transform: [
-                {
-                  translateX: Animated.add(
-                    indicatorAnim,
-                    10, // Left add 10px to center
-                  ),
-                },
-              ],
-              backgroundColor: views[currentView].activeColor,
-              width: (tabWidths[currentView] || 20) - 20, // Reduce 20px width
-            },
-          ]}
-        />
+        <Animated.View style={[styles.indicator, indicatorStyle]} />
       </ScrollView>
     </ThemedBlurView>
   )
@@ -120,6 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   tabContainer: {
+    backgroundColor: "transparent",
     bottom: 0,
     left: 0,
     position: "absolute",
@@ -133,4 +168,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 4,
   },
+
+  root: { paddingHorizontal: 6, borderTopWidth: StyleSheet.hairlineWidth },
 })

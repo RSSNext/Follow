@@ -1,28 +1,30 @@
+import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
-import { Link, router, Stack } from "expo-router"
-import { useAtom, useAtomValue } from "jotai"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useHeaderHeight } from "@react-navigation/elements"
+import { router } from "expo-router"
+import { useAtom } from "jotai"
 import type { FC } from "react"
-import { createContext, memo, useContext } from "react"
+import { createContext, memo, useContext, useEffect, useRef } from "react"
 import {
   Animated,
   Image,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   useAnimatedValue,
   View,
 } from "react-native"
+import PagerView from "react-native-pager-view"
 import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { HeaderBlur } from "@/src/components/common/HeaderBlur"
 import { AccordionItem } from "@/src/components/ui/accordion"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { bottomViewTabHeight } from "@/src/constants/ui"
-import { views } from "@/src/constants/views"
-import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { useFeed } from "@/src/store/feed/hooks"
@@ -36,77 +38,37 @@ import {
   useSortedUngroupedSubscription,
   useSubscription,
 } from "@/src/store/subscription/hooks"
-import { accentColor } from "@/src/theme/colors"
 
-import { useHeaderHeight } from "@react-navigation/elements"
-
-import { FeedViewType } from "@follow/constants"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import PagerView from "react-native-pager-view"
 import { viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
-const useActionPadding = () => {
-  const insets = useSafeAreaInsets()
-  return { paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }
-}
-
-function LeftAction() {
-  const handleEdit = () => {
-    //TODO
-  }
-
-  const insets = useActionPadding()
-
-  return (
-    <TouchableOpacity onPress={handleEdit} style={{ paddingLeft: insets.paddingLeft }}>
-      <Text className="text-lg text-accent">Edit</Text>
-    </TouchableOpacity>
-  )
-}
-
-function RightAction() {
-  const insets = useActionPadding()
-
-  return (
-    <View className="flex-row items-center" style={{ paddingRight: insets.paddingRight }}>
-      <Link asChild href="/add">
-        <TouchableOpacity>
-          <AddCuteReIcon color={accentColor} />
-        </TouchableOpacity>
-      </Link>
-    </View>
-  )
-}
-
-export const SubscriptionList = () => {
+export const SubscriptionList = memo(() => {
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
   const tabHeight = useBottomTabBarHeight()
   const headerHeight = useHeaderHeight()
 
   const insets = useSafeAreaInsets()
+
+  const pagerRef = useRef<PagerView>(null)
+
+  useEffect(() => {
+    pagerRef.current?.setPage(currentView)
+  }, [currentView])
+
   return (
     <>
       <StarItem />
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          title: views[currentView].name,
-          headerLeft: LeftAction,
-          headerRight: RightAction,
-          headerBackground: HeaderBlur,
 
-          headerTransparent: true,
-        }}
-      />
       <PagerView
+        pageMargin={1}
         onPageSelected={({ nativeEvent }) => {
           setCurrentView(nativeEvent.position)
         }}
         scrollEnabled
-        style={{ flex: 1 }}
+        style={style.flex}
         initialPage={0}
+        ref={pagerRef}
       >
         {[
           FeedViewType.Articles,
@@ -127,7 +89,7 @@ export const SubscriptionList = () => {
       </PagerView>
     </>
   )
-}
+})
 
 const ViewPage = memo(({ view }: { view: FeedViewType }) => {
   const { grouped, unGrouped } = useGroupedSubscription(view)
@@ -152,7 +114,7 @@ const StarItem = () => {
       className="mt-4 h-12 w-full flex-row items-center px-3"
     >
       <StarCuteFiIcon color="rgb(245, 158, 11)" height={20} width={20} />
-      <Text className="text-text ml-2">Collections</Text>
+      <Text className="ml-2 text-text">Collections</Text>
     </ItemPressable>
   )
 }
@@ -164,7 +126,7 @@ const ListList = () => {
   if (sortedListIds.length === 0) return null
   return (
     <View className="mt-4">
-      <Text className="text-tertiary-label mb-2 ml-3 text-sm font-medium">Lists</Text>
+      <Text className="mb-2 ml-3 text-sm font-medium text-tertiary-label">Lists</Text>
       {sortedListIds.map((id) => {
         return <ListSubscriptionItem key={id} id={id} />
       })}
@@ -176,7 +138,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
   const list = useList(id)
   if (!list) return null
   return (
-    <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3">
+    <ItemPressable className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-3">
       <View className="overflow-hidden rounded">
         {!!list.image && (
           <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
@@ -184,7 +146,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
         {!list.image && <FallbackIcon title={list.title} size={24} />}
       </View>
 
-      <Text className="text-text ml-2">{list.title}</Text>
+      <Text className="ml-2 text-text">{list.title}</Text>
     </ItemPressable>
   )
 })
@@ -230,7 +192,7 @@ const CategoryGrouped = memo(
           onPress={() => {
             // TODO navigate to category
           }}
-          className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3"
+          className="h-12 flex-row items-center border-b border-secondary-system-grouped-background px-3"
         >
           <AnimatedTouchableOpacity
             onPress={() => {
@@ -260,7 +222,7 @@ const CategoryGrouped = memo(
           >
             <MingcuteRightLine color="gray" height={18} width={18} />
           </AnimatedTouchableOpacity>
-          <Text className="text-text ml-3">{category}</Text>
+          <Text className="ml-3 text-text">{category}</Text>
         </ItemPressable>
         <AccordionItem isExpanded={isExpanded} viewKey={category}>
           <GroupedContext.Provider value={category}>
@@ -284,7 +246,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         "flex h-12 flex-row items-center",
         inGrouped ? "px-8" : "px-4",
 
-        "border-secondary-system-grouped-background border-b",
+        "border-b border-secondary-system-grouped-background",
         className,
       )}
       onPress={() => {
@@ -296,10 +258,16 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         })
       }}
     >
-      <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
+      <View className="mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:border-tertiary-system-background dark:bg-[#222]">
         <FeedIcon feed={feed} />
       </View>
       <Text className="text-text">{subscription.title || feed.title}</Text>
     </ItemPressable>
   )
+})
+
+const style = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
 })

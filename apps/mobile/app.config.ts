@@ -2,7 +2,7 @@ import { resolve } from "node:path"
 
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
-const roundedIconPath = resolve(__dirname, "../../resources/icon.png")
+// const roundedIconPath = resolve(__dirname, "../../resources/icon.png")
 const iconPath = resolve(__dirname, "./assets/icon.png")
 const adaptiveIconPath = resolve(__dirname, "./assets/adaptive-icon.png")
 
@@ -55,10 +55,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        image: roundedIconPath,
-        imageWidth: 200,
-        resizeMode: "contain",
         backgroundColor: "#ffffff",
+        dark: {
+          backgroundColor: "#000000",
+        },
       },
     ],
     [
