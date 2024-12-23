@@ -95,7 +95,7 @@ export const ViewTab = () => {
           top: headerHeight - StyleSheet.hairlineWidth,
         },
       ]}
-      className="border-b border-system-fill/60"
+      className="border-system-fill/60 border-b"
     >
       <ScrollView
         showsHorizontalScrollIndicator={false}

@@ -1,4 +1,4 @@
-import { FeedViewType } from "@follow/constants"
+import type { FeedViewType } from "@follow/constants"
 import { createContext, useContext } from "react"
 
 const ViewPageCurrentViewContext = createContext<FeedViewType>(null!)
