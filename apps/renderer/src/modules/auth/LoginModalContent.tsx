@@ -37,6 +37,7 @@ const defaultProviders = {
 }
 const overrideProviderIconMap = {
   apple: <i className="i-mgc-apple-cute-fi text-black dark:text-white" />,
+  credential: <i className="i-mingcute-mail-line text-black dark:text-white" />,
 }
 export const LoginModalContent = (props: LoginModalContentProps) => {
   const modal = useCurrentModal()

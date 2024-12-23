@@ -139,7 +139,9 @@ export function Login() {
                     }}
                   >
                     <i className={cn("mr-2 text-xl", authProvidersConfig[key]?.iconClassName)} />{" "}
-                    {t("login.continueWith", { provider: provider.name })}
+                    {t("login.continueWith", {
+                      provider: provider.name,
+                    })}
                   </Button>
                 ))}
             </div>
@@ -284,7 +286,7 @@ function LoginWithPassword() {
           buttonClassName="text-base !mt-3"
           disabled={!isValid}
         >
-          {t("login.continueWith", { provider: "email" })}
+          {t("login.continueWith", { provider: t("words.email") })}
         </Button>
         <Button
           buttonClassName="!mt-3 text-base"
