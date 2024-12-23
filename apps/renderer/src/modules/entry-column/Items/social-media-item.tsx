@@ -200,18 +200,18 @@ export const SocialMediaItemSkeleton = (
         <div className="ml-2 min-w-0 flex-1">
           <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
             <div className="flex w-[calc(100%-10rem)] space-x-1">
-              <Skeleton className="h-4 w-16 " />
+              <Skeleton className="h-4 w-16" />
               <span className="text-zinc-500">·</span>
-              <Skeleton className="h-4 w-12 " />
+              <Skeleton className="h-4 w-12" />
             </div>
             <div className="relative mt-0.5 text-sm">
-              <Skeleton className="h-4 w-full " />
-              <Skeleton className="mt-1.5 h-4 w-full " />
-              <Skeleton className="mt-1.5 h-4 w-3/4 " />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="mt-1.5 h-4 w-full" />
+              <Skeleton className="mt-1.5 h-4 w-3/4" />
             </div>
           </div>
           <div className="mt-2 flex gap-2 overflow-x-auto">
-            <Skeleton className="size-28 overflow-hidden rounded " />
+            <Skeleton className="size-28 overflow-hidden rounded" />
           </div>
         </div>
       </div>

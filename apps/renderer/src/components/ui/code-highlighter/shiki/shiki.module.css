@@ -1,5 +1,5 @@
 .shiki-wrapper {
-  @apply rounded-md overflow-hidden;
+  @apply overflow-hidden rounded-md;
 
   pre {
     @apply bg-transparent;
