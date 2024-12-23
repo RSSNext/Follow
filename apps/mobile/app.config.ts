@@ -13,6 +13,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: "a6335b14-fb84-45aa-ba80-6f6ab8926920",
     },
   },
+  owner: "follow",
+  updates: {
+    url: "https://u.expo.dev/a6335b14-fb84-45aa-ba80-6f6ab8926920",
+  },
+  runtimeVersion: {
+    policy: "appVersion",
+  },
   name: "Follow",
   slug: "follow",
   version: "1.0.0",

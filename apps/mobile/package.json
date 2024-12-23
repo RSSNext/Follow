@@ -46,6 +46,7 @@
     "expo-status-bar": "~2.0.0",
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.6",
+    "expo-updates": "~0.26.10",
     "expo-web-browser": "~14.0.1",
     "hono": "4.6.13",
     "immer": "10.1.1",
