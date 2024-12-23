@@ -1,8 +1,11 @@
+import type { FeedViewType } from "@follow/constants"
+
 import type { UnreadSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
 import { UnreadService } from "@/src/services/unread"
 
 import { createTransaction, createZustandStore } from "../internal/helper"
+import { getSubscriptionByView } from "../subscription/getter"
 
 type SubscriptionId = string
 interface UnreadStore {
@@ -21,6 +24,17 @@ class UnreadSyncService {
 
     await unreadActions.upsertMany(res.data)
     return res.data
+  }
+
+  async markViewAsRead(view: FeedViewType) {
+    await apiClient.reads.all.$post({
+      json: {
+        view,
+      },
+    })
+
+    const subscriptionIds = getSubscriptionByView(view)
+    await unreadActions.upsertMany(subscriptionIds.map((id) => ({ subscriptionId: id, count: 0 })))
   }
 }
 

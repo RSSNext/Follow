@@ -36,7 +36,6 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({ color }) => <FollowIcon color={color} style={{ width: 20, height: 20 }} />,
           tabBarButton(props) {
-            // return <PlatformPressable {...props} />
             return (
               <GestureDetector gesture={doubleTap}>
                 <View className="flex-1">

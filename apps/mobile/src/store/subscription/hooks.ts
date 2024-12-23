@@ -5,7 +5,7 @@ import { useCallback } from "react"
 
 import { getFeed } from "../feed/getter"
 import { getList } from "../list/getters"
-import { getSubscription } from "./getter"
+import { getSubscription, getSubscriptionByView } from "./getter"
 import { subscriptionSyncService, useSubscriptionStore } from "./store"
 
 export const usePrefetchSubscription = (view: FeedViewType) => {
@@ -38,16 +38,7 @@ const sortUngroupedSubscriptionByAlphabet = (
 }
 
 export const useSubscriptionByView = (view: FeedViewType) => {
-  return useSubscriptionStore(
-    useCallback(
-      (state) => {
-        return Array.from(state.feedIdByView[view])
-          .concat(Array.from(state.inboxIdByView[view]))
-          .concat(Array.from(state.listIdByView[view]))
-      },
-      [view],
-    ),
-  )
+  return useSubscriptionStore(useCallback(() => getSubscriptionByView(view), [view]))
 }
 
 export const useGroupedSubscription = (view: FeedViewType) => {
