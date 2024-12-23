@@ -23,16 +23,19 @@ export const useListStore = createZustandStore<ListState>("list")(() => defaultS
 const get = useListStore.getState
 const set = useListStore.setState
 class ListActions {
-  upsertMany(lists: ListModel[]) {
+  upsertManyInSession(lists: ListModel[]) {
     const state = get()
 
+    set({
+      ...state,
+      lists: { ...state.lists, ...Object.fromEntries(lists.map((list) => [list.id, list])) },
+      listIds: [...state.listIds, ...lists.map((list) => list.id)],
+    })
+  }
+  upsertMany(lists: ListModel[]) {
     const tx = createTransaction()
     tx.store(() => {
-      set({
-        ...state,
-        lists: { ...state.lists, ...Object.fromEntries(lists.map((list) => [list.id, list])) },
-        listIds: [...state.listIds, ...lists.map((list) => list.id)],
-      })
+      this.upsertManyInSession(lists)
     })
 
     tx.persist(() => {

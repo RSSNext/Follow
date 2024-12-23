@@ -139,3 +139,9 @@ export const useSortedListSubscription = (ids: string[], sortBy: "alphabet" | "u
     })
   })
 }
+
+export const useInboxSubscription = (view: FeedViewType) => {
+  return useSubscriptionStore((state) => {
+    return Array.from(state.inboxIdByView[view])
+  })
+}

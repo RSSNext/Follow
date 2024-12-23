@@ -11,7 +11,7 @@ class ListServiceStatic implements Hydratable, Resetable {
   }
   async hydrate() {
     const lists = await db.query.listsTable.findMany()
-    listActions.upsertMany(
+    listActions.upsertManyInSession(
       lists.map((list) => ({
         ...list,
         feedIds: JSON.parse(list.feedIds || "[]") as string[],

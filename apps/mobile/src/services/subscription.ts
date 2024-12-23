@@ -30,7 +30,7 @@ class SubscriptionServiceStatic implements Hydratable, Resetable {
   }
   async hydrate() {
     const subscriptions = await db.query.subscriptionsTable.findMany()
-    subscriptionActions.upsertMany(subscriptions)
+    subscriptionActions.upsertManyInSession(subscriptions)
   }
 }
 export const SubscriptionService = new SubscriptionServiceStatic()

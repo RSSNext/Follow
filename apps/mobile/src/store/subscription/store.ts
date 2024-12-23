@@ -10,10 +10,11 @@ import { feedActions } from "../feed/store"
 import { inboxActions } from "../inbox/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
+import { getInboxStoreId } from "./utils"
 
 type FeedId = string
 type ListId = string
-
+type InboxId = string
 export type SubscriptionModel = Omit<SubscriptionSchema, "id">
 interface SubscriptionState {
   /**
@@ -25,6 +26,8 @@ interface SubscriptionState {
   feedIdByView: Record<FeedViewType, Set<FeedId>>
 
   listIdByView: Record<FeedViewType, Set<ListId>>
+
+  inboxIdByView: Record<FeedViewType, Set<InboxId>>
   /**
    * Key: FeedViewType
    * Value: Record<string, boolean>
@@ -60,6 +63,7 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   data: {},
   feedIdByView: { ...emptyDataIdByView },
   listIdByView: { ...emptyDataIdByView },
+  inboxIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
   categories: new Set(),
   subscriptionIdSet: new Set(),
@@ -68,23 +72,32 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
 
 const immerSet = createImmerSetter(useSubscriptionStore)
 class SubscriptionActions {
+  async upsertManyInSession(subscriptions: SubscriptionModel[]) {
+    immerSet((draft) => {
+      for (const subscription of subscriptions) {
+        if (subscription.feedId && subscription.type === "feed") {
+          draft.data[subscription.feedId] = subscription
+          draft.subscriptionIdSet.add(`${subscription.type}/${subscription.feedId}`)
+          draft.feedIdByView[subscription.view as FeedViewType].add(subscription.feedId)
+        }
+        if (subscription.listId && subscription.type === "list") {
+          draft.data[subscription.listId] = subscription
+          draft.subscriptionIdSet.add(`${subscription.type}/${subscription.listId}`)
+          draft.listIdByView[subscription.view as FeedViewType].add(subscription.listId)
+        }
+
+        if (subscription.inboxId && subscription.type === "inbox") {
+          draft.data[getInboxStoreId(subscription.inboxId)] = subscription
+          draft.subscriptionIdSet.add(`${subscription.type}/${subscription.inboxId}`)
+          draft.inboxIdByView[subscription.view as FeedViewType].add(subscription.inboxId)
+        }
+      }
+    })
+  }
   async upsertMany(subscriptions: SubscriptionModel[]) {
     const tx = createTransaction()
     tx.store(() => {
-      immerSet((draft) => {
-        for (const subscription of subscriptions) {
-          if (subscription.feedId && subscription.type === "feed") {
-            draft.data[subscription.feedId] = subscription
-            draft.subscriptionIdSet.add(`${subscription.type}/${subscription.feedId}`)
-            draft.feedIdByView[subscription.view as FeedViewType].add(subscription.feedId)
-          }
-          if (subscription.listId && subscription.type === "list") {
-            draft.data[subscription.listId] = subscription
-            draft.subscriptionIdSet.add(`${subscription.type}/${subscription.listId}`)
-            draft.listIdByView[subscription.view as FeedViewType].add(subscription.listId)
-          }
-        }
-      })
+      this.upsertManyInSession(subscriptions)
     })
 
     tx.persist(() => {

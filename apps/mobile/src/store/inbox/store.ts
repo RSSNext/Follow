@@ -1,16 +1,14 @@
-import { create } from "zustand"
-
 import type { InboxSchema } from "@/src/database/schemas/types"
 import { InboxService } from "@/src/services/inbox"
 
-import { createTransaction } from "../internal/helper"
+import { createTransaction, createZustandStore } from "../internal/helper"
 
 const defaultState = {
   inboxes: [],
 }
-export const useInboxStore = create<{
+export const useInboxStore = createZustandStore<{
   inboxes: InboxSchema[]
-}>(() => defaultState)
+}>("inbox")(() => defaultState)
 
 // const get = useInboxStore.getState
 const set = useInboxStore.setState
