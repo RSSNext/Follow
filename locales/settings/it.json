@@ -2,7 +2,6 @@
   "about.changelog": "Registro modifiche",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) è nelle prime fasi di sviluppo. Se hai feedback o suggerimenti, sentiti libero di <OpenIssueLink>aprire un problema</OpenIssueLink> <ExternalLinkIcon /> sul nostro GitHub.",
   "about.iconLibrary": "La libreria di icone utilizzata è protetta da copyright da <IconLibraryLink /> <ExternalLinkIcon /> e non può essere ridistribuita.",
-  "about.licenseInfo": "{{appName}} è e sarà sempre un progetto gratuito e open-source. È rilasciato sotto licenza {{license}}.",
   "about.sidebar_title": "Informazioni",
   "about.socialMedia": "Social Media",
   "actions.actionName": "Azione {{number}}",

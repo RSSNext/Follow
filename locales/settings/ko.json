@@ -2,7 +2,6 @@
   "about.changelog": "변경 내역",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) 는 개발 초기 단계에 있습니다. 피드백이나 제안이 있으시면 GitHub 에서 <OpenIssueLink>이슈를 열어주세요</OpenIssueLink> <ExternalLinkIcon />.",
   "about.iconLibrary": "사용된 아이콘 라이브러리는 <IconLibraryLink /> <ExternalLinkIcon />의 저작권으로 보호되며 재배포할 수 없습니다.",
-  "about.licenseInfo": "{{appName}}는 항상 무료 오픈 소스 프로젝트입니다. {{license}} 하에 라이선스가 부여됩니다.",
   "about.sidebar_title": "정보",
   "about.socialMedia": "소셜 미디어",
   "actions.actionName": "액션 {{number}}",

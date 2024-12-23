@@ -79,7 +79,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
   const extraProviders = useMemo(() => {
     if (!authProviders) return []
     return Object.entries(authProviders)
-      .filter(([key]) => !defaultProviders[key] && key !== "credential")
+      .filter(([key]) => !defaultProviders[key])
       .map(([_, provider]) => provider)
   }, [authProviders])
 

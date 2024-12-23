@@ -2,8 +2,6 @@
 
 ## New Features
 
-- Register or Login with email and password
-
 ## Improvements
 
 ## Bug Fixes

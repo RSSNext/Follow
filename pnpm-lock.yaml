@@ -319,6 +319,9 @@ importers:
       builder-util-runtime:
         specifier: 9.2.10
         version: 9.2.10
+      cookie-es:
+        specifier: ^1.2.2
+        version: 1.2.2
       dompurify:
         specifier: ~3.2.2
         version: 3.2.2
