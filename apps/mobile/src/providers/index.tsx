@@ -6,6 +6,7 @@ import { Provider } from "jotai"
 import { useColorScheme } from "nativewind"
 import type { ReactNode } from "react"
 import { StyleSheet, View } from "react-native"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 
 import { sqlite } from "../database"
@@ -26,7 +27,9 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
         <View style={[styles.flex, currentThemeColors]}>
           <QueryClientProvider client={queryClient}>
             <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-              <MigrationProvider>{children}</MigrationProvider>
+              <GestureHandlerRootView>
+                <MigrationProvider>{children}</MigrationProvider>
+              </GestureHandlerRootView>
             </ThemeProvider>
           </QueryClientProvider>
         </View>
