@@ -37,7 +37,7 @@
     "lint:fix": "eslint --fix",
     "mitproxy": "bash scripts/run-proxy.sh",
     "polyfill-optimize": "pnpx nolyfill install",
-    "prepare": "pnpm exec simple-git-hooks && shx test -f .env || shx cp .env.example .env",
+    "prepare": "simple-git-hooks",
     "publish": "electron-vite build && electron-forge publish",
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
