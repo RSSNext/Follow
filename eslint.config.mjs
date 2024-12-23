@@ -29,6 +29,9 @@ export default defineConfig(
       defaultProject: "tsconfig.json",
     },
     typeChecked: "essential",
+    tailwindCSS: {
+      order: false,
+    },
   },
   {
     files: GLOB_TS_SRC,

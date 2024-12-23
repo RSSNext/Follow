@@ -107,7 +107,7 @@ const LayoutActionButton = () => {
             <i
               className={cn(
                 !feedColumnShow
-                  ? "i-mgc-layout-leftbar-open-cute-re "
+                  ? "i-mgc-layout-leftbar-open-cute-re"
                   : "i-mgc-layout-leftbar-close-cute-re",
                 "text-theme-vibrancyFg",
               )}

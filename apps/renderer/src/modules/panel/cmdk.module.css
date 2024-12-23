@@ -1,8 +1,8 @@
 .status-bar {
-  @apply scale-y-75 z-10 relative h-px w-full shrink-0 transform;
+  @apply relative z-10 h-px w-full shrink-0 scale-y-75 transform;
 
   &.loading::before {
-    @apply scale-y-75 z-10 h-px absolute bottom-0 w-full left-0 top-0 transform;
+    @apply absolute bottom-0 left-0 top-0 z-10 h-px w-full scale-y-75 transform;
     @apply bg-repeat;
 
     content: "";
