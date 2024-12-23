@@ -4,12 +4,7 @@ import { memo, useEffect, useRef, useState } from "react"
 import type { TouchableOpacityProps } from "react-native"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import type { WithSpringConfig } from "react-native-reanimated"
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { ContextMenu } from "@/src/components/ui/context-menu"
@@ -21,6 +16,11 @@ import { unreadSyncService } from "@/src/store/unread/store"
 
 import { offsetAtom, setCurrentView, viewAtom } from "./atoms"
 
+const springConfig: WithSpringConfig = {
+  damping: 20,
+  mass: 1,
+  stiffness: 120,
+}
 export const ViewTab = () => {
   const headerHeight = useHeaderHeight()
   const offset = useAtomValue(offsetAtom)
@@ -32,12 +32,6 @@ export const ViewTab = () => {
   const [tabWidths, setTabWidths] = useState<number[]>([])
   const [tabPositions, setTabPositions] = useState<number[]>([])
 
-  const springConfig: WithSpringConfig = {
-    damping: 20,
-    mass: 1,
-    stiffness: 120,
-  }
-
   useEffect(() => {
     if (tabWidths.length > 0) {
       indicatorPosition.value = withSpring(tabPositions[currentView] || 0, springConfig)
@@ -48,47 +42,15 @@ export const ViewTab = () => {
     }
   }, [currentView, tabPositions, tabWidths])
 
-  const nextTabPosition = tabPositions[currentView + 1] || tabPositions[currentView]
-  const prevTabPosition = tabPositions[currentView - 1] || tabPositions[currentView]
-
-  const nextTabWidth = tabWidths[currentView + 1] || tabWidths[currentView]
-  const prevTabWidth = tabWidths[currentView - 1] || tabWidths[currentView]
-
   const indicatorStyle = useAnimatedStyle(() => {
-    if (offset === 0) {
-      return {
-        transform: [{ translateX: indicatorPosition.value }],
-        backgroundColor: views[currentView].activeColor,
-        width: tabWidths[currentView] || 20,
-      }
-    }
-    const targetPosition =
-      offset > 0
-        ? nextTabPosition - tabPositions[currentView]
-        : prevTabPosition - tabPositions[currentView]
-
-    const targetWidth =
-      offset >= 0 ? nextTabWidth - tabWidths[currentView] : prevTabWidth - tabWidths[currentView]
-
-    const nextColor =
-      offset > 0
-        ? views[currentView + 1]?.activeColor || views[currentView].activeColor
-        : views[currentView - 1]?.activeColor || views[currentView].activeColor
-
-    const backgroundColor = interpolateColor(
-      Math.abs(offset),
-      [0, 1],
-      [views[currentView].activeColor, nextColor],
-    )
-
     return {
       transform: [
         {
-          translateX: indicatorPosition.value + 10 + Math.abs(offset) * targetPosition,
+          translateX: indicatorPosition.value + 10 + Math.abs(offset),
         },
       ],
-      backgroundColor,
-      width: (tabWidths[currentView] || 20) - 20 + Math.abs(offset) * targetWidth,
+      backgroundColor: views[currentView].activeColor,
+      width: (tabWidths[currentView] || 20) - 40 + Math.abs(offset),
     }
   })
 
@@ -157,12 +119,12 @@ const TabItem = memo(
             }
           }
         }}
+        onLayout={onLayout}
       >
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => setCurrentView(view.view)}
           className="relative mr-4 flex-row items-center justify-center"
-          onLayout={onLayout}
         >
           <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
           <Text

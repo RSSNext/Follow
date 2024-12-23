@@ -16,8 +16,13 @@ import {
   useAnimatedValue,
   View,
 } from "react-native"
+import type {
+  SwipeableMethods,
+  SwipeableRef,
+} from "react-native-gesture-handler/ReanimatedSwipeable"
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable"
 import PagerView from "react-native-pager-view"
-import { useSharedValue } from "react-native-reanimated"
+import ReAnimated, { FadeIn, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AccordionItem } from "@/src/components/ui/accordion"
@@ -241,20 +246,19 @@ const CategoryGrouped = memo(
                 useNativeDriver: true,
               }).start()
             }}
-            style={{
-              height: 20,
-              width: 20,
-              alignItems: "center",
-              justifyContent: "center",
-              transform: [
-                {
-                  rotate: rotateValue.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ["90deg", "0deg"],
-                  }),
-                },
-              ],
-            }}
+            style={[
+              {
+                transform: [
+                  {
+                    rotate: rotateValue.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["90deg", "0deg"],
+                    }),
+                  },
+                ],
+              },
+              style.accordionIcon,
+            ]}
           >
             <MingcuteRightLine color="gray" height={18} width={18} />
           </AnimatedTouchableOpacity>
@@ -273,42 +277,97 @@ const CategoryGrouped = memo(
   },
 )
 
+const renderRightActions = () => {
+  return (
+    <ReAnimated.View entering={FadeIn} className="flex-row items-center">
+      <TouchableOpacity
+        className="bg-red h-full justify-center px-4"
+        onPress={() => {
+          // TODO: Handle unsubscribe
+        }}
+      >
+        <Text className="text-base font-semibold text-white">Unsubscribe</Text>
+      </TouchableOpacity>
+    </ReAnimated.View>
+  )
+}
+
+const renderLeftActions = () => {
+  return (
+    <ReAnimated.View entering={FadeIn} className="flex-row items-center">
+      <TouchableOpacity
+        className="bg-blue h-full justify-center px-4"
+        onPress={() => {
+          // TODO: Handle unsubscribe
+        }}
+      >
+        <Text className="text-base font-semibold text-white">Read</Text>
+      </TouchableOpacity>
+    </ReAnimated.View>
+  )
+}
+
+let prevOpenedRow: SwipeableMethods | null = null
 const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const unreadCount = useUnreadCount(id)
   const feed = useFeed(id)
-
   const inGrouped = !!useContext(GroupedContext)
-  if (!subscription || !feed) return null
-  return (
-    <ItemPressable
-      className={cn(
-        "flex h-12 flex-row items-center",
-        inGrouped ? "pl-8 pr-4" : "px-4",
+  const swipeableRef: SwipeableRef = useRef(null)
 
-        "border-secondary-system-grouped-background border-b",
-        className,
-      )}
-      onPress={() => {
-        router.push({
-          pathname: `/feeds/[feedId]`,
-          params: {
-            feedId: id,
-          },
-        })
+  if (!subscription || !feed) return null
+
+  return (
+    // FIXME: Here leads to very serious performance issues, the frame rate of both the UI and JS threads has dropped
+    <Swipeable
+      renderRightActions={renderRightActions}
+      renderLeftActions={renderLeftActions}
+      leftThreshold={40}
+      rightThreshold={40}
+      ref={swipeableRef}
+      onSwipeableWillOpen={() => {
+        if (prevOpenedRow && prevOpenedRow !== swipeableRef.current) {
+          prevOpenedRow.close()
+        }
+        prevOpenedRow = swipeableRef.current
       }}
     >
-      <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
-        <FeedIcon feed={feed} />
-      </View>
-      <Text className="text-text">{subscription.title || feed.title}</Text>
-      {!!unreadCount && <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>}
-    </ItemPressable>
+      <ItemPressable
+        className={cn(
+          "bg-system-background flex h-12 flex-row items-center",
+          inGrouped ? "pl-8 pr-4" : "px-4",
+          "border-secondary-system-grouped-background border-b",
+          className,
+        )}
+        onPress={() => {
+          router.push({
+            pathname: `/feeds/[feedId]`,
+            params: {
+              feedId: id,
+            },
+          })
+        }}
+      >
+        <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
+          <FeedIcon feed={feed} />
+        </View>
+        <Text className="text-text">{subscription.title || feed.title}</Text>
+        {!!unreadCount && (
+          <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
+        )}
+      </ItemPressable>
+    </Swipeable>
   )
 })
 
 const style = StyleSheet.create({
   flex: {
     flex: 1,
+  },
+  accordionIcon: {
+    height: 20,
+    width: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })
