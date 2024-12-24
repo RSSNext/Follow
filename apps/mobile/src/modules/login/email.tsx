@@ -11,7 +11,7 @@ import { signIn } from "@/src/lib/auth"
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().max(128),
+  password: z.string().min(8).max(128),
 })
 
 type FormValue = z.infer<typeof formSchema>
@@ -39,7 +39,7 @@ function Input({
 }
 
 export function EmailLogin() {
-  const { control, handleSubmit } = useForm<FormValue>({
+  const { control, handleSubmit, formState } = useForm<FormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -76,9 +76,9 @@ export function EmailLogin() {
         />
       </View>
       <TouchableOpacity
-        disabled={submitMutation.isPending}
+        disabled={submitMutation.isPending || !formState.isValid}
         onPress={handleSubmit((values) => submitMutation.mutate(values))}
-        className="rounded-lg bg-accent p-3"
+        className="disabled:bg-gray-3 rounded-lg bg-accent p-3"
       >
         {submitMutation.isPending ? (
           <ActivityIndicator className="text-white" />
