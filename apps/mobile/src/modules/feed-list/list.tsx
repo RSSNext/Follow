@@ -2,14 +2,15 @@ import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
+import { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { useAtom } from "jotai"
 import type { FC } from "react"
 import { createContext, memo, useContext, useEffect, useRef } from "react"
 import {
   Animated,
+  Easing,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -54,11 +55,6 @@ import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 export const SubscriptionList = memo(() => {
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
-  const tabHeight = useBottomTabBarHeight()
-  const headerHeight = useHeaderHeight()
-
-  const insets = useSafeAreaInsets()
-
   const pagerRef = useRef<PagerView>(null)
 
   useEffect(() => {
@@ -88,33 +84,95 @@ export const SubscriptionList = memo(() => {
           FeedViewType.Notifications,
         ].map((view) => {
           return (
-            <ScrollView key={view} automaticallyAdjustContentInsets>
-              <View style={{ height: headerHeight - insets.top + bottomViewTabHeight }} />
-              <ViewPage view={view} />
-              <View style={{ height: tabHeight }} />
-            </ScrollView>
+            <ViewPageCurrentViewProvider key={view} value={view}>
+              <RecycleList view={view} />
+            </ViewPageCurrentViewProvider>
           )
         })}
       </PagerView>
     </>
   )
 })
+const RecycleList = ({ view }: { view: FeedViewType }) => {
+  const headerHeight = useHeaderHeight()
+  const insets = useSafeAreaInsets()
+  const tabHeight = useBottomTabBarHeight()
 
-const ViewPage = memo(({ view }: { view: FeedViewType }) => {
-  const { grouped, unGrouped } = useGroupedSubscription(view)
   usePrefetchSubscription(view)
+  const { grouped, unGrouped } = useGroupedSubscription(view)
+  const sortedGrouped = useSortedGroupedSubscription(grouped, "alphabet")
+  const sortedUnGrouped = useSortedUngroupedSubscription(unGrouped, "alphabet")
+  const data = [...sortedGrouped, ...sortedUnGrouped]
 
   return (
-    <ViewPageCurrentViewProvider value={view}>
+    <FlashList
+      contentContainerStyle={{
+        paddingTop: headerHeight - insets.top + bottomViewTabHeight,
+        paddingBottom: tabHeight,
+      }}
+      data={data}
+      estimatedItemSize={48}
+      ListHeaderComponent={ListHeaderComponent}
+      renderItem={ItemRender}
+      extraData={{
+        total: data.length,
+      }}
+    />
+  )
+}
+
+const ItemRender = ({
+  item,
+  index,
+  extraData,
+}: {
+  item: string | { category: string; subscriptionIds: string[] }
+  index: number
+  extraData?: {
+    total: number
+  }
+}) => {
+  if (typeof item === "string") {
+    return (
+      <SubscriptionItem
+        id={item}
+        className={extraData && index === extraData.total - 1 ? "border-b-transparent" : ""}
+      />
+    )
+  }
+  const { category, subscriptionIds } = item
+  return <CategoryGrouped category={category} subscriptionIds={subscriptionIds} />
+}
+
+const ListHeaderComponent = () => {
+  const view = useViewPageCurrentView()
+
+  return (
+    <>
       <StarItem />
       {view === FeedViewType.Articles && <InboxList />}
       <ListList />
       <Text className="text-tertiary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
-      <CategoryList grouped={grouped} />
-      <UnGroupedList subscriptionIds={unGrouped} />
-    </ViewPageCurrentViewProvider>
+    </>
   )
-})
+}
+
+// This not used FlashList
+// const ViewPage = memo(({ view }: { view: FeedViewType }) => {
+//   const { grouped, unGrouped } = useGroupedSubscription(view)
+//   usePrefetchSubscription(view)
+
+//   return (
+//     <ViewPageCurrentViewProvider value={view}>
+//       <StarItem />
+//       {view === FeedViewType.Articles && <InboxList />}
+//       <ListList />
+//       <Text className="text-tertiary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
+//       <CategoryList grouped={grouped} />
+//       <UnGroupedList subscriptionIds={unGrouped} />
+//     </ViewPageCurrentViewProvider>
+//   )
+// })
 
 const InboxList = () => {
   const inboxes = useInboxSubscription(FeedViewType.Articles)
@@ -176,6 +234,7 @@ const ListList = () => {
 
 const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
+  const unreadCount = useUnreadCount(id)
   if (!list) return null
   return (
     <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3">
@@ -187,6 +246,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
       </View>
 
       <Text className="text-text ml-2">{list.title}</Text>
+      {!!unreadCount && <View className="bg-tertiary-label ml-auto size-1 rounded-full" />}
     </ItemPressable>
   )
 })
@@ -212,15 +272,15 @@ const GroupedContext = createContext<string | null>(null)
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
-const CategoryList: FC<{
-  grouped: Record<string, string[]>
-}> = ({ grouped }) => {
-  const sortedGrouped = useSortedGroupedSubscription(grouped, "alphabet")
+// const CategoryList: FC<{
+//   grouped: Record<string, string[]>
+// }> = ({ grouped }) => {
+//   const sortedGrouped = useSortedGroupedSubscription(grouped, "alphabet")
 
-  return sortedGrouped.map(({ category, subscriptionIds }) => {
-    return <CategoryGrouped key={category} category={category} subscriptionIds={subscriptionIds} />
-  })
-}
+//   return sortedGrouped.map(({ category, subscriptionIds }) => {
+//     return <CategoryGrouped key={category} category={category} subscriptionIds={subscriptionIds} />
+//   })
+// }
 
 const CategoryGrouped = memo(
   ({ category, subscriptionIds }: { category: string; subscriptionIds: string[] }) => {
@@ -237,14 +297,13 @@ const CategoryGrouped = memo(
         >
           <AnimatedTouchableOpacity
             onPress={() => {
-              isExpanded.value = !isExpanded.value
-
-              Animated.spring(rotateValue, {
+              Animated.timing(rotateValue, {
                 toValue: isExpanded.value ? 1 : 0,
-                stiffness: 100,
-                damping: 10,
+                easing: Easing.linear,
+
                 useNativeDriver: true,
               }).start()
+              isExpanded.value = !isExpanded.value
             }}
             style={[
               {

@@ -31,16 +31,25 @@ export const ViewTab = () => {
 
   const [tabWidths, setTabWidths] = useState<number[]>([])
   const [tabPositions, setTabPositions] = useState<number[]>([])
+  const scrollOffsetX = useRef(0)
 
   useEffect(() => {
     if (tabWidths.length > 0) {
       indicatorPosition.value = withSpring(tabPositions[currentView] || 0, springConfig)
 
       if (tabRef.current) {
-        tabRef.current.scrollTo({ x: currentView * 60, y: 0, animated: true })
+        const x = currentView > 0 ? tabPositions[currentView - 1] + tabWidths[currentView - 1] : 0
+
+        const isCurrentTabVisible =
+          scrollOffsetX.current < tabPositions[currentView] &&
+          scrollOffsetX.current + tabWidths[currentView] > tabPositions[currentView]
+
+        if (!isCurrentTabVisible) {
+          tabRef.current.scrollTo({ x, y: 0, animated: true })
+        }
       }
     }
-  }, [currentView, tabPositions, tabWidths])
+  }, [currentView, indicatorPosition, tabPositions, tabWidths])
 
   const indicatorStyle = useAnimatedStyle(() => {
     return {
@@ -61,6 +70,9 @@ export const ViewTab = () => {
     >
       <View className="absolute inset-x-0 bottom-0" style={{ height: bottomViewTabHeight }}>
         <ScrollView
+          onScroll={(event) => {
+            scrollOffsetX.current = event.nativeEvent.contentOffset.x
+          }}
           showsHorizontalScrollIndicator={false}
           className="border-tertiary-system-background"
           horizontal

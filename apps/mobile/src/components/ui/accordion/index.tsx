@@ -2,10 +2,11 @@ import type { StyleProp, ViewStyle } from "react-native"
 import { StyleSheet, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated"
 
 export function AccordionItem({
@@ -27,9 +28,9 @@ export function AccordionItem({
   const height = useSharedValue(0)
 
   const derivedHeight = useDerivedValue(() =>
-    withSpring(height.value * Number(isExpanded.value), {
-      damping: 30,
-      stiffness: 100,
+    withTiming(height.value * Number(isExpanded.value), {
+      duration: 300,
+      easing: Easing.linear,
     }),
   )
   const bodyStyle = useAnimatedStyle(() => ({
