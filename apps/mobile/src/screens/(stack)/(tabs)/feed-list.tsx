@@ -2,7 +2,6 @@ import { Link, Stack } from "expo-router"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { HeaderBlur } from "@/src/components/common/HeaderBlur"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useCurrentView } from "@/src/modules/feed-list/atoms"
@@ -23,7 +22,10 @@ export default function FeedList() {
           title: views[currentView].name,
           headerLeft: LeftAction,
           headerRight: RightAction,
-          headerBackground: HeaderBlur,
+          // headerBackground: HeaderBlur,
+          headerBackground: () => (
+            <View className="absolute inset-0 flex-1 overflow-hidden bg-transparent" />
+          ),
 
           headerTransparent: true,
         }}

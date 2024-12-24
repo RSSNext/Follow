@@ -56,47 +56,44 @@ export const ViewTab = () => {
 
   return (
     <ThemedBlurView
-      style={[
-        styles.tabContainer,
-        {
-          top: headerHeight - StyleSheet.hairlineWidth,
-        },
-      ]}
-      className="border-system-fill/60 border-b"
+      style={[styles.tabContainer, { height: headerHeight + bottomViewTabHeight }]}
+      className="border-system-fill/60 relative border-b"
     >
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        className="border-tertiary-system-background"
-        horizontal
-        ref={tabRef}
-        contentContainerStyle={styles.tabScroller}
-        style={styles.root}
-      >
-        {views.map((view, index) => {
-          const isSelected = currentView === view.view
-          return (
-            <TabItem
-              isSelected={isSelected}
-              key={view.name}
-              view={view}
-              onLayout={(event) => {
-                const { width, x } = event.nativeEvent.layout
-                setTabWidths((prev) => {
-                  const newWidths = [...prev]
-                  newWidths[index] = width
-                  return newWidths
-                })
-                setTabPositions((prev) => {
-                  const newPositions = [...prev]
-                  newPositions[index] = x
-                  return newPositions
-                })
-              }}
-            />
-          )
-        })}
-        <Animated.View style={[styles.indicator, indicatorStyle]} />
-      </ScrollView>
+      <View className="absolute inset-x-0 bottom-0" style={{ height: bottomViewTabHeight }}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          className="border-tertiary-system-background"
+          horizontal
+          ref={tabRef}
+          contentContainerStyle={styles.tabScroller}
+          style={styles.root}
+        >
+          {views.map((view, index) => {
+            const isSelected = currentView === view.view
+            return (
+              <TabItem
+                isSelected={isSelected}
+                key={view.name}
+                view={view}
+                onLayout={(event) => {
+                  const { width, x } = event.nativeEvent.layout
+                  setTabWidths((prev) => {
+                    const newWidths = [...prev]
+                    newWidths[index] = width
+                    return newWidths
+                  })
+                  setTabPositions((prev) => {
+                    const newPositions = [...prev]
+                    newPositions[index] = x
+                    return newPositions
+                  })
+                }}
+              />
+            )
+          })}
+          <Animated.View style={[styles.indicator, indicatorStyle]} />
+        </ScrollView>
+      </View>
     </ThemedBlurView>
   )
 }
@@ -161,9 +158,7 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
     width: "100%",
-    borderTopColor: "rgba(0,0,0,0.2)",
-    borderTopWidth: StyleSheet.hairlineWidth,
-    height: bottomViewTabHeight,
+    top: 0,
   },
   tabScroller: {
     alignItems: "center",
