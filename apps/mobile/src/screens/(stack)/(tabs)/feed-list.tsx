@@ -56,7 +56,7 @@ function RightAction() {
   const insets = useActionPadding()
 
   return (
-    <View className="flex-row items-center gap-3" style={{ paddingRight: insets.paddingRight }}>
+    <View className="flex-row items-center gap-4" style={{ paddingRight: insets.paddingRight }}>
       <SortActionButton />
       <Link asChild href="/add">
         <TouchableOpacity className="size-6">

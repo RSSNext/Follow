@@ -9,6 +9,8 @@ export const ItemPressable: typeof Pressable = memo(({ children, ...props }) => 
       {...props}
       onPressIn={composeEventHandlers(props.onPressIn, () => setIsPressing(true))}
       onPressOut={composeEventHandlers(props.onPressOut, () => setIsPressing(false))}
+      onHoverIn={composeEventHandlers(props.onHoverIn, () => setIsPressing(true))}
+      onHoverOut={composeEventHandlers(props.onHoverOut, () => setIsPressing(false))}
       className={cn(
         isPressing ? "bg-tertiary-system-background" : "bg-system-background",
         props.className,

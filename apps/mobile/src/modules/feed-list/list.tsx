@@ -408,7 +408,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
     >
       <ItemPressable
         className={cn(
-          "bg-system-background flex h-12 flex-row items-center",
+          "flex h-12 flex-row items-center",
           inGrouped ? "pl-8 pr-4" : "px-4",
           "border-secondary-system-grouped-background border-b-hairline",
           className,
