@@ -5,6 +5,7 @@ import { useHeaderHeight } from "@react-navigation/elements"
 import { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { useAtom } from "jotai"
+import { useColorScheme } from "nativewind"
 import type { FC } from "react"
 import { createContext, memo, useContext, useEffect, useRef } from "react"
 import {
@@ -106,9 +107,13 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
 
   return (
     <FlashList
+      scrollIndicatorInsets={{
+        bottom: tabHeight - insets.bottom,
+        top: headerHeight - insets.top + bottomViewTabHeight,
+      }}
       contentContainerStyle={{
         paddingTop: headerHeight - insets.top + bottomViewTabHeight,
-        paddingBottom: tabHeight,
+        paddingBottom: tabHeight + headerHeight,
       }}
       data={data}
       estimatedItemSize={48}
@@ -190,11 +195,16 @@ const InboxList = () => {
 const InboxItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(getInboxStoreId(id))
   const unreadCount = useUnreadCount(id)
+  const { colorScheme } = useColorScheme()
   if (!subscription) return null
   return (
     <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3">
       <View className="ml-0.5 overflow-hidden rounded">
-        <InboxCuteFiIcon height={20} width={20} />
+        <InboxCuteFiIcon
+          height={20}
+          width={20}
+          color={colorScheme === "dark" ? "white" : "black"}
+        />
       </View>
 
       <Text className="text-text ml-2.5">{subscription.title}</Text>

@@ -67,6 +67,20 @@ export default function DebugPanel() {
         </View>
       </View>
 
+      <Text className="mt-4 px-8 text-2xl font-medium text-white">App</Text>
+      <View style={styles.container}>
+        <View style={styles.itemContainer}>
+          <TouchableOpacity
+            style={styles.itemPressable}
+            onPress={() => {
+              expo.reloadAppAsync("Reload App")
+            }}
+          >
+            <Text style={styles.filename}>Reload App</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
       <Sitemap />
     </ScrollView>
