@@ -3,9 +3,10 @@ import { useMutation } from "@tanstack/react-query"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { ActivityIndicator, Button, TextInput, View } from "react-native"
+import { ActivityIndicator, TextInput, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 
+import { ThemedText } from "@/src/components/common/ThemedText"
 import { signIn } from "@/src/lib/auth"
 
 const formSchema = z.object({
@@ -51,8 +52,8 @@ export function EmailLogin() {
   })
 
   return (
-    <View className="flex w-full gap-6">
-      <View className="mx-auto w-full max-w-sm gap-4">
+    <View className="mx-auto flex w-full max-w-sm gap-6">
+      <View className="gap-4">
         <Input
           autoCapitalize="none"
           autoCorrect={false}
@@ -61,7 +62,7 @@ export function EmailLogin() {
           placeholder="Email"
           control={control}
           name="email"
-          className="border-gray-6 rounded-lg border px-3 py-2"
+          className="border-gray-3 placeholder:font-sn placeholder:text-placeholder-text rounded-lg border px-3 py-2 focus:border-accent"
         />
         <Input
           autoCapitalize="none"
@@ -70,18 +71,21 @@ export function EmailLogin() {
           placeholder="Password"
           control={control}
           name="password"
-          className="border-gray-6 rounded-lg border px-3 py-2"
+          secureTextEntry
+          className="border-gray-3 placeholder:font-sn placeholder:text-placeholder-text rounded-lg border px-3 py-2 focus:border-accent"
         />
       </View>
-      {submitMutation.isPending ? (
-        <ActivityIndicator />
-      ) : (
-        <Button
-          title="Login"
-          disabled={submitMutation.isPending}
-          onPress={handleSubmit((values) => submitMutation.mutate(values))}
-        />
-      )}
+      <TouchableOpacity
+        disabled={submitMutation.isPending}
+        onPress={handleSubmit((values) => submitMutation.mutate(values))}
+        className="rounded-lg bg-accent p-3"
+      >
+        {submitMutation.isPending ? (
+          <ActivityIndicator className="text-white" />
+        ) : (
+          <ThemedText className="text-center text-white">Continue with Email</ThemedText>
+        )}
+      </TouchableOpacity>
     </View>
   )
 }
