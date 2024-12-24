@@ -50,7 +50,7 @@ import {
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount, useUnreadCounts } from "@/src/store/unread/hooks"
 
-import { viewAtom } from "./atoms"
+import { useFeedListSortMethod, useFeedListSortOrder, viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
 export const SubscriptionList = memo(() => {
@@ -101,8 +101,11 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
 
   usePrefetchSubscription(view)
   const { grouped, unGrouped } = useGroupedSubscription(view)
-  const sortedGrouped = useSortedGroupedSubscription(grouped, "alphabet")
-  const sortedUnGrouped = useSortedUngroupedSubscription(unGrouped, "alphabet")
+
+  const sortBy = useFeedListSortMethod()
+  const sortOrder = useFeedListSortOrder()
+  const sortedGrouped = useSortedGroupedSubscription(grouped, sortBy, sortOrder)
+  const sortedUnGrouped = useSortedUngroupedSubscription(unGrouped, sortBy, sortOrder)
   const data = [...sortedGrouped, ...sortedUnGrouped]
 
   return (
@@ -113,7 +116,7 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
       }}
       contentContainerStyle={{
         paddingTop: headerHeight - insets.top + bottomViewTabHeight,
-        paddingBottom: tabHeight + headerHeight,
+        paddingBottom: tabHeight,
       }}
       data={data}
       estimatedItemSize={48}
@@ -198,7 +201,7 @@ const InboxItem = memo(({ id }: { id: string }) => {
   const { colorScheme } = useColorScheme()
   if (!subscription) return null
   return (
-    <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3">
+    <ItemPressable className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3">
       <View className="ml-0.5 overflow-hidden rounded">
         <InboxCuteFiIcon
           height={20}
@@ -247,7 +250,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
   const unreadCount = useUnreadCount(id)
   if (!list) return null
   return (
-    <ItemPressable className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3">
+    <ItemPressable className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3">
       <View className="overflow-hidden rounded">
         {!!list.image && (
           <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
@@ -264,7 +267,9 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
 const UnGroupedList: FC<{
   subscriptionIds: string[]
 }> = ({ subscriptionIds }) => {
-  const sortedSubscriptionIds = useSortedUngroupedSubscription(subscriptionIds, "alphabet")
+  const sortBy = useFeedListSortMethod()
+  const sortOrder = useFeedListSortOrder()
+  const sortedSubscriptionIds = useSortedUngroupedSubscription(subscriptionIds, sortBy, sortOrder)
   const lastSubscriptionId = sortedSubscriptionIds.at(-1)
 
   return sortedSubscriptionIds.map((id) => {
@@ -303,7 +308,7 @@ const CategoryGrouped = memo(
           onPress={() => {
             // TODO navigate to category
           }}
-          className="border-secondary-system-grouped-background h-12 flex-row items-center border-b px-3"
+          className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3"
         >
           <AnimatedTouchableOpacity
             onPress={() => {
@@ -405,7 +410,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         className={cn(
           "bg-system-background flex h-12 flex-row items-center",
           inGrouped ? "pl-8 pr-4" : "px-4",
-          "border-secondary-system-grouped-background border-b",
+          "border-secondary-system-grouped-background border-b-hairline",
           className,
         )}
         onPress={() => {

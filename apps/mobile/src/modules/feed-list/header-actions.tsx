@@ -4,8 +4,8 @@ import type { ContextMenuAction } from "react-native-context-menu-view"
 import { ContextMenu } from "@/src/components/ui/context-menu"
 import { AZSortAscendingLettersCuteReIcon } from "@/src/icons/AZ_sort_ascending_letters_cute_re"
 import { AZSortDescendingLettersCuteReIcon } from "@/src/icons/AZ_sort_descending_letters_cute_re"
-import { Numbers09SortAscendingCuteReIcon } from "@/src/icons/numbers_09_sort_ascending_cute_re"
-import { Numbers09SortDescendingCuteReIcon } from "@/src/icons/numbers_09_sort_descending_cute_re"
+import { Numbers90SortAscendingCuteReIcon } from "@/src/icons/numbers_90_sort_ascending_cute_re"
+import { Numbers90SortDescendingCuteReIcon } from "@/src/icons/numbers_90_sort_descending_cute_re"
 import { accentColor } from "@/src/theme/colors"
 
 import {
@@ -21,8 +21,8 @@ const map = {
     desc: AZSortDescendingLettersCuteReIcon,
   },
   count: {
-    asc: Numbers09SortAscendingCuteReIcon,
-    desc: Numbers09SortDescendingCuteReIcon,
+    desc: Numbers90SortDescendingCuteReIcon,
+    asc: Numbers90SortAscendingCuteReIcon,
   },
 }
 
@@ -37,7 +37,7 @@ export const SortActionButton = () => {
 
   const actions: ContextMenuAction[] = [
     { title: "Alphabet", actions: orderActions, selected: sortMethod === "alphabet" },
-    { title: "Count", actions: orderActions, selected: sortMethod === "count" },
+    { title: "Unread Count", actions: orderActions, selected: sortMethod === "count" },
   ]
 
   const Icon = map[sortMethod][sortOrder]

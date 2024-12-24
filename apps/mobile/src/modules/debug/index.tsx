@@ -56,9 +56,9 @@ export const DebugButton = () => {
         transform: pan.getTranslateTransform(),
       }}
       {...panResponder.panHandlers}
-      className="absolute mt-5 flex size-5 items-center justify-center rounded-r-md bg-accent"
+      className="absolute mt-5 flex size-12 items-center justify-center rounded-r-md bg-accent"
     >
-      <BugCuteReIcon height={16} width={16} color="#fff" />
+      <BugCuteReIcon height={24} width={24} color="#fff" />
     </Animated.View>
   )
 }

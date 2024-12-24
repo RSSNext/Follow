@@ -178,5 +178,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
 
-  root: { paddingHorizontal: 6, borderTopWidth: StyleSheet.hairlineWidth },
+  root: { paddingHorizontal: 6 },
 })

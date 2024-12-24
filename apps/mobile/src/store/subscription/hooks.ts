@@ -5,7 +5,8 @@ import { useCallback } from "react"
 
 import { getFeed } from "../feed/getter"
 import { getList } from "../list/getters"
-import { getSubscription, getSubscriptionByView } from "./getter"
+import { getUnreadCount } from "../unread/getter"
+import { getSubscription, getSubscriptionByCategory, getSubscriptionByView } from "./getter"
 import { subscriptionSyncService, useSubscriptionStore } from "./store"
 
 export const usePrefetchSubscription = (view: FeedViewType) => {
@@ -75,40 +76,65 @@ export const useGroupedSubscription = (view: FeedViewType) => {
 }
 
 const sortByUnread = (_leftSubscriptionId: string, _rightSubscriptionId: string) => {
-  return 1
+  const leftSubscription = getSubscription(_leftSubscriptionId)
+  const rightSubscription = getSubscription(_rightSubscriptionId)
+
+  const leftSubscriptionId = leftSubscription?.feedId || leftSubscription?.listId
+  const rightSubscriptionId = rightSubscription?.feedId || rightSubscription?.listId
+
+  if (!leftSubscriptionId || !rightSubscriptionId) return 0
+  return getUnreadCount(rightSubscriptionId) - getUnreadCount(leftSubscriptionId)
 }
+
+const sortGroupedSubscriptionByUnread = (leftCategory: string, rightCategory: string) => {
+  const leftFeedIds = getSubscriptionByCategory(leftCategory)
+  const rightFeedIds = getSubscriptionByCategory(rightCategory)
+
+  const leftUnreadCount = leftFeedIds.reduce((acc, feedId) => {
+    return acc + getUnreadCount(feedId)
+  }, 0)
+  const rightUnreadCount = rightFeedIds.reduce((acc, feedId) => {
+    return acc + getUnreadCount(feedId)
+  }, 0)
+  return -(rightUnreadCount - leftUnreadCount)
+}
+
 export const useSortedGroupedSubscription = (
   grouped: Record<string, string[]>,
-  sortBy: "alphabet" | "unread",
+  sortBy: "alphabet" | "count",
+  sortOrder: "asc" | "desc",
 ) => {
   return useSubscriptionStore(
     useCallback(() => {
       const categories = Object.keys(grouped)
       const sortedCategories = categories.sort((a, b) => {
-        if (sortBy === "alphabet") {
-          return sortByAlphabet(a, b)
-        }
-        return sortByUnread(a, b)
+        const sortMethod = sortBy === "alphabet" ? sortByAlphabet : sortGroupedSubscriptionByUnread
+        const result = sortMethod(a, b)
+        return sortOrder === "asc" ? result : -result
       })
       const sortedList = [] as { category: string; subscriptionIds: string[] }[]
       for (const category of sortedCategories) {
         sortedList.push({ category, subscriptionIds: grouped[category] })
       }
       return sortedList
-    }, [grouped, sortBy]),
+    }, [grouped, sortBy, sortOrder]),
   )
 }
 
-export const useSortedUngroupedSubscription = (ids: string[], sortBy: "alphabet" | "unread") => {
+export const useSortedUngroupedSubscription = (
+  ids: string[],
+  sortBy: "alphabet" | "count",
+  sortOrder: "asc" | "desc",
+) => {
   return useSubscriptionStore(
     useCallback(() => {
       return ids.sort((a, b) => {
-        if (sortBy === "alphabet") {
-          return sortUngroupedSubscriptionByAlphabet(a, b)
-        }
-        return sortByUnread(a, b)
+        const sortMethod =
+          sortBy === "alphabet" ? sortUngroupedSubscriptionByAlphabet : sortByUnread
+        const result = sortMethod(a, b)
+        return sortOrder === "asc" ? result : -result
       })
-    }, [ids, sortBy]),
+    }, [ids, sortBy, sortOrder]),
   )
 }
 
