@@ -7,5 +7,14 @@
     "production": {
       "channel": "production"
     }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "rss3@diygod.me",
+        "ascAppId": "6739802604",
+        "appleTeamId": "NCLY2BLCL2"
+      }
+    }
   }
 }
