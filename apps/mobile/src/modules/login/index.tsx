@@ -1,6 +1,5 @@
 import { TouchableWithoutFeedback, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
-import { SafeAreaView } from "react-native-safe-area-context"
 
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { Logo } from "@/src/components/ui/logo"
@@ -10,7 +9,7 @@ import { SocialLogin } from "./social"
 
 export function Login() {
   return (
-    <SafeAreaView className="flex-1 gap-10">
+    <View className="flex-1 gap-10 p-safe">
       <TouchableWithoutFeedback
         onPress={() => {
           KeyboardController.dismiss()
@@ -31,6 +30,6 @@ export function Login() {
         </View>
         <SocialLogin />
       </View>
-    </SafeAreaView>
+    </View>
   )
 }

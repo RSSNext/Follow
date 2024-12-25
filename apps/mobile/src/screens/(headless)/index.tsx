@@ -34,13 +34,7 @@ export default function Index() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View className="flex-1 items-center justify-center pt-safe">
       {isCookieReady && <FollowWebView webViewRef={webViewRef} />}
 
       {__DEV__ && (

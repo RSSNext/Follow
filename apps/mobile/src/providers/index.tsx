@@ -8,7 +8,6 @@ import type { ReactNode } from "react"
 import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
-import { SafeAreaProvider } from "react-native-safe-area-context"
 
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
@@ -23,21 +22,19 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
   const currentThemeColors = getCurrentColors()!
 
   return (
-    <SafeAreaProvider>
-      <KeyboardProvider>
-        <Provider store={jotaiStore}>
-          <View style={[styles.flex, currentThemeColors]}>
-            <QueryClientProvider client={queryClient}>
-              <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                <GestureHandlerRootView>
-                  <MigrationProvider>{children}</MigrationProvider>
-                </GestureHandlerRootView>
-              </ThemeProvider>
-            </QueryClientProvider>
-          </View>
-        </Provider>
-      </KeyboardProvider>
-    </SafeAreaProvider>
+    <KeyboardProvider>
+      <Provider store={jotaiStore}>
+        <View style={[styles.flex, currentThemeColors]}>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+              <GestureHandlerRootView>
+                <MigrationProvider>{children}</MigrationProvider>
+              </GestureHandlerRootView>
+            </ThemeProvider>
+          </QueryClientProvider>
+        </View>
+      </Provider>
+    </KeyboardProvider>
   )
 }
 
