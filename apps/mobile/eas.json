@@ -1,0 +1,24 @@
+{
+  "cli": {
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "preview": {
+      "channel": "preview",
+      "distribution": "internal"
+    },
+    "production": {
+      "channel": "production",
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "rss3@diygod.me",
+        "ascAppId": "6739802604",
+        "appleTeamId": "NCLY2BLCL2"
+      }
+    }
+  }
+}

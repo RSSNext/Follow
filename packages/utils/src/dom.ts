@@ -44,3 +44,17 @@ export const findElementInShadowDOM = (selector: string): HTMLElement | null => 
   const results = getAllShadowRoots(document)
   return (results[0] as HTMLElement) || null
 }
+
+export function composeEventHandlers<E>(
+  originalEventHandler?: ((event: E) => void) | null,
+  ourEventHandler?: ((event: E) => void) | null,
+  { checkForDefaultPrevented = true } = {},
+) {
+  return function handleEvent(event: E) {
+    originalEventHandler?.(event)
+
+    if (checkForDefaultPrevented === false || !(event as unknown as Event).defaultPrevented) {
+      return ourEventHandler?.(event)
+    }
+  }
+}

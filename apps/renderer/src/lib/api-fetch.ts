@@ -20,7 +20,10 @@ export const apiFetch = ofetch.create({
     const header = new Headers(options.headers)
 
     header.set("x-app-version", PKG.version)
-    header.set("X-App-Dev", process.env.NODE_ENV === "development" ? "1" : "0")
+    if (isDev) {
+      header.set("X-App-Dev", "1")
+    }
+    header.set("X-App-Name", "Follow Web")
     options.headers = header
   },
   onResponse() {
@@ -82,7 +85,7 @@ export const apiClient = hc<AppType>(env.VITE_API_URL, {
   headers() {
     return {
       "X-App-Version": PKG.version,
-      "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
+      "X-App-Name": "Follow Web",
     }
   },
 })

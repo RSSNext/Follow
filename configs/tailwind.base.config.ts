@@ -7,7 +7,7 @@ import { cleanupSVG, importDirectorySync, isEmptyColor, parseColors, runSVGO } f
 import { compareColors, stringToColor } from "@iconify/utils/lib/colors"
 import type { Config } from "tailwindcss"
 
-export const baseConfig = {
+export const baseTwConfig = {
   darkMode: ["class", '[data-theme="dark"]'],
   content: [],
   prefix: "",

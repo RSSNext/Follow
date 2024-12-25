@@ -271,7 +271,7 @@ const VirtualGridImpl: FC<
 
   return (
     <div
-      className="relative mx-4 w-full"
+      className="relative mx-4"
       style={{
         height: `${rowVirtualizer.getTotalSize()}px`,
       }}
