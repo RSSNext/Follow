@@ -88,12 +88,13 @@ export function ListItem({
   const hasAudio = entry.entries?.attachments?.[0].url
   const hasMedia = entry.entries?.media?.[0]?.url
 
+  const marginWidth = 8 * (isMobile ? 1.125 : 1)
   // calculate the max width to have a correct truncation
   // FIXME: this is not easy to maintain, need to refactor
-  const feedIconWidth = 20 + 8 * (isMobile ? 1.125 : 1)
-  const audioCoverWidth = settingWideMode ? 65 : 80
-  const mediaWidth =
-    (settingWideMode ? 48 : 80) * (isMobile ? 1.125 : 1) + 8 * (isMobile ? 1.125 : 1)
+  const feedIconWidth = 20 + marginWidth
+  const audioCoverWidth = settingWideMode ? 65 : 80 + marginWidth
+  const mediaWidth = (settingWideMode ? 48 : 80) * (isMobile ? 1.125 : 1) + marginWidth
+
   let savedWidth = 0
   if (!withAudio) {
     savedWidth += feedIconWidth
