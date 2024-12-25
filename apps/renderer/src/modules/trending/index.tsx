@@ -64,7 +64,7 @@ const TrendContent: FC<TrendingProps> = ({ language }) => {
   const { dismiss } = useCurrentModal()
   if (!data)
     return (
-      <div className="center absolute inset-0">
+      <div className={isMobile ? "mx-auto" : "center absolute inset-0"}>
         <LoadingWithIcon
           icon={<i className="i-mingcute-trending-up-line text-3xl" />}
           size="large"
