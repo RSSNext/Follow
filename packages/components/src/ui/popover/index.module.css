@@ -6,7 +6,7 @@
     rgba(0, 0, 0, 0.067) 0px 1px 1px;
   border-radius: 6px;
 
-  @apply bg-background z-50 outline-none;
+  @apply z-50 bg-background outline-none;
 }
 
 [data-theme="dark"] .popover {

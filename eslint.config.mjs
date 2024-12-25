@@ -28,6 +28,9 @@ export default defineConfig(
         }
       : undefined,
     typeChecked: isCI ? "essential" : false,
+    tailwindCSS: {
+      order: false,
+    },
   },
   isCI && {
     files: GLOB_TS_SRC,

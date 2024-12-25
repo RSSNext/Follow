@@ -27,6 +27,7 @@ export const MobileRootLayout = () => {
             contentClassName="overflow-visible pb-safe"
             title="Login"
             hideHeader
+            dismissableClassName="hidden"
             content={<LoginModalContent canClose={false} runtime={"browser"} />}
           />
         </RootPortal>

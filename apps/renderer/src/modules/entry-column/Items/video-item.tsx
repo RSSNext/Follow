@@ -218,13 +218,13 @@ export const VideoItemSkeleton = (
         </div>
         <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
           <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
-            <Skeleton className="h-4 w-3/4 " />
+            <Skeleton className="h-4 w-3/4" />
           </div>
           <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
             <Skeleton className="mr-0.5 size-4" />
-            <Skeleton className="h-3 w-1/2 " />
+            <Skeleton className="h-3 w-1/2" />
             <span className="text-zinc-500">·</span>
-            <Skeleton className="h-3 w-12 " />
+            <Skeleton className="h-3 w-12" />
           </div>
         </div>
       </div>
