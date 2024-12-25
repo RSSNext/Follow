@@ -26,7 +26,7 @@
     "@react-navigation/native": "^7.0.0",
     "@shopify/flash-list": "1.7.1",
     "@tanstack/react-query": "5.62.3",
-    "better-auth": "1.0.14",
+    "better-auth": "1.1.3",
     "cookie-es": "^1.2.2",
     "dayjs": "1.11.13",
     "expo": "52.0.18",

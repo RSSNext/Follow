@@ -6039,10 +6039,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
+    hash: string;
     powerToken: string;
     fromUserId: string | null;
     toUserId: string | null;
-    hash: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
@@ -6051,10 +6051,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
+    hash: string;
     powerToken: string;
     fromUserId: string | null;
     toUserId: string | null;
-    hash: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
@@ -6321,46 +6321,404 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
 
 declare const auth: {
     handler: (request: Request) => Promise<Response>;
-    api: {
-        getSession: <R extends boolean>(context: {
-            headers: Headers;
-            query?: {
-                disableCookieCache?: boolean;
-            } | undefined;
-            asResponse?: R | undefined;
-        }) => false extends R ? Promise<{
-            user: {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                emailVerified: boolean;
-                name: string;
-                image?: string | null | undefined | undefined;
-            } & {
-                image: string | null;
-                handle: string | null;
-            };
-            session: {
-                id: string;
-                userId: string;
-                createdAt: Date;
-                updatedAt: Date;
-                expiresAt: Date;
-                token: string;
-                ipAddress?: string | null | undefined | undefined;
-                userAgent?: string | null | undefined | undefined;
-            };
-            invitation: {
-                code: string;
-                createdAt: Date | null;
-                usedAt: Date | null;
-                fromUserId: string;
-                toUserId: string | null;
-            } | undefined;
-            role: "user" | "trial";
-        } | null> & {
+    api: better_auth.InferAPI<{
+        ok: {
+            <C extends [(better_call.Context<"/ok", {
+                method: "GET";
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                ok: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    isAction: false;
+                };
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                ok: boolean;
+            }>;
+            path: "/ok";
             options: {
+                method: "GET";
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                ok: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    isAction: false;
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        error: {
+            <C extends [(better_call.Context<"/error", {
+                method: "GET";
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "text/html": {
+                                        schema: {
+                                            type: "string";
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    isAction: false;
+                };
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : Response>;
+            path: "/error";
+            options: {
+                method: "GET";
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "text/html": {
+                                        schema: {
+                                            type: "string";
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    isAction: false;
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        signInSocial: {
+            <C extends [better_call.Context<"/sign-in/social", {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
+                    errorCallbackURL: zod.ZodOptional<zod.ZodString>;
+                    provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
+                    disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
+                    idToken: zod.ZodOptional<zod.ZodObject<{
+                        token: zod.ZodString;
+                        nonce: zod.ZodOptional<zod.ZodString>;
+                        accessToken: zod.ZodOptional<zod.ZodString>;
+                        refreshToken: zod.ZodOptional<zod.ZodString>;
+                        expiresAt: zod.ZodOptional<zod.ZodNumber>;
+                    }, "strip", zod.ZodTypeAny, {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    }, {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    }>>;
+                }, "strip", zod.ZodTypeAny, {
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    idToken?: {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }, {
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    idToken?: {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                };
+                                                user: {
+                                                    type: string;
+                                                };
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                token: string;
+                url: undefined;
+                redirect: boolean;
+            } | {
+                url: string;
+                redirect: boolean;
+            }>;
+            path: "/sign-in/social";
+            options: {
+                method: "POST";
+                query: zod.ZodOptional<zod.ZodObject<{
+                    currentURL: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    currentURL?: string | undefined;
+                }, {
+                    currentURL?: string | undefined;
+                }>>;
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
+                    errorCallbackURL: zod.ZodOptional<zod.ZodString>;
+                    provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
+                    disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
+                    idToken: zod.ZodOptional<zod.ZodObject<{
+                        token: zod.ZodString;
+                        nonce: zod.ZodOptional<zod.ZodString>;
+                        accessToken: zod.ZodOptional<zod.ZodString>;
+                        refreshToken: zod.ZodOptional<zod.ZodString>;
+                        expiresAt: zod.ZodOptional<zod.ZodNumber>;
+                    }, "strip", zod.ZodTypeAny, {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    }, {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    }>>;
+                }, "strip", zod.ZodTypeAny, {
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    idToken?: {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }, {
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    idToken?: {
+                        token: string;
+                        expiresAt?: number | undefined;
+                        accessToken?: string | undefined;
+                        refreshToken?: string | undefined;
+                        nonce?: string | undefined;
+                    } | undefined;
+                    callbackURL?: string | undefined;
+                    newUserCallbackURL?: string | undefined;
+                    errorCallbackURL?: string | undefined;
+                    disableRedirect?: boolean | undefined;
+                }>;
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                session: {
+                                                    type: string;
+                                                };
+                                                user: {
+                                                    type: string;
+                                                };
+                                                url: {
+                                                    type: string;
+                                                };
+                                                redirect: {
+                                                    type: string;
+                                                };
+                                            };
+                                            required: string[];
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        callbackOAuth: {
+            <C extends [better_call.Context<"/callback/:id", {
+                method: ("GET" | "POST")[];
+                body: zod.ZodOptional<zod.ZodObject<{
+                    code: zod.ZodOptional<zod.ZodString>;
+                    error: zod.ZodOptional<zod.ZodString>;
+                    error_description: zod.ZodOptional<zod.ZodString>;
+                    state: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }>>;
+                query: zod.ZodOptional<zod.ZodObject<{
+                    code: zod.ZodOptional<zod.ZodString>;
+                    error: zod.ZodOptional<zod.ZodString>;
+                    error_description: zod.ZodOptional<zod.ZodString>;
+                    state: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }>>;
+                metadata: {
+                    isAction: false;
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : void>;
+            path: "/callback/:id";
+            options: {
+                method: ("GET" | "POST")[];
+                body: zod.ZodOptional<zod.ZodObject<{
+                    code: zod.ZodOptional<zod.ZodString>;
+                    error: zod.ZodOptional<zod.ZodString>;
+                    error_description: zod.ZodOptional<zod.ZodString>;
+                    state: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }>>;
+                query: zod.ZodOptional<zod.ZodObject<{
+                    code: zod.ZodOptional<zod.ZodString>;
+                    error: zod.ZodOptional<zod.ZodString>;
+                    error_description: zod.ZodOptional<zod.ZodString>;
+                    state: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }, {
+                    code?: string | undefined;
+                    error?: string | undefined;
+                    error_description?: string | undefined;
+                    state?: string | undefined;
+                }>>;
+                metadata: {
+                    isAction: false;
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        getSession: {
+            <C extends [better_call.Context<"/get-session", {
                 method: "GET";
                 query: zod.ZodOptional<zod.ZodObject<{
                     disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
@@ -6410,11 +6768,33 @@ declare const auth: {
                         };
                     };
                 };
-            } & {
-                method: "GET";
-                metadata: {
-                    CUSTOM_SESSION: boolean;
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                session: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: string;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined | undefined;
+                    userAgent?: string | null | undefined | undefined;
                 };
+                user: {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    image?: string | null | undefined | undefined;
+                    handle: string;
+                };
+            } | null>;
+            path: "/get-session";
+            options: {
+                method: "GET";
                 query: zod.ZodOptional<zod.ZodObject<{
                     disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
                     disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
@@ -6425,114 +6805,7 @@ declare const auth: {
                     disableCookieCache?: string | boolean | undefined;
                     disableRefresh?: boolean | undefined;
                 }>>;
-            };
-            path: "/get-session";
-        } : Promise<Response>;
-    } & {
-        getProviders: {
-            <C extends [(better_call.Context<"/get-providers", {
-                method: "GET";
-            }> | undefined)?]>(...ctx: C): Promise<C extends [{
-                asResponse: true;
-            }] ? Response : any>;
-            path: "/get-providers";
-            options: {
-                method: "GET";
-            };
-            method: better_call.Method | better_call.Method[];
-            headers: Headers;
-        };
-        createSession: {
-            <C extends [(better_call.Context<"/create-session", {
-                method: "GET";
-            }> | undefined)?]>(...ctx: C): Promise<C extends [{
-                asResponse: true;
-            }] ? Response : {
-                ck: string;
-                userId: string;
-            } | null>;
-            path: "/create-session";
-            options: {
-                method: "GET";
-            };
-            method: better_call.Method | better_call.Method[];
-            headers: Headers;
-        };
-        updateUserccc: {
-            <C extends [(better_call.Context<"/update-user-ccc", {
-                method: "POST";
-            }> | undefined)?]>(...ctx: C): Promise<C extends [{
-                asResponse: true;
-            }] ? Response : string | null>;
-            path: "/update-user-ccc";
-            options: {
-                method: "POST";
-            };
-            method: better_call.Method | better_call.Method[];
-            headers: Headers;
-        };
-        signInSocial: {
-            <C extends [better_call.Context<"/sign-in/social", {
-                method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
-                body: zod.ZodObject<{
-                    callbackURL: zod.ZodOptional<zod.ZodString>;
-                    newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    errorCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
-                    disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
-                    idToken: zod.ZodOptional<zod.ZodObject<{
-                        token: zod.ZodString;
-                        nonce: zod.ZodOptional<zod.ZodString>;
-                        accessToken: zod.ZodOptional<zod.ZodString>;
-                        refreshToken: zod.ZodOptional<zod.ZodString>;
-                        expiresAt: zod.ZodOptional<zod.ZodNumber>;
-                    }, "strip", zod.ZodTypeAny, {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    }, {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    }>>;
-                }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
-                    idToken?: {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    } | undefined;
-                    callbackURL?: string | undefined;
-                    newUserCallbackURL?: string | undefined;
-                    errorCallbackURL?: string | undefined;
-                    disableRedirect?: boolean | undefined;
-                }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
-                    idToken?: {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    } | undefined;
-                    callbackURL?: string | undefined;
-                    newUserCallbackURL?: string | undefined;
-                    errorCallbackURL?: string | undefined;
-                    disableRedirect?: boolean | undefined;
-                }>;
+                requireHeaders: true;
                 metadata: {
                     openapi: {
                         description: string;
@@ -6546,140 +6819,23 @@ declare const auth: {
                                             properties: {
                                                 session: {
                                                     type: string;
+                                                    properties: {
+                                                        token: {
+                                                            type: string;
+                                                        };
+                                                        userId: {
+                                                            type: string;
+                                                        };
+                                                        expiresAt: {
+                                                            type: string;
+                                                        };
+                                                    };
                                                 };
                                                 user: {
                                                     type: string;
-                                                };
-                                                url: {
-                                                    type: string;
-                                                };
-                                                redirect: {
-                                                    type: string;
+                                                    $ref: string;
                                                 };
                                             };
-                                            required: string[];
-                                        };
-                                    };
-                                };
-                            };
-                        };
-                    };
-                };
-            }>]>(...ctx: C): Promise<C extends [{
-                asResponse: true;
-            }] ? Response : {
-                session: {
-                    id: string;
-                    userId: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    expiresAt: Date;
-                    token: string;
-                    ipAddress?: string | null | undefined;
-                    userAgent?: string | null | undefined;
-                };
-                user: {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    email: string;
-                    emailVerified: boolean;
-                    name: string;
-                    image?: string | null | undefined;
-                };
-                url: undefined;
-                redirect: boolean;
-            } | {
-                url: string;
-                redirect: boolean;
-            }>;
-            path: "/sign-in/social";
-            options: {
-                method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
-                body: zod.ZodObject<{
-                    callbackURL: zod.ZodOptional<zod.ZodString>;
-                    newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    errorCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
-                    disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
-                    idToken: zod.ZodOptional<zod.ZodObject<{
-                        token: zod.ZodString;
-                        nonce: zod.ZodOptional<zod.ZodString>;
-                        accessToken: zod.ZodOptional<zod.ZodString>;
-                        refreshToken: zod.ZodOptional<zod.ZodString>;
-                        expiresAt: zod.ZodOptional<zod.ZodNumber>;
-                    }, "strip", zod.ZodTypeAny, {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    }, {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    }>>;
-                }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
-                    idToken?: {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    } | undefined;
-                    callbackURL?: string | undefined;
-                    newUserCallbackURL?: string | undefined;
-                    errorCallbackURL?: string | undefined;
-                    disableRedirect?: boolean | undefined;
-                }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
-                    idToken?: {
-                        token: string;
-                        accessToken?: string | undefined;
-                        refreshToken?: string | undefined;
-                        expiresAt?: number | undefined;
-                        nonce?: string | undefined;
-                    } | undefined;
-                    callbackURL?: string | undefined;
-                    newUserCallbackURL?: string | undefined;
-                    errorCallbackURL?: string | undefined;
-                    disableRedirect?: boolean | undefined;
-                }>;
-                metadata: {
-                    openapi: {
-                        description: string;
-                        responses: {
-                            "200": {
-                                description: string;
-                                content: {
-                                    "application/json": {
-                                        schema: {
-                                            type: "object";
-                                            properties: {
-                                                session: {
-                                                    type: string;
-                                                };
-                                                user: {
-                                                    type: string;
-                                                };
-                                                url: {
-                                                    type: string;
-                                                };
-                                                redirect: {
-                                                    type: string;
-                                                };
-                                            };
-                                            required: string[];
                                         };
                                     };
                                 };
@@ -6851,11 +7007,9 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                id: string;
-                email: string;
-                name: string;
-                image: string | null | undefined;
-                emailVerified: boolean;
+                token: null;
+            } | {
+                token: string;
             }>;
             path: "/sign-up/email";
             options: {
@@ -7292,7 +7446,6 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : void | {
-                user: any;
                 status: boolean;
             }>;
             path: "/verify-email";
@@ -7495,9 +7648,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7505,11 +7658,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -7541,7 +7694,6 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                user: any;
                 status: boolean;
             }>;
             path: "/change-email";
@@ -7568,9 +7720,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7578,11 +7730,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -7635,9 +7787,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7645,11 +7797,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -7679,14 +7831,8 @@ declare const auth: {
                 };
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
-            }] ? Response : Record<string, any> & {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                emailVerified: boolean;
-                name: string;
-                image?: string | null | undefined;
+            }] ? Response : {
+                token: string | null;
             }>;
             path: "/change-password";
             options: {
@@ -7708,9 +7854,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7718,11 +7864,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -7771,9 +7917,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7781,25 +7927,19 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
                 }>, better_call.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
-            }] ? Response : Record<string, any> & {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                emailVerified: boolean;
-                name: string;
-                image?: string | null | undefined;
+            }] ? Response : {
+                status: boolean;
             }>;
             path: "/set-password";
             options: {
@@ -7818,9 +7958,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7828,11 +7968,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -7864,9 +8004,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7874,11 +8014,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -7927,13 +8067,7 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                emailVerified: boolean;
-                name: string;
-                image?: string | null | undefined;
+                status: boolean;
             }>;
             path: "/update-user";
             options: {
@@ -7958,9 +8092,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -7968,11 +8102,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8023,15 +8157,15 @@ declare const auth: {
             headers: Headers;
         };
         deleteUser: {
-            <C extends [(better_call.Context<"/delete-user", {
+            <C extends [better_call.Context<"/delete-user", {
                 method: "POST";
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8039,15 +8173,28 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
                 }>, better_call.EndpointOptions>[];
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    password: zod.ZodOptional<zod.ZodString>;
+                    token: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    password?: string | undefined;
+                    token?: string | undefined;
+                    callbackURL?: string | undefined;
+                }, {
+                    password?: string | undefined;
+                    token?: string | undefined;
+                    callbackURL?: string | undefined;
+                }>;
                 metadata: {
                     openapi: {
                         description: string;
@@ -8065,7 +8212,7 @@ declare const auth: {
                         };
                     };
                 };
-            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+            }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
                 success: boolean;
@@ -8078,9 +8225,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8088,15 +8235,28 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
                 }>, better_call.EndpointOptions>[];
+                body: zod.ZodObject<{
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
+                    password: zod.ZodOptional<zod.ZodString>;
+                    token: zod.ZodOptional<zod.ZodString>;
+                }, "strip", zod.ZodTypeAny, {
+                    password?: string | undefined;
+                    token?: string | undefined;
+                    callbackURL?: string | undefined;
+                }, {
+                    password?: string | undefined;
+                    token?: string | undefined;
+                    callbackURL?: string | undefined;
+                }>;
                 metadata: {
                     openapi: {
                         description: string;
@@ -8196,9 +8356,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8206,11 +8366,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8251,9 +8411,9 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : better_auth.Prettify<{
                 id: string;
-                userId: string;
                 createdAt: Date;
                 updatedAt: Date;
+                userId: string;
                 expiresAt: Date;
                 token: string;
                 ipAddress?: string | null | undefined | undefined;
@@ -8266,9 +8426,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8276,11 +8436,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8335,9 +8495,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8345,11 +8505,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8394,9 +8554,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8404,11 +8564,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8445,9 +8605,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8455,11 +8615,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8500,9 +8660,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8510,11 +8670,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8555,9 +8715,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8565,11 +8725,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8609,9 +8769,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8619,11 +8779,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8667,21 +8827,21 @@ declare const auth: {
                 }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
+                    provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8689,11 +8849,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8743,21 +8903,21 @@ declare const auth: {
                 }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
+                    provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
+                    provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }>;
                 use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8765,11 +8925,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8811,9 +8971,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8821,11 +8981,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8871,9 +9031,9 @@ declare const auth: {
                     session: {
                         session: Record<string, any> & {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined;
@@ -8881,11 +9041,11 @@ declare const auth: {
                         };
                         user: Record<string, any> & {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined;
                         };
                     };
@@ -8927,10 +9087,13 @@ declare const auth: {
                 method: "GET";
                 query: zod.ZodObject<{
                     token: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
                 }, "strip", zod.ZodTypeAny, {
                     token: string;
+                    callbackURL?: string | undefined;
                 }, {
                     token: string;
+                    callbackURL?: string | undefined;
                 }>;
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -8943,16 +9106,135 @@ declare const auth: {
                 method: "GET";
                 query: zod.ZodObject<{
                     token: zod.ZodString;
+                    callbackURL: zod.ZodOptional<zod.ZodString>;
                 }, "strip", zod.ZodTypeAny, {
                     token: string;
+                    callbackURL?: string | undefined;
                 }, {
                     token: string;
+                    callbackURL?: string | undefined;
                 }>;
             };
             method: better_call.Method | better_call.Method[];
             headers: Headers;
         };
-    };
+    } & {
+        getProviders: {
+            <C extends [(better_call.Context<"/get-providers", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : any>;
+            path: "/get-providers";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    } & {
+        createSession: {
+            <C extends [(better_call.Context<"/create-session", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                ck: string;
+                userId: string;
+            } | null>;
+            path: "/create-session";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    } & {
+        updateUserccc: {
+            <C extends [(better_call.Context<"/update-user-ccc", {
+                method: "POST";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : string | null>;
+            path: "/update-user-ccc";
+            options: {
+                method: "POST";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    } & {
+        getSession: {
+            <C extends [(better_call.Context<"/get-session", {
+                method: "GET";
+                metadata: {
+                    CUSTOM_SESSION: boolean;
+                };
+                query: zod.ZodOptional<zod.ZodObject<{
+                    disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
+                    disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    disableCookieCache?: boolean | undefined;
+                    disableRefresh?: boolean | undefined;
+                }, {
+                    disableCookieCache?: string | boolean | undefined;
+                    disableRefresh?: boolean | undefined;
+                }>>;
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                user: {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    image?: string | null | undefined | undefined;
+                } & {
+                    image: string | null;
+                    handle: string | null;
+                };
+                session: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: string;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined | undefined;
+                    userAgent?: string | null | undefined | undefined;
+                };
+                invitation: {
+                    code: string;
+                    createdAt: Date | null;
+                    usedAt: Date | null;
+                    fromUserId: string;
+                    toUserId: string | null;
+                } | undefined;
+                role: "user" | "trial";
+            } | null>;
+            path: "/get-session";
+            options: {
+                method: "GET";
+                metadata: {
+                    CUSTOM_SESSION: boolean;
+                };
+                query: zod.ZodOptional<zod.ZodObject<{
+                    disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
+                    disableRefresh: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    disableCookieCache?: boolean | undefined;
+                    disableRefresh?: boolean | undefined;
+                }, {
+                    disableCookieCache?: string | boolean | undefined;
+                    disableRefresh?: boolean | undefined;
+                }>>;
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    }>;
     options: {
         appName: string;
         database: (options: better_auth.BetterAuthOptions) => {
@@ -8997,6 +9279,9 @@ declare const auth: {
             }): Promise<any>;
             options: better_auth_adapters_drizzle.DrizzleAdapterConfig;
         };
+        advanced: {
+            generateId: false;
+        };
         basePath: string;
         trustedOrigins: string[];
         user: {
@@ -9025,6 +9310,7 @@ declare const auth: {
                 enabled: boolean;
                 clientId: string;
                 clientSecret: string;
+                appBundleIdentifier: string | undefined;
             };
         };
         emailAndPassword: {
@@ -9036,6 +9322,7 @@ declare const auth: {
             }): Promise<void>;
         };
         emailVerification: {
+            sendOnSignUp: true;
             sendVerificationEmail({ user, url }: {
                 user: better_auth.User;
                 url: string;
@@ -9066,11 +9353,11 @@ declare const auth: {
                     }] ? Response : {
                         user: {
                             id: string;
-                            createdAt: Date;
-                            updatedAt: Date;
                             email: string;
                             emailVerified: boolean;
                             name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
                             image?: string | null | undefined | undefined;
                         } & {
                             image: string | null;
@@ -9078,9 +9365,9 @@ declare const auth: {
                         };
                         session: {
                             id: string;
-                            userId: string;
                             createdAt: Date;
                             updatedAt: Date;
+                            userId: string;
                             expiresAt: Date;
                             token: string;
                             ipAddress?: string | null | undefined | undefined;
@@ -9177,9 +9464,9 @@ declare const auth: {
         Session: {
             session: {
                 id: string;
-                userId: string;
                 createdAt: Date;
                 updatedAt: Date;
+                userId: string;
                 expiresAt: Date;
                 token: string;
                 ipAddress?: string | null | undefined | undefined;
@@ -9187,17 +9474,17 @@ declare const auth: {
             };
             user: {
                 id: string;
-                createdAt: Date;
-                updatedAt: Date;
                 email: string;
                 emailVerified: boolean;
                 name: string;
+                createdAt: Date;
+                updatedAt: Date;
                 image?: string | null | undefined | undefined;
                 handle: string;
             };
         };
     };
-    $ErrorCodes: {
+    $ERROR_CODES: {
         USER_NOT_FOUND: string;
         FAILED_TO_CREATE_USER: string;
         FAILED_TO_CREATE_SESSION: string;
@@ -9218,6 +9505,7 @@ declare const auth: {
         USER_ALREADY_EXISTS: string;
         EMAIL_CAN_NOT_BE_UPDATED: string;
         CREDENTIAL_ACCOUNT_NOT_FOUND: string;
+        SESSION_EXPIRED: string;
     };
 };
 
@@ -11069,9 +11357,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     type?: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop" | undefined;
+                    hash?: string | undefined;
                     fromUserId?: string | undefined;
                     toUserId?: string | undefined;
-                    hash?: string | undefined;
                     toFeedId?: string | undefined;
                     fromOrToUserId?: string | undefined;
                     createdAfter?: string | undefined;
@@ -11082,10 +11370,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
                     createdAt: string;
+                    hash: string;
                     powerToken: string;
                     fromUserId: string | null;
                     toUserId: string | null;
-                    hash: string;
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
