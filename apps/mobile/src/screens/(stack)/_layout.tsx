@@ -5,10 +5,16 @@ export default function AppRootLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        headerTitleStyle: { color: "system" },
       }}
     >
-      <Stack.Screen name="add" options={{ headerShown: true, title: "Add Subscription" }} />
+      <Stack.Screen
+        name="add"
+        options={{
+          headerShown: true,
+          presentation: "modal",
+          title: "Add Subscription",
+        }}
+      />
     </Stack>
   )
 }

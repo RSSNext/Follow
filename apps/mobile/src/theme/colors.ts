@@ -1,4 +1,5 @@
-import { vars } from "nativewind"
+import { useColorScheme, vars } from "nativewind"
+import { useMemo } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
 import { Appearance, StyleSheet } from "react-native"
 
@@ -87,6 +88,9 @@ const lightVariants = {
   secondaryText: "142 142 147",
   tertiaryText: "99 99 102",
   quaternaryText: "72 72 74",
+
+  // Extended colors
+  disabled: "235 235 228",
 }
 const darkVariants = {
   // UIKit Colors
@@ -116,6 +120,9 @@ const darkVariants = {
   secondaryText: "172 172 178",
   tertiaryText: "122 122 122",
   quaternaryText: "99 99 102",
+
+  // Extended colors
+  disabled: "85 85 85",
 }
 const variants = {
   light: buildVars(lightVariants),
@@ -140,4 +147,10 @@ export const getSystemBackgroundColor = () => {
 
   const colors = colorScheme === "light" ? lightVariants : darkVariants
   return toRgb(colors.systemBackground)
+}
+
+export const useColor = (color: keyof typeof lightVariants | keyof typeof darkVariants) => {
+  const { colorScheme } = useColorScheme()
+  const colors = colorScheme === "light" ? lightVariants : darkVariants
+  return useMemo(() => toRgb(colors[color]), [color, colors])
 }
