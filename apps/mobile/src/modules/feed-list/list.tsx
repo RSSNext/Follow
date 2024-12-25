@@ -18,13 +18,8 @@ import {
   useAnimatedValue,
   View,
 } from "react-native"
-import type {
-  SwipeableMethods,
-  SwipeableRef,
-} from "react-native-gesture-handler/ReanimatedSwipeable"
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable"
 import PagerView from "react-native-pager-view"
-import ReAnimated, { FadeIn, useSharedValue } from "react-native-reanimated"
+import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AccordionItem } from "@/src/components/ui/accordion"
@@ -50,6 +45,7 @@ import {
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount, useUnreadCounts } from "@/src/store/unread/hooks"
 
+import { SubscriptionItemContextMenu } from "../context-menu/feeds"
 import { useFeedListSortMethod, useFeedListSortOrder, viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
@@ -75,6 +71,7 @@ export const SubscriptionList = memo(() => {
         style={style.flex}
         initialPage={0}
         ref={pagerRef}
+        offscreenPageLimit={3}
       >
         {[
           FeedViewType.Articles,
@@ -149,6 +146,7 @@ const ItemRender = ({
     )
   }
   const { category, subscriptionIds } = item
+
   return <CategoryGrouped category={category} subscriptionIds={subscriptionIds} />
 }
 
@@ -351,61 +349,63 @@ const CategoryGrouped = memo(
   },
 )
 
-const renderRightActions = () => {
-  return (
-    <ReAnimated.View entering={FadeIn} className="flex-row items-center">
-      <TouchableOpacity
-        className="bg-red h-full justify-center px-4"
-        onPress={() => {
-          // TODO: Handle unsubscribe
-        }}
-      >
-        <Text className="text-base font-semibold text-white">Unsubscribe</Text>
-      </TouchableOpacity>
-    </ReAnimated.View>
-  )
-}
+// const renderRightActions = () => {
+//   return (
+//     <ReAnimated.View entering={FadeIn} className="flex-row items-center">
+//       <TouchableOpacity
+//         className="bg-red h-full justify-center px-4"
+//         onPress={() => {
+//           // TODO: Handle unsubscribe
+//         }}
+//       >
+//         <Text className="text-base font-semibold text-white">Unsubscribe</Text>
+//       </TouchableOpacity>
+//     </ReAnimated.View>
+//   )
+// }
 
-const renderLeftActions = () => {
-  return (
-    <ReAnimated.View entering={FadeIn} className="flex-row items-center">
-      <TouchableOpacity
-        className="bg-blue h-full justify-center px-4"
-        onPress={() => {
-          // TODO: Handle unsubscribe
-        }}
-      >
-        <Text className="text-base font-semibold text-white">Read</Text>
-      </TouchableOpacity>
-    </ReAnimated.View>
-  )
-}
+// const renderLeftActions = () => {
+//   return (
+//     <ReAnimated.View entering={FadeIn} className="flex-row items-center">
+//       <TouchableOpacity
+//         className="bg-blue h-full justify-center px-4"
+//         onPress={() => {
+//           // TODO: Handle unsubscribe
+//         }}
+//       >
+//         <Text className="text-base font-semibold text-white">Read</Text>
+//       </TouchableOpacity>
+//     </ReAnimated.View>
+//   )
+// }
 
-let prevOpenedRow: SwipeableMethods | null = null
+// let prevOpenedRow: SwipeableMethods | null = null
 const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const unreadCount = useUnreadCount(id)
   const feed = useFeed(id)
   const inGrouped = !!useContext(GroupedContext)
-  const swipeableRef: SwipeableRef = useRef(null)
+  const view = useViewPageCurrentView()
+  // const swipeableRef: SwipeableRef = useRef(null)
 
   if (!subscription || !feed) return null
 
   return (
     // FIXME: Here leads to very serious performance issues, the frame rate of both the UI and JS threads has dropped
-    <Swipeable
-      renderRightActions={renderRightActions}
-      renderLeftActions={renderLeftActions}
-      leftThreshold={40}
-      rightThreshold={40}
-      ref={swipeableRef}
-      onSwipeableWillOpen={() => {
-        if (prevOpenedRow && prevOpenedRow !== swipeableRef.current) {
-          prevOpenedRow.close()
-        }
-        prevOpenedRow = swipeableRef.current
-      }}
-    >
+    // <Swipeable
+    //   renderRightActions={renderRightActions}
+    //   renderLeftActions={renderLeftActions}
+    //   leftThreshold={40}
+    //   rightThreshold={40}
+    //   ref={swipeableRef}
+    //   onSwipeableWillOpen={() => {
+    //     if (prevOpenedRow && prevOpenedRow !== swipeableRef.current) {
+    //       prevOpenedRow.close()
+    //     }
+    //     prevOpenedRow = swipeableRef.current
+    //   }}
+    // >
+    <SubscriptionItemContextMenu id={id} view={view}>
       <ItemPressable
         className={cn(
           "flex h-12 flex-row items-center",
@@ -430,7 +430,8 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
           <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
         )}
       </ItemPressable>
-    </Swipeable>
+    </SubscriptionItemContextMenu>
+    // </Swipeable>
   )
 })
 

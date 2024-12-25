@@ -18,6 +18,7 @@
     "@better-auth/expo": "1.0.23-beta.2",
     "@expo/vector-icons": "^14.0.2",
     "@follow/constants": "workspace:*",
+    "@follow/hooks": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
     "@hookform/resolvers": "3.9.1",
@@ -70,6 +71,7 @@
     "react-native-webview": "13.12.5",
     "swiftui-react-native": "6.3.3",
     "tailwindcss": "3.4.16",
+    "usehooks-ts": "3.1.0",
     "zod": "3.23.8",
     "zustand": "5.0.2"
   },

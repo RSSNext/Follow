@@ -12,14 +12,15 @@ class StoreDbMorph {
   toSubscriptionSchema(subscription: SubscriptionModel): SubscriptionSchema {
     return {
       ...subscription,
-      id: buildId(subscription),
+      id: buildSubscriptionDbId(subscription),
+      isPrivate: subscription.isPrivate ? 1 : 0,
     }
   }
 }
 
 export const storeDbMorph = new StoreDbMorph()
 
-const buildId = (subscription: SubscriptionModel) => {
+const buildSubscriptionDbId = (subscription: SubscriptionModel) => {
   if (subscription.feedId) return `${subscription.type}/${subscription.feedId}`
   if (subscription.listId) return `${subscription.type}/${subscription.listId}`
   if (subscription.inboxId) return `${subscription.type}/${subscription.inboxId}`

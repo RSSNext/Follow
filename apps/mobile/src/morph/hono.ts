@@ -24,7 +24,7 @@ class Morph {
 
         userId: item.userId,
         view: item.view,
-        isPrivate: item.isPrivate ? 1 : 0,
+        isPrivate: item.isPrivate,
         title: item.title,
         createdAt: item.createdAt,
       } as SubscriptionModel

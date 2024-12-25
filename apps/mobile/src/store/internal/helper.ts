@@ -103,9 +103,13 @@ class Transaction<S, Ctx> {
     return this
   }
 
-  execute(executor: ExecutorFn<S, Ctx>): this {
+  request(executor: ExecutorFn<S, Ctx>): this {
     this.executorFn = executor
     return this
+  }
+
+  get execute() {
+    return this.request
   }
 
   store(executor: ExecutorFn<S, Ctx>): this {

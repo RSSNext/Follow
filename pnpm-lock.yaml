@@ -407,6 +407,9 @@ importers:
       '@follow/constants':
         specifier: workspace:*
         version: link:../../packages/constants
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
       '@follow/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -563,6 +566,9 @@ importers:
       tailwindcss:
         specifier: 3.4.16
         version: 3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))
+      usehooks-ts:
+        specifier: 3.1.0
+        version: 3.1.0(react@18.3.1)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -13864,7 +13870,7 @@ packages:
       '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
       postcss: ^8.4.12
-      typescript: '>=4.5.0'
+      typescript: 5.6.3
     peerDependenciesMeta:
       '@microsoft/api-extractor':
         optional: true

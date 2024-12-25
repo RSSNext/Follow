@@ -179,3 +179,14 @@ export const useInboxSubscription = (view: FeedViewType) => {
     ),
   )
 }
+
+export const useListSubscriptionCategory = (view: FeedViewType) => {
+  return useSubscriptionStore(
+    useCallback(
+      (state) => {
+        return Array.from(state.categories[view])
+      },
+      [view],
+    ),
+  )
+}

@@ -4,6 +4,7 @@ import { Sitemap } from "expo-router/build/views/Sitemap"
 import { useRef, useState } from "react"
 import {
   Alert,
+  Button,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -12,17 +13,35 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
+import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { AccordionItem } from "@/src/components/ui/accordion"
 import { getDbPath } from "@/src/database"
 import { getSessionToken, setSessionToken } from "@/src/lib/cookie"
 
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
-
+  const isExpanded = useSharedValue(false)
   return (
     <ScrollView className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Users</Text>
+
+      <Button
+        title="Toggle"
+        onPress={() => {
+          isExpanded.value = !isExpanded.value
+        }}
+      />
+      <AccordionItem isExpanded={isExpanded} viewKey="users">
+        {Array.from({ length: 100 }).map((_, index) => {
+          return (
+            <Text key={index} className="text-white">
+              {index}
+            </Text>
+          )
+        })}
+      </AccordionItem>
 
       <View style={styles.container}>
         <View style={styles.itemContainer}>

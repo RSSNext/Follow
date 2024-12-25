@@ -36,6 +36,14 @@ class UnreadSyncService {
     const subscriptionIds = getSubscriptionByView(view)
     await unreadActions.upsertMany(subscriptionIds.map((id) => ({ subscriptionId: id, count: 0 })))
   }
+
+  async markAsRead(feedId: string) {
+    await apiClient.reads.all.$post({
+      json: { feedId },
+    })
+
+    await unreadActions.upsertMany([{ subscriptionId: feedId, count: 0 }])
+  }
 }
 
 class UnreadActions {

@@ -1,8 +1,9 @@
-import { sql } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 
 import { db } from "../database"
 import { subscriptionsTable } from "../database/schemas"
 import type { SubscriptionSchema } from "../database/schemas/types"
+import { dbStoreMorph } from "../morph/db-store"
 import { subscriptionActions } from "../store/subscription/store"
 import type { Hydratable, Resetable } from "./internal/base"
 
@@ -28,9 +29,18 @@ class SubscriptionServiceStatic implements Hydratable, Resetable {
         },
       })
   }
+
+  async patch(subscription: Partial<SubscriptionSchema> & { id: string }) {
+    await db
+      .update(subscriptionsTable)
+      .set(subscription)
+      .where(eq(subscriptionsTable.id, subscription.id))
+  }
   async hydrate() {
     const subscriptions = await db.query.subscriptionsTable.findMany()
-    subscriptionActions.upsertManyInSession(subscriptions)
+    subscriptionActions.upsertManyInSession(
+      subscriptions.map((s) => dbStoreMorph.toSubscriptionModel(s)),
+    )
   }
 }
 export const SubscriptionService = new SubscriptionServiceStatic()
