@@ -20,6 +20,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   runtimeVersion: {
     policy: "appVersion",
   },
+
   name: "Follow",
   slug: "follow",
   version: "1.0.0",
@@ -32,6 +33,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
     bundleIdentifier: "is.follow",
     usesAppleSignIn: true,
+    infoPlist: {
+      LSApplicationCategoryType: "public.app-category.news",
+    },
   },
   android: {
     package: "is.follow",

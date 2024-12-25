@@ -315,6 +315,7 @@ const CategoryGrouped = memo(
           className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3"
         >
           <AnimatedTouchableOpacity
+            hitSlop={10}
             onPress={() => {
               Animated.timing(rotateValue, {
                 toValue: isExpanded.value ? 1 : 0,

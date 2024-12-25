@@ -26,7 +26,8 @@ export default function RootLayout() {
         <Stack.Screen name="(headless)" options={{ headerShown: false }} />
       </Stack>
 
-      {__DEV__ && <DebugButton />}
+      {/* {__DEV__ && <DebugButton />} */}
+      <DebugButton />
     </RootProviders>
   )
 }
