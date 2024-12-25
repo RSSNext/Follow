@@ -41,7 +41,7 @@ export default function Add() {
           onChangeText={setUrl}
           placeholder="Enter the URL of the feed"
           autoFocus
-          className="bg-system-background text-text rounded-xl p-3"
+          className="bg-system-background dark:bg-secondary-system-fill/30 text-text rounded-xl p-3"
         />
       </View>
     </View>
