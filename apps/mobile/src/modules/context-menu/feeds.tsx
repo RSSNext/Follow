@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import type { FC, PropsWithChildren } from "react"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import type { NativeSyntheticEvent } from "react-native"
 import { Alert, Clipboard } from "react-native"
 import type {
@@ -10,6 +10,7 @@ import type {
 import { useEventCallback } from "usehooks-ts"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
+import { views } from "@/src/constants/views"
 import { getFeed } from "@/src/store/feed/getter"
 import { getSubscription } from "@/src/store/subscription/getter"
 import { useListSubscriptionCategory } from "@/src/store/subscription/hooks"
@@ -19,7 +20,7 @@ import { unreadSyncService } from "@/src/store/unread/store"
 type Options = {
   categories: string[]
 }
-const createActions: (options: Options) => ContextMenuAction[] = (options) => {
+const createFeedItemActions: (options: Options) => ContextMenuAction[] = (options) => {
   return [
     {
       title: "Mark All As Read",
@@ -61,7 +62,10 @@ export const SubscriptionFeedItemContextMenu: FC<
   }
 > = ({ id, children, view }) => {
   const allCategories = useListSubscriptionCategory(view)
-  const actions = useMemo(() => createActions({ categories: allCategories }), [allCategories])
+  const actions = useMemo(
+    () => createFeedItemActions({ categories: allCategories }),
+    [allCategories],
+  )
 
   return (
     <ContextMenu
@@ -148,6 +152,69 @@ export const SubscriptionFeedItemContextMenu: FC<
           }
         }
       })}
+    >
+      {children}
+    </ContextMenu>
+  )
+}
+
+export const SubscriptionFeedCategoryContextMenu: FC<
+  {
+    category: string
+    feedIds: string[]
+  } & PropsWithChildren
+> = ({ category: _, feedIds, children }) => {
+  return (
+    <ContextMenu
+      actions={useMemo(
+        () => [
+          {
+            title: "Mark All As Read",
+          },
+          {
+            title: "Change To Other View",
+            actions: views.map((view) => ({
+              title: view.name,
+            })),
+          },
+          {
+            title: "Edit Category",
+          },
+          {
+            title: "Delete Category",
+            destructive: true,
+          },
+        ],
+        [],
+      )}
+      onPress={useCallback(
+        (e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>) => {
+          const { name } = e.nativeEvent
+          const [first, second] = e.nativeEvent.indexPath
+
+          if (first === 1) {
+            void second
+            // TODO change to other view
+            return
+          }
+          switch (name) {
+            case "Mark All As Read": {
+              unreadSyncService.markAsReadMany(feedIds)
+              break
+            }
+            case "Change To Other View": {
+              // TODO: implement logic
+              break
+            }
+
+            case "Delete Category": {
+              // TODO: implement logic
+              break
+            }
+          }
+        },
+        [feedIds],
+      )}
     >
       {children}
     </ContextMenu>

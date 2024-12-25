@@ -11,7 +11,7 @@ import { SafariCuteFi } from "@/src/icons/safari_cute_fi"
 import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
 import { Setting7CuteFi } from "@/src/icons/setting_7_cute_fi"
 import { Settings7CuteReIcon } from "@/src/icons/settings_7_cute_re"
-import { setCurrentView } from "@/src/modules/feed-list/atoms"
+import { setCurrentView } from "@/src/modules/subscription/atoms"
 
 const doubleTap = Gesture.Tap()
   .numberOfTaps(2)
@@ -30,7 +30,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="feed-list"
+        name="subscription"
         options={{
           title: "Subscriptions",
           headerShown: false,

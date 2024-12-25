@@ -45,7 +45,11 @@ import {
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount, useUnreadCounts } from "@/src/store/unread/hooks"
 
-import { SubscriptionFeedItemContextMenu } from "../context-menu/feeds"
+import {
+  SubscriptionFeedCategoryContextMenu,
+  SubscriptionFeedItemContextMenu,
+} from "../context-menu/feeds"
+import { SubscriptionListItemContextMenu } from "../context-menu/lists"
 import { useFeedListSortMethod, useFeedListSortOrder, viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
@@ -248,17 +252,19 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
   const unreadCount = useUnreadCount(id)
   if (!list) return null
   return (
-    <ItemPressable className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3">
-      <View className="overflow-hidden rounded">
-        {!!list.image && (
-          <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
-        )}
-        {!list.image && <FallbackIcon title={list.title} size={24} />}
-      </View>
+    <SubscriptionListItemContextMenu id={id}>
+      <ItemPressable className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3">
+        <View className="overflow-hidden rounded">
+          {!!list.image && (
+            <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
+          )}
+          {!list.image && <FallbackIcon title={list.title} size={24} />}
+        </View>
 
-      <Text className="text-text ml-2">{list.title}</Text>
-      {!!unreadCount && <View className="bg-tertiary-label ml-auto size-1 rounded-full" />}
-    </ItemPressable>
+        <Text className="text-text ml-2">{list.title}</Text>
+        {!!unreadCount && <View className="bg-tertiary-label ml-auto size-1 rounded-full" />}
+      </ItemPressable>
+    </SubscriptionListItemContextMenu>
   )
 })
 
@@ -301,7 +307,7 @@ const CategoryGrouped = memo(
     const isExpanded = useSharedValue(false)
     const rotateValue = useAnimatedValue(1)
     return (
-      <View>
+      <SubscriptionFeedCategoryContextMenu category={category} feedIds={subscriptionIds}>
         <ItemPressable
           onPress={() => {
             // TODO navigate to category
@@ -344,7 +350,7 @@ const CategoryGrouped = memo(
             <UnGroupedList subscriptionIds={subscriptionIds} />
           </GroupedContext.Provider>
         </AccordionItem>
-      </View>
+      </SubscriptionFeedCategoryContextMenu>
     )
   },
 )

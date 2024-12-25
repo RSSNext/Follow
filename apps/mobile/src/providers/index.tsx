@@ -22,19 +22,19 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
   const currentThemeColors = getCurrentColors()!
 
   return (
-    <KeyboardProvider>
+    <MigrationProvider>
       <Provider store={jotaiStore}>
-        <View style={[styles.flex, currentThemeColors]}>
-          <QueryClientProvider client={queryClient}>
-            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-              <GestureHandlerRootView>
-                <MigrationProvider>{children}</MigrationProvider>
-              </GestureHandlerRootView>
-            </ThemeProvider>
-          </QueryClientProvider>
-        </View>
+        <KeyboardProvider>
+          <View style={[styles.flex, currentThemeColors]}>
+            <QueryClientProvider client={queryClient}>
+              <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                <GestureHandlerRootView>{children}</GestureHandlerRootView>
+              </ThemeProvider>
+            </QueryClientProvider>
+          </View>
+        </KeyboardProvider>
       </Provider>
-    </KeyboardProvider>
+    </MigrationProvider>
   )
 }
 

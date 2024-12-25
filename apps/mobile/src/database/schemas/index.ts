@@ -48,3 +48,12 @@ export const unreadTable = sqliteTable("unread", {
   subscriptionId: text("subscription_id").notNull().primaryKey(),
   count: integer("count").notNull(),
 })
+
+export const usersTable = sqliteTable("users", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull(),
+  handle: text("handle"),
+  name: text("name"),
+  image: text("image"),
+  isMe: integer("is_me").notNull(),
+})
