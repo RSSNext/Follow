@@ -102,7 +102,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
     useImperativeHandle(contentRef, () => contentInnerRef.current!)
 
     return (
-      <Drawer.Root dismissible={dismissible} {...nextRootProps}>
+      <Drawer.Root dismissible={dismissible} repositionInputs={false} {...nextRootProps}>
         {!!children && <Drawer.Trigger asChild={triggerAsChild}>{children}</Drawer.Trigger>}
         <Drawer.Portal>
           <Drawer.Content
