@@ -5,6 +5,7 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "main": "./src/index.ts",
   "peerDependencies": {
     "react": "^18.3.1"
   },

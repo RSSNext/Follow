@@ -6,6 +6,7 @@
   "scripts": {
     "build:web": "cd ../.. && pnpm build:web",
     "dev": "cd ../.. && pnpm dev:web",
+    "dev:no-ssl": "cd ../.. && NO_SSL=true pnpm dev:web",
     "generate-pwa-assets": "pwa-assets-generator public/icon.svg",
     "test": "vitest --typecheck",
     "typecheck": "tsc --noEmit"

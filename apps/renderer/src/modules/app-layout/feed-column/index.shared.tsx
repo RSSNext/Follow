@@ -11,7 +11,8 @@ const LazyNewUserGuideModal = lazy(() =>
 export function NewUserGuide() {
   const user = useWhoami()
   const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
-  const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
+  const isNewUser =
+    !isLoading && remoteSettings && Object.keys(remoteSettings.updated ?? {}).length === 0
   return user && isNewUser ? (
     <Suspense>
       <LazyNewUserGuideModal />

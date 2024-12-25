@@ -11,7 +11,7 @@ const root = resolve(fileURLToPath(dirname(import.meta.url)), "..")
 export default {
   ...viteRenderBaseConfig,
 
-  plugins: [...viteRenderBaseConfig.plugins, createPlatformSpecificImportPlugin(true)],
+  plugins: [...viteRenderBaseConfig.plugins, createPlatformSpecificImportPlugin("electron")],
 
   root: resolve(root, "apps/renderer"),
   build: {

@@ -60,7 +60,7 @@ export default defineConfig({
 
     plugins: [
       ...viteRenderBaseConfig.plugins,
-      createPlatformSpecificImportPlugin(true),
+      createPlatformSpecificImportPlugin("electron"),
       cleanupUnnecessaryFilesPlugin([
         "og-image.png",
         "icon-512x512.png",

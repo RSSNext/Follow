@@ -57,7 +57,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <LazyLottieRenderContainer />
               <LazyExternalJumpInProvider />
               <LazyReloadPrompt />
-              <LazyPWAPrompt />
+              {!window.__RN__ && <LazyPWAPrompt />}
             </Suspense>
           </I18nProvider>
         </Provider>
