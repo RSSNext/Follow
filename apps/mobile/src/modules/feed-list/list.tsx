@@ -45,7 +45,7 @@ import {
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount, useUnreadCounts } from "@/src/store/unread/hooks"
 
-import { SubscriptionItemContextMenu } from "../context-menu/feeds"
+import { SubscriptionFeedItemContextMenu } from "../context-menu/feeds"
 import { useFeedListSortMethod, useFeedListSortOrder, viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
@@ -405,7 +405,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
     //     prevOpenedRow = swipeableRef.current
     //   }}
     // >
-    <SubscriptionItemContextMenu id={id} view={view}>
+    <SubscriptionFeedItemContextMenu id={id} view={view}>
       <ItemPressable
         className={cn(
           "flex h-12 flex-row items-center",
@@ -430,7 +430,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
           <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
         )}
       </ItemPressable>
-    </SubscriptionItemContextMenu>
+    </SubscriptionFeedItemContextMenu>
     // </Swipeable>
   )
 })

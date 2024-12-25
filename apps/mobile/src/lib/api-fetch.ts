@@ -2,12 +2,14 @@
 import type { AppType } from "@follow/shared"
 import { ofetch } from "ofetch"
 
+import { getApiUrl } from "./env"
+
 const { hc } = require("hono/dist/cjs/client/client") as typeof import("hono/client")
 
 export const apiFetch = ofetch.create({
   retry: false,
 
-  baseURL: process.env.EXPO_PUBLIC_API_URL,
+  baseURL: getApiUrl(),
   onRequest: async ({ options, request }) => {
     const header = new Headers(options.headers)
 
@@ -44,7 +46,7 @@ export const apiFetch = ofetch.create({
   },
 })
 
-export const apiClient = hc<AppType>(process.env.EXPO_PUBLIC_API_URL, {
+export const apiClient = hc<AppType>(getApiUrl(), {
   fetch: async (input: any, options = {}) =>
     apiFetch(input.toString(), options).catch((err) => {
       throw err

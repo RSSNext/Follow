@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import type * as better_call from "better-call"
 import { parse } from "cookie-es"
 
+import { getApiUrl } from "./env"
 import { kv } from "./kv"
 import { queryClient } from "./query-client"
 
@@ -13,7 +14,7 @@ const { createAuthClient } =
 
 const storagePrefix = "follow_auth"
 const authClient = createAuthClient({
-  baseURL: `${process.env.EXPO_PUBLIC_API_URL}/better-auth`,
+  baseURL: `${getApiUrl()}/better-auth`,
   plugins: [
     {
       id: "getProviders",

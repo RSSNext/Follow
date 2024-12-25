@@ -1,9 +1,8 @@
-// TODO: implement logic
 import type { FeedViewType } from "@follow/constants"
 import type { FC, PropsWithChildren } from "react"
 import { useMemo } from "react"
 import type { NativeSyntheticEvent } from "react-native"
-import { Alert } from "react-native"
+import { Alert, Clipboard } from "react-native"
 import type {
   ContextMenuAction,
   ContextMenuOnPressNativeEvent,
@@ -11,6 +10,7 @@ import type {
 import { useEventCallback } from "usehooks-ts"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
+import { getFeed } from "@/src/store/feed/getter"
 import { getSubscription } from "@/src/store/subscription/getter"
 import { useListSubscriptionCategory } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
@@ -54,7 +54,7 @@ const createActions: (options: Options) => ContextMenuAction[] = (options) => {
     },
   ]
 }
-export const SubscriptionItemContextMenu: FC<
+export const SubscriptionFeedItemContextMenu: FC<
   PropsWithChildren & {
     id: string
     view: FeedViewType
@@ -75,9 +75,11 @@ export const SubscriptionItemContextMenu: FC<
             break
           }
           case 1: {
+            // TODO: implement logic
             break
           }
           case 2: {
+            // TODO: implement logic
             break
           }
           case 3: {
@@ -104,6 +106,44 @@ export const SubscriptionItemContextMenu: FC<
               })
             }
 
+            break
+          }
+          case 4: {
+            // edit
+            break
+          }
+          case 5: {
+            // copy link
+            const subscription = getSubscription(id)
+            if (!subscription) return
+
+            switch (subscription.type) {
+              case "feed": {
+                if (!subscription.feedId) return
+                const feed = getFeed(subscription.feedId)
+                if (!feed) return
+                Clipboard.setString(feed.url)
+                return
+              }
+            }
+            break
+          }
+
+          case 6: {
+            // unsubscribe
+            Alert.alert("Unsubscribe?", "This will remove the feed from your list", [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Unsubscribe",
+                style: "destructive",
+                onPress: () => {
+                  subscriptionSyncService.unsubscribe(id)
+                },
+              },
+            ])
             break
           }
         }

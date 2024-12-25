@@ -4,7 +4,6 @@ import { Sitemap } from "expo-router/build/views/Sitemap"
 import { useRef, useState } from "react"
 import {
   Alert,
-  Button,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -13,21 +12,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { AccordionItem } from "@/src/components/ui/accordion"
 import { getDbPath } from "@/src/database"
 import { getSessionToken, setSessionToken } from "@/src/lib/cookie"
 
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
-  const isExpanded = useSharedValue(false)
+  // const isExpanded = useSharedValue(false)
   return (
     <ScrollView className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Users</Text>
 
-      <Button
+      {/* <Button
         title="Toggle"
         onPress={() => {
           isExpanded.value = !isExpanded.value
@@ -41,7 +38,7 @@ export default function DebugPanel() {
             </Text>
           )
         })}
-      </AccordionItem>
+      </AccordionItem> */}
 
       <View style={styles.container}>
         <View style={styles.itemContainer}>
@@ -66,22 +63,36 @@ export default function DebugPanel() {
             style={styles.itemPressable}
             onPress={async () => {
               const dbPath = getDbPath()
-              await FileSystem.deleteAsync(dbPath)
-              // Reload the app
-              await expo.reloadAppAsync("Clear Sqlite Data")
+              await Clipboard.setStringAsync(dbPath)
             }}
           >
-            <Text style={styles.filename}>Clear Sqlite Data</Text>
+            <Text style={styles.filename}>Copy Sqlite File Location</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.itemPressable}
             onPress={async () => {
-              const dbPath = getDbPath()
-              await Clipboard.setStringAsync(dbPath)
+              Alert.alert("Clear Sqlite Data?", "This will delete all your data", [
+                {
+                  text: "Cancel",
+                  style: "cancel",
+                },
+                {
+                  text: "Clear",
+                  style: "destructive",
+                  async onPress() {
+                    const dbPath = getDbPath()
+                    await FileSystem.deleteAsync(dbPath)
+                    // Reload the app
+                    await expo.reloadAppAsync("Clear Sqlite Data")
+                  },
+                },
+              ])
             }}
           >
-            <Text style={styles.filename}>Copy Sqlite File Location</Text>
+            <Text style={styles.filename} className="!text-red">
+              Clear Sqlite Data
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

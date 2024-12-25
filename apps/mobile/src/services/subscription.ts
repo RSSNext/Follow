@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm"
 
 import { db } from "../database"
-import { subscriptionsTable } from "../database/schemas"
+import { feedsTable, inboxesTable, listsTable, subscriptionsTable } from "../database/schemas"
 import type { SubscriptionSchema } from "../database/schemas/types"
 import { dbStoreMorph } from "../morph/db-store"
 import { subscriptionActions } from "../store/subscription/store"
@@ -41,6 +41,44 @@ class SubscriptionServiceStatic implements Hydratable, Resetable {
     subscriptionActions.upsertManyInSession(
       subscriptions.map((s) => dbStoreMorph.toSubscriptionModel(s)),
     )
+  }
+
+  async delete(id: string) {
+    const result = await db.query.subscriptionsTable.findFirst({
+      where: eq(subscriptionsTable.id, id),
+      columns: {
+        feedId: true,
+        listId: true,
+        type: true,
+        inboxId: true,
+      },
+    })
+
+    await db.delete(subscriptionsTable).where(eq(subscriptionsTable.id, id)).execute()
+
+    if (!result) {
+      return
+    }
+
+    // Cleanup
+    const { type, feedId, listId, inboxId } = result
+    switch (type) {
+      case "feed": {
+        if (!feedId) break
+        await db.delete(feedsTable).where(eq(feedsTable.id, feedId)).execute()
+        break
+      }
+      case "list": {
+        if (!listId) break
+        await db.delete(listsTable).where(eq(listsTable.id, listId)).execute()
+        break
+      }
+      case "inbox": {
+        if (!inboxId) break
+        await db.delete(inboxesTable).where(eq(inboxesTable.id, inboxId)).execute()
+        break
+      }
+    }
   }
 }
 export const SubscriptionService = new SubscriptionServiceStatic()

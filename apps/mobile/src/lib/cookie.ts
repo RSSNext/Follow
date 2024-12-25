@@ -1,5 +1,6 @@
 import CookieManager from "@react-native-cookies/cookies"
 
+import { getApiUrl } from "./env"
 import { kv } from "./kv"
 
 const keys = {
@@ -8,7 +9,7 @@ const keys = {
 export const setSessionToken = (token: string) => {
   kv.setSync(keys.sessionToken, token)
 
-  return CookieManager.set(process.env.EXPO_PUBLIC_API_URL, {
+  return CookieManager.set(getApiUrl(), {
     name: keys.sessionToken,
     value: token,
     httpOnly: true,
@@ -17,7 +18,7 @@ export const setSessionToken = (token: string) => {
 }
 
 export const getSessionToken = async () => {
-  const cookies = await CookieManager.get(process.env.EXPO_PUBLIC_API_URL)
+  const cookies = await CookieManager.get(getApiUrl())
 
   return cookies[keys.sessionToken] || kv.getSync(keys.sessionToken)
 }

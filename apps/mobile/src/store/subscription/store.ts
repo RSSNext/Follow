@@ -187,6 +187,60 @@ class SubscriptionSyncService {
 
     await tx.run()
   }
+
+  async unsubscribe(subscriptionId: string) {
+    const subscription = get().data[subscriptionId]
+
+    if (!subscription) return
+
+    const tx = createTransaction(subscription)
+
+    tx.store(() => {
+      immerSet((draft) => {
+        delete draft.data[subscriptionId]
+        draft.subscriptionIdSet.delete(getSubscriptionStoreId(subscription))
+        if (subscription.feedId)
+          draft.feedIdByView[subscription.view as FeedViewType].delete(subscription.feedId)
+        if (subscription.listId)
+          draft.listIdByView[subscription.view as FeedViewType].delete(subscription.listId)
+        if (subscription.inboxId)
+          draft.inboxIdByView[subscription.view as FeedViewType].delete(subscription.inboxId)
+        if (subscription.category)
+          draft.categories[subscription.view as FeedViewType].delete(subscription.category)
+      })
+    })
+
+    tx.persist(() => {
+      return SubscriptionService.delete(subscriptionId)
+    })
+
+    tx.request(async () => {
+      await apiClient.subscriptions.$delete({
+        json: {
+          feedId: subscription.feedId ?? undefined,
+          listId: subscription.listId ?? undefined,
+        },
+      })
+    })
+
+    tx.rollback((current) => {
+      immerSet((draft) => {
+        draft.data[subscriptionId] = current
+
+        draft.subscriptionIdSet.add(`${subscription.type}/${subscription.feedId}`)
+        if (subscription.feedId)
+          draft.feedIdByView[subscription.view as FeedViewType].add(subscription.feedId)
+        if (subscription.listId)
+          draft.listIdByView[subscription.view as FeedViewType].add(subscription.listId)
+        if (subscription.inboxId)
+          draft.inboxIdByView[subscription.view as FeedViewType].add(subscription.inboxId)
+        if (subscription.category)
+          draft.categories[subscription.view as FeedViewType].add(subscription.category)
+      })
+    })
+
+    await tx.run()
+  }
 }
 
 export const subscriptionActions = new SubscriptionActions()
