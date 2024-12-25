@@ -1,5 +1,5 @@
 import type { User } from "@auth/core/types"
-import { isMobile } from "@follow/components/hooks/useMobile.js"
+import { isMobile, useMobile } from "@follow/components/hooks/useMobile.js"
 import { PhUsersBold } from "@follow/components/icons/users.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { ActionButton, Button } from "@follow/components/ui/button/index.js"
@@ -33,7 +33,12 @@ export const TrendingButton = ({ language, className }: TrendingProps & { classN
       variant={"outline"}
       onClick={() => {
         present({
-          title: t("words.trending"),
+          title: (
+            <div className="flex items-center gap-2">
+              <i className="i-mingcute-trending-up-line text-2xl" />
+              <span>{t("words.trending")}</span>
+            </div>
+          ),
           content: () => <TrendContent language={language} />,
           CustomModalComponent: !isMobile() ? DrawerModalLayout : undefined,
         })
@@ -46,6 +51,8 @@ export const TrendingButton = ({ language, className }: TrendingProps & { classN
   )
 }
 const TrendContent: FC<TrendingProps> = ({ language }) => {
+  const isMobile = useMobile()
+
   const { data } = useQuery({
     queryKey: ["trending", language],
     queryFn: () => {
@@ -57,7 +64,7 @@ const TrendContent: FC<TrendingProps> = ({ language }) => {
   const { dismiss } = useCurrentModal()
   if (!data)
     return (
-      <div className="center absolute inset-0">
+      <div className={isMobile ? "mx-auto" : "center absolute inset-0"}>
         <LoadingWithIcon
           icon={<i className="i-mingcute-trending-up-line text-3xl" />}
           size="large"
@@ -66,10 +73,12 @@ const TrendContent: FC<TrendingProps> = ({ language }) => {
     )
   return (
     <div className="flex size-full grow flex-col gap-4">
-      <div className="-mt-4 flex w-full items-center justify-center gap-2 text-2xl">
-        <i className="i-mingcute-trending-up-line text-3xl" />
-        <span className="font-bold">{t("words.trending")}</span>
-      </div>
+      {!isMobile && (
+        <div className="-mt-4 flex w-full items-center justify-center gap-2 text-2xl">
+          <i className="i-mingcute-trending-up-line text-3xl" />
+          <span className="font-bold">{t("words.trending")}</span>
+        </div>
+      )}
       <ActionButton
         className="absolute right-4 top-4"
         onClick={dismiss}
@@ -78,7 +87,7 @@ const TrendContent: FC<TrendingProps> = ({ language }) => {
         <i className="i-mgc-close-cute-re" />
       </ActionButton>
       <ScrollArea.ScrollArea
-        rootClassName="flex h-0 w-[calc(100%+8px)] grow flex-col overflow-visible"
+        rootClassName="flex h-0 w-[calc(100%+8px)] min-h-[50vh] grow flex-col overflow-visible"
         viewportClassName="pb-4 [&>div]:!block"
         scrollbarClassName="-mr-6"
       >

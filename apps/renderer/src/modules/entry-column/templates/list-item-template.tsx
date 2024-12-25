@@ -30,6 +30,7 @@ export function ListItem({
   withDetails?: boolean
   withAudio?: boolean
 }) {
+  const isMobile = useMobile()
   const entry = useEntry(entryId) || entryPreview
 
   const asRead = useAsRead(entry)
@@ -85,6 +86,24 @@ export function ListItem({
   const related = feed || inbox
 
   const hasAudio = entry.entries?.attachments?.[0].url
+  const hasMedia = entry.entries?.media?.[0]?.url
+
+  // calculate the max width to have a correct truncation
+  // FIXME: this is not easy to maintain, need to refactor
+  const feedIconWidth = 20 + 8 * (isMobile ? 1.125 : 1)
+  const audioCoverWidth = settingWideMode ? 65 : 80
+  const mediaWidth =
+    (settingWideMode ? 48 : 80) * (isMobile ? 1.125 : 1) + 8 * (isMobile ? 1.125 : 1)
+  let savedWidth = 0
+  if (!withAudio) {
+    savedWidth += feedIconWidth
+  }
+  if (withAudio && hasAudio) {
+    savedWidth += audioCoverWidth
+  }
+  if (withDetails && hasMedia) {
+    savedWidth += mediaWidth
+  }
 
   return (
     <div
@@ -97,11 +116,10 @@ export function ListItem({
     >
       {!withAudio && <FeedIcon feed={related} fallback entry={entry.entries} />}
       <div
-        className={cn(
-          "-mt-0.5 flex-1 text-sm leading-tight",
-          lineClamp.global,
-          withAudio && !!hasAudio && "max-w-[calc(100%-88px)]",
-        )}
+        className={cn("-mt-0.5 flex-1 text-sm leading-tight", lineClamp.global)}
+        style={{
+          maxWidth: `calc(100% - ${savedWidth}px)`,
+        }}
       >
         <div
           className={cn(
