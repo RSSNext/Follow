@@ -28,6 +28,12 @@ const injectedJavaScript = [
   `window.setTimeout(() => window.ReactNativeWebView.postMessage("ready"), 2000)`,
 ].join(";")
 
+const styles = {
+  // https://github.com/react-native-webview/react-native-webview/issues/318#issuecomment-503979211
+  webview: { backgroundColor: "transparent" },
+  webviewContainer: { width: "100%" },
+} as const
+
 export const FollowWebView = ({
   webViewRef,
   customUrl,
@@ -49,7 +55,8 @@ export const FollowWebView = ({
       allowsBackForwardNavigationGestures
       /* Open chrome://inspect/#devices , or Development menu on Safari to debug the WebView. https://github.com/react-native-webview/react-native-webview/blob/master/docs/Debugging.md#debugging-webview-contents */
       webviewDebuggingEnabled={__DEV__}
-      containerStyle={{ width: "100%" }}
+      style={styles.webview}
+      containerStyle={styles.webviewContainer}
       onNavigationStateChange={onNavigationStateChange}
       // onLoad={() => setReady(false)}
       // onLoadProgress={({ nativeEvent }) => setProgress(nativeEvent.progress)}
