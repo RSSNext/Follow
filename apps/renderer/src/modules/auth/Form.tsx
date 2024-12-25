@@ -8,29 +8,23 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.js"
 import { Input } from "@follow/components/ui/input/Input.js"
+import type { LoginRuntime } from "@follow/shared/auth"
 import { loginHandler, signUp } from "@follow/shared/auth"
+import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 
-async function onSubmit(values: z.infer<typeof formSchema>) {
-  const res = await loginHandler("credential", "browser", values)
-  if (res?.error) {
-    toast.error(res.error.message)
-    return
-  }
-  window.location.reload()
-}
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().max(128),
 })
-export function LoginWithPassword() {
+
+export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
   const { t } = useTranslation("app")
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,6 +37,15 @@ export function LoginWithPassword() {
 
   const { present } = useModalStack()
   const { dismiss } = useCurrentModal()
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await loginHandler("credential", runtime ?? "browser", values)
+    if (res?.error) {
+      toast.error(res.error.message)
+      return
+    }
+    window.location.reload()
+  }
 
   return (
     <Form {...form}>
@@ -73,9 +76,14 @@ export function LoginWithPassword() {
             </FormItem>
           )}
         />
-        <Link to="/forget-password" className="block py-1 text-xs text-accent hover:underline">
+        <a
+          href={`${env.VITE_WEB_URL}/forget-password`}
+          target="_blank"
+          rel="noreferrer"
+          className="block py-1 text-xs text-accent hover:underline"
+        >
           {t("login.forget_password.note")}
-        </Link>
+        </a>
         <Button
           type="submit"
           className="w-full"

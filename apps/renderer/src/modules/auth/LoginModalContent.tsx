@@ -214,7 +214,7 @@ export const AuthProvidersRender: FC<{
 
                   if (provider.id === "credential") {
                     present({
-                      content: LoginWithPassword,
+                      content: () => <LoginWithPassword runtime={runtime} />,
                       title: t("login.with_email.title"),
                     })
                     return

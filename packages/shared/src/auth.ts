@@ -58,7 +58,7 @@ export const loginHandler = async (
   },
 ) => {
   const { email, password } = args ?? {}
-  if (IN_ELECTRON) {
+  if (IN_ELECTRON && provider !== "credential") {
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
     if (provider === "credential") {
