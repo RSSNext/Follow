@@ -10,6 +10,8 @@
 const { withDangerousMod, withXcodeProject, IOSConfig } = require("@expo/config-plugins")
 const fs = require("node:fs")
 const path = require("node:path")
+const { execSync } = require("node:child_process")
+const process = require("node:process")
 
 const followRoot = path.resolve(__dirname, "..", "..", "..")
 
@@ -18,9 +20,21 @@ const ASSET_SOURCE_DIR = path.join("out", "rn-web")
 
 const IOS_GROUP_NAME = "Assets"
 
+const isAssetReady = () => {
+  return fs.existsSync(path.resolve(followRoot, ASSET_SOURCE_DIR))
+}
+
 const withFollowAssets = (config) => {
-  if (!fs.existsSync(path.resolve(followRoot, ASSET_SOURCE_DIR))) {
-    throw new Error("Assets source directory not found! Do you forget to run `pnpm build:rn-web`?")
+  if (!isAssetReady()) {
+    console.info(
+      "Assets source directory not found! Running `pnpm build:rn-web` to generate assets.",
+    )
+    process.chdir(followRoot)
+    execSync("pnpm build:rn-web")
+    process.chdir(__dirname)
+  }
+  if (!isAssetReady()) {
+    throw new Error("Assets source directory not found! Please make sure the build is successful.")
   }
   config = addAndroidResources(config)
   config = addIOSResources(config)
