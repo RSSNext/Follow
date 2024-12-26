@@ -31,5 +31,5 @@ export const getSessionToken = async () => {
 
 export const clearSessionToken = async () => {
   await kv.delete(cookieKey)
-  return CookieManager.clearAll(true)
+  return CookieManager.clearAll()
 }
