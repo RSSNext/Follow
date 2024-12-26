@@ -13,6 +13,9 @@ const { createAuthClient } =
   require("better-auth/dist/react.js") as typeof import("better-auth/react")
 
 const storagePrefix = "follow_auth"
+export const cookieKey = `${storagePrefix}_cookie`
+export const sessionTokenKey = "__Secure-better-auth.session_token"
+
 const authClient = createAuthClient({
   baseURL: `${getApiUrl()}/better-auth`,
   plugins: [
@@ -26,7 +29,7 @@ const authClient = createAuthClient({
       storage: {
         setItem(key, value) {
           kv.setSync(key, value)
-          if (key === `${storagePrefix}_cookie`) {
+          if (key === cookieKey) {
             queryClient.invalidateQueries({ queryKey: ["cookie"] })
           }
         },
@@ -55,15 +58,16 @@ export const useAuthProviders = () => {
   })
 }
 
+export const getSessionTokenFromCookie = () => {
+  const cookie = getCookie()
+  return cookie ? parse(cookie)[sessionTokenKey] : null
+}
+
 export const useAuthToken = () => {
-  const query = useQuery({
+  return useQuery({
     queryKey: ["cookie"],
-    queryFn: getCookie,
+    queryFn: getSessionTokenFromCookie,
   })
-  return {
-    ...query,
-    data: query.data ? parse(query.data)["__Secure-better-auth.session_token"] : null,
-  }
 }
 
 // eslint-disable-next-line unused-imports/no-unused-vars

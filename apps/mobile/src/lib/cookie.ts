@@ -1,16 +1,22 @@
 import CookieManager from "@react-native-cookies/cookies"
 
+import { cookieKey, getSessionTokenFromCookie, sessionTokenKey } from "./auth"
 import { getApiUrl } from "./env"
 import { kv } from "./kv"
 
-const keys = {
-  sessionToken: "better-auth.session_token",
-}
 export const setSessionToken = (token: string) => {
-  kv.setSync(keys.sessionToken, token)
+  kv.setSync(
+    cookieKey,
+    JSON.stringify({
+      [sessionTokenKey]: {
+        value: token,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toISOString(),
+      },
+    }),
+  )
 
   return CookieManager.set(getApiUrl(), {
-    name: keys.sessionToken,
+    name: sessionTokenKey,
     value: token,
     httpOnly: true,
     secure: true,
@@ -20,10 +26,10 @@ export const setSessionToken = (token: string) => {
 export const getSessionToken = async () => {
   const cookies = await CookieManager.get(getApiUrl())
 
-  return cookies[keys.sessionToken] || kv.getSync(keys.sessionToken)
+  return cookies[sessionTokenKey] || getSessionTokenFromCookie()
 }
 
 export const clearSessionToken = async () => {
-  await kv.delete(keys.sessionToken)
-  return CookieManager.clearAll()
+  await kv.delete(cookieKey)
+  return CookieManager.clearAll(true)
 }
