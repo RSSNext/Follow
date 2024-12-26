@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.2.8-beta.0",
+  "version": "0.2.9-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow your favorites in one inbox",
@@ -183,5 +183,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "b2130db8e4fffd333fbc79e0bf9ddd4d93a5158289f61a36e968d791b6595c49"
+  "mainHash": "d1a9003fc61ee09706e74043ca5df74aee2f0263ce5ef45a26dc46d27cc313bf"
 }
