@@ -39,7 +39,7 @@ export const UpdateNotice = () => {
         break
       }
       case "pwa": {
-        window.location.reload()
+        status.finishUpdate?.()
         break
       }
     }
