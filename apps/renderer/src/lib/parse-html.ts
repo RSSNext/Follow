@@ -123,7 +123,7 @@ export const parseHtml = (
         passNode: true,
         components: {
           a: ({ node, ...props }) => {
-            markInlineImage(node)
+            // markInlineImage(node)
             return createElement(MarkdownLink, { ...props } as any)
           },
           img: Img,
