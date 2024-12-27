@@ -404,6 +404,9 @@ importers:
       '@expo/vector-icons':
         specifier: ^14.0.2
         version: 14.0.4
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../packages/components
       '@follow/constants':
         specifier: workspace:*
         version: link:../../packages/constants
@@ -600,6 +603,9 @@ importers:
       expo-drizzle-studio-plugin:
         specifier: 0.1.1
         version: 0.1.1(vc5zx7mqwgzirpvpjamp5nboge)
+      postcss:
+        specifier: 8.4.49
+        version: 8.4.49
       react-test-renderer:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -13870,7 +13876,7 @@ packages:
       '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
       postcss: ^8.4.12
-      typescript: 5.6.3
+      typescript: '>=4.5.0'
     peerDependenciesMeta:
       '@microsoft/api-extractor':
         optional: true

@@ -10,6 +10,10 @@ module.exports = function (api) {
         "module-resolver",
         {
           alias: {
+            "es-toolkit/compat": path.resolve(
+              __dirname,
+              "../../node_modules/es-toolkit/dist/compat/index.js",
+            ),
             "es-toolkit": path.resolve(__dirname, "../../node_modules/es-toolkit/dist/index.js"),
           },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
