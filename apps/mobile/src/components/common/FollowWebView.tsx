@@ -8,7 +8,7 @@ import type { WebViewNavigation, WebViewProps } from "react-native-webview"
 import { WebView } from "react-native-webview"
 
 import { signOut } from "@/src/lib/auth"
-import { useOpenLink } from "@/src/lib/hooks/useOpenLink"
+import { useOpenLink } from "@/src/lib/hooks/use-open-link"
 
 const presetUri = Platform.select({
   ios: "rn-web/index.html",
