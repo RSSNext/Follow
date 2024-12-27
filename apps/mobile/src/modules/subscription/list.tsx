@@ -111,6 +111,7 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
 
   return (
     <FlashList
+      contentInsetAdjustmentBehavior="automatic"
       scrollIndicatorInsets={{
         bottom: tabHeight - insets.bottom,
         top: headerHeight - insets.top + bottomViewTabHeight,
