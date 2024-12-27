@@ -110,7 +110,7 @@ export const parseHtml = (
 function rehypeUrlToAnchor(tree: Node) {
   const tagsShouldNotBeWrapped = new Set(["a", "pre", "code"])
   // https://chatgpt.com/share/37e0ceec-5c9e-4086-b9d6-5afc1af13bb0
-  visitParents(tree, "text", (node: Text, ancestors: Node[]) => {
+  visitParents(tree as any, "text", (node: Text, ancestors: Node[]) => {
     if (
       ancestors.some(
         (ancestor) =>
