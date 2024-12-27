@@ -1,6 +1,5 @@
 import type { Element, Parent, Text } from "hast"
 import type { Schema } from "hast-util-sanitize"
-import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { toText } from "hast-util-to-text"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -13,6 +12,8 @@ import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { visitParents } from "unist-util-visit-parents"
 import { VFile } from "vfile"
+
+import type { ParseHtmlOptions } from "./html"
 
 /**
  * Remove the last <br> element in the tree
@@ -39,16 +40,9 @@ function rehypeTrimEndBrElement() {
   return trim
 }
 
-export const parseHtml = (
-  content: string,
-  options?: Partial<{
-    renderInlineStyle: boolean
-    noMedia?: boolean
-    components?: Components
-  }>,
-) => {
+export const parseHtml = (content: string, options?: ParseHtmlOptions) => {
   const file = new VFile(content)
-  const { renderInlineStyle = false, noMedia = false } = options || {}
+  const { renderInlineStyle = false, noMedia = false, components } = options || {}
 
   const rehypeSchema: Schema = { ...defaultSchema }
   rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "math"]
@@ -101,7 +95,7 @@ export const parseHtml = (
         jsx: (type, props, key) => jsx(type as any, props, key),
         jsxs: (type, props, key) => jsxs(type as any, props, key),
         passNode: true,
-        components: options?.components,
+        components,
       }),
     toText: () => toText(hastTree),
   }
