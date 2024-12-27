@@ -1,6 +1,5 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
-import { memoize } from "es-toolkit/compat"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
@@ -15,7 +14,21 @@ declare const window: {
   navigator: Navigator
 }
 declare const ELECTRON: boolean
-export const getOS = memoize((): OS => {
+
+export const once = <T>(fn: () => T): (() => T) => {
+  let first = true
+  let value: T
+  return () => {
+    if (first) {
+      first = false
+      value = fn()
+      return value
+    }
+    return value
+  }
+}
+
+export const getOS = once((): OS => {
   if (window.platform) {
     switch (window.platform) {
       case "darwin": {
@@ -72,10 +85,10 @@ export function detectBrowser() {
   return "Unknown"
 }
 
-export const isSafari = memoize(() => {
+export const isSafari = once(() => {
   if (ELECTRON) return false
   const ua = window.navigator.userAgent
-  return ua.includes("Safari") && !ua.includes("Chrome")
+  return (ua.includes("Safari") || ua.includes("AppleWebKit")) && !ua.includes("Chrome")
 })
 
 // eslint-disable-next-line no-control-regex
