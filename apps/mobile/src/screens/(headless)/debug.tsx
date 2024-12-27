@@ -15,7 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { getDbPath } from "@/src/database"
-import { getSessionToken, setSessionToken } from "@/src/lib/cookie"
+import { clearSessionToken, getSessionToken, setSessionToken } from "@/src/lib/cookie"
 
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
@@ -52,6 +52,16 @@ export default function DebugPanel() {
             }}
           >
             <Text style={styles.filename}>Get Current Session Token</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.itemPressable}
+            onPress={async () => {
+              await clearSessionToken()
+              Alert.alert("Session Token Cleared")
+            }}
+          >
+            <Text style={styles.filename}>Clear Session Token</Text>
           </TouchableOpacity>
         </View>
       </View>

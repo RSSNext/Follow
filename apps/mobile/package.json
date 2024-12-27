@@ -10,7 +10,6 @@
     "ios": "expo run:ios",
     "ios:device": "expo run:ios --device",
     "lint": "expo lint",
-    "prepare": "cd ../.. && shx test -d out/rn-web || pnpm run build:rn-web",
     "start": "expo start --dev-client",
     "web": "expo start --web"
   },
