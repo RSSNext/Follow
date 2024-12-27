@@ -6,5 +6,5 @@ import { Html } from "@follow/components"
 
 // eslint-disable-next-line no-empty-pattern
 export default function HtmlRender({}: { dom?: import("expo/dom").DOMProps }) {
-  return <Html />
+  return <Html content="<div>hi</div>" />
 }

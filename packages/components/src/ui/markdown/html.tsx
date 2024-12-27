@@ -1,3 +1,7 @@
-export function Html() {
-  return <div className="text-3xl text-accent dark:text-blue-500">hi111</div>
+import { parseHtml } from "./parse-html"
+
+export function Html({ content }: { content: string }) {
+  const res = parseHtml(content)
+
+  return <article>{res.toContent()}</article>
 }
