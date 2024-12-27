@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1734622443265,
+      "tag": "0000_harsh_shiva",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1734622716320,
+      "tag": "0001_bored_hobgoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1734962295258,
+      "tag": "0002_smart_power_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1734963906590,
+      "tag": "0003_known_roland_deschain",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1735137187415,
+      "tag": "0004_majestic_thunderbolt_ross",
+      "breakpoints": true
+    }
+  ]
+}

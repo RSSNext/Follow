@@ -2,16 +2,16 @@ import daisyui from "daisyui"
 import { omit } from "es-toolkit/compat"
 import resolveConfig from "tailwindcss/resolveConfig"
 
-import { baseConfig } from "../../configs/tailwind.base.config"
+import { baseTwConfig } from "../../configs/tailwind.base.config"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
-  ...baseConfig,
+  ...baseTwConfig,
   theme: {
-    ...baseConfig.theme,
+    ...baseTwConfig.theme,
     extend: {
-      ...baseConfig.theme.extend,
+      ...baseTwConfig.theme.extend,
       colors: {
-        ...omit(baseConfig.theme.extend.colors, "accent"),
+        ...omit(baseTwConfig.theme.extend.colors, "accent"),
       },
     },
   },
@@ -23,7 +23,7 @@ export default resolveConfig({
     "../../node_modules/rc-modal-sheet/**/*.{ts,tsx}",
     "../../packages/**/*.{ts,tsx}",
   ],
-  plugins: [...baseConfig.plugins, daisyui],
+  plugins: [...baseTwConfig.plugins, daisyui],
   daisyui: {
     logs: false,
     darkTheme: "dark",

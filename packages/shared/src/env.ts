@@ -1,7 +1,8 @@
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
-const isDev = "process" in globalThis ? process.env.NODE_ENV === "development" : import.meta.env.DEV
+export const isDev =
+  "process" in globalThis ? process.env.NODE_ENV === "development" : import.meta.env.DEV
 export const env = createEnv({
   clientPrefix: "VITE_",
   client: {

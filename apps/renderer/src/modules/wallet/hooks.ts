@@ -10,7 +10,15 @@ export const useTipModal = () => {
   const { present } = useModalStack()
   const { t } = useTranslation()
   return useCallback(
-    ({ userId, feedId, entryId }: { userId?: string; feedId?: string; entryId?: string }) => {
+    ({
+      userId,
+      feedId,
+      entryId,
+    }: {
+      userId?: string | null
+      feedId?: string
+      entryId?: string
+    }) => {
       if (!feedId || !entryId) {
         // this should not happen unless there is a bug in the code
         toast.error("Invalid feed id or entry id")

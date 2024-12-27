@@ -66,5 +66,6 @@
   "register.login": "Login",
   "register.note": "Already have an account? <LoginLink />",
   "register.password": "Password",
-  "register.submit": "Create account"
+  "register.submit": "Create account",
+  "words.email": "Email"
 }

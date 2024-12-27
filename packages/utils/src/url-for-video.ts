@@ -1,10 +1,16 @@
-import { IN_ELECTRON } from "@follow/shared/constants"
-
-export const urlToIframe = (url?: string | null, mini?: boolean) => {
+export const transformVideoUrl = ({
+  url,
+  mini = false,
+  isIframe = false,
+}: {
+  url: string
+  mini?: boolean
+  isIframe?: boolean
+}) => {
   if (url?.match(/\/\/www.bilibili.com\/video\/BV\w+/)) {
-    const player = IN_ELECTRON
-      ? "https://www.bilibili.com/blackboard/newplayer.html"
-      : "https://player.bilibili.com/player.html"
+    const player = isIframe
+      ? "https://player.bilibili.com/player.html"
+      : "https://www.bilibili.com/blackboard/newplayer.html"
     return `${player}?${new URLSearchParams({
       isOutside: "true",
       autoplay: "true",
@@ -13,7 +19,9 @@ export const urlToIframe = (url?: string | null, mini?: boolean) => {
       highQuality: "true",
       bvid: url.match(/\/\/www.bilibili.com\/video\/(BV\w+)/)?.[1] || "",
     }).toString()}`
-  } else if (url?.match(/\/\/www.youtube.com\/watch\?v=[-\w]+/)) {
+  }
+
+  if (url?.match(/\/\/www.youtube.com\/watch\?v=[-\w]+/)) {
     return `https://www.youtube-nocookie.com/embed/${url.match(/\/\/www.youtube.com\/watch\?v=([-\w]+)/)?.[1]}?${new URLSearchParams(
       {
         controls: mini ? "0" : "1",
@@ -21,7 +29,6 @@ export const urlToIframe = (url?: string | null, mini?: boolean) => {
         mute: mini ? "1" : "0",
       },
     ).toString()}`
-  } else {
-    return null
   }
+  return null
 }

@@ -57,7 +57,7 @@
   }
 
   #root [data-button="true"][data-action="true"] {
-    @apply bg-transparent font-bold font-sans text-foreground relative -mr-[16px] px-4 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-foreground/30;
+    @apply relative -mr-[16px] bg-transparent px-4 font-sans font-bold text-foreground before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-foreground/30;
   }
 }
 
@@ -69,7 +69,7 @@
     content: "";
     border-radius: var(--border-radius);
 
-    @apply absolute inset-0 pointer-events-none z-[-1] dark:opacity-20 opacity-10 !transform-none;
+    @apply pointer-events-none absolute inset-0 z-[-1] !transform-none opacity-10 dark:opacity-20;
   }
 
   &[data-type="success"]::before {

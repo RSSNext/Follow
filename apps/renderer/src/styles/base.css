@@ -28,7 +28,7 @@ body,
 
   @apply font-theme;
 
-  @apply print:overflow-auto print:h-auto;
+  @apply print:h-auto print:overflow-auto;
 }
 
 :focus-visible {
@@ -53,5 +53,5 @@ button {
 }
 
 #react-scan-toolbar {
-  @apply max-lg:!hidden no-drag-region;
+  @apply no-drag-region max-lg:!hidden;
 }

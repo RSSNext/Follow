@@ -172,7 +172,12 @@ class Transaction<S, Ctx> {
     }
 
     if (this.onPersist) {
-      await runTransactionInScope(() => Promise.resolve(this.onPersist!(this._snapshot, this._ctx)))
+      await runTransactionInScope(() =>
+        Promise.resolve(this.onPersist!(this._snapshot, this._ctx)).catch((err) => {
+          console.error(err)
+          throw err
+        }),
+      )
     }
   }
 }

@@ -51,7 +51,7 @@ export function Login() {
 
   useEffect(() => {
     if (provider && !isCredentialProvider && status === "unauthenticated") {
-      loginHandler(provider)
+      loginHandler(provider, "app")
       setRedirecting(true)
     }
   }, [isCredentialProvider, provider, status])
@@ -135,11 +135,13 @@ export function Login() {
                       authProvidersConfig[key]?.buttonClassName,
                     )}
                     onClick={() => {
-                      loginHandler(key)
+                      loginHandler(key, "app")
                     }}
                   >
                     <i className={cn("mr-2 text-xl", authProvidersConfig[key]?.iconClassName)} />{" "}
-                    {t("login.continueWith", { provider: provider.name })}
+                    {t("login.continueWith", {
+                      provider: provider.name,
+                    })}
                   </Button>
                 ))}
             </div>
@@ -162,7 +164,7 @@ export function Login() {
                     <MotionButtonBase
                       key={key}
                       onClick={() => {
-                        loginHandler(key)
+                        loginHandler(key, "app")
                       }}
                     >
                       {overrideProviderIconMap[provider.id] ? (
@@ -226,7 +228,7 @@ const formSchema = z.object({
 })
 
 async function onSubmit(values: z.infer<typeof formSchema>) {
-  const res = await loginHandler("credential", "browser", values)
+  const res = await loginHandler("credential", "app", values)
   if (res?.error) {
     toast.error(res.error.message)
     return
@@ -284,7 +286,7 @@ function LoginWithPassword() {
           buttonClassName="text-base !mt-3"
           disabled={!isValid}
         >
-          {t("login.continueWith", { provider: "email" })}
+          {t("login.continueWith", { provider: t("words.email") })}
         </Button>
         <Button
           buttonClassName="!mt-3 text-base"

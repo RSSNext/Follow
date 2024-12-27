@@ -7,7 +7,7 @@ import type { COMMAND_ID } from "./id"
 
 export type TipCommand = Command<{
   id: typeof COMMAND_ID.entry.tip
-  fn: (data: { userId?: string; feedId?: string; entryId?: string }) => void
+  fn: (data: { userId?: string | null; feedId?: string; entryId?: string }) => void
 }>
 
 export type StarCommand = Command<{

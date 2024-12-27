@@ -117,7 +117,9 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       },
       {
         id: COMMAND_ID.entry.tip,
-        onClick: runCmdFn(COMMAND_ID.entry.tip, [{ entryId, feedId: feed?.id }]),
+        onClick: runCmdFn(COMMAND_ID.entry.tip, [
+          { entryId, feedId: feed?.id, userId: feed?.ownerUserId },
+        ]),
         hide: isInbox || feed?.ownerUserId === whoami()?.id,
         shortcut: shortcuts.entry.tip.key,
       },

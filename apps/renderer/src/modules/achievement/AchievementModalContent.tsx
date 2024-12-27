@@ -250,7 +250,7 @@ export const AchievementModalContent: FC = () => {
                     <div
                       className={styledButtonVariant({
                         variant: "outline",
-                        className: "relative border-0 pointer-events-none",
+                        className: "pointer-events-none relative border-0",
                       })}
                     >
                       <LoadingCircle size="small" className="center absolute inset-0" />
@@ -265,7 +265,7 @@ export const AchievementModalContent: FC = () => {
                       className={styledButtonVariant({
                         variant: "outline",
                         className:
-                          "relative !bg-green-100/50 gap-1 border-green-200 text-green-800 dark:text-foreground dark:!bg-green-100/5 dark:border-green-200/20",
+                          "relative gap-1 border-green-200 !bg-green-100/50 text-green-800 dark:border-green-200/20 dark:!bg-green-100/5 dark:text-foreground",
                       })}
                     >
                       <i className="i-mgc-check-filled" />
@@ -278,7 +278,7 @@ export const AchievementModalContent: FC = () => {
                       className={styledButtonVariant({
                         variant: "outline",
                         className:
-                          "relative cursor-not-allowed !bg-zinc-100/50 gap-1 border-zinc-200 text-zinc-800 dark:text-foreground dark:!bg-zinc-100/5 dark:border-zinc-200/20",
+                          "relative cursor-not-allowed gap-1 border-zinc-200 !bg-zinc-100/50 text-zinc-800 dark:border-zinc-200/20 dark:!bg-zinc-100/5 dark:text-foreground",
                       })}
                     >
                       Validating...
@@ -454,7 +454,7 @@ const IncompleteButton: FC<{
       type="button"
       className={styledButtonVariant({
         variant: "ghost",
-        className: "relative hover:bg-transparent group cursor-pointer",
+        className: "group relative cursor-pointer hover:bg-transparent",
       })}
       onClick={() => {
         checkAchievement(achievement.actionId)
