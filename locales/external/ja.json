@@ -66,5 +66,6 @@
   "register.login": "ログイン",
   "register.note": "アカウントを既にお持ちですか？ <LoginLink />",
   "register.password": "パスワード",
-  "register.submit": "アカウントを作成"
+  "register.submit": "アカウントを作成",
+  "words.email": "Email"
 }
