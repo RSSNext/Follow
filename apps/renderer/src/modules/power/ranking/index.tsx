@@ -58,7 +58,7 @@ export const PowerRanking: Component = ({ className }) => {
                   {!!hasGap && (
                     <>
                       <TableRow>
-                        <TableCell className="py-2">...</TableCell>
+                        <TableCell>...</TableCell>
                       </TableRow>
                       <TableRow>
                         <div className="h-px w-full" />
@@ -66,14 +66,14 @@ export const PowerRanking: Component = ({ className }) => {
                     </>
                   )}
                   <TableRow>
-                    <TableCell className="py-2">{!!row.rank && rankNumber(row.rank)}</TableCell>
-                    <TableCell className="py-2">
+                    <TableCell>{!!row.rank && rankNumber(row.rank)}</TableCell>
+                    <TableCell>
                       <UserRenderer
                         user={row.user}
                         avatarClassName={!!row.rank && row.rank <= 3 ? "size-6" : "size-5"}
                       />
                     </TableCell>
-                    <TableCell className="py-2">
+                    <TableCell>
                       <div className="flex items-center gap-1">
                         <Balance
                           withSuffix
@@ -85,15 +85,13 @@ export const PowerRanking: Component = ({ className }) => {
                         </Balance>
                       </div>
                     </TableCell>
-                    <TableCell className="py-2">
-                      {!!row.level && <Level level={row.level} />}
-                    </TableCell>
+                    <TableCell>{!!row.level && <Level level={row.level} />}</TableCell>
                   </TableRow>
                 </Fragment>
               )
             })}
             <TableRow>
-              <TableCell className="py-2">...</TableCell>
+              <TableCell>...</TableCell>
             </TableRow>
           </TableBody>
         </Table>

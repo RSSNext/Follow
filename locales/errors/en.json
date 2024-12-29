@@ -52,5 +52,9 @@
   "10002": "Inbox limit exceeded",
   "10003": "Inbox permission denied",
   "11000": "RSSHub route not found",
+  "11001": "You are not the owner of this RSSHub instance",
+  "11002": "RSSHub is in use",
+  "11003": "RSSHub not found",
+  "11004": "RSSHub user limit exceeded",
   "12000": "Action limit exceeded"
 }

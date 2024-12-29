@@ -15,7 +15,7 @@ export const tableHeadVariants = cva("", {
 export const tableCellVariants = cva("", {
   variants: {
     size: {
-      default: "p-4",
+      default: "px-4 py-2",
       sm: "py-1 pr-2 [&:last-child]:pr-0",
     },
   },
