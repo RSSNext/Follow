@@ -1,11 +1,12 @@
 import { getReadonlyRoute } from "@follow/components/atoms/route.js"
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import { Routes } from "@follow/constants"
 import { springScrollTo } from "@follow/utils/scroller"
 import { cn, getOS } from "@follow/utils/utils"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Outlet, useNavigate } from "react-router"
+import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType } from "react-router"
 
 import { getSidebarActiveView, setSidebarActiveView } from "~/atoms/sidebar"
 import { FABContainer, FABPortable } from "~/components/ui/fab"
@@ -20,6 +21,19 @@ export function SubviewLayout() {
   const title = useSubViewTitleValue()
   const [scrollRef, setRef] = useState(null as HTMLDivElement | null)
   const [isTitleSticky, setIsTitleSticky] = useState(false)
+  const navigationType = useNavigationType()
+  const location = useLocation()
+
+  useEffect(() => {
+    // Scroll to top search bar when re-navigating to Discover page while already on it
+    if (
+      navigationType === NavigationType.Replace &&
+      location.pathname === Routes.Discover &&
+      scrollRef
+    ) {
+      springScrollTo(0, scrollRef)
+    }
+  }, [location, navigationType, scrollRef])
 
   useEffect(() => {
     const $scroll = scrollRef
