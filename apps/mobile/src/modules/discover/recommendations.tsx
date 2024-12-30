@@ -4,6 +4,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { FlashList } from "@shopify/flash-list"
 import { useQuery } from "@tanstack/react-query"
+import type { FC } from "react"
 import { useCallback, useMemo, useRef, useState } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
@@ -87,7 +88,7 @@ const Tab: TabComponent = ({ tab }) => {
   }, [data])
 
   const alphabetGroups = useMemo(() => {
-    return keys.reduce(
+    const groups = keys.reduce(
       (acc, key) => {
         // A-Z -> A-Z, 0-9 -> #, other -> #, # push to the end
         const firstChar = key[0].toUpperCase()
@@ -103,17 +104,77 @@ const Tab: TabComponent = ({ tab }) => {
       },
       {} as Record<string, string[]>,
     )
+
+    const sortedGroups = Object.entries(groups).sort((a, b) => {
+      const aLetter = a[0]
+      const bLetter = b[0]
+
+      return aLetter.localeCompare(bLetter)
+    })
+
+    const data = [] as ({ key: string } | string)[]
+    for (const [letter, items] of sortedGroups) {
+      data.push(letter)
+
+      for (const item of items) {
+        data.push({ key: item })
+      }
+    }
+
+    return data
   }, [keys])
 
   // Add ref for FlashList
-  const listRef = useRef<FlashList<string>>(null)
-  // Add state for tracking current letter
+  const listRef = useRef<FlashList<{ key: string } | string>>(null)
+
+  const getItemType = useCallback((item: string | { key: string }) => {
+    return typeof item === "string" ? "sectionHeader" : "row"
+  }, [])
+
+  const keyExtractor = useCallback((item: string | { key: string }) => {
+    return typeof item === "string" ? item : item.key
+  }, [])
+
+  if (isLoading) {
+    return null
+  }
+
+  return (
+    <View className="bg-system-background flex-1">
+      <FlashList
+        ref={listRef}
+        data={alphabetGroups}
+        keyExtractor={keyExtractor}
+        getItemType={getItemType}
+        renderItem={ItemRenderer}
+      />
+
+      {/* Right Sidebar */}
+      <NavigationSidebar alphabetGroups={alphabetGroups} listRef={listRef} />
+    </View>
+  )
+}
+
+const ItemRenderer = ({ item }: { item: string | { key: string } }) => {
+  if (typeof item === "string") {
+    // Rendering header
+    return <Text>{item}</Text>
+  } else {
+    // Render item
+    return <Text>{item.key}</Text>
+  }
+}
+const NavigationSidebar: FC<{
+  alphabetGroups: (string | { key: string })[]
+  listRef: React.RefObject<FlashList<string | { key: string }>>
+}> = ({ alphabetGroups, listRef }) => {
   const [activeLetter, setActiveLetter] = useState<string>("")
 
   const scrollToLetter = useCallback(
     (letter: string, animated = true) => {
-      const index = keys.findIndex((key) => {
-        const firstChar = key[0].toUpperCase()
+      const index = alphabetGroups.findIndex((group) => {
+        if (typeof group !== "string") return false
+        const firstChar = group[0].toUpperCase()
         const firstCharIsAlphabet = /[A-Z]/.test(firstChar)
         if (firstCharIsAlphabet) {
           return firstChar === letter
@@ -127,68 +188,62 @@ const Tab: TabComponent = ({ tab }) => {
       })
 
       if (index !== -1) {
-        listRef.current?.scrollToIndex({ index, animated })
+        listRef.current?.scrollToIndex({
+          animated,
+          index,
+        })
       }
     },
-    [keys],
+    [alphabetGroups, listRef],
   )
-
+  const titles = useMemo(() => {
+    return alphabetGroups.filter((item) => typeof item === "string")
+  }, [alphabetGroups])
   // Replace PanResponder with gesture handler
   const handleGesture = useCallback(
     (event: PanGestureHandlerGestureEvent) => {
       const { y } = event.nativeEvent
       const letterHeight = 20 // Approximate height of each letter
-      const letters = Object.keys(alphabetGroups).sort((a, b) => a.localeCompare(b))
-      const index = Math.floor(y / letterHeight)
-      const letter = letters[Math.min(Math.max(0, index), letters.length - 1)]
+      const letter = titles[Math.floor(y / letterHeight)]
+      if (!letter) {
+        return
+      }
 
-      if (letter && letter !== activeLetter) {
+      const firstChar = letter[0].toUpperCase()
+      const firstCharIsAlphabet = /[A-Z]/.test(firstChar)
+      if (firstCharIsAlphabet) {
         setActiveLetter(letter)
         scrollToLetter(letter, false)
+      } else {
+        setActiveLetter("#")
+        scrollToLetter("#", false)
       }
     },
-    [alphabetGroups, activeLetter, scrollToLetter],
+    [scrollToLetter, titles],
   )
 
-  if (isLoading) {
-    return null
-  }
-
   return (
-    <View className="bg-system-background flex-1">
-      <FlashList
-        ref={listRef}
-        data={keys}
-        estimatedItemSize={100}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => <Text key={item}>{item}</Text>}
-      />
-
-      {/* Right Sidebar */}
-      <View className="absolute inset-y-0 right-1 h-full items-center justify-center">
-        <PanGestureHandler onGestureEvent={handleGesture}>
-          <View className="gap-0.5">
-            {Object.keys(alphabetGroups)
-              .sort((a, b) => a.localeCompare(b))
-              .map((letter) => (
-                <TouchableOpacity
-                  hitSlop={5}
-                  key={letter}
-                  onPress={() => {
-                    setActiveLetter(letter)
-                    scrollToLetter(letter)
-                  }}
-                >
-                  <Text
-                    className={`text-sm ${activeLetter !== letter ? "text-secondary-text/60" : "text-accent"}`}
-                  >
-                    {letter}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-          </View>
-        </PanGestureHandler>
-      </View>
+    <View className="absolute inset-y-0 right-1 h-full items-center justify-center">
+      <PanGestureHandler onGestureEvent={handleGesture}>
+        <View className="gap-0.5">
+          {titles.map((title) => (
+            <TouchableOpacity
+              hitSlop={5}
+              key={title}
+              onPress={() => {
+                setActiveLetter(title)
+                scrollToLetter(title)
+              }}
+            >
+              <Text
+                className={`text-sm ${activeLetter !== title ? "text-secondary-text/60" : "text-accent"}`}
+              >
+                {title}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </PanGestureHandler>
     </View>
   )
 }
