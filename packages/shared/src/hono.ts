@@ -9611,7 +9611,6 @@ declare const auth: {
             }): Promise<void>;
         };
         emailVerification: {
-            sendOnSignUp: true;
             sendVerificationEmail({ user, url }: {
                 user: better_auth.User;
                 url: string;
@@ -12705,8 +12704,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $post: {
             input: {
                 json: {
-                    id: string;
-                    durationInMonths: number;
+                    id: string | null;
+                    durationInMonths?: number | undefined;
                 };
             };
             output: {

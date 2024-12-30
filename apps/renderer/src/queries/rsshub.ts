@@ -6,9 +6,15 @@ import { userActions } from "~/store/user"
 
 import type { MutationBaseProps } from "./types"
 
-export const useUseRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
+export const useSetRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
   useMutation({
-    mutationFn: (id: string) => apiClient.rsshub.use.$post({ json: { id } }),
+    mutationFn: (data: { id: string | null; durationInMonths?: number }) =>
+      apiClient.rsshub.use.$post({ json: data }),
+
+    onSuccess: () => {
+      rsshub.list().invalidate()
+      rsshub.status().invalidate()
+    },
 
     onError: (error) => {
       onError?.(error)
