@@ -9,6 +9,8 @@ overrides:
   '@types/react-dom': npm:@types/react-dom@^18.3.1
   is-core-module: npm:@nolyfill/is-core-module@^1
   isarray: npm:@nolyfill/isarray@^1
+  unist-util-visit-parents: 5.1.3
+  vfile: 5.3.7
 
 patchedDependencies:
   '@mozilla/readability':
@@ -23,6 +25,9 @@ patchedDependencies:
   daisyui:
     hash: igsntdatmoaxzwxof4bkkh35fy
     path: patches/daisyui.patch
+  devlop:
+    hash: xzgzapu45daboiid4fiusduvwa
+    path: patches/devlop.patch
   electron-context-menu:
     hash: c53at4t5fflixuwjz35hmcqdu4
     path: patches/electron-context-menu.patch
@@ -404,6 +409,9 @@ importers:
       '@expo/vector-icons':
         specifier: ^14.0.2
         version: 14.0.4
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../packages/components
       '@follow/constants':
         specifier: workspace:*
         version: link:../../packages/constants
@@ -600,6 +608,9 @@ importers:
       expo-drizzle-studio-plugin:
         specifier: 0.1.1
         version: 0.1.1(vc5zx7mqwgzirpvpjamp5nboge)
+      postcss:
+        specifier: 8.4.49
+        version: 8.4.49
       react-test-renderer:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -880,8 +891,8 @@ importers:
         specifier: 11.0.5
         version: 11.0.5
       unist-util-visit-parents:
-        specifier: ^6.0.1
-        version: 6.0.1
+        specifier: 5.1.3
+        version: 5.1.3
       use-context-selector:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.25.0)
@@ -895,8 +906,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
       vfile:
-        specifier: 6.0.3
-        version: 6.0.3
+        specifier: 5.3.7
+        version: 5.3.7
       web-push:
         specifier: 3.6.7
         version: 3.6.7
@@ -1232,6 +1243,12 @@ importers:
       '@react-hook/window-size':
         specifier: 3.1.1
         version: 3.1.1(react@18.3.1)
+      '@types/hast':
+        specifier: 3.0.4
+        version: 3.0.4
+      '@types/unist':
+        specifier: 3.0.3
+        version: 3.0.3
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -1244,6 +1261,12 @@ importers:
       framer-motion:
         specifier: 11.13.1
         version: 11.13.1(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      hast-util-to-jsx-runtime:
+        specifier: 2.3.2
+        version: 2.3.2
+      hast-util-to-text:
+        specifier: 4.0.2
+        version: 4.0.2
       jotai:
         specifier: 2.10.3
         version: 2.10.3(@types/react@18.3.14)(react@18.3.1)
@@ -1268,9 +1291,30 @@ importers:
       react-i18next:
         specifier: ^15.1.3
         version: 15.1.3(i18next@24.0.5(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      rehype-infer-description-meta:
+        specifier: 2.0.0
+        version: 2.0.0
+      rehype-parse:
+        specifier: 9.0.1
+        version: 9.0.1
+      rehype-sanitize:
+        specifier: 6.0.0
+        version: 6.0.0
+      rehype-stringify:
+        specifier: 10.0.1
+        version: 10.0.1
       sonner:
         specifier: 1.7.1
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      unified:
+        specifier: 11.0.5
+        version: 11.0.5
+      unist-util-visit:
+        specifier: 5.0.0
+        version: 5.0.0
+      unist-util-visit-parents:
+        specifier: 5.1.3
+        version: 5.1.3
       use-context-selector:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.25.0)
@@ -1280,6 +1324,9 @@ importers:
       vaul:
         specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      vfile:
+        specifier: 5.3.7
+        version: 5.3.7
 
   packages/constants:
     dependencies:
@@ -9752,6 +9799,10 @@ packages:
   is-buffer@1.1.6:
     resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
 
+  is-buffer@2.0.5:
+    resolution: {integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==}
+    engines: {node: '>=4'}
+
   is-builtin-module@3.2.1:
     resolution: {integrity: sha512-BSLE3HnV2syZ0FK0iMA/yUGplUeMmNz4AW5fnTunbCIqZi4vG3WjJT9FHMy5D69xmAYBHXQhJdALdpwVxV501A==}
     engines: {node: '>=6'}
@@ -13870,7 +13921,7 @@ packages:
       '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
       postcss: ^8.4.12
-      typescript: 5.6.3
+      typescript: '>=4.5.0'
     peerDependenciesMeta:
       '@microsoft/api-extractor':
         optional: true
@@ -14105,6 +14156,9 @@ packages:
   unist-util-find-after@5.0.0:
     resolution: {integrity: sha512-amQa0Ep2m6hE2g72AugUItjbuM8X8cGQnFoHk0pGfrFeT9GZhzN5SW8nRsiGKK7Aif4CrACPENkA6P/Lw6fHGQ==}
 
+  unist-util-is@5.2.1:
+    resolution: {integrity: sha512-u9njyyfEh43npf1M+yGKDGVPbY/JWEemg5nH05ncKPfi+kBbKBJoTdsogMu33uhytuLlv9y0O7GH7fEdwLdLQw==}
+
   unist-util-is@6.0.0:
     resolution: {integrity: sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==}
 
@@ -14114,11 +14168,14 @@ packages:
   unist-util-remove-position@5.0.0:
     resolution: {integrity: sha512-Hp5Kh3wLxv0PHj9m2yZhhLt58KzPtEYKQQ4yxfYFEO7EvHwzyDYnduhHnY1mDxoqr7VUwVuHXk9RXKIiYS1N8Q==}
 
+  unist-util-stringify-position@3.0.3:
+    resolution: {integrity: sha512-k5GzIBZ/QatR8N5X2y+drfpWG8IDBzdnVj6OInRNWm1oXrzydiaAT2OQiA8DPRRZyAKb9b6I2a6PxYklZD0gKg==}
+
   unist-util-stringify-position@4.0.0:
     resolution: {integrity: sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ==}
 
-  unist-util-visit-parents@6.0.1:
-    resolution: {integrity: sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw==}
+  unist-util-visit-parents@5.1.3:
+    resolution: {integrity: sha512-x6+y8g7wWMyQhL1iZfhIPhDAs7Xwbn9nRosDXl7qoPTSCy0yNxnKc+hWokFifWQIDGi154rdUqKvbCa4+1kLhg==}
 
   unist-util-visit@5.0.0:
     resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==}
@@ -14312,11 +14369,14 @@ packages:
   vfile-location@5.0.3:
     resolution: {integrity: sha512-5yXvWDEgqeiYiBe1lbxYF7UMAIm/IcopxMHrMQDq3nvKcjPKIhZklUKL+AE7J7uApI4kwe2snsK+eI6UTj9EHg==}
 
+  vfile-message@3.1.4:
+    resolution: {integrity: sha512-fa0Z6P8HUrQN4BZaX05SIVXic+7kE3b05PWAtPuYP9QLHsLKYR7/AlLW3NtOrpXRLeawpDLMsVkmk5DG0NXgWw==}
+
   vfile-message@4.0.2:
     resolution: {integrity: sha512-jRDZ1IMLttGj41KcZvlrYAaI3CfqpLpfpf+Mfig13viT6NKvRzWZ+lXz0Y5D60w6uJIBAOGq9mSHf0gktF0duw==}
 
-  vfile@6.0.3:
-    resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
+  vfile@5.3.7:
+    resolution: {integrity: sha512-r7qlzkgErKjobAmyNIkkSpizsFPYiUPuJb5pNW1RB4JcYVZhs4lIbVqk8XPk033CV/1z8ss5pkax8SuhGpcG8g==}
 
   vite-bundle-analyzer@0.15.2:
     resolution: {integrity: sha512-AwFOewhvf7EkTACa9c/inbxMrJOWwyVF4nUMITwN26lM5TAYkcnJC4KFgZXym3sYRAWe1Qgvk8X4OFTw4HPaJw==}
@@ -22663,7 +22723,7 @@ snapshots:
   detect-node@2.1.0:
     optional: true
 
-  devlop@1.1.0:
+  devlop@1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa):
     dependencies:
       dequal: 2.0.3
 
@@ -25087,20 +25147,20 @@ snapshots:
   hast-util-from-html@2.0.3:
     dependencies:
       '@types/hast': 3.0.4
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       hast-util-from-parse5: 8.0.1
       parse5: 7.1.2
-      vfile: 6.0.3
+      vfile: 5.3.7
       vfile-message: 4.0.2
 
   hast-util-from-parse5@8.0.1:
     dependencies:
       '@types/hast': 3.0.4
       '@types/unist': 3.0.3
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       hastscript: 8.0.0
       property-information: 6.5.0
-      vfile: 6.0.3
+      vfile: 5.3.7
       vfile-location: 5.0.3
       web-namespaces: 2.0.1
 
@@ -25149,7 +25209,7 @@ snapshots:
       bcp-47-match: 2.0.3
       comma-separated-tokens: 2.0.3
       css-selector-parser: 3.0.5
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       direction: 2.0.1
       hast-util-has-property: 3.0.0
       hast-util-to-string: 3.0.0
@@ -25181,7 +25241,7 @@ snapshots:
       '@types/hast': 3.0.4
       '@types/unist': 3.0.3
       comma-separated-tokens: 2.0.3
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       estree-util-is-identifier-name: 3.0.0
       hast-util-whitespace: 3.0.0
       mdast-util-mdx-expression: 2.0.1
@@ -25577,6 +25637,8 @@ snapshots:
       has-tostringtag: 1.0.2
 
   is-buffer@1.1.6: {}
+
+  is-buffer@2.0.5: {}
 
   is-builtin-module@3.2.1:
     dependencies:
@@ -26553,12 +26615,12 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
       parse-entities: 4.0.1
       stringify-entities: 4.0.4
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 5.1.3
     transitivePeerDependencies:
       - supports-color
 
@@ -26567,14 +26629,14 @@ snapshots:
       '@types/mdast': 4.0.4
       escape-string-regexp: 5.0.0
       unist-util-is: 6.0.0
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 5.1.3
 
   mdast-util-from-markdown@2.0.2:
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       decode-named-character-reference: 1.0.2
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-to-string: 4.0.0
       micromark: 4.0.0
       micromark-util-decode-numeric-character-reference: 2.0.2
@@ -26590,14 +26652,14 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       ccount: 2.0.1
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-find-and-replace: 3.0.1
       micromark-util-character: 2.1.1
 
   mdast-util-gfm-footnote@2.0.0:
     dependencies:
       '@types/mdast': 4.0.4
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
       micromark-util-normalize-identifier: 2.0.0
@@ -26615,7 +26677,7 @@ snapshots:
   mdast-util-gfm-table@2.0.0:
     dependencies:
       '@types/mdast': 4.0.4
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       markdown-table: 3.0.3
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
@@ -26625,7 +26687,7 @@ snapshots:
   mdast-util-gfm-task-list-item@2.0.0:
     dependencies:
       '@types/mdast': 4.0.4
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
@@ -26648,7 +26710,7 @@ snapshots:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
@@ -26661,7 +26723,7 @@ snapshots:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       ccount: 2.0.1
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
       parse-entities: 4.0.1
@@ -26676,7 +26738,7 @@ snapshots:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
@@ -26692,12 +26754,12 @@ snapshots:
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
       '@ungap/structured-clone': 1.2.0
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
       unist-util-visit: 5.0.0
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   mdast-util-to-markdown@2.1.2:
     dependencies:
@@ -26919,7 +26981,7 @@ snapshots:
   micromark-core-commonmark@2.0.1:
     dependencies:
       decode-named-character-reference: 1.0.2
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-destination: 2.0.0
       micromark-factory-label: 2.0.0
       micromark-factory-space: 2.0.0
@@ -26937,7 +26999,7 @@ snapshots:
 
   micromark-extension-directive@3.0.1:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-space: 2.0.0
       micromark-factory-whitespace: 2.0.0
       micromark-util-character: 2.1.1
@@ -26954,7 +27016,7 @@ snapshots:
 
   micromark-extension-gfm-footnote@2.1.0:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-core-commonmark: 2.0.1
       micromark-factory-space: 2.0.0
       micromark-util-character: 2.1.1
@@ -26965,7 +27027,7 @@ snapshots:
 
   micromark-extension-gfm-strikethrough@2.1.0:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-chunked: 2.0.0
       micromark-util-classify-character: 2.0.1
       micromark-util-resolve-all: 2.0.0
@@ -26974,7 +27036,7 @@ snapshots:
 
   micromark-extension-gfm-table@2.1.0:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-space: 2.0.0
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
@@ -26986,7 +27048,7 @@ snapshots:
 
   micromark-extension-gfm-task-list-item@2.1.0:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-space: 2.0.0
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
@@ -27011,7 +27073,7 @@ snapshots:
 
   micromark-factory-label@2.0.0:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.1
@@ -27086,7 +27148,7 @@ snapshots:
 
   micromark-util-subtokenize@2.0.1:
     dependencies:
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-chunked: 2.0.0
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.1
@@ -27100,7 +27162,7 @@ snapshots:
       '@types/debug': 4.1.12
       debug: 4.4.0(supports-color@8.1.1)
       decode-named-character-reference: 1.0.2
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-core-commonmark: 2.0.1
       micromark-factory-space: 2.0.0
       micromark-util-character: 2.1.1
@@ -28985,7 +29047,7 @@ snapshots:
       hast-util-truncate: 2.0.0
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   rehype-minify-whitespace@6.0.2:
     dependencies:
@@ -29052,7 +29114,7 @@ snapshots:
       '@types/mdast': 4.0.4
       mdast-util-to-hast: 13.2.0
       unified: 11.0.5
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   remark-stringify@11.0.0:
     dependencies:
@@ -30500,11 +30562,11 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       bail: 2.0.2
-      devlop: 1.1.0
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       extend: 3.0.2
       is-plain-obj: 4.1.0
       trough: 2.2.0
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   uniqolor@1.1.1: {}
 
@@ -30533,6 +30595,10 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.0
 
+  unist-util-is@5.2.1:
+    dependencies:
+      '@types/unist': 2.0.11
+
   unist-util-is@6.0.0:
     dependencies:
       '@types/unist': 3.0.3
@@ -30546,20 +30612,24 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-visit: 5.0.0
 
+  unist-util-stringify-position@3.0.3:
+    dependencies:
+      '@types/unist': 2.0.11
+
   unist-util-stringify-position@4.0.0:
     dependencies:
       '@types/unist': 3.0.3
 
-  unist-util-visit-parents@6.0.1:
+  unist-util-visit-parents@5.1.3:
     dependencies:
-      '@types/unist': 3.0.3
-      unist-util-is: 6.0.0
+      '@types/unist': 2.0.11
+      unist-util-is: 5.2.1
 
   unist-util-visit@5.0.0:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.0
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 5.1.3
 
   universal-user-agent@6.0.1: {}
 
@@ -30741,17 +30811,24 @@ snapshots:
   vfile-location@5.0.3:
     dependencies:
       '@types/unist': 3.0.3
-      vfile: 6.0.3
+      vfile: 5.3.7
+
+  vfile-message@3.1.4:
+    dependencies:
+      '@types/unist': 2.0.11
+      unist-util-stringify-position: 3.0.3
 
   vfile-message@4.0.2:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-stringify-position: 4.0.0
 
-  vfile@6.0.3:
+  vfile@5.3.7:
     dependencies:
-      '@types/unist': 3.0.3
-      vfile-message: 4.0.2
+      '@types/unist': 2.0.11
+      is-buffer: 2.0.5
+      unist-util-stringify-position: 3.0.3
+      vfile-message: 3.1.4
 
   vite-bundle-analyzer@0.15.2: {}
 
