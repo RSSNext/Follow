@@ -16,11 +16,10 @@ import { TabView } from "@/src/components/ui/tabview"
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { RSSHubCategoryCopyMap } from "./copy"
-import { RecommendationCard } from "./recommendation-card"
+import { RecommendationListItem } from "./recommendation-item"
 
 export const Recommendations = () => {
   const headerHeight = useHeaderHeight()
-  const tabHeight = useBottomTabBarHeight()
 
   return (
     <TabView
@@ -28,7 +27,6 @@ export const Recommendations = () => {
       lazyTab
       Tab={Tab}
       tabbarStyle={{ paddingTop: headerHeight }}
-      scrollerContainerStyle={{ paddingBottom: tabHeight }}
       tabs={RSSHubCategories.map((category) => ({
         name: RSSHubCategoryCopyMap[category],
         value: category,
@@ -66,6 +64,8 @@ const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
 }
 
 const Tab: TabComponent = ({ tab }) => {
+  const tabHeight = useBottomTabBarHeight()
+
   const { data, isLoading } = useQuery({
     queryKey: ["rsshub-popular", tab.value],
     queryFn: () => fetchRsshubPopular(tab.value, "all").then((res) => res.data),
@@ -157,6 +157,8 @@ const Tab: TabComponent = ({ tab }) => {
         keyExtractor={keyExtractor}
         getItemType={getItemType}
         renderItem={ItemRenderer}
+        contentContainerStyle={{ paddingBottom: tabHeight }}
+        removeClippedSubviews
       />
 
       {/* Right Sidebar */}
@@ -180,8 +182,8 @@ const ItemRenderer = ({
   } else {
     // Render item
     return (
-      <View className="mr-6">
-        <RecommendationCard data={item.data} />
+      <View className="mr-4">
+        <RecommendationListItem data={item.data} />
       </View>
     )
   }

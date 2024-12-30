@@ -7,7 +7,7 @@ import { router } from "expo-router"
 import { useAtom } from "jotai"
 import { useColorScheme } from "nativewind"
 import type { FC } from "react"
-import { createContext, memo, useContext, useEffect, useRef } from "react"
+import { createContext, memo, useContext, useEffect, useMemo, useRef } from "react"
 import {
   Animated,
   Easing,
@@ -107,7 +107,10 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
   const sortOrder = useFeedListSortOrder()
   const sortedGrouped = useSortedGroupedSubscription(grouped, sortBy, sortOrder)
   const sortedUnGrouped = useSortedUngroupedSubscription(unGrouped, sortBy, sortOrder)
-  const data = [...sortedGrouped, ...sortedUnGrouped]
+  const data = useMemo(
+    () => [...sortedGrouped, ...sortedUnGrouped],
+    [sortedGrouped, sortedUnGrouped],
+  )
 
   return (
     <FlashList

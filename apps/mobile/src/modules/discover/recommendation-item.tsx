@@ -1,7 +1,8 @@
 import type { RSSHubCategories } from "@follow/constants"
 import type { RSSHubRouteDeclaration } from "@follow/models/src/rsshub"
+import { router } from "expo-router"
 import type { FC } from "react"
-import { useMemo } from "react"
+import { memo, useMemo } from "react"
 import { Clipboard, Linking, Text, TouchableOpacity, View } from "react-native"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
@@ -10,9 +11,9 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 
 import { RSSHubCategoryCopyMap } from "./copy"
 
-export const RecommendationCard: FC<{
+export const RecommendationListItem: FC<{
   data: RSSHubRouteDeclaration
-}> = ({ data }) => {
+}> = memo(({ data }) => {
   const { maintainers, categories } = useMemo(() => {
     const maintainers = new Set<string>()
     const categories = new Set<string>()
@@ -34,13 +35,13 @@ export const RecommendationCard: FC<{
 
   return (
     <View className="flex-row items-center p-4 px-6">
-      <View className="overflow-hidden rounded-lg">
+      <View className="mt-1.5 flex-row self-start overflow-hidden rounded-lg">
         <FeedIcon siteUrl={`https://${data.url}`} size={28} />
       </View>
       <View className="ml-2 flex-1">
         <Text className="text-text text-base font-medium">{data.name}</Text>
         {/* Maintainers */}
-        <View className="flex-row items-center">
+        <View className="flex-row flex-wrap items-center">
           {maintainers.map((m) => (
             <ContextMenu
               key={m}
@@ -90,6 +91,15 @@ export const RecommendationCard: FC<{
         <Grid columns={2} gap={8} className="mt-2">
           {Object.keys(data.routes).map((route) => (
             <TouchableOpacity
+              onPress={() => {
+                router.push({
+                  pathname: "/rsshub-form",
+                  params: {
+                    url: data.url,
+                    route,
+                  },
+                })
+              }}
               key={route}
               className="bg-gray-5 h-10 flex-row items-center justify-center overflow-hidden rounded px-2"
             >
@@ -102,4 +112,4 @@ export const RecommendationCard: FC<{
       </View>
     </View>
   )
-}
+})
