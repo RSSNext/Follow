@@ -1,10 +1,12 @@
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useTheme } from "@react-navigation/native"
+import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useRef } from "react"
 import {
   Animated,
   Easing,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -20,7 +22,7 @@ import { accentColor, useColor } from "@/src/theme/colors"
 
 import { useDiscoverPageContext } from "./ctx"
 
-export const SearchableHeader = () => {
+export const SearchHeader = () => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
@@ -32,6 +34,44 @@ export const SearchableHeader = () => {
         <ComposeSearchBar />
       </View>
     </View>
+  )
+}
+
+export const DiscoverHeader = () => {
+  const frame = useSafeAreaFrame()
+  const insets = useSafeAreaInsets()
+  const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
+
+  return (
+    <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
+      <HeaderBlur />
+      <View style={styles.header}>
+        <PlaceholerSearchBar />
+      </View>
+    </View>
+  )
+}
+
+const PlaceholerSearchBar = () => {
+  const { colors } = useTheme()
+  const placeholderTextColor = useColor("placeholderText")
+  return (
+    <Pressable
+      style={{ backgroundColor: colors.card, ...styles.searchbar }}
+      onPress={() => {
+        router.push("/search")
+      }}
+    >
+      <View
+        className="absolute inset-0 flex flex-row items-center justify-center"
+        pointerEvents="none"
+      >
+        <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
+        <Text className="text-placeholder-text ml-1" style={styles.searchPlaceholderText}>
+          Search
+        </Text>
+      </View>
+    </Pressable>
   )
 }
 
@@ -48,6 +88,10 @@ const ComposeSearchBar = () => {
           onPress={() => {
             setIsFocused(false)
             setSearchValue("")
+
+            if (router.canGoBack()) {
+              router.back()
+            }
           }}
         >
           <Text className="ml-2 text-accent">Cancel</Text>
@@ -70,8 +114,10 @@ const SearchInput = () => {
   const skeletonTranslateXValue = useAnimatedValue(0)
   const placeholderOpacityValue = useAnimatedValue(1)
 
+  const focusOrHasValue = isFocused || searchValue
+
   useEffect(() => {
-    if (isFocused) {
+    if (focusOrHasValue) {
       Animated.timing(skeletonOpacityValue, {
         toValue: 0,
         duration: 100,
@@ -113,16 +159,19 @@ const SearchInput = () => {
         useNativeDriver: true,
       }).start()
     }
-  }, [isFocused, skeletonOpacityValue, placeholderOpacityValue, skeletonTranslateXValue])
+  }, [focusOrHasValue, skeletonOpacityValue, placeholderOpacityValue, skeletonTranslateXValue])
 
   useEffect(() => {
     if (!isFocused) {
       inputRef.current?.blur()
+    } else {
+      inputRef.current?.focus()
     }
   }, [isFocused])
+
   return (
     <View style={{ backgroundColor: colors.card, ...styles.searchbar }}>
-      {isFocused && (
+      {focusOrHasValue && (
         <Animated.View
           style={{
             opacity: placeholderOpacityValue,
@@ -138,6 +187,8 @@ const SearchInput = () => {
         </Animated.View>
       )}
       <TextInput
+        enterKeyHint="search"
+        autoFocus={isFocused}
         ref={inputRef}
         value={searchValue}
         cursorColor={accentColor}

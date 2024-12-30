@@ -10,7 +10,7 @@ export const DiscoverPageContext = createContext<DiscoverPageContextType>(null!)
 
 export const DiscoverPageProvider = ({ children }: { children: React.ReactNode }) => {
   const [atomRefs] = useState((): DiscoverPageContextType => {
-    const searchFocusedAtom = atom(false)
+    const searchFocusedAtom = atom(true)
     const searchValueAtom = atom("")
 
     return {
