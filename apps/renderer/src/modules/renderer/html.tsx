@@ -37,11 +37,7 @@ export function EntryContentHTMLRenderer<AS extends keyof JSX.IntrinsicElements 
       entry?.entries.media?.reduce(
         (acc, media) => {
           if (media.height && media.width) {
-            acc[media.url] = {
-              url: media.url,
-              width: media.width,
-              height: media.height,
-            }
+            acc[media.url] = media
           }
           return acc
         },
