@@ -110,6 +110,29 @@ const Tab: TabComponent = ({ tab }) => {
   // Add state for tracking current letter
   const [activeLetter, setActiveLetter] = useState<string>("")
 
+  const scrollToLetter = useCallback(
+    (letter: string, animated = true) => {
+      const index = keys.findIndex((key) => {
+        const firstChar = key[0].toUpperCase()
+        const firstCharIsAlphabet = /[A-Z]/.test(firstChar)
+        if (firstCharIsAlphabet) {
+          return firstChar === letter
+        }
+
+        if (letter === "#" && !firstCharIsAlphabet) {
+          return true
+        }
+
+        return false
+      })
+
+      if (index !== -1) {
+        listRef.current?.scrollToIndex({ index, animated })
+      }
+    },
+    [keys],
+  )
+
   // Replace PanResponder with gesture handler
   const handleGesture = useCallback(
     (event: PanGestureHandlerGestureEvent) => {
@@ -121,9 +144,10 @@ const Tab: TabComponent = ({ tab }) => {
 
       if (letter && letter !== activeLetter) {
         setActiveLetter(letter)
+        scrollToLetter(letter, false)
       }
     },
-    [alphabetGroups, activeLetter],
+    [alphabetGroups, activeLetter, scrollToLetter],
   )
 
   if (isLoading) {
@@ -152,6 +176,7 @@ const Tab: TabComponent = ({ tab }) => {
                   key={letter}
                   onPress={() => {
                     setActiveLetter(letter)
+                    scrollToLetter(letter)
                   }}
                 >
                   <Text
