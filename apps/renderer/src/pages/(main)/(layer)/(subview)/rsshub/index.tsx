@@ -36,6 +36,7 @@ export function Component() {
 function List({ data }: { data?: RSSHubModel[] }) {
   const { t } = useTranslation("settings")
   const me = whoami()
+  const status = useAuthQuery(Queries.rsshub.status())
 
   return (
     <Table containerClassName="mt-2 max-w-4xl">
@@ -78,18 +79,17 @@ function List({ data }: { data?: RSSHubModel[] }) {
           <TableCell>*</TableCell>
           <TableCell>Unlimited</TableCell>
           <TableCell>
-            <span className="flex items-center gap-2">
-              <Button>{t("rsshub.table.use")}</Button>
-            </span>
+            {!status?.data?.usage?.rsshubId && <Button disabled>{t("rsshub.table.inuse")}</Button>}
+            {!!status?.data?.usage?.rsshubId && <Button>{t("rsshub.table.use")}</Button>}
           </TableCell>
         </TableRow>
-        {data?.map((instance, index) => {
+        {data?.map((instance) => {
           return (
             <TableRow key={instance.id}>
               <TableCell>
                 {(() => {
                   const flag: string[] = []
-                  if (index === 0) {
+                  if (status?.data?.usage?.rsshubId === instance.id) {
                     flag.push("In use")
                   }
                   if (instance.ownerUserId === me?.id) {
@@ -115,8 +115,12 @@ function List({ data }: { data?: RSSHubModel[] }) {
               <TableCell>{instance.userLimit || t("rsshub.table.unlimited")}</TableCell>
               <TableCell>
                 <span className="flex items-center gap-2">
-                  {index === 0 && <Button disabled>{t("rsshub.table.inuse")}</Button>}
-                  {index !== 0 && <Button>{t("rsshub.table.use")}</Button>}
+                  {status?.data?.usage?.rsshubId === instance.id && (
+                    <Button disabled>{t("rsshub.table.inuse")}</Button>
+                  )}
+                  {status?.data?.usage?.rsshubId !== instance.id && (
+                    <Button>{t("rsshub.table.use")}</Button>
+                  )}
                   {me?.id === instance.ownerUserId && (
                     <Button variant="outline">{t("rsshub.table.edit")}</Button>
                   )}

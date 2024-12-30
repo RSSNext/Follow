@@ -4161,15 +4161,15 @@ declare const invitationsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     code: string;
     createdAt: string | null;
+    usedAt: string | null;
     fromUserId: string;
     toUserId: string | null;
-    usedAt: string | null;
 }, {
     code: string;
     createdAt: string | null;
+    usedAt: string | null;
     fromUserId: string;
     toUserId: string | null;
-    usedAt: string | null;
 }>;
 declare const invitationsRelations: drizzle_orm.Relations<"invitations", {
     users: drizzle_orm.One<"user", false>;
@@ -4963,40 +4963,6 @@ declare const rsshubUsage: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        hash: drizzle_orm_pg_core.PgColumn<{
-            name: "hash";
-            tableName: "rsshub_usage";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        expiresAt: drizzle_orm_pg_core.PgColumn<{
-            name: "expires_at";
-            tableName: "rsshub_usage";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -5004,20 +4970,14 @@ declare const rsshubUsageOpenAPISchema: zod.ZodObject<{
     id: zod.ZodString;
     rsshubId: zod.ZodString;
     userId: zod.ZodString;
-    hash: zod.ZodNullable<zod.ZodString>;
-    expiresAt: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     id: string;
     userId: string;
-    hash: string | null;
     rsshubId: string;
-    expiresAt: string | null;
 }, {
     id: string;
     userId: string;
-    hash: string | null;
     rsshubId: string;
-    expiresAt: string | null;
 }>;
 declare const rsshubUsageRelations: drizzle_orm.Relations<"rsshub_usage", {
     rsshub: drizzle_orm.One<"rsshub", true>;
@@ -6220,6 +6180,23 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        toRSSHubId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_rsshub_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
             name: "power_token";
             tableName: "transactions";
@@ -6299,6 +6276,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: zod.ZodNullable<zod.ZodString>;
     toListId: zod.ZodNullable<zod.ZodString>;
     toEntryId: zod.ZodNullable<zod.ZodString>;
+    toRSSHubId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     tax: zod.ZodString;
     createdAt: zod.ZodString;
@@ -6313,6 +6291,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
+    toRSSHubId: string | null;
     tax: string;
     comment: string | null;
 }, {
@@ -6325,6 +6304,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
+    toRSSHubId: string | null;
     tax: string;
     comment: string | null;
 }>;
@@ -6568,6 +6548,47 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
         expiresAt: drizzle_orm_pg_core.PgColumn<{
             name: "expires_at";
             tableName: "boosts";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const rsshubPurchase: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "rsshub_purchase";
+    schema: undefined;
+    columns: {
+        hash: drizzle_orm_pg_core.PgColumn<{
+            name: "hash";
+            tableName: "rsshub_purchase";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        expiresAt: drizzle_orm_pg_core.PgColumn<{
+            name: "expires_at";
+            tableName: "rsshub_purchase";
             dataType: "date";
             columnType: "PgTimestamp";
             data: Date;
@@ -7438,6 +7459,7 @@ declare const auth: {
                     createdAt: Date;
                     updatedAt: Date;
                 };
+                token: string;
                 redirect: boolean;
                 url: string | undefined;
             }>;
@@ -9475,9 +9497,9 @@ declare const auth: {
                 invitation: {
                     code: string;
                     createdAt: Date | null;
+                    usedAt: Date | null;
                     fromUserId: string;
                     toUserId: string | null;
-                    usedAt: Date | null;
                 } | undefined;
                 role: "user" | "trial";
             } | null>;
@@ -9643,9 +9665,9 @@ declare const auth: {
                         invitation: {
                             code: string;
                             createdAt: Date | null;
+                            usedAt: Date | null;
                             fromUserId: string;
                             toUserId: string | null;
-                            usedAt: Date | null;
                         } | undefined;
                         role: "user" | "trial";
                     } | null>;
@@ -11077,8 +11099,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         id: string;
                         image: string | null;
                     } | null;
-                    toUserId: string | null;
                     usedAt: string | null;
+                    toUserId: string | null;
                 }[];
             };
             outputFormat: "json";
@@ -11644,6 +11666,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
+                    toRSSHubId: string | null;
                     tax: string;
                     comment: string | null;
                     fromUser?: {
@@ -12647,6 +12670,12 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     description: string | null;
                     id: string;
                     ownerUserId: string;
+                    owner: {
+                        name: string | null;
+                        id: string;
+                        image: string | null;
+                        handle: string | null;
+                    } | null;
                     price: number;
                     userLimit: number | null;
                     userCount: number;
@@ -12677,6 +12706,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     id: string;
+                    durationInMonths: number;
                 };
             };
             output: {
@@ -12710,7 +12740,29 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             status: 200;
         };
     };
+} & {
+    "/status": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    purchase: {
+                        hash: string | null;
+                        expiresAt: string;
+                    } | null;
+                    usage?: {
+                        id: string;
+                        userId: string;
+                        rsshubId: string;
+                    } | undefined;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 }, "/rsshub">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

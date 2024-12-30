@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { userActions } from "~/store/user"
 
 import type { MutationBaseProps } from "./types"
 
@@ -48,6 +49,14 @@ export const rsshub = {
   list: () =>
     defineQuery(["rsshub", "list"], async () => {
       const res = await apiClient.rsshub.list.$get()
+      userActions.upsert(res.data.map((item) => item.owner).filter((item) => item !== null))
+
+      return res.data
+    }),
+
+  status: () =>
+    defineQuery(["rsshub", "status"], async () => {
+      const res = await apiClient.rsshub.status.$get()
       return res.data
     }),
 }
