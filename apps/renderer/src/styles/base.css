@@ -12,6 +12,10 @@ html,
   -webkit-tap-highlight-color: transparent;
 }
 
+[data-build-type="rn"] #root {
+  background-color: hsl(var(--background));
+}
+
 html[data-viewport="desktop"],
 html[data-viewport="desktop"] body,
 html[data-viewport="desktop"] #shadow-html,
