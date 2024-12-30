@@ -1,6 +1,6 @@
 "use dom"
-import "../../../../../packages/components/assets/colors-media.css"
-import "../../../../../packages/components/assets/tailwind.css"
+import "@follow/components/assets/colors-media.css"
+import "@follow/components/assets/tailwind.css"
 
 import type { HtmlProps } from "@follow/components"
 import { Html } from "@follow/components"
