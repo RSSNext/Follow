@@ -291,6 +291,7 @@
   "rsshub.useModal.about": "About this Instance",
   "rsshub.useModal.month": "month",
   "rsshub.useModal.months_label": "The number of months you want to purchase",
+  "rsshub.useModal.purchase_expires_at": "You have purchased this Instance, and your purchase expires at",
   "rsshub.useModal.title": "RSSHub Instance",
   "rsshub.useModal.useWith": "Use with {{amount}} Power",
   "titles.about": "About",

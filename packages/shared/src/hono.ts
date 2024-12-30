@@ -12726,13 +12726,19 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    description: string | null;
-                    id: string;
-                    ownerUserId: string;
-                    baseUrl: string;
-                    accessKey: string | null;
-                    price: number;
-                    userLimit: number | null;
+                    purchase: {
+                        hash: string | null;
+                        expiresAt: string;
+                    } | null;
+                    instance: {
+                        description: string | null;
+                        id: string;
+                        ownerUserId: string;
+                        price: number;
+                        userLimit: number | null;
+                        baseUrl?: string | null | undefined;
+                        accessKey?: string | null | undefined;
+                    };
                 };
             };
             outputFormat: "json";

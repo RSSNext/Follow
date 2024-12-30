@@ -11,9 +11,13 @@ export const useSetRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
     mutationFn: (data: { id: string | null; durationInMonths?: number }) =>
       apiClient.rsshub.use.$post({ json: data }),
 
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       rsshub.list().invalidate()
       rsshub.status().invalidate()
+
+      if (variables.id) {
+        rsshub.get({ id: variables.id }).invalidate()
+      }
     },
 
     onError: (error) => {

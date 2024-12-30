@@ -143,25 +143,24 @@ function List({ data }: { data?: RSSHubModel[] }) {
               <TableCell>{instance.userLimit || t("rsshub.table.unlimited")}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  {status?.data?.usage?.rsshubId === instance.id && (
-                    <Button disabled className="shrink-0">
-                      {t("rsshub.table.inuse")}
-                    </Button>
-                  )}
-                  {status?.data?.usage?.rsshubId !== instance.id && (
-                    <Button
-                      onClick={() => {
-                        present({
-                          title: t("rsshub.useModal.title"),
-                          content: ({ dismiss }) => (
-                            <SetModalContent dismiss={dismiss} instance={instance} />
-                          ),
-                        })
-                      }}
-                    >
-                      {t("rsshub.table.use")}
-                    </Button>
-                  )}
+                  <Button
+                    className="shrink-0"
+                    variant={status?.data?.usage?.rsshubId === instance.id ? "outline" : "primary"}
+                    onClick={() => {
+                      present({
+                        title: t("rsshub.useModal.title"),
+                        content: ({ dismiss }) => (
+                          <SetModalContent dismiss={dismiss} instance={instance} />
+                        ),
+                      })
+                    }}
+                  >
+                    {t(
+                      status?.data?.usage?.rsshubId === instance.id
+                        ? "rsshub.table.inuse"
+                        : "rsshub.table.use",
+                    )}
+                  </Button>
                   {me?.id === instance.ownerUserId && (
                     <Button variant="outline">{t("rsshub.table.edit")}</Button>
                   )}
@@ -175,18 +174,23 @@ function List({ data }: { data?: RSSHubModel[] }) {
   )
 }
 
-const formSchema = z.object({
-  months: z.coerce.number().min(1).max(12),
-})
-
 const SetModalContent = ({ dismiss, instance }: { dismiss: () => void; instance: RSSHubModel }) => {
   const { t } = useTranslation("settings")
   const setRSSHubMutation = useSetRSSHubMutation()
+  const details = useAuthQuery(Queries.rsshub.get({ id: instance.id }))
+  const hasPurchase = !!details.data?.purchase
+
+  const formSchema = z.object({
+    months: z.coerce
+      .number()
+      .min(hasPurchase ? 0 : 1)
+      .max(12),
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      months: 1,
+      months: hasPurchase ? 0 : 1,
     },
   })
 
@@ -235,6 +239,16 @@ const SetModalContent = ({ dismiss, instance }: { dismiss: () => void; instance:
           </div>
         </CardContent>
       </Card>
+      {details.data?.purchase && (
+        <div>
+          <div className="text-sm text-muted-foreground">
+            {t("rsshub.useModal.purchase_expires_at")}
+          </div>
+          <div className="line-clamp-2">
+            {new Date(details.data.purchase.expiresAt).toLocaleString()}
+          </div>
+        </div>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {instance.price > 0 && (
@@ -247,7 +261,7 @@ const SetModalContent = ({ dismiss, instance }: { dismiss: () => void; instance:
                   <FormControl>
                     <div className="flex items-center gap-10">
                       <div className="space-x-2">
-                        <Input className="w-24" type="number" max={12} min={1} {...field} />
+                        <Input className="w-24" type="number" max={12} {...field} />
                         <span className="text-sm text-muted-foreground">
                           {t("rsshub.useModal.month")}
                         </span>
