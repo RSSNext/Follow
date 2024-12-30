@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import type { StyleProp, TouchableOpacityProps, ViewStyle } from "react-native"
 import {
   Animated as RnAnimated,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useAnimatedValue,
   useWindowDimensions,
   View,
@@ -53,7 +53,7 @@ const springConfig = {
 export const TabView: FC<TabViewProps> = ({
   tabs,
   Tab = View,
-  TabItem = TouchableOpacity,
+  TabItem = Pressable,
   initialTab,
   onTabChange,
 
@@ -215,7 +215,7 @@ export const TabView: FC<TabViewProps> = ({
             }}
             tab={tab}
           >
-            <TabItemInner tab={tab} />
+            <TabItemInner tab={tab} isSelected={index === currentTab} />
           </TabItem>
         ))}
         {/* <RnAnimated.View
@@ -261,10 +261,10 @@ export const TabView: FC<TabViewProps> = ({
   )
 }
 
-const TabItemInner = ({ tab }: { tab: Tab }) => {
+const TabItemInner = ({ tab, isSelected }: { tab: Tab; isSelected: boolean }) => {
   return (
     <View className="p-2">
-      <Text>{tab.name}</Text>
+      <Text style={{ color: isSelected ? accentColor : "gray" }}>{tab.name}</Text>
     </View>
   )
 }

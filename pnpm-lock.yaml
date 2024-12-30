@@ -418,6 +418,9 @@ importers:
       '@follow/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../packages/models
       '@follow/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -1375,6 +1378,9 @@ importers:
       '@auth/core':
         specifier: 0.37.4
         version: 0.37.4
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../constants
       '@follow/shared':
         specifier: workspace:*
         version: link:../shared

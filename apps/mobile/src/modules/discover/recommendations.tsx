@@ -1,4 +1,5 @@
 import { RSSHubCategories } from "@follow/constants"
+import type { RSSHubRouteDeclaration } from "@follow/models/src/rsshub"
 import { isASCII } from "@follow/utils"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
@@ -14,6 +15,9 @@ import type { TabComponent } from "@/src/components/ui/tabview"
 import { TabView } from "@/src/components/ui/tabview"
 import { apiClient } from "@/src/lib/api-fetch"
 
+import { RSSHubCategoryCopyMap } from "./copy"
+import { RecommendationCard } from "./recommendation-card"
+
 export const Recommendations = () => {
   const headerHeight = useHeaderHeight()
   const tabHeight = useBottomTabBarHeight()
@@ -25,7 +29,10 @@ export const Recommendations = () => {
       Tab={Tab}
       tabbarStyle={{ paddingTop: headerHeight }}
       scrollerContainerStyle={{ paddingBottom: tabHeight }}
-      tabs={RSSHubCategories.map((category) => ({ name: category, value: category }))}
+      tabs={RSSHubCategories.map((category) => ({
+        name: RSSHubCategoryCopyMap[category],
+        value: category,
+      }))}
     />
   )
 }
@@ -112,20 +119,23 @@ const Tab: TabComponent = ({ tab }) => {
       return aLetter.localeCompare(bLetter)
     })
 
-    const data = [] as ({ key: string } | string)[]
+    const result = [] as ({ key: string; data: RSSHubRouteDeclaration } | string)[]
     for (const [letter, items] of sortedGroups) {
-      data.push(letter)
+      result.push(letter)
 
       for (const item of items) {
-        data.push({ key: item })
+        if (!data) {
+          continue
+        }
+        result.push({ key: item, data: data[item] })
       }
     }
 
-    return data
-  }, [keys])
+    return result
+  }, [data, keys])
 
   // Add ref for FlashList
-  const listRef = useRef<FlashList<{ key: string } | string>>(null)
+  const listRef = useRef<FlashList<{ key: string; data: RSSHubRouteDeclaration } | string>>(null)
 
   const getItemType = useCallback((item: string | { key: string }) => {
     return typeof item === "string" ? "sectionHeader" : "row"
@@ -155,18 +165,31 @@ const Tab: TabComponent = ({ tab }) => {
   )
 }
 
-const ItemRenderer = ({ item }: { item: string | { key: string } }) => {
+const ItemRenderer = ({
+  item,
+}: {
+  item: string | { key: string; data: RSSHubRouteDeclaration }
+}) => {
   if (typeof item === "string") {
     // Rendering header
-    return <Text>{item}</Text>
+    return (
+      <View className="border-b-separator border-b-hairline mx-6 mb-1 mt-2 pb-1">
+        <Text className="text-secondary-label text-base">{item}</Text>
+      </View>
+    )
   } else {
     // Render item
-    return <Text>{item.key}</Text>
+    return (
+      <View className="mr-6">
+        <RecommendationCard data={item.data} />
+      </View>
+    )
   }
 }
+
 const NavigationSidebar: FC<{
-  alphabetGroups: (string | { key: string })[]
-  listRef: React.RefObject<FlashList<string | { key: string }>>
+  alphabetGroups: (string | { key: string; data: RSSHubRouteDeclaration })[]
+  listRef: React.RefObject<FlashList<string | { key: string; data: RSSHubRouteDeclaration }>>
 }> = ({ alphabetGroups, listRef }) => {
   const [activeLetter, setActiveLetter] = useState<string>("")
 

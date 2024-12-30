@@ -19,6 +19,7 @@
     "@follow/components": "workspace:*",
     "@follow/constants": "workspace:*",
     "@follow/hooks": "workspace:*",
+    "@follow/models": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
     "@hookform/resolvers": "3.9.1",
