@@ -15,7 +15,7 @@ export const UpdateNotice = () => {
 
     switch (status.type) {
       case "pwa": {
-        window.location.reload()
+        status.finishUpdate?.()
         break
       }
     }
