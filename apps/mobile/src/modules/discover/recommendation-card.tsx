@@ -2,9 +2,10 @@ import type { RSSHubCategories } from "@follow/constants"
 import type { RSSHubRouteDeclaration } from "@follow/models/src/rsshub"
 import type { FC } from "react"
 import { useMemo } from "react"
-import { Clipboard, Linking, Text, View } from "react-native"
+import { Clipboard, Linking, Text, TouchableOpacity, View } from "react-native"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
+import { Grid } from "@/src/components/ui/grid"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 
 import { RSSHubCategoryCopyMap } from "./copy"
@@ -36,7 +37,7 @@ export const RecommendationCard: FC<{
       <View className="overflow-hidden rounded-lg">
         <FeedIcon siteUrl={`https://${data.url}`} size={28} />
       </View>
-      <View className="ml-2">
+      <View className="ml-2 flex-1">
         <Text className="text-text text-base font-medium">{data.name}</Text>
         {/* Maintainers */}
         <View className="flex-row items-center">
@@ -83,6 +84,21 @@ export const RecommendationCard: FC<{
             </View>
           ))}
         </View>
+
+        {/* Items */}
+
+        <Grid columns={2} gap={8} className="mt-2">
+          {Object.keys(data.routes).map((route) => (
+            <TouchableOpacity
+              key={route}
+              className="bg-gray-5 h-10 flex-row items-center justify-center overflow-hidden rounded px-2"
+            >
+              <Text ellipsizeMode="middle" numberOfLines={1} className="whitespace-pre">
+                {data.routes[route].name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </Grid>
       </View>
     </View>
   )
