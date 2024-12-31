@@ -74,7 +74,6 @@
     "mdast-util-to-markdown": "^2.1.2",
     "nanoid": "5.0.9",
     "ofetch": "1.4.1",
-    "path-to-regexp": "8.2.0",
     "plain-shiki": "0.0.12",
     "re-resizable": "6.10.1",
     "react-blurhash": "^0.3.0",

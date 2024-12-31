@@ -1,4 +1,5 @@
 import { jotaiStore } from "@follow/utils"
+import { PortalProvider } from "@gorhom/portal"
 import { ThemeProvider } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
@@ -28,7 +29,9 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
           <View style={[styles.flex, currentThemeColors]}>
             <QueryClientProvider client={queryClient}>
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                <GestureHandlerRootView>{children}</GestureHandlerRootView>
+                <GestureHandlerRootView>
+                  <PortalProvider>{children}</PortalProvider>
+                </GestureHandlerRootView>
               </ThemeProvider>
             </QueryClientProvider>
           </View>

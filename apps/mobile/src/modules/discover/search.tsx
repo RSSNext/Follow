@@ -16,7 +16,7 @@ import {
 } from "react-native"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { HeaderBlur } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/HeaderBlur"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -29,7 +29,7 @@ export const SearchHeader = () => {
 
   return (
     <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
-      <HeaderBlur />
+      <BlurEffect />
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
@@ -44,7 +44,7 @@ export const DiscoverHeader = () => {
 
   return (
     <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
-      <HeaderBlur />
+      <BlurEffect />
       <View style={styles.header}>
         <PlaceholerSearchBar />
       </View>
@@ -53,11 +53,11 @@ export const DiscoverHeader = () => {
 }
 
 const PlaceholerSearchBar = () => {
-  const { colors } = useTheme()
   const placeholderTextColor = useColor("placeholderText")
   return (
     <Pressable
-      style={{ backgroundColor: colors.card, ...styles.searchbar }}
+      style={styles.searchbar}
+      className="dark:bg-gray-6 bg-gray-5"
       onPress={() => {
         router.push("/search")
       }}

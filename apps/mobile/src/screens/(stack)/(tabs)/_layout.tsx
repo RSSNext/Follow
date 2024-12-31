@@ -5,7 +5,7 @@ import { View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
 
-import { HeaderBlur } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/HeaderBlur"
 import { FollowIcon } from "@/src/components/ui/logo"
 import { SafariCuteFi } from "@/src/icons/safari_cute_fi"
 import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
@@ -23,7 +23,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarBackground: HeaderBlur,
+        tabBarBackground: BlurEffect,
         tabBarStyle: {
           position: "absolute",
         },

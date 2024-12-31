@@ -11,6 +11,6 @@ const node = (
     }}
   />
 )
-export const HeaderBlur = () => {
+export const BlurEffect = () => {
   return node
 }

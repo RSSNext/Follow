@@ -32,6 +32,7 @@
     "clsx": "2.1.1",
     "framer-motion": "11.13.1",
     "nanoid": "5.0.9",
+    "path-to-regexp": "8.2.0",
     "tailwind-merge": "2.5.5",
     "tldts": "6.1.66",
     "uniqolor": "1.1.1"
