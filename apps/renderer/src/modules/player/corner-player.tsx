@@ -137,7 +137,7 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
       navigator.mediaSession.setActionHandler("play", null)
       navigator.mediaSession.setActionHandler("pause", null)
     }
-  })
+  }, [])
 
   const isInbox = useInboxById(entry?.feedId, (inbox) => inbox !== null)
 
