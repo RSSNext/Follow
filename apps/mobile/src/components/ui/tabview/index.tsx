@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import type { StyleProp, TouchableOpacityProps, ViewStyle } from "react-native"
 import {
   Animated as RnAnimated,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useAnimatedValue,
   useWindowDimensions,
   View,
@@ -53,7 +53,7 @@ const springConfig = {
 export const TabView: FC<TabViewProps> = ({
   tabs,
   Tab = View,
-  TabItem = TouchableOpacity,
+  TabItem = Pressable,
   initialTab,
   onTabChange,
 
@@ -66,7 +66,6 @@ export const TabView: FC<TabViewProps> = ({
 
   lazyOnce,
   lazyTab,
-  // indicator
 }) => {
   const tabRef = useRef<ScrollView>(null)
 
@@ -85,9 +84,6 @@ export const TabView: FC<TabViewProps> = ({
       pagerOffsetX.removeListener(id)
     }
   }, [pagerOffsetX, sharedPagerOffsetX])
-
-  // const indicatorX = useAnimatedValue(0)
-  // const indicatorWidth = useAnimatedValue(0)
 
   const indicatorPosition = useSharedValue(0)
   const { width: windowWidth } = useWindowDimensions()
@@ -131,20 +127,6 @@ export const TabView: FC<TabViewProps> = ({
       backgroundColor: tabs[currentTab].activeColor || accentColor,
     }
   })
-  // useEffect(() => {
-  //   RnAnimated.spring(indicatorWidth, {
-  //     toValue: tabWidths[currentTab],
-  //     useNativeDriver: false,
-  //     damping: 10,
-  //     stiffness: 100,
-  //   }).start()
-  //   RnAnimated.spring(indicatorX, {
-  //     toValue: tabPositions[currentTab],
-  //     useNativeDriver: true,
-  //     damping: 10,
-  //     stiffness: 100,
-  //   })
-  // }, [currentTab, indicatorWidth, indicatorX, tabPositions, tabWidths])
 
   useEffect(() => {
     const listener = pagerOffsetX.addListener(({ value }) => {
@@ -215,25 +197,10 @@ export const TabView: FC<TabViewProps> = ({
             }}
             tab={tab}
           >
-            <TabItemInner tab={tab} />
+            <TabItemInner tab={tab} isSelected={index === currentTab} />
           </TabItem>
         ))}
-        {/* <RnAnimated.View
-          style={[
-            styles.indicator,
-            {
-              transform: [{ translateX: indicatorX }],
-            },
-          ]}
-        >
-          <RnAnimated.View
-            className={"h-full"}
-            style={{
-              width: indicatorWidth,
-              backgroundColor: accentColor,
-            }}
-          />
-        </RnAnimated.View> */}
+
         <Animated.View style={[styles.indicator, indicatorStyle]} />
       </ScrollView>
 
@@ -252,7 +219,7 @@ export const TabView: FC<TabViewProps> = ({
         nestedScrollEnabled
       >
         {tabs.map((tab, index) => (
-          <View style={{ width: windowWidth }} key={tab.value}>
+          <View className="flex-1" style={{ width: windowWidth }} key={tab.value}>
             {shouldRenderCurrentTab(index) && <Tab isSelected={currentTab === index} tab={tab} />}
           </View>
         ))}
@@ -261,10 +228,10 @@ export const TabView: FC<TabViewProps> = ({
   )
 }
 
-const TabItemInner = ({ tab }: { tab: Tab }) => {
+const TabItemInner = ({ tab, isSelected }: { tab: Tab; isSelected: boolean }) => {
   return (
     <View className="p-2">
-      <Text>{tab.name}</Text>
+      <Text style={{ color: isSelected ? accentColor : "gray" }}>{tab.name}</Text>
     </View>
   )
 }

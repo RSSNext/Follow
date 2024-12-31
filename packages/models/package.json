@@ -8,6 +8,10 @@
       "import": "./src/index.ts",
       "require": "./src/index.ts"
     },
+    "./rsshub": {
+      "import": "./src/rsshub.ts",
+      "types": "./src/rsshub.ts"
+    },
     "./types": {
       "import": "./src/types.ts",
       "require": "./src/types.ts"
@@ -15,6 +19,7 @@
   },
   "dependencies": {
     "@auth/core": "0.37.4",
+    "@follow/constants": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",

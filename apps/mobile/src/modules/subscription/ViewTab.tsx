@@ -133,7 +133,7 @@ const TabItem = memo(
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => setCurrentView(view.view)}
-          className="relative mr-4 flex-row items-center justify-center"
+          className="relative mr-4 flex-row items-center justify-center rounded-full"
         >
           <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
           <Text
