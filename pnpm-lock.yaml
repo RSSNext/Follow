@@ -13,6 +13,9 @@ overrides:
   vfile: 5.3.7
 
 patchedDependencies:
+  '@microflash/remark-callout-directives':
+    hash: bl6uhe4vs4xm3d2jmecdpzbh2m
+    path: patches/@microflash__remark-callout-directives.patch
   '@mozilla/readability':
     hash: 43niildbdafdxi7qfcwhpkkxwa
     path: patches/@mozilla__readability.patch
@@ -107,7 +110,7 @@ importers:
         version: 4.0.7
       '@microflash/remark-callout-directives':
         specifier: 4.3.2
-        version: 4.3.2
+        version: 4.3.2(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)
       '@mozilla/readability':
         specifier: ^0.5.0
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
@@ -658,7 +661,7 @@ importers:
         version: 0.11.0(react@18.3.1)
       '@microflash/remark-callout-directives':
         specifier: 4.3.2
-        version: 4.3.2
+        version: 4.3.2(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -1195,6 +1198,9 @@ importers:
       '@headlessui/react':
         specifier: 2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@microflash/remark-callout-directives':
+        specifier: 4.3.2
+        version: 4.3.2(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)
       '@radix-ui/react-avatar':
         specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1312,6 +1318,18 @@ importers:
       rehype-stringify:
         specifier: 10.0.1
         version: 10.0.1
+      remark-directive:
+        specifier: 3.0.0
+        version: 3.0.0
+      remark-gfm:
+        specifier: 4.0.0
+        version: 4.0.0
+      remark-gh-alerts:
+        specifier: 0.0.3
+        version: 0.0.3(@types/mdast@4.0.4)(unified@11.0.5)
+      remark-rehype:
+        specifier: 11.1.1
+        version: 11.1.1
       sonner:
         specifier: 1.7.1
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -18150,7 +18168,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@microflash/remark-callout-directives@4.3.2':
+  '@microflash/remark-callout-directives@4.3.2(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)':
     dependencies:
       defu: 6.1.4
       hastscript: 9.0.0

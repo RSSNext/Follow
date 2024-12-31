@@ -46,7 +46,6 @@
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
   "devDependencies": {
-    "@babel/generator": "7.26.3",
     "@clack/prompts": "0.8.2",
     "@egoist/tailwindcss-icons": "1.8.1",
     "@electron-forge/cli": "7.6.0",
@@ -57,14 +56,11 @@
     "@electron-forge/publisher-github": "7.6.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@eslint/compat": "^1.2.4",
-    "@fontsource/sn-pro": "5.1.0",
-    "@hono/node-server": "1.13.7",
     "@hookform/resolvers": "3.9.1",
     "@iconify-json/logos": "1.2.3",
     "@iconify-json/mingcute": "1.2.1",
     "@iconify-json/simple-icons": "^1.2.15",
     "@iconify/tools": "4.0.7",
-    "@microflash/remark-callout-directives": "4.3.2",
     "@mozilla/readability": "^0.5.0",
     "@pengx17/electron-forge-maker-appimage": "1.2.1",
     "@sentry/vite-plugin": "2.22.7",
@@ -141,7 +137,8 @@
       "workbox-precaching": "patches/workbox-precaching.patch",
       "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch",
       "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch",
-      "devlop": "patches/devlop.patch"
+      "devlop": "patches/devlop.patch",
+      "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch"
     },
     "overrides": {
       "@types/react": "npm:@types/react@^18.3.12",
