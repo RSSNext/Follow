@@ -11,6 +11,7 @@ import {
 import type { RSSHubModel } from "@follow/models"
 import { useTranslation } from "react-i18next"
 
+import RSSHubIcon from "~/assets/rsshub-icon.png"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
@@ -31,7 +32,10 @@ export function Component() {
 
   return (
     <div className="relative flex w-full max-w-4xl flex-col items-center gap-8 px-4 pb-8 lg:pb-4">
-      <div className="pt-12 text-2xl font-bold">{t("words.rsshub", { ns: "common" })}</div>
+      <div className="motion-preset-shake center text-accent motion-delay-500">
+        <img src={RSSHubIcon} className="mt-12 size-20" />
+      </div>
+      <div className="text-2xl font-bold">{t("words.rsshub", { ns: "common" })}</div>
       <div className="text-sm">{t("rsshub.description")}</div>
       <Button
         onClick={() =>
