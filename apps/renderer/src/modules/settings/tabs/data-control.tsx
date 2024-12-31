@@ -1,10 +1,23 @@
 import { CarbonInfinitySymbol } from "@follow/components/icons/infinify.jsx"
 import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@follow/components/ui/form/index.js"
+import { Input } from "@follow/components/ui/input/Input.js"
 import { Label } from "@follow/components/ui/label/index.jsx"
 import { Slider } from "@follow/components/ui/slider/index.js"
 import { env } from "@follow/shared/env"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { z } from "zod"
 
 import { setGeneralSetting, useGeneralSettingValue } from "~/atoms/settings/general"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -99,10 +112,11 @@ export const SettingDataControl = () => {
             description: t("general.export.description"),
             buttonText: t("general.export.button"),
             action: () => {
-              const link = document.createElement("a")
-              link.href = `${env.VITE_API_URL}/subscriptions/export`
-              link.download = "follow.opml"
-              link.click()
+              present({
+                title: t("general.export.label"),
+                clickOutsideToDismiss: true,
+                content: () => <ExportFeedsForm />,
+              })
             },
           },
 
@@ -127,6 +141,47 @@ export const SettingDataControl = () => {
         ]}
       />
     </div>
+  )
+}
+
+const exportFeedFormSchema = z.object({
+  rsshubUrl: z.string().url().optional(),
+})
+
+const ExportFeedsForm = () => {
+  const { t } = useTranslation("settings")
+
+  const form = useForm<z.infer<typeof exportFeedFormSchema>>({
+    resolver: zodResolver(exportFeedFormSchema),
+  })
+
+  function onSubmit(values: z.infer<typeof exportFeedFormSchema>) {
+    const link = document.createElement("a")
+    link.href = `${env.VITE_API_URL}/subscriptions/export${values.rsshubUrl ? `?RSSHubURL=${values.rsshubUrl}` : ""}`
+    link.download = "follow.opml"
+    link.click()
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-sm">
+        <FormField
+          control={form.control}
+          name="rsshubUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("general.export.rsshub_url.label")}</FormLabel>
+              <FormControl>
+                <Input type="url" placeholder="https://rsshub.app" {...field} />
+              </FormControl>
+              <FormDescription>{t("general.export.rsshub_url.description")}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">{t("ok", { ns: "common" })}</Button>
+      </form>
+    </Form>
   )
 }
 

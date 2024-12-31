@@ -11508,7 +11508,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 } & {
     "/export": {
         $get: {
-            input: {};
+            input: {
+                query: {
+                    RSSHubURL?: string | undefined;
+                };
+            };
             output: {};
             outputFormat: string;
             status: 200;
