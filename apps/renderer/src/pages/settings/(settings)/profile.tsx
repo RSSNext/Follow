@@ -1,4 +1,5 @@
 import { AccountManagement } from "~/modules/profile/account-management"
+import { EmailManagement } from "~/modules/profile/email-management"
 import { ProfileSettingForm } from "~/modules/profile/profile-setting-form"
 import { UpdatePasswordForm } from "~/modules/profile/update-password-form"
 import { SettingsTitle } from "~/modules/settings/title"
@@ -16,6 +17,7 @@ export function Component() {
   return (
     <>
       <SettingsTitle />
+      <EmailManagement />
       <ProfileSettingForm />
       <AccountManagement />
       <UpdatePasswordForm />

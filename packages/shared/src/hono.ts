@@ -9628,6 +9628,15 @@ declare const auth: {
                     type: "string";
                 };
             };
+            changeEmail: {
+                enabled: true;
+                sendChangeEmailVerification: ({ newEmail, url }: {
+                    user: better_auth.User;
+                    newEmail: string;
+                    url: string;
+                    token: string;
+                }) => Promise<void>;
+            };
         };
         account: {
             accountLinking: {
