@@ -27,13 +27,18 @@ export const useSetRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
 
 export const useAddRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
   useMutation({
-    mutationFn: ({ baseUrl, accessKey }: { baseUrl: string; accessKey: string }) =>
+    mutationFn: ({ baseUrl, accessKey }: { baseUrl: string; accessKey?: string }) =>
       apiClient.rsshub.$post({
         json: {
           baseUrl,
           accessKey,
         },
       }),
+
+    onSuccess: (_) => {
+      rsshub.list().invalidate()
+      rsshub.status().invalidate()
+    },
 
     onError: (error) => {
       onError?.(error)
