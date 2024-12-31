@@ -11511,6 +11511,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     RSSHubURL?: string | undefined;
+                    folderMode?: "view" | "category" | undefined;
                 };
             };
             output: {};
