@@ -129,6 +129,16 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
     })
   }, [entry, feed])
 
+  useEffect(() => {
+    navigator.mediaSession.setActionHandler("play", handleClickPlay)
+    navigator.mediaSession.setActionHandler("pause", handleClickPlay)
+
+    return () => {
+      navigator.mediaSession.setActionHandler("play", null)
+      navigator.mediaSession.setActionHandler("pause", null)
+    }
+  }, [])
+
   const isInbox = useInboxById(entry?.feedId, (inbox) => inbox !== null)
 
   const navigateToEntry = useNavigateEntry()
