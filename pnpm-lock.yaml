@@ -54,9 +54,6 @@ importers:
 
   .:
     devDependencies:
-      '@babel/generator':
-        specifier: 7.26.3
-        version: 7.26.3
       '@clack/prompts':
         specifier: 0.8.2
         version: 0.8.2
@@ -87,12 +84,6 @@ importers:
       '@eslint/compat':
         specifier: ^1.2.4
         version: 1.2.4(eslint@9.16.0(jiti@2.3.3))
-      '@fontsource/sn-pro':
-        specifier: 5.1.0
-        version: 5.1.0
-      '@hono/node-server':
-        specifier: 1.13.7
-        version: 1.13.7(hono@4.6.13(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.54.0(react@18.3.1))
@@ -108,9 +99,6 @@ importers:
       '@iconify/tools':
         specifier: 4.0.7
         version: 4.0.7
-      '@microflash/remark-callout-directives':
-        specifier: 4.3.2
-        version: 4.3.2(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)
       '@mozilla/readability':
         specifier: ^0.5.0
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
@@ -659,9 +647,6 @@ importers:
       '@lottiefiles/dotlottie-react':
         specifier: 0.11.0
         version: 0.11.0(react@18.3.1)
-      '@microflash/remark-callout-directives':
-        specifier: 4.3.2
-        version: 4.3.2(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -746,9 +731,6 @@ importers:
       dnum:
         specifier: ^2.14.0
         version: 2.14.0
-      electron-log:
-        specifier: 5.2.4
-        version: 5.2.4
       embla-carousel-react:
         specifier: 8.5.1
         version: 8.5.1(react@18.3.1)
@@ -779,9 +761,6 @@ importers:
       hast-util-to-mdast:
         specifier: ^10.1.1
         version: 10.1.1
-      hast-util-to-text:
-        specifier: 4.0.2
-        version: 4.0.2
       i18next:
         specifier: ^24.0.5
         version: 24.0.5(typescript@5.7.2)
@@ -827,9 +806,6 @@ importers:
       react-blurhash:
         specifier: ^0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
-      react-error-boundary:
-        specifier: 4.1.2
-        version: 4.1.2(react@18.3.1)
       react-fast-marquee:
         specifier: 1.6.5
         version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -863,33 +839,6 @@ importers:
       react-zoom-pan-pinch:
         specifier: ^3.6.1
         version: 3.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      rehype-infer-description-meta:
-        specifier: 2.0.0
-        version: 2.0.0
-      rehype-parse:
-        specifier: 9.0.1
-        version: 9.0.1
-      rehype-sanitize:
-        specifier: 6.0.0
-        version: 6.0.0
-      rehype-stringify:
-        specifier: 10.0.1
-        version: 10.0.1
-      remark-directive:
-        specifier: 3.0.0
-        version: 3.0.0
-      remark-gfm:
-        specifier: 4.0.0
-        version: 4.0.0
-      remark-gh-alerts:
-        specifier: 0.0.3
-        version: 0.0.3(@types/mdast@4.0.4)(unified@11.0.5)
-      remark-parse:
-        specifier: 11.0.0
-        version: 11.0.0
-      remark-rehype:
-        specifier: 11.1.1
-        version: 11.1.1
       shiki:
         specifier: 1.24.1
         version: 1.24.1
@@ -899,30 +848,15 @@ importers:
       tldts:
         specifier: 6.1.66
         version: 6.1.66
-      unified:
-        specifier: 11.0.5
-        version: 11.0.5
-      unist-util-visit-parents:
-        specifier: 5.1.3
-        version: 5.1.3
       use-context-selector:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.25.0)
-      use-pull-to-refresh:
-        specifier: 2.4.1
-        version: 2.4.1(react@18.3.1)
       use-sync-external-store:
         specifier: 1.4.0
         version: 1.4.0(react@18.3.1)
       usehooks-ts:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
-      vfile:
-        specifier: 5.3.7
-        version: 5.3.7
-      web-push:
-        specifier: 3.6.7
-        version: 3.6.7
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -930,9 +864,6 @@ importers:
         specifier: 5.0.2
         version: 5.0.2(@types/react@18.3.14)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     devDependencies:
-      '@babel/generator':
-        specifier: 7.26.3
-        version: 7.26.3
       '@follow/atoms':
         specifier: workspace:*
         version: link:../../packages/atoms
@@ -957,9 +888,6 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@hono/node-server':
-        specifier: 1.13.7
-        version: 1.13.7(hono@4.6.13(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@types/katex':
         specifier: 0.16.7
         version: 0.16.7
@@ -6372,9 +6300,6 @@ packages:
   asn1.js@4.10.1:
     resolution: {integrity: sha512-p32cOF5q0Zqs9uBiONKYLm6BClCoBCM5O9JfeUSlnQLBTxYdTK+pW+nXflm8UkKd2UYlEbYz5qEi0JuZR9ckSw==}
 
-  asn1.js@5.4.1:
-    resolution: {integrity: sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==}
-
   asn1@0.2.6:
     resolution: {integrity: sha512-ix/FxPn0MDjeyJ7i/yoHGFt/EX6LyNbxSEhPPXODPL+KB0VPk86UYfL0lMdy+KCnv+fmvIzySwaK5COwqVbWTQ==}
 
@@ -9624,10 +9549,6 @@ packages:
     resolution: {integrity: sha512-V+23sDMr12Wnz7iTcDeJr3O6AIxlnvT/bmaAAAP/Xda35C90p9599p0F1eHR/N1KILWSoWVAiOMFjBBXaXSMxg==}
     engines: {node: '>=10.19.0'}
 
-  http_ece@1.2.0:
-    resolution: {integrity: sha512-JrF8SSLVmcvc5NducxgyOrKXe3EsyHMgBFgSaIUGmArKe+rwr0uphRkRXvwiom3I+fpIfoItveHrfudL8/rxuA==}
-    engines: {node: '>=16'}
-
   http_ece@1.2.1:
     resolution: {integrity: sha512-+tzLoMYgXvicu60sVFoswTiu6BiQ6EX3DORRJQ3W2dNpNWCyZ3tcmRFZZ3jgVyw8ziWUCeUARKCkYDY6JgFx+w==}
     engines: {node: '>=16'}
@@ -10302,14 +10223,8 @@ packages:
   jwa@1.4.1:
     resolution: {integrity: sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==}
 
-  jwa@2.0.0:
-    resolution: {integrity: sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==}
-
   jws@3.2.2:
     resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
-
-  jws@4.0.0:
-    resolution: {integrity: sha512-KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==}
 
   katex@0.16.14:
     resolution: {integrity: sha512-tnUUAL/S+f/w8KrRpCFcCW/msuIlBkOmVnTmvdEK6WCkx6uDPRj3d9SBAP+qB5x0MCeOyUbdbIMtT5cUJD8aRw==}
@@ -12420,11 +12335,6 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-error-boundary@4.1.2:
-    resolution: {integrity: sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==}
-    peerDependencies:
-      react: '>=16.13.1'
-
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
@@ -14324,11 +14234,6 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  use-pull-to-refresh@2.4.1:
-    resolution: {integrity: sha512-mI3utetwSPT3ovZHUJ4LBW29EtmkrzpK/O38msP5WnI8ocFmM5boy3QZALosgeQwqwdmtQgC+8xnJIYHXeABew==}
-    peerDependencies:
-      react: 18.x || 19.x
-
   use-sidecar@1.1.2:
     resolution: {integrity: sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==}
     engines: {node: '>=10'}
@@ -14579,11 +14484,6 @@ packages:
 
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
-
-  web-push@3.6.7:
-    resolution: {integrity: sha512-OpiIUe8cuGjrj3mMBFWY+e4MMIkW3SVT+7vEIjvD9kejGUypv8GPDf84JdPWskK8zMRIJ6xYGm+Kxr8YkPyA0A==}
-    engines: {node: '>= 16'}
-    hasBin: true
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
@@ -21228,13 +21128,6 @@ snapshots:
       inherits: 2.0.4
       minimalistic-assert: 1.0.1
 
-  asn1.js@5.4.1:
-    dependencies:
-      bn.js: 4.12.0
-      inherits: 2.0.4
-      minimalistic-assert: 1.0.1
-      safer-buffer: 2.1.2
-
   asn1@0.2.6:
     dependencies:
       safer-buffer: 2.1.2
@@ -25486,8 +25379,6 @@ snapshots:
       quick-lru: 5.1.1
       resolve-alpn: 1.2.1
 
-  http_ece@1.2.0: {}
-
   http_ece@1.2.1: {}
 
   https-proxy-agent@5.0.1:
@@ -26197,20 +26088,9 @@ snapshots:
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.1
 
-  jwa@2.0.0:
-    dependencies:
-      buffer-equal-constant-time: 1.0.1
-      ecdsa-sig-formatter: 1.0.11
-      safe-buffer: 5.2.1
-
   jws@3.2.2:
     dependencies:
       jwa: 1.4.1
-      safe-buffer: 5.2.1
-
-  jws@4.0.0:
-    dependencies:
-      jwa: 2.0.0
       safe-buffer: 5.2.1
 
   katex@0.16.14:
@@ -28567,11 +28447,6 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-error-boundary@4.1.2(react@18.3.1):
-    dependencies:
-      '@babel/runtime': 7.26.0
-      react: 18.3.1
-
   react-fast-compare@3.2.2: {}
 
   react-fast-marquee@1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
@@ -30784,10 +30659,6 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  use-pull-to-refresh@2.4.1(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-
   use-sidecar@1.1.2(@types/react@18.3.14)(react@18.3.1):
     dependencies:
       detect-node-es: 1.1.0
@@ -31029,16 +30900,6 @@ snapshots:
       '@zxing/text-encoding': 0.9.0
 
   web-namespaces@2.0.1: {}
-
-  web-push@3.6.7:
-    dependencies:
-      asn1.js: 5.4.1
-      http_ece: 1.2.0
-      https-proxy-agent: 7.0.5
-      jws: 4.0.0
-      minimist: 1.2.8
-    transitivePeerDependencies:
-      - supports-color
 
   web-streams-polyfill@3.3.3: {}
 
