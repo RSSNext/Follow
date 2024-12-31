@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
@@ -22,16 +23,26 @@ export const useSetRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
 
     onError: (error) => {
       onError?.(error)
+      toast.error(error.message)
     },
   })
 
 export const useAddRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
   useMutation({
-    mutationFn: ({ baseUrl, accessKey }: { baseUrl: string; accessKey?: string }) =>
+    mutationFn: ({
+      baseUrl,
+      accessKey,
+      id,
+    }: {
+      baseUrl: string
+      accessKey?: string
+      id?: string
+    }) =>
       apiClient.rsshub.$post({
         json: {
           baseUrl,
           accessKey,
+          id,
         },
       }),
 
@@ -42,6 +53,7 @@ export const useAddRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
 
     onError: (error) => {
       onError?.(error)
+      toast.error(error.message)
     },
   })
 
@@ -51,6 +63,7 @@ export const useDeleteRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
 
     onError: (error) => {
       onError?.(error)
+      toast.error(error.message)
     },
   })
 

@@ -165,7 +165,19 @@ function List({ data }: { data?: RSSHubModel[] }) {
                     )}
                   </Button>
                   {me?.id === instance.ownerUserId && (
-                    <Button variant="outline">{t("rsshub.table.edit")}</Button>
+                    <Button
+                      variant="outline"
+                      onClick={() =>
+                        present({
+                          title: t("rsshub.table.edit"),
+                          content: ({ dismiss }) => (
+                            <AddModalContent dismiss={dismiss} instance={instance} />
+                          ),
+                        })
+                      }
+                    >
+                      {t("rsshub.table.edit")}
+                    </Button>
                   )}
                 </div>
               </TableCell>

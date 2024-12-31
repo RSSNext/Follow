@@ -12654,6 +12654,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     baseUrl: string;
+                    id?: string | undefined;
                     accessKey?: string | undefined;
                 };
             };

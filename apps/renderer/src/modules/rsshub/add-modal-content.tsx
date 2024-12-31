@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/Input.js"
+import type { RSSHubModel } from "@follow/models"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -17,13 +18,24 @@ import { z } from "zod"
 import { whoami } from "~/atoms/user"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { useShikiDefaultTheme } from "~/components/ui/code-highlighter/shiki/hooks"
+import { useAuthQuery } from "~/hooks/common"
+import { Queries } from "~/queries"
 import { useAddRSSHubMutation } from "~/queries/rsshub"
 
-export function AddModalContent({ dismiss }: { dismiss: () => void }) {
+export function AddModalContent({
+  dismiss,
+  instance,
+}: {
+  dismiss: () => void
+  instance?: RSSHubModel
+}) {
   const { t } = useTranslation("settings")
   const addRSSHubMutation = useAddRSSHubMutation()
   const shikiTheme = useShikiDefaultTheme()
   const me = whoami()
+  const details = useAuthQuery(Queries.rsshub.get({ id: instance?.id || "" }), {
+    enabled: !!instance?.id,
+  })
 
   const formSchema = z.object({
     baseUrl: z.string().url(),
@@ -35,7 +47,7 @@ export function AddModalContent({ dismiss }: { dismiss: () => void }) {
   })
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    addRSSHubMutation.mutate(data)
+    addRSSHubMutation.mutate({ ...data, id: instance?.id })
   }
 
   useEffect(() => {
@@ -43,6 +55,15 @@ export function AddModalContent({ dismiss }: { dismiss: () => void }) {
       dismiss()
     }
   }, [addRSSHubMutation.isSuccess])
+
+  useEffect(() => {
+    if (details.data?.instance.baseUrl) {
+      form.reset({
+        baseUrl: details.data.instance.baseUrl,
+        accessKey: details.data.instance.accessKey || undefined,
+      })
+    }
+  }, [details.data])
 
   return (
     <div className="max-w-[550px] space-y-4 lg:min-w-[550px]">
@@ -52,10 +73,10 @@ export function AddModalContent({ dismiss }: { dismiss: () => void }) {
         transparent
         theme={shikiTheme}
         className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words [&_pre]:!p-0"
-        code={`FOLLOW_OWNER_USER_ID=${me?.handle || me?.id}               # User id or handle of your follow account
-FOLLOW_DESCRIPTION=${me?.name}'s instance # The description of your instance
-FOLLOW_PRICE=0                            # The monthly price of your instance, set to 0 means free.
-FOLLOW_USER_LIMIT=1000                    # The user limit of your instance, set it to 0 or 1 can make your instance private, leaving it empty means no restriction`}
+        code={`FOLLOW_OWNER_USER_ID=${me?.handle || me?.id}      # User id or handle of your follow account
+FOLLOW_DESCRIPTION=${instance?.description || `${me?.name}'s instance`} # The description of your instance
+FOLLOW_PRICE=${instance?.price || 100}                 # The monthly price of your instance, set to 0 means free.
+FOLLOW_USER_LIMIT=${instance?.userLimit || 1000}           # The user limit of your instance, set it to 0 or 1 can make your instance private, leaving it empty means no restriction`}
         language="dotenv"
       />
       <Form {...form}>
