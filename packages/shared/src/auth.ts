@@ -6,14 +6,19 @@ import { createAuthClient } from "better-auth/react"
 
 import { IN_ELECTRON, WEB_URL } from "./constants"
 
+type AuthPlugin = (typeof authPlugins)[number]
 const serverPlugins = [
   {
     id: "getProviders",
-    $InferServerPlugin: {} as (typeof authPlugins)[0],
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "getProviders" }>,
   },
   {
     id: "createSession",
-    $InferServerPlugin: {} as (typeof authPlugins)[1],
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "createSession" }>,
+  },
+  {
+    id: "getAccountInfo",
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "getAccountInfo" }>,
   },
   inferAdditionalFields({
     user: {
@@ -35,6 +40,7 @@ export const {
   changePassword,
   createSession,
   forgetPassword,
+  getAccountInfo,
   getProviders,
   getSession,
   linkSocial,

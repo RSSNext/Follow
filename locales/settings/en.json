@@ -275,6 +275,7 @@
   "profile.email.verified": "Verified",
   "profile.handle.description": "Your unique identifier.",
   "profile.handle.label": "Handle",
+  "profile.link_social.description": "You can currently only connect social accounts with the same email.",
   "profile.name.description": "Your public display name.",
   "profile.name.label": "Display Name",
   "profile.new_password.label": "New Password",
