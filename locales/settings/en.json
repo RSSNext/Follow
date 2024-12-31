@@ -120,6 +120,8 @@
   "general.export.button": "Export",
   "general.export.description": "Export your feeds to an OPML file.",
   "general.export.label": "Export Feeds",
+  "general.export.rsshub_url.description": "Default base URL for RSSHub route, leave it empty to use https://rsshub.app.",
+  "general.export.rsshub_url.label": "RSSHub URL",
   "general.export_database.button": "Export",
   "general.export_database.description": "Export your database to a JSON file.",
   "general.export_database.label": "Export Database",
