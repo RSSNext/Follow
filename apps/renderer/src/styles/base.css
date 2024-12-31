@@ -12,7 +12,7 @@ html,
   -webkit-tap-highlight-color: transparent;
 }
 
-[data-build-type="rn"] #root {
+[data-build-type]:not([data-build-type="electron"]) #root {
   background-color: hsl(var(--background));
 }
 
