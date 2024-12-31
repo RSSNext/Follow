@@ -120,6 +120,8 @@
   "general.export.button": "导出",
   "general.export.description": "将你的订阅源导出到 OPML 文件。",
   "general.export.label": "导出订阅源",
+  "general.export.rsshub_url.description": "RSSHub 路由的默认根 URL，留空则使用 https://rsshub.app。",
+  "general.export.rsshub_url.label": "RSSHub URL",
   "general.export_database.button": "导出",
   "general.export_database.description": "将你的数据库导出到 JSON 文件。",
   "general.export_database.label": "导出数据库",
