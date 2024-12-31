@@ -6,7 +6,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router"
 import { useEffect, useMemo } from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { useForm } from "react-hook-form"
-import { View } from "react-native"
+import { Linking, Text, TouchableOpacity, View } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { z } from "zod"
 
@@ -14,6 +14,7 @@ import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedCompo
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
+import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
 import { PreviewUrl } from "@/src/modules/rsshub/preview-url"
 
 interface RsshubFormParams {
@@ -102,19 +103,20 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
   return (
     <PortalProvider>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView className="bg-system-grouped-background">
         <Stack.Screen
           options={{ headerLeft: ModalHeaderCloseButton, headerTitle: `${name} - ${routeName}` }}
         />
 
         <PreviewUrl
-          className="my-6 px-6"
+          className="m-2 mb-6"
           watch={form.watch}
           path={route.path}
           routePrefix={routePrefix}
         />
         {/* Form */}
-        <View className="gap-4 px-2">
+
+        <View className="bg-system-background mx-2 gap-4 rounded-lg px-3 py-6">
           {keys.map((keyItem) => {
             const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
             const formRegister = form.register(keyItem.name)
@@ -145,12 +147,38 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                     }}
                   />
                 )}
+
+                {!!parameters && (
+                  <Text className="text-text/80 ml-2 mt-2 text-xs">{parameters.description}</Text>
+                )}
               </View>
             )
           })}
         </View>
+        <Maintainers maintainers={route.maintainers} />
+
+        <View className="mx-4 mt-4">
+          <MarkdownWeb value={route.description} dom={{ matchContents: true }} />
+        </View>
       </KeyboardAwareScrollView>
     </PortalProvider>
+  )
+}
+
+const Maintainers = ({ maintainers }: { maintainers?: string[] }) => {
+  if (!maintainers || maintainers.length === 0) {
+    return null
+  }
+
+  return (
+    <View className="text-text/80 mx-4 mt-2 flex flex-row flex-wrap gap-x-1 text-sm">
+      <Text className="text-text/80 text-xs">This feed is provided by RSSHub, with credit to </Text>
+      {maintainers.map((m) => (
+        <TouchableOpacity key={m} onPress={() => Linking.openURL(`https://github.com/${m}`)}>
+          <Text className="text-text/50 text-xs">@{m}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
   )
 }
 

@@ -50,21 +50,21 @@ export function Select<T>({
     onValueChange(value)
   })
 
-  const systemFill = useColor("systemFill")
+  const systemFill = useColor("text")
   return (
     <>
       {/* Trigger */}
       <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View
           className={cn(
-            "border-system-fill/80 bg-system-fill/30 h-12 flex-row items-center rounded-lg border pl-4 pr-2",
+            "border-system-fill/80 bg-system-fill/30 h-10 flex-row items-center rounded-lg border pl-4 pr-2",
             wrapperClassName,
           )}
           style={wrapperStyle}
         >
           <Text className="text-text">{valueToLabelMap.get(currentValue)}</Text>
           <View className="ml-auto shrink-0">
-            <MingcuteDownLineIcon color={systemFill} />
+            <MingcuteDownLineIcon color={systemFill} height={16} width={16} />
           </View>
         </View>
       </Pressable>

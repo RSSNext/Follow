@@ -2,6 +2,7 @@ import { cn } from "@follow/utils/src/utils"
 import { useRef } from "react"
 import { Pressable } from "react-native"
 import Animated, {
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -11,8 +12,9 @@ import { useEventCallback } from "usehooks-ts"
 
 import { CheckFilledIcon } from "@/src/icons/check_filled"
 import { Copy2CuteReIcon } from "@/src/icons/copy_2_cute_re"
+import { useColor } from "@/src/theme/colors"
 
-type Size = "sm" | "md"
+type Size = "sm" | "md" | "tiny"
 interface CopyButtonProps {
   onCopy: () => void
   className?: string
@@ -20,15 +22,18 @@ interface CopyButtonProps {
 }
 
 const sizeClassNames = {
+  tiny: "size-6",
   sm: "size-8",
   md: "size-10",
 }
 
 const sizeIconSize = {
+  tiny: 14,
   sm: 18,
   md: 20,
 }
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 export const CopyButton = ({ onCopy, className, size = "sm" }: CopyButtonProps) => {
   const initialIconScale = useSharedValue(1)
   const pressedIconScale = useSharedValue(0)
@@ -36,14 +41,26 @@ export const CopyButton = ({ onCopy, className, size = "sm" }: CopyButtonProps) 
     transform: [{ scale: initialIconScale.value }],
   }))
 
+  const initialBgColor = useColor("gray3")
+  const pressedBgColor = useColor("green")
+
   const pressedStyle = useAnimatedStyle(() => ({
     position: "absolute",
     transform: [{ scale: pressedIconScale.value }],
   }))
 
+  const wrapperStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      pressedIconScale.value,
+      [0, 1],
+      [initialBgColor, pressedBgColor],
+    ),
+  }))
+
   const animatedProgressingRef = useRef(false)
   const handlePress = useEventCallback(() => {
     onCopy()
+
     if (animatedProgressingRef.current) return
     animatedProgressingRef.current = true
     initialIconScale.value = withTiming(0, { duration: 100 }, () => {
@@ -51,18 +68,25 @@ export const CopyButton = ({ onCopy, className, size = "sm" }: CopyButtonProps) 
         pressedIconScale.value = withDelay(
           1000,
           withTiming(0, { duration: 100 }, () => {
-            initialIconScale.value = withTiming(1, { duration: 100 }, () => {
-              animatedProgressingRef.current = false
-            })
+            initialIconScale.value = withTiming(1, { duration: 100 })
           }),
         )
       })
     })
+
+    setTimeout(
+      () => {
+        animatedProgressingRef.current = false
+      },
+      100 + 100 + 1000 + 100 + 100,
+    )
   })
   return (
-    <Pressable
+    <AnimatedPressable
+      hitSlop={10}
+      style={wrapperStyle}
       className={cn(
-        "bg-red items-center justify-center rounded-lg",
+        "bg-gray-4 items-center justify-center rounded-lg",
         sizeClassNames[size],
         className,
       )}
@@ -74,6 +98,6 @@ export const CopyButton = ({ onCopy, className, size = "sm" }: CopyButtonProps) 
       <Animated.View style={pressedStyle}>
         <CheckFilledIcon color="#fff" height={sizeIconSize[size]} width={sizeIconSize[size]} />
       </Animated.View>
-    </Pressable>
+    </AnimatedPressable>
   )
 }

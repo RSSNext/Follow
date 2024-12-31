@@ -17,7 +17,7 @@ export const TextField: FC<TextInputProps & TextFieldProps> = ({
   return (
     <View
       className={cn(
-        "bg-system-fill/40 relative h-12 flex-row items-center rounded-lg px-4",
+        "bg-system-fill/40 relative h-10 flex-row items-center rounded-lg px-4",
         wrapperClassName,
       )}
       style={wrapperStyle}

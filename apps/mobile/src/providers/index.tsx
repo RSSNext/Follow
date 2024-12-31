@@ -12,8 +12,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller"
 
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
-import { getCurrentColors } from "../theme/colors"
 import { DarkTheme, DefaultTheme } from "../theme/navigation"
+import { getCurrentColors } from "../theme/utils"
 import { MigrationProvider } from "./migration"
 
 export const RootProviders = ({ children }: { children: ReactNode }) => {
