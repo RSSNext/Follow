@@ -51,6 +51,7 @@ export const {
   signIn,
   signOut,
   signUp,
+  unlinkAccount,
   updateUser,
 } = authClient
 

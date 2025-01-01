@@ -6843,9 +6843,18 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
+                redirect: boolean;
                 token: string;
                 url: undefined;
-                redirect: boolean;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             } | {
                 url: string;
                 redirect: boolean;
@@ -7322,8 +7331,26 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : {
                 token: null;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             } | {
                 token: string;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             }>;
             path: "/sign-up/email";
             options: {
@@ -7476,6 +7503,9 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
+                redirect: boolean;
+                token: string;
+                url: string | undefined;
                 user: {
                     id: string;
                     email: string;
@@ -7485,9 +7515,6 @@ declare const auth: {
                     createdAt: Date;
                     updatedAt: Date;
                 };
-                token: string;
-                redirect: boolean;
-                url: string | undefined;
             }>;
             path: "/sign-in/email";
             options: {
@@ -7732,6 +7759,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -7762,6 +7790,18 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : void | {
                 status: boolean;
+                user: {
+                    id: any;
+                    email: any;
+                    name: any;
+                    image: any;
+                    emailVerified: any;
+                    createdAt: any;
+                    updatedAt: any;
+                };
+            } | {
+                status: boolean;
+                user: null;
             }>;
             path: "/verify-email";
             options: {
@@ -7776,6 +7816,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8148,6 +8189,15 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : {
                 token: string | null;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             }>;
             path: "/change-password";
             options: {
@@ -8603,6 +8653,7 @@ declare const auth: {
                 }, {
                     callbackURL: string;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8638,6 +8689,7 @@ declare const auth: {
                 }, {
                     callbackURL: string;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9338,6 +9390,10 @@ declare const auth: {
             }] ? Response : {
                 id: string;
                 provider: string;
+                createdAt: Date;
+                updatedAt: Date;
+                accountId: string;
+                scopes: string[];
             }[]>;
             path: "/list-accounts";
             options: {
@@ -9410,6 +9466,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
@@ -9429,6 +9486,82 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        unlinkAccount: {
+            <C extends [better_call.Context<"/unlink-account", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    providerId: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    providerId: string;
+                }, {
+                    providerId: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/unlink-account";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    providerId: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    providerId: string;
+                }, {
+                    providerId: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
             };
             method: better_call.Method | better_call.Method[];
             headers: Headers;
@@ -9878,6 +10011,8 @@ declare const auth: {
         EMAIL_CAN_NOT_BE_UPDATED: string;
         CREDENTIAL_ACCOUNT_NOT_FOUND: string;
         SESSION_EXPIRED: string;
+        FAILED_TO_UNLINK_LAST_ACCOUNT: string;
+        ACCOUNT_NOT_FOUND: string;
     };
 };
 
