@@ -164,6 +164,15 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
           >
             {t("words.actions")}
           </DropdownMenuItem>
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              navigate("/rsshub")
+            }}
+            icon={<i className="i-mgc-rss-cute-fi" />}
+          >
+            {t("words.rsshub")}
+          </DropdownMenuItem>
 
           <DropdownMenuSeparator />
           <DropdownMenuItem
