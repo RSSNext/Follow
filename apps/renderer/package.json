@@ -91,7 +91,7 @@
     "use-context-selector": "2.0.0",
     "use-sync-external-store": "1.4.0",
     "usehooks-ts": "3.1.0",
-    "zod": "3.23.8",
+    "zod": "3.24.1",
     "zustand": "5.0.2"
   },
   "devDependencies": {
