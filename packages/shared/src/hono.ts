@@ -54,6 +54,32 @@ declare const authPlugins: ({
         };
     };
 } | {
+    id: "getAccountInfo";
+    endpoints: {
+        getAccountInfo: {
+            <C extends [(better_call.Context<"/get-account-info", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                provider: string;
+                profile: {
+                    id?: string;
+                    email?: string;
+                    name?: string;
+                    image?: string;
+                } | null;
+            }[] | null>;
+            path: "/get-account-info";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    };
+} | {
     id: "updateUserccc";
     endpoints: {
         updateUserccc: {
@@ -9439,6 +9465,29 @@ declare const auth: {
             headers: Headers;
         };
     } & {
+        getAccountInfo: {
+            <C extends [(better_call.Context<"/get-account-info", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                provider: string;
+                profile: {
+                    id?: string;
+                    email?: string;
+                    name?: string;
+                    image?: string;
+                } | null;
+            }[] | null>;
+            path: "/get-account-info";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    } & {
         updateUserccc: {
             <C extends [(better_call.Context<"/update-user-ccc", {
                 method: "POST";
@@ -9578,6 +9627,15 @@ declare const auth: {
                 handle: {
                     type: "string";
                 };
+            };
+            changeEmail: {
+                enabled: true;
+                sendChangeEmailVerification: ({ newEmail, url }: {
+                    user: better_auth.User;
+                    newEmail: string;
+                    url: string;
+                    token: string;
+                }) => Promise<void>;
             };
         };
         account: {
@@ -9721,6 +9779,32 @@ declare const auth: {
                         userId: string;
                     } | null>;
                     path: "/create-session";
+                    options: {
+                        method: "GET";
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        } | {
+            id: "getAccountInfo";
+            endpoints: {
+                getAccountInfo: {
+                    <C extends [(better_call.Context<"/get-account-info", {
+                        method: "GET";
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        id: string;
+                        provider: string;
+                        profile: {
+                            id?: string;
+                            email?: string;
+                            name?: string;
+                            image?: string;
+                        } | null;
+                    }[] | null>;
+                    path: "/get-account-info";
                     options: {
                         method: "GET";
                     };
@@ -11511,6 +11595,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     RSSHubURL?: string | undefined;
+                    folderMode?: "view" | "category" | undefined;
                 };
             };
             output: {};
@@ -12653,6 +12738,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     baseUrl: string;
+                    id?: string | undefined;
                     accessKey?: string | undefined;
                 };
             };

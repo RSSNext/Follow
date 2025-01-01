@@ -13,7 +13,8 @@ import { RSSHubCategoryCopyMap } from "./copy"
 
 export const RecommendationListItem: FC<{
   data: RSSHubRouteDeclaration
-}> = memo(({ data }) => {
+  routePrefix: string
+}> = memo(({ data, routePrefix }) => {
   const { maintainers, categories } = useMemo(() => {
     const maintainers = new Set<string>()
     const categories = new Set<string>()
@@ -90,23 +91,26 @@ export const RecommendationListItem: FC<{
 
         <Grid columns={2} gap={8} className="mt-2">
           {Object.keys(data.routes).map((route) => (
-            <TouchableOpacity
-              onPress={() => {
-                router.push({
-                  pathname: "/rsshub-form",
-                  params: {
-                    url: data.url,
-                    route,
-                  },
-                })
-              }}
-              key={route}
-              className="bg-gray-5 h-10 flex-row items-center justify-center overflow-hidden rounded px-2"
-            >
-              <Text ellipsizeMode="middle" numberOfLines={1} className="whitespace-pre">
-                {data.routes[route].name}
-              </Text>
-            </TouchableOpacity>
+            <View className="relative" key={route}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: "/rsshub-form",
+                    params: {
+                      routePrefix,
+                      route: JSON.stringify(data.routes[route]),
+                      name: data.name,
+                    },
+                  })
+                }}
+                className="bg-gray-5 h-10 flex-row items-center justify-center overflow-hidden rounded px-2"
+              />
+              <View className="absolute inset-0 items-center justify-center" pointerEvents="none">
+                <Text ellipsizeMode="middle" numberOfLines={1} className="text-text whitespace-pre">
+                  {data.routes[route].name}
+                </Text>
+              </View>
+            </View>
           ))}
         </Grid>
       </View>

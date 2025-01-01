@@ -11,6 +11,7 @@ import {
 } from "@follow/components/ui/form/index.js"
 import { Input } from "@follow/components/ui/input/Input.js"
 import { Label } from "@follow/components/ui/label/index.jsx"
+import { Radio, RadioGroup } from "@follow/components/ui/radio-group/index.js"
 import { Slider } from "@follow/components/ui/slider/index.js"
 import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -146,6 +147,7 @@ export const SettingDataControl = () => {
 
 const exportFeedFormSchema = z.object({
   rsshubUrl: z.string().url().optional(),
+  folderMode: z.enum(["view", "category"]),
 })
 
 const ExportFeedsForm = () => {
@@ -153,11 +155,19 @@ const ExportFeedsForm = () => {
 
   const form = useForm<z.infer<typeof exportFeedFormSchema>>({
     resolver: zodResolver(exportFeedFormSchema),
+    defaultValues: {
+      folderMode: "view",
+    },
   })
 
   function onSubmit(values: z.infer<typeof exportFeedFormSchema>) {
     const link = document.createElement("a")
-    link.href = `${env.VITE_API_URL}/subscriptions/export${values.rsshubUrl ? `?RSSHubURL=${values.rsshubUrl}` : ""}`
+    const exportUrl = new URL(`${env.VITE_API_URL}/subscriptions/export`)
+    exportUrl.searchParams.append("folderMode", values.folderMode)
+    if (values.rsshubUrl) {
+      exportUrl.searchParams.append("RSSHubURL", values.rsshubUrl)
+    }
+    link.href = exportUrl.toString()
     link.download = "follow.opml"
     link.click()
   }
@@ -175,6 +185,33 @@ const ExportFeedsForm = () => {
                 <Input type="url" placeholder="https://rsshub.app" {...field} />
               </FormControl>
               <FormDescription>{t("general.export.rsshub_url.description")}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="folderMode"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("general.export.folder_mode.label")}</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value)
+                  }}
+                >
+                  <div className="flex gap-4">
+                    <Radio label={t("general.export.folder_mode.option.view")} value="view" />
+                    <Radio
+                      label={t("general.export.folder_mode.option.category")}
+                      value="category"
+                    />
+                  </div>
+                </RadioGroup>
+              </FormControl>
+              <FormDescription>{t("general.export.folder_mode.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from "expo-router"
 import { ScrollView, Text, View } from "react-native"
 
-import { HeaderBlur } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/HeaderBlur"
 
 export default function Feed() {
   const { feedId } = useLocalSearchParams()
@@ -12,7 +12,7 @@ export default function Feed() {
         options={{
           headerShown: true,
           headerBackTitle: "Subscriptions",
-          headerBackground: HeaderBlur,
+          headerBackground: BlurEffect,
 
           headerTransparent: true,
           headerTitle: "Feed",

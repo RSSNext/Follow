@@ -6,7 +6,7 @@ import { useColorScheme } from "nativewind"
 import { DebugButton } from "../modules/debug"
 import { RootProviders } from "../providers"
 import { usePrefetchSessionUser } from "../store/user/hooks"
-import { getSystemBackgroundColor } from "../theme/colors"
+import { getSystemBackgroundColor } from "../theme/utils"
 
 export default function RootLayout() {
   useColorScheme()

@@ -57,5 +57,6 @@
   "11003": "RSSHub not found",
   "11004": "RSSHub user limit exceeded",
   "11005": "RSSHub purchase not found",
+  "11006": "RSSHub config invalid",
   "12000": "Action limit exceeded"
 }

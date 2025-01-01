@@ -6,7 +6,7 @@ import { useHeaderHeight } from "@react-navigation/elements"
 import { FlashList } from "@shopify/flash-list"
 import { useQuery } from "@tanstack/react-query"
 import type { FC } from "react"
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
@@ -183,7 +183,7 @@ const ItemRenderer = ({
     // Render item
     return (
       <View className="mr-4">
-        <RecommendationListItem data={item.data} />
+        <RecommendationListItem data={item.data} routePrefix={item.key} />
       </View>
     )
   }
@@ -193,8 +193,6 @@ const NavigationSidebar: FC<{
   alphabetGroups: (string | { key: string; data: RSSHubRouteDeclaration })[]
   listRef: React.RefObject<FlashList<string | { key: string; data: RSSHubRouteDeclaration }>>
 }> = ({ alphabetGroups, listRef }) => {
-  const [activeLetter, setActiveLetter] = useState<string>("")
-
   const scrollToLetter = useCallback(
     (letter: string, animated = true) => {
       const index = alphabetGroups.findIndex((group) => {
@@ -237,10 +235,8 @@ const NavigationSidebar: FC<{
       const firstChar = letter[0].toUpperCase()
       const firstCharIsAlphabet = /[A-Z]/.test(firstChar)
       if (firstCharIsAlphabet) {
-        setActiveLetter(letter)
         scrollToLetter(letter, false)
       } else {
-        setActiveLetter("#")
         scrollToLetter("#", false)
       }
     },
@@ -256,15 +252,10 @@ const NavigationSidebar: FC<{
               hitSlop={5}
               key={title}
               onPress={() => {
-                setActiveLetter(title)
                 scrollToLetter(title)
               }}
             >
-              <Text
-                className={`text-sm ${activeLetter !== title ? "text-secondary-text/60" : "text-accent"}`}
-              >
-                {title}
-              </Text>
+              <Text className="text-secondary-text/60 text-sm">{title}</Text>
             </TouchableOpacity>
           ))}
         </View>
