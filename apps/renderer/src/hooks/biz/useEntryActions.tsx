@@ -191,7 +191,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.read,
         onClick: runCmdFn(COMMAND_ID.entry.read, [{ entryId }]),
-        hide: !hasEntry || !entry.read || !!entry.collections || !!inList,
+        hide: !hasEntry || entry.read || !!entry.collections || !!inList,
         shortcut: shortcuts.entry.toggleRead.key,
       },
       {
