@@ -3,11 +3,9 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
-import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { appLog } from "~/lib/log"
 
-const defaultStaleTime = 600_000 // 10min
-const maxStaleTime = 6 * 60 * (60 * 1000) // 6hr
+const staleTime = 600_000 // 10min
 
 export class ElectronCloseEvent extends Event {
   static type = "electron-close"
@@ -22,10 +20,6 @@ export class ElectronShowEvent extends Event {
   }
 }
 
-const useSlateTime = () => {
-  const reduceRefetch = useGeneralSettingKey("reduceRefetch")
-  return reduceRefetch ? maxStaleTime : defaultStaleTime
-}
 /**
  * Add a event listener to invalidate all queries
  */
@@ -48,12 +42,10 @@ const InvalidateQueryProviderElectron = () => {
     }
   }, [queryClient])
 
-  const slateTime = useSlateTime()
-
   useEffect(() => {
     const handler = () => {
       const now = Date.now()
-      if (!currentTimeRef.current || now - currentTimeRef.current < slateTime) {
+      if (!currentTimeRef.current || now - currentTimeRef.current < staleTime) {
         appLog(
           `Window switch to visible, but skip invalidation, ${currentTimeRef.current ? now - currentTimeRef.current : 0}`,
         )
@@ -90,15 +82,13 @@ const InvalidateQueryProviderWebApp = () => {
 
   const pageVisibility = usePageVisibility()
 
-  const slateTime = useSlateTime()
-
   useEffect(() => {
     if (currentVisibilityRef.current === pageVisibility) {
       return
     }
 
     const now = Date.now()
-    if (now - currentTimeRef.current < slateTime) {
+    if (now - currentTimeRef.current < staleTime) {
       return
     }
 

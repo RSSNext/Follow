@@ -148,8 +148,6 @@
   "general.rebuild_database.title": "重置資料庫",
   "general.rebuild_database.warning.line1": "重置資料庫將會清除您所有的本機資料。",
   "general.rebuild_database.warning.line2": "您確定要繼續嗎？",
-  "general.reduce_refetch.description": "降低時間軸資料的重新獲取次數，以避免在不同視圖間切換時時間軸被再次更新。",
-  "general.reduce_refetch.label": "降低時間軸重新獲取次數",
   "general.send_anonymous_data.description": "選擇傳送匿名使用資料，您將幫助改善 Follow 的整體使用體驗。",
   "general.send_anonymous_data.label": "傳送匿名資料",
   "general.show_quick_timeline.description": "在訂閱源列表頂部顯示快速時間軸。",

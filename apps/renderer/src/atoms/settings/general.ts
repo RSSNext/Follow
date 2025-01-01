@@ -14,7 +14,6 @@ const createDefaultSettings = (): GeneralSettings => ({
   // Data control
   dataPersist: true,
   sendAnonymousData: true,
-  reduceRefetch: true,
   showQuickTimeline: true,
 
   autoGroup: true,

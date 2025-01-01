@@ -13,7 +13,6 @@ export interface GeneralSettings {
   jumpOutLinkWarn: boolean
   // TTS
   voice: string
-  reduceRefetch: boolean
   autoGroup: boolean
   /**
    * Top timeline for mobile
