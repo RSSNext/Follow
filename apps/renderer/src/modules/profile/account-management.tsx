@@ -1,47 +1,73 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import { authProvidersConfig } from "@follow/constants"
-import { linkSocial } from "@follow/shared/auth"
+import { linkSocial, unlinkAccount } from "@follow/shared/auth"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
+import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 
-import { useSocialAccounts } from "~/queries/auth"
+import { auth, useSocialAccounts } from "~/queries/auth"
 import { useAuthProviders } from "~/queries/users"
+
+function AuthProviderButton({ provider }: { provider: string }) {
+  const { t } = useTranslation("settings")
+  const { data: accounts } = useSocialAccounts()
+  const unlinkAccountMutation = useMutation({
+    mutationFn: async () => {
+      const res = await unlinkAccount({ providerId: provider })
+      if (res.error) throw new Error(res.error.message)
+    },
+    onSuccess: () => {
+      toast.success(t("profile.link_social.unlink.success"))
+      auth.getAccounts().invalidate()
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+  const account = accounts?.find((account) => account.provider === provider)
+  if (!account && IN_ELECTRON) return null
+
+  return (
+    <Button
+      key={provider}
+      variant={account ? "outline" : "primary"}
+      className="gap-2"
+      onClick={() => {
+        if (!account) {
+          linkSocial({
+            provider: provider as any,
+          })
+          return
+        }
+        unlinkAccountMutation.mutate()
+      }}
+      isLoading={unlinkAccountMutation.isPending}
+    >
+      <i className={cn("text-xl", authProvidersConfig[provider]?.iconClassName)} />
+      <span>
+        {account ? account.profile?.email || account.profile?.name : t("profile.link_social.link")}
+      </span>
+      {account && <i className="i-mgc-delete-2-cute-re" />}
+    </Button>
+  )
+}
 
 export function AccountManagement() {
   const { t } = useTranslation("settings")
-  const { data: accounts } = useSocialAccounts()
+
   const { data: providers } = useAuthProviders()
 
   return (
     <div className="space-y-2">
-      <p className="text-sm font-semibold">Auth Providers</p>
+      <p className="text-sm font-semibold">{t("profile.link_social.auth_provider")}</p>
       <div className="space-x-2">
         {Object.keys(providers || {})
           .filter((provider) => provider !== "credential")
-          .map((provider) => {
-            const account = accounts?.find((account) => account.provider === provider)
-            if (!account && IN_ELECTRON) return null
-            return (
-              <Button
-                key={provider}
-                variant={account ? "outline" : "primary"}
-                className="gap-2"
-                onClick={() => {
-                  if (!account) {
-                    linkSocial({
-                      provider: provider as any,
-                    })
-                    return
-                  }
-                  // TODO: Implement delete social account after https://github.com/better-auth/better-auth/pull/1059
-                }}
-              >
-                <i className={cn("text-xl", authProvidersConfig[provider]?.iconClassName)} />
-                <span>{account ? account.profile?.email || account.profile?.name : "Link"}</span>
-              </Button>
-            )
-          })}
+          .map((provider) => (
+            <AuthProviderButton key={provider} provider={provider} />
+          ))}
       </div>
       <p className="text-xs text-muted-foreground">{t("profile.link_social.description")}</p>
     </div>
