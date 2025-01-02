@@ -14,7 +14,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@better-auth/expo": "1.1.8",
+    "@better-auth/expo": "1.1.9-beta.1",
     "@expo/vector-icons": "^14.0.2",
     "@follow/components": "workspace:*",
     "@follow/constants": "workspace:*",
@@ -30,7 +30,7 @@
     "@react-navigation/native": "^7.0.0",
     "@shopify/flash-list": "1.7.1",
     "@tanstack/react-query": "5.62.3",
-    "better-auth": "1.1.8",
+    "better-auth": "1.1.9-beta.1",
     "cookie-es": "^1.2.2",
     "dayjs": "1.11.13",
     "es-toolkit": "1.29.0",

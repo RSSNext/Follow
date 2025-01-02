@@ -143,7 +143,6 @@
     "overrides": {
       "@types/react": "npm:@types/react@^18.3.12",
       "@types/react-dom": "npm:@types/react-dom@^18.3.1",
-      "better-call": "0.3.3",
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
       "isarray": "npm:@nolyfill/isarray@^1",
       "unist-util-visit-parents": "5.1.3",
