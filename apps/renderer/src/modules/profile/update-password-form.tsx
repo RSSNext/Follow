@@ -137,8 +137,6 @@ export const UpdatePasswordForm = () => {
     return null
   }
 
-  return <UpdateExistingPasswordForm />
-
   return (
     <div className="mt-4 flex items-center justify-between">
       <Label className="mb-4">{t("profile.password.label")}</Label>

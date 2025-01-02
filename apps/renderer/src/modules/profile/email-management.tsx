@@ -80,6 +80,7 @@ export function EmailManagement() {
           onClick={() => {
             verifyEmailMutation.mutate()
           }}
+          buttonClassName="mt-2"
         >
           {t("profile.email.send_verification")}
         </Button>
