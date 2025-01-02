@@ -1,4 +1,4 @@
-{ 
+{
   "achievement.all_done": "Все сделано!",
   "achievement.alpha_tester": "Альфа-тестер",
   "achievement.alpha_tester_description": "Вы альфа-тестер Follow",
@@ -89,7 +89,6 @@
   "discover.inbox_destroy_error": "Не удалось уничтожить почтовый ящик.",
   "discover.inbox_destroy_success": "Почтовый ящик успешно уничтожен.",
   "discover.inbox_destroy_warning": "Внимание: после уничтожения почтовый ящик будет недоступен, а все содержимое будет навсегда удалено и не подлежит восстановлению.",
-  "discover.inbox.handle": "Обработчик",
   "discover.inbox_title": "Заголовок",
   "discover.inbox_update": "Обновить",
   "discover.inbox_update_error": "Не удалось изменить почтовый ящик.",
@@ -128,7 +127,7 @@
   "entry_actions.saved_to_instapaper": "Сохранено в Instapaper.",
   "entry_actions.saved_to_obsidian": "Сохранено в Obsidian",
   "entry_actions.saved_to_outline": "Сохранено в Outline.",
-  "entry_actions.saved_to_readeck": "Сохранено в Readeck.",  
+  "entry_actions.saved_to_readeck": "Сохранено в Readeck.",
   "entry_actions.saved_to_readwise": "Сохранено в Readwise.",
   "entry_actions.share": "Поделиться",
   "entry_actions.star": "Добавить в избранное",
@@ -386,7 +385,7 @@
   "trending.entry": "Популярные записи",
   "trending.feed": "Популярные каналы",
   "trending.list": "Популярные списки",
-  "trending.user": "Популярные пользователи",  
+  "trending.user": "Популярные пользователи",
   "user_button.account": "Аккаунт",
   "user_button.achievement": "Достижения",
   "user_button.actions": "Действия",
@@ -435,5 +434,5 @@
   "words.user": "Пользователь",
   "words.which.all": "все",
   "words.zero_items": "Нет элементов",
-  "zen.exit": "Выйти из режима zen" 
+  "zen.exit": "Выйти из режима zen"
 }

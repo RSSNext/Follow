@@ -34,7 +34,7 @@
   "invitation.getCodeMessage": "Вы можете получить пригласительный код следующими способами:",
   "invitation.title": "Пригласительный код",
   "login.backToWebApp": "Вернуться к веб-приложению",
-   "login.confirm_password.label": "Подтвердите пароль",
+  "login.confirm_password.label": "Подтвердите пароль",
   "login.continueWith": "Продолжить через {{provider}}",
   "login.email": "Электронная почта",
   "login.forget_password.description": "Введите адрес электронной почты, связанный с вашей учетной записью, и мы отправим вам инструкции по сбросу пароля.",
