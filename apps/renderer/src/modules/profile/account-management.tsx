@@ -32,8 +32,7 @@ function AuthProviderButton({ provider }: { provider: string }) {
   return (
     <Button
       key={provider}
-      variant={account ? "outline" : "primary"}
-      className="gap-2"
+      variant={"outline"}
       onClick={() => {
         if (!account) {
           linkSocial({
@@ -45,11 +44,15 @@ function AuthProviderButton({ provider }: { provider: string }) {
       }}
       isLoading={unlinkAccountMutation.isPending}
     >
-      <i className={cn("text-xl", authProvidersConfig[provider]?.iconClassName)} />
-      <span>
-        {account ? account.profile?.email || account.profile?.name : t("profile.link_social.link")}
-      </span>
-      {account && <i className="i-mgc-delete-2-cute-re" />}
+      <div className="flex items-center gap-2">
+        <i className={cn("text-xl", authProvidersConfig[provider]?.iconClassName)} />
+        <span>
+          {account
+            ? account.profile?.email || account.profile?.name
+            : t("profile.link_social.link")}
+        </span>
+        {account && <i className="i-mgc-delete-2-cute-re" />}
+      </div>
     </Button>
   )
 }
@@ -61,7 +64,7 @@ export function AccountManagement() {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm font-semibold">{t("profile.link_social.auth_provider")}</p>
+      <p className="text-sm font-semibold">{t("profile.link_social.authentication")}</p>
       <div className="space-x-2">
         {Object.keys(providers || {})
           .filter((provider) => provider !== "credential")

@@ -1,3 +1,5 @@
+import { Divider } from "@follow/components/ui/divider/Divider.js"
+
 import { AccountManagement } from "~/modules/profile/account-management"
 import { EmailManagement } from "~/modules/profile/email-management"
 import { ProfileSettingForm } from "~/modules/profile/profile-setting-form"
@@ -19,6 +21,9 @@ export function Component() {
       <SettingsTitle />
       <EmailManagement />
       <ProfileSettingForm />
+
+      <Divider className="mx-auto my-8 w-3/4" />
+
       <AccountManagement />
       <UpdatePasswordForm />
     </>

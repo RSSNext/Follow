@@ -28,7 +28,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { getViewFromRoute } from "~/lib/utils"

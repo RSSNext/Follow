@@ -7,7 +7,7 @@ import PKG, { repository } from "@pkg"
 import { useQuery } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { SocialMediaLinks } from "~/constants/social"
 import { tipcClient } from "~/lib/client"
 import { getNewIssueUrl } from "~/lib/issues"

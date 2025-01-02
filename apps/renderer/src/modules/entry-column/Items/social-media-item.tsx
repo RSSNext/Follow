@@ -10,7 +10,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { CommandActionButton } from "~/components/ui/button/command-button"
+import { CommandActionButton } from "~/components/ui/button/CommandActionButton"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"

@@ -4,25 +4,90 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.js"
 import { Input } from "@follow/components/ui/input/Input.js"
+import { Label } from "@follow/components/ui/label/index.js"
 import { changeEmail, sendVerificationEmail } from "@follow/shared/auth"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { m } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
+import { AnimatedCommandButton } from "~/components/ui/button/base"
+import { CopyButton } from "~/components/ui/button/CopyButton"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
 const formSchema = z.object({
   email: z.string().email(),
 })
 
 export function EmailManagement() {
+  const user = useWhoami()
+  const { t } = useTranslation("settings")
+
+  const verifyEmailMutation = useMutation({
+    mutationFn: async () => {
+      if (!user?.email) return
+      return sendVerificationEmail({
+        email: user.email,
+      })
+    },
+    onSuccess: () => {
+      toast.success(t("profile.email.verification_sent"))
+    },
+  })
+
+  const { present } = useModalStack()
+  return (
+    <>
+      <div className="mb-2">
+        <Label className="text-sm">{t("profile.email.label")}</Label>
+      </div>
+      <p className="group flex gap-2 text-sm text-muted-foreground">
+        {user?.email}
+
+        <AnimatedCommandButton
+          icon={<m.i className="i-mgc-edit-cute-re size-4" />}
+          className="size-5 bg-theme-item-active p-1"
+          onClick={() => {
+            present({
+              title: t("profile.email.change"),
+              content: EmailManagementForm,
+            })
+          }}
+        />
+        {user?.email && (
+          <CopyButton
+            value={user.email}
+            className="size-5 p-1 opacity-0 duration-300 group-hover:opacity-100"
+          />
+        )}
+        <span className={cn(user?.emailVerified ? "text-green-500" : "text-red-500")}>
+          {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
+        </span>
+      </p>
+      {!user?.emailVerified && (
+        <Button
+          variant="outline"
+          type="button"
+          isLoading={verifyEmailMutation.isPending}
+          onClick={() => {
+            verifyEmailMutation.mutate()
+          }}
+        >
+          {t("profile.email.send_verification")}
+        </Button>
+      )}
+    </>
+  )
+}
+function EmailManagementForm() {
   const { t } = useTranslation("settings")
   const user = useWhoami()
 
@@ -60,35 +125,22 @@ export function EmailManagement() {
     },
   })
 
-  const verifyEmailMutation = useMutation({
-    mutationFn: async () => {
-      if (!user?.email) return
-      return sendVerificationEmail({
-        email: user.email,
-      })
-    },
-    onSuccess: () => {
-      toast.success(t("profile.email.verification_sent"))
-    },
-  })
-
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values) => {
           updateEmailMutation.mutate(values)
         })}
-        className="space-y-4"
+        className="w-[30ch] max-w-full space-y-4"
       >
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("profile.email.label")}</FormLabel>
               <FormControl>
                 <div className="flex items-center gap-x-2">
-                  <Input {...field} />
+                  <Input autoFocus {...field} />
                 </div>
               </FormControl>
               <FormMessage />
@@ -97,18 +149,6 @@ export function EmailManagement() {
         />
 
         <div className="space-x-2 text-right">
-          {!user?.emailVerified && !form.formState.isDirty && (
-            <Button
-              variant="outline"
-              type="button"
-              isLoading={verifyEmailMutation.isPending}
-              onClick={() => {
-                verifyEmailMutation.mutate()
-              }}
-            >
-              {t("profile.email.send_verification")}
-            </Button>
-          )}
           <Button
             type="submit"
             isLoading={updateEmailMutation.isPending}

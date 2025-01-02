@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 
-import { CommandActionButton } from "~/components/ui/button/command-button"
+import { CommandActionButton } from "~/components/ui/button/CommandActionButton"
 import { useHasModal } from "~/components/ui/modal/stacked/hooks"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"

@@ -25,7 +25,7 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { enableShowSourceContent } from "~/atoms/source-content"
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { isWebBuild } from "~/constants"
