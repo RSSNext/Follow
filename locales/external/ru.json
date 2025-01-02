@@ -10,7 +10,7 @@
   "feed.followsAndFeeds": "{{subscriptionCount}} {{subscriptionNoun}} и {{feedsCount}} {{feedsNoun}} в {{appName}}",
   "feed.followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} с {{readCount}} {{readNoun}} на {{appName}}",
   "feed.madeby": "Создано",
-  "feed.preview": "Предпросмотр"
+  "feed.preview": "Предпросмотр",
   "feed.read_one": "чтение",
   "feed.read_other": "чтений",
   "feed.view_feed_url": "Просмотреть URL канала",
@@ -20,7 +20,7 @@
   "feed_item.claimed_feed": "Заявленный канал",
   "feed_item.claimed_list": "Заявленный список",
   "feed_item.error_since": "Ошибка с",
-  "feed_item.not_publicly_visible": "Не отображается на вашей публичной странице профиля"
+  "feed_item.not_publicly_visible": "Не отображается на вашей публичной странице профиля",
   "header.app": "Приложение",
   "header.download": "Скачать",
   "invitation.activate": "Активировать",
