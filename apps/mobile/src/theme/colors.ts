@@ -74,9 +74,10 @@ export const lightVariants = {
   systemBackground: "255 255 255",
   secondarySystemBackground: "242 242 247",
   tertiarySystemBackground: "229 229 234",
+
+  // Grouped
   systemGroupedBackground: "242 242 247",
-  secondarySystemGroupedBackground: "229 229 234",
-  tertiarySystemGroupedBackground: "209 209 214",
+  systemGroupedBackground2: "255 255 255",
 
   // System Colors
   systemFill: "209 213 219",
@@ -92,6 +93,7 @@ export const lightVariants = {
 
   // Extended colors
   disabled: "235 235 228",
+  itemPressed: "229 229 234",
 }
 export const darkVariants = {
   // UIKit Colors
@@ -106,9 +108,10 @@ export const darkVariants = {
   systemBackground: "0 0 0",
   secondarySystemBackground: "28 28 30",
   tertiarySystemBackground: "44 44 46",
-  systemGroupedBackground: "28 28 30",
-  secondarySystemGroupedBackground: "44 44 46",
-  tertiarySystemGroupedBackground: "72 72 74",
+
+  // Grouped
+  systemGroupedBackground: "0 0 0",
+  systemGroupedBackground2: "28 28 30",
 
   // System Colors
   systemFill: "72 72 74",
@@ -124,6 +127,7 @@ export const darkVariants = {
 
   // Extended colors
   disabled: "85 85 85",
+  itemPressed: "44 44 46",
 }
 
 /// Utils

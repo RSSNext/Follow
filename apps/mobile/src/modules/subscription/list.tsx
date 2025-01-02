@@ -207,7 +207,7 @@ const InboxItem = memo(({ id }: { id: string }) => {
   const { colorScheme } = useColorScheme()
   if (!subscription) return null
   return (
-    <ItemPressable className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3">
+    <ItemPressable className="border-item-pressed h-12 flex-row items-center border-b px-3">
       <View className="ml-0.5 overflow-hidden rounded">
         <InboxCuteFiIcon
           height={20}
@@ -257,7 +257,7 @@ const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) =
   if (!list) return null
   return (
     <SubscriptionListItemContextMenu id={id}>
-      <ItemPressable className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3">
+      <ItemPressable className="border-item-pressed h-12 flex-row items-center border-b px-3">
         <View className="overflow-hidden rounded">
           {!!list.image && (
             <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
@@ -316,7 +316,7 @@ const CategoryGrouped = memo(
           onPress={() => {
             // TODO navigate to category
           }}
-          className="border-secondary-system-grouped-background border-b-hairline h-12 flex-row items-center px-3"
+          className="border-item-pressed h-12 flex-row items-center border-b px-3"
         >
           <AnimatedTouchableOpacity
             hitSlop={10}
@@ -421,7 +421,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         className={cn(
           "flex h-12 flex-row items-center",
           inGrouped ? "pl-8 pr-4" : "px-4",
-          "border-secondary-system-grouped-background border-b-hairline",
+          "border-item-pressed border-b",
           className,
         )}
         onPress={() => {

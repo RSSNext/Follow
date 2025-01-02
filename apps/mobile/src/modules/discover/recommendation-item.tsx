@@ -105,7 +105,7 @@ export const RecommendationListItem: FC<{
                 }}
                 className="bg-gray-5 h-10 flex-row items-center justify-center overflow-hidden rounded px-2"
               />
-              <View className="absolute inset-0 items-center justify-center" pointerEvents="none">
+              <View className="absolute inset-2 items-center justify-center" pointerEvents="none">
                 <Text ellipsizeMode="middle" numberOfLines={1} className="text-text whitespace-pre">
                   {data.routes[route].name}
                 </Text>

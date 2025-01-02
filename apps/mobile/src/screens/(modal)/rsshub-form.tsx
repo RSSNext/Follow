@@ -116,7 +116,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
         />
         {/* Form */}
 
-        <View className="bg-system-background mx-2 gap-4 rounded-lg px-3 py-6">
+        <View className="bg-system-grouped-background-2 mx-2 gap-4 rounded-lg px-3 py-6">
           {keys.map((keyItem) => {
             const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
             const formRegister = form.register(keyItem.name)
