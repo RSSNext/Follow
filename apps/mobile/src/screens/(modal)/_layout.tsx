@@ -15,6 +15,10 @@ export default function ModalLayout() {
           title: "RSSHub Form",
         }}
       />
+      <Stack.Screen
+        name="loading"
+        options={{ presentation: "transparentModal", headerShown: false, animation: "fade" }}
+      />
     </Stack>
   )
 }
