@@ -97,7 +97,7 @@
   "appearance.zen_mode.description": "Режим Zen — это режим чтения без отвлекающих факторов, который позволяет сосредоточиться на содержимом без помех. Включение режима Zen скрывает боковую панель.",
   "appearance.zen_mode.label": "Режим Zen",
   "common.give_star": "<HeartIcon />Любите наш продукт? <Link>Дайте нам звезды на GitHub!</Link>",
-  "data_control.app_cache_limit.description": "Максимальный размер кэша приложения. Когда кэш достигает этого размера, старейшие элементы будут удалены для освобождения места."
+  "data_control.app_cache_limit.description": "Максимальный размер кэша приложения. Когда кэш достигает этого размера, старейшие элементы будут удалены для освобождения места.",
   "data_control.app_cache_limit.label": "Лимит кэша приложения",
   "data_control.clean_cache.button": "Очистить кэш",
   "data_control.clean_cache.description": "Очистить кэш приложения, чтобы освободить место.",
