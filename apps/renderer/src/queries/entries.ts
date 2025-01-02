@@ -1,5 +1,4 @@
 import { useFeedUnreadIsDirty } from "~/atoms/feed"
-import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useAuthInfiniteQuery, useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
@@ -126,7 +125,6 @@ export const entries = {
     ),
 }
 
-const maxStaleTime = 6 * 60 * (60 * 1000) // 6 hours
 const defaultStaleTime = 10 * (60 * 1000) // 10 minutes
 
 export const useEntries = ({
@@ -144,7 +142,6 @@ export const useEntries = ({
   read?: boolean
   isArchived?: boolean
 }) => {
-  const reduceRefetch = useGeneralSettingKey("reduceRefetch")
   const fetchUnread = read === false
   const feedUnreadDirty = useFeedUnreadIsDirty((feedId as string) || "")
 
@@ -165,14 +162,7 @@ export const useEntries = ({
       staleTime:
         // Force refetch unread entries when feed is dirty
         // HACK: disable refetch when the router is pop to previous page
-        history.isPop
-          ? Infinity
-          : fetchUnread && feedUnreadDirty
-            ? 0
-            : // Keep reduce data fetch logic
-              reduceRefetch
-              ? maxStaleTime
-              : defaultStaleTime,
+        history.isPop ? Infinity : fetchUnread && feedUnreadDirty ? 0 : defaultStaleTime,
     },
   )
 }

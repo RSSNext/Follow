@@ -6,6 +6,7 @@ export default resolveConfig({
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
 
+  plugins: [require("@tailwindcss/typography")],
   theme: {
     extend: {
       fontFamily: {
@@ -52,11 +53,7 @@ export default resolveConfig({
           "rgb(var(--color-secondarySystemBackground) / <alpha-value>)",
         "tertiary-system-background": "rgb(var(--color-tertiarySystemBackground) / <alpha-value>)",
         "system-grouped-background": "rgb(var(--color-systemGroupedBackground) / <alpha-value>)",
-        "secondary-system-grouped-background":
-          "rgb(var(--color-secondarySystemGroupedBackground) / <alpha-value>)",
-        "tertiary-system-grouped-background":
-          "rgb(var(--color-tertiarySystemGroupedBackground) / <alpha-value>)",
-
+        "system-grouped-background-2": "rgb(var(--color-systemGroupedBackground2) / <alpha-value>)",
         // System fills
         "system-fill": "rgb(var(--color-systemFill) / <alpha-value>)",
         "secondary-system-fill": "rgb(var(--color-secondarySystemFill) / <alpha-value>)",
@@ -68,6 +65,10 @@ export default resolveConfig({
         "secondary-text": "rgb(var(--color-secondaryText) / <alpha-value>)",
         "tertiary-text": "rgb(var(--color-tertiaryText) / <alpha-value>)",
         "quaternary-text": "rgb(var(--color-quaternaryText) / <alpha-value>)",
+
+        // Extended colors
+        disabled: "rgb(var(--color-disabled) / <alpha-value>)",
+        "item-pressed": "rgb(var(--color-itemPressed) / <alpha-value>)",
       },
     },
   },

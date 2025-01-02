@@ -10,6 +10,12 @@ import {
 } from "@follow/components/ui/select/index.jsx"
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
+import {
+  MissingOptionalParamError,
+  parseFullPathParams,
+  parseRegexpPathParams,
+  regexpPathToPath,
+} from "@follow/utils/path-parser"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { omit } from "es-toolkit/compat"
@@ -22,15 +28,9 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { getSidebarActiveView } from "~/atoms/sidebar"
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
-import {
-  MissingOptionalParamError,
-  parseFullPathParams,
-  parseRegexpPathParams,
-  regexpPathToPath,
-} from "~/lib/path-parser"
 import { getViewFromRoute } from "~/lib/utils"
 
 import { FeedForm } from "./feed-form"

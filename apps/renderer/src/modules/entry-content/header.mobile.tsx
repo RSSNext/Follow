@@ -10,7 +10,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
-import { CommandActionButton } from "~/components/ui/button/command-button"
+import { CommandActionButton } from "~/components/ui/button/CommandActionButton"
 import { useScrollTracking, useTocItems } from "~/components/ui/markdown/components/hooks"
 import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import type { EntryActionItem } from "~/hooks/biz/useEntryActions"

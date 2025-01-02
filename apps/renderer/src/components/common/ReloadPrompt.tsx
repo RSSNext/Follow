@@ -29,6 +29,9 @@ export function ReloadPrompt() {
       setUpdaterStatus({
         type: "pwa",
         status: "ready",
+        finishUpdate: () => {
+          updateServiceWorker(true)
+        },
       })
     }
   }, [needRefresh, updateServiceWorker])

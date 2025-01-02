@@ -102,10 +102,6 @@ export const SettingGeneral = () => {
               description: t("general.show_quick_timeline.description"),
             }),
 
-          defineSettingItem("reduceRefetch", {
-            label: t("general.reduce_refetch.label"),
-            description: t("general.reduce_refetch.description"),
-          }),
           { type: "title", value: t("general.unread") },
 
           defineSettingItem("scrollMarkUnread", {

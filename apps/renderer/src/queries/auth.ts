@@ -1,4 +1,4 @@
-import { getSession, listAccounts } from "@follow/shared/auth"
+import { getAccountInfo, getSession } from "@follow/shared/auth"
 import type { AuthSession } from "@follow/shared/hono"
 import type { FetchError } from "ofetch"
 
@@ -7,22 +7,26 @@ import { defineQuery } from "~/lib/defineQuery"
 
 export const auth = {
   getSession: () => defineQuery(["auth", "session"], () => getSession()),
-  getAccounts: () =>
-    defineQuery(["auth", "accounts"], async () => {
-      const accounts = await listAccounts()
-      return accounts.data as Array<{ id: string; provider: string }>
-    }),
+  getAccounts: () => defineQuery(["auth", "accounts"], () => getAccountInfo()),
 }
 
 export const useAccounts = () => {
   return useAuthQuery(auth.getAccounts())
 }
 
+export const useSocialAccounts = () => {
+  const accounts = useAccounts()
+  return {
+    ...accounts,
+    data: accounts.data?.data?.filter((account) => account.provider !== "credential"),
+  }
+}
+
 export const useHasPassword = () => {
   const accounts = useAccounts()
   return {
     ...accounts,
-    data: !!accounts.data?.find((account) => account.provider === "credential"),
+    data: !!accounts.data?.data?.find((account) => account.provider === "credential"),
   }
 }
 

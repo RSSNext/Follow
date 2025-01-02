@@ -1,8 +1,8 @@
-import { router, Stack } from "expo-router"
+import { Stack } from "expo-router"
 import { useState } from "react"
 import { Text, TextInput, TouchableOpacity, View } from "react-native"
 
-import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
+import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { useColor } from "@/src/theme/colors"
 
@@ -16,11 +16,8 @@ export default function Add() {
       <Stack.Screen
         options={{
           gestureEnabled: !url,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.dismiss()}>
-              <CloseCuteReIcon color={label} />
-            </TouchableOpacity>
-          ),
+          headerLeft: ModalHeaderCloseButton,
+          presentation: "modal",
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {

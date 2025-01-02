@@ -22,7 +22,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { useServerConfigs } from "~/atoms/server-configs"
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"

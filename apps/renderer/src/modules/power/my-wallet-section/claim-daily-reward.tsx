@@ -16,7 +16,7 @@ export const ClaimDailyReward = () => {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <Button
           variant="primary"
           isLoading={mutation.isPending}

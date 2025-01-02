@@ -10,7 +10,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { CommandActionButton } from "~/components/ui/button/command-button"
+import { CommandActionButton } from "~/components/ui/button/CommandActionButton"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
@@ -55,6 +55,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   }, [])
   const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
 
+  const [actionRef, setActionRef] = useState<HTMLDivElement | null>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
   if (!entry || !feed) return null
 
   const content = entry.entries.content || entry.entries.description
@@ -79,12 +81,26 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
       <div ref={ref} className="ml-2 min-w-0 flex-1">
         <div className="-mt-0.5 flex-1 text-sm">
-          <div className="select-none space-x-1 leading-6">
-            <span className="inline-flex items-center gap-1 text-base font-semibold">
+          <div className="flex select-none flex-wrap space-x-1 leading-6" ref={titleRef}>
+            <span className="inline-flex min-w-0 items-center gap-1 text-base font-semibold">
               <FeedTitle
+                style={
+                  showAction && titleRef.current && actionRef && ref.current
+                    ? {
+                        paddingRight:
+                          [...titleRef.current.childNodes.values()].reduce(
+                            (acc, node) => acc + (node as HTMLElement).offsetWidth,
+                            0,
+                          ) +
+                            actionRef.offsetWidth >
+                          ref.current.offsetWidth
+                            ? actionRef.offsetWidth
+                            : 0,
+                      }
+                    : undefined
+                }
                 feed={feed}
                 title={entry.entries.author || feed.title}
-                titleClassName="max-w-[calc(100vw-8rem)]"
               />
               {parsed?.type === "x" && (
                 <i className="i-mgc-twitter-cute-fi size-3 text-[#4A99E9]" />
@@ -121,7 +137,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       </div>
 
       {showAction && !isMobile && (
-        <div className={"absolute right-1 top-1.5"}>
+        <div className={"absolute right-1 top-1.5"} ref={setActionRef}>
           <ActionBar entryId={entryId} />
         </div>
       )}

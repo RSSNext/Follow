@@ -54,6 +54,32 @@ declare const authPlugins: ({
         };
     };
 } | {
+    id: "getAccountInfo";
+    endpoints: {
+        getAccountInfo: {
+            <C extends [(better_call.Context<"/get-account-info", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                provider: string;
+                profile: {
+                    id?: string;
+                    email?: string;
+                    name?: string;
+                    image?: string;
+                } | null;
+            }[] | null>;
+            path: "/get-account-info";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    };
+} | {
     id: "updateUserccc";
     endpoints: {
         updateUserccc: {
@@ -2836,6 +2862,7 @@ declare const subscriptionsRelations: drizzle_orm.Relations<"subscriptions", {
     users: drizzle_orm.One<"user", true>;
     feeds: drizzle_orm.One<"feeds", true>;
     timeline: drizzle_orm.Many<"timeline">;
+    rsshubUsage: drizzle_orm.One<"rsshub_usage", true>;
 }>;
 
 declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -4756,6 +4783,232 @@ type MessagingData = {
     description: string;
 };
 
+declare const rsshub: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "rsshub";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "rsshub";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        baseUrl: drizzle_orm_pg_core.PgColumn<{
+            name: "base_url";
+            tableName: "rsshub";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        accessKey: drizzle_orm_pg_core.PgColumn<{
+            name: "access_key";
+            tableName: "rsshub";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        ownerUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "owner_user_id";
+            tableName: "rsshub";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        price: drizzle_orm_pg_core.PgColumn<{
+            name: "price";
+            tableName: "rsshub";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "rsshub";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userLimit: drizzle_orm_pg_core.PgColumn<{
+            name: "user_limit";
+            tableName: "rsshub";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const rsshubOpenAPISchema: zod.ZodObject<{
+    id: zod.ZodString;
+    baseUrl: zod.ZodString;
+    accessKey: zod.ZodNullable<zod.ZodString>;
+    ownerUserId: zod.ZodString;
+    price: zod.ZodNumber;
+    description: zod.ZodNullable<zod.ZodString>;
+    userLimit: zod.ZodNullable<zod.ZodNumber>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    description: string | null;
+    id: string;
+    ownerUserId: string;
+    baseUrl: string;
+    accessKey: string | null;
+    price: number;
+    userLimit: number | null;
+}, {
+    description: string | null;
+    id: string;
+    ownerUserId: string;
+    baseUrl: string;
+    accessKey: string | null;
+    price: number;
+    userLimit: number | null;
+}>;
+declare const rsshubUsage: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "rsshub_usage";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "rsshub_usage";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        rsshubId: drizzle_orm_pg_core.PgColumn<{
+            name: "rsshub_id";
+            tableName: "rsshub_usage";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "rsshub_usage";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const rsshubUsageOpenAPISchema: zod.ZodObject<{
+    id: zod.ZodString;
+    rsshubId: zod.ZodString;
+    userId: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    id: string;
+    userId: string;
+    rsshubId: string;
+}, {
+    id: string;
+    userId: string;
+    rsshubId: string;
+}>;
+declare const rsshubUsageRelations: drizzle_orm.Relations<"rsshub_usage", {
+    rsshub: drizzle_orm.One<"rsshub", true>;
+}>;
+
 declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "settings";
     schema: undefined;
@@ -5953,6 +6206,23 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        toRSSHubId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_rsshub_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
             name: "power_token";
             tableName: "transactions";
@@ -6032,6 +6302,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: zod.ZodNullable<zod.ZodString>;
     toListId: zod.ZodNullable<zod.ZodString>;
     toEntryId: zod.ZodNullable<zod.ZodString>;
+    toRSSHubId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     tax: zod.ZodString;
     createdAt: zod.ZodString;
@@ -6046,6 +6317,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
+    toRSSHubId: string | null;
     tax: string;
     comment: string | null;
 }, {
@@ -6058,6 +6330,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
+    toRSSHubId: string | null;
     tax: string;
     comment: string | null;
 }>;
@@ -6318,6 +6591,47 @@ declare const boosts: drizzle_orm_pg_core.PgTableWithColumns<{
     };
     dialect: "pg";
 }>;
+declare const rsshubPurchase: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "rsshub_purchase";
+    schema: undefined;
+    columns: {
+        hash: drizzle_orm_pg_core.PgColumn<{
+            name: "hash";
+            tableName: "rsshub_purchase";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        expiresAt: drizzle_orm_pg_core.PgColumn<{
+            name: "expires_at";
+            tableName: "rsshub_purchase";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
 
 declare const auth: {
     handler: (request: Request) => Promise<Response>;
@@ -6529,9 +6843,18 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
+                redirect: boolean;
                 token: string;
                 url: undefined;
-                redirect: boolean;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             } | {
                 url: string;
                 redirect: boolean;
@@ -7008,8 +7331,26 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : {
                 token: null;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             } | {
                 token: string;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             }>;
             path: "/sign-up/email";
             options: {
@@ -7162,6 +7503,9 @@ declare const auth: {
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
+                redirect: boolean;
+                token: string;
+                url: string | undefined;
                 user: {
                     id: string;
                     email: string;
@@ -7171,8 +7515,6 @@ declare const auth: {
                     createdAt: Date;
                     updatedAt: Date;
                 };
-                redirect: boolean;
-                url: string | undefined;
             }>;
             path: "/sign-in/email";
             options: {
@@ -7417,6 +7759,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -7447,6 +7790,18 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : void | {
                 status: boolean;
+                user: {
+                    id: any;
+                    email: any;
+                    name: any;
+                    image: any;
+                    emailVerified: any;
+                    createdAt: any;
+                    updatedAt: any;
+                };
+            } | {
+                status: boolean;
+                user: null;
             }>;
             path: "/verify-email";
             options: {
@@ -7461,6 +7816,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -7833,6 +8189,15 @@ declare const auth: {
                 asResponse: true;
             }] ? Response : {
                 token: string | null;
+                user: {
+                    id: string;
+                    email: string;
+                    name: string;
+                    image: string | null | undefined;
+                    emailVerified: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
             }>;
             path: "/change-password";
             options: {
@@ -8288,6 +8653,7 @@ declare const auth: {
                 }, {
                     callbackURL: string;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8323,6 +8689,7 @@ declare const auth: {
                 }, {
                     callbackURL: string;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9023,6 +9390,10 @@ declare const auth: {
             }] ? Response : {
                 id: string;
                 provider: string;
+                createdAt: Date;
+                updatedAt: Date;
+                accountId: string;
+                scopes: string[];
             }[]>;
             path: "/list-accounts";
             options: {
@@ -9095,6 +9466,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
@@ -9114,6 +9486,82 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        unlinkAccount: {
+            <C extends [better_call.Context<"/unlink-account", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    providerId: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    providerId: string;
+                }, {
+                    providerId: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/unlink-account";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    providerId: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    providerId: string;
+                }, {
+                    providerId: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
             };
             method: better_call.Method | better_call.Method[];
             headers: Headers;
@@ -9143,6 +9591,29 @@ declare const auth: {
                 userId: string;
             } | null>;
             path: "/create-session";
+            options: {
+                method: "GET";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    } & {
+        getAccountInfo: {
+            <C extends [(better_call.Context<"/get-account-info", {
+                method: "GET";
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                id: string;
+                provider: string;
+                profile: {
+                    id?: string;
+                    email?: string;
+                    name?: string;
+                    image?: string;
+                } | null;
+            }[] | null>;
+            path: "/get-account-info";
             options: {
                 method: "GET";
             };
@@ -9290,6 +9761,15 @@ declare const auth: {
                     type: "string";
                 };
             };
+            changeEmail: {
+                enabled: true;
+                sendChangeEmailVerification: ({ newEmail, url }: {
+                    user: better_auth.User;
+                    newEmail: string;
+                    url: string;
+                    token: string;
+                }) => Promise<void>;
+            };
         };
         account: {
             accountLinking: {
@@ -9322,7 +9802,6 @@ declare const auth: {
             }): Promise<void>;
         };
         emailVerification: {
-            sendOnSignUp: true;
             sendVerificationEmail({ user, url }: {
                 user: better_auth.User;
                 url: string;
@@ -9441,6 +9920,32 @@ declare const auth: {
                 };
             };
         } | {
+            id: "getAccountInfo";
+            endpoints: {
+                getAccountInfo: {
+                    <C extends [(better_call.Context<"/get-account-info", {
+                        method: "GET";
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        id: string;
+                        provider: string;
+                        profile: {
+                            id?: string;
+                            email?: string;
+                            name?: string;
+                            image?: string;
+                        } | null;
+                    }[] | null>;
+                    path: "/get-account-info";
+                    options: {
+                        method: "GET";
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+        } | {
             id: "updateUserccc";
             endpoints: {
                 updateUserccc: {
@@ -9506,6 +10011,8 @@ declare const auth: {
         EMAIL_CAN_NOT_BE_UPDATED: string;
         CREDENTIAL_ACCOUNT_NOT_FOUND: string;
         SESSION_EXPIRED: string;
+        FAILED_TO_UNLINK_LAST_ACCOUNT: string;
+        ACCOUNT_NOT_FOUND: string;
     };
 };
 
@@ -11220,7 +11727,12 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 } & {
     "/export": {
         $get: {
-            input: {};
+            input: {
+                query: {
+                    RSSHubURL?: string | undefined;
+                    folderMode?: "view" | "category" | undefined;
+                };
+            };
             output: {};
             outputFormat: string;
             status: 200;
@@ -11377,6 +11889,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
+                    toRSSHubId: string | null;
                     tax: string;
                     comment: string | null;
                     fromUser?: {
@@ -11454,6 +11967,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     amount: string;
                     address: string;
+                    toRss3?: boolean | undefined;
                 };
             };
             output: {
@@ -11552,6 +12066,20 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     prevActivityPoints: number | null;
                     activityPoints: number | null;
                 }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/power-price": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    rss3: number;
+                };
             };
             outputFormat: "json";
             status: 200;
@@ -11979,6 +12507,25 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             status: 200;
         };
     };
+} & {
+    "/mintdscsafr": {
+        $post: {
+            input: {
+                json: {
+                    userId: string;
+                    amount: number;
+                    key: string;
+                    comment?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: string;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 }, "/admin"> | hono_types.MergeSchemaPath<{
     "/": {
         $delete: {
@@ -12335,7 +12882,132 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             status: 200;
         };
     };
-}, "/probes">, "/">;
+}, "/probes"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    baseUrl: string;
+                    id?: string | undefined;
+                    accessKey?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/list": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    description: string | null;
+                    id: string;
+                    ownerUserId: string;
+                    owner: {
+                        name: string | null;
+                        id: string;
+                        image: string | null;
+                        handle: string | null;
+                    } | null;
+                    price: number;
+                    userLimit: number | null;
+                    userCount: number;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/use": {
+        $post: {
+            input: {
+                json: {
+                    id: string | null;
+                    durationInMonths?: number | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    purchase: {
+                        hash: string | null;
+                        expiresAt: string;
+                    } | null;
+                    instance: {
+                        description: string | null;
+                        id: string;
+                        ownerUserId: string;
+                        price: number;
+                        userLimit: number | null;
+                        baseUrl?: string | null | undefined;
+                        accessKey?: string | null | undefined;
+                    };
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/status": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    purchase: {
+                        hash: string | null;
+                        expiresAt: string;
+                    } | null;
+                    usage?: {
+                        id: string;
+                        userId: string;
+                        rsshubId: string;
+                    } | undefined;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+}, "/rsshub">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

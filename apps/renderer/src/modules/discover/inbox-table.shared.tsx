@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { CopyButton } from "~/components/ui/code-highlighter/copy-button"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { createErrorToaster } from "~/lib/error-parser"
 import { inboxActions } from "~/store/inbox"

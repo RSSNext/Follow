@@ -71,7 +71,7 @@ export const SortActionButton = () => {
         }
       }}
     >
-      <TouchableOpacity className="size-6">
+      <TouchableOpacity className="size-6 rounded-full">
         <Icon color={accentColor} />
       </TouchableOpacity>
     </ContextMenu>

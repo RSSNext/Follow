@@ -14,8 +14,8 @@ import { useUISettingKey, useUISettingSelector } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
 import { tipcClient } from "~/lib/client"
 
+import { CopyButton } from "../../button/CopyButton"
 import { getLanguageColor, getLanguageIcon } from "../constants"
-import { CopyButton } from "../copy-button"
 import { shiki, shikiTransformers } from "./shared"
 import styles from "./shiki.module.css"
 

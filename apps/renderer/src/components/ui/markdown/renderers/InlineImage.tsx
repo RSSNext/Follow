@@ -1,8 +1,9 @@
 import { cn } from "@follow/utils/utils"
 import { useContext } from "react"
+import { useContextSelector } from "use-context-selector"
 
 import { Media } from "../../media"
-import { MarkdownRenderActionContext } from "../context"
+import { MarkdownImageRecordContext, MarkdownRenderActionContext } from "../context"
 
 export const MarkdownInlineImage = (
   props: React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -14,12 +15,19 @@ export const MarkdownInlineImage = (
 ) => {
   const { transformUrl } = useContext(MarkdownRenderActionContext)
   const populatedUrl = transformUrl(props.src)
+  const media = useContextSelector(MarkdownImageRecordContext, (record) =>
+    props.src ? record[props.src] : null,
+  )
+
   return (
     <Media
       type="photo"
       {...props}
       loading="lazy"
       src={populatedUrl}
+      height={media?.height || props.height}
+      width={media?.width || props.width}
+      blurhash={media?.blurhash}
       mediaContainerClassName={cn("inline max-w-full rounded-md")}
       popper
       showFallback

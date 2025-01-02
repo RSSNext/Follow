@@ -1,8 +1,9 @@
 export type MarkdownImage = {
   url: string
-  blurhash?: string
-  width: number
-  height: number
+  width?: number | undefined
+  height?: number | undefined
+  preview_image_url?: string | undefined
+  blurhash?: string | undefined
 }
 
 export interface MarkdownRenderActions {
