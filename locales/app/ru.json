@@ -89,6 +89,7 @@
   "discover.inbox_destroy_error": "Не удалось уничтожить почтовый ящик.",
   "discover.inbox_destroy_success": "Почтовый ящик успешно уничтожен.",
   "discover.inbox_destroy_warning": "Внимание: после уничтожения почтовый ящик будет недоступен, а все содержимое будет навсегда удалено и не подлежит восстановлению.",
+  "discover.inbox.handle": "Обработчик",
   "discover.inbox_title": "Заголовок",
   "discover.inbox_update": "Обновить",
   "discover.inbox_update_error": "Не удалось изменить почтовый ящик.",
