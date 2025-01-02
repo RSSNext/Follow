@@ -158,7 +158,10 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
         <Maintainers maintainers={route.maintainers} />
 
         <View className="mx-4 mt-4">
-          <MarkdownWeb value={route.description} dom={{ matchContents: true }} />
+          <MarkdownWeb
+            value={route.description.replaceAll("::: ", ":::")}
+            dom={{ matchContents: true, scrollEnabled: false }}
+          />
         </View>
       </KeyboardAwareScrollView>
     </PortalProvider>

@@ -23,7 +23,7 @@ export const TextField: FC<TextInputProps & TextFieldProps> = ({
       style={wrapperStyle}
     >
       <TextInput
-        className={cn("text-text placeholder:text-placeholder-text", className)}
+        className={cn("text-text placeholder:text-placeholder-text w-full flex-1", className)}
         style={StyleSheet.flatten([styles.textField, style])}
         {...rest}
       />
