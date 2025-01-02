@@ -13,7 +13,7 @@ import type { RSSHubModel } from "@follow/models"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { whoami } from "~/atoms/user"
@@ -66,32 +66,38 @@ export function SetModalContent({
       <Card>
         <CardContent className="max-w-2xl space-y-2 p-6">
           <div className="mb-3 text-lg font-medium">{t("rsshub.useModal.about")}</div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-muted-foreground">{t("rsshub.table.owner")}</div>
-            <UserAvatar
-              userId={instance.ownerUserId}
-              className="h-auto justify-start p-0"
-              avatarClassName="size-6"
-            />
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-muted-foreground">{t("rsshub.table.description")}</div>
-            <div className="line-clamp-2">{instance.description}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-muted-foreground">{t("rsshub.table.price")}</div>
-            <div className="line-clamp-2 flex items-center gap-1">
-              {instance.price} <i className="i-mgc-power text-accent" />
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-muted-foreground">{t("rsshub.table.userCount")}</div>
-            <div className="line-clamp-2">{instance.userCount}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-muted-foreground">{t("rsshub.table.userLimit")}</div>
-            <div className="line-clamp-2">{instance.userLimit || t("rsshub.table.unlimited")}</div>
-          </div>
+          <table className="w-full">
+            <tbody className="divide-y-8 divide-transparent">
+              <tr>
+                <td className="w-24 text-sm text-muted-foreground">{t("rsshub.table.owner")}</td>
+                <td>
+                  <UserAvatar
+                    userId={instance.ownerUserId}
+                    className="h-auto justify-start p-0"
+                    avatarClassName="size-6"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="text-sm text-muted-foreground">{t("rsshub.table.description")}</td>
+                <td className="line-clamp-2">{instance.description}</td>
+              </tr>
+              <tr>
+                <td className="text-sm text-muted-foreground">{t("rsshub.table.price")}</td>
+                <td className="flex items-center gap-1">
+                  {instance.price} <i className="i-mgc-power text-accent" />
+                </td>
+              </tr>
+              <tr>
+                <td className="text-sm text-muted-foreground">{t("rsshub.table.userCount")}</td>
+                <td>{instance.userCount}</td>
+              </tr>
+              <tr>
+                <td className="text-sm text-muted-foreground">{t("rsshub.table.userLimit")}</td>
+                <td>{instance.userLimit || t("rsshub.table.unlimited")}</td>
+              </tr>
+            </tbody>
+          </table>
         </CardContent>
       </Card>
       {details.data?.purchase && (
@@ -111,19 +117,15 @@ export function SetModalContent({
               control={form.control}
               name="months"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-center gap-4">
                   <FormLabel>{t("rsshub.useModal.months_label")}</FormLabel>
-                  <FormControl>
+                  <FormControl className="!mt-0">
                     <div className="flex items-center gap-10">
                       <div className="space-x-2">
                         <Input className="w-24" type="number" max={12} {...field} />
                         <span className="text-sm text-muted-foreground">
                           {t("rsshub.useModal.month")}
                         </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {price * field.value}
-                        <i className="i-mgc-power text-accent" />
                       </div>
                     </div>
                   </FormControl>
@@ -134,11 +136,16 @@ export function SetModalContent({
           )}
           <div className="flex items-center justify-end">
             <Button type="submit" isLoading={setRSSHubMutation.isPending}>
-              {price
-                ? t("rsshub.useModal.useWith", {
-                    amount: price * months,
-                  })
-                : t("rsshub.table.use")}
+              {price ? (
+                <Trans
+                  ns="settings"
+                  i18nKey={"rsshub.useModal.useWith"}
+                  components={{ Power: <i className="i-mgc-power ml-1 text-white" /> }}
+                  values={{ amount: price * months }}
+                />
+              ) : (
+                t("rsshub.table.use")
+              )}
             </Button>
           </div>
         </form>

@@ -11,7 +11,7 @@ import {
 import type { RSSHubModel } from "@follow/models"
 import { useTranslation } from "react-i18next"
 
-import RSSHubIcon from "~/assets/rsshub-icon.png"
+import RSSHubIconUrl from "~/assets/rsshub-icon.png?url"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
@@ -22,6 +22,7 @@ import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Queries } from "~/queries"
 import { useSetRSSHubMutation } from "~/queries/rsshub"
 
+const RSSHubIcon = new URL(RSSHubIconUrl, import.meta.url).href
 export function Component() {
   const { t } = useTranslation("settings")
   const { present } = useModalStack()
@@ -32,7 +33,7 @@ export function Component() {
 
   return (
     <div className="relative flex w-full max-w-4xl flex-col items-center gap-8 px-4 pb-8 lg:pb-4">
-      <div className="motion-preset-shake center text-accent motion-delay-500">
+      <div className="center">
         <img src={RSSHubIcon} className="mt-12 size-20" />
       </div>
       <div className="text-2xl font-bold">{t("words.rsshub", { ns: "common" })}</div>
@@ -74,13 +75,13 @@ function List({ data }: { data?: RSSHubModel[] }) {
           <TableHead className="font-bold" size="sm">
             {t("rsshub.table.description")}
           </TableHead>
-          <TableHead className="font-bold" size="sm">
+          <TableHead className="text-right font-bold" size="sm">
             {t("rsshub.table.price")}
           </TableHead>
-          <TableHead className="font-bold" size="sm">
+          <TableHead className="text-right font-bold" size="sm">
             {t("rsshub.table.userCount")}
           </TableHead>
-          <TableHead className="font-bold" size="sm">
+          <TableHead className="text-right font-bold" size="sm">
             {t("rsshub.table.userLimit")}
           </TableHead>
           <TableCell size="sm" />
@@ -88,7 +89,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
       </TableHeader>
       <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
         <TableRow>
-          <TableCell>Official</TableCell>
+          <TableCell className="font-bold">Official</TableCell>
           <TableCell>
             <span className="flex items-center gap-2">
               <Logo className="size-6" />
@@ -97,12 +98,12 @@ function List({ data }: { data?: RSSHubModel[] }) {
           </TableCell>
           <TableCell>Follow Built-in RSSHub</TableCell>
           <TableCell>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center justify-end gap-1">
               0 <i className="i-mgc-power text-accent" />
             </span>
           </TableCell>
-          <TableCell>*</TableCell>
-          <TableCell>{t("rsshub.table.unlimited")}</TableCell>
+          <TableCell className="text-right">*</TableCell>
+          <TableCell className="text-right">{t("rsshub.table.unlimited")}</TableCell>
           <TableCell>
             {!status?.data?.usage?.rsshubId && (
               <Button disabled className="shrink-0">
@@ -142,13 +143,15 @@ function List({ data }: { data?: RSSHubModel[] }) {
                 <div className="line-clamp-2">{instance.description}</div>
               </TableCell>
               <TableCell>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center justify-end gap-1">
                   {instance.price} <i className="i-mgc-power text-accent" />
                 </span>
               </TableCell>
-              <TableCell>{instance.userCount}</TableCell>
-              <TableCell>{instance.userLimit || t("rsshub.table.unlimited")}</TableCell>
-              <TableCell>
+              <TableCell className="text-right">{instance.userCount}</TableCell>
+              <TableCell className="text-right">
+                {instance.userLimit || t("rsshub.table.unlimited")}
+              </TableCell>
+              <TableCell className="text-right">
                 <div className="flex w-max items-center gap-2">
                   <Button
                     className="shrink-0"

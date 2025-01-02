@@ -310,7 +310,7 @@
   "rsshub.useModal.months_label": "你想购买的月份数量",
   "rsshub.useModal.purchase_expires_at": "你已购买此实例，到期时间为",
   "rsshub.useModal.title": "RSSHub 实例",
-  "rsshub.useModal.useWith": "使用 {{amount}} Power",
+  "rsshub.useModal.useWith": "使用 {{amount}} <Power />",
   "titles.about": "关于",
   "titles.actions": "自动化",
   "titles.appearance": "外观",

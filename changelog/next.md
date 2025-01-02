@@ -2,10 +2,16 @@
 
 ## New Features
 
-- Scroll to top when re-navigating to Discover page while already on it
+![Custom RSSHub](https://github.com/RSSNext/assets/blob/main/custom-rsshub.png?raw=true)
+
+- Support the use of custom RSSHub instances to enhance the efficiency of data acquisition, and contribute private deployed RSSHub instances to earn more $POWER.
 - Exporting opml supports controlling RSSHub URL and folder classification mode
-- Update email and manage linked social accounts
 
 ## Improvements
 
+- Update email and manage linked social accounts
+- Scroll to top when re-navigating to Discover page while already on it
+
 ## Bug Fixes
+
+Some bugs are fixed.
