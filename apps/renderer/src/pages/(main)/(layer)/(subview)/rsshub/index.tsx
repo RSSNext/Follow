@@ -68,23 +68,23 @@ function List({ data }: { data?: RSSHubModel[] }) {
     <Table containerClassName="mt-2 overflow-x-auto">
       <TableHeader>
         <TableRow>
-          <TableHead className="font-bold" size="sm" />
-          <TableHead className="font-bold" size="sm">
+          <TableHead className="w-[50px] font-bold" size="sm" />
+          <TableHead className="w-[150px] font-bold" size="sm">
             {t("rsshub.table.owner")}
           </TableHead>
           <TableHead className="font-bold" size="sm">
             {t("rsshub.table.description")}
           </TableHead>
-          <TableHead className="text-right font-bold" size="sm">
+          <TableHead className="w-[120px] text-right font-bold" size="sm">
             {t("rsshub.table.price")}
           </TableHead>
-          <TableHead className="text-right font-bold" size="sm">
+          <TableHead className="w-[100px] text-right font-bold" size="sm">
             {t("rsshub.table.userCount")}
           </TableHead>
-          <TableHead className="text-right font-bold" size="sm">
+          <TableHead className="w-[100px] text-right font-bold" size="sm">
             {t("rsshub.table.userLimit")}
           </TableHead>
-          <TableCell size="sm" />
+          <TableCell className="w-[100px]" size="sm" />
         </TableRow>
       </TableHeader>
       <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
