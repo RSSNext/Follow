@@ -38,6 +38,9 @@ export const SearchHeader = () => {
 }
 
 export const DiscoverHeader = () => {
+  return <DiscoverHeaderImpl />
+}
+const DiscoverHeaderImpl = () => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
