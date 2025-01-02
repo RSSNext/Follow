@@ -61,7 +61,9 @@ export const PowerRanking: Component = ({ className }) => {
                         <TableCell>...</TableCell>
                       </TableRow>
                       <TableRow>
-                        <div className="h-px w-full" />
+                        <TableCell className="p-0">
+                          <div className="h-px w-full" />
+                        </TableCell>
                       </TableRow>
                     </>
                   )}
