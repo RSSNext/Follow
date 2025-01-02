@@ -79,7 +79,8 @@ const FeedDescription = ({ description }: { description?: string }) => {
     <>
       <p>{t("discover.feed_description")}</p>
       <Markdown className="w-full max-w-full cursor-text select-text break-all prose-p:my-1">
-        {description}
+        {/* Fix markdown directive */}
+        {description.replaceAll("::: ", ":::")}
       </Markdown>
     </>
   )
@@ -248,7 +249,7 @@ export const DiscoverFeedForm = ({
       )}
       <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} ref={formElRef}>
         {keys.map((keyItem) => {
-          const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
+          const parameters = normalizeRSSHubParameters(route.parameters?.[keyItem.name])
 
           const formRegister = form.register(keyItem.name)
 

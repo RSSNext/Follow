@@ -1,6 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
-import { Tabs } from "expo-router"
+import { router, Tabs } from "expo-router"
 import { View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
@@ -17,6 +17,12 @@ const doubleTap = Gesture.Tap()
   .numberOfTaps(2)
   .onStart(() => {
     runOnJS(setCurrentView)(FeedViewType.Articles)
+  })
+
+const fifthTap = Gesture.Tap()
+  .numberOfTaps(5)
+  .onStart(() => {
+    runOnJS(router.push)("/debug")
   })
 
 export default function TabLayout() {
@@ -63,6 +69,15 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           headerShown: false,
+          tabBarButton(props) {
+            return (
+              <GestureDetector gesture={fifthTap}>
+                <View className="flex-1">
+                  <PlatformPressable {...props} />
+                </View>
+              </GestureDetector>
+            )
+          },
           tabBarIcon: ({ color, focused }) => {
             const Icon = !focused ? Settings7CuteReIcon : Setting7CuteFi
             return <Icon color={color} width={24} height={24} />

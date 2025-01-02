@@ -24,16 +24,17 @@ export const parseMarkdown = (content: string, options?: Partial<RemarkOptions>)
   const { components } = options || {}
 
   const pipeline = unified()
+    .use(remarkDirective)
     .use(remarkParse)
 
     .use(remarkGfm)
     .use(remarkGithubAlerts)
 
-    .use(remarkDirective)
     .use(remarkCalloutDirectives, {
       aliases: {
         danger: "deter",
         tip: "note",
+        warning: "warn",
       },
       callouts: {
         note: {

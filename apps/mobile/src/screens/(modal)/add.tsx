@@ -17,7 +17,6 @@ export default function Add() {
         options={{
           gestureEnabled: !url,
           headerLeft: ModalHeaderCloseButton,
-          presentation: "modal",
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {

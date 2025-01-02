@@ -26,7 +26,7 @@ const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         </div>
         <div className="text-lg font-bold">{message}</div>
         {import.meta.env.DEV && stack ? (
-          <pre className="mt-4 max-h-48 cursor-text overflow-auto whitespace-pre-line rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
+          <pre className="mt-4 max-h-48 cursor-text select-text overflow-auto whitespace-pre-line rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
             {attachOpenInEditor(stack)}
           </pre>
         ) : null}
