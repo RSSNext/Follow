@@ -274,7 +274,12 @@ const MediaImpl: FC<MediaProps> = ({
             }}
           >
             {props.blurhash && (
-              <span className="absolute inset-0 overflow-hidden rounded">
+              <span
+                className={cn(
+                  "absolute inset-0 overflow-hidden rounded",
+                  mediaLoadState === "loaded" && "animate-out fade-out-0 fill-mode-forwards",
+                )}
+              >
                 <BlurhashCanvas hash={props.blurhash} className="size-full" />
               </span>
             )}
@@ -299,7 +304,10 @@ const MediaImpl: FC<MediaProps> = ({
           fitContent={fitContent}
         >
           <div
-            className="absolute inset-0 flex items-center justify-center overflow-hidden rounded"
+            className={cn(
+              "absolute inset-0 flex items-center justify-center overflow-hidden rounded",
+              mediaLoadState === "loaded" && "animate-out fade-out-0 fill-mode-forwards",
+            )}
             data-blurhash={blurhash}
           >
             {blurhash ? (
