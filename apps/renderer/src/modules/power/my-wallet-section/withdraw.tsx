@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
+import { Switch } from "@follow/components/ui/switch/index.js"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -19,7 +20,9 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { useAuthQuery } from "~/hooks/common/useBizQuery"
 import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
 import { Balance } from "~/modules/wallet/balance"
 import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
@@ -50,19 +53,36 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
   const formSchema = z.object({
     address: z.string().startsWith("0x").length(42),
     amount: z.number().positive().max(cashablePowerTokenNumber),
+    toRss3: z.boolean().optional(),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
 
+  const powerPrice = useAuthQuery(
+    defineQuery(["power-price"], async () => {
+      const res = await apiClient.wallets["power-price"].$get()
+      return res.data
+    }),
+  )
+
   const mutation = useMutation({
-    mutationFn: async ({ address, amount }: { address: string; amount: number }) => {
+    mutationFn: async ({
+      address,
+      amount,
+      toRss3,
+    }: {
+      address: string
+      amount: number
+      toRss3?: boolean
+    }) => {
       const amountBigInt = from(amount, 18)[0]
       await apiClient.wallets.transactions.withdraw.$post({
         json: {
           address,
           amount: amountBigInt.toString(),
+          toRss3,
         },
       })
     },
@@ -130,6 +150,26 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="toRss3"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormLabel>{t("wallet.withdraw.toRss3Label")}</FormLabel>
+                  <FormControl className="!mt-0">
+                    <span className="inline-flex">
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </span>
+                  </FormControl>
+                </div>
+                <div className="w-full text-xs text-gray-500">
+                  1 POWER = {powerPrice.data?.rss3 ?? "-"} RSS3
+                </div>
                 <FormMessage />
               </FormItem>
             )}

@@ -11967,6 +11967,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     amount: string;
                     address: string;
+                    toRss3?: boolean | undefined;
                 };
             };
             output: {
@@ -12065,6 +12066,20 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     prevActivityPoints: number | null;
                     activityPoints: number | null;
                 }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/power-price": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    rss3: number;
+                };
             };
             outputFormat: "json";
             status: 200;
