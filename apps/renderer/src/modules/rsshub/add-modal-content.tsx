@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/Input.js"
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import type { RSSHubModel } from "@follow/models"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
@@ -79,41 +80,47 @@ FOLLOW_PRICE=${instance?.price || 100}                 # The monthly price of yo
 FOLLOW_USER_LIMIT=${instance?.userLimit || 1000}           # The user limit of your instance, set it to 0 or 1 can make your instance private, leaving it empty means no restriction`}
         language="dotenv"
       />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="baseUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("rsshub.addModal.base_url_label")}</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="accessKey"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("rsshub.addModal.access_key_label")}</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex items-center justify-end">
-            <Button type="submit" isLoading={addRSSHubMutation.isPending}>
-              {t("rsshub.addModal.add")}
-            </Button>
-          </div>
-        </form>
-      </Form>
+      {details.isLoading ? (
+        <div className="center mt-12 flex w-full flex-col gap-8">
+          <LoadingCircle size="large" />
+        </div>
+      ) : (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="baseUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("rsshub.addModal.base_url_label")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="accessKey"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("rsshub.addModal.access_key_label")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-end">
+              <Button type="submit" isLoading={addRSSHubMutation.isPending}>
+                {t("rsshub.addModal.add")}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      )}
     </div>
   )
 }

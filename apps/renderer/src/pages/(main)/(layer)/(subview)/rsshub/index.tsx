@@ -64,7 +64,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
   const { present } = useModalStack()
 
   return (
-    <Table containerClassName="mt-2">
+    <Table containerClassName="mt-2 overflow-x-auto">
       <TableHeader>
         <TableRow>
           <TableHead className="font-bold" size="sm" />
@@ -149,7 +149,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
               <TableCell>{instance.userCount}</TableCell>
               <TableCell>{instance.userLimit || t("rsshub.table.unlimited")}</TableCell>
               <TableCell>
-                <div className="flex items-center gap-2">
+                <div className="flex w-max items-center gap-2">
                   <Button
                     className="shrink-0"
                     variant={status?.data?.usage?.rsshubId === instance.id ? "outline" : "primary"}
