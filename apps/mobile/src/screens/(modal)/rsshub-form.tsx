@@ -9,6 +9,7 @@ import { Linking, Text, TouchableOpacity, View } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { z } from "zod"
 
+import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
 import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
@@ -16,7 +17,6 @@ import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
 import { CheckLineIcon } from "@/src/icons/check_line"
-import { PreviewUrl } from "@/src/modules/rsshub/preview-url"
 import { useColor } from "@/src/theme/colors"
 
 interface RsshubFormParams {
@@ -105,18 +105,15 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
   return (
     <FormProvider form={form}>
-      <ScreenOptions name={name} routeName={routeName} />
+      <ScreenOptions
+        name={name}
+        routeName={routeName}
+        route={route.path}
+        routePrefix={routePrefix}
+      />
 
       <PortalProvider>
         <KeyboardAwareScrollView className="bg-system-grouped-background">
-          <PreviewUrl
-            className="m-2 mb-6"
-            watch={form.watch}
-            path={route.path}
-            routePrefix={routePrefix}
-          />
-          {/* Form */}
-
           <View className="bg-system-grouped-background-2 mx-2 gap-4 rounded-lg px-3 py-6">
             {keys.map((keyItem) => {
               const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
@@ -211,7 +208,13 @@ const normalizeRSSHubParameters = (parameters: RSSHubParameter): RSSHubParameter
       : parameters
     : null
 
-const ScreenOptions = memo(({ name, routeName }: { name: string; routeName: string }) => {
+type ScreenOptionsProps = {
+  name: string
+  routeName: string
+  route: string
+  routePrefix: string
+}
+const ScreenOptions = memo(({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
   const form = useFormContext()
 
   return (
@@ -223,11 +226,22 @@ const ScreenOptions = memo(({ name, routeName }: { name: string; routeName: stri
             <ModalHeaderSubmitButton />
           </FormProvider>
         ),
-        headerTitle: `${name} - ${routeName}`,
+
+        headerTitle: () => (
+          <Title name={name} routeName={routeName} route={route} routePrefix={routePrefix} />
+        ),
       }}
     />
   )
 })
+
+const Title = ({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
+  return (
+    <HeaderTitleExtra subText={`rsshub://${routePrefix}${route}`}>
+      {`${name} - ${routeName}`}
+    </HeaderTitleExtra>
+  )
+}
 
 const ModalHeaderSubmitButton = () => {
   return <ModalHeaderSubmitButtonImpl />
