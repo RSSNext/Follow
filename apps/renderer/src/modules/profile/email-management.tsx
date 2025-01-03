@@ -46,8 +46,16 @@ export function EmailManagement() {
   const { present } = useModalStack()
   return (
     <>
-      <div className="mb-2">
+      <div className="mb-2 flex items-center space-x-1">
         <Label className="text-sm">{t("profile.email.label")}</Label>
+        <span
+          className={cn(
+            "rounded-full border px-1 text-[10px] font-semibold",
+            user?.emailVerified ? "border-green-500 text-green-500" : "border-red-500 text-red-500",
+          )}
+        >
+          {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
+        </span>
       </div>
       <p className="group flex gap-2 text-sm text-muted-foreground">
         {user?.email}
@@ -68,9 +76,6 @@ export function EmailManagement() {
             className="size-5 p-1 opacity-0 duration-300 group-hover:opacity-100"
           />
         )}
-        <span className={cn(user?.emailVerified ? "text-green-500" : "text-red-500")}>
-          {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
-        </span>
       </p>
       {!user?.emailVerified && (
         <Button
