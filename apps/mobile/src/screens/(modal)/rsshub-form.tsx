@@ -12,7 +12,6 @@ import { z } from "zod"
 import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
 import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
-import { FormLabel } from "@/src/components/ui/form/Label"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
@@ -121,7 +120,6 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
               return (
                 <View key={keyItem.name}>
-                  <FormLabel className="pl-1" label={keyItem.name} optional={keyItem.optional} />
                   {!parameters?.options && (
                     <Controller
                       name={keyItem.name}
@@ -136,6 +134,8 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                       }}
                       render={({ field: { onChange, onBlur, ref, value } }) => (
                         <TextField
+                          label={keyItem.name}
+                          required={!keyItem.optional}
                           wrapperClassName="mt-2"
                           placeholder={formPlaceholder[keyItem.name]}
                           onBlur={onBlur}
@@ -150,6 +150,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
                   {!!parameters?.options && (
                     <Select
+                      label={keyItem.name}
                       wrapperClassName="mt-2"
                       options={parameters.options}
                       value={form.getValues(keyItem.name)}
@@ -164,7 +165,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                   )}
 
                   {!!parameters && (
-                    <Text className="text-text/80 ml-2 mt-2 text-xs">{parameters.description}</Text>
+                    <Text className="text-text/80 ml-1 mt-2 text-xs">{parameters.description}</Text>
                   )}
                 </View>
               )
