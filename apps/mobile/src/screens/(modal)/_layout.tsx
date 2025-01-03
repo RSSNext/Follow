@@ -15,6 +15,12 @@ export default function ModalLayout() {
           title: "RSSHub Form",
         }}
       />
+      <Stack.Screen
+        name="follow"
+        options={{
+          title: "Follow",
+        }}
+      />
     </Stack>
   )
 }

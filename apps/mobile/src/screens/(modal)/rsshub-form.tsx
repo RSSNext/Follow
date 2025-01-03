@@ -1,5 +1,11 @@
 import type { RSSHubParameter, RSSHubParameterObject, RSSHubRoute } from "@follow/models/src/rsshub"
-import { parseFullPathParams, parseRegexpPathParams, withOpacity } from "@follow/utils"
+import {
+  MissingOptionalParamError,
+  parseFullPathParams,
+  parseRegexpPathParams,
+  regexpPathToPath,
+  withOpacity,
+} from "@follow/utils"
 import { PortalProvider } from "@gorhom/portal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, Stack, useLocalSearchParams } from "expo-router"
@@ -224,7 +230,7 @@ const ScreenOptions = memo(({ name, routeName, route, routePrefix }: ScreenOptio
         headerLeft: ModalHeaderCloseButton,
         headerRight: () => (
           <FormProvider form={form}>
-            <ModalHeaderSubmitButton />
+            <ModalHeaderSubmitButton routePrefix={routePrefix} route={route} />
           </FormProvider>
         ),
 
@@ -244,15 +250,62 @@ const Title = ({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
   )
 }
 
-const ModalHeaderSubmitButton = () => {
-  return <ModalHeaderSubmitButtonImpl />
+type ModalHeaderSubmitButtonProps = {
+  routePrefix: string
+  route: string
 }
-const ModalHeaderSubmitButtonImpl = () => {
+const ModalHeaderSubmitButton = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
+  return <ModalHeaderSubmitButtonImpl routePrefix={routePrefix} route={route} />
+}
+
+const routeParamsKeyPrefix = "route-params-"
+
+const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
   const form = useFormContext()
   const label = useColor("label")
   const { isValid } = form.formState
-  const submit = form.handleSubmit((data) => {
-    void data
+  const submit = form.handleSubmit((_data) => {
+    const data = Object.fromEntries(
+      Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
+    )
+
+    try {
+      const routeParamsPath = encodeURIComponent(
+        Object.entries(_data)
+          .filter(([key, value]) => key.startsWith(routeParamsKeyPrefix) && value)
+          .map(([key, value]) => [key.slice(routeParamsKeyPrefix.length), value])
+          .map(([key, value]) => `${key}=${value}`)
+          .join("&"),
+      )
+
+      const fillRegexpPath = regexpPathToPath(
+        routeParamsPath ? route.slice(0, route.indexOf("/:routeParams")) : route,
+        data,
+      )
+      const url = `rsshub://${routePrefix}${fillRegexpPath}`
+
+      const finalUrl = routeParamsPath ? `${url}/${routeParamsPath}` : url
+
+      if (router.canDismiss()) {
+        router.dismiss()
+      }
+      requestAnimationFrame(() => {
+        router.push({
+          pathname: "/follow",
+          params: {
+            url: finalUrl,
+          },
+        })
+      })
+    } catch (err: unknown) {
+      if (err instanceof MissingOptionalParamError) {
+        // toast.error(err.message)
+        // const idx = keys.findIndex((item) => item.name === err.param)
+        // form.setFocus(keys[idx === 0 ? 0 : idx - 1].name, {
+        //   shouldSelect: true,
+        // })
+      }
+    }
   })
 
   return (
