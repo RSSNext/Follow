@@ -14,6 +14,7 @@ export default resolveConfig({
     "./apps/renderer/index.html",
     "./apps/web/index.html",
     "./packages/**/*.{ts,tsx}",
+    "!./packages/**/node_modules",
   ],
   future: {
     hoverOnlyWhenSupported: isWebBuild,
