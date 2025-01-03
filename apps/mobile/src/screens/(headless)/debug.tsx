@@ -19,26 +19,10 @@ import { clearSessionToken, getSessionToken, setSessionToken } from "@/src/lib/c
 
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
-  // const isExpanded = useSharedValue(false)
+
   return (
     <ScrollView className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Users</Text>
-
-      {/* <Button
-        title="Toggle"
-        onPress={() => {
-          isExpanded.value = !isExpanded.value
-        }}
-      />
-      <AccordionItem isExpanded={isExpanded} viewKey="users">
-        {Array.from({ length: 100 }).map((_, index) => {
-          return (
-            <Text key={index} className="text-white">
-              {index}
-            </Text>
-          )
-        })}
-      </AccordionItem> */}
 
       <View style={styles.container}>
         <View style={styles.itemContainer}>
