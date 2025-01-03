@@ -28,10 +28,11 @@ export function EntryContentHTMLRenderer<AS extends keyof JSX.IntrinsicElements 
 } & HTMLProps<AS>) {
   const entry = useEntry(entryId)
 
-  const { feedSiteUrl, feedUrl } = useFeedByIdSelector(feedId, (feed) => ({
-    feedSiteUrl: "siteUrl" in feed ? feed.siteUrl : undefined,
-    feedUrl: "url" in feed ? feed.url : undefined,
-  })) || {}
+  const { feedSiteUrl, feedUrl } =
+    useFeedByIdSelector(feedId, (feed) => ({
+      feedSiteUrl: "siteUrl" in feed ? feed.siteUrl : undefined,
+      feedUrl: "url" in feed ? feed.url : undefined,
+    })) || {}
 
   const images: Record<string, MarkdownImage> = useMemo(() => {
     return (
@@ -64,11 +65,7 @@ export function EntryContentHTMLRenderer<AS extends keyof JSX.IntrinsicElements 
       <MarkdownRenderActionContext.Provider value={actions}>
         <EntryInfoContext.Provider value={useMemo(() => ({ feedId, entryId }), [feedId, entryId])}>
           {/*  @ts-expect-error */}
-          <HTML
-            data-feed-url={feedUrl}
-            data-view={view}
-            {...props}
-          >
+          <HTML data-feed-url={feedUrl} data-view={view} {...props}>
             {children}
           </HTML>
         </EntryInfoContext.Provider>
