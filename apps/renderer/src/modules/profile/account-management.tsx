@@ -65,7 +65,7 @@ export function AccountManagement() {
   return (
     <div className="space-y-2">
       <p className="text-sm font-semibold">{t("profile.link_social.authentication")}</p>
-      <div className="space-x-2">
+      <div className="flex flex-wrap items-center gap-2">
         {Object.keys(providers || {})
           .filter((provider) => provider !== "credential")
           .map((provider) => (
