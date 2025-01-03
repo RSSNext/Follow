@@ -276,12 +276,14 @@
   "profile.email.verified": "已验证",
   "profile.handle.description": "你的唯一标识。",
   "profile.handle.label": "唯一标识",
+  "profile.link_social.authentication": "身份验证",
   "profile.link_social.description": "目前只能连接具有相同邮件地址的社交帐户。",
   "profile.link_social.link": "连接",
   "profile.link_social.unlink.success": "已解除社交账户连接。",
   "profile.name.description": "你的公开显示名称。",
   "profile.name.label": "显示名称",
   "profile.new_password.label": "新密码",
+  "profile.password.label": "密码",
   "profile.reset_password_mail_sent": "重置密码邮件已发送。",
   "profile.sidebar_title": "个人资料",
   "profile.submit": "提交",
@@ -377,5 +379,6 @@
   "wallet.withdraw.error": "提现失败：{{error}}",
   "wallet.withdraw.modalTitle": "提现 Power",
   "wallet.withdraw.submitButton": "提交",
-  "wallet.withdraw.success": "提现成功！"
+  "wallet.withdraw.success": "提现成功！",
+  "wallet.withdraw.toRss3Label": "提现为 RSS3"
 }
