@@ -1,5 +1,6 @@
 import { Readability } from "@mozilla/readability"
 import { name, version } from "@pkg"
+import chardet from "chardet"
 import DOMPurify from "dompurify"
 import { parseHTML } from "linkedom"
 import { fetch } from "ofetch"
@@ -29,24 +30,24 @@ export async function readability(url: string) {
     },
   })
     .then(async (res) => {
-      // Get the Content-Type and character set from the response header
+      // Read ArrayBuffer once
+      const buffer = await res.arrayBuffer()
+
+      // Step 1: Get charset from Content-Type header
       const contentType = res.headers.get("content-type")
       const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
 
-      // Reading an ArrayBuffer in one go
-      const buffer = await res.arrayBuffer()
+      // Step 2: If charset is not available, use chardet to detect it
+      const detectedCharset = httpCharset || chardet.detect(Buffer.from(buffer)) || "utf-8"
 
-      // By default, the character set in the HTTP response header or UTF-8 is used
-      const charset = httpCharset || "utf-8"
-      const text = new TextDecoder(charset, { fatal: false }).decode(buffer)
+      // Decode text using the detected charset
+      const text = new TextDecoder(detectedCharset, { fatal: false }).decode(buffer)
 
-      return { buffer, text, charset }
+      return { buffer, text, detectedCharset }
     })
-    .then((res) => {
-      /*eslint prefer-const: "warn"*/
-      let { buffer, text, charset } = res
-      // Try parsing the <meta> charset in the text
+    .then(({ buffer, text, detectedCharset }) => {
       try {
+        // Step 3: Parse <meta> tag to check for charset
         const { document } = parseHTML(text)
         const metaCharset =
           document.querySelector("meta[charset]")?.getAttribute("charset") ||
@@ -55,18 +56,20 @@ export async function readability(url: string) {
             ?.getAttribute("content")
             ?.match(/charset=([\w-]+)/i)?.[1]
 
-        // If <meta> charset and HTTP charset are inconsistent, re-decode
-        if (metaCharset && metaCharset.toLowerCase() !== charset.toLowerCase()) {
-          charset = metaCharset
-          text = new TextDecoder(charset, { fatal: false }).decode(buffer)
+        // Step 4: Adjust charset if <meta> specifies a different one
+        const finalCharset = metaCharset || detectedCharset || "utf-8"
+        if (finalCharset.toLowerCase() !== detectedCharset.toLowerCase()) {
+          // eslint-disable-next-line no-param-reassign
+          text = new TextDecoder(finalCharset, { fatal: false }).decode(buffer)
         }
+
         return text
       } catch {
-        return text // Fallback origin content if it's failed
+        return text // Fallback to initially decoded content
       }
     })
     .catch(() => {
-      return ""
+      return "" // Fallback in case of request or decoding failure
     })
 
   const sanitizedDocumentString = sanitizeHTMLString(dirtyDocumentString)
