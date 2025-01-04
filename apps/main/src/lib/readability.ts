@@ -27,18 +27,47 @@ export async function readability(url: string) {
       "User-Agent": userAgents,
       Accept: "text/html",
     },
-  }).then(async (res) => {
-    const contentType = res.headers.get("content-type")
-    // text/html; charset=GBK
-    if (!contentType) return res.text()
-    const charset = contentType.match(/charset=([a-zA-Z-\d]+)/)?.[1]
-    if (charset) {
-      const blob = await res.blob()
-      const buffer = await blob.arrayBuffer()
-      return new TextDecoder(charset).decode(buffer)
-    }
-    return res.text()
   })
+    .then(async (res) => {
+      // Get the Content-Type and character set from the response header
+      const contentType = res.headers.get("content-type")
+      const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
+
+      // Reading an ArrayBuffer in one go
+      const buffer = await res.arrayBuffer()
+
+      // By default, the character set in the HTTP response header or UTF-8 is used
+      const charset = httpCharset || "utf-8"
+      const text = new TextDecoder(charset, { fatal: false }).decode(buffer)
+
+      return { buffer, text, charset }
+    })
+    .then((res) => {
+      /*eslint prefer-const: "warn"*/
+      let { buffer, text, charset } = res
+      // Try parsing the <meta> charset in the text
+      try {
+        const { document } = parseHTML(text)
+        const metaCharset =
+          document.querySelector("meta[charset]")?.getAttribute("charset") ||
+          document
+            .querySelector('meta[http-equiv="Content-Type"]')
+            ?.getAttribute("content")
+            ?.match(/charset=([\w-]+)/i)?.[1]
+
+        // If <meta> charset and HTTP charset are inconsistent, re-decode
+        if (metaCharset && metaCharset.toLowerCase() !== charset.toLowerCase()) {
+          charset = metaCharset
+          text = new TextDecoder(charset, { fatal: false }).decode(buffer)
+        }
+        return text
+      } catch {
+        return text // Fallback origin content if it's failed
+      }
+    })
+    .catch(() => {
+      return ""
+    })
 
   const sanitizedDocumentString = sanitizeHTMLString(dirtyDocumentString)
   const baseUrl = new URL(url).origin
