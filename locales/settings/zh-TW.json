@@ -380,5 +380,5 @@
   "wallet.withdraw.modalTitle": "提取 Power",
   "wallet.withdraw.submitButton": "送出",
   "wallet.withdraw.success": "提取成功！",
-    "wallet.withdraw.toRss3Label": "提取為 RSS3"
+  "wallet.withdraw.toRss3Label": "提取為 RSS3"
 }
