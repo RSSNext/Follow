@@ -11,6 +11,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 
 import { sqlite } from "../database"
+import { DrawerStateProvider } from "../lib/hooks/drawer-open"
+import { DrawerSwipeProvider } from "../lib/hooks/drawer-swipe-disabled"
 import { queryClient } from "../lib/query-client"
 import { DarkTheme, DefaultTheme } from "../theme/navigation"
 import { getCurrentColors } from "../theme/utils"
@@ -29,9 +31,13 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
           <View style={[styles.flex, currentThemeColors]}>
             <QueryClientProvider client={queryClient}>
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                <GestureHandlerRootView>
-                  <PortalProvider>{children}</PortalProvider>
-                </GestureHandlerRootView>
+                <DrawerSwipeProvider>
+                  <DrawerStateProvider>
+                    <GestureHandlerRootView>
+                      <PortalProvider>{children}</PortalProvider>
+                    </GestureHandlerRootView>
+                  </DrawerStateProvider>
+                </DrawerSwipeProvider>
               </ThemeProvider>
             </QueryClientProvider>
           </View>
