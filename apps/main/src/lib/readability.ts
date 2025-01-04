@@ -45,7 +45,8 @@ export async function readability(url: string) {
 
       return { buffer, text, detectedCharset }
     })
-    .then(({ buffer, text, detectedCharset }) => {
+    .then((res) => {
+      const { buffer, text, detectedCharset } = res
       try {
         // Step 3: Parse <meta> tag to check for charset
         const { document } = parseHTML(text)
@@ -58,12 +59,12 @@ export async function readability(url: string) {
 
         // Step 4: Adjust charset if <meta> specifies a different one
         const finalCharset = metaCharset || detectedCharset || "utf-8"
+        let decodedText = text
         if (finalCharset.toLowerCase() !== detectedCharset.toLowerCase()) {
-          // eslint-disable-next-line no-param-reassign
-          text = new TextDecoder(finalCharset, { fatal: false }).decode(buffer)
+          decodedText = new TextDecoder(finalCharset, { fatal: false }).decode(buffer)
         }
 
-        return text
+        return decodedText
       } catch {
         return text // Fallback to initially decoded content
       }
