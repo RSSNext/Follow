@@ -15,7 +15,7 @@ export const getTrayIconPath = () => {
   }
   if (isWindows) {
     // https://www.electronjs.org/docs/latest/api/tray#:~:text=Windows,best%20visual%20effects.
-    return path.join(__dirname, "../../resources/icon.ico")
+    return path.join(__dirname, "../../resources/icon-no-padding.ico")
   }
   return getIconPath()
 }
