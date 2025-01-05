@@ -97,6 +97,7 @@
   "appearance.zen_mode.description": "Zen mode is an undisturbed reading mode that allows you to focus on the content without any interference. Enabling Zen mode will hide the sidebar.",
   "appearance.zen_mode.label": "Zen mode",
   "common.give_star": "<HeartIcon />Love our product? <Link>Give us a star on GitHub!</Link>",
+  "customizeToolbar.title": "Customize Toolbar",
   "data_control.app_cache_limit.description": "The maximum size of the app cache. Once the cache reaches this size, the oldest items will be deleted to free up space.",
   "data_control.app_cache_limit.label": "App Cache Limit",
   "data_control.clean_cache.button": "Clean Cache",
