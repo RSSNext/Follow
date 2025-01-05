@@ -54,3 +54,30 @@ export const SortableActionButton = ({ id }: { id: UniqueIdentifier }) => {
     </SortableItem>
   )
 }
+
+export function DroppableContainer({
+  id,
+  children,
+}: {
+  children: ReactNode
+  id: UniqueIdentifier
+}) {
+  const { attributes, isDragging, listeners, setNodeRef, transition, transform } = useSortable({
+    id,
+  })
+  return (
+    <div
+      className="flex min-h-[120px] w-full flex-wrap items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 p-2 pb-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900"
+      ref={setNodeRef}
+      style={{
+        transition,
+        transform: CSS.Translate.toString(transform),
+        opacity: isDragging ? 0.5 : undefined,
+      }}
+      {...attributes}
+      {...listeners}
+    >
+      {children}
+    </div>
+  )
+}

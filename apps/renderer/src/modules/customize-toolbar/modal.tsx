@@ -14,12 +14,12 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { useCallback, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { useI18n } from "~/hooks/common"
 
 import { COMMAND_ID } from "../command/commands/id"
-import { SortableActionButton } from "./sortable"
+import { DroppableContainer, SortableActionButton } from "./dnd"
 
 const DEFAULT_ACTION_ORDER: {
   main: UniqueIdentifier[]
@@ -45,9 +45,10 @@ const CustomizeToolbar = () => {
       const activeId = active.id
       const overId = over.id
       const isActiveInMain = state.main.includes(activeId)
-      const isOverInMain = state.main.includes(overId)
+      const isOverInMain = overId === "container-main" || state.main.includes(overId)
+      const isCrossContainer = isActiveInMain !== isOverInMain
 
-      if (isActiveInMain !== isOverInMain) {
+      if (isCrossContainer) {
         // Moving between containers
         setState((prev) => {
           const sourceList = isActiveInMain ? "main" : "more"
@@ -92,35 +93,33 @@ const CustomizeToolbar = () => {
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragOver={handleDragOver}>
         <div className="space-y-4">
           {/* Main toolbar */}
-          <SortableContext
-            items={state.main.map((item) => item)}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="rounded-lg border border-neutral-200 bg-neutral-50 pb-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <div className="flex w-full flex-wrap items-center justify-center gap-1 p-2">
-                {state.main.map((id) => (
-                  <SortableActionButton key={id} id={id} />
-                ))}
-              </div>
-            </div>
-          </SortableContext>
+
+          <DroppableContainer id="container-main">
+            <SortableContext
+              items={state.main.map((item) => item)}
+              strategy={verticalListSortingStrategy}
+            >
+              {state.main.map((id) => (
+                <SortableActionButton key={id} id={id} />
+              ))}
+            </SortableContext>
+          </DroppableContainer>
 
           {/* More panel */}
-          <SortableContext
-            items={state.more.map((item) => item)}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="flex w-full items-center px-4 py-2 dark:border-neutral-800">
-              <h2 className="text-lg font-semibold">More Actions</h2>
-            </div>
-            <div className="rounded-lg border border-neutral-200 bg-neutral-50 pb-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <div className="flex w-full flex-wrap items-center justify-center gap-1 p-2">
-                {state.more.map((id) => (
-                  <SortableActionButton key={id} id={id} />
-                ))}
-              </div>
-            </div>
-          </SortableContext>
+          <div className="flex w-full items-center px-4 py-2 dark:border-neutral-800">
+            <h2 className="text-lg font-semibold">More Actions</h2>
+          </div>
+
+          <DroppableContainer id="container-more">
+            <SortableContext
+              items={state.more.map((item) => item)}
+              strategy={verticalListSortingStrategy}
+            >
+              {state.more.map((id) => (
+                <SortableActionButton key={id} id={id} />
+              ))}
+            </SortableContext>
+          </DroppableContainer>
         </div>
       </DndContext>
     </div>
@@ -128,13 +127,13 @@ const CustomizeToolbar = () => {
 }
 
 export const useShowCustomizeToolbarModal = () => {
-  const t = useI18n()
+  const [t] = useTranslation("settings")
   const { present } = useModalStack()
 
   return useCallback(() => {
     present({
       id: "customize-toolbar",
-      title: t("settings.customizeToolbar.title"),
+      title: t("customizeToolbar.title"),
       content: () => <CustomizeToolbar />,
       overlay: true,
       clickOutsideToDismiss: true,
