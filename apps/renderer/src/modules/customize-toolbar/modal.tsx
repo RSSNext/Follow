@@ -1,4 +1,4 @@
-import type { DragOverEvent } from "@dnd-kit/core"
+import type { DragOverEvent, UniqueIdentifier } from "@dnd-kit/core"
 import {
   closestCenter,
   DndContext,
@@ -19,21 +19,18 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 
 import { COMMAND_ID } from "../command/commands/id"
-import type { BasicCommand } from "../command/commands/types"
-import { getCommand } from "../command/hooks/use-command"
 import { SortableActionButton } from "./sortable"
 
-const customizeActionIds = [
-  ...Object.values(COMMAND_ID.entry),
-  ...Object.values(COMMAND_ID.integration),
-]
+const DEFAULT_ACTION_ORDER: {
+  main: UniqueIdentifier[]
+  more: UniqueIdentifier[]
+} = {
+  main: Object.values(COMMAND_ID.entry),
+  more: [...Object.values(COMMAND_ID.integration), COMMAND_ID.settings.customizeToolbar],
+}
 
 const CustomizeToolbar = () => {
-  const items = customizeActionIds.map((id) => getCommand(id)).filter((i) => i !== null)
-  const [state, setState] = useState<{ main: BasicCommand[]; more: BasicCommand[] }>({
-    main: items.filter((item) => !item.id.startsWith("integration")),
-    more: items.filter((item) => item.id.startsWith("integration")),
-  })
+  const [state, setState] = useState(DEFAULT_ACTION_ORDER)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -47,20 +44,20 @@ const CustomizeToolbar = () => {
       if (!over) return
       const activeId = active.id
       const overId = over.id
-      const isActiveInMain = state.main.some((item) => item.id === activeId)
-      const isOverInMain = state.main.some((item) => item.id === overId)
+      const isActiveInMain = state.main.includes(activeId)
+      const isOverInMain = state.main.includes(overId)
 
       if (isActiveInMain !== isOverInMain) {
         // Moving between containers
         setState((prev) => {
           const sourceList = isActiveInMain ? "main" : "more"
           const targetList = isActiveInMain ? "more" : "main"
-          const item = prev[sourceList].find((item) => item.id === activeId)
+          const item = prev[sourceList].find((item) => item === activeId)
           if (!item) return prev
-          const newIndexOfOver = prev[targetList].findIndex((item) => item.id === overId)
+          const newIndexOfOver = prev[targetList].indexOf(overId)
           return {
             ...prev,
-            [sourceList]: prev[sourceList].filter((item) => item.id !== activeId),
+            [sourceList]: prev[sourceList].filter((item) => item !== activeId),
             [targetList]: [
               ...prev[targetList].slice(0, newIndexOfOver),
               item,
@@ -74,8 +71,8 @@ const CustomizeToolbar = () => {
       setState((prev) => {
         const list = isActiveInMain ? "main" : "more"
         const items = prev[list]
-        const oldIndex = items.findIndex((item) => item.id === activeId)
-        const newIndex = items.findIndex((item) => item.id === overId)
+        const oldIndex = items.indexOf(activeId)
+        const newIndex = items.indexOf(overId)
 
         return {
           ...prev,
@@ -96,18 +93,13 @@ const CustomizeToolbar = () => {
         <div className="space-y-4">
           {/* Main toolbar */}
           <SortableContext
-            items={state.main.map((item) => item.id)}
+            items={state.main.map((item) => item)}
             strategy={verticalListSortingStrategy}
           >
             <div className="rounded-lg border border-neutral-200 bg-neutral-50 pb-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
               <div className="flex w-full flex-wrap items-center justify-center gap-1 p-2">
-                {state.main.map((config) => (
-                  <SortableActionButton
-                    key={config.id}
-                    id={config.id}
-                    label={config.label.title}
-                    icon={config.icon}
-                  />
+                {state.main.map((id) => (
+                  <SortableActionButton key={id} id={id} />
                 ))}
               </div>
             </div>
@@ -115,7 +107,7 @@ const CustomizeToolbar = () => {
 
           {/* More panel */}
           <SortableContext
-            items={state.more.map((item) => item.id)}
+            items={state.more.map((item) => item)}
             strategy={verticalListSortingStrategy}
           >
             <div className="flex w-full items-center px-4 py-2 dark:border-neutral-800">
@@ -123,13 +115,8 @@ const CustomizeToolbar = () => {
             </div>
             <div className="rounded-lg border border-neutral-200 bg-neutral-50 pb-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
               <div className="flex w-full flex-wrap items-center justify-center gap-1 p-2">
-                {state.more.map((config) => (
-                  <SortableActionButton
-                    key={config.id}
-                    id={config.id}
-                    label={config.label.title}
-                    icon={config.icon}
-                  />
+                {state.more.map((id) => (
+                  <SortableActionButton key={id} id={id} />
                 ))}
               </div>
             </div>
@@ -147,7 +134,7 @@ export const useShowCustomizeToolbarModal = () => {
   return useCallback(() => {
     present({
       id: "customize-toolbar",
-      title: t("settings.customizeToolbar"),
+      title: t("settings.customizeToolbar.title"),
       content: () => <CustomizeToolbar />,
       overlay: true,
       clickOutsideToDismiss: true,

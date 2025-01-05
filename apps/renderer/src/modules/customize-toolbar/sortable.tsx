@@ -1,10 +1,13 @@
+import type { UniqueIdentifier } from "@dnd-kit/core"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import type { ReactNode } from "react"
-import * as React from "react"
 import { useMemo } from "react"
 
-const SortableItem = ({ id, children }: { id: string; children: ReactNode }) => {
+import { getCommand } from "../command/hooks/use-command"
+import type { FollowCommandId } from "../command/types"
+
+const SortableItem = ({ id, children }: { id: UniqueIdentifier; children: ReactNode }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
     animateLayoutChanges: () => true, // Enable layout animations
@@ -37,19 +40,17 @@ const SortableItem = ({ id, children }: { id: string; children: ReactNode }) => 
   )
 }
 
-export const SortableActionButton = ({
-  id,
-  label,
-  icon,
-}: {
-  id: string
-  label: string
-  icon: ReactNode
-}) => (
-  <SortableItem id={id}>
-    <div className="flex flex-col items-center rounded-lg p-2 hover:bg-theme-button-hover">
-      <div className="flex size-8 items-center justify-center text-xl">{icon}</div>
-      <div className="mt-1 text-center text-xs text-neutral-500 dark:text-neutral-400">{label}</div>
-    </div>
-  </SortableItem>
-)
+export const SortableActionButton = ({ id }: { id: UniqueIdentifier }) => {
+  const cmd = getCommand(id as FollowCommandId)
+  if (!cmd) return null
+  return (
+    <SortableItem id={id}>
+      <div className="flex flex-col items-center rounded-lg p-2 hover:bg-theme-button-hover">
+        <div className="flex size-8 items-center justify-center text-xl">{cmd.icon}</div>
+        <div className="mt-1 text-center text-xs text-neutral-500 dark:text-neutral-400">
+          {cmd.label.title}
+        </div>
+      </div>
+    </SortableItem>
+  )
+}
