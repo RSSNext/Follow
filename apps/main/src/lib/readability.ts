@@ -26,16 +26,16 @@ function sanitizeHTMLString(dirtyDocumentString: string) {
  * Decodes the response body of a `fetch` request into a string, ensuring proper character set handling.
  * @throws Will return "Failed to decode response content." if the decoding process encounters any errors.
  */
-async function decodeResponseBodyChars(res: Response): Promise<string> {
+async function decodeResponseBodyChars(res: Response) {
+  // Read the response body as an ArrayBuffer
+  const buffer = await res.arrayBuffer()
+  // Step 1: Get charset from Content-Type header
+  const contentType = res.headers.get("content-type")
+  const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
+  // Step 2: Use charset from Content-Type header or fall back to chardet
+  const detectedCharset = httpCharset || chardet.detect(Buffer.from(buffer)) || "utf-8"
+  // Step 3: Decode the response body using the detected charset
   try {
-    // Read the response body as an ArrayBuffer
-    const buffer = await res.arrayBuffer()
-    // Step 1: Get charset from Content-Type header
-    const contentType = res.headers.get("content-type")
-    const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
-    // Step 2: Use charset from Content-Type header or fall back to chardet
-    const detectedCharset = httpCharset || chardet.detect(Buffer.from(buffer)) || "utf-8"
-    // Step 3: Decode the response body using the detected charset
     const decodedText = new TextDecoder(detectedCharset, { fatal: false }).decode(buffer)
     return decodedText
   } catch {
