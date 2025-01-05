@@ -22,56 +22,34 @@ function sanitizeHTMLString(dirtyDocumentString: string) {
   return sanitizedDocumentString
 }
 
+/**
+ * Decodes the response body of a `fetch` request into a string, ensuring proper character set handling.
+ * @throws Will return "Failed to decode response content." if the decoding process encounters any errors.
+ */
+async function decodeResponseBodyChars(res: Response): Promise<string> {
+  try {
+    // Read the response body as an ArrayBuffer
+    const buffer = await res.arrayBuffer()
+    // Step 1: Get charset from Content-Type header
+    const contentType = res.headers.get("content-type")
+    const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
+    // Step 2: Use charset from Content-Type header or fall back to chardet
+    const detectedCharset = httpCharset || chardet.detect(Buffer.from(buffer)) || "utf-8"
+    // Step 3: Decode the response body using the detected charset
+    const decodedText = new TextDecoder(detectedCharset, { fatal: false }).decode(buffer)
+    return decodedText
+  } catch {
+    return "Failed to decode response content."
+  }
+}
+
 export async function readability(url: string) {
   const dirtyDocumentString = await fetch(url, {
     headers: {
       "User-Agent": userAgents,
       Accept: "text/html",
     },
-  })
-    .then(async (res) => {
-      // Read ArrayBuffer once
-      const buffer = await res.arrayBuffer()
-
-      // Step 1: Get charset from Content-Type header
-      const contentType = res.headers.get("content-type")
-      const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
-
-      // Step 2: If charset is not available, use chardet to detect it
-      const detectedCharset = httpCharset || chardet.detect(Buffer.from(buffer)) || "utf-8"
-
-      // Decode text using the detected charset
-      const text = new TextDecoder(detectedCharset, { fatal: false }).decode(buffer)
-
-      return { buffer, text, detectedCharset }
-    })
-    .then((res) => {
-      const { buffer, text, detectedCharset } = res
-      try {
-        // Step 3: Parse <meta> tag to check for charset
-        const { document } = parseHTML(text)
-        const metaCharset =
-          document.querySelector("meta[charset]")?.getAttribute("charset") ||
-          document
-            .querySelector('meta[http-equiv="Content-Type"]')
-            ?.getAttribute("content")
-            ?.match(/charset=([\w-]+)/i)?.[1]
-
-        // Step 4: Adjust charset if <meta> specifies a different one
-        const finalCharset = metaCharset || detectedCharset || "utf-8"
-        let decodedText = text
-        if (finalCharset.toLowerCase() !== detectedCharset.toLowerCase()) {
-          decodedText = new TextDecoder(finalCharset, { fatal: false }).decode(buffer)
-        }
-
-        return decodedText
-      } catch {
-        return text // Fallback to initially decoded content
-      }
-    })
-    .catch(() => {
-      return "" // Fallback in case of request or decoding failure
-    })
+  }).then(decodeResponseBodyChars)
 
   const sanitizedDocumentString = sanitizeHTMLString(dirtyDocumentString)
   const baseUrl = new URL(url).origin
