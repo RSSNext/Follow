@@ -11,56 +11,21 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
-import { ActionButton } from "@follow/components/ui/button/action-button.js"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useState } from "react"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useI18n } from "~/hooks/common"
 
 import { COMMAND_ID } from "../command/commands/id"
 import { getCommand } from "../command/hooks/use-command"
+import { SortableActionButton } from "./sortable"
 
 const customizeActionIds = [
   ...Object.values(COMMAND_ID.entry),
   ...Object.values(COMMAND_ID.integration),
 ]
-
-const SortableItem = ({ id, children }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id,
-    animateLayoutChanges: () => true, // Enable layout animations
-    transition: {
-      duration: 400,
-      easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-    },
-  })
-
-  const style = useMemo(() => {
-    return {
-      transform: CSS.Transform.toString(transform),
-      transition,
-      width: "80px", // Fixed width
-      height: "80px", // Fixed height
-      zIndex: isDragging ? 999 : undefined,
-    }
-  }, [transform, transition, isDragging])
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={` ${isDragging ? "cursor-grabbing opacity-90" : "cursor-grab"} transition-colors duration-200`}
-      {...attributes}
-      {...listeners}
-    >
-      {children}
-    </div>
-  )
-}
 
 const CustomizeToolbar = () => {
   const [items, setItems] = useState(() =>
@@ -76,7 +41,6 @@ const CustomizeToolbar = () => {
 
   const handleDragOver = (event: DragOverEvent) => {
     const { active, over } = event
-
     if (!over || active.id === over.id) return
 
     setItems((items) => {
@@ -87,20 +51,31 @@ const CustomizeToolbar = () => {
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragOver={handleDragOver}>
-      <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
-        <div className="mx-auto flex w-full max-w-[800px] flex-wrap items-center justify-center gap-3">
-          {items.map((config) => (
-            <SortableItem key={config.id} id={config.id}>
-              <div className="flex flex-col items-center">
-                <ActionButton icon={config.icon} />
-                <div className="mt-1 text-center text-xs text-gray-500">{config.label.title}</div>
-              </div>
-            </SortableItem>
-          ))}
-        </div>
-      </SortableContext>
-    </DndContext>
+    <div className="mx-auto w-full max-w-[800px]">
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold">Quick Actions</h2>
+        <p className="text-sm text-gray-500">Customize and reorder your frequently used actions</p>
+      </div>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragOver={handleDragOver}>
+        <SortableContext
+          items={items.map((item) => item.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="rounded-lg border border-neutral-200 bg-neutral-50 pb-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="flex w-full flex-wrap items-center justify-center gap-1 p-2">
+              {items.map((config) => (
+                <SortableActionButton
+                  key={config.id}
+                  id={config.id}
+                  label={config.label.title}
+                  icon={config.icon}
+                />
+              ))}
+            </div>
+          </div>
+        </SortableContext>
+      </DndContext>
+    </div>
   )
 }
 
