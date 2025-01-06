@@ -20,7 +20,7 @@ export const registerAppTray = () => {
 
   const icon = nativeImage.createFromPath(getTrayIconPath())
   // See https://stackoverflow.com/questions/41664208/electron-tray-icon-change-depending-on-dark-theme/41998326#41998326
-  const trayIcon = icon.resize({ width: 16 })
+  const trayIcon = isMacOS ? icon.resize({ width: 16 }) : icon
   trayIcon.setTemplateImage(true)
   tray = new Tray(trayIcon)
 
