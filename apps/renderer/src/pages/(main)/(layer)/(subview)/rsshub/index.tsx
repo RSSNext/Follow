@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
+import { EllipsisTextWithTooltip } from "@follow/components/ui/typography/index.js"
 import type { RSSHubModel } from "@follow/models"
 import { useTranslation } from "react-i18next"
 
@@ -68,7 +69,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
     <Table containerClassName="mt-2 overflow-x-auto">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[50px] font-bold" size="sm" />
+          <TableHead className="font-bold" size="sm" />
           <TableHead className="w-[150px] font-bold" size="sm">
             {t("rsshub.table.owner")}
           </TableHead>
@@ -89,7 +90,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
       </TableHeader>
       <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
         <TableRow>
-          <TableCell className="font-bold">Official</TableCell>
+          <TableCell className="text-nowrap font-bold">{t("rsshub.table.official")}</TableCell>
           <TableCell>
             <span className="flex items-center gap-2">
               <Logo className="size-6" />
@@ -120,14 +121,14 @@ function List({ data }: { data?: RSSHubModel[] }) {
         {data?.map((instance) => {
           return (
             <TableRow key={instance.id}>
-              <TableCell>
+              <TableCell className="text-nowrap">
                 {(() => {
                   const flag: string[] = []
                   if (status?.data?.usage?.rsshubId === instance.id) {
-                    flag.push("In use")
+                    flag.push(t("rsshub.table.inuse"))
                   }
                   if (instance.ownerUserId === me?.id) {
-                    flag.push("Yours")
+                    flag.push(t("rsshub.table.yours"))
                   }
                   return flag.join(" / ")
                 })()}
@@ -140,7 +141,9 @@ function List({ data }: { data?: RSSHubModel[] }) {
                 />
               </TableCell>
               <TableCell>
-                <div className="line-clamp-2">{instance.description}</div>
+                <EllipsisTextWithTooltip className="line-clamp-2">
+                  {instance.description}
+                </EllipsisTextWithTooltip>
               </TableCell>
               <TableCell>
                 <span className="flex items-center justify-end gap-1">

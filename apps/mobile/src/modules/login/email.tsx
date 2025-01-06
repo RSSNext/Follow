@@ -54,26 +54,35 @@ export function EmailLogin() {
   return (
     <View className="mx-auto flex w-full max-w-sm gap-6">
       <View className="gap-4">
-        <Input
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="email-address"
-          autoComplete="email"
-          placeholder="Email"
-          control={control}
-          name="email"
-          className="border-gray-3 placeholder:font-sn placeholder:text-placeholder-text rounded-lg border px-3 py-2 focus:border-accent"
-        />
-        <Input
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoComplete="current-password"
-          placeholder="Password"
-          control={control}
-          name="password"
-          secureTextEntry
-          className="border-gray-3 placeholder:font-sn placeholder:text-placeholder-text rounded-lg border px-3 py-2 focus:border-accent"
-        />
+        <View className="border-b-separator border-b-hairline" />
+        <View className="flex-row">
+          <ThemedText className="w-28">Account</ThemedText>
+          <Input
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            autoComplete="email"
+            control={control}
+            name="email"
+            placeholder="Email"
+            className="placeholder:font-sn text-text flex-1"
+          />
+        </View>
+        <View className="border-b-separator border-b-hairline" />
+        <View className="flex-row">
+          <ThemedText className="w-28">Password</ThemedText>
+          <Input
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="current-password"
+            control={control}
+            name="password"
+            placeholder="Enter password"
+            className="placeholder:font-sn text-text flex-1"
+            secureTextEntry
+          />
+        </View>
+        <View className="border-b-separator border-b-hairline" />
       </View>
       <TouchableOpacity
         disabled={submitMutation.isPending || !formState.isValid}
@@ -83,7 +92,7 @@ export function EmailLogin() {
         {submitMutation.isPending ? (
           <ActivityIndicator className="text-white" />
         ) : (
-          <ThemedText className="text-center text-white">Continue with Email</ThemedText>
+          <ThemedText className="text-center text-white">Continue</ThemedText>
         )}
       </TouchableOpacity>
     </View>

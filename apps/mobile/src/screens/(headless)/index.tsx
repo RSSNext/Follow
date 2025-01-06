@@ -34,7 +34,7 @@ export default function Index() {
   }
 
   return (
-    <View className="flex-1 items-center justify-center pt-safe">
+    <View className="flex-1 items-center justify-center pt-safe dark:bg-[#121212]">
       {isCookieReady && <FollowWebView webViewRef={webViewRef} />}
 
       {__DEV__ && (

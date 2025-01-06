@@ -9753,6 +9753,10 @@ declare const auth: {
         advanced: {
             generateId: false;
         };
+        session: {
+            updateAge: number;
+            expiresIn: number;
+        };
         basePath: string;
         trustedOrigins: string[];
         user: {
@@ -11681,6 +11685,34 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             };
             output: {
                 code: 0;
+                feed: {
+                    description: string | null;
+                    title: string | null;
+                    id: string;
+                    image: string | null;
+                    url: string;
+                    siteUrl: string | null;
+                    checkedAt: string;
+                    lastModifiedHeader: string | null;
+                    etagHeader: string | null;
+                    ttl: number | null;
+                    errorMessage: string | null;
+                    errorAt: string | null;
+                    ownerUserId: string | null;
+                    language: string | null;
+                } | null;
+                list: {
+                    description: string | null;
+                    title: string;
+                    id: string;
+                    image: string | null;
+                    view: number;
+                    ownerUserId: string;
+                    language: string | null;
+                    feedIds: string[];
+                    fee: number;
+                    timelineUpdatedAt: string;
+                } | null;
             };
             outputFormat: "json";
             status: 200;
@@ -12876,6 +12908,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     completed: number;
                     wait: number;
                     failed: number;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/accounts": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    duplicateEmails: string[];
+                    duplicateAccountIds: string[];
                 };
             };
             outputFormat: "json";

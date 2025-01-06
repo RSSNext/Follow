@@ -51,12 +51,12 @@
   "10001": "Inbox already exists",
   "10002": "Inbox limit exceeded",
   "10003": "Inbox permission denied",
-  "11000": "RSSHub route not found",
-  "11001": "You are not the owner of this RSSHub instance",
-  "11002": "RSSHub is in use",
-  "11003": "RSSHub not found",
-  "11004": "RSSHub user limit exceeded",
-  "11005": "RSSHub purchase not found",
-  "11006": "RSSHub config invalid",
-  "12000": "Action limit exceeded"
+  "12000": "Action limit exceeded",
+  "13000": "RSSHub route not found",
+  "13001": "You are not the owner of this RSSHub instance",
+  "13002": "RSSHub is in use",
+  "13003": "RSSHub not found",
+  "13004": "RSSHub user limit exceeded",
+  "13005": "RSSHub purchase not found",
+  "13006": "RSSHub config invalid"
 }

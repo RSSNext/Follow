@@ -84,6 +84,7 @@ export default function DebugPanel() {
         },
       ],
     },
+
     {
       title: "App",
       items: [

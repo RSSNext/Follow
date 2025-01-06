@@ -1,8 +1,10 @@
 import { useAtom } from "jotai"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Modal, Text, TouchableOpacity, View } from "react-native"
+import { Text, TouchableOpacity, View } from "react-native"
 import Animated, {
   Easing,
+  FadeIn,
+  FadeOut,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -11,6 +13,8 @@ import Animated, {
 
 import { loadingAtom, loadingVisibleAtom } from "@/src/atoms/app"
 import { Loading3CuteReIcon } from "@/src/icons/loading_3_cute_re"
+
+import { BlurEffect } from "./HeaderBlur"
 
 export const LoadingContainer = () => {
   const rotate = useSharedValue(0)
@@ -25,6 +29,8 @@ export const LoadingContainer = () => {
       finish: null,
       cancel: null,
       thenable: null,
+      done: null,
+      error: null,
     })
   }, [setLoadingCaller])
 
@@ -41,16 +47,24 @@ export const LoadingContainer = () => {
 
   useEffect(() => {
     if (loadingCaller.thenable) {
-      loadingCaller.thenable.finally(() => {
-        setVisible(false)
-        setShowCancelButton(false)
+      loadingCaller.thenable
+        .then((r) => {
+          loadingCaller.done?.(r)
+        })
+        .catch((err) => {
+          console.error(err)
+          loadingCaller.error?.(err)
+        })
+        .finally(() => {
+          setVisible(false)
+          setShowCancelButton(false)
 
-        resetLoadingCaller()
+          resetLoadingCaller()
 
-        loadingCaller.finish?.()
-      })
+          loadingCaller.finish?.()
+        })
     }
-  }, [loadingCaller.thenable])
+  }, [loadingCaller.thenable, loadingCaller.done, loadingCaller.error, loadingCaller.finish])
 
   const cancelTimerRef = useRef<NodeJS.Timeout | null>(null)
   useEffect(() => {
@@ -78,23 +92,30 @@ export const LoadingContainer = () => {
     resetLoadingCaller()
   }
 
-  return (
-    <Modal visible={visible} animationType="fade" transparent>
-      <View className="flex-1 items-center justify-center bg-black/30">
-        <View className="border-system-fill/40 rounded-2xl border bg-black/50 p-12 drop-shadow dark:bg-white/5">
-          <Animated.View style={rotateStyle}>
-            <Loading3CuteReIcon height={36} width={36} color="#fff" />
-          </Animated.View>
-        </View>
+  if (!visible) {
+    return null
+  }
 
-        {showCancelButton && (
-          <View className="absolute inset-x-0 bottom-24 flex-row justify-center">
-            <TouchableOpacity onPress={cancel}>
-              <Text className="text-center text-lg text-accent">Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+  return (
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      className="absolute inset-0 flex-1 items-center justify-center"
+    >
+      <View className="border-system-fill/40 relative rounded-2xl border p-12">
+        <BlurEffect />
+        <Animated.View style={rotateStyle}>
+          <Loading3CuteReIcon height={36} width={36} color="#fff" />
+        </Animated.View>
       </View>
-    </Modal>
+
+      {showCancelButton && (
+        <View className="absolute inset-x-0 bottom-24 flex-row justify-center">
+          <TouchableOpacity onPress={cancel}>
+            <Text className="text-center text-lg text-accent">Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </Animated.View>
   )
 }

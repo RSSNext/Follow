@@ -152,11 +152,13 @@ const Tab: TabComponent = ({ tab }) => {
   return (
     <View className="bg-system-background flex-1">
       <FlashList
+        estimatedItemSize={150}
         ref={listRef}
         data={alphabetGroups}
         keyExtractor={keyExtractor}
         getItemType={getItemType}
         renderItem={ItemRenderer}
+        scrollIndicatorInsets={{ right: -2 }}
         contentContainerStyle={{ paddingBottom: tabHeight }}
         removeClippedSubviews
       />

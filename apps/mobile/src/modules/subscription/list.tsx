@@ -8,20 +8,12 @@ import { useAtom } from "jotai"
 import { useColorScheme } from "nativewind"
 import type { FC } from "react"
 import { createContext, memo, useContext, useEffect, useMemo, useRef } from "react"
-import {
-  Animated,
-  Easing,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useAnimatedValue,
-  View,
-} from "react-native"
+import { Animated, Easing, Image, StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import PagerView from "react-native-pager-view"
 import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { AnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { AccordionItem } from "@/src/components/ui/accordion"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -293,8 +285,6 @@ const UnGroupedList: FC<{
 
 const GroupedContext = createContext<string | null>(null)
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
-
 // const CategoryList: FC<{
 //   grouped: Record<string, string[]>
 // }> = ({ grouped }) => {
@@ -416,6 +406,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
     //     prevOpenedRow = swipeableRef.current
     //   }}
     // >
+    // <ReAnimated.View key={id} layout={CurvedTransition} exiting={FadeOut}>
     <SubscriptionFeedItemContextMenu id={id} view={view}>
       <ItemPressable
         className={cn(
@@ -442,6 +433,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
         )}
       </ItemPressable>
     </SubscriptionFeedItemContextMenu>
+    // </ReAnimated.View>
     // </Swipeable>
   )
 })

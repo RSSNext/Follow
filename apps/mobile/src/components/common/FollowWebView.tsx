@@ -117,24 +117,35 @@ const useDeepLink = ({
 }) => {
   const handleDeepLink = useCallback(
     async (url: string) => {
-      const { queryParams } = Linking.parse(url)
-      if (!queryParams) {
-        console.error("Invalid URL! queryParams is not available", url)
-        return
+      const { queryParams, path, hostname } = Linking.parse(url)
+
+      const pathname = (hostname || "") + (path || "")
+      const pathnameTrimmed = pathname?.endsWith("/") ? pathname.slice(0, -1) : pathname
+
+      switch (pathnameTrimmed) {
+        case "/add":
+        case "/follow": {
+          if (!queryParams) {
+            console.error("Invalid URL! queryParams is not available", url)
+            return
+          }
+
+          const id = queryParams["id"] ?? undefined
+          const isList = queryParams["type"] === "list"
+          // const urlParam = queryParams["url"] ?? undefined
+          if (!id || typeof id !== "string") {
+            console.error("Invalid URL! id is not a string", url)
+            return
+          }
+          const injectJavaScript = webViewRef.current?.injectJavaScript
+          if (!injectJavaScript) {
+            console.error("injectJavaScript is not available")
+            return
+          }
+          callWebviewExpose(injectJavaScript).follow({ id, isList })
+          return
+        }
       }
-      const id = queryParams["id"] ?? undefined
-      const isList = queryParams["type"] === "list"
-      // const urlParam = queryParams["url"] ?? undefined
-      if (!id || typeof id !== "string") {
-        console.error("Invalid URL! id is not a string", url)
-        return
-      }
-      const injectJavaScript = webViewRef.current?.injectJavaScript
-      if (!injectJavaScript) {
-        console.error("injectJavaScript is not available")
-        return
-      }
-      callWebviewExpose(injectJavaScript).follow({ id, isList })
     },
     [webViewRef],
   )
