@@ -1,4 +1,4 @@
-import type { DragOverEvent, UniqueIdentifier } from "@dnd-kit/core"
+import type { DragOverEvent } from "@dnd-kit/core"
 import {
   closestCenter,
   DndContext,
@@ -13,24 +13,16 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
-import { COMMAND_ID } from "../command/commands/id"
+import { setActionOrder, useActionOrder } from "./atoms"
 import { DroppableContainer, SortableActionButton } from "./dnd"
 
-const DEFAULT_ACTION_ORDER: {
-  main: UniqueIdentifier[]
-  more: UniqueIdentifier[]
-} = {
-  main: Object.values(COMMAND_ID.entry),
-  more: [...Object.values(COMMAND_ID.integration), COMMAND_ID.settings.customizeToolbar],
-}
-
 const CustomizeToolbar = () => {
-  const [state, setState] = useState(DEFAULT_ACTION_ORDER)
+  const actionOrder = useActionOrder()
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -44,44 +36,40 @@ const CustomizeToolbar = () => {
       if (!over) return
       const activeId = active.id
       const overId = over.id
-      const isActiveInMain = state.main.includes(activeId)
-      const isOverInMain = overId === "container-main" || state.main.includes(overId)
+      const isActiveInMain = actionOrder.main.includes(activeId)
+      const isOverInMain = overId === "container-main" || actionOrder.main.includes(overId)
       const isCrossContainer = isActiveInMain !== isOverInMain
 
       if (isCrossContainer) {
         // Moving between containers
-        setState((prev) => {
-          const sourceList = isActiveInMain ? "main" : "more"
-          const targetList = isActiveInMain ? "more" : "main"
-          const item = prev[sourceList].find((item) => item === activeId)
-          if (!item) return prev
-          const newIndexOfOver = prev[targetList].indexOf(overId)
-          return {
-            ...prev,
-            [sourceList]: prev[sourceList].filter((item) => item !== activeId),
-            [targetList]: [
-              ...prev[targetList].slice(0, newIndexOfOver),
-              item,
-              ...prev[targetList].slice(newIndexOfOver),
-            ],
-          }
+        const sourceList = isActiveInMain ? "main" : "more"
+        const targetList = isActiveInMain ? "more" : "main"
+        const item = actionOrder[sourceList].find((item) => item === activeId)
+        if (!item) return
+        const newIndexOfOver = actionOrder[targetList].indexOf(overId)
+        setActionOrder({
+          ...actionOrder,
+          [sourceList]: actionOrder[sourceList].filter((item) => item !== activeId),
+          [targetList]: [
+            ...actionOrder[targetList].slice(0, newIndexOfOver),
+            item,
+            ...actionOrder[targetList].slice(newIndexOfOver),
+          ],
         })
         return
       }
       // Reordering within container
-      setState((prev) => {
-        const list = isActiveInMain ? "main" : "more"
-        const items = prev[list]
-        const oldIndex = items.indexOf(activeId)
-        const newIndex = items.indexOf(overId)
+      const list = isActiveInMain ? "main" : "more"
+      const items = actionOrder[list]
+      const oldIndex = items.indexOf(activeId)
+      const newIndex = items.indexOf(overId)
 
-        return {
-          ...prev,
-          [list]: arrayMove(items, oldIndex, newIndex),
-        }
+      setActionOrder({
+        ...actionOrder,
+        [list]: arrayMove(items, oldIndex, newIndex),
       })
     },
-    [state.main],
+    [actionOrder],
   )
 
   return (
@@ -96,26 +84,27 @@ const CustomizeToolbar = () => {
 
           <DroppableContainer id="container-main">
             <SortableContext
-              items={state.main.map((item) => item)}
+              items={actionOrder.main.map((item) => item)}
               strategy={verticalListSortingStrategy}
             >
-              {state.main.map((id) => (
+              {actionOrder.main.map((id) => (
                 <SortableActionButton key={id} id={id} />
               ))}
             </SortableContext>
           </DroppableContainer>
 
           {/* More panel */}
-          <div className="flex w-full items-center px-4 py-2 dark:border-neutral-800">
+          <div className="mb-4">
             <h2 className="text-lg font-semibold">More Actions</h2>
+            <p className="text-sm text-gray-500">Will be shown in the dropdown menu</p>
           </div>
 
           <DroppableContainer id="container-more">
             <SortableContext
-              items={state.more.map((item) => item)}
+              items={actionOrder.more.map((item) => item)}
               strategy={verticalListSortingStrategy}
             >
-              {state.more.map((id) => (
+              {actionOrder.more.map((id) => (
                 <SortableActionButton key={id} id={id} />
               ))}
             </SortableContext>
