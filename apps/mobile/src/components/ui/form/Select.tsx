@@ -1,5 +1,5 @@
 import { cn } from "@follow/utils"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
 import { Text, View } from "react-native"
 import ContextMenu from "react-native-context-menu-view"
@@ -47,6 +47,10 @@ export function Select<T>({
     setCurrentValue(value)
     onValueChange(value)
   })
+
+  useEffect(() => {
+    onValueChange(currentValue)
+  }, [])
 
   const systemFill = useColor("text")
 

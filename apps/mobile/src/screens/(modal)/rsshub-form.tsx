@@ -24,6 +24,7 @@ import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
 import { useLoadingCallback } from "@/src/hooks/useLoadingCallback"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { feedSyncServices } from "@/src/store/feed/store"
+import type { FeedModel } from "@/src/store/feed/types"
 import { useColor } from "@/src/theme/colors"
 
 interface RsshubFormParams {
@@ -124,7 +125,6 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
           <View className="bg-system-grouped-background-2 mx-2 gap-4 rounded-lg px-3 py-6">
             {keys.map((keyItem) => {
               const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
-              const formRegister = form.register(keyItem.name)
 
               return (
                 <View key={keyItem.name}>
@@ -157,18 +157,18 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                   )}
 
                   {!!parameters?.options && (
-                    <Select
-                      label={keyItem.name}
-                      wrapperClassName="mt-2"
-                      options={parameters.options}
-                      value={form.getValues(keyItem.name)}
-                      onValueChange={(value) => {
-                        formRegister.onChange({
-                          target: {
-                            [keyItem.name]: value,
-                          },
-                        })
-                      }}
+                    <Controller
+                      name={keyItem.name}
+                      control={form.control}
+                      render={({ field: { onChange, value } }) => (
+                        <Select
+                          label={keyItem.name}
+                          wrapperClassName="mt-2"
+                          options={parameters.options ?? []}
+                          value={value}
+                          onValueChange={onChange}
+                        />
+                      )}
                     />
                   )}
 
@@ -297,11 +297,12 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
       }
 
       loadingFn(feedSyncServices.fetchFeedById({ url: finalUrl }), {
-        finish: () => {
+        done: (feed) => {
           router.push({
             pathname: "/follow",
             params: {
               url: finalUrl,
+              id: (feed as FeedModel)?.id,
             },
           })
         },

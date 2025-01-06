@@ -1,5 +1,3 @@
-import { nanoid } from "nanoid"
-
 import type { FeedSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
 import { FeedService } from "@/src/services/feed"
@@ -70,7 +68,7 @@ class FeedSyncServices {
       },
     })
 
-    const nonce = nanoid(8)
+    const nonce = Math.random().toString(36).slice(2, 15)
 
     const finalData = res.data.feed as FeedModel
     if (!finalData.id) {
@@ -78,10 +76,7 @@ class FeedSyncServices {
     }
     feedActions.upsertMany([finalData])
 
-    return {
-      ...res.data,
-      feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
-    }
+    return !finalData.id ? { ...finalData, id: nonce } : finalData
   }
 }
 export const feedSyncServices = new FeedSyncServices()

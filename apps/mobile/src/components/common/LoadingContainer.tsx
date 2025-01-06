@@ -52,6 +52,7 @@ export const LoadingContainer = () => {
           loadingCaller.done?.(r)
         })
         .catch((err) => {
+          console.error(err)
           loadingCaller.error?.(err)
         })
         .finally(() => {
