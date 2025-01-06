@@ -233,6 +233,7 @@ export const EntryList: FC<EntryListProps> = memo(
                   ref={rowVirtualizer.measureElement}
                   className="absolute left-0 top-0 w-full will-change-transform"
                   key={virtualRow.key}
+                  data-index={virtualRow.index}
                   style={{
                     transform,
                   }}

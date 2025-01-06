@@ -26,12 +26,12 @@ export function withResponsiveSyncComponent<P extends object, R = any>(
 ) {
   return forwardRef<R, P>(function ResponsiveLayout(props: PropsWithoutRef<P>, ref) {
     const isMobile = useMobile()
-    const componentProps = { ...props, ref } as P & RefAttributes<R>
+    const componentProps = { ...props } as P & RefAttributes<R>
 
     return isMobile ? (
       <MobileComponent {...componentProps} />
     ) : (
-      <DesktopComponent {...componentProps} />
+      <DesktopComponent {...componentProps} ref={ref} />
     )
   })
 }
