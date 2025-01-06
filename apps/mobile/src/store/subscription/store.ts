@@ -10,6 +10,8 @@ import { feedActions } from "../feed/store"
 import { inboxActions } from "../inbox/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
+import { whoami } from "../user/getters"
+import type { SubscriptionForm } from "./types"
 import { getInboxStoreId, getSubscriptionStoreId } from "./utils"
 
 type FeedId = string
@@ -186,6 +188,45 @@ class SubscriptionSyncService {
     })
 
     await tx.run()
+  }
+
+  async subscribe(subscription: SubscriptionForm) {
+    const data = await apiClient.subscriptions.$post({
+      json: {
+        url: subscription.url,
+        view: subscription.view,
+        category: subscription.category,
+        isPrivate: subscription.isPrivate,
+        title: subscription.title,
+        listId: subscription.listId,
+      },
+    })
+
+    if (data.feed) {
+      feedActions.upsertMany([data.feed])
+    }
+
+    if (data.list) {
+      listActions.upsertMany([
+        {
+          ...data.list,
+          userId: data.list.ownerUserId,
+        },
+      ])
+    }
+
+    // Insert to subscription
+    subscriptionActions.upsertMany([
+      {
+        ...subscription,
+        type: data.list ? "list" : "feed",
+        createdAt: new Date().toISOString(),
+        feedId: data.feed?.id ?? null,
+        listId: data.list?.id ?? null,
+        inboxId: null,
+        userId: whoami()?.id ?? "",
+      },
+    ])
   }
 
   async unsubscribe(subscriptionId: string) {

@@ -1,16 +1,23 @@
 import { FeedViewType } from "@follow/constants"
+import { withOpacity } from "@follow/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Stack, useLocalSearchParams } from "expo-router"
+import { router, Stack, useLocalSearchParams } from "expo-router"
 import { Controller, useForm } from "react-hook-form"
-import { ScrollView, Text, View } from "react-native"
+import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 
 import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
+import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { CheckLineIcon } from "@/src/icons/check_line"
+import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { useFeed } from "@/src/store/feed/hooks"
+import { subscriptionSyncService } from "@/src/store/subscription/store"
+import type { SubscriptionForm } from "@/src/store/subscription/types"
+import { useColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
   view: z.string(),
@@ -32,12 +39,39 @@ export default function Follow() {
     defaultValues,
   })
 
+  const submit = async () => {
+    const values = form.getValues()
+    const body: SubscriptionForm = {
+      url: feed.url,
+      view: Number.parseInt(values.view),
+      category: values.category ?? "",
+      isPrivate: values.isPrivate ?? false,
+      title: values.title ?? "",
+      feedId: feed.id,
+    }
+
+    await subscriptionSyncService.subscribe(body)
+
+    if (router.canDismiss()) {
+      router.dismiss()
+    }
+  }
+
+  const { isValid, isDirty } = form.formState
+  const label = useColor("label")
+
   return (
     <ScrollView contentContainerClassName="px-2 pt-4 gap-y-4">
       <Stack.Screen
         options={{
           title: `Follow - ${feed?.title}`,
           headerLeft: ModalHeaderCloseButton,
+          gestureEnabled: !isDirty,
+          headerRight: () => (
+            <TouchableOpacity onPress={form.handleSubmit(submit)} disabled={!isValid}>
+              <CheckLineIcon color={isValid ? label : withOpacity(label, 0.5)} />
+            </TouchableOpacity>
+          ),
         }}
       />
 
@@ -101,6 +135,18 @@ export default function Follow() {
                   description="Private feeds are only visible to you."
                   onValueChange={onChange}
                 />
+              )}
+            />
+          </View>
+
+          <View className="-mx-4">
+            <FormLabel className="mb-4 pl-5" label="View" optional />
+
+            <Controller
+              name="view"
+              control={form.control}
+              render={({ field: { onChange, value } }) => (
+                <FeedViewSelector value={value as any as FeedViewType} onChange={onChange} />
               )}
             />
           </View>

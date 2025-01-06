@@ -232,6 +232,8 @@ const ScreenOptions = memo(({ name, routeName, route, routePrefix }: ScreenOptio
     <Stack.Screen
       options={{
         headerLeft: ModalHeaderCloseButton,
+        gestureEnabled: !form.formState.isDirty,
+
         headerRight: () => (
           <FormProvider form={form}>
             <ModalHeaderSubmitButton routePrefix={routePrefix} route={route} />
