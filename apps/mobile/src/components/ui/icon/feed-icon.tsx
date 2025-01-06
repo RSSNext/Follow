@@ -1,9 +1,9 @@
 import type { FeedViewType } from "@follow/constants"
 import { getUrlIcon } from "@follow/utils/src/utils"
+import type { ImageProps } from "expo-image"
+import { Image } from "expo-image"
 import type { ReactNode } from "react"
 import { useMemo } from "react"
-import type { ImageProps } from "react-native"
-import { Image } from "react-native"
 
 import type { FeedSchema } from "@/src/database/schemas/types"
 
@@ -57,5 +57,5 @@ export function FeedIcon({
     }
   }, [fallback, feed, siteUrl])
 
-  return <Image height={size} width={size} source={{ uri: src }} {...props} />
+  return <Image style={{ height: size, width: size }} source={src} {...props} />
 }
