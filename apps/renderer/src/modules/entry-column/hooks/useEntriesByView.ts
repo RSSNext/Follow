@@ -54,6 +54,7 @@ export const useEntriesByView = ({
     {
       refetchInterval: 1000 * 60,
       enabled: !!fetchedTime && !pauseQuery,
+      notifyOnChangeProps: ["data"],
     },
   )
   const hasUpdate = useMemo(

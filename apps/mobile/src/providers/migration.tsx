@@ -15,7 +15,7 @@ export const MigrationProvider = ({ children }: { children: ReactNode }) => {
       <View className="flex-1 items-center justify-center">
         <BugCuteReIcon color="#ff0000" height={48} width={48} />
         <Text className="text-text mt-5">Oops, something went wrong...</Text>
-        <View className="bg-system-grouped-background mt-2 rounded-md p-2">
+        <View className="bg-system-background mt-2 rounded-md p-2">
           <Text className="text-text font-mono">{error.message}</Text>
         </View>
 

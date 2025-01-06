@@ -1,22 +1,10 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
 import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
-import type { Element, Parent, Text } from "hast"
-import type { Schema } from "hast-util-sanitize"
+import { parseHtml as parseHtmlGeneral } from "@follow/components/ui/markdown/parse-html.js"
+import type { Element } from "hast"
 import type { Components } from "hast-util-to-jsx-runtime"
-import { toJsxRuntime } from "hast-util-to-jsx-runtime"
-import { toText } from "hast-util-to-text"
 import { createElement } from "react"
-import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 import { renderToString } from "react-dom/server"
-import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
-import rehypeParse from "rehype-parse"
-import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
-import rehypeStringify from "rehype-stringify"
-import { unified } from "unified"
-import type { Node } from "unist"
-import { visit } from "unist-util-visit"
-import { visitParents } from "unist-util-visit-parents"
-import { VFile } from "vfile"
 
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
@@ -35,31 +23,6 @@ function markInlineImage(node?: Element) {
   }
 }
 
-/**
- * Remove the last <br> element in the tree
- */
-function rehypeTrimEndBrElement() {
-  function trim(tree: Parent): void {
-    if (!Array.isArray(tree.children) || tree.children.length === 0) {
-      return
-    }
-
-    for (let i = tree.children.length - 1; i >= 0; i--) {
-      const item = tree.children[i]
-      if (item.type === "element") {
-        if (item.tagName === "br") {
-          tree.children.pop()
-          continue
-        } else {
-          trim(item)
-        }
-      }
-      break
-    }
-  }
-  return trim
-}
-
 export const parseHtml = (
   content: string,
   options?: Partial<{
@@ -67,204 +30,150 @@ export const parseHtml = (
     noMedia?: boolean
   }>,
 ) => {
-  const file = new VFile(content)
-  const { renderInlineStyle = false, noMedia = false } = options || {}
+  return parseHtmlGeneral(content, {
+    ...options,
+    components: {
+      a: ({ node, ...props }) => {
+        // markInlineImage(node)
+        return createElement(MarkdownLink, { ...props } as any)
+      },
+      img: Img,
 
-  const rehypeSchema: Schema = { ...defaultSchema }
-  rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "math"]
+      h1: (props) => {
+        markInlineImage(props.node)
+        return createHeadingRenderer(1)(props)
+      },
+      h2: (props) => {
+        markInlineImage(props.node)
+        return createHeadingRenderer(2)(props)
+      },
+      h3: (props) => {
+        markInlineImage(props.node)
+        return createHeadingRenderer(3)(props)
+      },
+      h4: (props) => {
+        markInlineImage(props.node)
+        return createHeadingRenderer(4)(props)
+      },
+      h5: (props) => {
+        markInlineImage(props.node)
+        return createHeadingRenderer(5)(props)
+      },
+      h6: (props) => {
+        markInlineImage(props.node)
+        return createHeadingRenderer(6)(props)
+      },
+      style: Style,
 
-  if (noMedia) {
-    rehypeSchema.tagNames = rehypeSchema.tagNames?.filter(
-      (tag) => tag !== "img" && tag !== "picture",
-    )
-  } else {
-    rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "video", "style", "figure"]
-    rehypeSchema.attributes = {
-      ...rehypeSchema.attributes,
-      "*": renderInlineStyle
-        ? [...rehypeSchema.attributes!["*"], "style", "class"]
-        : rehypeSchema.attributes!["*"],
-      video: ["src", "poster"],
-    }
-  }
+      video: ({ node, ...props }) =>
+        createElement(Media, { ...props, popper: true, type: "video" }),
+      p: ({ node, ...props }) => {
+        if (node?.children && node.children.length !== 1) {
+          for (const item of node.children) {
+            item.type === "element" &&
+              item.tagName === "img" &&
+              ((item.properties as any).inline = true)
+          }
+        }
+        return createElement(MarkdownP, props, props.children)
+      },
+      span: ({ node, ...props }) => {
+        markInlineImage(node)
+        return createElement("span", props, props.children)
+      },
+      b: ({ node, ...props }) => {
+        markInlineImage(node)
+        return createElement("b", props, props.children)
+      },
+      i: ({ node, ...props }) => {
+        markInlineImage(node)
+        return createElement("i", props, props.children)
+      },
+      // @ts-expect-error
+      math: Math,
+      hr: ({ node, ...props }) =>
+        createElement("hr", {
+          ...props,
+          className: tw`scale-x-50`,
+        }),
+      input: ({ node, ...props }) => {
+        if (props.type === "checkbox") {
+          return createElement(Checkbox, {
+            ...props,
+            disabled: false,
+            className: tw`pointer-events-none mr-2`,
+          })
+        }
+        return createElement("input", props)
+      },
+      pre: ({ node, ...props }) => {
+        if (!props.children) return null
 
-  const pipeline = unified()
-    .use(rehypeParse, { fragment: true })
-    .use(rehypeSanitize, rehypeSchema)
-    .use(rehypeTrimEndBrElement)
-    .use(rehypeInferDescriptionMeta)
-    .use(rehypeStringify)
+        let language = ""
 
-  const tree = pipeline.parse(content)
+        let codeString = null as string | null
+        if (props.className?.includes("language-")) {
+          language = props.className.replace("language-", "")
+        }
 
-  rehypeUrlToAnchor(tree)
+        if (typeof props.children !== "object") {
+          codeString = props.children.toString()
+        } else {
+          const propsChildren = props.children
+          const children = Array.isArray(propsChildren)
+            ? propsChildren.find((i) => i.type === "code")
+            : propsChildren
 
-  // console.log("tree", tree)
+          // Don't process not code block
+          if (!children) return createElement("pre", props, props.children)
 
-  const hastTree = pipeline.runSync(tree, file)
+          if (
+            "type" in children &&
+            children.type === "code" &&
+            children.props.className?.includes("language-")
+          ) {
+            language = children.props.className.replace("language-", "")
+          }
+          const code = ("props" in children && children.props.children) || children
+          if (!code) return null
 
-  const images = [] as string[]
+          try {
+            codeString = extractCodeFromHtml(renderToString(code))
+          } catch (error) {
+            console.error("Code Block Render Error", error)
+            return createElement("pre", props, props.children)
+          }
+        }
 
-  visit(tree, "element", (node) => {
-    if (node.tagName === "img" && node.properties.src) {
-      images.push(node.properties.src as string)
-    }
+        if (!codeString) return createElement("pre", props, props.children)
+
+        return createElement(ShikiHighLighter, {
+          code: codeString.trimEnd(),
+          language: language.toLowerCase(),
+        })
+      },
+      figure: ({ node, ...props }) =>
+        createElement(
+          "figure",
+          {
+            className: "max-w-full",
+          },
+          props.children,
+        ),
+      table: ({ node, ...props }) =>
+        createElement(
+          "div",
+          {
+            className: "w-full overflow-x-auto",
+          },
+
+          createElement("table", {
+            ...props,
+            className: tw`w-full my-0`,
+          }),
+        ),
+    },
   })
-
-  return {
-    hastTree,
-    images,
-    toContent: () =>
-      toJsxRuntime(hastTree, {
-        Fragment,
-        ignoreInvalidStyle: true,
-        jsx: (type, props, key) => jsx(type as any, props, key),
-        jsxs: (type, props, key) => jsxs(type as any, props, key),
-        passNode: true,
-        components: {
-          a: ({ node, ...props }) => {
-            markInlineImage(node)
-            return createElement(MarkdownLink, { ...props } as any)
-          },
-          img: Img,
-
-          h1: (props) => {
-            markInlineImage(props.node)
-            return createHeadingRenderer(1)(props)
-          },
-          h2: (props) => {
-            markInlineImage(props.node)
-            return createHeadingRenderer(2)(props)
-          },
-          h3: (props) => {
-            markInlineImage(props.node)
-            return createHeadingRenderer(3)(props)
-          },
-          h4: (props) => {
-            markInlineImage(props.node)
-            return createHeadingRenderer(4)(props)
-          },
-          h5: (props) => {
-            markInlineImage(props.node)
-            return createHeadingRenderer(5)(props)
-          },
-          h6: (props) => {
-            markInlineImage(props.node)
-            return createHeadingRenderer(6)(props)
-          },
-          style: Style,
-
-          video: ({ node, ...props }) =>
-            createElement(Media, { ...props, popper: true, type: "video" }),
-          p: ({ node, ...props }) => {
-            if (node?.children && node.children.length !== 1) {
-              for (const item of node.children) {
-                item.type === "element" &&
-                  item.tagName === "img" &&
-                  ((item.properties as any).inline = true)
-              }
-            }
-            return createElement(MarkdownP, props, props.children)
-          },
-          span: ({ node, ...props }) => {
-            markInlineImage(node)
-            return createElement("span", props, props.children)
-          },
-          b: ({ node, ...props }) => {
-            markInlineImage(node)
-            return createElement("b", props, props.children)
-          },
-          i: ({ node, ...props }) => {
-            markInlineImage(node)
-            return createElement("i", props, props.children)
-          },
-          // @ts-expect-error
-          math: Math,
-          hr: ({ node, ...props }) =>
-            createElement("hr", {
-              ...props,
-              className: tw`scale-x-50`,
-            }),
-          input: ({ node, ...props }) => {
-            if (props.type === "checkbox") {
-              return createElement(Checkbox, {
-                ...props,
-                disabled: false,
-                className: tw`pointer-events-none mr-2`,
-              })
-            }
-            return createElement("input", props)
-          },
-          pre: ({ node, ...props }) => {
-            if (!props.children) return null
-
-            let language = ""
-
-            let codeString = null as string | null
-            if (props.className?.includes("language-")) {
-              language = props.className.replace("language-", "")
-            }
-
-            if (typeof props.children !== "object") {
-              codeString = props.children.toString()
-            } else {
-              const propsChildren = props.children
-              const children = Array.isArray(propsChildren)
-                ? propsChildren.find((i) => i.type === "code")
-                : propsChildren
-
-              // Don't process not code block
-              if (!children) return createElement("pre", props, props.children)
-
-              if (
-                "type" in children &&
-                children.type === "code" &&
-                children.props.className?.includes("language-")
-              ) {
-                language = children.props.className.replace("language-", "")
-              }
-              const code = ("props" in children && children.props.children) || children
-              if (!code) return null
-
-              try {
-                codeString = extractCodeFromHtml(renderToString(code))
-              } catch (error) {
-                console.error("Code Block Render Error", error)
-                return createElement("pre", props, props.children)
-              }
-            }
-
-            if (!codeString) return createElement("pre", props, props.children)
-
-            return createElement(ShikiHighLighter, {
-              code: codeString.trimEnd(),
-              language: language.toLowerCase(),
-            })
-          },
-          figure: ({ node, ...props }) =>
-            createElement(
-              "figure",
-              {
-                className: "max-w-full",
-              },
-              props.children,
-            ),
-          table: ({ node, ...props }) =>
-            createElement(
-              "div",
-              {
-                className: "w-full overflow-x-auto",
-              },
-
-              createElement("table", {
-                ...props,
-                className: tw`w-full my-0`,
-              }),
-            ),
-        },
-      }),
-    toText: () => toText(hastTree),
-  }
 }
 
 const Img: Components["img"] = ({ node, ...props }) => {
@@ -353,67 +262,6 @@ const Style: Components["style"] = ({ node, ...props }) => {
     )
   }
   return null
-}
-
-function rehypeUrlToAnchor(tree: Node) {
-  const tagsShouldNotBeWrapped = new Set(["a", "pre", "code"])
-  // https://chatgpt.com/share/37e0ceec-5c9e-4086-b9d6-5afc1af13bb0
-  visitParents(tree, "text", (node: Text, ancestors: Node[]) => {
-    if (
-      ancestors.some(
-        (ancestor) =>
-          "tagName" in ancestor && tagsShouldNotBeWrapped.has((ancestor as Element).tagName),
-      )
-    ) {
-      return
-    }
-
-    const parent = ancestors.at(-1)
-
-    const urlRegex = /https?:\/\/\S+/g
-    const text = node.value
-    const matches = [...text.matchAll(urlRegex)]
-
-    if (matches.length === 0 || !parent || !("children" in parent)) return
-
-    if ((parent as Element).tagName === "a") {
-      return
-    }
-
-    const newNodes: (Text | Element)[] = []
-    let lastIndex = 0
-
-    matches.forEach((match) => {
-      const [url] = match
-      const urlIndex = match.index || 0
-
-      if (urlIndex > lastIndex) {
-        newNodes.push({
-          type: "text",
-          value: text.slice(lastIndex, urlIndex),
-        })
-      }
-
-      newNodes.push({
-        type: "element",
-        tagName: "a",
-        properties: { href: url },
-        children: [{ type: "text", value: url }],
-      })
-
-      lastIndex = urlIndex + url.length
-    })
-
-    if (lastIndex < text.length) {
-      newNodes.push({
-        type: "text",
-        value: text.slice(lastIndex),
-      })
-    }
-
-    const index = (parent.children as (Text | Element)[]).indexOf(node)
-    ;(parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
-  })
 }
 
 const Math = ({ node }) => {

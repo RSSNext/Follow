@@ -66,5 +66,6 @@
   "register.login": "登入",
   "register.note": "已有账户？<LoginLink />",
   "register.password": "密码",
-  "register.submit": "创建账户"
+  "register.submit": "创建账户",
+  "words.email": "邮件地址"
 }

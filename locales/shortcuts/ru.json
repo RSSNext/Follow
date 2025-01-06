@@ -6,6 +6,7 @@
   "keys.entries.refetch": "Повторить запрос",
   "keys.entries.toggleUnreadOnly": "Показать только непрочитанное",
   "keys.entry.copyLink": "Скопировать ссылку",
+  "keys.entry.copyTitle": "Скопировать заголовок",
   "keys.entry.openInBrowser": "Открыть в браузере",
   "keys.entry.openInNewTab": "Открыть в новой вкладке",
   "keys.entry.scrollDown": "Прокрутить вниз",
@@ -20,5 +21,14 @@
   "keys.feeds.switchToView": "Переключиться на вид",
   "keys.layout.showShortcuts": "Показать/скрыть горячие клавиши",
   "keys.layout.toggleSidebar": "Показать/скрыть боковую панель каналов",
+  "keys.layout.toggleWideMode": "Переключить широкий режим",
+  "keys.layout.zenMode": "Режим zen",
+  "keys.misc.quickSearch": "Быстрый поиск",
+  "keys.type.audio": "аудио",
+  "keys.type.entries": "записи",
+  "keys.type.entry": "запись",
+  "keys.type.feeds": "ленты",
+  "keys.type.layout": "макет",
+  "keys.type.misc": "разное",
   "sidebar_title": "Горячие клавиши"
 }

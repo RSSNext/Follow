@@ -1,16 +1,12 @@
+import { expoClient } from "@better-auth/expo/client"
 import { useQuery } from "@tanstack/react-query"
+import { createAuthClient } from "better-auth/react"
 import type * as better_call from "better-call"
 import { parse } from "cookie-es"
 
 import { getApiUrl } from "./env"
 import { kv } from "./kv"
 import { queryClient } from "./query-client"
-
-const { expoClient } =
-  require("@better-auth/expo/dist/client.js") as typeof import("@better-auth/expo/client")
-
-const { createAuthClient } =
-  require("better-auth/dist/react.js") as typeof import("better-auth/react")
 
 const storagePrefix = "follow_auth"
 export const cookieKey = `${storagePrefix}_cookie`

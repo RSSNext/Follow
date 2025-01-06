@@ -5,7 +5,7 @@ import { createElement } from "react"
 import type { ExternalToast } from "sonner"
 import { toast } from "sonner"
 
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { isDev } from "~/constants"
 import { DebugRegistry } from "~/modules/debug/registry"

@@ -84,7 +84,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
           title: t.app("new_user_guide.step.migrate.profile"),
           content: (
             <ProfileSettingForm
-              className="w-full max-w-[500px]"
+              className="w-[500px] max-w-full"
               buttonClassName="text-center !mt-8"
             />
           ),
@@ -184,7 +184,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.1 },
             }}
-            className="min-w-0 px-6 sm:mt-12 sm:px-20 sm:pb-24"
+            className="min-w-0 px-6 sm:mt-12"
           >
             {!!title && (
               <div className="mb-6">
@@ -197,8 +197,8 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
                   {title}
                 </h1>
                 {!!guideSteps[step - 1].description && (
-                  <div className="text-center text-sm text-theme-vibrancyFg">
-                    <Markdown className="max-w-full text-sm">
+                  <div className="flex justify-center text-center text-sm text-theme-vibrancyFg">
+                    <Markdown className="prose max-w-[100ch] text-left text-sm">
                       {guideSteps[step - 1].description!}
                     </Markdown>
                   </div>

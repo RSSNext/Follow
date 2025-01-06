@@ -48,7 +48,7 @@
   "login.or": "或",
   "login.password": "密碼",
   "login.redirecting": "正在重定向",
-  "login.register": "註冊一個新帳號",
+  "login.register": "創建帳號",
   "login.reset_password.description": "輸入新密碼並確認以重設您的密碼",
   "login.reset_password.label": "重設密碼",
   "login.reset_password.success": "密碼已成功重設",
@@ -62,9 +62,10 @@
   "redirect.successMessage": "您已成功連接至 {{app_name}} 帳戶。",
   "register.confirm_password": "確認密碼",
   "register.email": "電子信箱",
-  "register.label": "創建一個 {{app_name}} 帳號",
+  "register.label": "創建 {{app_name}} 帳號",
   "register.login": "登入",
   "register.note": "已經有帳號了嗎？ <LoginLink />",
   "register.password": "密碼",
-  "register.submit": "創建帳號"
+  "register.submit": "創建帳號",
+  "words.email": "電子信箱"
 }

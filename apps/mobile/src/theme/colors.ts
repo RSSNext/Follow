@@ -1,17 +1,19 @@
+import { rgbStringToRgb } from "@follow/utils"
 import { useColorScheme, vars } from "nativewind"
 import { useMemo } from "react"
-import type { StyleProp, ViewStyle } from "react-native"
-import { Appearance, StyleSheet } from "react-native"
+
+// @ts-expect-error
+const IS_DOM = typeof ReactNativeWebView !== "undefined"
 
 const varPrefix = "--color"
 export const accentColor = "#FF5C00"
-const buildVars = (_vars: Record<string, string>) => {
+export const buildVars = (_vars: Record<string, string>) => {
   const cssVars = {} as Record<`${typeof varPrefix}-${string}`, string>
   for (const [key, value] of Object.entries(_vars)) {
     cssVars[`${varPrefix}-${key}`] = value
   }
 
-  return vars(cssVars)
+  return IS_DOM ? cssVars : vars(cssVars)
 }
 
 const lightPalette = {
@@ -54,13 +56,13 @@ const darkPalette = {
   gray5: "44 44 46",
   gray6: "28 28 30",
 }
-const palette = {
+export const palette = {
   // iOS color palette https://developer.apple.com/design/human-interface-guidelines/color
   light: buildVars(lightPalette),
   dark: buildVars(darkPalette),
 }
 
-const lightVariants = {
+export const lightVariants = {
   // UIKit Colors
   label: "0 0 0",
   secondaryLabel: "122 122 122",
@@ -73,9 +75,10 @@ const lightVariants = {
   systemBackground: "255 255 255",
   secondarySystemBackground: "242 242 247",
   tertiarySystemBackground: "229 229 234",
+
+  // Grouped
   systemGroupedBackground: "242 242 247",
-  secondarySystemGroupedBackground: "229 229 234",
-  tertiarySystemGroupedBackground: "209 209 214",
+  systemGroupedBackground2: "255 255 255",
 
   // System Colors
   systemFill: "209 213 219",
@@ -91,8 +94,9 @@ const lightVariants = {
 
   // Extended colors
   disabled: "235 235 228",
+  itemPressed: "229 229 234",
 }
-const darkVariants = {
+export const darkVariants = {
   // UIKit Colors
   label: "255 255 255",
   secondaryLabel: "172 172 178",
@@ -105,9 +109,10 @@ const darkVariants = {
   systemBackground: "0 0 0",
   secondarySystemBackground: "28 28 30",
   tertiarySystemBackground: "44 44 46",
-  systemGroupedBackground: "28 28 30",
-  secondarySystemGroupedBackground: "44 44 46",
-  tertiarySystemGroupedBackground: "72 72 74",
+
+  // Grouped
+  systemGroupedBackground: "0 0 0",
+  systemGroupedBackground2: "28 28 30",
 
   // System Colors
   systemFill: "72 72 74",
@@ -123,34 +128,38 @@ const darkVariants = {
 
   // Extended colors
   disabled: "85 85 85",
-}
-const variants = {
-  light: buildVars(lightVariants),
-  dark: buildVars(darkVariants),
-}
-
-export const getCurrentColors = () => {
-  const colorScheme = Appearance.getColorScheme() || "light"
-
-  return StyleSheet.compose(variants[colorScheme], palette[colorScheme]) as StyleProp<ViewStyle>
+  itemPressed: "44 44 46",
 }
 
 /// Utils
 
-const toRgb = (hex: string) => {
-  const [r, g, b] = hex.split(" ").map((s) => Number.parseInt(s))
-  return `rgb(${r} ${g} ${b})`
+const mergedLightColors = {
+  ...lightVariants,
+  ...lightPalette,
+}
+const mergedDarkColors = {
+  ...darkVariants,
+  ...darkPalette,
+}
+const mergedColors = {
+  light: mergedLightColors,
+  dark: mergedDarkColors,
 }
 
-export const getSystemBackgroundColor = () => {
-  const colorScheme = Appearance.getColorScheme() || "light"
-
-  const colors = colorScheme === "light" ? lightVariants : darkVariants
-  return toRgb(colors.systemBackground)
+export const colorVariants = {
+  light: buildVars(lightVariants),
+  dark: buildVars(darkVariants),
 }
 
-export const useColor = (color: keyof typeof lightVariants | keyof typeof darkVariants) => {
+export const useColor = (color: keyof typeof mergedLightColors) => {
   const { colorScheme } = useColorScheme()
-  const colors = colorScheme === "light" ? lightVariants : darkVariants
-  return useMemo(() => toRgb(colors[color]), [color, colors])
+  const colors = mergedColors[colorScheme || "light"]
+  return useMemo(() => rgbStringToRgb(colors[color]), [color, colors])
 }
+
+export const useColors = () => {
+  const { colorScheme } = useColorScheme()
+  return mergedColors[colorScheme || "light"]
+}
+
+export type Colors = typeof mergedLightColors

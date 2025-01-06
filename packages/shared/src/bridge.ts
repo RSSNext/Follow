@@ -125,7 +125,7 @@ type Fn<T> = {
     (T[K] extends object ? { [P in keyof T[K]]: AddPromise<T[K][P]> } : never)
 }
 export function callWindowExpose<T extends RenderGlobalContext>(window: BrowserWindow) {
-  return createProxy(window.webContents.executeJavaScript) as Fn<T>
+  return createProxy((code) => window.webContents.executeJavaScript(code)) as Fn<T>
 }
 
 export function callWebviewExpose<T extends RenderGlobalContext>(

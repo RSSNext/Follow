@@ -1,7 +1,7 @@
 import { Stack } from "expo-router"
 import { useColorScheme } from "react-native"
 
-import { getSystemBackgroundColor } from "@/src/theme/colors"
+import { getSystemBackgroundColor } from "@/src/theme/utils"
 
 export default function HeadlessLayout() {
   useColorScheme()

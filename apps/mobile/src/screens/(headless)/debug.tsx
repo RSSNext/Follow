@@ -1,6 +1,8 @@
 import * as Clipboard from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
 import { Sitemap } from "expo-router/build/views/Sitemap"
+import type { FC } from "react"
+import * as React from "react"
 import { useRef, useState } from "react"
 import {
   Alert,
@@ -17,109 +19,110 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { getDbPath } from "@/src/database"
 import { clearSessionToken, getSessionToken, setSessionToken } from "@/src/lib/cookie"
 
+interface MenuSection {
+  title: string
+  items: (MenuItem | FC)[]
+}
+
+interface MenuItem {
+  title: string
+  onPress: () => Promise<void> | void
+  textClassName?: string
+}
+
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
-  // const isExpanded = useSharedValue(false)
+
+  const menuSections: MenuSection[] = [
+    {
+      title: "Users",
+      items: [
+        UserSessionSetting,
+        {
+          title: "Get Current Session Token",
+          onPress: async () => {
+            const token = await getSessionToken()
+            Alert.alert(`Current Session Token: ${token?.value}`)
+          },
+        },
+        {
+          title: "Clear Session Token",
+          onPress: async () => {
+            await clearSessionToken()
+            Alert.alert("Session Token Cleared")
+          },
+        },
+      ],
+    },
+    {
+      title: "Data Control",
+      items: [
+        {
+          title: "Copy Sqlite File Location",
+          onPress: async () => {
+            const dbPath = getDbPath()
+            await Clipboard.setStringAsync(dbPath)
+          },
+        },
+        {
+          title: "Clear Sqlite Data",
+          textClassName: "!text-red",
+          onPress: async () => {
+            Alert.alert("Clear Sqlite Data?", "This will delete all your data", [
+              { text: "Cancel", style: "cancel" },
+              {
+                text: "Clear",
+                style: "destructive",
+                async onPress() {
+                  const dbPath = getDbPath()
+                  await FileSystem.deleteAsync(dbPath)
+                  await expo.reloadAppAsync("Clear Sqlite Data")
+                },
+              },
+            ])
+          },
+        },
+      ],
+    },
+    {
+      title: "App",
+      items: [
+        {
+          title: "Reload App",
+          onPress: () => expo.reloadAppAsync("Reload App"),
+        },
+      ],
+    },
+  ]
+
   return (
     <ScrollView className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
-      <Text className="mt-4 px-8 text-2xl font-medium text-white">Users</Text>
+      {menuSections.map((section) => (
+        <View key={section.title}>
+          <Text className="mt-4 px-8 text-2xl font-medium text-white">{section.title}</Text>
+          <View style={styles.container}>
+            <View style={styles.itemContainer}>
+              {section.items.map((item, index) => {
+                if (typeof item === "function") {
+                  return React.createElement(item, { key: index })
+                }
 
-      {/* <Button
-        title="Toggle"
-        onPress={() => {
-          isExpanded.value = !isExpanded.value
-        }}
-      />
-      <AccordionItem isExpanded={isExpanded} viewKey="users">
-        {Array.from({ length: 100 }).map((_, index) => {
-          return (
-            <Text key={index} className="text-white">
-              {index}
-            </Text>
-          )
-        })}
-      </AccordionItem> */}
-
-      <View style={styles.container}>
-        <View style={styles.itemContainer}>
-          <UserSessionSetting />
-
-          <TouchableOpacity
-            style={styles.itemPressable}
-            onPress={async () => {
-              const token = await getSessionToken()
-              Alert.alert(`Current Session Token: ${token?.value}`)
-            }}
-          >
-            <Text style={styles.filename}>Get Current Session Token</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.itemPressable}
-            onPress={async () => {
-              await clearSessionToken()
-              Alert.alert("Session Token Cleared")
-            }}
-          >
-            <Text style={styles.filename}>Clear Session Token</Text>
-          </TouchableOpacity>
+                return (
+                  <TouchableOpacity
+                    key={item.title}
+                    style={styles.itemPressable}
+                    onPress={item.onPress}
+                  >
+                    <Text style={styles.filename} className={item.textClassName}>
+                      {item.title}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              })}
+            </View>
+          </View>
         </View>
-      </View>
-
-      <Text className="mt-4 px-8 text-2xl font-medium text-white">Data Control</Text>
-      <View style={styles.container}>
-        <View style={styles.itemContainer}>
-          <TouchableOpacity
-            style={styles.itemPressable}
-            onPress={async () => {
-              const dbPath = getDbPath()
-              await Clipboard.setStringAsync(dbPath)
-            }}
-          >
-            <Text style={styles.filename}>Copy Sqlite File Location</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.itemPressable}
-            onPress={async () => {
-              Alert.alert("Clear Sqlite Data?", "This will delete all your data", [
-                {
-                  text: "Cancel",
-                  style: "cancel",
-                },
-                {
-                  text: "Clear",
-                  style: "destructive",
-                  async onPress() {
-                    const dbPath = getDbPath()
-                    await FileSystem.deleteAsync(dbPath)
-                    // Reload the app
-                    await expo.reloadAppAsync("Clear Sqlite Data")
-                  },
-                },
-              ])
-            }}
-          >
-            <Text style={styles.filename} className="!text-red">
-              Clear Sqlite Data
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Text className="mt-4 px-8 text-2xl font-medium text-white">App</Text>
-      <View style={styles.container}>
-        <View style={styles.itemContainer}>
-          <TouchableOpacity
-            style={styles.itemPressable}
-            onPress={() => {
-              expo.reloadAppAsync("Reload App")
-            }}
-          >
-            <Text style={styles.filename}>Reload App</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      ))}
 
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
       <Sitemap />
