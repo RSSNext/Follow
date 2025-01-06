@@ -1,5 +1,6 @@
 import { Readability } from "@mozilla/readability"
 import { name, version } from "@pkg"
+import chardet from "chardet"
 import DOMPurify from "dompurify"
 import { parseHTML } from "linkedom"
 import { fetch } from "ofetch"
@@ -21,24 +22,34 @@ function sanitizeHTMLString(dirtyDocumentString: string) {
   return sanitizedDocumentString
 }
 
+/**
+ * Decodes the response body of a `fetch` request into a string, ensuring proper character set handling.
+ * @throws Will return "Failed to decode response content." if the decoding process encounters any errors.
+ */
+async function decodeResponseBodyChars(res: Response) {
+  // Read the response body as an ArrayBuffer
+  const buffer = await res.arrayBuffer()
+  // Step 1: Get charset from Content-Type header
+  const contentType = res.headers.get("content-type")
+  const httpCharset = contentType?.match(/charset=([\w-]+)/i)?.[1]
+  // Step 2: Use charset from Content-Type header or fall back to chardet
+  const detectedCharset = httpCharset || chardet.detect(Buffer.from(buffer)) || "utf-8"
+  // Step 3: Decode the response body using the detected charset
+  try {
+    const decodedText = new TextDecoder(detectedCharset, { fatal: false }).decode(buffer)
+    return decodedText
+  } catch {
+    return "Failed to decode response content."
+  }
+}
+
 export async function readability(url: string) {
   const dirtyDocumentString = await fetch(url, {
     headers: {
       "User-Agent": userAgents,
       Accept: "text/html",
     },
-  }).then(async (res) => {
-    const contentType = res.headers.get("content-type")
-    // text/html; charset=GBK
-    if (!contentType) return res.text()
-    const charset = contentType.match(/charset=([a-zA-Z-\d]+)/)?.[1]
-    if (charset) {
-      const blob = await res.blob()
-      const buffer = await blob.arrayBuffer()
-      return new TextDecoder(charset).decode(buffer)
-    }
-    return res.text()
-  })
+  }).then(decodeResponseBodyChars)
 
   const sanitizedDocumentString = sanitizeHTMLString(dirtyDocumentString)
   const baseUrl = new URL(url).origin
