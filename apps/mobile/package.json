@@ -2,7 +2,7 @@
   "name": "@follow/mobile",
   "version": "1.0.0",
   "private": true,
-  "main": "src/main.ts",
+  "main": "src/main.tsx",
   "scripts": {
     "android": "expo run:android",
     "db:generate": "drizzle-kit generate",
@@ -57,6 +57,7 @@
     "hono": "4.6.13",
     "immer": "10.1.1",
     "jotai": "2.10.3",
+    "nanoid": "5.0.9",
     "nativewind": "4.1.23",
     "ofetch": "1.4.1",
     "react": "^18.3.1",
@@ -90,5 +91,10 @@
     "expo-drizzle-studio-plugin": "0.1.1",
     "postcss": "8.4.49",
     "react-test-renderer": "18.3.1"
+  },
+  "codegenConfig": {
+    "name": "FullscreenPortalManager",
+    "type": "modules",
+    "jsSrcsDir": "./specs"
   }
 }

@@ -17,7 +17,6 @@ export default function RootLayout() {
   return (
     <RootProviders>
       <Session />
-      <LoadingContainer />
       <Stack
         screenOptions={{
           contentStyle: { backgroundColor: systemBackgroundColor },
@@ -30,6 +29,7 @@ export default function RootLayout() {
       </Stack>
 
       {__DEV__ && <DebugButton />}
+      <LoadingContainer />
     </RootProviders>
   )
 }

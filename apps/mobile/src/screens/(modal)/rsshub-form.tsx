@@ -21,7 +21,9 @@ import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvi
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
+import { useLoadingCallback } from "@/src/hooks/useLoadingCallback"
 import { CheckLineIcon } from "@/src/icons/check_line"
+import { feedSyncServices } from "@/src/store/feed/store"
 import { useColor } from "@/src/theme/colors"
 
 interface RsshubFormParams {
@@ -179,12 +181,14 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
           </View>
           <Maintainers maintainers={route.maintainers} />
 
-          <View className="mx-4 mt-4">
-            <MarkdownWeb
-              value={route.description.replaceAll("::: ", ":::")}
-              dom={{ matchContents: true, scrollEnabled: false }}
-            />
-          </View>
+          {!!route.description && (
+            <View className="mx-4 mt-4">
+              <MarkdownWeb
+                value={route.description.replaceAll("::: ", ":::")}
+                dom={{ matchContents: true, scrollEnabled: false }}
+              />
+            </View>
+          )}
         </KeyboardAwareScrollView>
       </PortalProvider>
     </FormProvider>
@@ -264,6 +268,8 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
   const form = useFormContext()
   const label = useColor("label")
   const { isValid } = form.formState
+
+  const loadingFn = useLoadingCallback()
   const submit = form.handleSubmit((_data) => {
     const data = Object.fromEntries(
       Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
@@ -289,13 +295,16 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
       if (router.canDismiss()) {
         router.dismiss()
       }
-      requestAnimationFrame(() => {
-        router.push({
-          pathname: "/follow",
-          params: {
-            url: finalUrl,
-          },
-        })
+
+      loadingFn(feedSyncServices.fetchFeedById({ url: finalUrl }), {
+        finish: () => {
+          router.push({
+            pathname: "/follow",
+            params: {
+              url: finalUrl,
+            },
+          })
+        },
       })
     } catch (err: unknown) {
       if (err instanceof MissingOptionalParamError) {

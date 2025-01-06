@@ -1,10 +1,14 @@
+import { nanoid } from "nanoid"
+
 import type { FeedSchema } from "@/src/database/schemas/types"
+import { apiClient } from "@/src/lib/api-fetch"
 import { FeedService } from "@/src/services/feed"
 
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
+import type { FeedModel } from "./types"
 
 interface FeedState {
-  feeds: Record<string, FeedSchema>
+  feeds: Record<string, FeedModel>
 }
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -20,16 +24,20 @@ class FeedActions {
     set({ feeds: {} })
   }
 
+  upsertManyInSession(feeds: FeedSchema[]) {
+    immerSet((draft) => {
+      for (const feed of feeds) {
+        draft.feeds[feed.id] = feed
+      }
+    })
+  }
+
   upsertMany(feeds: FeedSchema[]) {
     if (feeds.length === 0) return
 
     const tx = createTransaction()
     tx.store(() => {
-      immerSet((draft) => {
-        for (const feed of feeds) {
-          draft.feeds[feed.id] = feed
-        }
-      })
+      this.upsertManyInSession(feeds)
     })
 
     tx.persist(async () => {
@@ -40,14 +48,6 @@ class FeedActions {
   }
 
   private patch(feedId: string, patch: Partial<FeedSchema>) {
-    // set((state) =>
-    //   produce(state, (state) => {
-    //     const feed = state.feeds[feedId]
-    //     if (!feed) return
-
-    //     Object.assign(feed, patch)
-    //   }),
-    // )
     immerSet((state) => {
       const feed = state.feeds[feedId]
       if (!feed) return
@@ -55,4 +55,34 @@ class FeedActions {
     })
   }
 }
+
+type FeedQueryParams = {
+  id?: string
+  url?: string
+}
+
+class FeedSyncServices {
+  async fetchFeedById({ id, url }: FeedQueryParams) {
+    const res = await apiClient.feeds.$get({
+      query: {
+        id,
+        url,
+      },
+    })
+
+    const nonce = nanoid(8)
+
+    const finalData = res.data.feed as FeedModel
+    if (!finalData.id) {
+      finalData["nonce"] = nonce
+    }
+    feedActions.upsertMany([finalData])
+
+    return {
+      ...res.data,
+      feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
+    }
+  }
+}
+export const feedSyncServices = new FeedSyncServices()
 export const feedActions = new FeedActions()
