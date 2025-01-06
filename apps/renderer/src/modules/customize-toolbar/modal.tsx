@@ -13,12 +13,13 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
+import { Button } from "@follow/components/ui/button/index.js"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
-import { setActionOrder, useActionOrder } from "./atoms"
+import { resetActionOrder, setActionOrder, useActionOrder } from "./atoms"
 import { DroppableContainer, SortableActionButton } from "./dnd"
 
 const CustomizeToolbar = () => {
@@ -73,7 +74,7 @@ const CustomizeToolbar = () => {
   )
 
   return (
-    <div className="mx-auto w-full max-w-[800px]">
+    <div className="mx-auto w-full max-w-[800px] space-y-4">
       <div className="mb-4">
         <h2 className="text-lg font-semibold">Quick Actions</h2>
         <p className="text-sm text-gray-500">Customize and reorder your frequently used actions</p>
@@ -111,6 +112,12 @@ const CustomizeToolbar = () => {
           </DroppableContainer>
         </div>
       </DndContext>
+
+      <div className="flex justify-end">
+        <Button variant="outline" onClick={resetActionOrder}>
+          Reset to Default Layout
+        </Button>
+      </div>
     </div>
   )
 }

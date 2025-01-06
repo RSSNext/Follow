@@ -43,6 +43,10 @@ export const [, , useActionOrder, , getActionOrder, setActionOrder] = createAtom
   atom<ActionOrder>(DEFAULT_ACTION_ORDER),
 )
 
+export const resetActionOrder = () => {
+  setActionOrder(DEFAULT_ACTION_ORDER)
+}
+
 export const useToolbarOrderMap = () => {
   const actionOrder = useActionOrder()
 
