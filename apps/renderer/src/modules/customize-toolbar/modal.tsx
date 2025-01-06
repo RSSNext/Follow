@@ -17,13 +17,14 @@ import { Button } from "@follow/components/ui/button/index.js"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 
+import { setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
-import { resetActionOrder, setActionOrder, useActionOrder } from "./atoms"
+import { DEFAULT_ACTION_ORDER } from "./constant"
 import { DroppableContainer, SortableActionButton } from "./dnd"
 
 const CustomizeToolbar = () => {
-  const actionOrder = useActionOrder()
+  const actionOrder = useUISettingSelector((s) => s.toolbarOrder)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -48,7 +49,7 @@ const CustomizeToolbar = () => {
         const item = actionOrder[sourceList].find((item) => item === activeId)
         if (!item) return
         const newIndexOfOver = actionOrder[targetList].indexOf(overId)
-        setActionOrder({
+        setUISetting("toolbarOrder", {
           ...actionOrder,
           [sourceList]: actionOrder[sourceList].filter((item) => item !== activeId),
           [targetList]: [
@@ -65,13 +66,17 @@ const CustomizeToolbar = () => {
       const oldIndex = items.indexOf(activeId)
       const newIndex = items.indexOf(overId)
 
-      setActionOrder({
+      setUISetting("toolbarOrder", {
         ...actionOrder,
         [list]: arrayMove(items, oldIndex, newIndex),
       })
     },
     [actionOrder],
   )
+
+  const resetActionOrder = useCallback(() => {
+    setUISetting("toolbarOrder", DEFAULT_ACTION_ORDER)
+  }, [])
 
   return (
     <div className="mx-auto w-full max-w-[800px] space-y-4">

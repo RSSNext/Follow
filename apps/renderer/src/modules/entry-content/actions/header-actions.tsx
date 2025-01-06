@@ -6,7 +6,7 @@ import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useCommandHotkey } from "~/modules/command/hooks/use-register-hotkey"
-import { useToolbarOrderMap } from "~/modules/customize-toolbar/atoms"
+import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 import { useEntry } from "~/store/entry/hooks"
 
 export const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {

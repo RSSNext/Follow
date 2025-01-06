@@ -11,7 +11,7 @@ import {
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useCommand } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
-import { useToolbarOrderMap } from "~/modules/customize-toolbar/atoms"
+import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const actionConfigs = useEntryActions({ entryId, view })
