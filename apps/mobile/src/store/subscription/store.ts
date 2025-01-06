@@ -252,7 +252,7 @@ class SubscriptionSyncService {
     })
 
     tx.persist(() => {
-      return SubscriptionService.delete(subscriptionId)
+      return SubscriptionService.delete(storeDbMorph.toSubscriptionSchema(subscription))
     })
 
     tx.request(async () => {

@@ -43,7 +43,9 @@ class SubscriptionServiceStatic implements Hydratable, Resetable {
     )
   }
 
-  async delete(id: string) {
+  async delete(subscription: SubscriptionSchema) {
+    const { id } = subscription
+
     const result = await db.query.subscriptionsTable.findFirst({
       where: eq(subscriptionsTable.id, id),
       columns: {
