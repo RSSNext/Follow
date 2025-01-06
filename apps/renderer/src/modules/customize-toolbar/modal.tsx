@@ -84,6 +84,7 @@ const CustomizeToolbar = () => {
         <h2 className="text-lg font-semibold">Quick Actions</h2>
         <p className="text-sm text-gray-500">Customize and reorder your frequently used actions</p>
       </div>
+      {/* Refer to https://github.com/clauderic/dnd-kit/blob/master/stories/2%20-%20Presets/Sortable/MultipleContainers.tsx */}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragOver={handleDragOver}>
         <div className="space-y-4">
           {/* Main toolbar */}
