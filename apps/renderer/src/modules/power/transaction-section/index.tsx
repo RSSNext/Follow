@@ -59,15 +59,13 @@ export const TransactionsSection: Component = ({ className }) => {
         </a>
       )}
 
-      {transactions.isFetching && (
+      {(transactions.isFetching || !transactions.data?.length) && (
         <div className="my-2 flex w-full justify-center text-sm text-zinc-400">
-          <LoadingCircle size="medium" />
-        </div>
-      )}
-
-      {!transactions.isFetching && !transactions.data?.length && (
-        <div className="my-2 flex w-full justify-center text-sm text-zinc-400">
-          {t("wallet.transactions.noTransactions")}
+          {transactions.isFetching ? (
+            <LoadingCircle size="medium" />
+          ) : (
+            t("wallet.transactions.noTransactions")
+          )}
         </div>
       )}
     </div>
