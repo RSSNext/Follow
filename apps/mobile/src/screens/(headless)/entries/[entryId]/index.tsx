@@ -31,7 +31,7 @@ export default function EntryDetailPage() {
 
   return (
     <>
-      <Stack.Screen options={{ animation: "fade" }} />
+      <Stack.Screen options={{ animation: "fade", animationDuration: 300 }} />
       <View className="flex-1 p-safe">
         <View
           style={{
@@ -67,18 +67,20 @@ export default function EntryDetailPage() {
               })}
             </PagerView>
           )}
-          <View className="absolute inset-x-0 bottom-1 w-full flex-row items-center justify-center gap-2">
-            {Array.from({ length: mediaList.length }).map((_, index) => {
-              return (
-                <View
-                  key={index}
-                  className={`size-2 rounded-full ${
-                    index === currentPageIndex ? "bg-red" : "bg-gray-2"
-                  }`}
-                />
-              )
-            })}
-          </View>
+          {mediaList.length > 1 && (
+            <View className="absolute inset-x-0 bottom-1 w-full flex-row items-center justify-center gap-2">
+              {Array.from({ length: mediaList.length }).map((_, index) => {
+                return (
+                  <View
+                    key={index}
+                    className={`size-2 rounded-full ${
+                      index === currentPageIndex ? "bg-red" : "bg-gray-2"
+                    }`}
+                  />
+                )
+              })}
+            </View>
+          )}
         </View>
       </View>
     </>
