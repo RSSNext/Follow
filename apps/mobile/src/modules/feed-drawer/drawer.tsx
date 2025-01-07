@@ -7,7 +7,6 @@ import type { PanGestureType } from "react-native-gesture-handler/lib/typescript
 import { useFeedDrawer } from "@/src/lib/hooks/drawer-open"
 import { useIsDrawerSwipeDisabled } from "@/src/lib/hooks/drawer-swipe-disabled"
 import { isIOS } from "@/src/lib/platform"
-import { useColor } from "@/src/theme/colors"
 
 import { CollectionPanel } from "./collection-panel"
 import { FeedPanel } from "./feed-panel"
@@ -64,12 +63,8 @@ export const FeedDrawer = ({ children }: PropsWithChildren) => {
 }
 
 const DrawerContent = () => {
-  const bg = useColor("systemBackground")
   return (
-    <View
-      className="flex h-[500px] flex-1 flex-row overflow-hidden"
-      style={{ backgroundColor: bg }}
-    >
+    <View className="bg-system-background flex h-[500px] flex-1 flex-row overflow-hidden">
       <CollectionPanel />
       <FeedPanel />
     </View>
