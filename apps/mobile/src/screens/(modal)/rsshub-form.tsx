@@ -4,28 +4,26 @@ import {
   parseFullPathParams,
   parseRegexpPathParams,
   regexpPathToPath,
-  withOpacity,
 } from "@follow/utils"
 import { PortalProvider } from "@gorhom/portal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, Stack, useLocalSearchParams } from "expo-router"
-import { memo, useEffect, useMemo } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Linking, Text, TouchableOpacity, View } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { z } from "zod"
 
 import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
-import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
+import {
+  ModalHeaderCloseButton,
+  ModalHeaderShubmitButton,
+} from "@/src/components/common/ModalSharedComponents"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
-import { useLoadingCallback } from "@/src/hooks/useLoadingCallback"
-import { CheckLineIcon } from "@/src/icons/check_line"
 import { feedSyncServices } from "@/src/store/feed/store"
-import type { FeedModel } from "@/src/store/feed/types"
-import { useColor } from "@/src/theme/colors"
 
 interface RsshubFormParams {
   route: RSSHubRoute
@@ -268,10 +266,10 @@ const routeParamsKeyPrefix = "route-params-"
 
 const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
   const form = useFormContext()
-  const label = useColor("label")
   const { isValid } = form.formState
 
-  const loadingFn = useLoadingCallback()
+  const [isLoading, setIsLoading] = useState(false)
+
   const submit = form.handleSubmit((_data) => {
     const data = Object.fromEntries(
       Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
@@ -294,21 +292,30 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
 
       const finalUrl = routeParamsPath ? `${url}/${routeParamsPath}` : url
 
-      if (router.canDismiss()) {
-        router.dismiss()
-      }
+      // if (router.canDismiss()) {
+      //   router.dismiss()
+      // }
 
-      loadingFn(feedSyncServices.fetchFeedById({ url: finalUrl }), {
-        done: (feed) => {
+      setIsLoading(true)
+
+      feedSyncServices
+        .fetchFeedById({ url: finalUrl })
+        .then((feed) => {
           router.push({
             pathname: "/follow",
             params: {
               url: finalUrl,
-              id: (feed as FeedModel)?.id,
+              id: feed?.id,
             },
           })
-        },
-      })
+        })
+        .catch(() => {
+          // TODO impl toast
+          // toast.error("Failed to fetch feed")
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     } catch (err: unknown) {
       if (err instanceof MissingOptionalParamError) {
         // toast.error(err.message)
@@ -320,9 +327,5 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
     }
   })
 
-  return (
-    <TouchableOpacity onPress={submit} disabled={!isValid}>
-      <CheckLineIcon color={isValid ? label : withOpacity(label, 0.5)} />
-    </TouchableOpacity>
-  )
+  return <ModalHeaderShubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
 }

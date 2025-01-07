@@ -1,8 +1,12 @@
+import { withOpacity } from "@follow/utils"
 import { router } from "expo-router"
 import { TouchableOpacity } from "react-native"
 
+import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 import { useColor } from "@/src/theme/colors"
+
+import { RotateableLoading } from "./RotateableLoading"
 
 export const ModalHeaderCloseButton = () => {
   return <ModalHeaderCloseButtonImpl />
@@ -12,7 +16,37 @@ const ModalHeaderCloseButtonImpl = () => {
   const label = useColor("label")
   return (
     <TouchableOpacity onPress={() => router.dismiss()}>
-      <CloseCuteReIcon color={label} />
+      <CloseCuteReIcon height={20} width={20} color={label} />
+    </TouchableOpacity>
+  )
+}
+
+export interface ModalHeaderShubmitButtonProps {
+  isValid: boolean
+  onPress: () => void
+  isLoading?: boolean
+}
+export const ModalHeaderShubmitButton = ({
+  isValid,
+  onPress,
+  isLoading,
+}: ModalHeaderShubmitButtonProps) => {
+  return <ModalHeaderShubmitButtonImpl isValid={isValid} onPress={onPress} isLoading={isLoading} />
+}
+
+const ModalHeaderShubmitButtonImpl = ({
+  isValid,
+  onPress,
+  isLoading,
+}: ModalHeaderShubmitButtonProps) => {
+  const label = useColor("label")
+  return (
+    <TouchableOpacity onPress={onPress} disabled={!isValid || isLoading}>
+      {isLoading ? (
+        <RotateableLoading size={20} color={withOpacity(label, 0.5)} />
+      ) : (
+        <CheckLineIcon height={20} width={20} color={isValid ? label : withOpacity(label, 0.5)} />
+      )}
     </TouchableOpacity>
   )
 }

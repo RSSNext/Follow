@@ -565,6 +565,9 @@ importers:
       react-native-reanimated:
         specifier: ~3.16.5
         version: 3.16.5(@babel/core@7.26.0)(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      react-native-root-siblings:
+        specifier: 5.0.1
+        version: 5.0.1
       react-native-safe-area-context:
         specifier: 4.12.0
         version: 4.12.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
@@ -12367,6 +12370,9 @@ packages:
       '@babel/core': ^7.0.0-0
       react: '*'
       react-native: '*'
+
+  react-native-root-siblings@5.0.1:
+    resolution: {integrity: sha512-Ay3k/fBj6ReUkWX5WNS+oEAcgPLEGOK8n7K/L7D85mf3xvd8rm/b4spsv26E4HlFzluVx5HKbxEt9cl0wQ1u3g==}
 
   react-native-safe-area-context@4.12.0:
     resolution: {integrity: sha512-ukk5PxcF4p3yu6qMZcmeiZgowhb5AsKRnil54YFUUAXVIS7PJcMHGGC+q44fCiBg44/1AJk5njGMez1m9H0BVQ==}
@@ -28383,6 +28389,8 @@ snapshots:
       react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)
     transitivePeerDependencies:
       - supports-color
+
+  react-native-root-siblings@5.0.1: {}
 
   react-native-safe-area-context@4.12.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1):
     dependencies:
