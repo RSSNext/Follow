@@ -258,7 +258,7 @@ const MediaImpl: FC<MediaProps> = ({
     } else {
       return (
         <div
-          className={cn("relative rounded", className)}
+          className={cn("relative overflow-hidden rounded", className)}
           data-state={mediaLoadState}
           style={props.style}
         >
