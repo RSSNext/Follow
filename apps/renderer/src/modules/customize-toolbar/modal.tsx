@@ -46,15 +46,13 @@ const CustomizeToolbar = () => {
         // Moving between containers
         const sourceList = isActiveInMain ? "main" : "more"
         const targetList = isActiveInMain ? "more" : "main"
-        const item = actionOrder[sourceList].find((item) => item === activeId)
-        if (!item) return
         const newIndexOfOver = actionOrder[targetList].indexOf(overId)
         setUISetting("toolbarOrder", {
           ...actionOrder,
           [sourceList]: actionOrder[sourceList].filter((item) => item !== activeId),
           [targetList]: [
             ...actionOrder[targetList].slice(0, newIndexOfOver),
-            item,
+            activeId,
             ...actionOrder[targetList].slice(newIndexOfOver),
           ],
         })

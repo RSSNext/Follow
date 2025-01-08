@@ -23,6 +23,7 @@ import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvi
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
+import { toast } from "@/src/lib/toast"
 import { feedSyncServices } from "@/src/store/feed/store"
 
 interface RsshubFormParams {
@@ -310,15 +311,14 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
           })
         })
         .catch(() => {
-          // TODO impl toast
-          // toast.error("Failed to fetch feed")
+          toast.error("Failed to fetch feed")
         })
         .finally(() => {
           setIsLoading(false)
         })
     } catch (err: unknown) {
       if (err instanceof MissingOptionalParamError) {
-        // toast.error(err.message)
+        toast.error(err.message)
         // const idx = keys.findIndex((item) => item.name === err.param)
         // form.setFocus(keys[idx === 0 ? 0 : idx - 1].name, {
         //   shouldSelect: true,

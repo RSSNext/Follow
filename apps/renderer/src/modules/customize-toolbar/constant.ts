@@ -16,11 +16,15 @@ export const DEFAULT_ACTION_ORDER: ToolbarActionOrder = {
     ),
   more: [
     ...Object.values(COMMAND_ID.integration),
-    ...Object.values(COMMAND_ID.entry)
-      .filter((id) => !([COMMAND_ID.entry.read, COMMAND_ID.entry.unread] as string[]).includes(id))
-      .filter((id) =>
-        ([COMMAND_ID.entry.copyLink, COMMAND_ID.entry.openInBrowser] as string[]).includes(id),
-      ),
-    COMMAND_ID.settings.customizeToolbar,
+    ...Object.values(COMMAND_ID.entry).filter((id) =>
+      (
+        [
+          COMMAND_ID.entry.copyLink,
+          COMMAND_ID.entry.openInBrowser,
+          COMMAND_ID.entry.read,
+          COMMAND_ID.entry.unread,
+        ] as string[]
+      ).includes(id),
+    ),
   ],
 }

@@ -28,7 +28,12 @@ function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
   const actionConfigs = useEntryActions({ entryId, view }).filter(
     (item) =>
       !(
-        [COMMAND_ID.entry.read, COMMAND_ID.entry.unread, COMMAND_ID.entry.copyLink] as string[]
+        [
+          COMMAND_ID.entry.read,
+          COMMAND_ID.entry.unread,
+          COMMAND_ID.entry.copyLink,
+          COMMAND_ID.settings.customizeToolbar,
+        ] as string[]
       ).includes(item.id),
   )
 
