@@ -34,26 +34,26 @@ import {
   SubscriptionFeedCategoryContextMenu,
   SubscriptionFeedItemContextMenu,
 } from "../context-menu/feeds"
-import {
-  useCurrentView,
-  useCurrentViewDefinition,
-  useFeedListSortMethod,
-  useFeedListSortOrder,
-} from "../subscription/atoms"
+import { useCurrentView, useFeedListSortMethod, useFeedListSortOrder } from "../subscription/atoms"
 import { SortActionButton } from "../subscription/header-actions"
+import { useSelectedCollection, useViewDefinition } from "./atoms"
 
 export const FeedPanel = () => {
-  const selectedView = useCurrentView()
-  return (
-    <SafeAreaView className="flex flex-1 overflow-hidden">
-      <ListHeaderComponent />
-      <RecycleList view={selectedView} />
-    </SafeAreaView>
-  )
+  const selectedCollection = useSelectedCollection()
+  if (selectedCollection.type === "view") {
+    return (
+      <SafeAreaView className="flex flex-1 overflow-hidden">
+        <ViewHeaderComponent view={selectedCollection.viewId} />
+        <RecycleList view={selectedCollection.viewId} />
+      </SafeAreaView>
+    )
+  }
+
+  return
 }
 
-const ListHeaderComponent = () => {
-  const viewDef = useCurrentViewDefinition()
+const ViewHeaderComponent = ({ view }: { view: FeedViewType }) => {
+  const viewDef = useViewDefinition(view)
   return (
     <View className="border-b-separator border-b-hairline flex flex-row items-center gap-2">
       <Text className="text-text my-4 ml-4 text-2xl font-bold">{viewDef.name}</Text>
