@@ -4,10 +4,9 @@ import { useWindowDimensions, View } from "react-native"
 import { Drawer } from "react-native-drawer-layout"
 import type { PanGestureType } from "react-native-gesture-handler/lib/typescript/handlers/gestures/panGesture"
 
-import { useFeedDrawer } from "@/src/lib/hooks/drawer-open"
-import { useIsDrawerSwipeDisabled } from "@/src/lib/hooks/drawer-swipe-disabled"
 import { isIOS } from "@/src/lib/platform"
 
+import { useFeedDrawer, useIsDrawerSwipeDisabled } from "./atoms"
 import { CollectionPanel } from "./collection-panel"
 import { FeedPanel } from "./feed-panel"
 

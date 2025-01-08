@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
-import { useFeedDrawer } from "@/src/lib/hooks/drawer-open"
+import { useFeedDrawer } from "@/src/modules/feed-drawer/atoms"
 import { useCurrentView } from "@/src/modules/subscription/atoms"
 import { SortActionButton } from "@/src/modules/subscription/header-actions"
 import { SubscriptionLists } from "@/src/modules/subscription/SubscriptionLists"
