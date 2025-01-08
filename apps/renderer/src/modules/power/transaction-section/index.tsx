@@ -1,3 +1,4 @@
+import { LoadingCircle } from "@follow/components/ui/loading/index.js"
 import { Tabs, TabsList, TabsTrigger } from "@follow/components/ui/tabs/index.jsx"
 import { TransactionTypes } from "@follow/models/types"
 import { useState } from "react"
@@ -57,9 +58,14 @@ export const TransactionsSection: Component = ({ className }) => {
           {t("wallet.transactions.more")}
         </a>
       )}
-      {!transactions.data?.length && (
-        <div className="my-2 w-full text-sm text-zinc-400">
-          {t("wallet.transactions.noTransactions")}
+
+      {(transactions.isFetching || !transactions.data?.length) && (
+        <div className="my-2 flex w-full justify-center text-sm text-zinc-400">
+          {transactions.isFetching ? (
+            <LoadingCircle size="medium" />
+          ) : (
+            t("wallet.transactions.noTransactions")
+          )}
         </div>
       )}
     </div>

@@ -15,8 +15,10 @@ const UserTooltip = ({ user, currentUserId }: { user: any; currentUserId?: strin
   const { t } = useTranslation("settings")
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <UserRenderer hideName user={user} iconClassName="size-6" />
+      <TooltipTrigger asChild>
+        <div>
+          <UserRenderer hideName user={user} iconClassName="size-6" />
+        </div>
       </TooltipTrigger>
       <TooltipContent>
         {user?.id === currentUserId ? (
