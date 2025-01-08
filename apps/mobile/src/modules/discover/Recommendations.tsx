@@ -16,7 +16,7 @@ import { TabView } from "@/src/components/ui/tabview"
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { RSSHubCategoryCopyMap } from "./copy"
-import { RecommendationListItem } from "./recommendation-item"
+import { RecommendationListItem } from "./RecommendationListItem"
 
 export const Recommendations = () => {
   const headerHeight = useHeaderHeight()

@@ -1,5 +1,4 @@
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
-import { useTheme } from "@react-navigation/native"
 import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useRef } from "react"
@@ -21,6 +20,7 @@ import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { useDiscoverPageContext } from "./ctx"
+import { SearchTabBar } from "./SearchTabBar"
 
 export const SearchHeader = () => {
   const frame = useSafeAreaFrame()
@@ -28,11 +28,12 @@ export const SearchHeader = () => {
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
 
   return (
-    <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
+    <View style={{ minHeight: headerHeight, paddingTop: insets.top }} className="relative">
       <BlurEffect />
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
+      <SearchTabBar />
     </View>
   )
 }
@@ -105,7 +106,6 @@ const ComposeSearchBar = () => {
 }
 
 const SearchInput = () => {
-  const { colors } = useTheme()
   const { searchFocusedAtom, searchValueAtom } = useDiscoverPageContext()
   const [isFocused, setIsFocused] = useAtom(searchFocusedAtom)
   const placeholderTextColor = useColor("placeholderText")
@@ -173,7 +173,7 @@ const SearchInput = () => {
   }, [isFocused])
 
   return (
-    <View style={{ backgroundColor: colors.card, ...styles.searchbar }}>
+    <View style={styles.searchbar} className="dark:bg-gray-6 bg-gray-5">
       {focusOrHasValue && (
         <Animated.View
           style={{
@@ -221,7 +221,6 @@ const SearchInput = () => {
 const styles = StyleSheet.create({
   header: {
     flex: 1,
-
     alignItems: "center",
     marginTop: -3,
     flexDirection: "row",
@@ -229,15 +228,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     position: "relative",
   },
+
   searchbar: {
     flex: 1,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-
     borderRadius: 50,
-    height: "100%",
+    height: 32,
     position: "relative",
   },
   searchInput: {

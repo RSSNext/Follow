@@ -1,6 +1,6 @@
 import { Stack } from "expo-router"
 
-import { Recommendations } from "@/src/modules/discover/recommendations"
+import { Recommendations } from "@/src/modules/discover/Recommendations"
 import { DiscoverHeader } from "@/src/modules/discover/search"
 
 export default function Discover() {

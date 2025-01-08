@@ -1,23 +1,18 @@
 import { cn } from "@follow/utils"
 import type { FC } from "react"
-import { useEffect, useRef, useState } from "react"
-import type { StyleProp, TouchableOpacityProps, ViewStyle } from "react-native"
+import { useCallback, useEffect, useRef, useState } from "react"
+import type { ScrollView, StyleProp, TouchableOpacityProps, ViewStyle } from "react-native"
 import {
   Animated as RnAnimated,
   Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
   useAnimatedValue,
   useWindowDimensions,
   View,
 } from "react-native"
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils"
 
-import { accentColor } from "@/src/theme/colors"
-
 import { AnimatedScrollView } from "../../common/AnimatedComponents"
+import { TabBar } from "./TabBar"
 
 type Tab = {
   name: string
@@ -45,11 +40,6 @@ interface TabViewProps {
   lazyOnce?: boolean
 }
 
-const springConfig = {
-  stiffness: 100,
-  damping: 10,
-}
-
 export const TabView: FC<TabViewProps> = ({
   tabs,
   Tab = View,
@@ -67,79 +57,11 @@ export const TabView: FC<TabViewProps> = ({
   lazyOnce,
   lazyTab,
 }) => {
-  const tabRef = useRef<ScrollView>(null)
-
-  const [tabWidths, setTabWidths] = useState<number[]>([])
-  const [tabPositions, setTabPositions] = useState<number[]>([])
-
   const [currentTab, setCurrentTab] = useState(initialTab ?? 0)
 
   const pagerOffsetX = useAnimatedValue(0)
-  const sharedPagerOffsetX = useSharedValue(0)
-  useEffect(() => {
-    const id = pagerOffsetX.addListener(({ value }) => {
-      sharedPagerOffsetX.value = value
-    })
-    return () => {
-      pagerOffsetX.removeListener(id)
-    }
-  }, [pagerOffsetX, sharedPagerOffsetX])
 
-  const indicatorPosition = useSharedValue(0)
   const { width: windowWidth } = useWindowDimensions()
-
-  useEffect(() => {
-    if (tabWidths.length > 0) {
-      indicatorPosition.value = withSpring(tabPositions[currentTab] || 0, springConfig)
-
-      if (tabRef.current) {
-        const x = currentTab > 0 ? tabPositions[currentTab - 1] + tabWidths[currentTab - 1] : 0
-
-        const isCurrentTabVisible =
-          sharedPagerOffsetX.value < tabPositions[currentTab] &&
-          sharedPagerOffsetX.value + tabWidths[currentTab] > tabPositions[currentTab]
-
-        if (!isCurrentTabVisible) {
-          tabRef.current.scrollTo({ x, y: 0, animated: true })
-        }
-      }
-    }
-  }, [currentTab, indicatorPosition, sharedPagerOffsetX.value, tabPositions, tabWidths])
-
-  const indicatorStyle = useAnimatedStyle(() => {
-    const scrollProgress = sharedPagerOffsetX.value / windowWidth
-
-    const currentIndex = Math.floor(scrollProgress)
-    const nextIndex = Math.min(currentIndex + 1, tabs.length - 1)
-    const progress = scrollProgress - currentIndex
-
-    // Interpolate between current and next tab positions
-    const xPosition =
-      tabPositions[currentIndex] + (tabPositions[nextIndex] - tabPositions[currentIndex]) * progress
-
-    // Interpolate between current and next tab widths
-    const width =
-      tabWidths[currentIndex] + (tabWidths[nextIndex] - tabWidths[currentIndex]) * progress
-
-    return {
-      transform: [{ translateX: xPosition }],
-      width,
-      backgroundColor: tabs[currentTab].activeColor || accentColor,
-    }
-  })
-
-  useEffect(() => {
-    const listener = pagerOffsetX.addListener(({ value }) => {
-      // Calculate which tab should be active based on scroll position
-      const tabIndex = Math.round(value / windowWidth)
-      if (tabIndex !== currentTab) {
-        setCurrentTab(tabIndex)
-        onTabChange?.(tabIndex)
-      }
-    })
-
-    return () => pagerOffsetX.removeListener(listener)
-  }, [tabWidths, tabPositions, currentTab, pagerOffsetX, windowWidth, onTabChange])
 
   const [lazyTabSet, setLazyTabSet] = useState(() => new Set<number>())
 
@@ -162,47 +84,22 @@ export const TabView: FC<TabViewProps> = ({
 
   return (
     <>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        className={cn(
-          "border-tertiary-system-background relative shrink-0 grow-0",
-          tabbarClassName,
+      <TabBar
+        onTabItemPress={useCallback(
+          (index: number) => {
+            contentScrollerRef.current?.scrollTo({ x: index * windowWidth, y: 0, animated: true })
+            setCurrentTab(index)
+            onTabChange?.(index)
+          },
+          [onTabChange, windowWidth],
         )}
-        horizontal
-        ref={tabRef}
-        contentContainerStyle={styles.tabScroller}
-        style={[styles.root, tabbarStyle]}
-      >
-        {tabs.map((tab, index) => (
-          <TabItem
-            onPress={() => {
-              // setCurrentTab(index)
-              contentScrollerRef.current?.scrollTo({ x: index * windowWidth, y: 0, animated: true })
-              onTabChange?.(index)
-            }}
-            key={tab.value}
-            isSelected={index === currentTab}
-            onLayout={(event) => {
-              const { width, x } = event.nativeEvent.layout
-              setTabWidths((prev) => {
-                const newWidths = [...prev]
-                newWidths[index] = width
-                return newWidths
-              })
-              setTabPositions((prev) => {
-                const newPositions = [...prev]
-                newPositions[index] = x
-                return newPositions
-              })
-            }}
-            tab={tab}
-          >
-            <TabItemInner tab={tab} isSelected={index === currentTab} />
-          </TabItem>
-        ))}
-
-        <Animated.View style={[styles.indicator, indicatorStyle]} />
-      </ScrollView>
+        tabs={tabs}
+        currentTab={currentTab}
+        tabbarClassName={tabbarClassName}
+        tabbarStyle={tabbarStyle}
+        TabItem={TabItem}
+        tabScrollContainerAnimatedX={pagerOffsetX}
+      />
 
       <AnimatedScrollView
         onScroll={RnAnimated.event([{ nativeEvent: { contentOffset: { x: pagerOffsetX } } }], {
@@ -227,27 +124,3 @@ export const TabView: FC<TabViewProps> = ({
     </>
   )
 }
-
-const TabItemInner = ({ tab, isSelected }: { tab: Tab; isSelected: boolean }) => {
-  return (
-    <View className="p-2">
-      <Text style={{ color: isSelected ? accentColor : "gray" }}>{tab.name}</Text>
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({
-  tabScroller: {
-    alignItems: "center",
-    flexDirection: "row",
-    paddingHorizontal: 4,
-  },
-
-  root: { paddingHorizontal: 6 },
-  indicator: {
-    position: "absolute",
-    bottom: 0,
-    height: 2,
-    borderRadius: 1,
-  },
-})
