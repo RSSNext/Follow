@@ -142,7 +142,11 @@ export const isRGBAColor = (color: string) => {
 export const withOpacity = (color: string, opacity: number) => {
   switch (true) {
     case isHexColor(color): {
-      return `${color}${opacity.toString(16).slice(1)}`
+      // Convert decimal opacity to hex (0-255)
+      const alpha = Math.round(opacity * 255)
+        .toString(16)
+        .padStart(2, "0")
+      return `${color}${alpha}`
     }
     case isRGBColor(color): {
       const [r, g, b] = color.match(/\d+/g)!.map(Number)

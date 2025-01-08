@@ -1,3 +1,4 @@
+import { sleep } from "@follow/utils"
 import * as Clipboard from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
 import { Sitemap } from "expo-router/build/views/Sitemap"
@@ -18,6 +19,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { getDbPath } from "@/src/database"
 import { clearSessionToken, getSessionToken, setSessionToken } from "@/src/lib/cookie"
+import { loading } from "@/src/lib/loading"
+import { toast } from "@/src/lib/toast"
 
 interface MenuSection {
   title: string
@@ -80,6 +83,27 @@ export default function DebugPanel() {
                 },
               },
             ])
+          },
+        },
+      ],
+    },
+    {
+      title: "Debug",
+      items: [
+        {
+          title: "Loading",
+          onPress: () => {
+            loading.start(sleep(2000))
+          },
+        },
+        {
+          title: "Toast",
+          onPress: () => {
+            toast.show({
+              message: "Hello, world!".repeat(10),
+              type: "success",
+              variant: "center-replace",
+            })
           },
         },
       ],

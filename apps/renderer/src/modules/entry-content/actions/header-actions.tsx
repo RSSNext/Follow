@@ -6,10 +6,12 @@ import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useCommandHotkey } from "~/modules/command/hooks/use-register-hotkey"
+import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 import { useEntry } from "~/store/entry/hooks"
 
 export const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const actionConfigs = useEntryActions({ entryId, view })
+  const orderMap = useToolbarOrderMap()
   const entry = useEntry(entryId)
 
   const hasModal = useHasModal()
@@ -22,18 +24,16 @@ export const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: 
   })
 
   return actionConfigs
-    .filter(
-      (item) =>
-        !item.id.startsWith("integration") &&
-        !(
-          [
-            COMMAND_ID.entry.read,
-            COMMAND_ID.entry.unread,
-            COMMAND_ID.entry.copyLink,
-            COMMAND_ID.entry.openInBrowser,
-          ] as string[]
-        ).includes(item.id),
-    )
+    .filter((item) => {
+      const order = orderMap.get(item.id)
+      if (!order) return false
+      return order.type === "main"
+    })
+    .sort((a, b) => {
+      const orderA = orderMap.get(a.id)?.order || 0
+      const orderB = orderMap.get(b.id)?.order || 0
+      return orderA - orderB
+    })
     .map((config) => {
       return (
         <CommandActionButton

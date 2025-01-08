@@ -89,6 +89,15 @@ export type EntryCommand =
   | ToggleAISummaryCommand
   | ToggleAITranslationCommand
 
+// Settings commands
+
+export type CustomizeToolbarCommand = Command<{
+  id: typeof COMMAND_ID.settings.customizeToolbar
+  fn: () => void
+}>
+
+export type SettingsCommand = CustomizeToolbarCommand
+
 // Integration commands
 
 export type SaveToEagleCommand = Command<{
@@ -129,4 +138,4 @@ export type IntegrationCommand =
   | SaveToOutlineCommand
   | SaveToReadeckCommand
 
-export type BasicCommand = EntryCommand | IntegrationCommand
+export type BasicCommand = EntryCommand | SettingsCommand | IntegrationCommand

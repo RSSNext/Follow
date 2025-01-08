@@ -4,6 +4,8 @@ import { jotaiStore } from "@follow/utils/jotai"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { useEventCallback } from "usehooks-ts"
 
+import { DEFAULT_ACTION_ORDER } from "~/modules/customize-toolbar/constant"
+
 export const createDefaultSettings = (): UISettings => ({
   // Sidebar
   entryColWidth: 356,
@@ -40,6 +42,9 @@ export const createDefaultSettings = (): UISettings => ({
   pictureViewMasonry: true,
   pictureViewFilterNoImage: false,
   wideMode: false,
+
+  // Action Order
+  toolbarOrder: DEFAULT_ACTION_ORDER,
 })
 
 const zenModeAtom = atom(false)

@@ -1,23 +1,24 @@
 import { FeedViewType } from "@follow/constants"
-import { withOpacity } from "@follow/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, Stack, useLocalSearchParams } from "expo-router"
+import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, Text, View } from "react-native"
 import { z } from "zod"
 
-import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
+import {
+  ModalHeaderCloseButton,
+  ModalHeaderShubmitButton,
+} from "@/src/components/common/ModalSharedComponents"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { CheckLineIcon } from "@/src/icons/check_line"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { useFeed } from "@/src/store/feed/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import type { SubscriptionForm } from "@/src/store/subscription/types"
-import { useColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
   view: z.string(),
@@ -39,7 +40,9 @@ export default function Follow() {
     defaultValues,
   })
 
+  const [isLoading, setIsLoading] = useState(false)
   const submit = async () => {
+    setIsLoading(true)
     const values = form.getValues()
     const body: SubscriptionForm = {
       url: feed.url,
@@ -50,15 +53,16 @@ export default function Follow() {
       feedId: feed.id,
     }
 
-    await subscriptionSyncService.subscribe(body)
+    await subscriptionSyncService.subscribe(body).finally(() => {
+      setIsLoading(false)
+    })
 
     if (router.canDismiss()) {
-      router.dismiss()
+      router.dismissAll()
     }
   }
 
   const { isValid, isDirty } = form.formState
-  const label = useColor("label")
 
   return (
     <ScrollView contentContainerClassName="px-2 pt-4 gap-y-4">
@@ -68,9 +72,11 @@ export default function Follow() {
           headerLeft: ModalHeaderCloseButton,
           gestureEnabled: !isDirty,
           headerRight: () => (
-            <TouchableOpacity onPress={form.handleSubmit(submit)} disabled={!isValid}>
-              <CheckLineIcon color={isValid ? label : withOpacity(label, 0.5)} />
-            </TouchableOpacity>
+            <ModalHeaderShubmitButton
+              isValid={isValid}
+              onPress={form.handleSubmit(submit)}
+              isLoading={isLoading}
+            />
           ),
         }}
       />

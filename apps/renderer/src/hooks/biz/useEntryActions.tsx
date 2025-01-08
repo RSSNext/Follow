@@ -200,6 +200,10 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         hide: !hasEntry || !entry.read || !!entry.collections || !!inList,
         shortcut: shortcuts.entry.toggleRead.key,
       },
+      {
+        id: COMMAND_ID.settings.customizeToolbar,
+        onClick: runCmdFn(COMMAND_ID.settings.customizeToolbar, []),
+      },
     ].filter((config) => !config.hide)
   }, [
     entry?.collections,
