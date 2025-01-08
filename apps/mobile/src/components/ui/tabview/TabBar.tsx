@@ -1,6 +1,7 @@
 import { cn } from "@follow/utils"
+import { debounce } from "es-toolkit/compat"
 import type { FC } from "react"
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
 import type {
   Animated as AnimatedNative,
   StyleProp,
@@ -77,19 +78,24 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
     }, [pagerOffsetX, sharedPagerOffsetX])
     const tabRef = useRef<ScrollView>(null)
 
+    const handleChangeTabIndex = useCallback((index: number) => {
+      setCurrentTab(index)
+      onTabItemPress?.(index)
+    }, [])
     useEffect(() => {
       if (!pagerOffsetX) return
-      const listener = pagerOffsetX.addListener(({ value }) => {
-        // Calculate which tab should be active based on scroll position
-        const tabIndex = Math.round(value / tabBarWidth)
-        if (tabIndex !== currentTab) {
-          setCurrentTab(tabIndex)
-          onTabItemPress?.(tabIndex)
-        }
-      })
+      const listener = pagerOffsetX.addListener(
+        debounce(({ value }) => {
+          // Calculate which tab should be active based on scroll position
+          const tabIndex = Math.round(value / tabBarWidth)
+          if (tabIndex !== currentTab) {
+            handleChangeTabIndex(tabIndex)
+          }
+        }, 36),
+      )
 
       return () => pagerOffsetX.removeListener(listener)
-    }, [currentTab, onTabItemPress, pagerOffsetX, tabBarWidth])
+    }, [currentTab, handleChangeTabIndex, onTabItemPress, pagerOffsetX, tabBarWidth])
 
     useImperativeHandle(ref, () => tabRef.current!)
     useEffect(() => {
@@ -151,8 +157,7 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
         {tabs.map((tab, index) => (
           <TabItem
             onPress={() => {
-              setCurrentTab(index)
-              onTabItemPress?.(index)
+              handleChangeTabIndex(index)
             }}
             key={tab.value}
             isSelected={index === currentTab}

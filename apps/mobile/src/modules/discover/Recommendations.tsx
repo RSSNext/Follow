@@ -11,8 +11,8 @@ import { Text, TouchableOpacity, View } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
 
-import type { TabComponent } from "@/src/components/ui/tabview"
-import { TabView } from "@/src/components/ui/tabview"
+import type { TabComponent } from "@/src/components/ui/tabview/TabView"
+import { TabView } from "@/src/components/ui/tabview/TabView"
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { RSSHubCategoryCopyMap } from "./copy"
