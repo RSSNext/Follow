@@ -1,6 +1,6 @@
 export enum SearchType {
-  AGGREGATE = "aggregate",
-  RSS = "rss",
-  RSSHUB = "rsshub",
-  USER = "user",
+  Feed = "feed",
+  List = "list",
+  User = "user",
+  RSSHub = "rsshub",
 }

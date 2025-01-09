@@ -8,10 +8,10 @@ import { SearchType } from "./constants"
 import { useDiscoverPageContext } from "./ctx"
 
 const Tabs: Tab[] = [
-  { name: "All", value: SearchType.AGGREGATE },
-  { name: "RSS", value: SearchType.RSS },
-  { name: "RSSHub", value: SearchType.RSSHUB },
-  { name: "User", value: SearchType.USER },
+  { name: "Feed", value: SearchType.Feed },
+  { name: "List", value: SearchType.List },
+  { name: "User", value: SearchType.User },
+  { name: "RSSHub", value: SearchType.RSSHub },
 ]
 export const SearchTabBar = () => {
   const { searchTypeAtom } = useDiscoverPageContext()

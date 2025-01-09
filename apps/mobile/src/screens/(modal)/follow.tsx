@@ -1,6 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { router, Stack, useLocalSearchParams } from "expo-router"
+import { StackActions } from "@react-navigation/native"
+import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { ScrollView, Text, View } from "react-native"
@@ -15,6 +16,7 @@ import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { useFeed } from "@/src/store/feed/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
@@ -41,6 +43,9 @@ export default function Follow() {
   })
 
   const [isLoading, setIsLoading] = useState(false)
+  const routeOnlyOne = useIsRouteOnlyOne()
+  const navigate = useNavigation()
+  const parentRoute = navigate.getParent()
   const submit = async () => {
     setIsLoading(true)
     const values = form.getValues()
@@ -59,6 +64,10 @@ export default function Follow() {
 
     if (router.canDismiss()) {
       router.dismissAll()
+
+      if (!routeOnlyOne) {
+        parentRoute?.dispatch(StackActions.popToTop())
+      }
     }
   }
 

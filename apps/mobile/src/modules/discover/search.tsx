@@ -1,7 +1,9 @@
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import type { FC } from "react"
 import { useEffect, useRef } from "react"
+import type { LayoutChangeEvent } from "react-native"
 import {
   Animated,
   Easing,
@@ -22,13 +24,19 @@ import { accentColor, useColor } from "@/src/theme/colors"
 import { useDiscoverPageContext } from "./ctx"
 import { SearchTabBar } from "./SearchTabBar"
 
-export const SearchHeader = () => {
+export const SearchHeader: FC<{
+  onLayout: (e: LayoutChangeEvent) => void
+}> = ({ onLayout }) => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
 
   return (
-    <View style={{ minHeight: headerHeight, paddingTop: insets.top }} className="relative">
+    <View
+      style={{ minHeight: headerHeight, paddingTop: insets.top }}
+      className="relative"
+      onLayout={onLayout}
+    >
       <BlurEffect />
       <View style={styles.header}>
         <ComposeSearchBar />
@@ -197,6 +205,7 @@ const SearchInput = () => {
         cursorColor={accentColor}
         selectionColor={accentColor}
         style={styles.searchInput}
+        className="text-text"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChangeText={(text) => setSearchValue(text)}
