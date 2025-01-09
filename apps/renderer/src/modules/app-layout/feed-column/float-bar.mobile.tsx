@@ -10,14 +10,13 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useSidebarActiveView } from "~/atoms/sidebar"
-import { FeedIcon } from "~/modules/feed/feed-icon"
-import { CornerPlayer } from "~/modules/player/corner-player"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { feedIconSelector } from "~/store/feed/selector"
 import { useUnreadByView } from "~/store/unread/hooks"
 
 import { ProfileButton } from "../../user/ProfileButton"
+import { PodcastButton } from "./components/PodcastButton"
 
 export const MobileFloatBar = ({
   scrollContainer,
@@ -134,20 +133,13 @@ const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) =
   )
 }
 
-const PlayerIcon = ({
-  isScrollDown,
-  onLogoClick,
-}: {
-  isScrollDown: boolean
-  onLogoClick?: () => void
-}) => {
-  const { isPlaying, entryId } = useAudioPlayerAtomSelector(
-    useCallback((state) => ({ isPlaying: state.status === "playing", entryId: state.entryId }), []),
+const PlayerIcon = ({ onLogoClick }: { isScrollDown: boolean; onLogoClick?: () => void }) => {
+  const { show, entryId } = useAudioPlayerAtomSelector(
+    useCallback((state) => ({ entryId: state.entryId, show: state.show }), []),
   )
   const feedId = useEntry(entryId, (s) => s.feedId)
   const feed = useFeedById(feedId, feedIconSelector)
-  const [isShowPlayer, setIsShowPlayer] = useState(false)
-  if (!feed || !isPlaying) {
+  if (!feed || !show) {
     return (
       <MotionButtonBase onClick={onLogoClick}>
         <Logo className="size-5 shrink-0" />
@@ -155,19 +147,5 @@ const PlayerIcon = ({
     )
   }
 
-  return (
-    <>
-      <button type="button" className="size-5 shrink-0" onClick={() => setIsShowPlayer((v) => !v)}>
-        <FeedIcon feed={feed} noMargin />
-      </button>
-
-      {isShowPlayer && !isScrollDown && (
-        <CornerPlayer
-          className="absolute inset-x-0 mx-auto w-full max-w-[350px] bottom-safe-or-12"
-          hideControls
-          rounded
-        />
-      )}
-    </>
-  )
+  return <PodcastButton feed={feed} />
 }
