@@ -2,7 +2,7 @@ import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import type { FC } from "react"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { LayoutChangeEvent } from "react-native"
 import {
   Animated,
@@ -21,12 +21,13 @@ import { BlurEffect } from "@/src/components/common/HeaderBlur"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-import { useDiscoverPageContext } from "./ctx"
+import { useSearchPageContext } from "./ctx"
 import { SearchTabBar } from "./SearchTabBar"
 
 export const SearchHeader: FC<{
+  animatedX: Animated.Value
   onLayout: (e: LayoutChangeEvent) => void
-}> = ({ onLayout }) => {
+}> = ({ animatedX, onLayout }) => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
@@ -41,7 +42,7 @@ export const SearchHeader: FC<{
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
-      <SearchTabBar />
+      <SearchTabBar animatedX={animatedX} />
     </View>
   )
 }
@@ -88,33 +89,32 @@ const PlaceholerSearchBar = () => {
 }
 
 const ComposeSearchBar = () => {
-  const { searchFocusedAtom, searchValueAtom } = useDiscoverPageContext()
-  const [isFocused, setIsFocused] = useAtom(searchFocusedAtom)
+  const { searchFocusedAtom, searchValueAtom } = useSearchPageContext()
+  const setIsFocused = useSetAtom(searchFocusedAtom)
   const setSearchValue = useSetAtom(searchValueAtom)
   return (
     <>
       <SearchInput />
-      {isFocused && (
-        <TouchableOpacity
-          hitSlop={10}
-          onPress={() => {
-            setIsFocused(false)
-            setSearchValue("")
 
-            if (router.canGoBack()) {
-              router.back()
-            }
-          }}
-        >
-          <Text className="ml-2 text-accent">Cancel</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        hitSlop={10}
+        onPress={() => {
+          setIsFocused(false)
+          setSearchValue("")
+
+          if (router.canGoBack()) {
+            router.back()
+          }
+        }}
+      >
+        <Text className="ml-2 text-accent">Cancel</Text>
+      </TouchableOpacity>
     </>
   )
 }
 
 const SearchInput = () => {
-  const { searchFocusedAtom, searchValueAtom } = useDiscoverPageContext()
+  const { searchFocusedAtom, searchValueAtom } = useSearchPageContext()
   const [isFocused, setIsFocused] = useAtom(searchFocusedAtom)
   const placeholderTextColor = useColor("placeholderText")
   const searchValue = useAtomValue(searchValueAtom)
@@ -125,7 +125,9 @@ const SearchInput = () => {
   const skeletonTranslateXValue = useAnimatedValue(0)
   const placeholderOpacityValue = useAnimatedValue(1)
 
-  const focusOrHasValue = isFocused || searchValue
+  const [tempSearchValue, setTempSearchValue] = useState(searchValue)
+
+  const focusOrHasValue = isFocused || searchValue || tempSearchValue
 
   useEffect(() => {
     if (focusOrHasValue) {
@@ -190,7 +192,7 @@ const SearchInput = () => {
           className="absolute inset-y-0 left-3 flex flex-row items-center justify-center"
         >
           <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
-          {!searchValue && (
+          {!searchValue && !tempSearchValue && (
             <Text className="text-placeholder-text ml-2" style={styles.searchPlaceholderText}>
               Search
             </Text>
@@ -201,14 +203,20 @@ const SearchInput = () => {
         enterKeyHint="search"
         autoFocus={isFocused}
         ref={inputRef}
-        value={searchValue}
+        onSubmitEditing={() => {
+          setSearchValue(tempSearchValue)
+          setTempSearchValue("")
+        }}
+        defaultValue={searchValue}
         cursorColor={accentColor}
         selectionColor={accentColor}
         style={styles.searchInput}
         className="text-text"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        onChangeText={(text) => setSearchValue(text)}
+        onChangeText={(text) => {
+          setTempSearchValue(text)
+        }}
       />
 
       <Animated.View

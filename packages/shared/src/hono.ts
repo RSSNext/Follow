@@ -10,6 +10,7 @@ import { AnyPgColumn } from 'drizzle-orm/pg-core';
 import * as drizzle_orm from 'drizzle-orm';
 import { InferInsertModel, SQL } from 'drizzle-orm';
 import * as better_auth_adapters_drizzle from 'better-auth/adapters/drizzle';
+import * as better_auth_plugins from 'better-auth/plugins';
 import * as better_auth from 'better-auth';
 
 type Env = {
@@ -17,9 +18,9 @@ type Env = {
 };
 
 declare const authPlugins: ({
-    id: "getProviders";
+    id: "customGetProviders";
     endpoints: {
-        getProviders: {
+        customGetProviders: {
             <C extends [(better_call.Context<"/get-providers", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -34,9 +35,9 @@ declare const authPlugins: ({
         };
     };
 } | {
-    id: "createSession";
+    id: "customCreateSession";
     endpoints: {
-        createSession: {
+        customCreateSession: {
             <C extends [(better_call.Context<"/create-session", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -80,9 +81,9 @@ declare const authPlugins: ({
         };
     };
 } | {
-    id: "updateUserccc";
+    id: "customUpdateUser";
     endpoints: {
-        updateUserccc: {
+        customUpdateUser: {
             <C extends [(better_call.Context<"/update-user-ccc", {
                 method: "POST";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -5261,6 +5262,23 @@ declare const user: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        twoFactorEnabled: drizzle_orm_pg_core.PgColumn<{
+            name: "two_factor_enabled";
+            tableName: "user";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -5404,6 +5422,23 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        twoFactorEnabled: drizzle_orm_pg_core.PgColumn<{
+            name: "two_factor_enabled";
+            tableName: "user";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -5417,6 +5452,7 @@ declare const usersOpenApiSchema: zod.ZodObject<Omit<{
     handle: zod.ZodNullable<zod.ZodString>;
     createdAt: zod.ZodDate;
     updatedAt: zod.ZodDate;
+    twoFactorEnabled: zod.ZodNullable<zod.ZodBoolean>;
 }, "email">, "strip", zod.ZodTypeAny, {
     name: string | null;
     id: string;
@@ -5425,6 +5461,7 @@ declare const usersOpenApiSchema: zod.ZodObject<Omit<{
     handle: string | null;
     createdAt: Date;
     updatedAt: Date;
+    twoFactorEnabled: boolean | null;
 }, {
     name: string | null;
     id: string;
@@ -5433,6 +5470,7 @@ declare const usersOpenApiSchema: zod.ZodObject<Omit<{
     handle: string | null;
     createdAt: Date;
     updatedAt: Date;
+    twoFactorEnabled: boolean | null;
 }>;
 declare const account: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "account";
@@ -5907,6 +5945,81 @@ declare const verification: drizzle_orm_pg_core.PgTableWithColumns<{
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const twoFactor: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "two_factor";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "two_factor";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        secret: drizzle_orm_pg_core.PgColumn<{
+            name: "secret";
+            tableName: "two_factor";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        backupCodes: drizzle_orm_pg_core.PgColumn<{
+            name: "backup_codes";
+            tableName: "two_factor";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "two_factor";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
             baseColumn: never;
             identity: undefined;
             generated: undefined;
@@ -7113,6 +7226,16 @@ declare const auth: {
                     updatedAt: Date;
                     image?: string | null | undefined | undefined;
                     handle: string;
+                } & {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    image?: string | null | undefined | undefined;
+                    twoFactorEnabled: boolean | null | undefined;
+                    handle: string;
                 };
             } | null>;
             path: "/get-session";
@@ -7255,9 +7378,15 @@ declare const auth: {
                     name: string;
                 }> & zod.ZodObject<{
                     handle: zod.ZodString;
+                } | {
+                    handle: zod.ZodString;
                 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
                     handle: string;
+                } | {
+                    handle: string;
                 }, {
+                    handle: string;
+                } | {
                     handle: string;
                 }>;
                 metadata: {
@@ -7376,9 +7505,15 @@ declare const auth: {
                     name: string;
                 }> & zod.ZodObject<{
                     handle: zod.ZodString;
+                } | {
+                    handle: zod.ZodString;
                 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
                     handle: string;
+                } | {
+                    handle: string;
                 }, {
+                    handle: string;
+                } | {
                     handle: string;
                 }>;
                 metadata: {
@@ -8351,9 +8486,15 @@ declare const auth: {
                 method: "POST";
                 body: zod.ZodObject<{
                     handle: zod.ZodString;
+                } | {
+                    handle: zod.ZodString;
                 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
                     handle: string;
+                } | {
+                    handle: string;
                 }, {
+                    handle: string;
+                } | {
                     handle: string;
                 }> & zod.ZodObject<{
                     name: zod.ZodOptional<zod.ZodString>;
@@ -8439,9 +8580,15 @@ declare const auth: {
                 method: "POST";
                 body: zod.ZodObject<{
                     handle: zod.ZodString;
+                } | {
+                    handle: zod.ZodString;
                 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
                     handle: string;
+                } | {
+                    handle: string;
                 }, {
+                    handle: string;
+                } | {
                     handle: string;
                 }> & zod.ZodObject<{
                     name: zod.ZodOptional<zod.ZodString>;
@@ -9567,7 +9714,7 @@ declare const auth: {
             headers: Headers;
         };
     } & {
-        getProviders: {
+        customGetProviders: {
             <C extends [(better_call.Context<"/get-providers", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -9581,7 +9728,7 @@ declare const auth: {
             headers: Headers;
         };
     } & {
-        createSession: {
+        customCreateSession: {
             <C extends [(better_call.Context<"/create-session", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -9621,7 +9768,7 @@ declare const auth: {
             headers: Headers;
         };
     } & {
-        updateUserccc: {
+        customUpdateUser: {
             <C extends [(better_call.Context<"/update-user-ccc", {
                 method: "POST";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -9630,6 +9777,1714 @@ declare const auth: {
             path: "/update-user-ccc";
             options: {
                 method: "POST";
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+    } & {
+        enableTwoFactor: {
+            <C extends [better_call.Context<"/two-factor/enable", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                totpURI: {
+                                                    type: string;
+                                                    description: string;
+                                                };
+                                                backupCodes: {
+                                                    type: string;
+                                                    items: {
+                                                        type: string;
+                                                    };
+                                                    description: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                totpURI: string;
+                backupCodes: string[];
+            }>;
+            path: "/two-factor/enable";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                totpURI: {
+                                                    type: string;
+                                                    description: string;
+                                                };
+                                                backupCodes: {
+                                                    type: string;
+                                                    items: {
+                                                        type: string;
+                                                    };
+                                                    description: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        disableTwoFactor: {
+            <C extends [better_call.Context<"/two-factor/disable", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/two-factor/disable";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        verifyBackupCode: {
+            <C extends [better_call.Context<"/two-factor/verify-backup-code", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    code: zod.ZodString;
+                    disableSession: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    code: string;
+                    disableSession?: boolean | undefined;
+                }, {
+                    code: string;
+                    disableSession?: boolean | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                user: better_auth_plugins.UserWithTwoFactor;
+                session: {
+                    session: {
+                        id: string;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        userId: string;
+                        expiresAt: Date;
+                        token: string;
+                        ipAddress?: string | null | undefined;
+                        userAgent?: string | null | undefined;
+                    };
+                    user: better_auth_plugins.UserWithTwoFactor;
+                } & {
+                    session: Record<string, any> & {
+                        id: string;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        userId: string;
+                        expiresAt: Date;
+                        token: string;
+                        ipAddress?: string | null | undefined;
+                        userAgent?: string | null | undefined;
+                    };
+                    user: Record<string, any> & {
+                        id: string;
+                        email: string;
+                        emailVerified: boolean;
+                        name: string;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        image?: string | null | undefined;
+                    };
+                } & {
+                    session: better_auth.Session & Record<string, any>;
+                    user: better_auth.User & Record<string, any>;
+                };
+            }>;
+            path: "/two-factor/verify-backup-code";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    code: zod.ZodString;
+                    disableSession: zod.ZodOptional<zod.ZodBoolean>;
+                }, "strip", zod.ZodTypeAny, {
+                    code: string;
+                    disableSession?: boolean | undefined;
+                }, {
+                    code: string;
+                    disableSession?: boolean | undefined;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        generateBackupCodes: {
+            <C extends [better_call.Context<"/two-factor/generate-backup-codes", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+                backupCodes: string[];
+            }>;
+            path: "/two-factor/generate-backup-codes";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        viewBackupCodes: {
+            <C extends [better_call.Context<"/two-factor/view-backup-codes", {
+                method: "GET";
+                body: zod.ZodObject<{
+                    userId: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    userId: string;
+                }, {
+                    userId: string;
+                }>;
+                metadata: {
+                    SERVER_ONLY: true;
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+                backupCodes: string[];
+            }>;
+            path: "/two-factor/view-backup-codes";
+            options: {
+                method: "GET";
+                body: zod.ZodObject<{
+                    userId: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    userId: string;
+                }, {
+                    userId: string;
+                }>;
+                metadata: {
+                    SERVER_ONLY: true;
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        sendTwoFactorOTP: {
+            <C extends [better_call.Context<"/two-factor/send-otp", {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                status: boolean;
+            }>;
+            path: "/two-factor/send-otp";
+            options: {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        verifyTwoFactorOTP: {
+            <C extends [better_call.Context<"/two-factor/verify-otp", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    code: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    code: string;
+                }, {
+                    code: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                token: string;
+                user: {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image: string | null | undefined;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
+            }>;
+            path: "/two-factor/verify-otp";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    code: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    code: string;
+                }, {
+                    code: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        generateTOTP: {
+            <C extends [(better_call.Context<"/totp/generate", {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                code: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                code: string;
+            }>;
+            path: "/totp/generate";
+            options: {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                code: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        getTOTPURI: {
+            <C extends [better_call.Context<"/two-factor/get-totp-uri", {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                totpURI: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                totpURI: string;
+            }>;
+            path: "/two-factor/get-totp-uri";
+            options: {
+                method: "POST";
+                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, better_call.EndpointOptions>[];
+                body: zod.ZodObject<{
+                    password: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    password: string;
+                }, {
+                    password: string;
+                }>;
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                totpURI: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_call.Method | better_call.Method[];
+            headers: Headers;
+        };
+        verifyTOTP: {
+            <C extends [better_call.Context<"/two-factor/verify-totp", {
+                method: "POST";
+                body: zod.ZodObject<{
+                    code: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    code: string;
+                }, {
+                    code: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }>]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                token: string;
+                user: {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image: string | null | undefined;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
+            }>;
+            path: "/two-factor/verify-totp";
+            options: {
+                method: "POST";
+                body: zod.ZodObject<{
+                    code: zod.ZodString;
+                }, "strip", zod.ZodTypeAny, {
+                    code: string;
+                }, {
+                    code: string;
+                }>;
+                use: better_call.Endpoint<better_call.Handler<string, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }, {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: better_auth_plugins.UserWithTwoFactor;
+                    };
+                } | {
+                    valid: () => Promise<{
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                image: string | null | undefined;
+                                createdAt: Date;
+                                updatedAt: Date;
+                            };
+                        };
+                        _flag: "json";
+                    }>;
+                    invalid: () => Promise<never>;
+                    session: {
+                        session: Record<string, any> & {
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            userId: string;
+                            expiresAt: Date;
+                            token: string;
+                            ipAddress?: string | null | undefined;
+                            userAgent?: string | null | undefined;
+                        };
+                        user: Record<string, any> & {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                            image?: string | null | undefined;
+                        };
+                    };
+                }>, {
+                    body: zod.ZodObject<{
+                        trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                    }, "strip", zod.ZodTypeAny, {
+                        trustDevice?: boolean | undefined;
+                    }, {
+                        trustDevice?: boolean | undefined;
+                    }>;
+                } & {
+                    method: "*";
+                }>[];
+                metadata: {
+                    openapi: {
+                        summary: string;
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                status: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
             };
             method: better_call.Method | better_call.Method[];
             headers: Headers;
@@ -9813,6 +11668,1778 @@ declare const auth: {
             }): Promise<void>;
         };
         plugins: (better_auth.BetterAuthPlugin | {
+            id: "two-factor";
+            endpoints: {
+                enableTwoFactor: {
+                    <C extends [better_call.Context<"/two-factor/enable", {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        totpURI: {
+                                                            type: string;
+                                                            description: string;
+                                                        };
+                                                        backupCodes: {
+                                                            type: string;
+                                                            items: {
+                                                                type: string;
+                                                            };
+                                                            description: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        totpURI: string;
+                        backupCodes: string[];
+                    }>;
+                    path: "/two-factor/enable";
+                    options: {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        totpURI: {
+                                                            type: string;
+                                                            description: string;
+                                                        };
+                                                        backupCodes: {
+                                                            type: string;
+                                                            items: {
+                                                                type: string;
+                                                            };
+                                                            description: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                disableTwoFactor: {
+                    <C extends [better_call.Context<"/two-factor/disable", {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        status: boolean;
+                    }>;
+                    path: "/two-factor/disable";
+                    options: {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                verifyBackupCode: {
+                    <C extends [better_call.Context<"/two-factor/verify-backup-code", {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            code: zod.ZodString;
+                            disableSession: zod.ZodOptional<zod.ZodBoolean>;
+                        }, "strip", zod.ZodTypeAny, {
+                            code: string;
+                            disableSession?: boolean | undefined;
+                        }, {
+                            code: string;
+                            disableSession?: boolean | undefined;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        user: better_auth_plugins.UserWithTwoFactor;
+                        session: {
+                            session: {
+                                id: string;
+                                createdAt: Date;
+                                updatedAt: Date;
+                                userId: string;
+                                expiresAt: Date;
+                                token: string;
+                                ipAddress?: string | null | undefined;
+                                userAgent?: string | null | undefined;
+                            };
+                            user: better_auth_plugins.UserWithTwoFactor;
+                        } & {
+                            session: Record<string, any> & {
+                                id: string;
+                                createdAt: Date;
+                                updatedAt: Date;
+                                userId: string;
+                                expiresAt: Date;
+                                token: string;
+                                ipAddress?: string | null | undefined;
+                                userAgent?: string | null | undefined;
+                            };
+                            user: Record<string, any> & {
+                                id: string;
+                                email: string;
+                                emailVerified: boolean;
+                                name: string;
+                                createdAt: Date;
+                                updatedAt: Date;
+                                image?: string | null | undefined;
+                            };
+                        } & {
+                            session: better_auth.Session & Record<string, any>;
+                            user: better_auth.User & Record<string, any>;
+                        };
+                    }>;
+                    path: "/two-factor/verify-backup-code";
+                    options: {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            code: zod.ZodString;
+                            disableSession: zod.ZodOptional<zod.ZodBoolean>;
+                        }, "strip", zod.ZodTypeAny, {
+                            code: string;
+                            disableSession?: boolean | undefined;
+                        }, {
+                            code: string;
+                            disableSession?: boolean | undefined;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                generateBackupCodes: {
+                    <C extends [better_call.Context<"/two-factor/generate-backup-codes", {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        status: boolean;
+                        backupCodes: string[];
+                    }>;
+                    path: "/two-factor/generate-backup-codes";
+                    options: {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                viewBackupCodes: {
+                    <C extends [better_call.Context<"/two-factor/view-backup-codes", {
+                        method: "GET";
+                        body: zod.ZodObject<{
+                            userId: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            userId: string;
+                        }, {
+                            userId: string;
+                        }>;
+                        metadata: {
+                            SERVER_ONLY: true;
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        status: boolean;
+                        backupCodes: string[];
+                    }>;
+                    path: "/two-factor/view-backup-codes";
+                    options: {
+                        method: "GET";
+                        body: zod.ZodObject<{
+                            userId: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            userId: string;
+                        }, {
+                            userId: string;
+                        }>;
+                        metadata: {
+                            SERVER_ONLY: true;
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                sendTwoFactorOTP: {
+                    <C extends [better_call.Context<"/two-factor/send-otp", {
+                        method: "POST";
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        status: boolean;
+                    }>;
+                    path: "/two-factor/send-otp";
+                    options: {
+                        method: "POST";
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                verifyTwoFactorOTP: {
+                    <C extends [better_call.Context<"/two-factor/verify-otp", {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            code: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            code: string;
+                        }, {
+                            code: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        token: string;
+                        user: {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image: string | null | undefined;
+                            createdAt: Date;
+                            updatedAt: Date;
+                        };
+                    }>;
+                    path: "/two-factor/verify-otp";
+                    options: {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            code: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            code: string;
+                        }, {
+                            code: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                generateTOTP: {
+                    <C extends [(better_call.Context<"/totp/generate", {
+                        method: "POST";
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        code: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        code: string;
+                    }>;
+                    path: "/totp/generate";
+                    options: {
+                        method: "POST";
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        code: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                getTOTPURI: {
+                    <C extends [better_call.Context<"/two-factor/get-totp-uri", {
+                        method: "POST";
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        totpURI: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        totpURI: string;
+                    }>;
+                    path: "/two-factor/get-totp-uri";
+                    options: {
+                        method: "POST";
+                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, better_call.EndpointOptions>[];
+                        body: zod.ZodObject<{
+                            password: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            password: string;
+                        }, {
+                            password: string;
+                        }>;
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        totpURI: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+                verifyTOTP: {
+                    <C extends [better_call.Context<"/two-factor/verify-totp", {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            code: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            code: string;
+                        }, {
+                            code: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }>]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        token: string;
+                        user: {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            image: string | null | undefined;
+                            createdAt: Date;
+                            updatedAt: Date;
+                        };
+                    }>;
+                    path: "/two-factor/verify-totp";
+                    options: {
+                        method: "POST";
+                        body: zod.ZodObject<{
+                            code: zod.ZodString;
+                        }, "strip", zod.ZodTypeAny, {
+                            code: string;
+                        }, {
+                            code: string;
+                        }>;
+                        use: better_call.Endpoint<better_call.Handler<string, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }, {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: better_auth_plugins.UserWithTwoFactor;
+                            };
+                        } | {
+                            valid: () => Promise<{
+                                response: {
+                                    body: any;
+                                    status: number;
+                                    statusText: string;
+                                    headers: Record<string, string> | undefined;
+                                };
+                                body: {
+                                    token: string;
+                                    user: {
+                                        id: string;
+                                        email: string;
+                                        emailVerified: boolean;
+                                        name: string;
+                                        image: string | null | undefined;
+                                        createdAt: Date;
+                                        updatedAt: Date;
+                                    };
+                                };
+                                _flag: "json";
+                            }>;
+                            invalid: () => Promise<never>;
+                            session: {
+                                session: Record<string, any> & {
+                                    id: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    userId: string;
+                                    expiresAt: Date;
+                                    token: string;
+                                    ipAddress?: string | null | undefined;
+                                    userAgent?: string | null | undefined;
+                                };
+                                user: Record<string, any> & {
+                                    id: string;
+                                    email: string;
+                                    emailVerified: boolean;
+                                    name: string;
+                                    createdAt: Date;
+                                    updatedAt: Date;
+                                    image?: string | null | undefined;
+                                };
+                            };
+                        }>, {
+                            body: zod.ZodObject<{
+                                trustDevice: zod.ZodOptional<zod.ZodBoolean>;
+                            }, "strip", zod.ZodTypeAny, {
+                                trustDevice?: boolean | undefined;
+                            }, {
+                                trustDevice?: boolean | undefined;
+                            }>;
+                        } & {
+                            method: "*";
+                        }>[];
+                        metadata: {
+                            openapi: {
+                                summary: string;
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        status: {
+                                                            type: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_call.Method | better_call.Method[];
+                    headers: Headers;
+                };
+            };
+            options: better_auth_plugins.TwoFactorOptions | undefined;
+            hooks: {
+                after: {
+                    matcher(context: better_auth.HookEndpointContext<{
+                        returned: better_call.APIError | Response | Record<string, any>;
+                        endpoint: better_call.Endpoint;
+                    }>): boolean;
+                    handler: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        response: {
+                            body: any;
+                            status: number;
+                            statusText: string;
+                            headers: Record<string, string> | undefined;
+                        };
+                        body: {
+                            twoFactorRedirect: boolean;
+                        };
+                        _flag: "json";
+                    } | undefined>, better_call.EndpointOptions>;
+                }[];
+            };
+            schema: {
+                user: {
+                    fields: {
+                        twoFactorEnabled: {
+                            type: "boolean";
+                            required: false;
+                            defaultValue: false;
+                            input: false;
+                        };
+                    };
+                };
+                twoFactor: {
+                    fields: {
+                        secret: {
+                            type: "string";
+                            required: true;
+                            returned: false;
+                        };
+                        backupCodes: {
+                            type: "string";
+                            required: true;
+                            returned: false;
+                        };
+                        userId: {
+                            type: "string";
+                            required: true;
+                            returned: false;
+                            references: {
+                                model: string;
+                                field: string;
+                            };
+                        };
+                    };
+                };
+            };
+            rateLimit: {
+                pathMatcher(path: string): boolean;
+                window: number;
+                max: number;
+            }[];
+        } | {
             id: "custom-session";
             endpoints: {
                 getSession: {
@@ -9887,9 +13514,9 @@ declare const auth: {
                 };
             };
         } | {
-            id: "getProviders";
+            id: "customGetProviders";
             endpoints: {
-                getProviders: {
+                customGetProviders: {
                     <C extends [(better_call.Context<"/get-providers", {
                         method: "GET";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -9904,9 +13531,9 @@ declare const auth: {
                 };
             };
         } | {
-            id: "createSession";
+            id: "customCreateSession";
             endpoints: {
-                createSession: {
+                customCreateSession: {
                     <C extends [(better_call.Context<"/create-session", {
                         method: "GET";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -9950,9 +13577,9 @@ declare const auth: {
                 };
             };
         } | {
-            id: "updateUserccc";
+            id: "customUpdateUser";
             endpoints: {
-                updateUserccc: {
+                customUpdateUser: {
                     <C extends [(better_call.Context<"/update-user-ccc", {
                         method: "POST";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
@@ -9990,6 +13617,7 @@ declare const auth: {
                 updatedAt: Date;
                 image?: string | null | undefined | undefined;
                 handle: string;
+                twoFactorEnabled: boolean | null | undefined;
             };
         };
     };
@@ -11360,6 +14988,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     handle: string | null;
                     createdAt: string;
                     updatedAt: string;
+                    twoFactorEnabled: boolean | null;
                 };
             };
             outputFormat: "json";
@@ -11385,6 +15014,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        twoFactorEnabled: boolean | null;
                     };
                 };
             };
@@ -11574,6 +15204,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            twoFactorEnabled: boolean | null;
                         }[];
                     };
                 } | {
@@ -11932,6 +15563,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        twoFactorEnabled: boolean | null;
                     } | null | undefined;
                     toUser?: {
                         name: string | null;
@@ -11941,6 +15573,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        twoFactorEnabled: boolean | null;
                     } | null | undefined;
                     toFeed?: {
                         type: "feed";
@@ -11982,26 +15615,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
     "/claim_daily": {
         $post: {
             input: {};
-            output: {
-                code: 0;
-                data: {
-                    transactionHash: string;
-                };
-            };
-            outputFormat: "json";
-            status: 200;
-        };
-    };
-} & {
-    "/withdraw": {
-        $post: {
-            input: {
-                json: {
-                    amount: string;
-                    address: string;
-                    toRss3?: boolean | undefined;
-                };
-            };
             output: {
                 code: 0;
                 data: {
@@ -12089,6 +15702,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        twoFactorEnabled: boolean | null;
                     };
                     userId: string;
                     rank: number | null;
@@ -12844,6 +16458,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     handle: string | null;
                     createdAt: string;
                     updatedAt: string;
+                    twoFactorEnabled: boolean | null;
                 }[];
             };
             outputFormat: "json";
@@ -13057,4 +16672,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/rsshub">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, twoFactor, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
