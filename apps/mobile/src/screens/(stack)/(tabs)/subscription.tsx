@@ -27,6 +27,7 @@ export default function FeedList() {
           headerTransparent: true,
         }}
       />
+
       <SubscriptionLists />
       <ViewTab />
     </>
