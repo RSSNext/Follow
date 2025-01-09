@@ -10,31 +10,59 @@ import { DATA } from "./data"
 
 const transition = SharedTransition.duration(300)
 
+type EntryList = Array<{
+  entries: {
+    id: string
+    title: string
+    media: Array<{
+      type: string
+      url: string
+      width?: number
+      height?: number
+      preview_image_url?: string
+    }>
+  }
+}>
+
 export function EntryColumnGrid() {
   return (
     <View className="flex-1 flex-row bg-gray-50">
       <MasonryFlashList
-        data={DATA}
+        data={DATA as EntryList}
         numColumns={2}
         keyExtractor={(item) => item.entries.id}
         contentContainerClassName="p-1"
         renderItem={({ item }) => {
-          const media = item.entries.media.find((media) => media.type === "photo")
+          const photo = item.entries.media.find((media) => media.type === "photo")
+          const video = item.entries.media.find((media) => media.type === "video")
+          const imageUrl = photo?.url || video?.preview_image_url
+          const aspectRatio =
+            photo?.height && photo.width
+              ? photo.width / photo.height
+              : video?.height && video.width
+                ? video.width / video.height
+                : 16 / 9
+
           return (
             <View className="m-1 overflow-hidden rounded-md bg-white">
               <Link href={`/entries/${item.entries.id}`} asChild>
                 <Pressable>
-                  <ReAnimatedExpoImage
-                    source={{ uri: media?.url }}
-                    style={{
-                      width: "100%",
-                      aspectRatio:
-                        media?.height && media.width ? media.width / media.height : 9 / 16,
-                    }}
-                    sharedTransitionTag={`entry-image-${media?.url}`}
-                    sharedTransitionStyle={transition}
-                    allowDownscaling={false}
-                  />
+                  {imageUrl ? (
+                    <ReAnimatedExpoImage
+                      source={{ uri: imageUrl }}
+                      style={{
+                        width: "100%",
+                        aspectRatio,
+                      }}
+                      sharedTransitionTag={`entry-image-${imageUrl}`}
+                      sharedTransitionStyle={transition}
+                      allowDownscaling={false}
+                    />
+                  ) : (
+                    <View className="aspect-video w-full items-center justify-center">
+                      <ThemedText className="text-center">No media available</ThemedText>
+                    </View>
+                  )}
                 </Pressable>
               </Link>
 

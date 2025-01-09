@@ -83,20 +83,35 @@ export const DATA = [
       insertedAt: "2025-01-06T13:55:22.088Z",
       publishedAt: "2025-01-06T13:55:22.088Z",
       media: [
+        // {
+        //   url: "https://1x.com/images/user/3ea3c266ed77aaa93a6a3a6221de853d-hd4.jpg",
+        //   type: "photo",
+        //   width: 1333,
+        //   height: 2000,
+        //   blurhash: "L#J8Ib%LRjay~ot7WBj[xuR+j[s:",
+        // },
+        // {
+        //   url: "https://1x.com/images/user/3ea3c266ed77aaa93a6a3a6221de853d-hd4.jpg",
+        //   type: "photo",
+        //   width: 1333,
+        //   height: 2000,
+        //   blurhash: "L#J8Ib%LRjay~ot7WBj[xuR+j[s:",
+        // },
         {
-          url: "https://1x.com/images/user/3ea3c266ed77aaa93a6a3a6221de853d-hd4.jpg",
-          type: "photo",
-          width: 1333,
-          height: 2000,
-          blurhash: "L#J8Ib%LRjay~ot7WBj[xuR+j[s:",
+          url: "https://video.twimg.com/amplify_video/1848739714049908736/vid/avc1/1280x720/jzWeEF8Xd3WmYp5s.mp4?tag=16",
+          type: "video",
+          width: 1280,
+          height: 720,
+          preview_image_url:
+            "https://pbs.twimg.com/amplify_video_thumb/1848739714049908736/img/OJbHuDJHbYcA6zzW.jpg",
         },
-        {
-          url: "https://1x.com/images/user/3ea3c266ed77aaa93a6a3a6221de853d-hd4.jpg",
-          type: "photo",
-          width: 1333,
-          height: 2000,
-          blurhash: "L#J8Ib%LRjay~ot7WBj[xuR+j[s:",
-        },
+        // {
+        //   url: "https://media.st.dl.eccdnx.com/steam/apps/2074800/extras/pic1.png?t=1673603154",
+        //   type: "photo",
+        //   width: 616,
+        //   height: 350,
+        //   blurhash: "LLLW6Yg7xzM.?aj2+c$,t*R*tPxV",
+        // },
       ],
       categories: null,
       attachments: [

@@ -36,6 +36,7 @@
     "es-toolkit": "1.29.0",
     "expo": "52.0.18",
     "expo-apple-authentication": "~7.1.2",
+    "expo-av": "~15.0.1",
     "expo-blur": "~14.0.1",
     "expo-build-properties": "^0.13.1",
     "expo-clipboard": "~7.0.0",
