@@ -2,19 +2,22 @@ import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
-import { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { useAtom } from "jotai"
 import { useColorScheme } from "nativewind"
 import type { FC } from "react"
-import { createContext, memo, useContext, useEffect, useMemo, useRef } from "react"
-import { Animated, Easing, Image, StyleSheet, Text, useAnimatedValue, View } from "react-native"
+import { createContext, memo, useContext, useEffect, useMemo, useRef, useState } from "react"
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import PagerView from "react-native-pager-view"
-import { useSharedValue } from "react-native-reanimated"
+import ReAnimated, {
+  FadeOutUp,
+  LinearTransition,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { AnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
-import { AccordionItem } from "@/src/components/ui/accordion"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
@@ -45,7 +48,7 @@ import { SubscriptionListItemContextMenu } from "../context-menu/lists"
 import { useFeedListSortMethod, useFeedListSortOrder, viewAtom } from "./atoms"
 import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 
-export const SubscriptionList = memo(() => {
+export const SubscriptionLists = memo(() => {
   const [currentView, setCurrentView] = useAtom(viewAtom)
 
   const pagerRef = useRef<PagerView>(null)
@@ -79,7 +82,7 @@ export const SubscriptionList = memo(() => {
         ].map((view) => {
           return (
             <ViewPageCurrentViewProvider key={view} value={view}>
-              <RecycleList view={view} />
+              <SubscriptionList view={view} />
             </ViewPageCurrentViewProvider>
           )
         })}
@@ -87,7 +90,13 @@ export const SubscriptionList = memo(() => {
     </>
   )
 })
-const RecycleList = ({ view }: { view: FeedViewType }) => {
+const keyExtractor = (item: string | { category: string; subscriptionIds: string[] }) => {
+  if (typeof item === "string") {
+    return item
+  }
+  return item.category
+}
+const SubscriptionList = ({ view }: { view: FeedViewType }) => {
   const headerHeight = useHeaderHeight()
   const insets = useSafeAreaInsets()
   const tabHeight = useBottomTabBarHeight()
@@ -105,7 +114,7 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
   )
 
   return (
-    <FlashList
+    <ReAnimated.FlatList
       contentInsetAdjustmentBehavior="automatic"
       scrollIndicatorInsets={{
         bottom: tabHeight - insets.bottom,
@@ -116,9 +125,10 @@ const RecycleList = ({ view }: { view: FeedViewType }) => {
         paddingBottom: tabHeight,
       }}
       data={data}
-      estimatedItemSize={48}
       ListHeaderComponent={ListHeaderComponent}
       renderItem={ItemRender}
+      keyExtractor={keyExtractor}
+      itemLayoutAnimation={LinearTransition}
       extraData={{
         total: data.length,
       }}
@@ -298,54 +308,50 @@ const GroupedContext = createContext<string | null>(null)
 const CategoryGrouped = memo(
   ({ category, subscriptionIds }: { category: string; subscriptionIds: string[] }) => {
     const unreadCounts = useUnreadCounts(subscriptionIds)
-    const isExpanded = useSharedValue(false)
-    const rotateValue = useAnimatedValue(1)
+    const [expanded, setExpanded] = useState(false)
+    const rotateSharedValue = useSharedValue(0)
+    const rotateStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ rotate: `${rotateSharedValue.value}deg` }],
+      }
+    }, [rotateSharedValue])
     return (
-      <SubscriptionFeedCategoryContextMenu category={category} feedIds={subscriptionIds}>
-        <ItemPressable
-          onPress={() => {
-            // TODO navigate to category
-          }}
-          className="border-item-pressed h-12 flex-row items-center border-b px-3"
-        >
-          <AnimatedTouchableOpacity
-            hitSlop={10}
+      <>
+        <SubscriptionFeedCategoryContextMenu category={category} feedIds={subscriptionIds}>
+          <ItemPressable
             onPress={() => {
-              Animated.timing(rotateValue, {
-                toValue: isExpanded.value ? 1 : 0,
-                easing: Easing.linear,
-
-                useNativeDriver: true,
-              }).start()
-              isExpanded.value = !isExpanded.value
+              // TODO navigate to category
             }}
-            style={[
-              {
-                transform: [
-                  {
-                    rotate: rotateValue.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ["90deg", "0deg"],
-                    }),
-                  },
-                ],
-              },
-              style.accordionIcon,
-            ]}
+            className="border-item-pressed h-12 flex-row items-center border-b px-3"
           >
-            <MingcuteRightLine color="gray" height={18} width={18} />
-          </AnimatedTouchableOpacity>
-          <Text className="text-text ml-3">{category}</Text>
-          {!!unreadCounts && (
-            <Text className="text-tertiary-label ml-auto text-xs">{unreadCounts}</Text>
-          )}
-        </ItemPressable>
-        <AccordionItem isExpanded={isExpanded} viewKey={category}>
+            <TouchableOpacity
+              hitSlop={10}
+              onPress={() => {
+                rotateSharedValue.value = withSpring(expanded ? 90 : 0, {})
+                setExpanded(!expanded)
+              }}
+              style={style.accordionIcon}
+            >
+              <ReAnimated.View style={rotateStyle}>
+                <MingcuteRightLine color="gray" height={18} width={18} />
+              </ReAnimated.View>
+            </TouchableOpacity>
+            <Text className="text-text ml-3">{category}</Text>
+            {!!unreadCounts && (
+              <Text className="text-tertiary-label ml-auto text-xs">{unreadCounts}</Text>
+            )}
+          </ItemPressable>
+        </SubscriptionFeedCategoryContextMenu>
+        {/* <AccordionItem isExpanded={isExpanded} viewKey={category}> */}
+        {expanded && (
           <GroupedContext.Provider value={category}>
-            <UnGroupedList subscriptionIds={subscriptionIds} />
+            <View>
+              <UnGroupedList subscriptionIds={subscriptionIds} />
+            </View>
           </GroupedContext.Provider>
-        </AccordionItem>
-      </SubscriptionFeedCategoryContextMenu>
+        )}
+        {/* </AccordionItem> */}
+      </>
     )
   },
 )
@@ -407,33 +413,34 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
     //   }}
     // >
     // <ReAnimated.View key={id} layout={CurvedTransition} exiting={FadeOut}>
-    <SubscriptionFeedItemContextMenu id={id} view={view}>
-      <ItemPressable
-        className={cn(
-          "flex h-12 flex-row items-center",
-          inGrouped ? "pl-8 pr-4" : "px-4",
-          "border-item-pressed border-b",
-          className,
-        )}
-        onPress={() => {
-          router.push({
-            pathname: `/feeds/[feedId]`,
-            params: {
-              feedId: id,
-            },
-          })
-        }}
-      >
-        <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
-          <FeedIcon feed={feed} />
-        </View>
-        <Text className="text-text">{subscription.title || feed.title}</Text>
-        {!!unreadCount && (
-          <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
-        )}
-      </ItemPressable>
-    </SubscriptionFeedItemContextMenu>
-    // </ReAnimated.View>
+    <ReAnimated.View exiting={FadeOutUp}>
+      <SubscriptionFeedItemContextMenu id={id} view={view}>
+        <ItemPressable
+          className={cn(
+            "flex h-12 flex-row items-center",
+            inGrouped ? "pl-8 pr-4" : "px-4",
+            "border-item-pressed border-b",
+            className,
+          )}
+          onPress={() => {
+            router.push({
+              pathname: `/feeds/[feedId]`,
+              params: {
+                feedId: id,
+              },
+            })
+          }}
+        >
+          <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
+            <FeedIcon feed={feed} />
+          </View>
+          <Text className="text-text">{subscription.title || feed.title}</Text>
+          {!!unreadCount && (
+            <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
+          )}
+        </ItemPressable>
+      </SubscriptionFeedItemContextMenu>
+    </ReAnimated.View>
     // </Swipeable>
   )
 })
