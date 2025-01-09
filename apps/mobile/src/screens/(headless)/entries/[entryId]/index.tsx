@@ -2,10 +2,11 @@ import type { AVPlaybackStatus } from "expo-av"
 import { Video } from "expo-av"
 import { Stack, useLocalSearchParams } from "expo-router"
 import { useState } from "react"
-import { Dimensions, Text, View } from "react-native"
+import { Dimensions, ScrollView, Text, View } from "react-native"
 import PagerView from "react-native-pager-view"
 
 import { ReAnimatedExpoImage } from "@/src/components/common/AnimatedComponents"
+import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
 import { useShouldAnimate } from "@/src/modules/entry/ctx"
 import { DATA } from "@/src/modules/entry/data"
 
@@ -34,7 +35,7 @@ function Media({ media, shouldAnimate }: { media: any; shouldAnimate: boolean })
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
         />
       )}
-      <View className="bg-gray-6 flex-1 justify-center">
+      <View className="flex-1 justify-center">
         {imageUrl ? (
           <ReAnimatedExpoImage
             source={{ uri: imageUrl }}
@@ -77,11 +78,12 @@ export default function EntryDetailPage() {
   const shouldAnimate = useShouldAnimate()
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const [height, setHeight] = useState(0)
 
   return (
     <>
       <Stack.Screen options={{ animation: "fade", animationDuration: 300 }} />
-      <View className="flex-1 p-safe">
+      <ScrollView className="pt-safe" contentContainerClassName="flex-grow">
         <View
           style={{
             height: maxMediaHeight > 0 ? maxMediaHeight : "80%",
@@ -104,7 +106,7 @@ export default function EntryDetailPage() {
             </PagerView>
           )}
           {mediaList.length > 1 && (
-            <View className="mt-2 w-full flex-row items-center justify-center gap-2">
+            <View className="my-2 w-full flex-row items-center justify-center gap-2">
               {Array.from({ length: mediaList.length }).map((_, index) => {
                 return (
                   <View
@@ -118,7 +120,19 @@ export default function EntryDetailPage() {
             </View>
           )}
         </View>
-      </View>
+        <HtmlWeb
+          content={item.entries.content || ""}
+          onLayout={async (size) => {
+            if (size[1] !== height) {
+              setHeight(size[1])
+            }
+          }}
+          dom={{
+            scrollEnabled: false,
+            style: { height },
+          }}
+        />
+      </ScrollView>
     </>
   )
 }
