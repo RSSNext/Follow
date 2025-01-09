@@ -300,7 +300,6 @@ const MediaImpl: FC<MediaProps> = ({
           width={Number.parseInt(props.width as string)}
           height={Number.parseInt(props.height as string)}
           containerWidth={containerWidth}
-          noScale={inline}
           fitContent={fitContent}
         >
           <div
@@ -360,7 +359,6 @@ const AspectRatio = ({
   containerWidth,
   children,
   style,
-  noScale,
   fitContent,
   ...props
 }: {
@@ -370,18 +368,13 @@ const AspectRatio = ({
   children: React.ReactNode
   style?: React.CSSProperties
   /**
-   * Keep the content size for inline image usage
-   */
-  noScale?: boolean
-  /**
    * If `fit` is true, the content width may be increased to fit the container width
    */
   fitContent?: boolean
   [key: string]: any
 }) => {
-  const scaleFactor = noScale
-    ? 1
-    : containerWidth && width
+  const scaleFactor =
+    containerWidth && width
       ? fitContent
         ? containerWidth / width
         : Math.min(1, containerWidth / width)
