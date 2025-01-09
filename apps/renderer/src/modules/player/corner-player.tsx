@@ -181,11 +181,17 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
       >
         {/* play cover */}
         <div className="relative h-[3.625rem] shrink-0">
-          <FeedIcon feed={feed} entry={entry.entries} size={58} fallback={false} noMargin />
+          <FeedIcon
+            feed={feed}
+            entry={entry.entries}
+            size={isMobile ? 65.25 : 58}
+            fallback={false}
+            noMargin
+          />
           <div
             className={cn(
-              "center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100",
-              isMobile && "opacity-100",
+              "center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out",
+              isMobile ? "opacity-100" : "group-hover:opacity-100",
             )}
           >
             <button
@@ -212,7 +218,12 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
           >
             {entry.entries.title}
           </Marquee>
-          <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:opacity-0">
+          <div
+            className={cn(
+              "mt-0.5 overflow-hidden truncate text-xs text-muted-foreground",
+              !isMobile && "group-hover:opacity-0",
+            )}
+          >
             {feed.title}
           </div>
 
@@ -225,8 +236,10 @@ const CornerPlayerImpl = ({ hideControls, rounded }: ControlButtonProps) => {
       {!hideControls && (
         <div
           className={cn(
-            "absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100",
-            isMobile && "-translate-y-full opacity-100",
+            "absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-0 transition-all duration-200 ease-in-out",
+            isMobile
+              ? "-translate-y-full opacity-100"
+              : "group-hover:-translate-y-full group-hover:opacity-100",
           )}
         >
           <div className="flex items-center">
@@ -321,8 +334,8 @@ const PlayerProgress = () => {
     <div className="relative mt-2">
       <div
         className={cn(
-          "absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100",
-          isMobile && "opacity-100",
+          "absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out",
+          isMobile ? "opacity-100" : "group-hover:opacity-100",
         )}
       >
         <div className="text-xs">{currentTimeIndicator}</div>
