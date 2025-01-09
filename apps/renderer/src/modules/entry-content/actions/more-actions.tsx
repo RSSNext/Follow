@@ -9,31 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu/dropdown-menu"
-import { useEntryActions } from "~/hooks/biz/useEntryActions"
+import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useCommand } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
-import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
-  const actionConfigs = useEntryActions({ entryId, view })
-  const orderMap = useToolbarOrderMap()
+  const { moreAction: actionConfigs } = useSortedEntryActions({ entryId, view })
   const availableActions = useMemo(
-    () =>
-      actionConfigs
-        .filter((item) => {
-          const order = orderMap.get(item.id)
-          // If the order is not set, it should be in the "more" menu
-          if (!order) return true
-          return order.type !== "main"
-        })
-        .filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar)
-        .sort((a, b) => {
-          const orderA = orderMap.get(a.id)?.order || Infinity
-          const orderB = orderMap.get(b.id)?.order || Infinity
-          return orderA - orderB
-        }),
-    [actionConfigs, orderMap],
+    () => actionConfigs.filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar),
+    [actionConfigs],
   )
 
   const extraAction = useMemo(

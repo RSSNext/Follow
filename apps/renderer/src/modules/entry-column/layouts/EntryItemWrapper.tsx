@@ -114,7 +114,7 @@ export const EntryItemWrapper: FC<
 
               return {
                 type: "text" as const,
-                label: cmd?.label.title || "aa",
+                label: cmd?.label.title || "",
                 click: () => item.onClick(),
                 shortcut: item.shortcut,
               }
