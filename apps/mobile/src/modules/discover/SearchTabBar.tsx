@@ -1,31 +1,27 @@
 import { useAtom } from "jotai"
-import { View } from "react-native"
+import type { FC } from "react"
+import type { Animated } from "react-native"
 
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
-import type { Tab } from "@/src/components/ui/tabview/types"
 
-import { SearchType } from "./constants"
-import { useDiscoverPageContext } from "./ctx"
+import type { SearchType } from "./constants"
+import { SearchTabs } from "./constants"
+import { useSearchPageContext } from "./ctx"
 
-const Tabs: Tab[] = [
-  { name: "Feed", value: SearchType.Feed },
-  { name: "List", value: SearchType.List },
-  { name: "User", value: SearchType.User },
-  { name: "RSSHub", value: SearchType.RSSHub },
-]
-export const SearchTabBar = () => {
-  const { searchTypeAtom } = useDiscoverPageContext()
+export const SearchTabBar: FC<{
+  animatedX: Animated.Value
+}> = ({ animatedX }) => {
+  const { searchTypeAtom } = useSearchPageContext()
   const [searchType, setSearchType] = useAtom(searchTypeAtom)
 
   return (
-    <View>
-      <TabBar
-        tabs={Tabs}
-        currentTab={Tabs.findIndex((tab) => tab.value === searchType)}
-        onTabItemPress={(index) => {
-          setSearchType(Tabs[index].value as SearchType)
-        }}
-      />
-    </View>
+    <TabBar
+      tabScrollContainerAnimatedX={animatedX}
+      tabs={SearchTabs}
+      currentTab={SearchTabs.findIndex((tab) => tab.value === searchType)}
+      onTabItemPress={(index) => {
+        setSearchType(SearchTabs[index].value as SearchType)
+      }}
+    />
   )
 }
