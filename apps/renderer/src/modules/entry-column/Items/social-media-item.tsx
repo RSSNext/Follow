@@ -118,7 +118,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       </div>
 
       {showAction && !isMobile && (
-        <div className="absolute right-1 top-0 -translate-y-1/2 rounded-lg border border-gray-200 bg-white/80 p-1 shadow-sm backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
+        <div className="absolute right-1 top-0 -translate-y-1/2 rounded-lg border border-gray-200 bg-neutral-900 p-1 shadow-sm backdrop-blur-sm dark:border-neutral-900">
           <ActionBar entryId={entryId} />
         </div>
       )}
