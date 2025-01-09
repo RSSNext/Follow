@@ -17,6 +17,7 @@ import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useRunCommandFn } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
+import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -226,4 +227,53 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   ])
 
   return actionConfigs
+}
+
+export const useSortedEntryActions = ({
+  entryId,
+  view,
+}: {
+  entryId: string
+  view?: FeedViewType
+}) => {
+  const entryActions = useEntryActions({ entryId, view })
+  const orderMap = useToolbarOrderMap()
+  const mainAction = useMemo(
+    () =>
+      entryActions
+        .filter((item) => {
+          const order = orderMap.get(item.id)
+          if (!order) return false
+          return order.type === "main"
+        })
+        .sort((a, b) => {
+          const orderA = orderMap.get(a.id)?.order || 0
+          const orderB = orderMap.get(b.id)?.order || 0
+          return orderA - orderB
+        }),
+    [entryActions, orderMap],
+  )
+
+  const moreAction = useMemo(
+    () =>
+      entryActions
+        .filter((item) => {
+          const order = orderMap.get(item.id)
+          // If the order is not set, it should be in the "more" menu
+          if (!order) return true
+          return order.type !== "main"
+        })
+        // .filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar)
+        .sort((a, b) => {
+          const orderA = orderMap.get(a.id)?.order || Infinity
+          const orderB = orderMap.get(b.id)?.order || Infinity
+          return orderA - orderB
+        }),
+    [entryActions, orderMap],
+  )
+
+  return {
+    mainAction,
+    moreAction,
+  }
 }
