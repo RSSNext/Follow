@@ -272,7 +272,7 @@ export const EntryList: FC<EntryListProps> = memo(
                   className="absolute left-0 top-0 w-full will-change-transform"
                   style={{
                     transform,
-                    paddingTop: sticky ? "1.75rem" : undefined,
+                    paddingTop: sticky ? "3.5rem" : undefined,
                   }}
                   ref={rowVirtualizer.measureElement}
                   data-index={virtualRow.index}

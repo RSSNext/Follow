@@ -118,7 +118,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       </div>
 
       {showAction && !isMobile && (
-        <div className={"absolute right-1 top-1.5"}>
+        <div className="absolute right-1 top-0 -translate-y-1/2 rounded-lg border border-gray-200 bg-white/80 p-1 shadow-sm backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
           <ActionBar entryId={entryId} />
         </div>
       )}
@@ -132,7 +132,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   const { mainAction: entryActions } = useSortedEntryActions({ entryId })
 
   return (
-    <div className="flex origin-right scale-90 items-center gap-1">
+    <div className="flex items-center gap-1">
       {entryActions
         .filter(
           (item) =>
