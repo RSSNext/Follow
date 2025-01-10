@@ -1,5 +1,6 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useCallback, useMemo } from "react"
 
 import { useShowAISummary } from "~/atoms/ai-summary"
@@ -186,7 +187,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.share,
         onClick: runCmdFn(COMMAND_ID.entry.share, [{ entryId }]),
-        hide: !entry?.entries.url || !("share" in navigator),
+        hide: !entry?.entries.url || !("share" in navigator || IN_ELECTRON),
         shortcut: shortcuts.entry.share.key,
       },
       {
