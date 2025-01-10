@@ -27,8 +27,6 @@ export const env = createEnv({
 
   emptyStringAsUndefined: true,
   runtimeEnv: getRuntimeEnv() as any,
-
-  skipValidation: !isDev,
 })
 
 function metaEnvIsEmpty() {
