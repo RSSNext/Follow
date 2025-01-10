@@ -8,13 +8,13 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { ContextMenu } from "@/src/components/ui/context-menu"
-import { bottomViewTabHeight } from "@/src/constants/ui"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
 import { useUnreadCountByView } from "@/src/store/unread/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 import { offsetAtom, setCurrentView, viewAtom } from "./atoms"
+import { ViewTabHeight } from "./constants"
 
 const springConfig: WithSpringConfig = {
   damping: 20,
@@ -65,10 +65,10 @@ export const ViewTab = () => {
 
   return (
     <ThemedBlurView
-      style={[styles.tabContainer, { height: headerHeight + bottomViewTabHeight }]}
+      style={[styles.tabContainer, { height: headerHeight + ViewTabHeight }]}
       className="border-system-fill/60 relative border-b"
     >
-      <View className="absolute inset-x-0 bottom-0" style={{ height: bottomViewTabHeight }}>
+      <View className="absolute inset-x-0 bottom-0" style={{ height: ViewTabHeight }}>
         <ScrollView
           onScroll={(event) => {
             scrollOffsetX.current = event.nativeEvent.contentOffset.x

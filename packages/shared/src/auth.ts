@@ -9,12 +9,12 @@ import { IN_ELECTRON, WEB_URL } from "./constants"
 type AuthPlugin = (typeof authPlugins)[number]
 const serverPlugins = [
   {
-    id: "getProviders",
-    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "getProviders" }>,
+    id: "customGetProviders",
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "customGetProviders" }>,
   },
   {
-    id: "createSession",
-    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "createSession" }>,
+    id: "customCreateSession",
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "customCreateSession" }>,
   },
   {
     id: "getAccountInfo",

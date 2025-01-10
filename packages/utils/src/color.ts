@@ -127,3 +127,41 @@ export function getDominantColor(imageObject: HTMLImageElement) {
 
   return `#${((1 << 24) + (i[0] << 16) + (i[1] << 8) + i[2]).toString(16).slice(1)}`
 }
+
+export const isHexColor = (color: string) => {
+  return /^#[0-9a-f]{6}$/i.test(color)
+}
+
+export const isRGBColor = (color: string) => {
+  return /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/.test(color)
+}
+export const isRGBAColor = (color: string) => {
+  return /^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*0?\.\d+\)$/.test(color)
+}
+
+export const withOpacity = (color: string, opacity: number) => {
+  switch (true) {
+    case isHexColor(color): {
+      // Convert decimal opacity to hex (0-255)
+      const alpha = Math.round(opacity * 255)
+        .toString(16)
+        .padStart(2, "0")
+      return `${color}${alpha}`
+    }
+    case isRGBColor(color): {
+      const [r, g, b] = color.match(/\d+/g)!.map(Number)
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`
+    }
+    case isRGBAColor(color): {
+      const [r, g, b] = color.match(/\d+/g)!.map(Number)
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`
+    }
+    default: {
+      return color
+    }
+  }
+}
+export const rgbStringToRgb = (hex: string) => {
+  const [r, g, b] = hex.split(" ").map((s) => Number.parseInt(s))
+  return `rgb(${r}, ${g}, ${b})`
+}

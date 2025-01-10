@@ -16,6 +16,11 @@
     ["[a-zA-Z]+[cC]lass[nN]ame[\"'`]?:\\s*[\"'`]([^\"'`]*)[\"'`]", "([^\"'`]*)"],
     ["[a-zA-Z]+[cC]lass[nN]ame\\s*=\\s*[\"'`]([^\"'`]*)[\"'`]", "([^\"'`]*)"]
   ],
+  "tailwindCSS.experimental.configFile": {
+    "apps/mobile/tailwind.config.ts": "apps/mobile/**",
+    "apps/server/tailwind.config.ts": "apps/server/**",
+    "tailwind.config.ts": ["!apps/mobile/**", "!apps/server/**", "**"]
+  },
   "typescript.tsserver.maxTsServerMemory": 8096,
   "typescript.tsserver.nodePath": "node",
   // If you do not want to autofix some rules on save

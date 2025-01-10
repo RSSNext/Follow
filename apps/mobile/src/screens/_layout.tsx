@@ -27,8 +27,7 @@ export default function RootLayout() {
         <Stack.Screen name="(modal)" options={{ headerShown: false, presentation: "modal" }} />
       </Stack>
 
-      {/* {__DEV__ && <DebugButton />} */}
-      <DebugButton />
+      {__DEV__ && <DebugButton />}
     </RootProviders>
   )
 }

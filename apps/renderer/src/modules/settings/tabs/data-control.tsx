@@ -216,7 +216,9 @@ const ExportFeedsForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">{t("ok", { ns: "common" })}</Button>
+        <div className="flex justify-end">
+          <Button type="submit">{t("ok", { ns: "common" })}</Button>
+        </div>
       </form>
     </Form>
   )

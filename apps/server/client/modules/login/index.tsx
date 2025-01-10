@@ -3,7 +3,6 @@ import { queryClient } from "@client/lib/query-client"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import {
@@ -194,7 +193,7 @@ export function Login() {
   const Content = useMemo(() => {
     switch (true) {
       case redirecting: {
-        return <div>{t("login.redirecting")}</div>
+        return <div className="center">{t("login.redirecting")}</div>
       }
       default: {
         return <div className="flex flex-col gap-3">{LoginOrStatusContent}</div>
@@ -205,19 +204,17 @@ export function Login() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <Logo className="size-16" />
-      {isLoading && <LoadingCircle className="mt-8" size="large" />}
 
-      <AutoResizeHeight>
-        <>
-          {!isAuthenticated && !isLoading && (
-            <h1 className="center mb-6 mt-8 flex text-2xl font-bold">
-              {t("login.logInTo")}
-              {` ${APP_NAME}`}
-            </h1>
-          )}
-          {Content}
-        </>
-      </AutoResizeHeight>
+      <>
+        {!isAuthenticated && !isLoading && (
+          <h1 className="center mb-6 mt-8 flex text-2xl font-bold">
+            {t("login.logInTo")}
+            {` ${APP_NAME}`}
+          </h1>
+        )}
+        {Content}
+        {isLoading && <LoadingCircle className="mt-8" size="large" />}
+      </>
     </div>
   )
 }

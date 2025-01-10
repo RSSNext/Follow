@@ -22,7 +22,7 @@ class FeedServiceStatic implements Hydratable, Resetable {
 
   async hydrate() {
     const feeds = await db.query.feedsTable.findMany()
-    feedActions.upsertMany(feeds)
+    feedActions.upsertManyInSession(feeds)
   }
 }
 

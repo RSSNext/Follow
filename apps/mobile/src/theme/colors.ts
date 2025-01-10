@@ -1,3 +1,4 @@
+import { rgbStringToRgb } from "@follow/utils"
 import { useColorScheme, vars } from "nativewind"
 import { useMemo } from "react"
 
@@ -132,11 +133,6 @@ export const darkVariants = {
 
 /// Utils
 
-const toRgb = (hex: string) => {
-  const [r, g, b] = hex.split(" ").map((s) => Number.parseInt(s))
-  return `rgb(${r} ${g} ${b})`
-}
-
 const mergedLightColors = {
   ...lightVariants,
   ...lightPalette,
@@ -158,7 +154,7 @@ export const colorVariants = {
 export const useColor = (color: keyof typeof mergedLightColors) => {
   const { colorScheme } = useColorScheme()
   const colors = mergedColors[colorScheme || "light"]
-  return useMemo(() => toRgb(colors[color]), [color, colors])
+  return useMemo(() => rgbStringToRgb(colors[color]), [color, colors])
 }
 
 export const useColors = () => {

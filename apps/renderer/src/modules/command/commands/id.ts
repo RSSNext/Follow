@@ -31,9 +31,10 @@ export const COMMAND_ID = {
     copyUrl: "list:copy-url",
     copyId: "list:copy-id",
   },
-  theme: {
-    toAuto: "follow:change-color-mode-to-auto",
-    toDark: "follow:change-color-mode-to-dark",
-    toLight: "follow:change-color-mode-to-light",
+  settings: {
+    changeThemeToAuto: "follow:change-color-mode-to-auto",
+    changeThemeToDark: "follow:change-color-mode-to-dark",
+    changeThemeToLight: "follow:change-color-mode-to-light",
+    customizeToolbar: "follow:customize-toolbar",
   },
 } as const

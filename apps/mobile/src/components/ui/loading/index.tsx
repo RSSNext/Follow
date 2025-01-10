@@ -16,8 +16,9 @@ import { Loading3CuteLiIcon } from "@/src/icons/loading_3_cute_li"
 export const LoadingIndicator: FC<
   {
     size?: number
+    color?: string
   } & PropsWithChildren
-> = ({ size = 60, children }) => {
+> = ({ size = 60, color, children }) => {
   const rotateValue = useSharedValue(0)
 
   const rotation = useDerivedValue(() => {
@@ -41,7 +42,7 @@ export const LoadingIndicator: FC<
   return (
     <View className="flex-1 items-center justify-center">
       <Animated.View style={[animatedStyle, { width: size, height: size }]} className={"mb-2"}>
-        <Loading3CuteLiIcon width={size} height={size} />
+        <Loading3CuteLiIcon width={size} height={size} color={color} />
       </Animated.View>
       {children}
     </View>

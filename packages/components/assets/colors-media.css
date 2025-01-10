@@ -1,3 +1,4 @@
+/* merged from colors.css and tailwind.css */
 :root {
   --fo-a: 21.6 100% 50%;
 
@@ -22,6 +23,21 @@
   --fo-button-hover: theme(colors.zinc.500/0.1);
   --fo-image-placeholder: theme(colors.zinc.100);
   --fo-text-placeholder: theme(colors.zinc.400);
+
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --border: 20 5.9% 90%;
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,6 +65,20 @@
     --fo-button-hover: theme(colors.neutral.400/0.15);
     --fo-image-placeholder: theme(colors.neutral.800);
     --fo-text-placeholder: theme(colors.zinc.500);
+
+    --background: 0 0% 7.1%;
+    --foreground: 60 9.1% 97.8%;
+    --card: 20 14.3% 4.1%;
+    --card-foreground: 60 9.1% 97.8%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 60 9.1% 97.8%;
+
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 0 0% 22.1%;
   }
 }
 

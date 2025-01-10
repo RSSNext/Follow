@@ -1,21 +1,30 @@
 import type { RSSHubParameter, RSSHubParameterObject, RSSHubRoute } from "@follow/models/src/rsshub"
-import { parseFullPathParams, parseRegexpPathParams } from "@follow/utils"
+import {
+  MissingOptionalParamError,
+  parseFullPathParams,
+  parseRegexpPathParams,
+  regexpPathToPath,
+} from "@follow/utils"
 import { PortalProvider } from "@gorhom/portal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, Stack, useLocalSearchParams } from "expo-router"
-import { useEffect, useMemo } from "react"
-import type { UseFormReturn } from "react-hook-form"
-import { useForm } from "react-hook-form"
+import { memo, useEffect, useMemo, useState } from "react"
+import { Controller, useForm } from "react-hook-form"
 import { Linking, Text, TouchableOpacity, View } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { z } from "zod"
 
-import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
-import { FormLabel } from "@/src/components/ui/form/Label"
+import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
+import {
+  ModalHeaderCloseButton,
+  ModalHeaderShubmitButton,
+} from "@/src/components/common/ModalSharedComponents"
+import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
-import { PreviewUrl } from "@/src/modules/rsshub/preview-url"
+import { toast } from "@/src/lib/toast"
+import { feedSyncServices } from "@/src/store/feed/store"
 
 interface RsshubFormParams {
   route: RSSHubRoute
@@ -99,69 +108,89 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
     resolver: zodResolver(dynamicFormSchema),
     defaultValues: defaultValue,
     mode: "all",
-  }) as UseFormReturn<any>
+  })
 
   return (
-    <PortalProvider>
-      <KeyboardAwareScrollView className="bg-system-grouped-background">
-        <Stack.Screen
-          options={{ headerLeft: ModalHeaderCloseButton, headerTitle: `${name} - ${routeName}` }}
-        />
+    <FormProvider form={form}>
+      <ScreenOptions
+        name={name}
+        routeName={routeName}
+        route={route.path}
+        routePrefix={routePrefix}
+      />
 
-        <PreviewUrl
-          className="m-2 mb-6"
-          watch={form.watch}
-          path={route.path}
-          routePrefix={routePrefix}
-        />
-        {/* Form */}
+      <PortalProvider>
+        <KeyboardAwareScrollView className="bg-system-grouped-background">
+          <View className="bg-system-grouped-background-2 mx-2 gap-4 rounded-lg px-3 py-6">
+            {keys.map((keyItem) => {
+              const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
 
-        <View className="bg-system-grouped-background-2 mx-2 gap-4 rounded-lg px-3 py-6">
-          {keys.map((keyItem) => {
-            const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
-            const formRegister = form.register(keyItem.name)
+              return (
+                <View key={keyItem.name}>
+                  {!parameters?.options && (
+                    <Controller
+                      name={keyItem.name}
+                      control={form.control}
+                      rules={{
+                        required: !keyItem.optional,
+                        // validate: (value) => {
+                        //   return dynamicFormSchema.safeParse({
+                        //     [keyItem.name]: value,
+                        //   }).success
+                        // },
+                      }}
+                      render={({ field: { onChange, onBlur, ref, value } }) => (
+                        <TextField
+                          label={keyItem.name}
+                          required={!keyItem.optional}
+                          wrapperClassName="mt-2"
+                          placeholder={formPlaceholder[keyItem.name]}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          defaultValue={defaultValue[keyItem.name] ?? ""}
+                          value={value ?? ""}
+                          ref={ref}
+                        />
+                      )}
+                    />
+                  )}
 
-            return (
-              <View key={keyItem.name}>
-                <FormLabel className="pl-1" label={keyItem.name} optional={keyItem.optional} />
-                {!parameters?.options && (
-                  <TextField
-                    wrapperClassName="mt-2"
-                    placeholder={formPlaceholder[keyItem.name]}
-                    value={form.getValues(keyItem.name)}
-                    onChangeText={(text) => {
-                      formRegister.onChange({
-                        target: { value: text },
-                      })
-                    }}
-                  />
-                )}
+                  {!!parameters?.options && (
+                    <Controller
+                      name={keyItem.name}
+                      control={form.control}
+                      render={({ field: { onChange, value } }) => (
+                        <Select
+                          label={keyItem.name}
+                          wrapperClassName="mt-2"
+                          options={parameters.options ?? []}
+                          value={value}
+                          onValueChange={onChange}
+                        />
+                      )}
+                    />
+                  )}
 
-                {!!parameters?.options && (
-                  <Select
-                    wrapperClassName="mt-2"
-                    options={parameters.options}
-                    value={form.getValues(keyItem.name)}
-                    onValueChange={(value) => {
-                      formRegister.onChange({ target: { value } })
-                    }}
-                  />
-                )}
+                  {!!parameters && (
+                    <Text className="text-text/80 ml-1 mt-2 text-xs">{parameters.description}</Text>
+                  )}
+                </View>
+              )
+            })}
+          </View>
+          <Maintainers maintainers={route.maintainers} />
 
-                {!!parameters && (
-                  <Text className="text-text/80 ml-2 mt-2 text-xs">{parameters.description}</Text>
-                )}
-              </View>
-            )
-          })}
-        </View>
-        <Maintainers maintainers={route.maintainers} />
-
-        <View className="mx-4 mt-4">
-          <MarkdownWeb value={route.description} dom={{ matchContents: true }} />
-        </View>
-      </KeyboardAwareScrollView>
-    </PortalProvider>
+          {!!route.description && (
+            <View className="mx-4 mt-4">
+              <MarkdownWeb
+                value={route.description.replaceAll("::: ", ":::")}
+                dom={{ matchContents: true, scrollEnabled: false }}
+              />
+            </View>
+          )}
+        </KeyboardAwareScrollView>
+      </PortalProvider>
+    </FormProvider>
   )
 }
 
@@ -188,3 +217,115 @@ const normalizeRSSHubParameters = (parameters: RSSHubParameter): RSSHubParameter
       ? { description: parameters, default: null }
       : parameters
     : null
+
+type ScreenOptionsProps = {
+  name: string
+  routeName: string
+  route: string
+  routePrefix: string
+}
+const ScreenOptions = memo(({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
+  const form = useFormContext()
+
+  return (
+    <Stack.Screen
+      options={{
+        headerLeft: ModalHeaderCloseButton,
+        gestureEnabled: !form.formState.isDirty,
+
+        headerRight: () => (
+          <FormProvider form={form}>
+            <ModalHeaderSubmitButton routePrefix={routePrefix} route={route} />
+          </FormProvider>
+        ),
+
+        headerTitle: () => (
+          <Title name={name} routeName={routeName} route={route} routePrefix={routePrefix} />
+        ),
+      }}
+    />
+  )
+})
+
+const Title = ({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
+  return (
+    <HeaderTitleExtra subText={`rsshub://${routePrefix}${route}`}>
+      {`${name} - ${routeName}`}
+    </HeaderTitleExtra>
+  )
+}
+
+type ModalHeaderSubmitButtonProps = {
+  routePrefix: string
+  route: string
+}
+const ModalHeaderSubmitButton = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
+  return <ModalHeaderSubmitButtonImpl routePrefix={routePrefix} route={route} />
+}
+
+const routeParamsKeyPrefix = "route-params-"
+
+const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
+  const form = useFormContext()
+  const { isValid } = form.formState
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const submit = form.handleSubmit((_data) => {
+    const data = Object.fromEntries(
+      Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
+    )
+
+    try {
+      const routeParamsPath = encodeURIComponent(
+        Object.entries(_data)
+          .filter(([key, value]) => key.startsWith(routeParamsKeyPrefix) && value)
+          .map(([key, value]) => [key.slice(routeParamsKeyPrefix.length), value])
+          .map(([key, value]) => `${key}=${value}`)
+          .join("&"),
+      )
+
+      const fillRegexpPath = regexpPathToPath(
+        routeParamsPath ? route.slice(0, route.indexOf("/:routeParams")) : route,
+        data,
+      )
+      const url = `rsshub://${routePrefix}${fillRegexpPath}`
+
+      const finalUrl = routeParamsPath ? `${url}/${routeParamsPath}` : url
+
+      // if (router.canDismiss()) {
+      //   router.dismiss()
+      // }
+
+      setIsLoading(true)
+
+      feedSyncServices
+        .fetchFeedById({ url: finalUrl })
+        .then((feed) => {
+          router.push({
+            pathname: "/follow",
+            params: {
+              url: finalUrl,
+              id: feed?.id,
+            },
+          })
+        })
+        .catch(() => {
+          toast.error("Failed to fetch feed")
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } catch (err: unknown) {
+      if (err instanceof MissingOptionalParamError) {
+        toast.error(err.message)
+        // const idx = keys.findIndex((item) => item.name === err.param)
+        // form.setFocus(keys[idx === 0 ? 0 : idx - 1].name, {
+        //   shouldSelect: true,
+        // })
+      }
+    }
+  })
+
+  return <ModalHeaderShubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
+}

@@ -11,12 +11,12 @@ import { Text, TouchableOpacity, View } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
 
-import type { TabComponent } from "@/src/components/ui/tabview"
-import { TabView } from "@/src/components/ui/tabview"
+import type { TabComponent } from "@/src/components/ui/tabview/TabView"
+import { TabView } from "@/src/components/ui/tabview/TabView"
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { RSSHubCategoryCopyMap } from "./copy"
-import { RecommendationListItem } from "./recommendation-item"
+import { RecommendationListItem } from "./RecommendationListItem"
 
 export const Recommendations = () => {
   const headerHeight = useHeaderHeight()
@@ -152,11 +152,13 @@ const Tab: TabComponent = ({ tab }) => {
   return (
     <View className="bg-system-background flex-1">
       <FlashList
+        estimatedItemSize={150}
         ref={listRef}
         data={alphabetGroups}
         keyExtractor={keyExtractor}
         getItemType={getItemType}
         renderItem={ItemRenderer}
+        scrollIndicatorInsets={{ right: -2 }}
         contentContainerStyle={{ paddingBottom: tabHeight }}
         removeClippedSubviews
       />

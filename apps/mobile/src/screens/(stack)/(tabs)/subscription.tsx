@@ -6,7 +6,7 @@ import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useCurrentView } from "@/src/modules/subscription/atoms"
 import { SortActionButton } from "@/src/modules/subscription/header-actions"
-import { SubscriptionList } from "@/src/modules/subscription/list"
+import { SubscriptionLists } from "@/src/modules/subscription/SubscriptionLists"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
 import { accentColor } from "@/src/theme/colors"
 
@@ -27,7 +27,8 @@ export default function FeedList() {
           headerTransparent: true,
         }}
       />
-      <SubscriptionList />
+
+      <SubscriptionLists />
       <ViewTab />
     </>
   )

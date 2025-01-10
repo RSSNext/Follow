@@ -190,3 +190,6 @@ export const useListSubscriptionCategory = (view: FeedViewType) => {
     ),
   )
 }
+
+export const useSubscriptionByFeedId = (feedId: string) =>
+  useSubscriptionStore(useCallback((state) => state.data[feedId] || null, [feedId]))
