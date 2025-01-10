@@ -1,6 +1,6 @@
 import { EmptyIcon } from "@follow/components/icons/empty.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { LRUCache } from "@follow/utils/lru-cache"
 import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
@@ -272,7 +272,11 @@ export const EntryList: FC<EntryListProps> = memo(
                   className="absolute left-0 top-0 w-full will-change-transform"
                   style={{
                     transform,
-                    paddingTop: sticky ? "3.5rem" : undefined,
+                    paddingTop: sticky
+                      ? view === FeedViewType.SocialMedia
+                        ? "3.5rem"
+                        : "1.5rem"
+                      : undefined,
                   }}
                   ref={rowVirtualizer.measureElement}
                   data-index={virtualRow.index}
