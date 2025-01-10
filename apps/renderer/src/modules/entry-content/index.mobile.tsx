@@ -1,3 +1,4 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
@@ -101,6 +102,7 @@ export const EntryContent: Component<{
   usePreventOverscrollBounce()
   const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null)
 
+  const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
   const translationLanguage = useGeneralSettingSelector((s) => s.translationLanguage)
 
@@ -186,6 +188,9 @@ export const EntryContent: Component<{
                     <AISummary entryId={entry.entries.id} />
                     <ErrorBoundary fallback={RenderError}>
                       <ShadowDOM injectHostStyles={!isInbox}>
+                        {!!customCSS && (
+                          <MemoedDangerousHTMLStyle>{customCSS}</MemoedDangerousHTMLStyle>
+                        )}
                         <EntryContentHTMLRenderer
                           view={view}
                           feedId={feed?.id}
