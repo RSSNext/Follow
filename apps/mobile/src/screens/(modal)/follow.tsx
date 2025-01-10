@@ -1,6 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { StackActions } from "@react-navigation/native"
+import { useQuery } from "@tanstack/react-query"
 import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -16,9 +17,12 @@ import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { LoadingIndicator } from "@/src/components/ui/loading"
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { useFeed } from "@/src/store/feed/hooks"
+import { feedSyncServices } from "@/src/store/feed/store"
+import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import type { SubscriptionForm } from "@/src/store/subscription/types"
 
@@ -29,13 +33,30 @@ const formSchema = z.object({
   title: z.string().optional(),
 })
 const defaultValues = { view: FeedViewType.Articles.toString() }
-
 export default function Follow() {
+  const { id } = useLocalSearchParams()
+  const feed = useFeed(id as string)
+  const { isLoading } = useQuery({
+    queryKey: ["feed", id],
+    queryFn: () => feedSyncServices.fetchFeedById({ id: id as string }),
+    enabled: !feed,
+  })
+
+  if (isLoading) {
+    return (
+      <View className="mt-24 flex-1 flex-row items-start justify-center">
+        <LoadingIndicator size={36} />
+      </View>
+    )
+  }
+
+  return <FollowImpl />
+}
+function FollowImpl() {
   const { id } = useLocalSearchParams()
 
   const feed = useFeed(id as string)
-  // const hasSub = useSubscriptionByFeedId(feed?.id || "")
-  // const isSubscribed = !!feedQuery.data?.subscription || hasSub
+  const isSubscribed = useSubscriptionByFeedId(feed?.id || "")
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,11 +94,15 @@ export default function Follow() {
 
   const { isValid, isDirty } = form.formState
 
+  if (!feed?.id) {
+    return <Text className="text-text">Feed ({id}) not found</Text>
+  }
+
   return (
     <ScrollView contentContainerClassName="px-2 pt-4 gap-y-4">
       <Stack.Screen
         options={{
-          title: `Follow - ${feed?.title}`,
+          title: `${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`,
           headerLeft: ModalHeaderCloseButton,
           gestureEnabled: !isDirty,
           headerRight: () => (

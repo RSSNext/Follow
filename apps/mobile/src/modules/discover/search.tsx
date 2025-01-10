@@ -56,7 +56,10 @@ const DiscoverHeaderImpl = () => {
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
 
   return (
-    <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
+    <View
+      style={{ height: headerHeight, paddingTop: insets.top }}
+      className="border-b-separator relative border-b"
+    >
       <BlurEffect />
       <View style={styles.header}>
         <PlaceholerSearchBar />
@@ -70,7 +73,7 @@ const PlaceholerSearchBar = () => {
   return (
     <Pressable
       style={styles.searchbar}
-      className="dark:bg-gray-6 bg-gray-5"
+      className="bg-gray-5/60"
       onPress={() => {
         router.push("/search")
       }}
@@ -183,7 +186,7 @@ const SearchInput = () => {
   }, [isFocused])
 
   return (
-    <View style={styles.searchbar} className="dark:bg-gray-6 bg-gray-5">
+    <View style={styles.searchbar} className="bg-gray-5/60">
       {focusOrHasValue && (
         <Animated.View
           style={{

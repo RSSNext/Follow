@@ -3,6 +3,8 @@ import { forwardRef } from "react"
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native"
 import { StyleSheet, Text, TextInput, View } from "react-native"
 
+import { accentColor } from "@/src/theme/colors"
+
 import { FormLabel } from "./Label"
 
 interface TextFieldProps {
@@ -35,6 +37,7 @@ export const TextField = forwardRef<TextInput, TextInputProps & TextFieldProps>(
           style={wrapperStyle}
         >
           <TextInput
+            selectionColor={accentColor}
             ref={ref}
             className={cn("text-text placeholder:text-placeholder-text w-full flex-1", className)}
             style={StyleSheet.flatten([styles.textField, style])}
