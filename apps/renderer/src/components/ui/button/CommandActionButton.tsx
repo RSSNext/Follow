@@ -11,18 +11,11 @@ export interface CommandActionButtonProps extends ActionButtonProps {
 }
 export const CommandActionButton = forwardRef<HTMLButtonElement, CommandActionButtonProps>(
   (props, ref) => {
-    const command = useCommand(props.commandId)
+    const { commandId, ...rest } = props
+    const command = useCommand(commandId)
     if (!command) return null
     const { icon, label } = command
 
-    return (
-      <ActionButton
-        ref={ref}
-        {...props}
-        icon={icon}
-        onClick={props.onClick}
-        tooltip={label.title}
-      />
-    )
+    return <ActionButton ref={ref} {...props} icon={icon} tooltip={label.title} {...rest} />
   },
 )
