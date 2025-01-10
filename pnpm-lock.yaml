@@ -556,6 +556,12 @@ importers:
       react-native-gesture-handler:
         specifier: ~2.20.2
         version: 2.20.2(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      react-native-ios-context-menu:
+        specifier: 3.1.0
+        version: 3.1.0(react-native-ios-utilities@5.1.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      react-native-ios-utilities:
+        specifier: 5.1.0
+        version: 5.1.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
       react-native-keyboard-controller:
         specifier: ^1.15.0
         version: 1.15.0(react-native-reanimated@3.16.5(@babel/core@7.26.0)(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
@@ -2269,6 +2275,9 @@ packages:
     resolution: {integrity: sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==}
     peerDependencies:
       react: '>=16.8.0'
+
+  '@dominicstop/ts-event-emitter@1.1.0':
+    resolution: {integrity: sha512-CcxmJIvUb1vsFheuGGVSQf4KdPZC44XolpUT34+vlal+LyQoBUOn31pjFET5M9ctOxEpt8xa0M3/2M7uUiAoJw==}
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -12345,6 +12354,19 @@ packages:
     peerDependencies:
       react: ^16.6.0 || ^17.0.0 || ^18.0.0
 
+  react-native-ios-context-menu@3.1.0:
+    resolution: {integrity: sha512-qdPSXMKUp5lDgmZeUPdv5sgBFhkFrIqma+zsnqJQYOvekb6Qs17yJy1Rqhrj0bJrwuduHzZX0aYbaA8whxqpDw==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+      react-native-ios-utilities: '*'
+
+  react-native-ios-utilities@5.1.0:
+    resolution: {integrity: sha512-25QqdENHyMdlT48Xkr5hEke1yfGbbGk6Wy+hM5jFPlfXDmGgF/QicGN4SiQXIbSLWuMqFHVVoiJ2vkQ8ARP5mg==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   react-native-is-edge-to-edge@1.1.6:
     resolution: {integrity: sha512-1pHnFTlBahins6UAajXUqeCOHew9l9C2C8tErnpGC3IyLJzvxD+TpYAixnCbrVS52f7+NvMttbiSI290XfwN0w==}
     peerDependencies:
@@ -15765,6 +15787,8 @@ snapshots:
     dependencies:
       react: 18.3.1
       tslib: 2.8.1
+
+  '@dominicstop/ts-event-emitter@1.1.0': {}
 
   '@drizzle-team/brocli@0.10.2': {}
 
@@ -28353,6 +28377,18 @@ snapshots:
       react: 18.3.1
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
+
+  react-native-ios-context-menu@3.1.0(react-native-ios-utilities@5.1.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@dominicstop/ts-event-emitter': 1.1.0
+      react: 18.3.1
+      react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)
+      react-native-ios-utilities: 5.1.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+
+  react-native-ios-utilities@5.1.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)
 
   react-native-is-edge-to-edge@1.1.6(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1):
     dependencies:

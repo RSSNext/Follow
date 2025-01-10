@@ -1,19 +1,20 @@
 import type { FC, PropsWithChildren } from "react"
 import { useMemo } from "react"
-import type { NativeSyntheticEvent } from "react-native"
 import { Alert, Clipboard } from "react-native"
-import type {
-  ContextMenuAction,
-  ContextMenuOnPressNativeEvent,
-} from "react-native-context-menu-view"
-import { useEventCallback } from "usehooks-ts"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
+import type { NullableContextMenuItemConfig } from "@/src/components/ui/context-menu/types"
 import { getWebUrl } from "@/src/lib/env"
+import { toast } from "@/src/lib/toast"
 import { getList } from "@/src/store/list/getters"
 import { useIsOwnList } from "@/src/store/list/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 
+enum ListItemActionKey {
+  EDIT = "edit",
+  COPY_LINK = "copyLink",
+  UNSUBSCRIBE = "unsubscribe",
+}
 export const SubscriptionListItemContextMenu: FC<
   PropsWithChildren & {
     id: string
@@ -21,39 +22,40 @@ export const SubscriptionListItemContextMenu: FC<
 > = ({ id, children }) => {
   const isOwnList = useIsOwnList(id)
   const actions = useMemo(
-    () =>
-      [
-        isOwnList && {
-          title: "Edit",
-        },
-        {
-          title: "Copy Link",
-        },
-        {
-          title: "Unsubscribe",
-          destructive: true,
-        },
-      ].filter(Boolean) as ContextMenuAction[],
+    (): NullableContextMenuItemConfig[] => [
+      isOwnList && {
+        title: "Edit",
+        actionKey: ListItemActionKey.EDIT,
+      },
+      {
+        title: "Copy Link",
+        actionKey: ListItemActionKey.COPY_LINK,
+      },
+      {
+        title: "Unsubscribe",
+        actionKey: ListItemActionKey.UNSUBSCRIBE,
+        destructive: true,
+      },
+    ],
     [isOwnList],
   )
   return (
     <ContextMenu
-      actions={actions}
-      onPress={useEventCallback((e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>) => {
-        const { name } = e.nativeEvent
-
-        switch (name) {
-          case "Edit": {
+      config={{ items: actions }}
+      onPressMenuItem={(item) => {
+        switch (item.actionKey) {
+          case ListItemActionKey.EDIT: {
             // TODO: implement
             break
           }
-          case "Copy Link": {
+          case ListItemActionKey.COPY_LINK: {
             const list = getList(id)
             if (!list) return
+            toast.info("Link copied to clipboard")
             Clipboard.setString(`${getWebUrl()}/share/lists/${list.id}`)
             break
           }
-          case "Unsubscribe": {
+          case ListItemActionKey.UNSUBSCRIBE: {
             Alert.alert("Unsubscribe", "Are you sure you want to unsubscribe?", [
               {
                 text: "Cancel",
@@ -70,7 +72,7 @@ export const SubscriptionListItemContextMenu: FC<
             break
           }
         }
-      })}
+      }}
     >
       {children}
     </ContextMenu>

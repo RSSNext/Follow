@@ -7,7 +7,7 @@ import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { useUnreadCounts } from "@/src/store/unread/hooks"
 
 import { SubscriptionFeedCategoryContextMenu } from "../context-menu/feeds"
-import { GroupedContext } from "./ctx"
+import { GroupedContext, useViewPageCurrentView } from "./ctx"
 import { UnGroupedList } from "./UnGroupedList"
 
 // const CategoryList: FC<{
@@ -28,9 +28,15 @@ export const CategoryGrouped = memo(
         transform: [{ rotate: `${rotateSharedValue.value}deg` }],
       }
     }, [rotateSharedValue])
+    const view = useViewPageCurrentView()
+
     return (
       <>
-        <SubscriptionFeedCategoryContextMenu category={category} feedIds={subscriptionIds}>
+        <SubscriptionFeedCategoryContextMenu
+          category={category}
+          feedIds={subscriptionIds}
+          view={view}
+        >
           <ItemPressable
             onPress={() => {
               // TODO navigate to category

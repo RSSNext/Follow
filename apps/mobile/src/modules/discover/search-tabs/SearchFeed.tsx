@@ -124,12 +124,7 @@ const SearchFeedItem = memo(({ item }: { item: SearchResultItem }) => {
             showsHorizontalScrollIndicator={false}
             contentContainerClassName="flex flex-row gap-4 pl-14 pr-2"
           >
-            {item.entries?.map((entry) => (
-              // <View key={entry.id} className="bg-green h-[60px] w-[3/4]">
-              //   <Text>{entry.title}</Text>
-              // </View>
-              <PreviewItem entry={entry} key={entry.id} />
-            ))}
+            {item.entries?.map((entry) => <PreviewItem entry={entry} key={entry.id} />)}
           </ScrollView>
         </View>
       </ItemPressable>
