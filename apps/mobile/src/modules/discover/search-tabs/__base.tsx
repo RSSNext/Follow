@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/src/utils"
 import { forwardRef } from "react"
 import type { ScrollViewProps } from "react-native"
 import { RefreshControl, ScrollView, useWindowDimensions, View } from "react-native"
@@ -29,13 +30,19 @@ export const BaseSearchPageScrollView = forwardRef<ScrollView, ScrollViewProps>(
   },
 )
 
-export const BaseSearchPageRootView = ({ children }: { children: React.ReactNode }) => {
+export const BaseSearchPageRootView = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) => {
   const windowWidth = useWindowDimensions().width
-  const insets = useSafeAreaInsets()
+
   const searchBarHeight = useSearchBarHeight()
-  const offsetTop = searchBarHeight - insets.top
+  const offsetTop = searchBarHeight
   return (
-    <View className="flex-1" style={{ paddingTop: offsetTop, width: windowWidth }}>
+    <View className={cn("flex-1", className)} style={{ paddingTop: offsetTop, width: windowWidth }}>
       {children}
     </View>
   )
