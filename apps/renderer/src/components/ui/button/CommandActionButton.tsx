@@ -16,6 +16,6 @@ export const CommandActionButton = forwardRef<HTMLButtonElement, CommandActionBu
     if (!command) return null
     const { icon, label } = command
 
-    return <ActionButton ref={ref} {...props} icon={icon} tooltip={label.title} {...rest} />
+    return <ActionButton ref={ref} icon={icon} tooltip={label.title} {...rest} />
   },
 )
