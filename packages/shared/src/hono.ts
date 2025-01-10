@@ -11520,6 +11520,7 @@ declare const auth: {
                 } & {
                     image: string | null;
                     handle: string | null;
+                    twoFactorEnabled: boolean | null;
                 };
                 session: {
                     id: string;
@@ -13472,6 +13473,7 @@ declare const auth: {
                         } & {
                             image: string | null;
                             handle: string | null;
+                            twoFactorEnabled: boolean | null;
                         };
                         session: {
                             id: string;
@@ -16523,21 +16525,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     completed: number;
                     wait: number;
                     failed: number;
-                };
-            };
-            outputFormat: "json";
-            status: 200;
-        };
-    };
-} & {
-    "/accounts": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    duplicateEmails: string[];
-                    duplicateAccountIds: string[];
                 };
             };
             outputFormat: "json";
