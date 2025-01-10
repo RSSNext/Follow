@@ -104,7 +104,7 @@ pnpm install
 ### Develop in the browser
 
 ```sh
-pnpm run dev:web
+pnpm run dev
 ```
 
 Then the browser opens `https://app.follow.is/__debug_proxy`，you can access the online API environment to development and debugging.
@@ -120,7 +120,7 @@ cp .env.example .env
 Then set `VITE_API_URL` to `https://api.follow.is` and run:
 
 ```sh
-pnpm run dev
+pnpm run dev:electron
 ```
 
 Since it is not very convenient to develop in Electron, the first way to develop and contribute is recommended at this stage.
