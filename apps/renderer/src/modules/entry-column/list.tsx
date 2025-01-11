@@ -1,6 +1,6 @@
 import { EmptyIcon } from "@follow/components/icons/empty.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
-import { FeedViewType } from "@follow/constants"
+import type { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { LRUCache } from "@follow/utils/lru-cache"
 import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
@@ -161,8 +161,8 @@ export const EntryList: FC<EntryListProps> = memo(
     })
 
     const activeStickyIndexRef = useRef(0)
-    const isActiveSticky = (index: number) => activeStickyIndexRef.current === index
-    const isSticky = (index: number) => stickyIndexes.includes(index)
+    const checkIsActiveSticky = (index: number) => activeStickyIndexRef.current === index
+    const checkIsStickyItem = (index: number) => stickyIndexes.includes(index)
 
     const virtualItems = rowVirtualizer.getVirtualItems()
     useEffect(() => {
@@ -242,20 +242,20 @@ export const EntryList: FC<EntryListProps> = memo(
                 </div>
               )
             }
-            const activeSticky = isActiveSticky(virtualRow.index)
-            const sticky = isSticky(virtualRow.index)
+            const isStickyItem = checkIsStickyItem(virtualRow.index)
+            const isActiveStickyItem = !isScrollTop && checkIsActiveSticky(virtualRow.index)
             return (
               <Fragment key={virtualRow.key}>
-                {sticky && (
+                {isStickyItem && (
                   <div
                     className={clsx(
                       "bg-background",
-                      activeSticky
+                      isActiveStickyItem
                         ? "sticky top-0 z-[1]"
-                        : "absolute left-0 top-0 z-[2] w-full will-change-transform",
+                        : "absolute left-0 top-0 w-full will-change-transform",
                     )}
                     style={
-                      !activeSticky
+                      !isActiveStickyItem
                         ? {
                             transform,
                           }
@@ -264,7 +264,7 @@ export const EntryList: FC<EntryListProps> = memo(
                   >
                     <EntryHeadDateItem
                       entryId={entriesIds[virtualRow.index]}
-                      isSticky={!isScrollTop && activeSticky}
+                      isSticky={isActiveStickyItem}
                     />
                   </div>
                 )}
@@ -272,11 +272,7 @@ export const EntryList: FC<EntryListProps> = memo(
                   className="absolute left-0 top-0 w-full will-change-transform"
                   style={{
                     transform,
-                    paddingTop: sticky
-                      ? view === FeedViewType.SocialMedia
-                        ? "3.5rem"
-                        : "1.5rem"
-                      : undefined,
+                    paddingTop: isStickyItem ? "1.75rem" : undefined,
                   }}
                   ref={rowVirtualizer.measureElement}
                   data-index={virtualRow.index}
