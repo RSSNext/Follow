@@ -1,10 +1,10 @@
 import { useRegisterEntryCommands } from "./commands/entry"
 import { useRegisterIntegrationCommands } from "./commands/integration"
 import { useRegisterListCommands } from "./commands/list"
-import { useRegisterThemeCommands } from "./commands/theme"
+import { useRegisterSettingsCommands } from "./commands/settings"
 
 export function useRegisterFollowCommands() {
-  useRegisterThemeCommands()
+  useRegisterSettingsCommands()
   useRegisterListCommands()
   useRegisterEntryCommands()
   useRegisterIntegrationCommands()

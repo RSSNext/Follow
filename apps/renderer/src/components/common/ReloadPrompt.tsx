@@ -1,13 +1,13 @@
 import { useEffect } from "react"
-import { toast } from "sonner"
 import { useRegisterSW } from "virtual:pwa-register/react"
+
+import { setUpdaterStatus } from "~/atoms/updater"
 
 // check for updates every hour
 const period = 60 * 60 * 1000
 
 export function ReloadPrompt() {
   const {
-    // offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
@@ -24,33 +24,14 @@ export function ReloadPrompt() {
     },
   })
 
-  // const close = useCallback(() => {
-  //   setOfflineReady(false)
-  //   setNeedRefresh(false)
-  // }, [setNeedRefresh, setOfflineReady])
-
-  // useEffect(() => {
-  //   if (offlineReady) {
-  //     toast.info("App is ready to work offline", {
-  //       action: {
-  //         label: "Close",
-  //         onClick: close,
-  //       },
-  //       duration: Infinity,
-  //     })
-  //   }
-  // }, [offlineReady, close])
-
   useEffect(() => {
     if (needRefresh) {
-      toast.info("New version available", {
-        action: {
-          label: "Refresh",
-          onClick: () => {
-            updateServiceWorker(true)
-          },
+      setUpdaterStatus({
+        type: "pwa",
+        status: "ready",
+        finishUpdate: () => {
+          updateServiceWorker(true)
         },
-        duration: Infinity,
       })
     }
   }, [needRefresh, updateServiceWorker])

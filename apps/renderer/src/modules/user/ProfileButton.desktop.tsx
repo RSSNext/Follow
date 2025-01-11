@@ -12,6 +12,7 @@ import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 
+import rsshubLogoUrl from "~/assets/rsshub-icon.png?url"
 import { useIsZenMode, useSetZenMode } from "~/atoms/settings/ui"
 import { useUserRole } from "~/atoms/user"
 import {
@@ -36,6 +37,8 @@ import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
 import { PowerButton } from "./ProfileButton.shared"
 import { UserAvatar } from "./UserAvatar"
+
+const rsshubLogo = new URL(rsshubLogoUrl, import.meta.url).href
 
 export type ProfileButtonProps = LoginProps & {
   animatedAvatar?: boolean
@@ -163,6 +166,15 @@ export const ProfileButton: FC<ProfileButtonProps> = memo((props) => {
             icon={<i className="i-mgc-magic-2-cute-re" />}
           >
             {t("words.actions")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              navigate("/rsshub")
+            }}
+            icon={<img src={rsshubLogo} className="size-3 grayscale" />}
+          >
+            {t("words.rsshub")}
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />

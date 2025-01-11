@@ -13,7 +13,10 @@
     <!-- favicon -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <!-- FireFox -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
+
     <title>Follow</title>
 
     <meta property="og:type" content="website" />
@@ -59,7 +62,8 @@
       setTheme()
       // Can not get window.electron so check userAgent
       const isElectron = navigator.userAgent.includes("Electron")
-      document.documentElement.dataset.buildType = isElectron ? "electron" : "web"
+      const isRN = window.__RN__
+      document.documentElement.dataset.buildType = isRN ? "rn" : isElectron ? "electron" : "web"
     </script>
     <script>
       const isMobile = window.innerWidth < 1024
@@ -72,6 +76,9 @@
     <div id="app-skeleton" class="drag-region">
       <!-- Skeleton -->
       <style>
+        [data-build-type]:not([data-build-type="electron"]) #root {
+          background-color: hsl(var(--background));
+        }
         html,
         body {
           height: 100%;

@@ -1,5 +1,4 @@
 import { callWindowExpose } from "@follow/shared/bridge"
-import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { extractElectronWindowOptions } from "@follow/shared/electron"
 import type { BrowserWindow } from "electron/main"
 
@@ -9,7 +8,15 @@ import { createMainWindow, createWindow, getMainWindow } from "~/window"
 export const handleUrlRouting = (url: string) => {
   const options = extractElectronWindowOptions(url)
 
-  const uri = url.replace(DEEPLINK_SCHEME, "/")
+  // For example, the url is "follow://add?id=123&type=list&url=https://example.com"
+  const doubleSlash = url.indexOf("://")
+  if (doubleSlash === -1) {
+    logger.error("url routing error: no protocol found", url)
+    return
+  }
+  // Remove the protocol
+  // For example, the uri is "/add?id=123&type=list&url=https://example.com"
+  const uri = url.slice(doubleSlash + 2)
   try {
     const { pathname, searchParams } = new URL(uri, "https://follow.dev")
 

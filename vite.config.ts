@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import legacy from "@vitejs/plugin-legacy"
+import chalk from "chalk"
 import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import { parseHTML } from "linkedom"
@@ -14,6 +15,7 @@ import { VitePWA } from "vite-plugin-pwa"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
+import { cleanupUnnecessaryFilesPlugin } from "./plugins/vite/cleanup"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
 import manifestPlugin from "./plugins/vite/manifest"
@@ -43,6 +45,11 @@ const devPrint = (): PluginOption => ({
   },
 })
 
+const isRNBuild = process.env.RN_BUILD === "1"
+const isWebBuild = process.env.WEB_BUILD === "1"
+// eslint-disable-next-line no-console
+console.log(chalk.green("Build type:"), isRNBuild ? "RN" : isWebBuild ? "Web" : "Unknown")
+
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   const typedEnv = env as typeof EnvType
@@ -50,9 +57,10 @@ export default ({ mode }) => {
   return defineConfig({
     ...viteRenderBaseConfig,
     root: ROOT,
+    base: isRNBuild ? "./" : "/",
     envDir: resolve(__dirname, "."),
     build: {
-      outDir: resolve(__dirname, "out/web"),
+      outDir: resolve(__dirname, isRNBuild ? "out/rn-web" : "out/web"),
       target: "ES2022",
       sourcemap: isCI,
       rollupOptions: {
@@ -123,71 +131,72 @@ export default ({ mode }) => {
     },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
-      VitePWA({
-        strategies: "injectManifest",
-        srcDir: "src",
-        filename: "sw.ts",
-        registerType: "prompt",
-        injectRegister: false,
+      isWebBuild &&
+        VitePWA({
+          strategies: "injectManifest",
+          srcDir: "src",
+          filename: "sw.ts",
+          registerType: "prompt",
+          injectRegister: false,
 
-        injectManifest: {
-          globPatterns: [
-            "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
-          ],
+          injectManifest: {
+            globPatterns: [
+              "**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}",
+            ],
 
-          manifestTransforms: [
-            (manifest) => {
-              return {
-                manifest,
-                warnings: [],
-                additionalManifestEntries: [
-                  {
-                    url: "/sw.js?pwa=true",
-                    revision: null,
-                  },
-                ],
-              }
-            },
-          ],
-        },
+            manifestTransforms: [
+              (manifest) => {
+                return {
+                  manifest,
+                  warnings: [],
+                  additionalManifestEntries: [
+                    {
+                      url: "/sw.js?pwa=true",
+                      revision: null,
+                    },
+                  ],
+                }
+              },
+            ],
+          },
 
-        manifest: {
-          theme_color: "#000000",
-          name: "Follow",
-          display: "standalone",
-          background_color: "#ffffff",
-          icons: [
-            {
-              src: "pwa-64x64.png",
-              sizes: "64x64",
-              type: "image/png",
-            },
-            {
-              src: "pwa-192x192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-            {
-              src: "pwa-512x512.png",
-              sizes: "512x512",
-              type: "image/png",
-            },
-            {
-              src: "maskable-icon-512x512.png",
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "maskable",
-            },
-          ],
-        },
+          manifest: {
+            theme_color: "#000000",
+            name: "Follow",
+            display: "standalone",
+            background_color: "#ffffff",
+            icons: [
+              {
+                src: "pwa-64x64.png",
+                sizes: "64x64",
+                type: "image/png",
+              },
+              {
+                src: "pwa-192x192.png",
+                sizes: "192x192",
+                type: "image/png",
+              },
+              {
+                src: "pwa-512x512.png",
+                sizes: "512x512",
+                type: "image/png",
+              },
+              {
+                src: "maskable-icon-512x512.png",
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "maskable",
+              },
+            ],
+          },
 
-        devOptions: {
-          enabled: false,
-          navigateFallback: "index.html",
-          suppressWarnings: true,
-          type: "module",
-        },
-      }),
+          devOptions: {
+            enabled: false,
+            navigateFallback: "index.html",
+            suppressWarnings: true,
+            type: "module",
+          },
+        }),
       mode !== "development" &&
         legacy({
           targets: "defaults",
@@ -199,7 +208,7 @@ export default ({ mode }) => {
           ],
         }),
       htmlInjectPlugin(typedEnv),
-      mkcert(),
+      process.env.SSL ? mkcert() : false,
       devPrint(),
       createDependencyChunksPlugin([
         //  React framework
@@ -266,10 +275,24 @@ export default ({ mode }) => {
         ["zod", "react-hook-form", "@hookform/resolvers"],
       ]),
 
-      createPlatformSpecificImportPlugin(false),
-      manifestPlugin(),
-      htmlPlugin(typedEnv),
+      createPlatformSpecificImportPlugin(isWebBuild ? "web" : isRNBuild ? "rn" : "web"),
+      isWebBuild && manifestPlugin(),
+      isWebBuild && htmlPlugin(typedEnv),
       process.env.analyzer && analyzer(),
+      isRNBuild &&
+        cleanupUnnecessaryFilesPlugin([
+          "og-image.png",
+          "icon-512x512.png",
+          "opengraph-image.png",
+          "favicon.ico",
+          "icon-192x192.png",
+          "favicon-dev.ico",
+          "apple-touch-icon-180x180.png",
+          "maskable-icon-512x512.png",
+          "pwa-64x64.png",
+          "pwa-192x192.png",
+          "pwa-512x512.png",
+        ]),
     ],
 
     define: {
@@ -278,6 +301,7 @@ export default ({ mode }) => {
     },
   })
 }
+
 function checkBrowserSupport() {
   if (!("findLastIndex" in Array.prototype) || !("structuredClone" in window)) {
     window.alert(

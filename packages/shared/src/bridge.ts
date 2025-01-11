@@ -86,18 +86,21 @@ export const useRegisterGlobalContext = <K extends keyof RenderGlobalContext>(
   }, [key])
 }
 
-function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path: string[] = []): T {
+function createProxy<T extends RenderGlobalContext>(
+  evalCode: (code: string) => void,
+  path: string[] = [],
+): T {
   return new Proxy((() => {}) as any, {
     get(_, prop: string) {
       const newPath = [...path, prop]
 
-      return createProxy(window, newPath)
+      return createProxy(evalCode, newPath)
     },
     async apply(_, __, args: any[]) {
       const methodPath = path.join(".")
 
       try {
-        return await window.webContents.executeJavaScript(
+        return await evalCode(
           `globalThis.${PREFIX}?.${methodPath}?.(${args
             .map((arg) => {
               if (arg === undefined) return "undefined"
@@ -122,7 +125,13 @@ type Fn<T> = {
     (T[K] extends object ? { [P in keyof T[K]]: AddPromise<T[K][P]> } : never)
 }
 export function callWindowExpose<T extends RenderGlobalContext>(window: BrowserWindow) {
-  return createProxy(window) as Fn<T>
+  return createProxy((code) => window.webContents.executeJavaScript(code)) as Fn<T>
+}
+
+export function callWebviewExpose<T extends RenderGlobalContext>(
+  injectCode: (code: string) => void,
+) {
+  return createProxy(injectCode) as Fn<T>
 }
 
 export function callWindowExposeRenderer() {

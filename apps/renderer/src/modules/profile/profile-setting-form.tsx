@@ -10,8 +10,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { Label } from "@follow/components/ui/label/index.js"
-import { sendVerificationEmail, updateUser } from "@follow/shared/auth"
+import { updateUser } from "@follow/shared/auth"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -21,11 +20,10 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
-import { CopyButton } from "~/components/ui/code-highlighter"
 import { toastFetchError } from "~/lib/error-parser"
 
 const formSchema = z.object({
-  handle: z.string().max(50),
+  handle: z.string().max(50).optional(),
   name: z.string().min(3).max(50),
   image: z.string().url(),
 })
@@ -43,7 +41,7 @@ export const ProfileSettingForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      handle: user?.handle || "",
+      handle: user?.handle || undefined,
       name: user?.name || "",
       image: user?.image || "",
     },
@@ -69,18 +67,6 @@ export const ProfileSettingForm = ({
     },
   })
 
-  const verifyEmailMutation = useMutation({
-    mutationFn: async () => {
-      if (!user?.email) return
-      return sendVerificationEmail({
-        email: user.email,
-      })
-    },
-    onSuccess: () => {
-      toast.success(t("profile.email.verification_sent"))
-    },
-  })
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateMutation.mutate(values)
   }
@@ -88,34 +74,6 @@ export const ProfileSettingForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("mt-4 space-y-4", className)}>
-        <div className="space-y-2">
-          <Label>{t("profile.email.label")}</Label>
-          <p className="group flex gap-2 text-sm text-muted-foreground">
-            {user?.email}
-
-            {user?.email && (
-              <CopyButton
-                value={user.email}
-                className="size-5 p-1 opacity-0 duration-300 group-hover:opacity-100"
-              />
-            )}
-            <span className={cn(user?.emailVerified ? "text-green-500" : "text-red-500")}>
-              {user?.emailVerified ? t("profile.email.verified") : t("profile.email.unverified")}
-            </span>
-          </p>
-          {!user?.emailVerified && (
-            <Button
-              variant="outline"
-              type="button"
-              isLoading={verifyEmailMutation.isPending}
-              onClick={() => {
-                verifyEmailMutation.mutate()
-              }}
-            >
-              {t("profile.email.send_verification")}
-            </Button>
-          )}
-        </div>
         <FormField
           control={form.control}
           name="handle"

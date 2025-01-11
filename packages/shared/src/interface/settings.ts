@@ -13,7 +13,6 @@ export interface GeneralSettings {
   jumpOutLinkWarn: boolean
   // TTS
   voice: string
-  reduceRefetch: boolean
   autoGroup: boolean
   /**
    * Top timeline for mobile
@@ -53,6 +52,12 @@ export interface UISettings {
   pictureViewMasonry: boolean
   pictureViewFilterNoImage: boolean
   wideMode: boolean
+
+  // Action Order
+  toolbarOrder: {
+    main: (string | number)[]
+    more: (string | number)[]
+  }
 }
 
 export interface IntegrationSettings {

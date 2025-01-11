@@ -4,17 +4,17 @@ import { findElementInShadowDOM } from "@follow/utils/dom"
 import { clsx, cn } from "@follow/utils/utils"
 import { DismissableLayer } from "@radix-ui/react-dismissable-layer"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { RemoveScroll } from "react-remove-scroll"
 import { useEventCallback } from "usehooks-ts"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
-import { CommandActionButton } from "~/components/ui/button/command-button"
+import { CommandActionButton } from "~/components/ui/button/CommandActionButton"
 import { useScrollTracking, useTocItems } from "~/components/ui/markdown/components/hooks"
 import { ENTRY_CONTENT_RENDER_CONTAINER_ID } from "~/constants/dom"
 import type { EntryActionItem } from "~/hooks/biz/useEntryActions"
-import { useEntryActions } from "~/hooks/biz/useEntryActions"
+import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { useEntry } from "~/store/entry/hooks"
 
 import { COMMAND_ID } from "../command/commands/id"
@@ -25,11 +25,16 @@ import type { EntryHeaderProps } from "./header.shared"
 
 function EntryHeaderImpl({ view, entryId, className }: EntryHeaderProps) {
   const entry = useEntry(entryId)
-  const actionConfigs = useEntryActions({ entryId, view }).filter(
-    (item) =>
-      !(
-        [COMMAND_ID.entry.read, COMMAND_ID.entry.unread, COMMAND_ID.entry.copyLink] as string[]
-      ).includes(item.id),
+  const sortedActionConfigs = useSortedEntryActions({ entryId, view })
+  const actionConfigs = useMemo(
+    () =>
+      [...sortedActionConfigs.mainAction, ...sortedActionConfigs.moreAction].filter(
+        (item) =>
+          !([COMMAND_ID.entry.copyLink, COMMAND_ID.settings.customizeToolbar] as string[]).includes(
+            item.id,
+          ),
+      ),
+    [sortedActionConfigs.mainAction, sortedActionConfigs.moreAction],
   )
 
   const entryTitleMeta = useEntryTitleMeta()

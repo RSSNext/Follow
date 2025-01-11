@@ -4,10 +4,10 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
+import { Label } from "@follow/components/ui/label/index.js"
 import { changePassword } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useHasPassword } from "~/queries/auth"
 
 const passwordSchema = z.string().min(8).max(128)
@@ -71,15 +72,15 @@ const UpdateExistingPasswordForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[35ch] max-w-full space-y-4">
         <FormField
           control={form.control}
           name="currentPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("profile.change_password.label")}</FormLabel>
               <FormControl>
                 <Input
+                  autoFocus
                   type="password"
                   placeholder={t("profile.current_password.label")}
                   {...field}
@@ -130,9 +131,26 @@ const UpdateExistingPasswordForm = () => {
 export const UpdatePasswordForm = () => {
   const { data: hasPassword, isLoading } = useHasPassword()
 
+  const { t } = useTranslation("settings")
+  const { present } = useModalStack()
   if (isLoading || !hasPassword) {
     return null
   }
 
-  return <UpdateExistingPasswordForm />
+  return (
+    <div className="mt-4 flex items-center justify-between">
+      <Label className="mb-4">{t("profile.password.label")}</Label>
+      <Button
+        variant="outline"
+        onClick={() =>
+          present({
+            title: t("profile.change_password.label"),
+            content: UpdateExistingPasswordForm,
+          })
+        }
+      >
+        {t("profile.change_password.label")}
+      </Button>
+    </div>
+  )
 }

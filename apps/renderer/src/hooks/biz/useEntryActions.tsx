@@ -1,5 +1,6 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { FeedViewType } from "@follow/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useCallback, useMemo } from "react"
 
 import { useShowAISummary } from "~/atoms/ai-summary"
@@ -17,6 +18,7 @@ import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useRunCommandFn } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
+import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -117,7 +119,9 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       },
       {
         id: COMMAND_ID.entry.tip,
-        onClick: runCmdFn(COMMAND_ID.entry.tip, [{ entryId, feedId: feed?.id }]),
+        onClick: runCmdFn(COMMAND_ID.entry.tip, [
+          { entryId, feedId: feed?.id, userId: feed?.ownerUserId },
+        ]),
         hide: isInbox || feed?.ownerUserId === whoami()?.id,
         shortcut: shortcuts.entry.tip.key,
       },
@@ -183,13 +187,13 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
       {
         id: COMMAND_ID.entry.share,
         onClick: runCmdFn(COMMAND_ID.entry.share, [{ entryId }]),
-        hide: !entry?.entries.url || !("share" in navigator),
+        hide: !entry?.entries.url || !("share" in navigator || IN_ELECTRON),
         shortcut: shortcuts.entry.share.key,
       },
       {
         id: COMMAND_ID.entry.read,
         onClick: runCmdFn(COMMAND_ID.entry.read, [{ entryId }]),
-        hide: !hasEntry || !entry.read || !!entry.collections || !!inList,
+        hide: !hasEntry || entry.read || !!entry.collections || !!inList,
         shortcut: shortcuts.entry.toggleRead.key,
       },
       {
@@ -197,6 +201,10 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         onClick: runCmdFn(COMMAND_ID.entry.unread, [{ entryId }]),
         hide: !hasEntry || !entry.read || !!entry.collections || !!inList,
         shortcut: shortcuts.entry.toggleRead.key,
+      },
+      {
+        id: COMMAND_ID.settings.customizeToolbar,
+        onClick: runCmdFn(COMMAND_ID.settings.customizeToolbar, []),
       },
     ].filter((config) => !config.hide)
   }, [
@@ -220,4 +228,53 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
   ])
 
   return actionConfigs
+}
+
+export const useSortedEntryActions = ({
+  entryId,
+  view,
+}: {
+  entryId: string
+  view?: FeedViewType
+}) => {
+  const entryActions = useEntryActions({ entryId, view })
+  const orderMap = useToolbarOrderMap()
+  const mainAction = useMemo(
+    () =>
+      entryActions
+        .filter((item) => {
+          const order = orderMap.get(item.id)
+          if (!order) return false
+          return order.type === "main"
+        })
+        .sort((a, b) => {
+          const orderA = orderMap.get(a.id)?.order || 0
+          const orderB = orderMap.get(b.id)?.order || 0
+          return orderA - orderB
+        }),
+    [entryActions, orderMap],
+  )
+
+  const moreAction = useMemo(
+    () =>
+      entryActions
+        .filter((item) => {
+          const order = orderMap.get(item.id)
+          // If the order is not set, it should be in the "more" menu
+          if (!order) return true
+          return order.type !== "main"
+        })
+        // .filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar)
+        .sort((a, b) => {
+          const orderA = orderMap.get(a.id)?.order || Infinity
+          const orderB = orderMap.get(b.id)?.order || Infinity
+          return orderA - orderB
+        }),
+    [entryActions, orderMap],
+  )
+
+  return {
+    mainAction,
+    moreAction,
+  }
 }

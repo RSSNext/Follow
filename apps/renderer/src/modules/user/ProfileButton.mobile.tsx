@@ -8,6 +8,7 @@ import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router"
 
+import rsshubLogoUrl from "~/assets/rsshub-icon.png?url"
 import { useUserRole, useWhoami } from "~/atoms/user"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useWallet } from "~/queries/wallet"
@@ -107,6 +108,11 @@ export const ProfileButton: FC<ProfileButtonProps> = () => {
                 settingModalPresent()
               }}
               icon={<i className="i-mgc-settings-7-cute-re" />}
+            />
+            <Item
+              label={t("words.rsshub")}
+              link="/rsshub"
+              icon={<img src={rsshubLogoUrl} className="size-3 grayscale" />}
             />
             <Item
               label={t("user_button.log_out")}

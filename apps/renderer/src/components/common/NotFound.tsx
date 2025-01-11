@@ -3,7 +3,7 @@ import { Button } from "@follow/components/ui/button/index.js"
 import { captureException } from "@sentry/react"
 import { useEffect } from "react"
 import type { Location } from "react-router"
-import { useLocation, useNavigate } from "react-router"
+import { Navigate, useLocation, useNavigate } from "react-router"
 
 import { isElectronBuild } from "~/constants"
 import { removeAppSkeleton } from "~/lib/app"
@@ -43,6 +43,11 @@ export const NotFound = () => {
     removeAppSkeleton()
   }, [])
   const navigate = useNavigate()
+
+  if (window.__RN__ && location.pathname.endsWith("/index.html")) {
+    return <Navigate to="/" />
+  }
+
   return (
     <div className="prose center m-auto size-full flex-col dark:prose-invert">
       <main className="flex grow flex-col items-center justify-center">

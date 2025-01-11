@@ -3,7 +3,6 @@ import { queryClient } from "@client/lib/query-client"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
 import { Logo } from "@follow/components/icons/logo.jsx"
-import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.jsx"
 import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import {
@@ -51,7 +50,7 @@ export function Login() {
 
   useEffect(() => {
     if (provider && !isCredentialProvider && status === "unauthenticated") {
-      loginHandler(provider)
+      loginHandler(provider, "app")
       setRedirecting(true)
     }
   }, [isCredentialProvider, provider, status])
@@ -135,11 +134,13 @@ export function Login() {
                       authProvidersConfig[key]?.buttonClassName,
                     )}
                     onClick={() => {
-                      loginHandler(key)
+                      loginHandler(key, "app")
                     }}
                   >
                     <i className={cn("mr-2 text-xl", authProvidersConfig[key]?.iconClassName)} />{" "}
-                    {t("login.continueWith", { provider: provider.name })}
+                    {t("login.continueWith", {
+                      provider: provider.name,
+                    })}
                   </Button>
                 ))}
             </div>
@@ -162,7 +163,7 @@ export function Login() {
                     <MotionButtonBase
                       key={key}
                       onClick={() => {
-                        loginHandler(key)
+                        loginHandler(key, "app")
                       }}
                     >
                       {overrideProviderIconMap[provider.id] ? (
@@ -192,7 +193,7 @@ export function Login() {
   const Content = useMemo(() => {
     switch (true) {
       case redirecting: {
-        return <div>{t("login.redirecting")}</div>
+        return <div className="center">{t("login.redirecting")}</div>
       }
       default: {
         return <div className="flex flex-col gap-3">{LoginOrStatusContent}</div>
@@ -203,19 +204,17 @@ export function Login() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <Logo className="size-16" />
-      {isLoading && <LoadingCircle className="mt-8" size="large" />}
 
-      <AutoResizeHeight>
-        <>
-          {!isAuthenticated && !isLoading && (
-            <h1 className="center mb-6 mt-8 flex text-2xl font-bold">
-              {t("login.logInTo")}
-              {` ${APP_NAME}`}
-            </h1>
-          )}
-          {Content}
-        </>
-      </AutoResizeHeight>
+      <>
+        {!isAuthenticated && !isLoading && (
+          <h1 className="center mb-6 mt-8 flex text-2xl font-bold">
+            {t("login.logInTo")}
+            {` ${APP_NAME}`}
+          </h1>
+        )}
+        {Content}
+        {isLoading && <LoadingCircle className="mt-8" size="large" />}
+      </>
     </div>
   )
 }
@@ -226,7 +225,7 @@ const formSchema = z.object({
 })
 
 async function onSubmit(values: z.infer<typeof formSchema>) {
-  const res = await loginHandler("credential", "browser", values)
+  const res = await loginHandler("credential", "app", values)
   if (res?.error) {
     toast.error(res.error.message)
     return
@@ -284,7 +283,7 @@ function LoginWithPassword() {
           buttonClassName="text-base !mt-3"
           disabled={!isValid}
         >
-          {t("login.continueWith", { provider: "email" })}
+          {t("login.continueWith", { provider: t("words.email") })}
         </Button>
         <Button
           buttonClassName="!mt-3 text-base"

@@ -43,6 +43,10 @@ export const FABBase = typescriptHappyForwardRef(
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
+            transition={{
+              duration: 0.2,
+              ease: "easeInOut",
+            }}
             ref={ref}
             aria-label="Floating action button"
             className={cn(
@@ -51,8 +55,6 @@ export const FABBase = typescriptHappyForwardRef(
               "outline-accent hover:opacity-100 focus:opacity-100 focus:outline-none",
               "rounded-xl border border-zinc-400/20 backdrop-blur-lg dark:border-zinc-500/30 dark:text-zinc-200",
               "bg-zinc-50/80 shadow-lg dark:bg-neutral-900/80",
-              "transition-all duration-500 ease-in-out",
-
               className,
             )}
             {...rest}

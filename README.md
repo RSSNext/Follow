@@ -38,9 +38,9 @@ You can also install using the following methods maintained by our community:
 - If you are using Nix, you can install package [follow](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/fo/follow/package.nix) that maintained by [iosmanthus](https://github.com/iosmanthus).
 - If you are using macOS with [Homebrew](https://brew.sh), you can install cask [follow](https://formulae.brew.sh/cask/follow) (also [@alpha](https://formulae.brew.sh/cask/follow@alpha) and [@nightly](https://formulae.brew.sh/cask/follow@nightly)) that maintained by [realSunyz](https://github.com/realSunyz).
 
-| [![Discord](https://img.shields.io/discord/1243823539426033696?color=5865F2&label=Discord&labelColor=black&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/followapp) | Join our Discord server to connect with developers, request features, and receive support. |
-| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
-| [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&labelColor=black&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)              | Follow us on X/Twitter for product updates and to join in on reward activities.            |
+| [![Discord](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2Ffollowapp%3Fwith_counts%3Dtrue&query=approximate_member_count&color=5865F2&label=Discord&labelColor=black&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/followapp) | Join our Discord server to connect with developers, request features, and receive support. |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&labelColor=black&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)                                                                                                                   | Follow us on X/Twitter for product updates and to join in on reward activities.            |
 
 > \[!IMPORTANT]
 >
@@ -104,7 +104,7 @@ pnpm install
 ### Develop in the browser
 
 ```sh
-pnpm run dev:web
+pnpm run dev
 ```
 
 Then the browser opens `https://app.follow.is/__debug_proxy`，you can access the online API environment to development and debugging.
@@ -120,13 +120,13 @@ cp .env.example .env
 Then set `VITE_API_URL` to `https://api.follow.is` and run:
 
 ```sh
-pnpm run dev
+pnpm run dev:electron
 ```
 
 Since it is not very convenient to develop in Electron, the first way to develop and contribute is recommended at this stage.
 
 > [!TIP]
-> If you can't log in to the app, copy the `better-auth.session_token` in the cookie from your browser into the app.
+> If you can't log in to the app, copy the `__Secure-better-auth.session_token` in the cookie from your browser into the app.
 
 ## 📝 License
 

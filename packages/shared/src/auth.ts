@@ -6,14 +6,19 @@ import { createAuthClient } from "better-auth/react"
 
 import { IN_ELECTRON, WEB_URL } from "./constants"
 
+type AuthPlugin = (typeof authPlugins)[number]
 const serverPlugins = [
   {
-    id: "getProviders",
-    $InferServerPlugin: {} as (typeof authPlugins)[0],
+    id: "customGetProviders",
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "customGetProviders" }>,
   },
   {
-    id: "createSession",
-    $InferServerPlugin: {} as (typeof authPlugins)[1],
+    id: "customCreateSession",
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "customCreateSession" }>,
+  },
+  {
+    id: "getAccountInfo",
+    $InferServerPlugin: {} as Extract<AuthPlugin, { id: "getAccountInfo" }>,
   },
   inferAdditionalFields({
     user: {
@@ -32,9 +37,11 @@ const authClient = createAuthClient({
 
 // @keep-sorted
 export const {
+  changeEmail,
   changePassword,
   createSession,
   forgetPassword,
+  getAccountInfo,
   getProviders,
   getSession,
   linkSocial,
@@ -44,6 +51,7 @@ export const {
   signIn,
   signOut,
   signUp,
+  unlinkAccount,
   updateUser,
 } = authClient
 
@@ -58,7 +66,7 @@ export const loginHandler = async (
   },
 ) => {
   const { email, password } = args ?? {}
-  if (IN_ELECTRON) {
+  if (IN_ELECTRON && provider !== "credential") {
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
     if (provider === "credential") {

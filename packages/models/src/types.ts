@@ -6,7 +6,7 @@ declare const _apiClient: ReturnType<typeof hc<AppType>>
 
 export type UserModel = Omit<
   typeof users.$inferSelect,
-  "createdAt" | "updatedAt" | "email" | "emailVerified"
+  "createdAt" | "updatedAt" | "email" | "emailVerified" | "twoFactorEnabled"
 > & {
   email?: string
 }
@@ -146,3 +146,12 @@ export const TransactionTypes = ["mint", "purchase", "tip", "withdraw", "airdrop
 export type WalletModel = ExtractBizResponse<typeof _apiClient.wallets.$get>["data"][number]
 
 export type ServerConfigs = ExtractBizResponse<typeof _apiClient.status.configs.$get>["data"]
+
+export type RSSHubModel = Omit<
+  ExtractBizResponse<typeof _apiClient.rsshub.list.$get>["data"][number],
+  "userCount"
+> & {
+  baseUrl?: string | null
+  accessKey?: string | null
+  userCount?: number
+}

@@ -271,7 +271,7 @@ const VirtualGridImpl: FC<
 
   return (
     <div
-      className="relative mx-4 w-full"
+      className="relative mx-4"
       style={{
         height: `${rowVirtualizer.getTotalSize()}px`,
       }}
@@ -298,12 +298,12 @@ const VirtualGridImpl: FC<
             {columnVirtualizer.getVirtualItems().map((virtualColumn) => (
               <div
                 ref={columnVirtualizer.measureElement}
-                key={virtualColumn.index}
+                key={virtualColumn.key}
+                data-index={virtualColumn.index}
                 className="absolute left-0 top-0"
                 style={{
                   height: `${virtualRow.size}px`,
                   width: `${virtualColumn.size}px`,
-
                   transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
                 }}
               >

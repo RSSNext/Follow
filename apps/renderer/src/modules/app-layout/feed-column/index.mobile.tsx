@@ -5,6 +5,7 @@ import { Outlet } from "react-router"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
+import { UpdateNotice } from "~/modules/update-notice/UpdateNotice.mobile"
 
 import { NewUserGuide } from "./index.shared"
 
@@ -17,6 +18,8 @@ export const MobileRootLayout = () => {
       <Outlet />
       <NewUserGuide />
 
+      <UpdateNotice />
+
       {isAuthFail && !user && (
         <RootPortal>
           <PresentSheet
@@ -24,6 +27,7 @@ export const MobileRootLayout = () => {
             contentClassName="overflow-visible pb-safe"
             title="Login"
             hideHeader
+            dismissableClassName="hidden"
             content={<LoginModalContent canClose={false} runtime={"browser"} />}
           />
         </RootPortal>

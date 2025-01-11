@@ -10,12 +10,12 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { CommandActionButton } from "~/components/ui/button/command-button"
+import { CommandActionButton } from "~/components/ui/button/CommandActionButton"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
 import { useAsRead } from "~/hooks/biz/useAsRead"
-import { useEntryActions } from "~/hooks/biz/useEntryActions"
+import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { jotaiStore } from "~/lib/jotai"
 import { parseSocialMedia } from "~/lib/parsers"
@@ -55,6 +55,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   }, [])
   const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
 
+  const titleRef = useRef<HTMLDivElement>(null)
   if (!entry || !feed) return null
 
   const content = entry.entries.content || entry.entries.description
@@ -79,13 +80,9 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
       <div ref={ref} className="ml-2 min-w-0 flex-1">
         <div className="-mt-0.5 flex-1 text-sm">
-          <div className="select-none space-x-1 leading-6">
-            <span className="inline-flex items-center gap-1 text-base font-semibold">
-              <FeedTitle
-                feed={feed}
-                title={entry.entries.author || feed.title}
-                titleClassName="max-w-[calc(100vw-8rem)]"
-              />
+          <div className="flex select-none flex-wrap space-x-1 leading-6" ref={titleRef}>
+            <span className="inline-flex min-w-0 items-center gap-1 text-base font-semibold">
+              <FeedTitle feed={feed} title={entry.entries.author || feed.title} />
               {parsed?.type === "x" && (
                 <i className="i-mgc-twitter-cute-fi size-3 text-[#4A99E9]" />
               )}
@@ -121,7 +118,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       </div>
 
       {showAction && !isMobile && (
-        <div className={"absolute right-1 top-1.5"}>
+        <div className="absolute right-1 top-0 -translate-y-1/2 rounded-lg border border-gray-200 bg-white/90 p-1 shadow-sm backdrop-blur-sm dark:border-neutral-900 dark:bg-neutral-900">
           <ActionBar entryId={entryId} />
         </div>
       )}
@@ -132,9 +129,10 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 SocialMediaItem.wrapperClassName = tw`w-[645px] max-w-full m-auto`
 
 const ActionBar = ({ entryId }: { entryId: string }) => {
-  const entryActions = useEntryActions({ entryId })
+  const { mainAction: entryActions } = useSortedEntryActions({ entryId })
+
   return (
-    <div className="flex origin-right scale-90 items-center gap-1">
+    <div className="flex items-center gap-1">
       {entryActions
         .filter(
           (item) =>
@@ -200,18 +198,18 @@ export const SocialMediaItemSkeleton = (
         <div className="ml-2 min-w-0 flex-1">
           <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
             <div className="flex w-[calc(100%-10rem)] space-x-1">
-              <Skeleton className="h-4 w-16 " />
+              <Skeleton className="h-4 w-16" />
               <span className="text-zinc-500">·</span>
-              <Skeleton className="h-4 w-12 " />
+              <Skeleton className="h-4 w-12" />
             </div>
             <div className="relative mt-0.5 text-sm">
-              <Skeleton className="h-4 w-full " />
-              <Skeleton className="mt-1.5 h-4 w-full " />
-              <Skeleton className="mt-1.5 h-4 w-3/4 " />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="mt-1.5 h-4 w-full" />
+              <Skeleton className="mt-1.5 h-4 w-3/4" />
             </div>
           </div>
           <div className="mt-2 flex gap-2 overflow-x-auto">
-            <Skeleton className="size-28 overflow-hidden rounded " />
+            <Skeleton className="size-28 overflow-hidden rounded" />
           </div>
         </div>
       </div>
@@ -286,8 +284,7 @@ const SocialMediaGallery = ({ media }: { media: MediaModel[] }) => {
               className="size-28 shrink-0 data-[state=loading]:!bg-theme-placeholder-image"
               loading="lazy"
               proxy={proxySize}
-              onClick={(e) => {
-                e.stopPropagation()
+              onClick={() => {
                 previewMedia(
                   mediaList.map((m) => ({
                     url: m.url,
@@ -337,8 +334,7 @@ const SocialMediaGallery = ({ media }: { media: MediaModel[] }) => {
               className="aspect-square w-full rounded object-cover"
               loading="lazy"
               proxy={proxySize}
-              onClick={(e) => {
-                e.stopPropagation()
+              onClick={() => {
                 previewMedia(
                   media.map((m) => ({
                     url: m.url,

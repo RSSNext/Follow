@@ -12,6 +12,10 @@ html,
   -webkit-tap-highlight-color: transparent;
 }
 
+[data-build-type]:not([data-build-type="electron"]) #root {
+  background-color: hsl(var(--background));
+}
+
 html[data-viewport="desktop"],
 html[data-viewport="desktop"] body,
 html[data-viewport="desktop"] #shadow-html,
@@ -28,7 +32,7 @@ body,
 
   @apply font-theme;
 
-  @apply print:overflow-auto print:h-auto;
+  @apply print:h-auto print:overflow-auto;
 }
 
 :focus-visible {
@@ -53,5 +57,5 @@ button {
 }
 
 #react-scan-toolbar {
-  @apply max-lg:!hidden no-drag-region;
+  @apply no-drag-region max-lg:!hidden;
 }

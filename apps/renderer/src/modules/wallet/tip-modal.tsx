@@ -31,7 +31,7 @@ const Loading = () => (
 )
 
 export const TipModalContent: FC<{
-  userId?: string
+  userId?: string | null
   feedId: string
   entryId: string
 }> = (props) => {
@@ -43,7 +43,7 @@ export const TipModalContent: FC<{
   return <TipModalContent_ {...props} />
 }
 const TipModalContent_: FC<{
-  userId?: string
+  userId?: string | null
   feedId: string
   entryId: string
 }> = ({ userId, feedId, entryId }) => {

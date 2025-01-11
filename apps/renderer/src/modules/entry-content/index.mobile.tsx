@@ -1,7 +1,7 @@
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
-import { stopPropagation } from "@follow/utils/dom"
+import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
 import { useEffect, useMemo, useState } from "react"
@@ -47,8 +47,10 @@ export const EntryContent: Component<{
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       event.preventDefault()
-      // This is triggered when the back button is pressed
-      navigateEntry({ entryId: null, ...params })
+      nextFrame(() => {
+        // This is triggered when the back button is pressed
+        navigateEntry({ entryId: null, ...params })
+      })
     }
 
     // Listen to the popstate event (back button)

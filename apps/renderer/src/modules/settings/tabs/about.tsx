@@ -3,11 +3,11 @@ import { Button } from "@follow/components/ui/button/index.js"
 import { styledButtonVariant } from "@follow/components/ui/button/variants.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { getCurrentEnvironment } from "@follow/utils/environment"
-import PKG, { license, repository } from "@pkg"
+import PKG, { repository } from "@pkg"
 import { useQuery } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
-import { CopyButton } from "~/components/ui/code-highlighter"
+import { CopyButton } from "~/components/ui/button/CopyButton"
 import { SocialMediaLinks } from "~/constants/social"
 import { tipcClient } from "~/lib/client"
 import { getNewIssueUrl } from "~/lib/issues"
@@ -33,7 +33,9 @@ export const SettingAbout = () => {
               {APP_NAME} {!import.meta.env.PROD ? `(${import.meta.env.MODE})` : ""}
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded bg-muted px-2 py-1 text-xs">app: {appVersion}</span>
+              {appVersion && (
+                <span className="rounded bg-muted px-2 py-1 text-xs">app: {appVersion}</span>
+              )}
               {rendererVersion && (
                 <span className="rounded bg-muted px-2 py-1 text-xs">
                   renderer: {rendererVersion}
@@ -62,9 +64,7 @@ export const SettingAbout = () => {
           </div>
         </div>
 
-        <p className="mt-6 text-balance text-sm">
-          {t("about.licenseInfo", { appName: APP_NAME, license })}
-        </p>
+        <p className="mt-6 text-balance text-sm">{t("about.licenseInfo", { appName: APP_NAME })}</p>
         <p className="mt-3 text-balance text-sm">
           <Trans
             ns="settings"

@@ -6,6 +6,9 @@
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
@@ -13,6 +16,13 @@
     ["[a-zA-Z]+[cC]lass[nN]ame[\"'`]?:\\s*[\"'`]([^\"'`]*)[\"'`]", "([^\"'`]*)"],
     ["[a-zA-Z]+[cC]lass[nN]ame\\s*=\\s*[\"'`]([^\"'`]*)[\"'`]", "([^\"'`]*)"]
   ],
+  "tailwindCSS.experimental.configFile": {
+    "apps/mobile/tailwind.config.ts": "apps/mobile/**",
+    "apps/server/tailwind.config.ts": "apps/server/**",
+    "tailwind.config.ts": ["!apps/mobile/**", "!apps/server/**", "**"]
+  },
+  "typescript.tsserver.maxTsServerMemory": 8096,
+  "typescript.tsserver.nodePath": "node",
   // If you do not want to autofix some rules on save
   // You can put this in your user settings or workspace settings
   "eslint.codeActionsOnSave.rules": [
@@ -54,22 +64,6 @@
     {
       "rule": "unused-imports/no-unused-imports",
       "severity": "off"
-    },
-    {
-      "rule": "@typescript-eslint/require-await",
-      "severity": "info"
-    },
-    {
-      "rule": "@typescript-eslint/await-thenable",
-      "severity": "info"
-    },
-    {
-      "rule": "@typescript-eslint/no-floating-promises",
-      "severity": "info"
-    },
-    {
-      "rule": "@typescript-eslint/no-misused-promises",
-      "severity": "info"
     }
   ],
   "cSpell.words": ["Hydable", "rsshub", "Русский"],
