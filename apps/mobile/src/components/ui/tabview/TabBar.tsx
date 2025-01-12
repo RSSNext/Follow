@@ -117,7 +117,7 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
     }, [currentTab, indicatorPosition, sharedPagerOffsetX.value, tabPositions, tabWidths])
 
     const indicatorStyle = useAnimatedStyle(() => {
-      const scrollProgress = sharedPagerOffsetX.value / tabBarWidth
+      const scrollProgress = Math.max(sharedPagerOffsetX.value / tabBarWidth, 0)
 
       const currentIndex = Math.floor(scrollProgress)
       const nextIndex = Math.min(currentIndex + 1, tabs.length - 1)
@@ -133,7 +133,7 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
         tabWidths[currentIndex] + (tabWidths[nextIndex] - tabWidths[currentIndex]) * progress
 
       return {
-        transform: [{ translateX: xPosition }],
+        transform: [{ translateX: Math.max(xPosition, 0) }],
         width,
         backgroundColor: tabs[currentTab].activeColor || accentColor,
       }
