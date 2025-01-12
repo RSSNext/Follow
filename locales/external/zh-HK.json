@@ -66,5 +66,6 @@
   "register.login": "登入",
   "register.note": "已經有帳號了嗎？<LoginLink />",
   "register.password": "密碼",
-  "register.submit": "建立帳號"
+  "register.submit": "建立帳號",
+  "words.email": "電子郵件"
 }
