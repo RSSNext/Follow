@@ -18,7 +18,7 @@ const useCustomizeToolbarCommand = () => {
   useRegisterCommandEffect([
     {
       id: COMMAND_ID.settings.customizeToolbar,
-      label: t("customizeToolbar.title"),
+      label: () => t("customizeToolbar.title"),
       category: "follow:settings",
       icon: <i className="i-mgc-settings-7-cute-re" />,
       run() {

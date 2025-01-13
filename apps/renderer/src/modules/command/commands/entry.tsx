@@ -92,7 +92,7 @@ export const useRegisterEntryCommands = () => {
   useRegisterFollowCommand([
     {
       id: COMMAND_ID.entry.tip,
-      label: t("entry_actions.tip"),
+      label: () => t("entry_actions.tip"),
       icon: <i className="i-mgc-power-outline" />,
       // keyBinding: shortcuts.entry.tip.key,
       // when: !isInbox && feed?.ownerUserId !== whoami()?.id && !!populatedEntry,
@@ -106,7 +106,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.star,
-      label: t("entry_actions.star"),
+      label: () => t("entry_actions.star"),
       icon: <i className="i-mgc-star-cute-re" />,
       run: ({ entryId, view }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -128,7 +128,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.unstar,
-      label: t("entry_actions.unstar"),
+      label: () => t("entry_actions.unstar"),
       icon: <i className="i-mgc-star-cute-fi text-orange-500" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -141,7 +141,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.delete,
-      label: t("entry_actions.delete"),
+      label: () => t("entry_actions.delete"),
       icon: <i className="i-mgc-delete-2-cute-re" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -154,7 +154,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.copyLink,
-      label: t("entry_actions.copy_link"),
+      label: () => t("entry_actions.copy_link"),
       icon: <i className="i-mgc-link-cute-re" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -171,7 +171,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.copyTitle,
-      label: t("entry_actions.copy_title"),
+      label: () => t("entry_actions.copy_title"),
       icon: <i className="i-mgc-copy-cute-re" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -188,9 +188,10 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.openInBrowser,
-      label: t("entry_actions.open_in_browser", {
-        which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
-      }),
+      label: () =>
+        t("entry_actions.open_in_browser", {
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
+        }),
       icon: <i className="i-mgc-world-2-cute-re" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -203,7 +204,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.viewSourceContent,
-      label: t("entry_actions.view_source_content"),
+      label: () => t("entry_actions.view_source_content"),
       icon: <i className="i-mgc-world-2-cute-re" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -233,7 +234,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.viewEntryContent,
-      label: t("entry_actions.view_source_content"),
+      label: () => t("entry_actions.view_source_content"),
       icon: <i className="i-mgc-world-2-cute-fi" />,
       run: () => {
         setShowSourceContent(false)
@@ -241,7 +242,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.share,
-      label: t("entry_actions.share"),
+      label: () => t("entry_actions.share"),
       icon:
         getOS() === "macOS" ? (
           <i className="i-mgc-share-3-cute-re" />
@@ -268,7 +269,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.read,
-      label: t("entry_actions.mark_as_read"),
+      label: () => t("entry_actions.mark_as_read"),
       icon: <i className="i-mgc-round-cute-fi" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -281,7 +282,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.unread,
-      label: t("entry_actions.mark_as_unread"),
+      label: () => t("entry_actions.mark_as_unread"),
       icon: <i className="i-mgc-round-cute-re" />,
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
@@ -294,7 +295,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.toggleAISummary,
-      label: t("entry_actions.toggle_ai_summary"),
+      label: () => t("entry_actions.toggle_ai_summary"),
       icon: <i className="i-mgc-magic-2-cute-re" />,
       run: () => {
         toggleShowAISummary()
@@ -302,7 +303,7 @@ export const useRegisterEntryCommands = () => {
     },
     {
       id: COMMAND_ID.entry.toggleAITranslation,
-      label: t("entry_actions.toggle_ai_translation"),
+      label: () => t("entry_actions.toggle_ai_translation"),
       icon: <i className="i-mgc-translate-2-cute-re" />,
       run: () => {
         toggleShowAITranslation()
