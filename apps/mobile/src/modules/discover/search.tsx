@@ -38,7 +38,7 @@ export const SearchHeader: FC<{
       className="relative"
       onLayout={onLayout}
     >
-      {/* <BlurEffect /> */}
+      <BlurEffect />
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>

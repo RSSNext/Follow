@@ -1,8 +1,9 @@
 import { getBackgroundGradient, isCJKChar } from "@follow/utils"
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
-import { StyleSheet, Text } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 
 export const FallbackIcon = ({
   title,
@@ -36,6 +37,31 @@ export const FallbackIcon = ({
     >
       {renderedText}
     </LinearGradient>
+  )
+}
+
+export const IconWithFallback = (props: {
+  url?: string | undefined | null
+  size: number
+  title?: string
+  className?: string
+  style?: StyleProp<ViewStyle>
+}) => {
+  const { url, size, title = "", className, style } = props
+  const [hasError, setHasError] = useState(false)
+
+  if (!url || hasError) {
+    return <FallbackIcon title={title} size={size} className={className} style={style} />
+  }
+
+  return (
+    <View className={className} style={style}>
+      <Image
+        source={{ uri: url }}
+        style={[{ width: size, height: size }]}
+        onError={() => setHasError(true)}
+      />
+    </View>
   )
 }
 

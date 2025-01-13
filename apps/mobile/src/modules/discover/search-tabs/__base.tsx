@@ -1,7 +1,7 @@
 import { cn } from "@follow/utils/src/utils"
 import { forwardRef } from "react"
 import type { ScrollViewProps } from "react-native"
-import { RefreshControl, ScrollView, useWindowDimensions, View } from "react-native"
+import { RefreshControl, ScrollView, StyleSheet, useWindowDimensions, View } from "react-native"
 import type { FlatListPropsWithLayout } from "react-native-reanimated"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -70,10 +70,18 @@ export function BaseSearchPageFlatList<T>({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          progressViewOffset={offsetTop}
+          progressViewOffset={searchBarHeight + insets.top}
         />
       }
       {...props}
     />
   )
 }
+const itemSeparator = (
+  <View style={{ height: StyleSheet.hairlineWidth }} className="bg-opaque-separator ml-16 flex-1" />
+)
+export const ItemSeparator = () => itemSeparator
+
+export const RenderScrollComponent = (props: ScrollViewProps) => (
+  <BaseSearchPageScrollView {...props} />
+)

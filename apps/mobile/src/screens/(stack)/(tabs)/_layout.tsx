@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
 import { router, Tabs } from "expo-router"
-import { View } from "react-native"
+import { Easing, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
 
@@ -32,6 +32,14 @@ export default function TabLayout() {
         tabBarBackground: BlurEffect,
         tabBarStyle: {
           position: "absolute",
+        },
+        animation: "fade",
+        transitionSpec: {
+          animation: "timing",
+          config: {
+            duration: 50,
+            easing: Easing.ease,
+          },
         },
       }}
     >
