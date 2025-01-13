@@ -38,20 +38,22 @@ const totpFormSchema = z.object({
 })
 type TOTPFormValues = z.infer<typeof totpFormSchema>
 
-function PasswordForm<
+export function PasswordForm<
   T extends "password" | "totp",
   Value extends T extends "password" ? PasswordFormValues : TOTPFormValues,
 >({
   type,
   message,
   onSubmitMutationFn,
+  onSuccess,
 }: {
   type: T
   message?: {
     placeholder?: string
     label?: string
   }
-  onSubmitMutationFn: (values: Value) => Promise<void>
+  onSubmitMutationFn?: (values: Value) => Promise<void>
+  onSuccess?: () => void
 }) {
   const isPassword = type === "password"
   const { t } = useTranslation("settings")
@@ -61,11 +63,23 @@ function PasswordForm<
     defaultValues: (isPassword ? { password: "" } : { code: "" }) as any,
   })
 
+  const mutationFn =
+    onSubmitMutationFn ??
+    (async (values: Value) => {
+      if (type === "totp" && "code" in values) {
+        const { data, error } = await twoFactor.verifyTotp({ code: values.code })
+        if (!data || error) {
+          throw new Error(error?.message ?? "Invalid TOTP code")
+        }
+      }
+    })
+
   const updateMutation = useMutation({
-    mutationFn: onSubmitMutationFn,
+    mutationFn,
     onError: (error) => {
       toast.error(error.message)
     },
+    onSuccess,
   })
 
   function onSubmit(values: Value) {

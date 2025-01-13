@@ -19,6 +19,8 @@ import { z } from "zod"
 
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 
+import { PasswordForm } from "../profile/two-factor"
+
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().max(128),
@@ -39,12 +41,32 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
   const { dismiss } = useCurrentModal()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await loginHandler("credential", runtime ?? "browser", values)
+    const res = await loginHandler("credential", runtime ?? "browser", {
+      email: values.email,
+      password: values.password,
+    })
     if (res?.error) {
       toast.error(res.error.message)
       return
     }
-    window.location.reload()
+
+    if ((res?.data as any)?.twoFactorRedirect) {
+      present({
+        title: "Enter 2FA code",
+        content: () => {
+          return (
+            <PasswordForm
+              type="totp"
+              onSuccess={() => {
+                window.location.reload()
+              }}
+            />
+          )
+        },
+      })
+    } else {
+      window.location.reload()
+    }
   }
 
   return (
@@ -86,9 +108,9 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
         </a>
         <Button
           type="submit"
-          className="w-full"
-          buttonClassName="text-base !mt-3"
+          buttonClassName="text-base !mt-3 w-full"
           disabled={!isValid}
+          isLoading={form.formState.isSubmitting}
         >
           {t("login.continueWith", { provider: t("words.email") })}
         </Button>
