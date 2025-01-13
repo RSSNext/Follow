@@ -21,6 +21,7 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { useFeed } from "@/src/store/feed/hooks"
+import { useList } from "@/src/store/list/hooks"
 import {
   useGroupedSubscription,
   usePrefetchSubscription,
@@ -38,30 +39,6 @@ import { useCurrentView, useFeedListSortMethod, useFeedListSortOrder } from "../
 import { SortActionButton } from "../subscription/header-actions"
 import { useSelectedCollection, useViewDefinition } from "./atoms"
 
-export const FeedPanel = () => {
-  const selectedCollection = useSelectedCollection()
-  if (selectedCollection.type === "view") {
-    return (
-      <SafeAreaView className="flex flex-1 overflow-hidden">
-        <ViewHeaderComponent view={selectedCollection.viewId} />
-        <RecycleList view={selectedCollection.viewId} />
-      </SafeAreaView>
-    )
-  }
-
-  return
-}
-
-const ViewHeaderComponent = ({ view }: { view: FeedViewType }) => {
-  const viewDef = useViewDefinition(view)
-  return (
-    <View className="border-b-separator border-b-hairline flex flex-row items-center gap-2">
-      <Text className="text-text my-4 ml-4 text-2xl font-bold">{viewDef.name}</Text>
-      <SortActionButton />
-    </View>
-  )
-}
-
 const useSortedSubscription = (view: FeedViewType) => {
   usePrefetchSubscription(view)
   const { grouped, unGrouped } = useGroupedSubscription(view)
@@ -77,7 +54,73 @@ const useSortedSubscription = (view: FeedViewType) => {
   return data
 }
 
-const RecycleList = ({ view }: { view: FeedViewType }) => {
+export const FeedPanel = () => {
+  const selectedCollection = useSelectedCollection()
+  if (selectedCollection.type === "view") {
+    return (
+      <SafeAreaView className="flex flex-1 overflow-hidden">
+        <ViewHeaderComponent view={selectedCollection.viewId} />
+        <FeedListView view={selectedCollection.viewId} />
+      </SafeAreaView>
+    )
+  }
+
+  return (
+    <SafeAreaView className="flex flex-1 overflow-hidden">
+      <ListHeaderComponent listId={selectedCollection.listId} />
+      <ListView listId={selectedCollection.listId} />
+    </SafeAreaView>
+  )
+}
+
+const ListView = ({ listId }: { listId: string }) => {
+  const list = useList(listId)
+  if (!list) {
+    console.warn("list not found:", listId)
+    return null
+  }
+  const { feedIds } = list
+
+  return (
+    <ScrollView>
+      {feedIds.map((item, index) => (
+        <ItemRender key={item} item={item} index={index} />
+      ))}
+      {/* Just a placeholder */}
+      <View className="h-10" />
+    </ScrollView>
+  )
+}
+
+const ViewHeaderComponent = ({ view }: { view: FeedViewType }) => {
+  const viewDef = useViewDefinition(view)
+  return (
+    <View className="border-b-separator border-b-hairline flex flex-row items-center gap-2">
+      <Text className="text-text my-4 ml-4 text-2xl font-bold">{viewDef.name}</Text>
+      <SortActionButton />
+    </View>
+  )
+}
+
+const ListHeaderComponent = ({ listId }: { listId: string }) => {
+  const list = useList(listId)
+  if (!list) {
+    console.warn("list not found:", listId)
+    return null
+  }
+  return (
+    <View className="border-b-separator border-b-hairline flex flex-col gap-2 py-4">
+      <View className="flex flex-row items-center gap-2">
+        <Text className="text-text ml-4 text-2xl font-bold">{list.title}</Text>
+      </View>
+      {list.description && (
+        <Text className="text-tertiary-label ml-4 text-sm font-medium">{list.description}</Text>
+      )}
+    </View>
+  )
+}
+
+const FeedListView = ({ view }: { view: FeedViewType }) => {
   const data = useSortedSubscription(view)
   return (
     <ScrollView>
