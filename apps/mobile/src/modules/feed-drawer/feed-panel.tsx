@@ -18,9 +18,10 @@ import { useSharedValue } from "react-native-reanimated"
 
 import { AccordionItem } from "@/src/components/ui/accordion/AccordionItem"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
-import { useFeed } from "@/src/store/feed/hooks"
+import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useList } from "@/src/store/list/hooks"
 import {
   useGroupedSubscription,
@@ -36,8 +37,8 @@ import {
   SubscriptionFeedItemContextMenu,
 } from "../context-menu/feeds"
 import { useCurrentView, useFeedListSortMethod, useFeedListSortOrder } from "../subscription/atoms"
-import { SortActionButton } from "../subscription/header-actions"
-import { useSelectedCollection, useViewDefinition } from "./atoms"
+import { useSelectedCollection } from "./atoms"
+import { ListHeaderComponent, ViewHeaderComponent } from "./header"
 
 const useSortedSubscription = (view: FeedViewType) => {
   usePrefetchSubscription(view)
@@ -89,34 +90,6 @@ const ListView = ({ listId }: { listId: string }) => {
       {/* Just a placeholder */}
       <View className="h-10" />
     </ScrollView>
-  )
-}
-
-const ViewHeaderComponent = ({ view }: { view: FeedViewType }) => {
-  const viewDef = useViewDefinition(view)
-  return (
-    <View className="border-b-separator border-b-hairline flex flex-row items-center gap-2">
-      <Text className="text-text my-4 ml-4 text-2xl font-bold">{viewDef.name}</Text>
-      <SortActionButton />
-    </View>
-  )
-}
-
-const ListHeaderComponent = ({ listId }: { listId: string }) => {
-  const list = useList(listId)
-  if (!list) {
-    console.warn("list not found:", listId)
-    return null
-  }
-  return (
-    <View className="border-b-separator border-b-hairline flex flex-col gap-2 py-4">
-      <View className="flex flex-row items-center gap-2">
-        <Text className="text-text ml-4 text-2xl font-bold">{list.title}</Text>
-      </View>
-      {list.description && (
-        <Text className="text-tertiary-label ml-4 text-sm font-medium">{list.description}</Text>
-      )}
-    </View>
   )
 }
 
@@ -248,8 +221,17 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
   const feed = useFeed(id)
   const inGrouped = !!useContext(GroupedContext)
   const view = useCurrentView()
+  const { isLoading } = usePrefetchFeed(id, { enabled: !feed })
 
-  if (!subscription || !feed) return null
+  if (isLoading) {
+    return (
+      <View className="mt-24 flex-1 flex-row items-start justify-center">
+        <LoadingIndicator size={36} />
+      </View>
+    )
+  }
+
+  if (!subscription && !feed) return null
 
   return (
     <SubscriptionFeedItemContextMenu id={id} view={view}>
@@ -272,7 +254,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
           <FeedIcon feed={feed} />
         </View>
         <Text numberOfLines={1} className="text-text flex-1">
-          {subscription.title || feed.title}
+          {subscription?.title || feed.title}
         </Text>
         {!!unreadCount && (
           <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
