@@ -14934,7 +14934,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/feeds"> | hono_types.MergeSchemaPath<{
     "/new": {
         $post: {
-            input: {};
+            input: {
+                json: {
+                    TOTPCode?: string | undefined;
+                };
+            };
             output: {
                 code: 0;
                 data: string;
@@ -15335,6 +15339,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     url?: string | undefined;
                     isPrivate?: boolean | undefined;
                     listId?: string | undefined;
+                    TOTPCode?: string | undefined;
                 };
             };
             output: {
@@ -15538,6 +15543,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     amount: string;
                     entryId: string;
+                    TOTPCode?: string | undefined;
                 };
             };
             output: {
@@ -16496,6 +16502,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     amount: string;
                     feedId: string;
+                    TOTPCode?: string | undefined;
                 };
             };
             output: {
@@ -16616,6 +16623,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     id: string | null;
+                    TOTPCode?: string | undefined;
                     durationInMonths?: number | undefined;
                 };
             };
