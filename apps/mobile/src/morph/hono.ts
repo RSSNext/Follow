@@ -79,6 +79,20 @@ class Morph {
     }
     return { subscriptions, ...collections }
   }
+
+  toList({ list: data }: HonoApiClient.List_Get): ListModel {
+    return {
+      id: data.id,
+      title: data.title!,
+      userId: data.ownerUserId!,
+      description: data.description!,
+      view: data.view,
+      image: data.image!,
+      ownerUserId: data.ownerUserId!,
+      feedIds: data.feedIds!,
+      fee: data.fee!,
+    }
+  }
 }
 
 export const honoMorph = new Morph()

@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
 import { router, Tabs } from "expo-router"
-import { View } from "react-native"
+import { Easing, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
 
@@ -35,8 +35,35 @@ export default function TabLayout() {
           tabBarStyle: {
             position: "absolute",
           },
+          animation: "fade",
+          transitionSpec: {
+            animation: "timing",
+            config: {
+              duration: 50,
+              easing: Easing.ease,
+            },
+          },
         }}
       >
+        <Tabs.Screen
+          name="subscription"
+          options={{
+            title: "Subscriptions",
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <FollowIcon color={color} style={{ width: 20, height: 20 }} />
+            ),
+            tabBarButton(props) {
+              return (
+                <GestureDetector gesture={doubleTap}>
+                  <View className="flex-1">
+                    <PlatformPressable {...props} />
+                  </View>
+                </GestureDetector>
+              )
+            },
+          }}
+        />
         <Tabs.Screen
           name="subscription"
           options={{

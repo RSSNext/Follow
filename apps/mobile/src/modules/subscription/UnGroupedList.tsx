@@ -1,9 +1,11 @@
 import type { FC } from "react"
+import { FlatList } from "react-native"
 
 import { useSortedUngroupedSubscription } from "@/src/store/subscription/hooks"
 
 import { useFeedListSortMethod, useFeedListSortOrder } from "./atoms"
 import { SubscriptionItem } from "./items/SubscriptionItem"
+import { ItemSeparator } from "./ItemSeparator"
 
 export const UnGroupedList: FC<{
   subscriptionIds: string[]
@@ -11,15 +13,14 @@ export const UnGroupedList: FC<{
   const sortBy = useFeedListSortMethod()
   const sortOrder = useFeedListSortOrder()
   const sortedSubscriptionIds = useSortedUngroupedSubscription(subscriptionIds, sortBy, sortOrder)
-  const lastSubscriptionId = sortedSubscriptionIds.at(-1)
 
-  return sortedSubscriptionIds.map((id) => {
-    return (
-      <SubscriptionItem
-        key={id}
-        id={id}
-        className={id === lastSubscriptionId ? "border-b-transparent" : ""}
-      />
-    )
-  })
+  return (
+    <FlatList
+      data={sortedSubscriptionIds}
+      renderItem={renderSubscriptionItems}
+      ItemSeparatorComponent={ItemSeparator}
+    />
+  )
 }
+
+const renderSubscriptionItems = ({ item }: { item: string }) => <SubscriptionItem id={item} />

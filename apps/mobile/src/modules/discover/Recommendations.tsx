@@ -176,7 +176,7 @@ const ItemRenderer = ({
   if (typeof item === "string") {
     // Rendering header
     return (
-      <View className="border-b-separator border-b-hairline mx-6 mb-1 mt-2 pb-1">
+      <View className="border-b-opaque-separator border-b-hairline mx-6 mb-1 mt-2 pb-1">
         <Text className="text-secondary-label text-base">{item}</Text>
       </View>
     )
@@ -256,7 +256,7 @@ const NavigationSidebar: FC<{
                 scrollToLetter(title)
               }}
             >
-              <Text className="text-secondary-text/60 text-sm">{title}</Text>
+              <Text className="text-tertiary-label text-sm">{title}</Text>
             </TouchableOpacity>
           ))}
         </View>

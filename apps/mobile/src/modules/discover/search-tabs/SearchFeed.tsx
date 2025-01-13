@@ -1,24 +1,21 @@
 import { FeedViewType } from "@follow/constants"
-import { withOpacity } from "@follow/utils"
 import { useQuery } from "@tanstack/react-query"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useAtomValue } from "jotai"
-import { memo } from "react"
+import type { ListRenderItem } from "react-native"
 import { Text, useWindowDimensions, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { SadCuteReIcon } from "@/src/icons/sad_cute_re"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
-import { useColor } from "@/src/theme/colors"
 
 import { useSearchPageContext } from "../ctx"
-import { BaseSearchPageFlatList, BaseSearchPageRootView, BaseSearchPageScrollView } from "./__base"
+import { BaseSearchPageFlatList, ItemSeparator, RenderScrollComponent } from "./__base"
+import { useDataSkeleton } from "./hooks"
 
 type SearchResultItem = Awaited<ReturnType<typeof apiClient.discover.$post>>["data"][number]
 
@@ -39,50 +36,34 @@ export const SearchFeed = () => {
     enabled: !!searchValue,
   })
 
-  const textColor = useColor("text")
-
-  if (isLoading) {
-    return (
-      <BaseSearchPageRootView className="items-center justify-center">
-        <View className="-mt-72" />
-        <LoadingIndicator color={withOpacity(textColor, 0.7)} size={32} />
-      </BaseSearchPageRootView>
-    )
-  }
-
-  if (data?.data.length === 0) {
-    return (
-      <BaseSearchPageRootView className="items-center justify-center">
-        <View className="-mt-72" />
-        <SadCuteReIcon height={32} width={32} color={withOpacity(textColor, 0.5)} />
-        <Text className="text-text/50 mt-2">No results found</Text>
-      </BaseSearchPageRootView>
-    )
-  }
+  const skeleton = useDataSkeleton(isLoading, data)
+  if (skeleton) return skeleton
 
   return (
     <BaseSearchPageFlatList
       refreshing={isLoading}
       onRefresh={refetch}
       keyExtractor={keyExtractor}
-      renderScrollComponent={(props) => <BaseSearchPageScrollView {...props} />}
+      contentContainerClassName={"-mt-4"}
+      renderScrollComponent={RenderScrollComponent}
       data={data?.data}
       renderItem={renderItem}
+      ItemSeparatorComponent={ItemSeparator}
     />
   )
 }
 const keyExtractor = (item: SearchResultItem) => item.feed?.id ?? Math.random().toString()
 
-const renderItem = ({ item }: { item: SearchResultItem }) => (
+const renderItem: ListRenderItem<SearchResultItem> = ({ item }) => (
   <SearchFeedItem key={item.feed?.id} item={item} />
 )
 
-const SearchFeedItem = memo(({ item }: { item: SearchResultItem }) => {
+const SearchFeedItem = ({ item }: { item: SearchResultItem }) => {
   const isSubscribed = useSubscriptionByFeedId(item.feed?.id ?? "")
   return (
     <Animated.View entering={FadeInUp}>
       <ItemPressable
-        className="py-2"
+        className="py-6"
         onPress={() => {
           if (item.feed?.id) {
             router.push(`/follow?id=${item.feed.id}`)
@@ -146,7 +127,7 @@ const SearchFeedItem = memo(({ item }: { item: SearchResultItem }) => {
       </ItemPressable>
     </Animated.View>
   )
-})
+}
 const formatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
   month: "short",
