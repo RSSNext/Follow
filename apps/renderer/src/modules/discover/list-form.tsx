@@ -37,6 +37,7 @@ import { useListById } from "~/store/list"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
+import { useTOTPModalWrapper } from "../profile/hooks"
 import { ViewSelectorRadioGroup } from "../shared/ViewSelectorRadioGroup"
 
 const formSchema = z.object({
@@ -249,8 +250,13 @@ const ListInnerForm = ({
     },
   })
 
+  const preset = useTOTPModalWrapper(followMutation.mutate)
   function onSubmit(values: z.infer<typeof formSchema>) {
-    followMutation.mutate(values)
+    if (isSubscribed) {
+      followMutation.mutate(values)
+    } else {
+      preset(values)
+    }
   }
 
   const t = useI18n()
