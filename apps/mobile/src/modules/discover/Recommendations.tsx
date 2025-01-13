@@ -6,7 +6,7 @@ import { useHeaderHeight } from "@react-navigation/elements"
 import { FlashList } from "@shopify/flash-list"
 import { useQuery } from "@tanstack/react-query"
 import type { FC } from "react"
-import { useCallback, useMemo, useRef } from "react"
+import { memo, useCallback, useMemo, useRef } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
@@ -63,7 +63,7 @@ const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
   })
 }
 
-const Tab: TabComponent = ({ tab }) => {
+const Tab: TabComponent = ({ tab, ...rest }) => {
   const tabHeight = useBottomTabBarHeight()
 
   const { data, isLoading } = useQuery({
@@ -150,7 +150,7 @@ const Tab: TabComponent = ({ tab }) => {
   }
 
   return (
-    <View className="bg-system-background flex-1">
+    <View className="bg-system-background flex-1" {...rest}>
       <FlashList
         estimatedItemSize={150}
         ref={listRef}
@@ -162,7 +162,6 @@ const Tab: TabComponent = ({ tab }) => {
         contentContainerStyle={{ paddingBottom: tabHeight }}
         removeClippedSubviews
       />
-
       {/* Right Sidebar */}
       <NavigationSidebar alphabetGroups={alphabetGroups} listRef={listRef} />
     </View>
@@ -194,7 +193,7 @@ const ItemRenderer = ({
 const NavigationSidebar: FC<{
   alphabetGroups: (string | { key: string; data: RSSHubRouteDeclaration })[]
   listRef: React.RefObject<FlashList<string | { key: string; data: RSSHubRouteDeclaration }>>
-}> = ({ alphabetGroups, listRef }) => {
+}> = memo(({ alphabetGroups, listRef }) => {
   const scrollToLetter = useCallback(
     (letter: string, animated = true) => {
       const index = alphabetGroups.findIndex((group) => {
@@ -264,4 +263,4 @@ const NavigationSidebar: FC<{
       </PanGestureHandler>
     </View>
   )
-}
+})

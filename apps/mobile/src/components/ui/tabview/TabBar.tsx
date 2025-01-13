@@ -1,9 +1,18 @@
 import { cn } from "@follow/utils"
 import { debounce } from "es-toolkit/compat"
 import type { FC } from "react"
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
+import {
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react"
 import type {
   Animated as AnimatedNative,
+  LayoutChangeEvent,
   StyleProp,
   TouchableOpacityProps,
   ViewStyle,
@@ -115,7 +124,19 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
         }
       }
     }, [currentTab, indicatorPosition, sharedPagerOffsetX.value, tabPositions, tabWidths])
-
+    const handleTabItemLayout = useCallback((event: LayoutChangeEvent, index: number) => {
+      const { width, x } = event.nativeEvent.layout
+      setTabWidths((prev) => {
+        const newWidths = [...prev]
+        newWidths[index] = width
+        return newWidths
+      })
+      setTabPositions((prev) => {
+        const newPositions = [...prev]
+        newPositions[index] = x
+        return newPositions
+      })
+    }, [])
     const indicatorStyle = useAnimatedStyle(() => {
       const scrollProgress = Math.max(sharedPagerOffsetX.value / tabBarWidth, 0)
 
@@ -155,29 +176,15 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
         style={[styles.root, tabbarStyle]}
       >
         {tabs.map((tab, index) => (
-          <TabItem
-            onPress={() => {
-              handleChangeTabIndex(index)
-            }}
+          <TarBarItem
+            TabItem={TabItem}
             key={tab.value}
-            isSelected={index === currentTab}
-            onLayout={(event) => {
-              const { width, x } = event.nativeEvent.layout
-              setTabWidths((prev) => {
-                const newWidths = [...prev]
-                newWidths[index] = width
-                return newWidths
-              })
-              setTabPositions((prev) => {
-                const newPositions = [...prev]
-                newPositions[index] = x
-                return newPositions
-              })
-            }}
+            index={index}
+            onTabItemPress={handleChangeTabIndex}
+            onLayout={handleTabItemLayout}
+            isSelected={currentTab === index}
             tab={tab}
-          >
-            <TabItemInner tab={tab} isSelected={index === currentTab} />
-          </TabItem>
+          />
         ))}
 
         <Animated.View style={[styles.indicator, indicatorStyle]} />
@@ -209,3 +216,29 @@ const TabItemInner = ({ tab, isSelected }: { tab: Tab; isSelected: boolean }) =>
     </View>
   )
 }
+
+const TarBarItem: FC<{
+  TabItem: FC<{ isSelected: boolean; tab: Tab } & Pick<TouchableOpacityProps, "onLayout">>
+  onTabItemPress: (index: number) => void
+  isSelected: boolean
+  tab: Tab
+
+  index: number
+  onLayout: (event: LayoutChangeEvent, index: number) => void
+}> = memo(({ TabItem = Pressable, onTabItemPress, isSelected, tab, onLayout, index }) => {
+  return (
+    <TabItem
+      onPress={() => {
+        onTabItemPress(index)
+      }}
+      key={tab.value}
+      isSelected={isSelected}
+      onLayout={(event) => {
+        onLayout(event, index)
+      }}
+      tab={tab}
+    >
+      <TabItemInner tab={tab} isSelected={isSelected} />
+    </TabItem>
+  )
+})
