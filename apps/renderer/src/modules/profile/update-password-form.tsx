@@ -130,7 +130,7 @@ const UpdateExistingPasswordForm = () => {
 }
 
 export const UpdatePasswordForm = () => {
-  const { data: hasPassword } = useHasPassword()
+  const { data: hasPassword, isLoading } = useHasPassword()
 
   const { t } = useTranslation("settings")
   const { present } = useModalStack()
@@ -138,7 +138,7 @@ export const UpdatePasswordForm = () => {
   return (
     <div className="flex items-center justify-between">
       <Label>{t("profile.password.label")}</Label>
-      {hasPassword ? (
+      {isLoading ? null : hasPassword ? (
         <Button
           variant="outline"
           onClick={() =>

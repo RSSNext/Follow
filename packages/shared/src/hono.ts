@@ -2652,6 +2652,23 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        migrateTo: drizzle_orm_pg_core.PgColumn<{
+            name: "migrate_to";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -2670,6 +2687,7 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: zod.ZodNullable<zod.ZodString>;
     ownerUserId: zod.ZodNullable<zod.ZodString>;
     language: zod.ZodNullable<zod.ZodString>;
+    migrateTo: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     description: string | null;
     title: string | null;
@@ -2685,6 +2703,7 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: string | null;
     ownerUserId: string | null;
     language: string | null;
+    migrateTo: string | null;
 }, {
     description: string | null;
     title: string | null;
@@ -2700,11 +2719,13 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: string | null;
     ownerUserId: string | null;
     language: string | null;
+    migrateTo: string | null;
 }>;
 declare const feedsRelations: drizzle_orm.Relations<"feeds", {
     subscriptions: drizzle_orm.Many<"subscriptions">;
     entries: drizzle_orm.Many<"entries">;
     owner: drizzle_orm.One<"user", false>;
+    migrateTo: drizzle_orm.One<"feeds", false>;
 }>;
 type FeedModel = InferInsertModel<typeof feeds>;
 
@@ -15333,6 +15354,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     errorAt: string | null;
                     ownerUserId: string | null;
                     language: string | null;
+                    migrateTo: string | null;
                 } | null;
                 list: {
                     description: string | null;

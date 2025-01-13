@@ -19,8 +19,8 @@ import QRCode from "react-qr-code"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { useWhoami } from "~/atoms/user"
-import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { setWhoami, useWhoami } from "~/atoms/user"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useHasPassword } from "~/queries/auth"
 
 import { NoPasswordHint } from "./update-password-form"
@@ -41,12 +41,24 @@ type TOTPFormValues = z.infer<typeof totpFormSchema>
 function PasswordForm<
   T extends "password" | "totp",
   Value extends T extends "password" ? PasswordFormValues : TOTPFormValues,
->({ onSubmitMutationFn, type }: { onSubmitMutationFn: (values: Value) => Promise<void>; type: T }) {
+>({
+  type,
+  message,
+  onSubmitMutationFn,
+}: {
+  type: T
+  message?: {
+    placeholder?: string
+    label?: string
+  }
+  onSubmitMutationFn: (values: Value) => Promise<void>
+}) {
+  const isPassword = type === "password"
   const { t } = useTranslation("settings")
 
   const form = useForm<Value>({
-    resolver: zodResolver(type === "password" ? passwordFormSchema : totpFormSchema),
-    defaultValues: (type === "password" ? { password: "" } : { code: "" }) as any,
+    resolver: zodResolver(isPassword ? passwordFormSchema : totpFormSchema),
+    defaultValues: (isPassword ? { password: "" } : { code: "" }) as any,
   })
 
   const updateMutation = useMutation({
@@ -65,15 +77,23 @@ function PasswordForm<
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-[35ch] max-w-full space-y-4">
         <FormField
           control={form.control}
-          name={(type === "password" ? "password" : "code") as any}
+          name={(isPassword ? "password" : "code") as any}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("profile.current_password.label")}</FormLabel>
+              <FormLabel>
+                {message?.label ??
+                  (isPassword ? t("profile.current_password.label") : t("profile.totp_code.label"))}
+              </FormLabel>
               <FormControl>
                 <Input
                   autoFocus
-                  type={type === "password" ? "password" : "text"}
-                  placeholder={t("profile.current_password.label")}
+                  type={isPassword ? "password" : "text"}
+                  placeholder={
+                    message?.placeholder ??
+                    (isPassword
+                      ? t("profile.current_password.label")
+                      : t("profile.totp_code.label"))
+                  }
                   {...field}
                 />
               </FormControl>
@@ -92,6 +112,8 @@ function PasswordForm<
 }
 
 const TwoFactorForm = () => {
+  const { t } = useTranslation("settings")
+  const modal = useCurrentModal()
   const user = useWhoami()
   const [totpURI, setTotpURI] = useState("")
   return totpURI ? (
@@ -101,12 +123,20 @@ const TwoFactorForm = () => {
       </div>
       <PasswordForm
         type="totp"
+        message={{
+          label: t("profile.totp_code.init"),
+        }}
         onSubmitMutationFn={async (values) => {
           const res = await twoFactor.verifyTotp({ code: values.code })
           if (res.error) {
             throw new Error(res.error.message)
           }
-          toast.success("Two-factor authentication enabled")
+          toast.success(t("profile.two_factor.enabled"))
+          modal.dismiss()
+          setWhoami((prev) => {
+            if (!prev) return prev
+            return { ...prev, twoFactorEnabled: true }
+          })
         }}
       />
     </div>
@@ -120,7 +150,16 @@ const TwoFactorForm = () => {
         if (res.error) {
           throw new Error(res.error.message)
         }
-        if ("totpURI" in res.data) setTotpURI(res.data?.totpURI ?? "")
+        if ("totpURI" in res.data) {
+          setTotpURI(res.data?.totpURI ?? "")
+        } else {
+          toast.success(t("profile.two_factor.disabled"))
+          modal.dismiss()
+          setWhoami((prev) => {
+            if (!prev) return prev
+            return { ...prev, twoFactorEnabled: false }
+          })
+        }
       }}
     />
   )
@@ -134,12 +173,12 @@ export function TwoFactor() {
     ? t("profile.two_factor.disable")
     : t("profile.two_factor.enable")
 
-  const { data: hasPassword } = useHasPassword()
+  const { data: hasPassword, isLoading } = useHasPassword()
 
   return (
     <div className="flex items-center justify-between">
       <Label>{t("profile.two_factor.label")}</Label>
-      {hasPassword ? (
+      {isLoading ? null : hasPassword ? (
         <Button
           variant="outline"
           onClick={() => {
