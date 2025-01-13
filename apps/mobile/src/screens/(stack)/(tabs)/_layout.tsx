@@ -65,25 +65,6 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="subscription"
-          options={{
-            title: "Subscriptions",
-            headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <FollowIcon color={color} style={{ width: 20, height: 20 }} />
-            ),
-            tabBarButton(props) {
-              return (
-                <GestureDetector gesture={doubleTap}>
-                  <View className="flex-1">
-                    <PlatformPressable {...props} />
-                  </View>
-                </GestureDetector>
-              )
-            },
-          }}
-        />
-        <Tabs.Screen
           name="discover"
           options={{
             title: "Discover",
