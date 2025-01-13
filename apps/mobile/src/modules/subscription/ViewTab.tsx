@@ -119,10 +119,11 @@ const TabItem = memo(
     const unreadCount = useUnreadCountByView(view.view)
     return (
       <ContextMenu
-        actions={[{ title: "Mark all as read" }]}
-        onPress={(e) => {
-          switch (e.nativeEvent.index) {
-            case 0: {
+        // actions={[{ title: "Mark all as read" }]}
+        config={{ items: [{ title: "Mark all as read", actionKey: "markAllAsRead" }] }}
+        onPressMenuItem={(e) => {
+          switch (e.actionKey) {
+            case "markAllAsRead": {
               unreadSyncService.markViewAsRead(view.view)
               break
             }

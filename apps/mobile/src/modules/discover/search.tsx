@@ -38,7 +38,7 @@ export const SearchHeader: FC<{
       className="relative"
       onLayout={onLayout}
     >
-      <BlurEffect />
+      {/* <BlurEffect /> */}
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
@@ -56,10 +56,7 @@ const DiscoverHeaderImpl = () => {
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
 
   return (
-    <View
-      style={{ height: headerHeight, paddingTop: insets.top }}
-      className="border-b-separator relative border-b"
-    >
+    <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
       <BlurEffect />
       <View style={styles.header}>
         <PlaceholerSearchBar />

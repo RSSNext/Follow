@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { withOpacity } from "@follow/utils"
 import { useQuery } from "@tanstack/react-query"
 import { Image } from "expo-image"
 import { router } from "expo-router"
@@ -11,8 +12,10 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { SadCuteReIcon } from "@/src/icons/sad_cute_re"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
+import { useColor } from "@/src/theme/colors"
 
 import { useSearchPageContext } from "../ctx"
 import { BaseSearchPageFlatList, BaseSearchPageRootView, BaseSearchPageScrollView } from "./__base"
@@ -36,10 +39,23 @@ export const SearchFeed = () => {
     enabled: !!searchValue,
   })
 
+  const textColor = useColor("text")
+
   if (isLoading) {
     return (
-      <BaseSearchPageRootView>
-        <LoadingIndicator color="#fff" size={32} />
+      <BaseSearchPageRootView className="items-center justify-center">
+        <View className="-mt-72" />
+        <LoadingIndicator color={withOpacity(textColor, 0.7)} size={32} />
+      </BaseSearchPageRootView>
+    )
+  }
+
+  if (data?.data.length === 0) {
+    return (
+      <BaseSearchPageRootView className="items-center justify-center">
+        <View className="-mt-72" />
+        <SadCuteReIcon height={32} width={32} color={withOpacity(textColor, 0.5)} />
+        <Text className="text-text/50 mt-2">No results found</Text>
       </BaseSearchPageRootView>
     )
   }
@@ -124,12 +140,7 @@ const SearchFeedItem = memo(({ item }: { item: SearchResultItem }) => {
             showsHorizontalScrollIndicator={false}
             contentContainerClassName="flex flex-row gap-4 pl-14 pr-2"
           >
-            {item.entries?.map((entry) => (
-              // <View key={entry.id} className="bg-green h-[60px] w-[3/4]">
-              //   <Text>{entry.title}</Text>
-              // </View>
-              <PreviewItem entry={entry} key={entry.id} />
-            ))}
+            {item.entries?.map((entry) => <PreviewItem entry={entry} key={entry.id} />)}
           </ScrollView>
         </View>
       </ItemPressable>

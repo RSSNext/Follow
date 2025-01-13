@@ -1,4 +1,5 @@
 import { session } from "electron"
+import { ProxyAgent, setGlobalDispatcher } from "undici"
 
 import { logger } from "../logger"
 import { store } from "./store"
@@ -77,4 +78,8 @@ export const updateProxy = () => {
     proxyRules,
     proxyBypassRules: BYPASS_RULES,
   })
+  // Currently, Session.setProxy is not working for native fetch, which is used by readability.
+  // So we need to set proxy for native fetch manually, refer to https://stackoverflow.com/a/76503362/14676508
+  const dispatcher = new ProxyAgent({ uri: new URL(proxyUri).toString() })
+  setGlobalDispatcher(dispatcher)
 }

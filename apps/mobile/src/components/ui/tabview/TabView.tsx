@@ -1,6 +1,6 @@
 import { cn } from "@follow/utils"
 import type { FC } from "react"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
 import type { ScrollView, StyleProp, TouchableOpacityProps, ViewStyle } from "react-native"
 import {
   Animated as RnAnimated,
@@ -117,10 +117,30 @@ export const TabView: FC<TabViewProps> = ({
       >
         {tabs.map((tab, index) => (
           <View className="flex-1" style={{ width: windowWidth }} key={tab.value}>
-            {shouldRenderCurrentTab(index) && <Tab isSelected={currentTab === index} tab={tab} />}
+            {shouldRenderCurrentTab(index) && (
+              <TabComponent
+                key={tab.value}
+                tab={tab}
+                isSelected={currentTab === index}
+                Tab={Tab as TabComponent}
+              />
+            )}
           </View>
         ))}
       </AnimatedScrollView>
     </>
   )
 }
+
+const TabComponent: FC<{
+  tab: Tab
+  isSelected: boolean
+  Tab: TabComponent
+}> = memo(({ tab, isSelected, Tab = View }) => {
+  const { width: windowWidth } = useWindowDimensions()
+  return (
+    <View className="flex-1" style={{ width: windowWidth }} key={tab.value}>
+      <Tab isSelected={isSelected} tab={tab} />
+    </View>
+  )
+})

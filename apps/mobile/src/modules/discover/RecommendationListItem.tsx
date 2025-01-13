@@ -4,12 +4,18 @@ import { router } from "expo-router"
 import type { FC } from "react"
 import { memo, useMemo } from "react"
 import { Clipboard, Linking, Text, TouchableOpacity, View } from "react-native"
+import WebView from "react-native-webview"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
 import { Grid } from "@/src/components/ui/grid"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 
 import { RSSHubCategoryCopyMap } from "./copy"
+
+enum RecommendationListItemActionKey {
+  COPY_MAINTAINER_NAME = "copyMaintainerName",
+  OPEN_MAINTAINER_PROFILE = "openMaintainerProfile",
+}
 
 export const RecommendationListItem: FC<{
   data: RSSHubRouteDeclaration
@@ -46,21 +52,28 @@ export const RecommendationListItem: FC<{
           {maintainers.map((m) => (
             <ContextMenu
               key={m}
-              actions={[
-                {
-                  title: "Copy Maintainer Name",
-                },
-                {
-                  title: "Open Maintainer's Profile",
-                },
-              ]}
-              onPress={(e) => {
-                switch (e.nativeEvent.index) {
-                  case 0: {
+              renderPreview={() => {
+                return <WebView source={{ uri: `https://github.com/${m}` }} />
+              }}
+              config={{
+                items: [
+                  {
+                    title: "Copy Maintainer Name",
+                    actionKey: RecommendationListItemActionKey.COPY_MAINTAINER_NAME,
+                  },
+                  {
+                    title: "Open Maintainer's Profile",
+                    actionKey: RecommendationListItemActionKey.OPEN_MAINTAINER_PROFILE,
+                  },
+                ],
+              }}
+              onPressMenuItem={(e) => {
+                switch (e.actionKey) {
+                  case RecommendationListItemActionKey.COPY_MAINTAINER_NAME: {
                     Clipboard.setString(m)
                     break
                   }
-                  case 1: {
+                  case RecommendationListItemActionKey.OPEN_MAINTAINER_PROFILE: {
                     Linking.openURL(`https://github.com/${m}`)
                     break
                   }
