@@ -116,21 +116,19 @@ function FollowImpl() {
       />
 
       {/* Group 1 */}
-      <View className="bg-system-grouped-background-2 rounded-lg p-4">
+      <View className="bg-secondary-system-grouped-background rounded-lg p-4">
         <View className="flex flex-row gap-4">
           <View className="size-[50px] overflow-hidden rounded-lg">
             <FeedIcon feed={feed} size={50} />
           </View>
           <View className="flex-1 flex-col gap-y-1">
             <Text className="text-text text-lg font-semibold">{feed?.title}</Text>
-            <Text className="text-system-secondary-label text-secondary-text text-sm">
-              {feed?.description}
-            </Text>
+            <Text className="text-secondary-label text-sm">{feed?.description}</Text>
           </View>
         </View>
       </View>
       {/* Group 2 */}
-      <View className="bg-system-grouped-background-2 gap-y-4 rounded-lg p-4">
+      <View className="bg-secondary-system-grouped-background gap-y-4 rounded-lg p-4">
         <FormProvider form={form}>
           <View>
             <Controller

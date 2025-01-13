@@ -162,6 +162,6 @@ export const withOpacity = (color: string, opacity: number) => {
   }
 }
 export const rgbStringToRgb = (hex: string) => {
-  const [r, g, b] = hex.split(" ").map((s) => Number.parseInt(s))
-  return `rgb(${r}, ${g}, ${b})`
+  const [r, g, b, a] = hex.split(" ").map((s) => Number.parseFloat(s))
+  return `rgba(${r}, ${g}, ${b}, ${a || 1})`
 }

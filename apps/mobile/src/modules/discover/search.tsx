@@ -66,11 +66,11 @@ const DiscoverHeaderImpl = () => {
 }
 
 const PlaceholerSearchBar = () => {
-  const placeholderTextColor = useColor("placeholderText")
+  const labelColor = useColor("secondaryLabel")
   return (
     <Pressable
       style={styles.searchbar}
-      className="bg-gray-5/60"
+      className="bg-tertiary-system-fill"
       onPress={() => {
         router.push("/search")
       }}
@@ -79,8 +79,8 @@ const PlaceholerSearchBar = () => {
         className="absolute inset-0 flex flex-row items-center justify-center"
         pointerEvents="none"
       >
-        <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
-        <Text className="text-placeholder-text ml-1" style={styles.searchPlaceholderText}>
+        <Search2CuteReIcon color={labelColor} height={18} width={18} />
+        <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>
       </View>
@@ -116,7 +116,7 @@ const ComposeSearchBar = () => {
 const SearchInput = () => {
   const { searchFocusedAtom, searchValueAtom } = useSearchPageContext()
   const [isFocused, setIsFocused] = useAtom(searchFocusedAtom)
-  const placeholderTextColor = useColor("placeholderText")
+  const placeholderTextColor = useColor("secondaryLabel")
   const searchValue = useAtomValue(searchValueAtom)
   const setSearchValue = useSetAtom(searchValueAtom)
   const inputRef = useRef<TextInput>(null)
@@ -183,7 +183,7 @@ const SearchInput = () => {
   }, [isFocused])
 
   return (
-    <View style={styles.searchbar} className="bg-gray-5/60">
+    <View style={styles.searchbar} className="bg-tertiary-system-fill">
       {focusOrHasValue && (
         <Animated.View
           style={{
@@ -193,7 +193,7 @@ const SearchInput = () => {
         >
           <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
           {!searchValue && !tempSearchValue && (
-            <Text className="text-placeholder-text ml-2" style={styles.searchPlaceholderText}>
+            <Text className="text-secondary-label ml-2" style={styles.searchPlaceholderText}>
               Search
             </Text>
           )}
@@ -228,7 +228,7 @@ const SearchInput = () => {
         pointerEvents="none"
       >
         <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
-        <Text className="text-placeholder-text ml-1" style={styles.searchPlaceholderText}>
+        <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>
       </Animated.View>
