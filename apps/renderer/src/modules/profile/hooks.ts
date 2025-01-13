@@ -1,8 +1,10 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { capitalizeFirstLetter } from "@follow/utils/utils"
 import { createElement, lazy, useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { parse } from "tldts"
 
+import { useWhoami } from "~/atoms/user"
 import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -10,6 +12,8 @@ import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { users } from "~/queries/users"
+
+import { PasswordForm } from "./two-factor"
 
 const LazyUserProfileModalContent = lazy(() =>
   import("./user-profile-modal").then((mod) => ({ default: mod.UserProfileModalContent })),
@@ -97,4 +101,33 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
     },
     [present, presentAsync, variant],
   )
+}
+
+export function useTOTPModalWrapper<T>(callback: (input: T) => any) {
+  const { present } = useModalStack()
+  const { t } = useTranslation("settings")
+  const user = useWhoami()
+  const callbackWrapper = useCallback(
+    (input: T) => {
+      present({
+        title: t("profile.totp_code.title"),
+        content: ({ dismiss }) => {
+          return createElement(PasswordForm, {
+            valueType: "totp",
+            onSubmitMutationFn(values) {
+              if ("code" in values) {
+                dismiss()
+                return callback({
+                  ...input,
+                  TOTPCode: values.code,
+                })
+              }
+            },
+          })
+        },
+      })
+    },
+    [callback, present, t],
+  )
+  return user?.twoFactorEnabled ? callbackWrapper : callback
 }

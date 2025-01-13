@@ -292,6 +292,7 @@
   "profile.title": "Profile Settings",
   "profile.totp_code.init": "Scan the QR code with your TOTP app",
   "profile.totp_code.label": "TOTP Code",
+  "profile.totp_code.title": "Enter TOTP Code",
   "profile.two_factor.disable": "Disable 2FA",
   "profile.two_factor.disabled": "Two-factor authentication disabled.",
   "profile.two_factor.enable": "Enable 2FA",

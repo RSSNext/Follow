@@ -38,35 +38,32 @@ const totpFormSchema = z.object({
 })
 type TOTPFormValues = z.infer<typeof totpFormSchema>
 
-export function PasswordForm<
-  T extends "password" | "totp",
-  Value extends T extends "password" ? PasswordFormValues : TOTPFormValues,
->({
-  type,
-  message,
-  onSubmitMutationFn,
-  onSuccess,
-}: {
-  type: T
+export type PasswordProps<T, V> = {
+  valueType: T
   message?: {
     placeholder?: string
     label?: string
   }
-  onSubmitMutationFn?: (values: Value) => Promise<void>
+  onSubmitMutationFn?: (values: V) => Promise<void>
   onSuccess?: () => void
-}) {
-  const isPassword = type === "password"
+}
+
+export function PasswordForm<
+  T extends "password" | "totp",
+  V extends T extends "password" ? PasswordFormValues : TOTPFormValues,
+>({ valueType, message, onSubmitMutationFn, onSuccess }: PasswordProps<T, V>) {
+  const isPassword = valueType === "password"
   const { t } = useTranslation("settings")
 
-  const form = useForm<Value>({
+  const form = useForm<V>({
     resolver: zodResolver(isPassword ? passwordFormSchema : totpFormSchema),
     defaultValues: (isPassword ? { password: "" } : { code: "" }) as any,
   })
 
   const mutationFn =
     onSubmitMutationFn ??
-    (async (values: Value) => {
-      if (type === "totp" && "code" in values) {
+    (async (values: V) => {
+      if (valueType === "totp" && "code" in values) {
         const { data, error } = await twoFactor.verifyTotp({ code: values.code })
         if (!data || error) {
           throw new Error(error?.message ?? "Invalid TOTP code")
@@ -82,7 +79,7 @@ export function PasswordForm<
     onSuccess,
   })
 
-  function onSubmit(values: Value) {
+  function onSubmit(values: V) {
     updateMutation.mutate(values)
   }
 
@@ -136,7 +133,7 @@ const TwoFactorForm = () => {
         <QRCode value={totpURI} />
       </div>
       <PasswordForm
-        type="totp"
+        valueType="totp"
         message={{
           label: t("profile.totp_code.init"),
         }}
@@ -156,7 +153,7 @@ const TwoFactorForm = () => {
     </div>
   ) : (
     <PasswordForm
-      type="password"
+      valueType="password"
       onSubmitMutationFn={async (values) => {
         const res = user?.twoFactorEnabled
           ? await twoFactor.disable({ password: values.password })

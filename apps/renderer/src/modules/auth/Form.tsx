@@ -56,7 +56,7 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
         content: () => {
           return (
             <PasswordForm
-              type="totp"
+              valueType="totp"
               onSuccess={() => {
                 window.location.reload()
               }}
