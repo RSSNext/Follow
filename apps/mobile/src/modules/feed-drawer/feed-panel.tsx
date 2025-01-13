@@ -16,7 +16,7 @@ import {
 } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 
-import { AccordionItem } from "@/src/components/ui/accordion"
+import { AccordionItem } from "@/src/components/ui/accordion/AccordionItem"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
@@ -139,8 +139,18 @@ const CategoryGrouped = memo(
     const unreadCounts = useUnreadCounts(subscriptionIds)
     const isExpanded = useSharedValue(false)
     const rotateValue = useAnimatedValue(1)
+    const selectedCollection = useSelectedCollection()
+    const view = selectedCollection.type === "view" ? selectedCollection.viewId : undefined
+    if (view === undefined) {
+      console.warn("view is undefined", selectedCollection)
+      return null
+    }
     return (
-      <SubscriptionFeedCategoryContextMenu category={category} feedIds={subscriptionIds}>
+      <SubscriptionFeedCategoryContextMenu
+        view={view}
+        category={category}
+        feedIds={subscriptionIds}
+      >
         <ItemPressable
           onPress={() => {
             // TODO navigate to category
