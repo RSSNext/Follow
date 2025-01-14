@@ -58,14 +58,8 @@ export function ListItem({
 
   const lineClamp = useMemo(() => {
     const envIsSafari = isSafari()
-    let lineClampTitle = settingWideMode ? 1 : 2
-    let lineClampDescription = settingWideMode ? 1 : 2
-    if (translation?.title) {
-      lineClampTitle += settingWideMode ? 1 : 2
-    }
-    if (translation?.description) {
-      lineClampDescription += settingWideMode ? 1 : 2
-    }
+    const lineClampTitle = settingWideMode ? 1 : 2
+    const lineClampDescription = settingWideMode ? 1 : 2
 
     // for tailwind
     // line-clamp-[1] line-clamp-[2] line-clamp-[3] line-clamp-[4] line-clamp-[5] line-clamp-[6] line-clamp-[7] line-clamp-[8]
@@ -76,7 +70,7 @@ export function ListItem({
       title: envIsSafari ? `line-clamp-[${lineClampTitle}]` : "",
       description: envIsSafari ? `line-clamp-[${lineClampDescription}]` : "",
     }
-  }, [translation?.title, translation?.description, settingWideMode])
+  }, [settingWideMode])
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return null
