@@ -144,6 +144,14 @@ export const useSubscription = (id: string) => {
   })
 }
 
+export const useAllListSubscription = () => {
+  return useSubscriptionStore(
+    useCallback((state) => {
+      return Object.values(state.listIdByView).flatMap((list) => Array.from(list))
+    }, []),
+  )
+}
+
 export const useListSubscription = (view: FeedViewType) => {
   return useSubscriptionStore(
     useCallback(
