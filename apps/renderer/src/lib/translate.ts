@@ -1,3 +1,4 @@
+import { parseHtml } from "@follow/components/ui/markdown/parse-html.js"
 import { views } from "@follow/constants"
 import type { SupportedLanguages } from "@follow/models/types"
 
@@ -58,7 +59,12 @@ export async function translate({
 
   fields = fields.filter((field) => {
     if (language && entry.entries[field]) {
-      const sourceLanguage = franc(entry.entries[field])
+      const content = parseHtml(entry.entries[field])
+        .toText()
+        .replaceAll(/https?:\/\/\S+|www\.\S+/g, " ")
+      const sourceLanguage = franc(content, {
+        only: [LanguageMap[language].code],
+      })
 
       if (sourceLanguage === LanguageMap[language].code) {
         return false
