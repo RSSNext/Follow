@@ -58,8 +58,12 @@ export function ListItem({
 
   const lineClamp = useMemo(() => {
     const envIsSafari = isSafari()
-    const lineClampTitle = settingWideMode ? 1 : 2
+    let lineClampTitle = settingWideMode ? 1 : 2
     const lineClampDescription = settingWideMode ? 1 : 2
+
+    if (translation?.title) {
+      lineClampTitle += 1
+    }
 
     // for tailwind
     // line-clamp-[1] line-clamp-[2] line-clamp-[3] line-clamp-[4] line-clamp-[5] line-clamp-[6] line-clamp-[7] line-clamp-[8]
