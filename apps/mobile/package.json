@@ -24,6 +24,8 @@
     "@follow/utils": "workspace:*",
     "@gorhom/portal": "1.0.14",
     "@hookform/resolvers": "3.9.1",
+    "@infinite-list/data-model": "2.2.10",
+    "@infinite-list/react-native": "2.2.10",
     "@react-native-cookies/cookies": "^6.2.1",
     "@react-native-picker/picker": "2.9.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
