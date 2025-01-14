@@ -130,6 +130,10 @@ function EntryColumnImpl() {
   const renderAsRead = useGeneralSettingKey("renderMarkUnread")
   const handleRangeChange = useCallback(
     (e: Range) => {
+      const [_, second] = rangeQueueRef.current
+      if (second?.startIndex === e.startIndex) {
+        return
+      }
       rangeQueueRef.current.push(e)
       if (rangeQueueRef.current.length > 2) {
         rangeQueueRef.current.shift()
