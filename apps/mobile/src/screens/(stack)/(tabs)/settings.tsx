@@ -1,8 +1,9 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { useContext, useEffect } from "react"
+import { createContext, useCallback, useContext, useEffect, useRef } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { ScrollView, useAnimatedValue } from "react-native"
+import { findNodeHandle, ScrollView, UIManager, useAnimatedValue } from "react-native"
 import { withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEventCallback } from "usehooks-ts"
@@ -13,33 +14,29 @@ import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
 
 const Stack = createNativeStackNavigator()
+const OutIsFocused = createContext(false)
 export default function SettingsX() {
+  const isFocused = useIsFocused()
+
   return (
-    <Stack.Navigator initialRouteName="Settings">
-      <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
-      {SettingRoutes(Stack)}
-    </Stack.Navigator>
+    <OutIsFocused.Provider value={isFocused}>
+      <Stack.Navigator initialRouteName="Settings">
+        <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+        {SettingRoutes(Stack)}
+      </Stack.Navigator>
+    </OutIsFocused.Provider>
   )
 }
 
 function Settings() {
   const insets = useSafeAreaInsets()
+  const isFocused = useContext(OutIsFocused)
   const { opacity } = useContext(TabBarBackgroundContext)
   const tabBarHeight = useBottomTabBarHeight()
-  useEffect(() => {
-    opacity.value = 1
-    return () => {
-      opacity.value = 1
-    }
-  }, [opacity])
 
-  const animatedScrollY = useAnimatedValue(0)
-  const handleScroll = useEventCallback(
-    ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const { contentOffset, contentSize, layoutMeasurement } = nativeEvent
-
-      const distanceFromBottom = contentSize.height - layoutMeasurement.height - contentOffset.y
-
+  const calculateOpacity = useCallback(
+    (contentHeight: number, viewportHeight: number, scrollY: number) => {
+      const distanceFromBottom = contentHeight - viewportHeight - scrollY
       const fadeThreshold = 50
 
       if (distanceFromBottom <= fadeThreshold) {
@@ -48,13 +45,38 @@ function Settings() {
       } else {
         opacity.value = withTiming(1, { duration: 150 })
       }
-      animatedScrollY.setValue(nativeEvent.contentOffset.y)
+    },
+    [opacity],
+  )
+
+  useEffect(() => {
+    if (!isFocused) return
+    const scrollView = scrollRef.current
+    if (scrollView) {
+      const node = findNodeHandle(scrollView)
+      if (node) {
+        UIManager.measure(node, (x, y, width, height) => {
+          calculateOpacity(height, height, 0)
+        })
+      }
+    }
+  }, [opacity, isFocused, calculateOpacity])
+
+  const animatedScrollY = useAnimatedValue(0)
+  const handleScroll = useEventCallback(
+    ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const { contentOffset, contentSize, layoutMeasurement } = nativeEvent
+      calculateOpacity(contentSize.height, layoutMeasurement.height, contentOffset.y)
+      animatedScrollY.setValue(contentOffset.y)
     },
   )
+
+  const scrollRef = useRef<ScrollView>(null)
   return (
     <ScrollView
       scrollEventThrottle={16}
       onScroll={handleScroll}
+      ref={scrollRef}
       style={{ paddingTop: insets.top }}
       className="bg-system-background flex-1"
       contentContainerStyle={{ paddingBottom: insets.bottom + tabBarHeight }}

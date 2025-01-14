@@ -35,6 +35,14 @@ export default function TabLayout() {
     <FeedDrawer>
       <TabBarBackgroundContext.Provider value={useMemo(() => ({ opacity }), [opacity])}>
         <Tabs
+          screenListeners={{
+            tabPress: () => {
+              opacity.value = 1
+            },
+            transitionStart: () => {
+              opacity.value = 1
+            },
+          }}
           screenOptions={{
             tabBarBackground: TabBarBackground,
             tabBarStyle: {
