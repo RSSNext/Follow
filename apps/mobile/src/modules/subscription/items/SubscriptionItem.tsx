@@ -48,6 +48,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
   const feed = useFeed(id)
   const inGrouped = !!useContext(GroupedContext)
   const view = useViewPageCurrentView()
+
   // const swipeableRef: SwipeableRef = useRef(null)
   if (!subscription || !feed) return null
 
@@ -73,7 +74,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
           className={cn(
             "flex h-12 flex-row items-center",
             inGrouped ? "pl-8 pr-4" : "px-4",
-            "border-item-pressed border-b",
+
             className,
           )}
           onPress={() => {

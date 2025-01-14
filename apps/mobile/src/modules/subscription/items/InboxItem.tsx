@@ -16,7 +16,7 @@ export const InboxItem = memo(({ id }: { id: string }) => {
   if (!subscription) return null
   return (
     <Animated.View exiting={FadeOutUp}>
-      <ItemPressable className="border-item-pressed h-12 flex-row items-center border-b px-3">
+      <ItemPressable className="h-12 flex-row items-center px-3">
         <View className="ml-0.5 overflow-hidden rounded">
           <InboxCuteFiIcon
             height={20}

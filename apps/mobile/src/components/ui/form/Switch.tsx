@@ -21,7 +21,7 @@ export const FormSwitch = forwardRef<Switch, Props & SwitchProps>(
         <View className="flex-1">
           {!!label && <FormLabel className="pl-1" label={label} optional />}
           {!!description && (
-            <Text className="text-secondary-text mb-1 pl-1 text-sm">{description}</Text>
+            <Text className="text-secondary-label mb-1 pl-1 text-sm">{description}</Text>
           )}
         </View>
         <Switch trackColor={{ true: accentColor }} ref={ref} {...rest} />

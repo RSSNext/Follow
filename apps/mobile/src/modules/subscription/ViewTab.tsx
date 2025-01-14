@@ -66,7 +66,7 @@ export const ViewTab = () => {
   return (
     <ThemedBlurView
       style={[styles.tabContainer, { height: headerHeight + ViewTabHeight }]}
-      className="border-system-fill/60 relative border-b"
+      className="border-opaque-separator border-b-hairline relative"
     >
       <View className="absolute inset-x-0 bottom-0" style={{ height: ViewTabHeight }}>
         <ScrollView
@@ -74,7 +74,6 @@ export const ViewTab = () => {
             scrollOffsetX.current = event.nativeEvent.contentOffset.x
           }}
           showsHorizontalScrollIndicator={false}
-          className="border-tertiary-system-background"
           horizontal
           ref={tabRef}
           contentContainerStyle={styles.tabScroller}

@@ -23,15 +23,13 @@ export const TextField = forwardRef<TextInput, TextInputProps & TextFieldProps>(
   ) => {
     return (
       <>
-        {!!label && <FormLabel className="pl-1" label={label} optional={!required} />}
+        {!!label && <FormLabel className="pl-2" label={label} optional={!required} />}
         {!!description && (
-          <Text className="text-system-secondary-label text-secondary-text mb-1 pl-1 text-sm">
-            {description}
-          </Text>
+          <Text className="text-secondary-label mb-1 pl-1 text-sm">{description}</Text>
         )}
         <View
           className={cn(
-            "bg-system-fill/40 relative h-10 flex-row items-center rounded-lg px-4",
+            "bg-tertiary-system-fill relative h-10 flex-row items-center rounded-lg px-3",
             wrapperClassName,
           )}
           style={wrapperStyle}
@@ -39,7 +37,7 @@ export const TextField = forwardRef<TextInput, TextInputProps & TextFieldProps>(
           <TextInput
             selectionColor={accentColor}
             ref={ref}
-            className={cn("text-text placeholder:text-placeholder-text w-full flex-1", className)}
+            className={cn("text-text placeholder:text-secondary-label w-full flex-1", className)}
             style={StyleSheet.flatten([styles.textField, style])}
             {...rest}
           />

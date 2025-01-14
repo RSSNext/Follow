@@ -1,4 +1,6 @@
 import type { ListSchema } from "@/src/database/schemas/types"
+import { apiClient } from "@/src/lib/api-fetch"
+import { honoMorph } from "@/src/morph/hono"
 import { storeDbMorph } from "@/src/morph/store-db"
 import { ListService } from "@/src/services/list"
 
@@ -49,3 +51,15 @@ class ListActions {
 }
 
 export const listActions = new ListActions()
+
+class ListSyncServices {
+  async fetchListById(params: { id: string }) {
+    const list = await apiClient.lists.$get({ query: { listId: params.id } })
+
+    listActions.upsertMany([honoMorph.toList(list.data)])
+
+    return list.data
+  }
+}
+
+export const listSyncServices = new ListSyncServices()

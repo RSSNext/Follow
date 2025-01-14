@@ -64,33 +64,34 @@ export const palette = {
 
 export const lightVariants = {
   // UIKit Colors
-  label: "0 0 0",
-  secondaryLabel: "122 122 122",
-  tertiaryLabel: "172 172 178",
-  quaternaryLabel: "199 199 204",
+
   placeholderText: "199 199 204",
-  separator: "209 209 214",
-  opaqueSeparator: "229 229 234",
+  separator: "84 84 86 0.34",
+  opaqueSeparator: "84 84 86 0.34",
+  nonOpaqueSeparator: "198 198 200",
   link: "0 122 255",
+
   systemBackground: "255 255 255",
   secondarySystemBackground: "242 242 247",
-  tertiarySystemBackground: "229 229 234",
+  tertiarySystemBackground: "255 255 255",
 
   // Grouped
   systemGroupedBackground: "242 242 247",
-  systemGroupedBackground2: "255 255 255",
+  secondarySystemGroupedBackground: "255 255 255",
+  tertiarySystemGroupedBackground: "242 242 247",
 
   // System Colors
-  systemFill: "209 213 219",
-  secondarySystemFill: "209 213 219",
-  tertiarySystemFill: "209 213 219",
-  quaternarySystemFill: "209 213 219",
+  systemFill: "120 120 128 0.2",
+  secondarySystemFill: "120 120 128 0.16",
+  tertiarySystemFill: "120 120 128 0.12",
+  quaternarySystemFill: "120 120 128 0.08",
 
   // Text Colors
+  label: "0 0 0",
   text: "0 0 0",
-  secondaryText: "142 142 147",
-  tertiaryText: "99 99 102",
-  quaternaryText: "72 72 74",
+  secondaryLabel: "60 60 67 0.6",
+  tertiaryLabel: "60 60 67 0.3",
+  quaternaryLabel: "60 60 67 0.18",
 
   // Extended colors
   disabled: "235 235 228",
@@ -98,13 +99,11 @@ export const lightVariants = {
 }
 export const darkVariants = {
   // UIKit Colors
-  label: "255 255 255",
-  secondaryLabel: "172 172 178",
-  tertiaryLabel: "122 122 122",
-  quaternaryLabel: "99 99 102",
+
   placeholderText: "122 122 122",
-  separator: "72 72 74",
-  opaqueSeparator: "58 58 60",
+  separator: "56 56 58 0.6",
+  opaqueSeparator: "56 56 58 0.6",
+  nonOpaqueSeparator: "84 84 86",
   link: "10 132 255",
   systemBackground: "0 0 0",
   secondarySystemBackground: "28 28 30",
@@ -112,19 +111,21 @@ export const darkVariants = {
 
   // Grouped
   systemGroupedBackground: "0 0 0",
-  systemGroupedBackground2: "28 28 30",
+  secondarySystemGroupedBackground: "28 28 30",
+  tertiarySystemGroupedBackground: "44 44 46",
 
   // System Colors
-  systemFill: "72 72 74",
-  secondarySystemFill: "99 99 102",
-  tertiarySystemFill: "122 122 122",
-  quaternarySystemFill: "142 142 147",
+  systemFill: "120 120 128 36",
+  secondarySystemFill: "120 120 128 0.32",
+  tertiarySystemFill: "120 120 128 0.24",
+  quaternarySystemFill: "120 120 128 0.19",
 
   // Text Colors
+  label: "255 255 255",
   text: "255 255 255",
-  secondaryText: "172 172 178",
-  tertiaryText: "122 122 122",
-  quaternaryText: "99 99 102",
+  secondaryLabel: "235 235 245 0.6",
+  tertiaryLabel: "235 235 245 0.3",
+  quaternaryLabel: "235 235 245 0.18",
 
   // Extended colors
   disabled: "85 85 85",
