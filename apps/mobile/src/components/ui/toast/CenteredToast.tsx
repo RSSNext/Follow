@@ -58,6 +58,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 12,
+    alignItems: "center",
+
     borderColor: withOpacity("#ffffff", 0.3),
     backgroundColor: withOpacity("#000000", 0.9),
   },
