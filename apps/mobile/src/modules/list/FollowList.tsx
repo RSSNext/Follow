@@ -1,9 +1,9 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery } from "@tanstack/react-query"
-import { Stack } from "expo-router"
+import { router, Stack } from "expo-router"
 import { Controller, useForm } from "react-hook-form"
-import { Alert, ScrollView, Text, View } from "react-native"
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native"
 import { z } from "zod"
 
 import {
@@ -16,9 +16,13 @@ import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { IconWithFallback } from "@/src/components/ui/icon/fallback-icon"
 import { LoadingIndicator } from "@/src/components/ui/loading"
+import { PowerIcon } from "@/src/icons/power"
+import { apiClient } from "@/src/lib/api-fetch"
+import { toast } from "@/src/lib/toast"
 import { useList } from "@/src/store/list/hooks"
 import { listSyncServices } from "@/src/store/list/store"
 import { useSubscriptionByListId } from "@/src/store/subscription/hooks"
+import { accentColor } from "@/src/theme/colors"
 
 import { FeedViewSelector } from "../feed/view-selector"
 
@@ -63,13 +67,27 @@ const Impl = (props: { id: string }) => {
 
   const submit = async () => {
     const payload = form.getValues()
-    // console.log("submit", payload)
-    void payload
 
+    const subscribeOrUpdate = async () => {
+      const body = {
+        listId: list.id,
+        view: list.view,
+
+        isPrivate: payload.isPrivate,
+        title: payload.title,
+      }
+      const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
+
+      await $method({
+        json: body,
+      })
+      router.dismiss()
+      toast.success(isSubscribed ? "List updated" : "List followed")
+    }
     if (list.fee && !isSubscribed) {
       Alert.alert(
+        `Follow List - ${list.title}`,
         `To follow this list, you must pay a fee to the list creator. Press OK to pay ${list.fee} power to follow this list.`,
-        "OK",
         [
           {
             text: "Cancel",
@@ -77,10 +95,15 @@ const Impl = (props: { id: string }) => {
           },
           {
             text: "OK",
-            onPress: () => {},
+            onPress: () => {
+              subscribeOrUpdate()
+            },
+            isPreferred: true,
           },
         ],
       )
+    } else {
+      subscribeOrUpdate()
     }
   }
 
@@ -106,7 +129,13 @@ const Impl = (props: { id: string }) => {
       <View className="bg-secondary-system-grouped-background rounded-lg p-4">
         <View className="flex flex-row gap-4">
           <View className="size-[50px] overflow-hidden rounded-lg">
-            <IconWithFallback url={list?.image} size={50} />
+            <IconWithFallback
+              url={list?.image}
+              title={list?.title}
+              size={50}
+              textClassName="font-semibold"
+              textStyle={styles.title}
+            />
           </View>
           <View className="flex-1 flex-col gap-y-1">
             <Text className="text-text text-lg font-semibold">{list?.title}</Text>
@@ -120,7 +149,7 @@ const Impl = (props: { id: string }) => {
           <View className="-mx-4">
             <FormLabel className="mb-4 pl-5" label="View" optional />
 
-            <FeedViewSelector value={list.view} />
+            <FeedViewSelector readOnly value={list.view} />
           </View>
 
           <View>
@@ -155,10 +184,13 @@ const Impl = (props: { id: string }) => {
           </View>
 
           {!!list.fee && (
-            <View>
+            <View className="ml-1">
               <View className="flex-row">
                 <FormLabel label="Follow fee" optional />
-                <Text className="text-text text-lg font-semibold">{list.fee}</Text>
+                <View className="ml-1 flex-row items-center gap-x-0.5">
+                  <PowerIcon height={14} width={14} color={accentColor} />
+                  <Text className="text-label text-sm font-semibold">{list.fee}</Text>
+                </View>
               </View>
               <Text className="text-secondary-label text-sm">
                 To follow this list, you must pay a fee to the list creator.
@@ -170,3 +202,9 @@ const Impl = (props: { id: string }) => {
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+  },
+})

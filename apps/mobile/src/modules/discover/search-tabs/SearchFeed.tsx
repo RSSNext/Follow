@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useAtomValue } from "jotai"
-import type { ListRenderItem } from "react-native"
+import type { FC } from "react"
+import type { ListRenderItem, ListRenderItemInfo } from "react-native"
 import { Text, useWindowDimensions, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import Animated, { FadeInUp } from "react-native-reanimated"
@@ -52,13 +53,15 @@ export const SearchFeed = () => {
     />
   )
 }
-const keyExtractor = (item: SearchResultItem) => item.feed?.id ?? Math.random().toString()
+const keyExtractor = (item: SearchResultItem) => {
+  return item.feed?.id || Math.random().toString()
+}
 
-const renderItem: ListRenderItem<SearchResultItem> = ({ item }) => (
-  <SearchFeedItem key={item.feed?.id} item={item} />
+const renderItem: ListRenderItem<SearchResultItem> = (props) => (
+  <SearchFeedItem key={props.item.feed?.id} {...props} />
 )
 
-const SearchFeedItem = ({ item }: { item: SearchResultItem }) => {
+const SearchFeedItem: FC<ListRenderItemInfo<SearchResultItem>> = ({ item }) => {
   const isSubscribed = useSubscriptionByFeedId(item.feed?.id ?? "")
   return (
     <Animated.View entering={FadeInUp}>

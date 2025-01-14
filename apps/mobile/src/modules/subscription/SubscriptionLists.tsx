@@ -62,7 +62,7 @@ export const SubscriptionLists = memo(() => {
       ].map((view) => {
         return (
           <ViewPageCurrentViewProvider key={view} value={view}>
-            <SubscriptionList view={view} />
+            <SubscriptionList view={view} additionalOffsetTop={ViewTabHeight * 2 + 23} />
           </ViewPageCurrentViewProvider>
         )
       })}
@@ -75,7 +75,13 @@ const keyExtractor = (item: string | { category: string; subscriptionIds: string
   }
   return item.category
 }
-const SubscriptionList = ({ view }: { view: FeedViewType }) => {
+export const SubscriptionList = ({
+  view,
+  additionalOffsetTop,
+}: {
+  view: FeedViewType
+  additionalOffsetTop?: number
+}) => {
   const headerHeight = useHeaderHeight()
   const insets = useSafeAreaInsets()
   const tabHeight = useBottomTabBarHeight()
@@ -97,13 +103,13 @@ const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
-  const offsetTop = headerHeight - insets.top + ViewTabHeight * 2 + 23
+  const offsetTop = headerHeight - insets.top + (additionalOffsetTop || 0)
 
   return (
     <ReAnimated.FlatList
       refreshControl={
         <RefreshControl
-          progressViewOffset={offsetTop}
+          progressViewOffset={headerHeight}
           onRefresh={() => {
             setRefreshing(true)
             onRefresh().finally(() => {

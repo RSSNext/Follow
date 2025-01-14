@@ -1,9 +1,8 @@
 import type { SupportedLanguages } from "@follow/models/types"
-import { franc } from "franc-min"
 
 import type { FlatEntryModel } from "~/store/entry"
 
-import { LanguageMap, translate } from "./translate"
+import { checkLanguage, translate } from "./translate"
 
 function textNodesUnder(el: Node) {
   const children: Node[] = el.nodeType === Node.TEXT_NODE ? [el] : []
@@ -17,7 +16,7 @@ function textNodesUnder(el: Node) {
   return children
 }
 
-const tagsToDuplicate = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "blockquote"]
+const tagsToDuplicate = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "blockquote", "article"]
 
 export function immersiveTranslate({
   html,
@@ -94,9 +93,14 @@ export function immersiveTranslate({
   }) as HTMLElement[]
 
   for (const tag of tags) {
-    const sourceLanguage = franc(tag.textContent ?? "")
-    if (sourceLanguage === LanguageMap[translation].code) {
-      return
+    if (tag.textContent) {
+      const isLanguageMatch = checkLanguage({
+        content: tag.textContent,
+        language: translation,
+      })
+      if (isLanguageMatch) {
+        continue
+      }
     }
 
     const children = Array.from(tag.childNodes)

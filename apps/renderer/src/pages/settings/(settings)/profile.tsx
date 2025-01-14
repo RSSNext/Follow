@@ -20,16 +20,18 @@ export function Component() {
   return (
     <>
       <SettingsTitle />
-      <EmailManagement />
-      <ProfileSettingForm />
+      <section className="mt-4">
+        <EmailManagement />
+        <ProfileSettingForm />
 
-      <Divider className="mx-auto my-8 w-3/4" />
+        <Divider className="mb-6 mt-8" />
 
-      <div className="space-y-4">
-        <AccountManagement />
-        <UpdatePasswordForm />
-        <TwoFactor />
-      </div>
+        <div className="space-y-4">
+          <AccountManagement />
+          <UpdatePasswordForm />
+          <TwoFactor />
+        </div>
+      </section>
     </>
   )
 }

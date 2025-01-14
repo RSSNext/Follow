@@ -23,7 +23,7 @@ export const TextField = forwardRef<TextInput, TextInputProps & TextFieldProps>(
   ) => {
     return (
       <>
-        {!!label && <FormLabel className="pl-2" label={label} optional={!required} />}
+        {!!label && <FormLabel className="pl-1" label={label} optional={!required} />}
         {!!description && (
           <Text className="text-secondary-label mb-1 pl-1 text-sm">{description}</Text>
         )}

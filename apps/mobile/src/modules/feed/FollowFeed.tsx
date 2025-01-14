@@ -1,7 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { StackActions } from "@react-navigation/native"
-import { useQuery } from "@tanstack/react-query"
 import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -20,8 +19,7 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { LoadingIndicator } from "@/src/components/ui/loading"
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
-import { useFeed } from "@/src/store/feed/hooks"
-import { feedSyncServices } from "@/src/store/feed/store"
+import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import type { SubscriptionForm } from "@/src/store/subscription/types"
@@ -36,11 +34,7 @@ const defaultValues = { view: FeedViewType.Articles.toString() }
 export function FollowFeed(props: { id: string }) {
   const { id } = props
   const feed = useFeed(id as string)
-  const { isLoading } = useQuery({
-    queryKey: ["feed", id],
-    queryFn: () => feedSyncServices.fetchFeedById({ id: id as string }),
-    enabled: !feed,
-  })
+  const { isLoading } = usePrefetchFeed(id as string, { enabled: !feed })
 
   if (isLoading) {
     return (

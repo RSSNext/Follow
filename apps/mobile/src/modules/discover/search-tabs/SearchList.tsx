@@ -4,7 +4,6 @@ import { router } from "expo-router"
 import { useAtomValue } from "jotai"
 import { memo } from "react"
 import { Text, View } from "react-native"
-import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
@@ -59,53 +58,51 @@ const renderItem = ({ item }: { item: SearchResultItem }) => (
 const SearchListCard = memo(({ item }: { item: SearchResultItem }) => {
   const isSubscribed = useSubscriptionByListId(item.list?.id ?? "")
   return (
-    <Animated.View entering={FadeInUp}>
-      <ItemPressable
-        className="py-2"
-        onPress={() => {
-          if (item.list?.id) {
-            router.push(`/follow?id=${item.list.id}&type=list`)
-          }
-        }}
-      >
-        {/* Headline */}
-        <View className="flex-row items-center gap-2 pl-4 pr-2">
-          <View className="size-[32px] overflow-hidden rounded-lg">
-            {item.list?.image ? (
-              <Image
-                source={item.list.image}
-                className="size-full"
-                contentFit="cover"
-                transition={1000}
-              />
-            ) : (
-              !!item.list?.title && <FallbackIcon title={item.list.title} size={32} />
-            )}
-          </View>
-          <View className="flex-1">
-            <Text
-              className="text-text text-lg font-semibold"
-              ellipsizeMode="middle"
-              numberOfLines={1}
-            >
-              {item.list?.title}
-            </Text>
-            {!!item.list?.description && (
-              <Text className="text-text/60" ellipsizeMode="tail" numberOfLines={1}>
-                {item.list?.description}
-              </Text>
-            )}
-          </View>
-          {/* Subscribe */}
-          {isSubscribed && (
-            <View className="ml-auto">
-              <View className="bg-gray-5/60 rounded-full px-2 py-1">
-                <Text className="text-gray-2 text-sm font-medium">Subscribed</Text>
-              </View>
-            </View>
+    <ItemPressable
+      className="py-2"
+      onPress={() => {
+        if (item.list?.id) {
+          router.push(`/follow?id=${item.list.id}&type=list`)
+        }
+      }}
+    >
+      {/* Headline */}
+      <View className="flex-row items-center gap-2 pl-4 pr-2">
+        <View className="size-[32px] overflow-hidden rounded-lg">
+          {item.list?.image ? (
+            <Image
+              source={item.list.image}
+              className="size-full"
+              contentFit="cover"
+              transition={1000}
+            />
+          ) : (
+            !!item.list?.title && <FallbackIcon title={item.list.title} size={32} />
           )}
         </View>
-      </ItemPressable>
-    </Animated.View>
+        <View className="flex-1">
+          <Text
+            className="text-text text-lg font-semibold"
+            ellipsizeMode="middle"
+            numberOfLines={1}
+          >
+            {item.list?.title}
+          </Text>
+          {!!item.list?.description && (
+            <Text className="text-text/60" ellipsizeMode="tail" numberOfLines={1}>
+              {item.list?.description}
+            </Text>
+          )}
+        </View>
+        {/* Subscribe */}
+        {isSubscribed && (
+          <View className="ml-auto">
+            <View className="bg-gray-5/60 rounded-full px-2 py-1">
+              <Text className="text-gray-2 text-sm font-medium">Subscribed</Text>
+            </View>
+          </View>
+        )}
+      </View>
+    </ItemPressable>
   )
 })
