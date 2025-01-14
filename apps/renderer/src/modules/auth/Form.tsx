@@ -9,7 +9,7 @@ import {
 } from "@follow/components/ui/form/index.js"
 import { Input } from "@follow/components/ui/input/Input.js"
 import type { LoginRuntime } from "@follow/shared/auth"
-import { loginHandler, signUp } from "@follow/shared/auth"
+import { loginHandler, signUp, twoFactor } from "@follow/shared/auth"
 import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -28,6 +28,7 @@ const formSchema = z.object({
 
 export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
   const { t } = useTranslation("app")
+  const { t: tSettings } = useTranslation("settings")
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,11 +53,17 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
 
     if ((res?.data as any)?.twoFactorRedirect) {
       present({
-        title: "Enter 2FA code",
+        title: tSettings("profile.totp_code.title"),
         content: () => {
           return (
             <PasswordForm
               valueType="totp"
+              onSubmitMutationFn={async (values) => {
+                const { data, error } = await twoFactor.verifyTotp({ code: values.code })
+                if (!data || error) {
+                  throw new Error(error?.message ?? "Invalid TOTP code")
+                }
+              }}
               onSuccess={() => {
                 window.location.reload()
               }}
