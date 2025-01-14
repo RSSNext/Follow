@@ -63,7 +63,7 @@ export const FeedDrawer = ({ children }: PropsWithChildren) => {
 
 const DrawerContent = () => {
   return (
-    <View className="bg-system-background flex h-[500px] flex-1 flex-row overflow-hidden">
+    <View className="bg-system-background flex-1 flex-row overflow-hidden">
       <CollectionPanel />
       <FeedPanel />
     </View>

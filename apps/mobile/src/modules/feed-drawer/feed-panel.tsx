@@ -1,12 +1,12 @@
-import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
+import { HeaderHeightContext } from "@react-navigation/elements"
 import { router } from "expo-router"
 import type { FC } from "react"
-import { createContext, memo, useContext, useMemo } from "react"
+import { createContext, memo, useContext, useState } from "react"
 import {
   Animated,
   Easing,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,13 +23,7 @@ import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useList } from "@/src/store/list/hooks"
-import {
-  useGroupedSubscription,
-  usePrefetchSubscription,
-  useSortedGroupedSubscription,
-  useSortedUngroupedSubscription,
-  useSubscription,
-} from "@/src/store/subscription/hooks"
+import { useSortedUngroupedSubscription, useSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCount, useUnreadCounts } from "@/src/store/unread/hooks"
 
 import {
@@ -37,40 +31,44 @@ import {
   SubscriptionFeedItemContextMenu,
 } from "../context-menu/feeds"
 import { useCurrentView, useFeedListSortMethod, useFeedListSortOrder } from "../subscription/atoms"
+import { ViewPageCurrentViewProvider } from "../subscription/ctx"
+import { SubscriptionList } from "../subscription/SubscriptionLists"
 import { useSelectedCollection } from "./atoms"
 import { ListHeaderComponent, ViewHeaderComponent } from "./header"
 
-const useSortedSubscription = (view: FeedViewType) => {
-  usePrefetchSubscription(view)
-  const { grouped, unGrouped } = useGroupedSubscription(view)
-
-  const sortBy = useFeedListSortMethod()
-  const sortOrder = useFeedListSortOrder()
-  const sortedGrouped = useSortedGroupedSubscription(grouped, sortBy, sortOrder)
-  const sortedUnGrouped = useSortedUngroupedSubscription(unGrouped, sortBy, sortOrder)
-  const data = useMemo(
-    () => [...sortedGrouped, ...sortedUnGrouped],
-    [sortedGrouped, sortedUnGrouped],
-  )
-  return data
-}
-
 export const FeedPanel = () => {
   const selectedCollection = useSelectedCollection()
+  const [headerHeight, setHeaderHeight] = useState(0)
+
   if (selectedCollection.type === "view") {
     return (
-      <SafeAreaView className="flex flex-1 overflow-hidden">
-        <ViewHeaderComponent view={selectedCollection.viewId} />
-        <FeedListView view={selectedCollection.viewId} />
-      </SafeAreaView>
+      <View className="flex flex-1 overflow-hidden">
+        <ViewHeaderComponent
+          view={selectedCollection.viewId}
+          onLayout={(e) => {
+            setHeaderHeight(e.nativeEvent.layout.height)
+          }}
+        />
+
+        <HeaderHeightContext.Provider value={headerHeight}>
+          <BottomTabBarHeightContext.Provider value={0}>
+            <ViewPageCurrentViewProvider
+              key={selectedCollection.viewId}
+              value={selectedCollection.viewId}
+            >
+              <SubscriptionList view={selectedCollection.viewId} />
+            </ViewPageCurrentViewProvider>
+          </BottomTabBarHeightContext.Provider>
+        </HeaderHeightContext.Provider>
+      </View>
     )
   }
 
   return (
-    <SafeAreaView className="flex flex-1 overflow-hidden">
+    <View className="flex flex-1 overflow-hidden">
       <ListHeaderComponent listId={selectedCollection.listId} />
       <ListView listId={selectedCollection.listId} />
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -86,23 +84,6 @@ const ListView = ({ listId }: { listId: string }) => {
     <ScrollView>
       {feedIds.map((item, index) => (
         <ItemRender key={item} item={item} index={index} />
-      ))}
-      {/* Just a placeholder */}
-      <View className="h-10" />
-    </ScrollView>
-  )
-}
-
-const FeedListView = ({ view }: { view: FeedViewType }) => {
-  const data = useSortedSubscription(view)
-  return (
-    <ScrollView>
-      {data.map((item, index) => (
-        <ItemRender
-          key={typeof item === "string" ? item : item.category}
-          item={item}
-          index={index}
-        />
       ))}
       {/* Just a placeholder */}
       <View className="h-10" />

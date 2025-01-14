@@ -1,12 +1,13 @@
 import { cn } from "@follow/utils"
 import {
   Image,
-  SafeAreaView,
   ScrollView,
+  StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { ViewDefinition } from "@/src/constants/views"
@@ -20,22 +21,33 @@ export const CollectionPanel = () => {
   const winDim = useWindowDimensions()
   const lists = useAllListSubscription()
 
+  const insets = useSafeAreaInsets()
   return (
-    <SafeAreaView
+    <View
       className="bg-secondary-system-background"
       style={{ width: Math.max(50, winDim.width * 0.15) }}
     >
-      <ScrollView contentContainerClassName="flex py-3 gap-3">
+      <ScrollView
+        contentContainerClassName="flex py-3 gap-3"
+        contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      >
         {views.map((viewDef) => (
           <ViewButton key={viewDef.name} viewDef={viewDef} />
         ))}
+        <View style={styles.hairline} className="bg-opaque-separator mx-4" />
         {lists.map((listId) => (
           <ListButton key={listId} listId={listId} />
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  hairline: {
+    height: StyleSheet.hairlineWidth,
+  },
+})
 
 const ViewButton = ({ viewDef }: { viewDef: ViewDefinition }) => {
   const selectedCollection = useSelectedCollection()
@@ -45,7 +57,7 @@ const ViewButton = ({ viewDef }: { viewDef: ViewDefinition }) => {
     <TouchableOpacity
       className={cn(
         "mx-3 flex aspect-square items-center justify-center rounded-lg p-3",
-        isActive ? "bg-system-fill" : "bg-system-background",
+        isActive ? "bg-secondary-system-fill" : "bg-system-background",
       )}
       onPress={() =>
         selectCollection({
