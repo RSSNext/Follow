@@ -1,6 +1,7 @@
 import { parseHtml } from "@follow/components/ui/markdown/parse-html.js"
 import { views } from "@follow/constants"
 import type { SupportedLanguages } from "@follow/models/types"
+import { franc } from "franc-min"
 
 import type { FlatEntryModel } from "~/store/entry"
 
@@ -35,6 +36,28 @@ export const LanguageMap: Record<
     code: "cmn",
   },
 }
+
+export const checkLanguage = ({
+  content,
+  language,
+}: {
+  content: string
+  language: SupportedLanguages
+}) => {
+  if (!content) return true
+  const pureContent = parseHtml(content)
+    .toText()
+    .replaceAll(/https?:\/\/\S+|www\.\S+/g, " ")
+  const sourceLanguage = franc(pureContent, {
+    only: [LanguageMap[language].code],
+  })
+  if (sourceLanguage === LanguageMap[language].code) {
+    return true
+  } else {
+    return false
+  }
+}
+
 export async function translate({
   entry,
   view,
@@ -55,22 +78,14 @@ export async function translate({
   if (extraFields) {
     fields = [...fields, ...extraFields]
   }
-  const { franc } = await import("franc-min")
 
   fields = fields.filter((field) => {
     if (language && entry.entries[field]) {
-      const content = parseHtml(entry.entries[field])
-        .toText()
-        .replaceAll(/https?:\/\/\S+|www\.\S+/g, " ")
-      const sourceLanguage = franc(content, {
-        only: [LanguageMap[language].code],
+      const isLanguageMatch = checkLanguage({
+        content: entry.entries[field],
+        language,
       })
-
-      if (sourceLanguage === LanguageMap[language].code) {
-        return false
-      } else {
-        return true
-      }
+      return !isLanguageMatch
     } else {
       return false
     }
