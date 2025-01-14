@@ -38,7 +38,7 @@ const totpFormSchema = z.object({
 })
 type TOTPFormValues = z.infer<typeof totpFormSchema>
 
-export type PasswordProps<T, V> = {
+export type PasswordFormProps<T, V> = {
   valueType: T
   onSubmitMutationFn: (values: V) => Promise<void>
   message?: {
@@ -51,7 +51,7 @@ export type PasswordProps<T, V> = {
 export function PasswordForm<
   T extends "password" | "totp",
   V extends T extends "password" ? PasswordFormValues : TOTPFormValues,
->({ valueType, message, onSubmitMutationFn, onSuccess }: PasswordProps<T, V>) {
+>({ valueType, message, onSubmitMutationFn, onSuccess }: PasswordFormProps<T, V>) {
   const isPassword = valueType === "password"
   const { t } = useTranslation("settings")
 
