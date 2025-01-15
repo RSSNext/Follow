@@ -88,6 +88,7 @@ export function PasswordForm<
                 <Input
                   autoFocus
                   type={isPassword ? "password" : "text"}
+                  className={isPassword ? "" : "font-mono"}
                   placeholder={
                     message?.placeholder ??
                     (isPassword
