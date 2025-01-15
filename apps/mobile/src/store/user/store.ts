@@ -22,14 +22,18 @@ class UserSyncService {
   async whoami() {
     const res = await apiFetch<{
       user: UserModel
-    }>("/better-auth/get-session", {
+    } | null>("/better-auth/get-session", {
       method: "GET",
     })
-    immerSet((state) => {
-      state.whoami = res.user
-    })
-    userActions.upsertMany([res.user])
-    return res.user
+    if (res) {
+      immerSet((state) => {
+        state.whoami = res.user
+      })
+      userActions.upsertMany([res.user])
+      return res.user
+    } else {
+      return null
+    }
   }
 }
 

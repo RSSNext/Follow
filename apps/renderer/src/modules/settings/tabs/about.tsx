@@ -94,7 +94,7 @@ export const SettingAbout = () => {
               OpenIssueLink: (
                 <a
                   className="inline-flex cursor-pointer items-center gap-1 hover:underline"
-                  href={getNewIssueUrl()}
+                  href={getNewIssueUrl({ template: "feature_request.yml" })}
                   target="_blank"
                 >
                   open an issue

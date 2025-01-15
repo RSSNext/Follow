@@ -1,10 +1,11 @@
 import { Link, Stack } from "expo-router"
+import { useEffect } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
-import { useFeedDrawer } from "@/src/modules/feed-drawer/atoms"
+import { useFeedDrawer, useSetDrawerSwipeDisabled } from "@/src/modules/feed-drawer/atoms"
 import { useCurrentView } from "@/src/modules/subscription/atoms"
 import { SortActionButton } from "@/src/modules/subscription/header-actions"
 import { SubscriptionLists } from "@/src/modules/subscription/SubscriptionLists"
@@ -16,6 +17,14 @@ import { ViewTab } from "../../../modules/subscription/ViewTab"
 export default function FeedList() {
   const currentView = useCurrentView()
   usePrefetchUnread()
+
+  const setDrawerSwipeDisabled = useSetDrawerSwipeDisabled()
+  useEffect(() => {
+    setDrawerSwipeDisabled(false)
+    return () => {
+      setDrawerSwipeDisabled(true)
+    }
+  }, [setDrawerSwipeDisabled])
   return (
     <>
       <Stack.Screen

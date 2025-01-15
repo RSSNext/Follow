@@ -5,6 +5,6 @@ interface TabBarBackgroundContextType {
   opacity: SharedValue<number>
 }
 
-export const TabBarBackgroundContext = createContext<TabBarBackgroundContextType>({
+export const BottomTabBarBackgroundContext = createContext<TabBarBackgroundContextType>({
   opacity: null!,
 })

@@ -57,7 +57,7 @@ export function AudioItemStateLess({ entry, feed }: EntryItemStatelessProps) {
 }
 
 export const AudioItemSkeleton = (
-  <div className="relative mx-auto w-full max-w-lg select-none rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+  <div className="relative mx-auto w-full select-none rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
     <div className="relative">
       <div className="group relative flex py-4 pl-3 pr-2">
         <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">

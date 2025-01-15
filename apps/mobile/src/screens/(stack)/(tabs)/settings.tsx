@@ -8,7 +8,7 @@ import { withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEventCallback } from "usehooks-ts"
 
-import { TabBarBackgroundContext } from "@/src/contexts/TabBarBackgroundContext"
+import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -31,7 +31,7 @@ export default function SettingsX() {
 function Settings() {
   const insets = useSafeAreaInsets()
   const isFocused = useContext(OutIsFocused)
-  const { opacity } = useContext(TabBarBackgroundContext)
+  const { opacity } = useContext(BottomTabBarBackgroundContext)
   const tabBarHeight = useBottomTabBarHeight()
 
   const calculateOpacity = useCallback(
@@ -82,7 +82,7 @@ function Settings() {
       contentContainerStyle={{ paddingBottom: insets.bottom + tabBarHeight }}
       scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
     >
-      <UserHeaderBanner />
+      <UserHeaderBanner scrollY={animatedScrollY} />
 
       <SettingsList />
     </ScrollView>

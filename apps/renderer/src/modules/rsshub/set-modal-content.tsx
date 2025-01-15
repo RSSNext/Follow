@@ -125,7 +125,14 @@ export function SetModalContent({
                   <FormControl className="!mt-0">
                     <div className="flex items-center gap-10">
                       <div className="space-x-2">
-                        <Input className="w-24" type="number" max={12} {...field} />
+                        <Input
+                          className="w-24"
+                          type="number"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          max={12}
+                          {...field}
+                        />
                         <span className="text-sm text-muted-foreground">
                           {t("rsshub.useModal.month")}
                         </span>
