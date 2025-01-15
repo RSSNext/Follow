@@ -22,7 +22,7 @@ class UserSyncService {
   async whoami() {
     const res = await apiFetch<{
       user: UserModel
-    }>("/better-auth/get-session", {
+    } | null>("/better-auth/get-session", {
       method: "GET",
     })
     if (res) {
