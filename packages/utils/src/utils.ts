@@ -247,3 +247,10 @@ export const toScientificNotation = (num: string, threshold: number) => {
   }
   return num
 }
+
+export function transfromShortcut(shortcut: string, platform: string = getOS()): string {
+  if (platform === "Windows") {
+    return shortcut.replace("Meta", "Ctrl").replace("meta", "ctrl")
+  }
+  return shortcut
+}

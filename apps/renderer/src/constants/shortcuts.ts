@@ -1,14 +1,17 @@
+import { transfromShortcut } from "@follow/utils/utils"
+
 import { COPY_MAP } from "~/constants"
 
 type Shortcuts = Record<
   string,
   Record<string, { name: I18nKeysForShortcuts; key: string; extra?: string }>
 >
+
 export const shortcuts = {
   feeds: {
     add: {
       name: "keys.feeds.add",
-      key: "Meta+T",
+      key: transfromShortcut("Meta+T"),
     },
     switchToView: {
       name: "keys.feeds.switchToView",
@@ -22,7 +25,7 @@ export const shortcuts = {
   layout: {
     toggleSidebar: {
       name: "keys.layout.toggleSidebar",
-      key: "Meta+B, [",
+      key: transfromShortcut("Meta+B, ["),
     },
     showShortcuts: {
       name: "keys.layout.showShortcuts",
@@ -30,7 +33,7 @@ export const shortcuts = {
     },
     toggleWideMode: {
       name: "keys.layout.toggleWideMode",
-      key: "Meta+[",
+      key: transfromShortcut("Meta+["),
     },
     zenMode: {
       name: "keys.layout.zenMode",
@@ -52,7 +55,7 @@ export const shortcuts = {
     },
     markAllAsRead: {
       name: "keys.entries.markAllAsRead",
-      key: "Shift+Meta+A",
+      key: transfromShortcut("Shift+Meta+A"),
     },
     toggleUnreadOnly: {
       name: "keys.entries.toggleUnreadOnly",
@@ -75,23 +78,23 @@ export const shortcuts = {
     },
     tts: {
       name: "keys.entry.tts",
-      key: "Shift+Meta+V",
+      key: transfromShortcut("Shift+Meta+V"),
     },
     copyLink: {
       name: "keys.entry.copyLink",
-      key: "Shift+Meta+C",
+      key: transfromShortcut("Shift+Meta+C"),
     },
     copyTitle: {
       name: "keys.entry.copyTitle",
-      key: "Shift+Meta+B",
+      key: transfromShortcut("Shift+Meta+B"),
     },
     tip: {
       name: "keys.entry.tip",
-      key: "Shift+Meta+T",
+      key: transfromShortcut("Shift+Meta+T"),
     },
     share: {
       name: "keys.entry.share",
-      key: "Meta+Alt+S",
+      key: transfromShortcut("Meta+Alt+S"),
     },
     scrollUp: {
       name: "keys.entry.scrollUp",
@@ -111,7 +114,7 @@ export const shortcuts = {
   misc: {
     quickSearch: {
       name: "keys.misc.quickSearch",
-      key: "Meta+K",
+      key: transfromShortcut("Meta+K"),
     },
   },
 } as const satisfies Shortcuts
