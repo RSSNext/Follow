@@ -148,6 +148,8 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
                   <Input
                     {...field}
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}
                   />
                 </FormControl>

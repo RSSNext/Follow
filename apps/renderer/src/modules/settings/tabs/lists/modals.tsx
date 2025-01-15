@@ -189,6 +189,8 @@ export const ListCreationModalContent = ({ id }: { id?: string }) => {
                   <Input
                     {...field}
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     min={0}
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}
                   />
