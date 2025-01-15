@@ -63,6 +63,11 @@ export const toastFetchError = (
     }
   }
 
+  // handled by the form
+  if (message === "Invalid two factor code") {
+    return
+  }
+
   const toastOptions: ExternalToast = {
     ..._toastOptions,
     classNames: {

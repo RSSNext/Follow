@@ -7,7 +7,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
-import { Input } from "@follow/components/ui/input/index.js"
+import {
+  Input,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
 import { twoFactor } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,6 +27,7 @@ import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { getFetchErrorMessage } from "~/lib/error-parser"
 import { useHasPassword } from "~/queries/auth"
 
 import { NoPasswordHint } from "./update-password-form"
@@ -63,7 +70,20 @@ export function PasswordForm<
   const updateMutation = useMutation({
     mutationFn: onSubmitMutationFn,
     onError: (error) => {
-      toast.error(error.message)
+      const fetchErrorMessage = getFetchErrorMessage(error)
+      if (
+        !isPassword &&
+        (error.message === "invalid two factor authentication" ||
+          fetchErrorMessage === "Invalid two factor code")
+      ) {
+        form.resetField("code" as any)
+        form.setError("code" as any, {
+          type: "manual",
+          message: t("profile.totp_code.invalid"),
+        })
+      } else {
+        toast.error(error.message)
+      }
     },
     onSuccess,
   })
@@ -85,28 +105,46 @@ export function PasswordForm<
                   (isPassword ? t("profile.current_password.label") : t("profile.totp_code.label"))}
               </FormLabel>
               <FormControl>
-                <Input
-                  autoFocus
-                  type={isPassword ? "password" : "text"}
-                  className={isPassword ? "" : "font-mono"}
-                  placeholder={
-                    message?.placeholder ??
-                    (isPassword
-                      ? t("profile.current_password.label")
-                      : t("profile.totp_code.label"))
-                  }
-                  {...field}
-                />
+                {isPassword ? (
+                  <Input
+                    autoFocus
+                    type="password"
+                    placeholder={message?.placeholder ?? t("profile.current_password.label")}
+                    {...field}
+                  />
+                ) : (
+                  <InputOTP
+                    autoFocus
+                    className="!w-full"
+                    maxLength={6}
+                    onComplete={() => form.handleSubmit(onSubmit)()}
+                    {...field}
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                )}
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="text-right">
-          <Button type="submit" isLoading={updateMutation.isPending}>
-            {t("profile.submit")}
-          </Button>
-        </div>
+        {isPassword && (
+          <div className="text-right">
+            <Button type="submit" isLoading={updateMutation.isPending}>
+              {t("profile.submit")}
+            </Button>
+          </div>
+        )}
       </form>
     </Form>
   )

@@ -64,7 +64,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
   const me = whoami()
   const status = useAuthQuery(Queries.rsshub.status())
   const setRSSHubMutation = useSetRSSHubMutation()
-  const presetTOTPModal = useTOTPModalWrapper(setRSSHubMutation.mutate)
+  const presetTOTPModal = useTOTPModalWrapper(setRSSHubMutation.mutateAsync)
   const { present } = useModalStack()
 
   return (

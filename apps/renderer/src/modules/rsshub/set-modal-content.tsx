@@ -33,7 +33,7 @@ export function SetModalContent({
 }) {
   const { t } = useTranslation("settings")
   const setRSSHubMutation = useSetRSSHubMutation()
-  const preset = useTOTPModalWrapper(setRSSHubMutation.mutate)
+  const preset = useTOTPModalWrapper(setRSSHubMutation.mutateAsync)
   const details = useAuthQuery(Queries.rsshub.get({ id: instance.id }))
   const hasPurchase = !!details.data?.purchase
   const price = instance.ownerUserId === whoami()?.id ? 0 : instance.price

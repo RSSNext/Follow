@@ -183,7 +183,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
       dismiss()
     },
   })
-  const preset = useTOTPModalWrapper(newInvitation.mutate)
+  const preset = useTOTPModalWrapper(newInvitation.mutateAsync)
 
   const serverConfigs = useServerConfigs()
 

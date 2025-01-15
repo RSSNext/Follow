@@ -111,12 +111,11 @@ export function useTOTPModalWrapper<T>(callback: (input: T) => any) {
     (input: T) => {
       present({
         title: t("profile.totp_code.title"),
-        content: ({ dismiss }) => {
+        content: () => {
           return createElement(PasswordForm, {
             valueType: "totp",
             onSubmitMutationFn(values) {
               if ("code" in values) {
-                dismiss()
                 return callback({
                   ...input,
                   TOTPCode: values.code,

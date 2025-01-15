@@ -34,7 +34,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   const { data: boostStatus, isLoading } = useBoostStatusQuery(feedId)
   const boostFeedMutation = useBoostFeedMutation()
   const { dismiss } = useCurrentModal()
-  const present = useTOTPModalWrapper(boostFeedMutation.mutate)
+  const present = useTOTPModalWrapper(boostFeedMutation.mutateAsync)
 
   const handleBoost = useCallback(() => {
     if (boostFeedMutation.isPending) return

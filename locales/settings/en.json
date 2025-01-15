@@ -291,6 +291,7 @@
   "profile.submit": "Submit",
   "profile.title": "Profile Settings",
   "profile.totp_code.init": "Scan the QR code with your TOTP app",
+  "profile.totp_code.invalid": "Invalid TOTP code.",
   "profile.totp_code.label": "TOTP Code",
   "profile.totp_code.title": "Enter TOTP Code",
   "profile.two_factor.disable": "Disable 2FA",

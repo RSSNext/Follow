@@ -89,7 +89,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
       })
     },
   })
-  const present = useTOTPModalWrapper(mutation.mutate)
+  const present = useTOTPModalWrapper(mutation.mutateAsync)
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     present(values)

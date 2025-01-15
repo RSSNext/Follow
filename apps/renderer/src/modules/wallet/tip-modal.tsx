@@ -57,7 +57,7 @@ const TipModalContent_: FC<{
   const balanceBigInt = cPowerBigInt + dPowerBigInt
 
   const tipMutation = useWalletTipMutation()
-  const present = useTOTPModalWrapper(tipMutation.mutate)
+  const present = useTOTPModalWrapper(tipMutation.mutateAsync)
 
   const [amount, setAmount] = useState<number>(DEFAULT_RECOMMENDED_TIP)
 

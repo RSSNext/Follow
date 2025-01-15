@@ -250,7 +250,7 @@ const ListInnerForm = ({
     },
   })
 
-  const preset = useTOTPModalWrapper(followMutation.mutate)
+  const preset = useTOTPModalWrapper(followMutation.mutateAsync)
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (isSubscribed) {
       followMutation.mutate(values)
