@@ -18,6 +18,7 @@ import { Label } from "@follow/components/ui/label/index.js"
 import { twoFactor } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { m, useAnimation } from "framer-motion"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -55,12 +56,25 @@ export type PasswordFormProps<T, V> = {
   onSuccess?: () => void
 }
 
+const shakeVariants = {
+  shake: {
+    x: [0, -2, 2, -2, 2, 0],
+    transition: {
+      duration: 0.5,
+    },
+  },
+  reset: {
+    x: 0,
+  },
+}
+
 export function PasswordForm<
   T extends "password" | "totp",
   V extends T extends "password" ? PasswordFormValues : TOTPFormValues,
 >({ valueType, message, onSubmitMutationFn, onSuccess }: PasswordFormProps<T, V>) {
   const isPassword = valueType === "password"
   const { t } = useTranslation("settings")
+  const controls = useAnimation()
 
   const form = useForm<V>({
     resolver: zodResolver(isPassword ? passwordFormSchema : totpFormSchema),
@@ -81,6 +95,7 @@ export function PasswordForm<
           type: "manual",
           message: t("profile.totp_code.invalid"),
         })
+        controls.start("shake")
       } else {
         toast.error(error.message)
       }
@@ -113,25 +128,27 @@ export function PasswordForm<
                     {...field}
                   />
                 ) : (
-                  <InputOTP
-                    autoFocus
-                    className="!w-full"
-                    maxLength={6}
-                    onComplete={() => form.handleSubmit(onSubmit)()}
-                    {...field}
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                    </InputOTPGroup>
-                    <InputOTPSeparator />
-                    <InputOTPGroup>
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                      <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  <m.div variants={shakeVariants} animate={controls}>
+                    <InputOTP
+                      autoFocus
+                      className="!w-full"
+                      maxLength={6}
+                      onComplete={() => form.handleSubmit(onSubmit)()}
+                      {...field}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </m.div>
                 )}
               </FormControl>
               <FormMessage />
