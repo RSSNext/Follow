@@ -1,14 +1,15 @@
 import type { BlurViewProps } from "expo-blur"
 import { BlurView } from "expo-blur"
 import { useColorScheme } from "nativewind"
-import type { FC } from "react"
+import { forwardRef } from "react"
 
-export const ThemedBlurView: FC<BlurViewProps> = ({ tint, ...rest }) => {
+export const ThemedBlurView = forwardRef<BlurView, BlurViewProps>(({ tint, ...rest }, ref) => {
   const { colorScheme } = useColorScheme()
   return (
     <BlurView
+      ref={ref}
       tint={colorScheme === "light" ? "systemMaterialLight" : "systemMaterialDark"}
       {...rest}
     />
   )
-}
+})

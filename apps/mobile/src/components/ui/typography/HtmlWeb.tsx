@@ -5,7 +5,7 @@ import "@follow/components/assets/tailwind.css"
 import type { HtmlProps } from "@follow/components"
 import { Html } from "@follow/components"
 
-export default function HtmlRender({
+export default function HtmlWeb({
   content,
   dom,
   ...options

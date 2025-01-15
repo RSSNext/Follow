@@ -16,25 +16,42 @@ export const EntryTranslation: Component<{
     return target
   }, [source, target, showTranslation])
 
-  const content = useMemo(() => source + (nextTarget ? ` ${nextTarget}` : ""), [source, nextTarget])
-
   if (!source) {
     return null
   }
 
   return (
     <div>
-      {nextTarget && <i className="i-mgc-translate-2-cute-re mr-1 align-middle" />}
       {isHTML ? (
-        <HTML
-          as="div"
-          className={cn("prose inline align-middle dark:prose-invert", className)}
-          noMedia
-        >
-          {content}
-        </HTML>
+        <>
+          <HTML as="div" className={cn("prose align-middle dark:prose-invert", className)} noMedia>
+            {source}
+          </HTML>
+          {nextTarget && (
+            <>
+              <i className="i-mgc-translate-2-cute-re mb-1 mt-4 align-middle" />
+              <HTML
+                as="div"
+                className={cn("prose align-middle dark:prose-invert", className)}
+                noMedia
+              >
+                {nextTarget}
+              </HTML>
+            </>
+          )}
+        </>
       ) : (
-        <div className={cn("inline align-middle", className)}>{content}</div>
+        <>
+          <div className={cn("inline align-middle", className)}>
+            <span className="align-middle">{source}</span>
+            {nextTarget && (
+              <>
+                <i className="i-mgc-translate-2-cute-re ml-2 mr-0.5 align-middle" />
+                <span className="align-middle">{nextTarget}</span>
+              </>
+            )}
+          </div>
+        </>
       )}
     </div>
   )

@@ -6,30 +6,24 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu/dropdown-menu"
-import { useEntryActions } from "~/hooks/biz/useEntryActions"
+import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
+import { COMMAND_ID } from "~/modules/command/commands/id"
 import { useCommand } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
-import { useToolbarOrderMap } from "~/modules/customize-toolbar/hooks"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
-  const actionConfigs = useEntryActions({ entryId, view })
-  const orderMap = useToolbarOrderMap()
+  const { moreAction: actionConfigs } = useSortedEntryActions({ entryId, view })
   const availableActions = useMemo(
-    () =>
-      actionConfigs
-        .filter((item) => {
-          const order = orderMap.get(item.id)
-          if (!order) return false
-          return order.type !== "main"
-        })
-        .sort((a, b) => {
-          const orderA = orderMap.get(a.id)?.order || 0
-          const orderB = orderMap.get(b.id)?.order || 0
-          return orderA - orderB
-        }),
-    [actionConfigs, orderMap],
+    () => actionConfigs.filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar),
+    [actionConfigs],
+  )
+
+  const extraAction = useMemo(
+    () => actionConfigs.filter((item) => item.id === COMMAND_ID.settings.customizeToolbar),
+    [actionConfigs],
   )
 
   if (availableActions.length === 0) {
@@ -43,6 +37,10 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {availableActions.map((config) => (
+          <CommandDropdownMenuItem key={config.id} commandId={config.id} onClick={config.onClick} />
+        ))}
+        <DropdownMenuSeparator />
+        {extraAction.map((config) => (
           <CommandDropdownMenuItem key={config.id} commandId={config.id} onClick={config.onClick} />
         ))}
       </DropdownMenuContent>

@@ -8,6 +8,7 @@ import { z } from "zod"
 
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { signIn } from "@/src/lib/auth"
+import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -35,7 +36,14 @@ function Input({
     control,
     name,
   })
-  return <TextInput {...rest} value={field.value} onChangeText={field.onChange} />
+  return (
+    <TextInput
+      selectionColor={accentColor}
+      {...rest}
+      value={field.value}
+      onChangeText={field.onChange}
+    />
+  )
 }
 
 export function EmailLogin() {

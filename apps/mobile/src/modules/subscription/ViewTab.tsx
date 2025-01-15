@@ -8,13 +8,13 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { ContextMenu } from "@/src/components/ui/context-menu"
-import { bottomViewTabHeight } from "@/src/constants/ui"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
 import { useUnreadCountByView } from "@/src/store/unread/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 import { offsetAtom, setCurrentView, viewAtom } from "./atoms"
+import { ViewTabHeight } from "./constants"
 
 const springConfig: WithSpringConfig = {
   damping: 20,
@@ -65,16 +65,15 @@ export const ViewTab = () => {
 
   return (
     <ThemedBlurView
-      style={[styles.tabContainer, { height: headerHeight + bottomViewTabHeight }]}
-      className="border-system-fill/60 relative border-b"
+      style={[styles.tabContainer, { height: headerHeight + ViewTabHeight }]}
+      className="border-opaque-separator border-b-hairline relative"
     >
-      <View className="absolute inset-x-0 bottom-0" style={{ height: bottomViewTabHeight }}>
+      <View className="absolute inset-x-0 bottom-0" style={{ height: ViewTabHeight }}>
         <ScrollView
           onScroll={(event) => {
             scrollOffsetX.current = event.nativeEvent.contentOffset.x
           }}
           showsHorizontalScrollIndicator={false}
-          className="border-tertiary-system-background"
           horizontal
           ref={tabRef}
           contentContainerStyle={styles.tabScroller}
@@ -119,10 +118,11 @@ const TabItem = memo(
     const unreadCount = useUnreadCountByView(view.view)
     return (
       <ContextMenu
-        actions={[{ title: "Mark all as read" }]}
-        onPress={(e) => {
-          switch (e.nativeEvent.index) {
-            case 0: {
+        // actions={[{ title: "Mark all as read" }]}
+        config={{ items: [{ title: "Mark all as read", actionKey: "markAllAsRead" }] }}
+        onPressMenuItem={(e) => {
+          switch (e.actionKey) {
+            case "markAllAsRead": {
               unreadSyncService.markViewAsRead(view.view)
               break
             }

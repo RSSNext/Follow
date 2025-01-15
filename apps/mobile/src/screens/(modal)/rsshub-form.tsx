@@ -121,7 +121,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
       <PortalProvider>
         <KeyboardAwareScrollView className="bg-system-grouped-background">
-          <View className="bg-system-grouped-background-2 mx-2 gap-4 rounded-lg px-3 py-6">
+          <View className="bg-secondary-system-grouped-background mx-2 mt-4 gap-4 rounded-lg px-3 py-6">
             {keys.map((keyItem) => {
               const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
 
@@ -172,7 +172,9 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                   )}
 
                   {!!parameters && (
-                    <Text className="text-text/80 ml-1 mt-2 text-xs">{parameters.description}</Text>
+                    <Text className="text-secondary-label ml-2 mt-1 text-xs">
+                      {parameters.description}
+                    </Text>
                   )}
                 </View>
               )
@@ -200,11 +202,13 @@ const Maintainers = ({ maintainers }: { maintainers?: string[] }) => {
   }
 
   return (
-    <View className="text-text/80 mx-4 mt-2 flex flex-row flex-wrap gap-x-1 text-sm">
-      <Text className="text-text/80 text-xs">This feed is provided by RSSHub, with credit to </Text>
+    <View className="text-tertiary-label mx-4 mt-2 flex flex-row flex-wrap gap-x-1 text-sm">
+      <Text className="text-secondary-label text-xs">
+        This feed is provided by RSSHub, with credit to{" "}
+      </Text>
       {maintainers.map((m) => (
         <TouchableOpacity key={m} onPress={() => Linking.openURL(`https://github.com/${m}`)}>
-          <Text className="text-text/50 text-xs">@{m}</Text>
+          <Text className="text-xs text-accent/90">@{m}</Text>
         </TouchableOpacity>
       ))}
     </View>
