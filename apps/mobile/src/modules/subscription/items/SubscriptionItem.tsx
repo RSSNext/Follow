@@ -103,7 +103,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
             {subscription?.title || feed.title}
           </Text>
           {!!unreadCount && (
-            <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
+            <Text className="text-tertiary-label ml-auto pl-2 text-xs">{unreadCount}</Text>
           )}
         </ItemPressable>
       </SubscriptionFeedItemContextMenu>
