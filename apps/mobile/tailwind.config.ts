@@ -38,13 +38,11 @@ export default resolveConfig({
         },
 
         // System colors
-        label: "rgb(var(--color-label) / <alpha-value>)",
-        "secondary-label": "rgb(var(--color-secondaryLabel) / <alpha-value>)",
-        "tertiary-label": "rgb(var(--color-tertiaryLabel) / <alpha-value>)",
-        "quaternary-label": "rgb(var(--color-quaternaryLabel) / <alpha-value>)",
+
         "placeholder-text": "rgb(var(--color-placeholderText) / <alpha-value>)",
         separator: "rgb(var(--color-separator) / <alpha-value>)",
-        "opaque-separator": "rgb(var(--color-opaqueSeparator) / <alpha-value>)",
+        "opaque-separator": "rgba(var(--color-opaqueSeparator))",
+        "non-opaque-separator": "rgba(var(--color-nonOpaqueSeparator))",
         link: "rgb(var(--color-link) / <alpha-value>)",
 
         // Backgrounds
@@ -53,18 +51,22 @@ export default resolveConfig({
           "rgb(var(--color-secondarySystemBackground) / <alpha-value>)",
         "tertiary-system-background": "rgb(var(--color-tertiarySystemBackground) / <alpha-value>)",
         "system-grouped-background": "rgb(var(--color-systemGroupedBackground) / <alpha-value>)",
-        "system-grouped-background-2": "rgb(var(--color-systemGroupedBackground2) / <alpha-value>)",
+        "secondary-system-grouped-background":
+          "rgb(var(--color-secondarySystemGroupedBackground) / <alpha-value>)",
+        "tertiary-system-grouped-background":
+          "rgb(var(--color-tertiarySystemGroupedBackground) / <alpha-value>)",
         // System fills
-        "system-fill": "rgb(var(--color-systemFill) / <alpha-value>)",
-        "secondary-system-fill": "rgb(var(--color-secondarySystemFill) / <alpha-value>)",
-        "tertiary-system-fill": "rgb(var(--color-tertiarySystemFill) / <alpha-value>)",
-        "quaternary-system-fill": "rgb(var(--color-quaternarySystemFill) / <alpha-value>)",
+        "system-fill": "rgba(var(--color-systemFill))",
+        "secondary-system-fill": "rgba(var(--color-secondarySystemFill))",
+        "tertiary-system-fill": "rgba(var(--color-tertiarySystemFill))",
+        "quaternary-system-fill": "rgba(var(--color-quaternarySystemFill))",
 
         // Text colors
+        label: "rgb(var(--color-text) / <alpha-value>)",
         text: "rgb(var(--color-text) / <alpha-value>)",
-        "secondary-text": "rgb(var(--color-secondaryText) / <alpha-value>)",
-        "tertiary-text": "rgb(var(--color-tertiaryText) / <alpha-value>)",
-        "quaternary-text": "rgb(var(--color-quaternaryText) / <alpha-value>)",
+        "secondary-label": "rgba(var(--color-secondaryLabel))",
+        "tertiary-label": "rgba(var(--color-tertiaryLabel))",
+        "quaternary-label": "rgba(var(--color-quaternaryLabel))",
 
         // Extended colors
         disabled: "rgb(var(--color-disabled) / <alpha-value>)",

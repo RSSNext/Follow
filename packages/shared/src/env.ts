@@ -28,7 +28,7 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
   runtimeEnv: getRuntimeEnv() as any,
 
-  skipValidation: !isDev,
+  skipValidation: "process" in globalThis ? process.env.VITEST === "true" : false,
 })
 
 function metaEnvIsEmpty() {

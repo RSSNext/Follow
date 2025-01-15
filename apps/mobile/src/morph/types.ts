@@ -7,4 +7,5 @@ type ExtractData<T extends (...args: any) => any> =
 
 export namespace HonoApiClient {
   export type Subscription_Get = ExtractData<typeof apiClient.subscriptions.$get>
+  export type List_Get = ExtractData<typeof apiClient.lists.$get>
 }

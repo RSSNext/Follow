@@ -4,7 +4,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native"
 
 import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
-import { useColor } from "@/src/theme/colors"
+import { accentColor, useColor } from "@/src/theme/colors"
 
 export default function Add() {
   const [url, setUrl] = useState("")
@@ -33,6 +33,7 @@ export default function Add() {
       <View className="mx-3 mt-6">
         <Text className="text-label mb-1 ml-3 text-base font-medium">Feed URL</Text>
         <TextInput
+          cursorColor={accentColor}
           value={url}
           onChangeText={setUrl}
           placeholder="Enter the URL of the feed"

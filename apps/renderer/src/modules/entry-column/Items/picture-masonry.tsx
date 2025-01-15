@@ -29,7 +29,9 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { MediaContainerWidthProvider } from "~/components/ui/media"
-import { getEntry } from "~/store/entry"
+import { useAuthQuery } from "~/hooks/common/useBizQuery"
+import { Queries } from "~/queries"
+import { getEntry, useEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 
 import { getMasonryColumnValue, setMasonryColumnValue, useMasonryColumnValue } from "../atoms"
@@ -245,6 +247,23 @@ const MasonryRender: React.ComponentType<
   }>
 > = ({ data, index }) => {
   const firstScreenReady = useContext(FirstScreenReadyContext)
+  const entry = useEntry(data.entryId)
+  const translation = useAuthQuery(
+    Queries.ai.translation({
+      entry: entry!,
+      view: entry?.view,
+      language: entry?.settings?.translation,
+    }),
+    {
+      enabled: !!entry?.settings?.translation,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      meta: {
+        persist: true,
+      },
+    },
+  )
+
   if (data.entryId.startsWith("placeholder")) {
     return <LoadingSkeletonItem />
   }
@@ -257,6 +276,7 @@ const MasonryRender: React.ComponentType<
       )}
       entryId={data.entryId}
       index={index}
+      translation={translation.data}
     />
   )
 }

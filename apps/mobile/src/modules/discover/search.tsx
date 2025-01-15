@@ -1,8 +1,9 @@
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
-import { useTheme } from "@react-navigation/native"
 import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { useEffect, useRef } from "react"
+import type { FC } from "react"
+import { useEffect, useRef, useState } from "react"
+import type { LayoutChangeEvent } from "react-native"
 import {
   Animated,
   Easing,
@@ -20,19 +21,28 @@ import { BlurEffect } from "@/src/components/common/HeaderBlur"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-import { useDiscoverPageContext } from "./ctx"
+import { useSearchPageContext } from "./ctx"
+import { SearchTabBar } from "./SearchTabBar"
 
-export const SearchHeader = () => {
+export const SearchHeader: FC<{
+  animatedX: Animated.Value
+  onLayout: (e: LayoutChangeEvent) => void
+}> = ({ animatedX, onLayout }) => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
   const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
 
   return (
-    <View style={{ height: headerHeight, paddingTop: insets.top }} className="relative">
-      <BlurEffect />
+    <View
+      style={{ minHeight: headerHeight, paddingTop: insets.top }}
+      className="relative"
+      onLayout={onLayout}
+    >
+      {/* <BlurEffect /> */}
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
+      <SearchTabBar animatedX={animatedX} />
     </View>
   )
 }
@@ -56,11 +66,11 @@ const DiscoverHeaderImpl = () => {
 }
 
 const PlaceholerSearchBar = () => {
-  const placeholderTextColor = useColor("placeholderText")
+  const labelColor = useColor("secondaryLabel")
   return (
     <Pressable
       style={styles.searchbar}
-      className="dark:bg-gray-6 bg-gray-5"
+      className="bg-tertiary-system-fill"
       onPress={() => {
         router.push("/search")
       }}
@@ -69,8 +79,8 @@ const PlaceholerSearchBar = () => {
         className="absolute inset-0 flex flex-row items-center justify-center"
         pointerEvents="none"
       >
-        <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
-        <Text className="text-placeholder-text ml-1" style={styles.searchPlaceholderText}>
+        <Search2CuteReIcon color={labelColor} height={18} width={18} />
+        <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>
       </View>
@@ -79,36 +89,34 @@ const PlaceholerSearchBar = () => {
 }
 
 const ComposeSearchBar = () => {
-  const { searchFocusedAtom, searchValueAtom } = useDiscoverPageContext()
-  const [isFocused, setIsFocused] = useAtom(searchFocusedAtom)
+  const { searchFocusedAtom, searchValueAtom } = useSearchPageContext()
+  const setIsFocused = useSetAtom(searchFocusedAtom)
   const setSearchValue = useSetAtom(searchValueAtom)
   return (
     <>
       <SearchInput />
-      {isFocused && (
-        <TouchableOpacity
-          hitSlop={10}
-          onPress={() => {
-            setIsFocused(false)
-            setSearchValue("")
 
-            if (router.canGoBack()) {
-              router.back()
-            }
-          }}
-        >
-          <Text className="ml-2 text-accent">Cancel</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        hitSlop={10}
+        onPress={() => {
+          setIsFocused(false)
+          setSearchValue("")
+
+          if (router.canGoBack()) {
+            router.back()
+          }
+        }}
+      >
+        <Text className="ml-2 text-accent">Cancel</Text>
+      </TouchableOpacity>
     </>
   )
 }
 
 const SearchInput = () => {
-  const { colors } = useTheme()
-  const { searchFocusedAtom, searchValueAtom } = useDiscoverPageContext()
+  const { searchFocusedAtom, searchValueAtom } = useSearchPageContext()
   const [isFocused, setIsFocused] = useAtom(searchFocusedAtom)
-  const placeholderTextColor = useColor("placeholderText")
+  const placeholderTextColor = useColor("secondaryLabel")
   const searchValue = useAtomValue(searchValueAtom)
   const setSearchValue = useSetAtom(searchValueAtom)
   const inputRef = useRef<TextInput>(null)
@@ -117,7 +125,9 @@ const SearchInput = () => {
   const skeletonTranslateXValue = useAnimatedValue(0)
   const placeholderOpacityValue = useAnimatedValue(1)
 
-  const focusOrHasValue = isFocused || searchValue
+  const [tempSearchValue, setTempSearchValue] = useState(searchValue)
+
+  const focusOrHasValue = isFocused || searchValue || tempSearchValue
 
   useEffect(() => {
     if (focusOrHasValue) {
@@ -173,7 +183,7 @@ const SearchInput = () => {
   }, [isFocused])
 
   return (
-    <View style={{ backgroundColor: colors.card, ...styles.searchbar }}>
+    <View style={styles.searchbar} className="bg-tertiary-system-fill">
       {focusOrHasValue && (
         <Animated.View
           style={{
@@ -182,8 +192,8 @@ const SearchInput = () => {
           className="absolute inset-y-0 left-3 flex flex-row items-center justify-center"
         >
           <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
-          {!searchValue && (
-            <Text className="text-placeholder-text ml-2" style={styles.searchPlaceholderText}>
+          {!searchValue && !tempSearchValue && (
+            <Text className="text-secondary-label ml-2" style={styles.searchPlaceholderText}>
               Search
             </Text>
           )}
@@ -193,13 +203,20 @@ const SearchInput = () => {
         enterKeyHint="search"
         autoFocus={isFocused}
         ref={inputRef}
-        value={searchValue}
+        onSubmitEditing={() => {
+          setSearchValue(tempSearchValue)
+          setTempSearchValue("")
+        }}
+        defaultValue={searchValue}
         cursorColor={accentColor}
         selectionColor={accentColor}
         style={styles.searchInput}
+        className="text-text"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        onChangeText={(text) => setSearchValue(text)}
+        onChangeText={(text) => {
+          setTempSearchValue(text)
+        }}
       />
 
       <Animated.View
@@ -211,7 +228,7 @@ const SearchInput = () => {
         pointerEvents="none"
       >
         <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
-        <Text className="text-placeholder-text ml-1" style={styles.searchPlaceholderText}>
+        <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>
       </Animated.View>
@@ -221,7 +238,6 @@ const SearchInput = () => {
 const styles = StyleSheet.create({
   header: {
     flex: 1,
-
     alignItems: "center",
     marginTop: -3,
     flexDirection: "row",
@@ -229,15 +245,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     position: "relative",
   },
+
   searchbar: {
     flex: 1,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-
     borderRadius: 50,
-    height: "100%",
+    height: 32,
     position: "relative",
   },
   searchInput: {

@@ -6,7 +6,7 @@ import ContextMenu from "react-native-context-menu-view"
 import { useEventCallback } from "usehooks-ts"
 
 import { MingcuteDownLineIcon } from "@/src/icons/mingcute_down_line"
-import { useColor } from "@/src/theme/colors"
+import { accentColor } from "@/src/theme/colors"
 
 import { FormLabel } from "./Label"
 
@@ -52,11 +52,9 @@ export function Select<T>({
     onValueChange(currentValue)
   }, [])
 
-  const systemFill = useColor("text")
-
   return (
     <View className="w-full flex-1 flex-row items-center">
-      {!!label && <FormLabel className="pl-1" label={label} />}
+      {!!label && <FormLabel className="pl-2" label={label} />}
       <View className="flex-1" />
       {/* Trigger */}
       <ContextMenu
@@ -72,15 +70,15 @@ export function Select<T>({
       >
         <View
           className={cn(
-            "border-system-fill/80 bg-system-fill/30 h-8 flex-row items-center rounded-lg border pl-3 pr-2",
+            "h-8 flex-row items-center rounded-lg pl-3 pr-2",
             "min-w-[80px]",
             wrapperClassName,
           )}
           style={wrapperStyle}
         >
-          <Text className="text-text">{valueToLabelMap.get(currentValue)}</Text>
-          <View className="ml-auto shrink-0 pl-2">
-            <MingcuteDownLineIcon color={systemFill} height={16} width={16} />
+          <Text className="font-semibold text-accent">{valueToLabelMap.get(currentValue)}</Text>
+          <View className="ml-auto shrink-0 pl-1">
+            <MingcuteDownLineIcon color={accentColor} height={18} width={18} />
           </View>
         </View>
       </ContextMenu>

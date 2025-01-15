@@ -1,7 +1,8 @@
 import { withOpacity } from "@follow/utils"
-import { router, useNavigation } from "expo-router"
+import { router } from "expo-router"
 import { TouchableOpacity } from "react-native"
 
+import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
@@ -16,11 +17,7 @@ export const ModalHeaderCloseButton = () => {
 const ModalHeaderCloseButtonImpl = () => {
   const label = useColor("label")
 
-  const navigation = useNavigation()
-
-  const state = navigation.getState()
-
-  const routeOnlyOne = state.routes.length === 1
+  const routeOnlyOne = useIsRouteOnlyOne()
 
   return (
     <TouchableOpacity onPress={() => router.dismiss()}>

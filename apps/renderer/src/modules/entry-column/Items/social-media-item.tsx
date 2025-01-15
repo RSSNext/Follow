@@ -15,7 +15,7 @@ import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
 import { useAsRead } from "~/hooks/biz/useAsRead"
-import { useEntryActions } from "~/hooks/biz/useEntryActions"
+import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { jotaiStore } from "~/lib/jotai"
 import { parseSocialMedia } from "~/lib/parsers"
@@ -55,7 +55,6 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   }, [])
   const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
 
-  const [actionRef, setActionRef] = useState<HTMLDivElement | null>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   if (!entry || !feed) return null
 
@@ -83,25 +82,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
         <div className="-mt-0.5 flex-1 text-sm">
           <div className="flex select-none flex-wrap space-x-1 leading-6" ref={titleRef}>
             <span className="inline-flex min-w-0 items-center gap-1 text-base font-semibold">
-              <FeedTitle
-                style={
-                  showAction && titleRef.current && actionRef && ref.current
-                    ? {
-                        paddingRight:
-                          [...titleRef.current.childNodes.values()].reduce(
-                            (acc, node) => acc + (node as HTMLElement).offsetWidth,
-                            0,
-                          ) +
-                            actionRef.offsetWidth >
-                          ref.current.offsetWidth
-                            ? actionRef.offsetWidth
-                            : 0,
-                      }
-                    : undefined
-                }
-                feed={feed}
-                title={entry.entries.author || feed.title}
-              />
+              <FeedTitle feed={feed} title={entry.entries.author || feed.title} />
               {parsed?.type === "x" && (
                 <i className="i-mgc-twitter-cute-fi size-3 text-[#4A99E9]" />
               )}
@@ -137,7 +118,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       </div>
 
       {showAction && !isMobile && (
-        <div className={"absolute right-1 top-1.5"} ref={setActionRef}>
+        <div className="absolute right-1 top-0 -translate-y-1/2 rounded-lg border border-gray-200 bg-white/90 p-1 shadow-sm backdrop-blur-sm dark:border-neutral-900 dark:bg-neutral-900">
           <ActionBar entryId={entryId} />
         </div>
       )}
@@ -148,9 +129,10 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 SocialMediaItem.wrapperClassName = tw`w-[645px] max-w-full m-auto`
 
 const ActionBar = ({ entryId }: { entryId: string }) => {
-  const entryActions = useEntryActions({ entryId })
+  const { mainAction: entryActions } = useSortedEntryActions({ entryId })
+
   return (
-    <div className="flex origin-right scale-90 items-center gap-1">
+    <div className="flex items-center gap-1">
       {entryActions
         .filter(
           (item) =>

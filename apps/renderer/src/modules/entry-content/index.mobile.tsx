@@ -1,3 +1,4 @@
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
@@ -14,7 +15,7 @@ import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery, usePreventOverscrollBounce } from "~/hooks/common"
-import { LanguageMap } from "~/lib/translate"
+import { checkLanguage } from "~/lib/translate"
 import { WrappedElementProvider } from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
@@ -101,8 +102,11 @@ export const EntryContent: Component<{
   usePreventOverscrollBounce()
   const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null)
 
+  const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
-  const translationLanguage = useGeneralSettingSelector((s) => s.translationLanguage)
+  const translationLanguage = useGeneralSettingSelector(
+    (s) => s.translationLanguage,
+  ) as SupportedLanguages
 
   if (!entry) return null
 
@@ -114,13 +118,17 @@ export const EntryContent: Component<{
     const fullText = html.textContent ?? ""
     if (!fullText) return
 
-    const { franc } = await import("franc-min")
     const translation =
       entry.settings?.translation ?? (showAITranslation ? translationLanguage : undefined)
 
-    const sourceLanguage = franc(fullText)
-    if (translation && sourceLanguage === LanguageMap[translation].code) {
-      return
+    if (translation) {
+      const isLanguageMatch = checkLanguage({
+        content: fullText,
+        language: translation,
+      })
+      if (isLanguageMatch) {
+        return
+      }
     }
 
     const { immersiveTranslate } = await import("~/lib/immersive-translate")
@@ -186,6 +194,9 @@ export const EntryContent: Component<{
                     <AISummary entryId={entry.entries.id} />
                     <ErrorBoundary fallback={RenderError}>
                       <ShadowDOM injectHostStyles={!isInbox}>
+                        {!!customCSS && (
+                          <MemoedDangerousHTMLStyle>{customCSS}</MemoedDangerousHTMLStyle>
+                        )}
                         <EntryContentHTMLRenderer
                           view={view}
                           feedId={feed?.id}
