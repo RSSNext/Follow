@@ -91,11 +91,7 @@ export function ErrorElement() {
   )
 }
 
-export const FeedbackIssue = ({
-  message,
-  stack,
-  error,
-}: {
+export const FeedbackIssue = (_props: {
   message: string
   stack: string | null | undefined
   error?: unknown
@@ -105,10 +101,11 @@ export const FeedbackIssue = ({
     <a
       className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-accent"
       href={getNewIssueUrl({
-        error: error instanceof Error ? error : undefined,
-        title: `Error: ${message}`,
-        body: ["### Error", "", message, "", "### Stack", "", "```", stack, "```"].join("\n"),
-        label: "bug",
+        // error: error instanceof Error ? error : undefined,
+        // title: `Error: ${message}`,
+        // body: ["### Error", "", message, "", "### Stack", "", "```", stack, "```"].join("\n"),
+        // label: "bug",
+        template: "bug_report.yml",
       })}
       target="_blank"
       rel="noreferrer"
