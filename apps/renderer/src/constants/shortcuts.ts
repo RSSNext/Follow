@@ -7,11 +7,11 @@ type Shortcuts = Record<
   Record<string, { name: I18nKeysForShortcuts; key: string; extra?: string }>
 >
 
-export const shortcuts = {
+const shortcutConfigs = {
   feeds: {
     add: {
       name: "keys.feeds.add",
-      key: transformShortcut("Meta+T"),
+      key: "Meta+T",
     },
     switchToView: {
       name: "keys.feeds.switchToView",
@@ -25,7 +25,7 @@ export const shortcuts = {
   layout: {
     toggleSidebar: {
       name: "keys.layout.toggleSidebar",
-      key: transformShortcut("Meta+B, ["),
+      key: "Meta+B, [",
     },
     showShortcuts: {
       name: "keys.layout.showShortcuts",
@@ -33,7 +33,7 @@ export const shortcuts = {
     },
     toggleWideMode: {
       name: "keys.layout.toggleWideMode",
-      key: transformShortcut("Meta+["),
+      key: "Meta+[",
     },
     zenMode: {
       name: "keys.layout.zenMode",
@@ -55,7 +55,7 @@ export const shortcuts = {
     },
     markAllAsRead: {
       name: "keys.entries.markAllAsRead",
-      key: transformShortcut("Shift+Meta+A"),
+      key: "Shift+Meta+A",
     },
     toggleUnreadOnly: {
       name: "keys.entries.toggleUnreadOnly",
@@ -78,23 +78,23 @@ export const shortcuts = {
     },
     tts: {
       name: "keys.entry.tts",
-      key: transformShortcut("Shift+Meta+V"),
+      key: "Shift+Meta+V",
     },
     copyLink: {
       name: "keys.entry.copyLink",
-      key: transformShortcut("Shift+Meta+C"),
+      key: "Shift+Meta+C",
     },
     copyTitle: {
       name: "keys.entry.copyTitle",
-      key: transformShortcut("Shift+Meta+B"),
+      key: "Shift+Meta+B",
     },
     tip: {
       name: "keys.entry.tip",
-      key: transformShortcut("Shift+Meta+T"),
+      key: "Shift+Meta+T",
     },
     share: {
       name: "keys.entry.share",
-      key: transformShortcut("Meta+Alt+S"),
+      key: "Meta+Alt+S",
     },
     scrollUp: {
       name: "keys.entry.scrollUp",
@@ -114,10 +114,29 @@ export const shortcuts = {
   misc: {
     quickSearch: {
       name: "keys.misc.quickSearch",
-      key: transformShortcut("Meta+K"),
+      key: "Meta+K",
     },
   },
 } as const satisfies Shortcuts
+
+function transformShortcuts<T extends Shortcuts>(configs: T) {
+  const result: Shortcuts = {}
+
+  for (const category in configs) {
+    result[category] = {}
+    for (const shortcutKey in configs[category]) {
+      const config = configs[category][shortcutKey]
+      result[category][shortcutKey] = {
+        name: config.name,
+        key: transformShortcut(config.key),
+      }
+    }
+  }
+
+  return result
+}
+
+export const shortcuts = transformShortcuts(shortcutConfigs)
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",
