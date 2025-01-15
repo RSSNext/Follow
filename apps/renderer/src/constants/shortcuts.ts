@@ -1,4 +1,4 @@
-import { transfromShortcut } from "@follow/utils/utils"
+import { transformShortcut } from "@follow/utils/utils"
 
 import { COPY_MAP } from "~/constants"
 
@@ -11,7 +11,7 @@ export const shortcuts = {
   feeds: {
     add: {
       name: "keys.feeds.add",
-      key: transfromShortcut("Meta+T"),
+      key: transformShortcut("Meta+T"),
     },
     switchToView: {
       name: "keys.feeds.switchToView",
@@ -25,7 +25,7 @@ export const shortcuts = {
   layout: {
     toggleSidebar: {
       name: "keys.layout.toggleSidebar",
-      key: transfromShortcut("Meta+B, ["),
+      key: transformShortcut("Meta+B, ["),
     },
     showShortcuts: {
       name: "keys.layout.showShortcuts",
@@ -33,7 +33,7 @@ export const shortcuts = {
     },
     toggleWideMode: {
       name: "keys.layout.toggleWideMode",
-      key: transfromShortcut("Meta+["),
+      key: transformShortcut("Meta+["),
     },
     zenMode: {
       name: "keys.layout.zenMode",
@@ -55,7 +55,7 @@ export const shortcuts = {
     },
     markAllAsRead: {
       name: "keys.entries.markAllAsRead",
-      key: transfromShortcut("Shift+Meta+A"),
+      key: transformShortcut("Shift+Meta+A"),
     },
     toggleUnreadOnly: {
       name: "keys.entries.toggleUnreadOnly",
@@ -78,23 +78,23 @@ export const shortcuts = {
     },
     tts: {
       name: "keys.entry.tts",
-      key: transfromShortcut("Shift+Meta+V"),
+      key: transformShortcut("Shift+Meta+V"),
     },
     copyLink: {
       name: "keys.entry.copyLink",
-      key: transfromShortcut("Shift+Meta+C"),
+      key: transformShortcut("Shift+Meta+C"),
     },
     copyTitle: {
       name: "keys.entry.copyTitle",
-      key: transfromShortcut("Shift+Meta+B"),
+      key: transformShortcut("Shift+Meta+B"),
     },
     tip: {
       name: "keys.entry.tip",
-      key: transfromShortcut("Shift+Meta+T"),
+      key: transformShortcut("Shift+Meta+T"),
     },
     share: {
       name: "keys.entry.share",
-      key: transfromShortcut("Meta+Alt+S"),
+      key: transformShortcut("Meta+Alt+S"),
     },
     scrollUp: {
       name: "keys.entry.scrollUp",
@@ -114,7 +114,7 @@ export const shortcuts = {
   misc: {
     quickSearch: {
       name: "keys.misc.quickSearch",
-      key: transfromShortcut("Meta+K"),
+      key: transformShortcut("Meta+K"),
     },
   },
 } as const satisfies Shortcuts
