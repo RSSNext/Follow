@@ -7,15 +7,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
-import {
-  Input,
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@follow/components/ui/input/index.js"
+import { Input, InputOTP, InputOTPGroup, InputOTPSlot } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
 import { twoFactor } from "@follow/shared/auth"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { m, useAnimation } from "framer-motion"
@@ -114,8 +109,8 @@ export function PasswordForm<
           control={form.control}
           name={(isPassword ? "password" : "code") as any}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>
+            <FormItem className={cn("flex flex-col", !isPassword ? "items-center" : "")}>
+              <FormLabel className="shrink-0">
                 {message?.label ??
                   (isPassword ? t("profile.current_password.label") : t("profile.totp_code.label"))}
               </FormLabel>
@@ -128,7 +123,11 @@ export function PasswordForm<
                     {...field}
                   />
                 ) : (
-                  <m.div variants={shakeVariants} animate={controls}>
+                  <m.div
+                    variants={shakeVariants}
+                    animate={controls}
+                    className="flex justify-center"
+                  >
                     <InputOTP
                       autoFocus
                       className="!w-full"
@@ -140,9 +139,6 @@ export function PasswordForm<
                         <InputOTPSlot index={0} />
                         <InputOTPSlot index={1} />
                         <InputOTPSlot index={2} />
-                      </InputOTPGroup>
-                      <InputOTPSeparator />
-                      <InputOTPGroup>
                         <InputOTPSlot index={3} />
                         <InputOTPSlot index={4} />
                         <InputOTPSlot index={5} />
