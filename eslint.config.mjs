@@ -2,8 +2,7 @@
 import path from "node:path"
 
 import { fixupPluginRules } from "@eslint/compat"
-import { defineConfig, GLOB_JSX_SRC, GLOB_TS_SRC } from "eslint-config-hyoban"
-import googleTranslate from "eslint-plugin-react-google-translate"
+import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 import reactNative from "eslint-plugin-react-native"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
@@ -123,16 +122,6 @@ export default defineConfig(
     files: ["apps/mobile/**/*"],
     rules: {
       "react-native/no-inline-styles": "warn",
-    },
-  },
-  {
-    files: GLOB_JSX_SRC,
-    plugins: {
-      "react-google-translate": googleTranslate,
-    },
-    rules: {
-      "react-google-translate/no-conditional-text-nodes-with-siblings": "warn",
-      "react-google-translate/no-return-text-nodes": "warn",
     },
   },
 )
