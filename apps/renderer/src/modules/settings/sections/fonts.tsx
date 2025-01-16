@@ -40,7 +40,7 @@ const useFontDataElectron = () => {
   )
 }
 
-// eslint-disable-next-line @eslint-react/hooks-extra/no-redundant-custom-hook
+// eslint-disable-next-line @eslint-react/hooks-extra/no-useless-custom-hooks
 const useFontDataWeb = () => [
   { label: FALLBACK_FONT, value: "inherit" },
   { label: "System UI", value: "system-ui" },

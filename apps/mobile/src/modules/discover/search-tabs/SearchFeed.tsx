@@ -40,6 +40,8 @@ export const SearchFeed = () => {
   const skeleton = useDataSkeleton(isLoading, data)
   if (skeleton) return skeleton
 
+  if (data === undefined) return null
+
   return (
     <BaseSearchPageFlatList
       refreshing={isLoading}
