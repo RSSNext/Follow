@@ -10,7 +10,6 @@ import {
 import { Input, InputOTP, InputOTPGroup, InputOTPSlot } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
 import { twoFactor } from "@follow/shared/auth"
-import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { m, useAnimation } from "framer-motion"
@@ -41,8 +40,7 @@ const totpFormSchema = z.object({
 })
 type TOTPFormValues = z.infer<typeof totpFormSchema>
 
-export type PasswordFormProps<T, V> = {
-  valueType: T
+type PasswordFormProps<V> = {
   onSubmitMutationFn: (values: V) => Promise<void>
   message?: {
     placeholder?: string
@@ -63,38 +61,36 @@ const shakeVariants = {
   },
 }
 
-export function PasswordForm<
-  T extends "password" | "totp",
-  V extends T extends "password" ? PasswordFormValues : TOTPFormValues,
->({ valueType, message, onSubmitMutationFn, onSuccess }: PasswordFormProps<T, V>) {
-  const isPassword = valueType === "password"
+export function TOTPForm({
+  message,
+  onSubmitMutationFn,
+  onSuccess,
+}: PasswordFormProps<TOTPFormValues>) {
   const { t } = useTranslation("settings")
   const controls = useAnimation()
 
-  const form = useForm<V>({
-    resolver: zodResolver(isPassword ? passwordFormSchema : totpFormSchema),
-    defaultValues: (isPassword ? { password: "" } : { code: "" }) as any,
+  const form = useForm<TOTPFormValues>({
+    resolver: zodResolver(totpFormSchema),
+    defaultValues: { code: "" },
   })
 
   const updateMutation = useMutation({
     mutationFn: onSubmitMutationFn,
     onError: (error) => {
       const { code } = getFetchErrorInfo(error)
-      if (!isPassword && (error.message === "invalid two factor authentication" || code === 4007)) {
+      if (error.message === "invalid two factor authentication" || code === 4007) {
         form.resetField("code" as any)
         form.setError("code" as any, {
           type: "manual",
           message: t("profile.totp_code.invalid"),
         })
         controls.start("shake")
-      } else {
-        toast.error(error.message)
       }
     },
     onSuccess,
   })
 
-  function onSubmit(values: V) {
+  function onSubmit(values: TOTPFormValues) {
     updateMutation.mutate(values)
   }
 
@@ -103,59 +99,96 @@ export function PasswordForm<
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-[35ch] max-w-full space-y-4">
         <FormField
           control={form.control}
-          name={(isPassword ? "password" : "code") as any}
+          name={"code"}
           render={({ field }) => (
-            <FormItem className={cn("flex flex-col", !isPassword ? "items-center" : "")}>
+            <FormItem className="flex flex-col items-center">
               <FormLabel className="shrink-0">
-                {message?.label ??
-                  (isPassword ? t("profile.current_password.label") : t("profile.totp_code.label"))}
+                {message?.label ?? t("profile.totp_code.label")}
               </FormLabel>
               <FormControl>
-                {isPassword ? (
-                  <Input
+                <m.div variants={shakeVariants} animate={controls} className="flex justify-center">
+                  <InputOTP
                     disabled={updateMutation.isPending}
                     autoFocus
-                    type="password"
-                    placeholder={message?.placeholder ?? t("profile.current_password.label")}
+                    className="!w-full"
+                    maxLength={6}
+                    onComplete={() => form.handleSubmit(onSubmit)()}
                     {...field}
-                  />
-                ) : (
-                  <m.div
-                    variants={shakeVariants}
-                    animate={controls}
-                    className="flex justify-center"
                   >
-                    <InputOTP
-                      disabled={updateMutation.isPending}
-                      autoFocus
-                      className="!w-full"
-                      maxLength={6}
-                      onComplete={() => form.handleSubmit(onSubmit)()}
-                      {...field}
-                    >
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </m.div>
-                )}
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </m.div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {isPassword && (
-          <div className="text-right">
-            <Button type="submit" isLoading={updateMutation.isPending}>
-              {t("profile.submit")}
-            </Button>
-          </div>
-        )}
+      </form>
+    </Form>
+  )
+}
+
+export function PasswordForm({
+  message,
+  onSubmitMutationFn,
+  onSuccess,
+}: PasswordFormProps<PasswordFormValues>) {
+  const { t } = useTranslation("settings")
+
+  const form = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: { password: "" },
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: onSubmitMutationFn,
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    onSuccess,
+  })
+
+  function onSubmit(values: PasswordFormValues) {
+    updateMutation.mutate(values)
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[35ch] max-w-full space-y-4">
+        <FormField
+          control={form.control}
+          name={"password"}
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel className="shrink-0">
+                {message?.label ?? t("profile.current_password.label")}
+              </FormLabel>
+              <FormControl>
+                <Input
+                  disabled={updateMutation.isPending}
+                  autoFocus
+                  type="password"
+                  placeholder={message?.placeholder ?? t("profile.current_password.label")}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="text-right">
+          <Button type="submit" isLoading={updateMutation.isPending}>
+            {t("profile.submit")}
+          </Button>
+        </div>
       </form>
     </Form>
   )
@@ -171,8 +204,7 @@ export const TwoFactorForm = () => {
       <div className="flex items-center justify-center">
         <QRCode value={totpURI} />
       </div>
-      <PasswordForm
-        valueType="totp"
+      <TOTPForm
         message={{
           label: t("profile.totp_code.init"),
         }}
@@ -192,7 +224,6 @@ export const TwoFactorForm = () => {
     </div>
   ) : (
     <PasswordForm
-      valueType="password"
       onSubmitMutationFn={async (values) => {
         const res = user?.twoFactorEnabled
           ? await twoFactor.disable({ password: values.password })

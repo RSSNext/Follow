@@ -15,7 +15,7 @@ import { defineQuery } from "~/lib/defineQuery"
 import { getFetchErrorInfo } from "~/lib/error-parser"
 import { users } from "~/queries/users"
 
-import { PasswordForm, TwoFactorForm } from "./two-factor"
+import { TOTPForm, TwoFactorForm } from "./two-factor"
 
 const LazyUserProfileModalContent = lazy(() =>
   import("./user-profile-modal").then((mod) => ({ default: mod.UserProfileModalContent })),
@@ -127,17 +127,13 @@ export function useTOTPModalWrapper<T>(
         present({
           title: t("profile.totp_code.title"),
           content: ({ dismiss }) => {
-            return createElement(PasswordForm, {
-              valueType: "totp",
+            return createElement(TOTPForm, {
               async onSubmitMutationFn(values) {
-                if ("code" in values) {
-                  await callback({
-                    ...input,
-                    TOTPCode: values.code,
-                  })
-                  dismiss()
-                }
-                return new Promise((resolve) => resolve())
+                await callback({
+                  ...input,
+                  TOTPCode: values.code,
+                })
+                dismiss()
               },
             })
           },

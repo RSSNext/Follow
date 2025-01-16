@@ -19,7 +19,7 @@ import { z } from "zod"
 
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 
-import { PasswordForm } from "../profile/two-factor"
+import { TOTPForm } from "../profile/two-factor"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -56,8 +56,7 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
         title: tSettings("profile.totp_code.title"),
         content: () => {
           return (
-            <PasswordForm
-              valueType="totp"
+            <TOTPForm
               onSubmitMutationFn={async (values) => {
                 const { data, error } = await twoFactor.verifyTotp({ code: values.code })
                 if (!data || error) {
