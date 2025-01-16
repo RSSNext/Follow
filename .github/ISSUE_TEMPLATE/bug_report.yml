@@ -1,6 +1,6 @@
 name: 🐞 Bug report
 description: Report an issue
-labels: [pending triage]
+labels: [pending triage, bug]
 type: Bug
 body:
   - type: markdown
