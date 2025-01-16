@@ -1,8 +1,10 @@
 import { cn, getLuminance } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useState } from "react"
-import { Animated, Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View } from "react-native"
 import ImageColors from "react-native-image-colors"
+import type { SharedValue } from "react-native-reanimated"
+import ReAnimated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { useWhoami } from "@/src/store/user/hooks"
@@ -10,7 +12,7 @@ import { accentColor } from "@/src/theme/colors"
 
 const defaultGradientColors = ["#FF5C00", "#FF8533", "#FFA666"]
 
-export const UserHeaderBanner = ({ scrollY }: { scrollY: Animated.Value }) => {
+export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) => {
   const whoami = useWhoami()
   const insets = useSafeAreaInsets()
 
@@ -57,6 +59,22 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: Animated.Value }) => {
 
     extractColors()
   }, [whoami?.image])
+  const styles = useAnimatedStyle(() => {
+    const translateYValue = interpolate(scrollY.value, [-MAX_PULL, 0], [TRANSLATE_Y, 0], {
+      extrapolateLeft: "extend",
+      extrapolateRight: "clamp",
+    })
+
+    const scaleValue = interpolate(scrollY.value, [-MAX_PULL, 0], [SCALE_FACTOR, 1], {
+      extrapolateLeft: "extend",
+      extrapolateRight: "clamp",
+    })
+
+    return {
+      backgroundColor: gradientColors[0],
+      transform: [{ translateY: translateYValue }, { scale: scaleValue }],
+    }
+  })
 
   if (!whoami) return null
   return (
@@ -64,36 +82,14 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: Animated.Value }) => {
       className="relative h-[200px] items-center justify-center"
       style={{ marginTop: -insets.top }}
     >
-      <Animated.View
-        className="absolute inset-0"
-        style={{
-          transform: [
-            {
-              translateY: scrollY.interpolate({
-                inputRange: [-MAX_PULL, 0],
-                outputRange: [TRANSLATE_Y, 0],
-                extrapolateLeft: "extend",
-                extrapolateRight: "clamp",
-              }),
-            },
-            {
-              scale: scrollY.interpolate({
-                inputRange: [-MAX_PULL, 0],
-                outputRange: [SCALE_FACTOR, 1],
-                extrapolateLeft: "extend",
-                extrapolateRight: "clamp",
-              }),
-            },
-          ],
-        }}
-      >
+      <ReAnimated.View className="absolute inset-0" style={styles}>
         <LinearGradient
           colors={gradientColors as [string, string, ...string[]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
-      </Animated.View>
+      </ReAnimated.View>
       <View
         className="bg-system-background overflow-hidden rounded-full"
         style={{ marginTop: insets.top }}

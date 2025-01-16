@@ -1,7 +1,9 @@
 import { cn } from "@follow/utils"
 import type { FC, PropsWithChildren } from "react"
+import * as React from "react"
+import { Fragment } from "react"
 import type { ViewProps } from "react-native"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 
 import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
@@ -9,7 +11,20 @@ import { useColor } from "@/src/theme/colors"
 export const GroupedInsetListCard: FC<PropsWithChildren> = ({ children }) => {
   return (
     <View className="bg-secondary-system-grouped-background mx-4 flex-1 overflow-hidden rounded-[10px]">
-      {children}
+      {React.Children.map(children, (child, index) => {
+        const isLast = index === React.Children.count(children) - 1
+        return (
+          <Fragment key={index}>
+            {child}
+            {!isLast && (
+              <View
+                className="bg-opaque-separator ml-16"
+                style={{ height: StyleSheet.hairlineWidth }}
+              />
+            )}
+          </Fragment>
+        )
+      })}
     </View>
   )
 }
@@ -48,10 +63,10 @@ export const GroupedInsetListNavigationLink: FC<{
           <View className={"flex-row items-center"}>
             <View className="flex-row items-center">
               {icon}
-              <Text>{label}</Text>
+              <Text className="text-[16px]">{label}</Text>
             </View>
             <View className="-mr-2 ml-auto">
-              <RightCuteReIcon height={20} width={20} color={tertiaryLabelColor} />
+              <RightCuteReIcon height={18} width={18} color={tertiaryLabelColor} />
             </View>
           </View>
         </GroupedInsetListItem>

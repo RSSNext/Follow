@@ -2,12 +2,13 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createContext, useCallback, useContext, useEffect, useRef } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { findNodeHandle, ScrollView, UIManager, useAnimatedValue } from "react-native"
-import { withTiming } from "react-native-reanimated"
+import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
+import { findNodeHandle, UIManager } from "react-native"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEventCallback } from "usehooks-ts"
 
+import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
@@ -52,39 +53,45 @@ function Settings() {
   useEffect(() => {
     if (!isFocused) return
     const scrollView = scrollRef.current
+
     if (scrollView) {
       const node = findNodeHandle(scrollView)
       if (node) {
         UIManager.measure(node, (x, y, width, height) => {
-          calculateOpacity(height, height, 0)
+          calculateOpacity(contentSizeRef.current.height, height, 0)
         })
       }
     }
   }, [opacity, isFocused, calculateOpacity])
 
-  const animatedScrollY = useAnimatedValue(0)
+  const animatedScrollY = useSharedValue(0)
   const handleScroll = useEventCallback(
     ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
       const { contentOffset, contentSize, layoutMeasurement } = nativeEvent
       calculateOpacity(contentSize.height, layoutMeasurement.height, contentOffset.y)
-      animatedScrollY.setValue(contentOffset.y)
+      animatedScrollY.value = contentOffset.y
     },
   )
 
   const scrollRef = useRef<ScrollView>(null)
+
+  const contentSizeRef = useRef({ height: 0, width: 0 })
+
   return (
-    <ScrollView
+    <ReAnimatedScrollView
       scrollEventThrottle={16}
       onScroll={handleScroll}
       ref={scrollRef}
+      onContentSizeChange={(w, h) => {
+        contentSizeRef.current = { height: h, width: w }
+      }}
       style={{ paddingTop: insets.top }}
-      className="bg-system-background flex-1"
-      contentContainerStyle={{ paddingBottom: insets.bottom + tabBarHeight }}
+      className="bg-system-grouped-background flex-1"
       scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
     >
       <UserHeaderBanner scrollY={animatedScrollY} />
 
       <SettingsList />
-    </ScrollView>
+    </ReAnimatedScrollView>
   )
 }

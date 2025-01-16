@@ -1,6 +1,6 @@
 import { Text, View } from "react-native"
 
-export const AccountScreen = () => {
+export const ProfileScreen = () => {
   return (
     <View>
       <Text>Account</Text>
