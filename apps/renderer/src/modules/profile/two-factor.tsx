@@ -23,7 +23,7 @@ import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { getFetchErrorMessage } from "~/lib/error-parser"
+import { getFetchErrorInfo } from "~/lib/error-parser"
 import { useHasPassword } from "~/queries/auth"
 
 import { NoPasswordHint } from "./update-password-form"
@@ -79,12 +79,8 @@ export function PasswordForm<
   const updateMutation = useMutation({
     mutationFn: onSubmitMutationFn,
     onError: (error) => {
-      const fetchErrorMessage = getFetchErrorMessage(error)
-      if (
-        !isPassword &&
-        (error.message === "invalid two factor authentication" ||
-          fetchErrorMessage === "Invalid two factor code")
-      ) {
+      const { code } = getFetchErrorInfo(error)
+      if (!isPassword && (error.message === "invalid two factor authentication" || code === 4007)) {
         form.resetField("code" as any)
         form.setError("code" as any, {
           type: "manual",

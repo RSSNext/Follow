@@ -10,6 +10,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { getFetchErrorInfo } from "~/lib/error-parser"
 import { users } from "~/queries/users"
 
 import { PasswordForm } from "./two-factor"
@@ -102,14 +103,15 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
   )
 }
 
-export function useTOTPModalWrapper<T>(callback: (input: T) => Promise<any>) {
+export function useTOTPModalWrapper<T>(
+  callback: (input: T) => Promise<any>,
+  options?: { force?: boolean },
+) {
   const { present } = useModalStack()
   const { t } = useTranslation("settings")
   return useCallback(
     async (input: T) => {
-      try {
-        await callback(input)
-      } catch {
+      const presentTOTPModal = () => {
         present({
           title: t("profile.totp_code.title"),
           content: ({ dismiss }) => {
@@ -129,7 +131,20 @@ export function useTOTPModalWrapper<T>(callback: (input: T) => Promise<any>) {
           },
         })
       }
+
+      if (options?.force) {
+        presentTOTPModal()
+      }
+
+      try {
+        await callback(input)
+      } catch (error) {
+        const { code } = getFetchErrorInfo(error as Error)
+        if (code === 4008) {
+          presentTOTPModal()
+        }
+      }
     },
-    [callback, present, t],
+    [callback, options?.force, present, t],
   )
 }
