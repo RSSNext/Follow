@@ -6981,13 +6981,6 @@ declare const auth: {
         signInSocial: {
             <C extends [better_call.Context<"/sign-in/social", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
@@ -7094,13 +7087,6 @@ declare const auth: {
             path: "/sign-in/social";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
@@ -7476,13 +7462,6 @@ declare const auth: {
         signUpEmail: {
             <C extends [better_call.Context<"/sign-up/email", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     name: zod.ZodString;
                     email: zod.ZodString;
@@ -7603,13 +7582,6 @@ declare const auth: {
             path: "/sign-up/email";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     name: zod.ZodString;
                     email: zod.ZodString;
@@ -7903,17 +7875,14 @@ declare const auth: {
         };
         resetPassword: {
             <C extends [better_call.Context<"/reset-password", {
+                method: "POST";
                 query: zod.ZodOptional<zod.ZodObject<{
                     token: zod.ZodOptional<zod.ZodString>;
-                    currentURL: zod.ZodOptional<zod.ZodString>;
                 }, "strip", zod.ZodTypeAny, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }>>;
-                method: "POST";
                 body: zod.ZodObject<{
                     newPassword: zod.ZodString;
                     token: zod.ZodOptional<zod.ZodString>;
@@ -7953,17 +7922,14 @@ declare const auth: {
             }>;
             path: "/reset-password";
             options: {
+                method: "POST";
                 query: zod.ZodOptional<zod.ZodObject<{
                     token: zod.ZodOptional<zod.ZodString>;
-                    currentURL: zod.ZodOptional<zod.ZodString>;
                 }, "strip", zod.ZodTypeAny, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }>>;
-                method: "POST";
                 body: zod.ZodObject<{
                     newPassword: zod.ZodString;
                     token: zod.ZodOptional<zod.ZodString>;
@@ -8104,13 +8070,6 @@ declare const auth: {
         sendVerificationEmail: {
             <C extends [better_call.Context<"/send-verification-email", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     email: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -8171,13 +8130,6 @@ declare const auth: {
             path: "/send-verification-email";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     email: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -8237,13 +8189,6 @@ declare const auth: {
         changeEmail: {
             <C extends [better_call.Context<"/change-email", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     newEmail: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -8309,13 +8254,6 @@ declare const auth: {
             path: "/change-email";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     newEmail: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -9451,13 +9389,6 @@ declare const auth: {
             <C extends [better_call.Context<"/link-social", {
                 method: "POST";
                 requireHeaders: true;
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
@@ -9527,13 +9458,6 @@ declare const auth: {
             options: {
                 method: "POST";
                 requireHeaders: true;
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
@@ -11742,7 +11666,7 @@ declare const auth: {
             };
             changeEmail: {
                 enabled: true;
-                sendChangeEmailVerification: ({ newEmail, url }: {
+                sendChangeEmailVerification: ({ user, url }: {
                     user: better_auth.User;
                     newEmail: string;
                     url: string;
