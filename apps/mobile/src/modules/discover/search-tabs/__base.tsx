@@ -78,7 +78,9 @@ export function BaseSearchPageFlatList<T>({
     />
   )
 }
-const itemSeparator = <View className="bg-opaque-separator ml-16 h-[0.5px]" />
+const itemSeparator = (
+  <View className="bg-opaque-separator ml-16 h-px" style={{ transform: [{ scaleY: 0.5 }] }} />
+)
 export const ItemSeparator = () => itemSeparator
 
 export const RenderScrollComponent = (props: ScrollViewProps) => (

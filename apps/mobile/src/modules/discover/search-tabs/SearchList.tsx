@@ -21,7 +21,7 @@ export const SearchList = () => {
   const searchValue = useAtomValue(searchValueAtom)
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["searchFeed", searchValue],
+    queryKey: ["searchList", searchValue],
     queryFn: () => {
       return apiClient.discover.$post({
         json: {
