@@ -302,7 +302,8 @@ const BackTopIndicator: Component = memo(({ className }) => {
           icon2={<CircleProgress percent={readPercent} size={14} strokeWidth={2} />}
           status={readPercent === 0 ? "init" : "done"}
         />
-        {readPercent}%<br />
+        <span>{readPercent}%</span>
+        <br />
       </div>
       <MotionButtonBase
         onClick={() => {
