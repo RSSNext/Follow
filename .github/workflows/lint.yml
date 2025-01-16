@@ -46,6 +46,7 @@ jobs:
         run: pnpm install
       - name: Format, Lint and Typecheck
         run: |
+          export NODE_OPTIONS="--max_old_space_size=16384"
           npm exec turbo run format:check typecheck lint
       - name: Run test
         run: npm exec turbo run test
