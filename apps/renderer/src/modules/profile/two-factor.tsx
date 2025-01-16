@@ -117,6 +117,7 @@ export function PasswordForm<
               <FormControl>
                 {isPassword ? (
                   <Input
+                    disabled={updateMutation.isPending}
                     autoFocus
                     type="password"
                     placeholder={message?.placeholder ?? t("profile.current_password.label")}
@@ -129,6 +130,7 @@ export function PasswordForm<
                     className="flex justify-center"
                   >
                     <InputOTP
+                      disabled={updateMutation.isPending}
                       autoFocus
                       className="!w-full"
                       maxLength={6}

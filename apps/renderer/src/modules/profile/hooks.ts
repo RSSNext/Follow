@@ -4,7 +4,6 @@ import { createElement, lazy, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { parse } from "tldts"
 
-import { useWhoami } from "~/atoms/user"
 import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -103,30 +102,34 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
   )
 }
 
-export function useTOTPModalWrapper<T>(callback: (input: T) => any) {
+export function useTOTPModalWrapper<T>(callback: (input: T) => Promise<any>) {
   const { present } = useModalStack()
   const { t } = useTranslation("settings")
-  const user = useWhoami()
-  const callbackWrapper = useCallback(
-    (input: T) => {
-      present({
-        title: t("profile.totp_code.title"),
-        content: () => {
-          return createElement(PasswordForm, {
-            valueType: "totp",
-            onSubmitMutationFn(values) {
-              if ("code" in values) {
-                return callback({
-                  ...input,
-                  TOTPCode: values.code,
-                })
-              }
-            },
-          })
-        },
-      })
+  return useCallback(
+    async (input: T) => {
+      try {
+        await callback(input)
+      } catch {
+        present({
+          title: t("profile.totp_code.title"),
+          content: ({ dismiss }) => {
+            return createElement(PasswordForm, {
+              valueType: "totp",
+              async onSubmitMutationFn(values) {
+                if ("code" in values) {
+                  await callback({
+                    ...input,
+                    TOTPCode: values.code,
+                  })
+                  dismiss()
+                }
+                return new Promise((resolve) => resolve())
+              },
+            })
+          },
+        })
+      }
     },
     [callback, present, t],
   )
-  return user?.twoFactorEnabled ? callbackWrapper : callback
 }
