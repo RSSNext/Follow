@@ -2,7 +2,7 @@
   "about.changelog": "Changelog",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) is in the early stages of development. If you have any feedback or suggestions, please feel free to <OpenIssueLink>open an issue</OpenIssueLink> <ExternalLinkIcon /> on our GitHub.",
   "about.iconLibrary": "The icon library used is copyrighted by <IconLibraryLink /> <ExternalLinkIcon /> and cannot be redistributed.",
-  "about.licenseInfo": "Copyright © 2024 {{appName}}. All rights reserved.",
+  "about.licenseInfo": "Copyright © {{currentYear}} {{appName}}. All rights reserved.",
   "about.sidebar_title": "About",
   "about.socialMedia": "Social Media",
   "actions.actionName": "Action {{number}}",

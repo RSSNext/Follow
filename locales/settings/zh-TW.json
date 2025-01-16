@@ -2,7 +2,7 @@
   "about.changelog": "更新日誌",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) 正處於開發早期階段。如果您有任何回饋或建議，請隨時在我們的 GitHub 上 <OpenIssueLink>提交問題</OpenIssueLink> <ExternalLinkIcon />。",
   "about.iconLibrary": "所使用的圖標庫版權由 <IconLibraryLink /> <ExternalLinkIcon /> 所有，不得重新分發。",
-  "about.licenseInfo": "版權所有 © 2024 {{appName}}。保留所有權利。",
+  "about.licenseInfo": "版權所有 © {{currentYear}} {{appName}}。保留所有權利。",
   "about.sidebar_title": "關於",
   "about.socialMedia": "社群媒體",
   "actions.actionName": "規則 {{number}}",
