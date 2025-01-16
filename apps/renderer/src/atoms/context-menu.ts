@@ -1,5 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS } from "@follow/utils/utils"
+import { getOS, transformShortcut } from "@follow/utils/utils"
 import { atom } from "jotai"
 import { useCallback } from "react"
 
@@ -84,10 +84,8 @@ export type MenuItemInput =
 
 function sortShortcutsString(shortcut: string) {
   const order = ["Shift", "Ctrl", "Meta", "Alt"]
-  let nextShortcut = shortcut
-  if (getOS() === "Windows") {
-    nextShortcut = shortcut.replace("Meta", "Ctrl").replace("meta", "ctrl")
-  }
+  const nextShortcut = transformShortcut(shortcut)
+
   const arr = nextShortcut.split("+")
 
   const sortedModifiers = arr
