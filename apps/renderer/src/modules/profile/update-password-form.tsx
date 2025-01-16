@@ -9,10 +9,11 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
 import { changePassword } from "@follow/shared/auth"
+import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -133,24 +134,45 @@ export const UpdatePasswordForm = () => {
 
   const { t } = useTranslation("settings")
   const { present } = useModalStack()
-  if (isLoading || !hasPassword) {
-    return null
-  }
 
   return (
-    <div className="mt-4 flex items-center justify-between">
-      <Label className="mb-4">{t("profile.password.label")}</Label>
-      <Button
-        variant="outline"
-        onClick={() =>
-          present({
-            title: t("profile.change_password.label"),
-            content: UpdateExistingPasswordForm,
-          })
-        }
-      >
-        {t("profile.change_password.label")}
-      </Button>
+    <div className="flex items-center justify-between">
+      <Label>{t("profile.password.label")}</Label>
+      {isLoading ? null : hasPassword ? (
+        <Button
+          variant="outline"
+          onClick={() =>
+            present({
+              title: t("profile.change_password.label"),
+              content: UpdateExistingPasswordForm,
+            })
+          }
+        >
+          {t("profile.change_password.label")}
+        </Button>
+      ) : (
+        <NoPasswordHint i18nKey="profile.no_password" />
+      )}
     </div>
+  )
+}
+
+export const NoPasswordHint = ({ i18nKey }: { i18nKey: string }) => {
+  return (
+    <p className="text-sm text-muted-foreground">
+      <Trans
+        ns="settings"
+        i18nKey={i18nKey as any}
+        components={{
+          Link: (
+            <a
+              href={`${env.VITE_WEB_URL}/forget-password`}
+              className="text-accent"
+              target="_blank"
+            />
+          ),
+        }}
+      />
+    </p>
   )
 }

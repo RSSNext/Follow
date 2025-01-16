@@ -56,6 +56,7 @@
     "framer-motion": "11.13.1",
     "hast-util-to-jsx-runtime": "2.3.2",
     "hast-util-to-text": "4.0.2",
+    "input-otp": "^1.4.2",
     "jotai": "2.10.3",
     "masonic": "4.0.1",
     "react-blurhash": "^0.3.0",

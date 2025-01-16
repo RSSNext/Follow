@@ -22,6 +22,8 @@ import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Queries } from "~/queries"
 import { useSetRSSHubMutation } from "~/queries/rsshub"
 
+import { useTOTPModalWrapper } from "../profile/hooks"
+
 export function SetModalContent({
   dismiss,
   instance,
@@ -31,6 +33,7 @@ export function SetModalContent({
 }) {
   const { t } = useTranslation("settings")
   const setRSSHubMutation = useSetRSSHubMutation()
+  const preset = useTOTPModalWrapper(setRSSHubMutation.mutateAsync)
   const details = useAuthQuery(Queries.rsshub.get({ id: instance.id }))
   const hasPurchase = !!details.data?.purchase
   const price = instance.ownerUserId === whoami()?.id ? 0 : instance.price
@@ -52,7 +55,7 @@ export function SetModalContent({
   const months = form.watch("months")
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    setRSSHubMutation.mutate({ id: instance.id, durationInMonths: data.months })
+    preset({ id: instance.id, durationInMonths: data.months })
   }
 
   useEffect(() => {

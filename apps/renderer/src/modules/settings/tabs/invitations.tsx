@@ -27,7 +27,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
-import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { usePresentUserProfileModal, useTOTPModalWrapper } from "~/modules/profile/hooks"
 import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Queries } from "~/queries"
 
@@ -171,7 +171,8 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
   const { t } = useTranslation("settings")
   const newInvitation = useMutation({
     mutationKey: ["newInvitation"],
-    mutationFn: () => apiClient.invitations.new.$post(),
+    mutationFn: (values: Parameters<typeof apiClient.invitations.new.$post>[0]["json"]) =>
+      apiClient.invitations.new.$post({ json: values }),
     onError(err) {
       toastFetchError(err)
     },
@@ -182,6 +183,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
       dismiss()
     },
   })
+  const preset = useTOTPModalWrapper(newInvitation.mutateAsync)
 
   const serverConfigs = useServerConfigs()
 
@@ -206,7 +208,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
         <Button variant="outline" onClick={dismiss}>
           {t("invitation.confirmModal.cancel")}
         </Button>
-        <Button isLoading={newInvitation.isPending} onClick={() => newInvitation.mutate()}>
+        <Button isLoading={newInvitation.isPending} onClick={() => preset({})}>
           {t("invitation.confirmModal.continue")}
         </Button>
       </div>
