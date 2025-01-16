@@ -117,26 +117,22 @@ const shortcutConfigs = {
       key: "Meta+K",
     },
   },
-} as const satisfies Shortcuts
+} as const
 
 function transformShortcuts<T extends Shortcuts>(configs: T) {
-  const result: Shortcuts = {}
+  const result = configs
 
   for (const category in configs) {
-    result[category] = {}
     for (const shortcutKey in configs[category]) {
       const config = configs[category][shortcutKey]
-      result[category][shortcutKey] = {
-        name: config.name,
-        key: transformShortcut(config.key),
-      }
+      result[category][shortcutKey].key = transformShortcut(config.key)
     }
   }
 
   return result
 }
 
-export const shortcuts = transformShortcuts(shortcutConfigs)
+export const shortcuts = transformShortcuts(shortcutConfigs) satisfies Shortcuts
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",
