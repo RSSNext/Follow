@@ -3,18 +3,16 @@ import { useEffect } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { SafeNavigationScrollView } from "@/src/components/common/SafeNavigationScrollView"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { useFeedDrawer, useSetDrawerSwipeDisabled } from "@/src/modules/feed-drawer/atoms"
 import { useCurrentView } from "@/src/modules/subscription/atoms"
 import { SortActionButton } from "@/src/modules/subscription/header-actions"
-import { SubscriptionLists } from "@/src/modules/subscription/SubscriptionLists"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
 import { accentColor } from "@/src/theme/colors"
 
-import { ViewTab } from "../../../modules/subscription/ViewTab"
-
-export default function FeedList() {
+export default function Index() {
   const currentView = useCurrentView()
   usePrefetchUnread()
 
@@ -33,13 +31,14 @@ export default function FeedList() {
           title: views[currentView].name,
           headerLeft: LeftAction,
           headerRight: RightAction,
-
           headerTransparent: true,
         }}
       />
-
-      <SubscriptionLists />
-      <ViewTab />
+      <SafeNavigationScrollView>
+        <View className="flex min-h-96 items-center justify-center bg-zinc-300">
+          <Text className="text-center text-2xl text-accent">EntryList Placeholder</Text>
+        </View>
+      </SafeNavigationScrollView>
     </>
   )
 }

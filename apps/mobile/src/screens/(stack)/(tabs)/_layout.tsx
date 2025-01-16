@@ -80,7 +80,7 @@ export default function TabLayout() {
             }}
           >
             <Tabs.Screen
-              name="subscription"
+              name="index"
               options={{
                 title: "Subscriptions",
                 headerShown: false,
