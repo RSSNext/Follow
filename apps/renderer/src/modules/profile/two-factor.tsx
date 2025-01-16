@@ -161,7 +161,7 @@ export function PasswordForm<
   )
 }
 
-const TwoFactorForm = () => {
+export const TwoFactorForm = () => {
   const { t } = useTranslation("settings")
   const modal = useCurrentModal()
   const user = useWhoami()

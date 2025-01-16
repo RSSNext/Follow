@@ -2,8 +2,10 @@ import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { capitalizeFirstLetter } from "@follow/utils/utils"
 import { createElement, lazy, useCallback } from "react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 import { parse } from "tldts"
 
+import { useWhoami } from "~/atoms/user"
 import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -13,7 +15,7 @@ import { defineQuery } from "~/lib/defineQuery"
 import { getFetchErrorInfo } from "~/lib/error-parser"
 import { users } from "~/queries/users"
 
-import { PasswordForm } from "./two-factor"
+import { PasswordForm, TwoFactorForm } from "./two-factor"
 
 const LazyUserProfileModalContent = lazy(() =>
   import("./user-profile-modal").then((mod) => ({ default: mod.UserProfileModalContent })),
@@ -109,9 +111,19 @@ export function useTOTPModalWrapper<T>(
 ) {
   const { present } = useModalStack()
   const { t } = useTranslation("settings")
+  const user = useWhoami()
   return useCallback(
     async (input: T) => {
       const presentTOTPModal = () => {
+        if (!user?.twoFactorEnabled) {
+          toast.error(t("profile.two_factor.enable_notice"))
+          present({
+            title: t("profile.two_factor.enable"),
+            content: TwoFactorForm,
+          })
+          return
+        }
+
         present({
           title: t("profile.totp_code.title"),
           content: ({ dismiss }) => {
@@ -145,6 +157,6 @@ export function useTOTPModalWrapper<T>(
         }
       }
     },
-    [callback, options?.force, present, t],
+    [callback, options?.force, present, t, user?.twoFactorEnabled],
   )
 }

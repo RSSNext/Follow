@@ -297,6 +297,7 @@
   "profile.two_factor.disable": "Disable 2FA",
   "profile.two_factor.disabled": "Two-factor authentication disabled.",
   "profile.two_factor.enable": "Enable 2FA",
+  "profile.two_factor.enable_notice": "You need to enable two-factor authentication to perform this action.",
   "profile.two_factor.enabled": "Two-factor authentication enabled.",
   "profile.two_factor.label": "Two Factor",
   "profile.two_factor.no_password": "You need to <Link>set</Link> a password before enabling 2FA.",
