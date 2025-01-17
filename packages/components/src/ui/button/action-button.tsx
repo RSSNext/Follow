@@ -15,6 +15,7 @@ export interface ActionButtonProps {
   tooltipSide?: "top" | "bottom"
   active?: boolean
   disabled?: boolean
+  clickableDisabled?: boolean
   shortcut?: string
   disableTriggerShortcut?: boolean
   enableHoverableContent?: boolean
@@ -49,6 +50,7 @@ export const ActionButton = React.forwardRef<
       active,
       shortcut,
       disabled,
+      clickableDisabled,
       disableTriggerShortcut,
       enableHoverableContent,
       size = "base",
@@ -75,6 +77,7 @@ export const ActionButton = React.forwardRef<
           active && "bg-zinc-500/15 hover:bg-zinc-500/20",
           "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
           "disabled:cursor-not-allowed disabled:opacity-50",
+          clickableDisabled && "cursor-not-allowed opacity-50",
           actionButtonStyleVariant.size[size],
           className,
         )}
