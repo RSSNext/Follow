@@ -18,9 +18,7 @@ class StoreDbMorph {
     }
   }
   toEntrySchema(entry: EntryModel): EntrySchema {
-    return {
-      ...entry,
-    }
+    return entry
   }
 }
 
