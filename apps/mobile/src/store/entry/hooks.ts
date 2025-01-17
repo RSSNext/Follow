@@ -1,8 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import { useQuery } from "@tanstack/react-query"
-import { useCallback } from "react"
 
-import { getList } from "../list/getters"
 import { entrySyncServices, useEntryStore } from "./store"
 import type { FetchEntriesProps } from "./types"
 
@@ -17,62 +15,18 @@ export const useEntry = (id: string) => {
   return useEntryStore((state) => state.data[id])
 }
 
-export const useEntriesByView = (view: FeedViewType) => {
-  return useEntryStore(
-    useCallback(
-      (state) => {
-        const entryIds = state.entryIdByView[view]
-        return Array.from(entryIds).map((id) => state.data[id])
-      },
-      [view],
-    ),
-  )
+export const useEntryIdsByView = (view: FeedViewType) => {
+  return useEntryStore((state) => state.entryIdByView[view])
 }
 
-export const useEntriesByFeedId = (feedId: string) => {
-  return useEntryStore(
-    useCallback(
-      (state) => {
-        const entryIds = state.entryIdByFeed[feedId]
-        return Array.from(entryIds).map((id) => state.data[id])
-      },
-      [feedId],
-    ),
-  )
+export const useEntryIdsByFeedId = (feedId: string) => {
+  return useEntryStore((state) => state.entryIdByFeed[feedId])
 }
 
-export const useEntriesByInboxId = (inboxId: string) => {
-  return useEntryStore(
-    useCallback(
-      (state) => {
-        const entryIds = state.entryIdByInbox[inboxId]
-        return Array.from(entryIds).map((id) => state.data[id])
-      },
-      [inboxId],
-    ),
-  )
+export const useEntryIdsByInboxId = (inboxId: string) => {
+  return useEntryStore((state) => state.entryIdByInbox[inboxId])
 }
 
-export const useEntriesByCategory = (category: string) => {
-  return useEntryStore(
-    useCallback(
-      (state) => {
-        const entryIds = state.entryIdByCategory[category]
-        return Array.from(entryIds).map((id) => state.data[id])
-      },
-      [category],
-    ),
-  )
-}
-
-export const useEntriesByListId = (listId: string) => {
-  return useEntryStore(
-    useCallback(
-      (state) => {
-        const entryIds = getList(listId)?.entryIds || new Set<string>()
-        return Array.from(entryIds).map((id) => state.data[id])
-      },
-      [listId],
-    ),
-  )
+export const useEntryIdsByCategory = (category: string) => {
+  return useEntryStore((state) => state.entryIdByCategory[category])
 }
