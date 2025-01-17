@@ -45,6 +45,55 @@ const set = useEntryStore.setState
 const immerSet = createImmerSetter(useEntryStore)
 
 class EntryActions {
+  private addEntryIdToFeed({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const entryIdSetByFeed = draft.entryIdByFeed[feedId]
+    if (!entryIdSetByFeed) {
+      draft.entryIdByFeed[feedId] = new Set([entryId])
+    } else {
+      entryIdSetByFeed.add(entryId)
+    }
+
+    const subscription = getSubscription(feedId)
+    if (subscription?.view) {
+      draft.entryIdByView[subscription.view].add(entryId)
+    }
+    if (subscription?.category) {
+      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+      if (!entryIdSetByCategory) {
+        draft.entryIdByCategory[subscription.category] = new Set([entryId])
+      } else {
+        entryIdSetByCategory.add(entryId)
+      }
+    }
+  }
+
+  private addEntryIdToInbox({
+    draft,
+    inboxHandle,
+    entryId,
+  }: {
+    draft: EntryState
+    inboxHandle?: InboxId | null
+    entryId: EntryId
+  }) {
+    if (!inboxHandle) return
+    const entryIdSetByInbox = draft.entryIdByInbox[inboxHandle]
+    if (!entryIdSetByInbox) {
+      draft.entryIdByInbox[inboxHandle] = new Set([entryId])
+    } else {
+      entryIdSetByInbox.add(entryId)
+    }
+  }
+
   upsertManyInSession(entries: EntryModel[]) {
     if (entries.length === 0) return
 
@@ -53,37 +102,17 @@ class EntryActions {
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
-        if (feedId) {
-          let entryIdSetByFeed = draft.entryIdByFeed[feedId]
-          if (!entryIdSetByFeed) {
-            entryIdSetByFeed = new Set<EntryId>()
-            draft.entryIdByFeed[feedId] = entryIdSetByFeed
-          }
-          entryIdSetByFeed.add(entry.id)
+        this.addEntryIdToFeed({
+          draft,
+          feedId,
+          entryId: entry.id,
+        })
 
-          const subscription = getSubscription(feedId)
-          if (subscription?.view) {
-            draft.entryIdByView[subscription.view].add(entry.id)
-          }
-
-          if (subscription?.category) {
-            let entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
-            if (!entryIdSetByCategory) {
-              entryIdSetByCategory = new Set<EntryId>()
-              draft.entryIdByCategory[subscription.category] = entryIdSetByCategory
-            }
-            entryIdSetByCategory.add(entry.id)
-          }
-        }
-
-        if (inboxHandle) {
-          let entryIdSetByInbox = draft.entryIdByInbox[inboxHandle]
-          if (!entryIdSetByInbox) {
-            entryIdSetByInbox = new Set<EntryId>()
-            draft.entryIdByInbox[inboxHandle] = entryIdSetByInbox
-          }
-          entryIdSetByInbox.add(entry.id)
-        }
+        this.addEntryIdToInbox({
+          draft,
+          inboxHandle,
+          entryId: entry.id,
+        })
       }
     })
   }
