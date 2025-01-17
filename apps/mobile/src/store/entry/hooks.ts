@@ -1,5 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import { useQuery } from "@tanstack/react-query"
+import { useCallback } from "react"
 
 import { entrySyncServices, useEntryStore } from "./store"
 import type { FetchEntriesProps } from "./types"
@@ -16,29 +17,49 @@ export const useEntry = (id: string) => {
 }
 
 export const useEntriesByView = (view: FeedViewType) => {
-  return useEntryStore((state) => {
-    const entryIds = state.entryIdByView[view]
-    return Array.from(entryIds).map((id) => state.data[id])
-  })
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const entryIds = state.entryIdByView[view]
+        return Array.from(entryIds).map((id) => state.data[id])
+      },
+      [view],
+    ),
+  )
 }
 
 export const useEntriesByFeedId = (feedId: string) => {
-  return useEntryStore((state) => {
-    const entryIds = state.entryIdByFeed[feedId]
-    return Array.from(entryIds).map((id) => state.data[id])
-  })
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const entryIds = state.entryIdByFeed[feedId]
+        return Array.from(entryIds).map((id) => state.data[id])
+      },
+      [feedId],
+    ),
+  )
 }
 
 export const useEntriesByInboxId = (inboxId: string) => {
-  return useEntryStore((state) => {
-    const entryIds = state.entryIdByInbox[inboxId]
-    return Array.from(entryIds).map((id) => state.data[id])
-  })
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const entryIds = state.entryIdByInbox[inboxId]
+        return Array.from(entryIds).map((id) => state.data[id])
+      },
+      [inboxId],
+    ),
+  )
 }
 
 export const useEntriesByCategory = (category: string) => {
-  return useEntryStore((state) => {
-    const entryIds = state.entryIdByCategory[category]
-    return Array.from(entryIds).map((id) => state.data[id])
-  })
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const entryIds = state.entryIdByCategory[category]
+        return Array.from(entryIds).map((id) => state.data[id])
+      },
+      [category],
+    ),
+  )
 }
