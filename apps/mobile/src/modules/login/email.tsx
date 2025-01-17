@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useContext, useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
