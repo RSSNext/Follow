@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 import type { AppType } from "@follow/shared"
+import { router } from "expo-router"
 import { ofetch } from "ofetch"
 
+import { getSessionToken } from "./cookie"
 import { getApiUrl } from "./env"
 
 const { hc } = require("hono/dist/cjs/client/client") as typeof import("hono/client")
@@ -15,10 +17,10 @@ export const apiFetch = ofetch.create({
 
     header.set("x-app-name", "Follow Mobile")
 
-    // const sessionToken = await getSessionToken()
-    // if (sessionToken.value) {
-    //   // header.set("cookie", `better-auth.session_token=${sessionToken.value};`)
-    // }
+    const sessionToken = await getSessionToken()
+    if (sessionToken) {
+      header.set("cookie", `__Secure-better-auth.session_token=${sessionToken}`)
+    }
     if (__DEV__) {
       // Logger
       console.log(`---> ${options.method} ${request as string}`)
@@ -42,7 +44,11 @@ export const apiFetch = ofetch.create({
     if (__DEV__) {
       console.log(`<--- [Error] ${response.status} ${options.method} ${request as string}`)
     }
-    console.error(error)
+    if (response.status === 401) {
+      router.replace("/login")
+    } else {
+      console.error(error)
+    }
   },
 })
 
