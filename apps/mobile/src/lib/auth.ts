@@ -4,7 +4,9 @@ import { createAuthClient } from "better-auth/react"
 import type * as better_call from "better-call"
 import * as SecureStore from "expo-secure-store"
 
+import { whoamiQueryKey } from "../store/user/hooks"
 import { getApiUrl } from "./env"
+import { queryClient } from "./query-client"
 
 const storagePrefix = "follow_auth"
 export const cookieKey = `${storagePrefix}_cookie`
@@ -20,7 +22,15 @@ const authClient = createAuthClient({
     expoClient({
       scheme: "follow",
       storagePrefix,
-      storage: SecureStore,
+      storage: {
+        setItem(key, value) {
+          SecureStore.setItem(key, value)
+          if (key === cookieKey) {
+            queryClient.invalidateQueries({ queryKey: whoamiQueryKey })
+          }
+        },
+        getItem: SecureStore.getItem,
+      },
     }),
   ],
 })
