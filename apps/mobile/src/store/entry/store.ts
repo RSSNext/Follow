@@ -154,6 +154,10 @@ class EntrySyncServices {
       },
     })
 
+    if (!pageParam) {
+      entryActions.reset()
+    }
+
     const entries = honoMorph.toEntry(res.data)
     await entryActions.upsertMany(entries)
     if (params.listId) {

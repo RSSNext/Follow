@@ -4,7 +4,7 @@ import { useCallback } from "react"
 
 import { getEntry } from "./getter"
 import { entrySyncServices, useEntryStore } from "./store"
-import type { FetchEntriesProps } from "./types"
+import type { EntryModel, FetchEntriesProps } from "./types"
 
 export const usePrefetchEntries = (props: FetchEntriesProps) => {
   const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived } = props
@@ -14,7 +14,7 @@ export const usePrefetchEntries = (props: FetchEntriesProps) => {
   })
 }
 
-export const useEntry = (id: string) => {
+export const useEntry = (id: string): EntryModel | null => {
   return useEntryStore((state) => state.data[id])
 }
 
@@ -30,6 +30,7 @@ export const useEntryIdsByView = (view: FeedViewType) => {
     useCallback(
       (state) => {
         const ids = state.entryIdByView[view]
+        if (!ids) return []
         return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
       },
       [view],
@@ -42,6 +43,7 @@ export const useEntryIdsByFeedId = (feedId: string) => {
     useCallback(
       (state) => {
         const ids = state.entryIdByFeed[feedId]
+        if (!ids) return []
         return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
       },
       [feedId],
@@ -54,6 +56,7 @@ export const useEntryIdsByInboxId = (inboxId: string) => {
     useCallback(
       (state) => {
         const ids = state.entryIdByInbox[inboxId]
+        if (!ids) return []
         return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
       },
       [inboxId],
@@ -66,6 +69,7 @@ export const useEntryIdsByCategory = (category: string) => {
     useCallback(
       (state) => {
         const ids = state.entryIdByCategory[category]
+        if (!ids) return []
         return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
       },
       [category],
