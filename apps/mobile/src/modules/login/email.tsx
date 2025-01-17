@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
@@ -19,7 +18,6 @@ import { z } from "zod"
 import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { signIn } from "@/src/lib/auth"
-import { setSessionToken } from "@/src/lib/cookie"
 import { toast } from "@/src/lib/toast"
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -35,14 +33,6 @@ async function onSubmit(values: FormValue) {
     .email({
       email: values.email,
       password: values.password,
-    })
-    .then((user) => {
-      if (!user.data) {
-        toast.error("Login failed")
-        return
-      }
-      setSessionToken(user.data.token)
-      router.push("/(stack)/(tabs)")
     })
     .catch((error) => {
       console.error(error)
