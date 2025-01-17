@@ -20,7 +20,6 @@ export function htmlInjectPlugin(env: typeof EnvType): PluginOption {
       injectEnv(${JSON.stringify({
         VITE_API_URL: env.VITE_API_URL,
         VITE_WEB_URL: env.VITE_WEB_URL,
-        VITE_IMGPROXY_URL: env.VITE_IMGPROXY_URL,
       })})
       </script>`,
       )
