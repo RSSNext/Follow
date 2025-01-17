@@ -142,6 +142,7 @@ export function useTOTPModalWrapper<T>(
 
       if (options?.force) {
         presentTOTPModal()
+        return
       }
 
       try {
