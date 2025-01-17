@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { router } from "expo-router"
+import { useContext, useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
@@ -17,6 +18,7 @@ import { z } from "zod"
 
 import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { ThemedText } from "@/src/components/common/ThemedText"
+import { LoginTeamsCheckGuardContext } from "@/src/contexts/LoginTeamsContext"
 import { signIn } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
 import { accentColor, useColor } from "@/src/theme/colors"
@@ -75,7 +77,10 @@ export function EmailLogin() {
     mutationFn: onSubmit,
   })
 
-  const login = handleSubmit((values) => submitMutation.mutate(values))
+  const teamsCheckGuard = useContext(LoginTeamsCheckGuardContext)
+  const login = handleSubmit((values) => {
+    teamsCheckGuard?.(() => submitMutation.mutate(values))
+  })
 
   const disableColor = useColor("gray3")
 

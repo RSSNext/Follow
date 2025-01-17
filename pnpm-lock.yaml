@@ -562,6 +562,9 @@ importers:
       react-native:
         specifier: 0.76.5
         version: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)
+      react-native-bouncy-checkbox:
+        specifier: 4.1.2
+        version: 4.1.2
       react-native-context-menu-view:
         specifier: 1.16.0
         version: 1.16.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
@@ -3743,6 +3746,9 @@ packages:
 
   '@fontsource/sn-pro@5.1.0':
     resolution: {integrity: sha512-k7cdU1hftD/pyrnrmQg+egKAssbuPORbtgQM/9JG5b76EchEKZdl/juO8xBjN3O/H5BQ16iu8/9vNPgzyExZeg==}
+
+  '@freakycoder/react-native-bounceable@1.0.3':
+    resolution: {integrity: sha512-+iMq2tnqxCwFjitbPUz9nZ+VfJ8OU9waIlDJAAsoq1229QEwCmERCNy5zVtDsz75q3i4FLXX/n7fimdMzmP21A==}
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
@@ -12688,6 +12694,9 @@ packages:
   react-merge-refs@1.1.0:
     resolution: {integrity: sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==}
 
+  react-native-bouncy-checkbox@4.1.2:
+    resolution: {integrity: sha512-hB7YwCGTNoMpTPOPiP+RWyQH35S6vxUbc7IGEW/Rqyp7GonEyhtqtthmxiphneRXnywMh8CZwND7OnvppJZscg==}
+
   react-native-context-menu-view@1.16.0:
     resolution: {integrity: sha512-zqeOAizM7MVV9o6h/quS0REQikBq3J4BkIRLFygY6RiCjr6rwuzSGkif7JRCHpAQQumSKlLqYl4N2h3AdoIHVg==}
     peerDependencies:
@@ -18228,6 +18237,8 @@ snapshots:
   '@floating-ui/utils@0.2.8': {}
 
   '@fontsource/sn-pro@5.1.0': {}
+
+  '@freakycoder/react-native-bounceable@1.0.3': {}
 
   '@gar/promisify@1.1.3': {}
 
@@ -29272,6 +29283,10 @@ snapshots:
   react-is@18.3.1: {}
 
   react-merge-refs@1.1.0: {}
+
+  react-native-bouncy-checkbox@4.1.2:
+    dependencies:
+      '@freakycoder/react-native-bounceable': 1.0.3
 
   react-native-context-menu-view@1.16.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1):
     dependencies:
