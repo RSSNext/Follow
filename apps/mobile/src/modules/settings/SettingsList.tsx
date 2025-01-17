@@ -1,6 +1,8 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
+import type { FC, RefObject } from "react"
 import { useContext, useEffect } from "react"
+import type { ScrollView } from "react-native"
 import { View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -27,15 +29,21 @@ import { SettingNavigationLinkIcon } from "./SettingNavigationLink"
 interface GroupNavigationLink {
   label: string
   icon: React.ElementType
-  onPress: (navigation: ReturnType<typeof useSettingsNavigation>) => void
+  onPress: (
+    navigation: ReturnType<typeof useSettingsNavigation>,
+    scrollRef: RefObject<ScrollView>,
+  ) => void
   iconBackgroundColor: string
 }
 const UserGroupNavigationLinks: GroupNavigationLink[] = [
   {
     label: "Profile",
     icon: User3CuteFiIcon,
-    onPress: (navigation) => {
-      navigation.navigate("Profile")
+    onPress: (navigation, scrollRef) => {
+      scrollRef.current?.scrollTo({ y: 0, animated: true })
+      setTimeout(() => {
+        navigation.navigate("Profile")
+      }, 100)
     },
     iconBackgroundColor: "#4F46E5",
   },
@@ -130,7 +138,7 @@ const PrivacyGroupNavigationLinks: GroupNavigationLink[] = [
   },
 ]
 
-export const SettingsList = () => {
+export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollRef }) => {
   const navigation = useSettingsNavigation()
 
   const setTabBarVisible = useContext(SetBottomTabBarVisibleContext)
@@ -158,7 +166,7 @@ export const SettingsList = () => {
                 <link.icon height={18} width={18} color="#fff" />
               </SettingNavigationLinkIcon>
             }
-            onPress={() => link.onPress(navigation)}
+            onPress={() => link.onPress(navigation, scrollRef)}
           />
         ))}
       </GroupedInsetListCard>
@@ -174,7 +182,7 @@ export const SettingsList = () => {
                 <link.icon height={18} width={18} color="#fff" />
               </SettingNavigationLinkIcon>
             }
-            onPress={() => link.onPress(navigation)}
+            onPress={() => link.onPress(navigation, scrollRef)}
           />
         ))}
       </GroupedInsetListCard>
@@ -190,7 +198,7 @@ export const SettingsList = () => {
                 <link.icon height={18} width={18} color="#fff" />
               </SettingNavigationLinkIcon>
             }
-            onPress={() => link.onPress(navigation)}
+            onPress={() => link.onPress(navigation, scrollRef)}
           />
         ))}
       </GroupedInsetListCard>
@@ -206,7 +214,7 @@ export const SettingsList = () => {
                 <link.icon height={18} width={18} color="#fff" />
               </SettingNavigationLinkIcon>
             }
-            onPress={() => link.onPress(navigation)}
+            onPress={() => link.onPress(navigation, scrollRef)}
           />
         ))}
       </GroupedInsetListCard>

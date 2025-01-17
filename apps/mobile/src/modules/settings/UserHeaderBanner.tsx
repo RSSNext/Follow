@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Image, StyleSheet, Text, View } from "react-native"
 import ImageColors from "react-native-image-colors"
 import type { SharedValue } from "react-native-reanimated"
-import ReAnimated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
+import ReAnimated, { FadeIn, interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { useWhoami } from "@/src/store/user/hooks"
@@ -82,7 +82,7 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) 
       className="relative h-[200px] items-center justify-center"
       style={{ marginTop: -insets.top }}
     >
-      <ReAnimated.View className="absolute inset-0" style={styles}>
+      <ReAnimated.View entering={FadeIn} className="absolute inset-0" style={styles}>
         <LinearGradient
           colors={gradientColors as [string, string, ...string[]]}
           start={{ x: 0, y: 0 }}

@@ -218,9 +218,7 @@ const ListList = () => {
   return (
     <View className="mt-4">
       <Text className="text-secondary-label mb-2 ml-3 text-sm font-medium">Lists</Text>
-      {/* {sortedListIds.map((id) => {
-        return <ListSubscriptionItem key={id} id={id} />
-      })} */}
+
       <FlatList
         data={sortedListIds}
         renderItem={renderListItems}
