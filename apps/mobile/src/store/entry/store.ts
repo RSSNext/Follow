@@ -126,9 +126,9 @@ class EntrySyncServices {
     })
 
     const entries = honoMorph.toEntry(res.data)
-    entryActions.upsertMany(entries)
+    await entryActions.upsertMany(entries)
     if (params.listId) {
-      listActions.addEntryIds({
+      await listActions.addEntryIds({
         listId: params.listId,
         entryIds: entries.map((e) => e.id),
       })

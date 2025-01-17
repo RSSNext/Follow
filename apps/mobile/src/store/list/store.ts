@@ -46,7 +46,7 @@ class ListActions {
     tx.run()
   }
 
-  addEntryIds(params: { listId: string; entryIds: string[] }) {
+  addEntryIdsInSession(params: { listId: string; entryIds: string[] }) {
     const state = get()
     const list = state.lists[params.listId]
 
@@ -59,6 +59,18 @@ class ListActions {
         [params.listId]: { ...list, feedIds: [...list.feedIds, ...params.entryIds] },
       },
     })
+  }
+
+  async addEntryIds(params: { listId: string; entryIds: string[] }) {
+    const tx = createTransaction()
+    tx.store(() => {
+      this.addEntryIdsInSession(params)
+    })
+
+    tx.persist(() => {
+      return ListService.addEntryIds(params)
+    })
+    await tx.run()
   }
 
   reset() {
