@@ -41,6 +41,7 @@
     "publish": "electron-vite build && electron-forge publish",
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
+    "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx",
     "test": "CI=1 pnpm --recursive run test",
     "typecheck": "turbo typecheck",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"

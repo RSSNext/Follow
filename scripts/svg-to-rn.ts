@@ -59,7 +59,7 @@ interface ${componentName}Props {
 export const ${componentName} = ({
   width = ${width},
   height = ${height},
-  color = "${DEFAULT_COLOR}",
+  ${pathElements.includes(`{color}`) ? `color = "${DEFAULT_COLOR}",` : ""}
 }: ${componentName}Props) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 ${width} ${height}">
