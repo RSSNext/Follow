@@ -2,6 +2,7 @@ import type { FeedViewType } from "@follow/constants"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
 
+import { getList } from "../list/getters"
 import { entrySyncServices, useEntryStore } from "./store"
 import type { FetchEntriesProps } from "./types"
 
@@ -60,6 +61,18 @@ export const useEntriesByCategory = (category: string) => {
         return Array.from(entryIds).map((id) => state.data[id])
       },
       [category],
+    ),
+  )
+}
+
+export const useEntriesByListId = (listId: string) => {
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const entryIds = getList(listId)?.entryIds || new Set<string>()
+        return Array.from(entryIds).map((id) => state.data[id])
+      },
+      [listId],
     ),
   )
 }

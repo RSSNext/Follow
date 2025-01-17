@@ -45,6 +45,22 @@ class ListActions {
     })
     tx.run()
   }
+
+  addEntryIds(params: { listId: string; entryIds: string[] }) {
+    const state = get()
+    const list = state.lists[params.listId]
+
+    if (!list) return
+
+    set({
+      ...state,
+      lists: {
+        ...state.lists,
+        [params.listId]: { ...list, feedIds: [...list.feedIds, ...params.entryIds] },
+      },
+    })
+  }
+
   reset() {
     set(defaultState)
   }

@@ -6,6 +6,7 @@ import { storeDbMorph } from "@/src/morph/store-db"
 import { EntryService } from "@/src/services/entry"
 
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
+import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
 import type { EntryModel, FetchEntriesProps } from "./types"
 import { getEntriesParams } from "./utils"
@@ -14,7 +15,6 @@ type EntryId = string
 type FeedId = string
 type InboxId = string
 type Category = string
-type ListId = string
 
 interface EntryState {
   data: Record<EntryId, EntryModel>
@@ -22,7 +22,6 @@ interface EntryState {
   entryIdByCategory: Record<Category, Set<EntryId>>
   entryIdByFeed: Record<FeedId, Set<EntryId>>
   entryIdByInbox: Record<InboxId, Set<EntryId>>
-  entryIdByList: Record<ListId, Set<EntryId>>
 }
 
 const defaultState: EntryState = {
@@ -38,7 +37,6 @@ const defaultState: EntryState = {
   entryIdByCategory: {},
   entryIdByFeed: {},
   entryIdByInbox: {},
-  entryIdByList: {},
 }
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => defaultState)
@@ -47,7 +45,7 @@ const set = useEntryStore.setState
 const immerSet = createImmerSetter(useEntryStore)
 
 class EntryActions {
-  upsertManyInSession(entries: EntryModel[], fetchProps?: FetchEntriesProps) {
+  upsertManyInSession(entries: EntryModel[]) {
     if (entries.length === 0) return
 
     immerSet((draft) => {
@@ -86,23 +84,14 @@ class EntryActions {
           }
           entryIdSetByInbox.add(entry.id)
         }
-
-        if (fetchProps?.listId) {
-          let entryIdSetByList = draft.entryIdByList[fetchProps.listId]
-          if (!entryIdSetByList) {
-            entryIdSetByList = new Set<EntryId>()
-            draft.entryIdByList[fetchProps.listId] = entryIdSetByList
-          }
-          entryIdSetByList.add(entry.id)
-        }
       }
     })
   }
 
-  async upsertMany(entries: EntryModel[], fetchProps: FetchEntriesProps) {
+  async upsertMany(entries: EntryModel[]) {
     const tx = createTransaction()
     tx.store(() => {
-      this.upsertManyInSession(entries, fetchProps)
+      this.upsertManyInSession(entries)
     })
 
     tx.persist(() => {
@@ -137,7 +126,13 @@ class EntrySyncServices {
     })
 
     const entries = honoMorph.toEntry(res.data)
-    entryActions.upsertMany(entries, props)
+    entryActions.upsertMany(entries)
+    if (params.listId) {
+      listActions.addEntryIds({
+        listId: params.listId,
+        entryIds: entries.map((e) => e.id),
+      })
+    }
     return entries
   }
 }
