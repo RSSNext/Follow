@@ -16,12 +16,13 @@ export function Login() {
         }}
         accessible={false}
       >
-        <View className="flex-1 items-center gap-10 pt-20">
-          <Logo style={{ width: 100, height: 100 }} />
+        <View className="flex-1 items-center gap-8 pt-20">
+          <Logo style={{ width: 80, height: 80 }} />
           <ThemedText className="text-2xl font-bold">Login to Follow</ThemedText>
           <EmailLogin />
         </View>
       </TouchableWithoutFeedback>
+      <View className="border-t-opaque-separator border-t-hairline mx-28" />
       <View className="items-center">
         <View className="mb-4 flex w-full max-w-sm flex-row items-center gap-4">
           <View className="bg-separator my-4 h-[0.5px] flex-1" />

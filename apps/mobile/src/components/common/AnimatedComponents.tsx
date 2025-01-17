@@ -7,3 +7,4 @@ export const AnimatedTouchableOpacity = Animated.createAnimatedComponent(Touchab
 
 export const ReAnimatedPressable = Reanimated.createAnimatedComponent(Pressable)
 export const ReAnimatedScrollView = Reanimated.createAnimatedComponent(ScrollView)
+export const ReAnimatedTouchableOpacity = Reanimated.createAnimatedComponent(TouchableOpacity)

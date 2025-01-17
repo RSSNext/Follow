@@ -49,7 +49,7 @@ export function SocialLogin() {
           return (
             <TouchableOpacity
               key={key}
-              className="border-gray/50 rounded-full border p-2"
+              className="border-opaque-separator border-hairline rounded-full p-2"
               onPress={async () => {
                 if (!data?.[providerInfo.id]) return
 
