@@ -15678,6 +15678,27 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         };
     };
 } & {
+    "/withdraw": {
+        $post: {
+            input: {
+                json: {
+                    amount: string;
+                    address: string;
+                    TOTPCode?: string | undefined;
+                    toRss3?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
     "/claim-check": {
         $get: {
             input: {};

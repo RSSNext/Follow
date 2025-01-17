@@ -79,7 +79,6 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
       toRss3?: boolean
     }) => {
       const amountBigInt = from(amount, 18)[0]
-      // @ts-expect-error FIXME: remove this line after API is back
       await apiClient.wallets.transactions.withdraw.$post({
         json: {
           address,
