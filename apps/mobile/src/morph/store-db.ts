@@ -1,4 +1,5 @@
-import type { ListSchema, SubscriptionSchema } from "../database/schemas/types"
+import type { EntrySchema, ListSchema, SubscriptionSchema } from "../database/schemas/types"
+import type { EntryModel } from "../store/entry/types"
 import type { ListModel } from "../store/list/store"
 import type { SubscriptionModel } from "../store/subscription/store"
 
@@ -15,6 +16,9 @@ class StoreDbMorph {
       id: buildSubscriptionDbId(subscription),
       isPrivate: subscription.isPrivate ? 1 : 0,
     }
+  }
+  toEntrySchema(entry: EntryModel): EntrySchema {
+    return entry
   }
 }
 
