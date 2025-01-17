@@ -54,17 +54,6 @@ class EntryActions {
       for (const entry of entries) {
         draft.data[entry.id] = entry
 
-        if (entry.categories) {
-          for (const category of entry.categories) {
-            let entryIdSetByCategory = draft.entryIdByCategory[category]
-            if (!entryIdSetByCategory) {
-              entryIdSetByCategory = new Set<EntryId>()
-              draft.entryIdByCategory[category] = entryIdSetByCategory
-            }
-            entryIdSetByCategory.add(entry.id)
-          }
-        }
-
         const { feedId, inboxHandle } = entry
         if (feedId) {
           let entryIdSetByFeed = draft.entryIdByFeed[feedId]
@@ -77,6 +66,15 @@ class EntryActions {
           const subscription = getSubscription(feedId)
           if (subscription?.view) {
             draft.entryIdByView[subscription.view].add(entry.id)
+          }
+
+          if (subscription?.category) {
+            let entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+            if (!entryIdSetByCategory) {
+              entryIdSetByCategory = new Set<EntryId>()
+              draft.entryIdByCategory[subscription.category] = entryIdSetByCategory
+            }
+            entryIdSetByCategory.add(entry.id)
           }
         }
 
