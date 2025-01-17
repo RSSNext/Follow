@@ -140,6 +140,7 @@ export function PasswordForm({
   onSubmitMutationFn,
   onSuccess,
 }: PasswordFormProps<PasswordFormValues>) {
+  const { data: hasPassword, isLoading } = useHasPassword()
   const { t } = useTranslation("settings")
 
   const form = useForm<PasswordFormValues>({
@@ -183,6 +184,7 @@ export function PasswordForm({
             </FormItem>
           )}
         />
+        {!hasPassword && !isLoading && <NoPasswordHint i18nKey="profile.two_factor.no_password" />}
 
         <div className="text-right">
           <Button type="submit" isLoading={updateMutation.isPending}>
