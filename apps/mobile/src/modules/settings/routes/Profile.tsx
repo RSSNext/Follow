@@ -173,7 +173,7 @@ const SubscriptionList = ({ subscriptions }: { subscriptions: Subscription[] }) 
         </Fragment>
       )}
       {hasFeeds && (
-        <Fragment>
+        <View className="mt-4">
           <SectionHeader title="Feeds" />
           {Object.entries(groupedFeeds).map(([category, feeds], index) => (
             <Fragment key={category}>
@@ -203,7 +203,7 @@ const SubscriptionList = ({ subscriptions }: { subscriptions: Subscription[] }) 
             renderItem={renderFeedItems}
             ItemSeparatorComponent={ItemSeparator}
           />
-        </Fragment>
+        </View>
       )}
     </View>
   )
