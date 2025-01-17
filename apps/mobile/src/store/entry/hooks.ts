@@ -14,7 +14,7 @@ export const usePrefetchEntries = (props: FetchEntriesProps) => {
   })
 }
 
-export const useEntry = (id: string): EntryModel | null => {
+export const useEntry = (id: string): EntryModel | undefined => {
   return useEntryStore((state) => state.data[id])
 }
 

@@ -3,6 +3,6 @@ import type { EntryModel } from "./types"
 
 const get = useEntryStore.getState
 
-export const getEntry = (id: string): EntryModel | null => {
-  return get().data[id] || null
+export const getEntry = (id: string): EntryModel | undefined => {
+  return get().data[id]
 }
