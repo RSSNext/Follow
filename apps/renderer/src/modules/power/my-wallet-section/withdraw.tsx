@@ -23,6 +23,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common/useBizQuery"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { useTOTPModalWrapper } from "~/modules/profile/hooks"
 import { Balance } from "~/modules/wallet/balance"
 import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
@@ -88,9 +89,10 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
       })
     },
   })
+  const present = useTOTPModalWrapper(mutation.mutateAsync, { force: true })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    mutation.mutate(values)
+    present(values)
   }
 
   useEffect(() => {
@@ -148,6 +150,8 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
                   <Input
                     {...field}
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}
                   />
                 </FormControl>

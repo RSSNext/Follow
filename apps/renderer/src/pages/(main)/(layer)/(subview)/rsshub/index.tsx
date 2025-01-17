@@ -17,6 +17,7 @@ import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { useSubViewTitle } from "~/modules/app-layout/subview/hooks"
+import { useTOTPModalWrapper } from "~/modules/profile/hooks"
 import { AddModalContent } from "~/modules/rsshub/add-modal-content"
 import { SetModalContent } from "~/modules/rsshub/set-modal-content"
 import { UserAvatar } from "~/modules/user/UserAvatar"
@@ -63,6 +64,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
   const me = whoami()
   const status = useAuthQuery(Queries.rsshub.status())
   const setRSSHubMutation = useSetRSSHubMutation()
+  const presetTOTPModal = useTOTPModalWrapper(setRSSHubMutation.mutateAsync)
   const { present } = useModalStack()
 
   return (
@@ -112,9 +114,7 @@ function List({ data }: { data?: RSSHubModel[] }) {
               </Button>
             )}
             {!!status?.data?.usage?.rsshubId && (
-              <Button onClick={() => setRSSHubMutation.mutate({ id: null })}>
-                {t("rsshub.table.use")}
-              </Button>
+              <Button onClick={() => presetTOTPModal({ id: null })}>{t("rsshub.table.use")}</Button>
             )}
           </TableCell>
         </TableRow>

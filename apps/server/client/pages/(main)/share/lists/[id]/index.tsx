@@ -113,10 +113,14 @@ export function Component() {
                 </div>
               )}
             </div>
-            <div className="mt-8 text-zinc-500">{t("feed.preview")}</div>
-            <div className={cn("w-full pb-12 pt-8", "flex max-w-3xl flex-col gap-2")}>
-              <Item entries={list.data.entries} view={list.data.list.view} />
-            </div>
+            {!!list.data.entries?.length && (
+              <>
+                <div className="mt-8 text-zinc-500">{t("feed.preview")}</div>
+                <div className={cn("w-full pb-12 pt-8", "flex max-w-3xl flex-col gap-2")}>
+                  <Item entries={list.data.entries} view={list.data.list.view} />
+                </div>
+              </>
+            )}
           </div>
         )
       )}

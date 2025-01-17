@@ -1,14 +1,16 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createContext, useCallback, useContext, useEffect, useRef } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { findNodeHandle, ScrollView, UIManager, useAnimatedValue } from "react-native"
-import { withTiming } from "react-native-reanimated"
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
+import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
+import { findNodeHandle, UIManager } from "react-native"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEventCallback } from "usehooks-ts"
 
-import { TabBarBackgroundContext } from "@/src/contexts/TabBarBackgroundContext"
+import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
+import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
+import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -18,9 +20,21 @@ const OutIsFocused = createContext(false)
 export default function SettingsX() {
   const isFocused = useIsFocused()
 
+  const setTabBarVisible = useContext(SetBottomTabBarVisibleContext)
   return (
     <OutIsFocused.Provider value={isFocused}>
-      <Stack.Navigator initialRouteName="Settings">
+      <Stack.Navigator
+        initialRouteName="Settings"
+        screenListeners={{
+          state: ({ data: { state } }) => {
+            if (state.index !== 0) {
+              setTabBarVisible(false)
+            } else {
+              setTabBarVisible(true)
+            }
+          },
+        }}
+      >
         <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
         {SettingRoutes(Stack)}
       </Stack.Navigator>
@@ -31,7 +45,7 @@ export default function SettingsX() {
 function Settings() {
   const insets = useSafeAreaInsets()
   const isFocused = useContext(OutIsFocused)
-  const { opacity } = useContext(TabBarBackgroundContext)
+  const { opacity } = useContext(BottomTabBarBackgroundContext)
   const tabBarHeight = useBottomTabBarHeight()
 
   const calculateOpacity = useCallback(
@@ -48,43 +62,50 @@ function Settings() {
     },
     [opacity],
   )
+  const [contentSize, setContentSize] = useState({ height: 0, width: 0 })
 
   useEffect(() => {
     if (!isFocused) return
     const scrollView = scrollRef.current
+
+    if (contentSize.height === 0) return
+
     if (scrollView) {
       const node = findNodeHandle(scrollView)
       if (node) {
         UIManager.measure(node, (x, y, width, height) => {
-          calculateOpacity(height, height, 0)
+          calculateOpacity(contentSize.height, height, 0)
         })
       }
     }
-  }, [opacity, isFocused, calculateOpacity])
+  }, [opacity, isFocused, calculateOpacity, contentSize.height])
 
-  const animatedScrollY = useAnimatedValue(0)
+  const animatedScrollY = useSharedValue(0)
   const handleScroll = useEventCallback(
     ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
       const { contentOffset, contentSize, layoutMeasurement } = nativeEvent
       calculateOpacity(contentSize.height, layoutMeasurement.height, contentOffset.y)
-      animatedScrollY.setValue(contentOffset.y)
+      animatedScrollY.value = contentOffset.y
     },
   )
 
   const scrollRef = useRef<ScrollView>(null)
+
   return (
-    <ScrollView
+    <ReAnimatedScrollView
       scrollEventThrottle={16}
       onScroll={handleScroll}
       ref={scrollRef}
+      onContentSizeChange={(w, h) => {
+        setContentSize({ height: h, width: w })
+      }}
       style={{ paddingTop: insets.top }}
-      className="bg-system-background flex-1"
-      contentContainerStyle={{ paddingBottom: insets.bottom + tabBarHeight }}
+      className="bg-system-grouped-background flex-1"
       scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
     >
-      <UserHeaderBanner />
+      <UserHeaderBanner scrollY={animatedScrollY} />
 
       <SettingsList />
-    </ScrollView>
+    </ReAnimatedScrollView>
   )
 }

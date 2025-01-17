@@ -16,7 +16,7 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { authProvidersConfig } from "@follow/constants"
-import { createSession, loginHandler, signOut } from "@follow/shared/auth"
+import { createSession, loginHandler, signOut, twoFactor } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -221,17 +221,9 @@ export function Login() {
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().max(128),
+  password: z.string().min(8).max(128),
+  code: z.string().length(6).regex(/^\d+$/).optional(),
 })
-
-async function onSubmit(values: z.infer<typeof formSchema>) {
-  const res = await loginHandler("credential", "app", values)
-  if (res?.error) {
-    toast.error(res.error.message)
-    return
-  }
-  queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
-}
 
 function LoginWithPassword() {
   const { t } = useTranslation("external")
@@ -242,8 +234,36 @@ function LoginWithPassword() {
       password: "",
     },
   })
-  const { isValid } = form.formState
+  const [needTwoFactor, setNeedTwoFactor] = useState(false)
+
+  const { isValid, isSubmitting } = form.formState
   const navigate = useNavigate()
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (needTwoFactor && values.code) {
+      const res = await twoFactor.verifyTotp({ code: values.code })
+      if (res?.error) {
+        toast.error(res.error.message)
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
+      }
+      return
+    }
+
+    const res = await loginHandler("credential", "app", values)
+    if (res?.error) {
+      toast.error(res.error.message)
+      return
+    }
+    if ((res?.data as any)?.twoFactorRedirect) {
+      setNeedTwoFactor(true)
+      form.setValue("code", "")
+      form.setFocus("code")
+      return
+    } else {
+      queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
+    }
+  }
 
   return (
     <Form {...form}>
@@ -277,15 +297,31 @@ function LoginWithPassword() {
         <Link to="/forget-password" className="block py-1 text-xs text-accent hover:underline">
           {t("login.forget_password.note")}
         </Link>
+        {needTwoFactor && (
+          <FormField
+            control={form.control}
+            name="code"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("login.two_factor.code")}</FormLabel>
+                <FormControl>
+                  <Input type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button
           type="submit"
-          className="w-full"
-          buttonClassName="text-base !mt-3"
+          buttonClassName="text-base !mt-3 w-full"
           disabled={!isValid}
+          isLoading={isSubmitting}
         >
           {t("login.continueWith", { provider: t("words.email") })}
         </Button>
         <Button
+          type="button"
           buttonClassName="!mt-3 text-base"
           className="w-full"
           variant="outline"

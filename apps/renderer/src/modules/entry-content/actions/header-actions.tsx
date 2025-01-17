@@ -30,6 +30,7 @@ export const EntryHeaderActions = ({ entryId, view }: { entryId: string; view?: 
         commandId={config.id}
         onClick={config.onClick}
         shortcut={config.shortcut}
+        clickableDisabled={config.disabled}
       />
     )
   })
