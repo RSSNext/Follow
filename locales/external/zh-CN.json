@@ -55,6 +55,7 @@
   "login.signOut": "登出",
   "login.signUp": "使用邮件地址注册",
   "login.submit": "提交",
+  "login.two_factor.code": "双重身份验证码",
   "login.welcomeTo": "欢迎来到 ",
   "redirect.continueInBrowser": "在浏览器中继续",
   "redirect.instruction": "现在可以打开 {{app_name}} 并关闭此页面。",
