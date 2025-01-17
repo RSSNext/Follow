@@ -79,11 +79,15 @@ export function TOTPForm({
     onError: (error) => {
       const { code } = getFetchErrorInfo(error)
       if (error.message === "invalid two factor authentication" || code === 4007) {
-        form.resetField("code" as any)
-        form.setError("code" as any, {
+        form.resetField("code")
+        form.setError("code", {
           type: "manual",
           message: t("profile.totp_code.invalid"),
         })
+        // Avoid calling setFocus right after reset as all input references will be removed by reset API.
+        setTimeout(() => {
+          form.setFocus("code")
+        }, 10)
         controls.start("shake")
       }
     },
