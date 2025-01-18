@@ -295,7 +295,7 @@ class EntryActions {
               draft.internal_feedId2entryIdSet[item.feeds.id]!.add(item.entries.id)
             }
 
-            // @ts-expect-error
+            // @ts-expect-error FIXME: fix this
             draft.flatMapEntries[item.entries.id] = merge(
               draft.flatMapEntries[item.entries.id] || {},
               {
@@ -327,7 +327,7 @@ class EntryActions {
               draft.internal_feedId2entryIdSet[inboxId].add(item.entries.id)
             }
 
-            // @ts-expect-error
+            // @ts-expect-error FIXME: fix this
             draft.flatMapEntries[item.entries.id] = merge(
               draft.flatMapEntries[item.entries.id] || {},
               {
