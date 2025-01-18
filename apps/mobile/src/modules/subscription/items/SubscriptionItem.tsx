@@ -5,8 +5,9 @@ import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useFeed } from "@/src/store/feed/hooks"
+import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
@@ -48,8 +49,18 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
   const feed = useFeed(id)
   const inGrouped = !!useContext(GroupedContext)
   const view = useViewPageCurrentView()
+  const { isLoading } = usePrefetchFeed(id, { enabled: !subscription && !feed })
+
+  if (isLoading) {
+    return (
+      <View className="mt-24 flex-1 flex-row items-start justify-center">
+        <LoadingIndicator size={36} />
+      </View>
+    )
+  }
+
   // const swipeableRef: SwipeableRef = useRef(null)
-  if (!subscription || !feed) return null
+  if (!subscription && !feed) return null
 
   return (
     // FIXME: Here leads to very serious performance issues, the frame rate of both the UI and JS threads has dropped
@@ -73,7 +84,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
           className={cn(
             "flex h-12 flex-row items-center",
             inGrouped ? "pl-8 pr-4" : "px-4",
-            "border-item-pressed border-b",
+
             className,
           )}
           onPress={() => {
@@ -88,9 +99,11 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
           <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
             <FeedIcon feed={feed} />
           </View>
-          <Text className="text-text">{subscription.title || feed.title}</Text>
+          <Text numberOfLines={1} className="text-text flex-1">
+            {subscription?.title || feed.title}
+          </Text>
           {!!unreadCount && (
-            <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
+            <Text className="text-tertiary-label ml-auto pl-2 text-xs">{unreadCount}</Text>
           )}
         </ItemPressable>
       </SubscriptionFeedItemContextMenu>

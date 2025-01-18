@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { EventBus } from "@follow/utils/event-bus"
 import { getOS, isEmptyObject } from "@follow/utils/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
@@ -68,6 +69,7 @@ export const loadLanguageAndApply = async (lang: string) => {
         return
       }
     }
+    EventBus.dispatch("I18N_UPDATE", "")
   } else {
     let importFilePath = ""
 

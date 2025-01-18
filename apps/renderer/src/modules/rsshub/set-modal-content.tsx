@@ -22,6 +22,8 @@ import { UserAvatar } from "~/modules/user/UserAvatar"
 import { Queries } from "~/queries"
 import { useSetRSSHubMutation } from "~/queries/rsshub"
 
+import { useTOTPModalWrapper } from "../profile/hooks"
+
 export function SetModalContent({
   dismiss,
   instance,
@@ -31,6 +33,7 @@ export function SetModalContent({
 }) {
   const { t } = useTranslation("settings")
   const setRSSHubMutation = useSetRSSHubMutation()
+  const preset = useTOTPModalWrapper(setRSSHubMutation.mutateAsync)
   const details = useAuthQuery(Queries.rsshub.get({ id: instance.id }))
   const hasPurchase = !!details.data?.purchase
   const price = instance.ownerUserId === whoami()?.id ? 0 : instance.price
@@ -52,7 +55,7 @@ export function SetModalContent({
   const months = form.watch("months")
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    setRSSHubMutation.mutate({ id: instance.id, durationInMonths: data.months })
+    preset({ id: instance.id, durationInMonths: data.months })
   }
 
   useEffect(() => {
@@ -122,7 +125,14 @@ export function SetModalContent({
                   <FormControl className="!mt-0">
                     <div className="flex items-center gap-10">
                       <div className="space-x-2">
-                        <Input className="w-24" type="number" max={12} {...field} />
+                        <Input
+                          className="w-24"
+                          type="number"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          max={12}
+                          {...field}
+                        />
                         <span className="text-sm text-muted-foreground">
                           {t("rsshub.useModal.month")}
                         </span>

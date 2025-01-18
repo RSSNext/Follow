@@ -19,8 +19,6 @@ import {
 import { SearchHeader } from "@/src/modules/discover/search"
 import { SearchFeed } from "@/src/modules/discover/search-tabs/SearchFeed"
 import { SearchList } from "@/src/modules/discover/search-tabs/SearchList"
-import { SearchRSSHub } from "@/src/modules/discover/search-tabs/SearchRSSHub"
-import { SearchUser } from "@/src/modules/discover/search-tabs/SearchUser"
 
 const Search = () => {
   return (
@@ -40,8 +38,7 @@ const Search = () => {
 const SearchType2RenderContent: Record<SearchType, React.FC> = {
   [SearchType.Feed]: SearchFeed,
   [SearchType.List]: SearchList,
-  [SearchType.User]: SearchUser,
-  [SearchType.RSSHub]: SearchRSSHub,
+  // [SearchType.User]: SearchUser,
 }
 const PlaceholderLazyView = () => {
   const windowWidth = Dimensions.get("window").width

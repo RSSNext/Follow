@@ -129,7 +129,10 @@ function bootstrap() {
     // handle session cookie when sign in with email in electron
     session.defaultSession.webRequest.onHeadersReceived(
       {
-        urls: [`${apiURL}/better-auth/sign-in/email?*`],
+        urls: [
+          `${apiURL}/better-auth/sign-in/email?*`,
+          `${apiURL}/better-auth/two-factor/verify-totp?*`,
+        ],
       },
       (detail, callback) => {
         const { responseHeaders } = detail

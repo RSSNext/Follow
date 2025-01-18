@@ -16,7 +16,7 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
   return (
     <Animated.View exiting={FadeOutUp}>
       <SubscriptionListItemContextMenu id={id}>
-        <ItemPressable className="border-item-pressed h-12 flex-row items-center border-b px-3">
+        <ItemPressable className="h-12 flex-row items-center px-3">
           <View className="overflow-hidden rounded">
             {!!list.image && (
               <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />

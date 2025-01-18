@@ -20,7 +20,7 @@
 
       const debugHostInSessionStorage = sessionStorage.getItem("debug-host")
 
-      const host = debugHost || debugHostInSessionStorage || "https://localhost:2233"
+      const host = debugHost || debugHostInSessionStorage || "http://localhost:2233"
       if (debugHost) {
         sessionStorage.setItem("debug-host", debugHost)
       }

@@ -50,13 +50,13 @@ export const DebugButton = () => {
     <Animated.View
       style={{
         position: "absolute",
-        left: 0,
-        top: 0,
+        right: 0,
+        top: -20,
         zIndex: 1000,
         transform: pan.getTranslateTransform(),
       }}
       {...panResponder.panHandlers}
-      className="absolute mt-5 flex size-12 items-center justify-center rounded-r-md bg-accent"
+      className="absolute mt-5 flex size-8 items-center justify-center rounded-l-md bg-accent"
     >
       <BugCuteReIcon height={24} width={24} color="#fff" />
     </Animated.View>

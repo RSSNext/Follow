@@ -380,7 +380,7 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
-          <div className="absolute inset-x-0 bottom-0 flex flex-1 items-center justify-end gap-4 bg-theme-background p-4">
+          <div className="absolute inset-x-0 bottom-0 right-[6px] flex flex-1 items-center justify-end gap-4 bg-theme-modal-background-opaque p-4">
             {isSubscribed && (
               <Button
                 type="button"

@@ -6,10 +6,9 @@ export const isDev =
 export const env = createEnv({
   clientPrefix: "VITE_",
   client: {
-    VITE_WEB_URL: z.string().url(),
+    VITE_WEB_URL: z.string().url().default("https://app.follow.is"),
     VITE_API_URL: z.string(),
     VITE_DEV_PROXY: z.string().optional(),
-    VITE_IMGPROXY_URL: z.string().url(),
     VITE_SENTRY_DSN: z.string().optional(),
     VITE_INBOXES_EMAIL: z.string().default("@follow.re"),
     VITE_FIREBASE_CONFIG: z.string().optional(),
@@ -28,7 +27,7 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
   runtimeEnv: getRuntimeEnv() as any,
 
-  skipValidation: !isDev,
+  skipValidation: "process" in globalThis ? process.env.VITEST === "true" : false,
 })
 
 function metaEnvIsEmpty() {

@@ -2,7 +2,7 @@
 import path from "node:path"
 
 import { fixupPluginRules } from "@eslint/compat"
-import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
+import { defineConfig } from "eslint-config-hyoban"
 import reactNative from "eslint-plugin-react-native"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
@@ -24,22 +24,8 @@ export default defineConfig(
       "apps/mobile/.expo",
     ],
     preferESM: false,
-    projectService: {
-      allowDefaultProject: ["apps/main/preload/index.d.ts"],
-      defaultProject: "tsconfig.json",
-    },
-    typeChecked: "essential",
     tailwindCSS: {
       order: false,
-    },
-  },
-  {
-    files: GLOB_TS_SRC,
-    rules: {
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/await-thenable": "off",
-      "@typescript-eslint/no-floating-promises": "off",
-      "@typescript-eslint/no-misused-promises": "off",
     },
   },
   {

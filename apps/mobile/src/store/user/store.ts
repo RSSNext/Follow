@@ -1,5 +1,5 @@
 import type { UserSchema } from "@/src/database/schemas/types"
-import { apiFetch } from "@/src/lib/api-fetch"
+import { apiClient } from "@/src/lib/api-fetch"
 import { UserService } from "@/src/services/user"
 
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
@@ -20,16 +20,18 @@ const immerSet = createImmerSetter(useUserStore)
 
 class UserSyncService {
   async whoami() {
-    const res = await apiFetch<{
+    const res = (await (apiClient["better-auth"] as any)["get-session"].$get()) as {
       user: UserModel
-    }>("/better-auth/get-session", {
-      method: "GET",
-    })
-    immerSet((state) => {
-      state.whoami = res.user
-    })
-    userActions.upsertMany([res.user])
-    return res.user
+    } | null // TODO
+    if (res) {
+      immerSet((state) => {
+        state.whoami = res.user
+      })
+      userActions.upsertMany([res.user])
+      return res.user
+    } else {
+      return null
+    }
   }
 }
 

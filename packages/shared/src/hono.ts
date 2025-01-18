@@ -2409,6 +2409,104 @@ declare const entryReadHistoriesOpenAPISchema: z.ZodObject<{
     userIds: string[];
     readCount: number;
 }>;
+declare const urlReads: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "urlReads";
+    schema: undefined;
+    columns: {
+        url: drizzle_orm_pg_core.PgColumn<{
+            name: "url";
+            tableName: "urlReads";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userIds: drizzle_orm_pg_core.PgColumn<{
+            name: "user_ids";
+            tableName: "urlReads";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "user_ids";
+                tableName: "urlReads";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            baseBuilder: drizzle_orm_pg_core.PgColumnBuilder<{
+                name: "user_ids";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                enumValues: [string, ...string[]];
+                driverParam: string;
+            }, {}, {}, drizzle_orm.ColumnBuilderExtraConfig>;
+            size: undefined;
+        }>;
+        count: drizzle_orm_pg_core.PgColumn<{
+            name: "count";
+            tableName: "urlReads";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+type UrlReadsModel = InferInsertModel<typeof urlReads>;
+declare const urlReadsOpenAPISchema: z.ZodObject<{
+    url: z.ZodString;
+    userIds: z.ZodArray<z.ZodString, "many">;
+    count: z.ZodNumber;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    url: string;
+    userIds: string[];
+    count: number;
+}, {
+    url: string;
+    userIds: string[];
+    count: number;
+}>;
 
 declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "feeds";
@@ -2652,6 +2750,23 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        migrateTo: drizzle_orm_pg_core.PgColumn<{
+            name: "migrate_to";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -2670,6 +2785,7 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: zod.ZodNullable<zod.ZodString>;
     ownerUserId: zod.ZodNullable<zod.ZodString>;
     language: zod.ZodNullable<zod.ZodString>;
+    migrateTo: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     description: string | null;
     title: string | null;
@@ -2685,6 +2801,7 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: string | null;
     ownerUserId: string | null;
     language: string | null;
+    migrateTo: string | null;
 }, {
     description: string | null;
     title: string | null;
@@ -2700,11 +2817,13 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: string | null;
     ownerUserId: string | null;
     language: string | null;
+    migrateTo: string | null;
 }>;
 declare const feedsRelations: drizzle_orm.Relations<"feeds", {
     subscriptions: drizzle_orm.Many<"subscriptions">;
     entries: drizzle_orm.Many<"entries">;
     owner: drizzle_orm.One<"user", false>;
+    migrateTo: drizzle_orm.One<"feeds", false>;
 }>;
 type FeedModel = InferInsertModel<typeof feeds>;
 
@@ -6862,13 +6981,6 @@ declare const auth: {
         signInSocial: {
             <C extends [better_call.Context<"/sign-in/social", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
@@ -6975,13 +7087,6 @@ declare const auth: {
             path: "/sign-in/social";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
@@ -7357,13 +7462,6 @@ declare const auth: {
         signUpEmail: {
             <C extends [better_call.Context<"/sign-up/email", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     name: zod.ZodString;
                     email: zod.ZodString;
@@ -7484,13 +7582,6 @@ declare const auth: {
             path: "/sign-up/email";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     name: zod.ZodString;
                     email: zod.ZodString;
@@ -7784,17 +7875,14 @@ declare const auth: {
         };
         resetPassword: {
             <C extends [better_call.Context<"/reset-password", {
+                method: "POST";
                 query: zod.ZodOptional<zod.ZodObject<{
                     token: zod.ZodOptional<zod.ZodString>;
-                    currentURL: zod.ZodOptional<zod.ZodString>;
                 }, "strip", zod.ZodTypeAny, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }>>;
-                method: "POST";
                 body: zod.ZodObject<{
                     newPassword: zod.ZodString;
                     token: zod.ZodOptional<zod.ZodString>;
@@ -7834,17 +7922,14 @@ declare const auth: {
             }>;
             path: "/reset-password";
             options: {
+                method: "POST";
                 query: zod.ZodOptional<zod.ZodObject<{
                     token: zod.ZodOptional<zod.ZodString>;
-                    currentURL: zod.ZodOptional<zod.ZodString>;
                 }, "strip", zod.ZodTypeAny, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }, {
                     token?: string | undefined;
-                    currentURL?: string | undefined;
                 }>>;
-                method: "POST";
                 body: zod.ZodObject<{
                     newPassword: zod.ZodString;
                     token: zod.ZodOptional<zod.ZodString>;
@@ -7985,13 +8070,6 @@ declare const auth: {
         sendVerificationEmail: {
             <C extends [better_call.Context<"/send-verification-email", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     email: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -8052,13 +8130,6 @@ declare const auth: {
             path: "/send-verification-email";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     email: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -8118,13 +8189,6 @@ declare const auth: {
         changeEmail: {
             <C extends [better_call.Context<"/change-email", {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     newEmail: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -8190,13 +8254,6 @@ declare const auth: {
             path: "/change-email";
             options: {
                 method: "POST";
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     newEmail: zod.ZodString;
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -9332,13 +9389,6 @@ declare const auth: {
             <C extends [better_call.Context<"/link-social", {
                 method: "POST";
                 requireHeaders: true;
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
@@ -9408,13 +9458,6 @@ declare const auth: {
             options: {
                 method: "POST";
                 requireHeaders: true;
-                query: zod.ZodOptional<zod.ZodObject<{
-                    currentURL: zod.ZodOptional<zod.ZodString>;
-                }, "strip", zod.ZodTypeAny, {
-                    currentURL?: string | undefined;
-                }, {
-                    currentURL?: string | undefined;
-                }>>;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     provider: zod.ZodEnum<["github", ...("github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit")[]]>;
@@ -11520,6 +11563,7 @@ declare const auth: {
                 } & {
                     image: string | null;
                     handle: string | null;
+                    twoFactorEnabled: boolean | null;
                 };
                 session: {
                     id: string;
@@ -11622,7 +11666,7 @@ declare const auth: {
             };
             changeEmail: {
                 enabled: true;
-                sendChangeEmailVerification: ({ newEmail, url }: {
+                sendChangeEmailVerification: ({ user, url }: {
                     user: better_auth.User;
                     newEmail: string;
                     url: string;
@@ -13472,6 +13516,7 @@ declare const auth: {
                         } & {
                             image: string | null;
                             handle: string | null;
+                            twoFactorEnabled: boolean | null;
                         };
                         session: {
                             id: string;
@@ -14911,7 +14956,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/feeds"> | hono_types.MergeSchemaPath<{
     "/new": {
         $post: {
-            input: {};
+            input: {
+                json: {
+                    TOTPCode?: string | undefined;
+                };
+            };
             output: {
                 code: 0;
                 data: string;
@@ -15312,6 +15361,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     url?: string | undefined;
                     isPrivate?: boolean | undefined;
                     listId?: string | undefined;
+                    TOTPCode?: string | undefined;
                 };
             };
             output: {
@@ -15331,6 +15381,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     errorAt: string | null;
                     ownerUserId: string | null;
                     language: string | null;
+                    migrateTo: string | null;
                 } | null;
                 list: {
                     description: string | null;
@@ -15514,6 +15565,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     amount: string;
                     entryId: string;
+                    TOTPCode?: string | undefined;
                 };
             };
             output: {
@@ -15615,6 +15667,27 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
     "/claim_daily": {
         $post: {
             input: {};
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/withdraw": {
+        $post: {
+            input: {
+                json: {
+                    amount: string;
+                    address: string;
+                    TOTPCode?: string | undefined;
+                    toRss3?: boolean | undefined;
+                };
+            };
             output: {
                 code: 0;
                 data: {
@@ -16472,6 +16545,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 json: {
                     amount: string;
                     feedId: string;
+                    TOTPCode?: string | undefined;
                 };
             };
             output: {
@@ -16523,21 +16597,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     completed: number;
                     wait: number;
                     failed: number;
-                };
-            };
-            outputFormat: "json";
-            status: 200;
-        };
-    };
-} & {
-    "/accounts": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    duplicateEmails: string[];
-                    duplicateAccountIds: string[];
                 };
             };
             outputFormat: "json";
@@ -16607,6 +16666,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 json: {
                     id: string | null;
+                    TOTPCode?: string | undefined;
                     durationInMonths?: number | undefined;
                 };
             };
@@ -16672,4 +16732,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/rsshub">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, twoFactor, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, type UrlReadsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, twoFactor, urlReads, urlReadsOpenAPISchema, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

@@ -13,6 +13,7 @@ import { useFeedById } from "~/store/feed"
 import { feedIconSelector } from "~/store/feed/selector"
 
 import { FeedIcon } from "../feed/feed-icon"
+import { useTOTPModalWrapper } from "../profile/hooks"
 import { BoostProgress } from "./boost-progress"
 import { BoostingContributors } from "./boosting-contributors"
 import { LevelBenefits } from "./level-benefits"
@@ -33,11 +34,12 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   const { data: boostStatus, isLoading } = useBoostStatusQuery(feedId)
   const boostFeedMutation = useBoostFeedMutation()
   const { dismiss } = useCurrentModal()
+  const present = useTOTPModalWrapper(boostFeedMutation.mutateAsync)
 
   const handleBoost = useCallback(() => {
     if (boostFeedMutation.isPending) return
-    boostFeedMutation.mutate({ feedId, amount: amountBigInt.toString() })
-  }, [amountBigInt, boostFeedMutation, feedId])
+    present({ feedId, amount: amountBigInt.toString() })
+  }, [amountBigInt, boostFeedMutation.isPending, feedId, present])
 
   const feed = useFeedById(feedId, feedIconSelector)
 

@@ -23,6 +23,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common/useBizQuery"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { useTOTPModalWrapper } from "~/modules/profile/hooks"
 import { Balance } from "~/modules/wallet/balance"
 import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
@@ -72,25 +73,28 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
       address,
       amount,
       toRss3,
+      TOTPCode,
     }: {
       address: string
       amount: number
       toRss3?: boolean
+      TOTPCode?: string
     }) => {
       const amountBigInt = from(amount, 18)[0]
-      // @ts-expect-error FIXME: remove this line after API is back
       await apiClient.wallets.transactions.withdraw.$post({
         json: {
           address,
           amount: amountBigInt.toString(),
           toRss3,
+          TOTPCode,
         },
       })
     },
   })
+  const present = useTOTPModalWrapper(mutation.mutateAsync, { force: true })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    mutation.mutate(values)
+    present(values)
   }
 
   useEffect(() => {
@@ -148,6 +152,8 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
                   <Input
                     {...field}
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}
                   />
                 </FormControl>

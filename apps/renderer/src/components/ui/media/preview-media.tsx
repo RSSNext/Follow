@@ -7,8 +7,9 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
+import { useAnimationControls } from "framer-motion"
 import type { FC } from "react"
-import { Fragment, useCallback, useEffect, useState } from "react"
+import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
 import { useTranslation } from "react-i18next"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
@@ -32,8 +33,55 @@ const Wrapper: Component<{
   const { dismiss } = useCurrentModal()
   const { t } = useTranslation(["shortcuts", "common"])
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const [showActionOverlay, setShowActionOverlay] = useState(false)
+  useEffect(() => {
+    if (!containerRef.current) {
+      return
+    }
+    const $container = containerRef.current
+    const handleMouseMove = (e: MouseEvent) => {
+      const atBottom = e.clientY / $container.clientHeight > 0.6
+      if (atBottom) {
+        setShowActionOverlay(true)
+      } else {
+        setShowActionOverlay(false)
+      }
+    }
+    const outOfContainer = () => {
+      setShowActionOverlay(false)
+    }
+    $container.addEventListener("mousemove", handleMouseMove)
+    $container.addEventListener("mouseleave", outOfContainer)
+    return () => {
+      $container.removeEventListener("mousemove", handleMouseMove)
+      $container.removeEventListener("mouseleave", outOfContainer)
+    }
+  }, [sideContent])
+
+  const animateController = useAnimationControls()
+
+  useEffect(() => {
+    if (showActionOverlay) {
+      animateController.start({
+        opacity: 1,
+        transform: "translateY(0)",
+      })
+    } else {
+      animateController.start({
+        opacity: 0,
+        transform: "translateY(50px)",
+      })
+    }
+  }, [showActionOverlay, animateController])
+
   return (
-    <div className="center relative size-full py-12 lg:px-20 lg:pb-8 lg:pt-10" onClick={dismiss}>
+    <div
+      className="center relative size-full py-12 lg:px-20 lg:pb-8 lg:pt-10"
+      onClick={dismiss}
+      ref={containerRef}
+    >
       <m.div
         onFocusCapture={stopPropagation}
         initial={true}
@@ -62,10 +110,14 @@ const Wrapper: Component<{
         >
           {children}
           <RootPortal to={sideContent ? null : undefined}>
-            <div
-              className={
-                "pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
-              }
+            <m.div
+              animate={animateController}
+              className={cn(
+                "pointer-events-none absolute inset-x-0 bottom-0 z-[99] flex justify-end gap-3 p-2 text-white/70 [&_button]:hover:text-white",
+                "overflow-hidden",
+                sideContent ? "rounded-bl-xl" : "rounded-xl",
+                "bg-black/30",
+              )}
               onClick={stopPropagation}
             >
               {showActions && (
@@ -90,7 +142,7 @@ const Wrapper: Component<{
                   </ActionButton>
                 </Fragment>
               )}
-            </div>
+            </m.div>
           </RootPortal>
         </div>
         {!!sideContent && (

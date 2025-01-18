@@ -55,6 +55,7 @@
   "login.signOut": "Sign out",
   "login.signUp": "Sign up with email",
   "login.submit": "Submit",
+  "login.two_factor.code": "Two Factor Code",
   "login.welcomeTo": "Welcome to ",
   "redirect.continueInBrowser": "Continue in Browser",
   "redirect.instruction": "Now is the time to open {{app_name}} and safely close this page.",

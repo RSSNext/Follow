@@ -2,6 +2,7 @@ import { sleep } from "@follow/utils"
 import * as Clipboard from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
 import { Sitemap } from "expo-router/build/views/Sitemap"
+import * as SecureStore from "expo-secure-store"
 import type { FC } from "react"
 import * as React from "react"
 import { useRef, useState } from "react"
@@ -18,7 +19,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { getDbPath } from "@/src/database"
-import { clearSessionToken, getSessionToken, setSessionToken } from "@/src/lib/cookie"
+import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
 import { toast } from "@/src/lib/toast"
 
@@ -44,14 +45,14 @@ export default function DebugPanel() {
         {
           title: "Get Current Session Token",
           onPress: async () => {
-            const token = await getSessionToken()
-            Alert.alert(`Current Session Token: ${token?.value}`)
+            const token = getCookie()
+            Alert.alert(`Current Session Token: ${token}`)
           },
         },
         {
           title: "Clear Session Token",
           onPress: async () => {
-            await clearSessionToken()
+            await signOut()
             Alert.alert("Session Token Cleared")
           },
         },
@@ -178,7 +179,14 @@ const UserSessionSetting = () => {
       <TouchableOpacity
         className="ml-2"
         onPress={() => {
-          setSessionToken(input)
+          SecureStore.setItem(
+            cookieKey,
+            JSON.stringify({
+              [sessionTokenKey]: {
+                value: input,
+              },
+            }),
+          )
           Alert.alert("Session Token Saved")
         }}
       >

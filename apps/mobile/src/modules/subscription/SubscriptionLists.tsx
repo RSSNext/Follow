@@ -3,7 +3,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { useAtom } from "jotai"
 import { memo, useEffect, useMemo, useRef, useState } from "react"
-import { RefreshControl, StyleSheet, Text, View } from "react-native"
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native"
 import PagerView from "react-native-pager-view"
 import ReAnimated, { LinearTransition } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -29,6 +29,7 @@ import { useViewPageCurrentView, ViewPageCurrentViewProvider } from "./ctx"
 import { InboxItem } from "./items/InboxItem"
 import { ListSubscriptionItem } from "./items/ListSubscriptionItem"
 import { SubscriptionItem } from "./items/SubscriptionItem"
+import { ItemSeparator } from "./ItemSeparator"
 
 export const SubscriptionLists = memo(() => {
   const [currentView, setCurrentView] = useAtom(viewAtom)
@@ -61,7 +62,7 @@ export const SubscriptionLists = memo(() => {
       ].map((view) => {
         return (
           <ViewPageCurrentViewProvider key={view} value={view}>
-            <SubscriptionList view={view} />
+            <SubscriptionList view={view} additionalOffsetTop={ViewTabHeight * 2 + 23} />
           </ViewPageCurrentViewProvider>
         )
       })}
@@ -74,7 +75,13 @@ const keyExtractor = (item: string | { category: string; subscriptionIds: string
   }
   return item.category
 }
-const SubscriptionList = ({ view }: { view: FeedViewType }) => {
+export const SubscriptionList = ({
+  view,
+  additionalOffsetTop,
+}: {
+  view: FeedViewType
+  additionalOffsetTop?: number
+}) => {
   const headerHeight = useHeaderHeight()
   const insets = useSafeAreaInsets()
   const tabHeight = useBottomTabBarHeight()
@@ -96,13 +103,13 @@ const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
-  const offsetTop = headerHeight - insets.top + ViewTabHeight * 2 + 23
+  const offsetTop = headerHeight - insets.top + (additionalOffsetTop || 0)
 
   return (
     <ReAnimated.FlatList
       refreshControl={
         <RefreshControl
-          progressViewOffset={offsetTop}
+          progressViewOffset={headerHeight}
           onRefresh={() => {
             setRefreshing(true)
             onRefresh().finally(() => {
@@ -112,6 +119,7 @@ const SubscriptionList = ({ view }: { view: FeedViewType }) => {
           refreshing={refreshing}
         />
       }
+      className={"bg-system-grouped-background"}
       contentInsetAdjustmentBehavior="automatic"
       scrollIndicatorInsets={{
         bottom: tabHeight - insets.bottom,
@@ -121,6 +129,7 @@ const SubscriptionList = ({ view }: { view: FeedViewType }) => {
         paddingTop: offsetTop,
         paddingBottom: tabHeight,
       }}
+      ItemSeparatorComponent={ItemSeparator}
       data={data}
       ListHeaderComponent={ListHeaderComponent}
       renderItem={ItemRender}
@@ -165,7 +174,7 @@ const ListHeaderComponent = () => {
       <StarItem />
       {view === FeedViewType.Articles && <InboxList />}
       <ListList />
-      <Text className="text-tertiary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
+      <Text className="text-secondary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
     </>
   )
 }
@@ -175,13 +184,17 @@ const InboxList = () => {
   if (inboxes.length === 0) return null
   return (
     <View>
-      <Text className="text-tertiary-label mb-2 ml-3 mt-4 text-sm font-medium">Inboxes</Text>
-      {inboxes.map((id) => {
-        return <InboxItem key={id} id={id} />
-      })}
+      <Text className="text-secondary-label mb-2 ml-3 mt-4 text-sm font-medium">Inboxes</Text>
+
+      <FlatList
+        data={inboxes}
+        renderItem={renderInboxItems}
+        ItemSeparatorComponent={ItemSeparator}
+      />
     </View>
   )
 }
+const renderInboxItems = ({ item }: { item: string }) => <InboxItem id={item} />
 
 const StarItem = () => {
   return (
@@ -204,13 +217,17 @@ const ListList = () => {
   if (sortedListIds.length === 0) return null
   return (
     <View className="mt-4">
-      <Text className="text-tertiary-label mb-2 ml-3 text-sm font-medium">Lists</Text>
-      {sortedListIds.map((id) => {
-        return <ListSubscriptionItem key={id} id={id} />
-      })}
+      <Text className="text-secondary-label mb-2 ml-3 text-sm font-medium">Lists</Text>
+
+      <FlatList
+        data={sortedListIds}
+        renderItem={renderListItems}
+        ItemSeparatorComponent={ItemSeparator}
+      />
     </View>
   )
 }
+const renderListItems = ({ item }: { item: string }) => <ListSubscriptionItem id={item} />
 
 const style = StyleSheet.create({
   flex: {

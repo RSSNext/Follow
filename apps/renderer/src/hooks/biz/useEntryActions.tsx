@@ -1,5 +1,5 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
-import { FeedViewType } from "@follow/constants"
+import { FeedViewType, UserRole } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { useCallback, useMemo } from "react"
 
@@ -12,7 +12,7 @@ import {
   setReadabilityStatus,
 } from "~/atoms/readability"
 import { useShowSourceContent } from "~/atoms/source-content"
-import { whoami } from "~/atoms/user"
+import { useUserRole, whoami } from "~/atoms/user"
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { COMMAND_ID } from "~/modules/command/commands/id"
@@ -67,6 +67,7 @@ export type EntryActionItem = {
   hide?: boolean
   shortcut?: string
   active?: boolean
+  disabled?: boolean
 }
 
 export const useEntryActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
@@ -89,6 +90,8 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
 
   const runCmdFn = useRunCommandFn()
   const hasEntry = !!entry
+
+  const userRole = useUserRole()
 
   const actionConfigs: EntryActionItem[] = useMemo(() => {
     if (!hasEntry) return []
@@ -173,6 +176,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
             entry?.view,
           ),
         active: isShowAISummary,
+        disabled: userRole === UserRole.Trial,
       },
       {
         id: COMMAND_ID.entry.toggleAITranslation,
@@ -183,6 +187,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
             entry?.view,
           ),
         active: isShowAITranslation,
+        disabled: userRole === UserRole.Trial,
       },
       {
         id: COMMAND_ID.entry.share,
@@ -224,6 +229,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
     isShowAITranslation,
     isShowSourceContent,
     runCmdFn,
+    userRole,
     view,
   ])
 

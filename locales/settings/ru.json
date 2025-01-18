@@ -2,7 +2,7 @@
   "about.changelog": "Журнал изменений",
   "about.feedbackInfo": "{{appName}} ({{commitSha}}) находится на ранних этапах разработки. Если у вас есть отзывы или предложения, пожалуйста, <OpenIssueLink>откройте задачу</OpenIssueLink> <ExternalLinkIcon /> на нашем GitHub.",
   "about.iconLibrary": "Библиотека иконок защищена авторскими правами <IconLibraryLink /> <ExternalLinkIcon /> и не может быть перераспределена.",
-  "about.licenseInfo": "Авторское право © 2024 {{appName}}. Все права защищены.",
+  "about.licenseInfo": "Авторское право © {{currentYear}} {{appName}}. Все права защищены.",
   "about.sidebar_title": "О проекте",
   "about.socialMedia": "Социальные сети",
   "actions.actionName": "Действие {{number}}",

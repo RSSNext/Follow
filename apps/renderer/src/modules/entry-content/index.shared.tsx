@@ -202,19 +202,20 @@ export const RenderError: FallbackRender = ({ error }) => {
         onClick={() => {
           window.open(
             getNewIssueUrl({
-              body: [
-                "### Error",
-                "",
-                nextError.message,
-                "",
-                "### Stack",
-                "",
-                "```",
-                nextError.stack,
-                "```",
-              ].join("\n"),
-              label: "bug",
-              title: "Render error",
+              // body: [
+              //   "### Error",
+              //   "",
+              //   nextError.message,
+              //   "",
+              //   "### Stack",
+              //   "",
+              //   "```",
+              //   nextError.stack,
+              //   "```",
+              // ].join("\n"),
+              // label: "bug",
+              // title: "Render error",
+              template: "bug_report.yml",
             }),
           )
         }}
@@ -301,7 +302,8 @@ const BackTopIndicator: Component = memo(({ className }) => {
           icon2={<CircleProgress percent={readPercent} size={14} strokeWidth={2} />}
           status={readPercent === 0 ? "init" : "done"}
         />
-        {readPercent}%<br />
+        <span>{readPercent}%</span>
+        <br />
       </div>
       <MotionButtonBase
         onClick={() => {

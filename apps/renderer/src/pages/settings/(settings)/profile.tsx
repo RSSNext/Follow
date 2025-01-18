@@ -3,6 +3,7 @@ import { Divider } from "@follow/components/ui/divider/Divider.js"
 import { AccountManagement } from "~/modules/profile/account-management"
 import { EmailManagement } from "~/modules/profile/email-management"
 import { ProfileSettingForm } from "~/modules/profile/profile-setting-form"
+import { TwoFactor } from "~/modules/profile/two-factor"
 import { UpdatePasswordForm } from "~/modules/profile/update-password-form"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
@@ -19,13 +20,18 @@ export function Component() {
   return (
     <>
       <SettingsTitle />
-      <EmailManagement />
-      <ProfileSettingForm />
+      <section className="mt-4">
+        <EmailManagement />
+        <ProfileSettingForm />
 
-      <Divider className="mx-auto my-8 w-3/4" />
+        <Divider className="mb-6 mt-8" />
 
-      <AccountManagement />
-      <UpdatePasswordForm />
+        <div className="space-y-4">
+          <AccountManagement />
+          <UpdatePasswordForm />
+          <TwoFactor />
+        </div>
+      </section>
     </>
   )
 }

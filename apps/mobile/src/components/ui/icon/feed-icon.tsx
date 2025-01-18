@@ -7,12 +7,14 @@ import { useMemo } from "react"
 
 import type { FeedSchema } from "@/src/database/schemas/types"
 
-type FeedIconFeed =
-  | (Pick<FeedSchema, "ownerUserId" | "id" | "title" | "url" | "image"> & {
-      type: FeedViewType
-      siteUrl?: string
-    })
-  | FeedSchema
+export type FeedIconRequiredFeed = Pick<
+  FeedSchema,
+  "ownerUserId" | "id" | "title" | "url" | "image"
+> & {
+  type: FeedViewType
+  siteUrl?: string
+}
+type FeedIconFeed = FeedIconRequiredFeed | FeedSchema
 
 const getFeedIconSrc = (siteUrl: string, fallback: boolean) => {
   const ret = getUrlIcon(siteUrl, fallback)

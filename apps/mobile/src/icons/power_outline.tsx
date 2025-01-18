@@ -20,7 +20,7 @@ export const PowerOutlineIcon = ({
       />
       <Path
         d="M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.7533 21.5 2.5 17.2467 2.5 12C2.5 6.7533 6.7533 2.5 12 2.5C17.2467 2.5 21.5 6.7533 21.5 12Z"
-        stroke="currentColor"
+        stroke={color}
         strokeWidth={2}
       />
     </Svg>
