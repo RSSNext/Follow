@@ -20,7 +20,7 @@ export const GridList: FC<{
           <Wrapper key={entry.id} href={entry.url || entry.authorUrl || ""}>
             <div className="relative -mx-1.5 -mt-1.5">
               <LazyImage
-                src={entry.media?.[0].url}
+                src={entry.media?.[0]!.url}
                 className="aspect-video h-auto w-full shrink-0 rounded-md object-cover"
               />
             </div>

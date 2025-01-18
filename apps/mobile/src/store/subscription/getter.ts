@@ -20,7 +20,7 @@ export const getSubscriptionByCategory = (category: string): string[] => {
 
   const ids = [] as string[]
   for (const id of Object.keys(state.data)) {
-    if (state.data[id].category === category) {
+    if (state.data[id]!.category === category) {
       ids.push(id)
     }
   }

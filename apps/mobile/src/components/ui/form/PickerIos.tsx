@@ -33,7 +33,7 @@ export function PickerIos<T>({
 
   const [currentValue, setCurrentValue] = useState(() => {
     if (!value) {
-      return options[0].value
+      return options[0]!.value
     }
     return value
   })

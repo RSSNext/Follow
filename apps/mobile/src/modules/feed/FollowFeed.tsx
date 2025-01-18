@@ -50,7 +50,7 @@ export function FollowFeed(props: { id: string }) {
 function FollowImpl() {
   const { id } = useLocalSearchParams()
 
-  const feed = useFeed(id as string)
+  const feed = useFeed(id as string)!
   const isSubscribed = useSubscriptionByFeedId(feed?.id || "")
 
   const form = useForm<z.infer<typeof formSchema>>({

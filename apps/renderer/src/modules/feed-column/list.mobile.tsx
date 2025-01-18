@@ -94,11 +94,11 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
                 }}
                 className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
               >
-                {views[view].icon}
+                {views[view]!.icon}
                 <span className="ml-2">
                   {t("words.all", { ns: "common" })}
                   {t("space", { ns: "common" })}
-                  {t(views[view].name)}
+                  {t(views[view]!.name as any)}
                 </span>
               </button>
               <SortableFeedList

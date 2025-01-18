@@ -88,6 +88,7 @@ export const ShadowDOM: FC<
   const [uiFont, usePointerCursor] = useUISettingKeys(["uiFontFamily", "usePointerCursor"])
 
   return (
+    // @ts-expect-error
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
         <div
@@ -150,7 +151,7 @@ function getLinkedStaticStyleSheets() {
     }
 
     cssArray.push({
-      cssText: cacheCssTextMap[sheet.href],
+      cssText: cacheCssTextMap[sheet.href]!,
       ref: $link,
     })
   }

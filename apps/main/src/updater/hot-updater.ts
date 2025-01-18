@@ -40,7 +40,7 @@ const getLatestReleaseTag = async () => {
 
     // Search the top nightly release
     const nightlyRelease = json.find((item) => item.prerelease)
-    if (!nightlyRelease) return json[0].tag_name
+    if (!nightlyRelease) return json[0]!.tag_name
     return nightlyRelease.tag_name
   }
 }

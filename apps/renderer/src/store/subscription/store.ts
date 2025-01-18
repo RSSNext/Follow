@@ -255,7 +255,7 @@ class SubscriptionActions {
     tx.optimistic(async () => {
       const state = get()
       for (const feedId in state.data) {
-        if (state.data[feedId].view === view) {
+        if (state.data[feedId]!.view === view) {
           // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
           !filter && feedUnreadActions.updateByFeedId(feedId, 0)
           entryActions.patchManyByFeedId(feedId, { read: true }, filter)
@@ -370,7 +370,7 @@ class SubscriptionActions {
           if (!idSet.has(id)) {
             return
           }
-          const subscription = state.data[id]
+          const subscription = state.data[id]!
           const feed = getFeedById(subscription.feedId)
           if (!feed || feed.type !== "feed") return
           const { siteUrl } = feed
@@ -386,7 +386,7 @@ class SubscriptionActions {
     tx.rollback(async (snapshot) => {
       immerSet((state) => {
         Object.keys(snapshot.data).forEach((id) => {
-          state.data[id] = snapshot.data[id]
+          state.data[id] = snapshot.data[id]!
         })
       })
     })
@@ -417,7 +417,7 @@ class SubscriptionActions {
       set((state) =>
         produce(state, (draft) => {
           for (const feedId of feedIds) {
-            const subscription = state.data[feedId]
+            const subscription = state.data[feedId]!
             ctx.subscription[feedId] = subscription
 
             delete draft.data[feedId]
@@ -444,7 +444,7 @@ class SubscriptionActions {
             if (!ctx.subscription[feedId]) return
             draft.data[feedId] = ctx.subscription[feedId]
 
-            for (const view of ctx.viewDeleted[feedId]) {
+            for (const view of ctx.viewDeleted[feedId]!) {
               draft.feedIdByView[view].push(feedId)
             }
           }
@@ -552,7 +552,7 @@ class SubscriptionActions {
           view,
         },
       })
-      const oldView = snapshot.data[feedIdList[0]].view
+      const oldView = snapshot.data[feedIdList[0]!]!.view
 
       queryClient.invalidateQueries({
         predicate(query) {
@@ -592,7 +592,7 @@ class SubscriptionActions {
               changeToViewFeedIds.push(feedId)
             }
 
-            ctx.subscription[feedId] = state.data[feedId]
+            ctx.subscription[feedId] = state.data[feedId]!
           }
         }),
       )
@@ -602,7 +602,7 @@ class SubscriptionActions {
       set((state) =>
         produce(state, (draft) => {
           for (const feedId of feedIdList) {
-            draft.data[feedId] = ctx.subscription[feedId]
+            draft.data[feedId] = ctx.subscription[feedId]!
           }
           for (let i = 0; i < 6; i++) {
             draft.feedIdByView[i] = ctx.feedIdByView[i]
@@ -648,7 +648,7 @@ class SubscriptionActions {
     const subscriptionIds = [] as string[]
     const state = get()
     for (const feedId in state.data) {
-      const subscription = state.data[feedId]
+      const subscription = state.data[feedId]!
       if (subscription.category === lastCategory || subscription.defaultCategory === lastCategory) {
         subscriptionIds.push(feedId)
       }
@@ -676,7 +676,7 @@ class SubscriptionActions {
               subscription.category = newCategory
               subscription.defaultCategory = undefined
 
-              ctx.subscription[feedId] = state.data[feedId]
+              ctx.subscription[feedId] = state.data[feedId]!
             }
           }
         }),
@@ -686,7 +686,7 @@ class SubscriptionActions {
       set((state) =>
         produce(state, (draft) => {
           for (const feedId of Object.keys(ctx.subscription)) {
-            draft.data[feedId] = ctx.subscription[feedId]
+            draft.data[feedId] = ctx.subscription[feedId]!
           }
         }),
       )

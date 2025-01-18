@@ -168,7 +168,7 @@ function RegisterForm() {
     return signUp.email({
       email: values.email,
       password: values.password,
-      name: values.email.split("@")[0],
+      name: values.email.split("@")[0]!,
       callbackURL: "/",
       fetchOptions: {
         onSuccess() {

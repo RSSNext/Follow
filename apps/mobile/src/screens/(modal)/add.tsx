@@ -10,6 +10,7 @@ export default function Add() {
   const [url, setUrl] = useState("")
 
   const label = useColor("label")
+  // @ts-expect-error FIXME: use the right color
   const disabled = useColor("disabled")
   return (
     <View>

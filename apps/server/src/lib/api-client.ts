@@ -73,7 +73,7 @@ export const getTokenFromCookie = (cookie: string) => {
     .reduce(
       (acc, item) => {
         const [key, value] = item.split("=")
-        acc[key] = value
+        acc[key!] = value!
         return acc
       },
       {} as Record<string, string>,

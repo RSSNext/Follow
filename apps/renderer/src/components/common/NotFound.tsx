@@ -20,7 +20,7 @@ class AccessNotFoundError extends Error {
     this.name = "AccessNotFoundError"
   }
 
-  toString() {
+  override toString() {
     return `${this.name}: ${this.message} at ${this.path}`
   }
 }

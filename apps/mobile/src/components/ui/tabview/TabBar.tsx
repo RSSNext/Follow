@@ -112,11 +112,11 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
         indicatorPosition.value = withSpring(tabPositions[currentTab] || 0, springConfig)
 
         if (tabRef.current) {
-          const x = currentTab > 0 ? tabPositions[currentTab - 1] + tabWidths[currentTab - 1] : 0
+          const x = currentTab > 0 ? tabPositions[currentTab - 1]! + tabWidths[currentTab - 1]! : 0
 
           const isCurrentTabVisible =
-            sharedPagerOffsetX.value < tabPositions[currentTab] &&
-            sharedPagerOffsetX.value + tabWidths[currentTab] > tabPositions[currentTab]
+            sharedPagerOffsetX.value < tabPositions[currentTab]! &&
+            sharedPagerOffsetX.value + tabWidths[currentTab]! > tabPositions[currentTab]!
 
           if (!isCurrentTabVisible) {
             tabRef.current.scrollTo({ x, y: 0, animated: true })
@@ -146,17 +146,17 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
 
       // Interpolate between current and next tab positions
       const xPosition =
-        tabPositions[currentIndex] +
-        (tabPositions[nextIndex] - tabPositions[currentIndex]) * progress
+        tabPositions[currentIndex]! +
+        (tabPositions[nextIndex]! - tabPositions[currentIndex]!) * progress
 
       // Interpolate between current and next tab widths
       const width =
-        tabWidths[currentIndex] + (tabWidths[nextIndex] - tabWidths[currentIndex]) * progress
+        tabWidths[currentIndex]! + (tabWidths[nextIndex]! - tabWidths[currentIndex]!) * progress
 
       return {
         transform: [{ translateX: Math.max(xPosition, 0) }],
         width,
-        backgroundColor: tabs[currentTab].activeColor || accentColor,
+        backgroundColor: tabs[currentTab]!.activeColor || accentColor,
       }
     })
 

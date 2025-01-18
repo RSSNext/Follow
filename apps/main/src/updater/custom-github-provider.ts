@@ -87,7 +87,7 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
         if (hrefElement === null) continue
 
         // This Release's Tag
-        const hrefTag = hrefElement[1]
+        const hrefTag = hrefElement[1]!
         // Get Channel from this release's tag
         // If it is null, we believe it is stable version
         const hrefChannel = (semver.prerelease(hrefTag)?.[0] as string) || "stable"

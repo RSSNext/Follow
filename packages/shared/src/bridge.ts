@@ -66,7 +66,9 @@ interface RenderGlobalContext {
 }
 
 export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => {
+  // @ts-ignore
   globalThis[PREFIX] = {
+    // @ts-ignore
     ...globalThis[PREFIX],
     ...context,
   }
@@ -135,5 +137,6 @@ export function callWebviewExpose<T extends RenderGlobalContext>(
 }
 
 export function callWindowExposeRenderer() {
+  // @ts-ignore
   return globalThis[PREFIX] as Fn<RenderGlobalContext>
 }

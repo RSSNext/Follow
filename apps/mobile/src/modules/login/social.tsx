@@ -48,7 +48,7 @@ export function SocialLogin() {
       {Object.keys(provider)
         .filter((key) => key !== "apple" || (Platform.OS === "ios" && key === "apple"))
         .map((key) => {
-          const providerInfo = provider[key]
+          const providerInfo = provider[key]!
           return (
             <TouchableOpacity
               key={key}

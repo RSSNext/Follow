@@ -46,7 +46,7 @@ export function FeedPreview(props: {
           <div
             className={cn(
               "mx-auto mt-12 flex w-full flex-col items-center p-4 lg:p-0",
-              views[view].gridMode ? "max-w-full" : "max-w-prose",
+              views[view]!.gridMode ? "max-w-full" : "max-w-prose",
             )}
           >
             <FeedIcon
@@ -73,7 +73,7 @@ export function FeedPreview(props: {
             <div
               className={cn(
                 "w-full pb-12 pt-8",
-                views[view].gridMode
+                views[view]!.gridMode
                   ? "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                   : "flex max-w-3xl flex-col gap-6",
               )}

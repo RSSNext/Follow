@@ -68,7 +68,7 @@ export const Component = () => {
                     <h3>{category}</h3>
                   </div>
                   <div>
-                    {subscriptions.data?.[category].map(
+                    {subscriptions.data?.[category]!.map(
                       (subscription) =>
                         "feeds" in subscription && (
                           <div key={subscription.feedId} className="group relative border-b py-5">

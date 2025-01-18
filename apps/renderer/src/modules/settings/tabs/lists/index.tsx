@@ -155,14 +155,14 @@ export const SettingLists = () => {
                               <span
                                 className={cn(
                                   "inline-flex items-center",
-                                  views[row.view].className,
+                                  views[row.view]!.className,
                                 )}
                               >
-                                {views[row.view].icon}
+                                {views[row.view]!.icon}
                               </span>
                             </TooltipTrigger>
                             <TooltipPortal>
-                              <TooltipContent>{t(views[row.view].name)}</TooltipContent>
+                              <TooltipContent>{t(views[row.view]!.name as any)}</TooltipContent>
                             </TooltipPortal>
                           </Tooltip>
                         </TableCell>

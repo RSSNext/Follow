@@ -109,7 +109,7 @@ function bootstrap() {
         userAgent = userAgent.replace(/\s?Electron\/[\d.]+/, "")
         userAgent = userAgent.replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
       }
-      details.requestHeaders["User-Agent"] = userAgent
+      details.requestHeaders["User-Agent"] = userAgent!
 
       // set referer and origin
       if (selfRefererMatches.some((item) => details.url.startsWith(item))) {

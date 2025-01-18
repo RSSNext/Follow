@@ -1,12 +1,15 @@
 {
   "name": "@follow/logger",
-  "version": "0.0.1",
+  "private": true,
   "exports": {
     ".": {
       "types": "./electron.ts",
       "web": "./web.ts",
       "default": "./electron.ts"
     }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "electron-log": "5.2.4"

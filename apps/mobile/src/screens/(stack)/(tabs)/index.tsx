@@ -29,7 +29,7 @@ export default function Index() {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: views[currentView].name,
+          title: views[currentView]!.name,
           headerLeft: LeftAction,
           headerRight: RightAction,
           headerTransparent: true,

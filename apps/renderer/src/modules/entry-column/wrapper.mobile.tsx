@@ -19,7 +19,10 @@ export const EntryColumnWrapper = forwardRef<HTMLDivElement, EntryColumnWrapperP
     const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null)
     return (
       <div className={clsx(styles, "relative flex flex-col")}>
-        <div ref={ref} className={clsx("grow overflow-hidden", views[view].wideMode ? "mt-2" : "")}>
+        <div
+          ref={ref}
+          className={clsx("grow overflow-hidden", views[view]!.wideMode ? "mt-2" : "")}
+        >
           <PullToRefresh className="h-full" onRefresh={onPullToRefresh || noop}>
             <ScrollElementContext.Provider value={scrollElement}>
               <div

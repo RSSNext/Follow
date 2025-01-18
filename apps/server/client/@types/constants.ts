@@ -44,5 +44,5 @@ export const dayjsLocaleImportMap = {
   ["ko"]: ["ko", () => import("dayjs/locale/ko")],
   ["tr"]: ["tr", () => import("dayjs/locale/tr")],
 }
-export const ns = ["common", "lang", "errors"] as const
+export const ns = ["common", "lang", "errors", "external"] as const
 export const defaultNS = "external" as const

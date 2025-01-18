@@ -158,7 +158,7 @@ export const DiscoverFeedForm = ({
     const ret = {}
     if (!route.parameters) return ret
     for (const key in route.parameters) {
-      const params = normalizeRSSHubParameters(route.parameters[key])
+      const params = normalizeRSSHubParameters(route.parameters[key]!)
       if (!params) continue
       ret[key] = params.default
     }
@@ -218,7 +218,7 @@ export const DiscoverFeedForm = ({
           toast.error(err.message)
           const idx = keys.findIndex((item) => item.name === err.param)
 
-          form.setFocus(keys[idx === 0 ? 0 : idx - 1].name, {
+          form.setFocus(keys[idx === 0 ? 0 : idx - 1]!.name, {
             shouldSelect: true,
           })
         }
@@ -249,7 +249,7 @@ export const DiscoverFeedForm = ({
       )}
       <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} ref={formElRef}>
         {keys.map((keyItem) => {
-          const parameters = normalizeRSSHubParameters(route.parameters?.[keyItem.name])
+          const parameters = normalizeRSSHubParameters(route.parameters?.[keyItem.name]!)
 
           const formRegister = form.register(keyItem.name)
 

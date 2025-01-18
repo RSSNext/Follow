@@ -92,7 +92,7 @@ function EntryColumnImpl() {
 
   // Determine if the archived button should be shown
   const showArchivedButton = commonConditions && feed?.type === "feed"
-  const hasNoEntries = entries.data?.pages?.[0].data?.length === 0 && !entries.isLoading
+  const hasNoEntries = entries.data?.pages?.[0]?.data?.length === 0 && !entries.isLoading
 
   // Determine if archived entries should be loaded
   const shouldLoadArchivedEntries =
@@ -140,7 +140,7 @@ function EntryColumnImpl() {
       }
 
       if (!renderAsRead) return
-      if (!views[view].wideMode) {
+      if (!views[view]!.wideMode) {
         return
       }
       // For gird, render as mark read logic
@@ -156,7 +156,7 @@ function EntryColumnImpl() {
   }, [entries])
   const isMobile = useMobile()
 
-  const ListComponent = views[view].gridMode ? EntryColumnGrid : EntryList
+  const ListComponent = views[view]!.gridMode ? EntryColumnGrid : EntryList
   return (
     <div
       data-hide-in-print

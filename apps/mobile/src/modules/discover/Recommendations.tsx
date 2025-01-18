@@ -75,11 +75,11 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
       return []
     }
     return Object.keys(data).sort((a, b) => {
-      const aname = data[a].name
-      const bname = data[b].name
+      const aname = data[a]!.name
+      const bname = data[b]!.name
 
-      const aRouteName = data[a].routes[Object.keys(data[a].routes)[0]].name
-      const bRouteName = data[b].routes[Object.keys(data[b].routes)[0]].name
+      const aRouteName = data[a]!.routes[Object.keys(data[a]!.routes)[0]!]!.name
+      const bRouteName = data[b]!.routes[Object.keys(data[b]!.routes)[0]!]!.name
 
       const ia = isASCII(aname) && isASCII(aRouteName)
       const ib = isASCII(bname) && isASCII(bRouteName)
@@ -98,7 +98,7 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
     const groups = keys.reduce(
       (acc, key) => {
         // A-Z -> A-Z, 0-9 -> #, other -> #, # push to the end
-        const firstChar = key[0].toUpperCase()
+        const firstChar = key[0]!.toUpperCase()
         if (/[A-Z]/.test(firstChar)) {
           acc[firstChar] = acc[firstChar] || []
           acc[firstChar].push(key)
@@ -127,7 +127,7 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
         if (!data) {
           continue
         }
-        result.push({ key: item, data: data[item] })
+        result.push({ key: item, data: data[item]! })
       }
     }
 
@@ -198,7 +198,7 @@ const NavigationSidebar: FC<{
     (letter: string, animated = true) => {
       const index = alphabetGroups.findIndex((group) => {
         if (typeof group !== "string") return false
-        const firstChar = group[0].toUpperCase()
+        const firstChar = group[0]!.toUpperCase()
         const firstCharIsAlphabet = /[A-Z]/.test(firstChar)
         if (firstCharIsAlphabet) {
           return firstChar === letter
@@ -233,7 +233,7 @@ const NavigationSidebar: FC<{
         return
       }
 
-      const firstChar = letter[0].toUpperCase()
+      const firstChar = letter[0]!.toUpperCase()
       const firstCharIsAlphabet = /[A-Z]/.test(firstChar)
       if (firstCharIsAlphabet) {
         scrollToLetter(letter, false)

@@ -304,7 +304,7 @@ const AppCacheLimit = () => {
   })
 
   const onChange = (value: number[]) => {
-    tipcClient?.limitCacheSize(value[0])
+    tipcClient?.limitCacheSize(value[0]!)
     refetchCacheLimit()
   }
 

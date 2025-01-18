@@ -79,7 +79,7 @@ export const useFeedActions = ({
 
   const inbox = useInboxById(feedId)
   const isInbox = !!inbox
-  const subscription = useSubscriptionByFeedId(feedId)
+  const subscription = useSubscriptionByFeedId(feedId)!
 
   const subscriptions = useSubscriptionsByFeedIds(
     useMemo(() => feedIds || [feedId], [feedId, feedIds]),
@@ -215,7 +215,7 @@ export const useFeedActions = ({
         submenu: [
           ...Array.from(categories.values()).map((category) => {
             const isIncluded = isMultipleSelection
-              ? subscriptions.every((s) => s.category === category)
+              ? subscriptions.every((s) => s!.category === category)
               : subscription?.category === category
             return {
               label: category,
@@ -397,7 +397,7 @@ export const useFeedActions = ({
 export const useListActions = ({ listId, view }: { listId: string; view: FeedViewType }) => {
   const { t } = useTranslation()
   const list = useListById(listId)
-  const subscription = useSubscriptionByFeedId(listId)
+  const subscription = useSubscriptionByFeedId(listId)!
 
   const { present } = useModalStack()
   const { mutateAsync: deleteSubscription } = useDeleteSubscription({})

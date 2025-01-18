@@ -7,7 +7,7 @@ export function refreshBound(window: BrowserWindow, timeout = 0) {
   setTimeout(() => {
     // FIXME: workaround for theme bug in full screen mode
     const size = window?.getSize()
-    window?.setSize(size[0] + 1, size[1] + 1)
-    window?.setSize(size[0], size[1])
+    window?.setSize(size[0]! + 1, size[1]! + 1)
+    window?.setSize(size[0]!, size[1]!)
   }, timeout)
 }

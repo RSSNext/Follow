@@ -27,7 +27,7 @@ export function useLongPress({
     events.onTouchStart?.(e)
     e.preventDefault()
     isLongPress.current = false
-    const touch = e.touches[0]
+    const touch = e.touches[0]!
 
     clearTimeout(timerRef.current)
     startPosition.current = {
@@ -61,7 +61,7 @@ export function useLongPress({
       const compatEventProxy = new Proxy(compatEvent, {
         get: (target, prop: string) => {
           if (compatProperties.has(prop)) {
-            return target[prop]
+            return target[prop as keyof typeof target]
           }
           throw new Error(`Property ${prop} not implemented on compatEvent`)
         },
@@ -75,7 +75,7 @@ export function useLongPress({
     events.onTouchMove?.(e)
     if (!startPosition.current) return
 
-    const touch = e.touches[0]
+    const touch = e.touches[0]!
     const currentX = touch.clientX + window.scrollX
     const currentY = touch.clientY + window.scrollY
 

@@ -209,8 +209,8 @@ export const PreviewMediaContent: FC<{
 
   if (media.length === 0) return null
   if (media.length === 1) {
-    const src = media[0].url
-    const { type } = media[0]
+    const src = media[0]!.url
+    const { type } = media[0]!
     const isVideo = type === "video"
     return (
       <Wrapper src={src} showActions={!isVideo} sideContent={children}>
@@ -225,23 +225,23 @@ export const PreviewMediaContent: FC<{
           />
         ) : (
           <FallbackableImage
-            fallbackUrl={media[0].fallbackUrl}
+            fallbackUrl={media[0]!.fallbackUrl}
             containerClassName="w-auto"
             className="h-full w-auto object-contain"
             alt="cover"
             src={src}
-            height={media[0].height}
-            width={media[0].width}
-            blurhash={media[0].blurhash}
+            height={media[0]!.height}
+            width={media[0]!.width}
+            blurhash={media[0]!.blurhash}
             haveSideContent={!!children}
           />
         )}
       </Wrapper>
     )
   }
-  const isVideo = currentMedia.type === "video"
+  const isVideo = currentMedia!.type === "video"
   return (
-    <Wrapper src={currentMedia.url} showActions={!isVideo} sideContent={children}>
+    <Wrapper src={currentMedia!.url} showActions={!isVideo} sideContent={children}>
       <div className="size-full overflow-hidden" ref={emblaRef}>
         <div className="flex size-full">
           {media.map((med) => (

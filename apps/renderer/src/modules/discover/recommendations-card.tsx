@@ -29,7 +29,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
       const maintainers = new Set<string>()
       const categories = new Set<string>()
       for (const route in data.routes) {
-        const routeData = data.routes[route]
+        const routeData = data.routes[route]!
         if (routeData.maintainers) {
           routeData.maintainers.forEach((m) => maintainers.add(m))
         }
@@ -89,17 +89,17 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(
                       content: () => (
                         <RecommendationContent
                           routePrefix={routePrefix}
-                          route={data.routes[route]}
+                          route={data.routes[route]!}
                         />
                       ),
                       icon: (
                         <FeedIcon className="size-4" size={16} siteUrl={`https://${data.url}`} />
                       ),
-                      title: `${data.name} - ${data.routes[route].name}`,
+                      title: `${data.name} - ${data.routes[route]!.name}`,
                     })
                   }}
                 >
-                  {data.routes[route].name}
+                  {data.routes[route]!.name}
                 </button>
               </li>
             ))}

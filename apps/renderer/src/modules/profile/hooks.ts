@@ -40,7 +40,7 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
           if (!groupFolder[subscription.category]) {
             groupFolder[subscription.category] = []
           }
-          groupFolder[subscription.category].push(subscription)
+          groupFolder[subscription.category]!.push(subscription)
         }
       }
 

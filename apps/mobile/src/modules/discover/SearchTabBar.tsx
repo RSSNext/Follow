@@ -20,7 +20,7 @@ export const SearchTabBar: FC<{
       tabs={SearchTabs}
       currentTab={SearchTabs.findIndex((tab) => tab.value === searchType)}
       onTabItemPress={(index) => {
-        setSearchType(SearchTabs[index].value as SearchType)
+        setSearchType(SearchTabs[index]!.value as SearchType)
       }}
     />
   )

@@ -64,14 +64,14 @@ export class ToastManager {
   }
 
   private scheduleDismiss(index: number) {
-    const props = this.propsMap[index]
+    const props = this.propsMap[index]!
 
     if (props.duration === Infinity) {
       return
     }
 
     setTimeout(async () => {
-      await this.toastRefs[index].dimiss()
+      await this.toastRefs[index]!.dimiss()
       this.remove(index)
     }, props.duration)
   }

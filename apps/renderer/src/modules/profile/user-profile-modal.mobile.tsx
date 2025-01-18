@@ -107,7 +107,7 @@ export const UserProfileModalContent: FC<SubscriptionModalContentProps> = ({ use
                       <SubscriptionGroup
                         key={category}
                         category={category}
-                        subscriptions={subscriptions.data?.[category]}
+                        subscriptions={subscriptions.data?.[category]!}
                         itemStyle="loose"
                       />
                     ))}
