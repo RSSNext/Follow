@@ -21,16 +21,16 @@ export const ogRoute = (app: FastifyInstance) => {
 
     switch (type) {
       case "feed": {
-        imageRes = await renderFeedOG(apiClient, id).catch(errorFallback)
+        imageRes = await renderFeedOG(apiClient, id!).catch(errorFallback)
 
         break
       }
       case "user": {
-        imageRes = await renderUserOG(apiClient, id).catch(errorFallback)
+        imageRes = await renderUserOG(apiClient, id!).catch(errorFallback)
         break
       }
       case "list": {
-        imageRes = await renderListOG(apiClient, id).catch(errorFallback)
+        imageRes = await renderListOG(apiClient, id!).catch(errorFallback)
         break
       }
       default: {

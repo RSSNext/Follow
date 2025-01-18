@@ -49,6 +49,7 @@ function getRuntimeEnv() {
   }
 }
 
+declare const globalThis: any
 function injectExternalEnv<T>(originEnv: T): T {
   if (!("document" in globalThis)) {
     return originEnv
@@ -60,7 +61,7 @@ function injectExternalEnv<T>(originEnv: T): T {
   }
 
   for (const key in env) {
-    originEnv[key] = env[key]
+    originEnv[key as keyof T] = env[key]
   }
   return originEnv
 }

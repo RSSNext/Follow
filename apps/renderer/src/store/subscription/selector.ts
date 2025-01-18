@@ -43,7 +43,7 @@ export const folderFeedsByFeedIdSelector =
     const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")
     const feedIds: string[] = []
     for (const feedId in state.data) {
-      const subscription = state.data[feedId]
+      const subscription = state.data[feedId]!
       if (
         subscription.view === view &&
         (subscription.category === folderName || subscription.defaultCategory === folderName)

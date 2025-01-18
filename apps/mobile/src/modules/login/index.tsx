@@ -96,7 +96,7 @@ const TeamsCheckBox = forwardRef<
         const runAnimation = (index: number) => {
           "worklet"
           if (index < animations.length) {
-            shakeSharedValue.value = withTiming(animations[index], { duration: 100 }, () => {
+            shakeSharedValue.value = withTiming(animations[index]!, { duration: 100 }, () => {
               runAnimation(index + 1)
             })
           }

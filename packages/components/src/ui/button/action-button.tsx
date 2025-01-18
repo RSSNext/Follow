@@ -19,7 +19,7 @@ export interface ActionButtonProps {
   shortcut?: string
   disableTriggerShortcut?: boolean
   enableHoverableContent?: boolean
-  size?: "sm" | "md" | "base"
+  size?: "sm" | "base"
 
   /**
    * @description only trigger shortcut when focus with in `<Focusable />`

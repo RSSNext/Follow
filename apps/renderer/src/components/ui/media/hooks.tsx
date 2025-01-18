@@ -13,7 +13,7 @@ export const usePreviewMedia = (children?: React.ReactNode) => {
   return useCallback(
     (media: PreviewMediaProps[], initialIndex = 0) => {
       if (isMobile()) {
-        window.open(replaceImgUrlIfNeed(media[initialIndex].url))
+        window.open(replaceImgUrlIfNeed(media[initialIndex]!.url))
         return
       }
       present({

@@ -91,7 +91,7 @@ class FeedUnreadActions {
     const handler = (state: UnreadState): void => {
       let unread = 0
       for (const key in state.data) {
-        unread += state.data[key]
+        unread += state.data[key]!
       }
 
       fn(unread)

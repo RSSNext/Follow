@@ -40,7 +40,7 @@ export const useCategoriesByView = (view: FeedViewType) =>
       (state) =>
         new Set(
           subscriptionByViewSelector(view)(state)
-            .map((subscription) => subscription.category)
+            .map((subscription) => subscription!.category)
             .filter((category) => category !== null && category !== undefined)
             .filter(Boolean),
         ),
@@ -90,7 +90,7 @@ export const useAllFeeds = () => {
         const allSubscriptions = Object.values(store.feedIdByView).flat()
 
         for (const feedId of allSubscriptions) {
-          const subscription = store.data[feedId]
+          const subscription = store.data[feedId]!
           const feed = feedTitleMap[feedId]
           if (feed) {
             feedInfo.push({ title: subscription.title || feed || "", id: feedId })

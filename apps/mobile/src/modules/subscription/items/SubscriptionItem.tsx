@@ -46,7 +46,7 @@ import { GroupedContext, useViewPageCurrentView } from "../ctx"
 export const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const unreadCount = useUnreadCount(id)
-  const feed = useFeed(id)
+  const feed = useFeed(id)!
   const inGrouped = !!useContext(GroupedContext)
   const view = useViewPageCurrentView()
   const { isLoading } = usePrefetchFeed(id, { enabled: !subscription && !feed })

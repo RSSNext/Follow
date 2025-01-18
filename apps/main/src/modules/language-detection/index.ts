@@ -73,7 +73,7 @@ export const detectCodeStringLanguage = async function* (codeString: string) {
     logger.debug("no model results", codeString)
     return
   }
-  const firstModelResult = adjustLanguageConfidence(modelResults[0])
+  const firstModelResult = adjustLanguageConfidence(modelResults[0]!)
   if (firstModelResult.confidence < expectedRelativeConfidence) {
     logger.debug("first model result confidence is less than expected relative confidence")
     return

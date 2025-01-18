@@ -109,13 +109,13 @@ const PlaybackRateButton = () => {
   const handleClick = () => {
     const nextIndex = (currentIndex + 1) % rates.length
     setCurrentIndex(nextIndex)
-    AudioPlayer.setPlaybackRate(rates[nextIndex])
+    AudioPlayer.setPlaybackRate(rates[nextIndex]!)
   }
 
   return (
     <button onClick={handleClick}>
       <span className="block font-mono text-xs text-muted-foreground">
-        {rates[currentIndex].toFixed(2)}x
+        {rates[currentIndex]!.toFixed(2)}x
       </span>
     </button>
   )

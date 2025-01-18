@@ -119,7 +119,7 @@ export const baseTwConfig = {
         sm: "calc(var(--radius) - 4px)",
       },
 
-      typography: (theme) => ({
+      typography: (theme: any) => ({
         zinc: {
           css: {
             "--tw-prose-body": theme("colors.zinc.500"),

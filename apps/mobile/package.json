@@ -11,6 +11,7 @@
     "ios:device": "expo run:ios --device",
     "lint": "expo lint",
     "start": "expo start --dev-client",
+    "typecheck": "tsc --noEmit",
     "web": "expo start --web"
   },
   "dependencies": {

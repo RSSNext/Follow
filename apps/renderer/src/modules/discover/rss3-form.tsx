@@ -29,11 +29,11 @@ export function DiscoverRSS3() {
 
   return (
     <>
-      {data?.rss3.routes && (
+      {data?.rss3!.routes && (
         <div className="w-full max-w-[540px]">
           <DiscoverFeedForm
             routePrefix="rss3"
-            route={data.rss3.routes[Object.keys(data.rss3.routes)[0]]}
+            route={data.rss3.routes[Object.keys(data.rss3.routes)[0]!]!}
             noDescription
             submitButtonClassName="justify-center"
           />

@@ -48,7 +48,7 @@ export const WithdrawButton = () => {
 const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
   const { t } = useTranslation("settings")
   const wallet = useWallet()
-  const cashablePowerTokenBigInt = [BigInt(wallet.data?.[0].cashablePowerToken || 0n), 18] as const
+  const cashablePowerTokenBigInt = [BigInt(wallet.data?.[0]!.cashablePowerToken || 0n), 18] as const
   const cashablePowerTokenNumber = toNumber(cashablePowerTokenBigInt)
 
   const formSchema = z.object({
@@ -119,8 +119,8 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
           i18nKey="wallet.withdraw.availableBalance"
           components={{
             Balance: (
-              <Balance className="inline-block" value={wallet.data?.[0].cashablePowerToken || "0"}>
-                {wallet.data?.[0].cashablePowerToken || "0"}
+              <Balance className="inline-block" value={wallet.data?.[0]!.cashablePowerToken || "0"}>
+                {wallet.data?.[0]!.cashablePowerToken || "0"}
               </Balance>
             ),
           }}

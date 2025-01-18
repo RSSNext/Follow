@@ -53,7 +53,7 @@ export function immersiveTranslate({
     return
   }
 
-  if (html.childNodes.length === 1 && html.childNodes[0].nodeType === Node.TEXT_NODE) {
+  if (html.childNodes.length === 1 && html.childNodes[0]?.nodeType === Node.TEXT_NODE) {
     const textNode = html.childNodes[0] as Text
     if (!textNode.textContent) {
       return

@@ -93,7 +93,7 @@ export const ElectronAdditionActions = IN_ELECTRON
             entryReadabilityStatus === ReadabilityStatus.WAITING ? `animate-pulse` : "",
           ),
           key: "readability",
-          hide: views[view].wideMode || !populatedEntry.entries.url,
+          hide: views[view]!.wideMode || !populatedEntry.entries.url,
           active: isInReadability(entryReadabilityStatus),
           onClick: readabilityToggle,
         },

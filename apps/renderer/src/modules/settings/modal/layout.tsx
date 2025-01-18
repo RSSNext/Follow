@@ -54,7 +54,7 @@ export function SettingModalLayout(
       if (initialTab) {
         setTab(initialTab)
       } else {
-        setTab(availableSettings[0].path)
+        setTab(availableSettings[0]!.path)
       }
     }
   }, [availableSettings])

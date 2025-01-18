@@ -388,6 +388,9 @@ importers:
         specifier: npm:@vscode/vscode-languagedetection@^1.0.22
         version: '@vscode/vscode-languagedetection@1.0.22'
     devDependencies:
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@types/js-yaml':
         specifier: 4.0.9
         version: 4.0.9

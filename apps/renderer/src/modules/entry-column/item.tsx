@@ -68,7 +68,7 @@ export const EntryItemSkeleton: FC<{
   }
 
   return SkeletonItem ? (
-    <div className={cn(views[view].gridMode ? girdClassNames : "flex flex-col")}>
+    <div className={cn(views[view]!.gridMode ? girdClassNames : "flex flex-col")}>
       {SkeletonItem}
       {SkeletonItem}
       {SkeletonItem}

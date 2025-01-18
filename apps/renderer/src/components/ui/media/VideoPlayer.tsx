@@ -391,9 +391,9 @@ const PlayProgressBar = () => {
         setCurrentDragging(true)
       }}
       onValueChange={(value) => {
-        setDragTime(value[0])
+        setDragTime(value[0]!)
         startTransition(() => {
-          controls.seek(value[0])
+          controls.seek(value[0]!)
         })
       }}
       onValueCommit={() => {

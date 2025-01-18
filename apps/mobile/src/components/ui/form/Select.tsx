@@ -31,7 +31,7 @@ export function Select<T>({
 }: SelectProps<T>) {
   const [currentValue, setCurrentValue] = useState(() => {
     if (!value) {
-      return options[0].value
+      return options[0]!.value
     }
     return value
   })
@@ -65,7 +65,7 @@ export function Select<T>({
         }))}
         onPress={(e) => {
           const { index } = e.nativeEvent
-          handleChangeValue(options[index].value)
+          handleChangeValue(options[index]!.value)
         }}
       >
         <View

@@ -1,6 +1,5 @@
 {
   "name": "@follow/components",
-  "version": "0.0.1",
   "private": true,
   "sideEffects": false,
   "exports": {
@@ -16,6 +15,9 @@
     "./utils/*": "./src/utils/*"
   },
   "main": "./exports.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

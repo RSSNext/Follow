@@ -72,7 +72,7 @@ const ArticleElementResizeObserver = () => {
     setPosition({ x, y })
 
     const observer = new ResizeObserver((entries) => {
-      const entry = entries[0]
+      const entry = entries[0]!
       const { height, width } = entry.contentRect
       const { x, y } = entry.target.getBoundingClientRect()
 
@@ -117,7 +117,7 @@ const BoundingDetection: Component<{
     const $el = ref.current
     const observer = new IntersectionObserver(
       (entries) => {
-        const entry = entries[0]
+        const entry = entries[0]!
 
         if (bounding === "start") startSetter(entry.isIntersecting)
         else endSetter(entry.isIntersecting)

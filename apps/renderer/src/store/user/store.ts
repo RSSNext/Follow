@@ -20,7 +20,7 @@ const avatarBatcher = create({
 
     const result = Array.from({ length: ids.length }).fill(null) as (typeof res)[string][]
     for (const [i, id] of ids.entries()) {
-      result[i] = res[id]
+      result[i] = res[id]!
     }
     return result
   },

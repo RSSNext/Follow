@@ -110,7 +110,7 @@ export const EntryList: FC<EntryListProps> = memo(
         groupCounts
           ? groupCounts.reduce(
               (acc, count, index) => {
-                acc[index + 1] = acc[index] + count
+                acc[index + 1] = acc[index]! + count
                 return acc
               },
               [0],
@@ -263,7 +263,7 @@ export const EntryList: FC<EntryListProps> = memo(
                     }
                   >
                     <EntryHeadDateItem
-                      entryId={entriesIds[virtualRow.index]}
+                      entryId={entriesIds[virtualRow.index]!}
                       isSticky={isActiveStickyItem}
                     />
                   </div>
@@ -277,7 +277,7 @@ export const EntryList: FC<EntryListProps> = memo(
                   ref={rowVirtualizer.measureElement}
                   data-index={virtualRow.index}
                 >
-                  <EntryItem entryId={entriesIds[virtualRow.index]} view={view} />
+                  <EntryItem entryId={entriesIds[virtualRow.index]!} view={view} />
                 </div>
               </Fragment>
             )

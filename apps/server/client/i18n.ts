@@ -40,7 +40,7 @@ export const fallbackLanguage = "en"
 export const initI18n = async () => {
   const i18next = jotaiStore.get(i18nAtom)
 
-  const lang = getGeneralSettings().language
+  const lang = getGeneralSettings().language!
 
   const mergedResources = {
     ...defaultResources,

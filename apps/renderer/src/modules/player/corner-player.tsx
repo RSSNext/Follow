@@ -352,8 +352,8 @@ export const PlayerProgress = () => {
           value={[controlledCurrentTime]}
           onPointerDown={() => setIsDraggingProgress(true)}
           onPointerUp={() => setIsDraggingProgress(false)}
-          onValueChange={(value) => setControlledCurrentTime(value[0])}
-          onValueCommit={(value) => AudioPlayer.seek(value[0])}
+          onValueChange={(value) => setControlledCurrentTime(value[0]!)}
+          onValueCommit={(value) => AudioPlayer.seek(value[0]!)}
         >
           <Slider.Track className="relative h-1 w-full grow rounded bg-gray-200 duration-200 group-hover:bg-gray-300 dark:bg-neutral-700 group-hover:dark:bg-neutral-600">
             <Slider.Range className="absolute h-1 rounded bg-theme-accent-400 dark:bg-theme-accent-700" />

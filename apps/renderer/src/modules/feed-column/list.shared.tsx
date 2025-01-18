@@ -42,7 +42,7 @@ export const useFeedsGroupedData = (view: FeedViewType) => {
 
     const groupFolder = {} as Record<string, string[]>
 
-    for (const subscription of data) {
+    for (const subscription of data.filter((s) => !!s)) {
       const category =
         subscription.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
 
@@ -66,11 +66,11 @@ export const useListsGroupedData = (view: FeedViewType) => {
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
-    const lists = data.filter((s) => "listId" in s)
+    const lists = data.filter((s) => s && "listId" in s)
 
     const groupFolder = {} as Record<string, string[]>
 
-    for (const subscription of lists) {
+    for (const subscription of lists.filter((s) => !!s)) {
       groupFolder[subscription.feedId] = [subscription.feedId]
     }
 
@@ -86,11 +86,11 @@ export const useInboxesGroupedData = (view: FeedViewType) => {
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
-    const inboxes = data.filter((s) => "inboxId" in s)
+    const inboxes = data.filter((s) => s && "inboxId" in s)
 
     const groupFolder = {} as Record<string, string[]>
 
-    for (const subscription of inboxes) {
+    for (const subscription of inboxes.filter((s) => !!s)) {
       if (!subscription.inboxId) continue
       groupFolder[subscription.inboxId] = [subscription.inboxId]
     }
@@ -127,7 +127,7 @@ export const ListHeader = ({ view }: { view: number }) => {
         let unread = 0
 
         for (const category in feedsData) {
-          for (const feedId of feedsData[category]) {
+          for (const feedId of feedsData[category]!) {
             unread += state.data[feedId] || 0
           }
         }
@@ -155,7 +155,7 @@ export const ListHeader = ({ view }: { view: number }) => {
           }
         }}
       >
-        {view !== undefined && t(views[view].name)}
+        {view !== undefined && t(views[view]!.name as any)}
       </div>
       <div className="ml-2 flex items-center gap-3 text-base text-zinc-400 dark:text-zinc-600 lg:text-sm lg:!text-theme-vibrancyFg">
         <SortButton />

@@ -54,7 +54,7 @@ export default function RsshubForm() {
   if (!parsedRoute || !routePrefix) {
     return null
   }
-  return <FormImpl route={parsedRoute} routePrefix={routePrefix as string} name={name} />
+  return <FormImpl route={parsedRoute} routePrefix={routePrefix as string} name={name!} />
 }
 
 function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
@@ -97,7 +97,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
     const ret = {} as Record<string, string | null>
     if (!route.parameters) return ret
     for (const key in route.parameters) {
-      const params = normalizeRSSHubParameters(route.parameters[key])
+      const params = normalizeRSSHubParameters(route.parameters[key]!)
       if (!params) continue
       ret[key] = params.default
     }
@@ -123,7 +123,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
         <KeyboardAwareScrollView className="bg-system-grouped-background">
           <View className="bg-secondary-system-grouped-background mx-2 mt-4 gap-4 rounded-lg px-3 py-6">
             {keys.map((keyItem) => {
-              const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
+              const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name]!)
 
               return (
                 <View key={keyItem.name}>

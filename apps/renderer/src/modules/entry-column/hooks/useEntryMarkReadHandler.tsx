@@ -29,7 +29,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   )
 
   return useMemo(() => {
-    if (views[feedView].wideMode && renderAsRead) {
+    if (views[feedView]!.wideMode && renderAsRead) {
       return handleRenderAsRead
     }
 

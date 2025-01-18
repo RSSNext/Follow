@@ -74,7 +74,7 @@ export async function translate({
   if (!language) {
     return null
   }
-  let fields = language && view !== undefined ? views[view!].translation.split(",") : []
+  let fields = language && view !== undefined ? views[view!]!.translation.split(",") : []
   if (extraFields) {
     fields = [...fields, ...extraFields]
   }

@@ -217,7 +217,7 @@ const ViewSwitchButton: FC<{
     <ActionButton
       ref={setNodeRef}
       key={item.name}
-      tooltip={t(item.name)}
+      tooltip={t(item.name as any)}
       shortcut={`${index + 1}`}
       className={cn(
         active === index && item.className,
@@ -237,7 +237,7 @@ const ViewSwitchButton: FC<{
       {item.icon}
       {showSidebarUnreadCount ? (
         <div className="text-[0.625rem] font-medium leading-none">
-          {unreadByView[index] > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[index]}
+          {unreadByView[index]! > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[index]}
         </div>
       ) : (
         <i

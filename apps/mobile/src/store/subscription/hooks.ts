@@ -114,7 +114,7 @@ export const useSortedGroupedSubscription = (
       })
       const sortedList = [] as { category: string; subscriptionIds: string[] }[]
       for (const category of sortedCategories) {
-        sortedList.push({ category, subscriptionIds: grouped[category] })
+        sortedList.push({ category, subscriptionIds: grouped[category]! })
       }
       return sortedList
     }, [grouped, sortBy, sortOrder]),
