@@ -105,7 +105,7 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
   )
 }
 
-export function useTOTPModalWrapper<T>(
+export function useTOTPModalWrapper<T extends { TOTPCode?: string }>(
   callback: (input: T) => Promise<any>,
   options?: { force?: boolean },
 ) {
