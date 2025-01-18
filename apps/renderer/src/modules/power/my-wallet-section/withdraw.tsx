@@ -73,10 +73,12 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
       address,
       amount,
       toRss3,
+      TOTPCode,
     }: {
       address: string
       amount: number
       toRss3?: boolean
+      TOTPCode?: string
     }) => {
       const amountBigInt = from(amount, 18)[0]
       await apiClient.wallets.transactions.withdraw.$post({
@@ -84,6 +86,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
           address,
           amount: amountBigInt.toString(),
           toRss3,
+          TOTPCode,
         },
       })
     },
