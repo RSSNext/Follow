@@ -7,10 +7,9 @@ import PagerView from "react-native-pager-view"
 
 import { ReAnimatedExpoImage } from "@/src/components/common/AnimatedComponents"
 import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
-import { useShouldAnimate } from "@/src/modules/entry/ctx"
 import { useEntry } from "@/src/store/entry/hooks"
 
-function Media({ media, shouldAnimate }: { media: any; shouldAnimate: boolean }) {
+function Media({ media }: { media: any }) {
   const isVideo = media.type === "video"
   const imageUrl = isVideo ? media.preview_image_url : media.url
   const videoUrl = media.url
@@ -44,7 +43,7 @@ function Media({ media, shouldAnimate }: { media: any; shouldAnimate: boolean })
               aspectRatio: media?.height && media.width ? media.width / media.height : 9 / 16,
               display: isVideo ? (status?.isLoaded ? "none" : "flex") : "flex",
             }}
-            sharedTransitionTag={shouldAnimate && imageUrl ? `entry-image-${imageUrl}` : undefined}
+            sharedTransitionTag={imageUrl ? `entry-image-${imageUrl}` : undefined}
             allowDownscaling={false}
           />
         ) : (
@@ -75,8 +74,6 @@ export default function EntryDetailPage() {
       }),
   )
 
-  const shouldAnimate = useShouldAnimate()
-
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [height, setHeight] = useState(0)
 
@@ -101,7 +98,7 @@ export default function EntryDetailPage() {
               }}
             >
               {mediaList.map((media) => {
-                return <Media key={media.url} media={media} shouldAnimate={shouldAnimate} />
+                return <Media key={media.url} media={media} />
               })}
             </PagerView>
           )}
