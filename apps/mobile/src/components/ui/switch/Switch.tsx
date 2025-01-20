@@ -1,7 +1,14 @@
-import type { useState } from "react"
-import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react"
+import { forwardRef, useEffect, useImperativeHandle } from "react"
 import type { SwitchChangeEvent } from "react-native"
-import { Animated, Easing, Pressable, StyleSheet, useAnimatedValue, View } from "react-native"
+import { Pressable, StyleSheet, View } from "react-native"
+import Animated, {
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated"
 
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -27,71 +34,21 @@ export type SwitchRef = {
 }
 export const Switch = forwardRef<SwitchRef, SwitchProps>(
   ({ value, onValueChange, onChange, size = "default" }, ref) => {
-    const animatedValue = useAnimatedValue(0)
-    const circleWidthAnimatedValue = useAnimatedValue(0)
-    const translateX = useAnimatedValue(0)
-    const colorAnimatedValue = useAnimatedValue(0)
-
-    useEffect(() => {
-      Animated.timing(animatedValue, {
-        toValue: value ? 1 : 0,
-        duration: 110,
-        easing: Easing.linear,
-        useNativeDriver: false,
-      }).start()
-
-      Animated.timing(colorAnimatedValue, {
-        toValue: value ? 1 : 0,
-        duration: 300,
-        easing: Easing.linear,
-        useNativeDriver: false,
-      }).start()
-    }, [value])
+    const progress = useSharedValue(value ? 1 : 0)
+    const scale = useSharedValue(1)
+    const translateX = useSharedValue(0)
 
     const onTouchStart = () => {
-      Animated.timing(circleWidthAnimatedValue, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: false,
-      }).start()
-      if (value)
-        Animated.timing(translateX, {
-          toValue: size === "sm" ? -4 : -7,
-          duration: 200,
-          useNativeDriver: false,
-        }).start()
+      scale.value = withSpring(1.1)
+      if (value) {
+        translateX.value = withSpring(size === "sm" ? -4 : -7)
+      }
     }
 
     const onTouchEnd = () => {
-      Animated.timing(circleWidthAnimatedValue, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: false,
-      }).start()
-      Animated.timing(translateX, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: false,
-      }).start()
+      scale.value = withSpring(1)
+      translateX.value = withSpring(0)
     }
-
-    const moveToggle = useMemo(
-      () =>
-        animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: size === "sm" ? [2, 20] : [2.3, 22],
-        }),
-      [animatedValue, size],
-    )
-
-    const circleWidth = useMemo(
-      () =>
-        circleWidthAnimatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: size === "sm" ? [18, 21] : [27.8, 35],
-        }),
-      [circleWidthAnimatedValue, size],
-    )
 
     useImperativeHandle(ref, () => ({
       value: !!value,
@@ -99,10 +56,39 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(
 
     const activeBgColor = accentColor
     const inactiveBgColor = useColor("secondarySystemFill")
-    const bgColor = colorAnimatedValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [inactiveBgColor, activeBgColor],
+
+    const toggleStyle = useAnimatedStyle(() => {
+      const backgroundColor = interpolateColor(
+        progress.value,
+        [0, 1],
+        [inactiveBgColor, activeBgColor],
+      )
+
+      return {
+        backgroundColor,
+      }
     })
+
+    const circleStyle = useAnimatedStyle(() => {
+      const marginLeft = interpolate(progress.value, [0, 1], size === "sm" ? [2, 20] : [2.3, 22])
+
+      const width = interpolate(scale.value, [1, 1.1], size === "sm" ? [18, 21] : [27.8, 35])
+
+      return {
+        marginLeft,
+        width,
+        transform: [{ translateX: translateX.value }, { translateY: -0.4 }, { scale: scale.value }],
+      }
+    })
+
+    useEffect(() => {
+      // Update progress when value changes
+      if (value && progress.value === 0) {
+        progress.value = withTiming(1)
+      } else if (!value && progress.value === 1) {
+        progress.value = withTiming(0)
+      }
+    }, [progress, value])
 
     return (
       <View style={styles.container}>
@@ -115,21 +101,12 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(
           }}
         >
           <Animated.View
-            style={[
-              size === "sm" ? styles.toggleContainerSm : styles.toggleContainer,
-              {
-                backgroundColor: bgColor,
-              },
-            ]}
+            style={[size === "sm" ? styles.toggleContainerSm : styles.toggleContainer, toggleStyle]}
           >
             <Animated.View
               style={[
                 size === "sm" ? styles.toggleWheelStyleSm : styles.toggleWheelStyle,
-                {
-                  marginLeft: moveToggle,
-                  width: circleWidth,
-                  transform: [{ translateX }, { translateY: -0.4 }],
-                },
+                circleStyle,
               ]}
             />
           </Animated.View>

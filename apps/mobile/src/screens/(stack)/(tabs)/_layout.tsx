@@ -1,5 +1,4 @@
 import { FeedViewType } from "@follow/constants"
-import { transformUriPath } from "@follow/utils"
 import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
 import { router, Tabs } from "expo-router"
 import { useContext, useEffect, useMemo, useState } from "react"

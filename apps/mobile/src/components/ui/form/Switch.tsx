@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import type { StyleProp, Switch as NativeSwitch, ViewStyle } from "react-native"
+import type { StyleProp, ViewStyle } from "react-native"
 import { Text, View } from "react-native"
 
 import type { SwitchProps, SwitchRef } from "../switch/Switch"

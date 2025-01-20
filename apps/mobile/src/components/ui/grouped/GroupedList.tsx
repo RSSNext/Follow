@@ -3,9 +3,8 @@ import type { FC, PropsWithChildren } from "react"
 import * as React from "react"
 import { Fragment } from "react"
 import type { ViewProps } from "react-native"
-import { Pressable, StyleSheet, Switch, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 
-import { setGeneralSetting } from "@/src/atoms/settings/general"
 import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
 
