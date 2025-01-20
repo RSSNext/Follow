@@ -14,10 +14,6 @@ export type StarCommand = Command<{
   id: typeof COMMAND_ID.entry.star
   fn: (data: { entryId: string; view?: FeedViewType }) => void
 }>
-export type UnStarCommand = Command<{
-  id: typeof COMMAND_ID.entry.unstar
-  fn: (data: { entryId: string }) => void
-}>
 
 export type DeleteCommand = Command<{
   id: typeof COMMAND_ID.entry.delete
@@ -43,10 +39,6 @@ export type ViewSourceContentCommand = Command<{
   id: typeof COMMAND_ID.entry.viewSourceContent
   fn: (data: { entryId: string }) => void
 }>
-export type ViewEntryContentCommand = Command<{
-  id: typeof COMMAND_ID.entry.viewEntryContent
-  fn: () => void
-}>
 
 export type ShareCommand = Command<{
   id: typeof COMMAND_ID.entry.share
@@ -55,11 +47,6 @@ export type ShareCommand = Command<{
 
 export type ReadCommand = Command<{
   id: typeof COMMAND_ID.entry.read
-  fn: ({ entryId }) => void
-}>
-
-export type UnReadCommand = Command<{
-  id: typeof COMMAND_ID.entry.unread
   fn: ({ entryId }) => void
 }>
 
@@ -76,16 +63,13 @@ export type ToggleAITranslationCommand = Command<{
 export type EntryCommand =
   | TipCommand
   | StarCommand
-  | UnStarCommand
   | DeleteCommand
   | CopyLinkCommand
   | CopyTitleCommand
   | OpenInBrowserCommand
   | ViewSourceContentCommand
-  | ViewEntryContentCommand
   | ShareCommand
   | ReadCommand
-  | UnReadCommand
   | ToggleAISummaryCommand
   | ToggleAITranslationCommand
 

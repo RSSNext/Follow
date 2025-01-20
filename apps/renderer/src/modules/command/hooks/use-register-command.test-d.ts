@@ -33,13 +33,6 @@ test("useRegisterFollowCommand types", () => {
           expectTypeOf(entryId).toEqualTypeOf<string>()
         },
       },
-      {
-        id: COMMAND_ID.entry.viewEntryContent,
-        label: "",
-        run: (...args) => {
-          expectTypeOf(args).toEqualTypeOf<[]>()
-        },
-      },
     ]),
   )
 
@@ -69,13 +62,6 @@ test("useRegisterFollowCommand types", () => {
         label: "",
         run: ({ entryId }) => {
           expectTypeOf(entryId).toEqualTypeOf<string>()
-        },
-      },
-      {
-        id: COMMAND_ID.entry.viewEntryContent,
-        label: "",
-        run: (...args) => {
-          expectTypeOf(args).toEqualTypeOf<[]>()
         },
       },
     ]),

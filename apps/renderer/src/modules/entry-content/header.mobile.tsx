@@ -187,6 +187,7 @@ const HeaderRightActions = ({
                       <CommandMotionButton
                         key={item.id}
                         commandId={item.id}
+                        active={item.active}
                         onClick={() => {
                           setCtxOpen(false)
                           item.onClick?.()
@@ -207,9 +208,11 @@ const HeaderRightActions = ({
 const CommandMotionButton = ({
   commandId,
   onClick,
+  active,
 }: {
   commandId: FollowCommandId
   onClick: () => void
+  active?: boolean
 }) => {
   const command = useCommand(commandId)
   if (!command) return null
@@ -219,7 +222,7 @@ const CommandMotionButton = ({
       layout={false}
       className="flex w-full items-center gap-2 px-4 py-2"
     >
-      {command.icon}
+      {typeof command.icon === "function" ? command.icon({ isActive: active }) : command.icon}
       {command.label.title}
     </MotionButtonBase>
   )

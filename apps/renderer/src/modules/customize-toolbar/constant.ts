@@ -9,7 +9,7 @@ export interface ToolbarActionOrder {
 
 export const DEFAULT_ACTION_ORDER: ToolbarActionOrder = {
   main: Object.values(COMMAND_ID.entry)
-    .filter((id) => !([COMMAND_ID.entry.read, COMMAND_ID.entry.unread] as string[]).includes(id))
+    .filter((id) => !([COMMAND_ID.entry.read] as string[]).includes(id))
     .filter(
       (id) =>
         !([COMMAND_ID.entry.copyLink, COMMAND_ID.entry.openInBrowser] as string[]).includes(id),
@@ -22,7 +22,6 @@ export const DEFAULT_ACTION_ORDER: ToolbarActionOrder = {
           COMMAND_ID.entry.copyLink,
           COMMAND_ID.entry.openInBrowser,
           COMMAND_ID.entry.read,
-          COMMAND_ID.entry.unread,
         ] as string[]
       ).includes(id),
     ),
