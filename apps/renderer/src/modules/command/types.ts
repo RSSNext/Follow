@@ -58,7 +58,7 @@ export interface Command<
     title: string
     subTitle?: string
   }
-  readonly icon?: ReactNode
+  readonly icon?: ReactNode | ((props?: { isActive?: boolean }) => ReactNode)
   readonly category: CommandCategory
   readonly run: T["fn"]
 
@@ -82,7 +82,7 @@ export interface CommandOptions<
     | (() => string)
     | { title: string; subTitle?: string }
     | (() => { title: string; subTitle?: string })
-  icon?: ReactNode
+  icon?: ReactNode | ((props?: { isActive?: boolean }) => ReactNode)
   category?: CommandCategory
   run: T["fn"]
 

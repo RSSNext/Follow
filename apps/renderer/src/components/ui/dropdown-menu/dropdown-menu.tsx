@@ -95,9 +95,10 @@ const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean
-    icon?: React.ReactNode
+    icon?: React.ReactNode | ((props?: { isActive?: boolean }) => React.ReactNode)
+    active?: boolean
   }
->(({ className, inset, icon, ...props }, ref) => (
+>(({ className, inset, icon, active, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
@@ -109,7 +110,9 @@ const DropdownMenuItem = React.forwardRef<
     {...props}
   >
     {!!icon && (
-      <span className="mr-1.5 inline-flex size-4 items-center justify-center">{icon}</span>
+      <span className="mr-1.5 inline-flex size-4 items-center justify-center">
+        {typeof icon === "function" ? icon({ isActive: active }) : icon}
+      </span>
     )}
     {props.children}
     {/* Justify Fill */}

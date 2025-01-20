@@ -46,7 +46,9 @@ export const SortableActionButton = ({ id }: { id: UniqueIdentifier }) => {
   return (
     <SortableItem id={id}>
       <div className="flex flex-col items-center rounded-lg p-2 hover:bg-theme-button-hover">
-        <div className="flex size-8 items-center justify-center text-xl">{cmd.icon}</div>
+        <div className="flex size-8 items-center justify-center text-xl">
+          {typeof cmd.icon === "function" ? cmd.icon({ isActive: false }) : cmd.icon}
+        </div>
         <div className="mt-1 text-center text-xs text-neutral-500 dark:text-neutral-400">
           {cmd.label.title}
         </div>
