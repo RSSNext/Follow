@@ -130,8 +130,19 @@ class EntryActions {
     await tx.run()
   }
 
-  reset() {
-    set(defaultState)
+  reset(entries: EntryModel[] = []) {
+    if (entries.length > 0) {
+      immerSet((draft) => {
+        // remove all entries from draft.data not in entries
+        for (const existingEntry of Object.values(draft.data)) {
+          if (!entries.some((e) => e.id === existingEntry.id)) {
+            delete draft.data[existingEntry.id]
+          }
+        }
+      })
+    } else {
+      set(defaultState)
+    }
   }
 }
 
@@ -154,11 +165,11 @@ class EntrySyncServices {
       },
     })
 
+    const entries = honoMorph.toEntry(res.data)
     if (!pageParam) {
-      entryActions.reset()
+      entryActions.reset(entries)
     }
 
-    const entries = honoMorph.toEntry(res.data)
     await entryActions.upsertMany(entries)
     if (params.listId) {
       await listActions.addEntryIds({

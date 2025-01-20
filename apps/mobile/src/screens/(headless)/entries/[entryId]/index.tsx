@@ -8,7 +8,7 @@ import PagerView from "react-native-pager-view"
 import { ReAnimatedExpoImage } from "@/src/components/common/AnimatedComponents"
 import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
 import { useShouldAnimate } from "@/src/modules/entry/ctx"
-import { DATA } from "@/src/modules/entry/data"
+import { useEntry } from "@/src/store/entry/hooks"
 
 function Media({ media, shouldAnimate }: { media: any; shouldAnimate: boolean }) {
   const isVideo = media.type === "video"
@@ -57,14 +57,13 @@ function Media({ media, shouldAnimate }: { media: any; shouldAnimate: boolean })
 
 export default function EntryDetailPage() {
   const { entryId } = useLocalSearchParams()
-  const initialIndex = DATA.findIndex((item) => item.entries.id === entryId)
-  const item = DATA[initialIndex]!
+  const item = useEntry(entryId as string)
 
   const mediaList =
-    item?.entries.media
-      .filter((media) => media.url)
+    item?.media
+      ?.filter((media) => media.url)
       .filter((media, index) => {
-        return item.entries.media.findIndex((m) => m.url === media.url) === index
+        return item.media?.findIndex((m) => m.url === media.url) === index
       }) || []
 
   const windowWidth = Dimensions.get("window").width
@@ -72,7 +71,7 @@ export default function EntryDetailPage() {
     ...mediaList
       .filter((media) => media.height && media.width)
       .map((media) => {
-        return windowWidth * (media.height / media.width)
+        return windowWidth * (media.height! / media.width!)
       }),
   )
 
@@ -93,7 +92,7 @@ export default function EntryDetailPage() {
         >
           {mediaList.length > 0 && (
             <PagerView
-              key={item.entries.id}
+              key={item?.id}
               style={{ flex: 1 }}
               initialPage={0}
               orientation="horizontal"
@@ -122,7 +121,7 @@ export default function EntryDetailPage() {
           )}
         </View>
         <HtmlWeb
-          content={item.entries.content || ""}
+          content={item?.content || ""}
           onLayout={async (size) => {
             if (size[1] !== height) {
               setHeight(size[1])

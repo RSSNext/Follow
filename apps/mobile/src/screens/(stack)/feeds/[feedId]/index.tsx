@@ -1,37 +1,49 @@
 import { Stack, useLocalSearchParams } from "expo-router"
-import { ScrollView, Text, View } from "react-native"
+import { useState } from "react"
+import { View } from "react-native"
 
 import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { EntryColumnGrid } from "@/src/modules/entry/gird"
+import { getEntry } from "@/src/store/entry/getter"
+import { useEntryIdsByFeedId, usePrefetchEntries } from "@/src/store/entry/hooks"
+import { useFeed } from "@/src/store/feed/hooks"
 
-export default function Feed() {
-  const { feedId } = useLocalSearchParams()
+function FeedEntryList({ feedId }: { feedId: string }) {
+  const [pageParam, setPageParam] = useState<string | undefined>()
+  usePrefetchEntries({ feedId, pageParam })
+  const feed = useFeed(feedId)
+  const entryIds = useEntryIdsByFeedId(feedId)
 
   return (
-    <View>
+    <View className="flex-1 flex-row bg-gray-50">
       <Stack.Screen
         options={{
           headerShown: true,
           headerBackTitle: "Subscriptions",
           headerBackground: BlurEffect,
-
           headerTransparent: true,
-          headerTitle: "Feed",
+          headerTitle: feed?.title ?? "Feed",
         }}
       />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" className="h-full">
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-      </ScrollView>
+      <EntryColumnGrid
+        entryIds={entryIds}
+        onEndReached={() => {
+          const lastEntryId = entryIds.at(-1)
+          if (!lastEntryId) return
+          const lastEntry = getEntry(lastEntryId)
+          if (!lastEntry) return
+          setPageParam(lastEntry.publishedAt.toISOString())
+        }}
+      />
     </View>
   )
+}
+
+export default function Feed() {
+  const { feedId } = useLocalSearchParams()
+  if (!feedId || Array.isArray(feedId)) {
+    return null
+  }
+
+  return <FeedEntryList feedId={feedId} />
 }
