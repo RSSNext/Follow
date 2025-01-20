@@ -1,13 +1,26 @@
-import { ScrollView } from "react-native"
+import { router } from "expo-router"
 
-import { GroupedInsetListCard, GroupedInsetListItem } from "@/src/components/ui/grouped/GroupedList"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/common/SafeNavigationScrollView"
+import {
+  GroupedInsetListCard,
+  GroupedInsetListNavigationLink,
+} from "@/src/components/ui/grouped/GroupedList"
 
 export const PrivacyScreen = () => {
   return (
-    <ScrollView>
+    <SafeNavigationScrollView className="bg-system-grouped-background">
+      <NavigationBlurEffectHeader title="Privacy" />
       <GroupedInsetListCard>
-        <GroupedInsetListItem />
+        <GroupedInsetListNavigationLink
+          label="Teams"
+          onPress={() => {
+            router.push("/teams")
+          }}
+        />
       </GroupedInsetListCard>
-    </ScrollView>
+    </SafeNavigationScrollView>
   )
 }

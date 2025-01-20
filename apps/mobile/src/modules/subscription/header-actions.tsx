@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native"
 import type { ContextMenuAction } from "react-native-context-menu-view"
-import ContextMenu from "react-native-context-menu-view"
 
+import { DropdownMenu } from "@/src/components/ui/dropdown/DropdownMenu"
 import { AZSortAscendingLettersCuteReIcon } from "@/src/icons/AZ_sort_ascending_letters_cute_re"
 import { AZSortDescendingLettersCuteReIcon } from "@/src/icons/AZ_sort_descending_letters_cute_re"
 import { Numbers90SortAscendingCuteReIcon } from "@/src/icons/numbers_90_sort_ascending_cute_re"
@@ -42,10 +42,10 @@ export const SortActionButton = () => {
 
   const Icon = map[sortMethod][sortOrder]
   return (
-    <ContextMenu
-      dropdownMenuMode
-      actions={actions}
-      onPress={(e) => {
+    <DropdownMenu
+      options={actions}
+      currentValue={sortMethod}
+      handlePress={(e) => {
         const [firstArgs, secondary] = e.nativeEvent.indexPath
 
         switch (firstArgs) {
@@ -74,6 +74,6 @@ export const SortActionButton = () => {
       <TouchableOpacity className="size-6 rounded-full">
         <Icon color={accentColor} />
       </TouchableOpacity>
-    </ContextMenu>
+    </DropdownMenu>
   )
 }

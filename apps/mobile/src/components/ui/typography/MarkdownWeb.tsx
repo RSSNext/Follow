@@ -24,7 +24,6 @@ const MarkdownWeb: WebComponent<{ value: string; style?: React.CSSProperties }> 
         dangerouslySetInnerHTML={{
           __html: `
         body, html {
-            height: 100%;
             overflow: hidden;
           }
         `,

@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
-import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
 import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
 import { SettingRoutes } from "@/src/modules/settings/routes"

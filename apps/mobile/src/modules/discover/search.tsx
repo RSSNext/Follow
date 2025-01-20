@@ -17,7 +17,7 @@ import {
 } from "react-native"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 

@@ -2,12 +2,12 @@ import { cn } from "@follow/utils"
 import { useEffect, useMemo, useState } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
 import { Text, View } from "react-native"
-import ContextMenu from "react-native-context-menu-view"
 import { useEventCallback } from "usehooks-ts"
 
 import { MingcuteDownLineIcon } from "@/src/icons/mingcute_down_line"
 import { accentColor } from "@/src/theme/colors"
 
+import { DropdownMenu } from "../dropdown/DropdownMenu"
 import { FormLabel } from "./Label"
 
 interface SelectProps<T> {
@@ -53,20 +53,18 @@ export function Select<T>({
   }, [])
 
   return (
-    <View className="w-full flex-1 flex-row items-center">
+    <View className="flex-1 flex-row items-center">
       {!!label && <FormLabel className="pl-2" label={label} />}
+
       <View className="flex-1" />
       {/* Trigger */}
-      <ContextMenu
-        dropdownMenuMode
-        actions={options.map((option) => ({
-          title: option.label,
-          selected: option.value === currentValue,
+      <DropdownMenu<T>
+        options={options.map((option) => ({
+          label: option.label,
+          value: option.value,
         }))}
-        onPress={(e) => {
-          const { index } = e.nativeEvent
-          handleChangeValue(options[index]!.value)
-        }}
+        currentValue={currentValue}
+        handleChangeValue={handleChangeValue}
       >
         <View
           className={cn(
@@ -81,7 +79,7 @@ export function Select<T>({
             <MingcuteDownLineIcon color={accentColor} height={18} width={18} />
           </View>
         </View>
-      </ContextMenu>
+      </DropdownMenu>
     </View>
   )
 }

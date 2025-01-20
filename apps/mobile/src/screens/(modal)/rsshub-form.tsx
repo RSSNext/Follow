@@ -167,7 +167,6 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                       render={({ field: { onChange, value } }) => (
                         <Select
                           label={keyItem.name}
-                          wrapperClassName="mt-2"
                           options={parameters.options ?? []}
                           value={value}
                           onValueChange={onChange}
@@ -190,6 +189,10 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
           {!!route.description && (
             <View className="bg-system-background mt-4 flex-1 px-4">
               <MarkdownWeb
+                style={{
+                  paddingTop: 16,
+                  paddingBottom: 16,
+                }}
                 value={route.description.replaceAll("::: ", ":::")}
                 dom={{ matchContents: true, scrollEnabled: false }}
               />
