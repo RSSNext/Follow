@@ -8,7 +8,7 @@ import { useEffect } from "react"
 
 function useSize(callback: (size: [number, number]) => void) {
   useEffect(() => {
-    const lastSize = [document.body.clientWidth, document.body.clientHeight]
+    const lastSize = [document.body.clientWidth, document.body.clientHeight] as [number, number]
 
     // Observe window size changes
     const observer = new ResizeObserver((entries) => {

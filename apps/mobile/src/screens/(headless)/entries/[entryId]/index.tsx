@@ -58,13 +58,14 @@ function Media({ media, shouldAnimate }: { media: any; shouldAnimate: boolean })
 export default function EntryDetailPage() {
   const { entryId } = useLocalSearchParams()
   const initialIndex = DATA.findIndex((item) => item.entries.id === entryId)
-  const item = DATA[initialIndex]
+  const item = DATA[initialIndex]!
 
-  const mediaList = item?.entries.media
-    .filter((media) => media.url)
-    .filter((media, index) => {
-      return item.entries.media.findIndex((m) => m.url === media.url) === index
-    })
+  const mediaList =
+    item?.entries.media
+      .filter((media) => media.url)
+      .filter((media, index) => {
+        return item.entries.media.findIndex((m) => m.url === media.url) === index
+      }) || []
 
   const windowWidth = Dimensions.get("window").width
   const maxMediaHeight = Math.max(
