@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
   GroupedInsetListCard,
   GroupedInsetListNavigationLink,
+  GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
 import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
@@ -24,7 +25,6 @@ import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
 import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
 
 import { useSettingsNavigation } from "./hooks"
-import { SettingNavigationLinkIcon } from "./SettingNavigationLink"
 
 interface GroupNavigationLink {
   label: string
@@ -162,9 +162,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />
@@ -178,9 +178,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />
@@ -194,9 +194,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />
@@ -210,9 +210,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />

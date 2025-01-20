@@ -23,7 +23,7 @@ import {
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
-import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
+import { Markdown } from "@/src/components/ui/typography/Markdown"
 import { toast } from "@/src/lib/toast"
 import { feedSyncServices } from "@/src/store/feed/store"
 
@@ -188,13 +188,13 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
           {!!route.description && (
             <View className="bg-system-background mt-4 flex-1 px-4">
-              <MarkdownWeb
+              <Markdown
                 style={{
                   paddingTop: 16,
                   paddingBottom: 16,
                 }}
                 value={route.description.replaceAll("::: ", ":::")}
-                dom={{ matchContents: true, scrollEnabled: false }}
+                webViewProps={{ matchContents: true, scrollEnabled: false }}
               />
             </View>
           )}

@@ -1,22 +1,19 @@
 import { callWebviewExpose } from "@follow/shared"
-import { parseSafeUrl, transformVideoUrl } from "@follow/utils"
 import * as Linking from "expo-linking"
 import type { RefObject } from "react"
 import { useCallback, useEffect, useState } from "react"
 import { Platform } from "react-native"
-import type { WebViewNavigation, WebViewProps } from "react-native-webview"
+import type { WebViewProps } from "react-native-webview"
 import { WebView } from "react-native-webview"
 
+import { useWebViewNavigation } from "@/src/hooks/useWebViewNavigation"
 import { signOut } from "@/src/lib/auth"
-import { useOpenLink } from "@/src/lib/hooks/use-open-link"
 
 const presetUri = Platform.select({
   ios: "rn-web/index.html",
   android: "file:///android_asset/raw/index.html",
   default: "https://app.follow.is",
 })
-
-const allowHosts = new Set(["app.follow.is"])
 
 interface FollowWebViewProps extends WebViewProps {
   customUrl?: string
@@ -78,32 +75,6 @@ export const FollowWebView = ({
       {...props}
     />
   )
-}
-
-const useWebViewNavigation = ({ webViewRef }: { webViewRef: RefObject<WebView> }) => {
-  const openLink = useOpenLink()
-
-  const onNavigationStateChange = useCallback(
-    (newNavState: WebViewNavigation) => {
-      const { url: urlStr } = newNavState
-      const url = parseSafeUrl(urlStr)
-      if (!url) return
-      if (url.protocol === "file:") return
-      if (allowHosts.has(url.host)) return
-
-      webViewRef.current?.stopLoading()
-
-      const formattedUrl = transformVideoUrl({ url: urlStr })
-      if (formattedUrl) {
-        openLink(formattedUrl)
-        return
-      }
-      openLink(urlStr)
-    },
-    [openLink, webViewRef],
-  )
-
-  return { onNavigationStateChange }
 }
 
 // We only need to handle deep link at the first time the app is opened

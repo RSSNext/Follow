@@ -2,7 +2,7 @@ import { router, Stack, useNavigation } from "expo-router"
 import { TouchableOpacity, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
-import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
+import { Markdown } from "@/src/components/ui/typography/Markdown"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 
 const txt = `# Terms of Service
@@ -84,9 +84,9 @@ Follow takes your privacy seriously. As a user, you acknowledge that we may coll
 
 export const TeamsMarkdown = () => {
   return (
-    <MarkdownWeb
+    <Markdown
       value={txt}
-      dom={{ matchContents: true, scrollEnabled: false }}
+      webViewProps={{ matchContents: true, scrollEnabled: false }}
       style={{ padding: 16 }}
     />
   )
