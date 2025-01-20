@@ -15,6 +15,7 @@ export const ContextMenu: FC<ContextMenuProps & PropsWithChildren> = ({
   onPressMenuItem,
   children,
   renderPreview,
+  onPressPreview,
   ...props
 }) => {
   const [actionKeyMap] = useState(() => new Map<string, IContextMenuItemConfig>())
@@ -80,6 +81,7 @@ export const ContextMenu: FC<ContextMenuProps & PropsWithChildren> = ({
         }
         renderPreview={renderPreview}
         menuConfig={menuViewConfig}
+        onPressMenuPreview={onPressPreview}
         onPressMenuItem={(e) => {
           onPressMenuItem(actionKeyMap.get(e.nativeEvent.actionKey)!)
         }}

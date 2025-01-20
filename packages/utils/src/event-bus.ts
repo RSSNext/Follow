@@ -30,7 +30,7 @@ class EventBusStatic<E extends AnyObject> {
     return this.unsubscribe.bind(this, event as string, handler)
   }
 
-  unsubscribe(event: string, handler: (e: any) => void) {
+  unsubscribe(_event: string, handler: (e: any) => void) {
     window.removeEventListener(EventBusEvent.type, handler)
   }
 }

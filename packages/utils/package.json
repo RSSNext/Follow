@@ -24,7 +24,8 @@
   },
   "main": "./exports.ts",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@follow/shared": "workspace:*",

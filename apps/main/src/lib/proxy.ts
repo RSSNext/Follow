@@ -40,7 +40,7 @@ const normalizeProxyUri = (userProxy: string) => {
     return
   }
   // Only use the first proxy if there are multiple urls
-  const firstInput = userProxy.split(",")[0]
+  const firstInput = userProxy.split(",")[0]!
 
   try {
     const proxyUrl = new URL(firstInput)

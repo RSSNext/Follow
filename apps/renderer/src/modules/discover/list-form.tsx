@@ -208,13 +208,14 @@ const ListInnerForm = ({
   }, [subscription])
 
   const followMutation = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) => {
+    mutationFn: async (values: z.infer<typeof formSchema> & { TOTPCode?: string }) => {
       const body = {
         listId: list.id,
         view: Number.parseInt(values.view),
         category: values.category,
         isPrivate: values.isPrivate,
         title: values.title,
+        TOTPCode: values.TOTPCode,
       }
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
 

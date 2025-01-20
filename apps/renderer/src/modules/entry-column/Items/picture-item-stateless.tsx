@@ -17,7 +17,7 @@ export function PictureItemStateLess({ entry, feed }: EntryItemStatelessProps) {
             <div
               className={cn(
                 "relative flex w-full shrink-0 items-center overflow-hidden rounded-md",
-                !entry.media?.[0].url && "aspect-square",
+                !entry.media?.[0]!.url && "aspect-square",
               )}
             >
               {entry.media?.[0] ? (

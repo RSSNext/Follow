@@ -127,7 +127,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
         }}
       >
         {media && media.length > 0 ? (
-          <MasonryItemFixedDimensionWrapper url={media[0].url}>
+          <MasonryItemFixedDimensionWrapper url={media[0]!.url}>
             <SwipeMedia
               media={media}
               className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
@@ -196,7 +196,7 @@ const MasonryItemFixedDimensionWrapper = (
   const style = useMemo(
     () => ({
       width: itemWidth,
-      height: itemWidth / stableRadioCtx,
+      height: itemWidth / stableRadioCtx!,
     }),
     [itemWidth, stableRadioCtx],
   )

@@ -228,7 +228,7 @@ class EntryActions {
 
         ids.forEach((entryId) => {
           if (filter) {
-            const entry = draft.flatMapEntries[entryId]
+            const entry = draft.flatMapEntries[entryId]!
             if (
               +new Date(entry.entries.publishedAt) < filter.startTime ||
               +new Date(entry.entries.publishedAt) > filter.endTime
@@ -236,7 +236,7 @@ class EntryActions {
               return
             }
           }
-          Object.assign(draft.flatMapEntries[entryId], changed)
+          Object.assign(draft.flatMapEntries[entryId]!, changed)
 
           if (changed.entries) {
             patchChangedEntriesInDb.push({
@@ -290,11 +290,12 @@ class EntryActions {
               draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
             }
 
-            if (!draft.internal_feedId2entryIdSet[item.feeds.id].has(item.entries.id)) {
-              draft.entries[item.feeds.id].push(item.entries.id)
-              draft.internal_feedId2entryIdSet[item.feeds.id].add(item.entries.id)
+            if (!draft.internal_feedId2entryIdSet[item.feeds.id]!.has(item.entries.id)) {
+              draft.entries[item.feeds.id]!.push(item.entries.id)
+              draft.internal_feedId2entryIdSet[item.feeds.id]!.add(item.entries.id)
             }
 
+            // @ts-expect-error FIXME: fix this
             draft.flatMapEntries[item.entries.id] = merge(
               draft.flatMapEntries[item.entries.id] || {},
               {
@@ -326,6 +327,7 @@ class EntryActions {
               draft.internal_feedId2entryIdSet[inboxId].add(item.entries.id)
             }
 
+            // @ts-expect-error FIXME: fix this
             draft.flatMapEntries[item.entries.id] = merge(
               draft.flatMapEntries[item.entries.id] || {},
               {
@@ -369,7 +371,7 @@ class EntryActions {
           }
 
           if (item.settings && draft.flatMapEntries[item.entries.id] && !options?.isArchived) {
-            draft.flatMapEntries[item.entries.id].settings = item.settings
+            draft.flatMapEntries[item.entries.id]!.settings = item.settings
           }
         }
 
@@ -412,9 +414,9 @@ class EntryActions {
             draft.internal_feedId2entryIdSet[item.feedId] = new Set()
           }
 
-          if (!draft.internal_feedId2entryIdSet[item.feedId].has(item.entries.id)) {
-            draft.entries[item.feedId].push(item.entries.id)
-            draft.internal_feedId2entryIdSet[item.feedId].add(item.entries.id)
+          if (!draft.internal_feedId2entryIdSet[item.feedId]!.has(item.entries.id)) {
+            draft.entries[item.feedId]!.push(item.entries.id)
+            draft.internal_feedId2entryIdSet[item.feedId]!.add(item.entries.id)
           }
 
           draft.flatMapEntries[item.entries.id] = merge(
@@ -444,7 +446,7 @@ class EntryActions {
 
   async markRead({ feedId, entryId, read }: { feedId: string; entryId: string; read: boolean }) {
     const entry = get().flatMapEntries[entryId]
-    const isInbox = entry?.entries && "inboxHandle" in entry.entries
+    const isInbox = !!(entry?.entries && "inboxHandle" in entry.entries)
     const subscription = getSubscriptionByFeedId(feedId)
 
     if (read && entry?.read) {
@@ -454,7 +456,7 @@ class EntryActions {
     const tx = createTransaction<unknown, { prevUnread: number }>({})
 
     tx.optimistic((_, ctx) => {
-      const prevUnread = feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+      const prevUnread = feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)!
       ctx.prevUnread = prevUnread
 
       this.patch(entryId, {
@@ -588,7 +590,7 @@ class EntryActions {
 
         delete nextFlatMapEntries[entryId]
 
-        const index = state.entries[fullInboxId].indexOf(entryId)
+        const index = state.entries[fullInboxId]!.indexOf(entryId)
 
         const nextState = {
           ...state,
@@ -600,7 +602,7 @@ class EntryActions {
           const nextFeedEntries = {
             ...state.entries,
 
-            [fullInboxId]: state.entries[fullInboxId].filter((id) => id !== entryId),
+            [fullInboxId]: state.entries[fullInboxId]!.filter((id) => id !== entryId),
           }
 
           nextState.entries = nextFeedEntries
@@ -623,7 +625,7 @@ class EntryActions {
         ...state,
         entries: {
           ...state.entries,
-          [entry.feedId]: state.entries[entry.feedId].splice(ctx.deletedIndex, 0, entryId),
+          [entry.feedId]: state.entries[entry.feedId]!.splice(ctx.deletedIndex, 0, entryId),
         },
         flatMapEntries: {
           ...state.flatMapEntries,

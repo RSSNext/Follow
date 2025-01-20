@@ -12,3 +12,9 @@ export const useIsOwnList = (id: string) => {
     return state.lists[id]?.userId === whoami()?.id
   })
 }
+
+export const useListEntryIds = (id: string) => {
+  return useListStore((state) => {
+    return state.lists[id]?.entryIds || []
+  })
+}

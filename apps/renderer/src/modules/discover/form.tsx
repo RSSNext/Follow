@@ -67,7 +67,7 @@ const info: Record<
 
 type DiscoverSearchData = Awaited<ReturnType<typeof apiClient.discover.$post>>["data"]
 export function DiscoverForm({ type = "search" }: { type?: string }) {
-  const { prefix, default: defaultValue } = info[type]
+  const { prefix, default: defaultValue } = info[type]!
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -99,7 +99,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
   const { present, dismissAll } = useModalStack()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (info[type].showModal) {
+    if (info[type]!.showModal) {
       const defaultView = getSidebarActiveView() as FeedViewType
       present({
         title: t("feed_form.add_feed"),
@@ -128,7 +128,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       }
       const isValidPrefix = prefix.find((p) => trimmedKeyword.startsWith(p))
       if (!isValidPrefix) {
-        form.setValue("keyword", prefix[0])
+        form.setValue("keyword", prefix[0]!)
         return
       }
       if (trimmedKeyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
@@ -208,7 +208,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
             name="keyword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t(info[type]?.label)}</FormLabel>
+                <FormLabel>{t(info[type]?.label!)}</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} onChange={handleKeywordChange} />
                 </FormControl>
@@ -254,7 +254,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
           )}
           <div className="center flex" data-testid="discover-form-actions">
             <Button disabled={!form.formState.isValid} type="submit" isLoading={mutation.isPending}>
-              {info[type].showModal ? t("discover.preview") : t("words.search")}
+              {info[type]!.showModal ? t("discover.preview") : t("words.search")}
             </Button>
           </div>
         </form>

@@ -16,7 +16,7 @@ export const SortByUnreadFeedList = ({ view, data, categoryOpenStateData }: Feed
         const folderUnread = {} as Record<string, number>
         // Calc total unread count for each folder
         for (const category in data) {
-          folderUnread[category] = data[category].reduce(
+          folderUnread[category] = data[category]!.reduce(
             (acc, cur) => (state.data[cur] || 0) + acc,
             0,
           )
@@ -24,9 +24,9 @@ export const SortByUnreadFeedList = ({ view, data, categoryOpenStateData }: Feed
 
         // Sort by unread count
         Object.keys(folderUnread)
-          .sort((a, b) => folderUnread[b] - folderUnread[a])
+          .sort((a, b) => folderUnread[b]! - folderUnread[a]!)
           .forEach((key) => {
-            sortedList.push([key, data[key]])
+            sortedList.push([key, data[key]!])
           })
 
         if (!isDesc) {

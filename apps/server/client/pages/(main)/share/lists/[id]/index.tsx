@@ -104,7 +104,7 @@ export function Component() {
             <div className="flex w-full max-w-3xl flex-col gap-4 pb-12 pt-8">
               {listData!.feedIds
                 ?.slice(0, 7)
-                .map((feedId) => <FeedRow feed={feedMap[feedId]} key={feedId} />)}
+                .map((feedId) => <FeedRow feed={feedMap[feedId]!} key={feedId} />)}
               {"feedCount" in list.data && (
                 <div onClick={handleOpenInFollowApp} className="text-sm text-zinc-500">
                   {t("feed.follow_to_view_all", {

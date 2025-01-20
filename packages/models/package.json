@@ -1,6 +1,5 @@
 {
   "name": "@follow/models",
-  "version": "0.0.1",
   "private": true,
   "sideEffects": false,
   "exports": {
@@ -16,6 +15,9 @@
       "import": "./src/types.ts",
       "require": "./src/types.ts"
     }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@auth/core": "0.37.4",

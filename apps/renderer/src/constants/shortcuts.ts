@@ -125,7 +125,7 @@ function transformShortcuts<T extends Shortcuts>(configs: T) {
   for (const category in configs) {
     for (const shortcutKey in configs[category]) {
       const config = configs[category][shortcutKey]
-      result[category][shortcutKey].key = transformShortcut(config.key)
+      result[category]![shortcutKey]!.key = transformShortcut(config!.key)
     }
   }
 

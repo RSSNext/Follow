@@ -10,6 +10,6 @@ export function useInboxById<T>(
 
 export function useInboxById<T>(inboxId: Nullable<string>, selector?: (inbox: InboxModel) => T) {
   return useInboxStore((state) =>
-    inboxId ? (selector ? selector(state.inboxes[inboxId]) : state.inboxes[inboxId]) : null,
+    inboxId ? (selector ? selector(state.inboxes[inboxId]!) : state.inboxes[inboxId]) : null,
   )
 }

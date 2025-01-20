@@ -117,7 +117,7 @@ function simulateKeyPress(key: string) {
     z: 90,
   }
 
-  const code = keyCodes[key] || key.codePointAt(0)
+  const code = keyCodes[key as keyof typeof keyCodes] || key.codePointAt(0)
 
   const event = new KeyboardEvent("keydown", {
     key,

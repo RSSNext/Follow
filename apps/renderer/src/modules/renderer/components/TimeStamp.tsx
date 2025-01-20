@@ -10,7 +10,7 @@ export const TimeStamp = (props: { time: string }) => {
   const { entryId } = useContext(EntryInfoContext)
   const entry = useEntry(entryId)
   const mediaDuration = entry?.entries.attachments?.[0]?.duration_in_seconds
-  const src = entry?.entries?.attachments?.[0].url
+  const src = entry?.entries?.attachments?.[0]?.url
   if (!src) return <span>{props.time}</span>
 
   const seekTo = timeStringToSeconds(props.time)
@@ -95,10 +95,10 @@ function timeStringToSeconds(time: string): number | null {
 
   if (timeParts.length === 2) {
     const [minutes, seconds] = timeParts
-    return minutes * 60 + seconds
+    return minutes! * 60 + seconds!
   } else if (timeParts.length === 3) {
     const [hours, minutes, seconds] = timeParts
-    return hours * 3600 + minutes * 60 + seconds
+    return hours! * 3600 + minutes! * 60 + seconds!
   } else {
     return null
   }

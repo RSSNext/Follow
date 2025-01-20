@@ -62,7 +62,7 @@ const DraggableItemWrapper: Component<
 }
 const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const { t } = useTranslation()
-  const subscription = useSubscriptionByFeedId(feedId)
+  const subscription = useSubscriptionByFeedId(feedId)!
   const navigate = useNavigateEntry()
   const feed = useFeedById(feedId, (feed) => {
     return {
@@ -244,7 +244,7 @@ const ListItemImpl: Component<{
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  const subscription = useSubscriptionByFeedId(listId)
+  const subscription = useSubscriptionByFeedId(listId)!
   const navigate = useNavigateEntry()
   const handleNavigate = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {

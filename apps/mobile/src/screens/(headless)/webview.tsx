@@ -1,41 +1,38 @@
-import { Redirect } from "expo-router"
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import type { WebView } from "react-native-webview"
 
-import { FollowWebView } from "@/src/components/common/FollowWebView"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { ExitCuteReIcon } from "@/src/icons/exit_cute_re"
 import { Refresh2CuteReIcon } from "@/src/icons/refresh_2_cute_re"
 import { World2CuteReIcon } from "@/src/icons/world_2_cute_re"
-import { signOut, useAuthToken } from "@/src/lib/auth"
-import { setSessionToken } from "@/src/lib/cookie"
+import { signOut } from "@/src/lib/auth"
 
 export default function Index() {
   const webViewRef = useRef<WebView>(null)
   const insets = useSafeAreaInsets()
 
-  const { data: token, isPending } = useAuthToken()
+  // const { data: token, isPending } = useAuthToken()
 
-  const [isCookieReady, setIsCookieReady] = useState(false)
-  useEffect(() => {
-    if (!token) {
-      return
-    }
+  // const [isCookieReady, setIsCookieReady] = useState(false)
+  // useEffect(() => {
+  //   if (!token) {
+  //     return
+  //   }
 
-    setSessionToken(token).then(() => {
-      setIsCookieReady(true)
-    })
-  }, [token])
+  //   // setSessionToken(token).then(() => {
+  //   //   setIsCookieReady(true)
+  //   // })
+  // }, [token])
 
-  if (!token && !isPending) {
-    return <Redirect href="/login" />
-  }
+  // if (!token && !isPending) {
+  //   return <Redirect href="/login" />
+  // }
 
   return (
     <View className="flex-1 items-center justify-center pt-safe dark:bg-[#121212]">
-      {isCookieReady && <FollowWebView webViewRef={webViewRef} />}
+      {/* {isCookieReady && <FollowWebView webViewRef={webViewRef} />} */}
 
       {__DEV__ && (
         <View

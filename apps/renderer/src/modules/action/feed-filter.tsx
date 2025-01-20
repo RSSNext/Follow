@@ -110,7 +110,7 @@ export const FeedFilter = ({ index }: { index: number }) => {
                       if (!data.condition[orConditionIdx]) {
                         data.condition[orConditionIdx] = [{}]
                       }
-                      data.condition[orConditionIdx][conditionIdx][key] = value
+                      data.condition[orConditionIdx][conditionIdx]![key] = value
                     })
                   }
                   const type =
@@ -174,15 +174,15 @@ export const FeedFilter = ({ index }: { index: number }) => {
                           disabled={disabled}
                           onAnd={() => {
                             onChange((data) => {
-                              data.condition[orConditionIdx].push({})
+                              data.condition[orConditionIdx]!.push({})
                             })
                           }}
                           onDelete={() => {
                             onChange((data) => {
-                              if (data.condition[orConditionIdx].length === 1) {
+                              if (data.condition[orConditionIdx]!.length === 1) {
                                 data.condition.splice(orConditionIdx, 1)
                               } else {
-                                data.condition[orConditionIdx].splice(conditionIdx, 1)
+                                data.condition[orConditionIdx]!.splice(conditionIdx, 1)
                               }
                             })
                           }}

@@ -189,17 +189,17 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
             {!!title && (
               <div className="mb-6">
                 <h1 className="mb-2 flex w-full items-center justify-center gap-2 text-xl font-bold">
-                  {typeof guideSteps[step - 1].icon === "string" ? (
-                    <i className={cn(guideSteps[step - 1].icon, "size-[22px]")} />
+                  {typeof guideSteps[step - 1]!.icon === "string" ? (
+                    <i className={cn(guideSteps[step - 1]!.icon, "size-[22px]")} />
                   ) : (
-                    guideSteps[step - 1].icon
+                    guideSteps[step - 1]!.icon
                   )}
                   {title}
                 </h1>
-                {!!guideSteps[step - 1].description && (
+                {!!guideSteps[step - 1]!.description && (
                   <div className="flex justify-center text-center text-sm text-theme-vibrancyFg">
                     <Markdown className="prose max-w-[100ch] text-left text-sm">
-                      {guideSteps[step - 1].description!}
+                      {guideSteps[step - 1]!.description!}
                     </Markdown>
                   </div>
                 )}
@@ -208,7 +208,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
             {status === "initial" ? (
               <Intro />
             ) : status === "active" ? (
-              guideSteps[step - 1].content
+              guideSteps[step - 1]!.content
             ) : status === "complete" ? (
               <Outtro />
             ) : null}

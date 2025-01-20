@@ -7,6 +7,7 @@ declare const globalThis: {
     electron?: ElectronAPI
     api?: { canWindowBlur: boolean }
   }
+  electron?: ElectronAPI
 }
 
 export const APP_PROTOCOL = isDev ? "follow-dev" : "follow"

@@ -132,7 +132,7 @@ export const parseRegexpPathParams = (
           }
         }
         case "group": {
-          if ("name" in token.tokens[1]) {
+          if ("name" in token.tokens[1]!) {
             return {
               name: token.tokens[1].name,
               optional: true,

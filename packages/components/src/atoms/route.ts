@@ -26,7 +26,7 @@ export const [routeAtom, , , , getReadonlyRoute, setRoute] = createAtomHooks(
   }),
 )
 
-const noop = []
+const noop: [] = []
 export const useReadonlyRouteSelector = <T>(
   selector: (route: RouteAtom) => T,
   deps: any[] = noop,

@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils/src/utils"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect } from "react"
 import { View } from "react-native"
@@ -17,8 +18,9 @@ export const LoadingIndicator: FC<
   {
     size?: number
     color?: string
+    className?: string
   } & PropsWithChildren
-> = ({ size = 60, color, children }) => {
+> = ({ size = 60, color, children, className }) => {
   const rotateValue = useSharedValue(0)
 
   const rotation = useDerivedValue(() => {
@@ -40,7 +42,7 @@ export const LoadingIndicator: FC<
     }
   }, [rotateValue])
   return (
-    <View className="flex-1 items-center justify-center">
+    <View className={cn("flex-1 items-center justify-center", className)}>
       <Animated.View style={[animatedStyle, { width: size, height: size }]} className={"mb-2"}>
         <Loading3CuteLiIcon width={size} height={size} color={color} />
       </Animated.View>

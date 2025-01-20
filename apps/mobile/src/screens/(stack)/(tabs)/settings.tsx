@@ -105,7 +105,7 @@ function Settings() {
     >
       <UserHeaderBanner scrollY={animatedScrollY} />
 
-      <SettingsList />
+      <SettingsList scrollRef={scrollRef} />
     </ReAnimatedScrollView>
   )
 }

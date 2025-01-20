@@ -1,4 +1,5 @@
 import type { FeedSchema, InboxSchema } from "../database/schemas/types"
+import type { EntryModel } from "../store/entry/types"
 import type { ListModel } from "../store/list/store"
 import type { SubscriptionModel } from "../store/subscription/store"
 import type { HonoApiClient } from "./types"
@@ -72,6 +73,7 @@ class Morph {
             ownerUserId: list.owner.id,
             feedIds: list.feedIds!,
             fee: list.fee!,
+            entryIds: [],
           })
       }
 
@@ -91,7 +93,41 @@ class Morph {
       ownerUserId: data.ownerUserId!,
       feedIds: data.feedIds!,
       fee: data.fee!,
+      entryIds: [],
     }
+  }
+
+  toEntry(data?: HonoApiClient.Entry_Get): EntryModel[] {
+    const entries: EntryModel[] = []
+    for (const item of data ?? []) {
+      entries.push({
+        id: item.entries.id,
+        title: item.entries.title,
+        url: item.entries.url,
+        content: "",
+        description: item.entries.description,
+        guid: item.entries.guid,
+        author: item.entries.author,
+        authorUrl: item.entries.authorUrl,
+        authorAvatar: item.entries.authorAvatar,
+        insertedAt: new Date(item.entries.insertedAt),
+        publishedAt: new Date(item.entries.publishedAt),
+        media: item.entries.media ?? null,
+        categories: item.entries.categories ?? null,
+        attachments: item.entries.attachments ?? null,
+        extra: item.entries.extra
+          ? {
+              links: item.entries.extra.links ?? undefined,
+            }
+          : null,
+        language: item.entries.language,
+        feedId: item.feeds.id,
+        // TODO: handle inboxHandle
+        inboxHandle: "",
+        read: false,
+      })
+    }
+    return entries
   }
 }
 

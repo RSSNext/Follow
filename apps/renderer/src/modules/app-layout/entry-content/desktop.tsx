@@ -26,7 +26,7 @@ export const RightContentDesktop = () => {
 
   const settingWideMode = useRealInWideMode()
   const realEntryId = entryId === ROUTE_ENTRY_PENDING ? "" : entryId
-  const showEntryContent = !(views[view].wideMode || (settingWideMode && !realEntryId))
+  const showEntryContent = !(views[view]!.wideMode || (settingWideMode && !realEntryId))
   const wideMode = !!(settingWideMode && realEntryId)
   const feedColumnTempShow = useFeedColumnTempShow()
   const feedColumnShow = useFeedColumnShow()

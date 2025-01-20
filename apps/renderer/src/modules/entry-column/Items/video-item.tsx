@@ -111,10 +111,10 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             />
           ) : entry.entries.media ? (
             <Media
-              key={entry.entries.media?.[0].url}
-              src={entry.entries.media?.[0].url}
-              type={entry.entries.media?.[0].type}
-              previewImageUrl={entry.entries.media?.[0].preview_image_url}
+              key={entry.entries.media?.[0]!.url}
+              src={entry.entries.media?.[0]!.url}
+              type={entry.entries.media?.[0]!.type}
+              previewImageUrl={entry.entries.media?.[0]!.preview_image_url}
               className={cn(
                 "aspect-video w-full shrink-0 rounded-md object-cover",
                 isActive && "rounded-b-none",

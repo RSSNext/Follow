@@ -92,6 +92,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-av",
     [require("./scripts/with-follow-assets.js")],
     [require("./scripts/with-follow-app-delegate.js")],
+    "expo-secure-store",
   ],
   experiments: {
     typedRoutes: true,

@@ -100,7 +100,7 @@ const MasonryItemFixedDimensionWrapper = (
   const style = useMemo(
     () => ({
       width: itemWidth,
-      height: itemWidth / stableRadioCtx,
+      height: itemWidth / stableRadioCtx!,
     }),
     [itemWidth, stableRadioCtx],
   )

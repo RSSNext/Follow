@@ -70,7 +70,7 @@ export const registerPusher = (self: ServiceWorkerGlobalScope) => {
       .then((windowClients) => {
         if (windowClients.length > 0) {
           const client = windowClients[0]
-          return client.focus()
+          return client?.focus()
         }
         return self.clients.openWindow(urlToOpen.href)
       })

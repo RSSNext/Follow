@@ -2,10 +2,10 @@ import { expoClient } from "@better-auth/expo/client"
 import { useQuery } from "@tanstack/react-query"
 import { createAuthClient } from "better-auth/react"
 import type * as better_call from "better-call"
-import { parse } from "cookie-es"
+import * as SecureStore from "expo-secure-store"
 
+import { whoamiQueryKey } from "../store/user/hooks"
 import { getApiUrl } from "./env"
-import { kv } from "./kv"
 import { queryClient } from "./query-client"
 
 const storagePrefix = "follow_auth"
@@ -24,14 +24,12 @@ const authClient = createAuthClient({
       storagePrefix,
       storage: {
         setItem(key, value) {
-          kv.setSync(key, value)
+          SecureStore.setItem(key, value)
           if (key === cookieKey) {
-            queryClient.invalidateQueries({ queryKey: ["cookie"] })
+            queryClient.invalidateQueries({ queryKey: whoamiQueryKey })
           }
         },
-        getItem(key) {
-          return kv.getSync(key)
-        },
+        getItem: SecureStore.getItem,
       },
     }),
   ],
@@ -51,18 +49,6 @@ export const useAuthProviders = () => {
   return useQuery({
     queryKey: ["providers"],
     queryFn: async () => (await getProviders()).data,
-  })
-}
-
-export const getSessionTokenFromCookie = () => {
-  const cookie = getCookie()
-  return cookie ? parse(cookie)[sessionTokenKey] : null
-}
-
-export const useAuthToken = () => {
-  return useQuery({
-    queryKey: ["cookie"],
-    queryFn: getSessionTokenFromCookie,
   })
 }
 

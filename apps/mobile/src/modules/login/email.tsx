@@ -1,14 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { useContext, useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { ActivityIndicator, TextInput, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, TextInput, View } from "react-native"
+import { KeyboardController } from "react-native-keyboard-controller"
+import {
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 import { z } from "zod"
 
+import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { ThemedText } from "@/src/components/common/ThemedText"
+import { LoginTeamsCheckGuardContext } from "@/src/contexts/LoginTeamsContext"
 import { signIn } from "@/src/lib/auth"
-import { accentColor } from "@/src/theme/colors"
+import { toast } from "@/src/lib/toast"
+import { accentColor, useColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -18,10 +30,15 @@ const formSchema = z.object({
 type FormValue = z.infer<typeof formSchema>
 
 async function onSubmit(values: FormValue) {
-  await signIn.email({
-    email: values.email,
-    password: values.password,
-  })
+  await signIn
+    .email({
+      email: values.email,
+      password: values.password,
+    })
+    .catch((error) => {
+      console.error(error)
+      toast.error("Login failed")
+    })
 }
 
 function Input({
@@ -59,10 +76,25 @@ export function EmailLogin() {
     mutationFn: onSubmit,
   })
 
+  const teamsCheckGuard = useContext(LoginTeamsCheckGuardContext)
+  const login = handleSubmit((values) => {
+    teamsCheckGuard?.(() => submitMutation.mutate(values))
+  })
+
+  const disableColor = useColor("gray3")
+
+  const canLogin = useSharedValue(0)
+  useEffect(() => {
+    canLogin.value = withTiming(submitMutation.isPending || !formState.isValid ? 1 : 0)
+  }, [submitMutation.isPending, formState.isValid, canLogin])
+  const buttonStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(canLogin.value, [0, 1], [1, 0.5]),
+    backgroundColor: interpolateColor(canLogin.value, [1, 0], [disableColor, accentColor]),
+  }))
+
   return (
     <View className="mx-auto flex w-full max-w-sm gap-6">
       <View className="gap-4">
-        <View className="border-b-separator border-b-hairline" />
         <View className="flex-row">
           <ThemedText className="w-28">Account</ThemedText>
           <Input
@@ -74,9 +106,13 @@ export function EmailLogin() {
             name="email"
             placeholder="Email"
             className="placeholder:font-sn text-text flex-1"
+            returnKeyType="next"
+            onSubmitEditing={() => {
+              KeyboardController.setFocusTo("next")
+            }}
           />
         </View>
-        <View className="border-b-separator border-b-hairline" />
+        <View className="border-b-opaque-separator border-b-hairline ml-28" />
         <View className="flex-row">
           <ThemedText className="w-28">Password</ThemedText>
           <Input
@@ -88,21 +124,25 @@ export function EmailLogin() {
             placeholder="Enter password"
             className="placeholder:font-sn text-text flex-1"
             secureTextEntry
+            returnKeyType="go"
+            onSubmitEditing={() => {
+              login()
+            }}
           />
         </View>
-        <View className="border-b-separator border-b-hairline" />
       </View>
-      <TouchableOpacity
+      <ReAnimatedPressable
         disabled={submitMutation.isPending || !formState.isValid}
-        onPress={handleSubmit((values) => submitMutation.mutate(values))}
-        className="disabled:bg-gray-3 rounded-lg bg-accent p-3"
+        onPress={login}
+        className="mt-8 h-10 flex-row items-center justify-center rounded-lg"
+        style={buttonStyle}
       >
         {submitMutation.isPending ? (
           <ActivityIndicator className="text-white" />
         ) : (
-          <ThemedText className="text-center text-white">Continue</ThemedText>
+          <ThemedText className="text-center font-semibold text-white">Continue</ThemedText>
         )}
-      </TouchableOpacity>
+      </ReAnimatedPressable>
     </View>
   )
 }

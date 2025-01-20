@@ -12,6 +12,7 @@ import { memo, useEffect, useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Linking, Text, TouchableOpacity, View } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { z } from "zod"
 
 import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
@@ -54,7 +55,7 @@ export default function RsshubForm() {
   if (!parsedRoute || !routePrefix) {
     return null
   }
-  return <FormImpl route={parsedRoute} routePrefix={routePrefix as string} name={name} />
+  return <FormImpl route={parsedRoute} routePrefix={routePrefix as string} name={name!} />
 }
 
 function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
@@ -97,7 +98,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
     const ret = {} as Record<string, string | null>
     if (!route.parameters) return ret
     for (const key in route.parameters) {
-      const params = normalizeRSSHubParameters(route.parameters[key])
+      const params = normalizeRSSHubParameters(route.parameters[key]!)
       if (!params) continue
       ret[key] = params.default
     }
@@ -110,6 +111,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
     mode: "all",
   })
 
+  const insets = useSafeAreaInsets()
   return (
     <FormProvider form={form}>
       <ScreenOptions
@@ -120,10 +122,13 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
       />
 
       <PortalProvider>
-        <KeyboardAwareScrollView className="bg-system-grouped-background">
-          <View className="bg-secondary-system-grouped-background mx-2 mt-4 gap-4 rounded-lg px-3 py-6">
+        <KeyboardAwareScrollView
+          className="bg-system-grouped-background"
+          contentContainerStyle={{ paddingBottom: insets.bottom, flexGrow: 1 }}
+        >
+          <View className="bg-secondary-system-grouped-background mx-2 mt-2 gap-4 rounded-lg px-3 py-6">
             {keys.map((keyItem) => {
-              const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
+              const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name]!)
 
               return (
                 <View key={keyItem.name}>
@@ -183,7 +188,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
           <Maintainers maintainers={route.maintainers} />
 
           {!!route.description && (
-            <View className="mx-4 mt-4">
+            <View className="bg-system-background mt-4 flex-1 px-4">
               <MarkdownWeb
                 value={route.description.replaceAll("::: ", ":::")}
                 dom={{ matchContents: true, scrollEnabled: false }}

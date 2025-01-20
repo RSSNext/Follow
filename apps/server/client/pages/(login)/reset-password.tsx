@@ -50,7 +50,12 @@ export function Component() {
   const navigate = useNavigate()
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof initPasswordFormSchema>) => {
-      const res = await resetPassword({ newPassword: values.newPassword })
+      const token = new URLSearchParams(window.location.search).get("token")
+      if (!token) {
+        throw new Error("Token not found")
+      }
+
+      const res = await resetPassword({ newPassword: values.newPassword, token })
       const error = res.error?.message
       if (error) {
         throw new Error(error)
