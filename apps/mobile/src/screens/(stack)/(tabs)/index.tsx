@@ -37,7 +37,7 @@ export default function Index() {
         }}
       />
 
-      <SafeNavigationScrollView>
+      <SafeNavigationScrollView contentInsetAdjustmentBehavior="automatic" withTopInset>
         <View className="flex min-h-96 items-center justify-center bg-zinc-300">
           <Text className="text-center text-2xl text-accent">EntryList Placeholder</Text>
         </View>

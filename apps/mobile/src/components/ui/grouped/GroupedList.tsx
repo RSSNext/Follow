@@ -8,9 +8,19 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
 
-export const GroupedInsetListCard: FC<PropsWithChildren> = ({ children }) => {
+export const GroupedInsetListCard: FC<PropsWithChildren & ViewProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <View className="bg-secondary-system-grouped-background mx-4 flex-1 overflow-hidden rounded-[10px]">
+    <View
+      {...props}
+      className={cn(
+        "bg-secondary-system-grouped-background mx-4 flex-1 overflow-hidden rounded-[10px]",
+        className,
+      )}
+    >
       {React.Children.map(children, (child, index) => {
         const isLast = index === React.Children.count(children) - 1
         return (

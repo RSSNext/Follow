@@ -13,7 +13,7 @@ export const PrivacyScreen = () => {
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Privacy" />
-      <GroupedInsetListCard>
+      <GroupedInsetListCard className="mt-4">
         <GroupedInsetListNavigationLink
           label="Teams"
           onPress={() => {
