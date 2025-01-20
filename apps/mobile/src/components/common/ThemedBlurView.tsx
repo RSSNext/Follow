@@ -8,7 +8,7 @@ export const ThemedBlurView = forwardRef<BlurView, BlurViewProps>(({ tint, ...re
   return (
     <BlurView
       ref={ref}
-      tint={colorScheme === "light" ? "systemMaterialLight" : "systemMaterialDark"}
+      tint={colorScheme === "light" ? "systemChromeMaterialLight" : "systemChromeMaterialDark"}
       {...rest}
     />
   )

@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { transformUriPath } from "@follow/utils"
 import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
 import { router, Tabs } from "expo-router"
 import { useContext, useEffect, useMemo, useState } from "react"
@@ -36,9 +37,11 @@ export default function TabLayout() {
 
   const [tabBarVisible, setTabBarVisible] = useState(true)
   useEffect(() => {
-    RNAnimated.spring(animatedTransformY, {
+    RNAnimated.timing(animatedTransformY, {
       toValue: tabBarVisible ? 1 : 0,
       useNativeDriver: true,
+      duration: 250,
+      easing: Easing.inOut(Easing.ease),
     }).start()
   }, [animatedTransformY, tabBarVisible])
 
