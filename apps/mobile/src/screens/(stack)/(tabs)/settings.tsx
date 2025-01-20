@@ -3,12 +3,14 @@ import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
-import { findNodeHandle, UIManager } from "react-native"
-import { useSharedValue, withTiming } from "react-native-reanimated"
+import { findNodeHandle, Text, UIManager } from "react-native"
+import type { SharedValue } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
+import { BlurEffect } from "@/src/components/common/HeaderBlur"
 import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
 import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
 import { SettingRoutes } from "@/src/modules/settings/routes"
@@ -92,20 +94,42 @@ function Settings() {
   const scrollRef = useRef<ScrollView>(null)
 
   return (
-    <ReAnimatedScrollView
-      scrollEventThrottle={16}
-      onScroll={handleScroll}
-      ref={scrollRef}
-      onContentSizeChange={(w, h) => {
-        setContentSize({ height: h, width: w })
-      }}
-      style={{ paddingTop: insets.top }}
-      className="bg-system-grouped-background flex-1"
-      scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
-    >
-      <UserHeaderBanner scrollY={animatedScrollY} />
+    <>
+      <ReAnimatedScrollView
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
+        ref={scrollRef}
+        onContentSizeChange={(w, h) => {
+          setContentSize({ height: h, width: w })
+        }}
+        style={{ paddingTop: insets.top }}
+        className="bg-system-grouped-background flex-1"
+        scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
+      >
+        <UserHeaderBanner scrollY={animatedScrollY} />
 
-      <SettingsList scrollRef={scrollRef} />
-    </ReAnimatedScrollView>
+        <SettingsList scrollRef={scrollRef} />
+      </ReAnimatedScrollView>
+      <SettingHeader scrollY={animatedScrollY} />
+    </>
+  )
+}
+
+const SettingHeader = ({ scrollY }: { scrollY: SharedValue<number> }) => {
+  const styles = useAnimatedStyle(() => {
+    return {
+      opacity: scrollY.value / 100,
+    }
+  })
+  return (
+    <Animated.View
+      pointerEvents="none"
+      className="border-b-hairline border-opaque-separator absolute inset-x-0 top-0 flex-row items-center px-4 pb-2 pt-safe"
+      style={styles}
+    >
+      <BlurEffect />
+
+      <Text className="text-label flex-1 text-center text-lg font-medium">Settings</Text>
+    </Animated.View>
   )
 }

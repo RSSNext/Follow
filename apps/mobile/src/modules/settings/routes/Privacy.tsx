@@ -1,9 +1,13 @@
-import { Text, View } from "react-native"
+import { ScrollView } from "react-native"
+
+import { GroupedInsetListCard, GroupedInsetListItem } from "@/src/components/ui/grouped/GroupedList"
 
 export const PrivacyScreen = () => {
   return (
-    <View className="flex-1 items-center justify-center">
-      <Text>Privacy Settings</Text>
-    </View>
+    <ScrollView>
+      <GroupedInsetListCard>
+        <GroupedInsetListItem />
+      </GroupedInsetListCard>
+    </ScrollView>
   )
 }
