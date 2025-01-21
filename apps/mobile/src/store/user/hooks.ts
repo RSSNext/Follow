@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query"
 
 import { userSyncService, useUserStore } from "./store"
 
+export const whoamiQueryKey = ["user", "whoami"]
+
 export const usePrefetchSessionUser = () => {
   useQuery({
-    queryKey: ["user", "whoami"],
+    queryKey: whoamiQueryKey,
     queryFn: () => userSyncService.whoami(),
   })
 }

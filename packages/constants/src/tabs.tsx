@@ -1,11 +1,9 @@
 import * as React from "react"
 
 import { FeedViewType } from "./enums"
-import type { t } from "./internal/i18n"
 
-export type I18nKeys = OmitStringType<Parameters<typeof t>[0]>
 interface ViewDefinition {
-  name: I18nKeys
+  name: string
   icon: React.JSX.Element
   className: string
   peerClassName: string

@@ -63,7 +63,7 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
 )
 
 const get = useSubscriptionStore.getState
-const set = useSubscriptionStore.setState
+
 const immerSet = createImmerSetter(useSubscriptionStore)
 class SubscriptionActions {
   async upsertManyInSession(subscriptions: SubscriptionModel[]) {
@@ -106,9 +106,6 @@ class SubscriptionActions {
     await tx.run()
   }
 
-  reset() {
-    set(defaultState)
-  }
   resetByView(view: FeedViewType) {
     immerSet((draft) => {
       draft.feedIdByView[view] = new Set()
@@ -211,6 +208,7 @@ class SubscriptionSyncService {
         {
           ...data.list,
           userId: data.list.ownerUserId,
+          entryIds: [],
         },
       ])
     }

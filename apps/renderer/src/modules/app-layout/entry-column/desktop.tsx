@@ -23,7 +23,7 @@ export function CenterColumnDesktop() {
   const settingWideMode = useRealInWideMode()
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
   const { view } = useRouteParams()
-  const inWideMode = (view ? views[view].wideMode : false) || settingWideMode
+  const inWideMode = (view ? views[view]!.wideMode : false) || settingWideMode
   const feedColumnWidth = useUISettingKey("feedColWidth")
   const { position, separatorProps, isDragging, separatorCursor } = useResizable({
     axis: "x",

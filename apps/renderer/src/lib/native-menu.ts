@@ -42,7 +42,7 @@ const getMenuItemByPath = (items: ElectronMenuItem[], path: number[]): ElectronM
 
   for (const index of path) {
     if (!currentItems || index >= currentItems.length) return null
-    currentItem = currentItems[index]
+    currentItem = currentItems[index]!
 
     if (currentItem.submenu && Array.isArray(currentItem.submenu)) {
       currentItems = currentItem.submenu

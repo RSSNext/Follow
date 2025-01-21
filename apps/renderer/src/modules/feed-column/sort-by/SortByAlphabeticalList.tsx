@@ -20,7 +20,7 @@ export const SortByAlphabeticalFeedList = ({
       (state) => {
         const map = {} as Record<string, string>
         for (const categoryName in data) {
-          const feedId = data[categoryName][0]
+          const feedId = data[categoryName]![0]
           if (!feedId) {
             continue
           }
@@ -42,7 +42,7 @@ export const SortByAlphabeticalFeedList = ({
       (state) => {
         const map = {} as Record<string, string>
         for (const categoryName in data) {
-          const feedId = data[categoryName][0]
+          const feedId = data[categoryName]![0]
 
           if (!feedId) {
             continue
@@ -52,7 +52,7 @@ export const SortByAlphabeticalFeedList = ({
             continue
           }
           const hascategoryNameNotDefault = !!feedId2CategoryMap[feedId]
-          const isSingle = data[categoryName].length === 1
+          const isSingle = data[categoryName]!.length === 1
           if (!isSingle || hascategoryNameNotDefault) {
             map[categoryName] = categoryName
           } else {
@@ -84,7 +84,7 @@ export const SortByAlphabeticalFeedList = ({
       {sortedByAlphabetical.map((category) => (
         <FeedCategory
           key={category}
-          data={data[category]}
+          data={data[category]!}
           view={view}
           categoryOpenStateData={categoryOpenStateData}
         />

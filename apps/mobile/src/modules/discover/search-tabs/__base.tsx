@@ -1,10 +1,18 @@
 import { cn } from "@follow/utils/src/utils"
-import { forwardRef } from "react"
-import type { ScrollViewProps } from "react-native"
-import { RefreshControl, ScrollView, useWindowDimensions, View } from "react-native"
+import { forwardRef, useCallback, useState } from "react"
+import type { NativeScrollEvent, NativeSyntheticEvent, ScrollViewProps } from "react-native"
+import {
+  RefreshControl,
+  ScrollView,
+  useAnimatedValue,
+  useWindowDimensions,
+  View,
+} from "react-native"
 import type { FlatListPropsWithLayout } from "react-native-reanimated"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import ReAnimated, { LinearTransition } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+import { CustomRefreshControl } from "@/src/components/common/RefreshControl"
 
 import { useSearchBarHeight } from "../ctx"
 
@@ -58,27 +66,71 @@ export function BaseSearchPageFlatList<T>({
   const offsetTop = searchBarHeight - insets.top
   const windowWidth = useWindowDimensions().width
 
-  return (
-    <Animated.FlatList
-      itemLayoutAnimation={LinearTransition}
-      className="flex-1"
-      style={{ width: windowWidth }}
-      contentContainerStyle={{ paddingTop: offsetTop + 8 }}
-      scrollIndicatorInsets={{ bottom: insets.bottom, top: offsetTop }}
-      automaticallyAdjustContentInsets
-      contentInsetAdjustmentBehavior="always"
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          progressViewOffset={offsetTop}
-        />
+  const [currentRefreshing, setCurrentRefreshing] = useState(refreshing)
+  const nextRefreshing = currentRefreshing || refreshing
+
+  const [pullProgress, setPullProgress] = useState(0)
+
+  const scrollY = useAnimatedValue(0)
+
+  const THRESHOLD = 180
+
+  const handleRefresh = async () => {
+    setCurrentRefreshing(true)
+    try {
+      await onRefresh()
+    } finally {
+      setCurrentRefreshing(false)
+    }
+  }
+
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offsetY = event.nativeEvent.contentOffset.y
+      if (offsetY < 0) {
+        const progress = Math.abs(offsetY) / THRESHOLD
+        setPullProgress(progress)
+      } else {
+        setPullProgress(0)
       }
-      {...props}
-    />
+      scrollY.setValue(offsetY)
+    },
+    [scrollY],
+  )
+
+  return (
+    <>
+      <ReAnimated.FlatList
+        itemLayoutAnimation={LinearTransition}
+        className="flex-1"
+        style={{ width: windowWidth }}
+        contentContainerStyle={{ paddingTop: offsetTop + 8 }}
+        scrollIndicatorInsets={{ bottom: insets.bottom, top: offsetTop }}
+        automaticallyAdjustContentInsets
+        contentInsetAdjustmentBehavior="always"
+        refreshControl={
+          <View style={{ transform: [{ translateY: offsetTop }] }}>
+            <CustomRefreshControl refreshing={nextRefreshing} pullProgress={pullProgress} />
+            <RefreshControl
+              tintColor="transparent"
+              colors={["transparent"]}
+              className="bg-transparent"
+              refreshing={nextRefreshing}
+              onRefresh={handleRefresh}
+            />
+          </View>
+        }
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        {...props}
+      />
+    </>
   )
 }
-const itemSeparator = <View className="bg-opaque-separator ml-16 h-[0.5px]" />
+
+const itemSeparator = (
+  <View className="bg-opaque-separator ml-16 h-px" style={{ transform: [{ scaleY: 0.5 }] }} />
+)
 export const ItemSeparator = () => itemSeparator
 
 export const RenderScrollComponent = (props: ScrollViewProps) => (

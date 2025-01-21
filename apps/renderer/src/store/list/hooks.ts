@@ -7,7 +7,7 @@ import { useWhoami } from "~/atoms/user"
 import { useListStore } from "./store"
 
 export const useListById = (listId: Nullable<string>): ListModel | null =>
-  useListStore((state) => (listId ? state.lists[listId] : null))
+  useListStore((state) => (listId ? state.lists[listId] || null : null))
 
 export const useListByView = (view: FeedViewType) => {
   return useListStore(

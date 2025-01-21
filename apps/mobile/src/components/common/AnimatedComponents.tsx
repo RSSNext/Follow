@@ -6,3 +6,5 @@ export const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 export const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 export const ReAnimatedPressable = Reanimated.createAnimatedComponent(Pressable)
+export const ReAnimatedScrollView = Reanimated.createAnimatedComponent(ScrollView)
+export const ReAnimatedTouchableOpacity = Reanimated.createAnimatedComponent(TouchableOpacity)

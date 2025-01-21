@@ -20,7 +20,7 @@ import { initializeSentry } from "./sentry"
 import { router } from "./tipc"
 import { createMainWindow, getMainWindow } from "./window"
 
-if (process.argv.length === 3 && process.argv[2].startsWith("follow-dev:")) {
+if (process.argv.length === 3 && process.argv[2]!.startsWith("follow-dev:")) {
   process.env.NODE_ENV = "development"
 }
 const isDev = process.env.NODE_ENV === "development"
@@ -36,7 +36,7 @@ export const initializeAppStage1 = () => {
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
       app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
-        path.resolve(process.argv[1]),
+        path.resolve(process.argv[1]!),
       ])
     }
   } else {

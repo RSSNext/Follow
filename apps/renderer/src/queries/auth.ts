@@ -60,6 +60,8 @@ export const useSession = (options?: { enabled?: boolean }) => {
         ? "authenticated"
         : fetchError
           ? "error"
-          : "unauthenticated",
+          : data?.data === null
+            ? "unauthenticated"
+            : "unknown",
   }
 }

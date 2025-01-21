@@ -68,7 +68,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const navigate = useNavigateEntry()
 
-  const subscription = useSubscriptionByFeedId(ids[0])
+  const subscription = useSubscriptionByFeedId(ids[0]!)!
   const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
   const folderName =
     subscription?.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
@@ -240,7 +240,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
             submenu: views
               .filter((v) => v.view !== view)
               .map((v) => ({
-                label: t(v.name),
+                label: t(v.name as any),
                 type: "text" as const,
                 shortcut: (v.view + 1).toString(),
                 icon: v.icon,

@@ -1,6 +1,6 @@
 {
   "name": "@follow/atoms",
-  "version": "0.0.1",
+  "private": true,
   "sideEffects": false,
   "exports": {
     "./atoms/*": {
@@ -11,6 +11,9 @@
       "import": "./src/helper/*",
       "types": "./src/helper/*"
     }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@follow/hooks": "workspace:*",

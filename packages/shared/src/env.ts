@@ -6,10 +6,9 @@ export const isDev =
 export const env = createEnv({
   clientPrefix: "VITE_",
   client: {
-    VITE_WEB_URL: z.string().url(),
+    VITE_WEB_URL: z.string().url().default("https://app.follow.is"),
     VITE_API_URL: z.string(),
     VITE_DEV_PROXY: z.string().optional(),
-    VITE_IMGPROXY_URL: z.string().url(),
     VITE_SENTRY_DSN: z.string().optional(),
     VITE_INBOXES_EMAIL: z.string().default("@follow.re"),
     VITE_FIREBASE_CONFIG: z.string().optional(),
@@ -50,6 +49,7 @@ function getRuntimeEnv() {
   }
 }
 
+declare const globalThis: any
 function injectExternalEnv<T>(originEnv: T): T {
   if (!("document" in globalThis)) {
     return originEnv
@@ -61,7 +61,7 @@ function injectExternalEnv<T>(originEnv: T): T {
   }
 
   for (const key in env) {
-    originEnv[key] = env[key]
+    originEnv[key as keyof T] = env[key]
   }
   return originEnv
 }

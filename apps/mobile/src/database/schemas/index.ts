@@ -1,6 +1,8 @@
 import type { FeedViewType } from "@follow/constants"
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 
+import type { AttachmentsModel, ExtraModel, MediaModel } from "./types"
+
 export const feedsTable = sqliteTable("feeds", {
   id: text("id").primaryKey(),
   title: text("title"),
@@ -42,6 +44,7 @@ export const listsTable = sqliteTable("lists", {
   image: text("image"),
   fee: integer("fee"),
   ownerUserId: text("owner_user_id"),
+  entryIds: text("entry_ids", { mode: "json" }).$type<string[]>(),
 })
 
 export const unreadTable = sqliteTable("unread", {
@@ -56,4 +59,28 @@ export const usersTable = sqliteTable("users", {
   name: text("name"),
   image: text("image"),
   isMe: integer("is_me").notNull(),
+})
+
+export const entriesTable = sqliteTable("entries", {
+  id: text("id").primaryKey(),
+  title: text("title"),
+  url: text("url"),
+  content: text("content"),
+  description: text("description"),
+  guid: text("guid").notNull(),
+  author: text("author"),
+  authorUrl: text("author_url"),
+  authorAvatar: text("author_avatar"),
+  insertedAt: integer("inserted_at", { mode: "timestamp" }).notNull(),
+  publishedAt: integer("published_at", { mode: "timestamp" }).notNull(),
+  media: text("media", { mode: "json" }).$type<MediaModel[]>(),
+  categories: text("categories", { mode: "json" }).$type<string[]>(),
+  attachments: text("attachments", { mode: "json" }).$type<AttachmentsModel[]>(),
+  extra: text("extra", { mode: "json" }).$type<ExtraModel>(),
+  language: text("language"),
+
+  feedId: text("feed_id"),
+
+  inboxHandle: text("inbox_handle"),
+  read: integer("read", { mode: "boolean" }),
 })

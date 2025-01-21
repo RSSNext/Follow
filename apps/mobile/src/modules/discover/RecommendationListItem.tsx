@@ -25,7 +25,7 @@ export const RecommendationListItem: FC<{
     const maintainers = new Set<string>()
     const categories = new Set<string>()
     for (const route in data.routes) {
-      const routeData = data.routes[route]
+      const routeData = data.routes[route]!
       if (routeData.maintainers) {
         routeData.maintainers.forEach((m) => maintainers.add(m))
       }
@@ -120,7 +120,7 @@ export const RecommendationListItem: FC<{
               />
               <View className="absolute inset-2 items-center justify-center" pointerEvents="none">
                 <Text ellipsizeMode="middle" numberOfLines={1} className="text-text whitespace-pre">
-                  {data.routes[route].name}
+                  {data.routes[route]!.name}
                 </Text>
               </View>
             </View>

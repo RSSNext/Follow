@@ -12,7 +12,7 @@ export const isCJKChar = (char: string): boolean => {
 
 export const getNameInitials = (name?: string): string => {
   if (!name) return ""
-  const first = name[0]
+  const first = name[0]!
   const second = name[1]
 
   if (isCJKChar(first)) return first

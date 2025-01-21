@@ -202,19 +202,20 @@ export const RenderError: FallbackRender = ({ error }) => {
         onClick={() => {
           window.open(
             getNewIssueUrl({
-              body: [
-                "### Error",
-                "",
-                nextError.message,
-                "",
-                "### Stack",
-                "",
-                "```",
-                nextError.stack,
-                "```",
-              ].join("\n"),
-              label: "bug",
-              title: "Render error",
+              // body: [
+              //   "### Error",
+              //   "",
+              //   nextError.message,
+              //   "",
+              //   "### Stack",
+              //   "",
+              //   "```",
+              //   nextError.stack,
+              //   "```",
+              // ].join("\n"),
+              // label: "bug",
+              // title: "Render error",
+              template: "bug_report.yml",
             }),
           )
         }}
@@ -298,10 +299,11 @@ const BackTopIndicator: Component = memo(({ className }) => {
       <div className="flex items-center gap-2 tabular-nums">
         <IconOpacityTransition
           icon1={<MaterialSymbolsProgressActivity />}
-          icon2={<CircleProgress percent={readPercent} size={14} strokeWidth={2} />}
+          icon2={<CircleProgress percent={readPercent!} size={14} strokeWidth={2} />}
           status={readPercent === 0 ? "init" : "done"}
         />
-        {readPercent}%<br />
+        <span>{readPercent}%</span>
+        <br />
       </div>
       <MotionButtonBase
         onClick={() => {
@@ -309,7 +311,7 @@ const BackTopIndicator: Component = memo(({ className }) => {
         }}
         className={cn(
           "mt-1 flex flex-nowrap items-center gap-2 opacity-50 transition-all duration-500 hover:opacity-100",
-          readPercent > 10 ? "" : "pointer-events-none opacity-0",
+          readPercent! > 10 ? "" : "pointer-events-none opacity-0",
         )}
       >
         <i className="i-mingcute-arrow-up-circle-line" />

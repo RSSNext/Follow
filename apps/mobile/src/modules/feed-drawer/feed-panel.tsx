@@ -199,7 +199,7 @@ const CategoryGrouped = memo(
 const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const unreadCount = useUnreadCount(id)
-  const feed = useFeed(id)
+  const feed = useFeed(id)!
   const inGrouped = !!useContext(GroupedContext)
   const view = useCurrentView()
   const { isLoading } = usePrefetchFeed(id, { enabled: !feed })

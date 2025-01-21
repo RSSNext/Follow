@@ -1,10 +1,13 @@
+import { transformShortcut } from "@follow/utils/utils"
+
 import { COPY_MAP } from "~/constants"
 
 type Shortcuts = Record<
   string,
   Record<string, { name: I18nKeysForShortcuts; key: string; extra?: string }>
 >
-export const shortcuts = {
+
+const shortcutConfigs = {
   feeds: {
     add: {
       name: "keys.feeds.add",
@@ -114,7 +117,22 @@ export const shortcuts = {
       key: "Meta+K",
     },
   },
-} as const satisfies Shortcuts
+} as const
+
+function transformShortcuts<T extends Shortcuts>(configs: T) {
+  const result = configs
+
+  for (const category in configs) {
+    for (const shortcutKey in configs[category]) {
+      const config = configs[category][shortcutKey]
+      result[category]![shortcutKey]!.key = transformShortcut(config!.key)
+    }
+  }
+
+  return result
+}
+
+export const shortcuts = transformShortcuts(shortcutConfigs) satisfies Shortcuts
 
 export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",

@@ -7,7 +7,10 @@ import { shallow } from "zustand/shallow"
 export const jotaiStore = createStore()
 
 export const createAtomAccessor = <T>(atom: PrimitiveAtom<T>) =>
-  [() => jotaiStore.get(atom), (value: T) => jotaiStore.set(atom, value)] as const
+  [
+    () => jotaiStore.get(atom),
+    (value: T | ((prev: T) => T)) => jotaiStore.set(atom, value),
+  ] as const
 
 const options = { store: jotaiStore }
 /**
@@ -39,7 +42,7 @@ export const createAtomHooks = <T>(atom: PrimitiveAtom<T>) => {
   return result as any as Result
 }
 
-const noop = []
+const noop: any[] = []
 const createAtomSelector = <T>(atom: Atom<T>) => {
   const useHook = <R>(selector: (a: T) => R, deps: any[] = noop) =>
     useAtomValue(

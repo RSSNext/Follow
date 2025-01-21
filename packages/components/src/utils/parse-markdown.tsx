@@ -3,6 +3,7 @@ import "remark-gh-alerts/styles/github-colors-light.css"
 import "remark-gh-alerts/styles/github-colors-dark-media.css"
 import "remark-gh-alerts/styles/github-base.css"
 
+// @ts-ignore
 import remarkCalloutDirectives from "@microflash/remark-callout-directives"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"

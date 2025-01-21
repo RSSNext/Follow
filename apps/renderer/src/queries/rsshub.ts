@@ -9,7 +9,7 @@ import type { MutationBaseProps } from "./types"
 
 export const useSetRSSHubMutation = ({ onError }: MutationBaseProps = {}) =>
   useMutation({
-    mutationFn: (data: { id: string | null; durationInMonths?: number }) =>
+    mutationFn: (data: { id: string | null; durationInMonths?: number; TOTPCode?: string }) =>
       apiClient.rsshub.use.$post({ json: data }),
 
     onSuccess: (_, variables) => {

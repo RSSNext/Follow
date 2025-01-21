@@ -1,16 +1,22 @@
-import { FeedViewType } from "@follow/constants"
+import { FeedViewType, UserRole } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { getOS } from "@follow/utils/utils"
+import { cn, getOS } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { toggleShowAISummary } from "~/atoms/ai-summary"
 import { toggleShowAITranslation } from "~/atoms/ai-translation"
-import { setShowSourceContent, useSourceContentModal } from "~/atoms/source-content"
+import {
+  getShowSourceContent,
+  toggleShowSourceContent,
+  useSourceContentModal,
+} from "~/atoms/source-content"
+import { useUserRole } from "~/atoms/user"
 import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
+import { useActivationModal } from "~/modules/activation"
 import { useTipModal } from "~/modules/wallet/hooks"
 import { entryActions, useEntryStore } from "~/store/entry"
 
@@ -89,6 +95,9 @@ export const useRegisterEntryCommands = () => {
   const read = useRead()
   const unread = useUnread()
 
+  const role = useUserRole()
+  const presentActivationModal = useActivationModal()
+
   useRegisterFollowCommand([
     {
       id: COMMAND_ID.entry.tip,
@@ -107,7 +116,13 @@ export const useRegisterEntryCommands = () => {
     {
       id: COMMAND_ID.entry.star,
       label: t("entry_actions.star"),
-      icon: <i className="i-mgc-star-cute-re" />,
+      icon: (props) => (
+        <i
+          className={cn(
+            props?.isActive ? "i-mgc-star-cute-fi text-orange-500" : "i-mgc-star-cute-re",
+          )}
+        />
+      ),
       run: ({ entryId, view }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
         if (!entry) {
@@ -123,20 +138,11 @@ export const useRegisterEntryCommands = () => {
         //     width: 252,
         //   })
         // }
-        collect.mutate({ entryId, view })
-      },
-    },
-    {
-      id: COMMAND_ID.entry.unstar,
-      label: t("entry_actions.unstar"),
-      icon: <i className="i-mgc-star-cute-fi text-orange-500" />,
-      run: ({ entryId }) => {
-        const entry = useEntryStore.getState().flatMapEntries[entryId]
-        if (!entry) {
-          toast.error("Failed to unstar: entry is not available", { duration: 3000 })
-          return
+        if (entry.collections) {
+          uncollect.mutate(entry.entries.id)
+        } else {
+          collect.mutate({ entryId, view })
         }
-        uncollect.mutate(entry.entries.id)
       },
     },
     {
@@ -206,37 +212,31 @@ export const useRegisterEntryCommands = () => {
       label: t("entry_actions.view_source_content"),
       icon: <i className="i-mgc-world-2-cute-re" />,
       run: ({ entryId }) => {
-        const entry = useEntryStore.getState().flatMapEntries[entryId]
-        if (!entry || !entry.entries.url) {
-          toast.error("Failed to view source content: url is not available", { duration: 3000 })
-          return
+        if (!getShowSourceContent()) {
+          const entry = useEntryStore.getState().flatMapEntries[entryId]
+          if (!entry || !entry.entries.url) {
+            toast.error("Failed to view source content: url is not available", { duration: 3000 })
+            return
+          }
+          const routeParams = getRouteParams()
+          const viewPreviewInModal = [
+            FeedViewType.SocialMedia,
+            FeedViewType.Videos,
+            FeedViewType.Pictures,
+          ].includes(routeParams.view)
+          if (viewPreviewInModal) {
+            showSourceContentModal({
+              title: entry.entries.title ?? undefined,
+              src: entry.entries.url,
+            })
+            return
+          }
+          const layoutEntryId = routeParams.entryId
+          if (layoutEntryId !== entry.entries.id) {
+            navigateEntry({ entryId: entry.entries.id })
+          }
         }
-        const routeParams = getRouteParams()
-        const viewPreviewInModal = [
-          FeedViewType.SocialMedia,
-          FeedViewType.Videos,
-          FeedViewType.Pictures,
-        ].includes(routeParams.view)
-        if (viewPreviewInModal) {
-          showSourceContentModal({
-            title: entry.entries.title ?? undefined,
-            src: entry.entries.url,
-          })
-          return
-        }
-        const layoutEntryId = routeParams.entryId
-        if (layoutEntryId !== entry.entries.id) {
-          navigateEntry({ entryId: entry.entries.id })
-        }
-        setShowSourceContent(true)
-      },
-    },
-    {
-      id: COMMAND_ID.entry.viewEntryContent,
-      label: t("entry_actions.view_source_content"),
-      icon: <i className="i-mgc-world-2-cute-fi" />,
-      run: () => {
-        setShowSourceContent(false)
+        toggleShowSourceContent()
       },
     },
     {
@@ -269,44 +269,53 @@ export const useRegisterEntryCommands = () => {
     {
       id: COMMAND_ID.entry.read,
       label: t("entry_actions.mark_as_read"),
-      icon: <i className="i-mgc-round-cute-fi" />,
+      icon: (props) => (
+        <i className={cn(props?.isActive ? "i-mgc-round-cute-re" : "i-mgc-round-cute-fi")} />
+      ),
       run: ({ entryId }) => {
         const entry = useEntryStore.getState().flatMapEntries[entryId]
         if (!entry) {
           toast.error("Failed to mark as unread: feed is not available", { duration: 3000 })
           return
         }
-        read.mutate({ entryId, feedId: entry.feedId })
-      },
-    },
-    {
-      id: COMMAND_ID.entry.unread,
-      label: t("entry_actions.mark_as_unread"),
-      icon: <i className="i-mgc-round-cute-re" />,
-      run: ({ entryId }) => {
-        const entry = useEntryStore.getState().flatMapEntries[entryId]
-        if (!entry) {
-          toast.error("Failed to mark as unread: feed is not available", { duration: 3000 })
-          return
+        if (entry.read) {
+          unread.mutate({ entryId, feedId: entry.feedId })
+        } else {
+          read.mutate({ entryId, feedId: entry.feedId })
         }
-        unread.mutate({ entryId, feedId: entry.feedId })
-      },
-    },
-    {
-      id: COMMAND_ID.entry.toggleAISummary,
-      label: t("entry_actions.toggle_ai_summary"),
-      icon: <i className="i-mgc-magic-2-cute-re" />,
-      run: () => {
-        toggleShowAISummary()
-      },
-    },
-    {
-      id: COMMAND_ID.entry.toggleAITranslation,
-      label: t("entry_actions.toggle_ai_translation"),
-      icon: <i className="i-mgc-translate-2-cute-re" />,
-      run: () => {
-        toggleShowAITranslation()
       },
     },
   ])
+
+  useRegisterFollowCommand(
+    [
+      {
+        id: COMMAND_ID.entry.toggleAISummary,
+        label: t("entry_actions.toggle_ai_summary"),
+        icon: <i className="i-mgc-magic-2-cute-re" />,
+        run: () => {
+          if (role === UserRole.Trial) {
+            presentActivationModal()
+            return
+          }
+          toggleShowAISummary()
+        },
+      },
+      {
+        id: COMMAND_ID.entry.toggleAITranslation,
+        label: t("entry_actions.toggle_ai_translation"),
+        icon: <i className="i-mgc-translate-2-cute-re" />,
+        run: () => {
+          if (role === UserRole.Trial) {
+            presentActivationModal()
+            return
+          }
+          toggleShowAITranslation()
+        },
+      },
+    ],
+    {
+      deps: [role],
+    },
+  )
 }

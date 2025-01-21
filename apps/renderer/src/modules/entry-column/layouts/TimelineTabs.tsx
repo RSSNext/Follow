@@ -12,13 +12,15 @@ export const TimelineTabs = () => {
 
   const listsData = useSubscriptionStore(
     useCallback(
-      (state) => state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
+      (state) =>
+        state.feedIdByView[view].map((id) => state.data[id]).filter((s) => s && "listId" in s),
       [view],
     ),
   )
   const inboxData = useSubscriptionStore(
     useCallback(
-      (state) => state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
+      (state) =>
+        state.feedIdByView[view].map((id) => state.data[id]).filter((s) => s && "inboxId" in s),
       [view],
     ),
   )
@@ -27,7 +29,7 @@ export const TimelineTabs = () => {
       (state) => {
         const categoryNames = new Set<string>()
         for (const subId of state.feedIdByView[view]) {
-          const sub = state.data[subId]
+          const sub = state.data[subId]!
           if (sub.category) {
             categoryNames.add(sub.category)
           }
@@ -63,16 +65,18 @@ export const TimelineTabs = () => {
         <TabsTrigger className="p-0" value="">
           <span>Yours</span>
         </TabsTrigger>
-        {listsData.map((s) => (
-          <TabsTrigger className="p-0" key={s.listId} value={s.listId!}>
-            <ListItem
-              listId={s.listId!}
-              view={view}
-              iconSize={16}
-              className="h-5 !bg-transparent p-0"
-            />
-          </TabsTrigger>
-        ))}
+        {listsData
+          .filter((s) => !!s)
+          .map((s) => (
+            <TabsTrigger className="p-0" key={s.listId} value={s.listId!}>
+              <ListItem
+                listId={s.listId!}
+                view={view}
+                iconSize={16}
+                className="h-5 !bg-transparent p-0"
+              />
+            </TabsTrigger>
+          ))}
         {categoriesData.map((s) => (
           <TabsTrigger
             key={s}
@@ -89,16 +93,18 @@ export const TimelineTabs = () => {
             </span>
           </TabsTrigger>
         ))}
-        {inboxData.map((s) => (
-          <TabsTrigger key={s.inboxId} value={s.inboxId!}>
-            <InboxItem
-              inboxId={s.inboxId!}
-              view={view}
-              iconSize={16}
-              className="h-5 !bg-transparent p-0"
-            />
-          </TabsTrigger>
-        ))}
+        {inboxData
+          .filter((s) => !!s)
+          .map((s) => (
+            <TabsTrigger key={s.inboxId} value={s.inboxId!}>
+              <InboxItem
+                inboxId={s.inboxId!}
+                view={view}
+                iconSize={16}
+                className="h-5 !bg-transparent p-0"
+              />
+            </TabsTrigger>
+          ))}
       </TabsList>
     </Tabs>
   )

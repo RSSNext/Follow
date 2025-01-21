@@ -15,7 +15,7 @@ export function localesPlugin(): Plugin {
       const localesDir = path.resolve(__dirname, "../../locales")
 
       const namespaces = fs.readdirSync(localesDir).filter((dir) => dir !== ".DS_Store")
-      const languageResources = {}
+      const languageResources = {} as any
 
       namespaces.forEach((namespace) => {
         const namespacePath = path.join(localesDir, namespace)

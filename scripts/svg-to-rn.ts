@@ -3,6 +3,9 @@ import path from "node:path"
 
 import { parse } from "svg-parser"
 
+const DIST_DIR = "apps/mobile/src/icons"
+
+const DEFAULT_COLOR = "#10161F"
 interface SvgNode {
   type: string
   tagName: string
@@ -15,14 +18,11 @@ const generatePathElement = (node: SvgNode): string => {
     .map(([key, value]) => {
       const camelKey = key.replaceAll(/-([a-z])/g, (_match, p1: string) => p1.toUpperCase())
 
-      if (["stroke", "fill"].includes(key)) {
-        if (value === "currentColor") {
-          return `${camelKey}={color}`
-        }
-
-        if (value === "#000000" || value === "#000" || value === "black") {
-          return `${camelKey}={color}`
-        }
+      if (
+        ["stroke", "fill"].includes(key) &&
+        (!value || value === "currentColor" || value === DEFAULT_COLOR)
+      ) {
+        return `${camelKey}={color}`
       }
 
       if (typeof value === "number") {
@@ -59,7 +59,7 @@ interface ${componentName}Props {
 export const ${componentName} = ({
   width = ${width},
   height = ${height},
-  color = "#10161F",
+  ${pathElements.includes(`{color}`) ? `color = "${DEFAULT_COLOR}",` : ""}
 }: ${componentName}Props) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 ${width} ${height}">
@@ -80,7 +80,7 @@ const processFile = (filePath: string) => {
 
   const rnComponent = convertSvgToRN(svgContent, componentName)
 
-  const outputDir = path.join(process.cwd(), "apps/mobile/src/components/icons")
+  const outputDir = path.join(process.cwd(), DIST_DIR)
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true })
   }

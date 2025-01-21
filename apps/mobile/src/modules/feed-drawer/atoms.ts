@@ -22,7 +22,7 @@ export function useFeedDrawer() {
 
 // is drawer swipe disabled
 
-const isDrawerSwipeDisabledAtom = atom<boolean>(false)
+const isDrawerSwipeDisabledAtom = atom<boolean>(true)
 
 export function useIsDrawerSwipeDisabled() {
   return useAtomValue(isDrawerSwipeDisabledAtom)

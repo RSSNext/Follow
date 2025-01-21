@@ -49,7 +49,7 @@ const MasonryItemFixedDimensionWrapper = (
   const style = useMemo(
     () => ({
       width: itemWidth,
-      height: itemWidth / stableRadioCtx,
+      height: itemWidth / stableRadioCtx!,
     }),
     [itemWidth, stableRadioCtx],
   )
@@ -148,10 +148,10 @@ export const PictureList: FC<{
     const flattenedItems = []
     const imageSrcSet = new Set<string>()
     for (let i = 0; i < entries?.length || 0; i++) {
-      const entry = entries[i]
+      const entry = entries[i]!
       if (!entry.media) continue
       for (let j = 0; j < entry.media?.length || 0; j++) {
-        const media = entry.media[j]
+        const media = entry.media[j]!
         if (imageSrcSet.has(media.url)) continue
         imageSrcSet.add(media.url)
 

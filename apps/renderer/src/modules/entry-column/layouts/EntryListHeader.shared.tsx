@@ -149,7 +149,7 @@ export const SwitchToMasonryButton = () => {
                     step={1}
                     defaultValue={[masonryColumnValue]}
                     onValueCommit={(value) => {
-                      setMasonryColumnValue(value[0])
+                      setMasonryColumnValue(value[0]!)
                     }}
                   />
                 </div>

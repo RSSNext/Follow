@@ -207,7 +207,7 @@ export const TargetActionList = ({ index }: { index: number }) => {
                 {rewriteRules?.map((rule, rewriteIdx) => {
                   const change = (key: string, value: string) => {
                     onChange((data) => {
-                      data.result.rewriteRules![rewriteIdx][key] = value
+                      data.result.rewriteRules![rewriteIdx]![key] = value
                     })
                   }
                   return (

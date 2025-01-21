@@ -50,7 +50,7 @@ class ListActionStatic {
 
   private patch(listId: string, data: Partial<ListModel>) {
     immerSet((state) => {
-      state.lists[listId] = { ...state.lists[listId], ...data }
+      state.lists[listId] = { ...state.lists[listId]!, ...data }
       return state
     })
 

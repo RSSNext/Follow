@@ -12,7 +12,7 @@ export function useActionByIndex(index: number): ActionModel
 export function useActionByIndex<T>(index: number, selector: (action: ActionModel) => T): T
 export function useActionByIndex<T>(index: number, selector?: (action: ActionModel) => T) {
   return useActionStore((state) =>
-    selector ? selector(state.actions[index]) : state.actions[index],
+    selector ? selector(state.actions[index]!) : state.actions[index],
   )
 }
 

@@ -34,4 +34,8 @@ export interface ContextMenuProps extends ViewProps {
    * @note only available on iOS
    */
   renderPreview?: RenderItem
+  /**
+   * @note only available on iOS
+   */
+  onPressPreview?: () => void
 }

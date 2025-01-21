@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.3.1-beta.0",
+  "version": "0.3.2-beta.0",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow your favorites in one inbox",
@@ -33,14 +33,16 @@
     "format:check": "prettier --check .",
     "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
     "hotfix": "vv -c bump.hotfix.config.js",
-    "lint": "eslint",
+    "lint": "pnpm run lint:tsl && eslint",
     "lint:fix": "eslint --fix",
+    "lint:tsl": "tsslint --project apps/*/tsconfig.json",
     "mitproxy": "bash scripts/run-proxy.sh",
     "polyfill-optimize": "pnpx nolyfill install",
     "prepare": "simple-git-hooks",
     "publish": "electron-vite build && electron-forge publish",
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
+    "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx",
     "test": "CI=1 pnpm --recursive run test",
     "typecheck": "turbo typecheck",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
@@ -67,6 +69,9 @@
     "@t3-oss/env-core": "^0.11.1",
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.15",
+    "@tsslint/cli": "^1.5.8",
+    "@tsslint/config": "^1.5.8",
+    "@tsslint/eslint": "^1.5.8",
     "@types/html-minifier-terser": "7.0.2",
     "@types/js-yaml": "4.0.9",
     "@types/node": "^22.10.1",
@@ -86,9 +91,9 @@
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
-    "eslint": "^9.16.0",
-    "eslint-config-hyoban": "^3.1.15",
-    "eslint-plugin-react-native": "^4.1.0",
+    "eslint": "^9.18.0",
+    "eslint-config-hyoban": "^3.2.0",
+    "eslint-plugin-react-native": "^5.0.0",
     "fake-indexeddb": "6.0.0",
     "fast-glob": "^3.3.2",
     "happy-dom": "15.11.7",
@@ -183,5 +188,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "b53d32acaa385ba52e4cc2e78a9710907229d10c52e90689b0abc0ae5d003f1b"
+  "mainHash": "1e87ac6080cfcc38786acfb9daba3c55e5f1ffa77df833c7182910971bae5ae9"
 }

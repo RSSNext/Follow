@@ -53,6 +53,7 @@
     "vscode-languagedetection": "npm:@vscode/vscode-languagedetection@^1.0.22"
   },
   "devDependencies": {
+    "@follow/types": "workspace:*",
     "@types/js-yaml": "4.0.9",
     "@types/node": "^22.10.1",
     "electron": "33.2.0",

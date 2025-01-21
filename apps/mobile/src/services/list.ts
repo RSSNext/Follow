@@ -1,3 +1,5 @@
+import { eq } from "drizzle-orm"
+
 import { db } from "../database"
 import { listsTable } from "../database/schemas"
 import type { ListSchema } from "../database/schemas/types"
@@ -27,6 +29,20 @@ class ListServiceStatic implements Hydratable, Resetable {
         target: [listsTable.id],
         set: conflictUpdateAllExcept(listsTable, ["id"]),
       })
+  }
+  async addEntryIds(params: { listId: string; entryIds: string[] }) {
+    const list = await db.query.listsTable.findFirst({
+      where: eq(listsTable.id, params.listId),
+    })
+
+    if (!list) return
+
+    await db
+      .update(listsTable)
+      .set({
+        entryIds: [...new Set([...(list.entryIds ?? []), ...params.entryIds])],
+      })
+      .where(eq(listsTable.id, params.listId))
   }
 }
 

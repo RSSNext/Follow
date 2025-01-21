@@ -1,10 +1,12 @@
 {
   "name": "@follow/server",
+  "private": true,
   "scripts": {
     "build": "cross-env NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
     "dev": "cross-env NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "meta": "tsx helper/meta-map.ts --watch",
-    "start": "tsx index.ts"
+    "start": "tsx index.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fastify/middie": "9.0.2",

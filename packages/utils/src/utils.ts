@@ -92,7 +92,7 @@ export const isSafari = once(() => {
 })
 
 // eslint-disable-next-line no-control-regex
-export const isASCII = (str) => /^[\u0000-\u007F]*$/.test(str)
+export const isASCII = (str: string) => /^[\u0000-\u007F]*$/.test(str)
 
 const EPOCH = 1712546615000n // follow repo created
 const MAX_TIMESTAMP_BITS = 41n // Maximum number of bits typically used for timestamp
@@ -149,7 +149,7 @@ export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
 
 export const omitObjectUndefinedValue = (obj: Record<string, any>) => {
-  const newObj = {}
+  const newObj = {} as any
   for (const key in obj) {
     if (obj[key] !== undefined) {
       newObj[key] = obj[key]
@@ -232,13 +232,13 @@ export function isKeyForMultiSelectPressed(e: MouseEvent) {
 export const toScientificNotation = (num: string, threshold: number) => {
   const cleanNum = num.replaceAll(",", "")
   const [intPart, decimalPart = ""] = cleanNum.split(".")
-  const numLength = intPart.replace(/^0+/, "").length
+  const numLength = intPart!.replace(/^0+/, "").length
 
   if (numLength > threshold) {
     const fullNum = intPart + decimalPart
     const firstDigit = fullNum.match(/[1-9]/)?.[0] || "0"
     const position = fullNum.indexOf(firstDigit)
-    const exponent = intPart.length - position - 1
+    const exponent = intPart!.length - position - 1
 
     const significand = fullNum.slice(position, position + 3)
     const formattedSignificand = `${significand[0]}.${significand.slice(1)}`
@@ -246,4 +246,11 @@ export const toScientificNotation = (num: string, threshold: number) => {
     return `${formattedSignificand}e+${exponent}`
   }
   return num
+}
+
+export function transformShortcut(shortcut: string, platform: OS = getOS()): string {
+  if (platform === "Windows") {
+    return shortcut.replace("Meta", "Ctrl").replace("meta", "ctrl")
+  }
+  return shortcut
 }

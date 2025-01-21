@@ -64,7 +64,9 @@ export const SettingAbout = () => {
           </div>
         </div>
 
-        <p className="mt-6 text-balance text-sm">{t("about.licenseInfo", { appName: APP_NAME })}</p>
+        <p className="mt-6 text-balance text-sm">
+          {t("about.licenseInfo", { appName: APP_NAME, currentYear: new Date().getFullYear() })}
+        </p>
         <p className="mt-3 text-balance text-sm">
           <Trans
             ns="settings"
@@ -94,7 +96,7 @@ export const SettingAbout = () => {
               OpenIssueLink: (
                 <a
                   className="inline-flex cursor-pointer items-center gap-1 hover:underline"
-                  href={getNewIssueUrl()}
+                  href={getNewIssueUrl({ template: "feature_request.yml" })}
                   target="_blank"
                 >
                   open an issue

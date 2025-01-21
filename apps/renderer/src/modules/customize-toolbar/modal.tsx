@@ -24,6 +24,7 @@ import { DEFAULT_ACTION_ORDER } from "./constant"
 import { DroppableContainer, SortableActionButton } from "./dnd"
 
 const CustomizeToolbar = () => {
+  const { t } = useTranslation("settings")
   const actionOrder = useUISettingSelector((s) => s.toolbarOrder)
 
   const sensors = useSensors(
@@ -79,8 +80,8 @@ const CustomizeToolbar = () => {
   return (
     <div className="mx-auto w-full max-w-[800px] space-y-4">
       <div className="mb-4">
-        <h2 className="text-lg font-semibold">Quick Actions</h2>
-        <p className="text-sm text-gray-500">Customize and reorder your frequently used actions</p>
+        <h2 className="text-lg font-semibold">{t("customizeToolbar.quick_actions.title")}</h2>
+        <p className="text-sm text-gray-500">{t("customizeToolbar.quick_actions.description")}</p>
       </div>
       {/* Refer to https://github.com/clauderic/dnd-kit/blob/master/stories/2%20-%20Presets/Sortable/MultipleContainers.tsx */}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragOver={handleDragOver}>
@@ -100,8 +101,10 @@ const CustomizeToolbar = () => {
 
           {/* More panel */}
           <div className="mb-4">
-            <h2 className="text-lg font-semibold">More Actions</h2>
-            <p className="text-sm text-gray-500">Will be shown in the dropdown menu</p>
+            <h2 className="text-lg font-semibold">{t("customizeToolbar.more_actions.title")}</h2>
+            <p className="text-sm text-gray-500">
+              {t("customizeToolbar.more_actions.description")}
+            </p>
           </div>
 
           <DroppableContainer id="container-more">
@@ -119,7 +122,7 @@ const CustomizeToolbar = () => {
 
       <div className="flex justify-end">
         <Button variant="outline" onClick={resetActionOrder}>
-          Reset to Default Layout
+          {t("customizeToolbar.reset_layout")}
         </Button>
       </div>
     </div>

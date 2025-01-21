@@ -8,13 +8,58 @@ import { useDarkMode } from "usehooks-ts"
 
 import { useCSSInjection } from "@/src/theme/web"
 
-const MarkdownWeb: WebComponent<{ value: string }> = ({ value }) => {
+declare const window: {
+  openLinkInModal: (url: string) => void
+}
+/**
+ * @internal
+ */
+const MarkdownWeb: WebComponent<{
+  value: string
+  style?: React.CSSProperties
+  className?: string
+}> = ({ value, style, className }) => {
   useCSSInjection()
 
   const { isDarkMode } = useDarkMode()
   return (
-    <div className={cn("text-text prose min-w-0", isDarkMode ? "prose-invert" : "prose")}>
-      {useMemo(() => parseMarkdown(value).content, [value])}
+    <div
+      className={cn("text-text prose min-w-0", isDarkMode ? "prose-invert" : "prose", className)}
+      style={style}
+    >
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+:root {
+  overscroll-behavior: none;
+}
+body, html {
+  overflow: hidden;
+}
+        `,
+        }}
+      />
+      {useMemo(
+        () =>
+          parseMarkdown(value, {
+            components: {
+              a: ({ children, ...props }) => (
+                <a
+                  onClick={(e) => {
+                    if (!props.href) return
+
+                    e.preventDefault()
+                    window.openLinkInModal(props.href)
+                  }}
+                  {...props}
+                >
+                  {children}
+                </a>
+              ),
+            },
+          }).content,
+        [value],
+      )}
     </div>
   )
 }

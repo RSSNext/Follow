@@ -1,5 +1,3 @@
-import { PlatformIcon } from "@follow/components/ui/platform-icon/index.jsx"
-import { getFeedIconSrc } from "@follow/components/utils/icon"
 import type { CombinedEntryModel, FeedModel, FeedOrListRespModel } from "@follow/models/types"
 import { getColorScheme, stringToHue } from "@follow/utils/color"
 import { getImageProxyUrl } from "@follow/utils/img-proxy"
@@ -8,6 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { forwardRef, useMemo } from "react"
+
+import { getFeedIconSrc } from "../../utils/icon"
+import { PlatformIcon } from "../platform-icon"
 
 const FallbackableImage = forwardRef<
   HTMLImageElement,
@@ -108,7 +109,7 @@ export function FeedIcon({
       const [src] = getFeedIconSrc({
         siteUrl,
       })
-      finalSrc = src
+      finalSrc = src!
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
@@ -145,7 +146,7 @@ export function FeedIcon({
           height: size * 2,
         },
       })
-      finalSrc = src
+      finalSrc = src!
 
       ImageElement = (
         <PlatformIcon
@@ -156,7 +157,7 @@ export function FeedIcon({
           <FallbackableImage
             className={cn("mr-2", className)}
             style={sizeStyle}
-            fallbackUrl={fallbackSrc}
+            fallbackUrl={fallbackSrc!}
           />
         </PlatformIcon>
       )

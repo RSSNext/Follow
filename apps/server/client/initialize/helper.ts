@@ -1,15 +1,14 @@
-import type { User } from "@auth/core/types"
+import type { AuthUser } from "@follow/shared/hono"
 
 import { op } from "./op"
 
-export const setIntegrationIdentify = async (user: User) => {
+export const setIntegrationIdentify = async (user: AuthUser) => {
   op.identify({
     profileId: user.id,
     email: user.email,
-    avatar: user.image,
+    avatar: user.image ?? undefined,
     lastName: user.name,
     properties: {
-      // @ts-expect-error
       handle: user.handle,
       name: user.name,
     },

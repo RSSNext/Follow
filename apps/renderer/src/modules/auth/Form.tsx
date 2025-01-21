@@ -9,7 +9,7 @@ import {
 } from "@follow/components/ui/form/index.js"
 import { Input } from "@follow/components/ui/input/Input.js"
 import type { LoginRuntime } from "@follow/shared/auth"
-import { loginHandler, signUp } from "@follow/shared/auth"
+import { loginHandler, signUp, twoFactor } from "@follow/shared/auth"
 import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -19,6 +19,8 @@ import { z } from "zod"
 
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
 
+import { TOTPForm } from "../profile/two-factor"
+
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().max(128),
@@ -26,6 +28,7 @@ const formSchema = z.object({
 
 export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
   const { t } = useTranslation("app")
+  const { t: tSettings } = useTranslation("settings")
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,12 +42,37 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
   const { dismiss } = useCurrentModal()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await loginHandler("credential", runtime ?? "browser", values)
+    const res = await loginHandler("credential", runtime ?? "browser", {
+      email: values.email,
+      password: values.password,
+    })
     if (res?.error) {
       toast.error(res.error.message)
       return
     }
-    window.location.reload()
+
+    if ((res?.data as any)?.twoFactorRedirect) {
+      present({
+        title: tSettings("profile.totp_code.title"),
+        content: () => {
+          return (
+            <TOTPForm
+              onSubmitMutationFn={async (values) => {
+                const { data, error } = await twoFactor.verifyTotp({ code: values.code })
+                if (!data || error) {
+                  throw new Error(error?.message ?? "Invalid TOTP code")
+                }
+              }}
+              onSuccess={() => {
+                window.location.reload()
+              }}
+            />
+          )
+        },
+      })
+    } else {
+      window.location.reload()
+    }
   }
 
   return (
@@ -86,9 +114,9 @@ export function LoginWithPassword({ runtime }: { runtime?: LoginRuntime }) {
         </a>
         <Button
           type="submit"
-          className="w-full"
-          buttonClassName="text-base !mt-3"
+          buttonClassName="text-base !mt-3 w-full"
           disabled={!isValid}
+          isLoading={form.formState.isSubmitting}
         >
           {t("login.continueWith", { provider: t("words.email") })}
         </Button>
@@ -140,7 +168,7 @@ function RegisterForm() {
     return signUp.email({
       email: values.email,
       password: values.password,
-      name: values.email.split("@")[0],
+      name: values.email.split("@")[0]!,
       callbackURL: "/",
       fetchOptions: {
         onSuccess() {

@@ -50,6 +50,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: iconPath,
   },
   plugins: [
+    "expo-localization",
     [
       "expo-router",
       {
@@ -90,6 +91,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "expo-apple-authentication",
     [require("./scripts/with-follow-assets.js")],
+    [require("./scripts/with-follow-app-delegate.js")],
+    "expo-secure-store",
   ],
   experiments: {
     typedRoutes: true,

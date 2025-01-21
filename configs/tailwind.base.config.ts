@@ -119,7 +119,7 @@ export const baseTwConfig = {
         sm: "calc(var(--radius) - 4px)",
       },
 
-      typography: (theme) => ({
+      typography: (theme: any) => ({
         zinc: {
           css: {
             "--tw-prose-body": theme("colors.zinc.500"),
@@ -127,6 +127,16 @@ export const baseTwConfig = {
           },
         },
       }),
+
+      keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
+      },
+      animation: {
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
+      },
     },
   },
 

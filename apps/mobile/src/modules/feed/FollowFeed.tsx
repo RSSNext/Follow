@@ -5,6 +5,7 @@ import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { ScrollView, Text, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { z } from "zod"
 
 import {
@@ -49,7 +50,7 @@ export function FollowFeed(props: { id: string }) {
 function FollowImpl() {
   const { id } = useLocalSearchParams()
 
-  const feed = useFeed(id as string)
+  const feed = useFeed(id as string)!
   const isSubscribed = useSubscriptionByFeedId(feed?.id || "")
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -86,6 +87,8 @@ function FollowImpl() {
     }
   }
 
+  const insets = useSafeAreaInsets()
+
   const { isValid, isDirty } = form.formState
 
   if (!feed?.id) {
@@ -93,7 +96,10 @@ function FollowImpl() {
   }
 
   return (
-    <ScrollView contentContainerClassName="px-2 pt-4 gap-y-4">
+    <ScrollView
+      contentContainerClassName="px-2 pt-4 gap-y-4"
+      contentContainerStyle={{ paddingBottom: insets.bottom }}
+    >
       <Stack.Screen
         options={{
           title: `${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`,
