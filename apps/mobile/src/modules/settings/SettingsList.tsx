@@ -1,7 +1,7 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
 import type { FC, RefObject } from "react"
-import { useContext, useEffect } from "react"
+import { Fragment, useContext, useEffect } from "react"
 import type { ScrollView } from "react-native"
 import { View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -34,6 +34,8 @@ interface GroupNavigationLink {
     scrollRef: RefObject<ScrollView>,
   ) => void
   iconBackgroundColor: string
+
+  todo?: boolean
 }
 const UserGroupNavigationLinks: GroupNavigationLink[] = [
   {
@@ -73,6 +75,7 @@ const SettingGroupNavigationLinks: GroupNavigationLink[] = [
       navigation.navigate("Notifications")
     },
     iconBackgroundColor: "#FBBF24",
+    todo: true,
   },
   {
     label: "Appearance",
@@ -139,6 +142,40 @@ const PrivacyGroupNavigationLinks: GroupNavigationLink[] = [
   },
 ]
 
+const NavigationLinkGroup: FC<{
+  links: GroupNavigationLink[]
+  navigation: ReturnType<typeof useSettingsNavigation>
+  scrollRef: RefObject<ScrollView>
+}> = ({ links, navigation, scrollRef }) => (
+  <GroupedInsetListCard>
+    {links.map((link) => (
+      <GroupedInsetListNavigationLink
+        key={link.label}
+        label={link.label + (link.todo ? " (Coming Soon)" : "")}
+        disabled={link.todo}
+        icon={
+          <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+            <link.icon height={18} width={18} color="#fff" />
+          </GroupedInsetListNavigationLinkIcon>
+        }
+        onPress={() => {
+          if (link.todo) {
+            return
+          }
+          link.onPress(navigation, scrollRef)
+        }}
+      />
+    ))}
+  </GroupedInsetListCard>
+)
+
+const navigationGroups = [
+  UserGroupNavigationLinks,
+  DataGroupNavigationLinks,
+  SettingGroupNavigationLinks,
+  PrivacyGroupNavigationLinks,
+] as const
+
 export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollRef }) => {
   const navigation = useSettingsNavigation()
 
@@ -157,68 +194,17 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
       className="bg-system-grouped-background flex-1 py-4"
       style={{ paddingBottom: insets.bottom + tabBarHeight }}
     >
-      <GroupedInsetListCard>
-        {UserGroupNavigationLinks.map((link) => (
-          <GroupedInsetListNavigationLink
-            key={link.label}
-            label={link.label}
-            icon={
-              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                <link.icon height={18} width={18} color="#fff" />
-              </GroupedInsetListNavigationLinkIcon>
-            }
-            onPress={() => link.onPress(navigation, scrollRef)}
+      {navigationGroups.map((group, index) => (
+        <Fragment key={`nav-group-${index}`}>
+          <NavigationLinkGroup
+            key={`nav-group-${index}`}
+            links={group}
+            navigation={navigation}
+            scrollRef={scrollRef}
           />
-        ))}
-      </GroupedInsetListCard>
-
-      <View className="h-8" />
-      <GroupedInsetListCard>
-        {DataGroupNavigationLinks.map((link) => (
-          <GroupedInsetListNavigationLink
-            key={link.label}
-            label={link.label}
-            icon={
-              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                <link.icon height={18} width={18} color="#fff" />
-              </GroupedInsetListNavigationLinkIcon>
-            }
-            onPress={() => link.onPress(navigation, scrollRef)}
-          />
-        ))}
-      </GroupedInsetListCard>
-      <View className="h-8" />
-
-      <GroupedInsetListCard>
-        {SettingGroupNavigationLinks.map((link) => (
-          <GroupedInsetListNavigationLink
-            key={link.label}
-            label={link.label}
-            icon={
-              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                <link.icon height={18} width={18} color="#fff" />
-              </GroupedInsetListNavigationLinkIcon>
-            }
-            onPress={() => link.onPress(navigation, scrollRef)}
-          />
-        ))}
-      </GroupedInsetListCard>
-
-      <View className="h-8" />
-      <GroupedInsetListCard>
-        {PrivacyGroupNavigationLinks.map((link) => (
-          <GroupedInsetListNavigationLink
-            key={link.label}
-            label={link.label}
-            icon={
-              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                <link.icon height={18} width={18} color="#fff" />
-              </GroupedInsetListNavigationLinkIcon>
-            }
-            onPress={() => link.onPress(navigation, scrollRef)}
-          />
-        ))}
-      </GroupedInsetListCard>
+          {index < navigationGroups.length - 1 && <View className="h-8" />}
+        </Fragment>
+      ))}
     </View>
   )
 }

@@ -625,6 +625,9 @@ importers:
       react-native-webview:
         specifier: 13.12.5
         version: 13.12.5(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      shiki:
+        specifier: 1.24.1
+        version: 1.24.1
       swiftui-react-native:
         specifier: 6.3.3
         version: 6.3.3(vc5zx7mqwgzirpvpjamp5nboge)

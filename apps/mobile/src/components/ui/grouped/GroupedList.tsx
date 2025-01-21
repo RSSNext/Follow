@@ -75,20 +75,23 @@ export const GroupedInsetListNavigationLink: FC<{
   label: string
   icon?: React.ReactNode
   onPress: () => void
-}> = ({ label, icon, onPress }) => {
-  const tertiaryLabelColor = useColor("tertiaryLabel")
+  disabled?: boolean
+}> = ({ label, icon, onPress, disabled }) => {
+  const rightIconColor = useColor("tertiaryLabel")
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={onPress} disabled={disabled}>
       {({ pressed }) => (
-        <GroupedInsetListBaseCell className={pressed ? "bg-system-fill" : undefined}>
+        <GroupedInsetListBaseCell
+          className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
+        >
           <View className={"flex-1 flex-row items-center"}>
             <View className="flex-row items-center">
               {icon}
-              <Text className="text-[16px]">{label}</Text>
+              <Text className={"text-label text-[16px]"}>{label}</Text>
             </View>
             <View className="-mr-2 ml-auto">
-              <RightCuteReIcon height={18} width={18} color={tertiaryLabelColor} />
+              <RightCuteReIcon height={18} width={18} color={rightIconColor} />
             </View>
           </View>
         </GroupedInsetListBaseCell>

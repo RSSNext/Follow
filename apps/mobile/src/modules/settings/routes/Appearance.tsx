@@ -1,4 +1,5 @@
-import { View } from "react-native"
+import { useColorScheme, View } from "react-native"
+import { bundledThemesInfo } from "shiki/dist/themes.mjs"
 
 import { setUISetting, useUISettingKey } from "@/src/atoms/settings/ui"
 import {
@@ -17,6 +18,13 @@ export const AppearanceScreen = () => {
   const showUnreadCount = useUISettingKey("subscriptionShowUnreadCount")
   const hideExtraBadge = useUISettingKey("hideExtraBadge")
   const thumbnailRatio = useUISettingKey("thumbnailRatio")
+
+  const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
+  const codeThemeDark = useUISettingKey("codeHighlightThemeDark")
+
+  const colorScheme = useColorScheme()
+  const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
+  const hideRecentReader = useUISettingKey("hideRecentReader")
 
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
@@ -67,6 +75,54 @@ export const AppearanceScreen = () => {
             </View>
           </GroupedInsetListCell>
         </GroupedInsetListCard>
+
+        <View className="mt-6">
+          <GroupedInsetListSectionHeader label="Content" />
+          <GroupedInsetListCard>
+            <GroupedInsetListCell label="Code highlight theme">
+              <Select
+                wrapperClassName="w-[120px]"
+                options={bundledThemesInfo.map((theme) => ({
+                  label: theme.displayName,
+                  value: theme.id,
+                }))}
+                value={colorScheme === "dark" ? codeThemeDark : codeThemeLight}
+                onValueChange={(val) => {
+                  setUISetting(
+                    `codeHighlightTheme${colorScheme === "dark" ? "Dark" : "Light"}`,
+                    val,
+                  )
+                }}
+              />
+            </GroupedInsetListCell>
+
+            <GroupedInsetListCell
+              label="Render inline style"
+              description="Allows rendering of the inline style of the original HTML."
+            >
+              <Switch
+                size="sm"
+                value={readerRenderInlineStyle}
+                onValueChange={(val) => {
+                  setUISetting("readerRenderInlineStyle", val)
+                }}
+              />
+            </GroupedInsetListCell>
+
+            <GroupedInsetListCell
+              label="Hide recent reader"
+              description="Hide the recent reader in the entry header."
+            >
+              <Switch
+                size="sm"
+                value={hideRecentReader}
+                onValueChange={(val) => {
+                  setUISetting("hideRecentReader", val)
+                }}
+              />
+            </GroupedInsetListCell>
+          </GroupedInsetListCard>
+        </View>
       </View>
     </SafeNavigationScrollView>
   )
