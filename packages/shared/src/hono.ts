@@ -6455,6 +6455,23 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        toProductId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_product_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
             name: "power_token";
             tableName: "transactions";
@@ -6535,6 +6552,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toListId: zod.ZodNullable<zod.ZodString>;
     toEntryId: zod.ZodNullable<zod.ZodString>;
     toRSSHubId: zod.ZodNullable<zod.ZodString>;
+    toProductId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     tax: zod.ZodString;
     createdAt: zod.ZodString;
@@ -6550,6 +6568,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toListId: string | null;
     toEntryId: string | null;
     toRSSHubId: string | null;
+    toProductId: string | null;
     tax: string;
     comment: string | null;
 }, {
@@ -6563,6 +6582,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toListId: string | null;
     toEntryId: string | null;
     toRSSHubId: string | null;
+    toProductId: string | null;
     tax: string;
     comment: string | null;
 }>;
@@ -15605,6 +15625,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     toListId: string | null;
                     toEntryId: string | null;
                     toRSSHubId: string | null;
+                    toProductId: string | null;
                     tax: string;
                     comment: string | null;
                     fromUser?: {
@@ -16559,7 +16580,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             status: 200;
         };
     };
-}, "boosts"> | hono_types.MergeSchemaPath<{
+}, "/boosts"> | hono_types.MergeSchemaPath<{
     "/postgresql": {
         $get: {
             input: {};
@@ -16729,7 +16750,47 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             status: 200;
         };
     };
-}, "/rsshub">, "/">;
+}, "/rsshub"> | hono_types.MergeSchemaPath<hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    products: {
+                        name: string;
+                        id: string;
+                        category: string;
+                        price: number;
+                        quantityPerUser: number;
+                        quantityPurchased: number;
+                    }[];
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    productId: string;
+                    TOTPCode?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+}, "/products">, "/store">, "/">;
 type AppType = typeof _routes;
 
 export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, type UrlReadsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, twoFactor, urlReads, urlReadsOpenAPISchema, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

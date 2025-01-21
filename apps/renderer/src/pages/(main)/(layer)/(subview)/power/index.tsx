@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useSubViewTitle } from "~/modules/app-layout/subview/hooks"
 import { MyWalletSection } from "~/modules/power/my-wallet-section"
 import { PowerRanking } from "~/modules/power/ranking"
+import { StoreSection } from "~/modules/power/store-section"
 import { TransactionsSection } from "~/modules/power/transaction-section"
 
 export function Component() {
@@ -27,6 +28,9 @@ export function Component() {
 
       <Divider className="my-8" />
       <PowerRanking />
+
+      <Divider className="my-8" />
+      <StoreSection />
 
       <Divider className="my-8" />
       <AutoResizeHeight>

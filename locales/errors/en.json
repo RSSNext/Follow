@@ -60,5 +60,7 @@
   "13003": "RSSHub not found",
   "13004": "RSSHub user limit exceeded",
   "13005": "RSSHub purchase not found",
-  "13006": "RSSHub config invalid"
+  "13006": "RSSHub config invalid",
+  "14000": "Product not found",
+  "14001": "Product sold out"
 }
