@@ -126,7 +126,7 @@ export const GroupedInsetListCell: FC<{
         {!!description && <Text className="text-secondary-label text-sm">{description}</Text>}
       </View>
 
-      <View className="ml-4 shrink-0">{children}</View>
+      <View className="mb-auto ml-4 shrink-0">{children}</View>
     </GroupedInsetListBaseCell>
   )
 }

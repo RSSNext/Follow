@@ -24,7 +24,7 @@ export const CollectionPanel = () => {
   const insets = useSafeAreaInsets()
   return (
     <View
-      className="bg-tertiary-system-background"
+      className="bg-quaternary-system-fill dark:bg-tertiary-system-background"
       style={{ width: Math.max(50, winDim.width * 0.15) }}
     >
       <ScrollView
