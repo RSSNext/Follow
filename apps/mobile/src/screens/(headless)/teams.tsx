@@ -1,7 +1,9 @@
-import { Stack } from "expo-router"
-import { View } from "react-native"
+import { router, Stack, useNavigation } from "expo-router"
+import { TouchableOpacity, View } from "react-native"
+import { useColor } from "react-native-uikit-colors"
 
-import MarkdownWeb from "@/src/components/ui/typography/MarkdownWeb"
+import { Markdown } from "@/src/components/ui/typography/Markdown"
+import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 
 const txt = `# Terms of Service
 
@@ -82,19 +84,32 @@ Follow takes your privacy seriously. As a user, you acknowledge that we may coll
 
 export const TeamsMarkdown = () => {
   return (
-    <MarkdownWeb
+    <Markdown
       value={txt}
-      dom={{ matchContents: true, scrollEnabled: false }}
+      webViewProps={{ matchContents: true, scrollEnabled: false }}
       style={{ padding: 16 }}
     />
   )
 }
 
 export default function Teams() {
+  const canGoBack = useNavigation().canGoBack()
+  const label = useColor("label")
   return (
     <View className="flex-1">
       <Stack.Screen
-        options={{ headerBackTitle: "Login", headerTitle: "Terms of Service", headerShown: true }}
+        options={{
+          headerBackTitle: "Login",
+          headerTitle: "Terms of Service",
+          headerShown: true,
+          headerLeft: canGoBack
+            ? () => (
+                <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
+                  <MingcuteLeftLineIcon height={20} width={20} color={label} />
+                </TouchableOpacity>
+              )
+            : undefined,
+        }}
       />
 
       <TeamsMarkdown />

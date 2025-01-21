@@ -1,6 +1,6 @@
 {
   "name": "@follow/mobile",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "src/main.tsx",
   "scripts": {
@@ -43,7 +43,7 @@
     "expo-blur": "~14.0.1",
     "expo-build-properties": "^0.13.1",
     "expo-clipboard": "~7.0.0",
-    "expo-constants": "~17.0.3",
+    "expo-constants": "~17.0.4",
     "expo-dev-client": "^5.0.9",
     "expo-file-system": "~18.0.6",
     "expo-font": "~13.0.1",
@@ -51,6 +51,7 @@
     "expo-image": "~2.0.3",
     "expo-linear-gradient": "~14.0.1",
     "expo-linking": "~7.0.3",
+    "expo-localization": "~16.0.1",
     "expo-router": "4.0.11",
     "expo-secure-store": "^14.0.1",
     "expo-sharing": "~13.0.0",

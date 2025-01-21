@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
   GroupedInsetListCard,
   GroupedInsetListNavigationLink,
+  GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
 import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
@@ -24,7 +25,6 @@ import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
 import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
 
 import { useSettingsNavigation } from "./hooks"
-import { SettingNavigationLinkIcon } from "./SettingNavigationLink"
 
 interface GroupNavigationLink {
   label: string
@@ -88,7 +88,7 @@ const SettingGroupNavigationLinks: GroupNavigationLink[] = [
     onPress: (navigation) => {
       navigation.navigate("Data")
     },
-    iconBackgroundColor: "#F59E0B",
+    iconBackgroundColor: "#CBAD6D",
   },
 ]
 
@@ -101,19 +101,20 @@ const DataGroupNavigationLinks: GroupNavigationLink[] = [
     },
     iconBackgroundColor: "#059669",
   },
-  {
-    label: "Lists",
-    icon: RadaCuteFiIcon,
-    onPress: (navigation) => {
-      navigation.navigate("Lists")
-    },
-    iconBackgroundColor: "#10B981",
-  },
+
   {
     label: "Feeds",
     icon: CertificateCuteFiIcon,
     onPress: (navigation) => {
       navigation.navigate("Feeds")
+    },
+    iconBackgroundColor: "#10B981",
+  },
+  {
+    label: "Lists",
+    icon: RadaCuteFiIcon,
+    onPress: (navigation) => {
+      navigation.navigate("Lists")
     },
     iconBackgroundColor: "#34D399",
   },
@@ -162,9 +163,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />
@@ -178,9 +179,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />
@@ -194,9 +195,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />
@@ -210,9 +211,9 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
             key={link.label}
             label={link.label}
             icon={
-              <SettingNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
                 <link.icon height={18} width={18} color="#fff" />
-              </SettingNavigationLinkIcon>
+              </GroupedInsetListNavigationLinkIcon>
             }
             onPress={() => link.onPress(navigation, scrollRef)}
           />

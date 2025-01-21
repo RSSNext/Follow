@@ -63,7 +63,7 @@ class EntryActions {
     }
 
     const subscription = getSubscription(feedId)
-    if (subscription?.view) {
+    if (typeof subscription?.view === "number") {
       draft.entryIdByView[subscription.view].add(entryId)
     }
     if (subscription?.category) {

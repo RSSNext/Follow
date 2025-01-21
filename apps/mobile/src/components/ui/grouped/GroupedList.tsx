@@ -8,17 +8,33 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
 
-export const GroupedInsetListCard: FC<PropsWithChildren> = ({ children }) => {
+export const GroupedInsetListCard: FC<PropsWithChildren & ViewProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <View className="bg-secondary-system-grouped-background mx-4 flex-1 overflow-hidden rounded-[10px]">
+    <View
+      {...props}
+      className={cn(
+        "bg-secondary-system-grouped-background mx-4 flex-1 overflow-hidden rounded-[10px]",
+        className,
+      )}
+    >
       {React.Children.map(children, (child, index) => {
         const isLast = index === React.Children.count(children) - 1
+
+        const isNavigationLink =
+          React.isValidElement(child) &&
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+          (child.type as Function).name === GroupedInsetListNavigationLink.name
+
         return (
           <Fragment key={index}>
             {child}
             {!isLast && (
               <View
-                className="bg-opaque-separator ml-16"
+                className={cn("bg-opaque-separator", isNavigationLink ? "ml-16" : "mx-4")}
                 style={{ height: StyleSheet.hairlineWidth }}
               />
             )}
@@ -41,9 +57,15 @@ export const GroupedInsetListSectionHeader: FC<{
   )
 }
 
-export const GroupedInsetListItem: FC<PropsWithChildren & ViewProps> = ({ children, ...props }) => {
+export const GroupedInsetListBaseCell: FC<PropsWithChildren & ViewProps> = ({
+  children,
+  ...props
+}) => {
   return (
-    <View {...props} className={cn("px-5 py-4", props.className)}>
+    <View
+      {...props}
+      className={cn("flex-row items-center justify-between px-5 py-4", props.className)}
+    >
       {children}
     </View>
   )
@@ -59,8 +81,8 @@ export const GroupedInsetListNavigationLink: FC<{
   return (
     <Pressable onPress={onPress}>
       {({ pressed }) => (
-        <GroupedInsetListItem className={cn(pressed && "bg-system-fill")}>
-          <View className={"flex-row items-center"}>
+        <GroupedInsetListBaseCell className={pressed ? "bg-system-fill" : undefined}>
+          <View className={"flex-1 flex-row items-center"}>
             <View className="flex-row items-center">
               {icon}
               <Text className="text-[16px]">{label}</Text>
@@ -69,8 +91,42 @@ export const GroupedInsetListNavigationLink: FC<{
               <RightCuteReIcon height={18} width={18} color={tertiaryLabelColor} />
             </View>
           </View>
-        </GroupedInsetListItem>
+        </GroupedInsetListBaseCell>
       )}
     </Pressable>
+  )
+}
+
+export const GroupedInsetListNavigationLinkIcon: FC<
+  {
+    backgroundColor: string
+  } & PropsWithChildren
+> = ({ backgroundColor, children }) => {
+  return (
+    <View
+      className="mr-4 items-center justify-center rounded-[5px] p-1"
+      style={{
+        backgroundColor,
+      }}
+    >
+      {children}
+    </View>
+  )
+}
+
+export const GroupedInsetListCell: FC<{
+  label: string
+  description?: string
+  children: React.ReactNode
+}> = ({ label, description, children }) => {
+  return (
+    <GroupedInsetListBaseCell className="flex-1">
+      <View className="flex-1">
+        <Text>{label}</Text>
+        {!!description && <Text className="text-secondary-label text-sm">{description}</Text>}
+      </View>
+
+      <View className="ml-4 shrink-0">{children}</View>
+    </GroupedInsetListBaseCell>
   )
 }

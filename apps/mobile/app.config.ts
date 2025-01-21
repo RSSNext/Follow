@@ -50,6 +50,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: iconPath,
   },
   plugins: [
+    "expo-localization",
     [
       "expo-router",
       {

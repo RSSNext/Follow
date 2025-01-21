@@ -91,7 +91,7 @@ export function Component() {
         }}
         className="max-w-full"
       >
-        <ScrollArea.ScrollArea orientation="horizontal" rootClassName="max-w-full">
+        <ScrollArea.ScrollArea orientation="horizontal" rootClassName="max-w-max">
           <TabsList className="relative w-full">
             {currentTabs.map((tab) => (
               <TabsTrigger

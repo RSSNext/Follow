@@ -47,16 +47,6 @@ test("defineFollowCommand types", () => {
 test("defineFollowCommand with keyBinding types", () => {
   assertType(
     defineFollowCommand({
-      id: COMMAND_ID.entry.viewEntryContent,
-      label: "",
-      when: true,
-      keyBinding: "",
-      run: () => {},
-    }),
-  )
-
-  assertType(
-    defineFollowCommand({
       id: COMMAND_ID.entry.viewSourceContent,
       label: "",
       when: true,

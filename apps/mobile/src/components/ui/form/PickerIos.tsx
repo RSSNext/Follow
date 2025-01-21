@@ -11,7 +11,7 @@ import { useEventCallback } from "usehooks-ts"
 import { MingcuteDownLineIcon } from "@/src/icons/mingcute_down_line"
 import { useColor } from "@/src/theme/colors"
 
-import { BlurEffect } from "../../common/HeaderBlur"
+import { BlurEffect } from "../../common/BlurEffect"
 
 interface PickerIosProps<T> {
   options: { label: string; value: T }[]

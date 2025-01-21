@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from "expo-router"
 import { useState } from "react"
 import { View } from "react-native"
 
-import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { EntryColumnGrid } from "@/src/modules/entry/gird"
 import { getEntry } from "@/src/store/entry/getter"
 import { useEntryIdsByFeedId, usePrefetchEntries } from "@/src/store/entry/hooks"

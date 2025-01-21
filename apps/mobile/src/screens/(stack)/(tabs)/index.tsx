@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { SafeNavigationScrollView } from "@/src/components/common/SafeNavigationScrollView"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
@@ -37,7 +37,7 @@ export default function Index() {
         }}
       />
 
-      <SafeNavigationScrollView>
+      <SafeNavigationScrollView contentInsetAdjustmentBehavior="automatic" withTopInset>
         <View className="flex min-h-96 items-center justify-center bg-zinc-300">
           <Text className="text-center text-2xl text-accent">EntryList Placeholder</Text>
         </View>

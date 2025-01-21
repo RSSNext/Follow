@@ -262,8 +262,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       {mutation.isSuccess && (
         <div className="mt-8 w-full max-w-lg">
           <div className="mb-4 text-zinc-500">
-            Found {mutation.data?.length || 0} feed
-            {mutation.data?.length > 1 && "s"}
+            {t("discover.search.results", { count: mutation.data?.length || 0 })}
           </div>
           <div className="space-y-6 text-sm">
             {discoverSearchData?.map((item) => (
