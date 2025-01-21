@@ -52,34 +52,43 @@ export function Select<T>({
     onValueChange(currentValue)
   }, [])
 
+  const Trigger = (
+    <DropdownMenu<T>
+      options={options.map((option) => ({
+        label: option.label,
+        value: option.value,
+      }))}
+      currentValue={currentValue}
+      handleChangeValue={handleChangeValue}
+    >
+      <View
+        className={cn(
+          "flex-1 shrink flex-row items-center rounded-lg pl-3",
+
+          wrapperClassName,
+        )}
+        style={wrapperStyle}
+      >
+        <Text className="flex-1 font-semibold text-accent" ellipsizeMode="middle" numberOfLines={1}>
+          {valueToLabelMap.get(currentValue)}
+        </Text>
+        <View className="ml-auto shrink-0 pl-1">
+          <MingcuteDownLineIcon color={accentColor} height={18} width={18} />
+        </View>
+      </View>
+    </DropdownMenu>
+  )
+
+  if (!label) {
+    return Trigger
+  }
+
   return (
     <View className="flex-1 flex-row items-center">
-      {!!label && <FormLabel className="pl-2" label={label} />}
-
+      <FormLabel className="pl-2" label={label} />
       <View className="flex-1" />
-      {/* Trigger */}
-      <DropdownMenu<T>
-        options={options.map((option) => ({
-          label: option.label,
-          value: option.value,
-        }))}
-        currentValue={currentValue}
-        handleChangeValue={handleChangeValue}
-      >
-        <View
-          className={cn(
-            "h-8 flex-row items-center rounded-lg pl-3 pr-2",
-            "min-w-[80px]",
-            wrapperClassName,
-          )}
-          style={wrapperStyle}
-        >
-          <Text className="font-semibold text-accent">{valueToLabelMap.get(currentValue)}</Text>
-          <View className="ml-auto shrink-0 pl-1">
-            <MingcuteDownLineIcon color={accentColor} height={18} width={18} />
-          </View>
-        </View>
-      </DropdownMenu>
+
+      {Trigger}
     </View>
   )
 }

@@ -88,7 +88,7 @@ const SettingGroupNavigationLinks: GroupNavigationLink[] = [
     onPress: (navigation) => {
       navigation.navigate("Data")
     },
-    iconBackgroundColor: "#F59E0B",
+    iconBackgroundColor: "#CBAD6D",
   },
 ]
 
@@ -101,19 +101,20 @@ const DataGroupNavigationLinks: GroupNavigationLink[] = [
     },
     iconBackgroundColor: "#059669",
   },
-  {
-    label: "Lists",
-    icon: RadaCuteFiIcon,
-    onPress: (navigation) => {
-      navigation.navigate("Lists")
-    },
-    iconBackgroundColor: "#10B981",
-  },
+
   {
     label: "Feeds",
     icon: CertificateCuteFiIcon,
     onPress: (navigation) => {
       navigation.navigate("Feeds")
+    },
+    iconBackgroundColor: "#10B981",
+  },
+  {
+    label: "Lists",
+    icon: RadaCuteFiIcon,
+    onPress: (navigation) => {
+      navigation.navigate("Lists")
     },
     iconBackgroundColor: "#34D399",
   },

@@ -81,7 +81,7 @@ export const AboutScreen = () => {
               label={link.title}
               icon={
                 <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                  <link.icon color={link.iconColor} />
+                  <link.icon color={link.iconColor} height={18} width={18} />
                 </GroupedInsetListNavigationLinkIcon>
               }
               onPress={() => Linking.openURL(link.url)}

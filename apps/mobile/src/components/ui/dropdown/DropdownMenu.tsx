@@ -29,6 +29,7 @@ export function DropdownMenu<T>({
   const isActionMenu = options.every((option) => "title" in option)
   return (
     <ContextMenu
+      style={{ flex: 1 }}
       dropdownMenuMode
       actions={
         isActionMenu
