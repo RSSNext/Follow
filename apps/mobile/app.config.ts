@@ -50,6 +50,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: iconPath,
   },
   plugins: [
+    [
+      "expo-document-picker",
+      {
+        iCloudContainerEnvironment: "Production",
+      },
+    ],
     "expo-localization",
     [
       "expo-router",

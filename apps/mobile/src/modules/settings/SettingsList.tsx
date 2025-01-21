@@ -1,9 +1,10 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
+import * as FileSystem from "expo-file-system"
 import type { FC, RefObject } from "react"
 import { Fragment, useContext, useEffect } from "react"
 import type { ScrollView } from "react-native"
-import { View } from "react-native"
+import { Alert, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import {
@@ -12,9 +13,11 @@ import {
   GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
 import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
+import { getDbPath } from "@/src/database"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
 import { CertificateCuteFiIcon } from "@/src/icons/certificate_cute_fi"
 import { DatabaseIcon } from "@/src/icons/database"
+import { ExitCuteFiIcon } from "@/src/icons/exit_cute_fi"
 import { Magic2CuteFiIcon } from "@/src/icons/magic_2_cute_fi"
 import { PaletteCuteFiIcon } from "@/src/icons/palette_cute_fi"
 import { RadaCuteFiIcon } from "@/src/icons/rada_cute_fi"
@@ -23,6 +26,7 @@ import { Settings7CuteFiIcon } from "@/src/icons/settings_7_cute_fi"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
 import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
+import { signOut } from "@/src/lib/auth"
 
 import { useSettingsNavigation } from "./hooks"
 
@@ -142,6 +146,33 @@ const PrivacyGroupNavigationLinks: GroupNavigationLink[] = [
   },
 ]
 
+const ActionGroupNavigationLinks: GroupNavigationLink[] = [
+  {
+    label: "Sign out",
+    icon: ExitCuteFiIcon,
+    onPress: () => {
+      Alert.alert("Sign out", "Are you sure you want to sign out?", [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Sign out",
+          style: "destructive",
+          onPress: async () => {
+            // sign out
+            await signOut()
+            const dbPath = getDbPath()
+            await FileSystem.deleteAsync(dbPath)
+            await expo.reloadAppAsync("User sign out")
+          },
+        },
+      ])
+    },
+    iconBackgroundColor: "#F87181",
+  },
+]
+
 const NavigationLinkGroup: FC<{
   links: GroupNavigationLink[]
   navigation: ReturnType<typeof useSettingsNavigation>
@@ -174,6 +205,7 @@ const navigationGroups = [
   DataGroupNavigationLinks,
   SettingGroupNavigationLinks,
   PrivacyGroupNavigationLinks,
+  ActionGroupNavigationLinks,
 ] as const
 
 export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollRef }) => {

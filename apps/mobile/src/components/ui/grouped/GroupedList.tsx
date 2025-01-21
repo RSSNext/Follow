@@ -85,12 +85,12 @@ export const GroupedInsetListNavigationLink: FC<{
         <GroupedInsetListBaseCell
           className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
         >
-          <View className={"flex-1 flex-row items-center"}>
+          <View className={"flex-1 flex-row items-center justify-between"}>
             <View className="flex-row items-center">
               {icon}
               <Text className={"text-label text-[16px]"}>{label}</Text>
             </View>
-            <View className="-mr-2 ml-auto">
+            <View className="-mr-2 ml-4">
               <RightCuteReIcon height={18} width={18} color={rightIconColor} />
             </View>
           </View>
@@ -120,7 +120,7 @@ export const GroupedInsetListNavigationLinkIcon: FC<
 export const GroupedInsetListCell: FC<{
   label: string
   description?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }> = ({ label, description, children }) => {
   return (
     <GroupedInsetListBaseCell className="flex-1">
@@ -131,5 +131,32 @@ export const GroupedInsetListCell: FC<{
 
       <View className="mb-auto ml-4 shrink-0">{children}</View>
     </GroupedInsetListBaseCell>
+  )
+}
+
+export const GroupedInsetListActionCell: FC<{
+  label: string
+  description?: string
+  onPress: () => void
+  disabled?: boolean
+}> = ({ label, description, onPress, disabled }) => {
+  const rightIconColor = useColor("tertiaryLabel")
+  return (
+    <Pressable onPress={onPress} disabled={disabled}>
+      {({ pressed }) => (
+        <GroupedInsetListBaseCell
+          className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
+        >
+          <View className="flex-1">
+            <Text>{label}</Text>
+            {!!description && <Text className="text-secondary-label text-sm">{description}</Text>}
+          </View>
+
+          <View className="-mr-2 ml-4">
+            <RightCuteReIcon height={18} width={18} color={rightIconColor} />
+          </View>
+        </GroupedInsetListBaseCell>
+      )}
+    </Pressable>
   )
 }
