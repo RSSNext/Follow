@@ -19,7 +19,7 @@ import { useAuthProviders } from "~/queries/users"
 import { LoginWithPassword } from "./Form"
 
 interface LoginModalContentProps {
-  runtime?: LoginRuntime
+  runtime: LoginRuntime
   canClose?: boolean
 }
 
@@ -196,7 +196,7 @@ const LoginButtonContent = (props: { children: React.ReactNode; isLoading: boole
 
 export const AuthProvidersRender: FC<{
   providers: AuthProvider[]
-  runtime?: LoginRuntime
+  runtime: LoginRuntime
 }> = ({ providers, runtime }) => {
   const { t } = useTranslation()
   const [authProcessingLockSet, setAuthProcessingLockSet] = useState(() => new Set<string>())
