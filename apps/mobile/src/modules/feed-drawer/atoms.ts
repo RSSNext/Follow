@@ -6,6 +6,7 @@ import { useCallback, useMemo } from "react"
 import { views } from "@/src/constants/views"
 import { usePrefetchEntries } from "@/src/store/entry/hooks"
 import type { FetchEntriesProps } from "@/src/store/entry/types"
+import { getSubscriptionByCategory } from "@/src/store/subscription/getter"
 
 // drawer open state
 
@@ -101,7 +102,7 @@ export function useSelectedFeed() {
       break
     }
     case "category": {
-      // payload = { category: selectedFeed.categoryName }
+      payload = { feedId: getSubscriptionByCategory(selectedFeed.categoryName).join(",") }
       break
     }
     case "list": {
