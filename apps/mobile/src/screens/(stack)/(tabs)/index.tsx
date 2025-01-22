@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native"
 import { Link, Stack } from "expo-router"
 import { useEffect } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
@@ -18,12 +19,15 @@ export default function Index() {
   usePrefetchUnread()
 
   const setDrawerSwipeDisabled = useSetDrawerSwipeDisabled()
+  const isFocused = useIsFocused()
   useEffect(() => {
-    setDrawerSwipeDisabled(false)
-    return () => {
+    if (isFocused) {
+      setDrawerSwipeDisabled(false)
+    } else {
       setDrawerSwipeDisabled(true)
     }
-  }, [setDrawerSwipeDisabled])
+  }, [setDrawerSwipeDisabled, isFocused])
+
   return (
     <>
       <Stack.Screen

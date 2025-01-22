@@ -1,4 +1,5 @@
 import Constants from "expo-constants"
+import { Link } from "expo-router"
 import { Linking, Text, View } from "react-native"
 
 import {
@@ -12,18 +13,9 @@ import {
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
 import { Logo } from "@/src/components/ui/logo"
-import { Markdown } from "@/src/components/ui/typography/Markdown"
 import { DiscordCuteFiIcon } from "@/src/icons/discord_cute_fi"
 import { Github2CuteFiIcon } from "@/src/icons/github_2_cute_fi"
 import { SocialXCuteReIcon } from "@/src/icons/social_x_cute_re"
-
-const about = `
-Follow is in the early stages of development. If you have any feedback or suggestions, please feel free to open an issue on the [GitHub repository](https://github.com/RSSNext/follow).
-
-The icon library used is copyrighted by <a class="inline-flex items-center" href="https://mgc.mingcute.com/" target="_blank" rel="noreferrer">https://mgc.mingcute.com/</a> and cannot be redistributed.
-
-Copyright © 2025 Follow. All rights reserved.
-`
 
 const links = [
   {
@@ -63,16 +55,28 @@ export const AboutScreen = () => {
           {appVersion} ({buildId})
         </Text>
       </View>
-      <View className="flex-1 px-6">
-        <Markdown
-          value={about}
-          webViewProps={{
-            matchContents: true,
-          }}
-          className="text-[15px] leading-snug"
-        />
+      <View className="mt-6 flex-1 px-9">
+        <Text className="text-label text-[15px]">
+          Follow is in the early stages of development. If you have any feedback or suggestions,
+          please feel free to open an issue on the{" "}
+          <Link className="text-accent" href="https://github.com/RSSNext/follow">
+            GitHub repository
+          </Link>
+        </Text>
+
+        <Text className="text-label mt-4 text-[15px]">
+          The icon library used is copyrighted by{" "}
+          <Link className="text-accent" href="https://mgc.mingcute.com/">
+            https://mgc.mingcute.com/
+          </Link>{" "}
+          and cannot be redistributed.
+        </Text>
+
+        <Text className="text-label mt-4 text-[15px]">
+          Copyright © 2025 Follow. All rights reserved.
+        </Text>
       </View>
-      <View className="mt-6">
+      <View className="mt-10">
         <GroupedInsetListSectionHeader label="Social Links" />
         <GroupedInsetListCard>
           {links.map((link) => (
