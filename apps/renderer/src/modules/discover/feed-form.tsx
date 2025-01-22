@@ -279,6 +279,13 @@ const FeedInnerForm = ({
     form.setValue("title", feed.title || "")
   }, [feed.title, form])
 
+  useEffect(() => {
+    const title = form.getValues("title")
+    if (!title) {
+      form.setValue("title", feed.title || "")
+    }
+  }, [])
+
   return (
     <div className="flex flex-1 flex-col gap-y-4">
       <Card>
@@ -299,7 +306,7 @@ const FeedInnerForm = ({
                 </div>
                 <FormControl>
                   <div className="flex gap-2">
-                    <Input {...field} />
+                    <Input {...field} placeholder={feed.title || ""} />
                     <Button
                       buttonClassName="shrink-0"
                       type="button"
