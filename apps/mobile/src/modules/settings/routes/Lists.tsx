@@ -26,6 +26,8 @@ import type { HonoApiClient } from "@/src/morph/types"
 import { listSyncServices } from "@/src/store/list/store"
 import { accentColor } from "@/src/theme/colors"
 
+import { SwipeableGroupProvider, SwipeableItem } from "../../../components/common/SwipeableItem"
+
 export const ListsScreen = () => {
   const { isLoading, data } = useQuery({
     queryKey: ["owned", "lists"],
@@ -54,22 +56,22 @@ export const ListsScreen = () => {
           />
         </GroupedInsetListCard>
       </View>
-
       <View className="mt-6">
         {data && (
           <GroupedInsetListCard>
-            <Animated.FlatList
-              keyExtractor={keyExtractor}
-              itemLayoutAnimation={LinearTransition}
-              scrollEnabled={false}
-              data={data}
-              renderItem={ListItemCell}
-              ItemSeparatorComponent={ItemSeparatorComponent}
-            />
+            <SwipeableGroupProvider>
+              <Animated.FlatList
+                keyExtractor={keyExtractor}
+                itemLayoutAnimation={LinearTransition}
+                scrollEnabled={false}
+                data={data}
+                renderItem={ListItemCell}
+                ItemSeparatorComponent={ItemSeparatorComponent}
+              />
+            </SwipeableGroupProvider>
           </GroupedInsetListCard>
         )}
       </View>
-
       {isLoading && (
         <View className="flex-1 items-center justify-center">
           <LoadingIndicator />
@@ -102,61 +104,73 @@ const keyExtractor = (item: HonoApiClient.List_List_Get) => item.id
 const ListItemCell: ListRenderItem<HonoApiClient.List_List_Get> = ({ item: list }) => {
   const { title, description } = list
   return (
-    <View className="flex-row p-4">
-      <View className="size-16 overflow-hidden rounded-lg">
-        {list.image ? (
-          <Image source={{ uri: list.image }} resizeMode="cover" className="size-full" />
-        ) : (
-          <FallbackIcon title={list.title || ""} size="100%" textStyle={styles.title} />
-        )}
-      </View>
-      <View className="ml-4 flex-1">
-        <Text
-          className="text-label text-lg font-semibold leading-tight"
-          numberOfLines={1}
-          ellipsizeMode="middle"
-        >
-          {title}
-        </Text>
-        <Text className="text-secondary-label text-base" numberOfLines={4}>
-          {description}
-        </Text>
-        <View className="flex-row items-center gap-1">
-          {!!views[list.view]?.icon &&
-            createElement(views[list.view]!.icon, {
-              color: views[list.view]!.activeColor,
-              height: 16,
-              width: 16,
-            })}
-          <Text className="text-secondary-label text-base">{views[list.view]?.name}</Text>
+    <SwipeableItem
+      rightActions={[
+        {
+          label: "Edit",
+          onPress: () => {
+            // TODO
+          },
+          backgroundColor: "#0ea5e9",
+        },
+      ]}
+    >
+      <View className="bg-secondary-system-grouped-background flex-row p-4">
+        <View className="size-16 overflow-hidden rounded-lg">
+          {list.image ? (
+            <Image source={{ uri: list.image }} resizeMode="cover" className="size-full" />
+          ) : (
+            <FallbackIcon title={list.title || ""} size="100%" textStyle={styles.title} />
+          )}
         </View>
-      </View>
-
-      <View
-        className="bg-opaque-separator mx-4 h-full"
-        style={{ width: StyleSheet.hairlineWidth }}
-      />
-      <View className="w-16 gap-1">
-        <View className="flex-row items-center gap-1">
-          <PowerIcon height={16} width={16} color={accentColor} />
-          <Text className="text-secondary-label text-sm">{list.fee}</Text>
-        </View>
-
-        <View className="flex-row items-center gap-1">
-          <UserAdd2CuteFiIcon height={16} width={16} color={accentColor} />
-          <Text className="text-secondary-label text-sm">{list.subscriptionCount || 0}</Text>
-        </View>
-
-        {!!list.purchaseAmount && (
+        <View className="ml-4 flex-1">
+          <Text
+            className="text-label text-lg font-semibold leading-tight"
+            numberOfLines={1}
+            ellipsizeMode="middle"
+          >
+            {title}
+          </Text>
+          <Text className="text-secondary-label text-base" numberOfLines={4}>
+            {description}
+          </Text>
           <View className="flex-row items-center gap-1">
-            <Wallet2CuteFiIcon height={16} width={16} color={accentColor} />
-            <Balance className="text-secondary-label text-sm">
-              {BigInt(list.purchaseAmount)}
-            </Balance>
+            {!!views[list.view]?.icon &&
+              createElement(views[list.view]!.icon, {
+                color: views[list.view]!.activeColor,
+                height: 16,
+                width: 16,
+              })}
+            <Text className="text-secondary-label text-base">{views[list.view]?.name}</Text>
           </View>
-        )}
+        </View>
+
+        <View
+          className="bg-opaque-separator mx-4 h-full"
+          style={{ width: StyleSheet.hairlineWidth }}
+        />
+        <View className="w-16 gap-1">
+          <View className="flex-row items-center gap-1">
+            <PowerIcon height={16} width={16} color={accentColor} />
+            <Text className="text-secondary-label text-sm">{list.fee}</Text>
+          </View>
+
+          <View className="flex-row items-center gap-1">
+            <UserAdd2CuteFiIcon height={16} width={16} color={accentColor} />
+            <Text className="text-secondary-label text-sm">{list.subscriptionCount || 0}</Text>
+          </View>
+
+          {!!list.purchaseAmount && (
+            <View className="flex-row items-center gap-1">
+              <Wallet2CuteFiIcon height={16} width={16} color={accentColor} />
+              <Balance className="text-secondary-label text-sm">
+                {BigInt(list.purchaseAmount)}
+              </Balance>
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+    </SwipeableItem>
   )
 }
 
