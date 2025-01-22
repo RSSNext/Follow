@@ -6,8 +6,9 @@ import { Dimensions, ScrollView, Text, View } from "react-native"
 import PagerView from "react-native-pager-view"
 
 import { ReAnimatedExpoImage } from "@/src/components/common/AnimatedComponents"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
-import { useEntry } from "@/src/store/entry/hooks"
+import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
 
 function Media({ media }: { media: any }) {
   const isVideo = media.type === "video"
@@ -56,6 +57,7 @@ function Media({ media }: { media: any }) {
 
 export default function EntryDetailPage() {
   const { entryId } = useLocalSearchParams()
+  usePrefetchEntryContent(entryId as string)
   const item = useEntry(entryId as string)
 
   const mediaList =
@@ -79,15 +81,27 @@ export default function EntryDetailPage() {
 
   return (
     <>
-      <Stack.Screen options={{ animation: "fade", animationDuration: 300 }} />
-      <ScrollView className="pt-safe" contentContainerClassName="flex-grow">
-        <View
-          style={{
-            height: maxMediaHeight > 0 ? maxMediaHeight : "80%",
-            maxHeight: "80%",
-          }}
-        >
-          {mediaList.length > 0 && (
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerBackTitle: "Feeds",
+          headerBackground: BlurEffect,
+          headerTransparent: true,
+          headerTitle: item?.title ?? "Entry",
+        }}
+      />
+      <ScrollView
+        className="pt-safe"
+        contentContainerClassName="flex-grow"
+        contentInsetAdjustmentBehavior="automatic"
+      >
+        {mediaList.length > 0 && (
+          <View
+            style={{
+              height: maxMediaHeight > 0 ? maxMediaHeight : "80%",
+              maxHeight: "80%",
+            }}
+          >
             <PagerView
               key={item?.id}
               style={{ flex: 1 }}
@@ -101,22 +115,23 @@ export default function EntryDetailPage() {
                 return <Media key={media.url} media={media} />
               })}
             </PagerView>
-          )}
-          {mediaList.length > 1 && (
-            <View className="my-2 w-full flex-row items-center justify-center gap-2">
-              {Array.from({ length: mediaList.length }).map((_, index) => {
-                return (
-                  <View
-                    key={index}
-                    className={`size-2 rounded-full ${
-                      index === currentPageIndex ? "bg-red" : "bg-gray-2"
-                    }`}
-                  />
-                )
-              })}
-            </View>
-          )}
-        </View>
+
+            {mediaList.length > 1 && (
+              <View className="my-2 w-full flex-row items-center justify-center gap-2">
+                {Array.from({ length: mediaList.length }).map((_, index) => {
+                  return (
+                    <View
+                      key={index}
+                      className={`size-2 rounded-full ${
+                        index === currentPageIndex ? "bg-red" : "bg-gray-2"
+                      }`}
+                    />
+                  )
+                })}
+              </View>
+            )}
+          </View>
+        )}
         <HtmlWeb
           content={item?.content || ""}
           onLayout={async (size) => {

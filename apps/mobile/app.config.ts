@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: iconPath,
   scheme: "follow",
   userInterfaceStyle: "automatic",
-  // newArchEnabled: true,
+  newArchEnabled: true,
   ios: {
     supportsTablet: true,
     bundleIdentifier: "is.follow",

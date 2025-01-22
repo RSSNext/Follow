@@ -180,12 +180,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
   const handlePress = useCallback(() => {
-    router.push({
-      pathname: `/feeds/[feedId]`,
-      params: {
-        feedId: entryId,
-      },
-    })
+    router.push(`/entries/${entryId}`)
   }, [entryId])
 
   if (!entry) return <EntryItemSkeleton />

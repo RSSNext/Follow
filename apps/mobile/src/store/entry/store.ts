@@ -165,7 +165,7 @@ class EntrySyncServices {
       },
     })
 
-    const entries = honoMorph.toEntry(res.data)
+    const entries = honoMorph.toEntryList(res.data)
     if (!pageParam) {
       entryActions.reset(entries)
     }
@@ -178,6 +178,14 @@ class EntrySyncServices {
       })
     }
     return entries
+  }
+
+  async fetchEntryContent(entryId: EntryId) {
+    const res = await apiClient.entries.$get({ query: { id: entryId } })
+    const entry = honoMorph.toEntry(res.data)
+    if (!entry) return null
+    await entryActions.upsertMany([entry])
+    return entry
   }
 }
 
