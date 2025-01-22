@@ -129,7 +129,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
           </MotionButtonBase>
         ))}
 
-        <AuthProvidersRender providers={extraProviders} />
+        <AuthProvidersRender providers={extraProviders} runtime={runtime} />
       </div>
     </>
   )
