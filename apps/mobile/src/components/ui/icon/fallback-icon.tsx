@@ -2,7 +2,7 @@ import { getBackgroundGradient, isCJKChar } from "@follow/utils"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useMemo, useState } from "react"
-import type { StyleProp, TextStyle, ViewStyle } from "react-native"
+import type { DimensionValue, StyleProp, TextStyle, ViewStyle } from "react-native"
 import { StyleSheet, Text, View } from "react-native"
 
 export const FallbackIcon = ({
@@ -16,7 +16,7 @@ export const FallbackIcon = ({
 }: {
   title: string
   url?: string
-  size: number
+  size: DimensionValue
   className?: string
   style?: StyleProp<ViewStyle>
   textClassName?: string
