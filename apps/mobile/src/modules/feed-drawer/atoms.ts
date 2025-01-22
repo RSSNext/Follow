@@ -4,6 +4,8 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai"
 import { useCallback, useMemo } from "react"
 
 import { views } from "@/src/constants/views"
+import { usePrefetchEntries } from "@/src/store/entry/hooks"
+import type { FetchEntriesProps } from "@/src/store/entry/types"
 
 // drawer open state
 
@@ -19,6 +21,8 @@ export function useFeedDrawer() {
     toggleDrawer: useCallback(() => setState(!state), [setState, state]),
   }
 }
+
+export const closeDrawer = () => jotaiStore.set(drawerOpenAtom, false)
 
 // is drawer swipe disabled
 
@@ -54,6 +58,68 @@ export function useSelectedCollection() {
 }
 export const selectCollection = (state: CollectionPanelState) => {
   jotaiStore.set(collectionPanelStateAtom, state)
+  if (state.type === "view") {
+    jotaiStore.set(selectedFeedAtom, state)
+  }
+}
+
+// feed panel selected state
+
+export type SelectedFeed =
+  | {
+      type: "view"
+      viewId: FeedViewType
+    }
+  | {
+      type: "feed"
+      feedId: string
+    }
+  | {
+      type: "category"
+      categoryName: string
+    }
+  | {
+      type: "list"
+      listId: string
+    }
+
+const selectedFeedAtom = atom<SelectedFeed>({
+  type: "view",
+  viewId: FeedViewType.Articles,
+})
+
+export function useSelectedFeed() {
+  const selectedFeed = useAtomValue(selectedFeedAtom)
+  let payload: FetchEntriesProps = {}
+  switch (selectedFeed.type) {
+    case "view": {
+      payload = { view: selectedFeed.viewId }
+      break
+    }
+    case "feed": {
+      payload = { feedId: selectedFeed.feedId }
+      break
+    }
+    case "category": {
+      // payload = { category: selectedFeed.categoryName }
+      break
+    }
+    case "list": {
+      payload = { listId: selectedFeed.listId }
+      break
+    }
+    // case "inbox": {
+    //   payload = { inboxId: selectedFeed.inboxId }
+    //   break
+    // }
+    // No default
+  }
+  usePrefetchEntries(payload)
+  return selectedFeed
+}
+
+export const selectFeed = (state: SelectedFeed) => {
+  jotaiStore.set(selectedFeedAtom, state)
 }
 
 export const useViewDefinition = (view: FeedViewType) => {
