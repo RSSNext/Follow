@@ -1,11 +1,11 @@
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useContext, useEffect, useMemo } from "react"
 import { Image, StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -32,6 +32,7 @@ import { useInbox } from "@/src/store/inbox/hooks"
 import { useList } from "@/src/store/list/hooks"
 
 import { LeftAction, RightAction } from "./action"
+import { EntryListContentGrid } from "./entry-list-gird"
 
 export function EntryList() {
   const setDrawerSwipeDisabled = useSetDrawerSwipeDisabled()
@@ -100,9 +101,9 @@ function InboxEntryList({ inboxId }: { inboxId: string }) {
 
 function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
-  const insets = useSafeAreaInsets()
-  const tabBarHeight = useBottomTabBarHeight()
-  const headerHeight = useHeaderHeight()
+  const selectedFeed = useSelectedFeed()
+  const view = selectedFeed.type === "view" ? selectedFeed.viewId : null
+
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
@@ -121,32 +122,46 @@ function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[
           [],
         )}
       />
-      <FlashList
-        onScroll={useTypeScriptHappyCallback(
-          (e) => {
-            scrollY.setValue(e.nativeEvent.contentOffset.y)
-          },
-          [scrollY],
-        )}
-        data={entryIds}
-        renderItem={useTypeScriptHappyCallback(
-          ({ item: id }) => (
-            <EntryItem key={id} entryId={id} />
-          ),
-          [],
-        )}
-        scrollIndicatorInsets={{
-          top: headerHeight - insets.top,
-          bottom: tabBarHeight - insets.bottom,
-        }}
-        estimatedItemSize={100}
-        contentContainerStyle={{
-          paddingTop: headerHeight,
-          paddingBottom: tabBarHeight,
-        }}
-        ItemSeparatorComponent={ItemSeparator}
-      />
+      {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
+        <EntryListContentGrid entryIds={entryIds} />
+      ) : (
+        <EntryListContent entryIds={entryIds} />
+      )}
     </NavigationContext.Provider>
+  )
+}
+
+function EntryListContent({ entryIds }: { entryIds: string[] }) {
+  const insets = useSafeAreaInsets()
+  const tabBarHeight = useBottomTabBarHeight()
+  const headerHeight = useHeaderHeight()
+  const { scrollY } = useContext(NavigationContext)!
+  return (
+    <FlashList
+      onScroll={useTypeScriptHappyCallback(
+        (e) => {
+          scrollY.setValue(e.nativeEvent.contentOffset.y)
+        },
+        [scrollY],
+      )}
+      data={entryIds}
+      renderItem={useTypeScriptHappyCallback(
+        ({ item: id }) => (
+          <EntryItem key={id} entryId={id} />
+        ),
+        [],
+      )}
+      scrollIndicatorInsets={{
+        top: headerHeight - insets.top,
+        bottom: tabBarHeight - insets.bottom,
+      }}
+      estimatedItemSize={100}
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+        paddingBottom: tabBarHeight,
+      }}
+      ItemSeparatorComponent={ItemSeparator}
+    />
   )
 }
 
@@ -165,12 +180,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
   const handlePress = useCallback(() => {
-    router.push({
-      pathname: `/feeds/[feedId]`,
-      params: {
-        feedId: entryId,
-      },
-    })
+    router.push(`/entries/${entryId}`)
   }, [entryId])
 
   if (!entry) return <EntryItemSkeleton />

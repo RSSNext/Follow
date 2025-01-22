@@ -8,5 +8,6 @@ type ExtractData<T extends (...args: any) => any> =
 export namespace HonoApiClient {
   export type Subscription_Get = ExtractData<typeof apiClient.subscriptions.$get>
   export type List_Get = ExtractData<typeof apiClient.lists.$get>
-  export type Entry_Get = ExtractData<typeof apiClient.entries.$post>
+  export type Entry_Post = ExtractData<typeof apiClient.entries.$post>
+  export type Entry_Get = ExtractData<typeof apiClient.entries.$get>
 }
