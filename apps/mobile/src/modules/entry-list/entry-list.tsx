@@ -1,14 +1,17 @@
 import type { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
-import { useCallback, useEffect } from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
+import { useCallback, useEffect, useMemo } from "react"
+import { Image, StyleSheet, Text, useAnimatedValue, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import {
   NavigationBlurEffectHeader,
-  SafeNavigationScrollView,
+  NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import {
@@ -94,9 +97,14 @@ function InboxEntryList({ inboxId }: { inboxId: string }) {
   const entryIds = useEntryIdsByInboxId(inboxId)
   return <EntryListScreen title={inbox?.title ?? "Inbox"} entryIds={entryIds} />
 }
+
 function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
+  const scrollY = useAnimatedValue(0)
+  const insets = useSafeAreaInsets()
+  const tabBarHeight = useBottomTabBarHeight()
+  const headerHeight = useHeaderHeight()
   return (
-    <SafeNavigationScrollView className="bg-system-grouped-background">
+    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
         headerShown
         title={title}
@@ -113,20 +121,32 @@ function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[
           [],
         )}
       />
-      <View className="flex-1">
-        <FlashList
-          data={entryIds}
-          renderItem={useTypeScriptHappyCallback(
-            ({ item: id }) => (
-              <EntryItem key={id} entryId={id} />
-            ),
-            [],
-          )}
-          estimatedItemSize={100}
-          ItemSeparatorComponent={ItemSeparator}
-        />
-      </View>
-    </SafeNavigationScrollView>
+      <FlashList
+        onScroll={useTypeScriptHappyCallback(
+          (e) => {
+            scrollY.setValue(e.nativeEvent.contentOffset.y)
+          },
+          [scrollY],
+        )}
+        data={entryIds}
+        renderItem={useTypeScriptHappyCallback(
+          ({ item: id }) => (
+            <EntryItem key={id} entryId={id} />
+          ),
+          [],
+        )}
+        scrollIndicatorInsets={{
+          top: headerHeight - insets.top,
+          bottom: tabBarHeight - insets.bottom,
+        }}
+        estimatedItemSize={100}
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+          paddingBottom: tabBarHeight,
+        }}
+        ItemSeparatorComponent={ItemSeparator}
+      />
+    </NavigationContext.Provider>
   )
 }
 

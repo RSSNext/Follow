@@ -29,7 +29,7 @@ type SafeNavigationScrollViewProps = Omit<ScrollViewProps, "onScroll"> & {
   withTopInset?: boolean
   withBottomInset?: boolean
 } & PropsWithChildren
-const NavigationContext = createContext<{
+export const NavigationContext = createContext<{
   scrollY: RNAnimated.Value
 } | null>(null)
 
