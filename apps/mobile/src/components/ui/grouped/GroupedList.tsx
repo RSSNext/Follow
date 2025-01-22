@@ -5,6 +5,7 @@ import { Fragment } from "react"
 import type { ViewProps } from "react-native"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 
+import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
 
@@ -91,7 +92,7 @@ export const GroupedInsetListNavigationLink: FC<{
               <Text className={"text-label text-[16px]"}>{label}</Text>
             </View>
             <View className="-mr-2 ml-4">
-              <RightCuteReIcon height={18} width={18} color={rightIconColor} />
+              <MingcuteRightLine height={18} width={18} color={rightIconColor} />
             </View>
           </View>
         </GroupedInsetListBaseCell>
@@ -158,5 +159,31 @@ export const GroupedInsetListActionCell: FC<{
         </GroupedInsetListBaseCell>
       )}
     </Pressable>
+  )
+}
+
+export const GroupedInformationCell: FC<{
+  title: string
+  description?: string
+  icon?: React.ReactNode
+  iconBackgroundColor?: string
+}> = ({ title, description, icon, iconBackgroundColor }) => {
+  return (
+    <GroupedInsetListBaseCell className="flex-1 flex-col items-center justify-center rounded-[16px] p-6">
+      {icon && (
+        <View
+          className="mb-3 size-[64px] items-center justify-center rounded-xl p-1"
+          style={{ backgroundColor: iconBackgroundColor }}
+        >
+          {icon}
+        </View>
+      )}
+      <Text className="text-3xl font-bold">{title}</Text>
+      {!!description && (
+        <Text className="text-label mt-3 text-balance text-center text-base leading-tight">
+          {description}
+        </Text>
+      )}
+    </GroupedInsetListBaseCell>
   )
 }

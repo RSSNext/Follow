@@ -60,6 +60,7 @@ const UserGroupNavigationLinks: GroupNavigationLink[] = [
       navigation.navigate("Achievement")
     },
     iconBackgroundColor: "#6366F1",
+    todo: true,
   },
 ]
 
@@ -107,6 +108,7 @@ const DataGroupNavigationLinks: GroupNavigationLink[] = [
       navigation.navigate("Actions")
     },
     iconBackgroundColor: "#059669",
+    todo: true,
   },
 
   {
@@ -116,6 +118,7 @@ const DataGroupNavigationLinks: GroupNavigationLink[] = [
       navigation.navigate("Feeds")
     },
     iconBackgroundColor: "#10B981",
+    todo: true,
   },
   {
     label: "Lists",
@@ -124,6 +127,7 @@ const DataGroupNavigationLinks: GroupNavigationLink[] = [
       navigation.navigate("Lists")
     },
     iconBackgroundColor: "#34D399",
+    // todo: true,
   },
 ]
 

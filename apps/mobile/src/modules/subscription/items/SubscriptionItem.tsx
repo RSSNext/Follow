@@ -54,7 +54,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator size={36} />
+        <LoadingIndicator />
       </View>
     )
   }

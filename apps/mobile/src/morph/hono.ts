@@ -82,7 +82,7 @@ class Morph {
     return { subscriptions, ...collections }
   }
 
-  toList({ list: data }: HonoApiClient.List_Get): ListModel {
+  toList(data: HonoApiClient.List_Get["list"] | HonoApiClient.List_List_Get): ListModel {
     return {
       id: data.id,
       title: data.title!,

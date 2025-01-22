@@ -15,7 +15,7 @@ export const useDataSkeleton = (isLoading: boolean, data: any) => {
       return (
         <BaseSearchPageRootView className="items-center justify-center">
           <View className="-mt-72" />
-          <LoadingIndicator color={withOpacity(textColor, 0.7)} size={32} />
+          <LoadingIndicator color={withOpacity(textColor, 0.7)} />
         </BaseSearchPageRootView>
       )
     }
