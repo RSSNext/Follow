@@ -94,7 +94,7 @@ export const ProfileScreen = () => {
         style={{ opacity: headerOpacity }}
       >
         <BlurEffect />
-        <TouchableOpacity pointerEvents="auto" onPress={() => settingNavigation.goBack()}>
+        <TouchableOpacity onPress={() => settingNavigation.goBack()}>
           <MingcuteLeftLineIcon color={textLabelColor} />
         </TouchableOpacity>
 
