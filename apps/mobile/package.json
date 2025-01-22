@@ -73,6 +73,7 @@
     "react-hook-form": "7.54.0",
     "react-native": "0.76.5",
     "react-native-bouncy-checkbox": "4.1.2",
+    "react-native-color-matrix-image-filters": "^7.0.2",
     "react-native-context-menu-view": "1.16.0",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-image-colors": "2.4.0",
