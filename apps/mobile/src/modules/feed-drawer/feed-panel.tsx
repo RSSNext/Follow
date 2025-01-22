@@ -32,7 +32,7 @@ import {
 import { useCurrentView, useFeedListSortMethod, useFeedListSortOrder } from "../subscription/atoms"
 import { ViewPageCurrentViewProvider } from "../subscription/ctx"
 import { SubscriptionList } from "../subscription/SubscriptionLists"
-import { selectFeed, useSelectedCollection } from "./atoms"
+import { closeDrawer, selectFeed, useSelectedCollection } from "./atoms"
 import { ListHeaderComponent, ViewHeaderComponent } from "./header"
 
 export const FeedPanel = () => {
@@ -153,6 +153,7 @@ const CategoryGrouped = memo(
               type: "category",
               categoryName: category,
             })
+            closeDrawer()
           }}
           className="h-12 flex-row items-center px-3"
         >
@@ -229,6 +230,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
             type: "feed",
             feedId: id,
           })
+          closeDrawer()
         }}
       >
         <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">

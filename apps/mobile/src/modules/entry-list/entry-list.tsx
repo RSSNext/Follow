@@ -1,11 +1,18 @@
 import type { FeedViewType } from "@follow/constants"
+import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
-import { router, Stack } from "expo-router"
-import { useCallback, useEffect } from "react"
-import { Image, Text, View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
+import { router } from "expo-router"
+import { useCallback, useEffect, useMemo } from "react"
+import { Image, StyleSheet, Text, useAnimatedValue, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { SafeNavigationScrollView } from "@/src/components/common/SafeNavigationScrollView"
+import {
+  NavigationBlurEffectHeader,
+  NavigationContext,
+} from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import {
   useSelectedFeed,
@@ -16,9 +23,12 @@ import {
   useEntry,
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
+  useEntryIdsByInboxId,
   useEntryIdsByView,
 } from "@/src/store/entry/hooks"
+import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import { useFeed } from "@/src/store/feed/hooks"
+import { useInbox } from "@/src/store/inbox/hooks"
 import { useList } from "@/src/store/list/hooks"
 
 import { LeftAction, RightAction } from "./action"
@@ -49,9 +59,9 @@ export function EntryList() {
     case "list": {
       return <ListEntryList listId={selectedFeed.listId} />
     }
-    // case "inbox": {
-    //   return <InboxEntryList inboxId={selectedFeed.inboxId} />
-    // }
+    case "inbox": {
+      return <InboxEntryList inboxId={selectedFeed.inboxId} />
+    }
     // No default
   }
 }
@@ -59,13 +69,15 @@ export function EntryList() {
 function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
   const entryIds = useEntryIdsByView(viewId)
   const viewDef = useViewDefinition(viewId)
+
   return <EntryListScreen title={viewDef.name} entryIds={entryIds} />
 }
 
 function FeedEntryList({ feedId }: { feedId: string }) {
   const feed = useFeed(feedId)
   const entryIds = useEntryIdsByFeedId(feedId)
-  return <EntryListScreen title={feed?.title ?? ""} entryIds={entryIds} />
+  const title = feedId === FEED_COLLECTION_LIST ? "Collections" : (feed?.title ?? "")
+  return <EntryListScreen title={title} entryIds={entryIds} />
 }
 
 function CategoryEntryList({ categoryName }: { categoryName: string }) {
@@ -80,28 +92,72 @@ function ListEntryList({ listId }: { listId: string }) {
   return <EntryListScreen title={list.title} entryIds={list.entryIds ?? []} />
 }
 
-function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
-  return (
-    <>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerTitle: title,
-          headerLeft: LeftAction,
-          headerRight: RightAction,
-          headerTransparent: true,
-          headerBackground: BlurEffect,
-        }}
-      />
+function InboxEntryList({ inboxId }: { inboxId: string }) {
+  const inbox = useInbox(inboxId)
+  const entryIds = useEntryIdsByInboxId(inboxId)
+  return <EntryListScreen title={inbox?.title ?? "Inbox"} entryIds={entryIds} />
+}
 
-      <SafeNavigationScrollView contentInsetAdjustmentBehavior="automatic" withTopInset>
-        <View className="flex">
-          {entryIds.map((id) => (
+function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
+  const scrollY = useAnimatedValue(0)
+  const insets = useSafeAreaInsets()
+  const tabBarHeight = useBottomTabBarHeight()
+  const headerHeight = useHeaderHeight()
+  return (
+    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
+      <NavigationBlurEffectHeader
+        headerShown
+        title={title}
+        headerLeft={useCallback(
+          () => (
+            <LeftAction />
+          ),
+          [],
+        )}
+        headerRight={useCallback(
+          () => (
+            <RightAction />
+          ),
+          [],
+        )}
+      />
+      <FlashList
+        onScroll={useTypeScriptHappyCallback(
+          (e) => {
+            scrollY.setValue(e.nativeEvent.contentOffset.y)
+          },
+          [scrollY],
+        )}
+        data={entryIds}
+        renderItem={useTypeScriptHappyCallback(
+          ({ item: id }) => (
             <EntryItem key={id} entryId={id} />
-          ))}
-        </View>
-      </SafeNavigationScrollView>
-    </>
+          ),
+          [],
+        )}
+        scrollIndicatorInsets={{
+          top: headerHeight - insets.top,
+          bottom: tabBarHeight - insets.bottom,
+        }}
+        estimatedItemSize={100}
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+          paddingBottom: tabBarHeight,
+        }}
+        ItemSeparatorComponent={ItemSeparator}
+      />
+    </NavigationContext.Provider>
+  )
+}
+
+const ItemSeparator = () => {
+  return (
+    <View
+      className="bg-opaque-separator mx-4"
+      style={{
+        height: StyleSheet.hairlineWidth,
+      }}
+    />
   )
 }
 
@@ -122,10 +178,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   const image = media?.[0]?.url
 
   return (
-    <ItemPressable
-      className="bg-system-background flex flex-row items-center p-4"
-      onPress={handlePress}
-    >
+    <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
       <View className="flex-1 space-y-2">
         <Text numberOfLines={2} className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           {title}
@@ -148,7 +201,7 @@ function EntryItem({ entryId }: { entryId: string }) {
 
 function EntryItemSkeleton() {
   return (
-    <View className="bg-system-background flex flex-row items-center p-4">
+    <View className="bg-secondary-system-grouped-background flex flex-row items-center p-4">
       <View className="flex flex-1 flex-col justify-between">
         {/* Title skeleton */}
         <View className="h-6 w-3/4 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />

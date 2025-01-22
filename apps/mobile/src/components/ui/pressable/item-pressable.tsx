@@ -1,4 +1,4 @@
-import { cn, composeEventHandlers } from "@follow/utils"
+import { composeEventHandlers } from "@follow/utils"
 import { memo, useEffect, useState } from "react"
 import type { Pressable } from "react-native"
 import { StyleSheet } from "react-native"
@@ -49,10 +49,7 @@ export const ItemPressable: typeof Pressable = memo(({ children, ...props }) => 
       onPressOut={composeEventHandlers(props.onPressOut, () => setIsPressing(false))}
       onHoverIn={composeEventHandlers(props.onHoverIn, () => setIsPressing(true))}
       onHoverOut={composeEventHandlers(props.onHoverOut, () => setIsPressing(false))}
-      className={cn(
-        // isPressing ? "bg-system-fill" : "bg-secondary-system-grouped-background",
-        props.className,
-      )}
+      className={props.className}
       style={StyleSheet.flatten([colorStyle, props.style])}
     >
       {children}
