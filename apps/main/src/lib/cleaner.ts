@@ -12,7 +12,7 @@ import { logger } from "~/logger"
 import { getMainWindow } from "~/window"
 
 import { t } from "./i18n"
-import { store, StoreKey } from "./store"
+import { store } from "./store"
 
 const require = createRequire(import.meta.url)
 const fastFolderSize = require("fast-folder-size") as any as typeof import("fast-folder-size")
@@ -101,7 +101,7 @@ export const clearCacheCronJob = () => {
   }
   timer = setInterval(
     async () => {
-      const hasLimit = store.get(StoreKey.CacheSizeLimit)
+      const hasLimit = store.get("cacheSizeLimit")
 
       if (!hasLimit) {
         return

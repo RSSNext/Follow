@@ -21,7 +21,3 @@ type StoreData = {
   } | null
 }
 export const store = new Store<StoreData>({ name: "db" })
-
-export enum StoreKey {
-  CacheSizeLimit = "cacheSizeLimit",
-}
