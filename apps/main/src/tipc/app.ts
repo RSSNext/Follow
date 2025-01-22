@@ -9,7 +9,7 @@ import { app, BrowserWindow, clipboard, dialog, shell } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
-import { store } from "~/lib/store"
+import { store, StoreKey } from "~/lib/store"
 import { registerAppTray } from "~/lib/tray"
 import { logger, revealLogFile } from "~/logger"
 import { cleanupOldRender, loadDynamicRenderEntry } from "~/updater/hot-updater"
@@ -290,7 +290,7 @@ ${content}
     shell.openPath(dir)
   }),
   getCacheLimit: t.procedure.action(async () => {
-    return store.get("cacheSizeLimit")
+    return store.get(StoreKey.CacheSizeLimit)
   }),
 
   clearCache: t.procedure.action(async () => {
@@ -318,9 +318,9 @@ ${content}
   limitCacheSize: t.procedure.input<number>().action(async ({ input }) => {
     logger.info("set limitCacheSize", input)
     if (input === 0) {
-      store.delete("cacheSizeLimit")
+      store.delete(StoreKey.CacheSizeLimit)
     } else {
-      store.set("cacheSizeLimit", input)
+      store.set(StoreKey.CacheSizeLimit, input)
     }
   }),
 
