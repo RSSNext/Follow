@@ -1,5 +1,6 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
+import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { router, Stack, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
@@ -28,7 +29,7 @@ type SafeNavigationScrollViewProps = Omit<ScrollViewProps, "onScroll"> & {
   withTopInset?: boolean
   withBottomInset?: boolean
 } & PropsWithChildren
-const NavigationContext = createContext<{
+export const NavigationContext = createContext<{
   scrollY: RNAnimated.Value
 } | null>(null)
 
@@ -66,10 +67,12 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   )
 }
 
-export interface NavigationBlurEffectHeaderProps {
-  title?: string
-}
-export const NavigationBlurEffectHeader = (props: NavigationBlurEffectHeaderProps) => {
+export const NavigationBlurEffectHeader = ({
+  blurThreshold = 0,
+  ...props
+}: NativeStackNavigationOptions & {
+  blurThreshold?: number
+}) => {
   const label = useColor("label")
 
   const canBack = useNavigation().canGoBack()
@@ -82,13 +85,13 @@ export const NavigationBlurEffectHeader = (props: NavigationBlurEffectHeaderProp
 
   useEffect(() => {
     const id = scrollY.addListener(({ value }) => {
-      setOpacity(Math.min(1, Math.max(0, Math.min(1, value / 10))))
+      setOpacity(Math.min(1, Math.max(0, Math.min(1, (value + blurThreshold) / 10))))
     })
 
     return () => {
       scrollY.removeListener(id)
     }
-  }, [scrollY])
+  }, [blurThreshold, scrollY])
 
   return (
     <Stack.Screen
@@ -112,7 +115,8 @@ export const NavigationBlurEffectHeader = (props: NavigationBlurEffectHeaderProp
               </TouchableOpacity>
             )
           : undefined,
-        title: props.title,
+
+        ...props,
       }}
     />
   )

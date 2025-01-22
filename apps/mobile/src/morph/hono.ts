@@ -97,7 +97,7 @@ class Morph {
     }
   }
 
-  toEntry(data?: HonoApiClient.Entry_Get): EntryModel[] {
+  toEntryList(data?: HonoApiClient.Entry_Post): EntryModel[] {
     const entries: EntryModel[] = []
     for (const item of data ?? []) {
       entries.push({
@@ -128,6 +128,37 @@ class Morph {
       })
     }
     return entries
+  }
+
+  toEntry(data?: HonoApiClient.Entry_Get): EntryModel | null {
+    if (!data) return null
+
+    return {
+      id: data.entries.id,
+      title: data.entries.title,
+      url: data.entries.url,
+      content: data.entries.content,
+      description: data.entries.description,
+      guid: data.entries.guid,
+      author: data.entries.author,
+      authorUrl: data.entries.authorUrl,
+      authorAvatar: data.entries.authorAvatar,
+      insertedAt: new Date(data.entries.insertedAt),
+      publishedAt: new Date(data.entries.publishedAt),
+      media: data.entries.media ?? null,
+      categories: data.entries.categories ?? null,
+      attachments: data.entries.attachments ?? null,
+      extra: data.entries.extra
+        ? {
+            links: data.entries.extra.links ?? undefined,
+          }
+        : null,
+      language: data.entries.language,
+      feedId: data.feeds.id,
+      // TODO: handle inboxHandle
+      inboxHandle: "",
+      read: false,
+    }
   }
 }
 

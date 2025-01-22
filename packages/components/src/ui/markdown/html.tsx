@@ -14,7 +14,7 @@ export function Html({ content, ...options }: HtmlProps) {
   const res = parseHtml(content, options)
 
   return (
-    <article className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold">
+    <article className="prose !max-w-full px-2 dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold">
       {res.toContent()}
     </article>
   )
