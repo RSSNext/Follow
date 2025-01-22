@@ -1,5 +1,7 @@
 import { cn } from "@follow/utils"
+import { useEffect } from "react"
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
@@ -17,12 +19,12 @@ export const CollectionPanel = () => {
   const insets = useSafeAreaInsets()
   return (
     <View
-      className="bg-quaternary-system-fill dark:bg-tertiary-system-background"
+      className="bg-secondary-system-fill dark:bg-tertiary-system-background"
       style={{ width: 65 }}
     >
       <ScrollView
         contentContainerClassName="flex gap-4 px-3.5"
-        contentContainerStyle={{ paddingTop: insets.top + 10, paddingBottom: insets.bottom }}
+        contentContainerStyle={{ marginTop: insets.top + 10, paddingBottom: insets.bottom }}
       >
         <View className="flex-1 items-center">
           <Logo width={37} height={37} color="#222" />
@@ -46,16 +48,38 @@ const styles = StyleSheet.create({
   },
 })
 
+const ActiveIndicator = ({ isActive }: { isActive: boolean }) => {
+  const scaleY = useSharedValue(1)
+
+  useEffect(() => {
+    if (isActive) {
+      scaleY.value = withTiming(1, { duration: 200 })
+    } else {
+      scaleY.value = withTiming(0, { duration: 200 })
+    }
+  }, [isActive, scaleY])
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scaleY: scaleY.value }],
+    }
+  })
+
+  return (
+    <Animated.View
+      className="absolute -left-3.5 h-9 w-1 rounded-r-xl bg-black"
+      style={animatedStyle}
+    />
+  )
+}
+
 const ViewButton = ({ viewDef }: { viewDef: ViewDefinition }) => {
   const selectedCollection = useSelectedCollection()
   const isActive = selectedCollection.type === "view" && selectedCollection.viewId === viewDef.view
 
   return (
     <TouchableOpacity
-      className={cn(
-        "flex aspect-square items-center justify-center rounded-full p-3",
-        isActive ? "bg-secondary-system-fill" : "bg-system-background",
-      )}
+      className="relative flex aspect-square items-center justify-center rounded-full p-3"
       onPress={() =>
         selectCollection({
           type: "view",
@@ -64,6 +88,7 @@ const ViewButton = ({ viewDef }: { viewDef: ViewDefinition }) => {
       }
       style={{ backgroundColor: viewDef.activeColor }}
     >
+      <ActiveIndicator isActive={isActive} />
       <viewDef.icon key={viewDef.name} color={"#fff"} />
     </TouchableOpacity>
   )
@@ -77,10 +102,7 @@ const ListButton = ({ listId }: { listId: string }) => {
 
   return (
     <TouchableOpacity
-      className={cn(
-        "flex aspect-square items-center justify-center overflow-hidden rounded-full p-3",
-        isActive ? "bg-system-fill" : "bg-system-background",
-      )}
+      className={cn("relative flex aspect-square items-center justify-center rounded-full p-3")}
       onPress={() =>
         selectCollection({
           type: "list",
@@ -88,11 +110,14 @@ const ListButton = ({ listId }: { listId: string }) => {
         })
       }
     >
-      {list.image ? (
-        <Image source={{ uri: list.image, width: 41, height: 41 }} resizeMode="cover" />
-      ) : (
-        <FallbackIcon title={list.title} size={41} />
-      )}
+      <ActiveIndicator isActive={isActive} />
+      <View className="overflow-hidden rounded-full">
+        {list.image ? (
+          <Image source={{ uri: list.image, width: 41, height: 41 }} resizeMode="cover" />
+        ) : (
+          <FallbackIcon title={list.title} size={41} />
+        )}
+      </View>
     </TouchableOpacity>
   )
 }
