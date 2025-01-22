@@ -1,11 +1,15 @@
 import type { FeedViewType } from "@follow/constants"
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useIsFocused } from "@react-navigation/native"
-import { router, Stack } from "expo-router"
+import { FlashList } from "@shopify/flash-list"
+import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
-import { Image, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View } from "react-native"
 
-import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { SafeNavigationScrollView } from "@/src/components/common/SafeNavigationScrollView"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import {
   useSelectedFeed,
@@ -62,6 +66,7 @@ export function EntryList() {
 function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
   const entryIds = useEntryIdsByView(viewId)
   const viewDef = useViewDefinition(viewId)
+
   return <EntryListScreen title={viewDef.name} entryIds={entryIds} />
 }
 
@@ -80,6 +85,7 @@ function CategoryEntryList({ categoryName }: { categoryName: string }) {
 function ListEntryList({ listId }: { listId: string }) {
   const list = useList(listId)
   if (!list) return null
+
   return <EntryListScreen title={list.title} entryIds={list.entryIds ?? []} />
 }
 
@@ -88,29 +94,50 @@ function InboxEntryList({ inboxId }: { inboxId: string }) {
   const entryIds = useEntryIdsByInboxId(inboxId)
   return <EntryListScreen title={inbox?.title ?? "Inbox"} entryIds={entryIds} />
 }
-
 function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
   return (
-    <>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerTitle: title,
-          headerLeft: LeftAction,
-          headerRight: RightAction,
-          headerTransparent: true,
-          headerBackground: BlurEffect,
-        }}
+    <SafeNavigationScrollView className="bg-system-grouped-background">
+      <NavigationBlurEffectHeader
+        headerShown
+        title={title}
+        headerLeft={useCallback(
+          () => (
+            <LeftAction />
+          ),
+          [],
+        )}
+        headerRight={useCallback(
+          () => (
+            <RightAction />
+          ),
+          [],
+        )}
       />
+      <View className="flex-1">
+        <FlashList
+          data={entryIds}
+          renderItem={useTypeScriptHappyCallback(
+            ({ item: id }) => (
+              <EntryItem key={id} entryId={id} />
+            ),
+            [],
+          )}
+          estimatedItemSize={100}
+          ItemSeparatorComponent={ItemSeparator}
+        />
+      </View>
+    </SafeNavigationScrollView>
+  )
+}
 
-      <SafeNavigationScrollView contentInsetAdjustmentBehavior="automatic" withTopInset>
-        <View className="flex">
-          {entryIds.map((id) => (
-            <EntryItem key={id} entryId={id} />
-          ))}
-        </View>
-      </SafeNavigationScrollView>
-    </>
+const ItemSeparator = () => {
+  return (
+    <View
+      className="bg-opaque-separator mx-4"
+      style={{
+        height: StyleSheet.hairlineWidth,
+      }}
+    />
   )
 }
 
@@ -131,10 +158,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   const image = media?.[0]?.url
 
   return (
-    <ItemPressable
-      className="bg-system-background flex flex-row items-center p-4"
-      onPress={handlePress}
-    >
+    <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
       <View className="flex-1 space-y-2">
         <Text numberOfLines={2} className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           {title}
@@ -157,7 +181,7 @@ function EntryItem({ entryId }: { entryId: string }) {
 
 function EntryItemSkeleton() {
   return (
-    <View className="bg-system-background flex flex-row items-center p-4">
+    <View className="bg-secondary-system-grouped-background flex flex-row items-center p-4">
       <View className="flex flex-1 flex-col justify-between">
         {/* Title skeleton */}
         <View className="h-6 w-3/4 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
