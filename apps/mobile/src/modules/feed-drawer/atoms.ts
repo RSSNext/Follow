@@ -59,7 +59,7 @@ export function useSelectedCollection() {
 }
 export const selectCollection = (state: CollectionPanelState) => {
   jotaiStore.set(collectionPanelStateAtom, state)
-  if (state.type === "view") {
+  if (state.type === "view" || state.type === "list") {
     jotaiStore.set(selectedFeedAtom, state)
   }
 }
@@ -82,6 +82,10 @@ export type SelectedFeed =
   | {
       type: "list"
       listId: string
+    }
+  | {
+      type: "inbox"
+      inboxId: string
     }
 
 const selectedFeedAtom = atom<SelectedFeed>({
@@ -109,10 +113,10 @@ export function useSelectedFeed() {
       payload = { listId: selectedFeed.listId }
       break
     }
-    // case "inbox": {
-    //   payload = { inboxId: selectedFeed.inboxId }
-    //   break
-    // }
+    case "inbox": {
+      payload = { inboxId: selectedFeed.inboxId }
+      break
+    }
     // No default
   }
   usePrefetchEntries(payload)

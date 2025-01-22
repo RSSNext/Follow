@@ -16,9 +16,12 @@ import {
   useEntry,
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
+  useEntryIdsByInboxId,
   useEntryIdsByView,
 } from "@/src/store/entry/hooks"
+import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import { useFeed } from "@/src/store/feed/hooks"
+import { useInbox } from "@/src/store/inbox/hooks"
 import { useList } from "@/src/store/list/hooks"
 
 import { LeftAction, RightAction } from "./action"
@@ -49,9 +52,9 @@ export function EntryList() {
     case "list": {
       return <ListEntryList listId={selectedFeed.listId} />
     }
-    // case "inbox": {
-    //   return <InboxEntryList inboxId={selectedFeed.inboxId} />
-    // }
+    case "inbox": {
+      return <InboxEntryList inboxId={selectedFeed.inboxId} />
+    }
     // No default
   }
 }
@@ -65,7 +68,8 @@ function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
 function FeedEntryList({ feedId }: { feedId: string }) {
   const feed = useFeed(feedId)
   const entryIds = useEntryIdsByFeedId(feedId)
-  return <EntryListScreen title={feed?.title ?? ""} entryIds={entryIds} />
+  const title = feedId === FEED_COLLECTION_LIST ? "Collections" : (feed?.title ?? "")
+  return <EntryListScreen title={title} entryIds={entryIds} />
 }
 
 function CategoryEntryList({ categoryName }: { categoryName: string }) {
@@ -76,8 +80,13 @@ function CategoryEntryList({ categoryName }: { categoryName: string }) {
 function ListEntryList({ listId }: { listId: string }) {
   const list = useList(listId)
   if (!list) return null
-
   return <EntryListScreen title={list.title} entryIds={list.entryIds ?? []} />
+}
+
+function InboxEntryList({ inboxId }: { inboxId: string }) {
+  const inbox = useInbox(inboxId)
+  const entryIds = useEntryIdsByInboxId(inboxId)
+  return <EntryListScreen title={inbox?.title ?? "Inbox"} entryIds={entryIds} />
 }
 
 function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
