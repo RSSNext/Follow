@@ -70,8 +70,8 @@ export const getBizFetchErrorMessage = (error: unknown) => {
         return data.message
       }
     } catch {
-      return ""
+      return error.message
     }
   }
-  return ""
+  return error.message
 }

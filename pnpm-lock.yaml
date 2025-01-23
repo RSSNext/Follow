@@ -415,6 +415,9 @@ importers:
       '@better-auth/expo':
         specifier: 1.1.9-beta.1
         version: 1.1.9-beta.1(better-auth@1.1.9-beta.1(encoding@0.1.13))
+      '@expo/react-native-action-sheet':
+        specifier: 4.1.0
+        version: 4.1.0(react@18.3.1)
       '@expo/vector-icons':
         specifier: ^14.0.2
         version: 14.0.4
@@ -3469,6 +3472,11 @@ packages:
   '@expo/prebuild-config@8.0.25':
     resolution: {integrity: sha512-xYHV8eiydZEDedf2AGaOFRFwcGlaSzrqQH94dwX42urNCU03FO0RUb7yPp4nkb7WNFg5Ov6PDsV7ES+YwzNgYQ==}
 
+  '@expo/react-native-action-sheet@4.1.0':
+    resolution: {integrity: sha512-RILoWhREgjMdr1NUSmZa/cHg8onV2YPDAMOy0iIP1c3H7nT9QQZf5dQNHK8ehcLM82sarVxriBJyYSSHAx7j6w==}
+    peerDependencies:
+      react: '>=18.0.0'
+
   '@expo/results@1.0.0':
     resolution: {integrity: sha512-qECzzXX5oJot3m2Gu9pfRDz50USdBieQVwYAzeAtQRUTD3PVeTK1tlRUoDcrK8PSruDLuVYdKkLebX4w/o55VA==}
     engines: {node: '>=10'}
@@ -5852,6 +5860,9 @@ packages:
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
+
+  '@types/hoist-non-react-statics@3.3.6':
+    resolution: {integrity: sha512-lPByRJUer/iN/xa4qpyL0qmL11DqNW81iU/IG1S3uvRUq4oKagz8VCxZjiWkumgt66YT3vOdDgZ0o32sGKtCEw==}
 
   '@types/html-minifier-terser@7.0.2':
     resolution: {integrity: sha512-mm2HqV22l8lFQh4r2oSsOEVea+m0qqxEmwpc9kC1p/XzmjLWrReR9D/GRs8Pex2NX/imyEH9c5IU/7tMBQCHOA==}
@@ -17736,6 +17747,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@expo/react-native-action-sheet@4.1.0(react@18.3.1)':
+    dependencies:
+      '@types/hoist-non-react-statics': 3.3.6
+      hoist-non-react-statics: 3.3.2
+      react: 18.3.1
+
   '@expo/results@1.0.0': {}
 
   '@expo/rudder-sdk-node@1.1.1(encoding@0.1.13)':
@@ -20917,6 +20934,11 @@ snapshots:
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.3
+
+  '@types/hoist-non-react-statics@3.3.6':
+    dependencies:
+      '@types/react': 18.3.14
+      hoist-non-react-statics: 3.3.2
 
   '@types/html-minifier-terser@7.0.2': {}
 

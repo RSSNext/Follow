@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@better-auth/expo": "1.1.9-beta.1",
+    "@expo/react-native-action-sheet": "4.1.0",
     "@expo/vector-icons": "^14.0.2",
     "@follow/components": "workspace:*",
     "@follow/constants": "workspace:*",

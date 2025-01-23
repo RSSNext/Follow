@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
 import { router } from "expo-router"
-import { createElement, useCallback } from "react"
+import { createContext, createElement, useCallback, useContext, useMemo } from "react"
 import type { ListRenderItem } from "react-native"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
@@ -24,16 +23,16 @@ import { RadaCuteFiIcon } from "@/src/icons/rada_cute_fi"
 import { UserAdd2CuteFiIcon } from "@/src/icons/user_add_2_cute_fi"
 import { Wallet2CuteFiIcon } from "@/src/icons/wallet_2_cute_fi"
 import type { HonoApiClient } from "@/src/morph/types"
-import { listSyncServices } from "@/src/store/list/store"
+import { useOwnedLists, usePrefetchOwnedLists } from "@/src/store/list/hooks"
+import type { ListModel } from "@/src/store/list/store"
 import { accentColor } from "@/src/theme/colors"
 
 import { SwipeableGroupProvider, SwipeableItem } from "../../../components/common/SwipeableItem"
 
+const ListContext = createContext({} as Record<string, HonoApiClient.List_List_Get>)
 export const ListsScreen = () => {
-  const { isLoading, data } = useQuery({
-    queryKey: ["owned", "lists"],
-    queryFn: () => listSyncServices.fetchOwnedLists(),
-  })
+  const { isLoading, data } = usePrefetchOwnedLists()
+  const lists = useOwnedLists()
 
   return (
     <SafeNavigationScrollView nestedScrollEnabled className="bg-system-grouped-background">
@@ -57,27 +56,41 @@ export const ListsScreen = () => {
           />
         </GroupedInsetListCard>
       </View>
-      <View className="mt-6">
-        <GroupedInsetListCard>
-          {data && (
-            <SwipeableGroupProvider>
-              <Animated.FlatList
-                keyExtractor={keyExtractor}
-                itemLayoutAnimation={LinearTransition}
-                scrollEnabled={false}
-                data={data}
-                renderItem={ListItemCell}
-                ItemSeparatorComponent={ItemSeparatorComponent}
-              />
-            </SwipeableGroupProvider>
-          )}
-          {isLoading && (
-            <View className="mt-1">
-              <LoadingIndicator />
-            </View>
-          )}
-        </GroupedInsetListCard>
-      </View>
+      <ListContext.Provider
+        value={useMemo(
+          () =>
+            data?.reduce(
+              (acc, list) => {
+                acc[list.id] = list
+                return acc
+              },
+              {} as Record<string, HonoApiClient.List_List_Get>,
+            ) ?? {},
+          [data],
+        )}
+      >
+        <View className="mt-6">
+          <GroupedInsetListCard>
+            {lists.length > 0 && (
+              <SwipeableGroupProvider>
+                <Animated.FlatList
+                  keyExtractor={keyExtractor}
+                  itemLayoutAnimation={LinearTransition}
+                  scrollEnabled={false}
+                  data={lists}
+                  renderItem={ListItemCell}
+                  ItemSeparatorComponent={ItemSeparatorComponent}
+                />
+              </SwipeableGroupProvider>
+            )}
+            {isLoading && lists.length === 0 && (
+              <View className="mt-1">
+                <LoadingIndicator />
+              </View>
+            )}
+          </GroupedInsetListCard>
+        </View>
+      </ListContext.Provider>
     </SafeNavigationScrollView>
   )
 }
@@ -100,10 +113,14 @@ const ItemSeparatorComponent = () => {
   )
 }
 
-const keyExtractor = (item: HonoApiClient.List_List_Get) => item.id
+const keyExtractor = (item: ListModel) => item.id
 
-const ListItemCell: ListRenderItem<HonoApiClient.List_List_Get> = ({ item: list }) => {
+const ListItemCell: ListRenderItem<ListModel> = (props) => {
+  return <ListItemCellImpl {...props} />
+}
+const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
   const { title, description } = list
+  const listData = useContext(ListContext)[list.id]
   return (
     <SwipeableItem
       rightActions={[
@@ -132,9 +149,11 @@ const ListItemCell: ListRenderItem<HonoApiClient.List_List_Get> = ({ item: list 
           >
             {title}
           </Text>
-          <Text className="text-secondary-label text-base" numberOfLines={4}>
-            {description}
-          </Text>
+          {!!description && (
+            <Text className="text-secondary-label text-base" numberOfLines={4}>
+              {description}
+            </Text>
+          )}
           <View className="flex-row items-center gap-1">
             {!!views[list.view]?.icon &&
               createElement(views[list.view]!.icon, {
@@ -158,14 +177,14 @@ const ListItemCell: ListRenderItem<HonoApiClient.List_List_Get> = ({ item: list 
 
           <View className="flex-row items-center gap-1">
             <UserAdd2CuteFiIcon height={16} width={16} color={accentColor} />
-            <Text className="text-secondary-label text-sm">{list.subscriptionCount || 0}</Text>
+            <Text className="text-secondary-label text-sm">{listData?.subscriptionCount || 0}</Text>
           </View>
 
-          {!!list.purchaseAmount && (
+          {!!listData?.purchaseAmount && (
             <View className="flex-row items-center gap-1">
               <Wallet2CuteFiIcon height={16} width={16} color={accentColor} />
               <Balance className="text-secondary-label text-sm">
-                {BigInt(list.purchaseAmount)}
+                {BigInt(listData.purchaseAmount)}
               </Balance>
             </View>
           )}

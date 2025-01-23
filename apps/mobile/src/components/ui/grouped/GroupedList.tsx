@@ -166,6 +166,29 @@ export const GroupedInsetListActionCell: FC<{
   )
 }
 
+export const GroupedInsetButtonCell: FC<{
+  label: string
+  onPress: () => void
+  disabled?: boolean
+  style?: "destructive" | "primary"
+}> = ({ label, onPress, disabled, style = "primary" }) => {
+  return (
+    <Pressable onPress={onPress} disabled={disabled}>
+      {({ pressed }) => (
+        <GroupedInsetListBaseCell
+          className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
+        >
+          <View className="flex-1 items-center justify-center">
+            <Text className={`${style === "destructive" ? "text-red" : "text-label"}`}>
+              {label}
+            </Text>
+          </View>
+        </GroupedInsetListBaseCell>
+      )}
+    </Pressable>
+  )
+}
+
 export const GroupedInformationCell: FC<{
   title: string
   description?: string
