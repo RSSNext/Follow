@@ -2,11 +2,10 @@ import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
-import { useIsFocused } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useContext, useEffect, useMemo } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -15,82 +14,14 @@ import {
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useSelectedFeed, useSetDrawerSwipeDisabled } from "@/src/modules/feed-drawer/atoms"
-import {
-  useEntry,
-  useEntryIdsByCategory,
-  useEntryIdsByFeedId,
-  useEntryIdsByInboxId,
-  useEntryIdsByView,
-} from "@/src/store/entry/hooks"
-import { useList } from "@/src/store/list/hooks"
+import { useSelectedFeed } from "@/src/modules/feed-drawer/atoms"
+import { useEntry } from "@/src/store/entry/hooks"
 
 import { ViewSelector } from "../feed-drawer/view-selector"
 import { LeftAction, RightAction } from "./action"
 import { EntryListContentGrid } from "./entry-list-gird"
 
-export function EntryList() {
-  const setDrawerSwipeDisabled = useSetDrawerSwipeDisabled()
-  const isFocused = useIsFocused()
-  useEffect(() => {
-    if (isFocused) {
-      setDrawerSwipeDisabled(false)
-    } else {
-      setDrawerSwipeDisabled(true)
-    }
-  }, [setDrawerSwipeDisabled, isFocused])
-
-  const selectedFeed = useSelectedFeed()
-
-  switch (selectedFeed.type) {
-    case "view": {
-      return <ViewEntryList viewId={selectedFeed.viewId} />
-    }
-    case "feed": {
-      return <FeedEntryList feedId={selectedFeed.feedId} />
-    }
-    case "category": {
-      return <CategoryEntryList categoryName={selectedFeed.categoryName} />
-    }
-    case "list": {
-      return <ListEntryList listId={selectedFeed.listId} />
-    }
-    case "inbox": {
-      return <InboxEntryList inboxId={selectedFeed.inboxId} />
-    }
-    // No default
-  }
-}
-
-function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
-  const entryIds = useEntryIdsByView(viewId)
-
-  return <EntryListScreen entryIds={entryIds} />
-}
-
-function FeedEntryList({ feedId }: { feedId: string }) {
-  const entryIds = useEntryIdsByFeedId(feedId)
-  return <EntryListScreen entryIds={entryIds} />
-}
-
-function CategoryEntryList({ categoryName }: { categoryName: string }) {
-  const entryIds = useEntryIdsByCategory(categoryName)
-  return <EntryListScreen entryIds={entryIds} />
-}
-
-function ListEntryList({ listId }: { listId: string }) {
-  const list = useList(listId)
-  if (!list) return null
-
-  return <EntryListScreen entryIds={list.entryIds ?? []} />
-}
-
-function InboxEntryList({ inboxId }: { inboxId: string }) {
-  const entryIds = useEntryIdsByInboxId(inboxId)
-  return <EntryListScreen entryIds={entryIds} />
-}
-
-function EntryListScreen({ entryIds }: { entryIds: string[] }) {
+export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
   const selectedFeed = useSelectedFeed()
   const view = selectedFeed.type === "view" ? selectedFeed.viewId : null

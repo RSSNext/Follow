@@ -1,4 +1,4 @@
-import { EntryList } from "@/src/modules/entry-list/entry-list"
+import { EntryList } from "@/src/modules/entry-list"
 
 export default function Index() {
   return <EntryList />
