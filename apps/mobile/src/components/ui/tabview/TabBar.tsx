@@ -20,7 +20,7 @@ import type {
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
-import { accentColor } from "@/src/theme/colors"
+import { accentColor, useColor } from "@/src/theme/colors"
 
 import type { Tab } from "./types"
 
@@ -210,9 +210,12 @@ const styles = StyleSheet.create({
 })
 
 const TabItemInner = ({ tab, isSelected }: { tab: Tab; isSelected: boolean }) => {
+  const gray = useColor("gray")
   return (
     <View className="p-2">
-      <Text style={{ color: isSelected ? accentColor : "gray" }}>{tab.name}</Text>
+      <Text style={{ color: isSelected ? accentColor : gray }} className="text-[15px] leading-none">
+        {tab.name}
+      </Text>
     </View>
   )
 }

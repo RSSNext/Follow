@@ -2,12 +2,14 @@ import { resolve } from "node:path"
 
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
+import PKG from "./package.json"
+
 // const roundedIconPath = resolve(__dirname, "../../resources/icon.png")
 const iconPath = resolve(__dirname, "./assets/icon.png")
 const adaptiveIconPath = resolve(__dirname, "./assets/adaptive-icon.png")
-
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+
   extra: {
     eas: {
       projectId: "a6335b14-fb84-45aa-ba80-6f6ab8926920",
@@ -23,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   name: "Follow",
   slug: "follow",
-  version: "1.0.0",
+  version: __DEV__ ? "dev" : PKG.version,
   orientation: "portrait",
   icon: iconPath,
   scheme: "follow",

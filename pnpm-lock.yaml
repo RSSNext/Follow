@@ -643,6 +643,9 @@ importers:
       usehooks-ts:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
+      zeego:
+        specifier: 2.0.4
+        version: 2.0.4(j3ti5ctilkzw4c72qtaivrgtti)
       zod:
         specifier: 3.24.1
         version: 3.24.1
@@ -5022,6 +5025,12 @@ packages:
 
   '@react-native-community/cli-tools@14.1.0':
     resolution: {integrity: sha512-r1KxSu2+OSuhWFoE//1UR7aSTXMLww/UYWQprEw4bSo/kvutGX//4r9ywgXSWp+39udpNN4jQpNTHuWhGZd/Bg==}
+
+  '@react-native-menu/menu@1.2.1':
+    resolution: {integrity: sha512-ut3fLnhEDR1h1VFCr/Hyx7hQ0Btc7MOvF3LXuoIOZfvaepV2OUDhXPs6dI6YImUGZxabWymjWlyWqZ90gn4Dog==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
 
   '@react-native-picker/picker@2.9.0':
     resolution: {integrity: sha512-khEhIW/uhfMqq/+tvg4rEAiPGT8GX+Y6QydlP2TSMSmRHoSJK+ShXvXZXSr4Sii4imkj4BwvLunGywwtQDODqg==}
@@ -15198,6 +15207,14 @@ packages:
   yoga-wasm-web@0.3.3:
     resolution: {integrity: sha512-N+d4UJSJbt/R3wqY7Coqs5pcV0aUj2j9IaQ3rNj9bVCLld8tTGKRa2USARjnvZJWVx1NDmQev8EknoczaOQDOA==}
 
+  zeego@2.0.4:
+    resolution: {integrity: sha512-mkKfUJmgcSGCTqWXW7ccqap8d8z6guQoLF5/mWlH17Jckd0BaFLVZ74y/uWvfBGaC9OawYVt/1MchPnQ8ieSxg==}
+    peerDependencies:
+      '@react-native-menu/menu': '*'
+      react: '*'
+      react-native: '*'
+      react-native-ios-context-menu: ~2.5.1
+
   zip-stream@4.1.1:
     resolution: {integrity: sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ==}
     engines: {node: '>= 10'}
@@ -19809,6 +19826,11 @@ snapshots:
       shell-quote: 1.8.2
       sudo-prompt: 9.2.1
     optional: true
+
+  '@react-native-menu/menu@1.2.1(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      react-native: 0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1)
 
   '@react-native-picker/picker@2.9.0(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -32056,6 +32078,20 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yoga-wasm-web@0.3.3: {}
+
+  zeego@2.0.4(j3ti5ctilkzw4c72qtaivrgtti):
+    dependencies:
+      '@radix-ui/react-context-menu': 2.2.2(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dropdown-menu': 2.1.2(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@react-native-menu/menu': 1.2.1(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-native: 0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1)
+      react-native-ios-context-menu: 3.1.0(react-native-ios-utilities@5.1.1(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)
+      sf-symbols-typescript: 2.0.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - react-dom
 
   zip-stream@4.1.1:
     dependencies:
