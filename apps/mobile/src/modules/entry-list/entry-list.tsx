@@ -14,7 +14,7 @@ import {
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useSelectedFeed } from "@/src/modules/feed-drawer/atoms"
+import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 
 import { ViewSelector } from "../feed-drawer/view-selector"
@@ -25,12 +25,13 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
   const selectedFeed = useSelectedFeed()
   const view = selectedFeed.type === "view" ? selectedFeed.viewId : null
+  const viewTitle = useSelectedFeedTitle()
 
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
         headerShown
-        headerTitle={ViewSelector}
+        title={viewTitle}
         headerLeft={useCallback(
           () => (
             <LeftAction />
@@ -43,6 +44,8 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
           ),
           [],
         )}
+        headerHideableBottomHeight={45}
+        headerHideableBottom={ViewSelector}
       />
       {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
         <EntryListContentGrid entryIds={entryIds} />

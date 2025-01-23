@@ -19,7 +19,11 @@ export function LeftAction() {
   const insets = useActionPadding()
 
   return (
-    <TouchableOpacity onPress={openDrawer} style={{ paddingLeft: insets.paddingLeft }}>
+    <TouchableOpacity
+      onPress={openDrawer}
+      className="flex-row items-center"
+      style={{ paddingLeft: insets.paddingLeft }}
+    >
       <LayoutLeftbarOpenCuteReIcon color={accentColor} />
     </TouchableOpacity>
   )
@@ -29,7 +33,7 @@ export function RightAction() {
   const insets = useActionPadding()
 
   return (
-    <View className="flex-row items-center gap-4" style={{ paddingRight: insets.paddingRight }}>
+    <View className="flex-row items-center" style={{ paddingRight: insets.paddingRight }}>
       <Link asChild href="/add">
         <TouchableOpacity className="size-6">
           <AddCuteReIcon color={accentColor} />

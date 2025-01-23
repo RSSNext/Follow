@@ -1,5 +1,5 @@
 import { Image } from "expo-image"
-import { ScrollView, TouchableOpacity } from "react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Grayscale } from "react-native-color-matrix-image-filters"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
@@ -15,14 +15,16 @@ export function ViewSelector() {
   const lists = useAllListSubscription()
 
   return (
-    <ScrollView horizontal contentContainerClassName="flex-row gap-3 items-center">
-      {views.map((view) => (
-        <ViewItem key={view.name} view={view} />
-      ))}
-      {lists.map((listId) => (
-        <ListItem key={listId} listId={listId} />
-      ))}
-    </ScrollView>
+    <View className="flex items-center justify-between px-3 pt-1">
+      <ScrollView horizontal contentContainerClassName="flex-row gap-3 items-center">
+        {views.map((view) => (
+          <ViewItem key={view.name} view={view} />
+        ))}
+        {lists.map((listId) => (
+          <ListItem key={listId} listId={listId} />
+        ))}
+      </ScrollView>
+    </View>
   )
 }
 
