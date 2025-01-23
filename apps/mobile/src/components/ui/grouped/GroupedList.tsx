@@ -170,7 +170,7 @@ export const GroupedInformationCell: FC<{
 }> = ({ title, description, icon, iconBackgroundColor }) => {
   return (
     <GroupedInsetListBaseCell className="flex-1 flex-col items-center justify-center rounded-[16px] p-6">
-      {icon && (
+      {!!icon && (
         <View
           className="mb-3 size-[64px] items-center justify-center rounded-xl p-1"
           style={{ backgroundColor: iconBackgroundColor }}
