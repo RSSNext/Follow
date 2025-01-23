@@ -9,11 +9,13 @@ import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
 
-export const GroupedInsetListCard: FC<PropsWithChildren & ViewProps> = ({
-  children,
-  className,
-  ...props
-}) => {
+type GroupedInsetListCardProps = {
+  showSeparator?: boolean
+}
+
+export const GroupedInsetListCard: FC<
+  PropsWithChildren & ViewProps & GroupedInsetListCardProps
+> = ({ children, className, showSeparator = true, ...props }) => {
   return (
     <View
       {...props}
@@ -22,26 +24,28 @@ export const GroupedInsetListCard: FC<PropsWithChildren & ViewProps> = ({
         className,
       )}
     >
-      {React.Children.map(children, (child, index) => {
-        const isLast = index === React.Children.count(children) - 1
+      {showSeparator
+        ? React.Children.map(children, (child, index) => {
+            const isLast = index === React.Children.count(children) - 1
 
-        const isNavigationLink =
-          React.isValidElement(child) &&
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-          (child.type as Function).name === GroupedInsetListNavigationLink.name
+            const isNavigationLink =
+              React.isValidElement(child) &&
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+              (child.type as Function).name === GroupedInsetListNavigationLink.name
 
-        return (
-          <Fragment key={index}>
-            {child}
-            {!isLast && (
-              <View
-                className={cn("bg-opaque-separator", isNavigationLink ? "ml-16" : "mx-4")}
-                style={{ height: StyleSheet.hairlineWidth }}
-              />
-            )}
-          </Fragment>
-        )
-      })}
+            return (
+              <Fragment key={index}>
+                {child}
+                {!isLast && (
+                  <View
+                    className={cn("bg-opaque-separator", isNavigationLink ? "ml-16" : "mx-4")}
+                    style={{ height: StyleSheet.hairlineWidth }}
+                  />
+                )}
+              </Fragment>
+            )
+          })
+        : children}
     </View>
   )
 }

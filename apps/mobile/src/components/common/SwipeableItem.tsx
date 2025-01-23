@@ -118,6 +118,10 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
   const renderRightActions = (progress: Animated.AnimatedInterpolation<number>) => {
     const width = rightActions?.length ? rightActions.length * 74 : 74
 
+    const parallaxX = progress.interpolate({
+      inputRange: [0, 1, 1.2],
+      outputRange: [0, 0, 10],
+    })
     return (
       <>
         <View
@@ -167,7 +171,15 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
                   onPress={action.onPress}
                 >
                   {action.icon}
-                  <Text style={styles.actionText}>{action.label}</Text>
+                  <Animated.Text
+                    style={[
+                      styles.actionText,
+                      { color: action.color ?? "#fff" },
+                      { transform: [{ translateX: parallaxX }] },
+                    ]}
+                  >
+                    {action.label}
+                  </Animated.Text>
                 </RectButton>
               </Animated.View>
             )

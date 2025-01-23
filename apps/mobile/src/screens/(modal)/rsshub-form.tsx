@@ -18,7 +18,7 @@ import { z } from "zod"
 import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
 import {
   ModalHeaderCloseButton,
-  ModalHeaderShubmitButton,
+  ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
@@ -247,7 +247,7 @@ const ScreenOptions = memo(({ name, routeName, route, routePrefix }: ScreenOptio
 
         headerRight: () => (
           <FormProvider form={form}>
-            <ModalHeaderSubmitButton routePrefix={routePrefix} route={route} />
+            <ModalHeaderSubmitButtonImpl routePrefix={routePrefix} route={route} />
           </FormProvider>
         ),
 
@@ -267,17 +267,15 @@ const Title = ({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
   )
 }
 
-type ModalHeaderSubmitButtonProps = {
-  routePrefix: string
-  route: string
-}
-const ModalHeaderSubmitButton = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
-  return <ModalHeaderSubmitButtonImpl routePrefix={routePrefix} route={route} />
-}
-
 const routeParamsKeyPrefix = "route-params-"
 
-const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitButtonProps) => {
+const ModalHeaderSubmitButtonImpl = ({
+  routePrefix,
+  route,
+}: {
+  routePrefix: string
+  route: string
+}) => {
   const form = useFormContext()
   const { isValid } = form.formState
 
@@ -339,5 +337,5 @@ const ModalHeaderSubmitButtonImpl = ({ routePrefix, route }: ModalHeaderSubmitBu
     }
   })
 
-  return <ModalHeaderShubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
+  return <ModalHeaderSubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
 }

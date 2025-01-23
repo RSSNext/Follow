@@ -10,7 +10,7 @@ import { z } from "zod"
 
 import {
   ModalHeaderCloseButton,
-  ModalHeaderShubmitButton,
+  ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
@@ -108,7 +108,7 @@ function FollowImpl() {
           headerLeft: ModalHeaderCloseButton,
           gestureEnabled: !isDirty,
           headerRight: () => (
-            <ModalHeaderShubmitButton
+            <ModalHeaderSubmitButton
               isValid={isValid}
               onPress={form.handleSubmit(submit)}
               isLoading={isLoading}

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import { router } from "expo-router"
 import { createElement, useCallback } from "react"
 import type { ListRenderItem } from "react-native"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
@@ -84,7 +85,7 @@ export const ListsScreen = () => {
 const AddListButton = () => {
   const labelColor = useColor("label")
   return (
-    <TouchableOpacity hitSlop={10}>
+    <TouchableOpacity hitSlop={10} onPress={() => router.push("/list")}>
       <AddCuteReIcon height={20} width={20} color={labelColor} />
     </TouchableOpacity>
   )
@@ -109,7 +110,7 @@ const ListItemCell: ListRenderItem<HonoApiClient.List_List_Get> = ({ item: list 
         {
           label: "Edit",
           onPress: () => {
-            // TODO
+            router.push(`/list?id=${list.id}`)
           },
           backgroundColor: "#0ea5e9",
         },
