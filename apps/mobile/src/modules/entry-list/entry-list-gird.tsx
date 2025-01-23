@@ -4,12 +4,12 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
 import type { MasonryFlashListProps } from "@shopify/flash-list"
 import { MasonryFlashList } from "@shopify/flash-list"
+import { Image } from "expo-image"
 import { Link } from "expo-router"
 import { useContext } from "react"
 import { Pressable, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { ReAnimatedExpoImage } from "@/src/components/common/AnimatedComponents"
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
@@ -64,6 +64,7 @@ function RenderEntryItem({ id }: { id: string }) {
   const photo = item.media?.find((media) => media.type === "photo")
   const video = item.media?.find((media) => media.type === "video")
   const imageUrl = photo?.url || video?.preview_image_url
+  const blurhash = photo?.blurhash || video?.blurhash
   const aspectRatio =
     view === FeedViewType.Pictures && photo?.height && photo.width
       ? photo.width / photo.height
@@ -74,14 +75,16 @@ function RenderEntryItem({ id }: { id: string }) {
       <Link href={`/entries/${item.id}`} asChild>
         <Pressable>
           {imageUrl ? (
-            <ReAnimatedExpoImage
+            <Image
               source={{ uri: imageUrl }}
+              placeholder={{
+                blurhash,
+              }}
               style={{
                 width: "100%",
                 aspectRatio,
               }}
-              sharedTransitionTag={`entry-image-${imageUrl}`}
-              allowDownscaling={false}
+              placeholderContentFit="cover"
               recyclingKey={imageUrl}
             />
           ) : (

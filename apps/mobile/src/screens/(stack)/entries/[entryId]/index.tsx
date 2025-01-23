@@ -47,6 +47,7 @@ function Media({ media }: { media: MediaModel }) {
               display: isVideo ? (status?.isLoaded ? "none" : "flex") : "flex",
             }}
             contentFit="contain"
+            placeholderContentFit="contain"
           />
         ) : (
           <Text className="text-gray-4 text-center">No media</Text>
