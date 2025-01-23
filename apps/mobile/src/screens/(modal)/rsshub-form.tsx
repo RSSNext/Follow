@@ -187,7 +187,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
           <Maintainers maintainers={route.maintainers} />
 
           {!!route.description && (
-            <View className="bg-system-background mt-4 flex-1 px-4">
+            <View className="bg-system-background border-t-hairline border-opaque-separator mt-4 flex-1 px-4">
               <Markdown
                 style={{
                   paddingTop: 16,
