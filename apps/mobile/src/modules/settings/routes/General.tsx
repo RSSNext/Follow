@@ -41,13 +41,15 @@ export const GeneralScreen = () => {
 
           <GroupedInsetListBaseCell>
             <Text>Translation Language</Text>
-            <Select
-              value={translationLanguage}
-              onValueChange={(value) => {
-                setGeneralSetting("translationLanguage", value)
-              }}
-              options={Object.values(LanguageMap)}
-            />
+            <View className="w-[180px]">
+              <Select
+                value={translationLanguage}
+                onValueChange={(value) => {
+                  setGeneralSetting("translationLanguage", value)
+                }}
+                options={Object.values(LanguageMap)}
+              />
+            </View>
           </GroupedInsetListBaseCell>
         </GroupedInsetListCard>
       </View>

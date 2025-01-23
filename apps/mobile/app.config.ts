@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   name: "Follow",
   slug: "follow",
-  version: __DEV__ ? "dev" : PKG.version,
+  version: process.env.NODE_ENV === "development" ? "dev" : PKG.version,
   orientation: "portrait",
   icon: iconPath,
   scheme: "follow",
