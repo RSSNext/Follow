@@ -15,11 +15,7 @@ import {
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import {
-  useSelectedFeed,
-  useSetDrawerSwipeDisabled,
-  useViewDefinition,
-} from "@/src/modules/feed-drawer/atoms"
+import { useSelectedFeed, useSetDrawerSwipeDisabled } from "@/src/modules/feed-drawer/atoms"
 import {
   useEntry,
   useEntryIdsByCategory,
@@ -27,11 +23,9 @@ import {
   useEntryIdsByInboxId,
   useEntryIdsByView,
 } from "@/src/store/entry/hooks"
-import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
-import { useFeed } from "@/src/store/feed/hooks"
-import { useInbox } from "@/src/store/inbox/hooks"
 import { useList } from "@/src/store/list/hooks"
 
+import { ViewSelector } from "../feed-drawer/view-selector"
 import { LeftAction, RightAction } from "./action"
 import { EntryListContentGrid } from "./entry-list-gird"
 
@@ -70,37 +64,33 @@ export function EntryList() {
 
 function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
   const entryIds = useEntryIdsByView(viewId)
-  const viewDef = useViewDefinition(viewId)
 
-  return <EntryListScreen title={viewDef.name} entryIds={entryIds} />
+  return <EntryListScreen entryIds={entryIds} />
 }
 
 function FeedEntryList({ feedId }: { feedId: string }) {
-  const feed = useFeed(feedId)
   const entryIds = useEntryIdsByFeedId(feedId)
-  const title = feedId === FEED_COLLECTION_LIST ? "Collections" : (feed?.title ?? "")
-  return <EntryListScreen title={title} entryIds={entryIds} />
+  return <EntryListScreen entryIds={entryIds} />
 }
 
 function CategoryEntryList({ categoryName }: { categoryName: string }) {
   const entryIds = useEntryIdsByCategory(categoryName)
-  return <EntryListScreen title={categoryName} entryIds={entryIds} />
+  return <EntryListScreen entryIds={entryIds} />
 }
 
 function ListEntryList({ listId }: { listId: string }) {
   const list = useList(listId)
   if (!list) return null
 
-  return <EntryListScreen title={list.title} entryIds={list.entryIds ?? []} />
+  return <EntryListScreen entryIds={list.entryIds ?? []} />
 }
 
 function InboxEntryList({ inboxId }: { inboxId: string }) {
-  const inbox = useInbox(inboxId)
   const entryIds = useEntryIdsByInboxId(inboxId)
-  return <EntryListScreen title={inbox?.title ?? "Inbox"} entryIds={entryIds} />
+  return <EntryListScreen entryIds={entryIds} />
 }
 
-function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[] }) {
+function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
   const selectedFeed = useSelectedFeed()
   const view = selectedFeed.type === "view" ? selectedFeed.viewId : null
@@ -109,7 +99,7 @@ function EntryListScreen({ title, entryIds }: { title: string; entryIds: string[
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
         headerShown
-        title={title}
+        headerTitle={ViewSelector}
         headerLeft={useCallback(
           () => (
             <LeftAction />

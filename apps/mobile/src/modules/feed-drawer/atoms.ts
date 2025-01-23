@@ -6,6 +6,10 @@ import { useCallback, useMemo } from "react"
 import { views } from "@/src/constants/views"
 import { usePrefetchEntries } from "@/src/store/entry/hooks"
 import type { FetchEntriesProps } from "@/src/store/entry/types"
+import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
+import { useFeed } from "@/src/store/feed/hooks"
+import { useInbox } from "@/src/store/inbox/hooks"
+import { useList } from "@/src/store/list/hooks"
 import { getSubscriptionByCategory } from "@/src/store/subscription/getter"
 
 // drawer open state
@@ -123,11 +127,37 @@ export function useSelectedFeed() {
   return selectedFeed
 }
 
+export const useSelectedFeedTitle = () => {
+  const selectedFeed = useSelectedFeed()
+  const viewDef = useViewDefinition(selectedFeed.type === "view" ? selectedFeed.viewId : undefined)
+  const feed = useFeed(selectedFeed.type === "feed" ? selectedFeed.feedId : "")
+  const list = useList(selectedFeed.type === "list" ? selectedFeed.listId : "")
+  const inbox = useInbox(selectedFeed.type === "inbox" ? selectedFeed.inboxId : "")
+
+  switch (selectedFeed.type) {
+    case "view": {
+      return viewDef?.name
+    }
+    case "feed": {
+      return selectedFeed.feedId === FEED_COLLECTION_LIST ? "Collections" : (feed?.title ?? "")
+    }
+    case "category": {
+      return selectedFeed.categoryName
+    }
+    case "list": {
+      return list?.title
+    }
+    case "inbox": {
+      return inbox?.title ?? "Inbox"
+    }
+  }
+}
+
 export const selectFeed = (state: SelectedFeed) => {
   jotaiStore.set(selectedFeedAtom, state)
 }
 
-export const useViewDefinition = (view: FeedViewType) => {
+export const useViewDefinition = (view?: FeedViewType) => {
   const viewDef = useMemo(() => views.find((v) => v.view === view), [view])
   if (!viewDef) {
     throw new Error(`View ${view} not found`)
