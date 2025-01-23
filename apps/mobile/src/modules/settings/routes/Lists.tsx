@@ -57,8 +57,8 @@ export const ListsScreen = () => {
         </GroupedInsetListCard>
       </View>
       <View className="mt-6">
-        {data && (
-          <GroupedInsetListCard>
+        <GroupedInsetListCard>
+          {data && (
             <SwipeableGroupProvider>
               <Animated.FlatList
                 keyExtractor={keyExtractor}
@@ -69,14 +69,14 @@ export const ListsScreen = () => {
                 ItemSeparatorComponent={ItemSeparatorComponent}
               />
             </SwipeableGroupProvider>
-          </GroupedInsetListCard>
-        )}
+          )}
+          {isLoading && (
+            <View className="mt-1">
+              <LoadingIndicator />
+            </View>
+          )}
+        </GroupedInsetListCard>
       </View>
-      {isLoading && (
-        <View className="flex-1 items-center justify-center">
-          <LoadingIndicator />
-        </View>
-      )}
     </SafeNavigationScrollView>
   )
 }

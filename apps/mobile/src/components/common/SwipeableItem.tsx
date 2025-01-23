@@ -225,7 +225,7 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
       renderRightActions={rightActions?.length ? renderRightActions : undefined}
       overshootLeft={leftActions?.length ? leftActions?.length >= 1 : undefined}
       overshootRight={rightActions?.length ? rightActions?.length >= 1 : undefined}
-      overshootFriction={3}
+      overshootFriction={10}
     >
       {children}
     </Swipeable>
