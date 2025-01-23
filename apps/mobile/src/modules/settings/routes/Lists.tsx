@@ -16,6 +16,7 @@ import {
 } from "@/src/components/ui/grouped/GroupedList"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { LoadingIndicator } from "@/src/components/ui/loading"
+import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { PowerIcon } from "@/src/icons/power"
@@ -125,6 +126,13 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
     <SwipeableItem
       rightActions={[
         {
+          label: "Manage",
+          onPress: () => {
+            router.push(`/manage-list?id=${list.id}`)
+          },
+          backgroundColor: accentColor,
+        },
+        {
           label: "Edit",
           onPress: () => {
             router.push(`/list?id=${list.id}`)
@@ -133,7 +141,10 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
         },
       ]}
     >
-      <View className="bg-secondary-system-grouped-background flex-row p-4">
+      <ItemPressable
+        className="flex-row p-4"
+        onPress={() => router.push(`/manage-list?id=${list.id}`)}
+      >
         <View className="size-16 overflow-hidden rounded-lg">
           {list.image ? (
             <Image source={{ uri: list.image }} resizeMode="cover" className="size-full" />
@@ -189,7 +200,7 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
             </View>
           )}
         </View>
-      </View>
+      </ItemPressable>
     </SwipeableItem>
   )
 }

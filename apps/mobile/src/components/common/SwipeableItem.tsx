@@ -128,7 +128,7 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
           style={[
             styles.absoluteFill,
             {
-              backgroundColor: rightActions?.[0]?.backgroundColor ?? "#fff",
+              backgroundColor: rightActions?.at(-1)?.backgroundColor ?? "#fff",
             },
           ]}
         />

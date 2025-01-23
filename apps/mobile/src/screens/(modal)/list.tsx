@@ -5,13 +5,14 @@ import { router, Stack, useLocalSearchParams } from "expo-router"
 import { memo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { View } from "react-native"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 import { z } from "zod"
 
+import { BlurEffectWithBottomBorder } from "@/src/components/common/BlurEffect"
 import {
   ModalHeaderCloseButton,
   ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
+import { SafeModalScrollView } from "@/src/components/common/SafeModalScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { NumberField, TextField } from "@/src/components/ui/form/TextField"
@@ -65,7 +66,7 @@ export default function ListScreen() {
 
   return (
     <FormProvider form={form}>
-      <KeyboardAwareScrollView className="bg-system-grouped-background flex-1 pb-safe">
+      <SafeModalScrollView className="bg-system-grouped-background flex-1 pb-safe">
         <ScreenOptions title={list?.title} listId={listId} />
 
         <GroupedInsetListCard showSeparator={false} className="mt-6 px-3 py-6">
@@ -186,7 +187,7 @@ export default function ListScreen() {
             />
           </GroupedInsetListCard>
         )}
-      </KeyboardAwareScrollView>
+      </SafeModalScrollView>
     </FormProvider>
   )
 }
@@ -208,7 +209,8 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
       options={{
         headerLeft: ModalHeaderCloseButton,
         gestureEnabled: !isDirty,
-
+        headerTransparent: true,
+        headerBackground: BlurEffectWithBottomBorder,
         headerRight: () => (
           <FormProvider form={form}>
             <ModalHeaderSubmitButton

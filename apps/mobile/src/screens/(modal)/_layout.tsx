@@ -27,6 +27,12 @@ export default function ModalLayout() {
           title: "List",
         }}
       />
+      <Stack.Screen
+        name="manage-list"
+        options={{
+          title: "Manage List",
+        }}
+      />
     </Stack>
   )
 }
