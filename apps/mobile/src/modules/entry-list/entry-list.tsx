@@ -4,9 +4,10 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
+import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useContext, useEffect, useMemo } from "react"
-import { Image, StyleSheet, Text, useAnimatedValue, View } from "react-native"
+import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import {
@@ -186,6 +187,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   if (!entry) return <EntryItemSkeleton />
   const { title, description, publishedAt, media } = entry
   const image = media?.[0]?.url
+  const blurhash = media?.[0]?.blurhash
 
   return (
     <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
@@ -201,8 +203,9 @@ function EntryItem({ entryId }: { entryId: string }) {
       {image && (
         <Image
           source={{ uri: image }}
+          placeholder={{ blurhash }}
           className="ml-2 size-20 rounded-md bg-zinc-200 dark:bg-zinc-800"
-          resizeMode="cover"
+          contentFit="cover"
         />
       )}
     </ItemPressable>

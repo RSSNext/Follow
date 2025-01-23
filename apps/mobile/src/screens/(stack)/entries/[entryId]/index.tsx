@@ -1,16 +1,17 @@
 import type { AVPlaybackStatus } from "expo-av"
 import { Video } from "expo-av"
+import { Image } from "expo-image"
 import { Stack, useLocalSearchParams } from "expo-router"
 import { useState } from "react"
 import { Dimensions, ScrollView, Text, View } from "react-native"
 import PagerView from "react-native-pager-view"
 
-import { ReAnimatedExpoImage } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
 import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
+import type { MediaModel } from "@/src/database/schemas/types"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
 
-function Media({ media }: { media: any }) {
+function Media({ media }: { media: MediaModel }) {
   const isVideo = media.type === "video"
   const imageUrl = isVideo ? media.preview_image_url : media.url
   const videoUrl = media.url
@@ -37,15 +38,15 @@ function Media({ media }: { media: any }) {
       )}
       <View className="flex-1 justify-center">
         {imageUrl ? (
-          <ReAnimatedExpoImage
+          <Image
             source={{ uri: imageUrl }}
+            placeholder={{ blurhash: media.blurhash }}
             style={{
               width: "100%",
               aspectRatio: media?.height && media.width ? media.width / media.height : 9 / 16,
               display: isVideo ? (status?.isLoaded ? "none" : "flex") : "flex",
             }}
-            sharedTransitionTag={imageUrl ? `entry-image-${imageUrl}` : undefined}
-            allowDownscaling={false}
+            contentFit="contain"
           />
         ) : (
           <Text className="text-gray-4 text-center">No media</Text>
@@ -90,16 +91,12 @@ export default function EntryDetailPage() {
           headerTitle: item?.title ?? "Entry",
         }}
       />
-      <ScrollView
-        className="pt-safe"
-        contentContainerClassName="flex-grow"
-        contentInsetAdjustmentBehavior="automatic"
-      >
+      <ScrollView contentContainerClassName="flex-grow" contentInsetAdjustmentBehavior="automatic">
         {mediaList.length > 0 && (
           <View
             style={{
-              height: maxMediaHeight > 0 ? maxMediaHeight : "80%",
-              maxHeight: "80%",
+              height: maxMediaHeight > 0 ? maxMediaHeight : "50%",
+              maxHeight: "50%",
             }}
           >
             <PagerView
