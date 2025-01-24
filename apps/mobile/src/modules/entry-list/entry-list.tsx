@@ -1,7 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useHeaderHeight } from "@react-navigation/elements"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
@@ -14,12 +13,15 @@ import {
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 
 import { ViewSelector } from "../feed-drawer/view-selector"
 import { LeftAction, RightAction } from "./action"
 import { EntryListContentGrid } from "./entry-list-gird"
+
+const headerHideableBottomHeight = 58
 
 export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
@@ -31,7 +33,7 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
         headerShown
-        title={viewTitle}
+        headerTitle={viewTitle}
         headerLeft={useCallback(
           () => (
             <LeftAction />
@@ -44,7 +46,7 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
           ),
           [],
         )}
-        headerHideableBottomHeight={45}
+        headerHideableBottomHeight={headerHideableBottomHeight}
         headerHideableBottom={ViewSelector}
       />
       {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
@@ -59,7 +61,8 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
 function EntryListContent({ entryIds }: { entryIds: string[] }) {
   const insets = useSafeAreaInsets()
   const tabBarHeight = useBottomTabBarHeight()
-  const headerHeight = useHeaderHeight()
+  const originalDefaultHeaderHeight = useDefaultHeaderHeight()
+  const headerHeight = originalDefaultHeaderHeight + headerHideableBottomHeight
   const { scrollY } = useContext(NavigationContext)!
   return (
     <FlashList
