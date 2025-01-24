@@ -6,7 +6,6 @@ import type { ViewProps } from "react-native"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
-import { RightCuteReIcon } from "@/src/icons/right_cute_re"
 import { useColor } from "@/src/theme/colors"
 
 type GroupedInsetListCardProps = {
@@ -132,7 +131,9 @@ export const GroupedInsetListCell: FC<{
     <GroupedInsetListBaseCell className="flex-1">
       <View className="flex-1">
         <Text>{label}</Text>
-        {!!description && <Text className="text-secondary-label text-sm">{description}</Text>}
+        {!!description && (
+          <Text className="text-secondary-label text-sm leading-tight">{description}</Text>
+        )}
       </View>
 
       <View className="mb-auto ml-4 shrink-0">{children}</View>
@@ -155,11 +156,13 @@ export const GroupedInsetListActionCell: FC<{
         >
           <View className="flex-1">
             <Text>{label}</Text>
-            {!!description && <Text className="text-secondary-label text-sm">{description}</Text>}
+            {!!description && (
+              <Text className="text-secondary-label text-sm leading-tight">{description}</Text>
+            )}
           </View>
 
           <View className="-mr-2 ml-4">
-            <RightCuteReIcon height={18} width={18} color={rightIconColor} />
+            <MingcuteRightLine height={18} width={18} color={rightIconColor} />
           </View>
         </GroupedInsetListBaseCell>
       )}
