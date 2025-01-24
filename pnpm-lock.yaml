@@ -629,8 +629,8 @@ importers:
         specifier: 15.8.0
         version: 15.8.0(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)
       react-native-uikit-colors:
-        specifier: 0.1.1
-        version: 0.1.1(nativewind@4.1.23(3wxr6jl3awyorutkywtxjkvvyy))(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
+        specifier: 0.1.2
+        version: 0.1.2(nativewind@4.1.23(3wxr6jl3awyorutkywtxjkvvyy))(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2)))
       react-native-web:
         specifier: ~0.19.13
         version: 0.19.13(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2496,8 +2496,8 @@ packages:
     resolution: {integrity: sha512-F+nKc0xW+kVbBRhFzaMgPy3KwmuNTYX1fx6+FxxoSnNgwYX6LD7AKBTWkU0MQ6IBoe7dz069CNkR673sPAgkCQ==}
     engines: {node: '>=14'}
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
-    resolution: {tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
+    resolution: {commit: 06b29aafb7708acef8b3669835c8a7857ebc92d2, repo: git@github.com:electron/node-gyp.git, type: git}
     version: 10.2.0-electron.1
     engines: {node: '>=12.13.0'}
     hasBin: true
@@ -12818,8 +12818,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-uikit-colors@0.1.1:
-    resolution: {integrity: sha512-PNAXc/Pk/WYnU+/C1I7iaMCVdphjt/QRXqvq0cWDEDgX3ac0gP2H4RTb6xAJWGTsIbGYmtE+BNp5LnX0NgBibw==}
+  react-native-uikit-colors@0.1.2:
+    resolution: {integrity: sha512-dmlQAxfb3FHGpDQhB399/5gs0vE/6M4lV4rKBiCMmH6BB+w1PCNOIKOHtgX2YW0xEuoHJfS2mwoGjvyT/15wXg==}
     peerDependencies:
       nativewind: '>=4.1.0'
       react: '>=18.0.0'
@@ -16623,7 +16623,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.1
@@ -16723,7 +16723,7 @@ snapshots:
 
   '@electron/rebuild@3.7.1':
     dependencies:
-      '@electron/node-gyp': https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2
+      '@electron/node-gyp': git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
       debug: 4.4.0(supports-color@8.1.1)
@@ -29366,7 +29366,7 @@ snapshots:
       react-native: 0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1)
       warn-once: 0.1.1
 
-  react-native-uikit-colors@0.1.1(nativewind@4.1.23(3wxr6jl3awyorutkywtxjkvvyy))(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))):
+  react-native-uikit-colors@0.1.2(nativewind@4.1.23(3wxr6jl3awyorutkywtxjkvvyy))(react-native@0.77.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.16(ts-node@10.9.1(@types/node@22.10.1)(typescript@5.7.2))):
     dependencies:
       nativewind: 4.1.23(3wxr6jl3awyorutkywtxjkvvyy)
       react: 18.3.1
