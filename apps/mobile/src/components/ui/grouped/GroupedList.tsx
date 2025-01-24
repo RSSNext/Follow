@@ -209,7 +209,7 @@ export const GroupedInformationCell: FC<{
           {icon}
         </View>
       )}
-      <Text className="text-3xl font-bold">{title}</Text>
+      <Text className="text-label text-3xl font-bold">{title}</Text>
       {!!description && (
         <Text className="text-label mt-3 text-balance text-center text-base leading-tight">
           {description}
