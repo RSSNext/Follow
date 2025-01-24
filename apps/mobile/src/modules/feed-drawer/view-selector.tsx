@@ -15,8 +15,12 @@ export function ViewSelector() {
   const lists = useAllListSubscription()
 
   return (
-    <View className="flex items-center justify-between px-3 py-2">
-      <ScrollView horizontal contentContainerClassName="flex-row gap-3 items-center">
+    <View className="flex items-center justify-between py-2">
+      <ScrollView
+        horizontal
+        contentContainerClassName="flex-row gap-3 items-center px-3"
+        showsHorizontalScrollIndicator={false}
+      >
         {views.map((view) => (
           <ViewItem key={view.name} view={view} />
         ))}

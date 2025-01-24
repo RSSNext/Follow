@@ -3,7 +3,7 @@ import { Header, useHeaderHeight } from "@react-navigation/elements"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { router, Stack, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
+import { createContext, useContext, useEffect, useMemo, useRef } from "react"
 import type { ScrollViewProps } from "react-native"
 import {
   Animated as RNAnimated,
@@ -12,7 +12,7 @@ import {
   useAnimatedValue,
   View,
 } from "react-native"
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
@@ -87,7 +87,7 @@ export const NavigationBlurEffectHeader = ({
 
   const border = useColor("opaqueSeparator")
 
-  const [opacity, setOpacity] = useState(0)
+  const opacityAnimated = useSharedValue(0)
 
   const originalDefaultHeaderHeight = useDefaultHeaderHeight()
   const largeDefaultHeaderHeight = originalDefaultHeaderHeight + headerHideableBottomHeight
@@ -98,7 +98,7 @@ export const NavigationBlurEffectHeader = ({
 
   useEffect(() => {
     const id = scrollY.addListener(({ value }) => {
-      setOpacity(Math.max(0, Math.min(1, (value + blurThreshold) / 10)))
+      opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
       if (headerHideableBottom && value > 0) {
         if (value > lastScrollY.current) {
           largeHeaderHeight.value = withTiming(originalDefaultHeaderHeight)
@@ -119,7 +119,15 @@ export const NavigationBlurEffectHeader = ({
     largeHeaderHeight,
     originalDefaultHeaderHeight,
     largeDefaultHeaderHeight,
+    opacityAnimated,
   ])
+
+  const style = useAnimatedStyle(() => ({
+    opacity: opacityAnimated.value,
+    ...StyleSheet.absoluteFillObject,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: border,
+  }))
 
   const hideableBottom = headerHideableBottom?.()
 
@@ -127,14 +135,9 @@ export const NavigationBlurEffectHeader = ({
     <Stack.Screen
       options={{
         headerBackground: () => (
-          <ThemedBlurView
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              opacity,
-              borderBottomWidth: StyleSheet.hairlineWidth,
-              borderBottomColor: border,
-            }}
-          />
+          <Animated.View style={style}>
+            <ThemedBlurView className="flex-1" />
+          </Animated.View>
         ),
         headerTransparent: true,
 
