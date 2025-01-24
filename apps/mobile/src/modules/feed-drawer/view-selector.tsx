@@ -15,7 +15,7 @@ export function ViewSelector() {
   const lists = useAllListSubscription()
 
   return (
-    <View className="flex items-center justify-between px-3 pt-1">
+    <View className="flex items-center justify-between px-3 py-2">
       <ScrollView horizontal contentContainerClassName="flex-row gap-3 items-center">
         {views.map((view) => (
           <ViewItem key={view.name} view={view} />
@@ -36,13 +36,13 @@ function ViewItem({ view }: { view: ViewDefinition }) {
 
   return (
     <TouchableOpacity
-      className="relative flex size-8 items-center justify-center overflow-hidden rounded-full"
+      className="relative flex size-12 items-center justify-center overflow-hidden rounded-full"
       onPress={() => selectFeed({ type: "view", viewId: view.view })}
       style={{
         backgroundColor: isActive ? view.activeColor : bgColor,
       }}
     >
-      <view.icon color={"#fff"} height={15} width={15} />
+      <view.icon color={"#fff"} height={21} width={21} />
     </TouchableOpacity>
   )
 }
@@ -56,15 +56,15 @@ function ListItem({ listId }: { listId: string }) {
 
   return (
     <TouchableOpacity
-      className="relative flex size-8 items-center justify-center overflow-hidden rounded-full"
+      className="relative flex size-12 items-center justify-center overflow-hidden rounded-full"
       onPress={() => selectFeed({ type: "list", listId })}
     >
       {list.image ? (
         isActive ? (
-          <Image source={list.image} contentFit="cover" style={{ width: 32, height: 32 }} />
+          <Image source={list.image} contentFit="cover" className="size-12" />
         ) : (
           <Grayscale>
-            <Image source={list.image} contentFit="cover" style={{ width: 32, height: 32 }} />
+            <Image source={list.image} contentFit="cover" className="size-12" />
           </Grayscale>
         )
       ) : (

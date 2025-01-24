@@ -159,8 +159,5 @@ export const selectFeed = (state: SelectedFeed) => {
 
 export const useViewDefinition = (view?: FeedViewType) => {
   const viewDef = useMemo(() => views.find((v) => v.view === view), [view])
-  if (!viewDef) {
-    throw new Error(`View ${view} not found`)
-  }
   return viewDef
 }
