@@ -29,6 +29,7 @@ import type { ListModel } from "@/src/store/list/store"
 import { accentColor } from "@/src/theme/colors"
 
 import { SwipeableGroupProvider, SwipeableItem } from "../../../components/common/SwipeableItem"
+import { useSettingsNavigation } from "../hooks"
 
 const ListContext = createContext({} as Record<string, HonoApiClient.List_List_Get>)
 export const ListsScreen = () => {
@@ -122,13 +123,15 @@ const ListItemCell: ListRenderItem<ListModel> = (props) => {
 const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
   const { title, description } = list
   const listData = useContext(ListContext)[list.id]
+  const navigation = useSettingsNavigation()
   return (
     <SwipeableItem
+      swipeRightToCallAction
       rightActions={[
         {
           label: "Manage",
           onPress: () => {
-            router.push(`/manage-list?id=${list.id}`)
+            navigation.navigate("ManageList", { id: list.id })
           },
           backgroundColor: accentColor,
         },
@@ -143,7 +146,7 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
     >
       <ItemPressable
         className="flex-row p-4"
-        onPress={() => router.push(`/manage-list?id=${list.id}`)}
+        onPress={() => navigation.navigate("ManageList", { id: list.id })}
       >
         <View className="size-16 overflow-hidden rounded-lg">
           {list.image ? (

@@ -28,6 +28,7 @@ export const GroupedInsetListCard: FC<
         ? React.Children.map(children, (child, index) => {
             const isLast = index === React.Children.count(children) - 1
 
+            if (child === null) return null
             const isNavigationLink =
               React.isValidElement(child) &&
               // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type

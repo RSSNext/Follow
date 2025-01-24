@@ -1,3 +1,5 @@
+import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { impactAsync, ImpactFeedbackStyle } from "expo-haptics"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { selectAtom } from "jotai/utils"
 import * as React from "react"
@@ -17,6 +19,8 @@ interface SwipeableItemProps {
   leftActions?: Action[]
   rightActions?: Action[]
   disabled?: boolean
+
+  swipeRightToCallAction?: boolean
 }
 
 const styles = StyleSheet.create({
@@ -41,18 +45,22 @@ const styles = StyleSheet.create({
   },
 })
 
+const rectButtonWidth = 74
+
 export const SwipeableItem: React.FC<SwipeableItemProps> = ({
   children,
   leftActions,
   rightActions,
   disabled,
+
+  swipeRightToCallAction,
 }) => {
-  const [leftHaptic, setLeftHaptic] = React.useState(false)
-  const [rightHaptic, setRightHaptic] = React.useState(false)
   const itemRef = React.useRef<Swipeable | null>(null)
 
+  const endDragCallerRef = React.useRef<() => void>(() => {})
+
   const renderLeftActions = (progress: Animated.AnimatedInterpolation<number>) => {
-    const width = leftActions?.length ? leftActions.length * 74 : 74
+    const width = leftActions?.length ? leftActions.length * rectButtonWidth : rectButtonWidth
 
     return (
       <>
@@ -68,18 +76,8 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
           {leftActions?.map((action, index) => {
             const trans = progress.interpolate({
               inputRange: [0, 1],
-              outputRange: [-74 * (leftHaptic ? (leftActions?.length ?? 1) : index + 1), 0],
+              outputRange: [-rectButtonWidth * (leftActions?.length ?? 1), 0],
             })
-
-            if (index === 0) {
-              trans.addListener(({ value }) => {
-                if (value >= (leftActions?.length === 1 ? 40 : 20)) {
-                  setLeftHaptic(true)
-                } else {
-                  leftHaptic && setLeftHaptic(false)
-                }
-              })
-            }
 
             return (
               <Animated.View
@@ -88,8 +86,8 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
                   styles.animatedContainer,
                   {
                     transform: [{ translateX: trans }],
-                    width: leftHaptic && index === 0 ? "100%" : 74,
-                    left: index * 74,
+                    width: rectButtonWidth,
+                    left: index * rectButtonWidth,
                   },
                 ]}
               >
@@ -116,12 +114,8 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
   }
 
   const renderRightActions = (progress: Animated.AnimatedInterpolation<number>) => {
-    const width = rightActions?.length ? rightActions.length * 74 : 74
+    const width = rightActions?.length ? rightActions.length * rectButtonWidth : rectButtonWidth
 
-    const parallaxX = progress.interpolate({
-      inputRange: [0, 1, 1.2],
-      outputRange: [0, 0, 10],
-    })
     return (
       <>
         <View
@@ -134,54 +128,18 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
         />
         <Animated.View style={[styles.actionsWrapper, { width }]}>
           {rightActions?.map((action, index) => {
-            const trans = progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [74 * (rightHaptic ? (rightActions?.length ?? 1) : index + 1), 0],
-            })
-
-            if (index === 0) {
-              trans.addListener(({ value }) => {
-                if (value <= (rightActions?.length === 1 ? -40 : -20)) {
-                  setRightHaptic(true)
-                } else {
-                  rightHaptic && setRightHaptic(false)
-                }
-              })
-            }
-
             return (
-              <Animated.View
+              <RightRectButton
+                endDragCallerRef={endDragCallerRef}
                 key={index}
-                style={[
-                  styles.animatedContainer,
-                  {
-                    transform: [{ translateX: trans }],
-                    width: rightHaptic && index === 0 ? "100%" : 74,
-                    left: index * 74,
-                  },
-                ]}
-              >
-                <RectButton
-                  style={[
-                    styles.actionContainer,
-                    {
-                      backgroundColor: action.backgroundColor ?? "#fff",
-                    },
-                  ]}
-                  onPress={action.onPress}
-                >
-                  {action.icon}
-                  <Animated.Text
-                    style={[
-                      styles.actionText,
-                      { color: action.color ?? "#fff" },
-                      { transform: [{ translateX: parallaxX }] },
-                    ]}
-                  >
-                    {action.label}
-                  </Animated.Text>
-                </RectButton>
-              </Animated.View>
+                index={index}
+                action={action}
+                length={rightActions?.length ?? 1}
+                progress={progress}
+                swipeRightToCallAction={
+                  swipeRightToCallAction && index === rightActions?.length - 1
+                }
+              />
             )
           })}
         </Animated.View>
@@ -218,26 +176,16 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
       rightThreshold={37}
       enableTrackpadTwoFingerGesture
       useNativeAnimations
-      onEnded={(e: any) => {
-        const { translationX } = e.nativeEvent
-        if (
-          leftHaptic &&
-          translationX >= (leftActions?.length === 1 ? 100 : 60) * (leftActions?.length ?? 1)
-        ) {
-          leftActions?.[0]?.onPress?.()
+      onEnded={useTypeScriptHappyCallback(() => {
+        if (swipeRightToCallAction && endDragCallerRef.current) {
+          endDragCallerRef.current()
         }
-        if (
-          rightHaptic &&
-          translationX <= (rightActions?.length === 1 ? -100 : -60) * (rightActions?.length ?? 1)
-        ) {
-          rightActions?.[0]?.onPress?.()
-        }
-      }}
+      }, [swipeRightToCallAction, endDragCallerRef])}
       renderLeftActions={leftActions?.length ? renderLeftActions : undefined}
       renderRightActions={rightActions?.length ? renderRightActions : undefined}
       overshootLeft={leftActions?.length ? leftActions?.length >= 1 : undefined}
       overshootRight={rightActions?.length ? rightActions?.length >= 1 : undefined}
-      overshootFriction={10}
+      overshootFriction={swipeRightToCallAction ? 1 : 10}
     >
       {children}
     </Swipeable>
@@ -258,3 +206,97 @@ export const SwipeableGroupProvider = ({ children }: { children: React.ReactNode
 
   return <SwipeableGroupContext.Provider value={ctx}>{children}</SwipeableGroupContext.Provider>
 }
+
+const rightActionThreshold = -100
+const RightRectButton = React.memo(
+  ({
+    index,
+    action,
+    length = 1,
+    progress,
+    swipeRightToCallAction,
+    endDragCallerRef,
+  }: {
+    progress: Animated.AnimatedInterpolation<number>
+    index: number
+    action: Action
+    length: number
+    swipeRightToCallAction?: boolean
+    endDragCallerRef: React.MutableRefObject<() => void>
+  }) => {
+    const trans = React.useMemo(
+      () =>
+        progress.interpolate({
+          inputRange: [0, 1, 1.2],
+          outputRange: [rectButtonWidth * length, 0, -40],
+        }),
+      [progress, length],
+    )
+    const parallaxX = React.useMemo(
+      () =>
+        progress.interpolate({
+          inputRange: [0, 1, 1.2],
+          outputRange: [0, 0, 10],
+        }),
+      [progress],
+    )
+
+    const hapticOnce = React.useRef(false)
+
+    React.useEffect(() => {
+      if (!swipeRightToCallAction) return
+      const id = trans.addListener(({ value }) => {
+        if (value <= rightActionThreshold) {
+          if (hapticOnce.current) return
+          hapticOnce.current = true
+          impactAsync(ImpactFeedbackStyle.Light)
+          endDragCallerRef.current = () => {
+            action.onPress?.()
+          }
+        } else {
+          hapticOnce.current = false
+          endDragCallerRef.current = () => {}
+        }
+      })
+
+      return () => {
+        trans.removeListener(id)
+      }
+    }, [action, endDragCallerRef, swipeRightToCallAction, trans])
+
+    return (
+      <Animated.View
+        key={index}
+        style={[
+          styles.animatedContainer,
+          {
+            transform: [{ translateX: trans }],
+            width: rectButtonWidth,
+            left: index * rectButtonWidth,
+          },
+        ]}
+      >
+        <RectButton
+          style={[
+            styles.actionContainer,
+            {
+              backgroundColor: action.backgroundColor ?? "#fff",
+            },
+          ]}
+          onPress={action.onPress}
+        >
+          {action.icon}
+          <Animated.Text
+            style={[
+              styles.actionText,
+              { color: action.color ?? "#fff" },
+              { transform: [{ translateX: parallaxX }] },
+            ]}
+          >
+            {action.label}
+          </Animated.Text>
+        </RectButton>
+      </Animated.View>
+    )
+  },
+)

@@ -4,6 +4,7 @@ import { honoMorph } from "@/src/morph/hono"
 import { storeDbMorph } from "@/src/morph/store-db"
 import { ListService } from "@/src/services/list"
 
+import { feedActions } from "../feed/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { getList } from "./getters"
 import type { CreateListModel } from "./types"
@@ -157,6 +158,21 @@ class ListSyncServices {
   async deleteList(params: { listId: string }) {
     await apiClient.lists.$delete({ json: { listId: params.listId } })
     listActions.deleteList({ listId: params.listId })
+  }
+
+  async addFeedsToFeedList(params: { listId: string; feedIds: string[] }) {
+    const feeds = await apiClient.lists.feeds.$post({
+      json: params,
+    })
+    const list = get().lists[params.listId]
+    if (!list) return
+
+    feeds.data.forEach((feed) => {
+      feedActions.upsertMany([honoMorph.toFeed(feed)])
+    })
+    listActions.upsertMany([
+      { ...list, feedIds: [...list.feedIds, ...feeds.data.map((feed) => feed.id)] },
+    ])
   }
 }
 

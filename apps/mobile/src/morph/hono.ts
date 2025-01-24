@@ -1,5 +1,6 @@
 import type { FeedSchema, InboxSchema } from "../database/schemas/types"
 import type { EntryModel } from "../store/entry/types"
+import type { FeedModel } from "../store/feed/types"
 import type { ListModel } from "../store/list/store"
 import type { SubscriptionModel } from "../store/subscription/store"
 import type { HonoApiClient } from "./types"
@@ -158,6 +159,20 @@ class Morph {
       // TODO: handle inboxHandle
       inboxHandle: "",
       read: false,
+    }
+  }
+
+  toFeed(data: HonoApiClient.Feed_Get["feed"]): FeedModel {
+    return {
+      id: data.id,
+      title: data.title!,
+      url: data.url,
+      image: data.image!,
+      description: data.description!,
+      ownerUserId: data.ownerUserId!,
+      errorAt: data.errorAt!,
+      errorMessage: data.errorMessage!,
+      siteUrl: data.siteUrl!,
     }
   }
 }

@@ -11,4 +11,5 @@ export namespace HonoApiClient {
   export type Entry_Post = ExtractData<typeof apiClient.entries.$post>
   export type Entry_Get = ExtractData<typeof apiClient.entries.$get>
   export type List_List_Get = ExtractData<typeof apiClient.lists.list.$get>[number]
+  export type Feed_Get = ExtractData<typeof apiClient.feeds.$get>
 }
