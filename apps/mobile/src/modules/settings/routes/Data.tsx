@@ -102,7 +102,7 @@ export const DataScreen = () => {
                   `Import successful, ${successfulItems.length} feeds were imported, ${conflictItems.length} feeds were already subscribed, and ${parsedErrorItems.length} feeds failed to import.`,
                 )
               } catch (error) {
-                const bizError = getBizFetchErrorMessage(error)
+                const bizError = getBizFetchErrorMessage(error as Error)
                 toast.error(`Import failed${bizError ? `: ${bizError}` : ""}`)
                 console.error(error)
               }

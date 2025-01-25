@@ -60,7 +60,7 @@ export const apiClient = hc<AppType>(getApiUrl(), {
   },
 })
 
-export const getBizFetchErrorMessage = (error: unknown) => {
+export const getBizFetchErrorMessage = (error: Error) => {
   if (error instanceof FetchError && error.response) {
     try {
       const data = JSON.parse(error.response._data)
