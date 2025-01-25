@@ -27,11 +27,11 @@ export function DiscoverUser() {
 
   return (
     <>
-      {data?.follow.routes && (
+      {data?.follow!.routes && (
         <div className="w-full max-w-[540px]">
           <DiscoverFeedForm
             routePrefix="follow"
-            route={data.follow.routes[Object.keys(data.follow.routes)[0]]}
+            route={data.follow.routes[Object.keys(data.follow.routes)[0]!]!}
             noDescription
             submitButtonClassName="justify-center"
           />

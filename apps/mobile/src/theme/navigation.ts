@@ -11,6 +11,7 @@ export const DefaultTheme: Theme = {
   colors: {
     ...NativeDefaultTheme.colors,
     primary: accentColor,
+    background: "white",
   },
 }
 
@@ -19,5 +20,6 @@ export const DarkTheme: Theme = {
   colors: {
     ...NativeDarkTheme.colors,
     primary: accentColor,
+    background: "black",
   },
 }

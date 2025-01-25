@@ -43,7 +43,7 @@ export function PullToRefresh({
       ) as HTMLElement
       if (!scrollContainer) return
 
-      const touchY = e.touches[0].clientY
+      const touchY = e.touches[0]!.clientY
       setStartY(touchY)
 
       if (scrollContainer.scrollTop <= 0) {
@@ -56,7 +56,7 @@ export function PullToRefresh({
     const touchMoveHandler = (e: TouchEvent) => {
       if (!shouldAllowPull || isRefreshing) return
 
-      const y = e.touches[0].clientY
+      const y = e.touches[0]!.clientY
       const delta = y - startY
 
       if (delta > 0) {

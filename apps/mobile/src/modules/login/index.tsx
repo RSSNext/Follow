@@ -20,7 +20,7 @@ import {
 } from "@/src/contexts/LoginTeamsContext"
 import { isIOS } from "@/src/lib/platform"
 import { toast } from "@/src/lib/toast"
-import { TeamsMarkdown } from "@/src/screens/(headless)/teams"
+import { TeamsMarkdown } from "@/src/screens/(headless)/terms"
 
 import { EmailLogin } from "./email"
 import { SocialLogin } from "./social"
@@ -96,7 +96,7 @@ const TeamsCheckBox = forwardRef<
         const runAnimation = (index: number) => {
           "worklet"
           if (index < animations.length) {
-            shakeSharedValue.value = withTiming(animations[index], { duration: 100 }, () => {
+            shakeSharedValue.value = withTiming(animations[index]!, { duration: 100 }, () => {
               runAnimation(index + 1)
             })
           }
@@ -115,7 +115,7 @@ const TeamsCheckBox = forwardRef<
         textComponent={<TeamsText />}
         onLongPress={() => {
           if (!isIOS) {
-            router.push("/teams")
+            router.push("/terms")
           }
         }}
       />
@@ -130,7 +130,7 @@ const TeamsText = () => {
       config={{ items: [] }}
       onPressMenuItem={noop}
       onPressPreview={() => {
-        router.push("/teams")
+        router.push("/terms")
       }}
       renderPreview={() => (
         <View className="flex-1">

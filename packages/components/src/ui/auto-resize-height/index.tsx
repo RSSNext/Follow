@@ -30,8 +30,8 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
     if (!containerRef.current) return
     const resizeObserver = new ResizeObserver((entries) => {
       // We only have one entry, so we can use entries[0].
-      const target = entries[0].target as HTMLElement
-      const observedHeight = entries[0].contentRect.height
+      const target = entries[0]!.target as HTMLElement
+      const observedHeight = entries[0]!.contentRect.height
       const style = getComputedStyle(target)
 
       const marginHeight =

@@ -3,7 +3,7 @@ import type { LayoutChangeEvent } from "react-native"
 import { Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { useList } from "@/src/store/list/hooks"
 
 import { SortActionButton } from "../subscription/header-actions"
@@ -26,7 +26,7 @@ export const ViewHeaderComponent = ({
       style={{ paddingTop: insets.top }}
     >
       <BlurEffect />
-      <Text className="text-text my-4 text-2xl font-bold">{viewDef.name}</Text>
+      <Text className="text-text my-4 text-2xl font-bold">{viewDef?.name}</Text>
       <SortActionButton />
     </View>
   )

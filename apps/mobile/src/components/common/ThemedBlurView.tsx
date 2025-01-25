@@ -5,10 +5,12 @@ import { forwardRef } from "react"
 
 export const ThemedBlurView = forwardRef<BlurView, BlurViewProps>(({ tint, ...rest }, ref) => {
   const { colorScheme } = useColorScheme()
+
   return (
     <BlurView
       ref={ref}
-      tint={colorScheme === "light" ? "systemMaterialLight" : "systemMaterialDark"}
+      intensity={100}
+      tint={colorScheme === "light" ? "systemChromeMaterialLight" : "systemChromeMaterialDark"}
       {...rest}
     />
   )

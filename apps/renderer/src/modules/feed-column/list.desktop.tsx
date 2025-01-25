@@ -174,7 +174,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
                     firstIndex < currentIndex
                       ? [firstIndex, currentIndex]
                       : [currentIndex, firstIndex]
-                  const between = allVisible.slice(order[0], order[1] + 1) as string[]
+                  const between = allVisible.slice(order[0], order[1]! + 1) as string[]
                   setSelectedFeedIds((prev) => {
                     // with intersection, we need to update selected ids as between
                     // otherwise, we need to add between to selected ids
@@ -199,7 +199,7 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
             threshold: 0,
           }}
           onScroll={(e) => {
-            scrollerRef.current?.scrollBy(e.direction[0] * 10, e.direction[1] * 10)
+            scrollerRef.current?.scrollBy(e.direction[0]! * 10, e.direction[1]! * 10)
           }}
         />
 

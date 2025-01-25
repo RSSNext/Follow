@@ -38,7 +38,7 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
     })
     const userLang = languageDetector.detect()
     if (!userLang) return
-    const firstUserLang = Array.isArray(userLang) ? userLang[0] : userLang
+    const firstUserLang = Array.isArray(userLang) ? userLang[0]! : userLang
     if (currentSupportedLanguages.includes(firstUserLang)) {
       setGeneralSetting("language", firstUserLang)
     }

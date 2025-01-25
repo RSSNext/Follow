@@ -115,4 +115,4 @@ export const useEntryIdsByFeedIdOrView = (
 export const useEntryReadHistory = (
   entryId: string,
 ): Omit<EntryReadHistoriesModel, "entryId"> | null =>
-  useEntryStore((state) => state.readHistory[entryId])
+  useEntryStore((state) => state.readHistory[entryId] || null)

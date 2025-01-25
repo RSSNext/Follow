@@ -25,7 +25,7 @@ export const setProxyConfig = (inputProxy: string) => {
 }
 
 export const getProxyConfig = () => {
-  const proxyConfig = store.get("proxy") as string | undefined
+  const proxyConfig = store.get("proxy")
   if (!proxyConfig) {
     return
   }
@@ -40,7 +40,7 @@ const normalizeProxyUri = (userProxy: string) => {
     return
   }
   // Only use the first proxy if there are multiple urls
-  const firstInput = userProxy.split(",")[0]
+  const firstInput = userProxy.split(",")[0]!
 
   try {
     const proxyUrl = new URL(firstInput)

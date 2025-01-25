@@ -187,7 +187,7 @@ const VirtualGridImpl: FC<
     horizontal: true,
     count: columns.length,
     getScrollElement: () => scrollRef,
-    estimateSize: (i) => columns[i],
+    estimateSize: (i) => columns[i]!,
     overscan: 5,
     initialOffset: offsetCache.get(columnCacheKey) ?? 0,
     initialMeasurementsCache: measurementsCache.get(columnCacheKey) ?? [],
@@ -205,7 +205,7 @@ const VirtualGridImpl: FC<
   const rowVirtualizer = useVirtualizer({
     count: rows.length + 1,
     estimateSize: () => {
-      return columns[0] / ratioMap[view] + 58
+      return columns[0]! / ratioMap[view] + 58
     },
     overscan: 5,
     gap: 8,
@@ -309,7 +309,7 @@ const VirtualGridImpl: FC<
               >
                 {ready && (
                   <EntryItem
-                    entryId={entriesIds[virtualRow.index * columns.length + virtualColumn.index]}
+                    entryId={entriesIds[virtualRow.index * columns.length + virtualColumn.index]!}
                     view={view}
                   />
                 )}

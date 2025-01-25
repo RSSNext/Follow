@@ -37,10 +37,12 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
         url: entry?.entries.url ?? "",
         mini: true,
         isIframe: !IN_ELECTRON,
+        attachments: entry?.entries.attachments,
       }),
       transformVideoUrl({
         url: entry?.entries.url ?? "",
         isIframe: !IN_ELECTRON,
+        attachments: entry?.entries.attachments,
       }),
     ],
     [entry?.entries.url],
@@ -111,10 +113,10 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             />
           ) : entry.entries.media ? (
             <Media
-              key={entry.entries.media?.[0].url}
-              src={entry.entries.media?.[0].url}
-              type={entry.entries.media?.[0].type}
-              previewImageUrl={entry.entries.media?.[0].preview_image_url}
+              key={entry.entries.media?.[0]!.url}
+              src={entry.entries.media?.[0]!.url}
+              type={entry.entries.media?.[0]!.type}
+              previewImageUrl={entry.entries.media?.[0]!.preview_image_url}
               className={cn(
                 "aspect-video w-full shrink-0 rounded-md object-cover",
                 isActive && "rounded-b-none",

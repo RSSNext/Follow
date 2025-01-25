@@ -84,8 +84,8 @@ export const useScrollTracking = (
     // calculate the range of data-container-top between each two headings
     const titleBetweenPositionTopRangeMap = [] as [number, number][]
     for (let i = 0; i < toc.length - 1; i++) {
-      const { $heading } = toc[i]
-      const $nextHeading = toc[i + 1].$heading
+      const { $heading } = toc[i]!
+      const $nextHeading = toc[i + 1]!.$heading
 
       const headingTop =
         Number.parseInt($heading.dataset["containerTop"] || "0") || getElementTop($heading)

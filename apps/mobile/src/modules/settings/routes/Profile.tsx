@@ -2,12 +2,12 @@ import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
 import { Stack } from "expo-router"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
-import { FlatList, Image, Linking, Pressable, StyleSheet, Text, View } from "react-native"
+import { FlatList, Image, Share, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
-import { BlurEffect } from "@/src/components/common/HeaderBlur"
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { FeedIconRequiredFeed } from "@/src/components/ui/icon/feed-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -51,8 +51,12 @@ export const ProfileScreen = () => {
   const textLabelColor = useColor("label")
   const openShareUrl = useCallback(() => {
     if (!whoami?.id) return
-    Linking.openURL(`https://app.follow.is/share/users/${whoami.id}`)
-  }, [whoami?.id])
+    Share.share({
+      url: `https://app.follow.is/share/users/${whoami.id}`,
+      title: `Follow | ${whoami.name}'s Profile`,
+    })
+  }, [whoami?.id, whoami?.name])
+
   return (
     <View className="bg-system-grouped-background flex-1">
       <ReAnimatedScrollView
@@ -68,17 +72,21 @@ export const ProfileScreen = () => {
         {!isLoading && subscriptions && <SubscriptionList subscriptions={subscriptions.data} />}
       </ReAnimatedScrollView>
       {/* Top transparent header buttons */}
-      <Pressable
+      <TouchableOpacity
         onPress={() => settingNavigation.goBack()}
         className="absolute left-4"
         style={{ top: insets.top }}
       >
         <MingcuteLeftLineIcon color="#fff" />
-      </Pressable>
+      </TouchableOpacity>
 
-      <Pressable onPress={openShareUrl} className="absolute right-4" style={{ top: insets.top }}>
+      <TouchableOpacity
+        onPress={openShareUrl}
+        className="absolute right-4"
+        style={{ top: insets.top }}
+      >
         <Share3CuteReIcon color="#fff" />
-      </Pressable>
+      </TouchableOpacity>
       {/* Header */}
       <Animated.View
         pointerEvents="none"
@@ -86,17 +94,17 @@ export const ProfileScreen = () => {
         style={{ opacity: headerOpacity }}
       >
         <BlurEffect />
-        <Pressable pointerEvents="auto" onPress={() => settingNavigation.goBack()}>
+        <TouchableOpacity onPress={() => settingNavigation.goBack()}>
           <MingcuteLeftLineIcon color={textLabelColor} />
-        </Pressable>
+        </TouchableOpacity>
 
         <Text className="text-label flex-1 text-center text-lg font-medium">
           {whoami?.name}'s Profile
         </Text>
 
-        <Pressable onPress={openShareUrl}>
+        <TouchableOpacity onPress={openShareUrl}>
           <Share3CuteReIcon color={textLabelColor} />
-        </Pressable>
+        </TouchableOpacity>
       </Animated.View>
     </View>
   )

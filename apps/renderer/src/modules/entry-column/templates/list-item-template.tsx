@@ -83,7 +83,7 @@ export function ListItem({
 
   const related = feed || inbox
 
-  const hasAudio = entry.entries?.attachments?.[0].url
+  const hasAudio = entry.entries?.attachments?.[0]!.url
   const hasMedia = entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
@@ -180,9 +180,9 @@ export function ListItem({
       {withAudio && !!hasAudio && (
         <AudioCover
           entryId={entryId}
-          src={entry.entries!.attachments![0].url}
+          src={entry.entries!.attachments![0]!.url}
           durationInSeconds={Number.parseInt(
-            String(entry.entries!.attachments![0].duration_in_seconds ?? 0),
+            String(entry.entries!.attachments![0]!.duration_in_seconds ?? 0),
             10,
           )}
           feedIcon={

@@ -131,6 +131,7 @@ export function SetModalContent({
                           inputMode="numeric"
                           pattern="[0-9]*"
                           max={12}
+                          min={hasPurchase ? 0 : 1}
                           {...field}
                         />
                         <span className="text-sm text-muted-foreground">

@@ -8,12 +8,13 @@ import { z } from "zod"
 
 import {
   ModalHeaderCloseButton,
-  ModalHeaderShubmitButton,
+  ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
+import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { IconWithFallback } from "@/src/components/ui/icon/fallback-icon"
 import { LoadingIndicator } from "@/src/components/ui/loading"
 import { PowerIcon } from "@/src/icons/power"
@@ -38,7 +39,7 @@ export const FollowList = (props: { id: string }) => {
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator size={36} />
+        <LoadingIndicator />
       </View>
     )
   }
@@ -110,14 +111,14 @@ const Impl = (props: { id: string }) => {
   const isLoading = false
 
   return (
-    <ScrollView contentContainerClassName="px-2 pt-4 gap-y-4">
+    <ScrollView className="bg-system-grouped-background" contentContainerClassName="pt-4 gap-y-4">
       <Stack.Screen
         options={{
           title: `${isSubscribed ? "Edit" : "Follow"} - ${list?.title}`,
           headerLeft: ModalHeaderCloseButton,
           gestureEnabled: !isDirty,
           headerRight: () => (
-            <ModalHeaderShubmitButton
+            <ModalHeaderSubmitButton
               isValid={isValid}
               onPress={form.handleSubmit(submit)}
               isLoading={isLoading}
@@ -126,7 +127,7 @@ const Impl = (props: { id: string }) => {
         }}
       />
 
-      <View className="bg-secondary-system-grouped-background rounded-lg p-4">
+      <GroupedInsetListCard className="px-5 py-4">
         <View className="flex flex-row gap-4">
           <View className="size-[50px] overflow-hidden rounded-lg">
             <IconWithFallback
@@ -142,9 +143,9 @@ const Impl = (props: { id: string }) => {
             <Text className="text-secondary-label text-sm">{list?.description}</Text>
           </View>
         </View>
-      </View>
+      </GroupedInsetListCard>
 
-      <View className="bg-secondary-system-grouped-background gap-y-4 rounded-lg p-4">
+      <GroupedInsetListCard className="gap-y-6 px-5 py-4">
         <FormProvider form={form}>
           <View className="-mx-4">
             <FormLabel className="mb-4 pl-5" label="View" optional />
@@ -178,6 +179,7 @@ const Impl = (props: { id: string }) => {
                   label="Private"
                   description="Private feeds are only visible to you."
                   onValueChange={onChange}
+                  size="sm"
                 />
               )}
             />
@@ -198,7 +200,7 @@ const Impl = (props: { id: string }) => {
             </View>
           )}
         </FormProvider>
-      </View>
+      </GroupedInsetListCard>
     </ScrollView>
   )
 }

@@ -25,7 +25,7 @@ function rehypeTrimEndBrElement() {
     }
 
     for (let i = tree.children.length - 1; i >= 0; i--) {
-      const item = tree.children[i]
+      const item = tree.children[i]!
       if (item.type === "element") {
         if (item.tagName === "br") {
           tree.children.pop()
@@ -56,8 +56,8 @@ export const parseHtml = (content: string, options?: ParseHtmlOptions) => {
     rehypeSchema.attributes = {
       ...rehypeSchema.attributes,
       "*": renderInlineStyle
-        ? [...rehypeSchema.attributes!["*"], "style", "class"]
-        : rehypeSchema.attributes!["*"],
+        ? [...rehypeSchema.attributes!["*"]!, "style", "class"]
+        : rehypeSchema.attributes!["*"]!,
       video: ["src", "poster"],
     }
   }

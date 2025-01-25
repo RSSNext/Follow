@@ -10,12 +10,13 @@ import { z } from "zod"
 
 import {
   ModalHeaderCloseButton,
-  ModalHeaderShubmitButton,
+  ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
+import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { LoadingIndicator } from "@/src/components/ui/loading"
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
@@ -40,7 +41,7 @@ export function FollowFeed(props: { id: string }) {
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator size={36} />
+        <LoadingIndicator />
       </View>
     )
   }
@@ -50,7 +51,7 @@ export function FollowFeed(props: { id: string }) {
 function FollowImpl() {
   const { id } = useLocalSearchParams()
 
-  const feed = useFeed(id as string)
+  const feed = useFeed(id as string)!
   const isSubscribed = useSubscriptionByFeedId(feed?.id || "")
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -92,12 +93,13 @@ function FollowImpl() {
   const { isValid, isDirty } = form.formState
 
   if (!feed?.id) {
-    return <Text className="text-text">Feed ({id}) not found</Text>
+    return <Text className="text-label">Feed ({id}) not found</Text>
   }
 
   return (
     <ScrollView
-      contentContainerClassName="px-2 pt-4 gap-y-4"
+      className="bg-system-grouped-background"
+      contentContainerClassName="pt-4 gap-y-4"
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
       <Stack.Screen
@@ -106,7 +108,7 @@ function FollowImpl() {
           headerLeft: ModalHeaderCloseButton,
           gestureEnabled: !isDirty,
           headerRight: () => (
-            <ModalHeaderShubmitButton
+            <ModalHeaderSubmitButton
               isValid={isValid}
               onPress={form.handleSubmit(submit)}
               isLoading={isLoading}
@@ -116,7 +118,7 @@ function FollowImpl() {
       />
 
       {/* Group 1 */}
-      <View className="bg-secondary-system-grouped-background rounded-lg p-4">
+      <GroupedInsetListCard className="px-5 py-4">
         <View className="flex flex-row gap-4">
           <View className="size-[50px] overflow-hidden rounded-lg">
             <FeedIcon feed={feed} size={50} />
@@ -126,9 +128,9 @@ function FollowImpl() {
             <Text className="text-secondary-label text-sm">{feed?.description}</Text>
           </View>
         </View>
-      </View>
+      </GroupedInsetListCard>
       {/* Group 2 */}
-      <View className="bg-secondary-system-grouped-background gap-y-4 rounded-lg p-4">
+      <GroupedInsetListCard className="gap-y-4 px-5 py-4">
         <FormProvider form={form}>
           <View>
             <Controller
@@ -189,7 +191,7 @@ function FollowImpl() {
             />
           </View>
         </FormProvider>
-      </View>
+      </GroupedInsetListCard>
     </ScrollView>
   )
 }

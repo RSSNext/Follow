@@ -91,7 +91,7 @@ export function Component() {
         }}
         className="max-w-full"
       >
-        <ScrollArea.ScrollArea orientation="horizontal" rootClassName="max-w-full">
+        <ScrollArea.ScrollArea orientation="horizontal" rootClassName="max-w-max">
           <TabsList className="relative w-full">
             {currentTabs.map((tab) => (
               <TabsTrigger
@@ -112,7 +112,7 @@ export function Component() {
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
             <div className={tab.value === "inbox" ? "" : "center flex flex-col"}>
-              {createElement(TabComponent[tab.value] || TabComponent.default, {
+              {createElement(TabComponent[tab.value]! || TabComponent.default, {
                 type: tab.value,
               })}
             </div>

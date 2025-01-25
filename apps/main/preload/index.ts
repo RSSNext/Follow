@@ -18,8 +18,8 @@ const detectingWindows11 = () => {
   if (!isWindows) return false
 
   const release = os.release()
-  const majorVersion = Number.parseInt(release.split(".")[0])
-  const buildNumber = Number.parseInt(release.split(".")[2])
+  const majorVersion = Number.parseInt(release.split(".")[0]!)
+  const buildNumber = Number.parseInt(release.split(".")[2]!)
 
   return majorVersion === 10 && buildNumber >= 22000
 }

@@ -165,10 +165,10 @@ export function FeedIcon({
       const [src] = getFeedIconSrc({
         siteUrl,
       })
-      finalSrc = src
+      finalSrc = src!
 
-      const isIconLoaded = isIconLoadedSet.has(src)
-      isIconLoadedSet.add(src)
+      const isIconLoaded = isIconLoadedSet.has(src!)
+      isIconLoadedSet.add(src!)
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center", className)}>
@@ -207,7 +207,7 @@ export function FeedIcon({
           height: size * 2,
         },
       })
-      finalSrc = src
+      finalSrc = src!
 
       ImageElement = (
         <PlatformIcon
@@ -218,7 +218,7 @@ export function FeedIcon({
           <FallbackableImage
             className={cn(marginClassName, className)}
             style={sizeStyle}
-            fallbackUrl={fallbackSrc}
+            fallbackUrl={fallbackSrc!}
           />
         </PlatformIcon>
       )

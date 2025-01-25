@@ -40,7 +40,7 @@ class ActionActionStatic {
 
   updateByIndex(index: number, update: (action: ActionModel) => void) {
     set((state) => {
-      update(state.actions[index])
+      update(state.actions[index]!)
       state.isDirty = true
     })
   }

@@ -1,7 +1,7 @@
 import { defineMetadata } from "~/meta-handler"
 
 export default defineMetadata(async ({ params, apiClient, origin, throwError }) => {
-  const listId = params.id
+  const listId = params.id!
   const list = await apiClient.lists
     .$get({ query: { listId } })
     .catch((e) => throwError(e.response?.status || 500, "List not found"))

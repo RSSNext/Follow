@@ -1,7 +1,6 @@
 import { cn } from "@follow/utils"
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import { HeaderHeightContext } from "@react-navigation/elements"
-import { router } from "expo-router"
 import type { FC } from "react"
 import { createContext, memo, useContext, useState } from "react"
 import {
@@ -33,7 +32,7 @@ import {
 import { useCurrentView, useFeedListSortMethod, useFeedListSortOrder } from "../subscription/atoms"
 import { ViewPageCurrentViewProvider } from "../subscription/ctx"
 import { SubscriptionList } from "../subscription/SubscriptionLists"
-import { useSelectedCollection } from "./atoms"
+import { closeDrawer, selectFeed, useSelectedCollection } from "./atoms"
 import { ListHeaderComponent, ViewHeaderComponent } from "./header"
 
 export const FeedPanel = () => {
@@ -150,7 +149,11 @@ const CategoryGrouped = memo(
       >
         <ItemPressable
           onPress={() => {
-            // TODO navigate to category
+            selectFeed({
+              type: "category",
+              categoryName: category,
+            })
+            closeDrawer()
           }}
           className="h-12 flex-row items-center px-3"
         >
@@ -199,7 +202,7 @@ const CategoryGrouped = memo(
 const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
   const subscription = useSubscription(id)
   const unreadCount = useUnreadCount(id)
-  const feed = useFeed(id)
+  const feed = useFeed(id)!
   const inGrouped = !!useContext(GroupedContext)
   const view = useCurrentView()
   const { isLoading } = usePrefetchFeed(id, { enabled: !feed })
@@ -207,7 +210,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator size={36} />
+        <LoadingIndicator />
       </View>
     )
   }
@@ -223,12 +226,11 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
           className,
         )}
         onPress={() => {
-          router.push({
-            pathname: `/feeds/[feedId]`,
-            params: {
-              feedId: id,
-            },
+          selectFeed({
+            type: "feed",
+            feedId: id,
           })
+          closeDrawer()
         }}
       >
         <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">

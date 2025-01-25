@@ -240,7 +240,7 @@ const getEntryContentAsMarkdown = async (entry: FlatEntryModel) => {
   const isReadabilityReady = getReadabilityStatus()[entry.entries.id] === ReadabilityStatus.SUCCESS
   const content =
     (isReadabilityReady
-      ? getReadabilityContent()[entry.entries.id].content
+      ? getReadabilityContent()[entry.entries.id]!.content
       : entry.entries.content) || ""
   const [toMarkdown, toMdast, gfmTableToMarkdown] = await Promise.all([
     import("mdast-util-to-markdown").then((m) => m.toMarkdown),

@@ -55,6 +55,7 @@
   "login.signOut": "サインアウト",
   "login.signUp": "メールでサインアップ",
   "login.submit": "送信",
+  "login.two_factor.code": "2要素コード",
   "login.welcomeTo": "ようこそ ",
   "redirect.continueInBrowser": "ブラウザーで続行",
   "redirect.instruction": "今が{{app_name}}を開き、このページを安全に閉じる時です。",

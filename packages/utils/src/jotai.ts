@@ -42,7 +42,7 @@ export const createAtomHooks = <T>(atom: PrimitiveAtom<T>) => {
   return result as any as Result
 }
 
-const noop = []
+const noop: any[] = []
 const createAtomSelector = <T>(atom: Atom<T>) => {
   const useHook = <R>(selector: (a: T) => R, deps: any[] = noop) =>
     useAtomValue(

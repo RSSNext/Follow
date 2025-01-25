@@ -1,9 +1,9 @@
 import { forwardRef } from "react"
-import type { StyleProp, SwitchProps, ViewStyle } from "react-native"
-import { Switch, Text, View } from "react-native"
+import type { StyleProp, ViewStyle } from "react-native"
+import { Text, View } from "react-native"
 
-import { accentColor } from "@/src/theme/colors"
-
+import type { SwitchProps, SwitchRef } from "../switch/Switch"
+import { Switch } from "../switch/Switch"
 import { FormLabel } from "./Label"
 
 interface Props {
@@ -12,19 +12,26 @@ interface Props {
 
   label?: string
   description?: string
+
+  size?: "sm" | "default"
 }
 
-export const FormSwitch = forwardRef<Switch, Props & SwitchProps>(
-  ({ wrapperClassName, wrapperStyle, label, description, ...rest }, ref) => {
+export const FormSwitch = forwardRef<SwitchRef, Props & SwitchProps>(
+  ({ wrapperClassName, wrapperStyle, label, description, size = "default", ...rest }, ref) => {
+    const Trigger = <Switch size={size} ref={ref} {...rest} />
+
+    if (!label) {
+      return Trigger
+    }
     return (
       <View className={"w-full flex-row"}>
         <View className="flex-1">
-          {!!label && <FormLabel className="pl-1" label={label} optional />}
+          <FormLabel className="pl-1" label={label} optional />
           {!!description && (
             <Text className="text-secondary-label mb-1 pl-1 text-sm">{description}</Text>
           )}
         </View>
-        <Switch trackColor={{ true: accentColor }} ref={ref} {...rest} />
+        {Trigger}
       </View>
     )
   },

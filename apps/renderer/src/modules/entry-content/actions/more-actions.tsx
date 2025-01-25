@@ -37,11 +37,21 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {availableActions.map((config) => (
-          <CommandDropdownMenuItem key={config.id} commandId={config.id} onClick={config.onClick} />
+          <CommandDropdownMenuItem
+            key={config.id}
+            commandId={config.id}
+            onClick={config.onClick}
+            active={config.active}
+          />
         ))}
         <DropdownMenuSeparator />
         {extraAction.map((config) => (
-          <CommandDropdownMenuItem key={config.id} commandId={config.id} onClick={config.onClick} />
+          <CommandDropdownMenuItem
+            key={config.id}
+            commandId={config.id}
+            onClick={config.onClick}
+            active={config.active}
+          />
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -51,14 +61,22 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
 const CommandDropdownMenuItem = ({
   commandId,
   onClick,
+  active,
 }: {
   commandId: FollowCommandId
   onClick: () => void
+  active?: boolean
 }) => {
   const command = useCommand(commandId)
   if (!command) return null
   return (
-    <DropdownMenuItem key={command.id} className="pl-3" icon={command.icon} onSelect={onClick}>
+    <DropdownMenuItem
+      key={command.id}
+      className="pl-3"
+      icon={command.icon}
+      onSelect={onClick}
+      active={active}
+    >
       {command.label.title}
     </DropdownMenuItem>
   )

@@ -78,7 +78,7 @@ export default function createHTMLMediaHook<T extends HTMLAudioElement | HTMLVid
     const getState = useEventCallback(() => state)
     const ref = useRef<T | null>(null)
 
-    const wrapEvent = (userEvent, proxyEvent?) => (event) => {
+    const wrapEvent = (userEvent: any, proxyEvent?: any) => (event: any) => {
       try {
         proxyEvent && proxyEvent(event)
       } finally {

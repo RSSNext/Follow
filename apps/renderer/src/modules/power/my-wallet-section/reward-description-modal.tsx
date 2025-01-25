@@ -53,7 +53,7 @@ export const useRewardDescriptionModal = () => {
                           {
                             from(
                               serverConfigs.DAILY_POWER_SUPPLY *
-                                serverConfigs?.DAILY_POWER_PERCENTAGES[level],
+                                serverConfigs?.DAILY_POWER_PERCENTAGES[level]!,
                               18,
                             )[0]
                           }

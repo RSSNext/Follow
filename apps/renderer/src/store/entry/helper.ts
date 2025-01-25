@@ -40,7 +40,7 @@ const unread = create({
     await apiClient.reads.$post({
       json: {
         entryIds: ids.map((i) => i.entryId),
-        isInbox: ids[0].isInbox,
+        isInbox: ids[0]!.isInbox,
         readHistories: ids.filter((i) => !i.isPrivate).map((i) => i.entryId),
       },
     })

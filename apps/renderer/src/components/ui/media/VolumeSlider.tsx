@@ -12,7 +12,7 @@ export const VolumeSlider: FC<{
     orientation="vertical"
     value={[volume ?? 0.8]}
     onValueChange={(values) => {
-      onVolumeChange?.(values[0])
+      onVolumeChange?.(values[0]!)
     }}
   >
     <Slider.Track className="relative w-1 grow rounded bg-zinc-500">

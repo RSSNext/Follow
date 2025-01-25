@@ -24,7 +24,19 @@ export function stringToHue(str: string) {
 }
 
 const memoMap = {} as Record<string, ReturnType<typeof getColorScheme>>
-export const getColorScheme = (hue?: number, memo?: boolean) => {
+export const getColorScheme = (
+  hue?: number,
+  memo?: boolean,
+): {
+  light: {
+    accent: string
+    background: string
+  }
+  dark: {
+    accent: string
+    background: string
+  }
+} => {
   const baseHue = hue ?? Math.floor(Math.random() * 361)
   if (baseHue && memo) {
     if (memoMap[baseHue]) {
@@ -70,14 +82,14 @@ const adjustColorTowardsTarget = (color: string, targetColor: string, factor: nu
   const [r1, g1, b1] = hexToRgb(color)
   const [r2, g2, b2] = hexToRgb(targetColor)
 
-  const r = Math.round(lerp(r1, r2, factor))
-  const g = Math.round(lerp(g1, g2, factor))
-  const b = Math.round(lerp(b1, b2, factor))
+  const r = Math.round(lerp(r1!, r2!, factor))
+  const g = Math.round(lerp(g1!, g2!, factor))
+  const b = Math.round(lerp(b1!, b2!, factor))
 
   return rgbToHex(r, g, b)
 }
 
-export const getBackgroundGradient = (seed?: Nullable<string>) => {
+export const getBackgroundGradient = (seed?: string | null | undefined) => {
   const nextSeed = seed ?? Math.random().toString(36).slice(7)
 
   const bgAccent = uniqolor(nextSeed, {
@@ -125,7 +137,7 @@ export function getDominantColor(imageObject: HTMLImageElement) {
   // get pixel color
   const i = ctx.getImageData(0, 0, 1, 1).data
 
-  return `#${((1 << 24) + (i[0] << 16) + (i[1] << 8) + i[2]).toString(16).slice(1)}`
+  return `#${((1 << 24) + (i[0]! << 16) + (i[1]! << 8) + i[2]!).toString(16).slice(1)}`
 }
 
 export const isHexColor = (color: string) => {
@@ -136,7 +148,7 @@ export const isRGBColor = (color: string) => {
   return /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/.test(color)
 }
 export const isRGBAColor = (color: string) => {
-  return /^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*0?\.\d+\)$/.test(color)
+  return /^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*(?:0?\.\d+|1(?:\.0+)?)\)$/.test(color)
 }
 
 export const withOpacity = (color: string, opacity: number) => {
