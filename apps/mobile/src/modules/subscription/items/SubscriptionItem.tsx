@@ -1,10 +1,9 @@
 import { cn } from "@follow/utils"
 import { memo, useContext } from "react"
-import { Text, View } from "react-native"
+import { ActivityIndicator, Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
@@ -54,7 +53,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator />
+        <ActivityIndicator />
       </View>
     )
   }

@@ -4,6 +4,7 @@ import { HeaderHeightContext } from "@react-navigation/elements"
 import type { FC } from "react"
 import { createContext, memo, useContext, useState } from "react"
 import {
+  ActivityIndicator,
   Animated,
   Easing,
   ScrollView,
@@ -17,7 +18,6 @@ import { useSharedValue } from "react-native-reanimated"
 
 import { AccordionItem } from "@/src/components/ui/accordion/AccordionItem"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
@@ -210,7 +210,7 @@ const SubscriptionItem = memo(({ id, className }: { id: string; className?: stri
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator />
+        <ActivityIndicator />
       </View>
     )
   }
