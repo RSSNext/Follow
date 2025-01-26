@@ -1,14 +1,22 @@
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import type { AVPlaybackStatus } from "expo-av"
 import { Video } from "expo-av"
 import { Image } from "expo-image"
-import { Stack, useLocalSearchParams } from "expo-router"
-import { useState } from "react"
-import { Dimensions, ScrollView, Text, View } from "react-native"
+import { useLocalSearchParams } from "expo-router"
+import type { FC } from "react"
+import { Fragment, useState } from "react"
+import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import PagerView from "react-native-pager-view"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useColor } from "react-native-uikit-colors"
 
-import { BlurEffect } from "@/src/components/common/BlurEffect"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/common/SafeNavigationScrollView"
 import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
 import type { MediaModel } from "@/src/database/schemas/types"
+import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
 
 function Media({ media }: { media: MediaModel }) {
@@ -62,74 +70,17 @@ export default function EntryDetailPage() {
   usePrefetchEntryContent(entryId as string)
   const item = useEntry(entryId as string)
 
-  const mediaList =
-    item?.media
-      ?.filter((media) => media.url)
-      .filter((media, index) => {
-        return item.media?.findIndex((m) => m.url === media.url) === index
-      }) || []
-
-  const windowWidth = Dimensions.get("window").width
-  const maxMediaHeight = Math.max(
-    ...mediaList
-      .filter((media) => media.height && media.width)
-      .map((media) => {
-        return windowWidth * (media.height! / media.width!)
-      }),
-  )
-
-  const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [height, setHeight] = useState(0)
 
+  const insets = useSafeAreaInsets()
   return (
-    <>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerBackTitle: "Feeds",
-          headerBackground: BlurEffect,
-          headerTransparent: true,
-          headerTitle: item?.title ?? "Entry",
-        }}
-      />
-      <ScrollView contentContainerClassName="flex-grow" contentInsetAdjustmentBehavior="automatic">
-        {mediaList.length > 0 && (
-          <View
-            style={{
-              height: maxMediaHeight > 0 ? maxMediaHeight : "50%",
-              maxHeight: "50%",
-            }}
-          >
-            <PagerView
-              key={item?.id}
-              style={{ flex: 1 }}
-              initialPage={0}
-              orientation="horizontal"
-              onPageSelected={(event) => {
-                setCurrentPageIndex(event.nativeEvent.position)
-              }}
-            >
-              {mediaList.map((media) => {
-                return <Media key={media.url} media={media} />
-              })}
-            </PagerView>
-
-            {mediaList.length > 1 && (
-              <View className="my-2 w-full flex-row items-center justify-center gap-2">
-                {Array.from({ length: mediaList.length }).map((_, index) => {
-                  return (
-                    <View
-                      key={index}
-                      className={`size-2 rounded-full ${
-                        index === currentPageIndex ? "bg-red" : "bg-gray-2"
-                      }`}
-                    />
-                  )
-                })}
-              </View>
-            )}
-          </View>
-        )}
+    <BottomTabBarHeightContext.Provider value={insets.bottom}>
+      <SafeNavigationScrollView nestedScrollEnabled className="bg-system-grouped-background">
+        <NavigationBlurEffectHeader
+          headerShown
+          headerRight={HeaderRightActions}
+          title={item?.title || "Loading..."}
+        />
         <HtmlWeb
           content={item?.content || ""}
           onLayout={async (size) => {
@@ -137,12 +88,86 @@ export default function EntryDetailPage() {
               setHeight(size[1])
             }
           }}
+          scrollEnabled={false}
           dom={{
             scrollEnabled: false,
             style: { height },
+            matchContents: true,
           }}
         />
-      </ScrollView>
-    </>
+
+        {/* {item && <MediaSwipe mediaList={item?.media || []} id={item.id} />} */}
+      </SafeNavigationScrollView>
+    </BottomTabBarHeightContext.Provider>
+  )
+}
+
+// eslint-disable-next-line unused-imports/no-unused-vars
+const MediaSwipe: FC<{ mediaList: MediaModel[]; id: string }> = ({ mediaList, id }) => {
+  const windowWidth = useWindowDimensions().width
+
+  const maxMediaHeight = Math.max(
+    ...mediaList
+      .filter((media) => media.height && media.width)
+      .map((media) => {
+        return windowWidth * (media.height! / media.width!)
+      }),
+  )
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  return (
+    <Fragment>
+      {mediaList.length > 0 && (
+        <View
+          style={{
+            height: maxMediaHeight > 0 ? maxMediaHeight : "50%",
+            maxHeight: "50%",
+          }}
+        >
+          <PagerView
+            key={id}
+            style={{ flex: 1 }}
+            initialPage={0}
+            orientation="horizontal"
+            onPageSelected={(event) => {
+              setCurrentPageIndex(event.nativeEvent.position)
+            }}
+          >
+            {mediaList.map((media) => {
+              return <Media key={media.url} media={media} />
+            })}
+          </PagerView>
+
+          {mediaList.length > 1 && (
+            <View className="my-2 w-full flex-row items-center justify-center gap-2">
+              {Array.from({ length: mediaList.length }).map((_, index) => {
+                return (
+                  <View
+                    key={index}
+                    className={`size-2 rounded-full ${
+                      index === currentPageIndex ? "bg-red" : "bg-gray-2"
+                    }`}
+                  />
+                )
+              })}
+            </View>
+          )}
+        </View>
+      )}
+    </Fragment>
+  )
+}
+
+const HeaderRightActions = () => {
+  return <HeaderRightActionsImpl />
+}
+
+const HeaderRightActionsImpl = () => {
+  const labelColor = useColor("label")
+  return (
+    <View>
+      <TouchableOpacity hitSlop={10}>
+        <More1CuteReIcon color={labelColor} />
+      </TouchableOpacity>
+    </View>
   )
 }
