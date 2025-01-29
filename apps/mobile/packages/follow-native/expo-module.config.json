@@ -1,7 +1,7 @@
 {
   "platforms": ["apple", "android", "web"],
   "apple": {
-    "modules": ["ListModule", "TableViewModule"]
+    "modules": ["ListModule", "TableViewModule", "SharedWebViewModule"]
   },
   "android": {
     "modules": ["expo.modules.follownative.ListModule"]
