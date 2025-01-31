@@ -1,8 +1,8 @@
 import { requireNativeView } from "expo"
-import * as React from "react"
+import type * as React from "react"
 
-const NativeView: React.ComponentType = requireNativeView("FOSharedWebView")
+const NativeView: React.ComponentType<{
+  onContentHeightChange?: (e: { nativeEvent: { height: number } }) => void
+}> = requireNativeView("FOSharedWebView")
 
-export default function SharedWebView() {
-  return <NativeView />
-}
+export default NativeView
