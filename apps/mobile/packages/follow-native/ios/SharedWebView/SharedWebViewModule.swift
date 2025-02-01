@@ -24,9 +24,18 @@ public class SharedWebViewModule: Module {
         }
 
         View(WebViewView.self) {
-            Events(
-                "onContentHeightChange"
-            )
+            Events("onContentHeightChange")
+
+            Prop("url") { (_: UIView, urlString: String) in
+                if let webView = SharedWebViewModule.sharedWebView {
+                    if let url = URL(string: urlString) {
+                        if url == webView.url {
+                            return
+                        }
+                        webView.load(URLRequest(url: url))
+                    }
+                }
+            }
         }
     }
 }

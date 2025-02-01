@@ -3,34 +3,6 @@ import ExpoModulesCore
 import SwiftUI
 import WebKit
 
-class WebViewProps: ExpoSwiftUI.ViewProps {
-    @Field var url: String
-}
-
-struct WebViewComponentView: ExpoSwiftUI.View {
-    @EnvironmentObject var props: WebViewProps
-    @StateObject private var webViewState = WebViewManager.state
-
-    let webView: WKWebView = SharedWebViewModule.sharedWebView!
-
-    var body: some View {
-        WebViewComponent(webView: webView)
-            .frame(
-                height: webViewState.contentHeight
-            )
-
-            .onChange(of: props.url, initial: false) { _, newValue in
-                if let nextUrl = URL(string: newValue) {
-                    let request = URLRequest(url: nextUrl)
-                    webView.load(request)
-                }
-            }
-        #if DEBUG
-            .border(.tint)
-        #endif
-    }
-}
-
 class WebViewView: ExpoView {
     private var cancellable: AnyCancellable?
 
@@ -39,6 +11,12 @@ class WebViewView: ExpoView {
     required init(appContext: AppContext? = nil) {
         super.init(appContext: appContext)
         addSubview(rctView)
+      
+      #if DEBUG
+      rctView.borderStyle = .solid
+      rctView.borderWidth = 1
+      rctView.borderColor = .tintColor
+      #endif
         rctView.addSubview(SharedWebViewModule.sharedWebView!)
 
         clipsToBounds = true
@@ -71,13 +49,7 @@ class WebViewView: ExpoView {
         rctView.frame = rect
 
       onContentHeightChange(["height": Float(rect.height)])
-//      if let superview = self.superview {
-//        superview.frame = rect
-//
-//        if let superSuperview = superview.superview {
-//          superSuperview.frame = rect
-//        }
-//        }
+
     }
 }
 

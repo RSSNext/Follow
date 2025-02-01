@@ -42,7 +42,10 @@ enum WebViewManager {
         
          
         #if DEBUG
+      if #available(iOS 16.4, *) {
+        
         webView.isInspectable = true
+      }
         #endif
         
          

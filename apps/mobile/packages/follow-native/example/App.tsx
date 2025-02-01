@@ -1,11 +1,10 @@
-import { SharedWebView, SharedWebViewModule } from "follow-native"
+import { SharedWebView } from "follow-native"
 import { ScrollView, View } from "react-native"
 
-SharedWebViewModule.preload("https://follow.is")
 export default function App() {
   return (
     <ScrollView>
-      <SharedWebView />
+      <SharedWebView url="https://innei.in" />
 
       <View style={{ height: 1000, backgroundColor: "red" }} />
     </ScrollView>

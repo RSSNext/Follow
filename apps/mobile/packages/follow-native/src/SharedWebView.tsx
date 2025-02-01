@@ -5,9 +5,10 @@ import { View } from "react-native"
 
 const NativeView: React.ComponentType<{
   onContentHeightChange?: (e: { nativeEvent: { height: number } }) => void
+  url: string
 }> = requireNativeView("FOSharedWebView")
 
-export default function SharedWebView() {
+export default function SharedWebView({ url }: { url: string }) {
   const [contentHeight, setContentHeight] = useState(0)
 
   return (
@@ -16,6 +17,7 @@ export default function SharedWebView() {
         onContentHeightChange={(e) => {
           setContentHeight(e.nativeEvent.height)
         }}
+        url={url}
       />
     </View>
   )
