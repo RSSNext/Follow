@@ -119,6 +119,9 @@
         "react-native-safe-area-context@~5.1.0",
         "react-native-webview@~13.12.5"
       ]
+    },
+    "autolinking": {
+      "nativeModulesDir": "./native"
     }
   }
 }

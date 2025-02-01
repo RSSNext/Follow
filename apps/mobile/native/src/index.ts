@@ -1,5 +1,5 @@
 import type { NativeModule } from "expo"
-import { requireNativeModule } from "expo"
+import { requireNativeModule } from "expo-modules-core"
 
 export { default as ListView } from "./ListView"
 export { default as SharedWebView } from "./SharedWebView"
