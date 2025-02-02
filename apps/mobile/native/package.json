@@ -17,13 +17,13 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
+    "//prepare": "expo-module prepare",
     "build": "expo-module build",
     "clean": "expo-module clean",
     "expo-module": "expo-module",
     "lint": "expo-module lint",
     "open:android": "open -a \"Android Studio\" example/android",
     "open:ios": "xed example/ios",
-    "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "test": "expo-module test"
   },
