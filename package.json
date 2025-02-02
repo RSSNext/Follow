@@ -148,13 +148,15 @@
     "overrides": {
       "@types/react": "npm:@types/react@^18.3.12",
       "@types/react-dom": "npm:@types/react-dom@^18.3.1",
+      "app-builder-lib": "npm:app-builder-lib@^25.1.8",
+      "electron": "33.2.0",
       "esbuild": "npm:esbuild@^0.24.2",
       "expo-modules-core": "npm:expo-modules-core@2.2.0",
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
       "isarray": "npm:@nolyfill/isarray@^1",
       "lightningcss": "npm:lightningcss@^1.29.1",
       "react-native": "npm:react-native@0.77.0",
-      "typescript": "npm:typescript@5.7.3",
+      "typescript": "5.7.3",
       "unist-util-visit-parents": "5.1.3",
       "vfile": "5.3.7"
     }
