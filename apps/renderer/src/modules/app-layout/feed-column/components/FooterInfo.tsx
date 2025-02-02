@@ -9,7 +9,7 @@ export const FooterInfo = () => {
 
   const isMobile = useMobile()
   return (
-    <div className="relative !mt-0">
+    <div className="relative">
       {APP_VERSION?.[0] === "0" && (
         <div className="pointer-events-none w-full py-3 text-center text-xs opacity-20">
           {t("beta_access")} {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}

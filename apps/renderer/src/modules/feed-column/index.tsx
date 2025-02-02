@@ -1,10 +1,11 @@
 import { useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
+import { ScrollArea } from "@follow/components/ui/scroll-area/ScrollArea.js"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
-import { stopPropagation } from "@follow/utils/dom"
+import { nextFrame } from "@follow/utils/dom"
 import { clamp, cn } from "@follow/utils/utils"
 import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
@@ -14,17 +15,25 @@ import { startTransition, useCallback, useLayoutEffect, useRef, useState } from 
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
-import { useRootContainerElement } from "~/atoms/dom"
+import { useShowContextMenu } from "~/atoms/context-menu"
+import { getMainContainerElement, useRootContainerElement } from "~/atoms/dom"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
 import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
+import { useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
-import { getRouteParams } from "~/hooks/biz/useRouteParams"
+import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useContextMenu } from "~/hooks/common"
+import { useListById } from "~/store/list"
+import { subscriptionActions } from "~/store/subscription"
+import { useAllLists } from "~/store/subscription/hooks"
+import { useFeedUnreadStore } from "~/store/unread"
 import { useUnreadByView } from "~/store/unread/hooks"
 
 import { WindowUnderBlur } from "../../components/ui/background"
+import { FeedIcon } from "../feed/feed-icon"
 import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
 import { useShouldFreeUpSpace } from "./hook"
@@ -123,11 +132,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   const feedColumnShow = useFeedColumnShow()
   const rootContainerElement = useRootContainerElement()
 
+  const lists = useAllLists()
+
   return (
     <WindowUnderBlur
       data-hide-in-print
       className={cn(
-        "relative flex h-full flex-col space-y-3 pt-2.5",
+        "relative flex h-full flex-col pt-2.5",
 
         !feedColumnShow && isElectronBuild && "bg-zinc-200 dark:bg-neutral-800",
         className,
@@ -147,9 +158,11 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         </RootPortal>
       )}
 
-      <div
-        className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
-        onClick={stopPropagation}
+      <ScrollArea
+        rootClassName="mx-3 pb-4 mt-3"
+        viewportClassName="h-11 text-xl text-theme-vibrancyFg [&>div]:!flex [&>div]:!flex-row [&>div]:gap-3 [&>div]:justify-between"
+        orientation="horizontal"
+        scrollbarClassName="h-2"
       >
         {views.map((item, index) => (
           <ViewSwitchButton
@@ -162,9 +175,12 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
             setUseHotkeysSwitch={setUseHotkeysSwitch}
           />
         ))}
-      </div>
+        {lists.map((list) => (
+          <ListSwitchButton key={list.listId} listId={list.listId!} />
+        ))}
+      </ScrollArea>
       <div
-        className={cn("relative flex size-full", !shouldFreeUpSpace && "overflow-hidden")}
+        className={cn("relative mt-1 flex size-full", !shouldFreeUpSpace && "overflow-hidden")}
         ref={carouselRef}
         onPointerDown={useTypeScriptHappyCallback((e) => {
           if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
@@ -221,7 +237,7 @@ const ViewSwitchButton: FC<{
       shortcut={`${index + 1}`}
       className={cn(
         active === index && item.className,
-        "flex h-11 flex-col items-center gap-1 text-xl",
+        "flex h-11 shrink-0 flex-col items-center gap-1 text-[1.375rem]",
         ELECTRON ? "hover:!bg-theme-item-hover" : "",
         active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
         isOver && "border-theme-accent-400 bg-theme-accent-400/60",
@@ -247,6 +263,64 @@ const ViewSwitchButton: FC<{
           )}
         />
       )}
+    </ActionButton>
+  )
+}
+
+const ListSwitchButton: FC<{
+  listId: string
+}> = ({ listId }) => {
+  const navigate = useNavigateEntry()
+  const list = useListById(listId)
+  const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
+
+  const handleNavigate = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation()
+
+      navigate({
+        listId,
+        entryId: null,
+        view: list?.view,
+      })
+      subscriptionActions.markReadByFeedIds({
+        listId,
+      })
+      // focus to main container in order to let keyboard can navigate entry items by arrow keys
+      nextFrame(() => {
+        getMainContainerElement()?.focus()
+      })
+    },
+    [listId, navigate, list?.view],
+  )
+
+  const items = useListActions({ listId })
+  const showContextMenu = useShowContextMenu()
+  const contextMenuProps = useContextMenu({
+    onContextMenu: async (e) => {
+      await showContextMenu(items, e)
+    },
+  })
+
+  if (!list) return null
+
+  return (
+    <ActionButton
+      key={list.id}
+      tooltip={list.title}
+      className={cn(
+        "flex h-11 shrink-0 flex-col items-center gap-1 text-xl grayscale",
+        ELECTRON ? "hover:!bg-theme-item-hover" : "",
+        isActive && "grayscale-0",
+      )}
+      onClick={handleNavigate}
+      {...contextMenuProps}
+    >
+      <FeedIcon fallback feed={list} size={22} noMargin />
+      <div className="center h-2.5 text-[0.25rem]">
+        <i className={cn("i-mgc-round-cute-fi", !listUnread && "opacity-0")} />
+      </div>
     </ActionButton>
   )
 }

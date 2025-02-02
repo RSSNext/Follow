@@ -14,6 +14,7 @@ import {
   subscriptionCategoryExistSelector,
   subscriptionsByFeedIsdSelector,
 } from "./selector"
+import type { SubscriptionFlatModel } from "./store"
 import { useSubscriptionStore } from "./store"
 
 type FeedId = string
@@ -100,5 +101,23 @@ export const useAllFeeds = () => {
       },
       [feedTitleMap],
     ),
+  )
+}
+
+export const useAllLists = () => {
+  return useSubscriptionStore(
+    useCallback((store) => {
+      const lists = [] as SubscriptionFlatModel[]
+
+      const allSubscriptions = Object.values(store.feedIdByView).flat()
+
+      for (const feedId of allSubscriptions) {
+        const subscription = store.data[feedId]!
+        if (subscription.listId) {
+          lists.push(subscription)
+        }
+      }
+      return lists
+    }, []),
   )
 }

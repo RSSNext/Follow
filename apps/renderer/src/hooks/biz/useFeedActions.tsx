@@ -394,7 +394,7 @@ export const useFeedActions = ({
   return items
 }
 
-export const useListActions = ({ listId, view }: { listId: string; view: FeedViewType }) => {
+export const useListActions = ({ listId, view }: { listId: string; view?: FeedViewType }) => {
   const { t } = useTranslation()
   const list = useListById(listId)
   const subscription = useSubscriptionByFeedId(listId)!
