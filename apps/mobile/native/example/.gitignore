@@ -35,4 +35,10 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
+# Expo
+.expo
+dist/
+web-build/
+
+ios
+android
