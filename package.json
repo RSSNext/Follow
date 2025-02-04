@@ -152,6 +152,7 @@
       "electron": "33.2.0",
       "esbuild": "npm:esbuild@^0.24.2",
       "expo-modules-core": "npm:expo-modules-core@2.2.0",
+      "expo-sqlite": "npm:expo-sqlite@15.1.1",
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
       "isarray": "npm:@nolyfill/isarray@^1",
       "lightningcss": "npm:lightningcss@^1.29.1",

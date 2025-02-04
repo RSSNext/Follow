@@ -22,6 +22,7 @@ export default defineConfig(
       "apps/mobile/android/**",
       "apps/mobile/ios/**",
       "apps/mobile/.expo",
+      "apps/mobile/native/build/**",
     ],
     preferESM: false,
     tailwindCSS: {
