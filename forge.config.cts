@@ -87,7 +87,7 @@ const ignorePattern = new RegExp(`^/node_modules/(?!${[...keepModules].join("|")
 
 const config: ForgeConfig = {
   packagerConfig: {
-    appBundleId: "is.follow",
+    appBundleId: "is.follow.Follow",
     icon: "resources/icon",
     extraResource: ["./resources/app-update.yml"],
     protocols: [
