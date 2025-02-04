@@ -127,3 +127,6 @@ class ListActionStatic {
 }
 
 export const listActions = new ListActionStatic()
+
+export const getListById = (listId: string): Nullable<ListModel> =>
+  useListStore.getState().lists[listId]

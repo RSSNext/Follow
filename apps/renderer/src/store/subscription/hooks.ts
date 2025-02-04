@@ -121,3 +121,21 @@ export const useAllLists = () => {
     }, []),
   )
 }
+
+export const useAllInboxes = () => {
+  return useSubscriptionStore(
+    useCallback((store) => {
+      const inboxes = [] as SubscriptionFlatModel[]
+
+      const allSubscriptions = Object.values(store.feedIdByView).flat()
+
+      for (const feedId of allSubscriptions) {
+        const subscription = store.data[feedId]!
+        if (subscription.inboxId) {
+          inboxes.push(subscription)
+        }
+      }
+      return inboxes
+    }, []),
+  )
+}

@@ -13,7 +13,6 @@ import { Input } from "@follow/components/ui/input/index.js"
 import { Radio } from "@follow/components/ui/radio-group/index.js"
 import { RadioGroup } from "@follow/components/ui/radio-group/RadioGroup.jsx"
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
-import type { FeedViewType } from "@follow/constants"
 import { getBackgroundGradient } from "@follow/utils/color"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -25,10 +24,10 @@ import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
-import { getSidebarActiveView } from "~/atoms/sidebar"
 import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useFollow } from "~/hooks/biz/useFollow"
+import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { apiClient } from "~/lib/api-fetch"
 
 import { FollowSummary } from "../feed/feed-summary"
@@ -100,7 +99,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (info[type]!.showModal) {
-      const defaultView = getSidebarActiveView() as FeedViewType
+      const defaultView = getRouteParams().view
       present({
         title: t("feed_form.add_feed"),
         content: () => (

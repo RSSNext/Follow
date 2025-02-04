@@ -15,30 +15,31 @@ import { toast } from "sonner"
 import { setAppSearchOpen } from "~/atoms/app"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useIsZenMode, useSetZenMode } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
+import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useI18n } from "~/hooks/common"
 import { useContextMenu } from "~/hooks/common/useContextMenu"
 import { ProfileButton } from "~/modules/user/ProfileButton"
 
-const useBackHome = (active: number) => {
+const useBackHome = (timelineId?: string) => {
   const navigate = useNavigateEntry()
 
   return useCallback(
-    (overvideActive?: number) => {
+    (overvideTimelineId?: string) => {
       navigate({
         feedId: null,
         entryId: null,
-        view: overvideActive ?? active,
+        timelineId: overvideTimelineId ?? timelineId,
       })
     },
-    [active, navigate],
+    [timelineId, navigate],
   )
 }
 
 export const FeedColumnHeader = memo(() => {
-  const [active] = useSidebarActiveView()
-  const navigateBackHome = useBackHome(active)
+  const timelineId = useRouteParamsSelector((s) => s.timelineId)
+  const navigateBackHome = useBackHome(timelineId)
   const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
   const { t } = useTranslation()
   return (

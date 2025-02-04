@@ -1,5 +1,4 @@
 import { Form, FormControl, FormField, FormItem } from "@follow/components/ui/form/index.jsx"
-import type { FeedViewType } from "@follow/constants"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,11 +8,11 @@ import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
-import { getSidebarActiveView } from "~/atoms/sidebar"
 import { m } from "~/components/common/Motion"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { HotKeyScopeMap } from "~/constants"
+import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { tipcClient } from "~/lib/client"
 
 import { FeedForm } from "../discover/feed-form"
@@ -44,7 +43,7 @@ const CmdNPanel = () => {
   const handleSubmit = () => {
     const { url } = form.getValues()
 
-    const defaultView = getSidebarActiveView() as FeedViewType
+    const defaultView = getRouteParams().view
 
     window.analytics?.capture("quick_add_feed", { url, defaultView })
 

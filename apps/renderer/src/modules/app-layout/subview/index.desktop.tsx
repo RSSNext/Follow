@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType } from "react-router"
 
-import { getSidebarActiveView, setSidebarActiveView } from "~/atoms/sidebar"
 import { FABContainer, FABPortable } from "~/components/ui/fab"
 import { isElectronBuild } from "~/constants"
 
@@ -17,7 +16,6 @@ import { useSubViewTitleValue } from "./hooks"
 export function SubviewLayout() {
   const navigate = useNavigate()
   const prevLocation = useRef(getReadonlyRoute().location).current
-  const prevView = useRef(getSidebarActiveView()).current
   const title = useSubViewTitleValue()
   const [scrollRef, setRef] = useState(null as HTMLDivElement | null)
   const [isTitleSticky, setIsTitleSticky] = useState(false)
@@ -68,8 +66,6 @@ export function SubviewLayout() {
         <MotionButtonBase
           onClick={() => {
             navigate(prevLocation)
-
-            setSidebarActiveView(prevView)
           }}
           className="no-drag-region inline-flex items-center gap-1 duration-200 hover:text-accent"
         >

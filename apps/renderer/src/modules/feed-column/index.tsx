@@ -2,6 +2,7 @@ import { useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { ScrollArea } from "@follow/components/ui/scroll-area/ScrollArea.js"
+import type { FeedViewType } from "@follow/constants"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
@@ -18,17 +19,23 @@ import { useTranslation } from "react-i18next"
 import { useShowContextMenu } from "~/atoms/context-menu"
 import { getMainContainerElement, useRootContainerElement } from "~/atoms/dom"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/atoms/sidebar"
-import { HotKeyScopeMap, isElectronBuild } from "~/constants"
+import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import {
+  HotKeyScopeMap,
+  isElectronBuild,
+  ROUTE_TIMELINE_OF_INBOX,
+  ROUTE_TIMELINE_OF_LIST,
+  ROUTE_TIMELINE_OF_VIEW,
+} from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
-import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useTimelineList } from "~/hooks/biz/useTimelineList"
 import { useContextMenu } from "~/hooks/common"
 import { useListById } from "~/store/list"
 import { subscriptionActions } from "~/store/subscription"
-import { useAllLists } from "~/store/subscription/hooks"
 import { useFeedUnreadStore } from "~/store/unread"
 import { useUnreadByView } from "~/store/unread/hooks"
 
@@ -41,44 +48,50 @@ import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
 
-const useBackHome = (active: number) => {
+const useBackHome = (timelineId?: string) => {
   const navigate = useNavigateEntry()
 
   return useCallback(
-    (overvideActive?: number) => {
+    (overvideTimelineId?: string) => {
       navigate({
         feedId: null,
         entryId: null,
-        view: overvideActive ?? active,
+        timelineId: overvideTimelineId ?? timelineId,
       })
     },
-    [active, navigate],
+    [timelineId, navigate],
   )
 }
 
 export function FeedColumn({ children, className }: PropsWithChildren<{ className?: string }>) {
   const carouselRef = useRef<HTMLDivElement>(null)
+  const timelineList = useTimelineList()
 
-  const [active, setActive_] = useSidebarActiveView()
-
-  const navigateBackHome = useBackHome(active)
-  const setActive: typeof setActive_ = useCallback(
-    (args) => {
-      const nextActive = typeof args === "function" ? args(active) : args
-      setActive_(args)
+  const routeParams = useRouteParamsSelector((s) => ({
+    timelineId: s.timelineId,
+    view: s.view,
+    listId: s.listId,
+  }))
+  const { timelineId, listId } = routeParams
+  let { view } = routeParams
+  const list = useListById(listId)
+  view = list?.view ?? view ?? 0
+  const navigateBackHome = useBackHome(timelineId)
+  const setActive = useCallback(
+    (args: string | ((prev: string | undefined, index: number) => string)) => {
+      let nextActive
+      if (typeof args === "function") {
+        const index = timelineId ? timelineList.indexOf(timelineId) : 0
+        nextActive = args(timelineId, index)
+      } else {
+        nextActive = args
+      }
 
       navigateBackHome(nextActive)
       resetSelectedFeedIds()
     },
-    [active, navigateBackHome, setActive_],
+    [navigateBackHome, timelineId, timelineList],
   )
-
-  useLayoutEffect(() => {
-    const { view } = getRouteParams()
-    if (view !== undefined) {
-      setActive_(view)
-    }
-  }, [setActive_])
 
   useWheel(
     ({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
@@ -86,7 +99,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         const s = lethargy.check(event)
         if (s) {
           if (!wait && Math.abs(dex) > 20) {
-            setActive((i) => clamp(i + dx, 0, views.length - 1))
+            setActive((_, i) => timelineList[clamp(i + dx, 0, timelineList.length - 1)]!)
             return true
           } else {
             return
@@ -103,22 +116,20 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     },
   )
 
-  const [useHotkeysSwitch, setUseHotkeysSwitch] = useState<boolean>(false)
   useHotkeys(
     shortcuts.feeds.switchBetweenViews.key,
     (e) => {
       e.preventDefault()
-      setUseHotkeysSwitch(true)
       if (isHotkeyPressed("Left")) {
-        setActive((i) => {
+        setActive((_, i) => {
           if (i === 0) {
-            return views.length - 1
+            return timelineList.at(-1)!
           } else {
-            return i - 1
+            return timelineList[i - 1]!
           }
         })
       } else {
-        setActive((i) => (i + 1) % views.length)
+        setActive((_, i) => timelineList[(i + 1) % timelineList.length]!)
       }
     },
     { scopes: HotKeyScopeMap.Home },
@@ -131,8 +142,6 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   const shouldFreeUpSpace = useShouldFreeUpSpace()
   const feedColumnShow = useFeedColumnShow()
   const rootContainerElement = useRootContainerElement()
-
-  const lists = useAllLists()
 
   return (
     <WindowUnderBlur
@@ -164,19 +173,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         orientation="horizontal"
         scrollbarClassName="h-2"
       >
-        {views.map((item, index) => (
-          <ViewSwitchButton
-            key={item.name}
-            item={item}
-            index={index}
-            active={active}
-            setActive={setActive}
-            useHotkeysSwitch={useHotkeysSwitch}
-            setUseHotkeysSwitch={setUseHotkeysSwitch}
-          />
-        ))}
-        {lists.map((list) => (
-          <ListSwitchButton key={list.listId} listId={list.listId!} />
+        {timelineList.map((timelineId) => (
+          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
       </ScrollArea>
       <div
@@ -193,7 +191,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
           }
         }, [])}
       >
-        <SwipeWrapper active={active}>
+        <SwipeWrapper active={view}>
           {views.map((item, index) => (
             <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
               <FeedList className="flex size-full flex-col text-sm" view={index} />
@@ -207,19 +205,39 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   )
 }
 
+const TimelineSwitchButton = ({ timelineId }: { timelineId: string }) => {
+  const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
+  const isActive = activeTimelineId === timelineId
+  const navigate = useNavigateEntry()
+  const setActive = useCallback(() => {
+    navigate({
+      timelineId,
+      feedId: null,
+      entryId: null,
+    })
+    resetSelectedFeedIds()
+  }, [navigate, timelineId])
+
+  if (timelineId.startsWith(ROUTE_TIMELINE_OF_VIEW)) {
+    const id = Number.parseInt(timelineId.slice(ROUTE_TIMELINE_OF_VIEW.length), 10) as FeedViewType
+    return <ViewSwitchButton view={id} isActive={isActive} setActive={setActive} />
+  } else if (timelineId.startsWith(ROUTE_TIMELINE_OF_LIST)) {
+    const id = timelineId.slice(ROUTE_TIMELINE_OF_LIST.length)
+    return <ListSwitchButton listId={id} isActive={isActive} setActive={setActive} />
+  } else if (timelineId.startsWith(ROUTE_TIMELINE_OF_INBOX)) {
+    return null // TODO
+  }
+}
+
 const ViewSwitchButton: FC<{
-  item: (typeof views)[number]
-  index: number
-
-  active: number
-  setActive: (next: number | ((prev: number) => number)) => void
-
-  useHotkeysSwitch: boolean
-  setUseHotkeysSwitch: (next: boolean) => void
-}> = ({ item, index, active, setActive, useHotkeysSwitch, setUseHotkeysSwitch }) => {
+  view: FeedViewType
+  isActive: boolean
+  setActive: () => void
+}> = ({ view, isActive, setActive }) => {
   const unreadByView = useUnreadByView()
   const { t } = useTranslation()
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
+  const item = views.find((item) => item.view === view)!
 
   const { isOver, setNodeRef } = useDroppable({
     id: `view-${item.name}`,
@@ -234,18 +252,16 @@ const ViewSwitchButton: FC<{
       ref={setNodeRef}
       key={item.name}
       tooltip={t(item.name as any)}
-      shortcut={`${index + 1}`}
+      shortcut={`${view + 1}`}
       className={cn(
-        active === index && item.className,
+        isActive && item.className,
         "flex h-11 shrink-0 flex-col items-center gap-1 text-[1.375rem]",
         ELECTRON ? "hover:!bg-theme-item-hover" : "",
-        active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
         isOver && "border-theme-accent-400 bg-theme-accent-400/60",
       )}
       onClick={(e) => {
         startTransition(() => {
-          setActive(index)
-          setUseHotkeysSwitch(false)
+          setActive()
         })
         e.stopPropagation()
       }}
@@ -253,13 +269,13 @@ const ViewSwitchButton: FC<{
       {item.icon}
       {showSidebarUnreadCount ? (
         <div className="text-[0.625rem] font-medium leading-none">
-          {unreadByView[index]! > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[index]}
+          {unreadByView[view]! > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[view]}
         </div>
       ) : (
         <i
           className={cn(
             "i-mgc-round-cute-fi text-[0.25rem]",
-            unreadByView[index] ? (active === index ? "opacity-100" : "opacity-60") : "opacity-0",
+            unreadByView[view] ? (isActive ? "opacity-100" : "opacity-60") : "opacity-0",
           )}
         />
       )}
@@ -269,21 +285,17 @@ const ViewSwitchButton: FC<{
 
 const ListSwitchButton: FC<{
   listId: string
-}> = ({ listId }) => {
-  const navigate = useNavigateEntry()
+  isActive: boolean
+  setActive: () => void
+}> = ({ listId, isActive, setActive }) => {
   const list = useListById(listId)
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
-  const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
 
   const handleNavigate = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()
 
-      navigate({
-        listId,
-        entryId: null,
-        view: list?.view,
-      })
+      setActive()
       subscriptionActions.markReadByFeedIds({
         listId,
       })
@@ -292,7 +304,7 @@ const ListSwitchButton: FC<{
         getMainContainerElement()?.focus()
       })
     },
-    [listId, navigate, list?.view],
+    [listId, setActive],
   )
 
   const items = useListActions({ listId })
