@@ -151,8 +151,8 @@ const registerPushNotifications = async () => {
     firebase: JSON.parse(env.VITE_FIREBASE_CONFIG),
     persistentIds: persistentIds || [],
     credentials: credentials || undefined,
-    bundleId: "is.follow.Follow",
-    chromeId: "is.follow.Follow",
+    bundleId: "is.follow",
+    chromeId: "is.follow",
   })
   logger.info(
     `PushReceiver initialized with credentials ${JSON.stringify(credentials)} and firebase config ${env.VITE_FIREBASE_CONFIG}`,
