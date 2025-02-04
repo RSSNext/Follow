@@ -48,6 +48,6 @@ if (IN_ELECTRON) {
 ReactDOM.createRoot($container).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-    <ClickToComponent editor="vscode-insiders" />
+    <ClickToComponent editor={import.meta.env.VITE_EDITOR} />
   </React.StrictMode>,
 )
