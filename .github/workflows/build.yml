@@ -35,6 +35,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
+        exclude:
+          - os: ${{ github.event.inputs.mas == 'true' && 'ubuntu-latest' }}
+          - os: ${{ github.event.inputs.mas == 'true' && 'windows-latest' }}
 
     permissions:
       id-token: write
@@ -118,7 +121,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Build (macOS)
-        if: matrix.os == 'macos-latest' && github.event.inputs.mas == false
+        if: matrix.os == 'macos-latest' && github.event.inputs.mas != 'true'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
@@ -127,7 +130,7 @@ jobs:
         run: npm exec turbo run //#build:macos
 
       - name: Build (Mac App Store)
-        if: matrix.os == 'macos-latest' && github.event.inputs.mas == true
+        if: matrix.os == 'macos-latest' && github.event.inputs.mas == 'true'
         env:
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: npm exec turbo run //#build:mas
