@@ -3,6 +3,7 @@
   "private": true,
   "sideEffects": false,
   "exports": {
+    "./assets/*": "./assets/*",
     "./atoms/*": "./src/atoms/*",
     "./common/*": "./src/common/*",
     "./dayjs": "./src/utils/dayjs.ts",
@@ -60,6 +61,7 @@
     "hast-util-to-text": "4.0.2",
     "input-otp": "^1.4.2",
     "jotai": "2.11.3",
+    "katex": "0.16.21",
     "masonic": "4.0.1",
     "react-blurhash": "^0.3.0",
     "react-fast-marquee": "1.6.5",
@@ -81,5 +83,8 @@
     "usehooks-ts": "3.1.0",
     "vaul": "1.1.2",
     "vfile": "5.3.7"
+  },
+  "devDependencies": {
+    "@types/katex": "0.16.7"
   }
 }

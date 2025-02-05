@@ -14,6 +14,7 @@ export interface LinkProps {
 
 export const MarkdownLink = (props: LinkProps) => {
   // TODO should populate the href with the populatedFullHref
+
   const populatedFullHref = props.href
   return (
     <Tooltip delayDuration={0}>

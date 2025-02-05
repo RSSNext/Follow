@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@follow/components": "workspace:*",
-    "@follow/types": "workspace:*"
+    "@follow/types": "workspace:*",
+    "clsx": "2.1.1"
   }
 }

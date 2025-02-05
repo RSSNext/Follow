@@ -1,9 +1,22 @@
-import { MemoedDangerousHTMLStyle as Style } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
+import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.jsx"
 import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
 import { parseHtml as parseHtmlGeneral } from "@follow/components/ui/markdown/parse-html.js"
+import type { Components } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 
 import { createHeadingRenderer, MarkdownLink, MarkdownP } from "./components"
+import { Math } from "./components/math"
+
+const Style: Components["style"] = ({ node, ...props }) => {
+  if (typeof props.children === "string") {
+    return createElement(
+      MemoedDangerousHTMLStyle,
+      null,
+      props.children.replaceAll(/html|body/g, "#shadow-html"),
+    )
+  }
+  return null
+}
 
 export const parseHtml = (
   content: string,
