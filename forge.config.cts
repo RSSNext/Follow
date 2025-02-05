@@ -125,34 +125,37 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerZIP({}, ["darwin"]),
-    new MakerDMG({
-      overwrite: true,
-      background: "static/dmg-background.png",
-      icon: "static/dmg-icon.icns",
-      iconSize: 160,
-      additionalDMGOptions: {
-        window: {
-          size: {
-            width: 660,
-            height: 400,
+    new MakerDMG(
+      {
+        overwrite: true,
+        background: "static/dmg-background.png",
+        icon: "static/dmg-icon.icns",
+        iconSize: 160,
+        additionalDMGOptions: {
+          window: {
+            size: {
+              width: 660,
+              height: 400,
+            },
           },
         },
+        contents: (opts) => [
+          {
+            x: 180,
+            y: 170,
+            type: "file",
+            path: (opts as any).appPath,
+          },
+          {
+            x: 480,
+            y: 170,
+            type: "link",
+            path: "/Applications",
+          },
+        ],
       },
-      contents: (opts) => [
-        {
-          x: 180,
-          y: 170,
-          type: "file",
-          path: (opts as any).appPath,
-        },
-        {
-          x: 480,
-          y: 170,
-          type: "link",
-          path: "/Applications",
-        },
-      ],
-    }),
+      ["darwin"],
+    ),
     new MakerSquirrel({
       name: "Follow",
       setupIcon: "resources/icon.ico",
