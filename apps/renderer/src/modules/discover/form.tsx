@@ -333,7 +333,7 @@ const SearchCard: FC<{
                   id: item.list?.id,
                   url: item.feed?.url,
                   defaultValues: {
-                    view: getSidebarActiveView().toString(),
+                    view: getRouteParams().view.toString(),
                   },
                   onSuccess() {
                     onSuccess(item)
