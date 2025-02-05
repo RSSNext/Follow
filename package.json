@@ -53,7 +53,6 @@
     "@egoist/tailwindcss-icons": "1.9.0",
     "@electron-forge/cli": "7.6.1",
     "@electron-forge/maker-dmg": "7.6.1",
-    "@electron-forge/maker-pkg": "7.6.1",
     "@electron-forge/maker-squirrel": "7.6.1",
     "@electron-forge/maker-zip": "7.6.1",
     "@electron-forge/plugin-fuses": "7.6.1",
