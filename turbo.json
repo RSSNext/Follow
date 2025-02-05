@@ -11,6 +11,9 @@
     "//#build:macos": {
       "outputs": ["dist/**", "out/**"]
     },
+    "//#build:mas": {
+      "outputs": ["dist/**", "out/**"]
+    },
     "//#format:check": {},
     "//#lint": {},
     "test": {},

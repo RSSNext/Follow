@@ -121,16 +121,7 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
-        run: npm exec turbo run //#build:macos
-
-      - name: Build (Mac App Store)
-        if: matrix.os == 'macos-latest'
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
-        run: npm exec turbo run //#build:mas
+        run: npm exec turbo run //#build:macos //#build:mas
 
       - name: Build Renderer
         if: matrix.os == 'ubuntu-latest'
