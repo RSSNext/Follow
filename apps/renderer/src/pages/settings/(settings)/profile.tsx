@@ -1,6 +1,7 @@
 import { Divider } from "@follow/components/ui/divider/Divider.js"
 
 import { AccountManagement } from "~/modules/profile/account-management"
+import { DeleteUser } from "~/modules/profile/delete-user"
 import { EmailManagement } from "~/modules/profile/email-management"
 import { ProfileSettingForm } from "~/modules/profile/profile-setting-form"
 import { TwoFactor } from "~/modules/profile/two-factor"
@@ -31,6 +32,10 @@ export function Component() {
           <UpdatePasswordForm />
           <TwoFactor />
         </div>
+
+        <Divider className="mb-6 mt-8" />
+
+        <DeleteUser />
       </section>
     </>
   )

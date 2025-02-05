@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
-import { Input, InputOTP, InputOTPGroup, InputOTPSlot } from "@follow/components/ui/input/index.js"
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
 import { twoFactor } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -25,29 +25,15 @@ import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/ho
 import { getFetchErrorInfo } from "~/lib/error-parser"
 import { useHasPassword } from "~/queries/auth"
 
-import { NoPasswordHint } from "./update-password-form"
+import type { PasswordFormProps } from "./shared"
+import { NoPasswordHint, PasswordForm } from "./shared"
 
-const passwordSchema = z.string().min(8).max(128)
 const totpCodeSchema = z.string().length(6).regex(/^\d+$/)
-
-const passwordFormSchema = z.object({
-  password: passwordSchema,
-})
-type PasswordFormValues = z.infer<typeof passwordFormSchema>
 
 const totpFormSchema = z.object({
   code: totpCodeSchema,
 })
 type TOTPFormValues = z.infer<typeof totpFormSchema>
-
-type PasswordFormProps<V> = {
-  onSubmitMutationFn: (values: V) => Promise<void>
-  message?: {
-    placeholder?: string
-    label?: string
-  }
-  onSuccess?: () => void
-}
 
 const shakeVariants = {
   shake: {
@@ -134,67 +120,6 @@ export function TOTPForm({
             </FormItem>
           )}
         />
-      </form>
-    </Form>
-  )
-}
-
-export function PasswordForm({
-  message,
-  onSubmitMutationFn,
-  onSuccess,
-}: PasswordFormProps<PasswordFormValues>) {
-  const { data: hasPassword, isLoading } = useHasPassword()
-  const { t } = useTranslation("settings")
-
-  const form = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordFormSchema),
-    defaultValues: { password: "" },
-  })
-
-  const updateMutation = useMutation({
-    mutationFn: onSubmitMutationFn,
-    onError: (error) => {
-      toast.error(error.message)
-    },
-    onSuccess,
-  })
-
-  function onSubmit(values: PasswordFormValues) {
-    updateMutation.mutate(values)
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[35ch] max-w-full space-y-4">
-        <FormField
-          control={form.control}
-          name={"password"}
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel className="shrink-0">
-                {message?.label ?? t("profile.current_password.label")}
-              </FormLabel>
-              <FormControl>
-                <Input
-                  disabled={updateMutation.isPending}
-                  autoFocus
-                  type="password"
-                  placeholder={message?.placeholder ?? t("profile.current_password.label")}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {!hasPassword && !isLoading && <NoPasswordHint i18nKey="profile.two_factor.no_password" />}
-
-        <div className="text-right">
-          <Button type="submit" isLoading={updateMutation.isPending}>
-            {t("profile.submit")}
-          </Button>
-        </div>
       </form>
     </Form>
   )

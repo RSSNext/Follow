@@ -40,6 +40,7 @@ export const {
   changeEmail,
   changePassword,
   createSession,
+  deleteUser,
   forgetPassword,
   getAccountInfo,
   getProviders,

@@ -11673,6 +11673,14 @@ declare const auth: {
                     token: string;
                 }) => Promise<void>;
             };
+            deleteUser: {
+                enabled: true;
+                sendDeleteAccountVerification({ user, url }: {
+                    user: better_auth.User;
+                    url: string;
+                    token: string;
+                }): Promise<void>;
+            };
         };
         account: {
             accountLinking: {

@@ -9,16 +9,17 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
 import { changePassword } from "@follow/shared/auth"
-import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
-import { Trans, useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useHasPassword } from "~/queries/auth"
+
+import { NoPasswordHint } from "./shared"
 
 const passwordSchema = z.string().min(8).max(128)
 
@@ -154,25 +155,5 @@ export const UpdatePasswordForm = () => {
         <NoPasswordHint i18nKey="profile.no_password" />
       )}
     </div>
-  )
-}
-
-export const NoPasswordHint = ({ i18nKey }: { i18nKey: string }) => {
-  return (
-    <p className="text-sm text-muted-foreground">
-      <Trans
-        ns="settings"
-        i18nKey={i18nKey as any}
-        components={{
-          Link: (
-            <a
-              href={`${env.VITE_WEB_URL}/forget-password`}
-              className="text-accent"
-              target="_blank"
-            />
-          ),
-        }}
-      />
-    </p>
   )
 }
