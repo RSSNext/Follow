@@ -57,7 +57,7 @@
     "expo-secure-store": "^14.0.1",
     "expo-sharing": "~13.0.1",
     "expo-splash-screen": "~0.29.21",
-    "expo-sqlite": "15.0.6",
+    "expo-sqlite": "15.1.1",
     "expo-status-bar": "~2.0.1",
     "expo-symbols": "~0.2.1",
     "expo-system-ui": "~4.0.7",
