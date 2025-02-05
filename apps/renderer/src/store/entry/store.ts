@@ -15,7 +15,7 @@ import { clearAllFeedUnreadDirty, clearFeedUnreadDirty, setFeedUnreadDirty } fro
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams } from "~/lib/utils"
-import { EntryService } from "~/services"
+import { EntryService } from "~/services/entry"
 
 import { feedActions } from "../feed"
 import { imageActions } from "../image"
