@@ -8,6 +8,7 @@ import { EntryService } from "@/src/services/entry"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
+import { getEntry } from "./getter"
 import type { EntryModel, FetchEntriesProps } from "./types"
 import { getEntriesParams } from "./utils"
 
@@ -130,6 +131,27 @@ class EntryActions {
     await tx.run()
   }
 
+  updateEntryContentInSession(entryId: EntryId, content: string) {
+    immerSet((draft) => {
+      const entry = draft.data[entryId]
+      if (!entry) return
+      entry.content = content
+    })
+  }
+
+  async updateEntryContent(entryId: EntryId, content: string) {
+    const tx = createTransaction()
+    tx.store(() => {
+      this.updateEntryContentInSession(entryId, content)
+    })
+
+    tx.persist(() => {
+      return EntryService.patch({ id: entryId, content })
+    })
+
+    await tx.run()
+  }
+
   reset(entries: EntryModel[] = []) {
     if (entries.length > 0) {
       immerSet((draft) => {
@@ -166,6 +188,13 @@ class EntrySyncServices {
     })
 
     const entries = honoMorph.toEntryList(res.data)
+    const entriesInDB = await EntryService.getEntryMany(entries.map((e) => e.id))
+    for (const entry of entries) {
+      const entryContent = entriesInDB.find((e) => e.id === entry.id)
+      if (entryContent) {
+        entry.content = entryContent.content
+      }
+    }
 
     await entryActions.upsertMany(entries)
     if (params.listId) {
@@ -181,7 +210,9 @@ class EntrySyncServices {
     const res = await apiClient.entries.$get({ query: { id: entryId } })
     const entry = honoMorph.toEntry(res.data)
     if (!entry) return null
-    await entryActions.upsertMany([entry])
+    if (entry.content && getEntry(entryId)?.content !== entry.content) {
+      await entryActions.updateEntryContent(entryId, entry.content)
+    }
     return entry
   }
 }

@@ -6,14 +6,14 @@ import type { MasonryFlashListProps } from "@shopify/flash-list"
 import { MasonryFlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link } from "expo-router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { Pressable, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useEntry } from "@/src/store/entry/hooks"
+import { useEntry, useFetchEntryContentByStream } from "@/src/store/entry/hooks"
 
 import { useSelectedFeed } from "../feed-drawer/atoms"
 
@@ -23,6 +23,9 @@ export function EntryListContentGrid({
 }: {
   entryIds: string[]
 } & Omit<MasonryFlashListProps<string>, "data" | "renderItem">) {
+  const [viewableEntryIds, setViewableEntryIds] = useState<string[]>([])
+  useFetchEntryContentByStream(viewableEntryIds)
+
   const insets = useSafeAreaInsets()
   const tabBarHeight = useBottomTabBarHeight()
   const headerHeight = useHeaderHeight()
@@ -33,6 +36,10 @@ export function EntryListContentGrid({
       renderItem={useTypeScriptHappyCallback(({ item }) => {
         return <RenderEntryItem id={item} />
       }, [])}
+      keyExtractor={(id) => id}
+      onViewableItemsChanged={({ viewableItems }) => {
+        setViewableEntryIds(viewableItems.map((item) => item.key))
+      }}
       numColumns={2}
       onScroll={useTypeScriptHappyCallback(
         (e) => {
