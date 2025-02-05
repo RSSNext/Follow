@@ -73,17 +73,20 @@ jobs:
         if: runner.os == 'macOS'
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          BUILD_CERTIFICATE_MAS_BASE64: ${{ secrets.BUILD_CERTIFICATE_MAS_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          CERTIFICATE_MAS_PATH=$RUNNER_TEMP/build_certificate_mas.p12
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_CERTIFICATE_MAS_BASE64" | base64 --decode -o $CERTIFICATE_MAS_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
           # create temporary keychain
@@ -93,6 +96,7 @@ jobs:
 
           # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $CERTIFICATE_MAS_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
@@ -119,6 +123,15 @@ jobs:
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: npm exec turbo run //#build:macos
 
+      - name: Build (Mac App Store)
+        if: matrix.os == 'macos-latest'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
+        run: npm exec turbo run //#build:mas
+
       - name: Build Renderer
         if: matrix.os == 'ubuntu-latest'
         run: pnpm build:render
@@ -138,6 +151,7 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            out/make/**/*.pkg
             dist/manifest.yml
             dist/*.tar.gz
           retention-days: 90
@@ -151,6 +165,17 @@ jobs:
           name: macos-arm64-dmg
           path: |
             out/make/**/*arm64.dmg
+          retention-days: 90
+
+      - name: Upload file (pkg)
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'macos-latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: mas-pkg
+          path: |
+            out/make/**/*.pkg
           retention-days: 90
 
       - name: Generate artifact attestation

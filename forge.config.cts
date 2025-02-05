@@ -5,6 +5,7 @@ import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
+import { MakerPKG } from "@electron-forge/maker-pkg"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
 import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
@@ -34,7 +35,7 @@ async function cleanSources(buildPath, _electronVersion, platform, _arch, callba
   // folders & files to be included in the app
   const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
 
-  if (platform === "darwin") {
+  if (platform === "darwin" || platform === "mas") {
     const frameworkResourcePath = resolve(
       buildPath,
       "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
@@ -167,6 +168,12 @@ const config: ForgeConfig = {
         ],
       },
     }),
+    new MakerPKG(
+      {
+        name: "Follow",
+      },
+      ["mas"],
+    ),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality
