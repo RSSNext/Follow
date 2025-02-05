@@ -5,6 +5,7 @@ import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
+import { MakerPKG } from "@electron-forge/maker-pkg"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
 import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
@@ -167,6 +168,13 @@ const config: ForgeConfig = {
         ],
       },
     }),
+    new MakerPKG(
+      {
+        name: "Follow",
+        keychain: process.env.KEYCHAIN_PATH,
+      },
+      ["mas"],
+    ),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality

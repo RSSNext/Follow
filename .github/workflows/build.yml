@@ -155,6 +155,7 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+            out/make/**/*.pkg
             dist/manifest.yml
             dist/*.tar.gz
           retention-days: 90
@@ -168,6 +169,17 @@ jobs:
           name: macos-arm64-dmg
           path: |
             out/make/**/*arm64.dmg
+          retention-days: 90
+
+      - name: Upload file (pkg)
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'macos-latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: mas-pkg
+          path: |
+            out/make/**/*.pkg
           retention-days: 90
 
       - name: Generate artifact attestation
