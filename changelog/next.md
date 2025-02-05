@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Allow delete user account
+- Allow deleting user account
 
 ## Improvements
 
