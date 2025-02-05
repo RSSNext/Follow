@@ -106,14 +106,12 @@ const config: ForgeConfig = {
     ignore: [ignorePattern],
 
     prune: true,
-    ...(process.env.KEYCHAIN_PATH && {
-      osxSign: {
-        optionsForFile: () => ({
-          entitlements: "build/entitlements.mac.plist",
-        }),
-        keychain: process.env.KEYCHAIN_PATH,
-      },
-    }),
+    osxSign: {
+      optionsForFile: () => ({
+        entitlements: "build/entitlements.mac.plist",
+      }),
+      keychain: process.env.KEYCHAIN_PATH,
+    },
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
       process.env.APPLE_TEAM_ID && {
@@ -173,6 +171,7 @@ const config: ForgeConfig = {
     new MakerPKG(
       {
         name: "Follow",
+        keychain: process.env.KEYCHAIN_PATH,
       },
       ["mas"],
     ),
