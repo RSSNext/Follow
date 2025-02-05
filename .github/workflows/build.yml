@@ -10,7 +10,6 @@ on:
     inputs:
       tag_version:
         description: "Tag Version"
-        required: true
       mas:
         type: boolean
         description: "Build for Mac App Store"
