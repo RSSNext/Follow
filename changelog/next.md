@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Allow delete user account
+
 ## Improvements
 
 ## Bug Fixes
