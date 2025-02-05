@@ -1,5 +1,4 @@
 import "@follow/components/assets/colors-media.css"
-import "@follow/components/assets/font.css"
 import "@follow/components/assets/tailwind.css"
 import "./index.css"
 

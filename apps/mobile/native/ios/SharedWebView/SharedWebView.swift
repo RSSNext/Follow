@@ -45,8 +45,8 @@ class WebViewView: ExpoView {
         SharedWebViewModule.sharedWebView!.frame = rect
 
         frame = rect
-
-        rctView.frame = rect
+      
+      rctView.frame = rect
 
       onContentHeightChange(["height": Float(rect.height)])
 

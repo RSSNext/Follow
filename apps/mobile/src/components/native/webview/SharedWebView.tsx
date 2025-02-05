@@ -1,6 +1,5 @@
 import { requireNativeView } from "expo"
-import type * as React from "react"
-import { useState } from "react"
+import * as React from "react"
 import { View } from "react-native"
 
 const NativeView: React.ComponentType<{
@@ -8,8 +7,8 @@ const NativeView: React.ComponentType<{
   url: string
 }> = requireNativeView("FOSharedWebView")
 
-export default function SharedWebView({ url }: { url: string }) {
-  const [contentHeight, setContentHeight] = useState(0)
+export function SharedWebView({ url }: { url: string }) {
+  const [contentHeight, setContentHeight] = React.useState(0)
 
   return (
     <View style={{ height: contentHeight }}>

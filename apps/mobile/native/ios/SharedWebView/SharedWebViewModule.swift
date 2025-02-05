@@ -15,11 +15,9 @@ public class SharedWebViewModule: Module {
     public func definition() -> ModuleDefinition {
         Name("FOSharedWebView")
 
-        Function("preload") { (url: String) in
+        Function("preload") { (urlString: String) in
             DispatchQueue.main.async {
-                guard let webUrl = URL(string: url) else { return }
-                let request = URLRequest(url: webUrl)
-                WebViewManager.shared.load(request)
+                self.load(urlString: urlString)
             }
         }
 
@@ -27,15 +25,63 @@ public class SharedWebViewModule: Module {
             Events("onContentHeightChange")
 
             Prop("url") { (_: UIView, urlString: String) in
-                if let webView = SharedWebViewModule.sharedWebView {
-                    if let url = URL(string: urlString) {
-                        if url == webView.url {
-                            return
-                        }
-                        webView.load(URLRequest(url: url))
-                    }
-                }
+                self.load(urlString: urlString)
             }
+        }
+    }
+
+    private func load(urlString: String) {
+        guard let webView = SharedWebViewModule.sharedWebView else {
+            return
+        }
+        // Check is local file
+        let urlProtocol = "file://"
+        if urlString.starts(with: urlProtocol) {
+            let localHtml = self.getLocalHTML(from: urlString)
+
+            debugPrint(localHtml)
+            if let localHtml = localHtml {
+
+                webView.loadFileURL(
+                    localHtml, allowingReadAccessTo: localHtml.deletingLastPathComponent())
+                debugPrint("load local html", localHtml)
+                return
+            }
+        }
+
+        if let url = URL(string: urlString) {
+            if url == webView.url {
+                return
+            }
+            webView.load(URLRequest(url: url))
+        }
+    }
+
+    private func getLocalHTML(from fileURL: String) -> URL? {
+        if let url = URL(string: fileURL), url.scheme == "file" {
+
+            let directoryPath = url.deletingLastPathComponent().absoluteString.replacingOccurrences(
+                of: "file://", with: ""
+            )
+            let fileName = url.lastPathComponent
+            let fileExtension = url.pathExtension
+
+            if let fileURL = Bundle.main
+                .url(
+                    forResource: String(fileName.dropLast(Int(fileExtension.count) + 1)),
+                    withExtension: fileExtension,
+                    subdirectory: directoryPath
+                )
+            {
+
+                return fileURL
+            } else {
+                return nil
+
+            }
+        } else {
+            debugPrint("Invalidate url")
+            return nil
         }
     }
 }

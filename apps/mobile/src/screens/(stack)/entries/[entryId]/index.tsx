@@ -5,15 +5,18 @@ import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
 import type { FC } from "react"
 import { Fragment, useState } from "react"
-import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import { Image as RnImage, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import PagerView from "react-native-pager-view"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
+import WebView from "react-native-webview"
 
+import { FollowWebView } from "@/src/components/common/FollowWebView"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
 } from "@/src/components/common/SafeNavigationScrollView"
+import { SharedWebView } from "@/src/components/native/webview/SharedWebView"
 import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
@@ -81,7 +84,7 @@ export default function EntryDetailPage() {
           headerRight={HeaderRightActions}
           title={item?.title || "Loading..."}
         />
-        <HtmlWeb
+        {/* <HtmlWeb
           content={item?.content || ""}
           onLayout={async (size) => {
             if (size[1] !== height) {
@@ -94,7 +97,12 @@ export default function EntryDetailPage() {
             style: { height },
             matchContents: true,
           }}
-        />
+        /> */}
+        <SharedWebView url="file://rn-web/html-renderer/index.html" />
+        {/* <View className="bg-red h-[400px]">
+          <FollowWebView customUrl="rn-web/html-renderer/index.html" />
+        </View> */}
+        {/* <SharedWebView url="https://www.baidu.com" /> */}
 
         {/* {item && <MediaSwipe mediaList={item?.media || []} id={item.id} />} */}
       </SafeNavigationScrollView>

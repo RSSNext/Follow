@@ -36,7 +36,7 @@ enum WebViewManager {
         )
         
         configuration.userContentController.addUserScript(script)
-        
+        configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
         let webView = WKWebView(frame: .zero, configuration: configuration)
       webView.scrollView.isScrollEnabled = false
         
