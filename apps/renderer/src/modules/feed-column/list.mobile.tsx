@@ -3,8 +3,8 @@ import { cn } from "@follow/utils/utils"
 import { memo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useSidebarActiveViewValue } from "~/atoms/sidebar"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import { useCategoryOpenStateByView } from "~/store/subscription"
@@ -39,12 +39,12 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
   const hasListData = Object.keys(listsData).length > 0
   const hasInboxData = Object.keys(inboxesData).length > 0
 
-  const currentActiveView = useSidebarActiveViewValue()
+  const currentActiveView = useRouteParamsSelector((s) => s.view)
   // Render only adjacent views
   // 0 => 0, 1
   // 1 => 0, 1, 2
   // 2 => 1, 2, 3
-  const shouldRender = view >= currentActiveView && view < currentActiveView + 2
+  const shouldRender = view >= Number(currentActiveView) && view < Number(currentActiveView) + 2
 
   const navigateEntry = useNavigateEntry()
 

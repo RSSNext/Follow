@@ -4,26 +4,18 @@ import { views } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import type { FC } from "react"
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router"
 
-import { useSetSidebarActiveView, useSidebarActiveView } from "~/atoms/sidebar"
-import { getRouteParams } from "~/hooks/biz/useRouteParams"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 
 import { FeedList } from "../../feed-column/list"
 import { MobileFloatBar } from "./float-bar.mobile"
 
 export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
-  const [active, setActive_] = useSidebarActiveView()
-
-  useLayoutEffect(() => {
-    if (asWidget) return
-    const { view } = getRouteParams()
-    if (view !== undefined) {
-      setActive_(view)
-    }
-  }, [asWidget, setActive_])
+  const view = useRouteParamsSelector((s) => s.view)
 
   const [feedListScrollRef, setFeedListScrollRef] = useState<HTMLDivElement | null>()
 
@@ -50,7 +42,7 @@ export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {
         </div>
       </div>
       <div className="relative flex size-full h-0 grow pb-safe-offset-2">
-        <SwipeWrapper active={active}>
+        <SwipeWrapper active={view}>
           {views.map((item, index) => (
             <section key={item.name} className="size-full flex-none shrink-0 snap-center">
               <FeedList
@@ -75,7 +67,7 @@ const SwipeWrapper: FC<{
   active: number
   className?: string
 }> = ({ children, active, className }) => {
-  const setActive = useSetSidebarActiveView()
+  const navigate = useNavigateEntry()
 
   const [initialActive] = useState(active)
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -89,15 +81,15 @@ const SwipeWrapper: FC<{
   useEffect(() => {
     if (!emblaApi) return
     emblaApi.on("select", () => {
-      setActive(emblaApi.selectedScrollSnap())
+      navigate({ view: emblaApi.selectedScrollSnap() })
     })
-  }, [emblaApi, setActive])
+  }, [emblaApi, navigate])
 
   useEffect(() => {
     if (!emblaApi) return
     const currentSlideIndex = emblaApi.selectedScrollSnap()
-    if (currentSlideIndex !== active) {
-      emblaApi.scrollTo(active)
+    if (currentSlideIndex !== Number(active)) {
+      emblaApi.scrollTo(Number(active))
     }
   }, [active, emblaApi])
 

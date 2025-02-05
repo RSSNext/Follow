@@ -4,12 +4,7 @@ import { atom, useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 
-import {
-  FEED_COLLECTION_LIST,
-  INBOX_PREFIX_ID,
-  ROUTE_FEED_IN_LIST,
-  ROUTE_FEED_PENDING,
-} from "~/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "~/constants"
 
 const feedUnreadDirtySetAtom = atom(new Set<string>())
 
@@ -22,11 +17,6 @@ export const useFeedUnreadIsDirty = (feedId: string) => {
           const isRealFeedId = isBizId(feedId)
 
           if (isRealFeedId) return set.has(feedId)
-
-          if (feedId.startsWith(ROUTE_FEED_IN_LIST) || feedId.startsWith(INBOX_PREFIX_ID)) {
-            // List/Inbox is not supported unread
-            return false
-          }
 
           if (feedId === ROUTE_FEED_PENDING) {
             return set.size > 0

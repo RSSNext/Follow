@@ -9,7 +9,8 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useSidebarActiveView } from "~/atoms/sidebar"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 import { feedIconSelector } from "~/store/feed/selector"
@@ -98,7 +99,9 @@ export const MobileFloatBar = ({
 }
 
 const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) => {
-  const [active, setActive] = useSidebarActiveView()
+  const view = useRouteParamsSelector((s) => s.view)
+  const navigate = useNavigateEntry()
+
   const unreadByView = useUnreadByView()
   const showCount = useUISettingKey("sidebarShowUnreadCount")
   return (
@@ -110,11 +113,11 @@ const ViewTabs = ({ onViewChange }: { onViewChange?: (view: number) => void }) =
         <MotionButtonBase
           className={clsx(
             "center flex transition-colors duration-200",
-            active === item.view && item.className,
+            view === item.view && item.className,
           )}
           key={item.name}
           onClick={() => {
-            setActive(item.view)
+            navigate({ view: item.view })
             onViewChange?.(item.view)
           }}
         >
