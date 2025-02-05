@@ -705,6 +705,8 @@ importers:
         specifier: npm:react-native@0.77.0
         version: 0.77.0(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.3.18)(react@18.3.1)
 
+  apps/mobile/web: {}
+
   apps/renderer:
     dependencies:
       '@dnd-kit/core':
@@ -24785,7 +24787,7 @@ snapshots:
 
   filelist@1.0.4:
     dependencies:
-      minimatch: 5.1.2
+      minimatch: 5.1.6
 
   filename-reserved-regex@2.0.0: {}
 

@@ -1,0 +1,14 @@
+{
+  "name": "@follow/rn-micro-web-app-html-renderer",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@follow/components": "workspace:*",
+    "@follow/types": "workspace:*"
+  }
+}
