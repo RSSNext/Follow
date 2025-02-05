@@ -4,7 +4,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -15,7 +15,8 @@ import {
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
-import { useEntry, useFetchEntryContentByStream } from "@/src/store/entry/hooks"
+import { useEntry } from "@/src/store/entry/hooks"
+import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { ViewSelector } from "../feed-drawer/view-selector"
 import { LeftAction, RightAction } from "./action"
@@ -59,9 +60,6 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
 }
 
 function EntryListContent({ entryIds }: { entryIds: string[] }) {
-  const [viewableEntryIds, setViewableEntryIds] = useState<string[]>([])
-  useFetchEntryContentByStream(viewableEntryIds)
-
   const insets = useSafeAreaInsets()
   const tabBarHeight = useBottomTabBarHeight()
   const originalDefaultHeaderHeight = useDefaultHeaderHeight()
@@ -84,7 +82,7 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
       )}
       keyExtractor={(id) => id}
       onViewableItemsChanged={({ viewableItems }) => {
-        setViewableEntryIds(viewableItems.map((item) => item.key))
+        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
       }}
       scrollIndicatorInsets={{
         top: headerHeight - insets.top,

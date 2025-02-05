@@ -1,13 +1,9 @@
 import type { FeedViewType } from "@follow/constants"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { fetch } from "expo/fetch"
 import { useCallback, useEffect } from "react"
 
-import { apiClient } from "@/src/lib/api-fetch"
-import { getCookie } from "@/src/lib/auth"
-
 import { getEntry } from "./getter"
-import { entryActions, entrySyncServices, useEntryStore } from "./store"
+import { entrySyncServices, useEntryStore } from "./store"
 import type { EntryModel, FetchEntriesProps } from "./types"
 
 export const usePrefetchEntries = (props: FetchEntriesProps) => {
@@ -90,78 +86,7 @@ export const useEntryIdsByCategory = (category: string) => {
 export const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {
   const { mutate: updateEntryContent } = useMutation({
     mutationKey: ["stream-entry-content", remoteEntryIds],
-    mutationFn: async (remoteEntryIds: string[]) => {
-      const onlyNoStored = true
-
-      const nextIds = [] as string[]
-      if (onlyNoStored) {
-        for (const id of remoteEntryIds) {
-          const entry = getEntry(id)!
-          if (entry.content) {
-            continue
-          }
-
-          nextIds.push(id)
-        }
-      }
-
-      if (nextIds.length === 0) return
-
-      const readStream = async () => {
-        // https://github.com/facebook/react-native/issues/37505
-        // TODO: And it seems we can not just use fetch from expo for ofetch, need further investigation
-        const response = await fetch(apiClient.entries.stream.$url().toString(), {
-          method: "post",
-          headers: {
-            cookie: getCookie(),
-          },
-          body: JSON.stringify({
-            ids: nextIds,
-          }),
-        })
-
-        const reader = response.body?.getReader()
-        if (!reader) return
-
-        const decoder = new TextDecoder()
-        let buffer = ""
-
-        try {
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-
-            buffer += decoder.decode(value, { stream: true })
-            const lines = buffer.split("\n")
-
-            // Process all complete lines
-            for (let i = 0; i < lines.length - 1; i++) {
-              if (lines[i]!.trim()) {
-                const json = JSON.parse(lines[i]!)
-                // Handle each JSON line here
-                entryActions.updateEntryContent(json.id, json.content)
-              }
-            }
-
-            // Keep the last incomplete line in the buffer
-            buffer = lines.at(-1) || ""
-          }
-
-          // Process any remaining data
-          if (buffer.trim()) {
-            const json = JSON.parse(buffer)
-
-            entryActions.updateEntryContent(json.id, json.content)
-          }
-        } catch (error) {
-          console.error("Error reading stream:", error)
-        } finally {
-          reader.releaseLock()
-        }
-      }
-
-      readStream()
-    },
+    mutationFn: entrySyncServices.fetchEntryContentByStream,
   })
 
   useEffect(() => {
