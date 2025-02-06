@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import crypto from "node:crypto"
 import fs, { readdirSync } from "node:fs"
 import { cp, readdir } from "node:fs/promises"
@@ -14,6 +16,8 @@ import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
 import yaml from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
+
+const platform = process.argv[process.argv.indexOf("--platform") + 1]
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
 const platformNamesMap = {
@@ -107,11 +111,23 @@ const config: ForgeConfig = {
 
     prune: true,
     osxSign: {
-      // temporarily disabled for https://github.com/electron/osx-sign/issues/346
-      // optionsForFile: () => ({
-      //   entitlements: "build/entitlements.mac.plist",
-      // }),
-      keychain: process.env.KEYCHAIN_PATH,
+      optionsForFile:
+        platform === "mas"
+          ? (filePath) => {
+              const entitlements = filePath.includes(".app/")
+                ? "build/entitlements.mas.child.plist"
+                : "build/entitlements.mas.plist"
+              return {
+                hardenedRuntime: false,
+                entitlements,
+              }
+            }
+          : () => ({
+              entitlements: "build/entitlements.mac.plist",
+            }),
+      keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
+      identity: process.env.OSX_SIGN_IDENTITY,
+      provisioningProfile: process.env.OSX_SIGN_PROVISIONING_PROFILE_PATH,
     },
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
@@ -155,7 +171,7 @@ const config: ForgeConfig = {
           },
         ],
       },
-      ["darwin"],
+      ["darwin", "mas"],
     ),
     new MakerSquirrel({
       name: "Follow",
