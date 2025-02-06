@@ -13,7 +13,7 @@ import { m } from "~/components/common/Motion"
 import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
 import { HotKeyScopeMap, ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { useRouteParams, useRouteView } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { EntryPlaceholderDaily } from "~/modules/ai/ai-daily/EntryPlaceholderDaily"
 import { EntryContent } from "~/modules/entry-content"
 import { EntryPlaceholderLogo } from "~/modules/entry-content/components/EntryPlaceholderLogo"
@@ -21,7 +21,7 @@ import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-cont
 
 export const RightContentDesktop = () => {
   const { entryId } = useParams()
-  const view = useRouteView()
+  const { feedId, view } = useRouteParams()
   const navigate = useNavigateEntry()
 
   const settingWideMode = useRealInWideMode()
@@ -43,8 +43,6 @@ export const RightContentDesktop = () => {
       preventDefault: true,
     },
   )
-
-  const { feedId } = useRouteParams()
 
   if (!showEntryContent) {
     return null

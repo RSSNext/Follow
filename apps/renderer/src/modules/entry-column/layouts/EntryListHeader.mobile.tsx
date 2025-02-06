@@ -12,14 +12,12 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
-import { getSidebarActiveView } from "~/atoms/sidebar"
 import { useWhoami } from "~/atoms/user"
 import { HeaderTopReturnBackButton } from "~/components/mobile/button"
-import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_LIST } from "~/constants"
+import { FEED_COLLECTION_LIST } from "~/constants"
 import { LOGO_MOBILE_ID } from "~/constants/dom"
 import { shortcuts } from "~/constants/shortcuts"
-import { navigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { getRouteParams, useRouteParams } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { FeedColumnMobile } from "~/modules/app-layout/feed-column/mobile"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
@@ -46,8 +44,7 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
 
   const isTimelineFirst = useGeneralSettingKey("startupScreen") === "timeline"
 
-  const isInCollectionList =
-    feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
+  const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   const titleInfo = !!headerTitle && (
     <div className="flex min-w-0 items-center break-all text-lg font-bold leading-tight">
@@ -167,18 +164,6 @@ const FollowSubscriptionButton = () => {
       content={<FeedColumnMobile asWidget />}
       modalClassName="bg-background pt-4 h-[calc(100svh-3rem)]"
       contentClassName="p-0 overflow-visible"
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          const sidebarActiveView = getSidebarActiveView()
-          const { view } = getRouteParams()
-          if (sidebarActiveView !== view) {
-            navigateEntry({
-              view: sidebarActiveView,
-              feedId: null,
-            })
-          }
-        }
-      }}
     >
       <ActionButton
         id={LOGO_MOBILE_ID}
