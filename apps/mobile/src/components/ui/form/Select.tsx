@@ -51,14 +51,14 @@ export function Select<T>({
       <DropdownMenu.Trigger asChild>
         <View
           className={cn(
-            "flex-1 shrink flex-row items-center rounded-lg pl-3",
+            "min-w-24 flex-1 shrink flex-row items-center rounded-lg pl-3",
 
             wrapperClassName,
           )}
           style={wrapperStyle}
         >
           <Text
-            className="min-w-0 flex-1 text-right font-semibold text-accent"
+            className="flex-1 text-right font-semibold text-accent"
             ellipsizeMode="middle"
             numberOfLines={1}
           >
