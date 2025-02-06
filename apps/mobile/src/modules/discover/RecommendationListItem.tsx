@@ -3,24 +3,22 @@ import type { RSSHubRouteDeclaration } from "@follow/models/src/rsshub"
 import { router } from "expo-router"
 import type { FC } from "react"
 import { memo, useMemo } from "react"
-import { Clipboard, Linking, Text, TouchableOpacity, View } from "react-native"
-import WebView from "react-native-webview"
+import { Clipboard, Text, TouchableOpacity, View } from "react-native"
+import * as ContextMenu from "zeego/context-menu"
 
-import { ContextMenu } from "@/src/components/ui/context-menu"
+import SharedWebView from "@/native/src/SharedWebView"
 import { Grid } from "@/src/components/ui/grid"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { useOpenLink } from "@/src/lib/hooks/use-open-link"
+import { toast } from "@/src/lib/toast"
 
 import { RSSHubCategoryCopyMap } from "./copy"
-
-enum RecommendationListItemActionKey {
-  COPY_MAINTAINER_NAME = "copyMaintainerName",
-  OPEN_MAINTAINER_PROFILE = "openMaintainerProfile",
-}
 
 export const RecommendationListItem: FC<{
   data: RSSHubRouteDeclaration
   routePrefix: string
 }> = memo(({ data, routePrefix }) => {
+  const openLink = useOpenLink()
   const { maintainers, categories } = useMemo(() => {
     const maintainers = new Set<string>()
     const categories = new Set<string>()
@@ -50,40 +48,39 @@ export const RecommendationListItem: FC<{
         {/* Maintainers */}
         <View className="flex-row flex-wrap items-center">
           {maintainers.map((m) => (
-            <ContextMenu
-              key={m}
-              renderPreview={() => {
-                return <WebView source={{ uri: `https://github.com/${m}` }} />
-              }}
-              config={{
-                items: [
-                  {
-                    title: "Copy Maintainer Name",
-                    actionKey: RecommendationListItemActionKey.COPY_MAINTAINER_NAME,
-                  },
-                  {
-                    title: "Open Maintainer's Profile",
-                    actionKey: RecommendationListItemActionKey.OPEN_MAINTAINER_PROFILE,
-                  },
-                ],
-              }}
-              onPressMenuItem={(e) => {
-                switch (e.actionKey) {
-                  case RecommendationListItemActionKey.COPY_MAINTAINER_NAME: {
+            <ContextMenu.Root key={m}>
+              <ContextMenu.Trigger asChild>
+                <View className="bg-system-background mr-1 rounded-full">
+                  <Text className="text-secondary-label text-sm">@{m}</Text>
+                </View>
+              </ContextMenu.Trigger>
+
+              <ContextMenu.Content>
+                <ContextMenu.Preview>
+                  {/* {() => <WebView source={{ uri: `https://github.com/${m}` }} />} */}
+                  {() => <SharedWebView url={`https://github.com/${m}`} />}
+                </ContextMenu.Preview>
+
+                <ContextMenu.Item
+                  key="copyMaintainerName"
+                  onSelect={() => {
                     Clipboard.setString(m)
-                    break
-                  }
-                  case RecommendationListItemActionKey.OPEN_MAINTAINER_PROFILE: {
-                    Linking.openURL(`https://github.com/${m}`)
-                    break
-                  }
-                }
-              }}
-            >
-              <View className="bg-system-background mr-1 rounded-full">
-                <Text className="text-secondary-label text-sm">@{m}</Text>
-              </View>
-            </ContextMenu>
+                    toast.info("Name copied to clipboard")
+                  }}
+                >
+                  <ContextMenu.ItemTitle>Copy Maintainer Name</ContextMenu.ItemTitle>
+                </ContextMenu.Item>
+
+                <ContextMenu.Item
+                  key="openMaintainerProfile"
+                  onSelect={() => {
+                    openLink(`https://github.com/${m}`)
+                  }}
+                >
+                  <ContextMenu.ItemTitle>Open Maintainer's Profile</ContextMenu.ItemTitle>
+                </ContextMenu.Item>
+              </ContextMenu.Content>
+            </ContextMenu.Root>
           ))}
         </View>
         {/* Tags */}

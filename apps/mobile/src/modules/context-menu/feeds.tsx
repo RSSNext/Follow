@@ -1,99 +1,16 @@
-import { FeedViewType } from "@follow/constants"
+import type { FeedViewType } from "@follow/constants"
 import type { FC, PropsWithChildren } from "react"
-import { useMemo } from "react"
+import { useCallback } from "react"
 import { Alert, Clipboard } from "react-native"
+import * as ContextMenu from "zeego/context-menu"
 
-import { ContextMenu } from "@/src/components/ui/context-menu"
-import type { IContextMenuItemConfig } from "@/src/components/ui/context-menu/types"
 import { views } from "@/src/constants/views"
+import { toast } from "@/src/lib/toast"
 import { getFeed } from "@/src/store/feed/getter"
 import { getSubscription } from "@/src/store/subscription/getter"
 import { useListSubscriptionCategory } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import { unreadSyncService } from "@/src/store/unread/store"
-
-enum FeedItemActionKey {
-  MARK_ALL_AS_READ = "markAllAsRead",
-  CLAIM = "claim",
-  BOOST = "boost",
-  ADD_TO_CATEGORY = "addToCategory",
-  CREATE_NEW_CATEGORY = "createNewCategory",
-  EDIT = "edit",
-  COPY_LINK = "copyLink",
-  UNSUBSCRIBE = "unsubscribe",
-
-  CHANGE_TO_OTHER_VIEW = "changeToOtherView",
-
-  DELETE = "delete",
-}
-
-enum ChangeToOtherViewActionKey {
-  ARTICLE = "article",
-  SOCIAL = "social",
-  PICTURE = "picture",
-  VIDEO = "video",
-  NOTIFICATION = "notification",
-  AUDIO = "audio",
-}
-const changeViewActionKeyMapping: Record<FeedViewType, ChangeToOtherViewActionKey> = {
-  [FeedViewType.Articles]: ChangeToOtherViewActionKey.ARTICLE,
-  [FeedViewType.SocialMedia]: ChangeToOtherViewActionKey.SOCIAL,
-  [FeedViewType.Pictures]: ChangeToOtherViewActionKey.PICTURE,
-  [FeedViewType.Videos]: ChangeToOtherViewActionKey.VIDEO,
-  [FeedViewType.Notifications]: ChangeToOtherViewActionKey.NOTIFICATION,
-  [FeedViewType.Audios]: ChangeToOtherViewActionKey.AUDIO,
-} as const
-type Options = {
-  categories: string[]
-}
-const createFeedItemActions: (options: Options) => IContextMenuItemConfig[] = (options) => {
-  return [
-    {
-      title: "Mark All As Read",
-      actionKey: FeedItemActionKey.MARK_ALL_AS_READ,
-    },
-    {
-      title: "Claim",
-      actionKey: FeedItemActionKey.CLAIM,
-    },
-    {
-      title: "Boost",
-      actionKey: FeedItemActionKey.BOOST,
-    },
-    {
-      title: "Add To Category",
-      actionKey: FeedItemActionKey.ADD_TO_CATEGORY,
-      subMenu: {
-        title: "Add To Category",
-        items: [
-          ...options.categories.map((category) => ({
-            title: category,
-            actionKey: `${FeedItemActionKey.ADD_TO_CATEGORY}:${category}`,
-          })),
-          {
-            title: "Create New Category",
-            actionKey: FeedItemActionKey.CREATE_NEW_CATEGORY,
-
-            systemIcon: "plus",
-          },
-        ],
-      },
-    },
-    {
-      title: "Edit",
-      actionKey: FeedItemActionKey.EDIT,
-    },
-    {
-      title: "Copy Link",
-      actionKey: FeedItemActionKey.COPY_LINK,
-    },
-    {
-      title: "Unsubscribe",
-      actionKey: FeedItemActionKey.UNSUBSCRIBE,
-      destructive: true,
-    },
-  ]
-}
 
 export const SubscriptionFeedItemContextMenu: FC<
   PropsWithChildren & {
@@ -102,43 +19,85 @@ export const SubscriptionFeedItemContextMenu: FC<
   }
 > = ({ id, children, view }) => {
   const allCategories = useListSubscriptionCategory(view)
-  const actions = useMemo(
-    () => createFeedItemActions({ categories: allCategories }),
-    [allCategories],
-  )
 
   return (
-    <ContextMenu
-      config={{
-        items: actions,
-      }}
-      onPressMenuItem={(item) => {
-        switch (item.actionKey) {
-          case FeedItemActionKey.MARK_ALL_AS_READ: {
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
+
+      <ContextMenu.Content>
+        <ContextMenu.Item
+          key="MarkAllAsRead"
+          onSelect={useCallback(() => {
             unreadSyncService.markAsRead(id)
-            break
-          }
-          case FeedItemActionKey.CREATE_NEW_CATEGORY: {
-            // create new category
-            const subscription = getSubscription(id)
-            if (!subscription) return
-            Alert.prompt("Create New Category", "Enter the name of the new category", (text) => {
-              subscriptionSyncService.edit({
-                ...subscription,
-                category: text,
-              })
-            })
-            break
-          }
-          case FeedItemActionKey.CLAIM: {
-            // TODO: implement logic
-            break
-          }
-          case FeedItemActionKey.BOOST: {
-            // TODO: implement logic
-            break
-          }
-          case FeedItemActionKey.COPY_LINK: {
+          }, [id])}
+        >
+          <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+
+        <ContextMenu.Item key="Claim">
+          <ContextMenu.ItemTitle>Claim</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+
+        <ContextMenu.Item key="Boost">
+          <ContextMenu.ItemTitle>Boost</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+
+        <ContextMenu.Sub key="AddToCategory">
+          <ContextMenu.SubTrigger key="SubTrigger/AddToCategory">
+            <ContextMenu.ItemTitle>Add To Category</ContextMenu.ItemTitle>
+          </ContextMenu.SubTrigger>
+
+          <ContextMenu.SubContent>
+            <>
+              {allCategories.map((category) => {
+                const onSelect = () => {
+                  const subscription = getSubscription(id)
+                  if (!subscription) return
+
+                  // add to category
+                  subscriptionSyncService.edit({
+                    ...subscription,
+                    category,
+                  })
+                }
+                return (
+                  <ContextMenu.Item key={`SubContent/${category}`} onSelect={onSelect}>
+                    <ContextMenu.ItemTitle>{category}</ContextMenu.ItemTitle>
+                  </ContextMenu.Item>
+                )
+              })}
+            </>
+            <ContextMenu.Item
+              key={`SubContent/CreateNewCategory`}
+              onSelect={useCallback(() => {
+                // create new category
+                const subscription = getSubscription(id)
+                if (!subscription) return
+                Alert.prompt(
+                  "Create New Category",
+                  "Enter the name of the new category",
+                  (text) => {
+                    subscriptionSyncService.edit({
+                      ...subscription,
+                      category: text,
+                    })
+                  },
+                )
+              }, [id])}
+            >
+              <ContextMenu.ItemTitle>Create New Category</ContextMenu.ItemTitle>
+              <ContextMenu.ItemIcon ios={{ name: "plus" }} />
+            </ContextMenu.Item>
+          </ContextMenu.SubContent>
+        </ContextMenu.Sub>
+
+        <ContextMenu.Item key="Edit">
+          <ContextMenu.ItemTitle>Edit</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+
+        <ContextMenu.Item
+          key="CopyLink"
+          onSelect={useCallback(() => {
             const subscription = getSubscription(id)
             if (!subscription) return
 
@@ -148,12 +107,19 @@ export const SubscriptionFeedItemContextMenu: FC<
                 const feed = getFeed(subscription.feedId)
                 if (!feed) return
                 Clipboard.setString(feed.url)
+                toast.info("Link copied to clipboard")
                 return
               }
             }
-            break
-          }
-          case FeedItemActionKey.UNSUBSCRIBE: {
+          }, [id])}
+        >
+          <ContextMenu.ItemTitle>Copy Link</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+
+        <ContextMenu.Item
+          key="Unsubscribe"
+          destructive
+          onSelect={useCallback(() => {
             // unsubscribe
             Alert.alert("Unsubscribe?", "This will remove the feed from your subscriptions", [
               {
@@ -168,112 +134,67 @@ export const SubscriptionFeedItemContextMenu: FC<
                 },
               },
             ])
-
-            break
-          }
-        }
-
-        if (item.actionKey.startsWith(FeedItemActionKey.ADD_TO_CATEGORY)) {
-          const category = item.actionKey.split(":")[1]
-          if (!category) return
-
-          const subscription = getSubscription(id)
-
-          if (!subscription) return
-
-          // add to category
-          subscriptionSyncService.edit({
-            ...subscription,
-            category,
-          })
-        }
-      }}
-    >
-      {children}
-    </ContextMenu>
+          }, [id])}
+        >
+          <ContextMenu.ItemTitle>Unsubscribe</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }
 
-export const SubscriptionFeedCategoryContextMenu: FC<
-  {
-    category: string
-    feedIds: string[]
-    view: FeedViewType
-  } & PropsWithChildren
-> = ({ category: _, feedIds, view: currentView, children }) => {
+export const SubscriptionFeedCategoryContextMenu = ({
+  category: _,
+  feedIds,
+  view: currentView,
+  children,
+}: PropsWithChildren<{
+  category: string
+  feedIds: string[]
+  view: FeedViewType
+}>) => {
   return (
-    <ContextMenu
-      config={{
-        items: [
-          {
-            title: "Mark All As Read",
-            actionKey: FeedItemActionKey.MARK_ALL_AS_READ,
-          },
-          {
-            title: "Change To Other View",
-            actionKey: FeedItemActionKey.CHANGE_TO_OTHER_VIEW,
-            subMenu: {
-              title: "Change To Other View",
-              items: views.map((view) => ({
-                title: view.name,
-                actionKey: changeViewActionKeyMapping[view.view],
-                checked: view.view === currentView,
-              })),
-            },
-          },
-          {
-            title: "Edit Category",
-            actionKey: FeedItemActionKey.EDIT,
-          },
-          {
-            title: "Delete Category",
-            actionKey: FeedItemActionKey.DELETE,
-            destructive: true,
-          },
-        ],
-      }}
-      onPressMenuItem={(item) => {
-        switch (item.actionKey) {
-          case FeedItemActionKey.MARK_ALL_AS_READ: {
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
+
+      <ContextMenu.Content>
+        <ContextMenu.Item
+          key="MarkAllAsRead"
+          onSelect={useCallback(() => {
             unreadSyncService.markAsReadMany(feedIds)
-            break
-          }
-          case ChangeToOtherViewActionKey.ARTICLE: {
-            // TODO: change to article view
-            break
-          }
-          case ChangeToOtherViewActionKey.SOCIAL: {
-            // TODO: change to social view
-            break
-          }
-          case ChangeToOtherViewActionKey.PICTURE: {
-            // TODO: change to picture view
-            break
-          }
-          case ChangeToOtherViewActionKey.VIDEO: {
-            // TODO: change to video view
-            break
-          }
-          case ChangeToOtherViewActionKey.NOTIFICATION: {
-            // TODO: change to notification view
-            break
-          }
-          case ChangeToOtherViewActionKey.AUDIO: {
-            // TODO: change to audio view
-            break
-          }
-          case FeedItemActionKey.EDIT: {
-            // TODO: edit category
-            break
-          }
-          case FeedItemActionKey.DELETE: {
-            // TODO: delete category
-            break
-          }
-        }
-      }}
-    >
-      {children}
-    </ContextMenu>
+          }, [feedIds])}
+        >
+          <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+
+        <ContextMenu.Sub key="ChangeToOtherView">
+          <ContextMenu.SubTrigger key="SubTrigger/ChangeToOtherView">
+            <ContextMenu.ItemTitle>Change To Other View</ContextMenu.ItemTitle>
+          </ContextMenu.SubTrigger>
+
+          <ContextMenu.SubContent>
+            {views.map((view) => {
+              const isSelected = view.view === currentView
+              return (
+                <ContextMenu.CheckboxItem
+                  key={`SubContent/${view.name}`}
+                  value={isSelected}
+                  // onSelect={onSelect}
+                >
+                  <ContextMenu.ItemTitle>{view.name}</ContextMenu.ItemTitle>
+                </ContextMenu.CheckboxItem>
+              )
+            })}
+          </ContextMenu.SubContent>
+        </ContextMenu.Sub>
+
+        <ContextMenu.Item key="EditCategory">
+          <ContextMenu.ItemTitle>Edit Category</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+        <ContextMenu.Item key="DeleteCategory" destructive>
+          <ContextMenu.ItemTitle>Delete Category</ContextMenu.ItemTitle>
+        </ContextMenu.Item>
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }

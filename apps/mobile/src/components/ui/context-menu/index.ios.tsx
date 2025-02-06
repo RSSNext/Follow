@@ -10,6 +10,9 @@ import { useColor } from "@/src/theme/colors"
 
 import type { ContextMenuProps, IContextMenuItemConfig } from "./types"
 
+/**
+ * @deprecated Use `zeego/context-menu` instead
+ */
 export const ContextMenu: FC<ContextMenuProps & PropsWithChildren> = ({
   config,
   onPressMenuItem,
