@@ -107,9 +107,10 @@ const config: ForgeConfig = {
 
     prune: true,
     osxSign: {
-      optionsForFile: () => ({
-        entitlements: "build/entitlements.mac.plist",
-      }),
+      // temporarily disabled for https://github.com/electron/osx-sign/issues/346
+      // optionsForFile: () => ({
+      //   entitlements: "build/entitlements.mac.plist",
+      // }),
       keychain: process.env.KEYCHAIN_PATH,
     },
     ...(process.env.APPLE_ID &&
