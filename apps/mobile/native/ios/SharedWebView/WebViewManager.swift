@@ -175,11 +175,9 @@ enum WebViewManager {
         webView.scrollView.backgroundColor = UIColor.clear
         webView.tintColor = accentColor
 
-        #if DEBUG
-            if #available(iOS 16.4, *) {
-                webView.isInspectable = true
-            }
-        #endif
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = true
+        }
 
         setupWebView(webView)
 
