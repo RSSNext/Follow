@@ -5,23 +5,11 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "follow-native": [
-        "src/components/native/webview/index.ts"
-      ],
-      "follow-native/*": [
-        "./native/*"
-      ]
+      "@/*": ["./*"],
+      "follow-native": ["src/components/native/webview/index.ts"],
+      "follow-native/*": ["./native/*"]
     },
     "jsx": "preserve"
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts",
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"]
 }
