@@ -21,6 +21,13 @@ public class SharedWebViewModule: Module {
             }
         }
 
+        Function("evaluateJavaScript") { (js: String) in
+            guard let webView = SharedWebViewModule.sharedWebView else {
+                return
+            }
+            webView.evaluateJavaScript(js)
+        }
+
         View(WebViewView.self) {
             Events("onContentHeightChange")
 
@@ -39,12 +46,11 @@ public class SharedWebViewModule: Module {
         if urlString.starts(with: urlProtocol) {
             let localHtml = self.getLocalHTML(from: urlString)
 
-            debugPrint(localHtml)
             if let localHtml = localHtml {
 
                 webView.loadFileURL(
                     localHtml, allowingReadAccessTo: localHtml.deletingLastPathComponent())
-                debugPrint("load local html", localHtml)
+
                 return
             }
         }
