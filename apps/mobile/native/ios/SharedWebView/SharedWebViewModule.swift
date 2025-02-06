@@ -8,6 +8,8 @@ import ExpoModulesCore
 import WebKit
 
 public class SharedWebViewModule: Module {
+    private var pendingJavaScripts: [String] = []
+
     public static var sharedWebView: WKWebView? {
         WebViewManager.shared
     }
@@ -15,17 +17,14 @@ public class SharedWebViewModule: Module {
     public func definition() -> ModuleDefinition {
         Name("FOSharedWebView")
 
-        Function("preload") { (urlString: String) in
+        Function("load") { (urlString: String) in
             DispatchQueue.main.async {
                 self.load(urlString: urlString)
             }
         }
 
         Function("evaluateJavaScript") { (js: String) in
-            guard let webView = SharedWebViewModule.sharedWebView else {
-                return
-            }
-            webView.evaluateJavaScript(js)
+            WebViewManager.evaluateJavaScript(js)
         }
 
         View(WebViewView.self) {
@@ -34,6 +33,7 @@ public class SharedWebViewModule: Module {
             Prop("url") { (_: UIView, urlString: String) in
                 self.load(urlString: urlString)
             }
+
         }
     }
 

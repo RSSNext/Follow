@@ -13,9 +13,6 @@ class WebViewView: ExpoView {
         addSubview(rctView)
 
         #if DEBUG
-            rctView.borderStyle = .solid
-            rctView.borderWidth = 1
-            rctView.borderColor = .systemBlue
         // var debugButton = DebugButton()
 
         // if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

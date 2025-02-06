@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
     :tvos => '15.1'
   }
   s.swift_version  = '5.4'
-  s.source         = { git: 'https://github.com/Innei/follow-native' }
+  s.source         = { git: 'https://github.com/RSSNext/follow' }
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
@@ -25,5 +25,11 @@ Pod::Spec.new do |s|
     'DEFINES_MODULE' => 'YES',
   }
 
-  s.source_files = "**/*.{h,m,mm,swift,hpp,cpp}"
+  s.source_files = "**/*.{h,m,mm,swift,hpp,cpp,js}"
+  
+  s.resource_bundles = {
+    'js' => ['SharedWebView/injected/**/*'],
+    'FollowNative' => ['Media.xcassets'],
+  }
+
 end

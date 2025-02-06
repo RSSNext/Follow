@@ -6,7 +6,7 @@ import { createElement } from "react"
 import { createRoot } from "react-dom/client"
 
 import { App } from "./App"
-import { isInRn } from "./utilts"
+import { isInRn } from "./utils"
 
 const root = document.querySelector("#root")
 if (root) {

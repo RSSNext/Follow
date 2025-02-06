@@ -5,19 +5,16 @@ import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
 import type { FC } from "react"
 import { Fragment, useState } from "react"
-import { Image as RnImage, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import PagerView from "react-native-pager-view"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
-import WebView from "react-native-webview"
 
-import { FollowWebView } from "@/src/components/common/FollowWebView"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
 } from "@/src/components/common/SafeNavigationScrollView"
-import { SharedWebView } from "@/src/components/native/webview/SharedWebView"
-import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
+import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
@@ -73,38 +70,20 @@ export default function EntryDetailPage() {
   usePrefetchEntryContent(entryId as string)
   const item = useEntry(entryId as string)
 
-  const [height, setHeight] = useState(0)
-
   const insets = useSafeAreaInsets()
   return (
     <BottomTabBarHeightContext.Provider value={insets.bottom}>
-      <SafeNavigationScrollView nestedScrollEnabled className="bg-system-grouped-background">
+      <SafeNavigationScrollView
+        automaticallyAdjustContentInsets={false}
+        className="bg-system-background"
+      >
         <NavigationBlurEffectHeader
           headerShown
           headerRight={HeaderRightActions}
           title={item?.title || "Loading..."}
         />
-        {/* <HtmlWeb
-          content={item?.content || ""}
-          onLayout={async (size) => {
-            if (size[1] !== height) {
-              setHeight(size[1])
-            }
-          }}
-          scrollEnabled={false}
-          dom={{
-            scrollEnabled: false,
-            style: { height },
-            matchContents: true,
-          }}
-        /> */}
-        <SharedWebView url="file://rn-web/html-renderer/index.html" />
-        {/* <View className="bg-red h-[400px]">
-          <FollowWebView customUrl="rn-web/html-renderer/index.html" />
-        </View> */}
-        {/* <SharedWebView url="https://www.baidu.com" /> */}
 
-        {/* {item && <MediaSwipe mediaList={item?.media || []} id={item.id} />} */}
+        {item && <EntryContentWebView entry={item} />}
       </SafeNavigationScrollView>
     </BottomTabBarHeightContext.Provider>
   )

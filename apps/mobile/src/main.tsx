@@ -6,6 +6,7 @@ import { App } from "expo-router/build/qualified-entry"
 import { cssInterop } from "nativewind"
 import { RootSiblingParent } from "react-native-root-siblings"
 
+import { prepareWebView } from "./components/native/webview"
 // import { renderRootComponent } from "expo"
 import { initializeApp } from "./initialize"
 
@@ -15,6 +16,8 @@ initializeApp().then(() => {
   // This file should only import and register the root. No components or exports
   // should be added here.
   // renderRootComponent(App)
+
+  prepareWebView()
 })
 
 const MApp = () => {

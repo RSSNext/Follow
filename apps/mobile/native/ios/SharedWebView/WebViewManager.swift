@@ -59,8 +59,37 @@ private class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
     }
 }
 
+private var pendingJavaScripts: [String] = []
+
+// Add protocol for handling link clicks
+protocol WebViewLinkDelegate: AnyObject {
+    func webView(_ webView: WKWebView, shouldOpenURL url: URL)
+}
+
 enum WebViewManager {
     static let state = WebViewState()
+    static weak var linkDelegate: WebViewLinkDelegate?
+
+    public static func evaluateJavaScript(_ js: String) {
+        DispatchQueue.main.async {
+            guard let webView = SharedWebViewModule.sharedWebView else {
+                pendingJavaScripts.append(js)
+                return
+            }
+            guard webView.url != nil else {
+                pendingJavaScripts.append(js)
+                return
+            }
+
+            if webView.isLoading {
+                pendingJavaScripts.append(js)
+            } else {
+                webView.evaluateJavaScript(js)
+            }
+
+        }
+
+    }
 
     static private(set) var shared: WKWebView = {
         let configuration = WKWebViewConfiguration()
@@ -92,7 +121,17 @@ enum WebViewManager {
             forMainFrameOnly: true
         )
 
-        configuration.userContentController.addUserScript(script)
+        let jsString = loadInjectedJs(forResource: "at_start")
+
+        if let jsString = jsString {
+            let script = WKUserScript(
+                source: jsString,
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: true
+            )
+            configuration.userContentController.addUserScript(script)
+        }
+
         configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
 
         let schemeHandler = CustomURLSchemeHandler()
@@ -130,7 +169,12 @@ enum WebViewManager {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.bounces = false
-        webView.tintColor = .init(named: "Accent")
+
+        webView.isOpaque = false
+        webView.backgroundColor = UIColor.clear
+        webView.scrollView.backgroundColor = UIColor.clear
+        webView.tintColor = accentColor
+
         #if DEBUG
             if #available(iOS 16.4, *) {
                 webView.isInspectable = true
@@ -143,25 +187,25 @@ enum WebViewManager {
     }()
 
     private static func setupWebView(_ webView: WKWebView) {
-        let delegate = WebViewDelegate(state: state)
+        let viewController = UIApplication.shared.keyWindow?.rootViewController
+        let delegate = WebViewDelegate(state: state, viewController: viewController)
         webView.navigationDelegate = delegate
+        webView.uiDelegate = delegate
 
+        let jsString = self.loadInjectedJs(forResource: "at_end")
+        guard let jsString = jsString else {
+            print("Failed to load injected js")
+            return
+        }
         let script = WKUserScript(
-            source: """
-                    window.addEventListener('load', function() {
-                        window.webkit.messageHandlers.contentHeight.postMessage(document.documentElement.scrollHeight);
-                    });
-                    const observer = new ResizeObserver(function() {
-                        window.webkit.messageHandlers.contentHeight.postMessage(document.documentElement.scrollHeight);
-                    });
-                    observer.observe(document.documentElement);
-                """,
+            source: jsString,
             injectionTime: .atDocumentEnd,
             forMainFrameOnly: true
         )
 
         webView.configuration.userContentController.addUserScript(script)
         webView.configuration.userContentController.add(delegate, name: "contentHeight")
+        webView.configuration.userContentController.add(delegate, name: "measure")
     }
 
     static func resetWebView() {
@@ -169,14 +213,43 @@ enum WebViewManager {
         setupWebView(newWebView)
         shared = newWebView
     }
+
+    private static func loadInjectedJs(forResource: String) -> String? {
+        if let bundleURL = Bundle(for: WebViewView.self).url(
+            forResource: "js", withExtension: "bundle"),
+            let resourceBundle = Bundle(url: bundleURL)
+        {
+
+            if let initJsPath = resourceBundle.path(forResource: "init", ofType: "js") {
+                do {
+                    let initJsContent = try String(contentsOfFile: initJsPath, encoding: .utf8)
+
+                    return initJsContent
+                } catch {
+                    print("Error reading JS file:", error)
+                }
+            }
+
+        }
+        return nil
+    }
+
+    static func presentModalWebView(url: URL, from viewController: UIViewController) {
+        let modalVC = ModalWebViewController(url: url)
+        let navController = UINavigationController(rootViewController: modalVC)
+        navController.modalPresentationStyle = .fullScreen
+        viewController.present(navController, animated: true)
+    }
 }
 
-// MARK: - WebViewState
-private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate
+{
     private let state: WebViewState
+    private weak var viewController: UIViewController?
 
-    init(state: WebViewState) {
+    init(state: WebViewState, viewController: UIViewController?) {
         self.state = state
+        self.viewController = viewController
         super.init()
     }
 
@@ -188,16 +261,67 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
                 self.state.contentHeight = height
             }
         }
+
+        if message.name == "measure" {
+            guard let webView = SharedWebViewModule.sharedWebView else { return }
+            self.measureWebView(webView)
+        }
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        webView.evaluateJavaScript("document.documentElement.scrollHeight") { (height, error) in
-            if let height = height as? CGFloat {
+    private func measureWebView(_ webView: WKWebView) {
+        let jsCode = "document.querySelector('#root').scrollHeight"
+        webView.evaluateJavaScript(jsCode) { (height, error) in
+            if let height = height as? CGFloat, height > 0 {
                 DispatchQueue.main.async {
                     self.state.contentHeight = height
+                    debugPrint("measure", height)
                 }
             }
         }
     }
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        measureWebView(webView)
 
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
+            self?.measureWebView(webView)
+        }
+
+        for js in pendingJavaScripts {
+            webView.evaluateJavaScript(js) { (_, error) in
+                if let error = error {
+                    print("Error evaluating JavaScript:", error)
+                }
+            }
+        }
+        pendingJavaScripts.removeAll()
+
+    }
+
+    func webView(
+        _ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
+        for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures
+    ) -> WKWebView? {
+        if let url = navigationAction.request.url,
+            let viewController = self.viewController
+        {
+            WebViewManager.presentModalWebView(url: url, from: viewController)
+        }
+        return nil
+    }
+
+    func webView(
+        _ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
+        if navigationAction.targetFrame == nil {
+            if let url = navigationAction.request.url,
+                let viewController = self.viewController
+            {
+                WebViewManager.presentModalWebView(url: url, from: viewController)
+                decisionHandler(.cancel)
+                return
+            }
+        }
+        decisionHandler(.allow)
+    }
 }

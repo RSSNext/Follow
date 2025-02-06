@@ -10,6 +10,7 @@
   "dependencies": {
     "@follow/components": "workspace:*",
     "@follow/types": "workspace:*",
-    "clsx": "2.1.1"
+    "clsx": "2.1.1",
+    "jotai": "2.11.3"
   }
 }
