@@ -4,12 +4,12 @@ import { router } from "expo-router"
 import type { FC } from "react"
 import { memo, useMemo } from "react"
 import { Clipboard, Text, TouchableOpacity, View } from "react-native"
+import WebView from "react-native-webview"
 import * as ContextMenu from "zeego/context-menu"
 
-import SharedWebView from "@/native/src/SharedWebView"
 import { Grid } from "@/src/components/ui/grid"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { useOpenLink } from "@/src/lib/hooks/use-open-link"
+import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 
 import { RSSHubCategoryCopyMap } from "./copy"
@@ -18,7 +18,6 @@ export const RecommendationListItem: FC<{
   data: RSSHubRouteDeclaration
   routePrefix: string
 }> = memo(({ data, routePrefix }) => {
-  const openLink = useOpenLink()
   const { maintainers, categories } = useMemo(() => {
     const maintainers = new Set<string>()
     const categories = new Set<string>()
@@ -57,8 +56,7 @@ export const RecommendationListItem: FC<{
 
               <ContextMenu.Content>
                 <ContextMenu.Preview>
-                  {/* {() => <WebView source={{ uri: `https://github.com/${m}` }} />} */}
-                  {() => <SharedWebView url={`https://github.com/${m}`} />}
+                  {() => <WebView source={{ uri: `https://github.com/${m}` }} />}
                 </ContextMenu.Preview>
 
                 <ContextMenu.Item
