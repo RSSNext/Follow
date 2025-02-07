@@ -20,33 +20,14 @@ interface EntryModel {
 const store = createStore()
 const entryAtom = atom<EntryModel | null>(null)
 
-declare global {
-  interface Window {
-    webkit: {
-      messageHandlers: Record<
-        string,
-        {
-          postMessage: (message?: string) => void
-        }
-      >
-    }
-  }
-}
-
-const birdage = {
-  measure() {
-    window.webkit.messageHandlers?.measure?.postMessage?.()
-  },
-}
-
 Object.assign(window, {
   setEntry(entry: EntryModel) {
     store.set(entryAtom, entry)
-    birdage.measure()
+    window.webkit.measure()
   },
   reset() {
     store.set(entryAtom, null)
-    birdage.measure()
+    window.webkit.measure()
   },
 })
 

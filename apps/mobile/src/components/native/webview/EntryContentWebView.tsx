@@ -1,3 +1,4 @@
+import { clsx } from "@follow/utils"
 import { Portal } from "@gorhom/portal"
 import { requireNativeView } from "expo"
 import * as React from "react"
@@ -11,7 +12,7 @@ import { htmlUrl } from "./constants"
 
 const NativeView: React.ComponentType<{
   onContentHeightChange?: (e: { nativeEvent: { height: number } }) => void
-  url: string
+  url?: string
 }> = requireNativeView("FOSharedWebView")
 
 type EntryContentWebViewProps = {
@@ -24,18 +25,21 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
   const { entry } = props
 
   const [mode, setMode] = React.useState<"normal" | "debug">("normal")
-
   React.useEffect(() => {
-    if (mode === "debug") {
-      SharedWebViewModule.load("http://localhost:5173/")
-    } else {
-      prepareWebView()
-    }
-  }, [mode])
+    SharedWebViewModule.evaluateJavaScript(
+      `setEntry(JSON.parse(${JSON.stringify(JSON.stringify(entry))}))`,
+    )
+  }, [entry])
 
+  const onceRef = React.useRef(false)
+  if (!onceRef.current) {
+    onceRef.current = true
+    prepareWebView()
+  }
   return (
     <>
       <View
+        key={mode}
         style={{ height: contentHeight, transform: [{ translateY: 0 }] }}
         onLayout={() => {
           SharedWebViewModule.evaluateJavaScript(
@@ -47,29 +51,29 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
           onContentHeightChange={(e) => {
             setContentHeight(e.nativeEvent.height)
           }}
-          url={htmlUrl}
         />
       </View>
 
-      <View className="bg-red h-24" />
       {__DEV__ && (
         <Portal>
           <View className="absolute left-4 flex-row gap-4 bottom-safe-offset-2">
             <TouchableOpacity
-              className="bg-yellow flex size-12 items-center justify-center rounded-full"
+              className={clsx(
+                "flex size-12 items-center justify-center rounded-full",
+                mode === "debug" ? "bg-yellow" : "bg-red",
+              )}
               onPress={() => {
-                setMode((prev) => (prev === "normal" ? "debug" : "normal"))
+                const nextMode = mode === "debug" ? "normal" : "debug"
+                setMode(nextMode)
+                if (nextMode === "debug") {
+                  SharedWebViewModule.load("http://localhost:5173/")
+                } else {
+                  SharedWebViewModule.load(htmlUrl)
+                }
               }}
             >
-              <BugCuteReIcon />
+              <BugCuteReIcon color="#fff" />
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-              className="bg-yellow flex size-12 items-center justify-center rounded-full"
-              onPress={() => {}}
-            >
-              <Refresh2CuteReIcon />
-            </TouchableOpacity> */}
           </View>
         </Portal>
       )}

@@ -47,9 +47,12 @@ public class SharedWebViewModule: Module {
             let localHtml = self.getLocalHTML(from: urlString)
 
             if let localHtml = localHtml {
-
                 webView.loadFileURL(
-                    localHtml, allowingReadAccessTo: localHtml.deletingLastPathComponent())
+                    localHtml,
+                    allowingReadAccessTo: localHtml.deletingLastPathComponent()
+                )
+
+                debugPrint("load local html: \(localHtml.absoluteString)")
 
                 return
             }
@@ -59,6 +62,7 @@ public class SharedWebViewModule: Module {
             if url == webView.url {
                 return
             }
+            debugPrint("load remote html: \(url.absoluteString)")
             webView.load(URLRequest(url: url))
         }
     }

@@ -8,57 +8,6 @@ import Combine
 import ExpoModulesCore
 import WebKit
 
-private let rewriteScheme = "follow-xhr"
-private class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
-    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
-        guard let url = urlSchemeTask.request.url,
-            let originalURLString = url.absoluteString.replacingOccurrences(
-                of: rewriteScheme, with: "https"
-            ).removingPercentEncoding,
-            let originalURL = URL(string: originalURLString)
-        else {
-            urlSchemeTask.didFailWithError(NSError(domain: "", code: -1))
-            return
-        }
-
-        var request = URLRequest(url: originalURL)
-
-        request.httpMethod = urlSchemeTask.request.httpMethod
-        request.httpBody = urlSchemeTask.request.httpBody
-
-        // setting headers
-        var headers = urlSchemeTask.request.allHTTPHeaderFields ?? [:]
-        if let urlComponents = URLComponents(url: originalURL, resolvingAgainstBaseURL: false),
-            let scheme = urlComponents.scheme,
-            let host = urlComponents.host
-        {
-            let origin = "\(scheme)://\(host)\(urlComponents.port.map { ":\($0)" } ?? "")"
-            headers["Referer"] = origin
-            headers["Origin"] = origin
-
-        }
-        request.allHTTPHeaderFields = headers
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                urlSchemeTask.didFailWithError(error)
-                return
-            }
-
-            if let response = response as? HTTPURLResponse, let data = data {
-                urlSchemeTask.didReceive(response)
-                urlSchemeTask.didReceive(data)
-                urlSchemeTask.didFinish()
-            }
-        }
-        task.resume()
-    }
-
-    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
-
-    }
-}
-
 private var pendingJavaScripts: [String] = []
 
 // Add protocol for handling link clicks
@@ -93,10 +42,9 @@ enum WebViewManager {
 
     static private(set) var shared: WKWebView = {
         let configuration = WKWebViewConfiguration()
-        let bundle = Bundle(for: WebViewView.self)
-        let accentColor =
-            UIColor(named: "Accent", in: bundle, compatibleWith: nil) ?? UIColor.systemBlue
-        let hexAccentColor = accentColor.toHex()
+        let bundle = Utils.bundle
+
+        let hexAccentColor = Utils.accentColor.toHex()
         let css = """
                 :root { overflow: hidden !important; overflow-behavior: none !important; }
                 body { 
@@ -135,27 +83,28 @@ enum WebViewManager {
         configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
 
         let schemeHandler = CustomURLSchemeHandler()
-        configuration.setURLSchemeHandler(schemeHandler, forURLScheme: rewriteScheme)
+        configuration.setURLSchemeHandler(
+            schemeHandler, forURLScheme: CustomURLSchemeHandler.rewriteScheme)
 
         let customSchemeScript = WKUserScript(
             source: """
                 (function() {
                     const originalXHROpen = XMLHttpRequest.prototype.open;
                     XMLHttpRequest.prototype.open = function(method, url, ...args) {
-                        const modifiedUrl = url.replace(/^https?:/, '\(rewriteScheme):');
+                        const modifiedUrl = url.replace(/^https?:/, '\(CustomURLSchemeHandler.rewriteScheme):');
                         originalXHROpen.call(this, method, modifiedUrl, ...args);
                     };
 
                     const originalFetch = window.fetch;
                     window.fetch = function(url, options) {
-                        const modifiedUrl = url.replace(/^https?:/, '\(rewriteScheme):');
+                        const modifiedUrl = url.replace(/^https?:/, '\(CustomURLSchemeHandler.rewriteScheme):');
                         return originalFetch(modifiedUrl, options);
                     };
 
                     const originalImageSrc = Object.getOwnPropertyDescriptor(Image.prototype, 'src');
                     Object.defineProperty(Image.prototype, 'src', {
                         set: function(url) {
-                            const modifiedUrl = url.replace(/^https?:/, '\(rewriteScheme):');
+                            const modifiedUrl = url.replace(/^https?:/, '\(CustomURLSchemeHandler.rewriteScheme):');
                             originalImageSrc.set.call(this, modifiedUrl);
                         }
                     });
@@ -166,19 +115,7 @@ enum WebViewManager {
         )
         configuration.userContentController.addUserScript(customSchemeScript)
 
-      let webView = WKWebView(frame: .zero, configuration: configuration)
-        webView.scrollView.isScrollEnabled = false
-        webView.scrollView.bounces = false
-      webView.scrollView.contentInsetAdjustmentBehavior = .never
-
-        webView.isOpaque = false
-        webView.backgroundColor = UIColor.clear
-        webView.scrollView.backgroundColor = UIColor.clear
-        webView.tintColor = accentColor
-
-        if #available(iOS 16.4, *) {
-            webView.isInspectable = true
-        }
+        let webView = FOWebView(frame: .zero, configuration: configuration)
 
         setupWebView(webView)
 
@@ -202,9 +139,8 @@ enum WebViewManager {
             forMainFrameOnly: true
         )
 
+        webView.configuration.userContentController.add(delegate, name: "message")
         webView.configuration.userContentController.addUserScript(script)
-        webView.configuration.userContentController.add(delegate, name: "contentHeight")
-        webView.configuration.userContentController.add(delegate, name: "measure")
     }
 
     static func resetWebView() {
@@ -219,9 +155,9 @@ enum WebViewManager {
             let resourceBundle = Bundle(url: bundleURL)
         {
 
-            if let initJsPath = resourceBundle.path(forResource: "init", ofType: "js") {
+            if let jsPath = resourceBundle.path(forResource: forResource, ofType: "js") {
                 do {
-                    let initJsContent = try String(contentsOfFile: initJsPath, encoding: .utf8)
+                    let initJsContent = try String(contentsOfFile: jsPath, encoding: .utf8)
 
                     return initJsContent
                 } catch {
@@ -255,15 +191,43 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
     func userContentController(
         _ userContentController: WKUserContentController, didReceive message: WKScriptMessage
     ) {
-        if message.name == "contentHeight", let height = message.body as? CGFloat {
-            DispatchQueue.main.async {
-                self.state.contentHeight = height
-            }
-        }
+        // if message.name == "contentHeight", let height = message.body as? CGFloat {
+        //     DispatchQueue.main.async {
+        //         self.state.contentHeight = height
+        //     }
+        // }
 
-        if message.name == "measure" {
-            guard let webView = SharedWebViewModule.sharedWebView else { return }
-            self.measureWebView(webView)
+        // if message.name == "measure" {
+        //     guard let webView = SharedWebViewModule.sharedWebView else { return }
+        //     self.measureWebView(webView)
+        // }
+        print("message", message.body)
+        if message.name == "message" {
+            let body = message.body
+
+            if let jsonString = body as? String, let decode = jsonString.data(using: .utf8) {
+                let data = try? JSONDecoder().decode(BridgeDataBasePayload.self, from: decode)
+                guard let data = data else { return }
+
+                switch data.type {
+                case "setContentHeight":
+                    let data = try? JSONDecoder().decode(
+                        SetContentHeightPayload.self, from: decode)
+                    guard let data = data else { return }
+
+                    DispatchQueue.main.async {
+                        self.state.contentHeight = data.payload
+                    }
+
+                case "measure":
+                    self.measureWebView(SharedWebViewModule.sharedWebView!)
+
+                default:
+                    break
+                }
+
+            }
+
         }
     }
 
@@ -278,6 +242,7 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
             }
         }
     }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         measureWebView(webView)
 

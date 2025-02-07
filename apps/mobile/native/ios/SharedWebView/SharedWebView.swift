@@ -12,16 +12,6 @@ class WebViewView: ExpoView {
         super.init(appContext: appContext)
         addSubview(rctView)
 
-        #if DEBUG
-        // var debugButton = DebugButton()
-
-        // if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-        //     let window = scene.windows.first
-        // {
-        //   window.addSubview(debugButton)
-        //   debugButton.setupConstraints(in: window)
-        // }
-        #endif
         rctView.addSubview(SharedWebViewModule.sharedWebView!)
 
         clipsToBounds = true
@@ -46,10 +36,9 @@ class WebViewView: ExpoView {
             width: bounds.width,
             height: WebViewManager.state.contentHeight
         )
-      guard let webView = SharedWebViewModule.sharedWebView else {return }
-      webView.frame = rect
-      webView.scrollView.frame = rect
-       
+        guard let webView = SharedWebViewModule.sharedWebView else { return }
+        webView.frame = rect
+        webView.scrollView.frame = rect
 
         frame = rect
         rctView.frame = rect
@@ -57,58 +46,3 @@ class WebViewView: ExpoView {
 
     }
 }
-
-#if DEBUG
-    class DebugButton: UIButton {
-        override init(frame: CGRect) {
-            super.init(frame: CGRect(x: 10, y: 0, width: 0, height: 30))
-            setupButton()
-        }
-
-        required init?(coder: NSCoder) {
-            super.init(coder: coder)
-            setupButton()
-        }
-      
-        private func setupButton() {
-            setTitle("Online", for: .normal)
-            backgroundColor = .systemGreen
-            layer.cornerRadius = 15
-            layer.zPosition = 999
-
-            addTarget(self, action: #selector(buttonTouchDown), for: .touchDown)
-            addTarget(
-                self, action: #selector(buttonTouchUp),
-                for: [.touchUpInside, .touchUpOutside, .touchCancel])
-            addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        }
-
-        func setupConstraints(in window: UIWindow) {
-            snp.makeConstraints { make in
-                make.left.equalTo(window).offset(10)
-                make.bottom.equalTo(window.safeAreaLayoutGuide).offset(-10)
-                make.width.equalTo(80)
-                make.height.equalTo(30)
-            }
-        }
-
-        @objc private func buttonTouchDown() {
-            UIView.animate(withDuration: 0.1) {
-                self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                self.alpha = 0.9
-            }
-        }
-
-        @objc private func buttonTouchUp() {
-            UIView.animate(withDuration: 0.1) {
-                self.transform = .identity
-                self.alpha = 1.0
-            }
-        }
-
-        @objc private func buttonPressed() {
-            print("Button pressed!")
-        }
-    }
-
-#endif

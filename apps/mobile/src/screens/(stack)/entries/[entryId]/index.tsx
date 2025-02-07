@@ -1,3 +1,4 @@
+import { PortalProvider } from "@gorhom/portal"
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import type { AVPlaybackStatus } from "expo-av"
 import { Video } from "expo-av"
@@ -73,20 +74,22 @@ export default function EntryDetailPage() {
   const insets = useSafeAreaInsets()
 
   return (
-    <BottomTabBarHeightContext.Provider value={insets.bottom}>
-      <SafeNavigationScrollView
-        automaticallyAdjustContentInsets={false}
-        className="bg-system-background"
-      >
-        <NavigationBlurEffectHeader
-          headerShown
-          headerRight={HeaderRightActions}
-          title={item?.title || "Loading..."}
-        />
+    <PortalProvider>
+      <BottomTabBarHeightContext.Provider value={insets.bottom}>
+        <SafeNavigationScrollView
+          automaticallyAdjustContentInsets={false}
+          className="bg-system-background"
+        >
+          <NavigationBlurEffectHeader
+            headerShown
+            headerRight={HeaderRightActions}
+            title={item?.title || "Loading..."}
+          />
 
-        {item && <EntryContentWebView entry={item} />}
-      </SafeNavigationScrollView>
-    </BottomTabBarHeightContext.Provider>
+          {item && <EntryContentWebView entry={item} />}
+        </SafeNavigationScrollView>
+      </BottomTabBarHeightContext.Provider>
+    </PortalProvider>
   )
 }
 
