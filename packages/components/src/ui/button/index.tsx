@@ -52,7 +52,7 @@ export const Button = React.forwardRef<
         buttonClassName?: string
       }
   >
->(({ className, buttonClassName, disabled, isLoading, variant, status, ...props }, ref) => {
+>(({ className, buttonClassName, disabled, isLoading, variant, status, size, ...props }, ref) => {
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
     (e) => {
       if (isLoading || disabled) {
@@ -71,6 +71,7 @@ export const Button = React.forwardRef<
         styledButtonVariant({
           variant,
           status: isLoading || disabled ? "disabled" : undefined,
+          size,
         }),
         className,
         buttonClassName,

@@ -36,7 +36,6 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
       password: "",
     },
   })
-  const { isValid } = form.formState
 
   const { present } = useModalStack()
   const { dismiss } = useCurrentModal()
@@ -96,7 +95,17 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
           name="password"
           render={({ field }) => (
             <FormItem className="mt-4">
-              <FormLabel>{t("login.password")}</FormLabel>
+              <FormLabel className="flex items-center justify-between">
+                <span>{t("login.password")}</span>
+                <a
+                  href={`${env.VITE_WEB_URL}/forget-password`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block py-1 text-xs text-accent hover:underline"
+                >
+                  {t("login.forget_password.note")}
+                </a>
+              </FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -104,26 +113,19 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
             </FormItem>
           )}
         />
-        <a
-          href={`${env.VITE_WEB_URL}/forget-password`}
-          target="_blank"
-          rel="noreferrer"
-          className="block py-1 text-xs text-accent hover:underline"
-        >
-          {t("login.forget_password.note")}
-        </a>
         <Button
           type="submit"
-          buttonClassName="text-base !mt-3 w-full"
-          disabled={!isValid}
+          buttonClassName="!mt-3 w-full"
           isLoading={form.formState.isSubmitting}
+          size="lg"
         >
           {t("login.continueWith", { provider: t("words.email") })}
         </Button>
         <Button
-          buttonClassName="!mt-3 text-base"
+          buttonClassName="!mt-3"
           className="w-full"
           variant="outline"
+          size="lg"
           onClick={() => {
             dismiss()
             present({
@@ -224,7 +226,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
-          <Button disabled={!isValid} type="submit" className="w-full">
+          <Button disabled={!isValid} type="submit" className="w-full" size="lg">
             {t("register.submit")}
           </Button>
         </form>
