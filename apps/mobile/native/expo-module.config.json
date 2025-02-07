@@ -1,7 +1,7 @@
 {
   "platforms": ["apple", "android"],
   "apple": {
-    "modules": ["SharedWebViewModule"]
+    "modules": ["SharedWebViewModule", "HelperModule"]
   },
   "android": {
     "modules": []

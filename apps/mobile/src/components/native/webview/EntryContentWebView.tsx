@@ -2,7 +2,7 @@ import { clsx } from "@follow/utils"
 import { Portal } from "@gorhom/portal"
 import { requireNativeView } from "expo"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import type { EntryModel } from "@/src/store/entry/types"
@@ -36,6 +36,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
     onceRef.current = true
     prepareWebView()
   }
+
   return (
     <>
       <View
@@ -54,6 +55,13 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
         />
       </View>
 
+      <Portal>
+        {!entry.content && (
+          <View className="absolute inset-0 items-center justify-center">
+            <ActivityIndicator size={"large"} />
+          </View>
+        )}
+      </Portal>
       {__DEV__ && (
         <Portal>
           <View className="absolute left-4 flex-row gap-4 bottom-safe-offset-2">

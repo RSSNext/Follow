@@ -191,17 +191,7 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
     func userContentController(
         _ userContentController: WKUserContentController, didReceive message: WKScriptMessage
     ) {
-        // if message.name == "contentHeight", let height = message.body as? CGFloat {
-        //     DispatchQueue.main.async {
-        //         self.state.contentHeight = height
-        //     }
-        // }
-
-        // if message.name == "measure" {
-        //     guard let webView = SharedWebViewModule.sharedWebView else { return }
-        //     self.measureWebView(webView)
-        // }
-        print("message", message.body)
+        debugPrint("message", message.body)
         if message.name == "message" {
             let body = message.body
 

@@ -42,10 +42,7 @@ class ModalWebViewController: UIViewController {
             target: self,
             action: #selector(openInSafari)
         )
-        let bundle = Bundle(for: ModalWebViewController.self)
-        let accentColor =
-            UIColor(named: "Accent", in: bundle, compatibleWith: nil) ?? UIColor.systemBlue
-        safariButton.tintColor = accentColor
+        safariButton.tintColor = Utils.accentColor
 
         navigationItem.leftBarButtonItem = closeButton
         navigationItem.rightBarButtonItem = safariButton

@@ -33,7 +33,6 @@ public class SharedWebViewModule: Module {
             Prop("url") { (_: UIView, urlString: String) in
                 self.load(urlString: urlString)
             }
-
         }
     }
 

@@ -4,7 +4,7 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { router, Stack, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useEffect, useMemo, useRef } from "react"
-import type { ScrollViewProps } from "react-native"
+import type { ScrollView, ScrollViewProps } from "react-native"
 import {
   Animated as RNAnimated,
   StyleSheet,
@@ -35,6 +35,15 @@ export const NavigationContext = createContext<{
   scrollY: RNAnimated.Value
 } | null>(null)
 
+const ScrollViewContext = createContext<React.RefObject<ScrollView>>(null!)
+
+export const useSafeNavigationScrollView = () => {
+  const scrollViewRef = useContext(ScrollViewContext)
+  if (!scrollViewRef) {
+    throw new Error("useSafeNavigationScrollView must be used within a SafeNavigationScrollView")
+  }
+  return scrollViewRef
+}
 export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   children,
 
@@ -51,18 +60,22 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   const headerHeight = useHeaderHeight()
 
   const scrollY = useAnimatedValue(0)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       {withHeaderBlur && <NavigationBlurEffectHeader />}
       <AnimatedScrollView
+        ref={scrollViewRef}
         onScroll={RNAnimated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
           useNativeDriver: true,
         })}
         {...props}
       >
         <View style={{ height: headerHeight - (withTopInset ? insets.top : 0) }} />
-        <View>{children}</View>
+        <ScrollViewContext.Provider value={scrollViewRef}>
+          <View>{children}</View>
+        </ScrollViewContext.Provider>
         <View style={{ height: tabBarHeight - (withBottomInset ? insets.bottom : 0) }} />
       </AnimatedScrollView>
     </NavigationContext.Provider>

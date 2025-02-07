@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import UIKit
 
-class Noop {}
+private class Noop {}
+
 enum Utils {
   static let bundle = Bundle(for: Noop.self)
   static let accentColor =
-      UIColor(named: "Accent", in: bundle, compatibleWith: nil) ?? UIColor.systemBlue
+    UIColor(named: "Accent", in: bundle, compatibleWith: nil) ?? UIColor.systemBlue
+
 }

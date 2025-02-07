@@ -15,7 +15,6 @@ class WebViewView: ExpoView {
         rctView.addSubview(SharedWebViewModule.sharedWebView!)
 
         clipsToBounds = true
-
         cancellable = WebViewManager.state.$contentHeight
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
