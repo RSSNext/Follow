@@ -18,7 +18,18 @@ public class HelperModule: Module {
         guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
         WebViewManager.presentModalWebView(url: url, from: rootVC)
       }
+    }
 
+    Function("previewImage") { (images: [String]) in
+      let imagesData: [Data] =
+        images.compactMap { image in
+          let url = URL(string: image)
+          let data = try? Data(contentsOf: url!)
+          return data
+        }
+      DispatchQueue.main.async {
+        ImagePreview.quickLookImage(imagesData)
+      }
     }
   }
 }

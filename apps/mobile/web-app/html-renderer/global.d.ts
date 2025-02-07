@@ -5,12 +5,11 @@ import "../../../../packages/types/global"
 interface Bridge {
   measure: () => void
   setContentHeight: (height: number) => void
+  previewImage: (base64: string[]) => void
 }
 
 declare global {
-  interface Window {
-    webkit: Bridge
-  }
+  export const bridge: Bridge
 }
 
 export {}

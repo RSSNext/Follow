@@ -18,3 +18,8 @@ struct SetContentHeightPayload: Hashable, Codable, BasePayload {
 struct BridgeDataBasePayload: Hashable, Codable {
   var type: String
 }
+
+struct PreviewImagePayload: Hashable, Codable, BasePayload {
+  var type: String
+  var payload: [String]
+}

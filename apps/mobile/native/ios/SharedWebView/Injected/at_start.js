@@ -11,7 +11,7 @@
     window.webkit.messageHandlers.message.postMessage?.(JSON.stringify(data))
   }
 
-  Object.assign(window.webkit, {
+  window.bridge = {
     measure: () => {
       send({
         type: "measure",
@@ -23,5 +23,11 @@
         payload: height,
       })
     },
-  })
+    previewImage: (base64) => {
+      send({
+        type: "previewImage",
+        payload: base64,
+      })
+    },
+  }
 })()

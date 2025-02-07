@@ -23,11 +23,11 @@ const entryAtom = atom<EntryModel | null>(null)
 Object.assign(window, {
   setEntry(entry: EntryModel) {
     store.set(entryAtom, entry)
-    window.webkit.measure()
+    bridge.measure()
   },
   reset() {
     store.set(entryAtom, null)
-    window.webkit.measure()
+    bridge.measure()
   },
 })
 

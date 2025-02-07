@@ -5,6 +5,7 @@ import type { Components } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 
 import { createHeadingRenderer, MarkdownLink, MarkdownP } from "./components"
+import { MarkdownImage } from "./components/image"
 import { Math } from "./components/math"
 
 const Style: Components["style"] = ({ node, ...props }) => {
@@ -51,6 +52,9 @@ export const parseHtml = (
         return createHeadingRenderer(6)(props)
       },
       style: Style,
+      img: ({ node, ...props }) => {
+        return createElement(MarkdownImage, props as any)
+      },
 
       p: ({ node, ...props }) => {
         if (node?.children && node.children.length !== 1) {

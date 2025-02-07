@@ -212,6 +212,16 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
                 case "measure":
                     self.measureWebView(SharedWebViewModule.sharedWebView!)
 
+                case "previewImage":
+                    let data = try? JSONDecoder().decode(
+                        PreviewImagePayload.self, from: decode)
+
+                    guard let data = data else { return }
+                    DispatchQueue.main.async {
+                        ImagePreview.quickLookImage(
+                            data.payload.compactMap { Data(base64Encoded: $0) })
+                    }
+
                 default:
                     break
                 }
