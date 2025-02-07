@@ -27,11 +27,6 @@ import { Link, useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
-const overrideProviderIconMap: Record<string, React.ReactNode> = {
-  apple: <i className="i-mgc-apple-cute-fi size-5 text-black dark:text-white" />,
-  github: <i className="i-mgc-github-cute-fi size-5 text-black dark:text-white" />,
-}
-
 export function Login() {
   const { status, refetch } = useSession()
 
@@ -166,21 +161,15 @@ export function Login() {
                         loginHandler(key, "app")
                       }}
                     >
-                      {overrideProviderIconMap[provider.id] ? (
-                        <div className="center box-content inline-flex size-5 rounded-full border p-2 duration-200 hover:bg-muted">
-                          {overrideProviderIconMap[provider.id]}
-                        </div>
-                      ) : (
-                        <div
-                          className="center inline-flex rounded-full border p-2 duration-200 hover:bg-muted [&_svg]:size-5"
-                          dangerouslySetInnerHTML={{
-                            __html: provider.icon,
-                          }}
-                          style={{
-                            color: provider.color,
-                          }}
-                        />
-                      )}
+                      <div
+                        className="center inline-flex rounded-full border p-2.5 duration-200 hover:bg-muted [&_svg]:size-6"
+                        dangerouslySetInnerHTML={{
+                          __html: provider.icon,
+                        }}
+                        style={{
+                          color: provider.color,
+                        }}
+                      />
                     </MotionButtonBase>
                   ))}
               </div>
@@ -205,16 +194,13 @@ export function Login() {
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <Logo className="size-16" />
 
-      <>
-        {!isAuthenticated && !isLoading && (
-          <h1 className="center mb-6 mt-8 flex text-2xl font-bold">
-            {t("login.logInTo")}
-            {` ${APP_NAME}`}
-          </h1>
-        )}
-        {Content}
-        {isLoading && <LoadingCircle className="mt-8" size="large" />}
-      </>
+      {!isAuthenticated && !isLoading && (
+        <h1 className="mb-6 mt-8 text-2xl">
+          {t("login.logInTo")} <b>{` ${APP_NAME}`}</b>
+        </h1>
+      )}
+      {Content}
+      {isLoading && <LoadingCircle className="mt-8" size="large" />}
     </div>
   )
 }
@@ -236,7 +222,7 @@ function LoginWithPassword() {
   })
   const [needTwoFactor, setNeedTwoFactor] = useState(false)
 
-  const { isValid, isSubmitting } = form.formState
+  const { isSubmitting } = form.formState
   const navigate = useNavigate()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -286,7 +272,15 @@ function LoginWithPassword() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("login.password")}</FormLabel>
+              <FormLabel className="flex items-center justify-between">
+                {t("login.password")}
+                <Link
+                  to="/forget-password"
+                  className="block py-1 text-xs text-accent hover:underline"
+                >
+                  {t("login.forget_password.note")}
+                </Link>
+              </FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -294,9 +288,6 @@ function LoginWithPassword() {
             </FormItem>
           )}
         />
-        <Link to="/forget-password" className="block py-1 text-xs text-accent hover:underline">
-          {t("login.forget_password.note")}
-        </Link>
         {needTwoFactor && (
           <FormField
             control={form.control}
@@ -312,22 +303,18 @@ function LoginWithPassword() {
             )}
           />
         )}
-        <Button
-          type="submit"
-          buttonClassName="text-base !mt-3 w-full"
-          disabled={!isValid}
-          isLoading={isSubmitting}
-        >
+        <Button type="submit" buttonClassName="!mt-3 w-full" isLoading={isSubmitting} size="lg">
           {t("login.continueWith", { provider: t("words.email") })}
         </Button>
         <Button
           type="button"
-          buttonClassName="!mt-3 text-base"
+          buttonClassName="!mt-3"
           className="w-full"
           variant="outline"
           onClick={() => {
             navigate("/register")
           }}
+          size="lg"
         >
           <Trans ns="external" i18nKey="login.signUp" />
         </Button>

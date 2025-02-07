@@ -37,6 +37,7 @@ export const styledButtonVariant = cva(
     variants: {
       size: {
         default: "px-3 py-1.5 rounded-lg text-sm",
+        lg: "px-4 py-2 rounded-lg text-base",
       },
 
       status: {
