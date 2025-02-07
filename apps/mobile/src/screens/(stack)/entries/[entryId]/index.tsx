@@ -71,6 +71,7 @@ export default function EntryDetailPage() {
   const item = useEntry(entryId as string)
 
   const insets = useSafeAreaInsets()
+
   return (
     <BottomTabBarHeightContext.Provider value={insets.bottom}>
       <SafeNavigationScrollView

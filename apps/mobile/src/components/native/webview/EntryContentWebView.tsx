@@ -36,7 +36,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
   return (
     <>
       <View
-        style={{ height: contentHeight }}
+        style={{ height: contentHeight, transform: [{ translateY: 0 }] }}
         onLayout={() => {
           SharedWebViewModule.evaluateJavaScript(
             `setEntry(JSON.parse(${JSON.stringify(JSON.stringify(entry))}))`,
@@ -50,6 +50,8 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
           url={htmlUrl}
         />
       </View>
+
+      <View className="bg-red h-24" />
       {__DEV__ && (
         <Portal>
           <View className="absolute left-4 flex-row gap-4 bottom-safe-offset-2">

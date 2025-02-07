@@ -54,7 +54,7 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(props: HTMLP
     [children, remarkOptions],
   )
 
-  if (!markdownElement) return null
+  if (!markdownElement) return <div className="h-px" />
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       <MemoedDangerousHTMLStyle>{katexStyle}</MemoedDangerousHTMLStyle>

@@ -166,9 +166,10 @@ enum WebViewManager {
         )
         configuration.userContentController.addUserScript(customSchemeScript)
 
-        let webView = WKWebView(frame: .zero, configuration: configuration)
+      let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.bounces = false
+      webView.scrollView.contentInsetAdjustmentBehavior = .never
 
         webView.isOpaque = false
         webView.backgroundColor = UIColor.clear

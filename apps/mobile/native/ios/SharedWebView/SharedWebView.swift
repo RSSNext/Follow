@@ -46,12 +46,13 @@ class WebViewView: ExpoView {
             width: bounds.width,
             height: WebViewManager.state.contentHeight
         )
-      
-        SharedWebViewModule.sharedWebView!.frame = rect
+      guard let webView = SharedWebViewModule.sharedWebView else {return }
+      webView.frame = rect
+      webView.scrollView.frame = rect
+       
 
         frame = rect
         rctView.frame = rect
-
         onContentHeightChange(["height": Float(rect.height)])
 
     }
