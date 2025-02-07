@@ -1,5 +1,6 @@
-import { SharedWebView } from "follow-native"
 import { ScrollView, View } from "react-native"
+
+import { SharedWebView } from "@/src/components/native/webview"
 
 export default function App() {
   return (

@@ -1,23 +1,37 @@
+import { PortalProvider } from "@gorhom/portal"
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
+import { HeaderTitle } from "@react-navigation/elements"
 import type { AVPlaybackStatus } from "expo-av"
 import { Video } from "expo-av"
 import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
 import type { FC } from "react"
-import { Fragment, useState } from "react"
-import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import { Fragment, useContext, useEffect, useState } from "react"
+import {
+  Animated,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  useAnimatedValue,
+  useWindowDimensions,
+  View,
+} from "react-native"
 import PagerView from "react-native-pager-view"
+import ReAnimated, { FadeIn, FadeOut } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
 import {
   NavigationBlurEffectHeader,
+  NavigationContext,
   SafeNavigationScrollView,
 } from "@/src/components/common/SafeNavigationScrollView"
-import HtmlWeb from "@/src/components/ui/typography/HtmlWeb"
+import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
+import { openLink } from "@/src/lib/native"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
+import { useFeed } from "@/src/store/feed/hooks"
 
 function Media({ media }: { media: MediaModel }) {
   const isVideo = media.type === "video"
@@ -68,37 +82,126 @@ function Media({ media }: { media: MediaModel }) {
 export default function EntryDetailPage() {
   const { entryId } = useLocalSearchParams()
   usePrefetchEntryContent(entryId as string)
-  const item = useEntry(entryId as string)
-
-  const [height, setHeight] = useState(0)
+  const entry = useEntry(entryId as string)
 
   const insets = useSafeAreaInsets()
-  return (
-    <BottomTabBarHeightContext.Provider value={insets.bottom}>
-      <SafeNavigationScrollView nestedScrollEnabled className="bg-system-grouped-background">
-        <NavigationBlurEffectHeader
-          headerShown
-          headerRight={HeaderRightActions}
-          title={item?.title || "Loading..."}
-        />
-        <HtmlWeb
-          content={item?.content || ""}
-          onLayout={async (size) => {
-            if (size[1] !== height) {
-              setHeight(size[1])
-            }
-          }}
-          scrollEnabled={false}
-          dom={{
-            scrollEnabled: false,
-            style: { height },
-            matchContents: true,
-          }}
-        />
 
-        {/* {item && <MediaSwipe mediaList={item?.media || []} id={item.id} />} */}
-      </SafeNavigationScrollView>
-    </BottomTabBarHeightContext.Provider>
+  return (
+    <PortalProvider>
+      <BottomTabBarHeightContext.Provider value={insets.bottom}>
+        <SafeNavigationScrollView
+          automaticallyAdjustContentInsets={false}
+          className="bg-system-background"
+        >
+          <Pressable onPress={() => entry?.url && openLink(entry.url)} className="relative py-3">
+            {({ pressed }) => (
+              <>
+                {pressed && (
+                  <ReAnimated.View
+                    entering={FadeIn}
+                    exiting={FadeOut}
+                    className={"bg-system-fill absolute inset-x-1 inset-y-0 rounded-xl"}
+                  />
+                )}
+                <EntryTitle title={entry?.title || ""} />
+                <EntryInfo entryId={entryId as string} />
+              </>
+            )}
+          </Pressable>
+          {entry && (
+            <View className="mt-3">
+              <EntryContentWebView entry={entry} />
+            </View>
+          )}
+        </SafeNavigationScrollView>
+      </BottomTabBarHeightContext.Provider>
+    </PortalProvider>
+  )
+}
+
+const EntryInfo = ({ entryId }: { entryId: string }) => {
+  const entry = useEntry(entryId)
+
+  if (!entry) return null
+
+  const { publishedAt } = entry
+
+  return (
+    <View className="mt-3 px-4">
+      <FeedInfo feedId={entry.feedId as string} />
+      <Text className="text-secondary-label">
+        {publishedAt.toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}
+      </Text>
+    </View>
+  )
+}
+
+const FeedInfo = ({ feedId }: { feedId: string }) => {
+  const feed = useFeed(feedId)
+  if (!feed) return null
+  return (
+    <View className="mb-2">
+      <Text className="text-secondary-label">{feed.title}</Text>
+    </View>
+  )
+}
+
+const EntryTitle = ({ title }: { title: string }) => {
+  const { scrollY } = useContext(NavigationContext)!
+
+  const [titleHeight, setTitleHeight] = useState(0)
+  const [navTitle, setNavTitle] = useState("")
+
+  const opacityAnimatedValue = useAnimatedValue(0)
+
+  const insets = useSafeAreaInsets()
+  useEffect(() => {
+    let animatedId = 0
+    const id = scrollY.addListener((value) => {
+      if (value.value > titleHeight + insets.top) {
+        setNavTitle(title)
+        Animated.timing(opacityAnimatedValue, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }).start()
+        animatedId++
+      } else {
+        const currentId = ++animatedId
+        Animated.timing(opacityAnimatedValue, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }).start(({ finished }) => {
+          if (finished && currentId === animatedId) {
+            setNavTitle("")
+          }
+        })
+      }
+    })
+
+    return () => {
+      scrollY.removeListener(id)
+    }
+  }, [scrollY, title, titleHeight, insets.top, opacityAnimatedValue])
+
+  return (
+    <>
+      <NavigationBlurEffectHeader
+        headerShown
+        headerRight={HeaderRightActions}
+        headerTitle={() => (
+          <HeaderTitle style={{ opacity: opacityAnimatedValue }}>{navTitle}</HeaderTitle>
+        )}
+      />
+      <View
+        onLayout={() => {
+          setTitleHeight(titleHeight)
+        }}
+      >
+        <Text className="text-label px-4 text-4xl font-bold leading-snug">{title}</Text>
+      </View>
+    </>
   )
 }
 

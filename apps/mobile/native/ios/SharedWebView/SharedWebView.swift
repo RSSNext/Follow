@@ -1,26 +1,20 @@
 import Combine
 import ExpoModulesCore
+import SnapKit
 import SwiftUI
 import WebKit
 
 class WebViewView: ExpoView {
     private var cancellable: AnyCancellable?
-
-    private let rctView = ExpoModulesCore.RCTView(frame: .zero)
+    private let rctView = RCTView(frame: .zero)
 
     required init(appContext: AppContext? = nil) {
         super.init(appContext: appContext)
         addSubview(rctView)
-      
-      #if DEBUG
-      rctView.borderStyle = .solid
-      rctView.borderWidth = 1
-      rctView.borderColor = .tintColor
-      #endif
+
         rctView.addSubview(SharedWebViewModule.sharedWebView!)
 
         clipsToBounds = true
-
         cancellable = WebViewManager.state.$contentHeight
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -41,24 +35,13 @@ class WebViewView: ExpoView {
             width: bounds.width,
             height: WebViewManager.state.contentHeight
         )
-
-        SharedWebViewModule.sharedWebView!.frame = rect
+        guard let webView = SharedWebViewModule.sharedWebView else { return }
+        webView.frame = rect
+        webView.scrollView.frame = rect
 
         frame = rect
-
         rctView.frame = rect
-
-      onContentHeightChange(["height": Float(rect.height)])
+        onContentHeightChange(["height": Float(rect.height)])
 
     }
-}
-
-struct WebViewComponent: UIViewRepresentable {
-    let webView: WKWebView
-
-    func makeUIView(context: Context) -> WKWebView {
-        return webView
-    }
-
-    func updateUIView(_ uiView: WKWebView, context: Context) {}
 }
