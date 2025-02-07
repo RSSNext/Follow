@@ -24,14 +24,18 @@ public class SharedWebViewModule: Module {
         }
 
         Function("evaluateJavaScript") { (js: String) in
-            WebViewManager.evaluateJavaScript(js)
+            DispatchQueue.main.async {
+                WebViewManager.evaluateJavaScript(js)
+            }
         }
 
         View(WebViewView.self) {
             Events("onContentHeightChange")
 
             Prop("url") { (_: UIView, urlString: String) in
-                self.load(urlString: urlString)
+                DispatchQueue.main.async {
+                    self.load(urlString: urlString)
+                }
             }
         }
     }

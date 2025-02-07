@@ -18,7 +18,7 @@ public class HelperModule: Module {
         guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
         WebViewManager.presentModalWebView(url: url, from: rootVC)
       }
-      
+
     }
   }
 }
