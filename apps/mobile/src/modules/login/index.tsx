@@ -1,4 +1,3 @@
-import { noop } from "es-toolkit/compat"
 import { router } from "expo-router"
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react"
 import { TouchableWithoutFeedback, View } from "react-native"
@@ -10,9 +9,9 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated"
+import * as ContextMenu from "zeego/context-menu"
 
 import { ThemedText } from "@/src/components/common/ThemedText"
-import { ContextMenu } from "@/src/components/ui/context-menu"
 import { Logo } from "@/src/components/ui/logo"
 import {
   LoginTeamsCheckedContext,
@@ -125,22 +124,26 @@ const TeamsCheckBox = forwardRef<
 
 const TeamsText = () => {
   return (
-    <ContextMenu
-      className="overflow-hidden rounded-full px-2"
-      config={{ items: [] }}
-      onPressMenuItem={noop}
-      onPressPreview={() => {
-        router.push("/terms")
-      }}
-      renderPreview={() => (
-        <View className="flex-1">
-          <TeamsMarkdown />
-        </View>
-      )}
-    >
-      <ThemedText className="text-secondary-label text-sm">
-        I agree to the Terms of Service and Privacy Policy
-      </ThemedText>
-    </ContextMenu>
+    <ContextMenu.Root>
+      <ContextMenu.Trigger className="overflow-hidden rounded-full px-2">
+        <ThemedText className="text-secondary-label text-sm">
+          I agree to the Terms of Service and Privacy Policy
+        </ThemedText>
+      </ContextMenu.Trigger>
+
+      <ContextMenu.Content>
+        <ContextMenu.Preview
+          onPress={useCallback(() => {
+            router.push("/terms")
+          }, [])}
+        >
+          {() => (
+            <View className="flex-1">
+              <TeamsMarkdown />
+            </View>
+          )}
+        </ContextMenu.Preview>
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }
