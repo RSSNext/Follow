@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import crypto from "node:crypto"
 import fs, { readdirSync } from "node:fs"
 import { cp, readdir } from "node:fs/promises"
@@ -5,6 +7,7 @@ import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
+import { MakerPKG } from "@electron-forge/maker-pkg"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
 import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
@@ -13,6 +16,8 @@ import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
 import yaml from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
+
+const platform = process.argv[process.argv.indexOf("--platform") + 1]
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
 const platformNamesMap = {
@@ -34,7 +39,7 @@ async function cleanSources(buildPath, _electronVersion, platform, _arch, callba
   // folders & files to be included in the app
   const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
 
-  if (platform === "darwin") {
+  if (platform === "darwin" || platform === "mas") {
     const frameworkResourcePath = resolve(
       buildPath,
       "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
@@ -87,6 +92,8 @@ const ignorePattern = new RegExp(`^/node_modules/(?!${[...keepModules].join("|")
 
 const config: ForgeConfig = {
   packagerConfig: {
+    appCategoryType: "public.app-category.news",
+    buildVersion: process.env.BUILD_VERSION || undefined,
     appBundleId: "is.follow",
     icon: "resources/icon",
     extraResource: ["./resources/app-update.yml"],
@@ -105,15 +112,28 @@ const config: ForgeConfig = {
     ignore: [ignorePattern],
 
     prune: true,
+    osxSign: {
+      optionsForFile:
+        platform === "mas"
+          ? (filePath) => {
+              const entitlements = filePath.includes(".app/")
+                ? "build/entitlements.mas.child.plist"
+                : "build/entitlements.mas.plist"
+              return {
+                hardenedRuntime: false,
+                entitlements,
+              }
+            }
+          : () => ({
+              entitlements: "build/entitlements.mac.plist",
+            }),
+      keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
+      identity: process.env.OSX_SIGN_IDENTITY,
+      provisioningProfile: process.env.OSX_SIGN_PROVISIONING_PROFILE_PATH,
+    },
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
       process.env.APPLE_TEAM_ID && {
-        osxSign: {
-          optionsForFile: () => ({
-            entitlements: "build/entitlements.mac.plist",
-          }),
-          keychain: process.env.KEYCHAIN_PATH,
-        },
         osxNotarize: {
           appleId: process.env.APPLE_ID!,
           appleIdPassword: process.env.APPLE_PASSWORD!,
@@ -124,34 +144,37 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerZIP({}, ["darwin"]),
-    new MakerDMG({
-      overwrite: true,
-      background: "static/dmg-background.png",
-      icon: "static/dmg-icon.icns",
-      iconSize: 160,
-      additionalDMGOptions: {
-        window: {
-          size: {
-            width: 660,
-            height: 400,
+    new MakerDMG(
+      {
+        overwrite: true,
+        background: "static/dmg-background.png",
+        icon: "static/dmg-icon.icns",
+        iconSize: 160,
+        additionalDMGOptions: {
+          window: {
+            size: {
+              width: 660,
+              height: 400,
+            },
           },
         },
+        contents: (opts) => [
+          {
+            x: 180,
+            y: 170,
+            type: "file",
+            path: (opts as any).appPath,
+          },
+          {
+            x: 480,
+            y: 170,
+            type: "link",
+            path: "/Applications",
+          },
+        ],
       },
-      contents: (opts) => [
-        {
-          x: 180,
-          y: 170,
-          type: "file",
-          path: (opts as any).appPath,
-        },
-        {
-          x: 480,
-          y: 170,
-          type: "link",
-          path: "/Applications",
-        },
-      ],
-    }),
+      ["darwin", "mas"],
+    ),
     new MakerSquirrel({
       name: "Follow",
       setupIcon: "resources/icon.ico",
@@ -167,6 +190,13 @@ const config: ForgeConfig = {
         ],
       },
     }),
+    new MakerPKG(
+      {
+        name: "Follow",
+        keychain: process.env.KEYCHAIN_PATH,
+      },
+      ["mas"],
+    ),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality

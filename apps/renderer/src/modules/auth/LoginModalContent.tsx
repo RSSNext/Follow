@@ -45,43 +45,47 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
       </div>
 
       <LoginWithPassword runtime={runtime} />
-      <div className="my-3 w-full space-y-2">
-        <div className="flex items-center justify-center">
-          <Divider className="flex-1" />
-          <p className="px-4 text-center text-sm text-muted-foreground">{t("login.or")}</p>
-          <Divider className="flex-1" />
-        </div>
-      </div>
-      <div className="mb-3 flex items-center justify-center gap-4">
-        {Object.entries(authProviders || [])
-          .filter(([key]) => key !== "credential")
-          .map(([key, provider]) => (
-            <Tooltip key={key} delayDuration={0}>
-              <TooltipTrigger>
-                <MotionButtonBase
-                  onClick={() => {
-                    loginHandler(key, "app")
-                  }}
-                >
-                  <div
-                    className="center inline-flex rounded-full border p-2.5 duration-200 hover:bg-muted [&_svg]:size-6"
-                    dangerouslySetInnerHTML={{
-                      __html: provider.icon,
-                    }}
-                    style={{
-                      color: provider.color,
-                    }}
-                  />
-                </MotionButtonBase>
-              </TooltipTrigger>
-              <TooltipPortal>
-                <TooltipContent>
-                  {t("login.continueWith", { provider: provider.name })}
-                </TooltipContent>
-              </TooltipPortal>
-            </Tooltip>
-          ))}
-      </div>
+      {!process.mas && (
+        <>
+          <div className="my-3 w-full space-y-2">
+            <div className="flex items-center justify-center">
+              <Divider className="flex-1" />
+              <p className="px-4 text-center text-sm text-muted-foreground">{t("login.or")}</p>
+              <Divider className="flex-1" />
+            </div>
+          </div>
+          <div className="mb-3 flex items-center justify-center gap-4">
+            {Object.entries(authProviders || [])
+              .filter(([key]) => key !== "credential")
+              .map(([key, provider]) => (
+                <Tooltip key={key} delayDuration={0}>
+                  <TooltipTrigger>
+                    <MotionButtonBase
+                      onClick={() => {
+                        loginHandler(key, "app")
+                      }}
+                    >
+                      <div
+                        className="center inline-flex rounded-full border p-2.5 duration-200 hover:bg-muted [&_svg]:size-6"
+                        dangerouslySetInnerHTML={{
+                          __html: provider.icon,
+                        }}
+                        style={{
+                          color: provider.color,
+                        }}
+                      />
+                    </MotionButtonBase>
+                  </TooltipTrigger>
+                  <TooltipPortal>
+                    <TooltipContent>
+                      {t("login.continueWith", { provider: provider.name })}
+                    </TooltipContent>
+                  </TooltipPortal>
+                </Tooltip>
+              ))}
+          </div>
+        </>
+      )}
     </>
   )
   if (isMobile) {
