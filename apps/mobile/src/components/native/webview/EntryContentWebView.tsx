@@ -60,7 +60,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
       <Portal>
         {!entry.content && (
           <View className="absolute inset-0 items-center justify-center">
-            <ActivityIndicator size={"large"} />
+            <ActivityIndicator />
           </View>
         )}
       </Portal>

@@ -1,5 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { PortalProvider } from "@gorhom/portal"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
@@ -151,12 +152,14 @@ function EntryItem({ entryId }: { entryId: string }) {
       <ContextMenu.Content>
         <ContextMenu.Preview size="STRETCH" onPress={handlePress}>
           {() => (
-            <View className="bg-system-background flex-1">
-              <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
-                {title}
-              </Text>
-              <EntryContentWebView entry={entry} />
-            </View>
+            <PortalProvider>
+              <View className="bg-system-background flex-1">
+                <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
+                  {title}
+                </Text>
+                <EntryContentWebView entry={entry} />
+              </View>
+            </PortalProvider>
           )}
         </ContextMenu.Preview>
       </ContextMenu.Content>
