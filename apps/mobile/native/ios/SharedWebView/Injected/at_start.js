@@ -23,10 +23,15 @@
         payload: height,
       })
     },
-    previewImage: (base64) => {
+    previewImage: (data) => {
       send({
         type: "previewImage",
-        payload: base64,
+        payload: {
+          images: data.images.map((image) => Array.from(image)),
+          index: data.index,
+          ext: data.ext,
+          filename: data.filename,
+        },
       })
     },
   }

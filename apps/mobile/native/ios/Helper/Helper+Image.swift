@@ -5,48 +5,78 @@
 //  Created by Innei on 2025/2/7.
 //
 
-import ObjectiveC
 import QuickLook
+import SDWebImage
 import UIKit
 
-class PreviewControllerClass: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
-  private var imageDataArray: [Data] = []
+private let previewContentDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+  .appendingPathComponent(Bundle.main.bundleIdentifier!)
+  .appendingPathComponent("image-preview")
 
-  init(images: [Data]) {
-    self.imageDataArray = images
-    super.init()
-  }
+class PreviewControllerController: QLPreviewController, QLPreviewControllerDataSource,
+  QLPreviewControllerDelegate
+{
+  private var imageDataArray: [Data] = []
+  private var initialIndex: Int = 0
 
   func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
     return imageDataArray.count
   }
 
+  func prepareImages(_ images: [Data], initialIndex: Int = 0) {
+    self.imageDataArray = images
+    self.initialIndex = initialIndex
+  }
+
   func previewController(_ controller: QLPreviewController, previewItemAt index: Int)
     -> QLPreviewItem
   {
-    let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(
-      "preview_image_\(index).jpg")
-    try? imageDataArray[index].write(to: tempURL)
-    return tempURL as QLPreviewItem
+    let imageData = imageDataArray[index]
+    guard let image = UIImage(data: imageData) else {
+      return previewContentDirectory as QLPreviewItem
+    }
+    try? FileManager.default.createDirectory(
+      at: previewContentDirectory, withIntermediateDirectories: true)
+
+    let tempLocation =
+      previewContentDirectory
+      .appendingPathComponent(UUID().uuidString)
+      .appendingPathExtension(image.sd_imageFormat.possiblePathExtension)
+
+    try? imageData.write(to: tempLocation)
+    return tempLocation as QLPreviewItem
+  }
+
+  override func viewDidLoad() {
+    debugPrint(previewContentDirectory, "previewContentDirectory")
+
+    super.viewDidLoad()
+    delegate = self
+    dataSource = self
+    view.tintColor = Utils.accentColor
+
+    // Set initial preview index
+    if initialIndex < imageDataArray.count {
+      self.currentPreviewItemIndex = initialIndex
+    }
   }
 
   private func cleanupTempFiles() {
-    for index in 0..<imageDataArray.count {
-      let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(
-        "preview_image_\(index).jpg")
-      try? FileManager.default.removeItem(at: tempURL)
-    }
+    try? FileManager.default.removeItem(at: previewContentDirectory)
   }
 
   func previewControllerDidDismiss(_ controller: QLPreviewController) {
     cleanupTempFiles()
   }
- 
+
+  deinit {
+    self.cleanupTempFiles()
+  }
+
 }
 
-
 class ImagePreview: NSObject {
-  public static func quickLookImage(_ images: [Data]) {
+  public static func quickLookImage(_ images: [Data], index: Int = 0) {
     guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
       return
     }
@@ -55,12 +85,28 @@ class ImagePreview: NSObject {
       print("no preview data")
       return
     }
-    let previewController = QLPreviewController()
-    let previewControllerClass = PreviewControllerClass(images: images)
-    previewController.view.tintColor = Utils.accentColor
-    previewController.dataSource = previewControllerClass
-    previewController.delegate = previewControllerClass
+
+    let previewController = PreviewControllerController()
+    previewController.prepareImages(images, initialIndex: index)
 
     rootViewController.present(previewController, animated: true)
+  }
+}
+
+extension SDImageFormat {
+  var possiblePathExtension: String {
+    switch self {
+    case .undefined: ""
+    case .JPEG: "jpg"
+    case .PNG: "png"
+    case .GIF: "gif"
+    case .TIFF: "tiff"
+    case .webP: "webp"
+    case .HEIC: "heic"
+    case .HEIF: "heif"
+    case .PDF: "pdf"
+    case .SVG: "svg"
+    default: "png"
+    }
   }
 }

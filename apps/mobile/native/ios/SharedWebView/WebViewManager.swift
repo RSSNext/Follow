@@ -219,7 +219,7 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
                     guard let data = data else { return }
                     DispatchQueue.main.async {
                         ImagePreview.quickLookImage(
-                            data.payload.compactMap { Data(base64Encoded: $0) })
+                            data.payload.images.compactMap { Data($0) })
                     }
 
                 default:

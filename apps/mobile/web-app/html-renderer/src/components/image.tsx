@@ -1,37 +1,44 @@
+import { useRef } from "react"
+
 import type { HTMLProps } from "~/HTML"
 
 export const MarkdownImage = (props: HTMLProps<"img">) => {
   const { src, ...rest } = props
 
+  const imageRef = useRef<HTMLImageElement>(null)
+
   return (
     <button
       type="button"
       onClick={() => {
-        if (!src) return
-        const $image = new Image()
-        $image.src = src
-        $image.crossOrigin = "anonymous"
+        const $image = imageRef.current
+        if (!$image) return
+        const canvas = document.createElement("canvas")
+        canvas.width = $image.naturalWidth
+        canvas.height = $image.naturalHeight
 
-        $image.onload = () => {
-          // Create a canvas element
-          const canvas = document.createElement("canvas")
-          canvas.width = $image.width
-          canvas.height = $image.height
+        // Draw image on canvas
+        const ctx = canvas.getContext("2d")
+        if (!ctx) return
+        ctx.drawImage($image, 0, 0)
 
-          // Draw image on canvas
-          const ctx = canvas.getContext("2d")
-          ctx?.drawImage($image, 0, 0)
+        canvas.toBlob((blob) => {
+          if (!blob) return
+          const reader = new FileReader()
+          // eslint-disable-next-line unicorn/prefer-blob-reading-methods
+          reader.readAsArrayBuffer(blob)
 
-          // Convert to base64
-          const imageBase64 = canvas.toDataURL("image/png")
-
-          // Remove base64 prefix
-          const base64 = imageBase64.split(",")[1]!
-          bridge.previewImage([base64])
-        }
+          reader.onloadend = () => {
+            const uint8Array = new Uint8Array(reader.result as ArrayBuffer)
+            bridge.previewImage({
+              images: [uint8Array],
+              index: 0,
+            })
+          }
+        }, "image/png")
       }}
     >
-      <img {...rest} src={src} />
+      <img {...rest} crossOrigin="anonymous" src={src} ref={imageRef} />
     </button>
   )
 }

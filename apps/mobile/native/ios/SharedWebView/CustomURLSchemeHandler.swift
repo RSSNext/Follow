@@ -5,9 +5,8 @@
 //  Created by Innei on 2025/2/7.
 //
 
-import WebKit
 import Foundation
-
+import WebKit
 
 class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
     static let rewriteScheme = "follow-xhr"
@@ -17,7 +16,7 @@ class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         guard let url = urlSchemeTask.request.url,
             let originalURLString = url.absoluteString.replacingOccurrences(
-              of: CustomURLSchemeHandler.rewriteScheme, with: "https"
+                of: CustomURLSchemeHandler.rewriteScheme, with: "https"
             ).removingPercentEncoding,
             let originalURL = URL(string: originalURLString)
         else {
@@ -48,28 +47,28 @@ class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
 
-            self.queue.sync {
-                // Check if task is still active
-                guard self.activeTasks[taskID] != nil else { return }
+            // Check if task is still active
+            guard self.activeTasks[taskID] != nil else { return }
 
-                if let error = error {
-                    urlSchemeTask.didFailWithError(error)
+            if let error = error {
+                urlSchemeTask.didFailWithError(error)
+                self.queue.sync {
                     self.activeTasks.removeValue(forKey: taskID)
-                    return
                 }
-
-                if let response = response as? HTTPURLResponse, let data = data {
-                    do {
-                        urlSchemeTask.didReceive(response)
-                        urlSchemeTask.didReceive(data)
-                        urlSchemeTask.didFinish()
-                    } catch {
-                        // Ignore errors that might occur if task was stopped
-                        print("Error completing URL scheme task: \(error)")
-                    }
-                }
-                self.activeTasks.removeValue(forKey: taskID)
+                return
             }
+
+            if let response = response as? HTTPURLResponse, let data = data {
+                do {
+                    urlSchemeTask.didReceive(response)
+                    urlSchemeTask.didReceive(data)
+                    urlSchemeTask.didFinish()
+                } catch {
+                    // Ignore errors that might occur if task was stopped
+                    print("Error completing URL scheme task: \(error)")
+                }
+            }
+            self.activeTasks.removeValue(forKey: taskID)
         }
         queue.sync {
             activeTasks[taskID] = task

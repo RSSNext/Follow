@@ -10,16 +10,21 @@ private protocol BasePayload {
   var type: String { get }
 }
 
-struct SetContentHeightPayload: Hashable, Codable, BasePayload {
+struct SetContentHeightPayload: Codable, BasePayload {
   var type: String
   var payload: CGFloat
 }
 
-struct BridgeDataBasePayload: Hashable, Codable {
+struct BridgeDataBasePayload: Codable {
   var type: String
 }
 
-struct PreviewImagePayload: Hashable, Codable, BasePayload {
+struct PreviewImagePayloadProps: Codable {
+  var images: [[UInt8]]
+  var index: Int = 0
+}
+
+struct PreviewImagePayload: Codable, BasePayload {
   var type: String
-  var payload: [String]
+  var payload: PreviewImagePayloadProps
 }
