@@ -7,7 +7,7 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import type { EntryModel } from "@/src/store/entry/types"
 
-import { prepareWebView, SharedWebViewModule } from "."
+import { prepareEntryRenderWebView, SharedWebViewModule } from "."
 import { htmlUrl } from "./constants"
 
 const NativeView: React.ComponentType<{
@@ -19,6 +19,12 @@ type EntryContentWebViewProps = {
   entry: EntryModel
 }
 
+export const setWebViewEntry = (entry: EntryModel) => {
+  SharedWebViewModule.evaluateJavaScript(
+    `setEntry(JSON.parse(${JSON.stringify(JSON.stringify(entry))}))`,
+  )
+}
+
 export function EntryContentWebView(props: EntryContentWebViewProps) {
   const [contentHeight, setContentHeight] = React.useState(0)
 
@@ -26,15 +32,13 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
 
   const [mode, setMode] = React.useState<"normal" | "debug">("normal")
   React.useEffect(() => {
-    SharedWebViewModule.evaluateJavaScript(
-      `setEntry(JSON.parse(${JSON.stringify(JSON.stringify(entry))}))`,
-    )
+    setWebViewEntry(entry)
   }, [entry])
 
   const onceRef = React.useRef(false)
   if (!onceRef.current) {
     onceRef.current = true
-    prepareWebView()
+    prepareEntryRenderWebView()
   }
 
   return (
@@ -43,9 +47,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
         key={mode}
         style={{ height: contentHeight, transform: [{ translateY: 0 }] }}
         onLayout={() => {
-          SharedWebViewModule.evaluateJavaScript(
-            `setEntry(JSON.parse(${JSON.stringify(JSON.stringify(entry))}))`,
-          )
+          setWebViewEntry(entry)
         }}
       >
         <NativeView

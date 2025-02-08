@@ -12,6 +12,7 @@ import {
   NavigationBlurEffectHeader,
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
+import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
@@ -113,8 +114,10 @@ function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
   const handlePress = useCallback(() => {
+    if (!entry) return
+    setWebViewEntry(entry)
     router.push(`/entries/${entryId}`)
-  }, [entryId])
+  }, [entryId, entry])
 
   if (!entry) return <EntryItemSkeleton />
   const { title, description, publishedAt, media } = entry

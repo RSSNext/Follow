@@ -10,6 +10,6 @@ declare class ISharedWebViewModule extends NativeModule {
 
 export const SharedWebViewModule = requireNativeModule<ISharedWebViewModule>("FOSharedWebView")
 
-export const prepareWebView = () => {
+export const prepareEntryRenderWebView = () => {
   SharedWebViewModule.load(htmlUrl)
 }
