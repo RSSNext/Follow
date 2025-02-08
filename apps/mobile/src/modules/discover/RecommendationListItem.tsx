@@ -45,7 +45,7 @@ export const RecommendationListItem: FC<{
       <View className="ml-2 flex-1">
         <Text className="text-text text-base font-medium">{data.name}</Text>
         {/* Maintainers */}
-        <View className="flex-row flex-wrap items-center">
+        <View className="mb-1 flex-row flex-wrap items-center">
           {maintainers.map((m) => (
             <ContextMenu.Root key={m}>
               <ContextMenu.Trigger asChild>
@@ -55,7 +55,7 @@ export const RecommendationListItem: FC<{
               </ContextMenu.Trigger>
 
               <ContextMenu.Content>
-                <ContextMenu.Preview>
+                <ContextMenu.Preview size="STRETCH">
                   {() => <WebView source={{ uri: `https://github.com/${m}` }} />}
                 </ContextMenu.Preview>
 

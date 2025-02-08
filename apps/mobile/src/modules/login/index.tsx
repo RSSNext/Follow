@@ -133,6 +133,7 @@ const TeamsText = () => {
 
       <ContextMenu.Content>
         <ContextMenu.Preview
+          size="STRETCH"
           onPress={useCallback(() => {
             router.push("/terms")
           }, [])}

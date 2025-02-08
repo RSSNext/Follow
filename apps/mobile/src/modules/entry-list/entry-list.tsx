@@ -7,12 +7,16 @@ import { router } from "expo-router"
 import { useCallback, useContext, useMemo } from "react"
 import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import * as ContextMenu from "zeego/context-menu"
 
 import {
   NavigationBlurEffectHeader,
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
-import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
+import {
+  EntryContentWebView,
+  setWebViewEntry,
+} from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
@@ -109,7 +113,6 @@ const ItemSeparator = () => {
     />
   )
 }
-
 function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
@@ -125,25 +128,39 @@ function EntryItem({ entryId }: { entryId: string }) {
   const blurhash = media?.[0]?.blurhash
 
   return (
-    <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
-      <View className="flex-1 space-y-2">
-        <Text numberOfLines={2} className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {title}
-        </Text>
-        <Text className="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">{description}</Text>
-        <Text className="text-xs text-zinc-500 dark:text-zinc-500">
-          {publishedAt.toLocaleString()}
-        </Text>
-      </View>
-      {image && (
-        <Image
-          source={{ uri: image }}
-          placeholder={{ blurhash }}
-          className="ml-2 size-20 rounded-md bg-zinc-200 dark:bg-zinc-800"
-          contentFit="cover"
-        />
-      )}
-    </ItemPressable>
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>
+        <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
+          <View className="flex-1 space-y-2">
+            <Text numberOfLines={2} className="text-label text-lg font-semibold">
+              {title}
+            </Text>
+            <Text className="text-secondary-label line-clamp-2 text-sm">{description}</Text>
+            <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
+          </View>
+          {image && (
+            <Image
+              source={{ uri: image }}
+              placeholder={{ blurhash }}
+              className="bg-system-fill ml-2 size-20 rounded-md"
+              contentFit="cover"
+            />
+          )}
+        </ItemPressable>
+      </ContextMenu.Trigger>
+      <ContextMenu.Content>
+        <ContextMenu.Preview size="STRETCH" onPress={handlePress}>
+          {() => (
+            <View className="bg-system-background flex-1">
+              <Text className="text-label -mb-3 mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
+                {title}
+              </Text>
+              <EntryContentWebView entry={entry} />
+            </View>
+          )}
+        </ContextMenu.Preview>
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }
 

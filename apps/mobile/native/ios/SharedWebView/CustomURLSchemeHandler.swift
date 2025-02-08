@@ -10,8 +10,8 @@ import WebKit
 
 class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
     static let rewriteScheme = "follow-xhr"
-    private let queue = DispatchQueue(label: "com.follow.urlschemehandler")
     private var activeTasks: [String: URLSessionDataTask] = [:]
+    private var stoppedTasks: Set<String> = []
 
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         guard let url = urlSchemeTask.request.url,
@@ -47,43 +47,38 @@ class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
 
-            // Check if task is still active
-            guard self.activeTasks[taskID] != nil else { return }
+            DispatchQueue.main.async {
 
-            if let error = error {
-                urlSchemeTask.didFailWithError(error)
-                self.queue.sync {
+                guard !self.stoppedTasks.contains(taskID) else { return }
+
+                if let error = error {
+                    urlSchemeTask.didFailWithError(error)
                     self.activeTasks.removeValue(forKey: taskID)
+                    return
                 }
-                return
-            }
 
-            if let response = response as? HTTPURLResponse, let data = data {
-                do {
+                if let response = response as? HTTPURLResponse, let data = data {
+                    guard !self.stoppedTasks.contains(taskID) else { return }
+
                     urlSchemeTask.didReceive(response)
                     urlSchemeTask.didReceive(data)
                     urlSchemeTask.didFinish()
-                } catch {
-                    // Ignore errors that might occur if task was stopped
-                    print("Error completing URL scheme task: \(error)")
+
+                    self.activeTasks.removeValue(forKey: taskID)
                 }
             }
-            self.activeTasks.removeValue(forKey: taskID)
-        }
-        queue.sync {
-            activeTasks[taskID] = task
         }
 
+        activeTasks[taskID] = task
         task.resume()
     }
 
     func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
         let taskID = urlSchemeTask.description
-        queue.sync {
-            if let task = activeTasks[taskID] {
-                task.cancel()
-                activeTasks.removeValue(forKey: taskID)
-            }
+        if let task = activeTasks[taskID] {
+            stoppedTasks.insert(taskID)
+            task.cancel()
+            activeTasks.removeValue(forKey: taskID)
         }
     }
 }
