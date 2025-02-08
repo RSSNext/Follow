@@ -152,7 +152,7 @@ function EntryItem({ entryId }: { entryId: string }) {
         <ContextMenu.Preview size="STRETCH" onPress={handlePress}>
           {() => (
             <View className="bg-system-background flex-1">
-              <Text className="text-label -mb-3 mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
+              <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
                 {title}
               </Text>
               <EntryContentWebView entry={entry} />
@@ -169,13 +169,13 @@ function EntryItemSkeleton() {
     <View className="bg-secondary-system-grouped-background flex flex-row items-center p-4">
       <View className="flex flex-1 flex-col justify-between">
         {/* Title skeleton */}
-        <View className="h-6 w-3/4 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <View className="bg-system-fill h-6 w-3/4 animate-pulse rounded-md" />
         {/* Description skeleton */}
-        <View className="mt-2 w-full flex-1 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <View className="bg-system-fill mt-2 w-full flex-1 animate-pulse rounded-md" />
       </View>
 
       {/* Image skeleton */}
-      <View className="ml-2 size-20 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
+      <View className="bg-system-fill ml-2 size-20 animate-pulse rounded-md" />
     </View>
   )
 }
