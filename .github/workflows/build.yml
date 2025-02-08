@@ -84,6 +84,7 @@ jobs:
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           BUILD_CERTIFICATE_MAS_BASE64: ${{ secrets.BUILD_CERTIFICATE_MAS_BASE64 }}
+          BUILD_CERTIFICATE_MASPKG_BASE64: ${{ secrets.BUILD_CERTIFICATE_MASPKG_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
@@ -91,12 +92,14 @@ jobs:
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           CERTIFICATE_MAS_PATH=$RUNNER_TEMP/build_certificate_mas.p12
+          CERTIFICATE_MASPKG_PATH=$RUNNER_TEMP/build_certificate_maspkg.p12
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_CERTIFICATE_MAS_BASE64" | base64 --decode -o $CERTIFICATE_MAS_PATH
+          echo -n "$BUILD_CERTIFICATE_MASPKG_BASE64" | base64 --decode -o $CERTIFICATE_MASPKG_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
           # create temporary keychain
@@ -107,6 +110,7 @@ jobs:
           # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security import $CERTIFICATE_MAS_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $CERTIFICATE_MASPKG_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
           security find-identity $KEYCHAIN_PATH
