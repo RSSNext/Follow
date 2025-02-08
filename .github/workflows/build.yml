@@ -9,10 +9,14 @@ on:
   workflow_dispatch:
     inputs:
       tag_version:
+        type: boolean
         description: "Tag Version"
       mas:
         type: boolean
         description: "Build for Mac App Store"
+      build_version:
+        type: string
+        description: "Build Version, only available when mas is true"
 
 # https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs
 concurrency:
@@ -47,13 +51,13 @@ jobs:
     steps:
       - name: Check out Git repository Fully
         uses: actions/checkout@v4
-        if: github.event.inputs.tag_version != '' || github.ref_type == 'tag'
+        if: github.event.inputs.tag_version == 'true' || github.ref_type == 'tag'
         with:
           fetch-depth: 0
           lfs: true
       - name: Check out Git repository
         uses: actions/checkout@v4
-        if: github.event.inputs.tag_version  == '' && github.ref_type != 'tag'
+        if: github.event.inputs.tag_version != 'true' && github.ref_type != 'tag'
         with:
           fetch-depth: 1
           lfs: true
@@ -137,6 +141,7 @@ jobs:
           OSX_SIGN_KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
           OSX_SIGN_IDENTITY: ${{ secrets.OSX_SIGN_IDENTITY_MAS }}
           OSX_SIGN_PROVISIONING_PROFILE_PATH: ${{ runner.temp }}/build_pp.provisionprofile
+          BUILD_VERSION: ${{ github.event.inputs.build_version }}
         run: npm exec turbo run //#build:mas
 
       - name: Build Renderer
@@ -186,7 +191,7 @@ jobs:
           retention-days: 90
 
       - name: Generate artifact attestation
-        if: github.ref_type == 'tag' || github.event.inputs.tag_version != ''
+        if: github.ref_type == 'tag' || github.event.inputs.tag_version == 'true'
         continue-on-error: true
         uses: actions/attest-build-provenance@v1
         with:
@@ -200,7 +205,7 @@ jobs:
             dist/*.tar.gz
 
       - run: npx changelogithub
-        if: github.ref_type == 'tag' || github.event.inputs.tag_version != ''
+        if: github.ref_type == 'tag' || github.event.inputs.tag_version == 'true'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -210,7 +215,7 @@ jobs:
         uses: ./.github/actions/setup-version
 
       - name: Create Release Draft
-        if: github.ref_type == 'tag' || github.event.inputs.tag_version != ''
+        if: github.ref_type == 'tag' || github.event.inputs.tag_version == 'true'
         uses: softprops/action-gh-release@v2
         with:
           name: v${{ steps.version.outputs.APP_VERSION }}
