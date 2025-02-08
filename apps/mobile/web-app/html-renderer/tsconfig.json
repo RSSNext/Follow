@@ -9,13 +9,12 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "baseUrl": ".",
     "noImplicitReturns": false,
     "noEmit": true,
     "skipLibCheck": true,
     "types": ["vite/client", "@follow/types/global", "@follow/types/react"],
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["./src/*"]
     }
   }
 }

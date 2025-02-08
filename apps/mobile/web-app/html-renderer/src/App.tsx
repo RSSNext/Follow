@@ -1,24 +1,10 @@
-import { atom, createStore, useAtomValue } from "jotai"
+import { createStore, Provider, useAtomValue } from "jotai"
 
+import { entryAtom } from "../atoms"
+import type { EntryModel } from "../types"
 import { HTML } from "./HTML"
 
-interface MediaModel {
-  url: string
-  type: "photo" | "video"
-  preview_image_url?: string
-  width?: number
-  height?: number
-  blurhash?: string
-}
-
-interface EntryModel {
-  content: string
-  title: string
-  media: MediaModel[]
-}
-
 const store = createStore()
-const entryAtom = atom<EntryModel | null>(null)
 
 Object.assign(window, {
   setEntry(entry: EntryModel) {
@@ -34,5 +20,9 @@ Object.assign(window, {
 export const App = () => {
   const entry = useAtomValue(entryAtom, { store })
 
-  return <HTML children={entry?.content} />
+  return (
+    <Provider store={store}>
+      <HTML children={entry?.content} />
+    </Provider>
+  )
 }

@@ -48,8 +48,6 @@ class PreviewControllerController: QLPreviewController, QLPreviewControllerDataS
   }
 
   override func viewDidLoad() {
-    debugPrint(previewContentDirectory, "previewContentDirectory")
-
     super.viewDidLoad()
     delegate = self
     dataSource = self
@@ -58,6 +56,36 @@ class PreviewControllerController: QLPreviewController, QLPreviewControllerDataS
     // Set initial preview index
     if initialIndex < imageDataArray.count {
       self.currentPreviewItemIndex = initialIndex
+    }
+
+    // Add save button to navigation bar
+    let saveButton = UIBarButtonItem(
+      image: UIImage(systemName: "square.and.arrow.down"),
+      style: .plain,
+      target: self,
+      action: #selector(saveCurrentImage)
+    )
+    navigationItem.leftBarButtonItem = saveButton
+  }
+
+  @objc private func saveCurrentImage() {
+    let currentIndex = currentPreviewItemIndex
+    guard currentIndex < imageDataArray.count else { return }
+
+    let imageData = imageDataArray[currentIndex]
+    guard let image = UIImage(data: imageData) else { return }
+
+    UIImageWriteToSavedPhotosAlbum(
+      image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+  }
+
+  @objc private func image(
+    _ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer
+  ) {
+    if let error = error {
+      print("Error saving image: \(error.localizedDescription)")
+    } else {
+      print("Image saved successfully")
     }
   }
 
@@ -77,7 +105,7 @@ class PreviewControllerController: QLPreviewController, QLPreviewControllerDataS
 
 class ImagePreview: NSObject {
   public static func quickLookImage(_ images: [Data], index: Int = 0) {
-    guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
+    guard let rootViewController = Utils.getRootVC() else {
       return
     }
 

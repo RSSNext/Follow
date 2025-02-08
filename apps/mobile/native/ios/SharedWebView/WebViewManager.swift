@@ -6,7 +6,7 @@
 //
 import Combine
 import ExpoModulesCore
-import WebKit
+@preconcurrency import WebKit
 
 private var pendingJavaScripts: [String] = []
 
@@ -123,7 +123,7 @@ enum WebViewManager {
     }()
 
     private static func setupWebView(_ webView: WKWebView) {
-        let viewController = UIApplication.shared.keyWindow?.rootViewController
+        guard let viewController = Utils.getRootVC() else { return }
         let delegate = WebViewDelegate(state: state, viewController: viewController)
         webView.navigationDelegate = delegate
         webView.uiDelegate = delegate

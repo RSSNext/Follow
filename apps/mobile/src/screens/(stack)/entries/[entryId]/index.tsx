@@ -1,23 +1,15 @@
 import { PortalProvider } from "@gorhom/portal"
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
-import { HeaderTitle } from "@react-navigation/elements"
+import { useHeaderHeight } from "@react-navigation/elements"
 import type { AVPlaybackStatus } from "expo-av"
 import { Video } from "expo-av"
 import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
 import type { FC } from "react"
 import { Fragment, useContext, useEffect, useState } from "react"
-import {
-  Animated,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  useAnimatedValue,
-  useWindowDimensions,
-  View,
-} from "react-native"
+import { Pressable, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import PagerView from "react-native-pager-view"
-import ReAnimated, { FadeIn, FadeOut } from "react-native-reanimated"
+import ReAnimated, { FadeIn, FadeOut, useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
@@ -150,40 +142,23 @@ const EntryTitle = ({ title }: { title: string }) => {
   const { scrollY } = useContext(NavigationContext)!
 
   const [titleHeight, setTitleHeight] = useState(0)
-  const [navTitle, setNavTitle] = useState("")
 
-  const opacityAnimatedValue = useAnimatedValue(0)
+  const opacityAnimatedValue = useSharedValue(0)
 
-  const insets = useSafeAreaInsets()
+  const headerHeight = useHeaderHeight()
   useEffect(() => {
-    let animatedId = 0
     const id = scrollY.addListener((value) => {
-      if (value.value > titleHeight + insets.top) {
-        setNavTitle(title)
-        Animated.timing(opacityAnimatedValue, {
-          toValue: 1,
-          duration: 100,
-          useNativeDriver: true,
-        }).start()
-        animatedId++
+      if (value.value > titleHeight + headerHeight) {
+        opacityAnimatedValue.value = withTiming(1, { duration: 100 })
       } else {
-        const currentId = ++animatedId
-        Animated.timing(opacityAnimatedValue, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: true,
-        }).start(({ finished }) => {
-          if (finished && currentId === animatedId) {
-            setNavTitle("")
-          }
-        })
+        opacityAnimatedValue.value = withTiming(0, { duration: 100 })
       }
     })
 
     return () => {
       scrollY.removeListener(id)
     }
-  }, [scrollY, title, titleHeight, insets.top, opacityAnimatedValue])
+  }, [scrollY, title, titleHeight, headerHeight, opacityAnimatedValue])
 
   return (
     <>
@@ -191,7 +166,13 @@ const EntryTitle = ({ title }: { title: string }) => {
         headerShown
         headerRight={HeaderRightActions}
         headerTitle={() => (
-          <HeaderTitle style={{ opacity: opacityAnimatedValue }}>{navTitle}</HeaderTitle>
+          <ReAnimated.Text
+            className={"text-label text-[17px] font-semibold"}
+            numberOfLines={1}
+            style={{ opacity: opacityAnimatedValue }}
+          >
+            {title}
+          </ReAnimated.Text>
         )}
       />
       <View
