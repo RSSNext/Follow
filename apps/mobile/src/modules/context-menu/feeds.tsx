@@ -28,7 +28,7 @@ export const SubscriptionFeedItemContextMenu: FC<
         <ContextMenu.Item
           key="MarkAllAsRead"
           onSelect={useCallback(() => {
-            unreadSyncService.markAsRead(id)
+            unreadSyncService.markFeedAsRead(id)
           }, [id])}
         >
           <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>

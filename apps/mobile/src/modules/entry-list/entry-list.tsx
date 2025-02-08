@@ -1,6 +1,5 @@
 import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { PortalProvider } from "@gorhom/portal"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
@@ -8,22 +7,19 @@ import { router } from "expo-router"
 import { useCallback, useContext, useMemo } from "react"
 import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import * as ContextMenu from "zeego/context-menu"
 
 import {
   NavigationBlurEffectHeader,
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
-import {
-  EntryContentWebView,
-  setWebViewEntry,
-} from "@/src/components/native/webview/EntryContentWebView"
+import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
+import { EntryItemContextMenu } from "../context-menu/entry"
 import { ViewSelector } from "../feed-drawer/view-selector"
 import { LeftAction, RightAction } from "./action"
 import { EntryListContentGrid } from "./entry-list-gird"
@@ -129,41 +125,25 @@ function EntryItem({ entryId }: { entryId: string }) {
   const blurhash = media?.[0]?.blurhash
 
   return (
-    <ContextMenu.Root>
-      <ContextMenu.Trigger>
-        <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
-          <View className="flex-1 space-y-2">
-            <Text numberOfLines={2} className="text-label text-lg font-semibold">
-              {title}
-            </Text>
-            <Text className="text-secondary-label line-clamp-2 text-sm">{description}</Text>
-            <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
-          </View>
-          {image && (
-            <Image
-              source={{ uri: image }}
-              placeholder={{ blurhash }}
-              className="bg-system-fill ml-2 size-20 rounded-md"
-              contentFit="cover"
-            />
-          )}
-        </ItemPressable>
-      </ContextMenu.Trigger>
-      <ContextMenu.Content>
-        <ContextMenu.Preview size="STRETCH" onPress={handlePress}>
-          {() => (
-            <PortalProvider>
-              <View className="bg-system-background flex-1">
-                <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
-                  {title}
-                </Text>
-                <EntryContentWebView entry={entry} />
-              </View>
-            </PortalProvider>
-          )}
-        </ContextMenu.Preview>
-      </ContextMenu.Content>
-    </ContextMenu.Root>
+    <EntryItemContextMenu id={entryId}>
+      <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
+        <View className="flex-1 space-y-2">
+          <Text numberOfLines={2} className="text-label text-lg font-semibold">
+            {title}
+          </Text>
+          <Text className="text-secondary-label line-clamp-2 text-sm">{description}</Text>
+          <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
+        </View>
+        {image && (
+          <Image
+            source={{ uri: image }}
+            placeholder={{ blurhash }}
+            className="bg-system-fill ml-2 size-20 rounded-md"
+            contentFit="cover"
+          />
+        )}
+      </ItemPressable>
+    </EntryItemContextMenu>
   )
 }
 
