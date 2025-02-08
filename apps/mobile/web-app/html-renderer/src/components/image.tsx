@@ -9,8 +9,14 @@ import { entryAtom } from "../../atoms"
 import { calculateDimensions } from "../../hooks/useCalculateNaturalSize"
 import { MarkdownRenderContainerRefContext } from "./__internal/ctx"
 
+const protocol = "follow-xhr"
 export const MarkdownImage = (props: HTMLProps<"img">) => {
   const { src, ...rest } = props
+
+  const perferSrc = useMemo(() => {
+    if (!src) return src
+    return src.replace(/^https?:\/\//, `${protocol}://`)
+  }, [src])
 
   const imageRef = useRef<HTMLImageElement>(null)
 
@@ -43,6 +49,7 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
       onClick={() => {
         const $image = imageRef.current
         if (!$image) return
+
         const canvas = document.createElement("canvas")
         canvas.width = $image.naturalWidth
         canvas.height = $image.naturalHeight
@@ -92,7 +99,7 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
           isLoading && "opacity-0",
         )}
         crossOrigin="anonymous"
-        src={src}
+        src={perferSrc}
         ref={imageRef}
       />
     </button>

@@ -60,7 +60,19 @@ class CustomURLSchemeHandler: NSObject, WKURLSchemeHandler {
                 if let response = response as? HTTPURLResponse, let data = data {
                     guard !self.stoppedTasks.contains(taskID) else { return }
 
-                    urlSchemeTask.didReceive(response)
+                    var newHeaders = response.allHeaderFields as? [String: String] ?? [:]
+                    newHeaders["Access-Control-Allow-Origin"] = "*"
+                    newHeaders["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+                    newHeaders["Access-Control-Allow-Headers"] = "*"
+
+                    let modifiedResponse = HTTPURLResponse(
+                        url: response.url!,
+                        statusCode: response.statusCode,
+                        httpVersion: "HTTP/1.1",
+                        headerFields: newHeaders
+                    )!
+
+                    urlSchemeTask.didReceive(modifiedResponse)
                     urlSchemeTask.didReceive(data)
                     urlSchemeTask.didFinish()
 
