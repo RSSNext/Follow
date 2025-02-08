@@ -16,6 +16,7 @@ import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
+import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { ViewSelector } from "../feed-drawer/view-selector"
 import { LeftAction, RightAction } from "./action"
@@ -79,6 +80,10 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
         ),
         [],
       )}
+      keyExtractor={(id) => id}
+      onViewableItemsChanged={({ viewableItems }) => {
+        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
+      }}
       scrollIndicatorInsets={{
         top: headerHeight - insets.top,
         bottom: tabBarHeight - insets.bottom,

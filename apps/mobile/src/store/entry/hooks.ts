@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
-import { useQuery } from "@tanstack/react-query"
-import { useCallback } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useCallback, useEffect } from "react"
 
 import { getEntry } from "./getter"
 import { entrySyncServices, useEntryStore } from "./store"
@@ -81,4 +81,16 @@ export const useEntryIdsByCategory = (category: string) => {
       [category],
     ),
   )
+}
+
+export const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {
+  const { mutate: updateEntryContent } = useMutation({
+    mutationKey: ["stream-entry-content", remoteEntryIds],
+    mutationFn: entrySyncServices.fetchEntryContentByStream,
+  })
+
+  useEffect(() => {
+    if (!remoteEntryIds) return
+    updateEntryContent(remoteEntryIds)
+  }, [remoteEntryIds, updateEntryContent])
 }

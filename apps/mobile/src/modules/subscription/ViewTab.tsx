@@ -7,11 +7,9 @@ import type { WithSpringConfig } from "react-native-reanimated"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
-import { ContextMenu } from "@/src/components/ui/context-menu"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
 import { useUnreadCountByView } from "@/src/store/unread/hooks"
-import { unreadSyncService } from "@/src/store/unread/store"
 
 import { offsetAtom, setCurrentView, viewAtom } from "./atoms"
 import { ViewTabHeight } from "./constants"
@@ -113,47 +111,32 @@ const TabItem = memo(
   ({
     isSelected,
     view,
-    onLayout,
   }: { isSelected: boolean; view: ViewDefinition } & Pick<TouchableOpacityProps, "onLayout">) => {
     const unreadCount = useUnreadCountByView(view.view)
     return (
-      <ContextMenu
-        // actions={[{ title: "Mark all as read" }]}
-        config={{ items: [{ title: "Mark all as read", actionKey: "markAllAsRead" }] }}
-        onPressMenuItem={(e) => {
-          switch (e.actionKey) {
-            case "markAllAsRead": {
-              unreadSyncService.markViewAsRead(view.view)
-              break
-            }
-          }
-        }}
-        onLayout={onLayout}
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => setCurrentView(view.view)}
+        className="relative mr-4 flex-row items-center justify-center rounded-full"
       >
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => setCurrentView(view.view)}
-          className="relative mr-4 flex-row items-center justify-center rounded-full"
+        <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
+        <Text
+          style={{
+            color: isSelected ? view.activeColor : "gray",
+            fontWeight: isSelected ? "medium" : "normal",
+          }}
+          className="ml-2"
         >
-          <view.icon color={isSelected ? view.activeColor : "gray"} height={18} width={18} />
-          <Text
-            style={{
-              color: isSelected ? view.activeColor : "gray",
-              fontWeight: isSelected ? "medium" : "normal",
-            }}
-            className="ml-2"
-          >
-            {view.name}
-          </Text>
-          {unreadCount > 0 && (
-            <View className={"bg-red ml-1 rounded-full px-1"}>
-              <Text className="text-xs font-medium text-white">
-                {unreadCount > 99 ? "99+" : unreadCount}
-              </Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      </ContextMenu>
+          {view.name}
+        </Text>
+        {unreadCount > 0 && (
+          <View className={"bg-red ml-1 rounded-full px-1"}>
+            <Text className="text-xs font-medium text-white">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
     )
   },
 )

@@ -1,10 +1,15 @@
 import type { NativeModule } from "expo"
 import { requireNativeModule } from "expo-modules-core"
 
-export { default as SharedWebView } from "./SharedWebView"
+import { htmlUrl } from "./constants"
 
 declare class ISharedWebViewModule extends NativeModule {
-  preload(url: string): void
+  load(url: string): void
+  evaluateJavaScript(js: string): void
 }
 
 export const SharedWebViewModule = requireNativeModule<ISharedWebViewModule>("FOSharedWebView")
+
+export const prepareWebView = () => {
+  SharedWebViewModule.load(htmlUrl)
+}

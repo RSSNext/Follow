@@ -14,6 +14,7 @@ import { NavigationContext } from "@/src/components/common/SafeNavigationScrollV
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useEntry } from "@/src/store/entry/hooks"
+import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { useSelectedFeed } from "../feed-drawer/atoms"
 
@@ -33,6 +34,10 @@ export function EntryListContentGrid({
       renderItem={useTypeScriptHappyCallback(({ item }) => {
         return <RenderEntryItem id={item} />
       }, [])}
+      keyExtractor={(id) => id}
+      onViewableItemsChanged={({ viewableItems }) => {
+        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
+      }}
       numColumns={2}
       onScroll={useTypeScriptHappyCallback(
         (e) => {

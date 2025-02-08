@@ -6,6 +6,7 @@
 //
 
 import Combine
+import UIKit
 
 class WebViewState: ObservableObject {
   @Published var contentHeight: CGFloat = UIWindow().bounds.height

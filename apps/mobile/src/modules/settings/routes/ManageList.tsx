@@ -139,7 +139,7 @@ const FeedCell = (props: { feedId: string; isSelected: boolean }) => {
               <FeedIcon feed={feed} size={24} />
             </View>
           </View>
-          <Text className="flex-1" ellipsizeMode="middle" numberOfLines={1}>
+          <Text className="text-label ml-2 flex-1" ellipsizeMode="middle" numberOfLines={1}>
             {feed?.title || "Untitled Feed"}
           </Text>
         </View>

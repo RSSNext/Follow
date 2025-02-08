@@ -129,7 +129,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
-          <Button disabled={!isValid} type="submit" className="w-full">
+          <Button disabled={!isValid} type="submit" className="w-full" size="lg">
             {t("register.submit")}
           </Button>
         </form>
