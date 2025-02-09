@@ -46,6 +46,8 @@ export function createWindow(
       sandbox: false,
       webviewTag: true,
       webSecurity: !isDev,
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   }
 
