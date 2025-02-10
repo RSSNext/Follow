@@ -3,10 +3,12 @@ import { Checkbox } from "@follow/components/ui/checkbox/index.jsx"
 import { parseHtml as parseHtmlGeneral } from "@follow/components/ui/markdown/parse-html.js"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
+import { renderToString } from "react-dom/server"
 
 import { createHeadingRenderer, MarkdownLink, MarkdownP } from "./components"
 import { MarkdownImage } from "./components/image"
 import { Math } from "./components/math"
+import { ShikiHighLighter } from "./components/shiki"
 
 const Style: Components["style"] = ({ node, ...props }) => {
   if (typeof props.children === "string") {
@@ -84,52 +86,52 @@ export const parseHtml = (
         }
         return createElement("input", props)
       },
-      // pre: ({ node, ...props }) => {
-      //   if (!props.children) return null
+      pre: ({ node, ...props }) => {
+        if (!props.children) return null
 
-      //   let language = ""
+        let language = ""
 
-      //   let codeString = null as string | null
-      //   if (props.className?.includes("language-")) {
-      //     language = props.className.replace("language-", "")
-      //   }
+        let codeString = null as string | null
+        if (props.className?.includes("language-")) {
+          language = props.className.replace("language-", "")
+        }
 
-      //   if (typeof props.children !== "object") {
-      //     codeString = props.children.toString()
-      //   } else {
-      //     const propsChildren = props.children
-      //     const children = Array.isArray(propsChildren)
-      //       ? propsChildren.find((i) => i.type === "code")
-      //       : propsChildren
+        if (typeof props.children !== "object") {
+          codeString = props.children.toString()
+        } else {
+          const propsChildren = props.children
+          const children = Array.isArray(propsChildren)
+            ? propsChildren.find((i) => i.type === "code")
+            : propsChildren
 
-      //     // Don't process not code block
-      //     if (!children) return createElement("pre", props, props.children)
+          // Don't process not code block
+          if (!children) return createElement("pre", props, props.children)
 
-      //     if (
-      //       "type" in children &&
-      //       children.type === "code" &&
-      //       children.props.className?.includes("language-")
-      //     ) {
-      //       language = children.props.className.replace("language-", "")
-      //     }
-      //     const code = ("props" in children && children.props.children) || children
-      //     if (!code) return null
+          if (
+            "type" in children &&
+            children.type === "code" &&
+            children.props.className?.includes("language-")
+          ) {
+            language = children.props.className.replace("language-", "")
+          }
+          const code = ("props" in children && children.props.children) || children
+          if (!code) return null
 
-      //     try {
-      //       codeString = extractCodeFromHtml(renderToString(code))
-      //     } catch (error) {
-      //       console.error("Code Block Render Error", error)
-      //       return createElement("pre", props, props.children)
-      //     }
-      //   }
+          try {
+            codeString = extractCodeFromHtml(renderToString(code))
+          } catch (error) {
+            console.error("Code Block Render Error", error)
+            return createElement("pre", props, props.children)
+          }
+        }
 
-      //   if (!codeString) return createElement("pre", props, props.children)
+        if (!codeString) return createElement("pre", props, props.children)
 
-      //   return createElement(ShikiHighLighter, {
-      //     code: codeString.trimEnd(),
-      //     language: language.toLowerCase(),
-      //   })
-      // },
+        return createElement(ShikiHighLighter, {
+          code: codeString.trimEnd(),
+          language: language.toLowerCase(),
+        })
+      },
       figure: ({ node, ...props }) =>
         createElement(
           "figure",
@@ -152,4 +154,62 @@ export const parseHtml = (
         ),
     },
   })
+}
+function extractCodeFromHtml(htmlString: string) {
+  const tempDiv = document.createElement("div")
+  tempDiv.innerHTML = htmlString
+
+  const hasPre = tempDiv.querySelector("pre")
+  if (!hasPre) {
+    tempDiv.innerHTML = `<pre><code>${htmlString}</code></pre>`
+  }
+
+  // 1. line break via <div />
+  const divElements = tempDiv.querySelectorAll("div")
+
+  let code = ""
+
+  if (divElements.length > 0) {
+    divElements.forEach((div) => {
+      code += `${div.textContent}\n`
+    })
+    return code
+  }
+
+  // 2. line wrapper like <span><span>...</span></span>
+  const spanElements = tempDiv.querySelectorAll("span > span")
+
+  // 2.1 outside <span /> as a line break?
+
+  let spanAsLineBreak = false
+
+  if (tempDiv.children.length > 2) {
+    for (const node of tempDiv.children) {
+      const span = node as HTMLSpanElement
+      // 2.2 If the span has only one child and it's a line break, then span can be as a line break
+      spanAsLineBreak = span.children.length === 1 && span.childNodes.item(0).textContent === "\n"
+      if (spanAsLineBreak) break
+    }
+  }
+
+  if (!spanAsLineBreak) {
+    const usingBr = tempDiv.querySelector("br")
+    if (usingBr) {
+      spanAsLineBreak = true
+    }
+  }
+
+  if (spanElements.length > 0) {
+    for (const node of tempDiv.children) {
+      if (spanAsLineBreak) {
+        code += `${node.textContent}`
+      } else {
+        code += `${node.textContent}\n`
+      }
+    }
+
+    return code
+  }
+
+  return tempDiv.textContent
 }

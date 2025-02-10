@@ -1,6 +1,6 @@
 import { createStore, Provider, useAtomValue } from "jotai"
 
-import { entryAtom } from "../atoms"
+import { codeThemeDarkAtom, codeThemeLightAtom, entryAtom } from "../atoms"
 import type { EntryModel } from "../types"
 import { HTML } from "./HTML"
 
@@ -10,6 +10,10 @@ Object.assign(window, {
   setEntry(entry: EntryModel) {
     store.set(entryAtom, entry)
     bridge.measure()
+  },
+  setCodeTheme(light: string, dark: string) {
+    store.set(codeThemeLightAtom, light)
+    store.set(codeThemeDarkAtom, dark)
   },
   reset() {
     store.set(entryAtom, null)
