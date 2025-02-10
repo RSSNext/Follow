@@ -33,7 +33,7 @@ import { useFeedUnreadStore } from "~/store/unread"
 import { useSelectedFeedIdsState } from "./atom"
 import { DraggableContext } from "./context"
 import { feedColumnStyles } from "./styles"
-import { UnreadNumber } from "./unread-number"
+import { UnreadNumber } from "./UnreadNumber"
 
 interface FeedItemProps {
   feedId: string

@@ -15,8 +15,8 @@ import {
   useSelectedFeedIdsState,
 } from "./atom"
 import { DraggableContext } from "./context"
+import { EmptyFeedList, ListHeader, StarredItem, useFeedsGroupedData } from "./FeedList.shared"
 import { useShouldFreeUpSpace } from "./hook"
-import { EmptyFeedList, ListHeader, StarredItem, useFeedsGroupedData } from "./list.shared"
 import { SortableFeedList } from "./sort-by"
 
 const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(

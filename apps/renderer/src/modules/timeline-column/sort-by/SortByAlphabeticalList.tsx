@@ -6,8 +6,8 @@ import { getPreferredTitle, useFeedStore } from "~/store/feed"
 import { useSubscriptionStore } from "~/store/subscription"
 
 import { useFeedListSortSelector } from "../atom"
-import { FeedCategory } from "../category"
-import { InboxItem, ListItem } from "../item"
+import { FeedCategory } from "../FeedCategory"
+import { InboxItem, ListItem } from "../FeedItem"
 import type { FeedListProps, ListListProps } from "./types"
 
 export const SortByAlphabeticalFeedList = ({

@@ -15,7 +15,7 @@ import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 
 import { useRootContainerElement } from "~/atoms/dom"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import { setTimelineColumnShow, useTimelineColumnShow } from "~/atoms/sidebar"
 import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -25,11 +25,11 @@ import { useTimelineList } from "~/hooks/biz/useTimelineList"
 
 import { WindowUnderBlur } from "../../components/ui/background"
 import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./atom"
-import { FeedColumnHeader } from "./header"
 import { useShouldFreeUpSpace } from "./hook"
 import styles from "./index.module.css"
-import TimelineList from "./timeline-list"
-import { TimelineSwitchButton } from "./timeline-switch-button"
+import { TimelineColumnHeader } from "./TimelineColumnHeader"
+import TimelineList from "./TimelineList"
+import { TimelineSwitchButton } from "./TimelineSwitchButton"
 
 const lethargy = new Lethargy()
 
@@ -123,7 +123,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   })
 
   const shouldFreeUpSpace = useShouldFreeUpSpace()
-  const feedColumnShow = useFeedColumnShow()
+  const feedColumnShow = useTimelineColumnShow()
   const rootContainerElement = useRootContainerElement()
 
   return (
@@ -137,13 +137,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       )}
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
-      <FeedColumnHeader />
+      <TimelineColumnHeader />
       {!feedColumnShow && (
         <RootPortal to={rootContainerElement}>
           <ActionButton
             tooltip={"Toggle Feed Column"}
             className="center absolute top-2.5 z-0 hidden -translate-x-2 text-zinc-500 left-macos-traffic-light macos:flex"
-            onClick={() => setFeedColumnShow(true)}
+            onClick={() => setTimelineColumnShow(true)}
           >
             <i className="i-mgc-layout-leftbar-open-cute-re" />
           </ActionButton>

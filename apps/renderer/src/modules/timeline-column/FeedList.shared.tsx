@@ -28,7 +28,7 @@ import { feedUnreadActions, useFeedUnreadStore } from "~/store/unread"
 
 import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
 import { feedColumnStyles } from "./styles"
-import { UnreadNumber } from "./unread-number"
+import { UnreadNumber } from "./UnreadNumber"
 
 export const useFeedsGroupedData = (view: FeedViewType) => {
   const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))

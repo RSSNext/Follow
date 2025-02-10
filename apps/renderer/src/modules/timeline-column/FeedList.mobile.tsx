@@ -16,7 +16,7 @@ import {
   useFeedsGroupedData,
   useInboxesGroupedData,
   useListsGroupedData,
-} from "./list.shared"
+} from "./FeedList.shared"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 

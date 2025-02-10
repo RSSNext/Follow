@@ -11,7 +11,7 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
-import { useFeedColumnShow } from "~/atoms/sidebar"
+import { useTimelineColumnShow } from "~/atoms/sidebar"
 import { useWhoami } from "~/atoms/user"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
@@ -63,7 +63,7 @@ export const EntryListHeader: FC<{
   const containerRef = React.useRef<HTMLDivElement>(null)
   const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
 
-  const feedColumnShow = useFeedColumnShow()
+  const feedColumnShow = useTimelineColumnShow()
   return (
     <div
       ref={containerRef}

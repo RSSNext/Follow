@@ -8,7 +8,7 @@ import { useHotkeys } from "react-hotkeys-hook"
 import { useParams } from "react-router"
 
 import { useRealInWideMode } from "~/atoms/settings/ui"
-import { useFeedColumnShow, useFeedColumnTempShow } from "~/atoms/sidebar"
+import { useTimelineColumnShow, useTimelineColumnTempShow } from "~/atoms/sidebar"
 import { m } from "~/components/common/Motion"
 import { FixedModalCloseButton } from "~/components/ui/modal/components/close"
 import { HotKeyScopeMap, ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "~/constants"
@@ -28,8 +28,8 @@ export const RightContentDesktop = () => {
   const realEntryId = entryId === ROUTE_ENTRY_PENDING ? "" : entryId
   const showEntryContent = !(views[view]!.wideMode || (settingWideMode && !realEntryId))
   const wideMode = !!(settingWideMode && realEntryId)
-  const feedColumnTempShow = useFeedColumnTempShow()
-  const feedColumnShow = useFeedColumnShow()
+  const feedColumnTempShow = useTimelineColumnTempShow()
+  const feedColumnShow = useTimelineColumnShow()
   const shouldHeaderPaddingLeft = feedColumnTempShow && !feedColumnShow && settingWideMode
 
   useHotkeys(

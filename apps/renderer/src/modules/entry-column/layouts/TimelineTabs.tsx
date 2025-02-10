@@ -3,7 +3,7 @@ import { useCallback } from "react"
 
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
-import { InboxItem, ListItem } from "~/modules/feed-column/item"
+import { InboxItem, ListItem } from "~/modules/timeline-column/FeedItem"
 import { useSubscriptionStore } from "~/store/subscription"
 
 export const TimelineTabs = () => {
