@@ -1,16 +1,23 @@
 import type { FeedViewType } from "@follow/constants"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
 
 import { getEntry } from "./getter"
 import { entrySyncServices, useEntryStore } from "./store"
 import type { EntryModel, FetchEntriesProps } from "./types"
 
-export const usePrefetchEntries = (props: FetchEntriesProps) => {
-  const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived } = props
-  return useQuery({
-    queryKey: ["entries", feedId, inboxId, listId, view, read, limit, pageParam, isArchived],
-    queryFn: () => entrySyncServices.fetchEntries(props),
+export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam">) => {
+  const { feedId, inboxId, listId, view, read, limit, isArchived } = props
+  return useInfiniteQuery({
+    queryKey: ["entries", feedId, inboxId, listId, view, read, limit, isArchived],
+    queryFn: ({ pageParam }) => entrySyncServices.fetchEntries({ ...props, pageParam }),
+    getNextPageParam: (lastPage) =>
+      inboxId || listId
+        ? lastPage.data?.at(-1)?.entries.insertedAt
+        : lastPage.data?.at(-1)?.entries.publishedAt,
+    initialPageParam: undefined as undefined | string,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 }
 export const usePrefetchEntryContent = (entryId: string) => {

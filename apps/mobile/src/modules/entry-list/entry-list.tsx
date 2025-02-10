@@ -15,7 +15,11 @@ import {
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
-import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
+import {
+  useFetchEntriesControls,
+  useSelectedFeedTitle,
+  useSelectedView,
+} from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
@@ -28,8 +32,7 @@ const headerHideableBottomHeight = 58
 
 export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
-  const selectedFeed = useSelectedFeed()
-  const view = selectedFeed.type === "view" ? selectedFeed.viewId : null
+  const view = useSelectedView()
   const viewTitle = useSelectedFeedTitle()
 
   return (
@@ -67,6 +70,9 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
   const originalDefaultHeaderHeight = useDefaultHeaderHeight()
   const headerHeight = originalDefaultHeaderHeight + headerHideableBottomHeight
   const { scrollY } = useContext(NavigationContext)!
+
+  const { fetchNextPage, isFetchingNextPage } = useFetchEntriesControls()
+
   return (
     <FlashList
       onScroll={useTypeScriptHappyCallback(
@@ -83,6 +89,9 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
         [],
       )}
       keyExtractor={(id) => id}
+      onEndReached={() => {
+        fetchNextPage()
+      }}
       onViewableItemsChanged={({ viewableItems }) => {
         debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
       }}
@@ -96,6 +105,7 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
         paddingBottom: tabBarHeight,
       }}
       ItemSeparatorComponent={ItemSeparator}
+      ListFooterComponent={isFetchingNextPage ? <EntryItemSkeleton /> : null}
     />
   )
 }

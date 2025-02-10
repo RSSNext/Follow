@@ -11,6 +11,7 @@ import { useFeed } from "@/src/store/feed/hooks"
 import { useInbox } from "@/src/store/inbox/hooks"
 import { useList } from "@/src/store/list/hooks"
 import { getSubscriptionByCategory } from "@/src/store/subscription/getter"
+import { useSubscription } from "@/src/store/subscription/hooks"
 
 // drawer open state
 
@@ -97,8 +98,22 @@ const selectedFeedAtom = atom<SelectedFeed>({
   viewId: FeedViewType.Articles,
 })
 
-export function useSelectedFeed() {
+export function useSelectedView() {
   const selectedFeed = useAtomValue(selectedFeedAtom)
+  const list = useList(selectedFeed.type === "list" ? selectedFeed.listId : "")
+  const subscription = useSubscription(selectedFeed.type === "feed" ? selectedFeed.feedId : "")
+  const view =
+    selectedFeed.type === "view"
+      ? selectedFeed.viewId
+      : selectedFeed.type === "list"
+        ? list?.view
+        : selectedFeed.type === "feed"
+          ? subscription?.view
+          : undefined
+  return view
+}
+
+function getFetchEntryPayload(selectedFeed: SelectedFeed): FetchEntriesProps {
   let payload: FetchEntriesProps = {}
   switch (selectedFeed.type) {
     case "view": {
@@ -123,8 +138,22 @@ export function useSelectedFeed() {
     }
     // No default
   }
+  return payload
+}
+
+export function useSelectedFeed() {
+  const selectedFeed = useAtomValue(selectedFeedAtom)
+
+  const payload = getFetchEntryPayload(selectedFeed)
   usePrefetchEntries(payload)
+
   return selectedFeed
+}
+
+export function useFetchEntriesControls() {
+  const selectedFeed = useSelectedFeed()
+  const payload = getFetchEntryPayload(selectedFeed)
+  return usePrefetchEntries(payload)
 }
 
 export const useSelectedFeedTitle = () => {
