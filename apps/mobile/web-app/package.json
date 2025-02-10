@@ -3,6 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "vite build"
+    "build": "cd html-renderer && vite build"
   }
 }
