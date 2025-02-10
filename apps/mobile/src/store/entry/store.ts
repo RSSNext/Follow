@@ -159,6 +159,12 @@ class EntryActions {
       draft.entryIdByView[view] = new Set(entries.map((e) => e.id))
     })
   }
+
+  resetByCategory({ category, entries }: { category: Category; entries: EntryModel[] }) {
+    immerSet((draft) => {
+      draft.entryIdByCategory[category] = new Set(entries.map((e) => e.id))
+    })
+  }
 }
 
 class EntrySyncServices {
@@ -199,9 +205,15 @@ class EntrySyncServices {
 
     // After initial fetch, we can reset the state to prefer the entries data from the server
     if (!pageParam) {
-      // eslint-disable-next-line unicorn/no-lonely-if
       if (view !== undefined) {
         entryActions.resetByView({ view, entries })
+      }
+
+      if (params.feedIdList && params.feedIdList.length > 0) {
+        const category = getSubscription(params.feedIdList[0]!)?.category
+        if (category) {
+          entryActions.resetByCategory({ category, entries })
+        }
       }
     }
 
