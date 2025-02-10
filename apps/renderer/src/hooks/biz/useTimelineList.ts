@@ -6,7 +6,7 @@ export const useTimelineList = () => {
 
   return [
     ...[0, 1, 2, 3].map((view) => `view-${view}`),
-    ...lists.map((list) => `list-${list.listId}`),
     ...inboxes.map((inbox) => `inbox-${inbox.inboxId}`),
+    ...lists.map((list) => `list-${list.listId}`),
   ]
 }
