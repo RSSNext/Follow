@@ -15,6 +15,6 @@ export const useTimelineList = () => {
     lists: listsIds,
     inboxes: inboxesIds,
 
-    all: useMemo(() => [...views, ...listsIds, ...inboxesIds], [listsIds, inboxesIds]),
+    all: useMemo(() => [...views, ...inboxesIds, ...listsIds], [listsIds, inboxesIds]),
   }
 }

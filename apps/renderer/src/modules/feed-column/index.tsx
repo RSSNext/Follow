@@ -1,59 +1,35 @@
-import { useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
-import type { FeedViewType } from "@follow/constants"
-import { Routes, views } from "@follow/constants"
+import { Routes } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
-import { getNodeXInScroller, isNodeVisibleInScroller, nextFrame } from "@follow/utils/dom"
+import { getNodeXInScroller, isNodeVisibleInScroller } from "@follow/utils/dom"
 import { clamp, clsx, cn } from "@follow/utils/utils"
 import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
 import type { FC, PropsWithChildren } from "react"
-import {
-  memo,
-  startTransition,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react"
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
-import { useTranslation } from "react-i18next"
 
-import { useShowContextMenu } from "~/atoms/context-menu"
-import { getMainContainerElement, useRootContainerElement } from "~/atoms/dom"
+import { useRootContainerElement } from "~/atoms/dom"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
-import {
-  HotKeyScopeMap,
-  isElectronBuild,
-  ROUTE_TIMELINE_OF_INBOX,
-  ROUTE_TIMELINE_OF_LIST,
-  ROUTE_TIMELINE_OF_VIEW,
-} from "~/constants"
+import { HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
-import { useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useTimelineList } from "~/hooks/biz/useTimelineList"
-import { useContextMenu } from "~/hooks/common"
-import { useListById } from "~/store/list"
-import { subscriptionActions } from "~/store/subscription"
-import { useFeedUnreadStore } from "~/store/unread"
-import { useUnreadByView } from "~/store/unread/hooks"
 
 import { WindowUnderBlur } from "../../components/ui/background"
-import { FeedIcon } from "../feed/feed-icon"
 import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
 import { useShouldFreeUpSpace } from "./hook"
 import styles from "./index.module.css"
-import { FeedList } from "./list"
+import TimelineList from "./timeline-list"
+import { TimelineSwitchButton } from "./timeline-switch-button"
 
 const lethargy = new Lethargy()
 
@@ -81,10 +57,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     view: s.view,
     listId: s.listId,
   }))
-  const { timelineId, listId } = routeParams
-  let { view } = routeParams
-  const listView = useListById(listId, (list) => list.view)
-  view = listView ?? view ?? 0
+  const { timelineId } = routeParams
+
   const navigateBackHome = useBackHome(timelineId)
   const setActive = useCallback(
     (args: string | ((prev: string | undefined, index: number) => string)) => {
@@ -99,7 +73,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       navigateBackHome(nextActive)
       resetSelectedFeedIds()
     },
-    [navigateBackHome, timelineId, timelineList],
+    [navigateBackHome, timelineId, timelineList.all],
   )
 
   useWheel(
@@ -191,10 +165,10 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
           }
         }, [])}
       >
-        <SwipeWrapper active={view}>
-          {views.map((item, index) => (
-            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
-              <FeedList className="flex size-full flex-col text-sm" view={index} />
+        <SwipeWrapper active={timelineId!}>
+          {timelineList.all.map((timelineId) => (
+            <section key={timelineId} className="h-full w-feed-col shrink-0 snap-center">
+              <TimelineList key={timelineId} timelineId={timelineId} />
             </section>
           ))}
         </SwipeWrapper>
@@ -247,212 +221,27 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
         {timelineList.views.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
-        {timelineList.views.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
-        {timelineList.lists.map((timelineId) => (
-          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-        ))}
+
         {timelineList.lists.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
         {timelineList.inboxes.map((timelineId) => (
+          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+        ))}
+        {timelineList.views.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.lists.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
       </div>
     </div>
   )
 }
-const TimelineSwitchButton = ({ timelineId }: { timelineId: string }) => {
-  const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
-  const isActive = activeTimelineId === timelineId
-
-  const navigate = useNavigateEntry()
-  const setActive = useCallback(() => {
-    navigate({
-      timelineId,
-      feedId: null,
-      entryId: null,
-    })
-    resetSelectedFeedIds()
-  }, [navigate, timelineId])
-
-  if (timelineId.startsWith(ROUTE_TIMELINE_OF_VIEW)) {
-    const id = Number.parseInt(timelineId.slice(ROUTE_TIMELINE_OF_VIEW.length), 10) as FeedViewType
-    return <ViewSwitchButton view={id} isActive={isActive} setActive={setActive} />
-  } else if (timelineId.startsWith(ROUTE_TIMELINE_OF_LIST)) {
-    const id = timelineId.slice(ROUTE_TIMELINE_OF_LIST.length)
-    return <ListSwitchButton listId={id} isActive={isActive} setActive={setActive} />
-  } else if (timelineId.startsWith(ROUTE_TIMELINE_OF_INBOX)) {
-    const id = timelineId.slice(ROUTE_TIMELINE_OF_INBOX.length)
-    return <InboxSwitchButton inboxId={id} isActive={isActive} setActive={setActive} />
-  }
-}
-
-const ViewSwitchButton: FC<{
-  view: FeedViewType
-  isActive: boolean
-  setActive: () => void
-}> = ({ view, isActive, setActive }) => {
-  const unreadByView = useUnreadByView()
-  const { t } = useTranslation()
-  const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
-  const item = views.find((item) => item.view === view)!
-
-  const { isOver, setNodeRef } = useDroppable({
-    id: `view-${item.name}`,
-    data: {
-      category: "",
-      view: item.view,
-    },
-  })
-
-  return (
-    <ActionButton
-      ref={setNodeRef}
-      key={item.name}
-      tooltip={t(item.name as any)}
-      shortcut={`${view + 1}`}
-      className={cn(
-        isActive && item.className,
-        "flex h-11 shrink-0 flex-col items-center gap-1 text-[1.375rem]",
-        ELECTRON ? "hover:!bg-theme-item-hover" : "",
-        isOver && "border-theme-accent-400 bg-theme-accent-400/60",
-      )}
-      onClick={(e) => {
-        startTransition(() => {
-          setActive()
-        })
-        e.stopPropagation()
-      }}
-    >
-      {item.icon}
-      {showSidebarUnreadCount ? (
-        <div className="text-[0.625rem] font-medium leading-none">
-          {unreadByView[view]! > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[view]}
-        </div>
-      ) : (
-        <i
-          className={cn(
-            "i-mgc-round-cute-fi text-[0.25rem]",
-            unreadByView[view] ? (isActive ? "opacity-100" : "opacity-60") : "opacity-0",
-          )}
-        />
-      )}
-    </ActionButton>
-  )
-}
-
-const ListSwitchButton: FC<{
-  listId: string
-  isActive: boolean
-  setActive: () => void
-}> = ({ listId, isActive, setActive }) => {
-  const list = useListById(listId)
-  const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
-
-  const handleNavigate = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation()
-
-      setActive()
-      subscriptionActions.markReadByFeedIds({
-        listId,
-      })
-      // focus to main container in order to let keyboard can navigate entry items by arrow keys
-      nextFrame(() => {
-        getMainContainerElement()?.focus()
-      })
-    },
-    [listId, setActive],
-  )
-
-  const items = useListActions({ listId })
-  const showContextMenu = useShowContextMenu()
-  const contextMenuProps = useContextMenu({
-    onContextMenu: async (e) => {
-      await showContextMenu(items, e)
-    },
-  })
-
-  if (!list) return null
-
-  return (
-    <ActionButton
-      key={list.id}
-      tooltip={list.title}
-      className={cn(
-        "flex h-11 shrink-0 flex-col items-center gap-1 text-xl grayscale",
-        "hover:!bg-theme-item-hover",
-        isActive && "!bg-theme-item-active grayscale-0",
-      )}
-      onClick={handleNavigate}
-      {...contextMenuProps}
-    >
-      <FeedIcon fallback feed={list} size={22} noMargin />
-      {!!listUnread && (
-        <div className="center h-2.5 text-[0.25rem]">
-          <i className={"i-mgc-round-cute-fi"} />
-        </div>
-      )}
-      {!listUnread && (
-        <span className="line-clamp-1 break-all px-1 text-[0.625rem] font-medium leading-none">
-          {list.title}
-        </span>
-      )}
-    </ActionButton>
-  )
-}
-
-const InboxSwitchButton: FC<{
-  inboxId: string
-  isActive: boolean
-  setActive: () => void
-}> = ({ inboxId, isActive, setActive }) => {
-  const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
-
-  const handleNavigate = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation()
-      setActive()
-      subscriptionActions.markReadByFeedIds({
-        inboxId,
-      })
-      // focus to main container for keyboard navigation
-      nextFrame(() => {
-        getMainContainerElement()?.focus()
-      })
-    },
-    [inboxId, setActive],
-  )
-
-  return (
-    <ActionButton
-      key={inboxId}
-      tooltip="Inbox"
-      className={cn(
-        "flex h-11 shrink-0 flex-col items-center gap-1 text-xl",
-        "hover:!bg-theme-item-hover",
-        isActive && "!bg-theme-item-active",
-      )}
-      onClick={handleNavigate}
-    >
-      <i className="i-mgc-inbox-cute-fi" />
-      {!!inboxUnread && (
-        <div className="center h-2.5 text-[0.25rem]">
-          <i className={"i-mgc-round-cute-fi"} />
-        </div>
-      )}
-      {!inboxUnread && (
-        <span className="line-clamp-1 break-all px-1 text-[0.625rem] font-medium leading-none">
-          Inbox
-        </span>
-      )}
-    </ActionButton>
-  )
-}
 
 const SwipeWrapper: FC<{
-  active: number
+  active: string
   children: React.JSX.Element[]
 }> = memo(({ children, active }) => {
   const reduceMotion = useReduceMotion()
+  const timelineList = useTimelineList()
+  const index = timelineList.all.indexOf(active)
 
   const feedColumnWidth = useUISettingKey("feedColWidth")
   const containerRef = useRef<HTMLDivElement>(null)
@@ -461,12 +250,12 @@ const SwipeWrapper: FC<{
   const [isReady, setIsReady] = useState(false)
 
   const [direction, setDirection] = useState<"left" | "right">("right")
-  const [currentAnimtedActive, setCurrentAnimatedActive] = useState(active)
+  const [currentAnimtedActive, setCurrentAnimatedActive] = useState(index)
 
   useLayoutEffect(() => {
     const prevActiveIndex = prevActiveIndexRef.current
-    if (prevActiveIndex !== active) {
-      if (prevActiveIndex < active) {
+    if (prevActiveIndex !== index) {
+      if (prevActiveIndex < index) {
         setDirection("right")
       } else {
         setDirection("left")
@@ -474,13 +263,13 @@ const SwipeWrapper: FC<{
     }
     // eslint-disable-next-line @eslint-react/web-api/no-leaked-timeout
     setTimeout(() => {
-      setCurrentAnimatedActive(active)
+      setCurrentAnimatedActive(index)
     }, 0)
     if (prevActiveIndexRef.current !== -1) {
       setIsReady(true)
     }
-    prevActiveIndexRef.current = active
-  }, [active])
+    prevActiveIndexRef.current = index
+  }, [index])
 
   if (reduceMotion) {
     return <div ref={containerRef}>{children[currentAnimtedActive]}</div>
