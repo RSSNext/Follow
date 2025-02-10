@@ -6,13 +6,21 @@ import type { FeedViewType } from "@follow/constants"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
-import { nextFrame } from "@follow/utils/dom"
+import { getNodeXInScroller, isNodeVisibleInScroller, nextFrame } from "@follow/utils/dom"
 import { clamp, clsx, cn } from "@follow/utils/utils"
 import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
 import type { FC, PropsWithChildren } from "react"
-import { startTransition, useCallback, useLayoutEffect, useRef, useState } from "react"
+import {
+  memo,
+  startTransition,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
@@ -75,8 +83,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   }))
   const { timelineId, listId } = routeParams
   let { view } = routeParams
-  const list = useListById(listId)
-  view = list?.view ?? view ?? 0
+  const listView = useListById(listId, (list) => list.view)
+  view = listView ?? view ?? 0
   const navigateBackHome = useBackHome(timelineId)
   const setActive = useCallback(
     (args: string | ((prev: string | undefined, index: number) => string)) => {
@@ -168,26 +176,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         </RootPortal>
       )}
 
-      <div className="mt-3 pb-4">
-        <div
-          className={clsx(
-            styles["mask-scroller"],
-            "flex h-11 justify-between gap-2 overflow-auto px-3 text-xl text-theme-vibrancyFg scrollbar-none",
-          )}
-        >
-          {timelineList.views.map((timelineId) => (
-            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-          ))}
-          <DividerVertical className="mx-2 my-auto h-8" />
-          {timelineList.lists.map((timelineId) => (
-            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-          ))}
-          <DividerVertical className="mx-2 my-auto h-8" />
-          {timelineList.inboxes.map((timelineId) => (
-            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-          ))}
-        </div>
-      </div>
+      <TimelineSelector timelineId={timelineId} />
       <div
         className={cn("relative mt-1 flex size-full", !shouldFreeUpSpace && "overflow-hidden")}
         ref={carouselRef}
@@ -216,9 +205,63 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   )
 }
 
+const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) => {
+  const timelineList = useTimelineList()
+  const scrollRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const $scroll = scrollRef.current
+    if (!$scroll) {
+      return
+    }
+    const handler = () => {
+      const targetElement = [...$scroll.children]
+        .filter(($el) => $el.tagName === "BUTTON")
+        .find(($el, index) => index === timelineList.all.indexOf(timelineId))
+      if (!targetElement) {
+        return
+      }
+
+      const isInCurrentView = isNodeVisibleInScroller(targetElement, $scroll)
+      if (!targetElement || isInCurrentView) {
+        return
+      }
+      const targetX = getNodeXInScroller(targetElement, $scroll)
+
+      $scroll.scrollTo({
+        left: targetX,
+        behavior: "smooth",
+      })
+    }
+    handler()
+  }, [timelineId, timelineList])
+  return (
+    <div className="mt-3 pb-4">
+      <div
+        ref={scrollRef}
+        className={clsx(
+          styles["mask-scroller"],
+          "flex h-11 justify-between gap-2 overflow-auto px-3 text-xl text-theme-vibrancyFg scrollbar-none",
+        )}
+      >
+        {timelineList.views.map((timelineId) => (
+          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+        ))}
+        {timelineList.views.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.lists.map((timelineId) => (
+          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+        ))}
+        {timelineList.lists.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.inboxes.map((timelineId) => (
+          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+        ))}
+      </div>
+    </div>
+  )
+}
 const TimelineSwitchButton = ({ timelineId }: { timelineId: string }) => {
   const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
   const isActive = activeTimelineId === timelineId
+
   const navigate = useNavigateEntry()
   const setActive = useCallback(() => {
     navigate({
@@ -334,16 +377,23 @@ const ListSwitchButton: FC<{
       tooltip={list.title}
       className={cn(
         "flex h-11 shrink-0 flex-col items-center gap-1 text-xl grayscale",
-        ELECTRON ? "hover:!bg-theme-item-hover" : "",
-        isActive && "grayscale-0",
+        "hover:!bg-theme-item-hover",
+        isActive && "!bg-theme-item-active grayscale-0",
       )}
       onClick={handleNavigate}
       {...contextMenuProps}
     >
       <FeedIcon fallback feed={list} size={22} noMargin />
-      <div className="center h-2.5 text-[0.25rem]">
-        <i className={cn("i-mgc-round-cute-fi", !listUnread && "opacity-0")} />
-      </div>
+      {!!listUnread && (
+        <div className="center h-2.5 text-[0.25rem]">
+          <i className={"i-mgc-round-cute-fi"} />
+        </div>
+      )}
+      {!listUnread && (
+        <span className="line-clamp-1 break-all px-1 text-[0.625rem] font-medium leading-none">
+          {list.title}
+        </span>
+      )}
     </ActionButton>
   )
 }
@@ -351,7 +401,7 @@ const ListSwitchButton: FC<{
 const SwipeWrapper: FC<{
   active: number
   children: React.JSX.Element[]
-}> = ({ children, active }) => {
+}> = memo(({ children, active }) => {
   const reduceMotion = useReduceMotion()
 
   const feedColumnWidth = useUISettingKey("feedColWidth")
@@ -411,4 +461,4 @@ const SwipeWrapper: FC<{
       </m.div>
     </AnimatePresence>
   )
-}
+})

@@ -18,10 +18,7 @@ export const CollectionPanel = () => {
 
   const insets = useSafeAreaInsets()
   return (
-    <View
-      className="bg-secondary-system-fill dark:bg-tertiary-system-background"
-      style={{ width: 65 }}
-    >
+    <View className="bg-secondary-system-fill dark:bg-tertiary-system-background w-[65px]">
       <ScrollView
         contentContainerClassName="flex gap-4 px-3.5"
         contentContainerStyle={{ marginTop: insets.top + 10, paddingBottom: insets.bottom }}
