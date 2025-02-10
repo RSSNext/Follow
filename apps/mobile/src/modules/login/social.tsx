@@ -3,7 +3,7 @@ import { useColorScheme } from "nativewind"
 import { useContext } from "react"
 import { Platform, TouchableOpacity, View } from "react-native"
 
-import { LoginTeamsCheckGuardContext } from "@/src/contexts/LoginTeamsContext"
+import { LoginTermsCheckGuardContext as LoginTermsCheckGuardContext } from "@/src/contexts/LoginTermsContext"
 import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
 import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
 import { GoogleCuteFiIcon } from "@/src/icons/google_cute_fi"
@@ -40,7 +40,7 @@ const provider: Record<
 
 export function SocialLogin() {
   const { data } = useAuthProviders()
-  const teamsCheckGuard = useContext(LoginTeamsCheckGuardContext)
+  const termsCheckGuard = useContext(LoginTermsCheckGuardContext)
   const { colorScheme } = useColorScheme()
 
   return (
@@ -54,7 +54,7 @@ export function SocialLogin() {
               key={key}
               className="border-opaque-separator border-hairline rounded-full p-2"
               onPress={() =>
-                teamsCheckGuard?.(async () => {
+                termsCheckGuard?.(async () => {
                   if (!data?.[providerInfo.id]) return
 
                   if (providerInfo.id === "apple") {
