@@ -707,6 +707,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3(h6skq47olxax7xbsaduxdbjqze)
 
+  apps/mobile/web-app: {}
+
   apps/renderer:
     dependencies:
       '@dnd-kit/core':
