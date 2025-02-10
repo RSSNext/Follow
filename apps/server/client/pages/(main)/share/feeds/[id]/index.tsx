@@ -89,7 +89,7 @@ export function Component() {
           variant={isSubscribed ? "outline" : undefined}
           onClick={() => {
             askOpenInFollowApp(`add?id=${id}`, () => {
-              return `/feeds/${id}/pending?view=${view}`
+              return `/timeline/view-${view}/${id}/pending`
             })
           }}
         >

@@ -4,9 +4,16 @@ export const useTimelineList = () => {
   const lists = useAllLists()
   const inboxes = useAllInboxes()
 
-  return [
-    ...[0, 1, 2, 3].map((view) => `view-${view}`),
-    ...lists.map((list) => `list-${list.listId}`),
-    ...inboxes.map((inbox) => `inbox-${inbox.inboxId}`),
-  ]
+  const views = [0, 1, 2, 3].map((view) => `view-${view}`)
+
+  const listsIds = lists.map((list) => `list-${list.listId}`)
+  const inboxesIds = inboxes.map((inbox) => `inbox-${inbox.inboxId}`)
+
+  return {
+    views,
+    lists: listsIds,
+    inboxes: inboxesIds,
+
+    all: [...views, ...listsIds, ...inboxesIds],
+  }
 }

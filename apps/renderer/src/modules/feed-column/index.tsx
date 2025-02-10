@@ -1,13 +1,13 @@
 import { useDroppable } from "@dnd-kit/core"
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
-import { ScrollArea } from "@follow/components/ui/scroll-area/ScrollArea.js"
 import type { FeedViewType } from "@follow/constants"
 import { Routes, views } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
 import { nextFrame } from "@follow/utils/dom"
-import { clamp, cn } from "@follow/utils/utils"
+import { clamp, clsx, cn } from "@follow/utils/utils"
 import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
@@ -44,6 +44,7 @@ import { FeedIcon } from "../feed/feed-icon"
 import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./atom"
 import { FeedColumnHeader } from "./header"
 import { useShouldFreeUpSpace } from "./hook"
+import styles from "./index.module.css"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -81,7 +82,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     (args: string | ((prev: string | undefined, index: number) => string)) => {
       let nextActive
       if (typeof args === "function") {
-        const index = timelineId ? timelineList.indexOf(timelineId) : 0
+        const index = timelineId ? timelineList.all.indexOf(timelineId) : 0
         nextActive = args(timelineId, index)
       } else {
         nextActive = args
@@ -99,7 +100,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         const s = lethargy.check(event)
         if (s) {
           if (!wait && Math.abs(dex) > 20) {
-            setActive((_, i) => timelineList[clamp(i + dx, 0, timelineList.length - 1)]!)
+            setActive((_, i) => timelineList.all[clamp(i + dx, 0, timelineList.all.length - 1)]!)
             return true
           } else {
             return
@@ -123,13 +124,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       if (isHotkeyPressed("Left")) {
         setActive((_, i) => {
           if (i === 0) {
-            return timelineList.at(-1)!
+            return timelineList.all.at(-1)!
           } else {
-            return timelineList[i - 1]!
+            return timelineList.all[i - 1]!
           }
         })
       } else {
-        setActive((_, i) => timelineList[(i + 1) % timelineList.length]!)
+        setActive((_, i) => timelineList.all[(i + 1) % timelineList.all.length]!)
       }
     },
     { scopes: HotKeyScopeMap.Home },
@@ -167,16 +168,26 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         </RootPortal>
       )}
 
-      <ScrollArea
-        rootClassName="mx-3 pb-4 mt-3"
-        viewportClassName="h-11 text-xl text-theme-vibrancyFg [&>div]:!flex [&>div]:!flex-row [&>div]:gap-3 [&>div]:justify-between"
-        orientation="horizontal"
-        scrollbarClassName="h-2"
-      >
-        {timelineList.map((timelineId) => (
-          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-        ))}
-      </ScrollArea>
+      <div className="mt-3 pb-4">
+        <div
+          className={clsx(
+            styles["mask-scroller"],
+            "flex h-11 justify-between gap-2 overflow-auto px-3 text-xl text-theme-vibrancyFg scrollbar-none",
+          )}
+        >
+          {timelineList.views.map((timelineId) => (
+            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+          ))}
+          <DividerVertical className="mx-2 my-auto h-8" />
+          {timelineList.lists.map((timelineId) => (
+            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+          ))}
+          <DividerVertical className="mx-2 my-auto h-8" />
+          {timelineList.inboxes.map((timelineId) => (
+            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+          ))}
+        </div>
+      </div>
       <div
         className={cn("relative mt-1 flex size-full", !shouldFreeUpSpace && "overflow-hidden")}
         ref={carouselRef}
