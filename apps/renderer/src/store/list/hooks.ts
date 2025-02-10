@@ -6,8 +6,18 @@ import { useWhoami } from "~/atoms/user"
 
 import { useListStore } from "./store"
 
-export const useListById = (listId: Nullable<string>): ListModel | null =>
-  useListStore((state) => (listId ? state.lists[listId] || null : null))
+const defaultSelector = (list) => list
+export function useListById<T>(listId: Nullable<string>, selector: (list: ListModel) => T): T | null
+export function useListById(listId: Nullable<string>): ListModel | null
+
+export function useListById<T>(
+  listId: Nullable<string>,
+  selector: (list: ListModel) => T = defaultSelector,
+): T | null {
+  return useListStore((state) =>
+    listId && state.lists[listId] ? selector(state.lists[listId]) : null,
+  )
+}
 
 export const useListByView = (view: FeedViewType) => {
   return useListStore(

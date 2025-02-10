@@ -29,7 +29,7 @@ import { useUnreadByView } from "~/store/unread/hooks"
 import { FeedIcon } from "../feed/feed-icon"
 import { resetSelectedFeedIds } from "./atom"
 
-export default function TimelineSwitchButton({ timelineId }: { timelineId: string }) {
+export function TimelineSwitchButton({ timelineId }: { timelineId: string }) {
   const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
   const isActive = activeTimelineId === timelineId
   const navigate = useNavigateEntry()
@@ -148,16 +148,23 @@ const ListSwitchButton: FC<{
       tooltip={list.title}
       className={cn(
         "flex h-11 shrink-0 flex-col items-center gap-1 text-xl grayscale",
-        ELECTRON ? "hover:!bg-theme-item-hover" : "",
-        isActive && "grayscale-0",
+        "hover:!bg-theme-item-hover",
+        isActive && "!bg-theme-item-active grayscale-0",
       )}
       onClick={handleNavigate}
       {...contextMenuProps}
     >
       <FeedIcon fallback feed={list} size={22} noMargin />
-      <div className="center h-2.5 text-[0.25rem]">
-        <i className={cn("i-mgc-round-cute-fi", !listUnread && "opacity-0")} />
-      </div>
+      {!!listUnread && (
+        <div className="center h-2.5 text-[0.25rem]">
+          <i className={"i-mgc-round-cute-fi"} />
+        </div>
+      )}
+      {!listUnread && (
+        <span className="line-clamp-1 break-all px-1 text-[0.625rem] font-medium leading-none">
+          {list.title}
+        </span>
+      )}
     </ActionButton>
   )
 }

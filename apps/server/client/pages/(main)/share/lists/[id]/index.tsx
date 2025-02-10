@@ -40,7 +40,7 @@ export function Component() {
 
   const handleOpenInFollowApp = () => {
     askOpenInFollowApp(`add?type=list&id=${id!}`, () => {
-      return `/feeds/all/pending?view=0&follow=${id}&follow_type=list`
+      return `/timeline/view-0/all/pending?follow=${id}&follow_type=list`
     })
   }
 

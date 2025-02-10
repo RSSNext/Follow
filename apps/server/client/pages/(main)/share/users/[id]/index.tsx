@@ -104,7 +104,7 @@ export const Component = () => {
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   askOpenInFollowApp(`add?id=${subscription.feedId}`, () => {
-                                    return `/feeds/${subscription.feedId}/pending?view=${subscription.view}`
+                                    return `/timeline/view-${subscription.view}/${subscription.feedId}/pending`
                                   })
                                 }}
                               >
