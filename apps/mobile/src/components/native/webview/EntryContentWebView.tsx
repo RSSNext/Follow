@@ -36,16 +36,25 @@ export const setWebViewEntry = (entry: EntryModel) => {
   )
 }
 
+const setReaderRenderInlineStyle = (value: boolean) => {
+  SharedWebViewModule.evaluateJavaScript(`setReaderRenderInlineStyle(${value})`)
+}
+
 export function EntryContentWebView(props: EntryContentWebViewProps) {
   const [contentHeight, setContentHeight] = React.useState(0)
 
   const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
   const codeThemeDark = useUISettingKey("codeHighlightThemeDark")
+  const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
   const { entry } = props
 
   useEffect(() => {
     setCodeTheme(codeThemeLight, codeThemeDark)
   }, [codeThemeLight, codeThemeDark])
+
+  useEffect(() => {
+    setReaderRenderInlineStyle(readerRenderInlineStyle)
+  }, [readerRenderInlineStyle])
 
   const [mode, setMode] = React.useState<"normal" | "debug">("normal")
   React.useEffect(() => {

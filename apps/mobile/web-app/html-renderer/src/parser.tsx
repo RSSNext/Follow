@@ -12,11 +12,7 @@ import { ShikiHighLighter } from "./components/shiki"
 
 const Style: Components["style"] = ({ node, ...props }) => {
   if (typeof props.children === "string") {
-    return createElement(
-      MemoedDangerousHTMLStyle,
-      null,
-      props.children.replaceAll(/html|body/g, "#shadow-html"),
-    )
+    return createElement(MemoedDangerousHTMLStyle, null, props.children)
   }
   return null
 }
