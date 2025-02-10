@@ -37,10 +37,10 @@ import { useFeedUnreadStore } from "~/store/unread"
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { ListCreationModalContent } from "../settings/tabs/lists/modals"
 import { useFeedListSortSelector } from "./atom"
-import { CategoryRemoveDialogContent } from "./category-remove-dialog"
-import { FeedItem } from "./item"
+import { CategoryRemoveDialogContent } from "./CategoryRemoveDialogContent"
+import { FeedItem } from "./FeedItem"
 import { feedColumnStyles } from "./styles"
-import { UnreadNumber } from "./unread-number"
+import { UnreadNumber } from "./UnreadNumber"
 
 type FeedId = string
 interface FeedCategoryProps {

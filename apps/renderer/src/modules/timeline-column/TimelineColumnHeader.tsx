@@ -15,7 +15,7 @@ import { toast } from "sonner"
 import { setAppSearchOpen } from "~/atoms/app"
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useIsZenMode, useSetZenMode } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import { setTimelineColumnShow, useTimelineColumnShow } from "~/atoms/sidebar"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useI18n } from "~/hooks/common"
@@ -37,7 +37,7 @@ const useBackHome = (timelineId?: string) => {
   )
 }
 
-export const FeedColumnHeader = memo(() => {
+export const TimelineColumnHeader = memo(() => {
   const timelineId = useRouteParamsSelector((s) => s.timelineId)
   const navigateBackHome = useBackHome(timelineId)
   const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
@@ -80,7 +80,7 @@ export const FeedColumnHeader = memo(() => {
 })
 
 const LayoutActionButton = () => {
-  const feedColumnShow = useFeedColumnShow()
+  const feedColumnShow = useTimelineColumnShow()
 
   const [animation, setAnimation] = useState({
     width: !feedColumnShow ? "auto" : 0,
@@ -119,7 +119,7 @@ const LayoutActionButton = () => {
           if (isZenMode) {
             setIsZenMode(false)
           } else {
-            setFeedColumnShow(!feedColumnShow)
+            setTimelineColumnShow(!feedColumnShow)
           }
         }}
       />

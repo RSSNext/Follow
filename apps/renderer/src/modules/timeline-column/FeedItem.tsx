@@ -33,7 +33,7 @@ import { useFeedUnreadStore } from "~/store/unread"
 import { useSelectedFeedIdsState } from "./atom"
 import { DraggableContext } from "./context"
 import { feedColumnStyles } from "./styles"
-import { UnreadNumber } from "./unread-number"
+import { UnreadNumber } from "./UnreadNumber"
 
 interface FeedItemProps {
   feedId: string
@@ -171,8 +171,8 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       }
       className={cn(
         feedColumnStyles.item,
-        isFeed ? "py-[2px]" : "py-1.5",
-        "justify-between py-[2px]",
+        isFeed ? "py-0.5" : "py-1.5",
+        "justify-between py-0.5",
         className,
       )}
       onClick={handleClick}
@@ -354,7 +354,7 @@ const InboxItemImpl: Component<{
       className={cn(
         "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-base font-medium leading-loose lg:text-sm",
         feedColumnStyles.item,
-        "py-[2px] pl-2.5",
+        "py-0.5 pl-2.5",
         className,
       )}
       onClick={handleNavigate}

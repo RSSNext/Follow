@@ -11,7 +11,7 @@ import { Link } from "react-router"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 
-import { FeedList } from "../../feed-column/list"
+import { FeedList } from "../../timeline-column/FeedList"
 import { MobileFloatBar } from "./float-bar.mobile"
 
 export function FeedColumnMobile({ asWidget }: { asWidget?: boolean }) {

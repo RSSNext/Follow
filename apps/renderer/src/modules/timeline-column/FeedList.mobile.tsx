@@ -16,7 +16,7 @@ import {
   useFeedsGroupedData,
   useInboxesGroupedData,
   useListsGroupedData,
-} from "./list.shared"
+} from "./FeedList.shared"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 
@@ -92,7 +92,7 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
                     feedId: null,
                   })
                 }}
-                className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
+                className={cn(feedColumnStyles.item, "px-2.5 py-0.5")}
               >
                 {views[view]!.icon}
                 <span className="ml-2">
