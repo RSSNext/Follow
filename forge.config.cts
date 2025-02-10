@@ -130,6 +130,7 @@ const config: ForgeConfig = {
       keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
       identity: process.env.OSX_SIGN_IDENTITY,
       provisioningProfile: process.env.OSX_SIGN_PROVISIONING_PROFILE_PATH,
+      preAutoEntitlements: platform !== "mas",
     },
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
