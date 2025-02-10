@@ -41,6 +41,7 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
+        headerBackTitle={screenType === "feed" ? "Subscriptions" : undefined}
         headerShown
         headerTitle={viewTitle}
         headerLeft={useCallback(
