@@ -4,6 +4,7 @@ import { Label } from "@follow/components/ui/label/index.js"
 import { signOut } from "@follow/shared/auth"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { isInMAS } from "~/lib/utils"
 import { AccountManagement } from "~/modules/profile/account-management"
 import { EmailManagement } from "~/modules/profile/email-management"
 import { ProfileSettingForm } from "~/modules/profile/profile-setting-form"
@@ -36,7 +37,7 @@ export function Component() {
           <UpdatePasswordForm />
           <TwoFactor />
           {/* TODO: Temporary fake account deletion feature */}
-          {process.mas && (
+          {isInMAS() && (
             <div className="flex items-center justify-between">
               <Label>Delete Account</Label>
               <Button

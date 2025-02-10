@@ -14,6 +14,7 @@ import { m } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
+import { isInMAS } from "~/lib/utils"
 import { useAuthProviders } from "~/queries/users"
 
 import { LoginWithPassword } from "./Form"
@@ -45,7 +46,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
       </div>
 
       <LoginWithPassword runtime={runtime} />
-      {!process.mas && (
+      {!isInMAS() && (
         <>
           <div className="my-3 w-full space-y-2">
             <div className="flex items-center justify-center">
