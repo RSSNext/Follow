@@ -280,7 +280,8 @@ const TimelineSwitchButton = ({ timelineId }: { timelineId: string }) => {
     const id = timelineId.slice(ROUTE_TIMELINE_OF_LIST.length)
     return <ListSwitchButton listId={id} isActive={isActive} setActive={setActive} />
   } else if (timelineId.startsWith(ROUTE_TIMELINE_OF_INBOX)) {
-    return null // TODO
+    const id = timelineId.slice(ROUTE_TIMELINE_OF_INBOX.length)
+    return <InboxSwitchButton inboxId={id} isActive={isActive} setActive={setActive} />
   }
 }
 
@@ -393,6 +394,54 @@ const ListSwitchButton: FC<{
       {!listUnread && (
         <span className="line-clamp-1 break-all px-1 text-[0.625rem] font-medium leading-none">
           {list.title}
+        </span>
+      )}
+    </ActionButton>
+  )
+}
+
+const InboxSwitchButton: FC<{
+  inboxId: string
+  isActive: boolean
+  setActive: () => void
+}> = ({ inboxId, isActive, setActive }) => {
+  const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
+
+  const handleNavigate = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation()
+      setActive()
+      subscriptionActions.markReadByFeedIds({
+        inboxId,
+      })
+      // focus to main container for keyboard navigation
+      nextFrame(() => {
+        getMainContainerElement()?.focus()
+      })
+    },
+    [inboxId, setActive],
+  )
+
+  return (
+    <ActionButton
+      key={inboxId}
+      tooltip="Inbox"
+      className={cn(
+        "flex h-11 shrink-0 flex-col items-center gap-1 text-xl",
+        "hover:!bg-theme-item-hover",
+        isActive && "!bg-theme-item-active",
+      )}
+      onClick={handleNavigate}
+    >
+      <i className="i-mgc-inbox-cute-fi" />
+      {!!inboxUnread && (
+        <div className="center h-2.5 text-[0.25rem]">
+          <i className={"i-mgc-round-cute-fi"} />
+        </div>
+      )}
+      {!inboxUnread && (
+        <span className="line-clamp-1 break-all px-1 text-[0.625rem] font-medium leading-none">
+          Inbox
         </span>
       )}
     </ActionButton>
