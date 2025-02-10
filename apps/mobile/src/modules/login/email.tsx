@@ -17,7 +17,7 @@ import { z } from "zod"
 
 import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { ThemedText } from "@/src/components/common/ThemedText"
-import { LoginTeamsCheckGuardContext } from "@/src/contexts/LoginTeamsContext"
+import { LoginTermsCheckGuardContext } from "@/src/contexts/LoginTermsContext"
 import { signIn } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
 import { accentColor, useColor } from "@/src/theme/colors"
@@ -76,9 +76,9 @@ export function EmailLogin() {
     mutationFn: onSubmit,
   })
 
-  const teamsCheckGuard = useContext(LoginTeamsCheckGuardContext)
+  const termsCheckGuard = useContext(LoginTermsCheckGuardContext)
   const login = handleSubmit((values) => {
-    teamsCheckGuard?.(() => submitMutation.mutate(values))
+    termsCheckGuard?.(() => submitMutation.mutate(values))
   })
 
   const disableColor = useColor("gray3")
