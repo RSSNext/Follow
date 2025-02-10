@@ -7,10 +7,11 @@ import {
 } from "@follow/components/ui/tooltip/index.js"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
-import type { FC } from "react"
+import type { FC, MouseEventHandler } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useFeedById } from "~/store/feed"
 import { useListById } from "~/store/list"
 
@@ -20,29 +21,42 @@ import { feedColumnStyles } from "./styles"
 
 export const ListFeedList: FC<{ listId: string }> = ({ listId }) => {
   const list = useListById(listId)
+  const currentFeedId = useRouteParamsSelector((s) => s.feedId)
 
   if (!list) return null
   return (
     <ScrollArea.ScrollArea flex viewportClassName="!px-3" rootClassName="h-full">
-      {list?.feedIds.map((feedId) => <FeedItem key={feedId} feedId={feedId} />)}
+      {list?.feedIds.map((feedId) => (
+        <FeedItem key={feedId} feedId={feedId} isActive={feedId === currentFeedId} />
+      ))}
     </ScrollArea.ScrollArea>
   )
 }
 
 interface FeedItemProps {
   feedId: string
+  isActive: boolean
 }
-const FeedItem = ({ feedId }: FeedItemProps) => {
+const FeedItem = ({ feedId, isActive }: FeedItemProps) => {
   const feed = useFeedById(feedId)
   const { t } = useTranslation()
   const navigate = useNavigateEntry()
+
   if (!feed) return null
 
-  const handleClick = () => {
+  const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation()
     navigate({ feedId })
   }
   return (
-    <div className={cn("my-px px-2.5 py-0.5", feedColumnStyles.item)} onClick={handleClick}>
+    <div
+      className={cn(
+        "my-px px-2.5 py-0.5",
+        feedColumnStyles.item,
+        isActive && "bg-theme-item-active",
+      )}
+      onClick={handleClick}
+    >
       <div
         className={cn(
           "flex min-w-0 items-center",

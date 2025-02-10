@@ -92,7 +92,7 @@ const FeedListImpl = ({ className, view }: { className?: string; view: number })
                     feedId: null,
                   })
                 }}
-                className={cn(feedColumnStyles.item, "px-2.5 py-[2px]")}
+                className={cn(feedColumnStyles.item, "px-2.5 py-0.5")}
               >
                 {views[view]!.icon}
                 <span className="ml-2">
