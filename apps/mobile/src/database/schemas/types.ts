@@ -1,4 +1,5 @@
 import type {
+  collectionsTable,
   entriesTable,
   feedsTable,
   inboxesTable,
@@ -21,6 +22,8 @@ export type UnreadSchema = typeof unreadTable.$inferSelect
 export type UserSchema = typeof usersTable.$inferSelect
 
 export type EntrySchema = typeof entriesTable.$inferSelect
+
+export type CollectionSchema = typeof collectionsTable.$inferSelect
 
 export type MediaModel = {
   url: string

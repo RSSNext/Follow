@@ -84,3 +84,10 @@ export const entriesTable = sqliteTable("entries", {
   inboxHandle: text("inbox_handle"),
   read: integer("read", { mode: "boolean" }),
 })
+
+export const collectionsTable = sqliteTable("collections", {
+  feedId: text("feed_id"),
+  entryId: text("entry_id").notNull(),
+  createdAt: text("created_at"),
+  view: integer("view").notNull().$type<FeedViewType>(),
+})
