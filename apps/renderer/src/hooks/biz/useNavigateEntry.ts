@@ -43,7 +43,7 @@ export const useNavigateEntry = () => {
 }
 
 /*
- * /feeds/:timelineId/:feedId/:entryId
+ * /timeline/:timelineId/:feedId/:entryId
  * timelineId: view-1, list-xxx, inbox-xxx
  * feedId: xxx, folder-xxx
  * entryId: xxx
@@ -89,7 +89,7 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     })
   }
 
-  const path = `/feeds/${finalTimelineId}/${finalFeedId}/${finalEntryId}`
+  const path = `/timeline/${finalTimelineId}/${finalFeedId}/${finalEntryId}`
 
   const currentPath = getReadonlyRoute().location.pathname + getReadonlyRoute().location.search
   if (path === currentPath) return
