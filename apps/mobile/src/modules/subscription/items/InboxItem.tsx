@@ -9,7 +9,7 @@ import { useSubscription } from "@/src/store/subscription/hooks"
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
-import { closeDrawer, selectFeed } from "../../feed-drawer/atoms"
+import { closeDrawer, selectTimeline } from "../../feed-drawer/atoms"
 
 export const InboxItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(getInboxStoreId(id))
@@ -21,7 +21,7 @@ export const InboxItem = memo(({ id }: { id: string }) => {
       <ItemPressable
         className="h-12 flex-row items-center px-3"
         onPress={() => {
-          selectFeed({ type: "inbox", inboxId: id })
+          selectTimeline({ type: "inbox", inboxId: id })
           closeDrawer()
         }}
       >

@@ -1,10 +1,11 @@
 import { FeedViewType } from "@follow/constants"
-import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
+import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useContext, useMemo } from "react"
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -16,6 +17,7 @@ import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWeb
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import {
+  useEntryListContext,
   useFetchEntriesControls,
   useSelectedFeedTitle,
   useSelectedView,
@@ -34,6 +36,7 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const scrollY = useAnimatedValue(0)
   const view = useSelectedView()
   const viewTitle = useSelectedFeedTitle()
+  const screenType = useEntryListContext().type
 
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
@@ -41,19 +44,17 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
         headerShown
         headerTitle={viewTitle}
         headerLeft={useCallback(
-          () => (
-            <LeftAction />
-          ),
-          [],
+          () => (screenType === "timeline" ? <LeftAction /> : null),
+          [screenType],
         )}
         headerRight={useCallback(
-          () => (
-            <RightAction />
-          ),
-          [],
+          () => (screenType === "timeline" ? <RightAction /> : null),
+          [screenType],
         )}
-        headerHideableBottomHeight={headerHideableBottomHeight}
-        headerHideableBottom={ViewSelector}
+        headerHideableBottomHeight={
+          screenType === "timeline" ? headerHideableBottomHeight : undefined
+        }
+        headerHideableBottom={screenType === "timeline" ? ViewSelector : undefined}
       />
       {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
         <EntryListContentGrid entryIds={entryIds} />
@@ -64,49 +65,60 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   )
 }
 
-function EntryListContent({ entryIds }: { entryIds: string[] }) {
+export function EntryListContent({ entryIds }: { entryIds: string[] }) {
+  const screenType = useEntryListContext().type
+
   const insets = useSafeAreaInsets()
-  const tabBarHeight = useBottomTabBarHeight()
+
   const originalDefaultHeaderHeight = useDefaultHeaderHeight()
-  const headerHeight = originalDefaultHeaderHeight + headerHideableBottomHeight
-  const { scrollY } = useContext(NavigationContext)!
+  const headerHeight =
+    screenType === "timeline"
+      ? originalDefaultHeaderHeight + headerHideableBottomHeight
+      : originalDefaultHeaderHeight
+  const scrollY = useContext(NavigationContext)?.scrollY
 
   const { fetchNextPage, isFetchingNextPage } = useFetchEntriesControls()
 
+  const onScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      scrollY?.setValue(e.nativeEvent.contentOffset.y)
+    },
+    [scrollY],
+  )
+
+  const renderItem = useCallback(
+    ({ item: id }: ListRenderItemInfo<string>) => <EntryItem key={id} entryId={id} />,
+    [],
+  )
+
   return (
-    <FlashList
-      onScroll={useTypeScriptHappyCallback(
-        (e) => {
-          scrollY.setValue(e.nativeEvent.contentOffset.y)
-        },
-        [scrollY],
+    <BottomTabBarHeightContext.Consumer>
+      {(tabBarHeight) => (
+        <FlashList
+          onScroll={onScroll}
+          data={entryIds}
+          renderItem={renderItem}
+          keyExtractor={(id) => id}
+          onEndReached={() => {
+            fetchNextPage()
+          }}
+          onViewableItemsChanged={({ viewableItems }) => {
+            debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
+          }}
+          scrollIndicatorInsets={{
+            top: headerHeight - insets.top,
+            bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
+          }}
+          estimatedItemSize={100}
+          contentContainerStyle={{
+            paddingTop: headerHeight,
+            paddingBottom: tabBarHeight,
+          }}
+          ItemSeparatorComponent={ItemSeparator}
+          ListFooterComponent={isFetchingNextPage ? <EntryItemSkeleton /> : null}
+        />
       )}
-      data={entryIds}
-      renderItem={useTypeScriptHappyCallback(
-        ({ item: id }) => (
-          <EntryItem key={id} entryId={id} />
-        ),
-        [],
-      )}
-      keyExtractor={(id) => id}
-      onEndReached={() => {
-        fetchNextPage()
-      }}
-      onViewableItemsChanged={({ viewableItems }) => {
-        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
-      }}
-      scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight - insets.bottom,
-      }}
-      estimatedItemSize={100}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-        paddingBottom: tabBarHeight,
-      }}
-      ItemSeparatorComponent={ItemSeparator}
-      ListFooterComponent={isFetchingNextPage ? <EntryItemSkeleton /> : null}
-    />
+    </BottomTabBarHeightContext.Consumer>
   )
 }
 

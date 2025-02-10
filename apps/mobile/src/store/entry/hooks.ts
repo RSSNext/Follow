@@ -6,8 +6,8 @@ import { getEntry } from "./getter"
 import { entrySyncServices, useEntryStore } from "./store"
 import type { EntryModel, FetchEntriesProps } from "./types"
 
-export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam">) => {
-  const { feedId, inboxId, listId, view, read, limit, isArchived } = props
+export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam"> | null) => {
+  const { feedId, inboxId, listId, view, read, limit, isArchived } = props || {}
   return useInfiniteQuery({
     queryKey: ["entries", feedId, inboxId, listId, view, read, limit, isArchived],
     queryFn: ({ pageParam }) => entrySyncServices.fetchEntries({ ...props, pageParam }),
@@ -18,6 +18,7 @@ export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam">) 
     initialPageParam: undefined as undefined | string,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    enabled: !!props,
   })
 }
 export const usePrefetchEntryContent = (entryId: string) => {

@@ -25,6 +25,7 @@ export function EntryList() {
   }, [setDrawerSwipeDisabled, isFocused])
 
   const selectedFeed = useSelectedFeed()
+  if (!selectedFeed) return null
 
   switch (selectedFeed.type) {
     case "view": {
