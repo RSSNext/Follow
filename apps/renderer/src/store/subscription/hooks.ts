@@ -14,7 +14,6 @@ import {
   subscriptionCategoryExistSelector,
   subscriptionsByFeedIsdSelector,
 } from "./selector"
-import type { SubscriptionFlatModel } from "./store"
 import { useSubscriptionStore } from "./store"
 
 type FeedId = string
@@ -88,13 +87,14 @@ export const useAllFeeds = () => {
       (store) => {
         const feedInfo = [] as { title: string; id: string }[]
 
-        const allSubscriptions = Object.values(store.feedIdByView).flat()
+        const allSubscriptions = Object.values(store.data).filter(
+          (subscription) => !subscription.listId && !subscription.inboxId,
+        )
 
-        for (const feedId of allSubscriptions) {
-          const subscription = store.data[feedId]!
-          const feed = feedTitleMap[feedId]
+        for (const subscription of allSubscriptions) {
+          const feed = feedTitleMap[subscription.feedId]
           if (feed) {
-            feedInfo.push({ title: subscription.title || feed || "", id: feedId })
+            feedInfo.push({ title: subscription.title || feed || "", id: subscription.feedId })
           }
         }
         return feedInfo
@@ -106,36 +106,18 @@ export const useAllFeeds = () => {
 
 export const useAllLists = () => {
   return useSubscriptionStore(
-    useCallback((store) => {
-      const lists = [] as SubscriptionFlatModel[]
-
-      const allSubscriptions = Object.values(store.feedIdByView).flat()
-
-      for (const feedId of allSubscriptions) {
-        const subscription = store.data[feedId]!
-        if (subscription.listId) {
-          lists.push(subscription)
-        }
-      }
-      return lists
-    }, []),
+    useCallback(
+      (store) => Object.values(store.data).filter((subscription) => subscription.listId),
+      [],
+    ),
   )
 }
 
 export const useAllInboxes = () => {
   return useSubscriptionStore(
-    useCallback((store) => {
-      const inboxes = [] as SubscriptionFlatModel[]
-
-      const allSubscriptions = Object.values(store.feedIdByView).flat()
-
-      for (const feedId of allSubscriptions) {
-        const subscription = store.data[feedId]!
-        if (subscription.inboxId) {
-          inboxes.push(subscription)
-        }
-      }
-      return inboxes
-    }, []),
+    useCallback(
+      (store) => Object.values(store.data).filter((subscription) => subscription.inboxId),
+      [],
+    ),
   )
 }

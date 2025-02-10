@@ -1,4 +1,4 @@
-import { FeedViewType } from "@follow/constants"
+import type { FeedViewType } from "@follow/constants"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
 
@@ -10,10 +10,7 @@ export const subscriptionCategoryExistSelector = (name: string) => (state: State
   state.categories.has(name)
 
 export const feedSubscriptionCountSelector = (state: State) =>
-  Object.values(state.data).filter(
-    // FIXME: Backend data compatibility
-    (s) => !!s.feedId && !s.listId && !s.inboxId && state.subscriptionIdSet.has(s.feedId),
-  ).length
+  state.listIds.size + state.inboxIds.size + Object.values(state.feedIdByView).flat().length
 
 export const feedIdByViewSelector = (view: FeedViewType) => (state: State) =>
   state.feedIdByView[view]
@@ -54,11 +51,6 @@ export const folderFeedsByFeedIdSelector =
     return feedIds
   }
 
-export const listSubscriptionCountSelector = (state: State) =>
-  Object.values(state.data).filter((s) => !!s.listId && state.subscriptionIdSet.has(s.listId))
-    .length
+export const listSubscriptionCountSelector = (state: State) => state.listIds.size
 
-export const inboxSubscriptionCountSelector = (state: State) =>
-  Object.values(state.data).filter(
-    (s) => !!s.inboxId && state.feedIdByView[FeedViewType.Articles].includes(s.inboxId),
-  ).length
+export const inboxSubscriptionCountSelector = (state: State) => state.inboxIds.size

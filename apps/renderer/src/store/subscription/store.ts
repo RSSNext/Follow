@@ -52,9 +52,13 @@ interface SubscriptionState {
    */
   categories: Set<string>
   /**
-   * All subscription ids set
+   * All list ids set
    */
-  subscriptionIdSet: Set<string>
+  listIds: Set<string>
+  /**
+   * All inbox ids set
+   */
+  inboxIds: Set<string>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -102,7 +106,8 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   feedIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
   categories: new Set(),
-  subscriptionIdSet: new Set(),
+  listIds: new Set(),
+  inboxIds: new Set(),
 }))
 
 const set = useSubscriptionStore.setState
@@ -118,18 +123,6 @@ class SubscriptionActions {
   constructor() {
     if (subscribeOnce) return
     subscribeOnce = true
-    // autorun
-    useSubscriptionStore.subscribe((next, prev) => {
-      if (next.feedIdByView !== prev.feedIdByView) {
-        const allSubscriptionIds = Object.values(next.feedIdByView).flat()
-        set((state) => {
-          return {
-            ...state,
-            subscriptionIdSet: new Set(allSubscriptionIds),
-          }
-        })
-      }
-    })
 
     useSubscriptionStore.subscribe((state, prev) => {
       if (state.data === prev.data) return
@@ -199,12 +192,18 @@ class SubscriptionActions {
     })
     immerSet((state) => {
       subscriptions.forEach((subscription) => {
+        if (subscription.listId) {
+          state.listIds.add(subscription.listId)
+        } else if (subscription.inboxId) {
+          state.inboxIds.add(subscription.inboxId)
+        } else {
+          state.feedIdByView[subscription.view].push(subscription.feedId)
+        }
         state.data[subscription.feedId] = omit(subscription, [
           "feeds",
           "lists",
           "inboxes",
         ]) as SubscriptionFlatModel
-        state.feedIdByView[subscription.view].push(subscription.feedId)
       })
     })
   }
@@ -398,6 +397,7 @@ class SubscriptionActions {
     await tx.run()
   }
 
+  // TODO
   async unfollow(feedIds: string[]) {
     // const feed = getFeedById(feedId)
     const feeds = feedIds.map((feedId) => getFeedById(feedId))
@@ -422,15 +422,21 @@ class SubscriptionActions {
 
             delete draft.data[feedId]
 
-            for (const view in draft.feedIdByView) {
-              const currentViewFeedIds = draft.feedIdByView[view] as string[]
+            if (subscription.listId) {
+              draft.listIds.delete(subscription.listId)
+            } else if (subscription.inboxId) {
+              draft.inboxIds.delete(subscription.inboxId)
+            } else {
+              for (const view in draft.feedIdByView) {
+                const currentViewFeedIds = draft.feedIdByView[view] as string[]
 
-              const idx = currentViewFeedIds.indexOf(feedId)
+                const idx = currentViewFeedIds.indexOf(feedId)
 
-              if (idx !== -1) {
-                currentViewFeedIds.splice(idx, 1)
-                ctx.viewDeleted[feedId] = ctx.viewDeleted[feedId] || []
-                ctx.viewDeleted[feedId].push(Number.parseInt(view))
+                if (idx !== -1) {
+                  currentViewFeedIds.splice(idx, 1)
+                  ctx.viewDeleted[feedId] = ctx.viewDeleted[feedId] || []
+                  ctx.viewDeleted[feedId].push(Number.parseInt(view))
+                }
               }
             }
           }

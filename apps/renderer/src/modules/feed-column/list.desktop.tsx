@@ -25,7 +25,7 @@ import {
   useInboxesGroupedData,
   useListsGroupedData,
 } from "./list.shared"
-import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
+import { SortableFeedList } from "./sort-by"
 
 const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(
   ({ className, view }, ref) => {
@@ -214,23 +214,6 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           rootClassName={cn("h-full", shouldFreeUpSpace && "overflow-visible")}
         >
           <StarredItem view={view} />
-          {hasListData && (
-            <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-                {t("words.lists")}
-              </div>
-              <SortByAlphabeticalList view={view} data={listsData} />
-            </>
-          )}
-          {hasInboxData && (
-            <>
-              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-                {t("words.inbox")}
-              </div>
-              <SortByAlphabeticalInbox view={view} data={inboxesData} />
-            </>
-          )}
-
           <DraggableContext.Provider value={draggableContextValue}>
             <div className="space-y-px" id="feeds-area" ref={setNodeRef}>
               {(hasListData || hasInboxData) && (

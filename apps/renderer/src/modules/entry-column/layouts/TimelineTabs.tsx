@@ -11,18 +11,10 @@ export const TimelineTabs = () => {
   const { view, listId, inboxId, folderName } = routerParams
 
   const listsData = useSubscriptionStore(
-    useCallback(
-      (state) =>
-        state.feedIdByView[view].map((id) => state.data[id]).filter((s) => s && "listId" in s),
-      [view],
-    ),
+    useCallback((state) => Array.from(state.listIds).map((id) => state.data[id]), []),
   )
   const inboxData = useSubscriptionStore(
-    useCallback(
-      (state) =>
-        state.feedIdByView[view].map((id) => state.data[id]).filter((s) => s && "inboxId" in s),
-      [view],
-    ),
+    useCallback((state) => Array.from(state.inboxIds).map((id) => state.data[id]), []),
   )
   const categoriesData = useSubscriptionStore(
     useCallback(
