@@ -214,6 +214,7 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
       return
     }
     const handler = () => {
+      if (!timelineId) return
       const targetElement = [...$scroll.children]
         .filter(($el) => $el.tagName === "BUTTON")
         .find(($el, index) => index === timelineList.all.indexOf(timelineId))
