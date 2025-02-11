@@ -1,10 +1,14 @@
-import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
-import { springScrollToElement } from "@follow/utils/scroller"
 import { cn } from "@follow/utils/utils"
-import { useContext, useId, useRef } from "react"
+import { useId, useRef } from "react"
 
-import { MarkdownRenderContainerRefContext } from "./__internal/ctx"
-
+const size = {
+  1: "text-[1.6em]",
+  2: "text-[1.5em]",
+  3: "text-[1.3em]",
+  4: "text-[1.1em]",
+  5: "text-[1.05em]",
+  6: "text-[1em]",
+}
 export const createHeadingRenderer =
   (level: number) =>
   (
@@ -15,35 +19,16 @@ export const createHeadingRenderer =
     const As = `h${level}` as any
     const { node, ...rest } = props as any
 
-    const scroller = useScrollViewElement()
-    const renderContainer = useContext(MarkdownRenderContainerRefContext)
     const ref = useRef<HTMLHeadingElement>(null)
 
     return (
-      <As ref={ref} {...rest} data-rid={rid} className={cn(rest.className, "group relative")}>
+      <As
+        ref={ref}
+        {...rest}
+        data-rid={rid}
+        className={cn(rest.className, "group relative", size[level])}
+      >
         {rest.children}
-        <span
-          className={cn(
-            "cursor-pointer select-none text-accent opacity-0 transition-opacity duration-200 group-hover:opacity-100",
-            "relative ml-2",
-            "@2xl:absolute @2xl:left-[-1.5em] @2xl:top-0 @2xl:opacity-0",
-          )}
-          aria-hidden
-          onClick={() => {
-            if (!renderContainer) return
-
-            springScrollToElement(
-              renderContainer.querySelector(`[data-rid="${rid}"]`)!,
-              -100,
-              scroller!,
-            )
-          }}
-        >
-          <i className="i-mingcute-hashtag-line invisible" />
-          <span className="center absolute inset-0">
-            <i className="i-mingcute-hashtag-line" />
-          </span>
-        </span>
       </As>
     )
   }
