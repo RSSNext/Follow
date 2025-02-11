@@ -200,7 +200,7 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
       if (!targetElement || isInCurrentView) {
         return
       }
-      const targetX = getNodeXInScroller(targetElement, $scroll)
+      const targetX = getNodeXInScroller(targetElement, $scroll) - 12
 
       $scroll.scrollTo({
         left: targetX,
@@ -208,7 +208,7 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
       })
     }
     handler()
-  }, [timelineId, timelineList])
+  }, [timelineId])
   return (
     <div className="mt-3 pb-4">
       <div
@@ -222,11 +222,11 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
 
-        {timelineList.lists.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.inboxes.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
         {timelineList.inboxes.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
-        {timelineList.views.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.lists.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
         {timelineList.lists.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
