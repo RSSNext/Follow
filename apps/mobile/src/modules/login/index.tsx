@@ -1,4 +1,4 @@
-import { router } from "expo-router"
+import { Link, router } from "expo-router"
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react"
 import { TouchableWithoutFeedback, View } from "react-native"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
@@ -128,7 +128,11 @@ const TermsText = () => {
     <ContextMenu.Root>
       <ContextMenu.Trigger className="overflow-hidden rounded-full">
         <ThemedText className="text-secondary-label text-sm">
-          I agree to the Terms of Service and Privacy Policy
+          I agree to the{" "}
+          <Link href="/terms" className="text-primary-label">
+            Terms of Service
+          </Link>{" "}
+          and Privacy Policy
         </ThemedText>
       </ContextMenu.Trigger>
 

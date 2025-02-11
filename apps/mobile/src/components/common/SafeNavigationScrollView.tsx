@@ -143,6 +143,7 @@ export const NavigationBlurEffectHeader = ({
   }))
 
   const hideableBottom = headerHideableBottom?.()
+  const { headerLeft, ...rest } = props
 
   return (
     <Stack.Screen
@@ -154,13 +155,15 @@ export const NavigationBlurEffectHeader = ({
         ),
         headerTransparent: true,
 
-        headerLeft: canBack
-          ? () => (
-              <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
-                <MingcuteLeftLineIcon height={20} width={20} color={label} />
-              </TouchableOpacity>
-            )
-          : undefined,
+        headerLeft:
+          headerLeft ??
+          (canBack
+            ? () => (
+                <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
+                  <MingcuteLeftLineIcon height={20} width={20} color={label} />
+                </TouchableOpacity>
+              )
+            : undefined),
 
         header: headerHideableBottom
           ? ({ options }) => {
@@ -176,7 +179,7 @@ export const NavigationBlurEffectHeader = ({
             }
           : undefined,
 
-        ...props,
+        ...rest,
       }}
     />
   )

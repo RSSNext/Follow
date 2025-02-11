@@ -1,3 +1,4 @@
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
 
@@ -11,9 +12,11 @@ export default function Feed() {
   const entryIdsByCategory = useEntryIdsByCategory(feedIdOrCategory as string)
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
-      <EntryListScreen
-        entryIds={entryIdsByFeedId.length > 0 ? entryIdsByFeedId : entryIdsByCategory}
-      />
+      <BottomTabBarHeightContext.Provider value={0}>
+        <EntryListScreen
+          entryIds={entryIdsByFeedId.length > 0 ? entryIdsByFeedId : entryIdsByCategory}
+        />
+      </BottomTabBarHeightContext.Provider>
     </EntryListContext.Provider>
   )
 }

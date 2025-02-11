@@ -1,5 +1,5 @@
 import { FeedViewType } from "@follow/constants"
-import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
@@ -38,24 +38,18 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type
 
+  const isFeed = screenType === "feed"
+  const isTimeline = screenType === "timeline"
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
-        headerBackTitle={screenType === "feed" ? "Subscriptions" : undefined}
+        headerBackTitle={isFeed ? "Subscriptions" : undefined}
         headerShown
         headerTitle={viewTitle}
-        headerLeft={useCallback(
-          () => (screenType === "timeline" ? <LeftAction /> : null),
-          [screenType],
-        )}
-        headerRight={useCallback(
-          () => (screenType === "timeline" ? <RightAction /> : null),
-          [screenType],
-        )}
-        headerHideableBottomHeight={
-          screenType === "timeline" ? headerHideableBottomHeight : undefined
-        }
-        headerHideableBottom={screenType === "timeline" ? ViewSelector : undefined}
+        headerLeft={useMemo(() => (isTimeline ? () => <LeftAction /> : undefined), [isTimeline])}
+        headerRight={useMemo(() => (isTimeline ? () => <RightAction /> : undefined), [isTimeline])}
+        headerHideableBottomHeight={isTimeline ? headerHideableBottomHeight : undefined}
+        headerHideableBottom={isTimeline ? ViewSelector : undefined}
       />
       {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
         <EntryListContentGrid entryIds={entryIds} />
@@ -66,7 +60,7 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   )
 }
 
-export function EntryListContent({ entryIds }: { entryIds: string[] }) {
+function EntryListContent({ entryIds }: { entryIds: string[] }) {
   const screenType = useEntryListContext().type
 
   const insets = useSafeAreaInsets()
@@ -92,34 +86,31 @@ export function EntryListContent({ entryIds }: { entryIds: string[] }) {
     [],
   )
 
+  const tabBarHeight = useBottomTabBarHeight()
   return (
-    <BottomTabBarHeightContext.Consumer>
-      {(tabBarHeight) => (
-        <FlashList
-          onScroll={onScroll}
-          data={entryIds}
-          renderItem={renderItem}
-          keyExtractor={(id) => id}
-          onEndReached={() => {
-            fetchNextPage()
-          }}
-          onViewableItemsChanged={({ viewableItems }) => {
-            debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
-          }}
-          scrollIndicatorInsets={{
-            top: headerHeight - insets.top,
-            bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
-          }}
-          estimatedItemSize={100}
-          contentContainerStyle={{
-            paddingTop: headerHeight,
-            paddingBottom: tabBarHeight,
-          }}
-          ItemSeparatorComponent={ItemSeparator}
-          ListFooterComponent={isFetchingNextPage ? <EntryItemSkeleton /> : null}
-        />
-      )}
-    </BottomTabBarHeightContext.Consumer>
+    <FlashList
+      onScroll={onScroll}
+      data={entryIds}
+      renderItem={renderItem}
+      keyExtractor={(id) => id}
+      onEndReached={() => {
+        fetchNextPage()
+      }}
+      onViewableItemsChanged={({ viewableItems }) => {
+        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
+      }}
+      scrollIndicatorInsets={{
+        top: headerHeight - insets.top,
+        bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
+      }}
+      estimatedItemSize={100}
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+        paddingBottom: tabBarHeight,
+      }}
+      ItemSeparatorComponent={ItemSeparator}
+      ListFooterComponent={isFetchingNextPage ? <EntryItemSkeleton /> : null}
+    />
   )
 }
 
