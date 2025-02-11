@@ -8,7 +8,7 @@ export const lists = {
       rootKey: ["lists"],
     }),
   byId: ({ id, noExtras }: { id: string; noExtras?: boolean }) =>
-    defineQuery(["lists", id, noExtras], async () => listActions.fetchListById(id, noExtras), {
+    defineQuery(["lists", id, `${noExtras}`], async () => listActions.fetchListById(id, noExtras), {
       rootKey: ["lists"],
     }),
 }
