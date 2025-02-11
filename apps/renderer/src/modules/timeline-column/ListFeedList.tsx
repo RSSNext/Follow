@@ -20,16 +20,22 @@ import { FeedTitle } from "../feed/feed-title"
 import { feedColumnStyles } from "./styles"
 
 export const ListFeedList: FC<{ listId: string }> = ({ listId }) => {
+  const { t } = useTranslation()
   const list = useListById(listId)
   const currentFeedId = useRouteParamsSelector((s) => s.feedId)
 
   if (!list) return null
   return (
-    <ScrollArea.ScrollArea flex viewportClassName="!px-3" rootClassName="h-full">
-      {list?.feedIds.map((feedId) => (
-        <FeedItem key={feedId} feedId={feedId} isActive={feedId === currentFeedId} />
-      ))}
-    </ScrollArea.ScrollArea>
+    <>
+      <div className="mx-3 mb-1 flex items-center justify-between px-2.5 py-1">
+        <div className="text-base font-bold">{list?.title || t("words.inbox")}</div>
+      </div>
+      <ScrollArea.ScrollArea flex viewportClassName="!px-3" rootClassName="h-full">
+        {list?.feedIds.map((feedId) => (
+          <FeedItem key={feedId} feedId={feedId} isActive={feedId === currentFeedId} />
+        ))}
+      </ScrollArea.ScrollArea>
+    </>
   )
 }
 
