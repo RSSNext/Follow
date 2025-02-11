@@ -235,6 +235,7 @@
   "login.continueWith": "使用 {{provider}} 登入",
   "login.email": "邮件地址",
   "login.forget_password.note": "忘记了密码？",
+  "login.or": "或",
   "login.password": "密码",
   "login.signUp": "使用邮件地址注册",
   "login.submit": "提交",
