@@ -48,7 +48,54 @@ export const useEntryStore = createZustandStore<EntryState>("entry")(() => defau
 
 const immerSet = createImmerSetter(useEntryStore)
 
+type UpsertPosition = "all" | "view" | "category" | "feed" | "inbox" | "list"
+
 class EntryActions {
+  private addEntryIdToView({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const subscription = getSubscription(feedId)
+    if (typeof subscription?.view === "number") {
+      draft.entryIdByView[subscription.view].add(entryId)
+    }
+    if (subscription?.category) {
+      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+      if (!entryIdSetByCategory) {
+        draft.entryIdByCategory[subscription.category] = new Set([entryId])
+      } else {
+        entryIdSetByCategory.add(entryId)
+      }
+    }
+  }
+
+  private addEntryIdToCategory({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const subscription = getSubscription(feedId)
+    if (subscription?.category) {
+      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+      if (!entryIdSetByCategory) {
+        draft.entryIdByCategory[subscription.category] = new Set([entryId])
+      } else {
+        entryIdSetByCategory.add(entryId)
+      }
+    }
+  }
+
   private addEntryIdToFeed({
     draft,
     feedId,
@@ -64,19 +111,6 @@ class EntryActions {
       draft.entryIdByFeed[feedId] = new Set([entryId])
     } else {
       entryIdSetByFeed.add(entryId)
-    }
-
-    const subscription = getSubscription(feedId)
-    if (typeof subscription?.view === "number") {
-      draft.entryIdByView[subscription.view].add(entryId)
-    }
-    if (subscription?.category) {
-      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
-      if (!entryIdSetByCategory) {
-        draft.entryIdByCategory[subscription.category] = new Set([entryId])
-      } else {
-        entryIdSetByCategory.add(entryId)
-      }
     }
   }
 
@@ -98,7 +132,7 @@ class EntryActions {
     }
   }
 
-  upsertManyInSession(entries: EntryModel[]) {
+  upsertManyInSession(entries: EntryModel[], position: UpsertPosition) {
     if (entries.length === 0) return
 
     immerSet((draft) => {
@@ -106,25 +140,45 @@ class EntryActions {
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
-        this.addEntryIdToFeed({
-          draft,
-          feedId,
-          entryId: entry.id,
-        })
+        if (position === "all" || position === "feed") {
+          this.addEntryIdToFeed({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
 
-        this.addEntryIdToInbox({
-          draft,
-          inboxHandle,
-          entryId: entry.id,
-        })
+        if (position === "all" || position === "view") {
+          this.addEntryIdToView({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
+
+        if (position === "all" || position === "inbox") {
+          this.addEntryIdToInbox({
+            draft,
+            inboxHandle,
+            entryId: entry.id,
+          })
+        }
+
+        if (position === "all" || position === "category") {
+          this.addEntryIdToCategory({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
       }
     })
   }
 
-  async upsertMany(entries: EntryModel[]) {
+  async upsertMany(entries: EntryModel[], position: UpsertPosition) {
     const tx = createTransaction()
     tx.store(() => {
-      this.upsertManyInSession(entries)
+      this.upsertManyInSession(entries, position)
     })
 
     tx.persist(() => {
@@ -155,15 +209,24 @@ class EntryActions {
     await tx.run()
   }
 
-  resetByView({ view, entries }: { view: FeedViewType; entries: EntryModel[] }) {
+  resetByView({ view, entries }: { view?: FeedViewType; entries: EntryModel[] }) {
+    if (view === undefined) return
     immerSet((draft) => {
       draft.entryIdByView[view] = new Set(entries.map((e) => e.id))
     })
   }
 
-  resetByCategory({ category, entries }: { category: Category; entries: EntryModel[] }) {
+  resetByCategory({ category, entries }: { category?: Category; entries: EntryModel[] }) {
+    if (!category) return
     immerSet((draft) => {
       draft.entryIdByCategory[category] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByFeed({ feedId, entries }: { feedId?: FeedId; entries: EntryModel[] }) {
+    if (!feedId) return
+    immerSet((draft) => {
+      draft.entryIdByFeed[feedId] = new Set(entries.map((e) => e.id))
     })
   }
 }
@@ -198,7 +261,20 @@ class EntrySyncServices {
       }
     }
 
-    await entryActions.upsertMany(entries)
+    const position =
+      params.view !== undefined
+        ? "view"
+        : params.feedId
+          ? "feed"
+          : params.feedIdList
+            ? "category"
+            : params.inboxId
+              ? "inbox"
+              : params.listId
+                ? "list"
+                : "all"
+
+    await entryActions.upsertMany(entries, position)
     if (params.listId) {
       await listActions.addEntryIds({
         listId: params.listId,
@@ -208,15 +284,19 @@ class EntrySyncServices {
 
     // After initial fetch, we can reset the state to prefer the entries data from the server
     if (!pageParam) {
-      if (view !== undefined) {
-        entryActions.resetByView({ view, entries })
+      if (position === "view") {
+        entryActions.resetByView({ view: params.view, entries })
       }
 
-      if (params.feedIdList && params.feedIdList.length > 0) {
-        const category = getSubscription(params.feedIdList[0]!)?.category
+      if (position === "category") {
+        const category = getSubscription(params.feedIdList?.[0])?.category
         if (category) {
           entryActions.resetByCategory({ category, entries })
         }
+      }
+
+      if (position === "feed") {
+        entryActions.resetByFeed({ feedId: params.feedId, entries })
       }
     }
 

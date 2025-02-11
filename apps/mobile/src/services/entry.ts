@@ -34,7 +34,10 @@ class EntryServiceStatic implements Hydratable, Resetable {
 
   async hydrate() {
     const entries = await db.query.entriesTable.findMany()
-    entryActions.upsertManyInSession(entries.map((e) => dbStoreMorph.toEntryModel(e)))
+    entryActions.upsertManyInSession(
+      entries.map((e) => dbStoreMorph.toEntryModel(e)),
+      "all",
+    )
   }
 }
 
