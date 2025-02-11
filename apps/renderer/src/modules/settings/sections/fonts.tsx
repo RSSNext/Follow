@@ -70,7 +70,7 @@ export const ContentFontSelector = () => {
   )
 
   return (
-    <div className="-mt-1 mb-3 flex items-center justify-between">
+    <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("appearance.content_font")}</span>
       <Select
         defaultValue={FALLBACK_FONT}

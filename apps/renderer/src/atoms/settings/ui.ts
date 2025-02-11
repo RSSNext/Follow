@@ -30,6 +30,9 @@ export const createDefaultSettings = (): UISettings => ({
   // Font
   uiFontFamily: "SN Pro",
   readerFontFamily: "inherit",
+  contentFontSize: 16,
+  dateFormat: "default",
+  contentLineHeight: 1.75,
   // Content
   readerRenderInlineStyle: false,
   codeHighlightThemeLight: "github-light",
