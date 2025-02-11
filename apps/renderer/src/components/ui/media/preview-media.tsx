@@ -110,39 +110,41 @@ const Wrapper: Component<{
         >
           {children}
           <RootPortal to={sideContent ? null : undefined}>
-            <m.div
-              animate={animateController}
-              className={cn(
-                "pointer-events-none absolute inset-x-0 bottom-0 z-[99] flex justify-end gap-3 p-2 text-white/70 [&_button]:hover:text-white",
-                "overflow-hidden",
-                sideContent ? "rounded-bl-xl" : "rounded-xl",
-                "bg-black/30",
-              )}
-              onClick={stopPropagation}
-            >
-              {showActions && (
-                <Fragment>
-                  {IN_ELECTRON && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[99] overflow-hidden">
+              <m.div
+                animate={animateController}
+                className={cn(
+                  "flex justify-end gap-3 p-2 text-white/70 [&_button]:hover:text-white",
+
+                  sideContent ? "rounded-bl-xl" : "rounded-xl",
+                  "bg-black/30",
+                )}
+                onClick={stopPropagation}
+              >
+                {showActions && (
+                  <Fragment>
+                    {IN_ELECTRON && (
+                      <ActionButton
+                        tooltip={t("common:words.download")}
+                        onClick={() => {
+                          tipcClient?.download(src)
+                        }}
+                      >
+                        <i className="i-mgc-download-2-cute-re" />
+                      </ActionButton>
+                    )}
                     <ActionButton
-                      tooltip={t("common:words.download")}
+                      tooltip={t(COPY_MAP.OpenInBrowser())}
                       onClick={() => {
-                        tipcClient?.download(src)
+                        window.open(src)
                       }}
                     >
-                      <i className="i-mgc-download-2-cute-re" />
+                      <i className="i-mgc-external-link-cute-re" />
                     </ActionButton>
-                  )}
-                  <ActionButton
-                    tooltip={t(COPY_MAP.OpenInBrowser())}
-                    onClick={() => {
-                      window.open(src)
-                    }}
-                  >
-                    <i className="i-mgc-external-link-cute-re" />
-                  </ActionButton>
-                </Fragment>
-              )}
-            </m.div>
+                  </Fragment>
+                )}
+              </m.div>
+            </div>
           </RootPortal>
         </div>
         {!!sideContent && (
