@@ -57,6 +57,13 @@
       "when": 1737108493439,
       "tag": "0007_curvy_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1739265018895,
+      "tag": "0008_last_the_santerians",
+      "breakpoints": true
     }
   ]
 }

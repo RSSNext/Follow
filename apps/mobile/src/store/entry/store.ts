@@ -8,6 +8,7 @@ import { honoMorph } from "@/src/morph/hono"
 import { storeDbMorph } from "@/src/morph/store-db"
 import { EntryService } from "@/src/services/entry"
 
+import { collectionActions } from "../collection/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
@@ -169,7 +170,8 @@ class EntryActions {
 
 class EntrySyncServices {
   async fetchEntries(props: FetchEntriesProps) {
-    const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived } = props
+    const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived, isCollection } =
+      props
     const params = getEntriesParams({
       feedId,
       inboxId,
@@ -182,6 +184,7 @@ class EntrySyncServices {
         read,
         limit,
         isArchived,
+        isCollection,
         ...params,
       },
     })
@@ -215,6 +218,14 @@ class EntrySyncServices {
           entryActions.resetByCategory({ category, entries })
         }
       }
+    }
+
+    if (isCollection && res.data) {
+      if (!view) {
+        console.error("view is required for collection")
+      }
+      const collections = honoMorph.toCollections(res.data, view ?? 0)
+      await collectionActions.upsertMany(collections)
     }
 
     return res
