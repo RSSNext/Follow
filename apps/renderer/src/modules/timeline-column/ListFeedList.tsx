@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next"
 
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useList } from "~/queries/lists"
 import { useFeedById } from "~/store/feed"
 import { useListById } from "~/store/list"
 
@@ -21,7 +22,9 @@ import { feedColumnStyles } from "./styles"
 
 export const ListFeedList: FC<{ listId: string }> = ({ listId }) => {
   const { t } = useTranslation()
-  const list = useListById(listId)
+  const cachedList = useListById(listId)
+  const res = useList({ id: listId, noExtras: true })
+  const list = res.data?.list || cachedList
   const currentFeedId = useRouteParamsSelector((s) => s.feedId)
 
   if (!list) return null

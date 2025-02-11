@@ -112,8 +112,8 @@ class ListActionStatic {
     await tx.run()
   }
 
-  async fetchListById(id: string) {
-    const res = await apiClient.lists.$get({ query: { listId: id } })
+  async fetchListById(id: string, noExtras?: boolean) {
+    const res = await apiClient.lists.$get({ query: { listId: id, noExtras } })
 
     this.upsertMany([res.data.list])
     return res.data
