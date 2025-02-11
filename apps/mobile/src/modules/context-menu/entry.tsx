@@ -10,14 +10,15 @@ import {
   setWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
 import { openLink } from "@/src/lib/native"
-import { useIsEntryStared } from "@/src/store/collection/hooks"
+import { toast } from "@/src/lib/toast"
+import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)
-  const isEntryStared = useIsEntryStared(id)
+  const isEntryStarred = useIsEntryStarred(id)
 
   const handlePressPreview = useCallback(() => {
     if (!entry) return
@@ -57,14 +58,14 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
         <ContextMenu.Item
           key="Star"
           onSelect={() => {
-            if (isEntryStared) {
+            if (isEntryStarred) {
               collectionSyncService.unstarEntry({
                 createdAt: new Date().toISOString(),
                 feedId: entry.feedId,
                 entryId: id,
                 view: 0,
               })
-              return
+              toast.info("Unstarred")
             } else {
               collectionSyncService.starEntry(
                 {
@@ -76,10 +77,11 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
                 },
                 0,
               )
+              toast.info("Starred")
             }
           }}
         >
-          <ContextMenu.ItemTitle>{isEntryStared ? "Unstar" : "Star"}</ContextMenu.ItemTitle>
+          <ContextMenu.ItemTitle>{isEntryStarred ? "Unstar" : "Star"}</ContextMenu.ItemTitle>
         </ContextMenu.Item>
 
         {entry.url && (
