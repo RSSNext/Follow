@@ -6,7 +6,7 @@ export const useCollectionEntry = (entryId: string) => {
   })
 }
 
-export const useIsEntryStared = (entryId: string) => {
+export const useIsEntryStarred = (entryId: string) => {
   return useCollectionStore((state) => {
     return !!state.collections[entryId]
   })

@@ -87,7 +87,7 @@ export const entriesTable = sqliteTable("entries", {
 
 export const collectionsTable = sqliteTable("collections", {
   feedId: text("feed_id"),
-  entryId: text("entry_id").notNull(),
+  entryId: text("entry_id").notNull().primaryKey(),
   createdAt: text("created_at"),
   view: integer("view").notNull().$type<FeedViewType>(),
 })

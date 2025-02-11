@@ -1,3 +1,4 @@
+import { CollectionService } from "./collection"
 import { EntryService } from "./entry"
 import { FeedService } from "./feed"
 import { InboxService } from "./inbox"
@@ -15,6 +16,7 @@ const hydrates: Hydratable[] = [
   UnreadService,
   UserService,
   EntryService,
+  CollectionService,
 ]
 
 export const hydrateDatabaseToStore = async () => {
