@@ -1,37 +1,19 @@
-import { Stack, useLocalSearchParams } from "expo-router"
-import { ScrollView, Text, View } from "react-native"
+import { useLocalSearchParams } from "expo-router"
+import { useMemo } from "react"
 
-import { BlurEffect } from "@/src/components/common/BlurEffect"
+import { EntryListScreen } from "@/src/modules/entry-list/entry-list"
+import { EntryListContext } from "@/src/modules/feed-drawer/atoms"
+import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 
 export default function Feed() {
-  const { feedId } = useLocalSearchParams()
-
+  const { feedId: feedIdOrCategory } = useLocalSearchParams()
+  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrCategory as string)
+  const entryIdsByCategory = useEntryIdsByCategory(feedIdOrCategory as string)
   return (
-    <View>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerBackTitle: "Subscriptions",
-          headerBackground: BlurEffect,
-
-          headerTransparent: true,
-          headerTitle: "Feed",
-        }}
+    <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
+      <EntryListScreen
+        entryIds={entryIdsByFeedId.length > 0 ? entryIdsByFeedId : entryIdsByCategory}
       />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" className="h-full">
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-      </ScrollView>
-    </View>
+    </EntryListContext.Provider>
   )
 }

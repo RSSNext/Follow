@@ -1,6 +1,7 @@
 import { cn } from "@follow/utils"
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import { HeaderHeightContext } from "@react-navigation/elements"
+import { router } from "expo-router"
 import type { FC } from "react"
 import { createContext, memo, useContext, useState } from "react"
 import {
@@ -155,6 +156,7 @@ const CategoryGrouped = memo(
               categoryName: category,
             })
             closeDrawer()
+            router.push(`/feeds/${category}`)
           }}
           className="h-12 flex-row items-center px-3"
         >

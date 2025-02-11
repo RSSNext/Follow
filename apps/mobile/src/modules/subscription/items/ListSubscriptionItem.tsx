@@ -8,7 +8,7 @@ import { useList } from "@/src/store/list/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
-import { closeDrawer, selectFeed } from "../../feed-drawer/atoms"
+import { closeDrawer, selectTimeline } from "../../feed-drawer/atoms"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
@@ -20,7 +20,7 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
         <ItemPressable
           className="h-12 flex-row items-center px-3"
           onPress={() => {
-            selectFeed({
+            selectTimeline({
               type: "list",
               listId: id,
             })

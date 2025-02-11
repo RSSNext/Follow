@@ -1,3 +1,4 @@
+import { router } from "expo-router"
 import { memo, useState } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
@@ -49,6 +50,7 @@ export const CategoryGrouped = memo(
                 categoryName: category,
               })
               closeDrawer()
+              router.push(`/feeds/${category}`)
             }}
             className="h-12 flex-row items-center px-3"
           >

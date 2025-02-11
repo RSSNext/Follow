@@ -16,7 +16,7 @@ import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
-import { useSelectedFeed } from "../feed-drawer/atoms"
+import { useFetchEntriesControls, useSelectedView } from "../feed-drawer/atoms"
 
 export function EntryListContentGrid({
   entryIds,
@@ -28,6 +28,9 @@ export function EntryListContentGrid({
   const tabBarHeight = useBottomTabBarHeight()
   const headerHeight = useHeaderHeight()
   const { scrollY } = useContext(NavigationContext)!
+
+  const { fetchNextPage } = useFetchEntriesControls()
+
   return (
     <MasonryFlashList
       data={entryIds}
@@ -37,6 +40,9 @@ export function EntryListContentGrid({
       keyExtractor={(id) => id}
       onViewableItemsChanged={({ viewableItems }) => {
         debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
+      }}
+      onEndReached={() => {
+        fetchNextPage()
       }}
       numColumns={2}
       onScroll={useTypeScriptHappyCallback(
@@ -60,8 +66,7 @@ export function EntryListContentGrid({
 }
 
 function RenderEntryItem({ id }: { id: string }) {
-  const selectedFeed = useSelectedFeed()
-  const view = selectedFeed.type === "view" ? selectedFeed.viewId : null
+  const view = useSelectedView()
   const item = useEntry(id)
   if (!item) {
     return null

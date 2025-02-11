@@ -45,7 +45,6 @@ const defaultState: EntryState = {
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => defaultState)
 
-const set = useEntryStore.setState
 const immerSet = createImmerSetter(useEntryStore)
 
 class EntryActions {
@@ -155,19 +154,16 @@ class EntryActions {
     await tx.run()
   }
 
-  reset(entries: EntryModel[] = []) {
-    if (entries.length > 0) {
-      immerSet((draft) => {
-        // remove all entries from draft.data not in entries
-        for (const existingEntry of Object.values(draft.data)) {
-          if (!entries.some((e) => e.id === existingEntry.id)) {
-            delete draft.data[existingEntry.id]
-          }
-        }
-      })
-    } else {
-      set(defaultState)
-    }
+  resetByView({ view, entries }: { view: FeedViewType; entries: EntryModel[] }) {
+    immerSet((draft) => {
+      draft.entryIdByView[view] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByCategory({ category, entries }: { category: Category; entries: EntryModel[] }) {
+    immerSet((draft) => {
+      draft.entryIdByCategory[category] = new Set(entries.map((e) => e.id))
+    })
   }
 }
 
@@ -206,7 +202,22 @@ class EntrySyncServices {
         entryIds: entries.map((e) => e.id),
       })
     }
-    return entries
+
+    // After initial fetch, we can reset the state to prefer the entries data from the server
+    if (!pageParam) {
+      if (view !== undefined) {
+        entryActions.resetByView({ view, entries })
+      }
+
+      if (params.feedIdList && params.feedIdList.length > 0) {
+        const category = getSubscription(params.feedIdList[0]!)?.category
+        if (category) {
+          entryActions.resetByCategory({ category, entries })
+        }
+      }
+    }
+
+    return res
   }
 
   async fetchEntryContent(entryId: EntryId) {

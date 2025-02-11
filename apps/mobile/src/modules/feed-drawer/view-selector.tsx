@@ -9,7 +9,7 @@ import { useList } from "@/src/store/list/hooks"
 import { useAllListSubscription } from "@/src/store/subscription/hooks"
 import { useColor } from "@/src/theme/colors"
 
-import { selectFeed, useSelectedFeed } from "../feed-drawer/atoms"
+import { selectTimeline, useSelectedFeed } from "../feed-drawer/atoms"
 
 export function ViewSelector() {
   const lists = useAllListSubscription()
@@ -33,15 +33,15 @@ export function ViewSelector() {
 }
 
 function ViewItem({ view }: { view: ViewDefinition }) {
-  const selectedFeed = useSelectedFeed()
-  const isActive = selectedFeed.type === "view" && selectedFeed.viewId === view.view
-
   const bgColor = useColor("gray2")
+  const selectedFeed = useSelectedFeed()
+  if (!selectedFeed) return null
+  const isActive = selectedFeed.type === "view" && selectedFeed.viewId === view.view
 
   return (
     <TouchableOpacity
       className="relative flex size-12 items-center justify-center overflow-hidden rounded-full"
-      onPress={() => selectFeed({ type: "view", viewId: view.view })}
+      onPress={() => selectTimeline({ type: "view", viewId: view.view })}
       style={{
         backgroundColor: isActive ? view.activeColor : bgColor,
       }}
@@ -54,6 +54,7 @@ function ViewItem({ view }: { view: ViewDefinition }) {
 function ListItem({ listId }: { listId: string }) {
   const list = useList(listId)
   const selectedFeed = useSelectedFeed()
+  if (!selectedFeed) return null
   const isActive = selectedFeed.type === "list" && selectedFeed.listId === listId
 
   if (!list) return null
@@ -61,7 +62,7 @@ function ListItem({ listId }: { listId: string }) {
   return (
     <TouchableOpacity
       className="relative flex size-12 items-center justify-center overflow-hidden rounded-full"
-      onPress={() => selectFeed({ type: "list", listId })}
+      onPress={() => selectTimeline({ type: "list", listId })}
     >
       {list.image ? (
         isActive ? (
