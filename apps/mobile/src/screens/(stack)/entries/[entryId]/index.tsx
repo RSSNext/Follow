@@ -10,13 +10,22 @@ import { Fragment, useCallback, useContext, useEffect, useState } from "react"
 import {
   Clipboard,
   Pressable,
+  Share,
   Text,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native"
 import PagerView from "react-native-pager-view"
-import ReAnimated, { FadeIn, FadeOut, useSharedValue, withTiming } from "react-native-reanimated"
+import type { SharedValue } from "react-native-reanimated"
+import Animated, {
+  FadeIn,
+  FadeOut,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
@@ -29,9 +38,16 @@ import { EntryContentWebView } from "@/src/components/native/webview/EntryConten
 import { DropdownMenu } from "@/src/components/ui/context-menu"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
+import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
+import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
+import { StarCuteReIcon } from "@/src/icons/star_cute_re"
 import { openLink } from "@/src/lib/native"
+import { toast } from "@/src/lib/toast"
+import { useIsEntryStarred } from "@/src/store/collection/hooks"
+import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
+import { useSubscription } from "@/src/store/subscription/hooks"
 
 function Media({ media }: { media: MediaModel }) {
   const isVideo = media.type === "video"
@@ -97,7 +113,7 @@ export default function EntryDetailPage() {
             {({ pressed }) => (
               <>
                 {pressed && (
-                  <ReAnimated.View
+                  <Animated.View
                     entering={FadeIn}
                     exiting={FadeOut}
                     className={"bg-system-fill absolute inset-x-1 inset-y-0 rounded-xl"}
@@ -154,12 +170,17 @@ const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {
   const opacityAnimatedValue = useSharedValue(0)
 
   const headerHeight = useHeaderHeight()
+
+  const [isHeaderTitleVisible, setIsHeaderTitleVisible] = useState(true)
+
   useEffect(() => {
     const id = scrollY.addListener((value) => {
       if (value.value > titleHeight + headerHeight) {
         opacityAnimatedValue.value = withTiming(1, { duration: 100 })
+        setIsHeaderTitleVisible(true)
       } else {
         opacityAnimatedValue.value = withTiming(0, { duration: 100 })
+        setIsHeaderTitleVisible(false)
       }
     })
 
@@ -174,18 +195,22 @@ const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {
         headerShown
         headerRight={useCallback(
           () => (
-            <HeaderRightActions entryId={entryId} />
+            <HeaderRightActions
+              entryId={entryId}
+              titleOpacityShareValue={opacityAnimatedValue}
+              isHeaderTitleVisible={isHeaderTitleVisible}
+            />
           ),
-          [entryId],
+          [entryId, opacityAnimatedValue, isHeaderTitleVisible],
         )}
         headerTitle={() => (
-          <ReAnimated.Text
+          <Animated.Text
             className={"text-label text-[17px] font-semibold"}
             numberOfLines={1}
             style={{ opacity: opacityAnimatedValue }}
           >
             {title}
-          </ReAnimated.Text>
+          </Animated.Text>
         )}
       />
       <View
@@ -254,36 +279,103 @@ const MediaSwipe: FC<{ mediaList: MediaModel[]; id: string }> = ({ mediaList, id
   )
 }
 
-const HeaderRightActions = ({ entryId }: { entryId: string }) => {
-  return <HeaderRightActionsImpl entryId={entryId} />
+const HeaderRightActions = (props: HeaderRightActionsProps) => {
+  return <HeaderRightActionsImpl {...props} />
 }
 
 interface HeaderRightActionsProps {
   entryId: string
+  titleOpacityShareValue: SharedValue<number>
+  isHeaderTitleVisible: boolean
 }
-const HeaderRightActionsImpl = ({ entryId }: HeaderRightActionsProps) => {
+const HeaderRightActionsImpl = ({
+  entryId,
+  titleOpacityShareValue,
+  isHeaderTitleVisible,
+}: HeaderRightActionsProps) => {
   const labelColor = useColor("label")
+  const isStarred = useIsEntryStarred(entryId)
 
   const entry = useEntry(entryId, (entry) => {
     if (!entry) return
     return {
       url: entry.url,
+      feedId: entry.feedId,
+      title: entry.title,
     }
   })
+  const feed = useFeed(entry?.feedId as string, (feed) => {
+    return {
+      feedId: feed.id,
+    }
+  })
+  const subscription = useSubscription(feed?.feedId as string)
+
+  const handleToggleStar = () => {
+    if (!entry) return
+    if (!feed) return
+    if (!subscription) return
+    if (isStarred) collectionSyncService.unstarEntry(entryId)
+    else
+      collectionSyncService.starEntry({
+        entryId,
+        feedId: feed.feedId,
+        view: subscription.view,
+      })
+  }
+
+  const handleShare = () => {
+    if (!entry) return
+    Share.share({
+      title: entry.title!,
+      url: entry.url!,
+    })
+  }
   return (
-    <View>
+    <View className="relative flex-row gap-4">
+      <Animated.View
+        style={useAnimatedStyle(() => {
+          return {
+            opacity: interpolate(titleOpacityShareValue.value, [0, 1], [1, 0]),
+          }
+        })}
+        className="absolute right-[32] flex-row gap-4"
+      >
+        {!!subscription && (
+          <TouchableOpacity hitSlop={10} onPress={handleToggleStar}>
+            {isStarred ? <StarCuteFiIcon color="#facc15" /> : <StarCuteReIcon color={labelColor} />}
+          </TouchableOpacity>
+        )}
+
+        <TouchableOpacity hitSlop={10} onPress={handleShare}>
+          <Share3CuteReIcon color={labelColor} />
+        </TouchableOpacity>
+      </Animated.View>
+
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <TouchableOpacity hitSlop={10}>
             <More1CuteReIcon color={labelColor} />
           </TouchableOpacity>
         </DropdownMenu.Trigger>
+
         <DropdownMenu.Content>
+          {isHeaderTitleVisible && (
+            <DropdownMenu.Group>
+              <DropdownMenu.Item key="Star" onSelect={handleToggleStar}>
+                <DropdownMenu.ItemTitle>{isStarred ? "Unstar" : "Star"}</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item key="Share" onSelect={handleShare}>
+                <DropdownMenu.ItemTitle>Share</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          )}
           <DropdownMenu.Item
             key="CopyLink"
             onSelect={() => {
               if (!entry?.url) return
               Clipboard.setString(entry.url)
+              toast.info("Link copied to clipboard")
             }}
           >
             <DropdownMenu.ItemTitle>Copy Link</DropdownMenu.ItemTitle>

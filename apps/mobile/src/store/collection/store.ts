@@ -22,26 +22,62 @@ export const useCollectionStore = createZustandStore<CollectionState>("collectio
 const set = useCollectionStore.setState
 
 class CollectionSyncService {
-  async starEntry(collection: CollectionSchema, view: FeedViewType) {
-    await apiClient.collections.$post({
-      json: {
-        entryId: collection.entryId,
-        view,
-      },
+  async starEntry({
+    entryId,
+    feedId,
+    view,
+  }: {
+    entryId: string
+    feedId: string
+    view: FeedViewType
+  }) {
+    const tx = createTransaction()
+    tx.store(async () => {
+      await collectionActions.upsertMany([
+        {
+          createdAt: new Date().toISOString(),
+          entryId,
+          feedId,
+          view,
+        },
+      ])
+    })
+    tx.request(async () => {
+      await apiClient.collections.$post({
+        json: {
+          entryId,
+          view,
+        },
+      })
+    })
+    tx.rollback(() => {
+      collectionActions.delete(entryId)
     })
 
-    await collectionActions.upsertMany([collection])
-    return
+    await tx.run()
   }
 
-  async unstarEntry(collection: CollectionSchema) {
-    await apiClient.collections.$delete({
-      json: {
-        entryId: collection.entryId,
-      },
+  async unstarEntry(entryId: string) {
+    const tx = createTransaction()
+
+    const snapshot = useCollectionStore.getState().collections[entryId]
+    tx.store(() => {
+      collectionActions.delete(entryId)
+    })
+    tx.request(async () => {
+      await apiClient.collections.$delete({
+        json: {
+          entryId,
+        },
+      })
     })
 
-    await collectionActions.delete(collection.entryId)
+    tx.rollback(() => {
+      if (!snapshot) return
+      collectionActions.upsertMany([snapshot])
+    })
+
+    await tx.run()
   }
 }
 
