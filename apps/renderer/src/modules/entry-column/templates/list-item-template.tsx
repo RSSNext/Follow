@@ -20,16 +20,7 @@ import { useInboxById } from "~/store/inbox"
 import { StarIcon } from "../star-icon"
 import type { UniversalItemProps } from "../types"
 
-export function ListItem({
-  entryId,
-  entryPreview,
-  translation,
-  withDetails,
-  withAudio,
-}: UniversalItemProps & {
-  withDetails?: boolean
-  withAudio?: boolean
-}) {
+export function ListItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const isMobile = useMobile()
   const entry = useEntry(entryId) || entryPreview
 
@@ -83,8 +74,8 @@ export function ListItem({
 
   const related = feed || inbox
 
-  const hasAudio = entry.entries?.attachments?.[0]!.url
-  const hasMedia = entry.entries?.media?.[0]?.url
+  const hasAudio = !!entry.entries?.attachments?.[0]?.url
+  const hasMedia = !!entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
   // calculate the max width to have a correct truncation
@@ -94,13 +85,13 @@ export function ListItem({
   const mediaWidth = (settingWideMode ? 48 : 80) * (isMobile ? 1.125 : 1) + marginWidth
 
   let savedWidth = 0
-  if (!withAudio) {
-    savedWidth += feedIconWidth
-  }
-  if (withAudio && hasAudio) {
+
+  savedWidth += feedIconWidth
+
+  if (hasAudio) {
     savedWidth += audioCoverWidth
   }
-  if (withDetails && hasMedia) {
+  if (hasMedia && !hasAudio) {
     savedWidth += mediaWidth
   }
 
@@ -113,7 +104,7 @@ export function ListItem({
         settingWideMode ? "py-3" : "py-4",
       )}
     >
-      {!withAudio && <FeedIcon feed={related} fallback entry={entry.entries} />}
+      <FeedIcon feed={related} fallback entry={entry.entries} />
       <div
         className={cn("-mt-0.5 flex-1 text-sm leading-tight", lineClamp.global)}
         style={{
@@ -141,7 +132,7 @@ export function ListItem({
           className={cn(
             "relative my-0.5 break-words",
             !!entry.collections && "pr-5",
-            entry.entries.title ? (withDetails || withAudio) && "font-medium" : "text-[13px]",
+            entry.entries.title ? "font-medium" : "text-[13px]",
           )}
         >
           {entry.entries.title ? (
@@ -159,25 +150,21 @@ export function ListItem({
           )}
           {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
         </div>
-        {withDetails && (
-          <div
-            className={cn(
-              "text-[13px]",
-              asRead
-                ? "text-zinc-400 dark:text-neutral-500"
-                : "text-zinc-500 dark:text-neutral-400",
-            )}
-          >
-            <EntryTranslation
-              className={cn("break-all", lineClamp.description)}
-              source={entry.entries.description}
-              target={translation?.description}
-            />
-          </div>
-        )}
+        <div
+          className={cn(
+            "text-[13px]",
+            asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500 dark:text-neutral-400",
+          )}
+        >
+          <EntryTranslation
+            className={cn("break-all", lineClamp.description)}
+            source={entry.entries.description}
+            target={translation?.description}
+          />
+        </div>
       </div>
 
-      {withAudio && !!hasAudio && (
+      {hasAudio && (
         <AudioCover
           entryId={entryId}
           src={entry.entries!.attachments![0]!.url}
@@ -208,7 +195,7 @@ export function ListItem({
         />
       )}
 
-      {withDetails && entry.entries.media?.[0] && (
+      {!hasAudio && entry.entries.media?.[0] && (
         <Media
           thumbnail
           src={entry.entries.media[0].url}
