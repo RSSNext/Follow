@@ -6,8 +6,9 @@ import type { MasonryFlashListProps } from "@shopify/flash-list"
 import { MasonryFlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link } from "expo-router"
+import { useColorScheme } from "nativewind"
 import { useContext } from "react"
-import { Pressable, View } from "react-native"
+import { Pressable, RefreshControl, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
@@ -29,10 +30,22 @@ export function EntryListContentGrid({
   const headerHeight = useHeaderHeight()
   const { scrollY } = useContext(NavigationContext)!
 
-  const { fetchNextPage } = useFetchEntriesControls()
+  const { colorScheme } = useColorScheme()
+  const { fetchNextPage, refetch, isRefetching } = useFetchEntriesControls()
 
   return (
     <MasonryFlashList
+      refreshControl={
+        <RefreshControl
+          progressViewOffset={headerHeight}
+          // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
+          tintColor={colorScheme === "dark" ? "white" : "black"}
+          onRefresh={() => {
+            refetch()
+          }}
+          refreshing={isRefetching}
+        />
+      }
       data={entryIds}
       renderItem={useTypeScriptHappyCallback(({ item }) => {
         return <RenderEntryItem id={item} />
