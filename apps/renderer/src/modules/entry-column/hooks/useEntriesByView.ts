@@ -87,10 +87,13 @@ export const useEntriesByView = ({
 
   useFetchEntryContentByStream(remoteEntryIds)
 
-  const currentEntries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : folderIds || feedId!, {
-    unread: unreadOnly,
-    view,
-  })
+  const currentEntries = useEntryIdsByFeedIdOrView(
+    listId || inboxId || (isAllFeeds ? view : folderIds || feedId!),
+    {
+      unread: unreadOnly,
+      view,
+    },
+  )
 
   // If remote data is not available, we use the local data, get the local data length
   // FIXME: remote first, then local store data
