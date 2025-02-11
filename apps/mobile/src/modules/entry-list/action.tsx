@@ -13,7 +13,7 @@ const useActionPadding = () => {
   return { paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }
 }
 
-export function LeftAction() {
+export function HomeLeftAction() {
   const { openDrawer } = useFeedDrawer()
 
   const insets = useActionPadding()
@@ -29,7 +29,7 @@ export function LeftAction() {
   )
 }
 
-export function RightAction() {
+export function HomeRightAction() {
   const insets = useActionPadding()
 
   return (

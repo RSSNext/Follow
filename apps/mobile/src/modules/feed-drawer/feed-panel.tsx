@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AccordionItem } from "@/src/components/ui/accordion/AccordionItem"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -40,6 +41,8 @@ export const FeedPanel = () => {
   const selectedCollection = useSelectedCollection()
   const [headerHeight, setHeaderHeight] = useState(0)
 
+  const insets = useSafeAreaInsets()
+
   if (selectedCollection.type === "view") {
     return (
       <View className="flex flex-1 overflow-hidden">
@@ -51,7 +54,7 @@ export const FeedPanel = () => {
         />
 
         <HeaderHeightContext.Provider value={headerHeight}>
-          <BottomTabBarHeightContext.Provider value={0}>
+          <BottomTabBarHeightContext.Provider value={insets.bottom}>
             <ViewPageCurrentViewProvider
               key={selectedCollection.viewId}
               value={selectedCollection.viewId}

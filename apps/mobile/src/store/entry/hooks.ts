@@ -28,8 +28,18 @@ export const usePrefetchEntryContent = (entryId: string) => {
   })
 }
 
-export const useEntry = (id: string): EntryModel | undefined => {
-  return useEntryStore((state) => state.data[id])
+const defaultSelector = (state: EntryModel) => state
+export function useEntry(id: string): EntryModel | undefined
+export function useEntry<T>(id: string, selector: (state: EntryModel) => T): T | undefined
+export function useEntry(
+  id: string,
+  selector: (state: EntryModel) => EntryModel = defaultSelector,
+) {
+  return useEntryStore((state) => {
+    const entry = state.data[id]
+    if (!entry) return
+    return selector(entry)
+  })
 }
 
 function sortEntryIdsByPublishDate(a: string, b: string) {

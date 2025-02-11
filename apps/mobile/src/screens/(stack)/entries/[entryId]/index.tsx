@@ -6,8 +6,15 @@ import { Video } from "expo-av"
 import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
 import type { FC } from "react"
-import { Fragment, useContext, useEffect, useState } from "react"
-import { Pressable, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import { Fragment, useCallback, useContext, useEffect, useState } from "react"
+import {
+  Clipboard,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native"
 import PagerView from "react-native-pager-view"
 import ReAnimated, { FadeIn, FadeOut, useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -19,6 +26,7 @@ import {
   SafeNavigationScrollView,
 } from "@/src/components/common/SafeNavigationScrollView"
 import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
+import { DropdownMenu } from "@/src/components/ui/context-menu"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
 import { openLink } from "@/src/lib/native"
@@ -95,7 +103,7 @@ export default function EntryDetailPage() {
                     className={"bg-system-fill absolute inset-x-1 inset-y-0 rounded-xl"}
                   />
                 )}
-                <EntryTitle title={entry?.title || ""} />
+                <EntryTitle title={entry?.title || ""} entryId={entryId as string} />
                 <EntryInfo entryId={entryId as string} />
               </>
             )}
@@ -138,7 +146,7 @@ const FeedInfo = ({ feedId }: { feedId: string }) => {
   )
 }
 
-const EntryTitle = ({ title }: { title: string }) => {
+const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {
   const { scrollY } = useContext(NavigationContext)!
 
   const [titleHeight, setTitleHeight] = useState(0)
@@ -164,7 +172,12 @@ const EntryTitle = ({ title }: { title: string }) => {
     <>
       <NavigationBlurEffectHeader
         headerShown
-        headerRight={HeaderRightActions}
+        headerRight={useCallback(
+          () => (
+            <HeaderRightActions entryId={entryId} />
+          ),
+          [entryId],
+        )}
         headerTitle={() => (
           <ReAnimated.Text
             className={"text-label text-[17px] font-semibold"}
@@ -241,17 +254,51 @@ const MediaSwipe: FC<{ mediaList: MediaModel[]; id: string }> = ({ mediaList, id
   )
 }
 
-const HeaderRightActions = () => {
-  return <HeaderRightActionsImpl />
+const HeaderRightActions = ({ entryId }: { entryId: string }) => {
+  return <HeaderRightActionsImpl entryId={entryId} />
 }
 
-const HeaderRightActionsImpl = () => {
+interface HeaderRightActionsProps {
+  entryId: string
+}
+const HeaderRightActionsImpl = ({ entryId }: HeaderRightActionsProps) => {
   const labelColor = useColor("label")
+
+  const entry = useEntry(entryId, (entry) => {
+    if (!entry) return
+    return {
+      url: entry.url,
+    }
+  })
   return (
     <View>
-      <TouchableOpacity hitSlop={10}>
-        <More1CuteReIcon color={labelColor} />
-      </TouchableOpacity>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <TouchableOpacity hitSlop={10}>
+            <More1CuteReIcon color={labelColor} />
+          </TouchableOpacity>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item
+            key="CopyLink"
+            onSelect={() => {
+              if (!entry?.url) return
+              Clipboard.setString(entry.url)
+            }}
+          >
+            <DropdownMenu.ItemTitle>Copy Link</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            key="OpenInBrowser"
+            onSelect={() => {
+              if (!entry?.url) return
+              openLink(entry.url)
+            }}
+          >
+            <DropdownMenu.ItemTitle>Open in Browser</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
     </View>
   )
 }

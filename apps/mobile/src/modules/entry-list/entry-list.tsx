@@ -27,7 +27,7 @@ import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { ViewSelector } from "../feed-drawer/view-selector"
-import { LeftAction, RightAction } from "./action"
+import { HomeLeftAction, HomeRightAction } from "./action"
 import { EntryListContentGrid } from "./entry-list-gird"
 
 const headerHideableBottomHeight = 58
@@ -46,8 +46,14 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
         headerBackTitle={isFeed ? "Subscriptions" : undefined}
         headerShown
         headerTitle={viewTitle}
-        headerLeft={useMemo(() => (isTimeline ? () => <LeftAction /> : undefined), [isTimeline])}
-        headerRight={useMemo(() => (isTimeline ? () => <RightAction /> : undefined), [isTimeline])}
+        headerLeft={useMemo(
+          () => (isTimeline ? () => <HomeLeftAction /> : undefined),
+          [isTimeline],
+        )}
+        headerRight={useMemo(
+          () => (isTimeline ? () => <HomeRightAction /> : undefined),
+          [isTimeline],
+        )}
         headerHideableBottomHeight={isTimeline ? headerHideableBottomHeight : undefined}
         headerHideableBottom={isTimeline ? ViewSelector : undefined}
       />
