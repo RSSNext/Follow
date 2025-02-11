@@ -12,7 +12,7 @@ export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam"> |
     queryKey: ["entries", feedId, inboxId, listId, view, read, limit, isArchived],
     queryFn: ({ pageParam }) => entrySyncServices.fetchEntries({ ...props, pageParam }),
     getNextPageParam: (lastPage) =>
-      inboxId || listId
+      listId
         ? lastPage.data?.at(-1)?.entries.insertedAt
         : lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined as undefined | string,
