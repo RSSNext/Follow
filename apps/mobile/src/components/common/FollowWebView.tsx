@@ -9,6 +9,9 @@ import { WebView } from "react-native-webview"
 import { useWebViewNavigation } from "@/src/hooks/useWebViewNavigation"
 import { signOut } from "@/src/lib/auth"
 
+/**
+ * @deprecated
+ */
 const presetUri = Platform.select({
   ios: "rn-web/index.html",
   android: "file:///android_asset/raw/index.html",
