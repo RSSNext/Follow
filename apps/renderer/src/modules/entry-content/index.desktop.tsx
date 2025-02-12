@@ -6,6 +6,7 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
+import * as React from "react"
 import { useEffect, useMemo, useRef } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
@@ -82,15 +83,23 @@ export const EntryContent: Component<EntryContentProps> = ({
     [entryId, isPeekModal],
   )
   useFocusEntryContainerSubscriptions(scrollerRef)
-  const stableRenderStyle = useMemo(
-    () =>
-      readerFontFamily
-        ? {
-            fontFamily: readerFontFamily,
-          }
-        : undefined,
-    [readerFontFamily],
-  )
+  const contentLineHeight = useUISettingKey("contentLineHeight")
+  const contentFontSize = useUISettingKey("contentFontSize")
+
+  const stableRenderStyle = useMemo(() => {
+    const css = {} as React.CSSProperties
+    if (readerFontFamily) {
+      css.fontFamily = readerFontFamily
+    }
+    if (contentLineHeight) {
+      css.lineHeight = contentLineHeight
+    }
+    if (contentFontSize) {
+      css.fontSize = contentFontSize
+    }
+
+    return css
+  }, [readerFontFamily, contentLineHeight, contentFontSize])
   const mediaInfo = useMemo(
     () =>
       Object.fromEntries(

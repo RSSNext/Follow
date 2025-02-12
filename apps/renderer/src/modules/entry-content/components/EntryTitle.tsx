@@ -1,9 +1,11 @@
 import type { SupportedLanguages } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
+import dayjs from "dayjs"
 import { useMemo } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useGeneralSettingSelector } from "~/atoms/settings/general"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { useWhoami } from "~/atoms/user"
 import { RelativeTime } from "~/components/ui/datetime"
 import { useAuthQuery } from "~/hooks/common"
@@ -65,6 +67,14 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
     },
   )
 
+  const dateFormat = useUISettingKey("dateFormat")
+
+  const dateRender = useMemo(() => {
+    if (!entry?.entries.publishedAt) return null
+    if (dateFormat === "default") return new Date(entry.entries.publishedAt).toLocaleString()
+    return dayjs(entry.entries.publishedAt).format(dateFormat)
+  }, [dateFormat, entry?.entries.publishedAt])
+
   if (!entry) return null
 
   return compact ? (
@@ -104,7 +114,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
         {getPreferredTitle(feed || inbox, entry.entries)}
       </div>
       <div className="flex select-none items-center gap-2 text-[13px] text-zinc-500">
-        {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
+        {dateRender}
 
         <div className="flex items-center gap-1">
           <i className="i-mgc-eye-2-cute-re" />
