@@ -59,24 +59,19 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
           key="Star"
           onSelect={() => {
             if (isEntryStarred) {
-              collectionSyncService.unstarEntry({
-                createdAt: new Date().toISOString(),
-                feedId: entry.feedId,
-                entryId: id,
-                view: 0,
-              })
+              collectionSyncService.unstarEntry(id)
               toast.info("Unstarred")
             } else {
-              collectionSyncService.starEntry(
-                {
-                  createdAt: new Date().toISOString(),
-                  feedId: entry.feedId,
-                  entryId: id,
-                  // TODO update view
-                  view: 0,
-                },
-                0,
-              )
+              if (!entry.feedId) {
+                toast.error("Feed not found")
+                return
+              }
+              collectionSyncService.starEntry({
+                feedId: entry.feedId,
+                entryId: id,
+                // TODO update view
+                view: 0,
+              })
               toast.info("Starred")
             }
           }}
