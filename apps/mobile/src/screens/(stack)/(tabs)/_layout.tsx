@@ -103,7 +103,7 @@ export default function TabLayout() {
                   return (
                     <GestureDetector gesture={doubleTap}>
                       <View className="flex-1">
-                        <PlatformPressable {...props} />
+                        <Pressable {...props} />
                       </View>
                     </GestureDetector>
                   )
