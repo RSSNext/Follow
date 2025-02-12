@@ -1,16 +1,17 @@
 import { Image } from "expo-image"
 import { useEffect } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
-import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { Grayscale } from "react-native-color-matrix-image-filters"
-import Animated, { useSharedValue, withSpring } from "react-native-reanimated"
+import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
+import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
 import { useList } from "@/src/store/list/hooks"
 import { useAllListSubscription } from "@/src/store/subscription/hooks"
-import { useColor } from "@/src/theme/colors"
+import { accentColor, useColor } from "@/src/theme/colors"
 
 import { selectTimeline, useSelectedFeed } from "../feed-drawer/atoms"
 
@@ -27,6 +28,7 @@ export function ViewSelector() {
         {views.map((view) => (
           <ViewItem key={view.name} view={view} />
         ))}
+        {lists.length > 0 && <View className="bg-opaque-separator mx-3 h-8 w-px" />}
         {lists.map((listId) => (
           <ListItem key={listId} listId={listId} />
         ))}
@@ -34,8 +36,6 @@ export function ViewSelector() {
     </View>
   )
 }
-
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 function ItemWrapper({
   children,
@@ -56,17 +56,17 @@ function ItemWrapper({
   }, [isActive, width])
 
   return (
-    <AnimatedTouchableOpacity
+    <ReAnimatedTouchableOpacity
       className="relative flex h-12 flex-row items-center justify-center gap-2 overflow-hidden rounded-[1.2rem]"
       onPress={onPress}
-      style={{
+      style={useAnimatedStyle(() => ({
         backgroundColor: bgColor,
-        width,
+        width: width.value,
         ...style,
-      }}
+      }))}
     >
       {children}
-    </AnimatedTouchableOpacity>
+    </ReAnimatedTouchableOpacity>
   )
 }
 
@@ -95,7 +95,7 @@ function ViewItem({ view }: { view: ViewDefinition }) {
 function ListItem({ listId }: { listId: string }) {
   const list = useList(listId)
   const selectedFeed = useSelectedFeed()
-  const bgColor = useColor("orange")
+
   if (!selectedFeed) return null
   const isActive = selectedFeed.type === "list" && selectedFeed.listId === listId
 
@@ -105,7 +105,7 @@ function ListItem({ listId }: { listId: string }) {
     <ItemWrapper
       isActive={isActive}
       onPress={() => selectTimeline({ type: "list", listId })}
-      style={isActive ? { backgroundColor: bgColor } : undefined}
+      style={isActive ? { backgroundColor: accentColor } : undefined}
     >
       {list.image ? (
         isActive ? (
@@ -116,14 +116,7 @@ function ListItem({ listId }: { listId: string }) {
           </Grayscale>
         )
       ) : (
-        <FallbackIcon
-          title={list.title}
-          size={28}
-          gray={!isActive}
-          style={{
-            borderRadius: 8,
-          }}
-        />
+        <FallbackIcon title={list.title} size={28} gray={!isActive} style={styles.fallbackIcon} />
       )}
       {isActive && (
         <Text className="max-w-24 text-sm font-semibold text-white" numberOfLines={1}>
@@ -133,3 +126,9 @@ function ListItem({ listId }: { listId: string }) {
     </ItemWrapper>
   )
 }
+
+const styles = StyleSheet.create({
+  fallbackIcon: {
+    borderRadius: 8,
+  },
+})

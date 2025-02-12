@@ -1,8 +1,14 @@
 import { FeedViewType } from "@follow/constants"
-import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
 import { router, Tabs } from "expo-router"
 import { useContext, useEffect, useMemo, useState } from "react"
-import { Animated as RNAnimated, Easing, StyleSheet, useAnimatedValue, View } from "react-native"
+import {
+  Animated as RNAnimated,
+  Easing,
+  Pressable,
+  StyleSheet,
+  useAnimatedValue,
+  View,
+} from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 
@@ -93,7 +99,7 @@ export default function TabLayout() {
                   return (
                     <GestureDetector gesture={doubleTap}>
                       <View className="flex-1">
-                        <PlatformPressable {...props} />
+                        <Pressable {...props} />
                       </View>
                     </GestureDetector>
                   )
@@ -109,6 +115,9 @@ export default function TabLayout() {
                   const Icon = !focused ? SafariCuteIcon : SafariCuteFi
                   return <Icon color={color} width={24} height={24} />
                 },
+                tabBarButton(props) {
+                  return <Pressable {...props} />
+                },
               }}
             />
 
@@ -121,7 +130,7 @@ export default function TabLayout() {
                   return (
                     <GestureDetector gesture={fifthTap}>
                       <View className="flex-1">
-                        <PlatformPressable {...props} />
+                        <Pressable {...props} />
                       </View>
                     </GestureDetector>
                   )

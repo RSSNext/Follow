@@ -4,11 +4,11 @@ import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useColorScheme } from "nativewind"
 import { useCallback, useContext, useMemo } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { RefreshControl, StyleSheet, Text, useAnimatedValue, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useColor } from "react-native-uikit-colors"
 
 import {
   NavigationBlurEffectHeader,
@@ -79,7 +79,6 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
       : originalDefaultHeaderHeight
   const scrollY = useContext(NavigationContext)?.scrollY
 
-  const { colorScheme } = useColorScheme()
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
 
   const onScroll = useCallback(
@@ -102,13 +101,15 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
     [isFetching, screenType],
   )
 
+  const systemFill = useColor("secondaryLabel")
+
   return (
     <FlashList
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}
-          // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
-          tintColor={colorScheme === "dark" ? "white" : "black"}
+          // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
+          tintColor={systemFill}
           onRefresh={() => {
             refetch()
           }}
