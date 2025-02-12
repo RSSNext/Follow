@@ -2,8 +2,11 @@ import type { FeedViewType } from "@follow/constants"
 
 import type { UnreadSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
+import { EntryService } from "@/src/services/entry"
 import { UnreadService } from "@/src/services/unread"
 
+import { getEntry } from "../entry/getter"
+import { entryActions } from "../entry/store"
 import { createTransaction, createZustandStore } from "../internal/helper"
 import { getSubscriptionByView } from "../subscription/getter"
 
@@ -46,11 +49,38 @@ class UnreadSyncService {
   }
 
   async markEntryAsRead(entryId: string) {
-    await apiClient.reads.$post({
-      json: { entryIds: [entryId] },
+    const feedId = getEntry(entryId)?.feedId
+
+    const tx = createTransaction()
+    tx.optimistic(() => {
+      entryActions.markEntryReadStatusInSession({ entryIds: [entryId], read: true })
+
+      if (feedId) {
+        unreadActions.removeUnread(feedId)
+      }
     })
-    // TODO update unreadActions
-    // await unreadActions.upsertMany([{ subscriptionId: feedId, count: 0 }])
+    tx.rollback(() => {
+      entryActions.markEntryReadStatusInSession({ entryIds: [entryId], read: false })
+
+      if (feedId) {
+        unreadActions.addUnread(feedId)
+      }
+    })
+
+    tx.request(() => {
+      apiClient.reads.$post({
+        json: { entryIds: [entryId] },
+      })
+    })
+
+    tx.persist(() => {
+      return EntryService.patchMany({
+        entry: { read: true },
+        entryIds: [entryId],
+      })
+    })
+
+    await tx.run()
   }
 
   async markAsReadMany(feedIds: string[]) {
@@ -85,6 +115,18 @@ class UnreadActions {
       return UnreadService.upsertMany(normalizedUnreads)
     })
     await tx.run()
+  }
+
+  async addUnread(subscriptionId: string, count = 1) {
+    const state = useUnreadStore.getState()
+    const currentCount = state.data[subscriptionId] || 0
+    await unreadActions.upsertMany([{ subscriptionId, count: currentCount + count }])
+  }
+
+  async removeUnread(subscriptionId: string, count = 1) {
+    const state = useUnreadStore.getState()
+    const currentCount = state.data[subscriptionId] || 0
+    await unreadActions.upsertMany([{ subscriptionId, count: Math.max(0, currentCount - count) }])
   }
 
   reset() {

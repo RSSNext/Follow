@@ -209,6 +209,40 @@ class EntryActions {
     await tx.run()
   }
 
+  markEntryReadStatusInSession({
+    entryIds,
+    feedIds,
+    read,
+  }: {
+    entryIds?: EntryId[]
+    feedIds?: FeedId[]
+    read: boolean
+  }) {
+    immerSet((draft) => {
+      if (entryIds) {
+        for (const entryId of entryIds) {
+          const entry = draft.data[entryId]
+          if (entry) {
+            entry.read = read
+          }
+        }
+      }
+
+      if (feedIds) {
+        for (const feedId of feedIds) {
+          const entryIdSet = draft.entryIdByFeed[feedId]
+          if (!entryIdSet) continue
+          for (const entryId of entryIdSet) {
+            const entry = draft.data[entryId]
+            if (entry) {
+              entry.read = read
+            }
+          }
+        }
+      }
+    })
+  }
+
   resetByView({ view, entries }: { view?: FeedViewType; entries: EntryModel[] }) {
     if (view === undefined) return
     immerSet((draft) => {
