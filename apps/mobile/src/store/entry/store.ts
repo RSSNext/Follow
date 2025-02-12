@@ -27,6 +27,7 @@ interface EntryState {
   entryIdByCategory: Record<Category, Set<EntryId>>
   entryIdByFeed: Record<FeedId, Set<EntryId>>
   entryIdByInbox: Record<InboxId, Set<EntryId>>
+  entryIdSet: Set<EntryId>
 }
 
 const defaultState: EntryState = {
@@ -42,6 +43,7 @@ const defaultState: EntryState = {
   entryIdByCategory: {},
   entryIdByFeed: {},
   entryIdByInbox: {},
+  entryIdSet: new Set(),
 }
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => defaultState)
@@ -137,6 +139,7 @@ class EntryActions {
 
     immerSet((draft) => {
       for (const entry of entries) {
+        draft.entryIdSet.add(entry.id)
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
@@ -229,15 +232,15 @@ class EntryActions {
       }
 
       if (feedIds) {
-        for (const feedId of feedIds) {
-          const entryIdSet = draft.entryIdByFeed[feedId]
-          if (!entryIdSet) continue
-          for (const entryId of entryIdSet) {
-            const entry = draft.data[entryId]
-            if (entry) {
-              entry.read = read
-            }
-          }
+        const entries = Array.from(draft.entryIdSet)
+          .map((id) => draft.data[id])
+          .filter(
+            (entry): entry is EntryModel =>
+              !!entry && !!entry.feedId && feedIds.includes(entry.feedId),
+          )
+
+        for (const entry of entries) {
+          entry.read = read
         }
       }
     })

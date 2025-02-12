@@ -40,12 +40,19 @@ class UnreadSyncService {
     await unreadActions.upsertMany(subscriptionIds.map((id) => ({ subscriptionId: id, count: 0 })))
   }
 
-  async markFeedAsRead(feedId: string) {
+  async markFeedAsRead(feedId: string | string[]) {
+    const feedIds = Array.isArray(feedId) ? feedId : [feedId]
+
     await apiClient.reads.all.$post({
-      json: { feedId },
+      json: { feedIdList: feedIds },
     })
 
-    await unreadActions.upsertMany([{ subscriptionId: feedId, count: 0 }])
+    await unreadActions.upsertMany(feedIds.map((id) => ({ subscriptionId: id, count: 0 })))
+    entryActions.markEntryReadStatusInSession({ feedIds, read: true })
+    await EntryService.patchMany({
+      feedIds,
+      entry: { read: true },
+    })
   }
 
   async markEntryAsRead(entryId: string) {
@@ -81,14 +88,6 @@ class UnreadSyncService {
     })
 
     await tx.run()
-  }
-
-  async markAsReadMany(feedIds: string[]) {
-    await apiClient.reads.all.$post({
-      json: { feedIdList: feedIds },
-    })
-
-    await unreadActions.upsertMany(feedIds.map((id) => ({ subscriptionId: id, count: 0 })))
   }
 }
 
