@@ -28,7 +28,7 @@ import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { ViewSelector } from "../feed-drawer/view-selector"
-import { HomeLeftAction, HomeRightAction } from "./action"
+import { HomeLeftAction, HomeRightAction, LoadArchiveButton } from "./action"
 import { EntryListContentGrid } from "./entry-list-gird"
 
 const headerHideableBottomHeight = 58
@@ -80,7 +80,7 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
   const scrollY = useContext(NavigationContext)?.scrollY
 
   const { colorScheme } = useColorScheme()
-  const { fetchNextPage, isFetchingNextPage, refetch, isRefetching } = useFetchEntriesControls()
+  const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -95,6 +95,13 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
   )
 
   const tabBarHeight = useBottomTabBarHeight()
+
+  const ListFooterComponent = useMemo(
+    () =>
+      isFetching ? <EntryItemSkeleton /> : screenType === "feed" ? <LoadArchiveButton /> : null,
+    [isFetching, screenType],
+  )
+
   return (
     <FlashList
       refreshControl={
@@ -128,7 +135,7 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
         paddingBottom: tabBarHeight,
       }}
       ItemSeparatorComponent={ItemSeparator}
-      ListFooterComponent={isFetchingNextPage ? <EntryItemSkeleton /> : null}
+      ListFooterComponent={ListFooterComponent}
     />
   )
 }
