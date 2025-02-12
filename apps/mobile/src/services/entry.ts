@@ -34,6 +34,7 @@ class EntryServiceStatic implements Hydratable, Resetable {
 
   async hydrate() {
     const entries = await db.query.entriesTable.findMany()
+    // TODO: Find a way to determine whether entry is archived, and then only hydrate unarchived entries
     entryActions.upsertManyInSession(
       entries.map((e) => dbStoreMorph.toEntryModel(e)),
       "view",
