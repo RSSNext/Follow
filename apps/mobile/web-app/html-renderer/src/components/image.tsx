@@ -28,8 +28,8 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
   const { height: scaleHeight, width: scaleWidth } = useMemo(
     () =>
       calculateDimensions({
-        width: image?.width ?? 0,
-        height: image?.height ?? 0,
+        width: image?.width,
+        height: image?.height,
         max: {
           width: ref?.clientWidth ?? 0,
           height: window.innerHeight,

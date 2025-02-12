@@ -49,6 +49,10 @@ export const ItemPressable: typeof Pressable = memo(({ children, ...props }) => 
       onPressOut={composeEventHandlers(props.onPressOut, () => setIsPressing(false))}
       onHoverIn={composeEventHandlers(props.onHoverIn, () => setIsPressing(true))}
       onHoverOut={composeEventHandlers(props.onHoverOut, () => setIsPressing(false))}
+      // This is a workaround to prevent context menu crash when release too quickly
+      // https://github.com/nandorojo/zeego/issues/61
+      onLongPress={composeEventHandlers(props.onLongPress, () => {})}
+      delayLongPress={props.delayLongPress ?? 100}
       className={cn(props.className, "bg-secondary-system-background relative")}
       style={props.style}
     >
