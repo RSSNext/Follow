@@ -23,6 +23,7 @@ export const EntryAISummary: FC<{
       className="mb-3"
       summary={summary?.summary || ""}
       pending={status === SummaryGeneratingStatus.Pending}
+      error={status === SummaryGeneratingStatus.Error ? "Failed to generate summary" : undefined}
     />
   )
 }

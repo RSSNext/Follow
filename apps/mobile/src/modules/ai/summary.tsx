@@ -1,8 +1,9 @@
 import { cn } from "@follow/utils"
 import type { FC } from "react"
 import * as React from "react"
-import { Text, View } from "react-native"
+import { Pressable, Text, View } from "react-native"
 import Animated, {
+  CurvedTransition,
   FadeIn,
   FadeOut,
   LinearTransition,
@@ -20,8 +21,11 @@ export const AISummary: FC<{
   className?: string
   summary: string
   pending?: boolean
-}> = ({ className, summary, pending = false }) => {
+  error?: string
+  onRetry?: () => void
+}> = ({ className, summary, pending = false, error, onRetry }) => {
   const labelColor = useColor("label")
+
   const opacity = useSharedValue(0.3)
 
   React.useEffect(() => {
@@ -38,20 +42,35 @@ export const AISummary: FC<{
   }))
 
   return (
-    <View className={cn("border-opaque-separator mx-1 rounded-lg border p-3", className)}>
+    <Animated.View
+      layout={CurvedTransition}
+      className={cn("border-opaque-separator mx-2 rounded border p-3", className)}
+    >
       <View className="flex-row items-center gap-2">
         <Magic2CuteReIcon height={16} width={16} color={labelColor} />
         <Text className="text-label font-medium">AI Summary</Text>
       </View>
       <Animated.View layout={LinearTransition}>
-        {pending ? (
-          <Animated.View entering={FadeIn} exiting={FadeOut} className="mt-2">
+        {error ? (
+          <Animated.View entering={FadeIn} exiting={FadeOut} className="mt-3">
+            <View className="flex-row items-center gap-2">
+              {/* <ErrorIcon width={16} height={16} color={errorColor} /> */}
+              <Text className="text-red flex-1 text-[15px]">{error}</Text>
+            </View>
+            {onRetry && (
+              <Pressable onPress={onRetry} className="mt-2">
+                <Text className="text-label text-[15px]">Retry</Text>
+              </Pressable>
+            )}
+          </Animated.View>
+        ) : pending ? (
+          <Animated.View entering={FadeIn} exiting={FadeOut} className="mt-3">
             <Animated.View
-              className="bg-secondary-label h-4 w-full rounded"
+              className="bg-quaternary-system-fill h-4 w-4/5 rounded"
               style={animatedStyle}
             />
             <Animated.View
-              className="bg-secondary-label mt-2 h-4 w-3/5 rounded"
+              className="bg-quaternary-system-fill mt-2 h-4 w-3/5 rounded"
               style={animatedStyle}
             />
           </Animated.View>
@@ -59,12 +78,12 @@ export const AISummary: FC<{
           <Animated.Text
             entering={FadeIn}
             exiting={FadeOut}
-            className="text-secondary-label mt-1 text-[15px] leading-normal"
+            className="text-secondary-label mt-3 text-[15px] leading-normal"
           >
-            {summary}
+            {summary.trim()}
           </Animated.Text>
         )}
       </Animated.View>
-    </View>
+    </Animated.View>
   )
 }

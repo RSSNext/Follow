@@ -5,11 +5,11 @@ export const calculateDimensions = ({
   height,
   max,
 }: {
-  width: number
-  height: number
+  width: number | undefined
+  height: number | undefined
   max: { width: number; height: number }
 }) => {
-  if (width === 0 || height === 0) return { width: 0, height: 0 }
+  if (!width || !height) return { width: undefined, height: undefined }
 
   const { width: maxW, height: maxH } = max
 
