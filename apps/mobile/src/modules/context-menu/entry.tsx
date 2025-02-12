@@ -16,8 +16,11 @@ import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
+import { useSelectedView } from "../feed-drawer/atoms"
+
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)
+  const view = useSelectedView()
   const isEntryStarred = useIsEntryStarred(id)
 
   const handlePressPreview = useCallback(() => {
@@ -66,11 +69,14 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
                 toast.error("Feed not found")
                 return
               }
+              if (!view) {
+                toast.error("View not found")
+                return
+              }
               collectionSyncService.starEntry({
                 feedId: entry.feedId,
                 entryId: id,
-                // TODO update view
-                view: 0,
+                view,
               })
               toast.info("Starred")
             }
