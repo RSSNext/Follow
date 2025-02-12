@@ -56,7 +56,10 @@ class UnreadSyncService {
   }
 
   async markEntryAsRead(entryId: string) {
-    const feedId = getEntry(entryId)?.feedId
+    const entry = getEntry(entryId)
+    if (entry?.read) return
+
+    const feedId = entry?.feedId
 
     const tx = createTransaction()
     tx.store(() => {
