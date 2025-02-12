@@ -46,7 +46,7 @@ export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
       <NavigationBlurEffectHeader
         headerBackTitle={isFeed ? "Subscriptions" : undefined}
         headerShown
-        headerTitle={viewTitle}
+        title={viewTitle}
         headerLeft={useMemo(
           () => (isTimeline ? () => <HomeLeftAction /> : undefined),
           [isTimeline],
