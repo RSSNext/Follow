@@ -59,7 +59,7 @@ class UnreadSyncService {
     const feedId = getEntry(entryId)?.feedId
 
     const tx = createTransaction()
-    tx.optimistic(() => {
+    tx.store(() => {
       entryActions.markEntryReadStatusInSession({ entryIds: [entryId], read: true })
 
       if (feedId) {
