@@ -2,7 +2,7 @@ import type { FeedViewType } from "@follow/constants"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
 
-import { useSubscriptionByView } from "../subscription/hooks"
+import { useFeedSubscriptionByView } from "../subscription/hooks"
 import { unreadSyncService, useUnreadStore } from "./store"
 
 export const usePrefetchUnread = () => {
@@ -42,7 +42,7 @@ export const useUnreadCounts = (subscriptionIds: string[]): number => {
 }
 
 export const useUnreadCountByView = (view: FeedViewType) => {
-  const subscriptionIds = useSubscriptionByView(view)
+  const subscriptionIds = useFeedSubscriptionByView(view)
   return useUnreadStore(
     useCallback(
       (state) => {
