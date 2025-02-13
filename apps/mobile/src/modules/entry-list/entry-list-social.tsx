@@ -1,53 +1,28 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import type { ListRenderItemInfo } from "@shopify/flash-list"
-import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useContext, useMemo } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { RefreshControl, StyleSheet, Text, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useColor } from "react-native-uikit-colors"
+import { useCallback, useMemo } from "react"
+import { StyleSheet, Text, View } from "react-native"
 
-import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
+import { TimelineSelectorList } from "../screen/timeline-selector-list"
 import { LoadArchiveButton } from "./action"
-
-const headerHideableBottomHeight = 58
 
 export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
   const screenType = useEntryListContext().type
-  const insets = useSafeAreaInsets()
-
-  const originalDefaultHeaderHeight = useDefaultHeaderHeight()
-  const headerHeight =
-    screenType === "timeline"
-      ? originalDefaultHeaderHeight + headerHideableBottomHeight
-      : originalDefaultHeaderHeight
-  const scrollY = useContext(NavigationContext)?.scrollY
 
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
-
-  const onScroll = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      scrollY?.setValue(e.nativeEvent.contentOffset.y)
-    },
-    [scrollY],
-  )
 
   const renderItem = useCallback(
     ({ item: id }: ListRenderItemInfo<string>) => <EntryItem key={id} entryId={id} />,
     [],
   )
-
-  const tabBarHeight = useBottomTabBarHeight()
 
   const ListFooterComponent = useMemo(
     () =>
@@ -55,40 +30,21 @@ export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
     [isFetching, screenType],
   )
 
-  const systemFill = useColor("secondaryLabel")
-
   return (
-    <FlashList
-      refreshControl={
-        <RefreshControl
-          progressViewOffset={headerHeight}
-          // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
-          tintColor={systemFill}
-          onRefresh={() => {
-            refetch()
-          }}
-          refreshing={isRefetching}
-        />
-      }
-      onScroll={onScroll}
+    <TimelineSelectorList
+      onRefresh={() => {
+        refetch()
+      }}
+      isRefetching={isRefetching}
       data={entryIds}
       renderItem={renderItem}
-      keyExtractor={(id) => id}
       onEndReached={() => {
         fetchNextPage()
       }}
       onViewableItemsChanged={({ viewableItems }) => {
         debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
       }}
-      scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
-      }}
       estimatedItemSize={100}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-        paddingBottom: tabBarHeight,
-      }}
       ItemSeparatorComponent={ItemSeparator}
       ListFooterComponent={ListFooterComponent}
     />
