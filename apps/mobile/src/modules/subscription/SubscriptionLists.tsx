@@ -10,7 +10,6 @@ import { TimelineSelectorList } from "@/src/modules/screen/timeline-selector-lis
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import {
   useGroupedSubscription,
-  usePrefetchSubscription,
   useSortedGroupedSubscription,
   useSortedUngroupedSubscription,
 } from "@/src/store/subscription/hooks"
@@ -29,7 +28,6 @@ const keyExtractor = (item: string | { category: string; subscriptionIds: string
 }
 
 export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
-  usePrefetchSubscription(view)
   const { grouped, unGrouped } = useGroupedSubscription(view)
 
   const sortBy = useFeedListSortMethod()
