@@ -7,6 +7,7 @@ import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reani
 
 import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
+import { gentleSpringPreset } from "@/src/constants/spring"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
 import { selectTimeline, useSelectedFeed } from "@/src/modules/screen/atoms"
@@ -15,7 +16,7 @@ import { useAllListSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCountByView } from "@/src/store/unread/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-export function ViewSelector() {
+export function TimelineViewSelector() {
   const lists = useAllListSubscription()
 
   return (
@@ -48,12 +49,16 @@ function ItemWrapper({
   onPress: () => void
   style?: Exclude<StyleProp<ViewStyle>, number>
 }) {
-  const width = useSharedValue(isActive ? 130 : 48)
+  const textWidth = useSharedValue(130)
+  const width = useSharedValue(isActive ? Math.max(130, textWidth.value + 48) : 48)
   const bgColor = useColor("gray5")
 
   useEffect(() => {
-    width.value = withSpring(isActive ? 130 : 48)
-  }, [isActive, width])
+    width.value = withSpring(
+      isActive ? Math.max(130, textWidth.value + 48) : 48,
+      gentleSpringPreset,
+    )
+  }, [isActive, width, textWidth])
 
   return (
     <ReAnimatedTouchableOpacity
@@ -65,7 +70,16 @@ function ItemWrapper({
         ...style,
       }))}
     >
-      {children}
+      <View
+        className="flex-row items-center gap-2"
+        onLayout={({ nativeEvent }) => {
+          if (isActive) {
+            textWidth.value = nativeEvent.layout.width
+          }
+        }}
+      >
+        {children}
+      </View>
     </ReAnimatedTouchableOpacity>
   )
 }
@@ -89,7 +103,13 @@ function ViewItem({ view }: { view: ViewDefinition }) {
           {view.name + (unreadCount ? ` (${unreadCount})` : "")}
         </Text>
       ) : (
-        !!unreadCount && <View className="bg-gray absolute right-2 top-2 size-2 rounded-full" />
+        !!unreadCount &&
+        !isActive && (
+          <View
+            className="border-gray-2 absolute -right-0.5 -top-0.5 size-2.5 rounded-full"
+            style={{ backgroundColor: view.activeColor }}
+          />
+        )
       )}
     </ItemWrapper>
   )

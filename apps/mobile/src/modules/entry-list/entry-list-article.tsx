@@ -1,11 +1,13 @@
 import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useMemo } from "react"
-import { Text, View } from "react-native"
+import { useCallback, useEffect, useMemo } from "react"
+import { Animated, Text, View } from "react-native"
+import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
@@ -61,6 +63,28 @@ function EntryItem({ entryId }: { entryId: string }) {
     router.push(`/entries/${entryId}`)
   }, [entryId, entry])
 
+  const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
+
+  const unreadIndicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: unreadZoomSharedValue.value,
+        },
+      ],
+    }
+  })
+
+  useEffect(() => {
+    if (!entry) return
+
+    if (entry.read) {
+      unreadZoomSharedValue.value = withSpring(0, gentleSpringPreset)
+    } else {
+      unreadZoomSharedValue.value = withSpring(1, gentleSpringPreset)
+    }
+  }, [entry, entry?.read, unreadZoomSharedValue])
+
   if (!entry) return <EntryItemSkeleton />
   const { title, description, publishedAt, media } = entry
   const image = media?.[0]?.url
@@ -69,7 +93,11 @@ function EntryItem({ entryId }: { entryId: string }) {
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
-        {!entry.read && <View className="bg-red absolute left-1 top-6 size-2 rounded-full" />}
+        <Animated.View
+          className="bg-red absolute left-2 top-[22] size-2.5 rounded-full"
+          style={unreadIndicatorStyle}
+        />
+
         <View className="flex-1 space-y-2">
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}

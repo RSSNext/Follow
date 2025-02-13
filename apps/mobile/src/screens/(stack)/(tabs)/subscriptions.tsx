@@ -1,5 +1,5 @@
 import { useSelectedFeed } from "@/src/modules/screen/atoms"
-import { TimelineSelectorHeader } from "@/src/modules/screen/timeline-selector-header"
+import { TimelineSelectorHeader } from "@/src/modules/screen/TimelineSelectorHeader"
 import { SubscriptionList } from "@/src/modules/subscription/SubscriptionLists"
 
 export default function Subscriptions() {

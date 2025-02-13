@@ -1,5 +1,3 @@
-const path = require("node:path")
-
 module.exports = function (api) {
   api.cache(true)
   return {
@@ -9,20 +7,12 @@ module.exports = function (api) {
       [
         "module-resolver",
         {
+          root: ["./"],
           alias: {
-            "es-toolkit/compat": path.resolve(
-              __dirname,
-              "../../node_modules/es-toolkit/dist/compat/index.js",
-            ),
-            "es-toolkit": path.resolve(__dirname, "../../node_modules/es-toolkit/dist/index.js"),
-            "better-auth/react": path.resolve(
-              __dirname,
-              "../../node_modules/better-auth/dist/react.js",
-            ),
-            "@better-auth/expo/client": path.resolve(
-              __dirname,
-              "../../node_modules/@better-auth/expo/dist/client.js",
-            ),
+            "es-toolkit/compat": "../../node_modules/es-toolkit/dist/compat/index.js",
+            "es-toolkit": "../../node_modules/es-toolkit/dist/index.js",
+            "better-auth/react": "../../node_modules/better-auth/dist/react.js",
+            "@better-auth/expo/client": "../../node_modules/@better-auth/expo/dist/client.js",
           },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
         },
