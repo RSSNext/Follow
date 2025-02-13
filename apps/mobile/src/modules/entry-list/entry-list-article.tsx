@@ -2,7 +2,7 @@ import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useMemo } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { Text, View } from "react-native"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
@@ -13,6 +13,7 @@ import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { TimelineSelectorList } from "../screen/timeline-selector-list"
 import { LoadArchiveButton } from "./action"
+import { ItemSeparator } from "./ItemSeparator"
 
 export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
   const screenType = useEntryListContext().type
@@ -47,17 +48,6 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
       estimatedItemSize={100}
       ItemSeparatorComponent={ItemSeparator}
       ListFooterComponent={ListFooterComponent}
-    />
-  )
-}
-
-const ItemSeparator = () => {
-  return (
-    <View
-      className="bg-opaque-separator mx-4"
-      style={{
-        height: StyleSheet.hairlineWidth,
-      }}
     />
   )
 }
