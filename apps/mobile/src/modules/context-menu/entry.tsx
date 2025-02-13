@@ -54,7 +54,7 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
             unreadSyncService.markEntryAsRead(id)
           }}
         >
-          <ContextMenu.ItemTitle>Mark As Read</ContextMenu.ItemTitle>
+          <ContextMenu.ItemTitle>Mark as Read</ContextMenu.ItemTitle>
         </ContextMenu.Item>
 
         <ContextMenu.Item
@@ -92,7 +92,7 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
               openLink(entry.url)
             }}
           >
-            <ContextMenu.ItemTitle>Open link</ContextMenu.ItemTitle>
+            <ContextMenu.ItemTitle>Open Link</ContextMenu.ItemTitle>
           </ContextMenu.Item>
         )}
 
