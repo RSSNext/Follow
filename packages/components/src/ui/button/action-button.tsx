@@ -19,7 +19,7 @@ export interface ActionButtonProps {
   shortcut?: string
   disableTriggerShortcut?: boolean
   enableHoverableContent?: boolean
-  size?: "sm" | "base"
+  size?: "sm" | "base" | "lg"
 
   /**
    * @description only trigger shortcut when focus with in `<Focusable />`
@@ -30,6 +30,7 @@ export interface ActionButtonProps {
 
 const actionButtonStyleVariant = {
   size: {
+    lg: tw`text-xl size-10`,
     base: tw`text-xl size-8`,
     sm: tw`text-sm size-6`,
   },

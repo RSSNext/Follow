@@ -35,7 +35,12 @@ export const useViewWithSubscription = () =>
   useSubscriptionStore(
     useCallback((state) => {
       return viewList.filter((view) => {
-        if (view === FeedViewType.Articles) {
+        if (
+          view === FeedViewType.Articles ||
+          view === FeedViewType.SocialMedia ||
+          view === FeedViewType.Pictures ||
+          view === FeedViewType.Videos
+        ) {
           return true
         } else {
           return state.feedIdByView[view].length > 0
