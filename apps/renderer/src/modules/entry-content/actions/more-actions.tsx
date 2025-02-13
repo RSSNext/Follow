@@ -11,13 +11,16 @@ import {
 } from "~/components/ui/dropdown-menu/dropdown-menu"
 import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
-import { useCommand } from "~/modules/command/hooks/use-command"
+import { getCommand } from "~/modules/command/hooks/use-command"
 import type { FollowCommandId } from "~/modules/command/types"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const { moreAction: actionConfigs } = useSortedEntryActions({ entryId, view })
   const availableActions = useMemo(
-    () => actionConfigs.filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar),
+    () =>
+      actionConfigs.filter(
+        (item) => item.id !== COMMAND_ID.settings.customizeToolbar && getCommand(item.id),
+      ),
     [actionConfigs],
   )
 
@@ -26,7 +29,7 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
     [actionConfigs],
   )
 
-  if (availableActions.length === 0) {
+  if (availableActions.length === 0 && extraAction.length === 0) {
     return null
   }
 
@@ -44,7 +47,7 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
             active={config.active}
           />
         ))}
-        <DropdownMenuSeparator />
+        {availableActions.length > 0 && <DropdownMenuSeparator />}
         {extraAction.map((config) => (
           <CommandDropdownMenuItem
             key={config.id}
@@ -67,7 +70,7 @@ const CommandDropdownMenuItem = ({
   onClick: () => void
   active?: boolean
 }) => {
-  const command = useCommand(commandId)
+  const command = getCommand(commandId)
   if (!command) return null
   return (
     <DropdownMenuItem
