@@ -11,7 +11,7 @@ import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
-import { TimelineSelectorList } from "../screen/timeline-selector-list"
+import { TimelineSelectorList } from "../screen/TimelineSelectorList"
 import { LoadArchiveButton } from "./action"
 import { ItemSeparator } from "./ItemSeparator"
 

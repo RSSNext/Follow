@@ -13,7 +13,7 @@ import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
-import { TimelineSelectorList } from "../screen/timeline-selector-list"
+import { TimelineSelectorList } from "../screen/TimelineSelectorList"
 import { LoadArchiveButton } from "./action"
 import { ItemSeparator } from "./ItemSeparator"
 
@@ -92,7 +92,7 @@ function EntryItem({ entryId }: { entryId: string }) {
 
   return (
     <EntryItemContextMenu id={entryId}>
-      <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
+      <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <Animated.View
           className="bg-red absolute left-2 top-[22] size-2.5 rounded-full"
           style={unreadIndicatorStyle}

@@ -2,20 +2,34 @@ import { FeedViewType } from "@follow/constants"
 
 import { EntryListContentGrid } from "@/src/modules/entry-list/entry-list-gird"
 import { useSelectedView } from "@/src/modules/screen/atoms"
-import { TimelineSelectorHeader } from "@/src/modules/screen/timeline-selector-header"
 
+import { TimelineSelectorHeader } from "../screen/TimelineSelectorHeader"
 import { EntryListContentArticle } from "./entry-list-article"
+import { EntryListContentSocial } from "./entry-list-social"
 
 export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
   const view = useSelectedView()
 
+  let ContentComponent = EntryListContentArticle
+  switch (view) {
+    case FeedViewType.SocialMedia: {
+      ContentComponent = EntryListContentSocial
+      break
+    }
+    case FeedViewType.Pictures:
+    case FeedViewType.Videos: {
+      ContentComponent = EntryListContentGrid
+      break
+    }
+    case FeedViewType.Articles: {
+      ContentComponent = EntryListContentArticle
+      break
+    }
+  }
+
   return (
     <TimelineSelectorHeader>
-      {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
-        <EntryListContentGrid entryIds={entryIds} />
-      ) : (
-        <EntryListContentArticle entryIds={entryIds} />
-      )}
+      <ContentComponent entryIds={entryIds} />
     </TimelineSelectorHeader>
   )
 }
