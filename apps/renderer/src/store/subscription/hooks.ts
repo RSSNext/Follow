@@ -1,4 +1,4 @@
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType, viewList } from "@follow/constants"
 import { useCallback } from "react"
 
 import { useFeedStore } from "../feed"
@@ -29,6 +29,19 @@ export const useCategoryOpenStateByView = (view: FeedViewType) =>
 export const useSubscriptionByView = (view: FeedViewType) =>
   useSubscriptionStore(
     useCallback((state) => subscriptionByViewSelector(view)(state) || [], [view]),
+  )
+
+export const useViewWithSubscription = () =>
+  useSubscriptionStore(
+    useCallback((state) => {
+      return viewList.filter((view) => {
+        if (view === FeedViewType.Articles) {
+          return true
+        } else {
+          return state.feedIdByView[view].length > 0
+        }
+      })
+    }, []),
   )
 
 export const useCategories = () =>
