@@ -11,18 +11,19 @@ import {
 } from "~/components/ui/dropdown-menu/dropdown-menu"
 import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
-import type { CustomizeToolbarCommand, EntryCommand } from "~/modules/command/commands/types"
-import { getCommand } from "~/modules/command/hooks/use-command"
+import type { EntryCommand } from "~/modules/command/commands/types"
+import { useCommands } from "~/modules/command/hooks/use-command"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const { moreAction } = useSortedEntryActions({ entryId, view })
+  const commands = useCommands()
 
   const actionConfigs = useMemo(
     () =>
       moreAction
         .map((item) => ({
           config: item,
-          command: getCommand(item.id) as EntryCommand,
+          command: commands[item.id] as EntryCommand,
         }))
         .filter(({ command }) => command),
     [moreAction],
@@ -65,7 +66,7 @@ const CommandDropdownMenuItem = ({
   onClick,
   active,
 }: {
-  command: EntryCommand | CustomizeToolbarCommand
+  command: EntryCommand
   onClick: () => void
   active?: boolean
 }) => {
