@@ -11,21 +11,32 @@ import {
 } from "~/components/ui/dropdown-menu/dropdown-menu"
 import { useSortedEntryActions } from "~/hooks/biz/useEntryActions"
 import { COMMAND_ID } from "~/modules/command/commands/id"
+import type { CustomizeToolbarCommand, EntryCommand } from "~/modules/command/commands/types"
 import { getCommand } from "~/modules/command/hooks/use-command"
-import type { FollowCommandId } from "~/modules/command/types"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
   const { moreAction: actionConfigs } = useSortedEntryActions({ entryId, view })
   const availableActions = useMemo(
     () =>
-      actionConfigs.filter(
-        (item) => item.id !== COMMAND_ID.settings.customizeToolbar && getCommand(item.id),
-      ),
+      actionConfigs
+        .filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar)
+        .map((item) => ({
+          config: item,
+          command: getCommand(item.id) as EntryCommand,
+        }))
+        .filter(({ command }) => command),
     [actionConfigs],
   )
 
   const extraAction = useMemo(
-    () => actionConfigs.filter((item) => item.id === COMMAND_ID.settings.customizeToolbar),
+    () =>
+      actionConfigs
+        .filter((item) => item.id === COMMAND_ID.settings.customizeToolbar)
+        .map((item) => ({
+          config: item,
+          command: getCommand(item.id) as CustomizeToolbarCommand,
+        }))
+        .filter(({ command }) => command),
     [actionConfigs],
   )
 
@@ -39,48 +50,30 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
         <ActionButton icon={<i className="i-mgc-more-1-cute-re" />} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {availableActions.map((config) => (
-          <CommandDropdownMenuItem
-            key={config.id}
-            commandId={config.id}
-            onClick={config.onClick}
+        {availableActions.map(({ config, command }) => (
+          <DropdownMenuItem
+            key={command.id}
+            className="pl-3"
+            icon={command.icon}
+            onSelect={config.onClick}
             active={config.active}
-          />
+          >
+            {command.label.title}
+          </DropdownMenuItem>
         ))}
         {availableActions.length > 0 && <DropdownMenuSeparator />}
-        {extraAction.map((config) => (
-          <CommandDropdownMenuItem
-            key={config.id}
-            commandId={config.id}
-            onClick={config.onClick}
+        {extraAction.map(({ config, command }) => (
+          <DropdownMenuItem
+            key={command.id}
+            className="pl-3"
+            icon={command.icon}
+            onSelect={config.onClick}
             active={config.active}
-          />
+          >
+            {command.label.title}
+          </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
-
-const CommandDropdownMenuItem = ({
-  commandId,
-  onClick,
-  active,
-}: {
-  commandId: FollowCommandId
-  onClick: () => void
-  active?: boolean
-}) => {
-  const command = getCommand(commandId)
-  if (!command) return null
-  return (
-    <DropdownMenuItem
-      key={command.id}
-      className="pl-3"
-      icon={command.icon}
-      onSelect={onClick}
-      active={active}
-    >
-      {command.label.title}
-    </DropdownMenuItem>
   )
 }
