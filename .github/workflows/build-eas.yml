@@ -26,6 +26,12 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
       - name: 📱 Setup EAS
         uses: expo/expo-github-action@v8
         with:
