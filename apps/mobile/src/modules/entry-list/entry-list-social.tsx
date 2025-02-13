@@ -136,7 +136,7 @@ function EntryItem({ entryId }: { entryId: string }) {
           {description}
         </Text>
 
-        {media?.length && (
+        {media && media.length > 0 && (
           <View className="ml-10 flex flex-row flex-wrap gap-2">
             {media.map((image) => {
               return (
