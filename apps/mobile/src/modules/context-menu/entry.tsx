@@ -11,12 +11,11 @@ import {
 } from "@/src/components/native/webview/EntryContentWebView"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
+import { useSelectedView } from "@/src/modules/screen/atoms"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
-
-import { useSelectedView } from "../feed-drawer/atoms"
 
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)
