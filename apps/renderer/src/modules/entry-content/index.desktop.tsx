@@ -6,6 +6,7 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
+import * as React from "react"
 import { useEffect, useMemo, useRef } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
@@ -82,15 +83,23 @@ export const EntryContent: Component<EntryContentProps> = ({
     [entryId, isPeekModal],
   )
   useFocusEntryContainerSubscriptions(scrollerRef)
-  const stableRenderStyle = useMemo(
-    () =>
-      readerFontFamily
-        ? {
-            fontFamily: readerFontFamily,
-          }
-        : undefined,
-    [readerFontFamily],
-  )
+  const contentLineHeight = useUISettingKey("contentLineHeight")
+  const contentFontSize = useUISettingKey("contentFontSize")
+
+  const stableRenderStyle = useMemo(() => {
+    const css = {} as React.CSSProperties
+    if (readerFontFamily) {
+      css.fontFamily = readerFontFamily
+    }
+    if (contentLineHeight) {
+      css.lineHeight = contentLineHeight
+    }
+    if (contentFontSize) {
+      css.fontSize = contentFontSize
+    }
+
+    return css
+  }, [readerFontFamily, contentLineHeight, contentFontSize])
   const mediaInfo = useMemo(
     () =>
       Object.fromEntries(
@@ -202,7 +211,7 @@ export const EntryContent: Component<EntryContentProps> = ({
                           noMedia={noMedia}
                           accessory={contentAccessories}
                           as="article"
-                          className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
+                          className="prose !max-w-full hyphens-auto dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
                           style={stableRenderStyle}
                           renderInlineStyle={readerRenderInlineStyle}
                         >

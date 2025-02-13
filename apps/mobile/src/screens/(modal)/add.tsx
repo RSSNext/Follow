@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Text, TextInput, TouchableOpacity, View } from "react-native"
 
 import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
-import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
+import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 export default function Add() {
@@ -26,7 +26,7 @@ export default function Add() {
                 //  TODO impl search
               }}
             >
-              <Search2CuteReIcon color={!url ? disabled : label} />
+              <Search3CuteReIcon color={!url ? disabled : label} />
             </TouchableOpacity>
           ),
         }}

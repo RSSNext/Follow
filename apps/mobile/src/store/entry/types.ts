@@ -10,4 +10,5 @@ export type FetchEntriesProps = {
   limit?: number
   pageParam?: string
   isArchived?: boolean
+  isCollection?: boolean
 }

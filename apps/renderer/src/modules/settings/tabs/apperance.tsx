@@ -12,8 +12,9 @@ import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useIsDark, useThemeAtomValue } from "@follow/hooks"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { getOS } from "@follow/utils/utils"
+import dayjs from "dayjs"
 import { useForceUpdate } from "framer-motion"
-import { lazy, Suspense, useEffect, useRef } from "react"
+import { lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
@@ -95,14 +96,19 @@ export const SettingAppearance = () => {
             value: t("appearance.fonts"),
             disabled: isMobile,
           },
-          !isMobile && TextSize,
           !isMobile && UIFontSelector,
+          !isMobile && TextSize,
+
           !isMobile && ContentFontSelector,
+          ContentFontSize,
+          ContentLineHeight,
+
           {
             type: "title",
             value: t("appearance.content"),
           },
           ShikiTheme,
+          DateFormat,
 
           defineItem("guessCodeLanguage", {
             label: t("appearance.guess_code_language.label"),
@@ -187,7 +193,7 @@ export const TextSize = () => {
   const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
   return (
-    <div className="-mt-1 mb-3 flex items-center justify-between">
+    <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("appearance.text_size")}</span>
       <Select
         defaultValue={textSizeMap.default.toString()}
@@ -390,5 +396,97 @@ const CustomCSSModal = () => {
         <Button type="submit">{t("words.save")}</Button>
       </div>
     </form>
+  )
+}
+
+const ContentFontSize = () => {
+  const { t } = useTranslation("settings")
+  const contentFontSize = useUISettingKey("contentFontSize")
+  return (
+    <div className="mb-3 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("appearance.content_font_size")}</span>
+
+      <ResponsiveSelect
+        items={[
+          { value: "12", label: "12" },
+          { value: "14", label: "14" },
+          { value: "16", label: "16" },
+          { value: "18", label: "18" },
+          { value: "20", label: "20" },
+        ]}
+        value={contentFontSize.toString()}
+        onValueChange={(value) => {
+          setUISetting("contentFontSize", Number.parseInt(value))
+        }}
+        triggerClassName="w-48"
+        size="sm"
+      />
+    </div>
+  )
+}
+
+const ContentLineHeight = () => {
+  const { t } = useTranslation("settings")
+  const contentLineHeight = useUISettingKey("contentLineHeight")
+  return (
+    <div className="mb-3 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">
+        {t("appearance.content_line_height.label")}
+      </span>
+
+      <ResponsiveSelect
+        items={[
+          { value: "1.25", label: t("appearance.content_line_height.tight") },
+          { value: "1.375", label: t("appearance.content_line_height.snug") },
+          { value: "1.5", label: t("appearance.content_line_height.normal") },
+          { value: "1.75", label: t("appearance.content_line_height.relaxed") },
+          { value: "2", label: t("appearance.content_line_height.loose") },
+        ]}
+        value={contentLineHeight.toString()}
+        onValueChange={(value) => {
+          setUISetting("contentLineHeight", Number.parseFloat(value))
+        }}
+        triggerClassName="w-48"
+        size="sm"
+      />
+    </div>
+  )
+}
+
+const DateFormat = () => {
+  const { t } = useTranslation("settings")
+  const { t: commonT } = useTranslation("common")
+  const dateFormat = useUISettingKey("dateFormat")
+  const [date] = useState(() => new Date())
+
+  const generateItem = (format: string) => ({
+    value: format,
+    label: dayjs(date).format(format),
+  })
+  return (
+    <div className="mb-3 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("appearance.date_format")}</span>
+
+      <ResponsiveSelect
+        items={[
+          { value: "default", label: commonT("words.default") },
+          generateItem("MM/DD/YY HH:mm"),
+          generateItem("DD/MM/YYYY HH:mm"),
+
+          generateItem("L"),
+          generateItem("LTS"),
+          generateItem("LT"),
+          generateItem("LLLL"),
+          generateItem("LL"),
+          generateItem("LLL"),
+        ]}
+        value={dateFormat}
+        onValueChange={(value) => {
+          setUISetting("dateFormat", value)
+        }}
+        triggerClassName="w-48"
+        size="sm"
+      />
+    </div>
   )
 }

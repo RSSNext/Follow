@@ -1,19 +1,28 @@
 import { FeedViewType } from "@follow/constants"
-import { PlatformPressable } from "@react-navigation/elements/src/PlatformPressable"
 import { router, Tabs } from "expo-router"
 import { useContext, useEffect, useMemo, useState } from "react"
-import { Animated as RNAnimated, Easing, StyleSheet, useAnimatedValue, View } from "react-native"
+import {
+  Animated as RNAnimated,
+  Easing,
+  Pressable,
+  StyleSheet,
+  useAnimatedValue,
+  View,
+} from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 
 import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
-import { FollowIcon } from "@/src/components/ui/logo"
 import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
 import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
-import { SafariCuteFi } from "@/src/icons/safari_cute_fi"
-import { SafariCuteIcon } from "@/src/icons/safari_cute-re"
-import { Setting7CuteFi } from "@/src/icons/setting_7_cute_fi"
-import { Settings7CuteReIcon } from "@/src/icons/settings_7_cute_re"
+import { BlackBoard2CuteFiIcon } from "@/src/icons/black_board_2_cute_fi"
+import { BlackBoard2CuteReIcon } from "@/src/icons/black_board_2_cute_re"
+import { Home5CuteFiIcon } from "@/src/icons/home_5_cute_fi"
+import { Home5CuteReIcon } from "@/src/icons/home_5_cute_re"
+import { Search3CuteFiIcon } from "@/src/icons/search_3_cute_fi"
+import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
+import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
+import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
 import { FeedDrawer } from "@/src/modules/feed-drawer/drawer"
 import { setCurrentView } from "@/src/modules/subscription/atoms"
 import { useColor } from "@/src/theme/colors"
@@ -84,16 +93,37 @@ export default function TabLayout() {
             <Tabs.Screen
               name="index"
               options={{
-                title: "Subscriptions",
+                title: "Home",
                 headerShown: false,
-                tabBarIcon: ({ color }) => (
-                  <FollowIcon color={color} style={{ width: 20, height: 20 }} />
-                ),
+                tabBarIcon: ({ color, focused }) => {
+                  const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
+                  return <Icon color={color} width={24} height={24} />
+                },
                 tabBarButton(props) {
                   return (
                     <GestureDetector gesture={doubleTap}>
                       <View className="flex-1">
-                        <PlatformPressable {...props} />
+                        <Pressable {...props} />
+                      </View>
+                    </GestureDetector>
+                  )
+                },
+              }}
+            />
+            <Tabs.Screen
+              name="subscriptions"
+              options={{
+                title: "Subscriptions",
+                headerShown: false,
+                tabBarIcon: ({ color, focused }) => {
+                  const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
+                  return <Icon color={color} width={24} height={24} />
+                },
+                tabBarButton(props) {
+                  return (
+                    <GestureDetector gesture={doubleTap}>
+                      <View className="flex-1">
+                        <Pressable {...props} />
                       </View>
                     </GestureDetector>
                   )
@@ -106,8 +136,11 @@ export default function TabLayout() {
                 title: "Discover",
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
-                  const Icon = !focused ? SafariCuteIcon : SafariCuteFi
+                  const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
                   return <Icon color={color} width={24} height={24} />
+                },
+                tabBarButton(props) {
+                  return <Pressable {...props} />
                 },
               }}
             />
@@ -121,13 +154,13 @@ export default function TabLayout() {
                   return (
                     <GestureDetector gesture={fifthTap}>
                       <View className="flex-1">
-                        <PlatformPressable {...props} />
+                        <Pressable {...props} />
                       </View>
                     </GestureDetector>
                   )
                 },
                 tabBarIcon: ({ color, focused }) => {
-                  const Icon = !focused ? Settings7CuteReIcon : Setting7CuteFi
+                  const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
                   return <Icon color={color} width={24} height={24} />
                 },
               }}

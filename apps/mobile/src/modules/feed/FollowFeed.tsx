@@ -4,7 +4,7 @@ import { StackActions } from "@react-navigation/native"
 import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { ScrollView, Text, View } from "react-native"
+import { ActivityIndicator, ScrollView, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { z } from "zod"
 
@@ -18,7 +18,6 @@ import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
@@ -41,7 +40,7 @@ export function FollowFeed(props: { id: string }) {
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator />
+        <ActivityIndicator />
       </View>
     )
   }

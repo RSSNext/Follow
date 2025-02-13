@@ -1,5 +1,4 @@
-import { noop } from "es-toolkit/compat"
-import { router } from "expo-router"
+import { Link, router } from "expo-router"
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react"
 import { TouchableWithoutFeedback, View } from "react-native"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
@@ -10,17 +9,17 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated"
+import * as ContextMenu from "zeego/context-menu"
 
 import { ThemedText } from "@/src/components/common/ThemedText"
-import { ContextMenu } from "@/src/components/ui/context-menu"
 import { Logo } from "@/src/components/ui/logo"
 import {
-  LoginTeamsCheckedContext,
-  LoginTeamsCheckGuardContext,
-} from "@/src/contexts/LoginTeamsContext"
+  LoginTermsCheckedContext,
+  LoginTermsCheckGuardContext,
+} from "@/src/contexts/LoginTermsContext"
 import { isIOS } from "@/src/lib/platform"
 import { toast } from "@/src/lib/toast"
-import { TeamsMarkdown } from "@/src/screens/(headless)/terms"
+import { TermsMarkdown } from "@/src/screens/(headless)/terms"
 
 import { EmailLogin } from "./email"
 import { SocialLogin } from "./social"
@@ -28,10 +27,10 @@ import { SocialLogin } from "./social"
 export function Login() {
   const [isChecked, setIsChecked] = useState(false)
 
-  const teamsCheckBoxRef = useRef<{ shake: () => void }>(null)
+  const termsCheckBoxRef = useRef<{ shake: () => void }>(null)
   return (
-    <LoginTeamsCheckedContext.Provider value={isChecked}>
-      <LoginTeamsCheckGuardContext.Provider
+    <LoginTermsCheckedContext.Provider value={isChecked}>
+      <LoginTermsCheckGuardContext.Provider
         value={useCallback(
           (callback: () => void) => {
             if (isChecked) {
@@ -39,7 +38,7 @@ export function Login() {
             } else {
               toast.info("Please accept the Terms of Service and Privacy Policy")
 
-              teamsCheckBoxRef.current?.shake()
+              termsCheckBoxRef.current?.shake()
             }
           },
           [isChecked],
@@ -58,7 +57,7 @@ export function Login() {
               <EmailLogin />
             </View>
           </TouchableWithoutFeedback>
-          <TeamsCheckBox ref={teamsCheckBoxRef} isChecked={isChecked} setIsChecked={setIsChecked} />
+          <TermsCheckBox ref={termsCheckBoxRef} isChecked={isChecked} setIsChecked={setIsChecked} />
           <View className="border-t-opaque-separator border-t-hairline mx-28" />
           <View className="mt-2 items-center">
             <View className="mb-4 flex w-full max-w-sm flex-row items-center gap-4">
@@ -69,12 +68,12 @@ export function Login() {
             <SocialLogin />
           </View>
         </View>
-      </LoginTeamsCheckGuardContext.Provider>
-    </LoginTeamsCheckedContext.Provider>
+      </LoginTermsCheckGuardContext.Provider>
+    </LoginTermsCheckedContext.Provider>
   )
 }
 
-const TeamsCheckBox = forwardRef<
+const TermsCheckBox = forwardRef<
   { shake: () => void },
   {
     isChecked: boolean
@@ -109,10 +108,11 @@ const TeamsCheckBox = forwardRef<
   return (
     <Animated.View className="mb-4 flex-row items-center gap-2 px-8" style={shakeStyle}>
       <BouncyCheckbox
+        className="gap-2"
         isChecked={isChecked}
         onPress={setIsChecked}
         size={14}
-        textComponent={<TeamsText />}
+        textComponent={<TermsText />}
         onLongPress={() => {
           if (!isIOS) {
             router.push("/terms")
@@ -123,24 +123,33 @@ const TeamsCheckBox = forwardRef<
   )
 })
 
-const TeamsText = () => {
+const TermsText = () => {
   return (
-    <ContextMenu
-      className="overflow-hidden rounded-full px-2"
-      config={{ items: [] }}
-      onPressMenuItem={noop}
-      onPressPreview={() => {
-        router.push("/terms")
-      }}
-      renderPreview={() => (
-        <View className="flex-1">
-          <TeamsMarkdown />
-        </View>
-      )}
-    >
-      <ThemedText className="text-secondary-label text-sm">
-        I agree to the Terms of Service and Privacy Policy
-      </ThemedText>
-    </ContextMenu>
+    <ContextMenu.Root>
+      <ContextMenu.Trigger className="overflow-hidden rounded-full">
+        <ThemedText className="text-secondary-label text-sm">
+          I agree to the{" "}
+          <Link href="/terms" className="text-primary-label">
+            Terms of Service
+          </Link>{" "}
+          and Privacy Policy
+        </ThemedText>
+      </ContextMenu.Trigger>
+
+      <ContextMenu.Content>
+        <ContextMenu.Preview
+          size="STRETCH"
+          onPress={useCallback(() => {
+            router.push("/terms")
+          }, [])}
+        >
+          {() => (
+            <View className="bg-system-background flex-1">
+              <TermsMarkdown />
+            </View>
+          )}
+        </ContextMenu.Preview>
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }

@@ -101,7 +101,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "expo-apple-authentication",
     "expo-av",
-    [require("./scripts/with-follow-assets.js")],
+    [
+      require("./scripts/with-follow-assets.js"),
+      {
+        // Add asset directory paths, the plugin copies the files in the given paths to the app bundle folder named Assets
+        assetsPath: resolve(__dirname, "..", "..", "out", "rn-web"),
+      },
+    ],
     [require("./scripts/with-follow-app-delegate.js")],
     "expo-secure-store",
   ],

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { eq, inArray } from "drizzle-orm"
 
 import { db } from "../database"
 import { entriesTable } from "../database/schemas"
@@ -28,9 +28,17 @@ class EntryServiceStatic implements Hydratable, Resetable {
     await db.update(entriesTable).set(entry).where(eq(entriesTable.id, entry.id))
   }
 
+  getEntryMany(entryId: string[]) {
+    return db.query.entriesTable.findMany({ where: inArray(entriesTable.id, entryId) })
+  }
+
   async hydrate() {
     const entries = await db.query.entriesTable.findMany()
-    entryActions.upsertManyInSession(entries.map((e) => dbStoreMorph.toEntryModel(e)))
+    // TODO: Find a way to determine whether entry is archived, and then only hydrate unarchived entries
+    entryActions.upsertManyInSession(
+      entries.map((e) => dbStoreMorph.toEntryModel(e)),
+      "view",
+    )
   }
 }
 

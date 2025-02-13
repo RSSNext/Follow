@@ -58,3 +58,24 @@ export function composeEventHandlers<E>(
     }
   }
 }
+
+export function getNodeXInScroller(node: Element, scroller: Element) {
+  const nodeRect = node.getBoundingClientRect()
+  const scrollerRect = scroller.getBoundingClientRect()
+  return nodeRect.left - scrollerRect.left + scroller.scrollLeft
+}
+/**
+ * Determines whether the node is visible in the horizontal scroll container
+ */
+export function isNodeVisibleInScroller(node: Element, scroller: Element) {
+  const nodeRect = node.getBoundingClientRect()
+  const scrollerRect = scroller.getBoundingClientRect()
+
+  const nodeLeft = nodeRect.left - scrollerRect.left + scroller.scrollLeft
+  const nodeRight = nodeLeft + nodeRect.width
+
+  const scrollerLeft = scroller.scrollLeft
+  const scrollerRight = scrollerLeft + scroller.clientWidth
+
+  return nodeRight > scrollerLeft && nodeLeft < scrollerRight
+}

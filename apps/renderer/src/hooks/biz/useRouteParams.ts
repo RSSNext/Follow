@@ -1,31 +1,18 @@
 import { getReadonlyRoute, useReadonlyRouteSelector } from "@follow/components/atoms/route.js"
 import { FeedViewType } from "@follow/constants"
 import type { Params } from "react-router"
-import { useParams, useSearchParams } from "react-router"
+import { useParams } from "react-router"
 
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
-  ROUTE_FEED_IN_INBOX,
-  ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
+  ROUTE_TIMELINE_OF_INBOX,
+  ROUTE_TIMELINE_OF_LIST,
+  ROUTE_TIMELINE_OF_VIEW,
 } from "~/constants"
-
-// '0', '1', '2', '3', '4', '5',
-const FeedViewTypeValues = (() => {
-  const values = Object.values(FeedViewType)
-  return values.slice(values.length / 2).map((v) => v.toString())
-})()
-export const useRouteView = () => {
-  const [search] = useSearchParams()
-  const view = search.get("view")
-
-  return (
-    (view && FeedViewTypeValues.includes(view) ? +view : FeedViewType.Articles) ||
-    FeedViewType.Articles
-  )
-}
+import { getListById } from "~/store/list"
 
 export const useRouteEntryId = () => {
   const { entryId } = useParams()
@@ -47,17 +34,22 @@ export interface BizRouteParams {
   folderName?: string
   inboxId?: string
   listId?: string
+  timelineId?: string
 }
 
-const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRouteParams => {
-  const _view = search.get("view")
-
-  const view =
-    (_view && FeedViewTypeValues.includes(_view) ? +_view : FeedViewType.Articles) ||
-    FeedViewType.Articles
+const parseRouteParams = (params: Params<any>): BizRouteParams => {
+  const listId = params.timelineId?.startsWith(ROUTE_TIMELINE_OF_LIST)
+    ? params.timelineId.slice(ROUTE_TIMELINE_OF_LIST.length)
+    : undefined
+  const list = listId ? getListById(listId) : undefined
 
   return {
-    view,
+    view: params.timelineId?.startsWith(ROUTE_TIMELINE_OF_VIEW)
+      ? (Number.parseInt(
+          params.timelineId.slice(ROUTE_TIMELINE_OF_VIEW.length),
+          10,
+        ) as FeedViewType)
+      : (list?.view ?? FeedViewType.Articles),
     entryId: params.entryId || undefined,
     feedId: params.feedId || undefined,
     // alias
@@ -67,12 +59,11 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
     folderName: params.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
       ? params.feedId.slice(ROUTE_FEED_IN_FOLDER.length)
       : undefined,
-    inboxId: params.feedId?.startsWith(ROUTE_FEED_IN_INBOX)
-      ? params.feedId.slice(ROUTE_FEED_IN_INBOX.length)
+    inboxId: params.timelineId?.startsWith(ROUTE_TIMELINE_OF_INBOX)
+      ? params.timelineId.slice(ROUTE_TIMELINE_OF_INBOX.length)
       : undefined,
-    listId: params.feedId?.startsWith(ROUTE_FEED_IN_LIST)
-      ? params.feedId.slice(ROUTE_FEED_IN_LIST.length)
-      : undefined,
+    listId,
+    timelineId: params.timelineId,
   }
 }
 
@@ -87,13 +78,13 @@ export const useRouteParamsSelector = <T>(
   deps = noop,
 ): T =>
   useReadonlyRouteSelector((route) => {
-    const { searchParams, params } = route
+    const { params } = route
 
-    return selector(parseRouteParams(params, searchParams))
+    return selector(parseRouteParams(params))
   }, deps)
 
 export const getRouteParams = () => {
   const route = getReadonlyRoute()
-  const { searchParams, params } = route
-  return parseRouteParams(params, searchParams)
+  const { params } = route
+  return parseRouteParams(params)
 }

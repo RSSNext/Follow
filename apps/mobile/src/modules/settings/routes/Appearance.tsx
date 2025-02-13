@@ -1,5 +1,5 @@
+import { themeNames } from "@shikijs/themes"
 import { useColorScheme, View } from "react-native"
-import { bundledThemesInfo } from "shiki/dist/themes.mjs"
 
 import { setUISetting, useUISettingKey } from "@/src/atoms/settings/ui"
 import {
@@ -82,9 +82,9 @@ export const AppearanceScreen = () => {
             <GroupedInsetListCell label="Code highlight theme">
               <Select
                 wrapperClassName="w-[120px]"
-                options={bundledThemesInfo.map((theme) => ({
-                  label: theme.displayName,
-                  value: theme.id,
+                options={themeNames.map((theme) => ({
+                  label: theme,
+                  value: theme,
                 }))}
                 value={colorScheme === "dark" ? codeThemeDark : codeThemeLight}
                 onValueChange={(val) => {

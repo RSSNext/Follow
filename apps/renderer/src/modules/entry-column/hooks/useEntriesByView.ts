@@ -1,4 +1,5 @@
 import { views } from "@follow/constants"
+import { isBizId } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
@@ -28,14 +29,22 @@ export const useEntriesByView = ({
     view,
   })
 
-  const entriesOptions = {
-    feedId: folderIds?.join(",") || feedId,
-    inboxId,
-    listId,
-    view,
-    ...(unreadOnly === true && { read: false }),
-    isArchived,
-  }
+  const entriesOptions = useMemo(() => {
+    const params = {
+      feedId: folderIds?.join(",") || feedId,
+      inboxId,
+      listId,
+      view,
+      ...(unreadOnly === true && { read: false }),
+      isArchived,
+    }
+
+    if (feedId && listId && isBizId(feedId)) {
+      delete params.listId
+    }
+
+    return params
+  }, [feedId, folderIds, inboxId, isArchived, listId, unreadOnly, view])
   const query = useEntries(entriesOptions)
 
   const [fetchedTime, setFetchedTime] = useState<number>()
@@ -78,10 +87,13 @@ export const useEntriesByView = ({
 
   useFetchEntryContentByStream(remoteEntryIds)
 
-  const currentEntries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : folderIds || feedId!, {
-    unread: unreadOnly,
-    view,
-  })
+  const currentEntries = useEntryIdsByFeedIdOrView(
+    listId || inboxId || (isAllFeeds ? view : folderIds || feedId!),
+    {
+      unread: unreadOnly,
+      view,
+    },
+  )
 
   // If remote data is not available, we use the local data, get the local data length
   // FIXME: remote first, then local store data

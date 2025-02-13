@@ -108,6 +108,22 @@ export const EntryContent: Component<{
     (s) => s.translationLanguage,
   ) as SupportedLanguages
 
+  const contentLineHeight = useUISettingKey("contentLineHeight")
+  const contentFontSize = useUISettingKey("contentFontSize")
+
+  const stableRenderStyle = useMemo(() => {
+    const css = {} as React.CSSProperties
+
+    if (contentLineHeight) {
+      css.lineHeight = contentLineHeight
+    }
+    if (contentFontSize) {
+      css.fontSize = contentFontSize
+    }
+
+    return css
+  }, [contentLineHeight, contentFontSize])
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -205,8 +221,9 @@ export const EntryContent: Component<{
                           mediaInfo={mediaInfo}
                           noMedia={noMedia}
                           as="article"
-                          className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
+                          className="prose !max-w-full hyphens-auto dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
                           renderInlineStyle={readerRenderInlineStyle}
+                          style={stableRenderStyle}
                         >
                           {content}
                         </EntryContentHTMLRenderer>

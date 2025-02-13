@@ -1,15 +1,16 @@
+import { router } from "expo-router"
 import { memo, useState } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
+import { closeDrawer, selectFeed, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useUnreadCounts } from "@/src/store/unread/hooks"
 import { useColor } from "@/src/theme/colors"
 
 import { SubscriptionFeedCategoryContextMenu } from "../context-menu/feeds"
-import { closeDrawer, selectFeed } from "../feed-drawer/atoms"
-import { GroupedContext, useViewPageCurrentView } from "./ctx"
+import { GroupedContext } from "./ctx"
 import { ItemSeparator } from "./ItemSeparator"
 import { UnGroupedList } from "./UnGroupedList"
 
@@ -32,9 +33,14 @@ export const CategoryGrouped = memo(
         transform: [{ rotate: `${rotateSharedValue.value}deg` }],
       }
     }, [rotateSharedValue])
-    const view = useViewPageCurrentView()
 
     const tertiaryLabelColor = useColor("tertiaryLabel")
+    const selectedFeed = useSelectedFeed()
+    if (selectedFeed?.type !== "view") {
+      return null
+    }
+    const view = selectedFeed.viewId
+
     return (
       <>
         <SubscriptionFeedCategoryContextMenu
@@ -49,6 +55,7 @@ export const CategoryGrouped = memo(
                 categoryName: category,
               })
               closeDrawer()
+              router.push(`/feeds/${category}`)
             }}
             className="h-12 flex-row items-center px-3"
           >

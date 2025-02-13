@@ -8,6 +8,9 @@ import m0004 from "./0004_majestic_thunderbolt_ross.sql"
 import m0005 from "./0005_tense_sleepwalker.sql"
 import m0006 from "./0006_exotic_kid_colt.sql"
 import m0007 from "./0007_curvy_tarantula.sql"
+import m0008 from "./0008_last_the_santerians.sql"
+import m0009 from "./0009_lucky_power_man.sql"
+import m0010 from "./0010_legal_ben_grimm.sql"
 import journal from "./meta/_journal.json"
 
 export default {
@@ -21,5 +24,8 @@ export default {
     m0005,
     m0006,
     m0007,
+    m0008,
+    m0009,
+    m0010,
   },
 }

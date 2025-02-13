@@ -15,7 +15,7 @@ export const loader = () => {
   if (!mobile || getGeneralSettings().startupScreen === "timeline") {
     // navigate to timeline
     return redirect(
-      `/feeds/${ROUTE_FEED_PENDING}/${ROUTE_ENTRY_PENDING}?view=${FeedViewType.Articles}`,
+      `/timeline/view-${FeedViewType.Articles}/${ROUTE_FEED_PENDING}/${ROUTE_ENTRY_PENDING}`,
     )
   }
   return {}

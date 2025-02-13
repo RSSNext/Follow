@@ -82,7 +82,7 @@ Before contributing, ensure that you have read and understood our contributing g
 Follow takes your privacy seriously. As a user, you acknowledge that we may collect, store, and process your personal information, including your usage patterns and interactions with content. We are committed to ensuring that your data is handled securely and transparently. Please refer to our [Privacy Policy](#) for more information on how we collect, process, and protect your data.
 `
 
-export const TeamsMarkdown = () => {
+export const TermsMarkdown = () => {
   return (
     <Markdown
       value={txt}
@@ -112,7 +112,7 @@ export default function Teams() {
         }}
       />
 
-      <TeamsMarkdown />
+      <TermsMarkdown />
     </View>
   )
 }

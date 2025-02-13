@@ -8,7 +8,7 @@ export enum FeedViewType {
 }
 
 export enum Routes {
-  Feeds = "/feeds",
+  Timeline = "/timeline",
   Discover = "/discover",
 }
 

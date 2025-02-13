@@ -11,9 +11,9 @@ import * as React from "react"
 import { useTranslation } from "react-i18next"
 
 import { setGeneralSetting, useGeneralSettingKey } from "~/atoms/settings/general"
-import { useFeedColumnShow } from "~/atoms/sidebar"
+import { useTimelineColumnShow } from "~/atoms/sidebar"
 import { useWhoami } from "~/atoms/user"
-import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_LIST } from "~/constants"
+import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { EntryHeader } from "~/modules/entry-content/header"
@@ -43,8 +43,7 @@ export const EntryListHeader: FC<{
 
   const headerTitle = useFeedHeaderTitle()
 
-  const isInCollectionList =
-    feedId === FEED_COLLECTION_LIST || feedId?.startsWith(ROUTE_FEED_IN_LIST)
+  const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   const titleInfo = !!headerTitle && (
     <div className="flex min-w-0 items-center break-all text-lg font-bold leading-tight">
@@ -64,7 +63,7 @@ export const EntryListHeader: FC<{
   const containerRef = React.useRef<HTMLDivElement>(null)
   const titleStyleBasedView = ["pl-6", "pl-7", "pl-7", "pl-7", "px-5", "pl-6"]
 
-  const feedColumnShow = useFeedColumnShow()
+  const feedColumnShow = useTimelineColumnShow()
   return (
     <div
       ref={containerRef}

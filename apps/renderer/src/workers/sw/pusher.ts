@@ -5,7 +5,7 @@ interface NewEntryMessage {
   feedId: string
   title: string
   type: "new-entry"
-  view: string
+  view: number
 }
 
 type Message = NewEntryMessage
@@ -30,8 +30,10 @@ export const registerPusher = (self: ServiceWorkerGlobalScope) => {
               type: payload.type,
               feedId: payload.feedId,
               entryId: payload.entryId,
-              view: Number.parseInt(payload.view),
-            },
+              view: Number.parseInt(payload.view as any),
+              description: payload.description,
+              title: payload.title,
+            } as NewEntryMessage,
           })
           event.waitUntil(notificationPromise)
           break
@@ -43,7 +45,7 @@ export const registerPusher = (self: ServiceWorkerGlobalScope) => {
   self.addEventListener("notificationclick", (event) => {
     event.notification.close()
 
-    const notificationData = event.notification.data
+    const notificationData = event.notification.data as NewEntryMessage
     if (!notificationData) return
 
     let urlToOpen: URL
@@ -51,7 +53,7 @@ export const registerPusher = (self: ServiceWorkerGlobalScope) => {
     switch (notificationData.type) {
       case "new-entry": {
         urlToOpen = new URL(
-          `/feeds/${notificationData.feedId}/${notificationData.entryId}`,
+          `/timeline/view-${notificationData.view}/${notificationData.feedId}/${notificationData.entryId}`,
           self.location.origin,
         )
         break

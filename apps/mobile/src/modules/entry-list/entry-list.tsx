@@ -1,94 +1,71 @@
 import { FeedViewType } from "@follow/constants"
-import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { FlashList } from "@shopify/flash-list"
+import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useContext, useMemo } from "react"
-import { StyleSheet, Text, useAnimatedValue, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useCallback, useMemo } from "react"
+import { StyleSheet, Text, View } from "react-native"
 
-import {
-  NavigationBlurEffectHeader,
-  NavigationContext,
-} from "@/src/components/common/SafeNavigationScrollView"
+import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
-import { useSelectedFeed, useSelectedFeedTitle } from "@/src/modules/feed-drawer/atoms"
+import { EntryItemContextMenu } from "@/src/modules/context-menu/entry"
+import { LoadArchiveButton } from "@/src/modules/entry-list/action"
+import { EntryListContentGrid } from "@/src/modules/entry-list/entry-list-gird"
+import {
+  useEntryListContext,
+  useFetchEntriesControls,
+  useSelectedView,
+} from "@/src/modules/screen/atoms"
+import { TimelineSelectorHeader } from "@/src/modules/screen/timeline-selector-header"
+import { TimelineSelectorList } from "@/src/modules/screen/timeline-selector-list"
 import { useEntry } from "@/src/store/entry/hooks"
-
-import { ViewSelector } from "../feed-drawer/view-selector"
-import { LeftAction, RightAction } from "./action"
-import { EntryListContentGrid } from "./entry-list-gird"
-
-const headerHideableBottomHeight = 58
+import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
-  const scrollY = useAnimatedValue(0)
-  const selectedFeed = useSelectedFeed()
-  const view = selectedFeed.type === "view" ? selectedFeed.viewId : null
-  const viewTitle = useSelectedFeedTitle()
+  const view = useSelectedView()
 
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <NavigationBlurEffectHeader
-        headerShown
-        headerTitle={viewTitle}
-        headerLeft={useCallback(
-          () => (
-            <LeftAction />
-          ),
-          [],
-        )}
-        headerRight={useCallback(
-          () => (
-            <RightAction />
-          ),
-          [],
-        )}
-        headerHideableBottomHeight={headerHideableBottomHeight}
-        headerHideableBottom={ViewSelector}
-      />
+    <TimelineSelectorHeader>
       {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
         <EntryListContentGrid entryIds={entryIds} />
       ) : (
         <EntryListContent entryIds={entryIds} />
       )}
-    </NavigationContext.Provider>
+    </TimelineSelectorHeader>
   )
 }
 
 function EntryListContent({ entryIds }: { entryIds: string[] }) {
-  const insets = useSafeAreaInsets()
-  const tabBarHeight = useBottomTabBarHeight()
-  const originalDefaultHeaderHeight = useDefaultHeaderHeight()
-  const headerHeight = originalDefaultHeaderHeight + headerHideableBottomHeight
-  const { scrollY } = useContext(NavigationContext)!
+  const screenType = useEntryListContext().type
+
+  const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
+
+  const renderItem = useCallback(
+    ({ item: id }: ListRenderItemInfo<string>) => <EntryItem key={id} entryId={id} />,
+    [],
+  )
+
+  const ListFooterComponent = useMemo(
+    () =>
+      isFetching ? <EntryItemSkeleton /> : screenType === "feed" ? <LoadArchiveButton /> : null,
+    [isFetching, screenType],
+  )
+
   return (
-    <FlashList
-      onScroll={useTypeScriptHappyCallback(
-        (e) => {
-          scrollY.setValue(e.nativeEvent.contentOffset.y)
-        },
-        [scrollY],
-      )}
-      data={entryIds}
-      renderItem={useTypeScriptHappyCallback(
-        ({ item: id }) => (
-          <EntryItem key={id} entryId={id} />
-        ),
-        [],
-      )}
-      scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight - insets.bottom,
+    <TimelineSelectorList
+      onRefresh={() => {
+        refetch()
       }}
-      estimatedItemSize={100}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-        paddingBottom: tabBarHeight,
+      isRefetching={isRefetching}
+      data={entryIds}
+      renderItem={renderItem}
+      onEndReached={() => {
+        fetchNextPage()
+      }}
+      onViewableItemsChanged={({ viewableItems }) => {
+        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
       }}
       ItemSeparatorComponent={ItemSeparator}
+      ListFooterComponent={ListFooterComponent}
     />
   )
 }
@@ -103,13 +80,14 @@ const ItemSeparator = () => {
     />
   )
 }
-
 function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
   const handlePress = useCallback(() => {
+    if (!entry) return
+    setWebViewEntry(entry)
     router.push(`/entries/${entryId}`)
-  }, [entryId])
+  }, [entryId, entry])
 
   if (!entry) return <EntryItemSkeleton />
   const { title, description, publishedAt, media } = entry
@@ -117,25 +95,25 @@ function EntryItem({ entryId }: { entryId: string }) {
   const blurhash = media?.[0]?.blurhash
 
   return (
-    <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
-      <View className="flex-1 space-y-2">
-        <Text numberOfLines={2} className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {title}
-        </Text>
-        <Text className="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">{description}</Text>
-        <Text className="text-xs text-zinc-500 dark:text-zinc-500">
-          {publishedAt.toLocaleString()}
-        </Text>
-      </View>
-      {image && (
-        <Image
-          source={{ uri: image }}
-          placeholder={{ blurhash }}
-          className="ml-2 size-20 rounded-md bg-zinc-200 dark:bg-zinc-800"
-          contentFit="cover"
-        />
-      )}
-    </ItemPressable>
+    <EntryItemContextMenu id={entryId}>
+      <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
+        <View className="flex-1 space-y-2">
+          <Text numberOfLines={2} className="text-label text-lg font-semibold">
+            {title}
+          </Text>
+          <Text className="text-secondary-label line-clamp-2 text-sm">{description}</Text>
+          <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
+        </View>
+        {image && (
+          <Image
+            source={{ uri: image }}
+            placeholder={{ blurhash }}
+            className="bg-system-fill ml-2 size-20 rounded-md"
+            contentFit="cover"
+          />
+        )}
+      </ItemPressable>
+    </EntryItemContextMenu>
   )
 }
 
@@ -144,13 +122,13 @@ function EntryItemSkeleton() {
     <View className="bg-secondary-system-grouped-background flex flex-row items-center p-4">
       <View className="flex flex-1 flex-col justify-between">
         {/* Title skeleton */}
-        <View className="h-6 w-3/4 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <View className="bg-system-fill h-6 w-3/4 animate-pulse rounded-md" />
         {/* Description skeleton */}
-        <View className="mt-2 w-full flex-1 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <View className="bg-system-fill mt-2 w-full flex-1 animate-pulse rounded-md" />
       </View>
 
       {/* Image skeleton */}
-      <View className="ml-2 size-20 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
+      <View className="bg-system-fill ml-2 size-20 animate-pulse rounded-md" />
     </View>
   )
 }

@@ -8,7 +8,14 @@ import { useAtomValue } from "jotai"
 import type { FC } from "react"
 import { memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import type { ScrollView } from "react-native"
-import { Animated, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import {
+  ActivityIndicator,
+  Animated,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -180,7 +187,7 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
 
   const insets = useSafeAreaInsets()
   if (isLoading) {
-    return null
+    return <ActivityIndicator className="flex-1 items-center justify-center" />
   }
 
   return (

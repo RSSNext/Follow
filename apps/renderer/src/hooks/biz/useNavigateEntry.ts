@@ -1,23 +1,23 @@
 import { getReadonlyRoute, getStableRouterNavigate } from "@follow/components/atoms/route.js"
-import { isMobile, useMobile } from "@follow/components/hooks/useMobile.js"
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { useSheetContext } from "@follow/components/ui/sheet/context.js"
-import { FeedViewType } from "@follow/constants"
-import { isUndefined } from "es-toolkit/compat"
+import type { FeedViewType } from "@follow/constants"
 import { useCallback } from "react"
 
 import { disableShowAISummary } from "~/atoms/ai-summary"
 import { disableShowAITranslation } from "~/atoms/ai-translation"
-import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
 import {
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
-  ROUTE_FEED_IN_INBOX,
-  ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
+  ROUTE_TIMELINE_OF_INBOX,
+  ROUTE_TIMELINE_OF_LIST,
+  ROUTE_TIMELINE_OF_VIEW,
 } from "~/constants"
 
 export type NavigateEntryOptions = Partial<{
+  timelineId: string
   feedId: string | null
   entryId: string | null
   view: FeedViewType
@@ -42,10 +42,18 @@ export const useNavigateEntry = () => {
   )
 }
 
+/*
+ * /timeline/:timelineId/:feedId/:entryId
+ * timelineId: view-1, list-xxx, inbox-xxx
+ * feedId: xxx, folder-xxx
+ * entryId: xxx
+ */
 export const navigateEntry = (options: NavigateEntryOptions) => {
-  const { entryId, feedId, view, folderName, inboxId, listId } = options || {}
-  const { params, searchParams } = getReadonlyRoute()
+  const { entryId, feedId, view, folderName, inboxId, listId, timelineId } = options || {}
+  const { params } = getReadonlyRoute()
   let finalFeedId = feedId || params.feedId || ROUTE_FEED_PENDING
+  let finalTimelineId = timelineId || params.timelineId || ROUTE_FEED_PENDING
+  const finalEntryId = entryId || ROUTE_ENTRY_PENDING
 
   if ("feedId" in options && feedId === null) {
     finalFeedId = ROUTE_FEED_PENDING
@@ -55,47 +63,35 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     finalFeedId = `${ROUTE_FEED_IN_FOLDER}${folderName}`
   }
 
+  finalFeedId = encodeURIComponent(finalFeedId)
+
+  if (view !== undefined) {
+    finalTimelineId = `${ROUTE_TIMELINE_OF_VIEW}${view}`
+  }
+
   if (inboxId) {
-    finalFeedId = `${ROUTE_FEED_IN_INBOX}${inboxId}`
+    finalTimelineId = `${ROUTE_TIMELINE_OF_INBOX}${inboxId}`
   }
 
   if (listId) {
-    finalFeedId = `${ROUTE_FEED_IN_LIST}${listId}`
+    finalTimelineId = `${ROUTE_TIMELINE_OF_LIST}${listId}`
   }
 
-  finalFeedId = encodeURIComponent(finalFeedId)
-  const nextSearchParams = new URLSearchParams(searchParams)
-
-  if (!isUndefined(view)) {
-    nextSearchParams.set("view", view.toString())
-    setSidebarActiveView(view)
-  }
   resetShowSourceContent()
   disableShowAISummary()
   disableShowAITranslation()
-
-  const finalView = nextSearchParams.get("view")
 
   if (window.analytics) {
     window.analytics.capture("Navigate Entry", {
       feedId: finalFeedId,
       entryId,
-      view: finalView ? Number.parseInt(finalView, 10) : FeedViewType.Articles,
+      timelineId: finalTimelineId,
     })
   }
 
-  let path = `/feeds`
-  if (finalFeedId) {
-    path += `/${finalFeedId}`
-  }
-  if (entryId) {
-    path += `/${entryId}`
-  } else {
-    if (!isMobile()) path += `/${ROUTE_ENTRY_PENDING}`
-  }
+  const path = `/timeline/${finalTimelineId}/${finalFeedId}/${finalEntryId}`
 
-  const finalPath = `${path}?${nextSearchParams.toString()}`
   const currentPath = getReadonlyRoute().location.pathname + getReadonlyRoute().location.search
-  if (finalPath === currentPath) return
-  return getStableRouterNavigate()?.(finalPath)
+  if (path === currentPath) return
+  return getStableRouterNavigate()?.(path)
 }

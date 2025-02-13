@@ -7,7 +7,6 @@ import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
-import { useAnimationControls } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
@@ -60,22 +59,6 @@ const Wrapper: Component<{
     }
   }, [sideContent])
 
-  const animateController = useAnimationControls()
-
-  useEffect(() => {
-    if (showActionOverlay) {
-      animateController.start({
-        opacity: 1,
-        transform: "translateY(0)",
-      })
-    } else {
-      animateController.start({
-        opacity: 0,
-        transform: "translateY(50px)",
-      })
-    }
-  }, [showActionOverlay, animateController])
-
   return (
     <div
       className="center relative size-full py-12 lg:px-20 lg:pb-8 lg:pt-10"
@@ -110,39 +93,45 @@ const Wrapper: Component<{
         >
           {children}
           <RootPortal to={sideContent ? null : undefined}>
-            <m.div
-              animate={animateController}
-              className={cn(
-                "pointer-events-none absolute inset-x-0 bottom-0 z-[99] flex justify-end gap-3 p-2 text-white/70 [&_button]:hover:text-white",
-                "overflow-hidden",
-                sideContent ? "rounded-bl-xl" : "rounded-xl",
-                "bg-black/30",
-              )}
-              onClick={stopPropagation}
-            >
-              {showActions && (
-                <Fragment>
-                  {IN_ELECTRON && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[99] overflow-hidden">
+              <div
+                style={{
+                  opacity: showActionOverlay ? 1 : 0,
+                  transform: showActionOverlay ? "translateY(0)" : "translateY(50px)",
+                }}
+                className={cn(
+                  "flex justify-end gap-3 p-2 text-white/70 duration-200 [&_button]:hover:text-white",
+                  "hover:!transform-none hover:!opacity-100",
+
+                  sideContent ? "rounded-bl-xl" : "rounded-xl",
+                  "bg-black/30",
+                )}
+                onClick={stopPropagation}
+              >
+                {showActions && (
+                  <Fragment>
+                    {IN_ELECTRON && (
+                      <ActionButton
+                        tooltip={t("common:words.download")}
+                        onClick={() => {
+                          tipcClient?.download(src)
+                        }}
+                      >
+                        <i className="i-mgc-download-2-cute-re" />
+                      </ActionButton>
+                    )}
                     <ActionButton
-                      tooltip={t("common:words.download")}
+                      tooltip={t(COPY_MAP.OpenInBrowser())}
                       onClick={() => {
-                        tipcClient?.download(src)
+                        window.open(src)
                       }}
                     >
-                      <i className="i-mgc-download-2-cute-re" />
+                      <i className="i-mgc-external-link-cute-re" />
                     </ActionButton>
-                  )}
-                  <ActionButton
-                    tooltip={t(COPY_MAP.OpenInBrowser())}
-                    onClick={() => {
-                      window.open(src)
-                    }}
-                  >
-                    <i className="i-mgc-external-link-cute-re" />
-                  </ActionButton>
-                </Fragment>
-              )}
-            </m.div>
+                  </Fragment>
+                )}
+              </div>
+            </div>
           </RootPortal>
         </div>
         {!!sideContent && (

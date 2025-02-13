@@ -1,37 +1,24 @@
-import { Stack, useLocalSearchParams } from "expo-router"
-import { ScrollView, Text, View } from "react-native"
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
+import { useLocalSearchParams } from "expo-router"
+import { useMemo } from "react"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { BlurEffect } from "@/src/components/common/BlurEffect"
+import { EntryListScreen } from "@/src/modules/entry-list/entry-list"
+import { EntryListContext } from "@/src/modules/screen/atoms"
+import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 
 export default function Feed() {
-  const { feedId } = useLocalSearchParams()
-
+  const { feedId: feedIdOrCategory } = useLocalSearchParams()
+  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrCategory as string)
+  const entryIdsByCategory = useEntryIdsByCategory(feedIdOrCategory as string)
+  const insets = useSafeAreaInsets()
   return (
-    <View>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerBackTitle: "Subscriptions",
-          headerBackground: BlurEffect,
-
-          headerTransparent: true,
-          headerTitle: "Feed",
-        }}
-      />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" className="h-full">
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-        <Text>Feed {feedId}</Text>
-      </ScrollView>
-    </View>
+    <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
+      <BottomTabBarHeightContext.Provider value={insets.bottom}>
+        <EntryListScreen
+          entryIds={entryIdsByFeedId.length > 0 ? entryIdsByFeedId : entryIdsByCategory}
+        />
+      </BottomTabBarHeightContext.Provider>
+    </EntryListContext.Provider>
   )
 }

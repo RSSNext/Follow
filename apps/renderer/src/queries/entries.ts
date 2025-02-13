@@ -150,7 +150,7 @@ export const useEntries = ({
     {
       enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
       getNextPageParam: (lastPage) =>
-        inboxId || listId
+        listId
           ? lastPage.data?.at(-1)?.entries.insertedAt
           : lastPage.data?.at(-1)?.entries.publishedAt,
       initialPageParam: undefined,

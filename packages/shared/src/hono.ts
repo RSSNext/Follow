@@ -15810,6 +15810,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     listId: string;
+                    noExtras?: boolean | undefined;
                 };
             };
             output: {

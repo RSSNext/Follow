@@ -1,4 +1,7 @@
+import type { FeedViewType } from "@follow/constants"
+
 import type { FeedSchema, InboxSchema } from "../database/schemas/types"
+import type { CollectionModel } from "../store/collection/types"
 import type { EntryModel } from "../store/entry/types"
 import type { FeedModel } from "../store/feed/types"
 import type { ListModel } from "../store/list/store"
@@ -129,6 +132,23 @@ class Morph {
       })
     }
     return entries
+  }
+
+  toCollections(data: HonoApiClient.Entry_Post, view: FeedViewType): CollectionModel[] {
+    if (!data) return [] satisfies CollectionModel[]
+    return data
+      .map((item) => {
+        if (!item.collections) {
+          return null
+        }
+        return {
+          createdAt: item.collections.createdAt,
+          entryId: item.entries.id,
+          feedId: item.feeds.id,
+          view,
+        } satisfies CollectionModel
+      })
+      .filter((i) => i !== null)
   }
 
   toEntry(data?: HonoApiClient.Entry_Get): EntryModel | null {

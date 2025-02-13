@@ -7,13 +7,13 @@ export const lists = {
     defineQuery(["lists"], async () => listActions.fetchOwnedLists(), {
       rootKey: ["lists"],
     }),
-  byId: ({ id }: { id: string }) =>
-    defineQuery(["lists", id], async () => listActions.fetchListById(id), {
+  byId: ({ id, noExtras }: { id: string; noExtras?: boolean }) =>
+    defineQuery(["lists", id, `${noExtras}`], async () => listActions.fetchListById(id, noExtras), {
       rootKey: ["lists"],
     }),
 }
 
-export const useList = ({ id }: { id?: string }) =>
-  useAuthQuery(lists.byId({ id: id! }), {
+export const useList = ({ id, noExtras }: { id?: string; noExtras?: boolean }) =>
+  useAuthQuery(lists.byId({ id: id!, noExtras }), {
     enabled: !!id,
   })

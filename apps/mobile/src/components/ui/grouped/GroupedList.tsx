@@ -155,7 +155,7 @@ export const GroupedInsetListActionCell: FC<{
           className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
         >
           <View className="flex-1">
-            <Text>{label}</Text>
+            <Text className="text-label">{label}</Text>
             {!!description && (
               <Text className="text-secondary-label text-sm leading-tight">{description}</Text>
             )}

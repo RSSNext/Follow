@@ -2,7 +2,7 @@ import type { FeedViewType } from "@follow/constants"
 import { useIsFocused } from "@react-navigation/native"
 import { useEffect } from "react"
 
-import { useSelectedFeed, useSetDrawerSwipeDisabled } from "@/src/modules/feed-drawer/atoms"
+import { useSelectedFeed, useSetDrawerSwipeDisabled } from "@/src/modules/screen/atoms"
 import {
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
@@ -25,6 +25,7 @@ export function EntryList() {
   }, [setDrawerSwipeDisabled, isFocused])
 
   const selectedFeed = useSelectedFeed()
+  if (!selectedFeed) return null
 
   switch (selectedFeed.type) {
     case "view": {

@@ -5,7 +5,6 @@ import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 
-import { getSidebarActiveView } from "~/atoms/sidebar"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { entries } from "~/queries/entries"
@@ -53,7 +52,7 @@ const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetErr
                         asWidget
                         url={feed.url}
                         defaultValues={{
-                          view: getSidebarActiveView().toString(),
+                          view: getRouteParams().view.toString(),
                         }}
                         onSuccess={() => {
                           dismiss()

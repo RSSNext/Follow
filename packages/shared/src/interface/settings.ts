@@ -52,6 +52,9 @@ export interface UISettings {
   pictureViewMasonry: boolean
   pictureViewFilterNoImage: boolean
   wideMode: boolean
+  contentFontSize: number
+  dateFormat: string
+  contentLineHeight: number
 
   // Action Order
   toolbarOrder: {

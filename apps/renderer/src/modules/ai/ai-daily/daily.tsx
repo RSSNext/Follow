@@ -270,7 +270,7 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
             // eslint-disable-next-line @eslint-react/no-nested-components
             CustomModalComponent: ({ children }) => {
               const { feedId } = useEntry(entryId) || {}
-              return <PeekModal to={`/feeds/${feedId}/${entryId}`}>{children}</PeekModal>
+              return <PeekModal to={`/timeline/${feedId}/${entryId}`}>{children}</PeekModal>
             },
             content: () => <EntryModalPreview entryId={entryId} />,
             overlay: true,

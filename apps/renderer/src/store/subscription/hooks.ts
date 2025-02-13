@@ -87,18 +87,37 @@ export const useAllFeeds = () => {
       (store) => {
         const feedInfo = [] as { title: string; id: string }[]
 
-        const allSubscriptions = Object.values(store.feedIdByView).flat()
+        const allSubscriptions = Object.values(store.data).filter(
+          (subscription) => !subscription.listId && !subscription.inboxId,
+        )
 
-        for (const feedId of allSubscriptions) {
-          const subscription = store.data[feedId]!
-          const feed = feedTitleMap[feedId]
+        for (const subscription of allSubscriptions) {
+          const feed = feedTitleMap[subscription.feedId]
           if (feed) {
-            feedInfo.push({ title: subscription.title || feed || "", id: feedId })
+            feedInfo.push({ title: subscription.title || feed || "", id: subscription.feedId })
           }
         }
         return feedInfo
       },
       [feedTitleMap],
+    ),
+  )
+}
+
+export const useAllLists = () => {
+  return useSubscriptionStore(
+    useCallback(
+      (store) => Object.values(store.data).filter((subscription) => subscription.listId),
+      [],
+    ),
+  )
+}
+
+export const useAllInboxes = () => {
+  return useSubscriptionStore(
+    useCallback(
+      (store) => Object.values(store.data).filter((subscription) => subscription.inboxId),
+      [],
     ),
   )
 }

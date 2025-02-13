@@ -1,16 +1,24 @@
 import type { FeedViewType } from "@follow/constants"
-import { useQuery } from "@tanstack/react-query"
-import { useCallback } from "react"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { useCallback, useEffect } from "react"
 
 import { getEntry } from "./getter"
 import { entrySyncServices, useEntryStore } from "./store"
 import type { EntryModel, FetchEntriesProps } from "./types"
 
-export const usePrefetchEntries = (props: FetchEntriesProps) => {
-  const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived } = props
-  return useQuery({
-    queryKey: ["entries", feedId, inboxId, listId, view, read, limit, pageParam, isArchived],
-    queryFn: () => entrySyncServices.fetchEntries(props),
+export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam"> | null) => {
+  const { feedId, inboxId, listId, view, read, limit, isArchived } = props || {}
+  return useInfiniteQuery({
+    queryKey: ["entries", feedId, inboxId, listId, view, read, limit, isArchived],
+    queryFn: ({ pageParam }) => entrySyncServices.fetchEntries({ ...props, pageParam }),
+    getNextPageParam: (lastPage) =>
+      listId
+        ? lastPage.data?.at(-1)?.entries.insertedAt
+        : lastPage.data?.at(-1)?.entries.publishedAt,
+    initialPageParam: undefined as undefined | string,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    enabled: !!props,
   })
 }
 export const usePrefetchEntryContent = (entryId: string) => {
@@ -20,8 +28,18 @@ export const usePrefetchEntryContent = (entryId: string) => {
   })
 }
 
-export const useEntry = (id: string): EntryModel | undefined => {
-  return useEntryStore((state) => state.data[id])
+const defaultSelector = (state: EntryModel) => state
+export function useEntry(id: string): EntryModel | undefined
+export function useEntry<T>(id: string, selector: (state: EntryModel) => T): T | undefined
+export function useEntry(
+  id: string,
+  selector: (state: EntryModel) => EntryModel = defaultSelector,
+) {
+  return useEntryStore((state) => {
+    const entry = state.data[id]
+    if (!entry) return
+    return selector(entry)
+  })
 }
 
 function sortEntryIdsByPublishDate(a: string, b: string) {
@@ -81,4 +99,16 @@ export const useEntryIdsByCategory = (category: string) => {
       [category],
     ),
   )
+}
+
+export const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {
+  const { mutate: updateEntryContent } = useMutation({
+    mutationKey: ["stream-entry-content", remoteEntryIds],
+    mutationFn: entrySyncServices.fetchEntryContentByStream,
+  })
+
+  useEffect(() => {
+    if (!remoteEntryIds) return
+    updateEntryContent(remoteEntryIds)
+  }, [remoteEntryIds, updateEntryContent])
 }

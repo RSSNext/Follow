@@ -2,7 +2,16 @@ import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
 import { Stack } from "expo-router"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
-import { FlatList, Image, Share, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -11,7 +20,6 @@ import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { FeedIconRequiredFeed } from "@/src/components/ui/icon/feed-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import type { apiClient } from "@/src/lib/api-fetch"
@@ -68,7 +76,7 @@ export const ProfileScreen = () => {
 
         <Stack.Screen options={{ headerShown: false, animation: "fade" }} />
 
-        {isLoading && <LoadingIndicator className="mt-24" size={28} />}
+        {isLoading && <ActivityIndicator className="mt-24" size={28} />}
         {!isLoading && subscriptions && <SubscriptionList subscriptions={subscriptions.data} />}
       </ReAnimatedScrollView>
       {/* Top transparent header buttons */}

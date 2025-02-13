@@ -1,5 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core"
 
 import type { AttachmentsModel, ExtraModel, MediaModel } from "./types"
 
@@ -84,3 +84,23 @@ export const entriesTable = sqliteTable("entries", {
   inboxHandle: text("inbox_handle"),
   read: integer("read", { mode: "boolean" }),
 })
+
+export const collectionsTable = sqliteTable("collections", {
+  feedId: text("feed_id"),
+  entryId: text("entry_id").notNull().primaryKey(),
+  createdAt: text("created_at"),
+  view: integer("view").notNull().$type<FeedViewType>(),
+})
+
+export const summariesTable = sqliteTable(
+  "summaries",
+  {
+    entryId: text("entry_id").notNull().primaryKey(),
+    summary: text("summary").notNull(),
+    createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
+    language: text("language").notNull(),
+  },
+  (table) => ({
+    unq: uniqueIndex("unq").on(table.entryId, table.language),
+  }),
+)

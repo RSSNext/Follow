@@ -1,13 +1,18 @@
 import { FeedViewType } from "@follow/constants"
+import { debounce } from "es-toolkit/compat"
+import { fetch as expoFetch } from "expo/fetch"
 
 import { apiClient } from "@/src/lib/api-fetch"
+import { getCookie } from "@/src/lib/auth"
 import { honoMorph } from "@/src/morph/hono"
 import { storeDbMorph } from "@/src/morph/store-db"
 import { EntryService } from "@/src/services/entry"
 
+import { collectionActions } from "../collection/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
+import { getEntry } from "./getter"
 import type { EntryModel, FetchEntriesProps } from "./types"
 import { getEntriesParams } from "./utils"
 
@@ -41,10 +46,56 @@ const defaultState: EntryState = {
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => defaultState)
 
-const set = useEntryStore.setState
 const immerSet = createImmerSetter(useEntryStore)
 
+type UpsertPosition = "all" | "view" | "category" | "feed" | "inbox" | "list"
+
 class EntryActions {
+  private addEntryIdToView({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const subscription = getSubscription(feedId)
+    if (typeof subscription?.view === "number") {
+      draft.entryIdByView[subscription.view].add(entryId)
+    }
+    if (subscription?.category) {
+      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+      if (!entryIdSetByCategory) {
+        draft.entryIdByCategory[subscription.category] = new Set([entryId])
+      } else {
+        entryIdSetByCategory.add(entryId)
+      }
+    }
+  }
+
+  private addEntryIdToCategory({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const subscription = getSubscription(feedId)
+    if (subscription?.category) {
+      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+      if (!entryIdSetByCategory) {
+        draft.entryIdByCategory[subscription.category] = new Set([entryId])
+      } else {
+        entryIdSetByCategory.add(entryId)
+      }
+    }
+  }
+
   private addEntryIdToFeed({
     draft,
     feedId,
@@ -60,19 +111,6 @@ class EntryActions {
       draft.entryIdByFeed[feedId] = new Set([entryId])
     } else {
       entryIdSetByFeed.add(entryId)
-    }
-
-    const subscription = getSubscription(feedId)
-    if (typeof subscription?.view === "number") {
-      draft.entryIdByView[subscription.view].add(entryId)
-    }
-    if (subscription?.category) {
-      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
-      if (!entryIdSetByCategory) {
-        draft.entryIdByCategory[subscription.category] = new Set([entryId])
-      } else {
-        entryIdSetByCategory.add(entryId)
-      }
     }
   }
 
@@ -94,7 +132,7 @@ class EntryActions {
     }
   }
 
-  upsertManyInSession(entries: EntryModel[]) {
+  upsertManyInSession(entries: EntryModel[], position: UpsertPosition) {
     if (entries.length === 0) return
 
     immerSet((draft) => {
@@ -102,25 +140,45 @@ class EntryActions {
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
-        this.addEntryIdToFeed({
-          draft,
-          feedId,
-          entryId: entry.id,
-        })
+        if (position === "all" || position === "feed") {
+          this.addEntryIdToFeed({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
 
-        this.addEntryIdToInbox({
-          draft,
-          inboxHandle,
-          entryId: entry.id,
-        })
+        if (position === "all" || position === "view") {
+          this.addEntryIdToView({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
+
+        if (position === "all" || position === "inbox") {
+          this.addEntryIdToInbox({
+            draft,
+            inboxHandle,
+            entryId: entry.id,
+          })
+        }
+
+        if (position === "all" || position === "category") {
+          this.addEntryIdToCategory({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
       }
     })
   }
 
-  async upsertMany(entries: EntryModel[]) {
+  async upsertMany(entries: EntryModel[], position: UpsertPosition) {
     const tx = createTransaction()
     tx.store(() => {
-      this.upsertManyInSession(entries)
+      this.upsertManyInSession(entries, position)
     })
 
     tx.persist(() => {
@@ -130,25 +188,53 @@ class EntryActions {
     await tx.run()
   }
 
-  reset(entries: EntryModel[] = []) {
-    if (entries.length > 0) {
-      immerSet((draft) => {
-        // remove all entries from draft.data not in entries
-        for (const existingEntry of Object.values(draft.data)) {
-          if (!entries.some((e) => e.id === existingEntry.id)) {
-            delete draft.data[existingEntry.id]
-          }
-        }
-      })
-    } else {
-      set(defaultState)
-    }
+  updateEntryContentInSession(entryId: EntryId, content: string) {
+    immerSet((draft) => {
+      const entry = draft.data[entryId]
+      if (!entry) return
+      entry.content = content
+    })
+  }
+
+  async updateEntryContent(entryId: EntryId, content: string) {
+    const tx = createTransaction()
+    tx.store(() => {
+      this.updateEntryContentInSession(entryId, content)
+    })
+
+    tx.persist(() => {
+      return EntryService.patch({ id: entryId, content })
+    })
+
+    await tx.run()
+  }
+
+  resetByView({ view, entries }: { view?: FeedViewType; entries: EntryModel[] }) {
+    if (view === undefined) return
+    immerSet((draft) => {
+      draft.entryIdByView[view] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByCategory({ category, entries }: { category?: Category; entries: EntryModel[] }) {
+    if (!category) return
+    immerSet((draft) => {
+      draft.entryIdByCategory[category] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByFeed({ feedId, entries }: { feedId?: FeedId; entries: EntryModel[] }) {
+    if (!feedId) return
+    immerSet((draft) => {
+      draft.entryIdByFeed[feedId] = new Set(entries.map((e) => e.id))
+    })
   }
 }
 
 class EntrySyncServices {
   async fetchEntries(props: FetchEntriesProps) {
-    const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived } = props
+    const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived, isCollection } =
+      props
     const params = getEntriesParams({
       feedId,
       inboxId,
@@ -161,30 +247,159 @@ class EntrySyncServices {
         read,
         limit,
         isArchived,
+        isCollection,
         ...params,
       },
     })
 
     const entries = honoMorph.toEntryList(res.data)
+    const entriesInDB = await EntryService.getEntryMany(entries.map((e) => e.id))
+    for (const entry of entries) {
+      const entryContent = entriesInDB.find((e) => e.id === entry.id)
+      if (entryContent) {
+        entry.content = entryContent.content
+      }
+    }
 
-    await entryActions.upsertMany(entries)
+    const position =
+      params.view !== undefined
+        ? "view"
+        : params.feedId
+          ? "feed"
+          : params.feedIdList
+            ? "category"
+            : params.inboxId
+              ? "inbox"
+              : params.listId
+                ? "list"
+                : "all"
+
+    await entryActions.upsertMany(entries, position)
     if (params.listId) {
       await listActions.addEntryIds({
         listId: params.listId,
         entryIds: entries.map((e) => e.id),
       })
     }
-    return entries
+
+    // After initial fetch, we can reset the state to prefer the entries data from the server
+    if (!pageParam) {
+      if (position === "view") {
+        entryActions.resetByView({ view: params.view, entries })
+      }
+
+      if (position === "category") {
+        const category = getSubscription(params.feedIdList?.[0])?.category
+        if (category) {
+          entryActions.resetByCategory({ category, entries })
+        }
+      }
+
+      if (position === "feed") {
+        entryActions.resetByFeed({ feedId: params.feedId, entries })
+      }
+    }
+
+    if (isCollection && res.data) {
+      if (!view) {
+        console.error("view is required for collection")
+      }
+      const collections = honoMorph.toCollections(res.data, view ?? 0)
+      await collectionActions.upsertMany(collections)
+    }
+
+    return res
   }
 
   async fetchEntryContent(entryId: EntryId) {
     const res = await apiClient.entries.$get({ query: { id: entryId } })
     const entry = honoMorph.toEntry(res.data)
     if (!entry) return null
-    await entryActions.upsertMany([entry])
+    if (entry.content && getEntry(entryId)?.content !== entry.content) {
+      await entryActions.updateEntryContent(entryId, entry.content)
+    }
     return entry
+  }
+
+  async fetchEntryContentByStream(remoteEntryIds?: string[]) {
+    if (!remoteEntryIds || remoteEntryIds.length === 0) return
+
+    const onlyNoStored = true
+
+    const nextIds = [] as string[]
+    if (onlyNoStored) {
+      for (const id of remoteEntryIds) {
+        const entry = getEntry(id)!
+        if (entry.content) {
+          continue
+        }
+
+        nextIds.push(id)
+      }
+    }
+
+    if (nextIds.length === 0) return
+
+    const readStream = async () => {
+      // https://github.com/facebook/react-native/issues/37505
+      // TODO: And it seems we can not just use fetch from expo for ofetch, need further investigation
+      const response = await expoFetch(apiClient.entries.stream.$url().toString(), {
+        method: "post",
+        headers: {
+          cookie: getCookie(),
+        },
+        body: JSON.stringify({
+          ids: nextIds,
+        }),
+      })
+
+      const reader = response.body?.getReader()
+      if (!reader) return
+
+      const decoder = new TextDecoder()
+      let buffer = ""
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          buffer += decoder.decode(value, { stream: true })
+          const lines = buffer.split("\n")
+
+          // Process all complete lines
+          for (let i = 0; i < lines.length - 1; i++) {
+            if (lines[i]!.trim()) {
+              const json = JSON.parse(lines[i]!)
+              // Handle each JSON line here
+              entryActions.updateEntryContent(json.id, json.content)
+            }
+          }
+
+          // Keep the last incomplete line in the buffer
+          buffer = lines.at(-1) || ""
+        }
+
+        // Process any remaining data
+        if (buffer.trim()) {
+          const json = JSON.parse(buffer)
+
+          entryActions.updateEntryContent(json.id, json.content)
+        }
+      } catch (error) {
+        console.error("Error reading stream:", error)
+      } finally {
+        reader.releaseLock()
+      }
+    }
+
+    readStream()
   }
 }
 
 export const entrySyncServices = new EntrySyncServices()
 export const entryActions = new EntryActions()
+export const debouncedFetchEntryContentByStream = debounce(
+  entrySyncServices.fetchEntryContentByStream,
+  1000,
+)

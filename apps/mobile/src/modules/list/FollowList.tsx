@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery } from "@tanstack/react-query"
 import { router, Stack } from "expo-router"
 import { Controller, useForm } from "react-hook-form"
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from "react-native"
 import { z } from "zod"
 
 import {
@@ -16,7 +16,6 @@ import { FormSwitch } from "@/src/components/ui/form/Switch"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { IconWithFallback } from "@/src/components/ui/icon/fallback-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { PowerIcon } from "@/src/icons/power"
 import { apiClient } from "@/src/lib/api-fetch"
 import { toast } from "@/src/lib/toast"
@@ -39,7 +38,7 @@ export const FollowList = (props: { id: string }) => {
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <LoadingIndicator />
+        <ActivityIndicator />
       </View>
     )
   }

@@ -1,7 +1,7 @@
 import { router } from "expo-router"
 import { createContext, createElement, useCallback, useContext, useMemo } from "react"
 import type { ListRenderItem } from "react-native"
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useColor } from "react-native-uikit-colors"
 
@@ -15,7 +15,6 @@ import {
   GroupedInsetListCard,
 } from "@/src/components/ui/grouped/GroupedList"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
-import { LoadingIndicator } from "@/src/components/ui/loading"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { views } from "@/src/constants/views"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
@@ -87,7 +86,7 @@ export const ListsScreen = () => {
             )}
             {isLoading && lists.length === 0 && (
               <View className="mt-1">
-                <LoadingIndicator />
+                <ActivityIndicator />
               </View>
             )}
           </GroupedInsetListCard>

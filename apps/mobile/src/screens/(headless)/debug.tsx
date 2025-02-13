@@ -21,6 +21,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
+import { quickLookImage } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 
 interface MenuSection {
@@ -105,6 +106,16 @@ export default function DebugPanel() {
               type: "success",
               variant: "center-replace",
             })
+          },
+        },
+        {
+          title: "Quick Look Image",
+          onPress: () => {
+            quickLookImage([
+              "https://picsum.photos/200/300",
+              "https://picsum.photos/200/300?grayscale",
+              "https://picsum.photos/200/300?blur",
+            ])
           },
         },
       ],

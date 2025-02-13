@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@follow/components/ui/select/index.jsx"
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
 import {
   MissingOptionalParamError,
@@ -27,7 +27,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { getSidebarActiveView } from "~/atoms/sidebar"
 import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
@@ -198,7 +197,7 @@ export const DiscoverFeedForm = ({
 
         const finalUrl = routeParams && routeParamsPath ? `${url}/${routeParamsPath}` : url
 
-        const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
+        const defaultView = getViewFromRoute(route) || FeedViewType.Articles
 
         present({
           title: t("feed_form.add_feed"),

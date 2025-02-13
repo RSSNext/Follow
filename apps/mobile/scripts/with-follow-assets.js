@@ -11,38 +11,34 @@ const { withDangerousMod, withXcodeProject, IOSConfig } = require("@expo/config-
 const fs = require("node:fs")
 const path = require("node:path")
 const { execSync } = require("node:child_process")
-const process = require("node:process")
-
-const followRoot = path.resolve(__dirname, "..", "..", "..")
-
-// Specify the source directory of your assets
-const ASSET_SOURCE_DIR = path.join("out", "rn-web")
 
 const IOS_GROUP_NAME = "Assets"
 
-const isAssetReady = () => {
-  return fs.existsSync(path.resolve(followRoot, ASSET_SOURCE_DIR))
+const isAssetReady = (assetsPath) => {
+  return fs.existsSync(assetsPath)
 }
 
-const withFollowAssets = (config) => {
-  if (!isAssetReady()) {
-    console.info(
-      "Assets source directory not found! Running `pnpm build:rn-web` to generate assets.",
+const withFollowAssets = (config, props) => {
+  if (!isAssetReady(props.assetsPath)) {
+    // TODO move to props
+    const cmd = "pnpm --filter @follow/rn-micro-web-app build"
+    console.info(`Assets source directory not found! Running \`${cmd}\` to generate assets.`)
+    execSync(cmd)
+  }
+  if (!isAssetReady(props.assetsPath)) {
+    throw new Error(
+      `Assets source directory not found! Please make sure the build is successful. path: ${
+        props.assetsPath
+      }`,
     )
-    process.chdir(followRoot)
-    execSync("pnpm build:rn-web")
-    process.chdir(__dirname)
   }
-  if (!isAssetReady()) {
-    throw new Error("Assets source directory not found! Please make sure the build is successful.")
-  }
-  config = addAndroidResources(config)
-  config = addIOSResources(config)
-  return config
+  const configAfterAndroid = addAndroidResources(config, props)
+  const configAfterIos = addIOSResources(configAfterAndroid, props)
+  return configAfterIos
 }
 
 // Code inspired by https://github.com/rive-app/rive-react-native/issues/185#issuecomment-1593396573
-function addAndroidResources(config) {
+function addAndroidResources(config, { assetsPath }) {
   return withDangerousMod(config, [
     "android",
     async (config) => {
@@ -56,14 +52,11 @@ function addAndroidResources(config) {
       const rawDir = path.join(resDir, "raw")
       fs.mkdirSync(rawDir, { recursive: true })
 
-      // Get the path to the assets directory
-      const assetSourcePath = path.join(followRoot, ASSET_SOURCE_DIR)
-
       // Retrieve all files in the assets directory
       // const assetFiles = fs.readdirSync(assetSourcePath)
 
       // Move asset file to the resources 'raw' directory
-      fs.cpSync(assetSourcePath, rawDir, { recursive: true })
+      fs.cpSync(assetsPath, rawDir, { recursive: true })
 
       // Move each asset file to the resources 'raw' directory
       // for (const assetFile of assetFiles) {
@@ -78,7 +71,7 @@ function addAndroidResources(config) {
 }
 
 // Code inspired by https://github.com/expo/expo/blob/61f8cf8d4b3cf5f8bf61f346476ebdb4aff40545/packages/expo-font/plugin/src/withFontsIos.ts
-function addIOSResources(config) {
+function addIOSResources(config, { assetsPath }) {
   return withXcodeProject(config, async (config) => {
     const project = config.modResults
     const { platformProjectRoot } = config.modRequest
@@ -86,11 +79,8 @@ function addIOSResources(config) {
     // Create Assets group in project
     IOSConfig.XcodeUtils.ensureGroupRecursively(project, IOS_GROUP_NAME)
 
-    // Get filepaths
-    const assetSourcePath = path.resolve(followRoot, ASSET_SOURCE_DIR)
-
     // Add assets to group
-    addIOSResourceFile(project, platformProjectRoot, [assetSourcePath])
+    addIOSResourceFile(project, platformProjectRoot, [assetsPath])
 
     return config
   })
