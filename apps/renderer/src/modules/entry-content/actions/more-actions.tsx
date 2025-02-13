@@ -15,28 +15,26 @@ import type { CustomizeToolbarCommand, EntryCommand } from "~/modules/command/co
 import { getCommand } from "~/modules/command/hooks/use-command"
 
 export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedViewType }) => {
-  const { moreAction: actionConfigs } = useSortedEntryActions({ entryId, view })
-  const availableActions = useMemo(
+  const { moreAction } = useSortedEntryActions({ entryId, view })
+
+  const actionConfigs = useMemo(
     () =>
-      actionConfigs
-        .filter((item) => item.id !== COMMAND_ID.settings.customizeToolbar)
+      moreAction
         .map((item) => ({
           config: item,
           command: getCommand(item.id) as EntryCommand,
         }))
         .filter(({ command }) => command),
+    [moreAction],
+  )
+
+  const availableActions = useMemo(
+    () => actionConfigs.filter(({ config }) => config.id !== COMMAND_ID.settings.customizeToolbar),
     [actionConfigs],
   )
 
   const extraAction = useMemo(
-    () =>
-      actionConfigs
-        .filter((item) => item.id === COMMAND_ID.settings.customizeToolbar)
-        .map((item) => ({
-          config: item,
-          command: getCommand(item.id) as CustomizeToolbarCommand,
-        }))
-        .filter(({ command }) => command),
+    () => actionConfigs.filter(({ config }) => config.id === COMMAND_ID.settings.customizeToolbar),
     [actionConfigs],
   )
 
@@ -51,29 +49,35 @@ export const MoreActions = ({ entryId, view }: { entryId: string; view?: FeedVie
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {availableActions.map(({ config, command }) => (
-          <DropdownMenuItem
-            key={command.id}
-            className="pl-3"
-            icon={command.icon}
-            onSelect={config.onClick}
-            active={config.active}
-          >
-            {command.label.title}
-          </DropdownMenuItem>
+          <CommandDropdownMenuItem key={config.id} command={command} onClick={config.onClick} />
         ))}
-        {availableActions.length > 0 && <DropdownMenuSeparator />}
+        {availableActions.length > 0 && extraAction.length > 0 && <DropdownMenuSeparator />}
         {extraAction.map(({ config, command }) => (
-          <DropdownMenuItem
-            key={command.id}
-            className="pl-3"
-            icon={command.icon}
-            onSelect={config.onClick}
-            active={config.active}
-          >
-            {command.label.title}
-          </DropdownMenuItem>
+          <CommandDropdownMenuItem key={config.id} command={command} onClick={config.onClick} />
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+const CommandDropdownMenuItem = ({
+  command,
+  onClick,
+  active,
+}: {
+  command: EntryCommand | CustomizeToolbarCommand
+  onClick: () => void
+  active?: boolean
+}) => {
+  return (
+    <DropdownMenuItem
+      key={command.id}
+      className="pl-3"
+      icon={command.icon}
+      onSelect={onClick}
+      active={active}
+    >
+      {command.label.title}
+    </DropdownMenuItem>
   )
 }
