@@ -1,8 +1,8 @@
 import type { FeedViewType } from "@follow/constants"
-import { useQuery } from "@tanstack/react-query"
-import { useCallback } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useCallback, useEffect } from "react"
 
-import { useSubscriptionByView } from "../subscription/hooks"
+import { useFeedSubscriptionByView } from "../subscription/hooks"
 import { unreadSyncService, useUnreadStore } from "./store"
 
 export const usePrefetchUnread = () => {
@@ -11,6 +11,15 @@ export const usePrefetchUnread = () => {
     queryFn: () => unreadSyncService.fetch(),
     staleTime: 5 * 1000 * 60, // 5 minutes
   })
+}
+
+export const useAutoMarkAsRead = (entryId: string) => {
+  const { mutate } = useMutation({
+    mutationFn: (entryId: string) => unreadSyncService.markEntryAsRead(entryId),
+  })
+  useEffect(() => {
+    mutate(entryId)
+  }, [entryId, mutate])
 }
 
 export const useUnreadCount = (subscriptionId: string) => {
@@ -33,7 +42,7 @@ export const useUnreadCounts = (subscriptionIds: string[]): number => {
 }
 
 export const useUnreadCountByView = (view: FeedViewType) => {
-  const subscriptionIds = useSubscriptionByView(view)
+  const subscriptionIds = useFeedSubscriptionByView(view)
   return useUnreadStore(
     useCallback(
       (state) => {

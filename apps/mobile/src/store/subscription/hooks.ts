@@ -14,7 +14,7 @@ import {
 } from "./getter"
 import { subscriptionSyncService, useSubscriptionStore } from "./store"
 
-export const usePrefetchSubscription = (view: FeedViewType) => {
+export const usePrefetchSubscription = (view?: FeedViewType) => {
   return useQuery({
     queryKey: ["subscription", view],
     queryFn: () => subscriptionSyncService.fetch(view),

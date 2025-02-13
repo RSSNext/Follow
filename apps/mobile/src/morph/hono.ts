@@ -128,7 +128,7 @@ class Morph {
         feedId: item.feeds.id,
         // TODO: handle inboxHandle
         inboxHandle: "",
-        read: false,
+        read: item.read,
       })
     }
     return entries
