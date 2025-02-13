@@ -69,6 +69,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4" onPress={handlePress}>
+        {!entry.read && <View className="bg-red absolute left-1 top-6 size-2 rounded-full" />}
         <View className="flex-1 space-y-2">
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
