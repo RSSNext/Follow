@@ -24,12 +24,8 @@ export const EntryTranslation: Component<{
     <div>
       {isHTML ? (
         <>
-          <HTML as="div" className={cn("prose align-middle dark:prose-invert", className)} noMedia>
-            {source}
-          </HTML>
           {nextTarget && (
             <>
-              <i className="i-mgc-translate-2-cute-re mb-1 mt-4 align-middle" />
               <HTML
                 as="div"
                 className={cn("prose align-middle dark:prose-invert", className)}
@@ -37,19 +33,23 @@ export const EntryTranslation: Component<{
               >
                 {nextTarget}
               </HTML>
+              <i className="i-mgc-translate-2-cute-re mb-4 mt-1 align-middle" />
             </>
           )}
+          <HTML as="div" className={cn("prose align-middle dark:prose-invert", className)} noMedia>
+            {source}
+          </HTML>
         </>
       ) : (
         <>
           <div className={cn("inline align-middle", className)}>
-            <span className="align-middle">{source}</span>
             {nextTarget && (
               <>
-                <i className="i-mgc-translate-2-cute-re ml-2 mr-0.5 align-middle" />
                 <span className="align-middle">{nextTarget}</span>
+                <i className="i-mgc-translate-2-cute-re mr-2 align-middle" />
               </>
             )}
+            <span className="align-middle">{source}</span>
           </div>
         </>
       )}

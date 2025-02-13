@@ -12,6 +12,7 @@ import { views } from "@/src/constants/views"
 import { selectTimeline, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useList } from "@/src/store/list/hooks"
 import { useAllListSubscription } from "@/src/store/subscription/hooks"
+import { useUnreadCountByView } from "@/src/store/unread/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 export function ViewSelector() {
@@ -74,6 +75,7 @@ function ViewItem({ view }: { view: ViewDefinition }) {
 
   const selectedFeed = useSelectedFeed()
   const isActive = selectedFeed?.type === "view" && selectedFeed.viewId === view.view
+  const unreadCount = useUnreadCountByView(view.view)
 
   return (
     <ItemWrapper
@@ -82,10 +84,12 @@ function ViewItem({ view }: { view: ViewDefinition }) {
       style={isActive ? { backgroundColor: view.activeColor } : undefined}
     >
       <view.icon color={isActive ? "#fff" : textColor} height={21} width={21} />
-      {isActive && (
+      {isActive ? (
         <Text className="text-sm font-semibold text-white" numberOfLines={1}>
-          {view.name}
+          {view.name + (unreadCount ? ` (${unreadCount})` : "")}
         </Text>
+      ) : (
+        !!unreadCount && <View className="bg-gray absolute right-2 top-2 size-2 rounded-full" />
       )}
     </ItemWrapper>
   )
