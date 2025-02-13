@@ -6,7 +6,7 @@ import { useEventCallback } from "usehooks-ts"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
-import { TimelineSelectorList } from "@/src/modules/screen/timeline-selector-list"
+import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import {
   useGroupedSubscription,

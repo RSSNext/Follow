@@ -8,6 +8,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { gentleSpringPreset } from "@/src/constants/spring"
 import { EntryItemContextMenu } from "@/src/modules/context-menu/entry"
 import { LoadArchiveButton } from "@/src/modules/entry-list/action"
 import { EntryListContentGrid } from "@/src/modules/entry-list/entry-list-gird"
@@ -16,8 +17,8 @@ import {
   useFetchEntriesControls,
   useSelectedView,
 } from "@/src/modules/screen/atoms"
-import { TimelineSelectorHeader } from "@/src/modules/screen/timeline-selector-header"
-import { TimelineSelectorList } from "@/src/modules/screen/timeline-selector-list"
+import { TimelineSelectorHeader } from "@/src/modules/screen/TimelineSelectorHeader"
+import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
@@ -104,15 +105,10 @@ function EntryItem({ entryId }: { entryId: string }) {
   useEffect(() => {
     if (!entry) return
 
-    const springConfig = {
-      damping: 15,
-      stiffness: 100,
-      mass: 1,
-    }
     if (entry.read) {
-      unreadZoomSharedValue.value = withSpring(0, springConfig)
+      unreadZoomSharedValue.value = withSpring(0, gentleSpringPreset)
     } else {
-      unreadZoomSharedValue.value = withSpring(1, springConfig)
+      unreadZoomSharedValue.value = withSpring(1, gentleSpringPreset)
     }
   }, [entry?.read, unreadZoomSharedValue])
   if (!entry) return <EntryItemSkeleton />
@@ -122,7 +118,7 @@ function EntryItem({ entryId }: { entryId: string }) {
 
   return (
     <EntryItemContextMenu id={entryId}>
-      <ItemPressable className="flex flex-row items-center p-4 px-6" onPress={handlePress}>
+      <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <Animated.View
           className="bg-red absolute left-2 top-[22] size-2.5 rounded-full"
           style={unreadIndicatorStyle}
