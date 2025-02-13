@@ -67,14 +67,6 @@ class EntryActions {
     if (typeof subscription?.view === "number") {
       draft.entryIdByView[subscription.view].add(entryId)
     }
-    if (subscription?.category) {
-      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
-      if (!entryIdSetByCategory) {
-        draft.entryIdByCategory[subscription.category] = new Set([entryId])
-      } else {
-        entryIdSetByCategory.add(entryId)
-      }
-    }
   }
 
   private addEntryIdToCategory({

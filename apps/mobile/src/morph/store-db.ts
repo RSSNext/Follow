@@ -24,7 +24,7 @@ class StoreDbMorph {
 
 export const storeDbMorph = new StoreDbMorph()
 
-const buildSubscriptionDbId = (subscription: SubscriptionModel) => {
+export const buildSubscriptionDbId = (subscription: SubscriptionModel) => {
   if (subscription.feedId) return `${subscription.type}/${subscription.feedId}`
   if (subscription.listId) return `${subscription.type}/${subscription.listId}`
   if (subscription.inboxId) return `${subscription.type}/${subscription.inboxId}`
