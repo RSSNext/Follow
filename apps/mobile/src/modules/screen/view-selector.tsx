@@ -9,11 +9,10 @@ import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComp
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
+import { selectTimeline, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useList } from "@/src/store/list/hooks"
 import { useAllListSubscription } from "@/src/store/subscription/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
-
-import { selectTimeline, useSelectedFeed } from "../feed-drawer/atoms"
 
 export function ViewSelector() {
   const lists = useAllListSubscription()

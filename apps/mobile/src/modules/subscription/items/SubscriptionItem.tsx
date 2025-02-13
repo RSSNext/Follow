@@ -6,13 +6,13 @@ import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { closeDrawer, selectFeed, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionFeedItemContextMenu } from "../../context-menu/feeds"
-import { closeDrawer, selectFeed } from "../../feed-drawer/atoms"
-import { GroupedContext, useViewPageCurrentView } from "../ctx"
+import { GroupedContext } from "../ctx"
 
 // const renderRightActions = () => {
 //   return (
@@ -48,8 +48,10 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
   const unreadCount = useUnreadCount(id)
   const feed = useFeed(id)!
   const inGrouped = !!useContext(GroupedContext)
-  const view = useViewPageCurrentView()
   const { isLoading } = usePrefetchFeed(id, { enabled: !subscription && !feed })
+
+  const selectedFeed = useSelectedFeed()
+  const view = selectedFeed?.type === "view" ? selectedFeed.viewId : undefined
 
   if (isLoading) {
     return (

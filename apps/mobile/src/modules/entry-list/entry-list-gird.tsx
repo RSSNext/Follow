@@ -14,10 +14,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { useFetchEntriesControls, useSelectedView } from "@/src/modules/screen/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
-
-import { useFetchEntriesControls, useSelectedView } from "../feed-drawer/atoms"
 
 export function EntryListContentGrid({
   entryIds,

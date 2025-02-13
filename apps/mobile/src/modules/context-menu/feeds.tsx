@@ -15,7 +15,7 @@ import { unreadSyncService } from "@/src/store/unread/store"
 export const SubscriptionFeedItemContextMenu: FC<
   PropsWithChildren & {
     id: string
-    view: FeedViewType
+    view?: FeedViewType
   }
 > = ({ id, children, view }) => {
   const allCategories = useListSubscriptionCategory(view)

@@ -1,99 +1,48 @@
 import { FeedViewType } from "@follow/constants"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import type { ListRenderItemInfo } from "@shopify/flash-list"
-import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useContext, useMemo } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { RefreshControl, StyleSheet, Text, useAnimatedValue, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useColor } from "react-native-uikit-colors"
+import { useCallback, useMemo } from "react"
+import { StyleSheet, Text, View } from "react-native"
 
-import {
-  NavigationBlurEffectHeader,
-  NavigationContext,
-} from "@/src/components/common/SafeNavigationScrollView"
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
-import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
+import { EntryItemContextMenu } from "@/src/modules/context-menu/entry"
+import { LoadArchiveButton } from "@/src/modules/entry-list/action"
+import { EntryListContentGrid } from "@/src/modules/entry-list/entry-list-gird"
 import {
   useEntryListContext,
   useFetchEntriesControls,
-  useSelectedFeedTitle,
   useSelectedView,
-} from "@/src/modules/feed-drawer/atoms"
+} from "@/src/modules/screen/atoms"
+import { TimelineSelectorHeader } from "@/src/modules/screen/timeline-selector-header"
+import { TimelineSelectorList } from "@/src/modules/screen/timeline-selector-list"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
-import { EntryItemContextMenu } from "../context-menu/entry"
-import { ViewSelector } from "../feed-drawer/view-selector"
-import { HomeLeftAction, HomeRightAction, LoadArchiveButton } from "./action"
-import { EntryListContentGrid } from "./entry-list-gird"
-
-const headerHideableBottomHeight = 58
-
 export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
-  const scrollY = useAnimatedValue(0)
   const view = useSelectedView()
-  const viewTitle = useSelectedFeedTitle()
-  const screenType = useEntryListContext().type
 
-  const isFeed = screenType === "feed"
-  const isTimeline = screenType === "timeline"
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <NavigationBlurEffectHeader
-        headerBackTitle={isFeed ? "Subscriptions" : undefined}
-        headerShown
-        title={viewTitle}
-        headerLeft={useMemo(
-          () => (isTimeline ? () => <HomeLeftAction /> : undefined),
-          [isTimeline],
-        )}
-        headerRight={useMemo(
-          () => (isTimeline ? () => <HomeRightAction /> : undefined),
-          [isTimeline],
-        )}
-        headerHideableBottomHeight={isTimeline ? headerHideableBottomHeight : undefined}
-        headerHideableBottom={isTimeline ? ViewSelector : undefined}
-      />
+    <TimelineSelectorHeader>
       {view === FeedViewType.Pictures || view === FeedViewType.Videos ? (
         <EntryListContentGrid entryIds={entryIds} />
       ) : (
         <EntryListContent entryIds={entryIds} />
       )}
-    </NavigationContext.Provider>
+    </TimelineSelectorHeader>
   )
 }
 
 function EntryListContent({ entryIds }: { entryIds: string[] }) {
   const screenType = useEntryListContext().type
 
-  const insets = useSafeAreaInsets()
-
-  const originalDefaultHeaderHeight = useDefaultHeaderHeight()
-  const headerHeight =
-    screenType === "timeline"
-      ? originalDefaultHeaderHeight + headerHideableBottomHeight
-      : originalDefaultHeaderHeight
-  const scrollY = useContext(NavigationContext)?.scrollY
-
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
-
-  const onScroll = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      scrollY?.setValue(e.nativeEvent.contentOffset.y)
-    },
-    [scrollY],
-  )
 
   const renderItem = useCallback(
     ({ item: id }: ListRenderItemInfo<string>) => <EntryItem key={id} entryId={id} />,
     [],
   )
-
-  const tabBarHeight = useBottomTabBarHeight()
 
   const ListFooterComponent = useMemo(
     () =>
@@ -101,39 +50,19 @@ function EntryListContent({ entryIds }: { entryIds: string[] }) {
     [isFetching, screenType],
   )
 
-  const systemFill = useColor("secondaryLabel")
-
   return (
-    <FlashList
-      refreshControl={
-        <RefreshControl
-          progressViewOffset={headerHeight}
-          // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
-          tintColor={systemFill}
-          onRefresh={() => {
-            refetch()
-          }}
-          refreshing={isRefetching}
-        />
-      }
-      onScroll={onScroll}
+    <TimelineSelectorList
+      onRefresh={() => {
+        refetch()
+      }}
+      isRefetching={isRefetching}
       data={entryIds}
       renderItem={renderItem}
-      keyExtractor={(id) => id}
       onEndReached={() => {
         fetchNextPage()
       }}
       onViewableItemsChanged={({ viewableItems }) => {
         debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
-      }}
-      scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
-      }}
-      estimatedItemSize={100}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-        paddingBottom: tabBarHeight,
       }}
       ItemSeparatorComponent={ItemSeparator}
       ListFooterComponent={ListFooterComponent}
