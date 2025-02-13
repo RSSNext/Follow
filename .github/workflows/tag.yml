@@ -27,7 +27,7 @@ jobs:
           const semverRegex = /chore: Release (v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-.]+)?)/;
           const match = commitMessage.match(semverRegex);
           if (match) {
-            fs.appendFileSync(process.env.GITHUB_ENV, `tag_version=true\n`);
+            fs.appendFileSync(process.env.GITHUB_ENV, `tag_version=${match[1]}\n`);
           } else {
             console.log("No SemVer found in commit body.");
             process.exit(0);
@@ -46,4 +46,4 @@ jobs:
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/build.yml/dispatches \
-            -d '{"ref":"main", "inputs": {"tag_version": "${{ env.tag_version }}"}}'
+            -d '{"ref":"main", "inputs": {"tag_version": "true"}}'
