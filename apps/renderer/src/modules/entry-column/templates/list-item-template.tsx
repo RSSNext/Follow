@@ -50,10 +50,13 @@ export function ListItem({ entryId, entryPreview, translation }: UniversalItemPr
   const lineClamp = useMemo(() => {
     const envIsSafari = isSafari()
     let lineClampTitle = settingWideMode ? 1 : 2
-    const lineClampDescription = settingWideMode ? 1 : 2
+    let lineClampDescription = settingWideMode ? 1 : 2
 
     if (translation?.title) {
       lineClampTitle += 1
+    }
+    if (translation?.description) {
+      lineClampDescription += 1
     }
 
     // for tailwind
