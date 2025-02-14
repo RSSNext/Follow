@@ -217,6 +217,10 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
           styles["mask-scroller"],
           "flex h-11 justify-between gap-0.5 overflow-auto px-2 text-xl text-theme-vibrancyFg scrollbar-none",
         )}
+        onWheel={(e) => {
+          e.preventDefault()
+          e.currentTarget.scrollLeft += e.deltaY
+        }}
       >
         {timelineList.views.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
