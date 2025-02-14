@@ -11,6 +11,7 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
+import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
@@ -56,6 +57,7 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
 
 function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
+  const feed = useFeed(entry?.feedId as string)
 
   const handlePress = useCallback(() => {
     if (!entry) return
@@ -94,11 +96,12 @@ function EntryItem({ entryId }: { entryId: string }) {
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <Animated.View
-          className="bg-red absolute left-2 top-[23] size-2 rounded-full"
+          className="bg-red absolute left-2 top-[18] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />
 
         <View className="flex-1 space-y-2">
+          <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
