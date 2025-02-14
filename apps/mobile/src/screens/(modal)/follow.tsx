@@ -1,10 +1,10 @@
 import { useLocalSearchParams } from "expo-router"
 
-import { FollowFeed } from "@/src/modules/feed/FollowFeed"
+import { FollowFeed, FollowUrl } from "@/src/modules/feed/FollowFeed"
 import { FollowList } from "@/src/modules/list/FollowList"
 
 export default function Follow() {
-  const { id, type = "feed" } = useLocalSearchParams()
+  const { id, type = "feed", url } = useLocalSearchParams()
 
   switch (type) {
     case "feed": {
@@ -12,6 +12,9 @@ export default function Follow() {
     }
     case "list": {
       return <FollowList id={id as string} />
+    }
+    case "url": {
+      return <FollowUrl url={url as string} />
     }
     default: {
       return <FollowFeed id={id as string} />

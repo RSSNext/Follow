@@ -39,7 +39,7 @@ class FeedActions {
     })
 
     tx.persist(async () => {
-      await FeedService.upsertMany(feeds)
+      await FeedService.upsertMany(feeds.filter((feed) => !("nonce" in feed)))
     })
 
     tx.run()
@@ -77,6 +77,25 @@ class FeedSyncServices {
     feedActions.upsertMany([finalData])
 
     return !finalData.id ? { ...finalData, id: nonce } : finalData
+  }
+
+  async fetchFeedByUrl({ url }: FeedQueryParams) {
+    const res = await apiClient.feeds.$get({
+      query: {
+        url,
+      },
+    })
+
+    const nonce = Math.random().toString(36).slice(2, 15)
+
+    const finalData = res.data.feed as FeedModel
+    if (!finalData.id) {
+      finalData["nonce"] = nonce
+      finalData["id"] = nonce
+    }
+    feedActions.upsertMany([finalData])
+
+    return finalData
   }
 }
 export const feedSyncServices = new FeedSyncServices()
