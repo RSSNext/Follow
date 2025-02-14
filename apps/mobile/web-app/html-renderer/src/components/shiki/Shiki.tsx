@@ -1,5 +1,4 @@
-import { useIsDark } from "@follow/hooks"
-import { cn } from "@follow/utils/utils"
+import clsx from "clsx"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { useAtomValue } from "jotai"
 import type { FC } from "react"
@@ -10,6 +9,7 @@ import type {
   DynamicImportLanguageRegistration,
   DynamicImportThemeRegistration,
 } from "shiki"
+import { useMediaQuery } from "usehooks-ts"
 
 import { codeThemeDarkAtom, codeThemeLightAtom } from "../../../atoms"
 import { shiki, shikiTransformers } from "./shared"
@@ -25,6 +25,11 @@ export interface ShikiProps {
   transparent?: boolean
 
   theme?: string
+}
+
+const useIsDark = () => {
+  const isDark = useMediaQuery("(prefers-color-scheme: dark)")
+  return isDark
 }
 
 let langModule: Record<BundledLanguage, DynamicImportLanguageRegistration> | null = null
@@ -116,7 +121,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 
   if (!loaded) {
     return (
-      <pre className={cn("bg-transparent", className)}>
+      <pre className={clsx("bg-transparent", className)}>
         <code>{code}</code>
       </pre>
     )
@@ -154,7 +159,7 @@ const ShikiCode: FC<
 
   return (
     <div
-      className={cn(
+      className={clsx(
         "group relative -mx-3 my-4",
         styles["shiki-wrapper"],
         transparent ? styles["transparent"] : null,

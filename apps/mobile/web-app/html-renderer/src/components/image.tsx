@@ -25,6 +25,7 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
   const [isLoading, setIsLoading] = useState(true)
   const ref = useContext(MarkdownRenderContainerRefContext)
   const image = entry?.media.find((media) => media.url === src)
+
   const { height: scaleHeight, width: scaleWidth } = useMemo(
     () =>
       calculateDimensions({

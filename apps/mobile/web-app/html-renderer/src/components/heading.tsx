@@ -1,4 +1,4 @@
-import { cn } from "@follow/utils/utils"
+import clsx from "clsx"
 import { useId, useRef } from "react"
 
 const size = {
@@ -26,7 +26,7 @@ export const createHeadingRenderer =
         ref={ref}
         {...rest}
         data-rid={rid}
-        className={cn(rest.className, "group relative", size[level])}
+        className={clsx(rest.className, "group relative", size[level])}
       >
         {rest.children}
       </As>
