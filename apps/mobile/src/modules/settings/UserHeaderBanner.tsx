@@ -1,12 +1,13 @@
 import { cn, getLuminance } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useState } from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import ImageColors from "react-native-image-colors"
 import type { SharedValue } from "react-native-reanimated"
 import ReAnimated, { FadeIn, interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor } from "@/src/theme/colors"
 
@@ -94,9 +95,7 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) 
         className="bg-system-background overflow-hidden rounded-full"
         style={{ marginTop: insets.top }}
       >
-        {!!whoami.image && (
-          <Image source={{ uri: whoami.image, height: 60, width: 60 }} resizeMode="cover" />
-        )}
+        <UserAvatar image={whoami.image} name={whoami.name!} size={60} />
       </View>
 
       <View className="mt-2">

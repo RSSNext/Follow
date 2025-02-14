@@ -1,4 +1,3 @@
-import { FeedViewType } from "@follow/constants"
 import { router, Tabs } from "expo-router"
 import { useContext, useEffect, useMemo, useState } from "react"
 import {
@@ -24,16 +23,9 @@ import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
 import { FeedDrawer } from "@/src/modules/feed-drawer/drawer"
-import { setCurrentView } from "@/src/modules/subscription/atoms"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
 import { useColor } from "@/src/theme/colors"
-
-const doubleTap = Gesture.Tap()
-  .numberOfTaps(2)
-  .onStart(() => {
-    runOnJS(setCurrentView)(FeedViewType.Articles)
-  })
 
 const fifthTap = Gesture.Tap()
   .numberOfTaps(5)
@@ -100,18 +92,13 @@ export default function TabLayout() {
               options={{
                 title: "Home",
                 headerShown: false,
+                tabBarLabel: "Timeline",
                 tabBarIcon: ({ color, focused }) => {
                   const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
                   return <Icon color={color} width={24} height={24} />
                 },
                 tabBarButton(props) {
-                  return (
-                    <GestureDetector gesture={doubleTap}>
-                      <View className="flex-1">
-                        <Pressable {...props} />
-                      </View>
-                    </GestureDetector>
-                  )
+                  return <Pressable {...props} />
                 },
               }}
             />
@@ -124,14 +111,10 @@ export default function TabLayout() {
                   const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
                   return <Icon color={color} width={24} height={24} />
                 },
+                tabBarLabel: "Subscriptions",
+
                 tabBarButton(props) {
-                  return (
-                    <GestureDetector gesture={doubleTap}>
-                      <View className="flex-1">
-                        <Pressable {...props} />
-                      </View>
-                    </GestureDetector>
-                  )
+                  return <Pressable {...props} />
                 },
               }}
             />

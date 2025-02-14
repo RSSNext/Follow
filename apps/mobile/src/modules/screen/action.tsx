@@ -2,8 +2,9 @@ import { Link } from "expo-router"
 import { TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
-import { LayoutLeftbarOpenCuteReIcon } from "@/src/icons/layout_leftbar_open_cute_re"
+import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor } from "@/src/theme/colors"
 
 const useActionPadding = () => {
@@ -13,14 +14,11 @@ const useActionPadding = () => {
 
 export function HomeLeftAction() {
   const insets = useActionPadding()
-
+  const user = useWhoami()
+  if (!user) return null
   return (
-    <TouchableOpacity
-      // onPress={openDrawer}
-      className="flex-row items-center"
-      style={{ paddingLeft: insets.paddingLeft }}
-    >
-      <LayoutLeftbarOpenCuteReIcon color={accentColor} />
+    <TouchableOpacity className="flex-row items-center" style={{ paddingLeft: insets.paddingLeft }}>
+      <UserAvatar image={user.image} name={user.name!} size={28} />
     </TouchableOpacity>
   )
 }
