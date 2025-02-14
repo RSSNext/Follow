@@ -20,7 +20,14 @@ import { useInboxById } from "~/store/inbox"
 import { StarIcon } from "../star-icon"
 import type { UniversalItemProps } from "../types"
 
-export function ListItem({ entryId, entryPreview, translation }: UniversalItemProps) {
+export function ListItem({
+  entryId,
+  entryPreview,
+  translation,
+  simple,
+}: UniversalItemProps & {
+  simple?: boolean
+}) {
   const isMobile = useMobile()
   const entry = useEntry(entryId) || entryPreview
 
@@ -52,10 +59,10 @@ export function ListItem({ entryId, entryPreview, translation }: UniversalItemPr
     let lineClampTitle = settingWideMode ? 1 : 2
     let lineClampDescription = settingWideMode ? 1 : 2
 
-    if (translation?.title) {
+    if (translation?.title && !simple) {
       lineClampTitle += 1
     }
-    if (translation?.description) {
+    if (translation?.description && !simple) {
       lineClampDescription += 1
     }
 
@@ -64,7 +71,9 @@ export function ListItem({ entryId, entryPreview, translation }: UniversalItemPr
 
     // FIXME: Safari bug, not support line-clamp cross elements
     return {
-      global: !envIsSafari ? `line-clamp-[${lineClampTitle + lineClampDescription}]` : "",
+      global: !envIsSafari
+        ? `line-clamp-[${simple ? lineClampTitle : lineClampTitle + lineClampDescription}]`
+        : "",
       title: envIsSafari ? `line-clamp-[${lineClampTitle}]` : "",
       description: envIsSafari ? `line-clamp-[${lineClampDescription}]` : "",
     }
@@ -77,8 +86,8 @@ export function ListItem({ entryId, entryPreview, translation }: UniversalItemPr
 
   const related = feed || inbox
 
-  const hasAudio = !!entry.entries?.attachments?.[0]?.url
-  const hasMedia = !!entry.entries?.media?.[0]?.url
+  const hasAudio = simple ? false : !!entry.entries?.attachments?.[0]?.url
+  const hasMedia = simple ? false : !!entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
   // calculate the max width to have a correct truncation
@@ -153,18 +162,22 @@ export function ListItem({ entryId, entryPreview, translation }: UniversalItemPr
           )}
           {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
         </div>
-        <div
-          className={cn(
-            "text-[13px]",
-            asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500 dark:text-neutral-400",
-          )}
-        >
-          <EntryTranslation
-            className={cn("break-all", lineClamp.description)}
-            source={entry.entries.description}
-            target={translation?.description}
-          />
-        </div>
+        {!simple && (
+          <div
+            className={cn(
+              "text-[13px]",
+              asRead
+                ? "text-zinc-400 dark:text-neutral-500"
+                : "text-zinc-500 dark:text-neutral-400",
+            )}
+          >
+            <EntryTranslation
+              className={cn("break-all", lineClamp.description)}
+              source={entry.entries.description}
+              target={translation?.description}
+            />
+          </div>
+        )}
       </div>
 
       {hasAudio && (
@@ -198,7 +211,7 @@ export function ListItem({ entryId, entryPreview, translation }: UniversalItemPr
         />
       )}
 
-      {!hasAudio && entry.entries.media?.[0] && (
+      {!simple && !hasAudio && entry.entries.media?.[0] && (
         <Media
           thumbnail
           src={entry.entries.media[0].url}

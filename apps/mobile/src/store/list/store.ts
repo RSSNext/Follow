@@ -51,17 +51,10 @@ class ListActions {
   }
 
   addEntryIdsInSession(params: { listId: string; entryIds: string[] }) {
-    const state = get()
-    const list = state.lists[params.listId]
-
-    if (!list) return
-
-    set({
-      ...state,
-      lists: {
-        ...state.lists,
-        [params.listId]: { ...list, feedIds: [...list.feedIds, ...params.entryIds] },
-      },
+    immerSet((draft) => {
+      const list = draft.lists[params.listId]
+      if (!list) return
+      list.entryIds = [...new Set([...(list.entryIds ?? []), ...params.entryIds])]
     })
   }
 

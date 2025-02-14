@@ -27,6 +27,7 @@ interface EntryState {
   entryIdByCategory: Record<Category, Set<EntryId>>
   entryIdByFeed: Record<FeedId, Set<EntryId>>
   entryIdByInbox: Record<InboxId, Set<EntryId>>
+  entryIdSet: Set<EntryId>
 }
 
 const defaultState: EntryState = {
@@ -42,6 +43,7 @@ const defaultState: EntryState = {
   entryIdByCategory: {},
   entryIdByFeed: {},
   entryIdByInbox: {},
+  entryIdSet: new Set(),
 }
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => defaultState)
@@ -64,14 +66,6 @@ class EntryActions {
     const subscription = getSubscription(feedId)
     if (typeof subscription?.view === "number") {
       draft.entryIdByView[subscription.view].add(entryId)
-    }
-    if (subscription?.category) {
-      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
-      if (!entryIdSetByCategory) {
-        draft.entryIdByCategory[subscription.category] = new Set([entryId])
-      } else {
-        entryIdSetByCategory.add(entryId)
-      }
     }
   }
 
@@ -137,6 +131,7 @@ class EntryActions {
 
     immerSet((draft) => {
       for (const entry of entries) {
+        draft.entryIdSet.add(entry.id)
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
@@ -207,6 +202,40 @@ class EntryActions {
     })
 
     await tx.run()
+  }
+
+  markEntryReadStatusInSession({
+    entryIds,
+    feedIds,
+    read,
+  }: {
+    entryIds?: EntryId[]
+    feedIds?: FeedId[]
+    read: boolean
+  }) {
+    immerSet((draft) => {
+      if (entryIds) {
+        for (const entryId of entryIds) {
+          const entry = draft.data[entryId]
+          if (entry) {
+            entry.read = read
+          }
+        }
+      }
+
+      if (feedIds) {
+        const entries = Array.from(draft.entryIdSet)
+          .map((id) => draft.data[id])
+          .filter(
+            (entry): entry is EntryModel =>
+              !!entry && !!entry.feedId && feedIds.includes(entry.feedId),
+          )
+
+        for (const entry of entries) {
+          entry.read = read
+        }
+      }
+    })
   }
 
   resetByView({ view, entries }: { view?: FeedViewType; entries: EntryModel[] }) {

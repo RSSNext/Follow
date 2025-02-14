@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.3.4-beta.0](https://github.com/RSSNext/follow/compare/v0.2.7-beta.0...v0.3.4-beta.0) (2025-02-13)
+## [0.3.5](https://github.com/RSSNext/follow/compare/v0.2.7-beta.0...v0.3.5) (2025-02-14)
 
 
 ### Bug Fixes
@@ -241,6 +241,7 @@
 * md lint ([c8e556a](https://github.com/RSSNext/follow/commit/c8e556a3ac861cab4a4a7aff1aa2fa51aaca1f42))
 * media item dot position on mobile ([c67248f](https://github.com/RSSNext/follow/commit/c67248ffc8d77cbdeac289f5ed398248dff41cb3))
 * **media:** adjust inline media size and alignment for better display [#2251](https://github.com/RSSNext/follow/issues/2251) ([#2254](https://github.com/RSSNext/follow/issues/2254)) ([86b5712](https://github.com/RSSNext/follow/commit/86b57120fca3aadcead672fb6e9ea470045b4759))
+* missing icon ([8963f22](https://github.com/RSSNext/follow/commit/8963f222cb6a91772a8154b4d8f46691372c7f99))
 * missing runtime option, close [#2630](https://github.com/RSSNext/follow/issues/2630) ([500f0ba](https://github.com/RSSNext/follow/commit/500f0ba260556923beead33c67989bd05b3a1d4d))
 * missing site url in feed selector ([ea677ac](https://github.com/RSSNext/follow/commit/ea677ac6a3a43489a9508a32ecb22fa38ecf4f27))
 * missing translation in pitcure masonry ([902d681](https://github.com/RSSNext/follow/commit/902d68180d1cc872cbe4435efbcae108f0d732b5))
@@ -613,9 +614,12 @@
 * mobile app architecture and initial screens ([#2144](https://github.com/RSSNext/follow/issues/2144)) ([4b6a0fc](https://github.com/RSSNext/follow/commit/4b6a0fca2e3243061c7befc837e705262f17b664))
 * mobile design ([#1568](https://github.com/RSSNext/follow/issues/1568)) ([edd4f9e](https://github.com/RSSNext/follow/commit/edd4f9e5a6dc041e9eae2cee5ddf4eb624527ef5)), closes [#1575](https://github.com/RSSNext/follow/issues/1575)
 * **mobile:** add AI summary generation for entries ([f5c4d35](https://github.com/RSSNext/follow/commit/f5c4d35c6cb6808d7966dc1a02282fc3890c544f))
+* **mobile:** add animated unread indicator for entries ([8703a0d](https://github.com/RSSNext/follow/commit/8703a0d503aab68e23c1e5cf7034d9da99b4b08d))
+* **mobile:** add context menu and animated text for timeline view selector ([baf1af5](https://github.com/RSSNext/follow/commit/baf1af5f9923469fdd90f3c569bf92745cda8cf9))
 * **mobile:** add dynamic code highlighting theme support in WebView ([70e1de5](https://github.com/RSSNext/follow/commit/70e1de5a2762e59c18205be18a9791465e6b1767))
 * **mobile:** add PortalProvider to EntryContentWebView and adjust ActivityIndicator ([713dc47](https://github.com/RSSNext/follow/commit/713dc47531f3e5fb4247cc9dc278ae2c6de6cdc6))
 * **mobile:** add reader inline style rendering option ([160eb14](https://github.com/RSSNext/follow/commit/160eb14258f24afe08f5103b237e4391c09bd93e))
+* **mobile:** add social entry list component ([#2733](https://github.com/RSSNext/follow/issues/2733)) ([903b989](https://github.com/RSSNext/follow/commit/903b98953aa74fe472bf3793c6a4b8edbfe519bf))
 * **mobile:** enhance CORS handling and image loading in WebView ([ad06db9](https://github.com/RSSNext/follow/commit/ad06db9744f3b001a8bf0d004a1492e656091ab1))
 * **mobile:** enhance entry detail page with star and share actions ([970c932](https://github.com/RSSNext/follow/commit/970c9329d2ca0b8b163e59e03adab5d34c73f3ac))
 * **mobile:** enhance HTML renderer with image rendering and blurhash support ([b534667](https://github.com/RSSNext/follow/commit/b534667c059c7b60edaa9c0dfe6e2bfebe85fc7e))
@@ -626,6 +630,7 @@
 * **mobile:** load archive entries ([#2725](https://github.com/RSSNext/follow/issues/2725)) ([d8a796d](https://github.com/RSSNext/follow/commit/d8a796d3ab4ca79496aef6e6597d2f9108d40058))
 * **mobile:** prefetch entry content ([03a1438](https://github.com/RSSNext/follow/commit/03a1438133ee809d15a757b300490de4c62f63a3))
 * **mobile:** refresh control for entry list ([#2723](https://github.com/RSSNext/follow/issues/2723)) ([c01984d](https://github.com/RSSNext/follow/commit/c01984d50f0488b74893180a2a43ad59ba3ec36a))
+* **mobile:** unread state for entry ([#2730](https://github.com/RSSNext/follow/issues/2730)) ([ddd6a2c](https://github.com/RSSNext/follow/commit/ddd6a2c8cdf8fc6a06acd52345eb8c5b157c2e12))
 * **modal:** enhance Follow modal with improved navigation and loading state ([cf31c0f](https://github.com/RSSNext/follow/commit/cf31c0f5fae3fd6dac1e1e571e870ea57e05ed0b))
 * move feed to new category in context menu ([#2072](https://github.com/RSSNext/follow/issues/2072)) ([d684e14](https://github.com/RSSNext/follow/commit/d684e14056581744ac78ca697fa5ca059294245e))
 * move hideExtraBadge ([2f14c30](https://github.com/RSSNext/follow/commit/2f14c30307a895bc866ac57989df1dc624eab4e6))
@@ -638,6 +643,7 @@
 * optimize language check ([f850474](https://github.com/RSSNext/follow/commit/f850474d13b88e9f388216e1402f4fa0dfbc2d64))
 * optimize login modal ([2f3655c](https://github.com/RSSNext/follow/commit/2f3655cf5689d8374415139479cfd320b5f2a21e))
 * optimize profile setting page ([61508a4](https://github.com/RSSNext/follow/commit/61508a478ecc87b26330bc9376260458ec39cea5))
+* optimize translation display ([3f01ce8](https://github.com/RSSNext/follow/commit/3f01ce87fae9e46fcbb330c24732c4733b9f7f59))
 * optimize translation display ([75b9135](https://github.com/RSSNext/follow/commit/75b9135a02fb6e94abb5c0670c9f12f354a88f0e))
 * **podcast:** add PodcastButton component to mobile float bar ([#2514](https://github.com/RSSNext/follow/issues/2514)) ([037791e](https://github.com/RSSNext/follow/commit/037791eae13bf0b9322eba332a852f73cd737bd0))
 * prefer origin addresses for content images ([d4d4345](https://github.com/RSSNext/follow/commit/d4d43451dec839b64239e1835b2ac1a1aa2478be))
@@ -656,6 +662,8 @@
 * **renderer:** prevent currently executing async entry action from being executed again ([#1348](https://github.com/RSSNext/follow/issues/1348)) ([be82fe2](https://github.com/RSSNext/follow/commit/be82fe2a8ce37bac7205a1a43abeca396fdadba6))
 * replace twMacro with unplugin-ast ([#1462](https://github.com/RSSNext/follow/issues/1462)) ([05da9ca](https://github.com/RSSNext/follow/commit/05da9ca7d3d1f66bd22250599df8b66ea0fd3a43))
 * reset feed ([#1419](https://github.com/RSSNext/follow/issues/1419)) ([9066758](https://github.com/RSSNext/follow/commit/9066758c322b8b31c1a9a137be017283fa92bea8))
+* revert notifications and audio list styles ([9fb0aff](https://github.com/RSSNext/follow/commit/9fb0affd829110d8e4118710b7b1de89360ff476))
+* revert view merge, hide unused view ([4303da2](https://github.com/RSSNext/follow/commit/4303da22e1beb0654011b15697d4625afb0e429d))
 * **rn-component:** implement toast manager ([950b5af](https://github.com/RSSNext/follow/commit/950b5af8ec0316875ed3ce5a99baaaecb56c6d37))
 * **rn-component:** refactor context menu for ios ([4bae36a](https://github.com/RSSNext/follow/commit/4bae36ae70e5ce7c60eec385873f943976e798f1))
 * **rn-list:** manage list ([e3baee3](https://github.com/RSSNext/follow/commit/e3baee39865adb7960c07b648bcb3a22651d4af8))
@@ -716,6 +724,8 @@
 * support read indicator and back to top, fixed [#2040](https://github.com/RSSNext/follow/issues/2040) ([dac1a47](https://github.com/RSSNext/follow/commit/dac1a47b0eedc083b8a94291373873f4a2315894))
 * support zen mode sidebar entry timeline selector ([4ab132c](https://github.com/RSSNext/follow/commit/4ab132c593a7acce0167d02f6025030775a9fac5))
 * sync icons ([870905d](https://github.com/RSSNext/follow/commit/870905d7b7e97238bd2b4c435d78a7f9d019d6d8))
+* timeline button width ([c475ecd](https://github.com/RSSNext/follow/commit/c475ecd4000541eb6dd70c2cf8ac6500e920db01))
+* timeline selector onWheel ([29f48e3](https://github.com/RSSNext/follow/commit/29f48e39185de82951849dbb3155cf7036c1947c))
 * **trending:** support language filter ([1cb5b73](https://github.com/RSSNext/follow/commit/1cb5b73eb5901f242d79f357d52bca7af5d8c8b3))
 * unified feed title ([b86afe5](https://github.com/RSSNext/follow/commit/b86afe5a9789ad13c5a026adf553d2c6bc333bff))
 * uniq macos entry column position ([4b63023](https://github.com/RSSNext/follow/commit/4b63023389e125353de343b679840e5fbca1a4d3))
@@ -730,6 +740,7 @@
 * update text ([5aae827](https://github.com/RSSNext/follow/commit/5aae8273dcd999bc11904bc8c9d7b72e769fa200))
 * update text ([89bef43](https://github.com/RSSNext/follow/commit/89bef43267199f60de376c3998d3cfff26faad23))
 * update toast style ([cf5eeb6](https://github.com/RSSNext/follow/commit/cf5eeb63c488f9978f12659af59286315b768eea))
+* update updater channel ([614c9b7](https://github.com/RSSNext/follow/commit/614c9b70b52c833df830afc24eea56f877d71ca2))
 * update zh-HK file ([#1955](https://github.com/RSSNext/follow/issues/1955)) ([9364761](https://github.com/RSSNext/follow/commit/936476169caba5cbacafe6f4d35f7857add32802))
 * upload arm64 dmg separately ([1d77c09](https://github.com/RSSNext/follow/commit/1d77c092ce18fbabe6cfbbd21d9a96e3445795da))
 * use expo module to write native component/module ([#2675](https://github.com/RSSNext/follow/issues/2675)) ([e1bf881](https://github.com/RSSNext/follow/commit/e1bf881e854e4b051f2e83e9cff0bce387641bcc))
@@ -766,6 +777,7 @@
 
 ### Reverts
 
+* Revert "refactor: merge audio item layout (#2722)" (#2745) ([aff5486](https://github.com/RSSNext/follow/commit/aff54864af15b395b8cc89d08a3d2e9b22f663f7)), closes [#2722](https://github.com/RSSNext/follow/issues/2722) [#2745](https://github.com/RSSNext/follow/issues/2745)
 * Revert "chore: update" ([8a13db9](https://github.com/RSSNext/follow/commit/8a13db9d6d8169ff14ae597068e74375a2dcc1aa))
 * Revert "docs: fix video preview" ([8499079](https://github.com/RSSNext/follow/commit/8499079e503ad8cfc35e390755cec159f9eb3b7a))
 * Revert "build: use pnpm catalogs" ([37164a3](https://github.com/RSSNext/follow/commit/37164a3674fa0bdf5b10919e788142a3d1b1cce3))

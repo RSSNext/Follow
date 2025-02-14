@@ -1,0 +1,50 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - "apps/mobile/**"
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - "apps/mobile/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS IPA
+    runs-on: macos-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          run_install: true
+      - name: 🏗 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: 📱 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 🔨 Build iOS IPA
+        run: |
+          cd apps/mobile
+          eas build --platform ios --profile production --non-interactive --local --output=./build.ipa
+
+      # Optional: Upload artifact
+      - name: 📤 Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-ios
+          path: apps/mobile/build.ipa
+          retention-days: 5

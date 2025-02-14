@@ -26,6 +26,7 @@ import { EntryAISummary } from "@/src/modules/entry-content/EntryAISummary"
 import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/HeaderActions"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
+import { useAutoMarkAsRead } from "@/src/store/unread/hooks"
 
 function Media({ media }: { media: MediaModel }) {
   const isVideo = media.type === "video"
@@ -76,6 +77,7 @@ function Media({ media }: { media: MediaModel }) {
 export default function EntryDetailPage() {
   const { entryId } = useLocalSearchParams()
   usePrefetchEntryContent(entryId as string)
+  useAutoMarkAsRead(entryId as string)
   const entry = useEntry(entryId as string)
 
   const insets = useSafeAreaInsets()

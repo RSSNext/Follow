@@ -161,7 +161,7 @@ export const SubscriptionFeedCategoryContextMenu = ({
         <ContextMenu.Item
           key="MarkAllAsRead"
           onSelect={useCallback(() => {
-            unreadSyncService.markAsReadMany(feedIds)
+            unreadSyncService.markFeedAsRead(feedIds)
           }, [feedIds])}
         >
           <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>

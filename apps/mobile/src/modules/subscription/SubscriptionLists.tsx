@@ -6,11 +6,10 @@ import { useEventCallback } from "usehooks-ts"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
-import { TimelineSelectorList } from "@/src/modules/screen/timeline-selector-list"
+import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import {
   useGroupedSubscription,
-  usePrefetchSubscription,
   useSortedGroupedSubscription,
   useSortedUngroupedSubscription,
 } from "@/src/store/subscription/hooks"
@@ -29,7 +28,6 @@ const keyExtractor = (item: string | { category: string; subscriptionIds: string
 }
 
 export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
-  usePrefetchSubscription(view)
   const { grouped, unGrouped } = useGroupedSubscription(view)
 
   const sortBy = useFeedListSortMethod()

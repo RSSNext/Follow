@@ -8,7 +8,7 @@ import {
 import { HomeLeftAction, HomeRightAction } from "@/src/modules/screen/action"
 import { useEntryListContext, useSelectedFeedTitle } from "@/src/modules/screen/atoms"
 import { headerHideableBottomHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
-import { ViewSelector } from "@/src/modules/screen/view-selector"
+import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
 
 export function TimelineSelectorHeader({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
@@ -32,7 +32,7 @@ export function TimelineSelectorHeader({ children }: { children: React.ReactNode
           [isTimeline],
         )}
         headerHideableBottomHeight={isTimeline ? headerHideableBottomHeight : undefined}
-        headerHideableBottom={isTimeline ? ViewSelector : undefined}
+        headerHideableBottom={isTimeline ? TimelineViewSelector : undefined}
       />
       {children}
     </NavigationContext.Provider>

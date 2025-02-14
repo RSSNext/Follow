@@ -84,6 +84,7 @@ const ViewSwitchButton: FC<{
         ELECTRON ? "hover:!bg-theme-item-hover" : "",
         isOver && "border-theme-accent-400 bg-theme-accent-400/60",
       )}
+      size="lg"
       onClick={(e) => {
         startTransition(() => {
           setActive()
@@ -151,6 +152,7 @@ const ListSwitchButton: FC<{
         "hover:!bg-theme-item-hover",
         isActive && "!bg-theme-item-active grayscale-0",
       )}
+      size="lg"
       onClick={handleNavigate}
       {...contextMenuProps}
     >
@@ -201,6 +203,7 @@ const InboxSwitchButton: FC<{
         ELECTRON ? "hover:!bg-theme-item-hover" : "",
         isActive && "text-black dark:text-white",
       )}
+      size="lg"
       onClick={handleNavigate}
     >
       <FeedIcon fallback feed={inbox} size={22} noMargin />

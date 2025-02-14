@@ -3,18 +3,27 @@ import { useEffect } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { Grayscale } from "react-native-color-matrix-image-filters"
-import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import Animated, {
+  FadeOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
 
 import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
+import { gentleSpringPreset } from "@/src/constants/spring"
 import type { ViewDefinition } from "@/src/constants/views"
 import { views } from "@/src/constants/views"
 import { selectTimeline, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useList } from "@/src/store/list/hooks"
 import { useAllListSubscription } from "@/src/store/subscription/hooks"
+import { useUnreadCountByView } from "@/src/store/unread/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-export function ViewSelector() {
+import { TimelineViewSelectorContextMenu } from "./TimelineViewSelectorContextMenu"
+
+export function TimelineViewSelector() {
   const lists = useAllListSubscription()
 
   return (
@@ -47,12 +56,16 @@ function ItemWrapper({
   onPress: () => void
   style?: Exclude<StyleProp<ViewStyle>, number>
 }) {
-  const width = useSharedValue(isActive ? 130 : 48)
+  const textWidth = useSharedValue(130)
+  const width = useSharedValue(isActive ? Math.max(130, textWidth.value + 48) : 48)
   const bgColor = useColor("gray5")
 
   useEffect(() => {
-    width.value = withSpring(isActive ? 130 : 48)
-  }, [isActive, width])
+    width.value = withSpring(
+      isActive ? Math.max(130, textWidth.value + 48) : 48,
+      gentleSpringPreset,
+    )
+  }, [isActive, width, textWidth])
 
   return (
     <ReAnimatedTouchableOpacity
@@ -64,30 +77,66 @@ function ItemWrapper({
         ...style,
       }))}
     >
-      {children}
+      <View
+        className="flex-row items-center gap-2"
+        onLayout={({ nativeEvent }) => {
+          if (isActive) {
+            textWidth.value = nativeEvent.layout.width
+          }
+        }}
+      >
+        {children}
+      </View>
     </ReAnimatedTouchableOpacity>
   )
 }
 
 function ViewItem({ view }: { view: ViewDefinition }) {
   const textColor = useColor("gray")
-
   const selectedFeed = useSelectedFeed()
   const isActive = selectedFeed?.type === "view" && selectedFeed.viewId === view.view
+  const unreadCount = useUnreadCountByView(view.view)
+
+  const textWidth = useSharedValue(130)
+  const width = useSharedValue(isActive ? Math.max(130, textWidth.value + 48) : 48)
+
+  useEffect(() => {
+    if (isActive) {
+      width.value = withSpring(Math.max(130, textWidth.value + 48), gentleSpringPreset)
+    }
+  }, [isActive, unreadCount, unreadCount])
 
   return (
-    <ItemWrapper
-      isActive={isActive}
-      onPress={() => selectTimeline({ type: "view", viewId: view.view })}
-      style={isActive ? { backgroundColor: view.activeColor } : undefined}
+    <TimelineViewSelectorContextMenu
+      viewId={selectedFeed && "viewId" in selectedFeed ? selectedFeed.viewId : undefined}
+      type={selectedFeed?.type}
     >
-      <view.icon color={isActive ? "#fff" : textColor} height={21} width={21} />
-      {isActive && (
-        <Text className="text-sm font-semibold text-white" numberOfLines={1}>
-          {view.name}
-        </Text>
-      )}
-    </ItemWrapper>
+      <ItemWrapper
+        isActive={isActive}
+        onPress={() => selectTimeline({ type: "view", viewId: view.view })}
+        style={isActive ? { backgroundColor: view.activeColor } : undefined}
+      >
+        <view.icon color={isActive ? "#fff" : textColor} height={21} width={21} />
+        {isActive ? (
+          <Animated.Text
+            key={view.name + (unreadCount ? ` (${unreadCount})` : "")}
+            exiting={FadeOut}
+            className="text-sm font-semibold text-white"
+            numberOfLines={1}
+          >
+            {view.name + (unreadCount ? ` (${unreadCount})` : "")}
+          </Animated.Text>
+        ) : (
+          !!unreadCount &&
+          !isActive && (
+            <View
+              className="border-gray-2 absolute -right-0.5 -top-0.5 size-2.5 rounded-full"
+              style={{ backgroundColor: view.activeColor }}
+            />
+          )
+        )}
+      </ItemWrapper>
+    </TimelineViewSelectorContextMenu>
   )
 }
 

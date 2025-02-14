@@ -15,7 +15,7 @@
     mask:
       linear-gradient(to right, white, transparent) 0 50% / 0.8rem 100% no-repeat,
       linear-gradient(white, white) 50% 50% / 100% 100% no-repeat,
-      linear-gradient(to right, transparent, white) 100% 50% / 0.8rem 100% no-repeat;
+      linear-gradient(to right, transparent, white) 100% 50% / 1.6rem 100% no-repeat;
     mask-composite: exclude;
     animation:
       mask-left both linear,
