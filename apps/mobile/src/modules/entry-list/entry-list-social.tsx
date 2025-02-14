@@ -6,7 +6,7 @@ import { Animated, Pressable, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
-import { ReleatDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
+import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -112,7 +112,7 @@ function EntryItem({ entryId }: { entryId: string }) {
           <View className="flex flex-row items-end gap-1">
             <Text className="text-label text-[16px] font-semibold">{entry.author}</Text>
 
-            <ReleatDateTime
+            <RelativeDateTime
               date={publishedAt}
               className="text-secondary-label -mb-0.5 text-[14px] leading-none"
             />

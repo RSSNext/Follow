@@ -38,18 +38,18 @@ const getUpdateInterval = (date: string | Date, relativeBeforeDay?: number) => {
   return null // No need to update
 }
 
-interface ReleatDateTimeProps extends TextProps {
+interface RelativeDateTimeProps extends TextProps {
   date: string | Date
   displayAbsoluteTimeAfterDay?: number
   dateFormatTemplate?: string
 }
 
-export const ReleatDateTime = ({
+export const RelativeDateTime = ({
   date,
   displayAbsoluteTimeAfterDay,
   dateFormatTemplate,
   ...props
-}: ReleatDateTimeProps) => {
+}: RelativeDateTimeProps) => {
   const [relative, setRelative] = useState<string>(() =>
     formatTime(date, displayAbsoluteTimeAfterDay, dateFormatTemplate),
   )
