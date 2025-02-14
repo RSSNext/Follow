@@ -8,7 +8,7 @@ import { FeedTitle } from "~/modules/feed/feed-title"
 import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
 export function NotificationItem({ entryId, entryPreview, translation }: UniversalItemProps) {
-  return <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} />
+  return <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} simple />
 }
 
 export function NotificationItemStateLess({ entry, feed }: EntryItemStatelessProps) {

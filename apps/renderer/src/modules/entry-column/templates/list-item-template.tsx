@@ -24,11 +24,9 @@ export function ListItem({
   entryId,
   entryPreview,
   translation,
-  withDetails,
-  withAudio,
+  simple,
 }: UniversalItemProps & {
-  withDetails?: boolean
-  withAudio?: boolean
+  simple?: boolean
 }) {
   const isMobile = useMobile()
   const entry = useEntry(entryId) || entryPreview
@@ -61,10 +59,10 @@ export function ListItem({
     let lineClampTitle = settingWideMode ? 1 : 2
     let lineClampDescription = settingWideMode ? 1 : 2
 
-    if (translation?.title) {
+    if (translation?.title && !simple) {
       lineClampTitle += 1
     }
-    if (translation?.description) {
+    if (translation?.description && !simple) {
       lineClampDescription += 1
     }
 
@@ -73,7 +71,9 @@ export function ListItem({
 
     // FIXME: Safari bug, not support line-clamp cross elements
     return {
-      global: !envIsSafari ? `line-clamp-[${lineClampTitle + lineClampDescription}]` : "",
+      global: !envIsSafari
+        ? `line-clamp-[${simple ? lineClampTitle : lineClampTitle + lineClampDescription}]`
+        : "",
       title: envIsSafari ? `line-clamp-[${lineClampTitle}]` : "",
       description: envIsSafari ? `line-clamp-[${lineClampDescription}]` : "",
     }
@@ -86,8 +86,8 @@ export function ListItem({
 
   const related = feed || inbox
 
-  const hasAudio = entry.entries?.attachments?.[0]!.url
-  const hasMedia = entry.entries?.media?.[0]?.url
+  const hasAudio = simple ? false : !!entry.entries?.attachments?.[0]?.url
+  const hasMedia = simple ? false : !!entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
   // calculate the max width to have a correct truncation
@@ -97,13 +97,13 @@ export function ListItem({
   const mediaWidth = (settingWideMode ? 48 : 80) * (isMobile ? 1.125 : 1) + marginWidth
 
   let savedWidth = 0
-  if (!withAudio) {
-    savedWidth += feedIconWidth
-  }
-  if (withAudio && hasAudio) {
+
+  savedWidth += feedIconWidth
+
+  if (hasAudio) {
     savedWidth += audioCoverWidth
   }
-  if (withDetails && hasMedia) {
+  if (hasMedia && !hasAudio) {
     savedWidth += mediaWidth
   }
 
@@ -116,7 +116,7 @@ export function ListItem({
         settingWideMode ? "py-3" : "py-4",
       )}
     >
-      {!withAudio && <FeedIcon feed={related} fallback entry={entry.entries} />}
+      <FeedIcon feed={related} fallback entry={entry.entries} />
       <div
         className={cn("-mt-0.5 flex-1 text-sm leading-tight", lineClamp.global)}
         style={{
@@ -144,7 +144,7 @@ export function ListItem({
           className={cn(
             "relative my-0.5 break-words",
             !!entry.collections && "pr-5",
-            entry.entries.title ? (withDetails || withAudio) && "font-medium" : "text-[13px]",
+            entry.entries.title ? "font-medium" : "text-[13px]",
           )}
         >
           {entry.entries.title ? (
@@ -162,7 +162,7 @@ export function ListItem({
           )}
           {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
         </div>
-        {withDetails && (
+        {!simple && (
           <div
             className={cn(
               "text-[13px]",
@@ -180,7 +180,7 @@ export function ListItem({
         )}
       </div>
 
-      {withAudio && !!hasAudio && (
+      {hasAudio && (
         <AudioCover
           entryId={entryId}
           src={entry.entries!.attachments![0]!.url}
@@ -211,7 +211,7 @@ export function ListItem({
         />
       )}
 
-      {withDetails && entry.entries.media?.[0] && (
+      {!simple && !hasAudio && entry.entries.media?.[0] && (
         <Media
           thumbnail
           src={entry.entries.media[0].url}
