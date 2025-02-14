@@ -3,10 +3,10 @@ import { useAtomValue } from "jotai"
 import { useContext, useMemo, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
 
+import { entryAtom } from "~/atoms"
 import type { HTMLProps } from "~/HTML"
 
-import { entryAtom } from "../../atoms"
-import { calculateDimensions } from "../../hooks/useCalculateNaturalSize"
+import { calculateDimensions } from "./__internal/calculateDimensions"
 import { MarkdownRenderContainerRefContext } from "./__internal/ctx"
 
 const protocol = "follow-xhr"

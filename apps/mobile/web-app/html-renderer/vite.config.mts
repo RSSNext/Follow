@@ -15,6 +15,11 @@ export default defineConfig({
       ? path.resolve(import.meta.dirname, "../../../../out/rn-web/html-renderer")
       : path.resolve("/tmp/rn-web/html-renderer"),
   },
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "./src"),
+    },
+  },
 
   plugins: [react({}), astPlugin],
 })

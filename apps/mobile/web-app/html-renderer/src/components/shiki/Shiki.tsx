@@ -11,7 +11,8 @@ import type {
 } from "shiki"
 import { useMediaQuery } from "usehooks-ts"
 
-import { codeThemeDarkAtom, codeThemeLightAtom } from "../../../atoms"
+import { codeThemeDarkAtom, codeThemeLightAtom } from "~/atoms"
+
 import { shiki, shikiTransformers } from "./shared"
 import styles from "./shiki.module.css"
 
