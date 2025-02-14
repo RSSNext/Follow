@@ -5,7 +5,8 @@ import { useCallback, useEffect, useMemo } from "react"
 import { Animated, Pressable, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
-import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
+import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
+import { ReleatDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -59,11 +60,11 @@ export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
 function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
-  const handlePress = useCallback(() => {
-    if (!entry) return
-    setWebViewEntry(entry)
-    router.push(`/entries/${entryId}`)
-  }, [entryId, entry])
+  // const handlePress = useCallback(() => {
+  //   if (!entry) return
+  //   setWebViewEntry(entry)
+  //   router.push(`/entries/${entryId}`)
+  // }, [entryId, entry])
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
 
@@ -92,28 +93,33 @@ function EntryItem({ entryId }: { entryId: string }) {
 
   return (
     <EntryItemContextMenu id={entryId}>
-      <ItemPressable
-        itemStyle={ItemPressableStyle.Plain}
-        className="flex flex-col gap-2 p-4 pl-6"
-        onPress={handlePress}
-      >
+      <ItemPressable itemStyle={ItemPressableStyle.Plain} className="flex flex-col gap-2 p-4 pl-6">
         <Animated.View
-          className="bg-red absolute left-2 top-[22] size-2.5 rounded-full"
+          className="bg-red absolute left-1.5 top-[22] size-2.5 rounded-full"
           style={unreadIndicatorStyle}
         />
 
-        <View className="flex flex-1 flex-row items-center gap-2">
-          <Image
-            source={{ uri: entry.authorAvatar }}
-            className="bg-system-fill size-8 rounded-full"
-            contentFit="cover"
-          />
-          <Text className="text-label">{entry.author}</Text>
-          {/* TODO relative time */}
-          <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
+        <View className="flex flex-1 flex-row items-center gap-4">
+          <Pressable
+            hitSlop={10}
+            onPress={() => {
+              router.push(`/feeds/${entry.feedId}`)
+            }}
+          >
+            <UserAvatar size={28} name={entry.author ?? ""} image={entry.authorAvatar} />
+          </Pressable>
+
+          <View className="flex flex-row items-end gap-1">
+            <Text className="text-label text-[16px] font-semibold">{entry.author}</Text>
+
+            <ReleatDateTime
+              date={publishedAt}
+              className="text-secondary-label -mb-0.5 text-[14px] leading-none"
+            />
+          </View>
         </View>
 
-        <Text numberOfLines={4} className="text-label ml-10 text-sm">
+        <Text numberOfLines={4} className="text-label ml-12 text-[16px] leading-relaxed">
           {description}
         </Text>
 
