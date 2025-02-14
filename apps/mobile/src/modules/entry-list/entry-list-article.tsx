@@ -6,7 +6,7 @@ import { Animated, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"

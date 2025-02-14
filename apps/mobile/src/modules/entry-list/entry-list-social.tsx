@@ -6,7 +6,8 @@ import { Animated, Pressable, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { quickLookImage } from "@/src/lib/native"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
@@ -16,7 +17,7 @@ import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
 import { LoadArchiveButton } from "./action"
-import { ItemSeparator } from "./ItemSeparator"
+import { ItemSeparatorFullWidth } from "./ItemSeparator"
 
 export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
   const screenType = useEntryListContext().type
@@ -49,7 +50,7 @@ export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
         debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
       }}
       estimatedItemSize={100}
-      ItemSeparatorComponent={ItemSeparator}
+      ItemSeparatorComponent={ItemSeparatorFullWidth}
       ListFooterComponent={ListFooterComponent}
     />
   )
@@ -91,7 +92,11 @@ function EntryItem({ entryId }: { entryId: string }) {
 
   return (
     <EntryItemContextMenu id={entryId}>
-      <ItemPressable className="flex flex-col gap-2 p-4 pl-6" onPress={handlePress}>
+      <ItemPressable
+        itemStyle={ItemPressableStyle.Plain}
+        className="flex flex-col gap-2 p-4 pl-6"
+        onPress={handlePress}
+      >
         <Animated.View
           className="bg-red absolute left-2 top-[22] size-2.5 rounded-full"
           style={unreadIndicatorStyle}

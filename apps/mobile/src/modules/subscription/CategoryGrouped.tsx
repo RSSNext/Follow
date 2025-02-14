@@ -3,7 +3,7 @@ import { memo, useState } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { closeDrawer, selectFeed, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useUnreadCounts } from "@/src/store/unread/hooks"

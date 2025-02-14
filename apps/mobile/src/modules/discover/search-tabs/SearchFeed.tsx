@@ -10,7 +10,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 
