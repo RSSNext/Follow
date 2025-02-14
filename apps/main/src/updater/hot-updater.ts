@@ -18,31 +18,18 @@ import { hotUpdateDownloadTrack, hotUpdateRenderSuccessTrack } from "~/tracker"
 import { getMainWindow } from "~/window"
 
 import { appUpdaterConfig } from "./configs"
-import type { GitHubReleasesItem } from "./types"
 
 const logger = log.scope("hot-updater")
-
-const isNightlyBuild = appVersion.includes("nightly")
 
 const url = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}`
 const releasesUrl = `${url}/releases`
 const releaseApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases`
 
 const getLatestReleaseTag = async () => {
-  if (!isNightlyBuild) {
-    const res = await fetch(`${releaseApiUrl}/latest`)
-    const json = await res.json()
+  const res = await fetch(`${releaseApiUrl}/latest`)
+  const json = await res.json()
 
-    return json.tag_name
-  } else {
-    const res = await fetch(releaseApiUrl)
-    const json = (await res.json()) as GitHubReleasesItem[]
-
-    // Search the top nightly release
-    const nightlyRelease = json.find((item) => item.prerelease)
-    if (!nightlyRelease) return json[0]!.tag_name
-    return nightlyRelease.tag_name
-  }
+  return json.tag_name
 }
 
 const getFileDownloadUrl = async (filename: string) => {
