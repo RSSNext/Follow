@@ -57,7 +57,12 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     view: s.view,
     listId: s.listId,
   }))
-  const { timelineId } = routeParams
+
+  const [timelineId, setMemoizedTimelineId] = useState(routeParams.timelineId)
+
+  useEffect(() => {
+    if (routeParams.timelineId) setMemoizedTimelineId(routeParams.timelineId)
+  }, [routeParams.timelineId])
 
   const navigateBackHome = useBackHome(timelineId)
   const setActive = useCallback(
