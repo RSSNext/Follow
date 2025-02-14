@@ -94,7 +94,7 @@ function EntryItem({ entryId }: { entryId: string }) {
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <Animated.View
-          className="bg-red absolute left-2 top-[22] size-2.5 rounded-full"
+          className="bg-red absolute left-2 top-[23] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />
 

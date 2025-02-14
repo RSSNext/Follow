@@ -96,6 +96,7 @@ function ViewItem({ view }: { view: ViewDefinition }) {
   const selectedFeed = useSelectedFeed()
   const isActive = selectedFeed?.type === "view" && selectedFeed.viewId === view.view
   const unreadCount = useUnreadCountByView(view.view)
+  const borderColor = useColor("gray5")
 
   const textWidth = useSharedValue(130)
   const width = useSharedValue(isActive ? Math.max(130, textWidth.value + 48) : 48)
@@ -104,7 +105,7 @@ function ViewItem({ view }: { view: ViewDefinition }) {
     if (isActive) {
       width.value = withSpring(Math.max(130, textWidth.value + 48), gentleSpringPreset)
     }
-  }, [isActive, unreadCount, unreadCount])
+  }, [isActive, unreadCount])
 
   return (
     <TimelineViewSelectorContextMenu
@@ -118,20 +119,25 @@ function ViewItem({ view }: { view: ViewDefinition }) {
       >
         <view.icon color={isActive ? "#fff" : textColor} height={21} width={21} />
         {isActive ? (
-          <Animated.Text
-            key={view.name + (unreadCount ? ` (${unreadCount})` : "")}
-            exiting={FadeOut}
-            className="text-sm font-semibold text-white"
-            numberOfLines={1}
-          >
-            {view.name + (unreadCount ? ` (${unreadCount})` : "")}
-          </Animated.Text>
+          <>
+            <Animated.Text
+              key={view.name}
+              exiting={FadeOut}
+              className="text-sm font-semibold text-white"
+              numberOfLines={1}
+            >
+              {view.name}
+            </Animated.Text>
+            {!!unreadCount && (
+              <Animated.View exiting={FadeOut} className="size-1.5 rounded-full bg-white" />
+            )}
+          </>
         ) : (
           !!unreadCount &&
           !isActive && (
             <View
-              className="border-gray-2 absolute -right-0.5 -top-0.5 size-2.5 rounded-full"
-              style={{ backgroundColor: view.activeColor }}
+              className="absolute -right-0.5 -top-0.5 size-2 rounded-full border"
+              style={{ backgroundColor: textColor, borderColor }}
             />
           )
         )}
