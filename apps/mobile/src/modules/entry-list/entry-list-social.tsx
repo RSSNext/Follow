@@ -2,12 +2,13 @@ import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useEffect, useMemo } from "react"
-import { Animated, Text, View } from "react-native"
+import { Animated, Pressable, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
+import { quickLookImage } from "@/src/lib/native"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
@@ -113,15 +114,22 @@ function EntryItem({ entryId }: { entryId: string }) {
 
         {media && media.length > 0 && (
           <View className="ml-10 flex flex-row flex-wrap gap-2">
-            {media.map((image) => {
+            {media.map((image, idx) => {
               return (
-                <Image
+                <Pressable
                   key={image.url}
-                  source={{ uri: image.url }}
-                  placeholder={{ blurhash: image.blurhash }}
-                  className="bg-system-fill ml-2 size-20 rounded-md"
-                  contentFit="cover"
-                />
+                  onPress={() => {
+                    const previewImages = media.map((i) => i.url)
+                    quickLookImage([...previewImages.slice(idx), ...previewImages.slice(0, idx)])
+                  }}
+                >
+                  <Image
+                    source={{ uri: image.url }}
+                    placeholder={{ blurhash: image.blurhash }}
+                    className="bg-system-fill ml-2 size-20 rounded-md"
+                    contentFit="cover"
+                  />
+                </Pressable>
               )
             })}
           </View>
