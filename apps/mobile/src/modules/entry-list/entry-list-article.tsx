@@ -6,6 +6,7 @@ import { Animated, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
+import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
@@ -101,7 +102,11 @@ function EntryItem({ entryId }: { entryId: string }) {
         />
 
         <View className="flex-1 space-y-2">
-          <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
+          <View className="flex-1 flex-row gap-2">
+            <FeedIcon fallback feed={feed} size={14} />
+            <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
+          </View>
+
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
