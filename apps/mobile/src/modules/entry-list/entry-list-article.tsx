@@ -6,11 +6,13 @@ import { Animated, Text, View } from "react-native"
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
+import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
+import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
@@ -56,6 +58,7 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
 
 function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
+  const feed = useFeed(entry?.feedId as string)
 
   const handlePress = useCallback(() => {
     if (!entry) return
@@ -94,11 +97,16 @@ function EntryItem({ entryId }: { entryId: string }) {
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <Animated.View
-          className="bg-red absolute left-2 top-[23] size-2 rounded-full"
+          className="bg-red absolute left-2 top-[18] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />
 
         <View className="flex-1 space-y-2">
+          <View className="flex-1 flex-row gap-2">
+            <FeedIcon fallback feed={feed} size={14} />
+            <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
+          </View>
+
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
