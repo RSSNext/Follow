@@ -2,8 +2,8 @@ import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useEffect, useMemo } from "react"
-import { Animated, Pressable, Text, View } from "react-native"
-import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import { Pressable, Text, View } from "react-native"
+import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
@@ -94,7 +94,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable itemStyle={ItemPressableStyle.Plain} className="flex flex-col gap-2 p-4 pl-6">
-        <Animated.View
+        <ReAnimated.View
           className="bg-red absolute left-1.5 top-[25] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />

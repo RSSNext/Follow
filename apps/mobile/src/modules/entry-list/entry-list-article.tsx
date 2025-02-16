@@ -2,8 +2,8 @@ import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useEffect, useMemo } from "react"
-import { Animated, Text, View } from "react-native"
-import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import { Text, View } from "react-native"
+import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -96,7 +96,7 @@ function EntryItem({ entryId }: { entryId: string }) {
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
-        <Animated.View
+        <ReAnimated.View
           className="bg-red absolute left-2 top-[18] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />
