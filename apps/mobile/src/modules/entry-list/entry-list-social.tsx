@@ -16,13 +16,13 @@ import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { quickLookImage } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
-import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { useFetchEntriesControls } from "../screen/atoms"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
+import { useOnViewableItemsChanged } from "./hooks"
 import { ItemSeparatorFullWidth } from "./ItemSeparator"
 
 export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
@@ -38,6 +38,8 @@ export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
     [isFetching],
   )
 
+  const onViewableItemsChanged = useOnViewableItemsChanged()
+
   return (
     <TimelineSelectorList
       onRefresh={() => {
@@ -45,14 +47,13 @@ export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
       }}
       isRefetching={isRefetching}
       data={entryIds}
+      keyExtractor={(id) => id}
+      estimatedItemSize={100}
       renderItem={renderItem}
       onEndReached={() => {
         fetchNextPage()
       }}
-      onViewableItemsChanged={({ viewableItems }) => {
-        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
-      }}
-      estimatedItemSize={100}
+      onViewableItemsChanged={onViewableItemsChanged}
       ItemSeparatorComponent={ItemSeparatorFullWidth}
       ListFooterComponent={ListFooterComponent}
     />
