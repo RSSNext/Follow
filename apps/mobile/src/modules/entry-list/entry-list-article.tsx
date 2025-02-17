@@ -9,19 +9,16 @@ import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWeb
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
-import { useEntryListContext, useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
+import { useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
-import { LoadArchiveButton } from "./action"
 import { ItemSeparator } from "./ItemSeparator"
 
 export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
-  const screenType = useEntryListContext().type
-
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
 
   const renderItem = useCallback(
@@ -30,9 +27,8 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
   )
 
   const ListFooterComponent = useMemo(
-    () =>
-      isFetching ? <EntryItemSkeleton /> : screenType === "feed" ? <LoadArchiveButton /> : null,
-    [isFetching, screenType],
+    () => (isFetching ? <EntryItemSkeleton /> : null),
+    [isFetching],
   )
 
   return (
