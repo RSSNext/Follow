@@ -94,7 +94,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     appCategoryType: "public.app-category.news",
     buildVersion: process.env.BUILD_VERSION || undefined,
-    appBundleId: "is.follow.dev",
+    appBundleId: "is.follow",
     icon: "resources/icon",
     extraResource: ["./resources/app-update.yml"],
     protocols: [
