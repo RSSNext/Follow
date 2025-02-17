@@ -1,22 +1,17 @@
 import { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useHeaderHeight } from "@react-navigation/elements"
 import type { MasonryFlashListProps } from "@shopify/flash-list"
-import { MasonryFlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link } from "expo-router"
-import { useColorScheme } from "nativewind"
-import { useContext } from "react"
-import { Pressable, RefreshControl, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { Pressable, View } from "react-native"
 
-import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
 import { ThemedText } from "@/src/components/common/ThemedText"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { useFetchEntriesControls, useSelectedView } from "@/src/modules/screen/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
-import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
+
+import { TimelineSelectorMasonryList } from "../screen/TimelineSelectorList"
+import { useOnViewableItemsChanged } from "./hooks"
 
 export function EntryListContentGrid({
   entryIds,
@@ -24,54 +19,28 @@ export function EntryListContentGrid({
 }: {
   entryIds: string[]
 } & Omit<MasonryFlashListProps<string>, "data" | "renderItem">) {
-  const insets = useSafeAreaInsets()
-  const tabBarHeight = useBottomTabBarHeight()
-  const headerHeight = useHeaderHeight()
-  const { scrollY } = useContext(NavigationContext)!
-
-  const { colorScheme } = useColorScheme()
   const { fetchNextPage, refetch, isRefetching } = useFetchEntriesControls()
+  const onViewableItemsChanged = useOnViewableItemsChanged()
 
   return (
-    <MasonryFlashList
-      refreshControl={
-        <RefreshControl
-          progressViewOffset={headerHeight}
-          // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
-          tintColor={colorScheme === "dark" ? "white" : "black"}
-          onRefresh={() => {
-            refetch()
-          }}
-          refreshing={isRefetching}
-        />
+    <TimelineSelectorMasonryList
+      isRefetching={isRefetching}
+      onRefresh={
+        (() => {
+          refetch()
+        }) as any
       }
       data={entryIds}
       renderItem={useTypeScriptHappyCallback(({ item }) => {
         return <RenderEntryItem id={item} />
       }, [])}
       keyExtractor={(id) => id}
-      onViewableItemsChanged={({ viewableItems }) => {
-        debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
-      }}
+      onViewableItemsChanged={onViewableItemsChanged}
       onEndReached={() => {
         fetchNextPage()
       }}
       numColumns={2}
-      onScroll={useTypeScriptHappyCallback(
-        (e) => {
-          scrollY.setValue(e.nativeEvent.contentOffset.y)
-        },
-        [scrollY],
-      )}
-      scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight - insets.bottom,
-      }}
       estimatedItemSize={100}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-        paddingBottom: tabBarHeight,
-      }}
       {...rest}
     />
   )
