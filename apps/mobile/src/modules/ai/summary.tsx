@@ -44,7 +44,7 @@ export const AISummary: FC<{
   return (
     <Animated.View
       layout={CurvedTransition}
-      className={cn("border-opaque-separator mx-2 rounded border p-3", className)}
+      className={cn("border-non-opaque-separator mx-2 rounded border p-3", className)}
     >
       <View className="flex-row items-center gap-2">
         <Magic2CuteReIcon height={16} width={16} color={labelColor} />
