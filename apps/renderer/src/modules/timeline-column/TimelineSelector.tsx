@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next"
 
 import { useShowContextMenu } from "~/atoms/context-menu"
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { useTimelineColumnShow } from "~/atoms/sidebar"
 import {
   ROUTE_TIMELINE_OF_INBOX,
   ROUTE_TIMELINE_OF_LIST,
@@ -92,6 +93,7 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
       })
     }
   }, [animateControls, shouldOpen])
+  const timelineColumnShow = useTimelineColumnShow()
 
   return (
     <Fragment>
@@ -122,53 +124,72 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
         </div>
       </div>
 
-      <RootPortal to={rootContainer}>
-        <AnimatePresence>
-          <m.div
-            ref={setPanelRef}
-            className="fixed inset-y-0 z-[1] flex h-full w-64 flex-col border-x bg-native"
-            style={{ left: feedColWidth }}
-            initial={{ transform: "translateX(-100%)" }}
-            animate={animateControls}
-            // animate={{ transform: "translateX(0%)" }}
-            transition={{
-              damping: 50,
-              stiffness: 500,
-              type: "spring",
-            }}
-          >
-            <div className="border-b p-3 text-lg font-medium">Quick Selector</div>
-            <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
-              <span className="mb-3 text-base font-bold">Views</span>
-              {timelineList.views.map((timelineId) => (
-                <TimelineListViewItem
-                  key={timelineId}
-                  timelineId={timelineId}
-                  isActive={activeTimelineId === timelineId}
-                />
-              ))}
-              <Divider className="mx-12 my-4" />
-              <span className="mb-3 text-base font-bold">Inboxes</span>
-              {timelineList.inboxes.map((timelineId) => (
-                <TimelineInboxListItem
-                  key={timelineId}
-                  timelineId={timelineId}
-                  isActive={activeTimelineId === timelineId}
-                />
-              ))}
-              <Divider className="mx-12 my-4" />
-              <span className="mb-3 text-base font-bold">Lists</span>
-              {timelineList.lists.map((timelineId) => (
-                <TimelineListListItem
-                  key={timelineId}
-                  timelineId={timelineId}
-                  isActive={activeTimelineId === timelineId}
-                />
-              ))}
-            </ScrollArea>
-          </m.div>
-        </AnimatePresence>
-      </RootPortal>
+      {timelineColumnShow && (
+        <RootPortal to={rootContainer}>
+          <AnimatePresence>
+            <m.div
+              ref={setPanelRef}
+              className="fixed inset-y-0 z-[1] flex h-full w-64 flex-col border-x bg-native"
+              style={{ left: feedColWidth }}
+              initial={{ transform: "translateX(-100%)" }}
+              animate={animateControls}
+              transition={{
+                damping: 50,
+                stiffness: 500,
+                type: "spring",
+              }}
+            >
+              {shouldOpen && (
+                <>
+                  <header className="flex items-center justify-between border-b p-3 text-lg font-medium">
+                    <span className="text-lg font-medium">Quick Selector</span>
+
+                    <button
+                      type="button"
+                      className="flex items-center justify-center rounded p-1 transition-colors duration-200 hover:bg-theme-item-hover"
+                      onClick={() => {
+                        animateControls.start({
+                          transform: "translateX(-100%)",
+                        })
+                      }}
+                    >
+                      <i className="i-mgc-close-cute-re" />
+                    </button>
+                  </header>
+                  <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
+                    <div className="mb-1 text-base font-bold">Views</div>
+                    {timelineList.views.map((timelineId) => (
+                      <TimelineListViewItem
+                        key={timelineId}
+                        timelineId={timelineId}
+                        isActive={activeTimelineId === timelineId}
+                      />
+                    ))}
+                    <Divider className="mx-12 my-4" />
+                    <div className="mb-1 text-base font-bold">Inboxes</div>
+                    {timelineList.inboxes.map((timelineId) => (
+                      <TimelineInboxListItem
+                        key={timelineId}
+                        timelineId={timelineId}
+                        isActive={activeTimelineId === timelineId}
+                      />
+                    ))}
+                    <Divider className="mx-12 my-4" />
+                    <div className="mb-1 text-base font-bold">Lists</div>
+                    {timelineList.lists.map((timelineId) => (
+                      <TimelineListListItem
+                        key={timelineId}
+                        timelineId={timelineId}
+                        isActive={activeTimelineId === timelineId}
+                      />
+                    ))}
+                  </ScrollArea>
+                </>
+              )}
+            </m.div>
+          </AnimatePresence>
+        </RootPortal>
+      )}
     </Fragment>
   )
 }

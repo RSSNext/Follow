@@ -1,17 +1,24 @@
+import { FeedViewType } from "@follow/constants"
+import { cn } from "@follow/utils"
 import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Pressable, Text, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
+import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
+import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { quickLookImage } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
+import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
+import { useFeed } from "@/src/store/feed/hooks"
+import { unreadSyncService } from "@/src/store/unread/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
 import { useFetchEntriesControls } from "../screen/atoms"
@@ -57,11 +64,12 @@ export function EntryListContentSocial({ entryIds }: { entryIds: string[] }) {
 function EntryItem({ entryId }: { entryId: string }) {
   const entry = useEntry(entryId)
 
-  // const handlePress = useCallback(() => {
-  //   if (!entry) return
-  //   setWebViewEntry(entry)
-  //   router.push(`/entries/${entryId}`)
-  // }, [entryId, entry])
+  const feed = useFeed(entry?.feedId || "")
+
+  const handlePress = useCallback(() => {
+    unreadSyncService.markEntryAsRead(entryId)
+    router.push(`/entries/${entryId}?view=${FeedViewType.SocialMedia}`)
+  }, [entryId])
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
 
@@ -85,12 +93,19 @@ function EntryItem({ entryId }: { entryId: string }) {
     }
   }, [entry, entry?.read, unreadZoomSharedValue])
 
+  const [isTextCollapsed, setIsTextCollapsed] = useState(false)
+  const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
   if (!entry) return <EntryItemSkeleton />
+
   const { description, publishedAt, media } = entry
 
   return (
     <EntryItemContextMenu id={entryId}>
-      <ItemPressable itemStyle={ItemPressableStyle.Plain} className="flex flex-col gap-2 p-4 pl-6">
+      <ItemPressable
+        itemStyle={ItemPressableStyle.Plain}
+        className="flex flex-col gap-2 p-4 pl-6"
+        onPress={handlePress}
+      >
         <ReAnimated.View
           className="bg-red absolute left-1.5 top-[25] size-2 rounded-full"
           style={unreadIndicatorStyle}
@@ -103,22 +118,48 @@ function EntryItem({ entryId }: { entryId: string }) {
               router.push(`/feeds/${entry.feedId}`)
             }}
           >
-            <UserAvatar size={28} name={entry.author ?? ""} image={entry.authorAvatar} />
+            {entry.authorAvatar ? (
+              <UserAvatar size={28} name={entry.author ?? ""} image={entry.authorAvatar} />
+            ) : (
+              feed && <FeedIcon feed={feed} size={28} />
+            )}
           </Pressable>
 
           <View className="flex flex-row items-end gap-1">
-            <Text className="text-label text-[16px] font-semibold">{entry.author}</Text>
+            <Text className="text-label text-[16px] font-semibold">
+              {entry.author || feed?.title}
+            </Text>
 
             <RelativeDateTime
               date={publishedAt}
-              className="text-secondary-label -mb-0.5 text-[14px] leading-none"
+              className="text-secondary-label text-[14px] leading-none"
             />
           </View>
         </View>
 
-        <Text numberOfLines={4} className="text-label ml-12 text-[16px] leading-relaxed">
-          {description}
-        </Text>
+        <View className="relative">
+          <View
+            className={cn(
+              "overflow-hidden",
+              autoExpandLongSocialMedia ? "max-h-none" : "max-h-[120px]",
+            )}
+          >
+            <Text
+              numberOfLines={autoExpandLongSocialMedia ? undefined : 5}
+              className="text-label ml-12 text-[16px] leading-relaxed"
+              onTextLayout={(e) => {
+                if (e.nativeEvent.lines.length > 4) {
+                  setIsTextCollapsed(true)
+                }
+              }}
+            >
+              {description}
+            </Text>
+          </View>
+          {isTextCollapsed && !autoExpandLongSocialMedia && (
+            <Text className="absolute bottom-0 ml-12 font-medium text-accent">See more</Text>
+          )}
+        </View>
 
         {media && media.length > 0 && (
           <View className="ml-10 flex flex-row flex-wrap gap-2">

@@ -94,20 +94,20 @@ function EntryItem({ entryId }: { entryId: string }) {
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <ReAnimated.View
-          className="bg-red absolute left-2 top-[18] size-2 rounded-full"
+          className="bg-red absolute left-2 top-[40] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />
 
         <View className="flex-1 space-y-2">
-          <View className="flex-1 flex-row gap-2">
+          <View className="mb-1 flex-1 flex-row gap-2">
             <FeedIcon fallback feed={feed} size={14} />
             <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
           </View>
 
-          <Text numberOfLines={2} className="text-label text-lg font-semibold">
+          <Text numberOfLines={2} className="text-label text-lg font-semibold leading-tight">
             {title}
           </Text>
-          <Text className="text-secondary-label line-clamp-2 text-sm">{description}</Text>
+          <Text className="text-secondary-label mt-1 line-clamp-2 text-sm">{description}</Text>
           <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
         </View>
         {image && (
