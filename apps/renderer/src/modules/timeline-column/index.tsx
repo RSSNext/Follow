@@ -1,11 +1,9 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
-import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
 import { Routes } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useRegisterGlobalContext } from "@follow/shared/bridge"
-import { getNodeXInScroller, isNodeVisibleInScroller } from "@follow/utils/dom"
-import { clamp, clsx, cn } from "@follow/utils/utils"
+import { clamp, cn } from "@follow/utils/utils"
 import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
@@ -26,10 +24,9 @@ import { useTimelineList } from "~/hooks/biz/useTimelineList"
 import { WindowUnderBlur } from "../../components/ui/background"
 import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./atom"
 import { useShouldFreeUpSpace } from "./hook"
-import styles from "./index.module.css"
 import { TimelineColumnHeader } from "./TimelineColumnHeader"
 import TimelineList from "./TimelineList"
-import { TimelineSwitchButton } from "./TimelineSwitchButton"
+import { TimelineSelector } from "./TimelineSelector"
 
 const lethargy = new Lethargy()
 
@@ -181,66 +178,6 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
 
       {children}
     </WindowUnderBlur>
-  )
-}
-
-const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) => {
-  const timelineList = useTimelineList()
-  const scrollRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const $scroll = scrollRef.current
-    if (!$scroll) {
-      return
-    }
-    const handler = () => {
-      if (!timelineId) return
-      const targetElement = [...$scroll.children]
-        .filter(($el) => $el.tagName === "BUTTON")
-        .find(($el, index) => index === timelineList.all.indexOf(timelineId))
-      if (!targetElement) {
-        return
-      }
-
-      const isInCurrentView = isNodeVisibleInScroller(targetElement, $scroll)
-      if (!targetElement || isInCurrentView) {
-        return
-      }
-      const targetX = getNodeXInScroller(targetElement, $scroll) - 12
-
-      $scroll.scrollTo({
-        left: targetX,
-        behavior: "smooth",
-      })
-    }
-    handler()
-  }, [timelineId])
-  return (
-    <div className="mt-3 pb-4">
-      <div
-        ref={scrollRef}
-        className={clsx(
-          styles["mask-scroller"],
-          "flex h-11 justify-between gap-0.5 overflow-auto px-2 text-xl text-theme-vibrancyFg scrollbar-none",
-        )}
-        onWheel={(e) => {
-          e.preventDefault()
-          e.currentTarget.scrollLeft += e.deltaY
-        }}
-      >
-        {timelineList.views.map((timelineId) => (
-          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-        ))}
-
-        {timelineList.inboxes.length > 0 && <DividerVertical className="mx-1 my-auto h-8" />}
-        {timelineList.inboxes.map((timelineId) => (
-          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-        ))}
-        {timelineList.lists.length > 0 && <DividerVertical className="mx-1 my-auto h-8" />}
-        {timelineList.lists.map((timelineId) => (
-          <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
-        ))}
-      </div>
-    </div>
   )
 }
 
