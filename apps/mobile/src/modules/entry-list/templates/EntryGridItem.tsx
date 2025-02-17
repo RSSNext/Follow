@@ -69,54 +69,8 @@ export function EntryGridItem({ id }: { id: string }) {
           </ReAnimatedPressable>
         </View>
       </Modal>
-      <ItemPressable
-        className="m-1 overflow-hidden rounded-md"
-        // onPress={() => {
-        //   // router.push(`/entries/${item.id}`)
-
-        //   imageRef?.measureInWindow((pageX, pageY, w1, h1) => {
-        //     setPreviewModalOpen(true)
-
-        //     const { width: w2, height: screenHeight } = Dimensions.get("window")
-
-        //     const scale = w2 / w1
-
-        //     const x1 = pageX + w1 / 2
-        //     const y1 = pageY + h1 / 2
-
-        //     const x2 = w2 / 2
-        //     const y2 = screenHeight / 2
-
-        //     const xDelta = (x1 - x2) * scale
-        //     const yDelta = (y1 - y2) * scale
-
-        //     scaleValue.value = 1 / scale
-        //     transformXValue.value = xDelta
-        //     transformYValue.value = yDelta
-
-        //     requestAnimationFrame(() => {
-        //       scaleValue.value = withTiming(1)
-        //       transformXValue.value = withTiming(0)
-        //       transformYValue.value = withTiming(0)
-        //     })
-        //   })
-        // }}
-      >
+      <ItemPressable className="m-1 overflow-hidden rounded-md">
         {imageUrl ? (
-          // <View ref={setImageRef}>
-          //   <Image
-          //     source={{ uri: imageUrl }}
-          //     placeholder={{
-          //       blurhash,
-          //     }}
-          //     className="w-full"
-          //     style={{
-          //       aspectRatio,
-          //     }}
-          //     placeholderContentFit="cover"
-          //     recyclingKey={imageUrl}
-          //   />
-          // </View>
           <PreviewImage imageUrl={imageUrl} blurhash={blurhash} aspectRatio={aspectRatio} />
         ) : (
           <View className="aspect-video w-full items-center justify-center">
