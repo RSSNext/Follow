@@ -10,8 +10,8 @@ import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import type { EntryModel } from "@/src/store/entry/types"
 
-import { prepareEntryRenderWebView, SharedWebViewModule } from "."
 import { htmlUrl } from "./constants"
+import { prepareEntryRenderWebView, SharedWebViewModule } from "./index"
 
 const NativeView: React.ComponentType<
   ViewProps & {
