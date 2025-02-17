@@ -103,15 +103,6 @@ const selectedTimelineAtom = atom<SelectedTimeline>({
 
 const selectedFeedAtom = atom<SelectedFeed>(null)
 
-const isLoadingArchivedEntriesAtom = atom(false)
-
-export const useIsLoadingArchivedEntries = () => {
-  return useAtomValue(isLoadingArchivedEntriesAtom)
-}
-export const setIsLoadingArchivedEntries = (isLoading: boolean) => {
-  jotaiStore.set(isLoadingArchivedEntriesAtom, isLoading)
-}
-
 export const EntryListContext = createContext<{ type: "timeline" | "feed" }>({ type: "timeline" })
 export const useEntryListContext = () => {
   return useContext(EntryListContext)
@@ -138,7 +129,6 @@ export function useSelectedView() {
 
 function getFetchEntryPayload(
   selectedFeed: SelectedTimeline | SelectedFeed,
-  isArchived = false,
 ): FetchEntriesProps | null {
   if (!selectedFeed) {
     return null
@@ -169,7 +159,6 @@ function getFetchEntryPayload(
     // No default
   }
 
-  payload.isArchived = isArchived
   return payload
 }
 
@@ -179,10 +168,8 @@ export function useSelectedFeed() {
   const selectedTimeline = useAtomValue(selectedTimelineAtom)
   const selectedFeed = useAtomValue(selectedFeedAtom)
 
-  const isArchived = useIsLoadingArchivedEntries()
   const payload = getFetchEntryPayload(
     entryListContext.type === "feed" ? selectedFeed : selectedTimeline,
-    entryListContext.type === "feed" ? isArchived : false,
   )
   usePrefetchEntries(payload)
 
@@ -190,15 +177,9 @@ export function useSelectedFeed() {
 }
 
 export function useFetchEntriesControls() {
-  const entryListContext = useEntryListContext()
-
   const selectedFeed = useSelectedFeed()
-  const isArchived = useIsLoadingArchivedEntries()
 
-  const payload = getFetchEntryPayload(
-    selectedFeed,
-    entryListContext.type === "feed" ? isArchived : false,
-  )
+  const payload = getFetchEntryPayload(selectedFeed)
   return usePrefetchEntries(payload)
 }
 
@@ -241,7 +222,6 @@ export const selectTimeline = (state: SelectedTimeline) => {
 
 export const selectFeed = (state: SelectedFeed) => {
   jotaiStore.set(selectedFeedAtom, state)
-  jotaiStore.set(isLoadingArchivedEntriesAtom, false)
 }
 
 export const useViewDefinition = (view?: FeedViewType) => {

@@ -11,11 +11,11 @@ import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { quickLookImage } from "@/src/lib/native"
-import { useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
+import { useFetchEntriesControls } from "../screen/atoms"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
 import { ItemSeparatorFullWidth } from "./ItemSeparator"
 

@@ -10,10 +10,11 @@ import {
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import { getWebUrl } from "@/src/lib/env"
 import { HomeLeftAction, HomeRightAction } from "@/src/modules/screen/action"
-import { useEntryListContext, useSelectedFeedTitle } from "@/src/modules/screen/atoms"
 import { headerHideableBottomHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
 import { getFeed } from "@/src/store/feed/getter"
+
+import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
 export function TimelineSelectorHeader({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
