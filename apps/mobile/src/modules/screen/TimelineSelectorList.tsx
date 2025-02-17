@@ -17,63 +17,64 @@ type Props = {
   isRefetching: boolean
 }
 
-export const TimelineSelectorList = forwardRef<FlashList<any>, Props & FlashListProps<any>>(
-  ({ onRefresh, isRefetching, ...props }, ref) => {
-    const { refetch: unreadRefetch } = usePrefetchUnread()
-    const { refetch: subscriptionRefetch } = usePrefetchSubscription()
+export const TimelineSelectorList = forwardRef<
+  FlashList<any>,
+  Props & Omit<FlashListProps<any>, "onRefresh">
+>(({ onRefresh, isRefetching, ...props }, ref) => {
+  const { refetch: unreadRefetch } = usePrefetchUnread()
+  const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
-    const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets()
 
-    const headerHeight = useHeaderHeight()
-    const scrollY = useContext(NavigationContext)?.scrollY
+  const headerHeight = useHeaderHeight()
+  const scrollY = useContext(NavigationContext)?.scrollY
 
-    const onScroll = useCallback(
-      (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-        scrollY?.setValue(e.nativeEvent.contentOffset.y)
-      },
-      [scrollY],
-    )
+  const onScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      scrollY?.setValue(e.nativeEvent.contentOffset.y)
+    },
+    [scrollY],
+  )
 
-    const tabBarHeight = useBottomTabBarHeight()
+  const tabBarHeight = useBottomTabBarHeight()
 
-    const systemFill = useColor("secondaryLabel")
+  const systemFill = useColor("secondaryLabel")
 
-    return (
-      <FlashList
-        ref={ref}
-        refreshControl={
-          <RefreshControl
-            progressViewOffset={headerHeight}
-            // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
-            tintColor={systemFill}
-            onRefresh={() => {
-              unreadRefetch()
-              subscriptionRefetch()
-              onRefresh()
-            }}
-            refreshing={isRefetching}
-          />
-        }
-        onScroll={onScroll}
-        scrollIndicatorInsets={{
-          top: headerHeight - insets.top,
-          bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
-        }}
-        contentContainerStyle={{
-          paddingTop: headerHeight,
-          paddingBottom: tabBarHeight,
-        }}
-        {...props}
-      />
-    )
-  },
-)
+  return (
+    <FlashList
+      ref={ref}
+      refreshControl={
+        <RefreshControl
+          progressViewOffset={headerHeight}
+          // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
+          tintColor={systemFill}
+          onRefresh={() => {
+            unreadRefetch()
+            subscriptionRefetch()
+            onRefresh()
+          }}
+          refreshing={isRefetching}
+        />
+      }
+      onScroll={onScroll}
+      scrollIndicatorInsets={{
+        top: headerHeight - insets.top,
+        bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
+      }}
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+        paddingBottom: tabBarHeight,
+      }}
+      {...props}
+    />
+  )
+})
 
 export const TimelineSelectorMasonryList = ({
   onRefresh,
   isRefetching,
   ...props
-}: Props & MasonryFlashListProps<any>) => {
+}: Props & Omit<MasonryFlashListProps<any>, "onRefresh">) => {
   const { refetch: unreadRefetch } = usePrefetchUnread()
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 

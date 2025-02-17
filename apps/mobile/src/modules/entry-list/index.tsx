@@ -11,7 +11,7 @@ import {
 } from "@/src/store/entry/hooks"
 import { useListEntryIds } from "@/src/store/list/hooks"
 
-import { EntryListScreen } from "./entry-list"
+import { EntryListSelector } from "./EntryListSelector"
 
 export function EntryList() {
   const setDrawerSwipeDisabled = useSetDrawerSwipeDisabled()
@@ -49,26 +49,26 @@ export function EntryList() {
 
 function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
   const entryIds = useEntryIdsByView(viewId)
-  return <EntryListScreen entryIds={entryIds} />
+  return <EntryListSelector entryIds={entryIds} />
 }
 
 function FeedEntryList({ feedId }: { feedId: string }) {
   const entryIds = useEntryIdsByFeedId(feedId)
-  return <EntryListScreen entryIds={entryIds} />
+  return <EntryListSelector entryIds={entryIds} />
 }
 
 function CategoryEntryList({ categoryName }: { categoryName: string }) {
   const entryIds = useEntryIdsByCategory(categoryName)
-  return <EntryListScreen entryIds={entryIds} />
+  return <EntryListSelector entryIds={entryIds} />
 }
 
 function ListEntryList({ listId }: { listId: string }) {
   const entryIds = useListEntryIds(listId)
   if (!entryIds) return null
-  return <EntryListScreen entryIds={entryIds} />
+  return <EntryListSelector entryIds={entryIds} />
 }
 
 function InboxEntryList({ inboxId }: { inboxId: string }) {
   const entryIds = useEntryIdsByInboxId(inboxId)
-  return <EntryListScreen entryIds={entryIds} />
+  return <EntryListSelector entryIds={entryIds} />
 }
