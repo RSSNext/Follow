@@ -16,7 +16,6 @@ import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { quickLookImage } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
-import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
