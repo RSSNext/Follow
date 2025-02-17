@@ -6,11 +6,9 @@ import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { getNodeXInScroller, isNodeVisibleInScroller } from "@follow/utils/dom"
 import { clsx, cn } from "@follow/utils/utils"
-import { AnimatePresence, m } from "framer-motion"
-import type { PrimitiveAtom } from "jotai"
-import { atom, useAtom } from "jotai"
+import { AnimatePresence, m, useAnimationControls } from "framer-motion"
 import type { HTMLAttributes } from "react"
-import { createContext, Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useShowContextMenu } from "~/atoms/context-menu"
@@ -33,8 +31,6 @@ import { FeedIcon } from "../feed/feed-icon"
 import styles from "./index.module.css"
 import { feedColumnStyles } from "./styles"
 import { TimelineSwitchButton } from "./TimelineSwitchButton"
-
-const TimelineSelectorPanelStatusContext = createContext<PrimitiveAtom<boolean>>(null!)
 
 export const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) => {
   const timelineList = useTimelineList()
@@ -67,8 +63,6 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
     handler()
   }, [timelineId])
 
-  const ctxValue = useMemo(() => atom(false), [])
-  const [openPanel, setOpenPanel] = useAtom(ctxValue)
   const feedColWidth = useUISettingKey("feedColWidth")
   const [rootContainer, setRootContainer] = useState<HTMLElement | null>(null)
 
@@ -83,18 +77,25 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
 
   const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
 
+  const [panelRef, setPanelRef] = useState<HTMLDivElement | null>(null)
+  const shouldOpen = useTriangleMenu(containerRef, panelRef!)
+
+  const animateControls = useAnimationControls()
+  useEffect(() => {
+    if (shouldOpen) {
+      animateControls.start({
+        transform: "translateX(0%)",
+      })
+    } else {
+      animateControls.start({
+        transform: "translateX(-100%)",
+      })
+    }
+  }, [animateControls, shouldOpen])
+
   return (
     <Fragment>
-      <div
-        ref={containerRef}
-        className="mt-3 pb-4"
-        onMouseEnter={() => {
-          setOpenPanel(true)
-        }}
-        onMouseLeave={() => {
-          setOpenPanel(false)
-        }}
-      >
+      <div ref={containerRef} className="mt-3 pb-4">
         <div
           ref={scrollRef}
           className={clsx(
@@ -122,56 +123,51 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
       </div>
 
       <RootPortal to={rootContainer}>
-        <TimelineSelectorPanelStatusContext.Provider value={ctxValue}>
-          <AnimatePresence>
-            {openPanel && (
-              <m.div
-                className="fixed inset-y-0 z-[1] flex h-full w-64 flex-col border-x bg-native"
-                style={{ left: feedColWidth }}
-                initial={{ transform: "translateX(-100%)" }}
-                animate={{ transform: "translateX(0%)" }}
-                exit={{ transform: "translateX(-100%)" }}
-                transition={{
-                  damping: 50,
-                  stiffness: 500,
-                  type: "spring",
-                }}
-                onMouseEnter={() => setOpenPanel(true)}
-                onMouseLeave={() => setOpenPanel(false)}
-              >
-                <div className="border-b p-3 text-lg font-medium">Quick Selector</div>
-                <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
-                  <span className="mb-3 text-base font-bold">Views</span>
-                  {timelineList.views.map((timelineId) => (
-                    <TimelineListViewItem
-                      key={timelineId}
-                      timelineId={timelineId}
-                      isActive={activeTimelineId === timelineId}
-                    />
-                  ))}
-                  <Divider className="mx-12 my-4" />
-                  <span className="mb-3 text-base font-bold">Inboxes</span>
-                  {timelineList.inboxes.map((timelineId) => (
-                    <TimelineInboxListItem
-                      key={timelineId}
-                      timelineId={timelineId}
-                      isActive={activeTimelineId === timelineId}
-                    />
-                  ))}
-                  <Divider className="mx-12 my-4" />
-                  <span className="mb-3 text-base font-bold">Lists</span>
-                  {timelineList.lists.map((timelineId) => (
-                    <TimelineListListItem
-                      key={timelineId}
-                      timelineId={timelineId}
-                      isActive={activeTimelineId === timelineId}
-                    />
-                  ))}
-                </ScrollArea>
-              </m.div>
-            )}
-          </AnimatePresence>
-        </TimelineSelectorPanelStatusContext.Provider>
+        <AnimatePresence>
+          <m.div
+            ref={setPanelRef}
+            className="fixed inset-y-0 z-[1] flex h-full w-64 flex-col border-x bg-native"
+            style={{ left: feedColWidth }}
+            initial={{ transform: "translateX(-100%)" }}
+            animate={animateControls}
+            // animate={{ transform: "translateX(0%)" }}
+            transition={{
+              damping: 50,
+              stiffness: 500,
+              type: "spring",
+            }}
+          >
+            <div className="border-b p-3 text-lg font-medium">Quick Selector</div>
+            <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
+              <span className="mb-3 text-base font-bold">Views</span>
+              {timelineList.views.map((timelineId) => (
+                <TimelineListViewItem
+                  key={timelineId}
+                  timelineId={timelineId}
+                  isActive={activeTimelineId === timelineId}
+                />
+              ))}
+              <Divider className="mx-12 my-4" />
+              <span className="mb-3 text-base font-bold">Inboxes</span>
+              {timelineList.inboxes.map((timelineId) => (
+                <TimelineInboxListItem
+                  key={timelineId}
+                  timelineId={timelineId}
+                  isActive={activeTimelineId === timelineId}
+                />
+              ))}
+              <Divider className="mx-12 my-4" />
+              <span className="mb-3 text-base font-bold">Lists</span>
+              {timelineList.lists.map((timelineId) => (
+                <TimelineListListItem
+                  key={timelineId}
+                  timelineId={timelineId}
+                  isActive={activeTimelineId === timelineId}
+                />
+              ))}
+            </ScrollArea>
+          </m.div>
+        </AnimatePresence>
       </RootPortal>
     </Fragment>
   )
@@ -265,5 +261,132 @@ const TimelineInboxListItem = ({ timelineId, isActive }: TimelineItemProps) => {
         </EllipsisHorizontalTextWithTooltip>
       </div>
     </ItemBase>
+  )
+}
+
+function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTMLElement) {
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const $trigger = triggerRef.current
+    const $panel = panelRef
+    if (!$trigger || !$panel) return
+    const timer: NodeJS.Timeout | null = null
+
+    let inStartTrack = false
+    const mousePath = [] as { x: number; y: number }[]
+    function handleMouseMove(event: MouseEvent) {
+      const { clientX, clientY } = event
+
+      if (!inStartTrack) return
+
+      mousePath.push({ x: clientX, y: clientY })
+      if (mousePath.length > 5) {
+        mousePath.shift()
+      }
+
+      const triggerRect = $trigger?.getBoundingClientRect()
+
+      if (!triggerRect) return
+      const panelRect = $panel.getBoundingClientRect()
+
+      const lastPoint = mousePath[0]
+
+      if (!lastPoint) return
+
+      const inTriangle = isPointInTriangle(
+        { x: lastPoint.x, y: lastPoint.y },
+        { x: triggerRect.right - triggerRect.width / 2, y: triggerRect.top },
+        { x: panelRect.left, y: panelRect.top },
+        { x: panelRect.left, y: panelRect.bottom },
+      )
+
+      if (inTriangle) {
+        setOpen(true)
+      } else {
+        const inRect =
+          isPointInRect(
+            { x: clientX, y: clientY },
+            {
+              x: triggerRect.left,
+              y: triggerRect.bottom,
+              width: triggerRect.width,
+              height: triggerRect.height,
+            },
+          ) ||
+          isPointInRect(
+            { x: clientX, y: clientY },
+            {
+              x: panelRect.left,
+              y: panelRect.top,
+              width: panelRect.width,
+              height: panelRect.height,
+            },
+          )
+
+        if (inRect) {
+          setOpen(true)
+        } else {
+          setOpen(false)
+          inStartTrack = false
+        }
+      }
+    }
+
+    function handleMouseEnter() {
+      inStartTrack = true
+      setOpen(true)
+    }
+
+    function handleMouseLeave() {
+      // setOpen(false)
+    }
+
+    document.addEventListener("mousemove", handleMouseMove)
+    $trigger.addEventListener("mouseenter", handleMouseEnter)
+    $panel.addEventListener("mouseleave", handleMouseLeave)
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove)
+      $trigger.removeEventListener("mouseenter", handleMouseEnter)
+      $panel.removeEventListener("mouseleave", handleMouseLeave)
+      if (timer) {
+        clearTimeout(timer)
+      }
+    }
+  }, [triggerRef, panelRef])
+
+  return open
+}
+
+function isPointInTriangle(
+  P: { x: number; y: number },
+  A: { x: number; y: number },
+  B: { x: number; y: number },
+  C: { x: number; y: number },
+) {
+  function sign(p1: any, p2: any, p3: any) {
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
+  }
+
+  const d1 = sign(P, A, B)
+  const d2 = sign(P, B, C)
+  const d3 = sign(P, C, A)
+
+  const hasNeg = d1 < 0 || d2 < 0 || d3 < 0
+  const hasPos = d1 > 0 || d2 > 0 || d3 > 0
+
+  return !(hasNeg && hasPos)
+}
+
+function isPointInRect(
+  point: { x: number; y: number },
+  rect: { x: number; y: number; width: number; height: number },
+) {
+  return (
+    point.x >= rect.x &&
+    point.x <= rect.x + rect.width &&
+    point.y >= rect.y &&
+    point.y <= rect.y + rect.height
   )
 }
