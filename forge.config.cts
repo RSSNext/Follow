@@ -126,6 +126,7 @@ const config: ForgeConfig = {
             }
           : () => ({
               entitlements: "build/entitlements.mac.plist",
+              requirements: "designated => anchor trusted",
             }),
       keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
       identity: process.env.OSX_SIGN_IDENTITY,

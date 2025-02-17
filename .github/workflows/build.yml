@@ -82,7 +82,7 @@ jobs:
       - name: Install the Apple certificate and provisioning profile
         if: runner.os == 'macOS'
         env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_DEPRECATED_BASE64 }}
           BUILD_CERTIFICATE_MAS_BASE64: ${{ secrets.BUILD_CERTIFICATE_MAS_BASE64 }}
           BUILD_CERTIFICATE_MASPKG_BASE64: ${{ secrets.BUILD_CERTIFICATE_MASPKG_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -132,11 +132,11 @@ jobs:
       - name: Build (macOS)
         if: matrix.os == 'macos-latest' && github.event.inputs.mas != 'true'
         env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID: ${{ secrets.APPLE_ID_DEPRECATED }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD_DEPRECATED }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID_DEPRECATED }}
           OSX_SIGN_KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
-          OSX_SIGN_IDENTITY: ${{ secrets.OSX_SIGN_IDENTITY }}
+          OSX_SIGN_IDENTITY: ${{ secrets.OSX_SIGN_IDENTITY_DEPRECATED }}
         run: npm exec turbo run //#build:macos
 
       - name: Build (Mac App Store)
