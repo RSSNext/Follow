@@ -41,7 +41,9 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
           ? {
               paddingLeft: `${(depth - rootDepth) * 12}px`,
             }
-          : undefined
+          : {
+              lineHeight: "24px",
+            }
       }
       data-depth={depth}
       onClick={useCallback(
