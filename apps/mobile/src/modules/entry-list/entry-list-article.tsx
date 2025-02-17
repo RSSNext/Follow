@@ -9,12 +9,12 @@ import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWeb
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
-import { useFetchEntriesControls } from "@/src/modules/feed-drawer/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../context-menu/entry"
+import { useFetchEntriesControls } from "../screen/atoms"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
 import { ItemSeparator } from "./ItemSeparator"
 
