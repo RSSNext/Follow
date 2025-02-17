@@ -158,6 +158,11 @@ function getFetchEntryPayload(
     }
     // No default
   }
+  const isCollection =
+    selectedFeed && selectedFeed.type === "feed" && selectedFeed?.feedId === FEED_COLLECTION_LIST
+  if (isCollection) {
+    payload.isCollection = true
+  }
 
   return payload
 }

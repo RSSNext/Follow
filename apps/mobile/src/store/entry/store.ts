@@ -307,7 +307,7 @@ class EntrySyncServices {
     }
 
     if (isCollection && res.data) {
-      if (!view) {
+      if (view === undefined) {
         console.error("view is required for collection")
       }
       const collections = honoMorph.toCollections(res.data, view ?? 0)

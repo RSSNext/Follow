@@ -46,11 +46,17 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
 export function EntryItemSkeleton() {
   return (
     <View className="bg-secondary-system-grouped-background flex flex-row items-center p-4">
-      <View className="flex flex-1 flex-col justify-between">
+      <View className="flex flex-1 flex-col gap-2">
+        <View className="flex flex-row gap-2">
+          {/* Icon skeleton */}
+          <View className="bg-system-fill size-4 animate-pulse rounded-full" />
+          <View className="bg-system-fill h-4 w-1/4 animate-pulse rounded-md" />
+        </View>
+
         {/* Title skeleton */}
-        <View className="bg-system-fill h-6 w-3/4 animate-pulse rounded-md" />
+        <View className="bg-system-fill h-4 w-3/4 animate-pulse rounded-md" />
         {/* Description skeleton */}
-        <View className="bg-system-fill mt-2 w-full flex-1 animate-pulse rounded-md" />
+        <View className="bg-system-fill w-full flex-1 animate-pulse rounded-md" />
       </View>
 
       {/* Image skeleton */}
