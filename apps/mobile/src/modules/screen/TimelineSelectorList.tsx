@@ -9,6 +9,8 @@ import { useColor } from "react-native-uikit-colors"
 
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
+import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
+import { usePrefetchUnread } from "@/src/store/unread/hooks"
 
 type Props = {
   onRefresh: () => void
@@ -17,6 +19,9 @@ type Props = {
 
 export const TimelineSelectorList = forwardRef<FlashList<any>, Props & FlashListProps<any>>(
   ({ onRefresh, isRefetching, ...props }, ref) => {
+    const { refetch: unreadRefetch } = usePrefetchUnread()
+    const { refetch: subscriptionRefetch } = usePrefetchSubscription()
+
     const insets = useSafeAreaInsets()
 
     const headerHeight = useHeaderHeight()
@@ -41,7 +46,11 @@ export const TimelineSelectorList = forwardRef<FlashList<any>, Props & FlashList
             progressViewOffset={headerHeight}
             // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
             tintColor={systemFill}
-            onRefresh={onRefresh}
+            onRefresh={() => {
+              unreadRefetch()
+              subscriptionRefetch()
+              onRefresh()
+            }}
             refreshing={isRefetching}
           />
         }
@@ -65,6 +74,9 @@ export const TimelineSelectorMasonryList = ({
   isRefetching,
   ...props
 }: Props & MasonryFlashListProps<any>) => {
+  const { refetch: unreadRefetch } = usePrefetchUnread()
+  const { refetch: subscriptionRefetch } = usePrefetchSubscription()
+
   const insets = useSafeAreaInsets()
 
   const headerHeight = useHeaderHeight()
@@ -88,7 +100,11 @@ export const TimelineSelectorMasonryList = ({
           progressViewOffset={headerHeight}
           // // FIXME: not sure why we need set tintColor manually here, otherwise we can not see the refresh indicator
           tintColor={systemFill}
-          onRefresh={onRefresh}
+          onRefresh={() => {
+            unreadRefetch()
+            subscriptionRefetch()
+            onRefresh()
+          }}
           refreshing={isRefetching}
         />
       }
