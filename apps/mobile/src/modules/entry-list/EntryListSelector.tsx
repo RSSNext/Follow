@@ -1,13 +1,13 @@
 import { FeedViewType } from "@follow/constants"
 
-import { EntryListContentGrid } from "@/src/modules/entry-list/entry-list-gird"
+import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentGrid"
 import { useSelectedView } from "@/src/modules/screen/atoms"
 
 import { TimelineSelectorHeader } from "../screen/TimelineSelectorHeader"
-import { EntryListContentArticle } from "./entry-list-article"
-import { EntryListContentSocial } from "./entry-list-social"
+import { EntryListContentArticle } from "./EntryListContentArticle"
+import { EntryListContentSocial } from "./EntryListContentSocial"
 
-export function EntryListScreen({ entryIds }: { entryIds: string[] }) {
+export function EntryListSelector({ entryIds }: { entryIds: string[] }) {
   const view = useSelectedView()
 
   let ContentComponent = EntryListContentArticle

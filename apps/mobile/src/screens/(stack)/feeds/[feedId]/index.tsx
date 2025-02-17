@@ -3,7 +3,7 @@ import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { EntryListScreen } from "@/src/modules/entry-list/entry-list"
+import { EntryListSelector } from "@/src/modules/entry-list/EntryListSelector"
 import { EntryListContext } from "@/src/modules/screen/atoms"
 import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 
@@ -15,7 +15,7 @@ export default function Feed() {
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
       <BottomTabBarHeightContext.Provider value={insets.bottom}>
-        <EntryListScreen
+        <EntryListSelector
           entryIds={entryIdsByFeedId.length > 0 ? entryIdsByFeedId : entryIdsByCategory}
         />
       </BottomTabBarHeightContext.Provider>
