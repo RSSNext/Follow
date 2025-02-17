@@ -94,7 +94,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     appCategoryType: "public.app-category.news",
     buildVersion: process.env.BUILD_VERSION || undefined,
-    appBundleId: "is.follow",
+    appBundleId: "is.follow.dev",
     icon: "resources/icon",
     extraResource: ["./resources/app-update.yml"],
     protocols: [
@@ -126,7 +126,7 @@ const config: ForgeConfig = {
             }
           : () => ({
               entitlements: "build/entitlements.mac.plist",
-              requirements: "designated => anchor trusted",
+              requirements: "build/requirements.rqset",
             }),
       keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
       identity: process.env.OSX_SIGN_IDENTITY,
