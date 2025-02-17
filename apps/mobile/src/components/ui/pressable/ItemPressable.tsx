@@ -5,11 +5,9 @@ import { Fragment, memo, useEffect, useState } from "react"
 import type { PressableProps } from "react-native"
 import { StyleSheet } from "react-native"
 import Animated, {
-  Easing,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
 } from "react-native-reanimated"
 
 import { useColor } from "@/src/theme/colors"
@@ -38,10 +36,7 @@ export const ItemPressable: FC<ItemPressableProps> = memo(
       if (isPressing) {
         pressed.value = 1
       } else {
-        pressed.value = withTiming(0, {
-          duration: 300,
-          easing: Easing.ease,
-        })
+        pressed.value = 0
       }
     }, [isPressing, pressed])
 
