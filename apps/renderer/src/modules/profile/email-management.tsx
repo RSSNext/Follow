@@ -1,3 +1,4 @@
+import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { Button } from "@follow/components/ui/button/index.js"
 import {
   Form,
@@ -29,6 +30,7 @@ const formSchema = z.object({
 
 export function EmailManagement() {
   const user = useWhoami()
+  const isMobile = useMobile()
   const { t } = useTranslation("settings")
 
   const verifyEmailMutation = useMutation({
@@ -73,7 +75,10 @@ export function EmailManagement() {
         {user?.email && (
           <CopyButton
             value={user.email}
-            className="size-5 p-1 opacity-0 duration-300 group-hover:opacity-100"
+            className={cn(
+              "size-5 p-1 duration-300",
+              !isMobile && "opacity-0 group-hover:opacity-100",
+            )}
           />
         )}
       </p>

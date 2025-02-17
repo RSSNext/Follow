@@ -16,7 +16,7 @@ import {
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { getBizFetchErrorMessage } from "@/src/lib/api-fetch"
 import { toast } from "@/src/lib/toast"

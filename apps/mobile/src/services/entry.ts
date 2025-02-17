@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm"
+import { eq, inArray, or } from "drizzle-orm"
 
 import { db } from "../database"
 import { entriesTable } from "../database/schemas"
@@ -26,6 +26,24 @@ class EntryServiceStatic implements Hydratable, Resetable {
 
   async patch(entry: Partial<EntrySchema> & { id: string }) {
     await db.update(entriesTable).set(entry).where(eq(entriesTable.id, entry.id))
+  }
+
+  async patchMany({
+    entry,
+    entryIds,
+    feedIds,
+  }: {
+    entry: Partial<EntrySchema>
+    entryIds?: string[]
+    feedIds?: string[]
+  }) {
+    if (!entryIds && !feedIds) return
+    await db
+      .update(entriesTable)
+      .set(entry)
+      .where(
+        or(inArray(entriesTable.id, entryIds ?? []), inArray(entriesTable.feedId, feedIds ?? [])),
+      )
   }
 
   getEntryMany(entryId: string[]) {

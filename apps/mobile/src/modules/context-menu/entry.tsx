@@ -11,6 +11,7 @@ import {
 } from "@/src/components/native/webview/EntryContentWebView"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
+import { useSelectedView } from "@/src/modules/screen/atoms"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
@@ -18,6 +19,7 @@ import { unreadSyncService } from "@/src/store/unread/store"
 
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)
+  const view = useSelectedView()
   const isEntryStarred = useIsEntryStarred(id)
 
   const handlePressPreview = useCallback(() => {
@@ -52,31 +54,29 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
             unreadSyncService.markEntryAsRead(id)
           }}
         >
-          <ContextMenu.ItemTitle>Mark As Read</ContextMenu.ItemTitle>
+          <ContextMenu.ItemTitle>Mark as Read</ContextMenu.ItemTitle>
         </ContextMenu.Item>
 
         <ContextMenu.Item
           key="Star"
           onSelect={() => {
             if (isEntryStarred) {
-              collectionSyncService.unstarEntry({
-                createdAt: new Date().toISOString(),
-                feedId: entry.feedId,
-                entryId: id,
-                view: 0,
-              })
+              collectionSyncService.unstarEntry(id)
               toast.info("Unstarred")
             } else {
-              collectionSyncService.starEntry(
-                {
-                  createdAt: new Date().toISOString(),
-                  feedId: entry.feedId,
-                  entryId: id,
-                  // TODO update view
-                  view: 0,
-                },
-                0,
-              )
+              if (!entry.feedId) {
+                toast.error("Feed not found")
+                return
+              }
+              if (!view) {
+                toast.error("View not found")
+                return
+              }
+              collectionSyncService.starEntry({
+                feedId: entry.feedId,
+                entryId: id,
+                view,
+              })
               toast.info("Starred")
             }
           }}
@@ -92,7 +92,7 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
               openLink(entry.url)
             }}
           >
-            <ContextMenu.ItemTitle>Open link</ContextMenu.ItemTitle>
+            <ContextMenu.ItemTitle>Open Link</ContextMenu.ItemTitle>
           </ContextMenu.Item>
         )}
 

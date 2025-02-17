@@ -3,13 +3,12 @@ import { memo } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { InboxCuteFiIcon } from "@/src/icons/inbox_cute_fi"
+import { closeDrawer, selectTimeline } from "@/src/modules/screen/atoms"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount } from "@/src/store/unread/hooks"
-
-import { closeDrawer, selectTimeline } from "../../feed-drawer/atoms"
 
 export const InboxItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(getInboxStoreId(id))

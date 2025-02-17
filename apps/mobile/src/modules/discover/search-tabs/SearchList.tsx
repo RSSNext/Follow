@@ -6,7 +6,7 @@ import { memo } from "react"
 import { Text, View } from "react-native"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useSubscriptionByListId } from "@/src/store/subscription/hooks"
 

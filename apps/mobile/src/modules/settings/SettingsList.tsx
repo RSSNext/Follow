@@ -22,7 +22,7 @@ import { Magic2CuteFiIcon } from "@/src/icons/magic_2_cute_fi"
 import { PaletteCuteFiIcon } from "@/src/icons/palette_cute_fi"
 import { RadaCuteFiIcon } from "@/src/icons/rada_cute_fi"
 import { SafeLockFilledIcon } from "@/src/icons/safe_lock_filled"
-import { Settings7CuteFiIcon } from "@/src/icons/settings_7_cute_fi"
+import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
 import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
@@ -67,7 +67,7 @@ const UserGroupNavigationLinks: GroupNavigationLink[] = [
 const SettingGroupNavigationLinks: GroupNavigationLink[] = [
   {
     label: "General",
-    icon: Settings7CuteFiIcon,
+    icon: Settings1CuteFiIcon,
     onPress: (navigation) => {
       navigation.navigate("General")
     },

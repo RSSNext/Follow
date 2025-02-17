@@ -1,17 +1,9 @@
 import os from "node:os"
 
-import { version as appVersion } from "@pkg"
-
 export const mode = process.env.NODE_ENV
 export const isDev = mode === "development"
 
-export const isNightlyBuild = appVersion.includes("nightly")
-
-export const channel: "development" | "beta" | "alpha" | "stable" | "nightly" = isDev
-  ? "development"
-  : isNightlyBuild
-    ? "nightly"
-    : "beta"
+export const channel: "development" | "beta" | "alpha" | "stable" = isDev ? "development" : "stable"
 
 const { platform } = process
 export const isMacOS = platform === "darwin"

@@ -2,14 +2,14 @@ import type { FeedViewType } from "@follow/constants"
 import { useIsFocused } from "@react-navigation/native"
 import { useEffect } from "react"
 
-import { useSelectedFeed, useSetDrawerSwipeDisabled } from "@/src/modules/feed-drawer/atoms"
+import { useSelectedFeed, useSetDrawerSwipeDisabled } from "@/src/modules/screen/atoms"
 import {
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
   useEntryIdsByInboxId,
   useEntryIdsByView,
 } from "@/src/store/entry/hooks"
-import { useList } from "@/src/store/list/hooks"
+import { useListEntryIds } from "@/src/store/list/hooks"
 
 import { EntryListScreen } from "./entry-list"
 
@@ -63,10 +63,9 @@ function CategoryEntryList({ categoryName }: { categoryName: string }) {
 }
 
 function ListEntryList({ listId }: { listId: string }) {
-  const list = useList(listId)
-  if (!list) return null
-
-  return <EntryListScreen entryIds={list.entryIds ?? []} />
+  const entryIds = useListEntryIds(listId)
+  if (!entryIds) return null
+  return <EntryListScreen entryIds={entryIds} />
 }
 
 function InboxEntryList({ inboxId }: { inboxId: string }) {

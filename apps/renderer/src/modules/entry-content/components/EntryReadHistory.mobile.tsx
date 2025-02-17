@@ -48,6 +48,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         <PresentSheet
           title="Entry Recent Readers"
           content={<Content entryHistory={entryHistory} />}
+          triggerAsChild
         >
           <button
             type="button"

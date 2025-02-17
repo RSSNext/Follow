@@ -21,6 +21,7 @@ import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-cont
 import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
+import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { RSSHubCategoryCopyMap } from "./copy"
@@ -103,7 +104,7 @@ const PlaceholerSearchBar = () => {
         className="absolute inset-0 flex flex-row items-center justify-center"
         pointerEvents="none"
       >
-        <Search2CuteReIcon color={labelColor} height={18} width={18} />
+        <Search3CuteReIcon color={labelColor} height={18} width={18} />
         <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>

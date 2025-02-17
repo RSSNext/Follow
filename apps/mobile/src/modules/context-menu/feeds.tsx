@@ -15,7 +15,7 @@ import { unreadSyncService } from "@/src/store/unread/store"
 export const SubscriptionFeedItemContextMenu: FC<
   PropsWithChildren & {
     id: string
-    view: FeedViewType
+    view?: FeedViewType
   }
 > = ({ id, children, view }) => {
   const allCategories = useListSubscriptionCategory(view)
@@ -161,7 +161,7 @@ export const SubscriptionFeedCategoryContextMenu = ({
         <ContextMenu.Item
           key="MarkAllAsRead"
           onSelect={useCallback(() => {
-            unreadSyncService.markAsReadMany(feedIds)
+            unreadSyncService.markFeedAsRead(feedIds)
           }, [feedIds])}
         >
           <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>

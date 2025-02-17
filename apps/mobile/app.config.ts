@@ -4,6 +4,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config"
 
 import PKG from "./package.json"
 
+const isDev = process.env.NODE_ENV === "development"
 // const roundedIconPath = resolve(__dirname, "../../resources/icon.png")
 const iconPath = resolve(__dirname, "./assets/icon.png")
 const adaptiveIconPath = resolve(__dirname, "./assets/adaptive-icon.png")
@@ -105,7 +106,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       require("./scripts/with-follow-assets.js"),
       {
         // Add asset directory paths, the plugin copies the files in the given paths to the app bundle folder named Assets
-        assetsPath: resolve(__dirname, "..", "..", "out", "rn-web"),
+        assetsPath: isDev ? resolve(__dirname, "..", "..", "out", "rn-web") : "/tmp/rn-web",
       },
     ],
     [require("./scripts/with-follow-app-delegate.js")],

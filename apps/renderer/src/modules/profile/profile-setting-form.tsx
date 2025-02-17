@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
 import { Button } from "@follow/components/ui/button/index.js"
 import {
   Form,
@@ -116,6 +116,7 @@ export const ProfileSettingForm = ({
                     {field.value && (
                       <Avatar className="size-9">
                         <AvatarImage src={field.value} />
+                        <AvatarFallback>{user?.name[0] || ""}</AvatarFallback>
                       </Avatar>
                     )}
                   </div>

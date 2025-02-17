@@ -57,7 +57,12 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     view: s.view,
     listId: s.listId,
   }))
-  const { timelineId } = routeParams
+
+  const [timelineId, setMemoizedTimelineId] = useState(routeParams.timelineId)
+
+  useEffect(() => {
+    if (routeParams.timelineId) setMemoizedTimelineId(routeParams.timelineId)
+  }, [routeParams.timelineId])
 
   const navigateBackHome = useBackHome(timelineId)
   const setActive = useCallback(
@@ -215,18 +220,22 @@ const TimelineSelector = ({ timelineId }: { timelineId: string | undefined }) =>
         ref={scrollRef}
         className={clsx(
           styles["mask-scroller"],
-          "flex h-11 justify-between gap-2 overflow-auto px-3 text-xl text-theme-vibrancyFg scrollbar-none",
+          "flex h-11 justify-between gap-0.5 overflow-auto px-2 text-xl text-theme-vibrancyFg scrollbar-none",
         )}
+        onWheel={(e) => {
+          e.preventDefault()
+          e.currentTarget.scrollLeft += e.deltaY
+        }}
       >
         {timelineList.views.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
 
-        {timelineList.inboxes.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.inboxes.length > 0 && <DividerVertical className="mx-1 my-auto h-8" />}
         {timelineList.inboxes.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}
-        {timelineList.lists.length > 0 && <DividerVertical className="mx-2 my-auto h-8" />}
+        {timelineList.lists.length > 0 && <DividerVertical className="mx-1 my-auto h-8" />}
         {timelineList.lists.map((timelineId) => (
           <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
         ))}

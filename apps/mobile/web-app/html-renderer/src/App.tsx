@@ -1,12 +1,12 @@
 import { createStore, Provider, useAtomValue } from "jotai"
 
+import type { EntryModel } from "../types"
 import {
   codeThemeDarkAtom,
   codeThemeLightAtom,
   entryAtom,
   readerRenderInlineStyleAtom,
-} from "../atoms"
-import type { EntryModel } from "../types"
+} from "./atoms"
 import { HTML } from "./HTML"
 
 const store = createStore()

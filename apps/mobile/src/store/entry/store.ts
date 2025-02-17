@@ -27,6 +27,7 @@ interface EntryState {
   entryIdByCategory: Record<Category, Set<EntryId>>
   entryIdByFeed: Record<FeedId, Set<EntryId>>
   entryIdByInbox: Record<InboxId, Set<EntryId>>
+  entryIdSet: Set<EntryId>
 }
 
 const defaultState: EntryState = {
@@ -42,6 +43,7 @@ const defaultState: EntryState = {
   entryIdByCategory: {},
   entryIdByFeed: {},
   entryIdByInbox: {},
+  entryIdSet: new Set(),
 }
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => defaultState)
@@ -49,6 +51,43 @@ export const useEntryStore = createZustandStore<EntryState>("entry")(() => defau
 const immerSet = createImmerSetter(useEntryStore)
 
 class EntryActions {
+  private addEntryIdToView({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const subscription = getSubscription(feedId)
+    if (typeof subscription?.view === "number") {
+      draft.entryIdByView[subscription.view].add(entryId)
+    }
+  }
+
+  private addEntryIdToCategory({
+    draft,
+    feedId,
+    entryId,
+  }: {
+    draft: EntryState
+    feedId?: FeedId | null
+    entryId: EntryId
+  }) {
+    if (!feedId) return
+    const subscription = getSubscription(feedId)
+    if (subscription?.category) {
+      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
+      if (!entryIdSetByCategory) {
+        draft.entryIdByCategory[subscription.category] = new Set([entryId])
+      } else {
+        entryIdSetByCategory.add(entryId)
+      }
+    }
+  }
+
   private addEntryIdToFeed({
     draft,
     feedId,
@@ -64,19 +103,6 @@ class EntryActions {
       draft.entryIdByFeed[feedId] = new Set([entryId])
     } else {
       entryIdSetByFeed.add(entryId)
-    }
-
-    const subscription = getSubscription(feedId)
-    if (typeof subscription?.view === "number") {
-      draft.entryIdByView[subscription.view].add(entryId)
-    }
-    if (subscription?.category) {
-      const entryIdSetByCategory = draft.entryIdByCategory[subscription.category]
-      if (!entryIdSetByCategory) {
-        draft.entryIdByCategory[subscription.category] = new Set([entryId])
-      } else {
-        entryIdSetByCategory.add(entryId)
-      }
     }
   }
 
@@ -103,6 +129,7 @@ class EntryActions {
 
     immerSet((draft) => {
       for (const entry of entries) {
+        draft.entryIdSet.add(entry.id)
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
@@ -112,9 +139,21 @@ class EntryActions {
           entryId: entry.id,
         })
 
+        this.addEntryIdToView({
+          draft,
+          feedId,
+          entryId: entry.id,
+        })
+
         this.addEntryIdToInbox({
           draft,
           inboxHandle,
+          entryId: entry.id,
+        })
+
+        this.addEntryIdToCategory({
+          draft,
+          feedId,
           entryId: entry.id,
         })
       }
@@ -155,15 +194,58 @@ class EntryActions {
     await tx.run()
   }
 
-  resetByView({ view, entries }: { view: FeedViewType; entries: EntryModel[] }) {
+  markEntryReadStatusInSession({
+    entryIds,
+    feedIds,
+    read,
+  }: {
+    entryIds?: EntryId[]
+    feedIds?: FeedId[]
+    read: boolean
+  }) {
+    immerSet((draft) => {
+      if (entryIds) {
+        for (const entryId of entryIds) {
+          const entry = draft.data[entryId]
+          if (entry) {
+            entry.read = read
+          }
+        }
+      }
+
+      if (feedIds) {
+        const entries = Array.from(draft.entryIdSet)
+          .map((id) => draft.data[id])
+          .filter(
+            (entry): entry is EntryModel =>
+              !!entry && !!entry.feedId && feedIds.includes(entry.feedId),
+          )
+
+        for (const entry of entries) {
+          entry.read = read
+        }
+      }
+    })
+  }
+
+  resetByView({ view, entries }: { view?: FeedViewType; entries: EntryModel[] }) {
+    if (view === undefined) return
     immerSet((draft) => {
       draft.entryIdByView[view] = new Set(entries.map((e) => e.id))
     })
   }
 
-  resetByCategory({ category, entries }: { category: Category; entries: EntryModel[] }) {
+  resetByCategory({ category, entries }: { category?: Category; entries: EntryModel[] }) {
+    if (!category) return
     immerSet((draft) => {
       draft.entryIdByCategory[category] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByFeed({ feedId, entries }: { feedId?: FeedId; entries: EntryModel[] }) {
+    if (!feedId) return
+    immerSet((draft) => {
+      draft.entryIdByFeed[feedId] = new Set(entries.map((e) => e.id))
     })
   }
 }
@@ -208,15 +290,19 @@ class EntrySyncServices {
 
     // After initial fetch, we can reset the state to prefer the entries data from the server
     if (!pageParam) {
-      if (view !== undefined) {
-        entryActions.resetByView({ view, entries })
+      if (params.view !== undefined) {
+        entryActions.resetByView({ view: params.view, entries })
       }
 
       if (params.feedIdList && params.feedIdList.length > 0) {
-        const category = getSubscription(params.feedIdList[0]!)?.category
+        const category = getSubscription(params.feedIdList[0])?.category
         if (category) {
           entryActions.resetByCategory({ category, entries })
         }
+      }
+
+      if (params.feedId) {
+        entryActions.resetByFeed({ feedId: params.feedId, entries })
       }
     }
 

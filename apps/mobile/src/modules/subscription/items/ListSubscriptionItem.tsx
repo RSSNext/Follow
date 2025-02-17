@@ -3,12 +3,12 @@ import { Image, Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
+import { closeDrawer, selectTimeline } from "@/src/modules/screen/atoms"
 import { useList } from "@/src/store/list/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
-import { closeDrawer, selectTimeline } from "../../feed-drawer/atoms"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)

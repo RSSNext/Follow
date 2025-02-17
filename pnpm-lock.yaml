@@ -572,6 +572,9 @@ importers:
       jotai:
         specifier: 2.11.3
         version: 2.11.3(@types/react@18.3.18)(react@18.3.1)
+      lru-cache:
+        specifier: 11.0.2
+        version: 11.0.2
       nanoid:
         specifier: 5.0.9
         version: 5.0.9

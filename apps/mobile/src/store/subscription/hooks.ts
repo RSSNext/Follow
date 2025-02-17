@@ -14,7 +14,7 @@ import {
 } from "./getter"
 import { subscriptionSyncService, useSubscriptionStore } from "./store"
 
-export const usePrefetchSubscription = (view: FeedViewType) => {
+export const usePrefetchSubscription = (view?: FeedViewType) => {
   return useQuery({
     queryKey: ["subscription", view],
     queryFn: () => subscriptionSyncService.fetch(view),
@@ -210,11 +210,11 @@ export const useInboxSubscription = (view: FeedViewType) => {
   )
 }
 
-export const useListSubscriptionCategory = (view: FeedViewType) => {
+export const useListSubscriptionCategory = (view?: FeedViewType) => {
   return useSubscriptionStore(
     useCallback(
       (state) => {
-        return Array.from(state.categories[view])
+        return view ? Array.from(state.categories[view]) : []
       },
       [view],
     ),

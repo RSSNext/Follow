@@ -3,10 +3,10 @@ import { useAtomValue } from "jotai"
 import { useContext, useMemo, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
 
+import { entryAtom } from "~/atoms"
 import type { HTMLProps } from "~/HTML"
 
-import { entryAtom } from "../../atoms"
-import { calculateDimensions } from "../../hooks/useCalculateNaturalSize"
+import { calculateDimensions } from "./__internal/calculateDimensions"
 import { MarkdownRenderContainerRefContext } from "./__internal/ctx"
 
 const protocol = "follow-xhr"
@@ -25,11 +25,12 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
   const [isLoading, setIsLoading] = useState(true)
   const ref = useContext(MarkdownRenderContainerRefContext)
   const image = entry?.media.find((media) => media.url === src)
+
   const { height: scaleHeight, width: scaleWidth } = useMemo(
     () =>
       calculateDimensions({
-        width: image?.width ?? 0,
-        height: image?.height ?? 0,
+        width: image?.width,
+        height: image?.height,
         max: {
           width: ref?.clientWidth ?? 0,
           height: window.innerHeight,
