@@ -79,7 +79,7 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
   const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
 
   const [panelRef, setPanelRef] = useState<HTMLDivElement | null>(null)
-  const shouldOpen = useTriangleMenu(containerRef, panelRef!)
+  const shouldOpen = useTriangleMenu(containerRef, panelRef!, 300)
 
   const animateControls = useAnimationControls()
   useEffect(() => {
@@ -285,15 +285,18 @@ const TimelineInboxListItem = ({ timelineId, isActive }: TimelineItemProps) => {
   )
 }
 
-function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTMLElement) {
+function useTriangleMenu(
+  triggerRef: React.RefObject<HTMLElement>,
+  panelRef: HTMLElement,
+  openDelay = 100,
+) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const $trigger = triggerRef.current
     const $panel = panelRef
     if (!$trigger || !$panel) return
-    const timer: NodeJS.Timeout | null = null
-
+    let timer: NodeJS.Timeout | null = null
     let inStartTrack = false
     const mousePath = [] as { x: number; y: number }[]
     function handleMouseMove(event: MouseEvent) {
@@ -323,7 +326,8 @@ function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTM
       )
 
       if (inTriangle) {
-        setOpen(true)
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => setOpen(true), openDelay)
       } else {
         const inRect =
           isPointInRect(
@@ -346,8 +350,10 @@ function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTM
           )
 
         if (inRect) {
-          setOpen(true)
+          if (timer) clearTimeout(timer)
+          timer = setTimeout(() => setOpen(true), openDelay)
         } else {
+          if (timer) clearTimeout(timer)
           setOpen(false)
           inStartTrack = false
         }
@@ -356,11 +362,13 @@ function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTM
 
     function handleMouseEnter() {
       inStartTrack = true
-      setOpen(true)
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => setOpen(true), openDelay)
     }
 
     function handleMouseLeave() {
-      // setOpen(false)
+      if (timer) clearTimeout(timer)
+      setOpen(false)
     }
 
     document.addEventListener("mousemove", handleMouseMove)
@@ -375,7 +383,7 @@ function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTM
         clearTimeout(timer)
       }
     }
-  }, [triggerRef, panelRef])
+  }, [triggerRef, panelRef, openDelay])
 
   return open
 }

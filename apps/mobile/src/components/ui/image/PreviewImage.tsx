@@ -19,15 +19,7 @@ export const PreviewImage = ({ imageUrl, blurhash, aspectRatio }: PreviewImagePr
       onPress={() =>
         openPreview({
           imageRef,
-          images: [
-            { imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl },
-            {
-              imageUrl:
-                "https://raw.githubusercontent.com/RSSNext/assets/refs/heads/main/poster.png",
-              aspectRatio,
-              blurhash,
-            },
-          ],
+          images: [{ imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl }],
         })
       }
     >
