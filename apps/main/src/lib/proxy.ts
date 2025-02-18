@@ -37,7 +37,7 @@ const URL_SCHEME = new Set(["http:", "https:", "ftp:", "socks:", "socks4:", "soc
 
 const normalizeProxyUri = (userProxy: string) => {
   if (!userProxy) {
-    return
+    return ""
   }
   // Only use the first proxy if there are multiple urls
   const firstInput = userProxy.split(",")[0]!
