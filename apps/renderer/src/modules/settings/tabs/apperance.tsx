@@ -174,7 +174,12 @@ const ShikiTheme = () => {
           }
         }}
         triggerClassName="w-48"
-        itemClassName="capitalize"
+        renderItem={(item) => {
+          const firstChar = item.label.charAt(0)
+          return firstChar === firstChar.toUpperCase()
+            ? item.label
+            : firstChar.toUpperCase() + item.label.slice(1)
+        }}
         size="sm"
       />
     </div>
