@@ -38,7 +38,7 @@ declare global {
 }
 
 export const initializeApp = async () => {
-  appLog(`${APP_NAME}: Follow your favorites in one inbox`, repository.url)
+  appLog(`${APP_NAME}: Follow everything in one place`, repository.url)
 
   if (isDev) {
     const favicon = await import("/favicon-dev.ico?url")
