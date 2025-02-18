@@ -11,7 +11,7 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
 import { getImageHeaders } from "@/src/lib/image"
-import { pause, play } from "@/src/lib/player"
+import { getAttachmentState, pause, play } from "@/src/lib/player"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
@@ -57,9 +57,9 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
   const blurhash = media?.[0]?.blurhash
 
   const audio = attachments?.find((attachment) => attachment.mime_type?.startsWith("audio/"))
-
-  const isPlaying = audio?.url && extraData === audio.url
-  const isLoading = extraData === `${audio?.url}_loading`
+  const audioState = getAttachmentState(extraData, audio)
+  const isPlaying = audioState === "playing"
+  const isLoading = audioState === "loading"
 
   return (
     <EntryItemContextMenu id={entryId}>
