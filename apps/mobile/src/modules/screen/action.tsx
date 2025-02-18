@@ -38,7 +38,7 @@ export function HomeRightAction(props: PropsWithChildren) {
 
   return (
     <View
-      className="-mr-4 flex-row items-center gap-2"
+      className="-mr-2 flex-row items-center gap-2"
       style={{ paddingRight: insets.paddingRight }}
     >
       {props.children}

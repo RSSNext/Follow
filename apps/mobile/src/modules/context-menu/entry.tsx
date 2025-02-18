@@ -55,6 +55,11 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
           }}
         >
           <ContextMenu.ItemTitle>Mark as Read</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "checkmark",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Item
@@ -81,6 +86,11 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
             }
           }}
         >
+          <ContextMenu.ItemIcon
+            ios={{
+              name: isEntryStarred ? "star.slash" : "star",
+            }}
+          />
           <ContextMenu.ItemTitle>{isEntryStarred ? "Unstar" : "Star"}</ContextMenu.ItemTitle>
         </ContextMenu.Item>
 
@@ -92,6 +102,11 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
               openLink(entry.url)
             }}
           >
+            <ContextMenu.ItemIcon
+              ios={{
+                name: "link",
+              }}
+            />
             <ContextMenu.ItemTitle>Open Link</ContextMenu.ItemTitle>
           </ContextMenu.Item>
         )}
@@ -108,6 +123,11 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
               })
             }}
           >
+            <ContextMenu.ItemIcon
+              ios={{
+                name: "square.and.arrow.up",
+              }}
+            />
             <ContextMenu.ItemTitle>Share</ContextMenu.ItemTitle>
           </ContextMenu.Item>
         )}

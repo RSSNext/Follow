@@ -1,15 +1,10 @@
 import { FeedViewType } from "@follow/constants"
-import { Image } from "expo-image"
-import { useState } from "react"
-import { Modal, Pressable, Text, View } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
+import { Text, View } from "react-native"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
-import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
+import { ImageContextMenu } from "@/src/components/ui/image/ImageContextMenu"
 import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
-import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
-import { getImageHeaders } from "@/src/lib/image"
 import { useEntry } from "@/src/store/entry/hooks"
 
 import { useSelectedView } from "../../screen/atoms"
@@ -17,11 +12,6 @@ import { useSelectedView } from "../../screen/atoms"
 export function EntryGridItem({ id }: { id: string }) {
   const view = useSelectedView()
   const item = useEntry(id)
-
-  const [previewModalOpen, setPreviewModalOpen] = useState(false)
-  const scaleValue = useSharedValue(1)
-  const transformXValue = useSharedValue(0)
-  const transformYValue = useSharedValue(0)
 
   const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
   if (!item) {
@@ -41,57 +31,22 @@ export function EntryGridItem({ id }: { id: string }) {
       : 16 / 9
 
   return (
-    <>
-      <Modal
-        transparent
-        className="absolute inset-0 flex flex-1 items-center justify-center bg-white/20"
-        visible={previewModalOpen}
-      >
-        <View className="flex-1 items-center justify-center">
-          <Pressable
-            className="absolute right-2 top-safe-offset-2"
-            onPress={() => setPreviewModalOpen(false)}
-          >
-            <CloseCuteReIcon />
-          </Pressable>
-          <ReAnimatedPressable
-            style={{
-              transform: [
-                { scale: scaleValue },
-                { translateX: transformXValue },
-                { translateY: transformYValue },
-              ],
-            }}
-          >
-            <Image
-              source={{ uri: imageUrl, headers: getImageHeaders(imageUrl) }}
-              className="w-full"
-              style={{
-                aspectRatio,
-              }}
-              transition={500}
-              placeholder={{
-                blurhash,
-              }}
-            />
-          </ReAnimatedPressable>
-        </View>
-      </Modal>
-      <ItemPressable className="m-1 overflow-hidden rounded-md">
-        {imageUrl ? (
+    <ItemPressable className="m-1 overflow-hidden rounded-md">
+      {imageUrl ? (
+        <ImageContextMenu imageUrl={imageUrl}>
           <PreviewImage imageUrl={imageUrl} blurhash={blurhash} aspectRatio={aspectRatio} />
-        ) : (
-          <View className="aspect-video w-full items-center justify-center">
-            <Text className="text-label text-center">No media available</Text>
-          </View>
-        )}
+        </ImageContextMenu>
+      ) : (
+        <View className="aspect-video w-full items-center justify-center">
+          <Text className="text-label text-center">No media available</Text>
+        </View>
+      )}
 
-        {view === FeedViewType.Videos && (
-          <Text className="text-label p-2 font-medium" numberOfLines={2}>
-            {item.title}
-          </Text>
-        )}
-      </ItemPressable>
-    </>
+      {view === FeedViewType.Videos && (
+        <Text className="text-label p-2 font-medium" numberOfLines={2}>
+          {item.title}
+        </Text>
+      )}
+    </ItemPressable>
   )
 }
