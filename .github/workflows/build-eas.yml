@@ -18,7 +18,7 @@ on:
 jobs:
   build:
     name: Build iOS IPA
-    runs-on: ${{ inputs.use_self_hosted_runner == 'true' && 'macos-diygod' || 'macos-latest' }}
+    runs-on: ${{ inputs.use_self_hosted_runner == 'true' && 'self-hosted' || 'macos-latest' }}
 
     steps:
       - name: 📦 Checkout code
