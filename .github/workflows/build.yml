@@ -140,6 +140,7 @@ jobs:
         uses: nick-fields/retry@v3
         with:
           max_attempts: 3
+          timeout_minutes: 10
           command: npm exec turbo run //#build:macos
 
       - name: Build (Mac App Store)
