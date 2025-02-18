@@ -134,6 +134,7 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
                 >
                   <Image
                     source={{ uri: image.url }}
+                    transition={500}
                     placeholder={{ blurhash: image.blurhash }}
                     className="bg-system-fill ml-2 size-20 rounded-md"
                     contentFit="cover"

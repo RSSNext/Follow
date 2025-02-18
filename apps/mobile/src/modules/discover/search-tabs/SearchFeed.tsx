@@ -163,7 +163,7 @@ const PreviewItem = ({ entry }: { entry: NonNullable<SearchResultItem["entries"]
             source={firstMedia.url}
             className="size-full rounded-lg"
             contentFit="cover"
-            transition={300}
+            transition={500}
             placeholder={{
               blurHash: firstMedia.blurhash,
             }}

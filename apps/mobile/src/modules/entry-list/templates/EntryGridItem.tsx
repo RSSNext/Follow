@@ -62,6 +62,7 @@ export function EntryGridItem({ id }: { id: string }) {
               style={{
                 aspectRatio,
               }}
+              transition={500}
               placeholder={{
                 blurhash,
               }}

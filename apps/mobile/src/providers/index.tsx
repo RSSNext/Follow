@@ -11,6 +11,7 @@ import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 
+import { PreviewImageProvider } from "../components/ui/image/PreviewPageProvider"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
 import { DarkTheme, DefaultTheme } from "../theme/navigation"
@@ -32,7 +33,9 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <GestureHandlerRootView>
                   <ActionSheetProvider>
-                    <PortalProvider>{children}</PortalProvider>
+                    <PreviewImageProvider>
+                      <PortalProvider>{children}</PortalProvider>
+                    </PreviewImageProvider>
                   </ActionSheetProvider>
                 </GestureHandlerRootView>
               </ThemeProvider>
