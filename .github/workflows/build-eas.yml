@@ -10,11 +10,15 @@ on:
     paths:
       - "apps/mobile/**"
   workflow_dispatch:
+    inputs:
+      use_self_hosted_runner:
+        type: boolean
+        description: "Use self-hosted runner"
 
 jobs:
   build:
     name: Build iOS IPA
-    runs-on: macos-latest
+    runs-on: ${{ inputs.use_self_hosted_runner == 'true' && 'macos-diygod' || 'macos-latest' }}
 
     steps:
       - name: 📦 Checkout code
