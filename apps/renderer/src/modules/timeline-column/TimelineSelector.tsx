@@ -97,7 +97,7 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
 
   return (
     <Fragment>
-      <div ref={containerRef} className="mt-3 pb-4">
+      <div ref={containerRef} className="mb-4 mt-3">
         <div
           ref={scrollRef}
           className={clsx(
@@ -316,8 +316,8 @@ function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTM
       if (!lastPoint) return
 
       const inTriangle = isPointInTriangle(
+        { x: clientX, y: clientY },
         { x: lastPoint.x, y: lastPoint.y },
-        { x: triggerRect.right - triggerRect.width / 2, y: triggerRect.top },
         { x: panelRect.left, y: panelRect.top },
         { x: panelRect.left, y: panelRect.bottom },
       )
@@ -330,7 +330,7 @@ function useTriangleMenu(triggerRef: React.RefObject<HTMLElement>, panelRef: HTM
             { x: clientX, y: clientY },
             {
               x: triggerRect.left,
-              y: triggerRect.bottom,
+              y: triggerRect.top,
               width: triggerRect.width,
               height: triggerRect.height,
             },
