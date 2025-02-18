@@ -174,7 +174,7 @@ const ShikiTheme = () => {
           }
         }}
         triggerClassName="w-48"
-        renderItem={(item) => <span className="capitalize">{item.label}</span>}
+        itemClassName="capitalize"
         size="sm"
       />
     </div>

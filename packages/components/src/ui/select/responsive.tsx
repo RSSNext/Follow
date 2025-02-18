@@ -22,6 +22,7 @@ export interface ResponsiveSelectProps {
   disabled?: boolean
   triggerClassName?: string
   contentClassName?: string
+  itemClassName?: string
 }
 export const ResponsiveSelect = ({
   defaultValue,
@@ -34,6 +35,7 @@ export const ResponsiveSelect = ({
   size = "default",
   triggerClassName,
   contentClassName,
+  itemClassName,
   placeholder,
 }: ResponsiveSelectProps) => {
   const [valueInner] = useControlled(value, defaultValue ?? "", onValueChange)
@@ -81,7 +83,7 @@ export const ResponsiveSelect = ({
           onChange={(e) => onValueChange?.(e.target.value)}
         >
           {items.map((item) => (
-            <option key={item.value} value={item.value}>
+            <option key={item.value} value={item.value} className={itemClassName}>
               {renderItem?.(item) ?? item.label}
             </option>
           ))}
@@ -102,7 +104,7 @@ export const ResponsiveSelect = ({
       </SelectTrigger>
       <SelectContent className={contentClassName} position="item-aligned">
         {items.map((item) => (
-          <SelectItem key={item.value} value={item.value}>
+          <SelectItem key={item.value} value={item.value} className={itemClassName}>
             {renderItem?.(item) ?? item.label}
           </SelectItem>
         ))}
