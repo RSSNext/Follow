@@ -320,7 +320,6 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
     ],
   }))
 
-  // 更新动画样式
   const modalStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }))

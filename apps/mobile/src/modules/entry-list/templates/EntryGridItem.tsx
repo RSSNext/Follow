@@ -8,6 +8,7 @@ import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
+import { getImageHeaders } from "@/src/lib/image"
 import { useEntry } from "@/src/store/entry/hooks"
 
 import { useSelectedView } from "../../screen/atoms"
@@ -57,7 +58,7 @@ export function EntryGridItem({ id }: { id: string }) {
             }}
           >
             <Image
-              source={{ uri: imageUrl }}
+              source={{ uri: imageUrl, headers: getImageHeaders(imageUrl) }}
               className="w-full"
               style={{
                 aspectRatio,

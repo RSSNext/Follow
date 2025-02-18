@@ -13,6 +13,7 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
+import { getImageHeaders } from "@/src/lib/image"
 import { quickLookImage } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
@@ -133,11 +134,12 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
                   }}
                 >
                   <Image
-                    source={{ uri: image.url }}
+                    source={{ uri: image.url, headers: getImageHeaders(image.url) }}
                     transition={500}
                     placeholder={{ blurhash: image.blurhash }}
                     className="bg-system-fill ml-2 size-20 rounded-md"
                     contentFit="cover"
+                    recyclingKey={image.url}
                   />
                 </Pressable>
               )

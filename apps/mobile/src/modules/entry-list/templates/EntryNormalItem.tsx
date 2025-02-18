@@ -8,6 +8,7 @@ import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWeb
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
+import { getImageHeaders } from "@/src/lib/image"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
@@ -73,10 +74,15 @@ export function EntryNormalItem({ entryId }: { entryId: string }) {
         </View>
         {image && (
           <Image
-            source={{ uri: image }}
+            source={{
+              uri: image,
+              headers: getImageHeaders(image),
+            }}
             placeholder={{ blurhash }}
             className="bg-system-fill ml-2 size-20 rounded-md"
             contentFit="cover"
+            recyclingKey={image}
+            transition={500}
           />
         )}
       </ItemPressable>
