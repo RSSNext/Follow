@@ -116,15 +116,16 @@ export function useSelectedView() {
   const subscription = useSubscription(
     selectedFeed && selectedFeed.type === "feed" ? selectedFeed.feedId : "",
   )
-  const view =
-    selectedTimeLine.type === "view"
-      ? selectedTimeLine.viewId
-      : selectedTimeLine.type === "list"
-        ? list?.view
-        : selectedFeed?.type === "feed"
-          ? subscription?.view
-          : undefined
-  return view
+
+  if (selectedTimeLine.type === "view") {
+    return selectedTimeLine.viewId
+  }
+  if (selectedTimeLine.type === "list") {
+    return list?.view
+  }
+  if (selectedFeed?.type === "feed") {
+    return subscription?.view
+  }
 }
 
 function getFetchEntryPayload(

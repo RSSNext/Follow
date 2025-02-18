@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Modal, Pressable, Text, View } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 
+import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
@@ -22,12 +23,17 @@ export function EntryGridItem({ id }: { id: string }) {
   const transformXValue = useSharedValue(0)
   const transformYValue = useSharedValue(0)
 
+  const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
   if (!item) {
     return null
   }
   const photo = item.media?.find((media) => media.type === "photo")
   const video = item.media?.find((media) => media.type === "video")
   const imageUrl = photo?.url || video?.preview_image_url
+  if (pictureViewFilterNoImage && !imageUrl && view === FeedViewType.Pictures) {
+    return null
+  }
+
   const blurhash = photo?.blurhash || video?.blurhash
   const aspectRatio =
     view === FeedViewType.Pictures && photo?.height && photo.width

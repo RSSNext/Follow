@@ -1,26 +1,32 @@
+import { FeedViewType } from "@follow/constants"
 import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
-import { Share, TouchableOpacity, useAnimatedValue } from "react-native"
+import { Share, useAnimatedValue, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
 import {
   NavigationBlurEffectHeader,
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
+import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import { getWebUrl } from "@/src/lib/env"
-import { HomeLeftAction, HomeRightAction } from "@/src/modules/screen/action"
+import {
+  HideNoMediaActionButton,
+  HomeLeftAction,
+  HomeRightAction,
+} from "@/src/modules/screen/action"
 import { headerHideableBottomHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
 import { getFeed } from "@/src/store/feed/getter"
 
-import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
+import { useEntryListContext, useSelectedFeedTitle, useSelectedView } from "./atoms"
 
 export function TimelineSelectorHeader({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type
-
+  const view = useSelectedView()
   const params = useLocalSearchParams()
   const isFeed = screenType === "feed"
   const isTimeline = screenType === "timeline"
@@ -35,10 +41,21 @@ export function TimelineSelectorHeader({ children }: { children: React.ReactNode
           [isTimeline],
         )}
         headerRight={useMemo(() => {
-          if (isTimeline) return () => <HomeRightAction />
-          if (isFeed) return () => <FeedShareAction params={params} />
+          if (isTimeline)
+            return () => (
+              <HomeRightAction>
+                {view === FeedViewType.Pictures && <HideNoMediaActionButton />}
+              </HomeRightAction>
+            )
+          if (isFeed)
+            return () => (
+              <View className="-mr-2 flex-row gap-2">
+                <HideNoMediaActionButton variant="secondary" />
+                <FeedShareAction params={params} />
+              </View>
+            )
           return
-        }, [isTimeline, isFeed, params])}
+        }, [isTimeline, isFeed, view, params])}
         headerHideableBottomHeight={isTimeline ? headerHideableBottomHeight : undefined}
         headerHideableBottom={isTimeline ? TimelineViewSelector : undefined}
       />
@@ -53,8 +70,9 @@ function FeedShareAction({ params }: { params: any }) {
 
   if (!feedId) return null
   return (
-    <TouchableOpacity
-      hitSlop={10}
+    <UIBarButton
+      label="Share"
+      normalIcon={<Share3CuteReIcon height={20} width={20} color={label} />}
       onPress={() => {
         const feed = getFeed(feedId)
         if (!feed) return
@@ -66,8 +84,6 @@ function FeedShareAction({ params }: { params: any }) {
           url,
         })
       }}
-    >
-      <Share3CuteReIcon height={20} width={20} color={label} />
-    </TouchableOpacity>
+    />
   )
 }
