@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
@@ -15,8 +16,8 @@ export default function Feed() {
   const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrCategory as string)
   const entryIdsByCategory = useEntryIdsByCategory(feedIdOrCategory as string)
   const isCollection = feedIdOrCategory === FEED_COLLECTION_LIST
-  const view = useSelectedView()
-  const collectionEntryIds = useCollectionEntryList(view ?? 0)
+  const view = useSelectedView() ?? FeedViewType.Articles
+  const collectionEntryIds = useCollectionEntryList(view)
 
   const entryIds = isCollection
     ? collectionEntryIds
@@ -27,7 +28,7 @@ export default function Feed() {
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
       <BottomTabBarHeightContext.Provider value={insets.bottom}>
-        <EntryListSelector entryIds={entryIds} />
+        <EntryListSelector entryIds={entryIds} viewId={view} />
       </BottomTabBarHeightContext.Provider>
     </EntryListContext.Provider>
   )
