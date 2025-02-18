@@ -27,7 +27,7 @@ jobs:
       - name: 🏗 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - name: 📱 Setup EAS
@@ -39,7 +39,7 @@ jobs:
       - name: 🔨 Build iOS IPA
         run: |
           cd apps/mobile
-          eas build --platform ios --profile production --non-interactive --local --output=./build.ipa
+          eas build --platform ios --profile preview --non-interactive --local --output=./build.ipa
 
       # Optional: Upload artifact
       - name: 📤 Upload IPA
