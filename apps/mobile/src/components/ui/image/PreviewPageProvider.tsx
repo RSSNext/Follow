@@ -15,6 +15,8 @@ import { useEventCallback } from "usehooks-ts"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 
+import { ImageContextMenu } from "./ImageContextMenu"
+
 interface PreviewImageProps {
   imageUrl: string
   blurhash?: string | undefined
@@ -23,11 +25,11 @@ interface PreviewImageProps {
 }
 
 interface PreviewImageContextType {
-  openPreview: (
-    params: {
-      imageRef: RefObject<View>
-    } & PreviewImageProps,
-  ) => void
+  openPreview: (params: {
+    imageRef: RefObject<View>
+    images: PreviewImageProps[]
+    initialIndex?: number
+  }) => void
 }
 const PreviewImageContext = createContext<PreviewImageContextType | null>(null)
 
@@ -43,8 +45,9 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   const { width, height } = useWindowDimensions()
   const [previewModalOpen, setPreviewModalOpen] = useState(false)
 
-  const [currentState, setCurrentState] = useState<PreviewImageProps | null>(null)
+  const [currentState, setCurrentState] = useState<PreviewImageProps[] | null>(null)
   const [imageRef, setImageRef] = useState<View | null>(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   const layoutScale = useSharedValue(1)
   const layoutTransformX = useSharedValue(0)
@@ -105,7 +108,8 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
         })
         .onEnd((e) => {
           if (!currentState) return
-          const { aspectRatio } = currentState
+          if (!currentState[currentIndex]) return
+          const { aspectRatio } = currentState[currentIndex]
           if (isClosing.value) return
 
           if (scale.value <= 1 && e.translationY > 100) {
@@ -170,6 +174,12 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
             overlayOpacity.value = withTiming(0.9, {
               duration: 100,
             })
+            // Handle horizontal swipe
+            if (e.translationX < -50 && currentIndex < currentState.length - 1) {
+              setCurrentIndex((prevIndex) => prevIndex + 1)
+            } else if (e.translationX > 50 && currentIndex > 0) {
+              setCurrentIndex((prevIndex) => prevIndex - 1)
+            }
             // Boundary check logic
             const scaledWidth = width * scale.value
             const scaledHeight = height * aspectRatio * scale.value
@@ -184,25 +194,13 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
 
             // If scale is less than or equal to 1, force center
             if (scale.value <= 1) {
-              translateX.value = withSpring(0, {
-                damping: 15,
-                stiffness: 150,
-              })
-              translateY.value = withSpring(0, {
-                damping: 15,
-                stiffness: 150,
-              })
+              translateX.value = withSpring(0, gentleSpringPreset)
+              translateY.value = withSpring(0, gentleSpringPreset)
               savedTranslateX.value = 0
               savedTranslateY.value = 0
             } else {
-              translateX.value = withSpring(targetX, {
-                damping: 15,
-                stiffness: 150,
-              })
-              translateY.value = withSpring(targetY, {
-                damping: 15,
-                stiffness: 150,
-              })
+              translateX.value = withSpring(targetX, gentleSpringPreset)
+              translateY.value = withSpring(targetY, gentleSpringPreset)
               savedTranslateX.value = targetX
               savedTranslateY.value = targetY
             }
@@ -210,6 +208,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
         }),
     [
       currentState,
+      currentIndex,
       height,
       imageRef,
       isClosing,
@@ -228,7 +227,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   )
 
   const fadeOutCloseAnimation = useEventCallback(() => {
-    scale.value = withSpring(2, gentleSpringPreset, (finished) => {
+    scale.value = withSpring(1.2, gentleSpringPreset, (finished) => {
       if (finished) {
         runOnJS(setPreviewModalOpen)(false)
       }
@@ -236,18 +235,6 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
     opacity.value = withSpring(0, gentleSpringPreset)
     overlayOpacity.value = withSpring(0, gentleSpringPreset)
   })
-  const singleTapGesture = useMemo(
-    () =>
-      Gesture.Tap()
-        .numberOfTaps(1)
-        .runOnJS(true)
-        .onStart(() => {
-          if (scale.value <= 1) {
-            fadeOutCloseAnimation()
-          }
-        }),
-    [fadeOutCloseAnimation, scale.value],
-  )
   const doubleTapGesture = useMemo(
     () =>
       Gesture.Tap()
@@ -255,19 +242,10 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
         .onStart((e) => {
           if (scale.value !== 1) {
             // If current scale is not 1, reset to 1 and center
-            scale.value = withSpring(1, {
-              damping: 15,
-              stiffness: 150,
-            })
+            scale.value = withSpring(1, gentleSpringPreset)
             savedScale.value = 1
-            translateX.value = withSpring(0, {
-              damping: 15,
-              stiffness: 150,
-            })
-            translateY.value = withSpring(0, {
-              damping: 15,
-              stiffness: 150,
-            })
+            translateX.value = withSpring(0, gentleSpringPreset)
+            translateY.value = withSpring(0, gentleSpringPreset)
             savedTranslateX.value = 0
             savedTranslateY.value = 0
           } else {
@@ -288,19 +266,24 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
             const targetX = (centerX - e.absoluteX) * targetScale
             const targetY = (centerY - e.absoluteY) * targetScale
 
-            translateX.value = withSpring(targetX, {
-              damping: 15,
-              stiffness: 150,
-            })
-            translateY.value = withSpring(targetY, {
-              damping: 15,
-              stiffness: 150,
-            })
+            translateX.value = withSpring(targetX, gentleSpringPreset)
+            translateY.value = withSpring(targetY, gentleSpringPreset)
             savedTranslateX.value = targetX
             savedTranslateY.value = targetY
           }
         }),
     [height, savedScale, savedTranslateX, savedTranslateY, scale, translateX, translateY, width],
+  )
+  const singleTapGesture = useMemo(
+    () =>
+      Gesture.Tap()
+        .numberOfTaps(1)
+        .runOnJS(true)
+        .onStart(() => {
+          fadeOutCloseAnimation()
+        })
+        .requireExternalGestureToFail(pinchGesture, doubleTapGesture),
+    [doubleTapGesture, fadeOutCloseAnimation, pinchGesture],
   )
 
   const composed = useMemo(
@@ -360,8 +343,9 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   }
 
   const openPreview = useCallback(
-    (params: { imageRef: RefObject<View> } & PreviewImageProps) => {
-      setCurrentState(params)
+    (params: { imageRef: RefObject<View>; images: PreviewImageProps[]; initialIndex?: number }) => {
+      setCurrentState(params.images)
+      setCurrentIndex(params.initialIndex || 0)
       setImageRef(params.imageRef.current)
       params.imageRef.current?.measureInWindow((pageX, pageY, w1, h1) => {
         setPreviewModalOpen(true)
@@ -431,17 +415,19 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
                         ],
                       }}
                     >
-                      <Image
-                        recyclingKey={currentState?.recyclingKey}
-                        source={{ uri: currentState?.imageUrl }}
-                        className="w-full"
-                        style={{
-                          aspectRatio: currentState?.aspectRatio,
-                        }}
-                        placeholder={{
-                          blurhash: currentState?.blurhash,
-                        }}
-                      />
+                      <ImageContextMenu imageUrl={currentState[currentIndex]?.imageUrl}>
+                        <Image
+                          recyclingKey={currentState[currentIndex]?.recyclingKey}
+                          source={{ uri: currentState[currentIndex]?.imageUrl }}
+                          className="w-full"
+                          style={{
+                            aspectRatio: currentState[currentIndex]?.aspectRatio,
+                          }}
+                          placeholder={{
+                            blurhash: currentState[currentIndex]?.blurhash,
+                          }}
+                        />
+                      </ImageContextMenu>
                     </Animated.View>
                   </Animated.View>
                 </GestureDetector>

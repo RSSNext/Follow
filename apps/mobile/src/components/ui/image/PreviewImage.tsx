@@ -15,28 +15,29 @@ export const PreviewImage = ({ imageUrl, blurhash, aspectRatio }: PreviewImagePr
 
   const { openPreview } = usePreviewImage()
   return (
-    <>
-      <Pressable
-        onPress={() =>
-          openPreview({ imageRef, imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl })
-        }
-      >
-        <View ref={imageRef}>
-          <Image
-            transition={500}
-            source={{ uri: imageUrl }}
-            placeholder={{
-              blurhash,
-            }}
-            className="w-full"
-            style={{
-              aspectRatio,
-            }}
-            placeholderContentFit="cover"
-            recyclingKey={imageUrl}
-          />
-        </View>
-      </Pressable>
-    </>
+    <Pressable
+      onPress={() =>
+        openPreview({
+          imageRef,
+          images: [{ imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl }],
+        })
+      }
+    >
+      <View ref={imageRef}>
+        <Image
+          transition={500}
+          source={{ uri: imageUrl }}
+          placeholder={{
+            blurhash,
+          }}
+          className="w-full"
+          style={{
+            aspectRatio,
+          }}
+          placeholderContentFit="cover"
+          recyclingKey={imageUrl}
+        />
+      </View>
+    </Pressable>
   )
 }

@@ -79,6 +79,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-build-properties",
     "expo-sqlite",
     [
+      "expo-media-library",
+      {
+        photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
+        savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
+        isAccessMediaLocationEnabled: true,
+      },
+    ],
+    [
       "expo-font",
       {
         fonts: [
