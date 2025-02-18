@@ -144,7 +144,8 @@
       "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch",
       "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch",
       "devlop": "patches/devlop.patch",
-      "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch"
+      "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch",
+      "react-native-track-player": "patches/react-native-track-player.patch"
     },
     "overrides": {
       "@types/react": "npm:@types/react@^18.3.12",

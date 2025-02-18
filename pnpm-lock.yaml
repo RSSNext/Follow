@@ -53,6 +53,9 @@ patchedDependencies:
   re-resizable:
     hash: yitcmpfwcomg2fky72uc3lhk2i
     path: patches/re-resizable@6.9.17.patch
+  react-native-track-player:
+    hash: ul2ym56izpf2mkfucn2nug6afu
+    path: patches/react-native-track-player.patch
   workbox-precaching:
     hash: frtipzgil4wle57aliuhcr746e
     path: patches/workbox-precaching.patch
@@ -690,6 +693,9 @@ importers:
       postcss:
         specifier: 8.5.1
         version: 8.5.1
+      react-native-track-player:
+        specifier: ^4.1.1
+        version: 4.1.1(patch_hash=ul2ym56izpf2mkfucn2nug6afu)(react-native@0.77.0(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.3.18)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-test-renderer:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -12554,6 +12560,19 @@ packages:
     peerDependencies:
       react: '*'
       react-native: npm:react-native@0.77.0
+
+  react-native-track-player@4.1.1:
+    resolution: {integrity: sha512-E5N/eK/+HtAVJUAzXpm1cWz8ROheV9jb0TI6h2bM+333U+DWibTTnT2T1122FkCoXLXIYavtm2FR2if+5jH8cA==}
+    peerDependencies:
+      react: '>=16.8.6'
+      react-native: npm:react-native@0.77.0
+      react-native-windows: '>=0.63.0'
+      shaka-player: ^4.7.9
+    peerDependenciesMeta:
+      react-native-windows:
+        optional: true
+      shaka-player:
+        optional: true
 
   react-native-uikit-colors@0.2.0:
     resolution: {integrity: sha512-YYJHejX3JgmfGceo058fC8iFVhXdZtWjjqcb9lfSYVjYX29DnkcHmdjUGNLAK6M5R0/IFv9v7N2V2drpRKRVvA==}
@@ -29455,6 +29474,11 @@ snapshots:
       react: 18.3.1
       react-native: 0.77.0(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.3.18)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
       warn-once: 0.1.1
+
+  react-native-track-player@4.1.1(patch_hash=ul2ym56izpf2mkfucn2nug6afu)(react-native@0.77.0(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.3.18)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-native: 0.77.0(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.3.18)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
 
   react-native-uikit-colors@0.2.0(44lwr6qbdoxmm2crfekp75v3tq):
     dependencies:

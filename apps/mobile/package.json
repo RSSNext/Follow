@@ -107,6 +107,7 @@
     "eas-cli": "14.7.1",
     "expo-drizzle-studio-plugin": "0.1.1",
     "postcss": "8.5.1",
+    "react-native-track-player": "^4.1.1",
     "react-test-renderer": "18.3.1"
   },
   "expo": {

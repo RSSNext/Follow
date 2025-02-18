@@ -2,6 +2,8 @@ import type { ListRenderItemInfo } from "@shopify/flash-list"
 import { useCallback, useMemo } from "react"
 import { View } from "react-native"
 
+import { usePlayingUrl } from "@/src/lib/player"
+
 import { useFetchEntriesControls } from "../screen/atoms"
 import { TimelineSelectorList } from "../screen/TimelineSelectorList"
 import { useOnViewableItemsChanged } from "./hooks"
@@ -9,10 +11,14 @@ import { ItemSeparator } from "./ItemSeparator"
 import { EntryNormalItem } from "./templates/EntryNormalItem"
 
 export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
+  const playingAudioUrl = usePlayingUrl()
+
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
 
   const renderItem = useCallback(
-    ({ item: id }: ListRenderItemInfo<string>) => <EntryNormalItem key={id} entryId={id} />,
+    ({ item: id, extraData }: ListRenderItemInfo<string>) => (
+      <EntryNormalItem key={id} entryId={id} extraData={extraData} />
+    ),
     [],
   )
 
@@ -30,6 +36,7 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
       }}
       isRefetching={isRefetching}
       data={entryIds}
+      extraData={playingAudioUrl}
       keyExtractor={(id) => id}
       estimatedItemSize={100}
       renderItem={renderItem}
