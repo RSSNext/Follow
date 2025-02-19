@@ -5,15 +5,16 @@ import { Forward2CuteReIcon } from "@/src/icons/forward_2_cute_re"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
 import { pause, play, seekBy } from "@/src/lib/player"
+import { useColor } from "@/src/theme/colors"
 
 type ControlButtonProps = {
   size?: number
-  color?: string
   className?: string
 }
 
-export function PlayPauseButton({ size = 24, color, className }: ControlButtonProps) {
+export function PlayPauseButton({ size = 24, className }: ControlButtonProps) {
   const { playing } = useIsPlaying()
+  const label = useColor("label")
   return (
     <View className={className}>
       <TouchableOpacity
@@ -22,9 +23,9 @@ export function PlayPauseButton({ size = 24, color, className }: ControlButtonPr
         }}
       >
         {playing ? (
-          <PauseCuteFiIcon color={color} width={size} height={size} />
+          <PauseCuteFiIcon color={label} width={size} height={size} />
         ) : (
-          <PlayCuteFiIcon color={color} width={size} height={size} />
+          <PlayCuteFiIcon color={label} width={size} height={size} />
         )}
       </TouchableOpacity>
     </View>
@@ -33,10 +34,10 @@ export function PlayPauseButton({ size = 24, color, className }: ControlButtonPr
 
 export function SeekButton({
   size = 24,
-  color,
   className,
   offset = 30,
 }: ControlButtonProps & { offset?: number }) {
+  const label = useColor("label")
   return (
     <View className={className}>
       <TouchableOpacity
@@ -44,7 +45,7 @@ export function SeekButton({
           seekBy(offset)
         }}
       >
-        <Forward2CuteReIcon color={color} width={size} height={size} />
+        <Forward2CuteReIcon color={label} width={size} height={size} />
       </TouchableOpacity>
     </View>
   )

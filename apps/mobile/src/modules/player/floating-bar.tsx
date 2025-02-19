@@ -29,7 +29,7 @@ export function FloatingBar({ className }: { className?: string }) {
         <ThemedBlurView className="flex flex-row items-center gap-4 overflow-hidden rounded-2xl p-2">
           <Image source={activeTrack.artwork} className="size-12 rounded-lg" />
           <View className="flex-1 overflow-hidden">
-            <Text className="text-lg font-semibold" numberOfLines={1}>
+            <Text className="text-label text-lg font-semibold" numberOfLines={1}>
               {activeTrack.title}
             </Text>
           </View>
