@@ -26,6 +26,11 @@
     "open:ios": "xed example/ios",
     "prepublishOnly": "expo-module prepublishOnly"
   },
+  "peerDependencies": {
+    "expo": "52.0.35",
+    "react": "18.3.1",
+    "react-native": "0.77.0"
+  },
   "devDependencies": {
     "expo-module-scripts": "4.0.4"
   }

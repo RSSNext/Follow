@@ -72,6 +72,8 @@
     "nanoid": "5.1.0",
     "nativewind": "4.1.23",
     "ofetch": "1.4.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-hook-form": "7.54.2",
     "react-native": "0.77.0",
     "react-native-bouncy-checkbox": "4.1.2",
@@ -99,6 +101,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.26.9",
+    "@types/react": "18.3.12",
     "babel-plugin-inline-import": "3.0.0",
     "babel-plugin-module-resolver": "5.0.2",
     "drizzle-kit": "0.30.4",
