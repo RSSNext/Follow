@@ -1,4 +1,3 @@
-import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import tsconfigPath from "vite-tsconfig-paths"
@@ -11,7 +10,6 @@ export default defineProject({
   test: {
     globals: true,
     environment: "node",
-    includeSource: [resolve(__dirname, ".")],
   },
 
   plugins: [

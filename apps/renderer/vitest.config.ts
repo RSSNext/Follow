@@ -16,7 +16,6 @@ export default defineProject({
     globals: true,
     setupFiles: [resolve(__dirname, "./setup-file.ts")],
     environment: "happy-dom",
-    includeSource: [resolve(__dirname, ".")],
   },
 
   define: {
