@@ -2,7 +2,6 @@ import { FeedViewType } from "@follow/constants"
 
 import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentGrid"
 
-import { TimelineSelectorHeader } from "../screen/TimelineSelectorHeader"
 import { EntryListContentArticle } from "./EntryListContentArticle"
 import { EntryListContentSocial } from "./EntryListContentSocial"
 
@@ -30,9 +29,5 @@ export function EntryListSelector({
     }
   }
 
-  return (
-    <TimelineSelectorHeader>
-      <ContentComponent entryIds={entryIds} />
-    </TimelineSelectorHeader>
-  )
+  return <ContentComponent entryIds={entryIds} />
 }

@@ -1,27 +1,29 @@
 import type ViewToken from "@shopify/flash-list/dist/viewability/ViewToken"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 
 import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { unreadSyncService } from "@/src/store/unread/store"
 
-export function useOnViewableItemsChanged(): (info: {
-  viewableItems: ViewToken[]
-  changed: ViewToken[]
-}) => void {
+const defaultIdExtractor = (item: ViewToken) => item.key
+export function useOnViewableItemsChanged(
+  idExtractor: (item: ViewToken) => string = defaultIdExtractor,
+): (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void {
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
+
+  const [stableIdExtractor] = useState(() => idExtractor)
 
   return useCallback(
     ({ viewableItems, changed }) => {
-      debouncedFetchEntryContentByStream(viewableItems.map((item) => item.key))
+      debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
       if (markAsReadWhenScrolling) {
         changed
           .filter((item) => !item.isViewable)
           .forEach((item) => {
-            unreadSyncService.markEntryAsRead(item.key)
+            unreadSyncService.markEntryAsRead(stableIdExtractor(item))
           })
       }
     },
-    [markAsReadWhenScrolling],
+    [markAsReadWhenScrolling, stableIdExtractor],
   )
 }
