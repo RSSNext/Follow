@@ -107,6 +107,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
               play({
                 url: audio.url,
                 title: entry?.title,
+                artist: feed?.title,
                 artwork: image,
               })
             }}
