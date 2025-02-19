@@ -1,5 +1,5 @@
 import { useSelectedFeed } from "@/src/modules/screen/atoms"
-import { TimelineSelectorHeader } from "@/src/modules/screen/TimelineSelectorHeader"
+import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorProvider"
 import { SubscriptionList } from "@/src/modules/subscription/SubscriptionLists"
 
 export default function Subscriptions() {
@@ -7,8 +7,8 @@ export default function Subscriptions() {
   const view = selectedFeed?.type === "view" ? selectedFeed.viewId : undefined
 
   return (
-    <TimelineSelectorHeader>
+    <TimelineSelectorProvider>
       <SubscriptionList view={view ?? 0} />
-    </TimelineSelectorHeader>
+    </TimelineSelectorProvider>
   )
 }

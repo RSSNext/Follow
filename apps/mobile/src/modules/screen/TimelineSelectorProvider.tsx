@@ -22,7 +22,7 @@ import { getFeed } from "@/src/store/feed/getter"
 
 import { useEntryListContext, useSelectedFeedTitle, useSelectedView } from "./atoms"
 
-export function TimelineSelectorHeader({ children }: { children: React.ReactNode }) {
+export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type

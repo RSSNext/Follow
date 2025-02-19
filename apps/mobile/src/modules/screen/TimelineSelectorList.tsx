@@ -27,13 +27,15 @@ export const TimelineSelectorList = forwardRef<
   const insets = useSafeAreaInsets()
 
   const headerHeight = useHeaderHeight()
-  const scrollY = useContext(NavigationContext)?.scrollY
+  const { scrollY } = useContext(NavigationContext)!
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      props.onScroll?.(e)
+
       scrollY?.setValue(e.nativeEvent.contentOffset.y)
     },
-    [scrollY],
+    [scrollY, props.onScroll],
   )
 
   const tabBarHeight = useBottomTabBarHeight()
@@ -56,7 +58,6 @@ export const TimelineSelectorList = forwardRef<
           refreshing={isRefetching}
         />
       }
-      onScroll={onScroll}
       scrollIndicatorInsets={{
         top: headerHeight - insets.top,
         bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
@@ -66,6 +67,7 @@ export const TimelineSelectorList = forwardRef<
         paddingBottom: tabBarHeight,
       }}
       {...props}
+      onScroll={onScroll}
     />
   )
 })
@@ -85,9 +87,10 @@ export const TimelineSelectorMasonryList = ({
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      props.onScroll?.(e)
       scrollY?.setValue(e.nativeEvent.contentOffset.y)
     },
-    [scrollY],
+    [scrollY, props.onScroll],
   )
 
   const tabBarHeight = useBottomTabBarHeight()
@@ -109,7 +112,6 @@ export const TimelineSelectorMasonryList = ({
           refreshing={isRefetching}
         />
       }
-      onScroll={onScroll}
       scrollIndicatorInsets={{
         top: headerHeight - insets.top,
         bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
@@ -119,6 +121,7 @@ export const TimelineSelectorMasonryList = ({
         paddingBottom: tabBarHeight,
       }}
       {...props}
+      onScroll={onScroll}
     />
   )
 }

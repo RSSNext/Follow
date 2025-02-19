@@ -74,6 +74,7 @@ export function EntryGridItem(props: MasonryItem) {
       }
       case "video": {
         const { videoPreviewImageUrl } = props
+
         return (
           <>
             {videoPreviewImageUrl ? (

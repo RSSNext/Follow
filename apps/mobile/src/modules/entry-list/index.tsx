@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { useIsFocused } from "@react-navigation/native"
 import { useEffect, useMemo } from "react"
-import { Animated, StyleSheet, View } from "react-native"
+import { Animated, StyleSheet } from "react-native"
 import PagerView from "react-native-pager-view"
 
 import { views } from "@/src/constants/views"
@@ -19,7 +19,7 @@ import {
 } from "@/src/store/entry/hooks"
 import { useListEntryIds } from "@/src/store/list/hooks"
 
-import { TimelineSelectorHeader } from "../screen/TimelineSelectorHeader"
+import { TimelineSelectorProvider } from "../screen/TimelineSelectorProvider"
 import { EntryListSelector } from "./EntryListSelector"
 import { usePagerView } from "./usePagerView"
 
@@ -35,26 +35,30 @@ export function EntryList() {
   }, [setDrawerSwipeDisabled, isFocused])
 
   const selectedFeed = useSelectedFeed()
-  if (!selectedFeed) return null
 
-  switch (selectedFeed.type) {
-    case "view": {
-      return <ViewPagerList viewId={selectedFeed.viewId} />
+  const Content = useMemo(() => {
+    if (!selectedFeed) return null
+    switch (selectedFeed.type) {
+      case "view": {
+        return <ViewPagerList viewId={selectedFeed.viewId} />
+      }
+      case "feed": {
+        return <FeedEntryList feedId={selectedFeed.feedId} />
+      }
+      case "category": {
+        return <CategoryEntryList categoryName={selectedFeed.categoryName} />
+      }
+      case "list": {
+        return <ListEntryList listId={selectedFeed.listId} />
+      }
+      case "inbox": {
+        return <InboxEntryList inboxId={selectedFeed.inboxId} />
+      }
     }
-    case "feed": {
-      return <FeedEntryList feedId={selectedFeed.feedId} />
-    }
-    case "category": {
-      return <CategoryEntryList categoryName={selectedFeed.categoryName} />
-    }
-    case "list": {
-      return <ListEntryList listId={selectedFeed.listId} />
-    }
-    case "inbox": {
-      return <InboxEntryList inboxId={selectedFeed.inboxId} />
-    }
-    // No default
-  }
+  }, [selectedFeed])
+  if (!Content) return null
+
+  return <TimelineSelectorProvider>{Content}</TimelineSelectorProvider>
 }
 
 const AnimatedPagerView = Animated.createAnimatedComponent<typeof PagerView>(PagerView)
@@ -73,33 +77,21 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
   }, [page, pagerRef, viewId])
 
   return (
-    <View style={styles.container}>
-      <TimelineSelectorHeader>
-        <AnimatedPagerView
-          testID="pager-view"
-          ref={pagerRef}
-          style={styles.PagerView}
-          initialPage={page}
-          layoutDirection="ltr"
-          overdrag
-          onPageScroll={rest.onPageScroll}
-          onPageSelected={rest.onPageSelected}
-          onPageScrollStateChanged={rest.onPageScrollStateChanged}
-          pageMargin={10}
-          orientation="horizontal"
-        >
-          {useMemo(
-            () =>
-              views.map((view) => (
-                <View testID="pager-view-content" key={view.view}>
-                  <ViewEntryList viewId={view.view} />
-                </View>
-              )),
-            [],
-          )}
-        </AnimatedPagerView>
-      </TimelineSelectorHeader>
-    </View>
+    <AnimatedPagerView
+      testID="pager-view"
+      ref={pagerRef}
+      style={styles.PagerView}
+      initialPage={page}
+      layoutDirection="ltr"
+      overdrag
+      onPageScroll={rest.onPageScroll}
+      onPageSelected={rest.onPageSelected}
+      onPageScrollStateChanged={rest.onPageScrollStateChanged}
+      pageMargin={10}
+      orientation="horizontal"
+    >
+      {useMemo(() => views.map((view) => <ViewEntryList viewId={view.view} key={view.view} />), [])}
+    </AnimatedPagerView>
   )
 }
 
