@@ -79,25 +79,38 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
   const activeTimelineId = useRouteParamsSelector((s) => s.timelineId)
 
   const [panelRef, setPanelRef] = useState<HTMLDivElement | null>(null)
-  const shouldOpen = useTriangleMenu(containerRef, panelRef!, 300)
+  const triggerRef = useRef<HTMLDivElement>(null)
+  const shouldOpen = useTriangleMenu(triggerRef, panelRef!, 0)
 
   const animateControls = useAnimationControls()
+
+  const [renderPanel, setRenderPanel] = useState(false)
   useEffect(() => {
+    let cancel = false
     if (shouldOpen) {
+      setRenderPanel(true)
       animateControls.start({
         transform: "translateX(0%)",
       })
     } else {
-      animateControls.start({
-        transform: "translateX(-100%)",
-      })
+      animateControls
+        .start({
+          transform: "translateX(-100%)",
+        })
+        .then(() => {
+          if (cancel) return
+          setRenderPanel(false)
+        })
+    }
+    return () => {
+      cancel = true
     }
   }, [animateControls, shouldOpen])
   const timelineColumnShow = useTimelineColumnShow()
 
   return (
     <Fragment>
-      <div ref={containerRef} className="mb-4 mt-3">
+      <div ref={containerRef} className="relative mb-4 mt-3">
         <div
           ref={scrollRef}
           className={clsx(
@@ -122,6 +135,8 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
             <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
           ))}
         </div>
+
+        <div ref={triggerRef} className="absolute inset-y-0 right-0 w-4" />
       </div>
 
       {timelineColumnShow && (
@@ -139,7 +154,7 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
                 type: "spring",
               }}
             >
-              {shouldOpen && (
+              {renderPanel && (
                 <>
                   <header className="flex items-center justify-between border-b p-3 text-lg font-medium">
                     <span className="text-lg font-medium">Quick Selector</span>
@@ -361,9 +376,11 @@ function useTriangleMenu(
     }
 
     function handleMouseEnter() {
-      inStartTrack = true
       if (timer) clearTimeout(timer)
-      timer = setTimeout(() => setOpen(true), openDelay)
+      timer = setTimeout(() => {
+        inStartTrack = true
+        setOpen(true)
+      }, openDelay)
     }
 
     function handleMouseLeave() {
