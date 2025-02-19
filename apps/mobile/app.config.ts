@@ -38,6 +38,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     usesAppleSignIn: true,
     infoPlist: {
       LSApplicationCategoryType: "public.app-category.news",
+      ITSAppUsesNonExemptEncryption: false,
     },
   },
   android: {
