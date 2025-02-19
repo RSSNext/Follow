@@ -1,12 +1,15 @@
 import { FeedViewType } from "@follow/constants"
 import { LinearGradient } from "expo-linear-gradient"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { ScrollView, Text, View } from "react-native"
-import Animated from "react-native-reanimated"
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
-import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
+import {
+  EntryContentWebView,
+  setWebViewEntry,
+} from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ImageContextMenu } from "@/src/components/ui/image/ImageContextMenu"
@@ -49,6 +52,11 @@ export function EntryGridItem(props: MasonryItem) {
         return imageUrl ? (
           <ImageContextMenu imageUrl={imageUrl}>
             <PreviewImage
+              onPreview={() => {
+                if (item) {
+                  setWebViewEntry(item)
+                }
+              }}
               imageUrl={imageUrl}
               blurhash={blurhash}
               aspectRatio={aspectRatio}
@@ -105,11 +113,17 @@ const EntryGridItemAccessory = ({ id }: { id: string }) => {
   const entry = useEntry(id)
   const feed = useFeed(entry?.feedId || "")
   const insets = useSafeAreaInsets()
+
+  const opacityValue = useSharedValue(0)
+  useEffect(() => {
+    opacityValue.value = withTiming(1, { duration: 1000 })
+  }, [opacityValue])
   if (!entry) {
     return null
   }
+
   return (
-    <Animated.View className="absolute inset-x-0 bottom-0">
+    <Animated.View style={{ opacity: opacityValue }} className="absolute inset-x-0 bottom-0">
       <LinearGradient colors={["transparent", "#000"]} locations={[0.1, 1]} className="flex-1">
         <View className="flex-row items-center gap-2">
           <View className="border-non-opaque-separator overflow-hidden rounded-full border">

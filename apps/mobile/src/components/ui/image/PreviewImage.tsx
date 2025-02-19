@@ -11,6 +11,7 @@ interface PreviewImageProps {
   aspectRatio: number
   Accessory?: FC<any>
   AccessoryProps?: any
+  onPreview?: () => void
 }
 
 export const PreviewImage = ({
@@ -19,19 +20,21 @@ export const PreviewImage = ({
   aspectRatio,
   Accessory,
   AccessoryProps,
+  onPreview,
 }: PreviewImageProps) => {
   const imageRef = useRef<View>(null)
 
   const { openPreview } = usePreviewImage()
   return (
     <Pressable
-      onPress={() =>
+      onPress={() => {
+        onPreview?.()
         openPreview({
           imageRef,
           images: [{ imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl }],
           accessoriesElement: Accessory ? <Accessory {...AccessoryProps} /> : undefined,
         })
-      }
+      }}
     >
       <View ref={imageRef}>
         <Image
