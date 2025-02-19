@@ -88,6 +88,7 @@
     "react-native-root-siblings": "5.0.1",
     "react-native-safe-area-context": "5.1.0",
     "react-native-screens": "~4.5.0",
+    "react-native-sheet-transitions": "^0.1.2",
     "react-native-svg": "15.8.0",
     "react-native-uikit-colors": "0.2.0",
     "react-native-web": "~0.19.13",

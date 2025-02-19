@@ -25,6 +25,16 @@ export default function RootLayout() {
         <Stack.Screen name="(stack)" options={{ headerShown: false }} />
         <Stack.Screen name="(headless)" options={{ headerShown: false }} />
         <Stack.Screen name="(modal)" options={{ headerShown: false, presentation: "modal" }} />
+        <Stack.Screen
+          name="player"
+          options={{
+            presentation: "transparentModal",
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+        />
       </Stack>
 
       {__DEV__ && <DebugButton />}
