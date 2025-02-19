@@ -1,10 +1,9 @@
 import { TouchableOpacity, View } from "react-native"
-import { useIsPlaying } from "react-native-track-player"
 
 import { Forward2CuteReIcon } from "@/src/icons/forward_2_cute_re"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
-import { pause, play, seekBy } from "@/src/lib/player"
+import { pause, play, seekBy, useIsPlaying } from "@/src/lib/player"
 import { useColor } from "@/src/theme/colors"
 
 type ControlButtonProps = {
