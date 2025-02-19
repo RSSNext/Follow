@@ -13,6 +13,6 @@
     "@follow/types": "workspace:*",
     "clsx": "2.1.1",
     "jotai": "2.11.3",
-    "react-blurhash": "^0.3.0"
+    "react-blurhash": "0.3.0"
   }
 }

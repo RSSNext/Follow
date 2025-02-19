@@ -1,6 +1,6 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { buildGlobRoutes } from "@follow/utils/route-builder"
-import { wrapCreateBrowserRouter } from "@sentry/react"
+import { wrapCreateBrowserRouterV7 } from "@sentry/react"
 import { createBrowserRouter, createHashRouter } from "react-router"
 
 import { ErrorElement } from "./components/common/ErrorElement"
@@ -12,7 +12,7 @@ const tree = buildGlobRoutes(globTree)
 let routerCreator =
   IN_ELECTRON || globalThis["__DEBUG_PROXY__"] ? createHashRouter : createBrowserRouter
 if (window.SENTRY_RELEASE) {
-  routerCreator = wrapCreateBrowserRouter(routerCreator)
+  routerCreator = wrapCreateBrowserRouterV7(routerCreator)
 }
 
 export const router = routerCreator(

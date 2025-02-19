@@ -12,16 +12,12 @@
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
   "dependencies": {
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
-    "foxact": "0.2.43",
-    "jotai": "2.11.3",
-    "usehooks-ts": "3.1.0"
+    "foxact": "0.2.44",
+    "jotai": "2.12.1",
+    "usehooks-ts": "3.1.1"
   }
 }

@@ -4,7 +4,7 @@ import { withUIKit } from "react-native-uikit-colors/tailwind"
 export default withUIKit({
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  presets: [require("nativewind/preset")],
+  // presets: [require("nativewind/preset")],
 
   plugins: [require("@tailwindcss/typography")],
   theme: {
