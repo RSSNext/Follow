@@ -1,4 +1,5 @@
 import { Image } from "expo-image"
+import type { FC } from "react"
 import { useRef } from "react"
 import { Pressable, View } from "react-native"
 
@@ -8,9 +9,17 @@ interface PreviewImageProps {
   imageUrl: string
   blurhash?: string | undefined
   aspectRatio: number
+  Accessory?: FC<any>
+  AccessoryProps?: any
 }
 
-export const PreviewImage = ({ imageUrl, blurhash, aspectRatio }: PreviewImageProps) => {
+export const PreviewImage = ({
+  imageUrl,
+  blurhash,
+  aspectRatio,
+  Accessory,
+  AccessoryProps,
+}: PreviewImageProps) => {
   const imageRef = useRef<View>(null)
 
   const { openPreview } = usePreviewImage()
@@ -20,6 +29,7 @@ export const PreviewImage = ({ imageUrl, blurhash, aspectRatio }: PreviewImagePr
         openPreview({
           imageRef,
           images: [{ imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl }],
+          accessoriesElement: Accessory ? <Accessory {...AccessoryProps} /> : undefined,
         })
       }
     >

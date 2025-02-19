@@ -22,6 +22,7 @@ const NativeView: React.ComponentType<
 
 type EntryContentWebViewProps = {
   entry: EntryModel
+  noMedia?: boolean
 }
 
 const setCodeTheme = (light: string, dark: string) => {
@@ -36,6 +37,10 @@ export const setWebViewEntry = (entry: EntryModel) => {
   )
 }
 
+const setNoMedia = (value: boolean) => {
+  SharedWebViewModule.evaluateJavaScript(`setNoMedia(${value})`)
+}
+
 const setReaderRenderInlineStyle = (value: boolean) => {
   SharedWebViewModule.evaluateJavaScript(`setReaderRenderInlineStyle(${value})`)
 }
@@ -46,17 +51,22 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
   const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
   const codeThemeDark = useUISettingKey("codeHighlightThemeDark")
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-  const { entry } = props
+  const { entry, noMedia } = props
+
+  const [mode, setMode] = React.useState<"normal" | "debug">("normal")
 
   useEffect(() => {
-    setCodeTheme(codeThemeLight, codeThemeDark)
-  }, [codeThemeLight, codeThemeDark])
+    setNoMedia(!!noMedia)
+  }, [noMedia, mode])
 
   useEffect(() => {
     setReaderRenderInlineStyle(readerRenderInlineStyle)
-  }, [readerRenderInlineStyle])
+  }, [readerRenderInlineStyle, mode])
 
-  const [mode, setMode] = React.useState<"normal" | "debug">("normal")
+  useEffect(() => {
+    setCodeTheme(codeThemeLight, codeThemeDark)
+  }, [codeThemeLight, codeThemeDark, mode])
+
   React.useEffect(() => {
     setWebViewEntry(entry)
   }, [entry])
