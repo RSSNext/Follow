@@ -701,9 +701,6 @@ importers:
       postcss:
         specifier: 8.5.2
         version: 8.5.2
-      react-test-renderer:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
 
   apps/mobile/native:
     dependencies:
