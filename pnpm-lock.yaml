@@ -3261,13 +3261,8 @@ packages:
   '@gorhom/portal@1.0.14':
     resolution: {integrity: sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A==}
     peerDependencies:
-<<<<<<< HEAD
-      react: '*'
-      react-native: npm:react-native@0.77.0
-=======
       react: 18.3.1
-      react-native: '*'
->>>>>>> dev
+      react-native: npm:react-native@0.77.0
 
   '@grpc/grpc-js@1.9.15':
     resolution: {integrity: sha512-nqE7Hc0AzI+euzUwDAy0aY5hCp10r734gMGRdU+qOPX0XSceI2ULrcXB5U2xSc5VkWwalCj4M7GzCAygZl2KoQ==}
@@ -4596,24 +4591,14 @@ packages:
   '@react-native-menu/menu@1.2.2':
     resolution: {integrity: sha512-Uk65PAhwNkCVBAqJu5t2H9biV+m0JLwJc7m3v2X2A/W8SFJmUqYabBsLH4fOWKI3a7kkR9QDT6HruliIKSfM8w==}
     peerDependencies:
-<<<<<<< HEAD
-      react: '*'
-      react-native: '*'
-=======
       react: 18.3.1
-      react-native: npm:react-native@0.77.0
->>>>>>> dev
+      react-native: '*'
 
   '@react-native-picker/picker@2.11.0':
     resolution: {integrity: sha512-QuZU6gbxmOID5zZgd/H90NgBnbJ3VV6qVzp6c7/dDrmWdX8S0X5YFYgDcQFjE3dRen9wB9FWnj2VVdPU64adSg==}
     peerDependencies:
-<<<<<<< HEAD
-      react: '*'
-      react-native: npm:react-native@0.77.0
-=======
       react: 18.3.1
-      react-native: '*'
->>>>>>> dev
+      react-native: npm:react-native@0.77.0
 
   '@react-native/assets-registry@0.77.0':
     resolution: {integrity: sha512-Ms4tYYAMScgINAXIhE4riCFJPPL/yltughHS950l0VP5sm5glbimn9n7RFn9Tc8cipX74/ddbk19+ydK2iDMmA==}
@@ -4782,13 +4767,8 @@ packages:
     resolution: {integrity: sha512-1LxjgnbPyFINyf9Qr5d1YE0pYhuJayg5TCIIFQmbcX4PRhX7FKUXV7cX8OzrKXEdZi/UE/VNXugtozPAR9zgvA==}
     peerDependencies:
       '@react-navigation/native': ^7.0.14
-<<<<<<< HEAD
-      react: '>= 18.2.0'
-      react-native: npm:react-native@0.77.0
-=======
       react: 18.3.1
       react-native: '*'
->>>>>>> dev
       react-native-safe-area-context: '>= 4.0.0'
       react-native-screens: '>= 4.0.0'
 
@@ -4813,13 +4793,8 @@ packages:
     peerDependencies:
       '@react-native-masked-view/masked-view': '>= 0.2.0'
       '@react-navigation/native': ^7.0.14
-<<<<<<< HEAD
-      react: '>= 18.2.0'
-      react-native: npm:react-native@0.77.0
-=======
       react: 18.3.1
       react-native: '*'
->>>>>>> dev
       react-native-safe-area-context: '>= 4.0.0'
     peerDependenciesMeta:
       '@react-native-masked-view/masked-view':
@@ -5383,13 +5358,8 @@ packages:
     resolution: {integrity: sha512-RLhNptm02aqpqZvjj9pJPcU+EVYxOAJhPRCmDOaUbUP86+636w+plsbjpBPSYGvPZhPj56RtZ9FBlvolPeEmYA==}
     peerDependencies:
       '@babel/runtime': '*'
-<<<<<<< HEAD
-      react: '*'
-      react-native: npm:react-native@0.77.0
-=======
       react: 18.3.1
-      react-native: '*'
->>>>>>> dev
+      react-native: npm:react-native@0.77.0
 
   '@shuding/opentype.js@1.4.0-beta.0':
     resolution: {integrity: sha512-3NgmNyH3l/Hv6EvsWJbsvpcpUba6R8IREQ83nH83cyakCw7uM1arZKNfHwv1Wz6jgqrF/j4x5ELvR6PnK9nTcA==}
@@ -5508,7 +5478,7 @@ packages:
     peerDependencies:
       jest: '>=28.0.0'
       react: 18.3.1
-      react-native: npm:react-native@0.77.0
+      react-native: '>=0.59'
       react-test-renderer: '>=16.8.0'
     peerDependenciesMeta:
       jest:
@@ -8794,13 +8764,8 @@ packages:
     resolution: {integrity: sha512-xe+v56ts6GWJoNXLpWBQJmIPd7K1Bk9tmWc2b0nV5yUjqXZX3lbTYm8QhXEqUJxYu87o2GSkNqAqNKeDbMUXGQ==}
     peerDependencies:
       expo: '*'
-<<<<<<< HEAD
-      react: '*'
-      react-native: npm:react-native@0.77.0
-=======
       react: 18.3.1
       react-native: '*'
->>>>>>> dev
 
   expo-status-bar@2.0.1:
     resolution: {integrity: sha512-AkIPX7jWHRPp83UBZ1iXtVvyr0g+DgBVvIXTtlmPtmUsm8Vq9Bb5IGj86PW8osuFlgoTVAg7HI/+Ok7yEYwiRg==}
@@ -12806,7 +12771,7 @@ packages:
   react-native-sheet-transitions@0.1.2:
     resolution: {integrity: sha512-9PPREdwH3tMR8otUK1voiFw9AFNtC37Del2fZwbCMBKjOyClC+f3Fwp7KqUouP0A5c3zjEc3T8TetBGQGPQE9A==}
     peerDependencies:
-      react: '*'
+      react: 18.3.1
       react-native: npm:react-native@0.77.0
       react-native-gesture-handler: '*'
       react-native-reanimated: '*'
@@ -12820,7 +12785,7 @@ packages:
   react-native-track-player@4.1.1:
     resolution: {integrity: sha512-E5N/eK/+HtAVJUAzXpm1cWz8ROheV9jb0TI6h2bM+333U+DWibTTnT2T1122FkCoXLXIYavtm2FR2if+5jH8cA==}
     peerDependencies:
-      react: '>=16.8.6'
+      react: 18.3.1
       react-native: npm:react-native@0.77.0
       react-native-windows: '>=0.63.0'
       shaka-player: ^4.7.9
