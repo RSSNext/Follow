@@ -19,6 +19,7 @@ import {
 } from "@/src/store/entry/hooks"
 import { useListEntryIds } from "@/src/store/list/hooks"
 
+import { TimelineSelectorHeader } from "../screen/TimelineSelectorHeader"
 import { EntryListSelector } from "./EntryListSelector"
 import { usePagerView } from "./usePagerView"
 
@@ -73,29 +74,31 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
 
   return (
     <View style={styles.container}>
-      <AnimatedPagerView
-        testID="pager-view"
-        ref={pagerRef}
-        style={styles.PagerView}
-        initialPage={page}
-        layoutDirection="ltr"
-        overdrag
-        onPageScroll={rest.onPageScroll}
-        onPageSelected={rest.onPageSelected}
-        onPageScrollStateChanged={rest.onPageScrollStateChanged}
-        pageMargin={10}
-        orientation="horizontal"
-      >
-        {useMemo(
-          () =>
-            views.map((view) => (
-              <View testID="pager-view-content" key={view.view}>
-                <ViewEntryList viewId={view.view} />
-              </View>
-            )),
-          [],
-        )}
-      </AnimatedPagerView>
+      <TimelineSelectorHeader>
+        <AnimatedPagerView
+          testID="pager-view"
+          ref={pagerRef}
+          style={styles.PagerView}
+          initialPage={page}
+          layoutDirection="ltr"
+          overdrag
+          onPageScroll={rest.onPageScroll}
+          onPageSelected={rest.onPageSelected}
+          onPageScrollStateChanged={rest.onPageScrollStateChanged}
+          pageMargin={10}
+          orientation="horizontal"
+        >
+          {useMemo(
+            () =>
+              views.map((view) => (
+                <View testID="pager-view-content" key={view.view}>
+                  <ViewEntryList viewId={view.view} />
+                </View>
+              )),
+            [],
+          )}
+        </AnimatedPagerView>
+      </TimelineSelectorHeader>
     </View>
   )
 }
