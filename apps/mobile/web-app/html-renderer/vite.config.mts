@@ -7,14 +7,12 @@ import { viteRenderBaseConfig } from "../../../../configs/vite.render.config"
 import { astPlugin } from "../../../../plugins/vite/ast"
 
 // const isDev = process.env.NODE_ENV === "development"
-const isCI = !!process.env.CI
+// const isCI = !!process.env.CI
 export default defineConfig({
   ...viteRenderBaseConfig,
   base: "",
   build: {
-    outDir: !isCI
-      ? path.resolve(import.meta.dirname, "../../../../out/rn-web/html-renderer")
-      : path.resolve("/tmp/rn-web/html-renderer"),
+    outDir: path.resolve(import.meta.dirname, "../../../../out/rn-web/html-renderer"),
   },
   resolve: {
     alias: {
