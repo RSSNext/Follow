@@ -7,7 +7,7 @@ import { unreadSyncService } from "@/src/store/unread/store"
 export const TimelineViewSelectorContextMenu: FC<
   PropsWithChildren<{ type: string | undefined; viewId: FeedViewType | undefined }>
 > = ({ children, type, viewId }) => {
-  if (type !== "view" || !viewId) return children
+  if (type !== "view" || viewId === undefined) return children
 
   return (
     <ContextMenu.Root>
