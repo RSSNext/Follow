@@ -21,26 +21,37 @@ export function getAttachmentState(playingUrl?: string, attachment?: Attachments
   return isPlaying ? "playing" : isLoading ? "loading" : null
 }
 
-export async function play({
-  url,
-  title,
-  artwork,
-}: {
+export async function play(newTrack?: {
   url: string
   title?: string | null
   artwork?: string | null
 }) {
-  await TrackPlayer.load({
-    url,
-    title: title ?? "Unknown",
-    artwork: artwork ?? undefined,
-  })
-  const { state } = await TrackPlayer.getPlaybackState()
-  if (state !== State.Playing) {
-    await TrackPlayer.play()
+  if (newTrack) {
+    const activeTrack = await TrackPlayer.getActiveTrack()
+    if (activeTrack?.url !== newTrack.url) {
+      const { url, title, artwork } = newTrack
+
+      await TrackPlayer.load({
+        url,
+        title: title ?? "Unknown",
+        artwork: artwork ?? undefined,
+      })
+    }
   }
+
+  await TrackPlayer.play()
 }
 
 export async function pause() {
   await TrackPlayer.pause()
 }
+
+export async function reset() {
+  await TrackPlayer.reset()
+}
+
+export async function seekBy(offset: number) {
+  await TrackPlayer.seekBy(offset)
+}
+
+export { useActiveTrack, useIsPlaying } from "react-native-track-player"
