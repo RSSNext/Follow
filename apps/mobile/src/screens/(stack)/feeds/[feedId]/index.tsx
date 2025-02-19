@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { EntryListSelector } from "@/src/modules/entry-list/EntryListSelector"
 import { EntryListContext, useSelectedView } from "@/src/modules/screen/atoms"
-import { TimelineSelectorHeader } from "@/src/modules/screen/TimelineSelectorHeader"
+import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorProvider"
 import { useCollectionEntryList } from "@/src/store/collection/hooks"
 import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
@@ -29,9 +29,9 @@ export default function Feed() {
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
       <BottomTabBarHeightContext.Provider value={insets.bottom}>
-        <TimelineSelectorHeader>
+        <TimelineSelectorProvider>
           <EntryListSelector entryIds={entryIds} viewId={view} />
-        </TimelineSelectorHeader>
+        </TimelineSelectorProvider>
       </BottomTabBarHeightContext.Provider>
     </EntryListContext.Provider>
   )

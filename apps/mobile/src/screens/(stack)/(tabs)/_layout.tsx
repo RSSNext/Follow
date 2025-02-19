@@ -22,7 +22,6 @@ import { Search3CuteFiIcon } from "@/src/icons/search_3_cute_fi"
 import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
-import { FeedDrawer } from "@/src/modules/feed-drawer/drawer"
 import { FloatingBar } from "@/src/modules/player/floating-bar"
 import { useColor } from "@/src/theme/colors"
 
@@ -47,113 +46,111 @@ export default function TabLayout() {
   }, [animatedTransformY, tabBarVisible])
 
   return (
-    <FeedDrawer>
-      <BottomTabBarBackgroundContext.Provider value={useMemo(() => ({ opacity }), [opacity])}>
-        <SetBottomTabBarVisibleContext.Provider value={setTabBarVisible}>
-          <Tabs
-            screenListeners={{
-              tabPress: () => {
-                opacity.value = 1
+    <BottomTabBarBackgroundContext.Provider value={useMemo(() => ({ opacity }), [opacity])}>
+      <SetBottomTabBarVisibleContext.Provider value={setTabBarVisible}>
+        <Tabs
+          screenListeners={{
+            tabPress: () => {
+              opacity.value = 1
+            },
+            transitionStart: () => {
+              opacity.value = 1
+            },
+          }}
+          screenOptions={{
+            tabBarBackground: TabBarBackground,
+            tabBarStyle: {
+              position: "absolute",
+              borderTopWidth: 0,
+              transform: [
+                {
+                  translateY: animatedTransformY.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [100, 0],
+                  }),
+                },
+              ],
+            },
+            animation: "fade",
+            transitionSpec: {
+              animation: "timing",
+              config: {
+                duration: 50,
+                easing: Easing.ease,
               },
-              transitionStart: () => {
-                opacity.value = 1
+            },
+          }}
+        >
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: "Home",
+              headerShown: false,
+              tabBarLabel: "Timeline",
+              tabBarIcon: ({ color, focused }) => {
+                const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
+                return <Icon color={color} width={24} height={24} />
+              },
+              tabBarButton(props) {
+                return <Pressable {...props} />
               },
             }}
-            screenOptions={{
-              tabBarBackground: TabBarBackground,
-              tabBarStyle: {
-                position: "absolute",
-                borderTopWidth: 0,
-                transform: [
-                  {
-                    translateY: animatedTransformY.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [100, 0],
-                    }),
-                  },
-                ],
+          />
+          <Tabs.Screen
+            name="subscriptions"
+            options={{
+              title: "Subscriptions",
+              headerShown: false,
+              tabBarIcon: ({ color, focused }) => {
+                const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
+                return <Icon color={color} width={24} height={24} />
               },
-              animation: "fade",
-              transitionSpec: {
-                animation: "timing",
-                config: {
-                  duration: 50,
-                  easing: Easing.ease,
-                },
+              tabBarLabel: "Subscriptions",
+
+              tabBarButton(props) {
+                return <Pressable {...props} />
               },
             }}
-          >
-            <Tabs.Screen
-              name="index"
-              options={{
-                title: "Home",
-                headerShown: false,
-                tabBarLabel: "Timeline",
-                tabBarIcon: ({ color, focused }) => {
-                  const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
-                  return <Icon color={color} width={24} height={24} />
-                },
-                tabBarButton(props) {
-                  return <Pressable {...props} />
-                },
-              }}
-            />
-            <Tabs.Screen
-              name="subscriptions"
-              options={{
-                title: "Subscriptions",
-                headerShown: false,
-                tabBarIcon: ({ color, focused }) => {
-                  const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
-                  return <Icon color={color} width={24} height={24} />
-                },
-                tabBarLabel: "Subscriptions",
+          />
+          <Tabs.Screen
+            name="discover"
+            options={{
+              title: "Discover",
+              headerShown: false,
+              tabBarIcon: ({ color, focused }) => {
+                const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
+                return <Icon color={color} width={24} height={24} />
+              },
+              tabBarButton(props) {
+                return <Pressable {...props} />
+              },
+            }}
+          />
 
-                tabBarButton(props) {
-                  return <Pressable {...props} />
-                },
-              }}
-            />
-            <Tabs.Screen
-              name="discover"
-              options={{
-                title: "Discover",
-                headerShown: false,
-                tabBarIcon: ({ color, focused }) => {
-                  const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
-                  return <Icon color={color} width={24} height={24} />
-                },
-                tabBarButton(props) {
-                  return <Pressable {...props} />
-                },
-              }}
-            />
-
-            <Tabs.Screen
-              name="settings"
-              options={{
-                title: "Settings",
-                headerShown: false,
-                tabBarButton(props) {
-                  return (
-                    <GestureDetector gesture={fifthTap}>
-                      <View className="flex-1">
-                        <Pressable {...props} />
-                      </View>
-                    </GestureDetector>
-                  )
-                },
-                tabBarIcon: ({ color, focused }) => {
-                  const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
-                  return <Icon color={color} width={24} height={24} />
-                },
-              }}
-            />
-          </Tabs>
-          <FloatingBar className="absolute inset-x-0 bottom-28" />
-        </SetBottomTabBarVisibleContext.Provider>
-      </BottomTabBarBackgroundContext.Provider>
-    </FeedDrawer>
+          <Tabs.Screen
+            name="settings"
+            options={{
+              title: "Settings",
+              headerShown: false,
+              tabBarButton(props) {
+                return (
+                  <GestureDetector gesture={fifthTap}>
+                    <View className="flex-1">
+                      <Pressable {...props} />
+                    </View>
+                  </GestureDetector>
+                )
+              },
+              tabBarIcon: ({ color, focused }) => {
+                const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
+                return <Icon color={color} width={24} height={24} />
+              },
+            }}
+          />
+        </Tabs>
+        <FloatingBar className="absolute inset-x-0 bottom-28" />
+      </SetBottomTabBarVisibleContext.Provider>
+    </BottomTabBarBackgroundContext.Provider>
   )
 }
 

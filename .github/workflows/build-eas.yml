@@ -40,6 +40,8 @@ jobs:
         run: |
           cd apps/mobile
           eas build --platform ios --profile preview --non-interactive --local --output=./build.ipa
+        env:
+          CI: true
 
       # Optional: Upload artifact
       - name: 📤 Upload IPA

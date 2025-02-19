@@ -1,3 +1,4 @@
+import { PortalProvider } from "@gorhom/portal"
 import { Image } from "expo-image"
 import type { RefObject } from "react"
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
@@ -24,12 +25,15 @@ interface PreviewImageProps {
   recyclingKey?: string
 }
 
+interface OpenPreviewParams {
+  imageRef: RefObject<View>
+  images: PreviewImageProps[]
+  initialIndex?: number
+  accessoriesElement?: React.ReactNode
+}
+
 interface PreviewImageContextType {
-  openPreview: (params: {
-    imageRef: RefObject<View>
-    images: PreviewImageProps[]
-    initialIndex?: number
-  }) => void
+  openPreview: (params: OpenPreviewParams) => void
 }
 const PreviewImageContext = createContext<PreviewImageContextType | null>(null)
 
@@ -48,7 +52,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   const [currentState, setCurrentState] = useState<PreviewImageProps[] | null>(null)
   const [imageRef, setImageRef] = useState<View | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-
+  const [accessoriesElement, setAccessoriesElement] = useState<React.ReactNode | null>(null)
   const layoutScale = useSharedValue(1)
   const layoutTransformX = useSharedValue(0)
   const layoutTransformY = useSharedValue(0)
@@ -343,10 +347,11 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   }
 
   const openPreview = useCallback(
-    (params: { imageRef: RefObject<View>; images: PreviewImageProps[]; initialIndex?: number }) => {
+    (params: OpenPreviewParams) => {
       setCurrentState(params.images)
       setCurrentIndex(params.initialIndex || 0)
       setImageRef(params.imageRef.current)
+      setAccessoriesElement(params.accessoriesElement)
       params.imageRef.current?.measureInWindow((pageX, pageY, w1, h1) => {
         setPreviewModalOpen(true)
 
@@ -388,52 +393,55 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
       {children}
       {currentState && (
         <Modal transparent visible={previewModalOpen}>
-          <Animated.View style={overlayStyle} className="absolute inset-0" />
-          <Animated.View style={modalStyle} className="w-full flex-1">
-            <GestureHandlerRootView className="w-full flex-1">
-              <View className="flex-1 items-center justify-center">
-                <Pressable
-                  className="absolute right-2 top-safe-offset-2"
-                  onPress={fadeOutCloseAnimation}
-                >
-                  <CloseCuteReIcon color="#fff" />
-                </Pressable>
-                <GestureDetector gesture={composed}>
-                  <Animated.View style={animatedStyle}>
-                    <Animated.View
-                      style={{
-                        transform: [
-                          {
-                            scale: layoutScale,
-                          },
-                          {
-                            translateX: layoutTransformX,
-                          },
-                          {
-                            translateY: layoutTransformY,
-                          },
-                        ],
-                      }}
-                    >
-                      <ImageContextMenu imageUrl={currentState[currentIndex]?.imageUrl}>
-                        <Image
-                          recyclingKey={currentState[currentIndex]?.recyclingKey}
-                          source={{ uri: currentState[currentIndex]?.imageUrl }}
-                          className="w-full"
-                          style={{
-                            aspectRatio: currentState[currentIndex]?.aspectRatio,
-                          }}
-                          placeholder={{
-                            blurhash: currentState[currentIndex]?.blurhash,
-                          }}
-                        />
-                      </ImageContextMenu>
+          <PortalProvider>
+            <Animated.View style={overlayStyle} className="absolute inset-0" />
+            <Animated.View style={modalStyle} className="w-full flex-1">
+              <GestureHandlerRootView className="w-full flex-1">
+                <View className="flex-1 items-center justify-center">
+                  <Pressable
+                    className="absolute right-2 top-safe-offset-2"
+                    onPress={fadeOutCloseAnimation}
+                  >
+                    <CloseCuteReIcon color="#fff" />
+                  </Pressable>
+                  <GestureDetector gesture={composed}>
+                    <Animated.View style={animatedStyle}>
+                      <Animated.View
+                        style={{
+                          transform: [
+                            {
+                              scale: layoutScale,
+                            },
+                            {
+                              translateX: layoutTransformX,
+                            },
+                            {
+                              translateY: layoutTransformY,
+                            },
+                          ],
+                        }}
+                      >
+                        <ImageContextMenu imageUrl={currentState[currentIndex]?.imageUrl}>
+                          <Image
+                            recyclingKey={currentState[currentIndex]?.recyclingKey}
+                            source={{ uri: currentState[currentIndex]?.imageUrl }}
+                            className="w-full"
+                            style={{
+                              aspectRatio: currentState[currentIndex]?.aspectRatio,
+                            }}
+                            placeholder={{
+                              blurhash: currentState[currentIndex]?.blurhash,
+                            }}
+                          />
+                        </ImageContextMenu>
+                      </Animated.View>
                     </Animated.View>
-                  </Animated.View>
-                </GestureDetector>
-              </View>
-            </GestureHandlerRootView>
-          </Animated.View>
+                  </GestureDetector>
+                </View>
+              </GestureHandlerRootView>
+              {accessoriesElement}
+            </Animated.View>
+          </PortalProvider>
         </Modal>
       )}
     </PreviewImageContext.Provider>
