@@ -86,7 +86,10 @@ export function ListItem({
 
   const related = feed || inbox
 
-  const hasAudio = simple ? false : !!entry.entries?.attachments?.[0]?.url
+  const hasAudio = simple
+    ? false
+    : !!entry.entries?.attachments?.[0]?.url &&
+      entry.entries?.attachments?.[0]?.mime_type?.startsWith("audio")
   const hasMedia = simple ? false : !!entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
