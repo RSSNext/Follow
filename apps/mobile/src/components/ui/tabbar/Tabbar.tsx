@@ -14,14 +14,14 @@ import { Platform, Pressable, StyleSheet, Text } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { SetBottomTabBarHeightContext } from "@/src/components/ui/tabbar/context"
+import { SetBottomTabBarHeightContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarHeightContext"
 import { quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
 import { Grid } from "../grid"
-import { BottomTabBarBackgroundContext } from "./BottomTabBarBackgroundContext"
-import { BottomTabBarVisibleContext } from "./BottomTabBarVisibleContext"
+import { BottomTabBarBackgroundContext } from "./contexts/BottomTabBarBackgroundContext"
+import { BottomTabBarVisibleContext } from "./contexts/BottomTabBarVisibleContext"
 
 export const Tabbar: FC<BottomTabBarProps> = (props) => {
   const { state, navigation, descriptors } = props

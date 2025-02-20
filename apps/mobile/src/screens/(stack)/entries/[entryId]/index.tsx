@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { SafeNavigationScrollView } from "@/src/components/common/SafeNavigationScrollView"
 import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
-import { BottomTabBarHeightContext } from "@/src/components/ui/tabbar/context"
+import { BottomTabBarHeightContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarHeightContext"
 import { openLink } from "@/src/lib/native"
 import { EntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryAISummary } from "@/src/modules/entry-content/EntryAISummary"

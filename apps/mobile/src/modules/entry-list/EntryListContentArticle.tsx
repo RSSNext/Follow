@@ -31,18 +31,14 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
 
   return (
     <TimelineSelectorList
-      onRefresh={() => {
-        refetch()
-      }}
+      onRefresh={refetch}
       isRefetching={isRefetching}
       data={entryIds}
       extraData={playingAudioUrl}
       keyExtractor={(id) => id}
       estimatedItemSize={100}
       renderItem={renderItem}
-      onEndReached={() => {
-        fetchNextPage()
-      }}
+      onEndReached={fetchNextPage}
       onViewableItemsChanged={onViewableItemsChanged}
       ItemSeparatorComponent={ItemSeparator}
       ListFooterComponent={ListFooterComponent}
