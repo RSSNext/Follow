@@ -1,5 +1,10 @@
-import type { FlashListProps, MasonryFlashListProps } from "@shopify/flash-list"
+import type {
+  FlashListProps,
+  MasonryFlashListProps,
+  MasonryFlashListRef,
+} from "@shopify/flash-list"
 import { FlashList, MasonryFlashList } from "@shopify/flash-list"
+import type { ElementRef, RefObject } from "react"
 import { forwardRef, useCallback, useContext, useImperativeHandle, useRef } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { RefreshControl } from "react-native"
@@ -75,11 +80,10 @@ export const TimelineSelectorList = forwardRef<
   )
 })
 
-export const TimelineSelectorMasonryList = ({
-  onRefresh,
-  isRefetching,
-  ...props
-}: Props & Omit<MasonryFlashListProps<any>, "onRefresh">) => {
+export const TimelineSelectorMasonryList = forwardRef<
+  ElementRef<typeof MasonryFlashList>,
+  Props & Omit<MasonryFlashListProps<any>, "onRefresh">
+>(({ onRefresh, isRefetching, ...props }, ref) => {
   const { refetch: unreadRefetch } = usePrefetchUnread()
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
@@ -102,6 +106,7 @@ export const TimelineSelectorMasonryList = ({
 
   return (
     <MasonryFlashList
+      ref={ref as RefObject<MasonryFlashListRef<any>>}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}
@@ -127,4 +132,4 @@ export const TimelineSelectorMasonryList = ({
       onScroll={onScroll}
     />
   )
-}
+})

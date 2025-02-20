@@ -1,5 +1,6 @@
 import type { ListRenderItemInfo } from "@shopify/flash-list"
-import { useCallback, useMemo } from "react"
+import type { ElementRef } from "react"
+import { forwardRef, useCallback, useMemo } from "react"
 import { View } from "react-native"
 
 import { usePlayingUrl } from "@/src/lib/player"
@@ -10,7 +11,10 @@ import { useOnViewableItemsChanged } from "./hooks"
 import { ItemSeparator } from "./ItemSeparator"
 import { EntryNormalItem } from "./templates/EntryNormalItem"
 
-export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
+export const EntryListContentArticle = forwardRef<
+  ElementRef<typeof TimelineSelectorList>,
+  { entryIds: string[] }
+>(({ entryIds }, ref) => {
   const playingAudioUrl = usePlayingUrl()
 
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
@@ -31,6 +35,7 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
 
   return (
     <TimelineSelectorList
+      ref={ref}
       onRefresh={refetch}
       isRefetching={isRefetching}
       data={entryIds}
@@ -44,7 +49,7 @@ export function EntryListContentArticle({ entryIds }: { entryIds: string[] }) {
       ListFooterComponent={ListFooterComponent}
     />
   )
-}
+})
 
 export function EntryItemSkeleton() {
   return (
