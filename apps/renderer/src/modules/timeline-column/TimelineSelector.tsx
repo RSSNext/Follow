@@ -142,60 +142,64 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
       {timelineColumnShow && (
         <RootPortal to={rootContainer}>
           <AnimatePresence>
-            <m.div
-              ref={setPanelRef}
-              className="fixed inset-y-0 z-[1] flex h-full w-64 flex-col border-x bg-native"
+            <div
+              className="pointer-events-none fixed inset-y-0 z-[1] w-64 overflow-hidden"
               style={{ left: feedColWidth }}
-              initial={{ transform: "translateX(-100%)" }}
-              animate={animateControls}
-              transition={{
-                damping: 50,
-                stiffness: 500,
-                type: "spring",
-              }}
             >
-              {renderPanel && (
-                <>
-                  <header className="flex items-center justify-between border-b p-3 text-lg font-medium">
-                    <span className="text-lg font-medium">Quick Selector</span>
+              <m.div
+                ref={setPanelRef}
+                className="pointer-events-auto flex h-full w-64 flex-col border-x bg-native"
+                initial={{ transform: "translateX(-100%)" }}
+                animate={animateControls}
+                transition={{
+                  damping: 50,
+                  stiffness: 500,
+                  type: "spring",
+                }}
+              >
+                {renderPanel && (
+                  <>
+                    <header className="flex items-center justify-between border-b p-3 text-lg font-medium">
+                      <span className="text-lg font-medium">Quick Selector</span>
 
-                    <button
-                      type="button"
-                      className="flex items-center justify-center rounded p-1 transition-colors duration-200 hover:bg-theme-item-hover"
-                      onClick={() => {
-                        animateControls.start({
-                          transform: "translateX(-100%)",
-                        })
-                      }}
-                    >
-                      <i className="i-mgc-close-cute-re" />
-                    </button>
-                  </header>
-                  <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
-                    <TimelineSection
-                      title="Views"
-                      items={timelineList.views}
-                      activeTimelineId={activeTimelineId}
-                      ItemComponent={TimelineListViewItem}
-                    />
-                    <Divider className="mx-12 my-4" />
-                    <TimelineSection
-                      title="Inboxes"
-                      items={timelineList.inboxes}
-                      activeTimelineId={activeTimelineId}
-                      ItemComponent={TimelineInboxListItem}
-                    />
-                    <Divider className="mx-12 my-4" />
-                    <TimelineSection
-                      title="Lists"
-                      items={timelineList.lists}
-                      activeTimelineId={activeTimelineId}
-                      ItemComponent={TimelineListListItem}
-                    />
-                  </ScrollArea>
-                </>
-              )}
-            </m.div>
+                      <button
+                        type="button"
+                        className="flex items-center justify-center rounded p-1 transition-colors duration-200 hover:bg-theme-item-hover"
+                        onClick={() => {
+                          animateControls.start({
+                            transform: "translateX(-100%)",
+                          })
+                        }}
+                      >
+                        <i className="i-mgc-close-cute-re" />
+                      </button>
+                    </header>
+                    <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
+                      <TimelineSection
+                        title="Views"
+                        items={timelineList.views}
+                        activeTimelineId={activeTimelineId}
+                        ItemComponent={TimelineListViewItem}
+                      />
+                      <Divider className="mx-12 my-4" />
+                      <TimelineSection
+                        title="Inboxes"
+                        items={timelineList.inboxes}
+                        activeTimelineId={activeTimelineId}
+                        ItemComponent={TimelineInboxListItem}
+                      />
+                      <Divider className="mx-12 my-4" />
+                      <TimelineSection
+                        title="Lists"
+                        items={timelineList.lists}
+                        activeTimelineId={activeTimelineId}
+                        ItemComponent={TimelineListListItem}
+                      />
+                    </ScrollArea>
+                  </>
+                )}
+              </m.div>
+            </div>
           </AnimatePresence>
         </RootPortal>
       )}
