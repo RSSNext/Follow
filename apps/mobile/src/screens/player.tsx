@@ -62,7 +62,7 @@ export default function PlaterScreen() {
       containerRadiusSync={true}
     >
       <PlayerScreenContext.Provider value={playerScreenContextValue}>
-        <View className="flex-1 p-safe">
+        <View className="flex-1 px-[1000] p-safe">
           <LinearGradient
             style={StyleSheet.absoluteFill}
             colors={[backgroundColor, shadeColor(backgroundColor, -50)]}
@@ -73,28 +73,30 @@ export default function PlaterScreen() {
           <View className="mx-auto my-24 aspect-square w-[65%] shadow">
             <Image source={activeTrack.artwork} className="size-full rounded-lg" />
           </View>
-          <Text
-            className={cn(
-              "mx-6 text-xl font-bold opacity-90",
-              isGradientLight ? "text-black" : "text-white",
-            )}
-            numberOfLines={1}
-          >
-            {activeTrack.title}
-          </Text>
-          <Text
-            className={cn(
-              "mx-6 mt-2 text-xl font-semibold opacity-60",
-              isGradientLight ? "text-black" : "text-white",
-            )}
-            numberOfLines={1}
-          >
-            {activeTrack.artist}
-          </Text>
-          <ProgressBar />
-          <ControlGroup />
-          <View className="flex-1" />
-          <VolumeBar />
+          <View className="mx-10 flex-1">
+            <Text
+              className={cn(
+                "text-xl font-bold opacity-90",
+                isGradientLight ? "text-black" : "text-white",
+              )}
+              numberOfLines={1}
+            >
+              {activeTrack.title}
+            </Text>
+            <Text
+              className={cn(
+                "mt-2 text-xl font-semibold opacity-60",
+                isGradientLight ? "text-black" : "text-white",
+              )}
+              numberOfLines={1}
+            >
+              {activeTrack.artist}
+            </Text>
+            <ProgressBar />
+            <ControlGroup />
+            <View className="flex-1" />
+            <VolumeBar />
+          </View>
         </View>
       </PlayerScreenContext.Provider>
     </SheetScreen>

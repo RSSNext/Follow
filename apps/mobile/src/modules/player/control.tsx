@@ -84,7 +84,7 @@ export function RateSelector() {
         <DropdownMenu.Trigger>
           <Text
             className={cn(
-              "text-lg font-bold",
+              "w-[43] text-lg font-bold",
               isBackgroundLight ? "text-black/70" : "text-white/70",
             )}
           >
@@ -127,12 +127,14 @@ export function ControlGroup() {
   const buttonColor = isBackgroundLight ? "black" : "white"
 
   return (
-    <View className="flex-row items-center justify-around">
+    <View className="flex-row items-center justify-between">
       <RateSelector />
       <SeekButton size={35} offset={-15} color={buttonColor} />
       <PlayPauseButton size={50} color={buttonColor} />
       <SeekButton size={35} offset={30} color={buttonColor} />
-      <StopButton color={buttonColor} />
+      <View className="w-[43] flex-row justify-end">
+        <StopButton color={buttonColor} />
+      </View>
     </View>
   )
 }
@@ -163,7 +165,7 @@ export function ProgressBar() {
     progress.value = duration > 0 ? position / duration : 0
   }
   return (
-    <View className="m-6">
+    <View className="my-6">
       <Slider
         progress={progress}
         minimumValue={min}
@@ -224,7 +226,7 @@ export function VolumeBar() {
   progress.value = volume ?? 0
 
   return (
-    <View className="mx-6 mb-10">
+    <View className="mb-10">
       <View className="flex-row items-center justify-between">
         <VolumeOffCuteReIcon height={15} width={15} color={buttonColor} />
         <View className="flex-1 flex-row px-4">
