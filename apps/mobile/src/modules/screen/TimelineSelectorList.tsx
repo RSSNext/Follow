@@ -104,15 +104,9 @@ export const TimelineSelectorMasonryList = forwardRef<
 
   const systemFill = useColor("secondaryLabel")
 
-  const maybeRef: RefObject<MasonryFlashListRef<any>> | undefined = ref
-    ? typeof ref === "object" && ref.current
-      ? ref
-      : undefined
-    : undefined
-
   return (
     <MasonryFlashList
-      ref={maybeRef}
+      ref={ref as RefObject<MasonryFlashListRef<any>>}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}
