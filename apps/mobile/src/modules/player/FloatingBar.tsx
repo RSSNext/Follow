@@ -20,7 +20,7 @@ export function FloatingBar({ className }: { className?: string }) {
 
   return (
     <ReAnimated.View
-      className={cn("mx-4 shadow-md", className)}
+      className={cn("mx-2 shadow-md", className)}
       entering={SlideInDown}
       exiting={SlideOutDown}
     >

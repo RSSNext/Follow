@@ -1,4 +1,3 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -12,8 +11,9 @@ import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { BottomTabBarBackgroundContext } from "@/src/contexts/BottomTabBarBackgroundContext"
-import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
+import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/BottomTabBarBackgroundContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/BottomTabBarVisibleContext"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -54,13 +54,13 @@ function Settings() {
   const calculateOpacity = useCallback(
     (contentHeight: number, viewportHeight: number, scrollY: number) => {
       const distanceFromBottom = contentHeight - viewportHeight - scrollY
-      const fadeThreshold = 50
+      const fadeThreshold = 20
 
       if (distanceFromBottom <= fadeThreshold) {
         const newOpacity = Math.max(0, distanceFromBottom / fadeThreshold)
-        opacity.value = withTiming(newOpacity, { duration: 150 })
+        opacity.value = withTiming(newOpacity, { duration: 50 })
       } else {
-        opacity.value = withTiming(1, { duration: 150 })
+        opacity.value = withTiming(1, { duration: 50 })
       }
     },
     [opacity],

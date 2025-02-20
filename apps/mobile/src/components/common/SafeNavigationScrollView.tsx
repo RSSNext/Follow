@@ -1,4 +1,3 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { Header, useHeaderHeight } from "@react-navigation/elements"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { router, Stack, useNavigation } from "expo-router"
@@ -17,6 +16,7 @@ import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescri
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 

@@ -5,6 +5,7 @@ import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
+import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -74,53 +75,61 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
             <FeedIcon fallback feed={feed} size={14} />
             <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
           </View>
-
           <Text numberOfLines={2} className="text-label text-lg font-semibold leading-tight">
             {title}
           </Text>
           <Text className="text-secondary-label mt-1 line-clamp-2 text-sm">{description}</Text>
-          <Text className="text-tertiary-label text-xs">{publishedAt.toLocaleString()}</Text>
-        </View>
-        {image && (
-          <Image
-            source={{
-              uri: image,
-              headers: getImageHeaders(image),
-            }}
-            placeholder={{ blurhash }}
-            className="bg-system-fill ml-2 size-20 rounded-md"
-            contentFit="cover"
-            recyclingKey={image}
-            transition={500}
-          />
-        )}
 
-        {audio && (
-          <TouchableOpacity
-            className="absolute right-4 flex size-20 items-center justify-center"
-            onPress={() => {
-              if (isLoading) return
-              if (isPlaying) {
-                player.pause()
-                return
-              }
-              player.play({
-                url: audio.url,
-                title: entry?.title,
-                artist: feed?.title,
-                artwork: image,
-              })
-            }}
-          >
-            {isPlaying ? (
-              <PauseCuteFiIcon color="white" width={40} height={40} />
-            ) : isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <PlayCuteFiIcon color="white" width={40} height={40} />
-            )}
-          </TouchableOpacity>
-        )}
+          <RelativeDateTime
+            date={publishedAt}
+            className="text-tertiary-label text-xs"
+            postfixText="ago"
+          />
+        </View>
+        <View className="relative">
+          {image && (
+            <Image
+              source={{
+                uri: image,
+                headers: getImageHeaders(image),
+              }}
+              placeholder={{ blurhash }}
+              className="bg-system-fill ml-2 size-20 rounded-md"
+              contentFit="cover"
+              recyclingKey={image}
+              transition={500}
+            />
+          )}
+
+          {audio && (
+            <TouchableOpacity
+              className="absolute inset-0 flex items-center justify-center"
+              onPress={() => {
+                if (isLoading) return
+                if (isPlaying) {
+                  player.pause()
+                  return
+                }
+                player.play({
+                  url: audio.url,
+                  title: entry?.title,
+                  artist: feed?.title,
+                  artwork: image,
+                })
+              }}
+            >
+              <View className="bg-gray-6/50 rounded-full p-2">
+                {isPlaying ? (
+                  <PauseCuteFiIcon color="white" width={24} height={24} />
+                ) : isLoading ? (
+                  <ActivityIndicator />
+                ) : (
+                  <PlayCuteFiIcon color="white" width={24} height={24} />
+                )}
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
       </ItemPressable>
     </EntryItemContextMenu>
   )

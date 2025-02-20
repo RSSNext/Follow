@@ -1,7 +1,6 @@
 import { RSSHubCategories } from "@follow/constants"
 import type { RSSHubRouteDeclaration } from "@follow/models/src/rsshub"
 import { isASCII } from "@follow/utils"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { FlashList } from "@shopify/flash-list"
 import { useQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
@@ -21,6 +20,7 @@ import { PanGestureHandler } from "react-native-gesture-handler"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import type { TabComponent } from "@/src/components/ui/tabview/TabView"
 import { apiClient } from "@/src/lib/api-fetch"
 
