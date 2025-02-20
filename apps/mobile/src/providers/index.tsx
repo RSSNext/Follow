@@ -28,23 +28,28 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
   return (
     <MigrationProvider>
       <Provider store={jotaiStore}>
-        <SheetProvider>
-          <KeyboardProvider>
-            <View style={[styles.flex, currentThemeColors]}>
-              <QueryClientProvider client={queryClient}>
-                <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                  <GestureHandlerRootView>
+        <KeyboardProvider>
+          <View style={[styles.flex, currentThemeColors]}>
+            <QueryClientProvider client={queryClient}>
+              <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                <GestureHandlerRootView
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#000",
+                  }}
+                >
+                  <SheetProvider>
                     <ActionSheetProvider>
                       <PreviewImageProvider>
                         <PortalProvider>{children}</PortalProvider>
                       </PreviewImageProvider>
                     </ActionSheetProvider>
-                  </GestureHandlerRootView>
-                </ThemeProvider>
-              </QueryClientProvider>
-            </View>
-          </KeyboardProvider>
-        </SheetProvider>
+                  </SheetProvider>
+                </GestureHandlerRootView>
+              </ThemeProvider>
+            </QueryClientProvider>
+          </View>
+        </KeyboardProvider>
       </Provider>
     </MigrationProvider>
   )

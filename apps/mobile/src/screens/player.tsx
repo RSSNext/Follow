@@ -56,11 +56,7 @@ export default function PlaterScreen() {
   }
 
   return (
-    <SheetScreen
-      onClose={() => router.back()}
-      dragDirections={{ toBottom: true, toTop: false, toLeft: false, toRight: false }}
-      containerRadiusSync={true}
-    >
+    <SheetScreen onClose={() => router.back()}>
       <PlayerScreenContext.Provider value={playerScreenContextValue}>
         <View className="flex-1 px-[1000] p-safe">
           <LinearGradient

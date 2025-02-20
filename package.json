@@ -146,7 +146,8 @@
       "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch",
       "devlop": "patches/devlop.patch",
       "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch",
-      "react-native-track-player": "patches/react-native-track-player.patch"
+      "react-native-track-player": "patches/react-native-track-player.patch",
+      "react-native-sheet-transitions": "patches/react-native-sheet-transitions.patch"
     },
     "overrides": {
       "app-builder-lib": "25.1.8",

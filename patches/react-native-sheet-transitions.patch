@@ -1,0 +1,50 @@
+diff --git a/src/SheetProvider.tsx b/src/SheetProvider.tsx
+index 2e3964c86ad78a9eddcb074ab26ae8ee2ae12179..fa1f95cfe779c5ed4120c30e36216e3561637897 100644
+--- a/src/SheetProvider.tsx
++++ b/src/SheetProvider.tsx
+@@ -11,6 +11,7 @@ import Animated, {
+ interface SheetContextType {
+   scale: Animated.SharedValue<number>
+   setScale: (scale: number) => void
++  isScaling: boolean
+   resizeType: 'incremental' | 'decremental'
+   enableForWeb: boolean
+ }
+@@ -30,6 +31,7 @@ export function SheetProvider({
+ }: SheetProviderProps) {
+   const scale = useSharedValue(1)
+   const isMounted = useSharedValue(false)
++  const [isScaling, setIsScaling] = React.useState(false)
+ 
+   useEffect(() => {
+     // Delay setting isMounted to ensure view is ready
+@@ -51,6 +53,8 @@ export function SheetProvider({
+       return
+     }
+ 
++    setIsScaling(newScale !== 1)
++
+     scale.value = withSpring(newScale, {
+       damping: 20,
+       stiffness: 300,
+@@ -74,6 +78,7 @@ export function SheetProvider({
+     <SheetContext.Provider value={{
+       scale,
+       setScale,
++      isScaling,
+       resizeType,
+       enableForWeb: isEnabled
+     }}>
+diff --git a/src/SheetScreen.tsx b/src/SheetScreen.tsx
+index 3eebf713a5dcf42dd43b2c34cef136b682828d23..ca1394fe4319151cd1a31f303c2e70de5f48850a 100644
+--- a/src/SheetScreen.tsx
++++ b/src/SheetScreen.tsx
+@@ -278,7 +278,7 @@ export function SheetScreen({
+         { scale }
+       ],
+       opacity: opacity.value,
+-      borderRadius: borderRadius.value,
++      borderRadius: translateY.value === 0 ? 0 : borderRadius.value,
+     }
+   }, [disableSheetContentResizeOnDragDown])
+ 
