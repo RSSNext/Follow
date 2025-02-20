@@ -1,7 +1,9 @@
 import { cn } from "@follow/utils"
+import { router } from "expo-router"
 import { Text, TouchableOpacity, View } from "react-native"
 import { Slider } from "react-native-awesome-slider"
 import { useSharedValue } from "react-native-reanimated"
+import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { Back2CuteReIcon } from "@/src/icons/back_2_cute_re"
 import { Forward2CuteReIcon } from "@/src/icons/forward_2_cute_re"
@@ -9,9 +11,20 @@ import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
 import { RewindBackward15CuteReIcon } from "@/src/icons/rewind_backward_15_cute_re"
 import { RewindForward30CuteReIcon } from "@/src/icons/rewind_forward_30_cute_re"
+import { StopCircleCuteFiIcon } from "@/src/icons/stop_circle_cute_fi"
 import { VolumeCuteReIcon } from "@/src/icons/volume_cute_re"
 import { VolumeOffCuteReIcon } from "@/src/icons/volume_off_cute_re"
-import { pause, play, seekBy, seekTo, useIsPlaying, useProgress } from "@/src/lib/player"
+import {
+  allowedRate,
+  pause,
+  play,
+  reset,
+  seekBy,
+  seekTo,
+  useIsPlaying,
+  useProgress,
+  useRate,
+} from "@/src/lib/player"
 import { useVolume } from "@/src/lib/volume"
 import { useColor } from "@/src/theme/colors"
 
@@ -71,14 +84,65 @@ export function SeekButton({
   )
 }
 
-export function ControlGroup() {
+export function RateSelector() {
   const { isBackgroundLight } = usePlayerScreenContext()
+  const [currentRate, setCurrentRate] = useRate()
 
   return (
-    <View className="flex-row items-center justify-center gap-10">
-      <SeekButton size={35} offset={-15} color={isBackgroundLight ? "black" : "white"} />
-      <PlayPauseButton size={50} color={isBackgroundLight ? "black" : "white"} />
-      <SeekButton size={35} offset={30} color={isBackgroundLight ? "black" : "white"} />
+    <View className="flex-row items-center justify-center">
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Text
+            className={cn(
+              "text-lg font-bold",
+              isBackgroundLight ? "text-black/70" : "text-white/70",
+            )}
+          >
+            {currentRate}x
+          </Text>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          {allowedRate.map((rate) => (
+            <DropdownMenu.CheckboxItem
+              value={rate === currentRate}
+              key={`${rate}`}
+              onSelect={() => setCurrentRate(rate)}
+            >
+              <DropdownMenu.ItemTitle>{`${rate}x`}</DropdownMenu.ItemTitle>
+            </DropdownMenu.CheckboxItem>
+          ))}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </View>
+  )
+}
+
+export function StopButton({ size = 24, className, color }: ControlButtonProps) {
+  const label = useColor("label")
+  return (
+    <TouchableOpacity
+      className={className}
+      onPress={() => {
+        reset()
+        router.back()
+      }}
+    >
+      <StopCircleCuteFiIcon color={color ?? label} width={size} height={size} />
+    </TouchableOpacity>
+  )
+}
+
+export function ControlGroup() {
+  const { isBackgroundLight } = usePlayerScreenContext()
+  const buttonColor = isBackgroundLight ? "black" : "white"
+
+  return (
+    <View className="flex-row items-center justify-around">
+      <RateSelector />
+      <SeekButton size={35} offset={-15} color={buttonColor} />
+      <PlayPauseButton size={50} color={buttonColor} />
+      <SeekButton size={35} offset={30} color={buttonColor} />
+      <StopButton color={buttonColor} />
     </View>
   )
 }

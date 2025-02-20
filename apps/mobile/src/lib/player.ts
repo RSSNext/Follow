@@ -1,3 +1,5 @@
+import { atom, useAtom } from "jotai"
+import { useCallback, useEffect } from "react"
 import TrackPlayer, { State, useActiveTrack, usePlaybackState } from "react-native-track-player"
 
 import type { AttachmentsModel } from "../database/schemas/types"
@@ -61,3 +63,37 @@ export async function seekTo(position: number) {
 }
 
 export { useActiveTrack, useIsPlaying, useProgress } from "react-native-track-player"
+
+export const allowedRate = [0.75, 1, 1.25, 1.5, 1.75, 2]
+export type Rate = (typeof allowedRate)[number]
+
+const rateAtom = atom<Rate>(1)
+
+export function useRate() {
+  const [rate, setRate] = useAtom(rateAtom)
+
+  useEffect(() => {
+    async function getRate() {
+      const rate = await TrackPlayer.getRate()
+      if (allowedRate.includes(rate)) {
+        setRate(rate as Rate)
+      } else {
+        setRate(1)
+      }
+    }
+
+    getRate()
+  }, [setRate])
+
+  const setRateAndSave = useCallback(
+    async (rate: Rate) => {
+      if (allowedRate.includes(rate)) {
+        await TrackPlayer.setRate(rate)
+        setRate(rate)
+      }
+    },
+    [setRate],
+  )
+
+  return [rate, setRateAndSave] as const
+}
