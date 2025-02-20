@@ -32,12 +32,7 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
           <View style={[styles.flex, currentThemeColors]}>
             <QueryClientProvider client={queryClient}>
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                <GestureHandlerRootView
-                  style={{
-                    flex: 1,
-                    backgroundColor: "#000",
-                  }}
-                >
+                <GestureHandlerRootView>
                   <SheetProvider>
                     <ActionSheetProvider>
                       <PreviewImageProvider>

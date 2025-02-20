@@ -1,4 +1,3 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import type { FlashListProps, MasonryFlashListProps } from "@shopify/flash-list"
 import { FlashList, MasonryFlashList } from "@shopify/flash-list"
 import { forwardRef, useCallback, useContext } from "react"
@@ -8,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"

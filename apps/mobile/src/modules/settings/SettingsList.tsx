@@ -1,4 +1,3 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
 import * as FileSystem from "expo-file-system"
 import type { FC, RefObject } from "react"
@@ -12,7 +11,8 @@ import {
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
-import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/BottomTabBarVisibleContext"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { getDbPath } from "@/src/database"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
 import { CertificateCuteFiIcon } from "@/src/icons/certificate_cute_fi"

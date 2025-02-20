@@ -5,3 +5,21 @@ export const gentleSpringPreset: SpringConfig = {
   stiffness: 100,
   mass: 1,
 }
+
+export const bouncySpringPreset: SpringConfig = {
+  damping: 8,
+  stiffness: 150,
+  mass: 1,
+}
+
+export const softSpringPreset: SpringConfig = {
+  damping: 20,
+  stiffness: 80,
+  mass: 1,
+}
+
+export const quickSpringPreset: SpringConfig = {
+  damping: 10,
+  stiffness: 200,
+  mass: 1,
+}
