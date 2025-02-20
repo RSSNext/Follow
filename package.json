@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow everything in one place",
@@ -14,7 +14,7 @@
   },
   "main": "./dist/main/index.js",
   "scripts": {
-    "analyze:web": "analyzer=1 vite build",
+    "analyze:web": "cross-env analyzer=1 vite build",
     "build": "electron-vite build && electron-forge make",
     "build:macos": "electron-vite build && electron-forge make --arch=x64 --platform=darwin && electron-forge make --arch=arm64 --platform=darwin && tsx scripts/merge-yml.ts",
     "build:mas": "electron-vite build && electron-forge make --arch=universal --platform=mas",
@@ -29,7 +29,7 @@
     "dev:electron": "electron-vite dev",
     "dev:expo": "pnpm --filter=mobile start",
     "dev:server": "pnpm run --filter=server dev",
-    "dev:web": " WEB_BUILD=1 vite",
+    "dev:web": "cross-env WEB_BUILD=1 vite",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
@@ -45,7 +45,7 @@
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
     "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx",
-    "test": "CI=1 pnpm --recursive run test",
+    "test": "cross-env CI=1 pnpm --recursive run test",
     "typecheck": "turbo typecheck",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
@@ -196,5 +196,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "238ff29ee6094c2061997392ca8a7e439911c21a8157ead25bc41e6dd1f5034b"
+  "mainHash": "d2184ce595ab3b45f933edb9938b6a6fe53d8c85558d0899b9ffb8f72850cf25"
 }

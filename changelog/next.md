@@ -2,12 +2,6 @@
 
 ## New Features
 
-- Added a quick selector to the timeline column.
-
-![](https://github.com/RSSNext/assets/raw/refs/heads/main/timeline-selector.mp4)
-
 ## Improvements
 
 ## Bug Fixes
-
-- Resolved the issue of being unable to reset it to empty after using the proxy.
