@@ -20,9 +20,10 @@ export const useScrollToTopRef = <T extends FlashList<unknown>>(enabled = true) 
       ref.current?.scrollToOffset({ animated: true, offset: 0 })
     }
     jotaiStore.set(scrollToTopAtom, { scrollToTop })
-    // return () => {
-    //   jotaiStore.set(scrollToTopAtom, defaultScrollToTop)
-    // }
+    return () => {
+      if (jotaiStore.get(scrollToTopAtom).scrollToTop !== scrollToTop) return
+      jotaiStore.set(scrollToTopAtom, defaultScrollToTop)
+    }
   }, [enabled, ref])
   return ref
 }
