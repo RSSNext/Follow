@@ -14,7 +14,6 @@ export const ListExpansionCuteFiIcon = ({
 }: ListExpansionCuteFiIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
-      <Path fill="#fff" fillOpacity={0.01} d="M24 0v24H0V0z" />
       <Path
         fill={color}
         d="M4 3.5a1.5 1.5 0 1 0 0 3h7.5a1.5 1.5 0 0 0 0-3zM2.5 12A1.5 1.5 0 0 1 4 10.5h7.5a1.5 1.5 0 0 1 0 3H4A1.5 1.5 0 0 1 2.5 12M4 17.5a1.5 1.5 0 0 0 0 3h7.5a1.5 1.5 0 0 0 0-3z"

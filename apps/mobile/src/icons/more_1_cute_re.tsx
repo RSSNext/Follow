@@ -14,7 +14,6 @@ export const More1CuteReIcon = ({
 }: More1CuteReIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
-      <Path fill="#fff" fillOpacity={0.01} d="M24 0v24H0V0z" />
       <Path
         fill={color}
         d="M12.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M18.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M6.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"

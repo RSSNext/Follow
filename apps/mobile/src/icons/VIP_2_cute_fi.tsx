@@ -14,7 +14,6 @@ export const VIP2CuteFiIcon = ({
 }: VIP2CuteFiIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
-      <Path fill="#fff" fillOpacity={0.01} d="M24 0v24H0V0z" />
       <Path
         fill={color}
         fillRule="evenodd"
