@@ -102,11 +102,8 @@ const SettingGroupNavigationLinks: GroupNavigationLink[] = [
   {
     label: "Account",
     icon: UserSettingCuteFiIcon,
-    onPress: (navigation, scrollRef) => {
-      scrollRef.current?.scrollTo({ y: 0, animated: true })
-      setTimeout(() => {
-        navigation.navigate("Account")
-      }, 100)
+    onPress: (navigation) => {
+      navigation.navigate("Account")
     },
     iconBackgroundColor: "#d08700",
   },
