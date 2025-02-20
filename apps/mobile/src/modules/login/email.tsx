@@ -143,6 +143,19 @@ export function EmailLogin() {
           <ThemedText className="text-center font-semibold text-white">Continue</ThemedText>
         )}
       </ReAnimatedPressable>
+      <ReAnimatedPressable
+        onPress={async () => {
+          await signIn.anonymous().catch((error: any) => {
+            console.error(error)
+            toast.error("Login failed")
+          })
+        }}
+        className="mt-4 h-10 flex-row items-center justify-center rounded-3xl bg-accent"
+      >
+        <ThemedText className="text-center font-semibold text-white">
+          Continue anonymously
+        </ThemedText>
+      </ReAnimatedPressable>
     </View>
   )
 }

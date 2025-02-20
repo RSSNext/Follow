@@ -1,5 +1,6 @@
 import { expoClient } from "@better-auth/expo/client"
 import { useQuery } from "@tanstack/react-query"
+import { anonymousClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
 import type * as better_call from "better-call"
 import * as SecureStore from "expo-secure-store"
@@ -32,6 +33,7 @@ const authClient = createAuthClient({
         getItem: SecureStore.getItem,
       },
     }),
+    anonymousClient(),
   ],
 })
 
