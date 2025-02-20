@@ -1,3 +1,5 @@
+import { eq } from "drizzle-orm"
+
 import { db } from "../database"
 import { usersTable } from "../database/schemas"
 import type { UserSchema } from "../database/schemas/types"
@@ -19,6 +21,10 @@ class UserServiceStatic implements Hydratable {
   async hydrate() {
     const users = await db.query.usersTable.findMany()
     userActions.upsertManyInSession(users)
+  }
+
+  async removeCurrentUser() {
+    await db.update(usersTable).set({ isMe: 0 }).where(eq(usersTable.isMe, 1))
   }
 }
 
