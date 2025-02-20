@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils"
 import { Text, TouchableOpacity, View } from "react-native"
 import { Slider } from "react-native-awesome-slider"
 import { useSharedValue } from "react-native-reanimated"
@@ -12,12 +13,15 @@ import { pause, play, seekBy, seekTo, useIsPlaying, useProgress } from "@/src/li
 import { useVolume } from "@/src/lib/volume"
 import { useColor } from "@/src/theme/colors"
 
+import { usePlayerScreenContext } from "./context"
+
 type ControlButtonProps = {
   size?: number
   className?: string
+  color?: string
 }
 
-export function PlayPauseButton({ size = 24, className }: ControlButtonProps) {
+export function PlayPauseButton({ size = 24, className, color }: ControlButtonProps) {
   const { playing } = useIsPlaying()
   const label = useColor("label")
   return (
@@ -28,9 +32,9 @@ export function PlayPauseButton({ size = 24, className }: ControlButtonProps) {
         }}
       >
         {playing ? (
-          <PauseCuteFiIcon color={label} width={size} height={size} />
+          <PauseCuteFiIcon color={color ?? label} width={size} height={size} />
         ) : (
-          <PlayCuteFiIcon color={label} width={size} height={size} />
+          <PlayCuteFiIcon color={color ?? label} width={size} height={size} />
         )}
       </TouchableOpacity>
     </View>
@@ -40,6 +44,7 @@ export function PlayPauseButton({ size = 24, className }: ControlButtonProps) {
 export function SeekButton({
   size = 24,
   className,
+  color,
   offset = 30,
 }: ControlButtonProps & { offset?: number }) {
   const label = useColor("label")
@@ -51,9 +56,9 @@ export function SeekButton({
         }}
       >
         {offset > 0 ? (
-          <Forward2CuteReIcon color={label} width={size} height={size} />
+          <Forward2CuteReIcon color={color ?? label} width={size} height={size} />
         ) : (
-          <Back2CuteReIcon color={label} width={size} height={size} />
+          <Back2CuteReIcon color={color ?? label} width={size} height={size} />
         )}
       </TouchableOpacity>
     </View>
@@ -61,11 +66,13 @@ export function SeekButton({
 }
 
 export function ControlGroup() {
+  const { isBackgroundLight } = usePlayerScreenContext()
+
   return (
     <View className="flex-row items-center justify-center gap-10">
-      <SeekButton size={40} offset={-30} />
-      <PlayPauseButton size={50} />
-      <SeekButton size={40} offset={30} />
+      <SeekButton size={40} offset={-30} color={isBackgroundLight ? "black" : "white"} />
+      <PlayPauseButton size={50} color={isBackgroundLight ? "black" : "white"} />
+      <SeekButton size={40} offset={30} color={isBackgroundLight ? "black" : "white"} />
     </View>
   )
 }
@@ -81,6 +88,8 @@ const formatSecondsToMinutes = (seconds: number) => {
 }
 
 export function ProgressBar() {
+  const { isBackgroundLight } = usePlayerScreenContext()
+
   const { duration, position } = useProgress(250)
   const isSliding = useSharedValue(false)
   const progress = useSharedValue(0)
@@ -120,11 +129,21 @@ export function ProgressBar() {
       />
 
       <View className="mt-3 flex-row justify-between">
-        <Text className="text-label font-mono text-xs font-medium tracking-wider opacity-75">
+        <Text
+          className={cn(
+            "font-mono text-xs font-medium tracking-wider opacity-75",
+            isBackgroundLight ? "text-black" : "text-white",
+          )}
+        >
           {trackElapsedTime}
         </Text>
 
-        <Text className="text-label font-mono text-xs font-medium tracking-wider opacity-75">
+        <Text
+          className={cn(
+            "font-mono text-xs font-medium tracking-wider opacity-75",
+            isBackgroundLight ? "text-black" : "text-white",
+          )}
+        >
           {"-"} {trackRemainingTime}
         </Text>
       </View>
@@ -133,6 +152,8 @@ export function ProgressBar() {
 }
 
 export function VolumeBar() {
+  const { isBackgroundLight } = usePlayerScreenContext()
+
   const { volume, updateVolume } = useVolume()
 
   const progress = useSharedValue(0)
@@ -141,12 +162,10 @@ export function VolumeBar() {
 
   progress.value = volume ?? 0
 
-  const label = useColor("label")
-
   return (
     <View className="mx-6 mb-10">
       <View className="flex-row items-center justify-between">
-        <VolumeOffCuteReIcon height={15} width={15} color={label} />
+        <VolumeOffCuteReIcon height={15} width={15} color={isBackgroundLight ? "black" : "white"} />
         <View className="flex-1 flex-row px-2">
           <Slider
             progress={progress}
@@ -164,7 +183,7 @@ export function VolumeBar() {
             maximumValue={max}
           />
         </View>
-        <VolumeCuteReIcon height={15} width={15} color={label} />
+        <VolumeCuteReIcon height={15} width={15} color={isBackgroundLight ? "black" : "white"} />
       </View>
     </View>
   )

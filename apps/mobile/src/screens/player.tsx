@@ -1,12 +1,14 @@
+import { cn, getLuminance } from "@follow/utils"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import ImageColors from "react-native-image-colors"
 import { SheetScreen } from "react-native-sheet-transitions"
 
 import { useActiveTrack } from "../lib/player"
+import { PlayerScreenContext } from "../modules/player/context"
 import { ControlGroup, ProgressBar, VolumeBar } from "../modules/player/control"
 
 const defaultBackgroundColor = "#000000"
@@ -15,6 +17,13 @@ export default function PlaterScreen() {
   const activeTrack = useActiveTrack()
 
   const [backgroundColor, setBackgroundColor] = useState(defaultBackgroundColor)
+  const [isGradientLight, setIsGradientLight] = useState(false)
+
+  const playerScreenContextValue = useMemo(
+    () => ({ isBackgroundLight: isGradientLight }),
+    [isGradientLight],
+  )
+
   useEffect(() => {
     async function extractColors() {
       if (!activeTrack?.artwork) {
@@ -31,8 +40,10 @@ export default function PlaterScreen() {
       }
 
       if (result.platform === "ios") {
+        setIsGradientLight(getLuminance(result.background) > 0.5)
         setBackgroundColor(result.background)
       } else {
+        setIsGradientLight(getLuminance(result.dominant) > 0.5)
         setBackgroundColor(result.average)
       }
     }
@@ -50,28 +61,42 @@ export default function PlaterScreen() {
       dragDirections={{ toBottom: true, toTop: false, toLeft: false, toRight: false }}
       containerRadiusSync={true}
     >
-      <View className="flex-1 p-safe">
-        <LinearGradient
-          style={StyleSheet.absoluteFill}
-          colors={[backgroundColor, shadeColor(backgroundColor, -50)]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        />
-        <DismissIndicator />
-        <View className="mx-auto my-24 aspect-square w-[65%] shadow">
-          <Image source={activeTrack.artwork} className="size-full rounded-lg" />
+      <PlayerScreenContext.Provider value={playerScreenContextValue}>
+        <View className="flex-1 p-safe">
+          <LinearGradient
+            style={StyleSheet.absoluteFill}
+            colors={[backgroundColor, shadeColor(backgroundColor, -50)]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          />
+          <DismissIndicator />
+          <View className="mx-auto my-24 aspect-square w-[65%] shadow">
+            <Image source={activeTrack.artwork} className="size-full rounded-lg" />
+          </View>
+          <Text
+            className={cn(
+              "mx-6 text-xl font-bold opacity-90",
+              isGradientLight ? "text-black" : "text-white",
+            )}
+            numberOfLines={1}
+          >
+            {activeTrack.title}
+          </Text>
+          <Text
+            className={cn(
+              "mx-6 mt-2 text-xl font-semibold opacity-60",
+              isGradientLight ? "text-black" : "text-white",
+            )}
+            numberOfLines={1}
+          >
+            {activeTrack.artist}
+          </Text>
+          <ProgressBar />
+          <ControlGroup />
+          <View className="flex-1" />
+          <VolumeBar />
         </View>
-        <Text className="text-label mx-6 text-xl font-bold opacity-90" numberOfLines={1}>
-          {activeTrack.title}
-        </Text>
-        <Text className="text-label mx-6 mt-2 text-xl font-semibold opacity-60" numberOfLines={1}>
-          {activeTrack.artist}
-        </Text>
-        <ProgressBar />
-        <ControlGroup />
-        <View className="flex-1" />
-        <VolumeBar />
-      </View>
+      </PlayerScreenContext.Provider>
     </SheetScreen>
   )
 }
