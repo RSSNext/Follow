@@ -40,6 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationCategoryType: "public.app-category.news",
       ITSAppUsesNonExemptEncryption: false,
+      UIBackgroundModes: ["audio"],
     },
   },
   android: {

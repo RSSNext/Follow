@@ -185,3 +185,23 @@ export const getLuminance = (hexColor: string) => {
   const b = (rgb >> 0) & 0xff
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255
 }
+
+export const shadeColor = (color: string, percent: number): string => {
+  const R = Number.parseInt(color.slice(1, 3), 16)
+  const G = Number.parseInt(color.slice(3, 5), 16)
+  const B = Number.parseInt(color.slice(5, 7), 16)
+
+  let newR = Math.round((R * (100 + percent)) / 100)
+  let newG = Math.round((G * (100 + percent)) / 100)
+  let newB = Math.round((B * (100 + percent)) / 100)
+
+  newR = Math.min(newR, 255)
+  newG = Math.min(newG, 255)
+  newB = Math.min(newB, 255)
+
+  const RR = newR.toString(16).length === 1 ? `0${newR.toString(16)}` : newR.toString(16)
+  const GG = newG.toString(16).length === 1 ? `0${newG.toString(16)}` : newG.toString(16)
+  const BB = newB.toString(16).length === 1 ? `0${newB.toString(16)}` : newB.toString(16)
+
+  return `#${RR}${GG}${BB}`
+}

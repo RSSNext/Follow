@@ -22,6 +22,7 @@ import { Search3CuteFiIcon } from "@/src/icons/search_3_cute_fi"
 import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
+import { FloatingBar } from "@/src/modules/player/floating-bar"
 import { useColor } from "@/src/theme/colors"
 
 const fifthTap = Gesture.Tap()
@@ -147,6 +148,7 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
+        <FloatingBar className="absolute inset-x-0 bottom-28" />
       </SetBottomTabBarVisibleContext.Provider>
     </BottomTabBarBackgroundContext.Provider>
   )

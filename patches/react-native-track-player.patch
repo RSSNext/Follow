@@ -1,0 +1,22 @@
+diff --git a/ios/RNTrackPlayer/RNTrackPlayerBridge.m b/ios/RNTrackPlayer/RNTrackPlayerBridge.m
+index 7741994191921ed86f7577f7ce589b3939d9dd49..776c09ec0ae450daa4dc9031ccd3ff4baba016d3 100644
+--- a/ios/RNTrackPlayer/RNTrackPlayerBridge.m
++++ b/ios/RNTrackPlayer/RNTrackPlayerBridge.m
+@@ -151,17 +151,4 @@ @interface RCT_EXTERN_REMAP_MODULE(TrackPlayerModule, RNTrackPlayer, NSObject)
+                   resolver:(RCTPromiseResolveBlock)resolve
+                   rejecter:(RCTPromiseRejectBlock)reject);
+ 
+-RCT_EXTERN_METHOD(getSleepTimerProgress:(RCTPromiseResolveBlock)resolve
+-              rejecter:(RCTPromiseRejectBlock)reject);
+-
+-RCT_EXTERN_METHOD(setSleepTimer:(double)time
+-                  resolver:(RCTPromiseResolveBlock)resolve
+-                  rejecter:(RCTPromiseRejectBlock)reject);
+-
+-RCT_EXTERN_METHOD(sleepWhenActiveTrackReachesEnd:(RCTPromiseResolveBlock)resolve
+-                  rejecter:(RCTPromiseRejectBlock)reject);
+-
+-RCT_EXTERN_METHOD(clearSleepTimer:(RCTPromiseResolveBlock)resolve
+-              rejecter:(RCTPromiseRejectBlock)reject);
+-
+ @end
