@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { router } from "expo-router"
 import { useContext, useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
@@ -34,9 +35,17 @@ async function onSubmit(values: FormValue) {
       email: values.email,
       password: values.password,
     })
+    .then((res) => {
+      if (res.error) {
+        throw new Error(res.error.message)
+      }
+      // @ts-expect-error
+      if (res.data.twoFactorRedirect) {
+        router.push("/2fa")
+      }
+    })
     .catch((error) => {
-      console.error(error)
-      toast.error("Login failed")
+      toast.error(`Failed to login: ${error.message}`)
     })
 }
 
