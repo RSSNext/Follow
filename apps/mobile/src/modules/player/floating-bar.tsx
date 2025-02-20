@@ -9,7 +9,7 @@ import { useActiveTrack } from "@/src/lib/player"
 
 import { PlayPauseButton, SeekButton } from "./control"
 
-const allowedRoutes = new Set(["/", "/subscriptions"])
+const allowedRoutes = new Set(["/", "/subscriptions", "/player"])
 
 export function FloatingBar({ className }: { className?: string }) {
   const activeTrack = useActiveTrack()
