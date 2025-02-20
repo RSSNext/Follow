@@ -7,6 +7,8 @@ import { Back2CuteReIcon } from "@/src/icons/back_2_cute_re"
 import { Forward2CuteReIcon } from "@/src/icons/forward_2_cute_re"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
+import { RewindBackward15CuteReIcon } from "@/src/icons/rewind_backward_15_cute_re"
+import { RewindForward30CuteReIcon } from "@/src/icons/rewind_forward_30_cute_re"
 import { VolumeCuteReIcon } from "@/src/icons/volume_cute_re"
 import { VolumeOffCuteReIcon } from "@/src/icons/volume_off_cute_re"
 import { pause, play, seekBy, seekTo, useIsPlaying, useProgress } from "@/src/lib/player"
@@ -55,7 +57,11 @@ export function SeekButton({
           seekBy(offset)
         }}
       >
-        {offset > 0 ? (
+        {offset === 30 ? (
+          <RewindForward30CuteReIcon color={color ?? label} width={size} height={size} />
+        ) : offset === -15 ? (
+          <RewindBackward15CuteReIcon color={color ?? label} width={size} height={size} />
+        ) : offset > 0 ? (
           <Forward2CuteReIcon color={color ?? label} width={size} height={size} />
         ) : (
           <Back2CuteReIcon color={color ?? label} width={size} height={size} />
@@ -70,9 +76,9 @@ export function ControlGroup() {
 
   return (
     <View className="flex-row items-center justify-center gap-10">
-      <SeekButton size={40} offset={-30} color={isBackgroundLight ? "black" : "white"} />
+      <SeekButton size={35} offset={-15} color={isBackgroundLight ? "black" : "white"} />
       <PlayPauseButton size={50} color={isBackgroundLight ? "black" : "white"} />
-      <SeekButton size={40} offset={30} color={isBackgroundLight ? "black" : "white"} />
+      <SeekButton size={35} offset={30} color={isBackgroundLight ? "black" : "white"} />
     </View>
   )
 }
