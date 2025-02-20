@@ -6,7 +6,7 @@ declare const _apiClient: ReturnType<typeof hc<AppType>>
 
 export type UserModel = Omit<
   typeof users.$inferSelect,
-  "createdAt" | "updatedAt" | "email" | "emailVerified" | "twoFactorEnabled"
+  "createdAt" | "updatedAt" | "email" | "emailVerified" | "twoFactorEnabled" | "isAnonymous"
 > & {
   email?: string
 }

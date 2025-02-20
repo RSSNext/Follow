@@ -1,6 +1,6 @@
 import { Link, router } from "expo-router"
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react"
-import { TouchableWithoutFeedback, View } from "react-native"
+import { Text, TouchableWithoutFeedback, View } from "react-native"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import { KeyboardController } from "react-native-keyboard-controller"
 import Animated, {
@@ -11,7 +11,6 @@ import Animated, {
 } from "react-native-reanimated"
 import * as ContextMenu from "zeego/context-menu"
 
-import { ThemedText } from "@/src/components/common/ThemedText"
 import { Logo } from "@/src/components/ui/logo"
 import {
   LoginTermsCheckedContext,
@@ -53,7 +52,7 @@ export function Login() {
           >
             <View className="flex-1 items-center gap-8 pt-20">
               <Logo style={{ width: 80, height: 80 }} />
-              <ThemedText className="text-2xl font-bold">Login to Follow</ThemedText>
+              <Text className="text-label text-2xl font-bold">Login to Follow</Text>
               <EmailLogin />
             </View>
           </TouchableWithoutFeedback>
@@ -62,7 +61,7 @@ export function Login() {
           <View className="mt-2 items-center">
             <View className="mb-4 flex w-full max-w-sm flex-row items-center gap-4">
               <View className="bg-separator my-4 h-[0.5px] flex-1" />
-              <ThemedText className="text-secondary-label text-lg">or</ThemedText>
+              <Text className="text-secondary-label text-lg">or</Text>
               <View className="bg-separator my-4 h-[0.5px] flex-1" />
             </View>
             <SocialLogin />
@@ -127,13 +126,13 @@ const TermsText = () => {
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger className="overflow-hidden rounded-full">
-        <ThemedText className="text-secondary-label text-sm">
+        <Text className="text-secondary-label text-sm">
           I agree to the{" "}
           <Link href="/terms" className="text-primary-label">
             Terms of Service
           </Link>{" "}
           and Privacy Policy
-        </ThemedText>
+        </Text>
       </ContextMenu.Trigger>
 
       <ContextMenu.Content>
