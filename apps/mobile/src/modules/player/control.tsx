@@ -223,6 +223,7 @@ export function ProgressBar() {
 
 export function VolumeBar() {
   const { isBackgroundLight } = usePlayerScreenContext()
+  const buttonColor = isBackgroundLight ? "black" : "white"
 
   const { volume, updateVolume } = useVolume()
 
@@ -235,8 +236,8 @@ export function VolumeBar() {
   return (
     <View className="mx-6 mb-10">
       <View className="flex-row items-center justify-between">
-        <VolumeOffCuteReIcon height={15} width={15} color={isBackgroundLight ? "black" : "white"} />
-        <View className="flex-1 flex-row px-2">
+        <VolumeOffCuteReIcon height={15} width={15} color={buttonColor} />
+        <View className="flex-1 flex-row px-4">
           <Slider
             progress={progress}
             minimumValue={min}
@@ -253,7 +254,7 @@ export function VolumeBar() {
             maximumValue={max}
           />
         </View>
-        <VolumeCuteReIcon height={15} width={15} color={isBackgroundLight ? "black" : "white"} />
+        <VolumeCuteReIcon height={15} width={15} color={buttonColor} />
       </View>
     </View>
   )
