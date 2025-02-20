@@ -16,6 +16,7 @@ import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescri
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
+import { scrollToTop } from "@/src/atoms/scroll-to-top"
 import {
   AttachNavigationScrollViewContext,
   SetAttachNavigationScrollViewContext,
@@ -174,7 +175,13 @@ export const NavigationBlurEffectHeader = ({
                   <View pointerEvents="box-none" style={[StyleSheet.absoluteFill]}>
                     {options.headerBackground?.()}
                   </View>
-                  <Header title={options.title ?? ""} {...options} headerBackground={() => null} />
+                  <TouchableOpacity onPress={scrollToTop}>
+                    <Header
+                      title={options.title ?? ""}
+                      {...options}
+                      headerBackground={() => null}
+                    />
+                  </TouchableOpacity>
                   {hideableBottom}
                 </Animated.View>
               )
