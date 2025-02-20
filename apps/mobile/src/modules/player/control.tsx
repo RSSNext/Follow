@@ -14,17 +14,7 @@ import { RewindForward30CuteReIcon } from "@/src/icons/rewind_forward_30_cute_re
 import { StopCircleCuteFiIcon } from "@/src/icons/stop_circle_cute_fi"
 import { VolumeCuteReIcon } from "@/src/icons/volume_cute_re"
 import { VolumeOffCuteReIcon } from "@/src/icons/volume_off_cute_re"
-import {
-  allowedRate,
-  pause,
-  play,
-  reset,
-  seekBy,
-  seekTo,
-  useIsPlaying,
-  useProgress,
-  useRate,
-} from "@/src/lib/player"
+import { allowedRate, player, useIsPlaying, useProgress, useRate } from "@/src/lib/player"
 import { useVolume } from "@/src/lib/volume"
 import { useColor } from "@/src/theme/colors"
 
@@ -43,7 +33,7 @@ export function PlayPauseButton({ size = 24, className, color }: ControlButtonPr
     <View className={className}>
       <TouchableOpacity
         onPress={() => {
-          playing ? pause() : play()
+          playing ? player.pause() : player.play()
         }}
       >
         {playing ? (
@@ -67,7 +57,7 @@ export function SeekButton({
     <View className={className}>
       <TouchableOpacity
         onPress={() => {
-          seekBy(offset)
+          player.seekBy(offset)
         }}
       >
         {offset === 30 ? (
@@ -123,7 +113,7 @@ export function StopButton({ size = 24, className, color }: ControlButtonProps) 
     <TouchableOpacity
       className={className}
       onPress={() => {
-        reset()
+        player.reset()
         router.back()
       }}
     >
@@ -187,14 +177,14 @@ export function ProgressBar() {
         }}
         onSlidingStart={() => (isSliding.value = true)}
         onValueChange={async (value) => {
-          await seekTo(value * duration)
+          await player.seekTo(value * duration)
         }}
         onSlidingComplete={async (value) => {
           if (!isSliding.value) return
 
           isSliding.value = false
 
-          await seekTo(value * duration)
+          await player.seekTo(value * duration)
         }}
       />
 

@@ -11,7 +11,7 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
 import { getImageHeaders } from "@/src/lib/image"
-import { getAttachmentState, pause, play } from "@/src/lib/player"
+import { getAttachmentState, player } from "@/src/lib/player"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
@@ -101,10 +101,10 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
             onPress={() => {
               if (isLoading) return
               if (isPlaying) {
-                pause()
+                player.pause()
                 return
               }
-              play({
+              player.play({
                 url: audio.url,
                 title: entry?.title,
                 artist: feed?.title,

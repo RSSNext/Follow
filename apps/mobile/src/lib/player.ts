@@ -23,44 +23,48 @@ export function getAttachmentState(playingUrl?: string, attachment?: Attachments
   return isPlaying ? "playing" : isLoading ? "loading" : null
 }
 
-export async function play(newTrack?: {
-  url: string
-  title?: string | null
-  artist?: string | null
-  artwork?: string | null
-}) {
-  if (newTrack) {
-    const activeTrack = await TrackPlayer.getActiveTrack()
-    if (activeTrack?.url !== newTrack.url) {
-      const { url, title, artist, artwork } = newTrack
+class Player {
+  async play(newTrack?: {
+    url: string
+    title?: string | null
+    artist?: string | null
+    artwork?: string | null
+  }) {
+    if (newTrack) {
+      const activeTrack = await TrackPlayer.getActiveTrack()
+      if (activeTrack?.url !== newTrack.url) {
+        const { url, title, artist, artwork } = newTrack
 
-      await TrackPlayer.load({
-        url,
-        title: title ?? "Unknown Title",
-        artist: artist ?? "Unknown Artist",
-        artwork: artwork ?? undefined,
-      })
+        await TrackPlayer.load({
+          url,
+          title: title ?? "Unknown Title",
+          artist: artist ?? "Unknown Artist",
+          artwork: artwork ?? undefined,
+        })
+      }
     }
+
+    await TrackPlayer.play()
   }
 
-  await TrackPlayer.play()
+  async pause() {
+    await TrackPlayer.pause()
+  }
+
+  async reset() {
+    await TrackPlayer.reset()
+  }
+
+  async seekBy(offset: number) {
+    await TrackPlayer.seekBy(offset)
+  }
+
+  async seekTo(position: number) {
+    await TrackPlayer.seekTo(position)
+  }
 }
 
-export async function pause() {
-  await TrackPlayer.pause()
-}
-
-export async function reset() {
-  await TrackPlayer.reset()
-}
-
-export async function seekBy(offset: number) {
-  await TrackPlayer.seekBy(offset)
-}
-
-export async function seekTo(position: number) {
-  await TrackPlayer.seekTo(position)
-}
+export const player = new Player()
 
 export { useActiveTrack, useIsPlaying, useProgress } from "react-native-track-player"
 
