@@ -172,32 +172,26 @@ export const TimelineSelector = ({ timelineId }: { timelineId: string | undefine
                     </button>
                   </header>
                   <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
-                    <div className="mb-1 text-base font-bold">Views</div>
-                    {timelineList.views.map((timelineId) => (
-                      <TimelineListViewItem
-                        key={timelineId}
-                        timelineId={timelineId}
-                        isActive={activeTimelineId === timelineId}
-                      />
-                    ))}
+                    <TimelineSection
+                      title="Views"
+                      items={timelineList.views}
+                      activeTimelineId={activeTimelineId}
+                      ItemComponent={TimelineListViewItem}
+                    />
                     <Divider className="mx-12 my-4" />
-                    <div className="mb-1 text-base font-bold">Inboxes</div>
-                    {timelineList.inboxes.map((timelineId) => (
-                      <TimelineInboxListItem
-                        key={timelineId}
-                        timelineId={timelineId}
-                        isActive={activeTimelineId === timelineId}
-                      />
-                    ))}
+                    <TimelineSection
+                      title="Inboxes"
+                      items={timelineList.inboxes}
+                      activeTimelineId={activeTimelineId}
+                      ItemComponent={TimelineInboxListItem}
+                    />
                     <Divider className="mx-12 my-4" />
-                    <div className="mb-1 text-base font-bold">Lists</div>
-                    {timelineList.lists.map((timelineId) => (
-                      <TimelineListListItem
-                        key={timelineId}
-                        timelineId={timelineId}
-                        isActive={activeTimelineId === timelineId}
-                      />
-                    ))}
+                    <TimelineSection
+                      title="Lists"
+                      items={timelineList.lists}
+                      activeTimelineId={activeTimelineId}
+                      ItemComponent={TimelineListListItem}
+                    />
                   </ScrollArea>
                 </>
               )}
@@ -246,7 +240,7 @@ const ItemBase: Component<
       }}
       className={cn(
         feedColumnStyles.item,
-        "flex w-full cursor-menu items-center justify-between rounded-md px-2.5 py-0.5 text-base font-medium leading-loose lg:text-sm",
+        "flex w-full cursor-pointer items-center justify-between rounded-md px-2.5 py-0.5 text-base font-medium leading-loose lg:text-sm",
         isActive && "bg-theme-item-active",
         className,
       )}
@@ -297,6 +291,39 @@ const TimelineInboxListItem = ({ timelineId, isActive }: TimelineItemProps) => {
         </EllipsisHorizontalTextWithTooltip>
       </div>
     </ItemBase>
+  )
+}
+
+interface TimelineSectionProps {
+  title: string
+  items: string[]
+  ItemComponent: React.ComponentType<TimelineItemProps>
+  activeTimelineId?: string | undefined
+}
+
+const TimelineSection = ({
+  title,
+  items,
+  activeTimelineId,
+  ItemComponent,
+}: TimelineSectionProps) => {
+  return (
+    <>
+      <div className="mb-1 text-base font-bold">{title}</div>
+      {items.length > 0 ? (
+        <div className="flex flex-col gap-1">
+          {items.map((timelineId) => (
+            <ItemComponent
+              key={timelineId}
+              timelineId={timelineId}
+              isActive={activeTimelineId === timelineId}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-sm text-muted-foreground">Nothing in {title}</div>
+      )}
+    </>
   )
 }
 
