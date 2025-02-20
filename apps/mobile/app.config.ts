@@ -4,7 +4,8 @@ import type { ConfigContext, ExpoConfig } from "expo/config"
 
 import PKG from "./package.json"
 
-const isDev = process.env.NODE_ENV === "development"
+// const isDev = process.env.NODE_ENV === "development"
+const isCI = process.env.CI === "true"
 // const roundedIconPath = resolve(__dirname, "../../resources/icon.png")
 const iconPath = resolve(__dirname, "./assets/icon.png")
 const adaptiveIconPath = resolve(__dirname, "./assets/adaptive-icon.png")
@@ -26,7 +27,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   name: "Follow",
   slug: "follow",
-  version: process.env.NODE_ENV === "development" ? "dev" : PKG.version,
+  version: PKG.version,
   orientation: "portrait",
   icon: iconPath,
   scheme: "follow",
@@ -38,6 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     usesAppleSignIn: true,
     infoPlist: {
       LSApplicationCategoryType: "public.app-category.news",
+      ITSAppUsesNonExemptEncryption: false,
     },
   },
   android: {
@@ -78,6 +80,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-build-properties",
     "expo-sqlite",
     [
+      "expo-media-library",
+      {
+        photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
+        savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
+        isAccessMediaLocationEnabled: true,
+      },
+    ],
+    [
       "expo-font",
       {
         fonts: [
@@ -106,7 +116,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       require("./scripts/with-follow-assets.js"),
       {
         // Add asset directory paths, the plugin copies the files in the given paths to the app bundle folder named Assets
-        assetsPath: isDev ? resolve(__dirname, "..", "..", "out", "rn-web") : "/tmp/rn-web",
+        assetsPath: !isCI ? resolve(__dirname, "..", "..", "out", "rn-web") : "/tmp/rn-web",
       },
     ],
     [require("./scripts/with-follow-app-delegate.js")],

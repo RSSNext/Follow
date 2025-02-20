@@ -25,6 +25,7 @@ class UnreadSyncService {
       query: {},
     })
 
+    await unreadActions.reset()
     await unreadActions.upsertMany(res.data)
     return res.data
   }
@@ -95,7 +96,7 @@ class UnreadSyncService {
 }
 
 class UnreadActions {
-  async upsertManyInSession(unreads: UnreadSchema[]) {
+  upsertManyInSession(unreads: UnreadSchema[]) {
     const state = useUnreadStore.getState()
     const nextData = { ...state.data }
     for (const unread of unreads) {
@@ -131,10 +132,19 @@ class UnreadActions {
     await unreadActions.upsertMany([{ subscriptionId, count: Math.max(0, currentCount - count) }])
   }
 
-  reset() {
-    set({
-      data: {},
+  async reset() {
+    const tx = createTransaction()
+    tx.store(() => {
+      set({
+        data: {},
+      })
     })
+
+    tx.persist(() => {
+      return UnreadService.reset()
+    })
+
+    await tx.run()
   }
 }
 export const unreadActions = new UnreadActions()

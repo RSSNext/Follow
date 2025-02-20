@@ -1,6 +1,6 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { buildGlobRoutes } from "@follow/utils/route-builder"
-import { wrapCreateBrowserRouter } from "@sentry/react"
+import { wrapCreateBrowserRouterV7 } from "@sentry/react"
 import { createBrowserRouter, createHashRouter } from "react-router"
 
 import { Component as App } from "./App"
@@ -15,7 +15,7 @@ let routerCreator =
     ? createHashRouter
     : createBrowserRouter
 if (window.SENTRY_RELEASE) {
-  routerCreator = wrapCreateBrowserRouter(routerCreator)
+  routerCreator = wrapCreateBrowserRouterV7(routerCreator)
 }
 
 export const router = routerCreator(

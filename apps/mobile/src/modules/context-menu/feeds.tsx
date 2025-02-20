@@ -32,14 +32,29 @@ export const SubscriptionFeedItemContextMenu: FC<
           }, [id])}
         >
           <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "checklist.checked",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Item key="Claim">
           <ContextMenu.ItemTitle>Claim</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "checkmark.seal",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Item key="Boost">
           <ContextMenu.ItemTitle>Boost</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "bolt",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Sub key="AddToCategory">
@@ -93,6 +108,11 @@ export const SubscriptionFeedItemContextMenu: FC<
 
         <ContextMenu.Item key="Edit">
           <ContextMenu.ItemTitle>Edit</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "square.and.pencil",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Item
@@ -114,6 +134,11 @@ export const SubscriptionFeedItemContextMenu: FC<
           }, [id])}
         >
           <ContextMenu.ItemTitle>Copy Link</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "link",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Item
@@ -137,6 +162,11 @@ export const SubscriptionFeedItemContextMenu: FC<
           }, [id])}
         >
           <ContextMenu.ItemTitle>Unsubscribe</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "xmark",
+            }}
+          />
         </ContextMenu.Item>
       </ContextMenu.Content>
     </ContextMenu.Root>
@@ -165,6 +195,11 @@ export const SubscriptionFeedCategoryContextMenu = ({
           }, [feedIds])}
         >
           <ContextMenu.ItemTitle>Mark All As Read</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "checklist.checked",
+            }}
+          />
         </ContextMenu.Item>
 
         <ContextMenu.Sub key="ChangeToOtherView">
@@ -190,9 +225,19 @@ export const SubscriptionFeedCategoryContextMenu = ({
 
         <ContextMenu.Item key="EditCategory">
           <ContextMenu.ItemTitle>Edit Category</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "square.and.pencil",
+            }}
+          />
         </ContextMenu.Item>
         <ContextMenu.Item key="DeleteCategory" destructive>
           <ContextMenu.ItemTitle>Delete Category</ContextMenu.ItemTitle>
+          <ContextMenu.ItemIcon
+            ios={{
+              name: "trash",
+            }}
+          />
         </ContextMenu.Item>
       </ContextMenu.Content>
     </ContextMenu.Root>

@@ -1,14 +1,19 @@
 import { Portal } from "@gorhom/portal"
 import { router } from "expo-router"
+import type { PropsWithChildren } from "react"
 import { useRef, useState } from "react"
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native"
 import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { setUISetting, useUISettingKey } from "@/src/atoms/settings/ui"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
+import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { Overlay } from "@/src/components/ui/overlay/Overlay"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { LinkCuteReIcon } from "@/src/icons/link_cute_re"
+import { PhotoAlbumCuteFiIcon } from "@/src/icons/photo_album_cute_fi"
+import { PhotoAlbumCuteReIcon } from "@/src/icons/photo_album_cute_re"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -28,16 +33,42 @@ export function HomeLeftAction() {
   )
 }
 
-export function HomeRightAction() {
+export function HomeRightAction(props: PropsWithChildren) {
   const insets = useActionPadding()
 
   return (
-    <View className="flex-row items-center" style={{ paddingRight: insets.paddingRight }}>
+    <View
+      className="-mr-2 flex-row items-center gap-2"
+      style={{ paddingRight: insets.paddingRight }}
+    >
+      {props.children}
       <AddFeedButton />
     </View>
   )
 }
 
+export function HideNoMediaActionButton({
+  variant = "primary",
+}: {
+  variant?: "primary" | "secondary"
+}) {
+  const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
+
+  const label = useColor("label")
+  const size = variant === "primary" ? 24 : 20
+  const color = variant === "primary" ? accentColor : label
+  return (
+    <UIBarButton
+      label="Hide No Media Item"
+      normalIcon={<PhotoAlbumCuteReIcon height={size} width={size} color={color} />}
+      selectedIcon={<PhotoAlbumCuteFiIcon height={size} width={size} color={color} />}
+      onPress={() => {
+        setUISetting("pictureViewFilterNoImage", !pictureViewFilterNoImage)
+      }}
+      selected={pictureViewFilterNoImage}
+    />
+  )
+}
 const AddFeedButton = () => {
   const [isOpen, setIsOpen] = useState(false)
   const label = useColor("label")
@@ -59,9 +90,11 @@ const AddFeedButton = () => {
   }
   return (
     <>
-      <TouchableOpacity className="size-6" onPress={() => setIsOpen((s) => !s)}>
-        <AddCuteReIcon color={accentColor} />
-      </TouchableOpacity>
+      <UIBarButton
+        label="Add Feed"
+        normalIcon={<AddCuteReIcon color={accentColor} />}
+        onPress={() => setIsOpen((s) => !s)}
+      />
 
       <Portal>
         {isOpen && (

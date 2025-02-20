@@ -12,7 +12,9 @@
     "@follow/components": "workspace:*",
     "@follow/types": "workspace:*",
     "clsx": "2.1.1",
+    "foxact": "0.2.44",
     "jotai": "2.11.3",
-    "react-blurhash": "^0.3.0"
+    "react": "18.3.1",
+    "react-blurhash": "0.3.0"
   }
 }

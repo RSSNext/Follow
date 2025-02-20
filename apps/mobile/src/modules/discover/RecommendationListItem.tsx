@@ -67,6 +67,11 @@ export const RecommendationListItem: FC<{
                   }}
                 >
                   <ContextMenu.ItemTitle>Copy Maintainer Name</ContextMenu.ItemTitle>
+                  <ContextMenu.ItemIcon
+                    ios={{
+                      name: "doc.on.doc",
+                    }}
+                  />
                 </ContextMenu.Item>
 
                 <ContextMenu.Item
@@ -76,6 +81,11 @@ export const RecommendationListItem: FC<{
                   }}
                 >
                   <ContextMenu.ItemTitle>Open Maintainer's Profile</ContextMenu.ItemTitle>
+                  <ContextMenu.ItemIcon
+                    ios={{
+                      name: "link",
+                    }}
+                  />
                 </ContextMenu.Item>
               </ContextMenu.Content>
             </ContextMenu.Root>

@@ -18,7 +18,7 @@
   </p>
 </div>
 
-![](https://github.com/user-attachments/assets/80cc7a6d-5044-44a5-ae00-2a29b7e936a2)
+![](https://github.com/RSSNext/assets/blob/main/poster.png?raw=true)
 
 As they say, your thoughts are what you read—and we’ve been consuming noisy feeds for too long! Follow organizes content into one timeline, keeping you updated on what matters, noise-free. Share lists, explore collections, and enjoy distraction-free browsing.
 

@@ -36,6 +36,15 @@ const generatePathElement = (node: SvgNode): string => {
   return `      <Path ${props} />`
 }
 
+const isPureBackgroundPath = (node: any) => {
+  return (
+    node.tagName === "path" &&
+    node.properties.fill === "#fff" &&
+    node.properties["fill-opacity"] === 0.01 &&
+    node.properties.d === "M24 0v24H0V0z"
+  )
+}
+
 const convertSvgToRN = (svgContent: string, componentName: string) => {
   const ast = parse(svgContent)
   const svgNode = ast.children[0] as SvgNode
@@ -44,6 +53,7 @@ const convertSvgToRN = (svgContent: string, componentName: string) => {
   const pathElements =
     svgNode.children
       ?.filter((child) => child.tagName === "path")
+      .filter((child) => !isPureBackgroundPath(child))
       .map((node) => generatePathElement(node))
       .join("\n") ?? ""
 

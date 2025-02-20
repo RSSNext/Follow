@@ -3,7 +3,6 @@ import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import legacy from "@vitejs/plugin-legacy"
-import chalk from "chalk"
 import { minify as htmlMinify } from "html-minifier-terser"
 import { cyan, dim, green } from "kolorist"
 import { parseHTML } from "linkedom"
@@ -48,7 +47,7 @@ const devPrint = (): PluginOption => ({
 const isRNBuild = process.env.RN_BUILD === "1"
 const isWebBuild = process.env.WEB_BUILD === "1"
 // eslint-disable-next-line no-console
-console.log(chalk.green("Build type:"), isRNBuild ? "RN" : isWebBuild ? "Web" : "Unknown")
+console.log(green("Build type:"), isRNBuild ? "RN" : isWebBuild ? "Web" : "Unknown")
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())

@@ -108,10 +108,7 @@ function ViewItem({ view }: { view: ViewDefinition }) {
   }, [isActive, unreadCount])
 
   return (
-    <TimelineViewSelectorContextMenu
-      viewId={selectedFeed && "viewId" in selectedFeed ? selectedFeed.viewId : undefined}
-      type={selectedFeed?.type}
-    >
+    <TimelineViewSelectorContextMenu type="view" viewId={view.view}>
       <ItemWrapper
         isActive={isActive}
         onPress={() => selectTimeline({ type: "view", viewId: view.view })}

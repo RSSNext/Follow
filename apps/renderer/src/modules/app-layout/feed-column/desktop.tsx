@@ -32,6 +32,7 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
 import { HotKeyScopeMap, isDev } from "~/constants"
+import { ROOT_CONTAINER_ID } from "~/constants/dom"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
 import { useBatchUpdateSubscription } from "~/hooks/biz/useSubscriptionActions"
@@ -176,6 +177,7 @@ const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children 
       }
       className="relative z-0 flex h-screen overflow-hidden print:h-auto print:overflow-auto"
       onContextMenu={preventDefault}
+      id={ROOT_CONTAINER_ID}
     >
       {children}
     </div>

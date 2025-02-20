@@ -14,7 +14,6 @@ export const RadaCuteFiIcon = ({
 }: RadaCuteFiIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
-      <Path fill="#fff" fillOpacity={0.01} d="M24 0v24H0V0z" />
       <Path fill={color} d="M13 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
       <Path
         stroke={color}

@@ -58,6 +58,7 @@ export default function ListScreen() {
   const list = useList(listId || "")
   const form = useForm({
     defaultValues: list || defaultValues,
+    // @ts-ignore
     resolver: zodResolver(listSchema),
     mode: "all",
   })

@@ -3,6 +3,7 @@ import { clsx } from "clsx"
 import katexStyle from "katex/dist/katex.min.css?raw"
 import { createElement, Fragment, useEffect, useMemo, useState } from "react"
 
+import { WrappedElementProvider } from "./common/WrappedElementProvider"
 import { MarkdownRenderContainerRefContext } from "./components/__internal/ctx"
 import { parseHtml } from "./parser"
 
@@ -58,15 +59,18 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(props: HTMLP
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       <MemoedDangerousHTMLStyle>{katexStyle}</MemoedDangerousHTMLStyle>
-      {createElement(
-        as,
-        {
-          ...rest,
-          ref: setRefElement,
-          className: clsx("prose mx-auto px-3", "dark:prose-invert"),
-        },
-        markdownElement,
-      )}
+      <WrappedElementProvider>
+        {createElement(
+          as,
+          {
+            ...rest,
+            ref: setRefElement,
+            className: clsx("prose mx-auto px-3", "dark:prose-invert"),
+          },
+          markdownElement,
+        )}
+      </WrappedElementProvider>
+
       {!!accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
     </MarkdownRenderContainerRefContext.Provider>
   )
