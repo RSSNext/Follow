@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow everything in one place",
@@ -194,5 +194,5 @@
     ]
   },
   "productName": "Follow",
-  "mainHash": "238ff29ee6094c2061997392ca8a7e439911c21a8157ead25bc41e6dd1f5034b"
+  "mainHash": "d2184ce595ab3b45f933edb9938b6a6fe53d8c85558d0899b9ffb8f72850cf25"
 }
