@@ -1,6 +1,6 @@
 import type { ElectronAPI } from "@electron-toolkit/preload"
 
-import { env } from "./env"
+import { env, isDev } from "./env"
 
 declare const globalThis: {
   window: Window & {
@@ -10,7 +10,7 @@ declare const globalThis: {
   electron?: ElectronAPI
 }
 
-export const APP_PROTOCOL = "follow"
+export const APP_PROTOCOL = isDev ? "follow-dev" : "follow"
 export const DEEPLINK_SCHEME = `${APP_PROTOCOL}://` as const
 
 export const WEB_URL = env.VITE_WEB_URL
