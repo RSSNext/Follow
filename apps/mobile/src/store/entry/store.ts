@@ -252,8 +252,7 @@ class EntryActions {
 
 class EntrySyncServices {
   async fetchEntries(props: FetchEntriesProps) {
-    const { feedId, inboxId, listId, view, read, limit, pageParam, isArchived, isCollection } =
-      props
+    const { feedId, inboxId, listId, view, read, limit, pageParam, isCollection } = props
     const params = getEntriesParams({
       feedId,
       inboxId,
@@ -265,7 +264,6 @@ class EntrySyncServices {
         publishedAfter: pageParam,
         read,
         limit,
-        isArchived,
         isCollection,
         ...params,
       },

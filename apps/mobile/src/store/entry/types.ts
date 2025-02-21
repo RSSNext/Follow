@@ -9,6 +9,5 @@ export type FetchEntriesProps = {
   read?: boolean
   limit?: number
   pageParam?: string
-  isArchived?: boolean
   isCollection?: boolean
 }
