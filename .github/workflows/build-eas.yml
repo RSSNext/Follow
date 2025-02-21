@@ -62,4 +62,5 @@ jobs:
       - name: Submit to App Store
         if: github.event.inputs.profile == 'production'
         run: |
-          eas submit --platform ios --path apps/mobile/build.ipa --non-interactive
+          cd apps/mobile
+          eas submit --platform ios --path build.ipa --non-interactive
