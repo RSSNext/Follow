@@ -1,6 +1,7 @@
 import { FeedViewType } from "@follow/constants"
+import { uniqBy } from "es-toolkit/compat"
 import { LinearGradient } from "expo-linear-gradient"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ScrollView, Text, View } from "react-native"
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -15,99 +16,155 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ImageContextMenu } from "@/src/components/ui/image/ImageContextMenu"
 import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
+import type { MediaModel } from "@/src/database/schemas/types"
+import { openLink } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
-import { useSelectedView } from "../../screen/atoms"
+import { useEntryListContextView } from "../EntryListContext"
 
-export type MasonryItem = {
-  id: string
-} & (
-  | {
-      type: "image"
-      imageUrl: string
-      blurhash?: string
-      height?: number
-      width?: number
-    }
-  | {
-      type: "video"
-      videoUrl: string
-      videoPreviewImageUrl?: string
-    }
-)
-export function EntryGridItem(props: MasonryItem) {
-  const { type, id } = props
-  const view = useSelectedView()
+export function EntryGridItem({ id }: { id: string }) {
   const item = useEntry(id)
+  const view = useEntryListContextView()
 
   const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
+  if (!item || !item.media) {
+    return null
+  }
 
-  const Content = useMemo(() => {
-    switch (type) {
-      case "image": {
-        const { imageUrl, blurhash, height, width } = props
-        const aspectRatio = height && width ? width / height : 16 / 9
+  const hasMedia = item.media.length > 0
 
-        return imageUrl ? (
-          <ImageContextMenu imageUrl={imageUrl}>
-            <PreviewImage
-              onPreview={() => {
-                if (item) {
-                  setWebViewEntry(item)
-                }
-              }}
-              imageUrl={imageUrl}
-              blurhash={blurhash}
-              aspectRatio={aspectRatio}
-              Accessory={EntryGridItemAccessory}
-              AccessoryProps={{
-                id,
-              }}
-            />
-          </ImageContextMenu>
-        ) : (
-          <View className="aspect-video w-full items-center justify-center">
-            <Text className="text-label text-center">No media available</Text>
-          </View>
-        )
-      }
-      case "video": {
-        const { videoPreviewImageUrl } = props
+  if (pictureViewFilterNoImage && !hasMedia && view === FeedViewType.Pictures) {
+    return null
+  }
+  if (!hasMedia) {
+    return (
+      <View className="aspect-video w-full items-center justify-center">
+        <Text className="text-label text-center">No media available</Text>
+      </View>
+    )
+  }
 
-        return (
-          <>
-            {videoPreviewImageUrl ? (
-              <ImageContextMenu imageUrl={videoPreviewImageUrl}>
-                <PreviewImage imageUrl={videoPreviewImageUrl} aspectRatio={16 / 9} />
-              </ImageContextMenu>
-            ) : (
-              <View className="aspect-video w-full items-center justify-center">
-                <Text className="text-label text-center">No media available</Text>
+  const WrapperComponent = view === FeedViewType.Videos ? ItemPressable : View
+
+  return (
+    <WrapperComponent
+      className="m-1 overflow-hidden rounded-md"
+      onPress={() => {
+        if (!item.url) {
+          return
+        }
+        if (view === FeedViewType.Videos) {
+          openLink(item.url)
+        }
+      }}
+    >
+      <MediaItems
+        media={item.media}
+        title={item.title || ""}
+        view={view!}
+        entryId={id}
+        onPreview={() => {
+          if (item) {
+            setWebViewEntry(item)
+          }
+        }}
+      />
+    </WrapperComponent>
+  )
+}
+
+const MediaItems = ({
+  media,
+  view,
+  entryId,
+  onPreview,
+  title,
+}: {
+  media: MediaModel[]
+  view: FeedViewType
+  entryId: string
+  onPreview: () => void
+  title: string
+}) => {
+  const firstMedia = media[0]
+  const [containerWidth, setContainerWidth] = useState(0)
+  const uniqMedia = useMemo(() => {
+    return uniqBy(media, "url")
+  }, [media])
+
+  if (!firstMedia) {
+    return null
+  }
+
+  const { height } = firstMedia
+  const { width } = firstMedia
+  const aspectRatio = width && height ? width / height : 1
+
+  if (view === FeedViewType.Videos) {
+    const mediaUrl = firstMedia.preview_image_url || firstMedia.url
+    const aspectRatio = 16 / 9
+    return (
+      <View>
+        <View className="flex-1" style={{ aspectRatio }}>
+          {mediaUrl && (
+            <PreviewImage imageUrl={mediaUrl} aspectRatio={aspectRatio} onPreview={onPreview} />
+          )}
+        </View>
+        <Text className="text-label p-2 font-medium" numberOfLines={2}>
+          {title}
+        </Text>
+      </View>
+    )
+  }
+
+  return (
+    <View
+      onLayout={({ nativeEvent }) => {
+        setContainerWidth(nativeEvent.layout.width)
+      }}
+    >
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        className="flex-1"
+        contentContainerClassName="flex-row"
+        style={{ aspectRatio }}
+      >
+        {uniqMedia.map((m, index) => {
+          if (m.type === "photo") {
+            return (
+              <View key={index} className="relative" style={{ width: containerWidth }}>
+                <ImageContextMenu imageUrl={m.url}>
+                  <PreviewImage
+                    onPreview={onPreview}
+                    imageUrl={m.url}
+                    aspectRatio={m.width && m.height ? m.width / m.height : 1}
+                    Accessory={EntryGridItemAccessory}
+                    AccessoryProps={{
+                      id: entryId,
+                    }}
+                  />
+                </ImageContextMenu>
               </View>
-            )}
-            <Text className="text-label p-2 font-medium" numberOfLines={2}>
-              {item?.title}
-            </Text>
-          </>
-        )
-      }
-    }
-  }, [type, JSON.stringify(props), item?.title])
-  if (!item) {
-    return null
-  }
+            )
+          }
 
-  if (
-    pictureViewFilterNoImage &&
-    type === "image" &&
-    !props.imageUrl &&
-    view === FeedViewType.Pictures
-  ) {
-    return null
-  }
-
-  return <ItemPressable className="m-1 overflow-hidden rounded-md">{Content}</ItemPressable>
+          return (
+            <PreviewImage
+              key={index}
+              onPreview={() => {
+                // open player
+              }}
+              imageUrl={m.url}
+              aspectRatio={m.width && m.height ? m.width / m.height : 1}
+            />
+          )
+        })}
+      </ScrollView>
+    </View>
+  )
 }
 
 const EntryGridItemAccessory = ({ id }: { id: string }) => {

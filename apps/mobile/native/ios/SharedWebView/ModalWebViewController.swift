@@ -56,7 +56,8 @@ class ModalWebViewController: UIViewController {
     private func setupWebView() {
         view.addSubview(webView)
         webView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.left.right.bottom.equalToSuperview()
         }
     }
 

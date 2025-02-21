@@ -1,16 +1,10 @@
 import { FeedViewType } from "@follow/constants"
-import { useIsFocused } from "@react-navigation/native"
 import { useEffect, useMemo } from "react"
 import { Animated, StyleSheet } from "react-native"
 import PagerView from "react-native-pager-view"
 
 import { views } from "@/src/constants/views"
-import {
-  selectTimeline,
-  useSelectedFeed,
-  useSelectedView,
-  useSetDrawerSwipeDisabled,
-} from "@/src/modules/screen/atoms"
+import { selectTimeline, useSelectedFeed, useSelectedView } from "@/src/modules/screen/atoms"
 import {
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
@@ -24,16 +18,6 @@ import { EntryListSelector } from "./EntryListSelector"
 import { usePagerView } from "./usePagerView"
 
 export function EntryList() {
-  const setDrawerSwipeDisabled = useSetDrawerSwipeDisabled()
-  const isFocused = useIsFocused()
-  useEffect(() => {
-    if (isFocused) {
-      setDrawerSwipeDisabled(false)
-    } else {
-      setDrawerSwipeDisabled(true)
-    }
-  }, [setDrawerSwipeDisabled, isFocused])
-
   const selectedFeed = useSelectedFeed()
 
   const Content = useMemo(() => {

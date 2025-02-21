@@ -9,6 +9,7 @@ import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentG
 
 import { EntryListContentArticle } from "./EntryListContentArticle"
 import { EntryListContentSocial } from "./EntryListContentSocial"
+import { EntryListContextViewContext } from "./EntryListContext"
 
 export function EntryListSelector({
   entryIds,
@@ -47,5 +48,9 @@ export function EntryListSelector({
     }
   }
 
-  return <ContentComponent ref={ref} entryIds={entryIds} />
+  return (
+    <EntryListContextViewContext.Provider value={viewId}>
+      <ContentComponent ref={ref} entryIds={entryIds} />
+    </EntryListContextViewContext.Provider>
+  )
 }
