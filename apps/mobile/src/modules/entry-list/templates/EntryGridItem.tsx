@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { uniqBy } from "es-toolkit/compat"
 import { LinearGradient } from "expo-linear-gradient"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { ScrollView, Text, View } from "react-native"
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -11,9 +11,9 @@ import {
   EntryContentWebView,
   setWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
+import { MediaCarousel } from "@/src/components/ui/carousel/Carousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ImageContextMenu } from "@/src/components/ui/image/ImageContextMenu"
 import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import type { MediaModel } from "@/src/database/schemas/types"
@@ -88,7 +88,7 @@ const MediaItems = ({
   title: string
 }) => {
   const firstMedia = media[0]
-  const [containerWidth, setContainerWidth] = useState(0)
+
   const uniqMedia = useMemo(() => {
     return uniqBy(media, "url")
   }, [media])
@@ -119,51 +119,13 @@ const MediaItems = ({
   }
 
   return (
-    <View
-      onLayout={({ nativeEvent }) => {
-        setContainerWidth(nativeEvent.layout.width)
-      }}
-    >
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        className="flex-1"
-        contentContainerClassName="flex-row"
-        style={{ aspectRatio }}
-      >
-        {uniqMedia.map((m, index) => {
-          if (m.type === "photo") {
-            return (
-              <View key={index} className="relative" style={{ width: containerWidth }}>
-                <ImageContextMenu imageUrl={m.url}>
-                  <PreviewImage
-                    onPreview={onPreview}
-                    imageUrl={m.url}
-                    aspectRatio={m.width && m.height ? m.width / m.height : 1}
-                    Accessory={EntryGridItemAccessory}
-                    AccessoryProps={{
-                      id: entryId,
-                    }}
-                  />
-                </ImageContextMenu>
-              </View>
-            )
-          }
-
-          return (
-            <PreviewImage
-              key={index}
-              onPreview={() => {
-                // open player
-              }}
-              imageUrl={m.url}
-              aspectRatio={m.width && m.height ? m.width / m.height : 1}
-            />
-          )
-        })}
-      </ScrollView>
-    </View>
+    <MediaCarousel
+      media={uniqMedia}
+      onPreview={onPreview}
+      aspectRatio={aspectRatio}
+      Accessory={EntryGridItemAccessory}
+      AccessoryProps={{ id: entryId }}
+    />
   )
 }
 

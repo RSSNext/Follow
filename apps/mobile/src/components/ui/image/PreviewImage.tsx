@@ -5,7 +5,7 @@ import { Pressable, View } from "react-native"
 
 import { usePreviewImage } from "./PreviewPageProvider"
 
-interface PreviewImageProps {
+export interface PreviewImageProps {
   imageUrl: string
   blurhash?: string | undefined
   aspectRatio: number
