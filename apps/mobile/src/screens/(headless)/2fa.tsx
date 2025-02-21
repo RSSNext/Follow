@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import {
+  ActivityIndicator,
   Text,
   TextInput,
   TouchableOpacity,
@@ -101,7 +102,11 @@ export default function TwoFactorAuthScreen() {
                   submitMutation.mutate(authCode)
                 }}
               >
-                <Text className="text-center text-white">Submit</Text>
+                {submitMutation.isPending ? (
+                  <ActivityIndicator className="text-white" />
+                ) : (
+                  <Text className="text-center font-semibold text-white">Submit</Text>
+                )}
               </TouchableOpacity>
             </View>
           </TouchableWithoutFeedback>
