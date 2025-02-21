@@ -41,6 +41,7 @@ export function createWindow(
     show: false,
     resizable: configs?.resizable ?? true,
     autoHideMenuBar: true,
+    alwaysOnTop: false,
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.mjs"),
       sandbox: false,
