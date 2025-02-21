@@ -113,7 +113,6 @@ class EntryActions {
     read,
     limit,
     pageParam,
-    isArchived,
   }: {
     feedId?: number | string
     inboxId?: number | string
@@ -122,7 +121,6 @@ class EntryActions {
     read?: boolean
     limit?: number
     pageParam?: string
-    isArchived?: boolean
   }) {
     if (inboxId) {
       const data = await apiClient.entries.inbox
@@ -147,7 +145,7 @@ class EntryActions {
         })
 
       if (data.data) {
-        this.upsertMany(structuredClone(data.data), { isArchived })
+        this.upsertMany(structuredClone(data.data))
       }
       return data
     }
@@ -163,7 +161,6 @@ class EntryActions {
         publishedAfter: pageParam,
         read,
         limit,
-        isArchived,
         ...params,
       },
     })
@@ -183,7 +180,7 @@ class EntryActions {
       }
     }
     if (data.data) {
-      this.upsertMany(structuredClone(data.data), { isArchived })
+      this.upsertMany(structuredClone(data.data))
     }
     return data
   }
@@ -263,7 +260,7 @@ class EntryActions {
     })
   }
 
-  upsertMany(data: CombinedEntryModel[], options?: { isArchived?: boolean }) {
+  upsertMany(data: CombinedEntryModel[]) {
     const feeds = [] as FeedOrListRespModel[]
     const entries = [] as EntryModel[]
     const inboxes = [] as InboxModel[]
@@ -370,7 +367,7 @@ class EntryActions {
             }
           }
 
-          if (item.settings && draft.flatMapEntries[item.entries.id] && !options?.isArchived) {
+          if (item.settings && draft.flatMapEntries[item.entries.id]) {
             draft.flatMapEntries[item.entries.id]!.settings = item.settings
           }
         }

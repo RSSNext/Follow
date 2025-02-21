@@ -1,12 +1,10 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
-import { Button } from "@follow/components/ui/button/index.js"
 import { FeedViewType, views } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
 import type { FeedModel } from "@follow/models/types"
 import { isBizId } from "@follow/utils/utils"
 import type { Range, Virtualizer } from "@tanstack/react-virtual"
-import { memo, useCallback, useEffect, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { memo, useCallback, useEffect, useRef } from "react"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { FeedFoundCanBeFollowError } from "~/components/errors/FeedFoundCanBeFollowErrorFallback"
@@ -28,18 +26,14 @@ import { EntryEmptyList, EntryList } from "./list"
 import { EntryColumnWrapper } from "./wrapper"
 
 function EntryColumnImpl() {
-  const { t } = useTranslation()
-  const [isArchived, setIsArchived] = useState(false)
-  const unreadOnly = useGeneralSettingKey("unreadOnly")
   const listRef = useRef<Virtualizer<HTMLElement, Element>>()
   const entries = useEntriesByView({
     onReset: useCallback(() => {
       listRef.current?.scrollToIndex(0)
     }, []),
-    isArchived,
   })
 
-  const { entriesIds, isFetchingNextPage, groupedCounts } = entries
+  const { entriesIds, groupedCounts } = entries
   useSnapEntryIdList(entriesIds)
 
   const {
@@ -48,13 +42,7 @@ function EntryColumnImpl() {
     feedId: routeFeedId,
     isPendingEntry,
     isCollection,
-    inboxId,
-    listId,
   } = useRouteParams()
-
-  useEffect(() => {
-    setIsArchived(false)
-  }, [view, routeFeedId])
 
   const activeEntry = useEntry(activeEntryId)
   const feed = useFeedById(routeFeedId)
@@ -75,35 +63,6 @@ function EntryColumnImpl() {
   const isInteracted = useRef(false)
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
-
-  useEffect(() => {
-    if (isArchived) {
-      if (entries.hasNextPage) {
-        entries.fetchNextPage()
-      } else {
-        entries.refetch()
-      }
-    }
-  }, [isArchived])
-
-  // Common conditions for both showArchivedButton and shouldLoadArchivedEntries
-  const commonConditions =
-    !isArchived && !unreadOnly && !isCollection && routeFeedId !== ROUTE_FEED_PENDING
-
-  // Determine if the archived button should be shown
-  const showArchivedButton = commonConditions && feed?.type === "feed"
-  const hasNoEntries = entries.data?.pages?.[0]?.data?.length === 0 && !entries.isLoading
-
-  // Determine if archived entries should be loaded
-  const shouldLoadArchivedEntries =
-    commonConditions && (feed?.type === "feed" || !feed) && !inboxId && !listId && hasNoEntries
-
-  // automatically fetch archived entries when there is no entries in timeline
-  useEffect(() => {
-    if (shouldLoadArchivedEntries) {
-      setIsArchived(true)
-    }
-  }, [shouldLoadArchivedEntries])
 
   const handleScroll = useCallback(() => {
     if (!isInteracted.current) {
@@ -185,7 +144,7 @@ function EntryColumnImpl() {
         onPullToRefresh={entries.refetch}
         key={`${routeFeedId}-${view}`}
       >
-        {entriesIds.length === 0 && !showArchivedButton ? (
+        {entriesIds.length === 0 ? (
           entries.isLoading ? null : (
             <EntryEmptyList />
           )
@@ -201,15 +160,6 @@ function EntryColumnImpl() {
             fetchNextPage={fetchNextPage}
             refetch={entries.refetch}
             groupCounts={groupedCounts}
-            Footer={
-              !isFetchingNextPage && showArchivedButton ? (
-                <div className="flex justify-center py-4">
-                  <Button variant="outline" onClick={() => setIsArchived(true)}>
-                    {t("words.load_archived_entries")}
-                  </Button>
-                </div>
-              ) : null
-            }
           />
         )}
       </EntryColumnWrapper>
