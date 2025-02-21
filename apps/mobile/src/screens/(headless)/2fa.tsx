@@ -18,7 +18,9 @@ import {
 } from "@/src/components/common/SafeNavigationScrollView"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { twoFactor } from "@/src/lib/auth"
+import { queryClient } from "@/src/lib/query-client"
 import { toast } from "@/src/lib/toast"
+import { whoamiQueryKey } from "@/src/store/user/hooks"
 
 function isAuthCodeValid(authCode: string) {
   return (
@@ -32,12 +34,13 @@ export default function TwoFactorAuthScreen() {
   const [authCode, setAuthCode] = useState("")
 
   const submitMutation = useMutation({
-    mutationFn: (value: string) =>
-      twoFactor.verifyTotp({ code: value }).then((res) => {
-        if (res.error) {
-          throw new Error(res.error.message)
-        }
-      }),
+    mutationFn: async (value: string) => {
+      const res = await twoFactor.verifyTotp({ code: value })
+      if (res.error) {
+        throw new Error(res.error.message)
+      }
+      await queryClient.invalidateQueries({ queryKey: whoamiQueryKey })
+    },
     onError(error) {
       toast.error(`Failed to verify: ${error.message}`)
       setAuthCode("")
@@ -89,13 +92,13 @@ export default function TwoFactorAuthScreen() {
             </View>
 
             <TouchableOpacity
-              className="disabled:bg-gray-3 mx-5 mt-10 rounded-lg bg-accent p-4"
+              className="disabled:bg-gray-3 mx-5 mt-10 rounded-lg bg-accent py-3"
               disabled={submitMutation.isPending || !isAuthCodeValid(authCode)}
               onPress={() => {
                 submitMutation.mutate(authCode)
               }}
             >
-              <Text className="text-label text-center">Submit</Text>
+              <Text className="text-center text-white">Submit</Text>
             </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>

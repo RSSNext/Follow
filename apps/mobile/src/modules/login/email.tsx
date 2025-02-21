@@ -91,7 +91,7 @@ export function EmailLogin() {
 
   const disableColor = useColor("gray3")
 
-  const canLogin = useSharedValue(0)
+  const canLogin = useSharedValue(1)
   useEffect(() => {
     canLogin.value = withTiming(submitMutation.isPending || !formState.isValid ? 1 : 0)
   }, [submitMutation.isPending, formState.isValid, canLogin])
@@ -148,7 +148,7 @@ export function EmailLogin() {
         {submitMutation.isPending ? (
           <ActivityIndicator className="text-white" />
         ) : (
-          <Text className="text-label text-center font-semibold">Continue</Text>
+          <Text className="text-center font-semibold text-white">Continue</Text>
         )}
       </ReAnimatedPressable>
     </View>
