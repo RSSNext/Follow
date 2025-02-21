@@ -42,12 +42,14 @@ interface RelativeDateTimeProps extends TextProps {
   date: string | Date
   displayAbsoluteTimeAfterDay?: number
   dateFormatTemplate?: string
+  postfixText?: string
 }
 
 export const RelativeDateTime = ({
   date,
   displayAbsoluteTimeAfterDay,
   dateFormatTemplate,
+  postfixText,
   ...props
 }: RelativeDateTimeProps) => {
   const [relative, setRelative] = useState<string>(() =>
@@ -78,7 +80,7 @@ export const RelativeDateTime = ({
       }}
     >
       <Animated.Text {...props} key={mode} exiting={FadeOut}>
-        {mode === "relative" ? relative : memoizedFormatTime}
+        {mode === "relative" ? `${relative} ${postfixText}` : memoizedFormatTime}
       </Animated.Text>
     </Pressable>
   )

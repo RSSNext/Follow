@@ -10,6 +10,7 @@ import type { ReactNode } from "react"
 import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
+import { SheetProvider } from "react-native-sheet-transitions"
 
 import { PreviewImageProvider } from "../components/ui/image/PreviewPageProvider"
 import { sqlite } from "../database"
@@ -32,11 +33,13 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
             <QueryClientProvider client={queryClient}>
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <GestureHandlerRootView>
-                  <ActionSheetProvider>
-                    <PreviewImageProvider>
-                      <PortalProvider>{children}</PortalProvider>
-                    </PreviewImageProvider>
-                  </ActionSheetProvider>
+                  <SheetProvider>
+                    <ActionSheetProvider>
+                      <PreviewImageProvider>
+                        <PortalProvider>{children}</PortalProvider>
+                      </PreviewImageProvider>
+                    </ActionSheetProvider>
+                  </SheetProvider>
                 </GestureHandlerRootView>
               </ThemeProvider>
             </QueryClientProvider>

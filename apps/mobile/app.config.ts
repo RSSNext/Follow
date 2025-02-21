@@ -40,6 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationCategoryType: "public.app-category.news",
       ITSAppUsesNonExemptEncryption: false,
+      UIBackgroundModes: ["audio"],
     },
   },
   android: {
@@ -85,29 +86,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
         savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
         isAccessMediaLocationEnabled: true,
-      },
-    ],
-    [
-      "expo-font",
-      {
-        fonts: [
-          "./assets/font/sn-pro/SNPro-Black.otf",
-          "./assets/font/sn-pro/SNPro-BlackItalic.otf",
-          "./assets/font/sn-pro/SNPro-Bold.otf",
-          "./assets/font/sn-pro/SNPro-BoldItalic.otf",
-          "./assets/font/sn-pro/SNPro-Heavy.otf",
-          "./assets/font/sn-pro/SNPro-HeavyItalic.otf",
-          "./assets/font/sn-pro/SNPro-Light.otf",
-          "./assets/font/sn-pro/SNPro-LightItalic.otf",
-          "./assets/font/sn-pro/SNPro-Medium.otf",
-          "./assets/font/sn-pro/SNPro-MediumItalic.otf",
-          "./assets/font/sn-pro/SNPro-Regular.otf",
-          "./assets/font/sn-pro/SNPro-RegularItalic.otf",
-          "./assets/font/sn-pro/SNPro-Semibold.otf",
-          "./assets/font/sn-pro/SNPro-SemiboldItalic.otf",
-          "./assets/font/sn-pro/SNPro-Thin.otf",
-          "./assets/font/sn-pro/SNPro-ThinItalic.otf",
-        ],
       },
     ],
     "expo-apple-authentication",

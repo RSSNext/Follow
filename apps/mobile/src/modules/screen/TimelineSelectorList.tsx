@@ -1,13 +1,18 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import type { FlashListProps, MasonryFlashListProps } from "@shopify/flash-list"
+import type {
+  FlashListProps,
+  MasonryFlashListProps,
+  MasonryFlashListRef,
+} from "@shopify/flash-list"
 import { FlashList, MasonryFlashList } from "@shopify/flash-list"
-import { forwardRef, useCallback, useContext } from "react"
+import type { ElementRef, RefObject } from "react"
+import { forwardRef, useCallback, useContext, useImperativeHandle, useRef } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { RefreshControl } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
 import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
@@ -42,9 +47,12 @@ export const TimelineSelectorList = forwardRef<
 
   const systemFill = useColor("secondaryLabel")
 
+  const listRef = useRef<FlashList<any>>(null)
+  useImperativeHandle(ref, () => listRef.current!)
+
   return (
     <FlashList
-      ref={ref}
+      ref={listRef}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}
@@ -72,11 +80,10 @@ export const TimelineSelectorList = forwardRef<
   )
 })
 
-export const TimelineSelectorMasonryList = ({
-  onRefresh,
-  isRefetching,
-  ...props
-}: Props & Omit<MasonryFlashListProps<any>, "onRefresh">) => {
+export const TimelineSelectorMasonryList = forwardRef<
+  ElementRef<typeof MasonryFlashList>,
+  Props & Omit<MasonryFlashListProps<any>, "onRefresh">
+>(({ onRefresh, isRefetching, ...props }, ref) => {
   const { refetch: unreadRefetch } = usePrefetchUnread()
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
@@ -99,6 +106,7 @@ export const TimelineSelectorMasonryList = ({
 
   return (
     <MasonryFlashList
+      ref={ref as RefObject<MasonryFlashListRef<any>>}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}
@@ -124,4 +132,4 @@ export const TimelineSelectorMasonryList = ({
       onScroll={onScroll}
     />
   )
-}
+})

@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { router } from "expo-router"
 import { useContext, useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { ActivityIndicator, TextInput, View } from "react-native"
+import { ActivityIndicator, Text, TextInput, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
 import {
   interpolate,
@@ -16,7 +17,6 @@ import {
 import { z } from "zod"
 
 import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
-import { ThemedText } from "@/src/components/common/ThemedText"
 import { LoginTermsCheckGuardContext } from "@/src/contexts/LoginTermsContext"
 import { signIn } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
@@ -35,9 +35,17 @@ async function onSubmit(values: FormValue) {
       email: values.email,
       password: values.password,
     })
+    .then((res) => {
+      if (res.error) {
+        throw new Error(res.error.message)
+      }
+      // @ts-expect-error
+      if (res.data.twoFactorRedirect) {
+        router.push("/2fa")
+      }
+    })
     .catch((error) => {
-      console.error(error)
-      toast.error("Login failed")
+      toast.error(`Failed to login: ${error.message}`)
     })
 }
 
@@ -83,7 +91,7 @@ export function EmailLogin() {
 
   const disableColor = useColor("gray3")
 
-  const canLogin = useSharedValue(0)
+  const canLogin = useSharedValue(1)
   useEffect(() => {
     canLogin.value = withTiming(submitMutation.isPending || !formState.isValid ? 1 : 0)
   }, [submitMutation.isPending, formState.isValid, canLogin])
@@ -96,7 +104,7 @@ export function EmailLogin() {
     <View className="mx-auto flex w-full max-w-sm gap-6">
       <View className="gap-4">
         <View className="flex-row">
-          <ThemedText className="w-28">Account</ThemedText>
+          <Text className="text-label w-28">Account</Text>
           <Input
             autoCapitalize="none"
             autoCorrect={false}
@@ -105,7 +113,7 @@ export function EmailLogin() {
             control={control}
             name="email"
             placeholder="Email"
-            className="placeholder:font-sn text-text flex-1"
+            className="text-text flex-1"
             returnKeyType="next"
             onSubmitEditing={() => {
               KeyboardController.setFocusTo("next")
@@ -114,7 +122,7 @@ export function EmailLogin() {
         </View>
         <View className="border-b-opaque-separator border-b-hairline ml-28" />
         <View className="flex-row">
-          <ThemedText className="w-28">Password</ThemedText>
+          <Text className="text-label w-28">Password</Text>
           <Input
             autoCapitalize="none"
             autoCorrect={false}
@@ -122,7 +130,7 @@ export function EmailLogin() {
             control={control}
             name="password"
             placeholder="Enter password"
-            className="placeholder:font-sn text-text flex-1"
+            className="text-text flex-1"
             secureTextEntry
             returnKeyType="go"
             onSubmitEditing={() => {
@@ -140,7 +148,7 @@ export function EmailLogin() {
         {submitMutation.isPending ? (
           <ActivityIndicator className="text-white" />
         ) : (
-          <ThemedText className="text-center font-semibold text-white">Continue</ThemedText>
+          <Text className="text-center font-semibold text-white">Continue</Text>
         )}
       </ReAnimatedPressable>
     </View>

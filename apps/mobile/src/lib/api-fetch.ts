@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import type { AppType } from "@follow/shared"
-import { router } from "expo-router"
 import { FetchError, ofetch } from "ofetch"
 
+import { userActions } from "../store/user/store"
 import { getCookie } from "./auth"
 import { getApiUrl } from "./env"
 
@@ -40,7 +40,7 @@ export const apiFetch = ofetch.create({
       console.log(`<--- [Error] ${response.status} ${options.method} ${request as string}`)
     }
     if (response.status === 401) {
-      router.replace("/login")
+      userActions.removeCurrentUser()
     } else {
       console.error(error)
     }

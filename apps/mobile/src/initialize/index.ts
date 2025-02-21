@@ -2,6 +2,7 @@ import { initializeDb } from "../database"
 import { initializeDayjs } from "./dayjs"
 import { hydrateDatabaseToStore, hydrateSettings } from "./hydrate"
 import { migrateDatabase } from "./migration"
+import { initializePlayer } from "./player"
 /* eslint-disable no-console */
 export const initializeApp = async () => {
   console.log(`Initialize...`)
@@ -16,6 +17,8 @@ export const initializeApp = async () => {
 
   const loadingTime = Date.now() - now
   console.log(`Initialize done,`, `${loadingTime}ms`)
+
+  await apm("initializePlayer", initializePlayer)
 }
 
 const apm = async (label: string, fn: () => Promise<any> | any) => {
