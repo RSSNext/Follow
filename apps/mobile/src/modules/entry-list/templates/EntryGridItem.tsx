@@ -11,7 +11,7 @@ import {
   EntryContentWebView,
   setWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
-import { MediaCarousel } from "@/src/components/ui/carousel/Carousel"
+import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { PreviewImage } from "@/src/components/ui/image/PreviewImage"

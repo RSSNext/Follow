@@ -102,7 +102,7 @@ export default function PlaterScreen() {
 function DismissIndicator() {
   return (
     <View className="absolute inset-x-0 flex items-center justify-center top-safe-offset-2">
-      <View className="h-[5] w-[40] rounded-full bg-white/45" />
+      <View className="bg-tertiary-label h-[5] w-[40] rounded-full" />
     </View>
   )
 }

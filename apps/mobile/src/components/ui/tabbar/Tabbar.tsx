@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { SetBottomTabBarHeightContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarHeightContext"
 import { quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
+import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
@@ -42,7 +43,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
   return (
     <Animated.View
       accessibilityRole="tablist"
-      className="absolute inset-x-0 bottom-0 z-10 flex-row py-[7]"
+      className="absolute inset-x-0 bottom-0 z-10 py-[7]"
       style={{
         paddingBottom: insets.bottom,
         transform: [{ translateY }],
@@ -52,6 +53,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
       }}
     >
       <TabBarBackground />
+      <PlayerTabBar />
       <Grid columns={routes.length} gap={10}>
         {routes.map((route, index) => {
           const focused = index === state.index
