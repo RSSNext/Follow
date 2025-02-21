@@ -7,7 +7,6 @@ import { MicCuteFiIcon } from "../icons/mic_cute_fi"
 import { PaperCuteFiIcon } from "../icons/paper_cute_fi"
 import { PicCuteFiIcon } from "../icons/pic_cute_fi"
 import { TwitterCuteFiIcon } from "../icons/twitter_cute_fi"
-import { VideoCuteFiIcon } from "../icons/video_cute_fi"
 import { accentColor } from "../theme/colors"
 
 export interface ViewDefinition {
@@ -41,13 +40,13 @@ export const views: ViewDefinition[] = [
     translation: "title",
     view: FeedViewType.Pictures,
   },
-  {
-    name: "Videos",
-    icon: VideoCuteFiIcon,
-    activeColor: colors.red[500],
-    translation: "title",
-    view: FeedViewType.Videos,
-  },
+  // {
+  //   name: "Videos",
+  //   icon: VideoCuteFiIcon,
+  //   activeColor: colors.red[500],
+  //   translation: "title",
+  //   view: FeedViewType.Videos,
+  // },
   {
     name: "Audios",
     icon: MicCuteFiIcon,

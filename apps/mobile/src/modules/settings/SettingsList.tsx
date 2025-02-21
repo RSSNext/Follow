@@ -189,24 +189,26 @@ const NavigationLinkGroup: FC<{
   scrollRef: RefObject<ScrollView>
 }> = ({ links, navigation, scrollRef }) => (
   <GroupedInsetListCard>
-    {links.map((link) => (
-      <GroupedInsetListNavigationLink
-        key={link.label}
-        label={link.label + (link.todo ? " (Coming Soon)" : "")}
-        disabled={link.todo}
-        icon={
-          <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-            <link.icon height={18} width={18} color="#fff" />
-          </GroupedInsetListNavigationLinkIcon>
-        }
-        onPress={() => {
-          if (link.todo) {
-            return
+    {links
+      .filter((link) => !link.todo)
+      .map((link) => (
+        <GroupedInsetListNavigationLink
+          key={link.label}
+          label={link.label + (link.todo ? " (Coming Soon)" : "")}
+          disabled={link.todo}
+          icon={
+            <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <link.icon height={18} width={18} color="#fff" />
+            </GroupedInsetListNavigationLinkIcon>
           }
-          link.onPress(navigation, scrollRef)
-        }}
-      />
-    ))}
+          onPress={() => {
+            if (link.todo) {
+              return
+            }
+            link.onPress(navigation, scrollRef)
+          }}
+        />
+      ))}
   </GroupedInsetListCard>
 )
 
