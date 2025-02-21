@@ -9,7 +9,7 @@ import {
   useAnimatedValue,
   View,
 } from "react-native"
-import { KeyboardController } from "react-native-keyboard-controller"
+import { KeyboardAvoidingView, KeyboardController } from "react-native-keyboard-controller"
 import { useColor } from "react-native-uikit-colors"
 
 import {
@@ -53,55 +53,59 @@ export default function TwoFactorAuthScreen() {
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <View className="flex-1 p-safe">
-        <NavigationBlurEffectHeader
-          headerShown
-          headerTitle=""
-          headerLeft={() => {
-            return (
-              <TouchableOpacity onPress={() => router.back()}>
-                <MingcuteLeftLineIcon color={label} />
-              </TouchableOpacity>
-            )
-          }}
-        />
-        <TouchableWithoutFeedback
-          onPress={() => {
-            KeyboardController.dismiss()
-          }}
-          accessible={false}
-        >
-          <View className="mt-20 flex-1">
-            <View className="flex-row items-center justify-center">
-              <Text className="text-label w-72 text-center text-3xl font-bold" numberOfLines={2}>
-                Verify with your authenticator app
-              </Text>
-            </View>
-
-            <View className="mx-5 mt-10">
-              <Text className="text-label">Enter Follow Auth Code</Text>
-              <View className="bg-secondary-system-background mt-2 rounded-lg p-4">
-                <TextInput
-                  placeholder="6-digit authentication code"
-                  autoComplete="one-time-code"
-                  keyboardType="numeric"
-                  className="text-text"
-                  value={authCode}
-                  onChangeText={setAuthCode}
-                />
+        <KeyboardAvoidingView behavior={"padding"} className="flex-1">
+          <NavigationBlurEffectHeader
+            headerShown
+            headerTitle=""
+            headerLeft={() => {
+              return (
+                <TouchableOpacity onPress={() => router.back()}>
+                  <MingcuteLeftLineIcon color={label} />
+                </TouchableOpacity>
+              )
+            }}
+          />
+          <TouchableWithoutFeedback
+            onPress={() => {
+              KeyboardController.dismiss()
+            }}
+            accessible={false}
+          >
+            <View className="mt-20 flex-1 pb-10">
+              <View className="flex-row items-center justify-center">
+                <Text className="text-label w-72 text-center text-3xl font-bold" numberOfLines={2}>
+                  Verify with your authenticator app
+                </Text>
               </View>
-            </View>
 
-            <TouchableOpacity
-              className="disabled:bg-gray-3 mx-5 mt-10 rounded-lg bg-accent py-3"
-              disabled={submitMutation.isPending || !isAuthCodeValid(authCode)}
-              onPress={() => {
-                submitMutation.mutate(authCode)
-              }}
-            >
-              <Text className="text-center text-white">Submit</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableWithoutFeedback>
+              <View className="mx-5 mt-10">
+                <Text className="text-label">Enter Follow Auth Code</Text>
+                <View className="bg-secondary-system-background mt-2 rounded-lg p-4">
+                  <TextInput
+                    placeholder="6-digit authentication code"
+                    autoComplete="one-time-code"
+                    keyboardType="numeric"
+                    className="text-text"
+                    value={authCode}
+                    onChangeText={setAuthCode}
+                  />
+                </View>
+              </View>
+
+              <View className="flex-1" />
+
+              <TouchableOpacity
+                className="disabled:bg-gray-3 mx-5 rounded-lg bg-accent py-3"
+                disabled={submitMutation.isPending || !isAuthCodeValid(authCode)}
+                onPress={() => {
+                  submitMutation.mutate(authCode)
+                }}
+              >
+                <Text className="text-center text-white">Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </View>
     </NavigationContext.Provider>
   )
