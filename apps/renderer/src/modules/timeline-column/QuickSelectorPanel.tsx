@@ -40,6 +40,7 @@ interface QuickSelectorPanelProps {
 
 export const QuickSelectorPanel = forwardRef<HTMLDivElement, QuickSelectorPanelProps>(
   ({ rootContainer, timelineList, activeTimelineId, open: shouldOpen }, ref) => {
+    const { t } = useTranslation()
     const feedColWidth = useUISettingKey("feedColWidth")
     const animateControls = useAnimationControls()
     const [renderPanel, setRenderPanel] = useState(false)
@@ -87,7 +88,7 @@ export const QuickSelectorPanel = forwardRef<HTMLDivElement, QuickSelectorPanelP
               {renderPanel && (
                 <>
                   <header className="flex items-center justify-between border-b p-3 text-lg font-medium">
-                    <span className="text-lg font-medium">Quick Selector</span>
+                    <span className="text-lg font-medium">{t("quick_selector.title")}</span>
 
                     <button
                       type="button"
@@ -103,21 +104,21 @@ export const QuickSelectorPanel = forwardRef<HTMLDivElement, QuickSelectorPanelP
                   </header>
                   <ScrollArea viewportClassName="pt-2 px-3" rootClassName="w-full">
                     <TimelineSection
-                      title="Views"
+                      title={t("quick_selector.views")}
                       items={timelineList.views}
                       activeTimelineId={activeTimelineId}
                       ItemComponent={TimelineListViewItem}
                     />
                     <Divider className="mx-12 my-4" />
                     <TimelineSection
-                      title="Inboxes"
+                      title={t("quick_selector.inboxes")}
                       items={timelineList.inboxes}
                       activeTimelineId={activeTimelineId}
                       ItemComponent={TimelineInboxListItem}
                     />
                     <Divider className="mx-12 my-4" />
                     <TimelineSection
-                      title="Lists"
+                      title={t("quick_selector.lists")}
                       items={timelineList.lists}
                       activeTimelineId={activeTimelineId}
                       ItemComponent={TimelineListListItem}
@@ -237,6 +238,7 @@ const TimelineSection = ({
   activeTimelineId,
   ItemComponent,
 }: TimelineSectionProps) => {
+  const { t } = useTranslation()
   return (
     <>
       <div className="mb-1 text-base font-bold">{title}</div>
@@ -251,7 +253,9 @@ const TimelineSection = ({
           ))}
         </div>
       ) : (
-        <div className="text-center text-sm text-muted-foreground">Nothing in {title}</div>
+        <div className="text-center text-sm text-muted-foreground">
+          {t("quick_selector.nothing")}
+        </div>
       )}
     </>
   )
