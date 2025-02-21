@@ -1,6 +1,7 @@
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import type { MasonryFlashListProps } from "@shopify/flash-list"
-import { useCallback } from "react"
+import type { ElementRef } from "react"
+import { forwardRef, useCallback } from "react"
 import { ActivityIndicator, View } from "react-native"
 
 import { useFetchEntriesControls } from "@/src/modules/screen/atoms"
@@ -11,12 +12,12 @@ import { useOnViewableItemsChanged } from "./hooks"
 import type { MasonryItem } from "./templates/EntryGridItem"
 import { EntryGridItem } from "./templates/EntryGridItem"
 
-export function EntryListContentGrid({
-  entryIds,
-  ...rest
-}: {
-  entryIds: string[]
-} & Omit<MasonryFlashListProps<string>, "data" | "renderItem">) {
+export const EntryListContentGrid = forwardRef<
+  ElementRef<typeof TimelineSelectorMasonryList>,
+  {
+    entryIds: string[]
+  } & Omit<MasonryFlashListProps<string>, "data" | "renderItem">
+>(({ entryIds, ...rest }, ref) => {
   const { fetchNextPage, refetch, isRefetching, hasNextPage } = useFetchEntriesControls()
   const onViewableItemsChanged = useOnViewableItemsChanged(
     (item) => (item.key as any).split("-")[0],
@@ -67,6 +68,7 @@ export function EntryListContentGrid({
 
   return (
     <TimelineSelectorMasonryList
+      ref={ref}
       isRefetching={isRefetching}
       data={data}
       renderItem={useTypeScriptHappyCallback(({ item }: { item: MasonryItem }) => {
@@ -90,7 +92,7 @@ export function EntryListContentGrid({
       onRefresh={refetch}
     />
   )
-}
+})
 
 const defaultKeyExtractor = (item: MasonryItem & { index: number }) => {
   const key = `${item.id}-${item.index}`

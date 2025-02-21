@@ -16,6 +16,11 @@ import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescri
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
+import { scrollToTop } from "@/src/atoms/scroll-to-top"
+import {
+  AttachNavigationScrollViewContext,
+  SetAttachNavigationScrollViewContext,
+} from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
 import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
@@ -35,15 +40,6 @@ export const NavigationContext = createContext<{
   scrollY: RNAnimated.Value
 } | null>(null)
 
-const ScrollViewContext = createContext<React.RefObject<ScrollView>>(null!)
-
-export const useSafeNavigationScrollView = () => {
-  const scrollViewRef = useContext(ScrollViewContext)
-  if (!scrollViewRef) {
-    throw new Error("useSafeNavigationScrollView must be used within a SafeNavigationScrollView")
-  }
-  return scrollViewRef
-}
 export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   children,
 
@@ -62,6 +58,13 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   const scrollY = useAnimatedValue(0)
   const scrollViewRef = useRef<ScrollView>(null)
 
+  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
+  useEffect(() => {
+    if (setAttachNavigationScrollViewRef) {
+      setAttachNavigationScrollViewRef(scrollViewRef)
+    }
+  }, [setAttachNavigationScrollViewRef, scrollViewRef])
+
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       {withHeaderBlur && <NavigationBlurEffectHeader />}
@@ -73,9 +76,9 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
         {...props}
       >
         <View style={{ height: headerHeight - (withTopInset ? insets.top : 0) }} />
-        <ScrollViewContext.Provider value={scrollViewRef}>
+        <AttachNavigationScrollViewContext.Provider value={scrollViewRef}>
           <View>{children}</View>
-        </ScrollViewContext.Provider>
+        </AttachNavigationScrollViewContext.Provider>
         <View style={{ height: tabBarHeight - (withBottomInset ? insets.bottom : 0) }} />
       </AnimatedScrollView>
     </NavigationContext.Provider>
@@ -172,7 +175,13 @@ export const NavigationBlurEffectHeader = ({
                   <View pointerEvents="box-none" style={[StyleSheet.absoluteFill]}>
                     {options.headerBackground?.()}
                   </View>
-                  <Header title={options.title ?? ""} {...options} headerBackground={() => null} />
+                  <TouchableOpacity onPress={scrollToTop}>
+                    <Header
+                      title={options.title ?? ""}
+                      {...options}
+                      headerBackground={() => null}
+                    />
+                  </TouchableOpacity>
                   {hideableBottom}
                 </Animated.View>
               )

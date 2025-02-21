@@ -11,7 +11,7 @@ import {
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
-import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/BottomTabBarVisibleContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
 import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { getDbPath } from "@/src/database"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"

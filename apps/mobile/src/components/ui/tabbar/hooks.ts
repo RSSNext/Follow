@@ -1,6 +1,6 @@
 import { useContext } from "react"
 
-import { BottomTabBarHeightContext } from "./context"
+import { BottomTabBarHeightContext } from "./contexts/BottomTabBarHeightContext"
 
 export const useBottomTabBarHeight = () => {
   const height = useContext(BottomTabBarHeightContext)

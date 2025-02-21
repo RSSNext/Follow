@@ -11,8 +11,9 @@ import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/BottomTabBarBackgroundContext"
-import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/BottomTabBarVisibleContext"
+import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
+import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarBackgroundContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
 import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
@@ -94,12 +95,18 @@ function Settings() {
 
   const scrollRef = useRef<ScrollView>(null)
 
+  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
   return (
     <>
       <ReAnimatedScrollView
         scrollEventThrottle={16}
         onScroll={handleScroll}
         ref={scrollRef}
+        onLayout={() => {
+          if (setAttachNavigationScrollViewRef) {
+            setAttachNavigationScrollViewRef(scrollRef)
+          }
+        }}
         onContentSizeChange={(w, h) => {
           setContentSize({ height: h, width: w })
         }}

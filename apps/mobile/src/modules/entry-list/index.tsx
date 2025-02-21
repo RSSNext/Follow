@@ -90,14 +90,20 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
       pageMargin={10}
       orientation="horizontal"
     >
-      {useMemo(() => views.map((view) => <ViewEntryList viewId={view.view} key={view.view} />), [])}
+      {useMemo(
+        () =>
+          views.map((view) => (
+            <ViewEntryList key={view.view} viewId={view.view} active={page === view.view} />
+          )),
+        [page],
+      )}
     </AnimatedPagerView>
   )
 }
 
-function ViewEntryList({ viewId }: { viewId: FeedViewType }) {
+function ViewEntryList({ viewId, active }: { viewId: FeedViewType; active: boolean }) {
   const entryIds = useEntryIdsByView(viewId)
-  return <EntryListSelector entryIds={entryIds} viewId={viewId} />
+  return <EntryListSelector entryIds={entryIds} viewId={viewId} active={active} />
 }
 
 function FeedEntryList({ feedId }: { feedId: string }) {
