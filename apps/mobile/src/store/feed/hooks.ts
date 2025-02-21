@@ -31,3 +31,11 @@ export const usePrefetchFeed = (id: string, options?: { enabled?: boolean }) => 
     ...options,
   })
 }
+
+export const usePrefetchFeedByUrl = (url: string, options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["feed", url],
+    queryFn: () => feedSyncServices.fetchFeedByUrl({ url }),
+    ...options,
+  })
+}

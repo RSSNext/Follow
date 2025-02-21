@@ -10,6 +10,7 @@ import {
 } from "@follow/components/ui/tooltip/index.js"
 import type { LoginRuntime } from "@follow/shared/auth"
 import { loginHandler } from "@follow/shared/auth"
+import clsx from "clsx"
 import { m } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
@@ -22,6 +23,11 @@ import { LoginWithPassword } from "./Form"
 interface LoginModalContentProps {
   runtime: LoginRuntime
   canClose?: boolean
+}
+
+const overrideAuthProvidersClassName = {
+  github: "!text-dark dark:!text-white",
+  apple: "!text-[#1F2937] dark:!text-[#E5E7EB]",
 }
 
 export const LoginModalContent = (props: LoginModalContentProps) => {
@@ -67,7 +73,10 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
                       }}
                     >
                       <div
-                        className="center inline-flex rounded-full border p-2.5 duration-200 hover:bg-muted [&_svg]:size-6"
+                        className={clsx(
+                          "center inline-flex rounded-full border p-2.5 duration-200 hover:bg-muted [&_svg]:size-6",
+                          overrideAuthProvidersClassName[key],
+                        )}
                         dangerouslySetInnerHTML={{
                           __html: provider.icon,
                         }}

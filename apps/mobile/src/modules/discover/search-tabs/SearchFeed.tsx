@@ -10,8 +10,9 @@ import { ScrollView } from "react-native-gesture-handler"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
+import { getImageHeaders } from "@/src/lib/image"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 
 import { useSearchPageContext } from "../ctx"
@@ -160,10 +161,10 @@ const PreviewItem = ({ entry }: { entry: NonNullable<SearchResultItem["entries"]
       {!!firstMedia && (
         <View className="bg-gray-6 ml-auto size-[52px] shrink-0 overflow-hidden rounded-lg">
           <Image
-            source={firstMedia.url}
+            source={{ uri: firstMedia.url, headers: getImageHeaders(firstMedia.url) }}
             className="size-full rounded-lg"
             contentFit="cover"
-            transition={300}
+            transition={500}
             placeholder={{
               blurHash: firstMedia.blurhash,
             }}

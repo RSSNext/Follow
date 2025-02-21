@@ -20,6 +20,7 @@ import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-cont
 
 import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
+import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -215,7 +216,7 @@ const SearchInput = () => {
           }}
           className="absolute inset-y-0 left-3 flex flex-row items-center justify-center"
         >
-          <Search3CuteReIcon color={placeholderTextColor} height={18} width={18} />
+          <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
           {!searchValue && !tempSearchValue && (
             <Text className="text-secondary-label ml-2" style={styles.searchPlaceholderText}>
               Search
@@ -251,7 +252,7 @@ const SearchInput = () => {
         className="absolute inset-0 flex flex-row items-center justify-center"
         pointerEvents="none"
       >
-        <Search3CuteReIcon color={placeholderTextColor} height={18} width={18} />
+        <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
         <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>

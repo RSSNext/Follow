@@ -1,4 +1,3 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused } from "@react-navigation/native"
 import * as FileSystem from "expo-file-system"
 import type { FC, RefObject } from "react"
@@ -12,7 +11,8 @@ import {
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
-import { SetBottomTabBarVisibleContext } from "@/src/contexts/BottomTabBarVisibleContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { getDbPath } from "@/src/database"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
 import { CertificateCuteFiIcon } from "@/src/icons/certificate_cute_fi"
@@ -26,6 +26,7 @@ import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
 import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
+import { UserSettingCuteFiIcon } from "@/src/icons/user_setting_cute_fi"
 import { signOut } from "@/src/lib/auth"
 
 import { useSettingsNavigation } from "./hooks"
@@ -98,6 +99,14 @@ const SettingGroupNavigationLinks: GroupNavigationLink[] = [
     },
     iconBackgroundColor: "#CBAD6D",
   },
+  {
+    label: "Account",
+    icon: UserSettingCuteFiIcon,
+    onPress: (navigation) => {
+      navigation.navigate("Account")
+    },
+    iconBackgroundColor: "#d08700",
+  },
 ]
 
 const DataGroupNavigationLinks: GroupNavigationLink[] = [
@@ -156,10 +165,7 @@ const ActionGroupNavigationLinks: GroupNavigationLink[] = [
     icon: ExitCuteFiIcon,
     onPress: () => {
       Alert.alert("Sign out", "Are you sure you want to sign out?", [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
+        { text: "Cancel", style: "cancel" },
         {
           text: "Sign out",
           style: "destructive",

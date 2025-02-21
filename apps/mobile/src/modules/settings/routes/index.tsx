@@ -1,6 +1,7 @@
 import type { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { AboutScreen } from "./About"
+import { AccountScreen } from "./Account"
 import { AchievementScreen } from "./Achievement"
 import { ActionsScreen } from "./Actions"
 import { AppearanceScreen } from "./Appearance"
@@ -21,6 +22,7 @@ export const SettingRoutes = (Stack: ReturnType<typeof createNativeStackNavigato
     <Stack.Screen key="Notifications" name="Notifications" component={NotificationsScreen} />,
     <Stack.Screen key="Appearance" name="Appearance" component={AppearanceScreen} />,
     <Stack.Screen key="Data" name="Data" component={DataScreen} />,
+    <Stack.Screen key="Account" name="Account" component={AccountScreen} />,
     <Stack.Screen key="Actions" name="Actions" component={ActionsScreen} />,
     <Stack.Screen key="Lists" name="Lists" component={ListsScreen} />,
     <Stack.Screen key="Feeds" name="Feeds" component={FeedsScreen} />,

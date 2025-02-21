@@ -14,7 +14,6 @@ export const PauseCuteFiIcon = ({
 }: PauseCuteFiIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
-      <Path fill="#fff" fillOpacity={0.01} d="M24 0v24H0V0z" />
       <Path
         fill={color}
         d="M14 5a2 2 0 1 1 4 0v14a2 2 0 1 1-4 0zM6 5a2 2 0 1 1 4 0v14a2 2 0 1 1-4 0z"

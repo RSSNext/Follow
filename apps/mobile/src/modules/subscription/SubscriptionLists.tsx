@@ -1,9 +1,10 @@
 import type { FeedViewType } from "@follow/constants"
+import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import { Text } from "react-native"
 import { useEventCallback } from "usehooks-ts"
 
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
 import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
@@ -105,6 +106,7 @@ const StarItem = () => {
       onPress={() => {
         selectFeed({ type: "feed", feedId: FEED_COLLECTION_LIST })
         closeDrawer()
+        router.push(`/feeds/${FEED_COLLECTION_LIST}`)
       }}
       className="mt-4 h-12 w-full flex-row items-center px-3"
     >

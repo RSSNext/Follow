@@ -10,6 +10,11 @@ on:
     paths:
       - "apps/mobile/**"
   workflow_dispatch:
+    inputs:
+      profile:
+        type: string
+        default: preview
+        description: "Build profile, preview or production"
 
 jobs:
   build:
@@ -27,7 +32,7 @@ jobs:
       - name: 🏗 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - name: 📱 Setup EAS
@@ -39,7 +44,9 @@ jobs:
       - name: 🔨 Build iOS IPA
         run: |
           cd apps/mobile
-          eas build --platform ios --profile production --non-interactive --local --output=./build.ipa
+          eas build --platform ios --profile ${{ github.event.inputs.profile || 'preview' }} --non-interactive --local --output=./build.ipa
+        env:
+          CI: true
 
       # Optional: Upload artifact
       - name: 📤 Upload IPA

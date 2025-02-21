@@ -2,7 +2,7 @@ import * as hono_hono_base from 'hono/hono-base';
 import * as hono_types from 'hono/types';
 import * as hono_utils_http_status from 'hono/utils/http-status';
 import { HttpBindings } from '@hono/node-server';
-import * as better_call from 'better-call';
+import * as better_auth from 'better-auth';
 import * as zod from 'zod';
 import { z } from 'zod';
 import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
@@ -11,7 +11,6 @@ import * as drizzle_orm from 'drizzle-orm';
 import { InferInsertModel, SQL } from 'drizzle-orm';
 import * as better_auth_adapters_drizzle from 'better-auth/adapters/drizzle';
 import * as better_auth_plugins from 'better-auth/plugins';
-import * as better_auth from 'better-auth';
 
 type Env = {
     Bindings: HttpBindings;
@@ -21,7 +20,7 @@ declare const authPlugins: ({
     id: "customGetProviders";
     endpoints: {
         customGetProviders: {
-            <C extends [(better_call.Context<"/get-providers", {
+            <C extends [(better_auth.Context<"/get-providers", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -30,7 +29,7 @@ declare const authPlugins: ({
             options: {
                 method: "GET";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     };
@@ -38,7 +37,7 @@ declare const authPlugins: ({
     id: "customCreateSession";
     endpoints: {
         customCreateSession: {
-            <C extends [(better_call.Context<"/create-session", {
+            <C extends [(better_auth.Context<"/create-session", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -50,7 +49,7 @@ declare const authPlugins: ({
             options: {
                 method: "GET";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     };
@@ -58,7 +57,7 @@ declare const authPlugins: ({
     id: "getAccountInfo";
     endpoints: {
         getAccountInfo: {
-            <C extends [(better_call.Context<"/get-account-info", {
+            <C extends [(better_auth.Context<"/get-account-info", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -76,7 +75,7 @@ declare const authPlugins: ({
             options: {
                 method: "GET";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     };
@@ -84,7 +83,7 @@ declare const authPlugins: ({
     id: "customUpdateUser";
     endpoints: {
         customUpdateUser: {
-            <C extends [(better_call.Context<"/update-user-ccc", {
+            <C extends [(better_auth.Context<"/update-user-ccc", {
                 method: "POST";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -93,7 +92,7 @@ declare const authPlugins: ({
             options: {
                 method: "POST";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     };
@@ -142,7 +141,7 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             tableName: "achievements";
             dataType: "string";
             columnType: "PgText";
-            data: "received" | "checking" | "completed" | "incomplete" | "audit";
+            data: "checking" | "completed" | "incomplete" | "audit" | "received";
             driverParam: string;
             notNull: true;
             hasDefault: false;
@@ -270,9 +269,9 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     doneAt: zod.ZodNullable<zod.ZodString>;
     tx: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
     userId: string;
+    type: "checking" | "completed" | "incomplete" | "audit" | "received";
     actionId: number;
     progress: number;
     progressMax: number;
@@ -280,9 +279,9 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     doneAt: string | null;
     tx: string | null;
 }, {
-    type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
     userId: string;
+    type: "checking" | "completed" | "incomplete" | "audit" | "received";
     actionId: number;
     progress: number;
     progressMax: number;
@@ -449,11 +448,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         }, "strip", z.ZodTypeAny, {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }, {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">>;
         webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -472,7 +471,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
@@ -491,7 +490,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
@@ -522,7 +521,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
@@ -553,7 +552,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
         webhooks?: string[] | undefined;
@@ -663,11 +662,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }, {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }>, "many">>;
             webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -686,7 +685,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
@@ -705,7 +704,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
@@ -736,7 +735,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
@@ -767,7 +766,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
@@ -801,7 +800,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
@@ -835,7 +834,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
             webhooks?: string[] | undefined;
@@ -2224,10 +2223,10 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[] | null | undefined;
     }>>>;
 }>, "strip", z.ZodTypeAny, {
+    id: string;
     description: string | null;
     title: string | null;
     content: string | null;
-    id: string;
     author: string | null;
     url: string | null;
     language: string | null;
@@ -2261,10 +2260,10 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[] | null | undefined;
     } | null | undefined;
 }, {
+    id: string;
     description: string | null;
     title: string | null;
     content: string | null;
-    id: string;
     author: string | null;
     url: string | null;
     language: string | null;
@@ -2787,10 +2786,10 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     language: zod.ZodNullable<zod.ZodString>;
     migrateTo: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    description: string | null;
-    title: string | null;
     id: string;
     image: string | null;
+    description: string | null;
+    title: string | null;
     url: string;
     siteUrl: string | null;
     checkedAt: string;
@@ -2803,10 +2802,10 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     language: string | null;
     migrateTo: string | null;
 }, {
-    description: string | null;
-    title: string | null;
     id: string;
     image: string | null;
+    description: string | null;
+    title: string | null;
     url: string;
     siteUrl: string | null;
     checkedAt: string;
@@ -2962,17 +2961,17 @@ declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     createdAt: zod.ZodString;
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    title: string | null;
     createdAt: string;
     userId: string;
+    title: string | null;
     view: number;
     category: string | null;
     feedId: string;
     isPrivate: boolean;
 }, {
-    title: string | null;
     createdAt: string;
     userId: string;
+    title: string | null;
     view: number;
     category: string | null;
     feedId: string;
@@ -3721,10 +3720,10 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
         }[] | null | undefined;
     }>>>;
 }>, "strip", z.ZodTypeAny, {
+    id: string;
     description: string | null;
     title: string | null;
     content: string | null;
-    id: string;
     author: string | null;
     url: string | null;
     language: string | null;
@@ -3759,10 +3758,10 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
         }[] | null | undefined;
     } | null | undefined;
 }, {
+    id: string;
     description: string | null;
     title: string | null;
     content: string | null;
-    id: string;
     author: string | null;
     url: string | null;
     language: string | null;
@@ -3798,10 +3797,10 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     } | null | undefined;
 }>;
 declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    id: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     title: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     content: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    id: z.ZodOptional<z.ZodString>;
     author: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     language: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -4190,14 +4189,14 @@ declare const inboxesOpenAPISchema: z.ZodObject<{
     secret: z.ZodString;
     title: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    title: string | null;
     handle: string;
     userId: string;
+    title: string | null;
     secret: string;
 }, {
-    title: string | null;
     handle: string;
     userId: string;
+    title: string | null;
     secret: string;
 }>;
 declare const inboxesRelations: drizzle_orm.Relations<"inboxes", {
@@ -4536,10 +4535,10 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     language: zod.ZodNullable<zod.ZodString>;
     ownerUserId: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    description: string | null;
-    title: string;
     id: string;
     image: string | null;
+    description: string | null;
+    title: string;
     view: number;
     ownerUserId: string;
     language: string | null;
@@ -4547,10 +4546,10 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     fee: number;
     timelineUpdatedAt: string;
 }, {
-    description: string | null;
-    title: string;
     id: string;
     image: string | null;
+    description: string | null;
+    title: string;
     view: number;
     ownerUserId: string;
     language: string | null;
@@ -4698,17 +4697,17 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     createdAt: zod.ZodString;
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    title: string | null;
     createdAt: string;
     userId: string;
+    title: string | null;
     view: number;
     isPrivate: boolean;
     listId: string;
     lastViewedAt: string | null;
 }, {
-    title: string | null;
     createdAt: string;
     userId: string;
+    title: string | null;
     view: number;
     isPrivate: boolean;
     listId: string;
@@ -5038,16 +5037,16 @@ declare const rsshubOpenAPISchema: zod.ZodObject<{
     description: zod.ZodNullable<zod.ZodString>;
     userLimit: zod.ZodNullable<zod.ZodNumber>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    description: string | null;
     id: string;
+    description: string | null;
     ownerUserId: string;
     baseUrl: string;
     accessKey: string | null;
     price: number;
     userLimit: number | null;
 }, {
-    description: string | null;
     id: string;
+    description: string | null;
     ownerUserId: string;
     baseUrl: string;
     accessKey: string | null;
@@ -5398,6 +5397,23 @@ declare const user: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        isAnonymous: drizzle_orm_pg_core.PgColumn<{
+            name: "is_anonymous";
+            tableName: "user";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -5558,6 +5574,23 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        isAnonymous: drizzle_orm_pg_core.PgColumn<{
+            name: "is_anonymous";
+            tableName: "user";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -5572,24 +5605,27 @@ declare const usersOpenApiSchema: zod.ZodObject<Omit<{
     createdAt: zod.ZodDate;
     updatedAt: zod.ZodDate;
     twoFactorEnabled: zod.ZodNullable<zod.ZodBoolean>;
+    isAnonymous: zod.ZodNullable<zod.ZodBoolean>;
 }, "email">, "strip", zod.ZodTypeAny, {
-    name: string | null;
     id: string;
+    name: string | null;
     emailVerified: boolean | null;
     image: string | null;
     handle: string | null;
     createdAt: Date;
     updatedAt: Date;
     twoFactorEnabled: boolean | null;
+    isAnonymous: boolean | null;
 }, {
-    name: string | null;
     id: string;
+    name: string | null;
     emailVerified: boolean | null;
     image: string | null;
     handle: string | null;
     createdAt: Date;
     updatedAt: Date;
     twoFactorEnabled: boolean | null;
+    isAnonymous: boolean | null;
 }>;
 declare const account: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "account";
@@ -6540,8 +6576,8 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     createdAt: zod.ZodString;
     comment: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
+    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     hash: string;
     powerToken: string;
     fromUserId: string | null;
@@ -6553,8 +6589,8 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     tax: string;
     comment: string | null;
 }, {
-    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     createdAt: string;
+    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
     hash: string;
     powerToken: string;
     fromUserId: string | null;
@@ -6869,7 +6905,7 @@ declare const auth: {
     handler: (request: Request) => Promise<Response>;
     api: better_auth.InferAPI<{
         ok: {
-            <C extends [(better_call.Context<"/ok", {
+            <C extends [(better_auth.Context<"/ok", {
                 method: "GET";
                 metadata: {
                     openapi: {
@@ -6926,11 +6962,11 @@ declare const auth: {
                     isAction: false;
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         error: {
-            <C extends [(better_call.Context<"/error", {
+            <C extends [(better_auth.Context<"/error", {
                 method: "GET";
                 metadata: {
                     openapi: {
@@ -6975,11 +7011,11 @@ declare const auth: {
                     isAction: false;
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         signInSocial: {
-            <C extends [better_call.Context<"/sign-in/social", {
+            <C extends [better_auth.Context<"/sign-in/social", {
                 method: "POST";
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
@@ -7172,11 +7208,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         callbackOAuth: {
-            <C extends [better_call.Context<"/callback/:id", {
+            <C extends [better_auth.Context<"/callback/:id", {
                 method: ("GET" | "POST")[];
                 body: zod.ZodOptional<zod.ZodObject<{
                     code: zod.ZodOptional<zod.ZodString>;
@@ -7255,11 +7291,11 @@ declare const auth: {
                     isAction: false;
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         getSession: {
-            <C extends [better_call.Context<"/get-session", {
+            <C extends [better_auth.Context<"/get-session", {
                 method: "GET";
                 query: zod.ZodOptional<zod.ZodObject<{
                     disableCookieCache: zod.ZodOptional<zod.ZodUnion<[zod.ZodBoolean, zod.ZodEffects<zod.ZodString, boolean, string>]>>;
@@ -7341,6 +7377,16 @@ declare const auth: {
                     image?: string | null | undefined | undefined;
                     twoFactorEnabled: boolean | null | undefined;
                     handle: string;
+                } & {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    image?: string | null | undefined | undefined;
+                    isAnonymous?: boolean | null | undefined;
+                    handle: string;
                 };
             } | null>;
             path: "/get-session";
@@ -7395,11 +7441,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         signOut: {
-            <C extends [better_call.Context<"/sign-out", {
+            <C extends [better_auth.Context<"/sign-out", {
                 method: "POST";
                 requireHeaders: true;
                 metadata: {
@@ -7456,38 +7502,27 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         signUpEmail: {
-            <C extends [better_call.Context<"/sign-up/email", {
+            <C extends [better_auth.Context<"/sign-up/email", {
                 method: "POST";
-                body: zod.ZodObject<{
-                    name: zod.ZodString;
-                    email: zod.ZodString;
-                    password: zod.ZodString;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    password: string;
-                    email: string;
-                    name: string;
-                }, {
-                    password: string;
-                    email: string;
-                    name: string;
-                }> & zod.ZodObject<{
-                    handle: zod.ZodString;
-                } | {
-                    handle: zod.ZodString;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }>;
+                body: zod.ZodRecord<zod.ZodString, zod.ZodAny>;
                 metadata: {
+                    $Infer: {
+                        body: ({
+                            name: string;
+                            email: string;
+                            password: string;
+                        } & ({} | ({} & {}) | ({} & {
+                            isAnonymous?: boolean | null | undefined;
+                        }))) & {
+                            handle: string;
+                        } & {
+                            handle?: string | null | undefined;
+                        };
+                    };
                     openapi: {
                         description: string;
                         requestBody: {
@@ -7582,32 +7617,21 @@ declare const auth: {
             path: "/sign-up/email";
             options: {
                 method: "POST";
-                body: zod.ZodObject<{
-                    name: zod.ZodString;
-                    email: zod.ZodString;
-                    password: zod.ZodString;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    password: string;
-                    email: string;
-                    name: string;
-                }, {
-                    password: string;
-                    email: string;
-                    name: string;
-                }> & zod.ZodObject<{
-                    handle: zod.ZodString;
-                } | {
-                    handle: zod.ZodString;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }>;
+                body: zod.ZodRecord<zod.ZodString, zod.ZodAny>;
                 metadata: {
+                    $Infer: {
+                        body: ({
+                            name: string;
+                            email: string;
+                            password: string;
+                        } & ({} | ({} & {}) | ({} & {
+                            isAnonymous?: boolean | null | undefined;
+                        }))) & {
+                            handle: string;
+                        } & {
+                            handle?: string | null | undefined;
+                        };
+                    };
                     openapi: {
                         description: string;
                         requestBody: {
@@ -7675,11 +7699,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         signInEmail: {
-            <C extends [better_call.Context<"/sign-in/email", {
+            <C extends [better_auth.Context<"/sign-in/email", {
                 method: "POST";
                 body: zod.ZodObject<{
                     email: zod.ZodString;
@@ -7791,11 +7815,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         forgetPassword: {
-            <C extends [better_call.Context<"/forget-password", {
+            <C extends [better_auth.Context<"/forget-password", {
                 method: "POST";
                 body: zod.ZodObject<{
                     email: zod.ZodString;
@@ -7870,11 +7894,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         resetPassword: {
-            <C extends [better_call.Context<"/reset-password", {
+            <C extends [better_auth.Context<"/reset-password", {
                 method: "POST";
                 query: zod.ZodOptional<zod.ZodObject<{
                     token: zod.ZodOptional<zod.ZodString>;
@@ -7963,11 +7987,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         verifyEmail: {
-            <C extends [better_call.Context<"/verify-email", {
+            <C extends [better_auth.Context<"/verify-email", {
                 method: "GET";
                 query: zod.ZodObject<{
                     token: zod.ZodString;
@@ -7979,7 +8003,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8036,7 +8060,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8064,11 +8088,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         sendVerificationEmail: {
-            <C extends [better_call.Context<"/send-verification-email", {
+            <C extends [better_auth.Context<"/send-verification-email", {
                 method: "POST";
                 body: zod.ZodObject<{
                     email: zod.ZodString;
@@ -8183,11 +8207,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         changeEmail: {
-            <C extends [better_call.Context<"/change-email", {
+            <C extends [better_auth.Context<"/change-email", {
                 method: "POST";
                 body: zod.ZodObject<{
                     newEmail: zod.ZodString;
@@ -8199,7 +8223,7 @@ declare const auth: {
                     newEmail: string;
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8221,7 +8245,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         responses: {
@@ -8264,7 +8288,7 @@ declare const auth: {
                     newEmail: string;
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8286,7 +8310,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         responses: {
@@ -8312,11 +8336,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         changePassword: {
-            <C extends [better_call.Context<"/change-password", {
+            <C extends [better_auth.Context<"/change-password", {
                 method: "POST";
                 body: zod.ZodObject<{
                     newPassword: zod.ZodString;
@@ -8331,7 +8355,7 @@ declare const auth: {
                     currentPassword: string;
                     revokeOtherSessions?: boolean | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8353,7 +8377,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8407,7 +8431,7 @@ declare const auth: {
                     currentPassword: string;
                     revokeOtherSessions?: boolean | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8429,7 +8453,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8454,11 +8478,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         setPassword: {
-            <C extends [better_call.Context<"/set-password", {
+            <C extends [better_auth.Context<"/set-password", {
                 method: "POST";
                 body: zod.ZodObject<{
                     newPassword: zod.ZodString;
@@ -8470,7 +8494,7 @@ declare const auth: {
                 metadata: {
                     SERVER_ONLY: true;
                 };
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8492,7 +8516,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
@@ -8511,7 +8535,7 @@ declare const auth: {
                 metadata: {
                     SERVER_ONLY: true;
                 };
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8533,37 +8557,16 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         updateUser: {
-            <C extends [better_call.Context<"/update-user", {
+            <C extends [better_auth.Context<"/update-user", {
                 method: "POST";
-                body: zod.ZodObject<{
-                    handle: zod.ZodString;
-                } | {
-                    handle: zod.ZodString;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }> & zod.ZodObject<{
-                    name: zod.ZodOptional<zod.ZodString>;
-                    image: zod.ZodOptional<zod.ZodString | zod.ZodNull>;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    name?: string | undefined;
-                    image?: string | null | undefined;
-                }, {
-                    name?: string | undefined;
-                    image?: string | null | undefined;
-                }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                body: zod.ZodRecord<zod.ZodString, zod.ZodAny>;
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8585,8 +8588,20 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
+                    $Infer: {
+                        body: (({} | ({} & {}) | ({} & {
+                            isAnonymous?: boolean | null | undefined;
+                        })) & {
+                            handle: string;
+                        }) & {
+                            handle?: string | null | undefined;
+                        } & {
+                            name?: string;
+                            image?: string | null;
+                        };
+                    };
                     openapi: {
                         description: string;
                         requestBody: {
@@ -8635,29 +8650,8 @@ declare const auth: {
             path: "/update-user";
             options: {
                 method: "POST";
-                body: zod.ZodObject<{
-                    handle: zod.ZodString;
-                } | {
-                    handle: zod.ZodString;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }, {
-                    handle: string;
-                } | {
-                    handle: string;
-                }> & zod.ZodObject<{
-                    name: zod.ZodOptional<zod.ZodString>;
-                    image: zod.ZodOptional<zod.ZodString | zod.ZodNull>;
-                }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-                    name?: string | undefined;
-                    image?: string | null | undefined;
-                }, {
-                    name?: string | undefined;
-                    image?: string | null | undefined;
-                }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                body: zod.ZodRecord<zod.ZodString, zod.ZodAny>;
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8679,8 +8673,20 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
+                    $Infer: {
+                        body: (({} | ({} & {}) | ({} & {
+                            isAnonymous?: boolean | null | undefined;
+                        })) & {
+                            handle: string;
+                        }) & {
+                            handle?: string | null | undefined;
+                        } & {
+                            name?: string;
+                            image?: string | null;
+                        };
+                    };
                     openapi: {
                         description: string;
                         requestBody: {
@@ -8722,13 +8728,13 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         deleteUser: {
-            <C extends [better_call.Context<"/delete-user", {
+            <C extends [better_auth.Context<"/delete-user", {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8750,7 +8756,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     password: zod.ZodOptional<zod.ZodString>;
@@ -8790,7 +8796,7 @@ declare const auth: {
             path: "/delete-user";
             options: {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8812,7 +8818,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     password: zod.ZodOptional<zod.ZodString>;
@@ -8844,11 +8850,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         forgetPasswordCallback: {
-            <C extends [better_call.Context<"/reset-password/:token", {
+            <C extends [better_auth.Context<"/reset-password/:token", {
                 method: "GET";
                 query: zod.ZodObject<{
                     callbackURL: zod.ZodString;
@@ -8857,7 +8863,7 @@ declare const auth: {
                 }, {
                     callbackURL: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8893,7 +8899,7 @@ declare const auth: {
                 }, {
                     callbackURL: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -8917,13 +8923,13 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         listSessions: {
-            <C extends [better_call.Context<"/list-sessions", {
+            <C extends [better_auth.Context<"/list-sessions", {
                 method: "GET";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -8945,7 +8951,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 requireHeaders: true;
                 metadata: {
                     openapi: {
@@ -8993,7 +8999,7 @@ declare const auth: {
             path: "/list-sessions";
             options: {
                 method: "GET";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9015,7 +9021,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 requireHeaders: true;
                 metadata: {
                     openapi: {
@@ -9049,11 +9055,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         revokeSession: {
-            <C extends [better_call.Context<"/revoke-session", {
+            <C extends [better_auth.Context<"/revoke-session", {
                 method: "POST";
                 body: zod.ZodObject<{
                     token: zod.ZodString;
@@ -9062,7 +9068,7 @@ declare const auth: {
                 }, {
                     token: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9084,7 +9090,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 requireHeaders: true;
                 metadata: {
                     openapi: {
@@ -9121,7 +9127,7 @@ declare const auth: {
                 }, {
                     token: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9143,7 +9149,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 requireHeaders: true;
                 metadata: {
                     openapi: {
@@ -9166,13 +9172,13 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         revokeSessions: {
-            <C extends [better_call.Context<"/revoke-sessions", {
+            <C extends [better_auth.Context<"/revoke-sessions", {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9194,7 +9200,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 requireHeaders: true;
                 metadata: {
                     openapi: {
@@ -9227,7 +9233,7 @@ declare const auth: {
             path: "/revoke-sessions";
             options: {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9249,7 +9255,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 requireHeaders: true;
                 metadata: {
                     openapi: {
@@ -9275,14 +9281,14 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         revokeOtherSessions: {
-            <C extends [better_call.Context<"/revoke-other-sessions", {
+            <C extends [better_auth.Context<"/revoke-other-sessions", {
                 method: "POST";
                 requireHeaders: true;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9304,7 +9310,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9336,7 +9342,7 @@ declare const auth: {
             options: {
                 method: "POST";
                 requireHeaders: true;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9358,7 +9364,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9382,11 +9388,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         linkSocialAccount: {
-            <C extends [better_call.Context<"/link-social", {
+            <C extends [better_auth.Context<"/link-social", {
                 method: "POST";
                 requireHeaders: true;
                 body: zod.ZodObject<{
@@ -9399,7 +9405,7 @@ declare const auth: {
                     provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9421,7 +9427,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9468,7 +9474,7 @@ declare const auth: {
                     provider: "github" | "apple" | "discord" | "facebook" | "microsoft" | "google" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "reddit";
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9490,7 +9496,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9518,13 +9524,13 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         listUserAccounts: {
-            <C extends [(better_call.Context<"/list-accounts", {
+            <C extends [(better_auth.Context<"/list-accounts", {
                 method: "GET";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9546,7 +9552,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9588,7 +9594,7 @@ declare const auth: {
             path: "/list-accounts";
             options: {
                 method: "GET";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9610,7 +9616,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         description: string;
@@ -9640,11 +9646,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         deleteUserCallback: {
-            <C extends [better_call.Context<"/delete-user/callback", {
+            <C extends [better_auth.Context<"/delete-user/callback", {
                 method: "GET";
                 query: zod.ZodObject<{
                     token: zod.ZodString;
@@ -9656,7 +9662,7 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
@@ -9676,13 +9682,13 @@ declare const auth: {
                     token: string;
                     callbackURL?: string | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, void>, better_call.EndpointOptions>[];
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>[];
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         unlinkAccount: {
-            <C extends [better_call.Context<"/unlink-account", {
+            <C extends [better_auth.Context<"/unlink-account", {
                 method: "POST";
                 body: zod.ZodObject<{
                     providerId: zod.ZodString;
@@ -9691,7 +9697,7 @@ declare const auth: {
                 }, {
                     providerId: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9713,7 +9719,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
@@ -9729,7 +9735,7 @@ declare const auth: {
                 }, {
                     providerId: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9751,14 +9757,14 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     } & {
         customGetProviders: {
-            <C extends [(better_call.Context<"/get-providers", {
+            <C extends [(better_auth.Context<"/get-providers", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -9767,12 +9773,12 @@ declare const auth: {
             options: {
                 method: "GET";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     } & {
         customCreateSession: {
-            <C extends [(better_call.Context<"/create-session", {
+            <C extends [(better_auth.Context<"/create-session", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -9784,12 +9790,12 @@ declare const auth: {
             options: {
                 method: "GET";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     } & {
         getAccountInfo: {
-            <C extends [(better_call.Context<"/get-account-info", {
+            <C extends [(better_auth.Context<"/get-account-info", {
                 method: "GET";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -9807,12 +9813,12 @@ declare const auth: {
             options: {
                 method: "GET";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     } & {
         customUpdateUser: {
-            <C extends [(better_call.Context<"/update-user-ccc", {
+            <C extends [(better_auth.Context<"/update-user-ccc", {
                 method: "POST";
             }> | undefined)?]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
@@ -9821,12 +9827,12 @@ declare const auth: {
             options: {
                 method: "POST";
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     } & {
         enableTwoFactor: {
-            <C extends [better_call.Context<"/two-factor/enable", {
+            <C extends [better_auth.Context<"/two-factor/enable", {
                 method: "POST";
                 body: zod.ZodObject<{
                     password: zod.ZodString;
@@ -9835,7 +9841,7 @@ declare const auth: {
                 }, {
                     password: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9857,7 +9863,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         summary: string;
@@ -9905,7 +9911,7 @@ declare const auth: {
                 }, {
                     password: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9927,7 +9933,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         summary: string;
@@ -9960,11 +9966,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         disableTwoFactor: {
-            <C extends [better_call.Context<"/two-factor/disable", {
+            <C extends [better_auth.Context<"/two-factor/disable", {
                 method: "POST";
                 body: zod.ZodObject<{
                     password: zod.ZodString;
@@ -9973,7 +9979,7 @@ declare const auth: {
                 }, {
                     password: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -9995,7 +10001,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         summary: string;
@@ -10034,7 +10040,7 @@ declare const auth: {
                 }, {
                     password: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -10056,7 +10062,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         summary: string;
@@ -10081,11 +10087,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         verifyBackupCode: {
-            <C extends [better_call.Context<"/two-factor/verify-backup-code", {
+            <C extends [better_auth.Context<"/two-factor/verify-backup-code", {
                 method: "POST";
                 body: zod.ZodObject<{
                     code: zod.ZodString;
@@ -10097,7 +10103,7 @@ declare const auth: {
                     code: string;
                     disableSession?: boolean | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -10252,7 +10258,7 @@ declare const auth: {
                     code: string;
                     disableSession?: boolean | undefined;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -10354,11 +10360,11 @@ declare const auth: {
                     method: "*";
                 }>[];
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         generateBackupCodes: {
-            <C extends [better_call.Context<"/two-factor/generate-backup-codes", {
+            <C extends [better_auth.Context<"/two-factor/generate-backup-codes", {
                 method: "POST";
                 body: zod.ZodObject<{
                     password: zod.ZodString;
@@ -10367,7 +10373,7 @@ declare const auth: {
                 }, {
                     password: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -10389,7 +10395,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
             }>]>(...ctx: C): Promise<C extends [{
                 asResponse: true;
             }] ? Response : {
@@ -10406,7 +10412,7 @@ declare const auth: {
                 }, {
                     password: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -10428,13 +10434,13 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         viewBackupCodes: {
-            <C extends [better_call.Context<"/two-factor/view-backup-codes", {
+            <C extends [better_auth.Context<"/two-factor/view-backup-codes", {
                 method: "GET";
                 body: zod.ZodObject<{
                     userId: zod.ZodString;
@@ -10466,13 +10472,13 @@ declare const auth: {
                     SERVER_ONLY: true;
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         sendTwoFactorOTP: {
-            <C extends [better_call.Context<"/two-factor/send-otp", {
+            <C extends [better_auth.Context<"/two-factor/send-otp", {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -10604,7 +10610,7 @@ declare const auth: {
             path: "/two-factor/send-otp";
             options: {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -10729,11 +10735,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         verifyTwoFactorOTP: {
-            <C extends [better_call.Context<"/two-factor/verify-otp", {
+            <C extends [better_auth.Context<"/two-factor/verify-otp", {
                 method: "POST";
                 body: zod.ZodObject<{
                     code: zod.ZodString;
@@ -10742,7 +10748,7 @@ declare const auth: {
                 }, {
                     code: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -10890,7 +10896,7 @@ declare const auth: {
                 }, {
                     code: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -11015,13 +11021,13 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         generateTOTP: {
-            <C extends [(better_call.Context<"/totp/generate", {
+            <C extends [(better_auth.Context<"/totp/generate", {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -11043,7 +11049,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         summary: string;
@@ -11075,7 +11081,7 @@ declare const auth: {
             path: "/totp/generate";
             options: {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -11097,7 +11103,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 metadata: {
                     openapi: {
                         summary: string;
@@ -11122,13 +11128,13 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         getTOTPURI: {
-            <C extends [better_call.Context<"/two-factor/get-totp-uri", {
+            <C extends [better_auth.Context<"/two-factor/get-totp-uri", {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -11150,7 +11156,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 body: zod.ZodObject<{
                     password: zod.ZodString;
                 }, "strip", zod.ZodTypeAny, {
@@ -11189,7 +11195,7 @@ declare const auth: {
             path: "/two-factor/get-totp-uri";
             options: {
                 method: "POST";
-                use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                     session: {
                         session: Record<string, any> & {
                             id: string;
@@ -11211,7 +11217,7 @@ declare const auth: {
                             image?: string | null | undefined;
                         };
                     };
-                }>, better_call.EndpointOptions>[];
+                }>, better_auth.EndpointOptions>[];
                 body: zod.ZodObject<{
                     password: zod.ZodString;
                 }, "strip", zod.ZodTypeAny, {
@@ -11243,11 +11249,11 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
         verifyTOTP: {
-            <C extends [better_call.Context<"/two-factor/verify-totp", {
+            <C extends [better_auth.Context<"/two-factor/verify-totp", {
                 method: "POST";
                 body: zod.ZodObject<{
                     code: zod.ZodString;
@@ -11256,7 +11262,7 @@ declare const auth: {
                 }, {
                     code: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -11404,7 +11410,7 @@ declare const auth: {
                 }, {
                     code: string;
                 }>;
-                use: better_call.Endpoint<better_call.Handler<string, {
+                use: better_auth.Endpoint<better_auth.Handler<string, {
                     body: zod.ZodObject<{
                         trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                     }, "strip", zod.ZodTypeAny, {
@@ -11529,12 +11535,86 @@ declare const auth: {
                     };
                 };
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
+            headers: Headers;
+        };
+    } & {
+        signInAnonymous: {
+            <C extends [(better_auth.Context<"/sign-in/anonymous", {
+                method: "POST";
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    $ref: string;
+                                                };
+                                                session: {
+                                                    $ref: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                asResponse: true;
+            }] ? Response : {
+                token: string;
+                user: {
+                    id: string;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
+            } | null>;
+            path: "/sign-in/anonymous";
+            options: {
+                method: "POST";
+                metadata: {
+                    openapi: {
+                        description: string;
+                        responses: {
+                            200: {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "object";
+                                            properties: {
+                                                user: {
+                                                    $ref: string;
+                                                };
+                                                session: {
+                                                    $ref: string;
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     } & {
         getSession: {
-            <C extends [(better_call.Context<"/get-session", {
+            <C extends [(better_auth.Context<"/get-session", {
                 method: "GET";
                 metadata: {
                     CUSTOM_SESSION: boolean;
@@ -11601,7 +11681,7 @@ declare const auth: {
                     disableRefresh?: boolean | undefined;
                 }>>;
             };
-            method: better_call.Method | better_call.Method[];
+            method: better_auth.Method | better_auth.Method[];
             headers: Headers;
         };
     }>;
@@ -11711,11 +11791,11 @@ declare const auth: {
                 token: string;
             }): Promise<void>;
         };
-        plugins: (better_auth.BetterAuthPlugin | {
+        plugins: ({
             id: "two-factor";
             endpoints: {
                 enableTwoFactor: {
-                    <C extends [better_call.Context<"/two-factor/enable", {
+                    <C extends [better_auth.Context<"/two-factor/enable", {
                         method: "POST";
                         body: zod.ZodObject<{
                             password: zod.ZodString;
@@ -11724,7 +11804,7 @@ declare const auth: {
                         }, {
                             password: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -11746,7 +11826,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         metadata: {
                             openapi: {
                                 summary: string;
@@ -11794,7 +11874,7 @@ declare const auth: {
                         }, {
                             password: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -11816,7 +11896,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         metadata: {
                             openapi: {
                                 summary: string;
@@ -11849,11 +11929,11 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 disableTwoFactor: {
-                    <C extends [better_call.Context<"/two-factor/disable", {
+                    <C extends [better_auth.Context<"/two-factor/disable", {
                         method: "POST";
                         body: zod.ZodObject<{
                             password: zod.ZodString;
@@ -11862,7 +11942,7 @@ declare const auth: {
                         }, {
                             password: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -11884,7 +11964,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         metadata: {
                             openapi: {
                                 summary: string;
@@ -11923,7 +12003,7 @@ declare const auth: {
                         }, {
                             password: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -11945,7 +12025,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         metadata: {
                             openapi: {
                                 summary: string;
@@ -11970,11 +12050,11 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 verifyBackupCode: {
-                    <C extends [better_call.Context<"/two-factor/verify-backup-code", {
+                    <C extends [better_auth.Context<"/two-factor/verify-backup-code", {
                         method: "POST";
                         body: zod.ZodObject<{
                             code: zod.ZodString;
@@ -11986,7 +12066,7 @@ declare const auth: {
                             code: string;
                             disableSession?: boolean | undefined;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -12141,7 +12221,7 @@ declare const auth: {
                             code: string;
                             disableSession?: boolean | undefined;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -12243,11 +12323,11 @@ declare const auth: {
                             method: "*";
                         }>[];
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 generateBackupCodes: {
-                    <C extends [better_call.Context<"/two-factor/generate-backup-codes", {
+                    <C extends [better_auth.Context<"/two-factor/generate-backup-codes", {
                         method: "POST";
                         body: zod.ZodObject<{
                             password: zod.ZodString;
@@ -12256,7 +12336,7 @@ declare const auth: {
                         }, {
                             password: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -12278,7 +12358,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                     }>]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
                     }] ? Response : {
@@ -12295,7 +12375,7 @@ declare const auth: {
                         }, {
                             password: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -12317,13 +12397,13 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 viewBackupCodes: {
-                    <C extends [better_call.Context<"/two-factor/view-backup-codes", {
+                    <C extends [better_auth.Context<"/two-factor/view-backup-codes", {
                         method: "GET";
                         body: zod.ZodObject<{
                             userId: zod.ZodString;
@@ -12355,13 +12435,13 @@ declare const auth: {
                             SERVER_ONLY: true;
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 sendTwoFactorOTP: {
-                    <C extends [better_call.Context<"/two-factor/send-otp", {
+                    <C extends [better_auth.Context<"/two-factor/send-otp", {
                         method: "POST";
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -12493,7 +12573,7 @@ declare const auth: {
                     path: "/two-factor/send-otp";
                     options: {
                         method: "POST";
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -12618,11 +12698,11 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 verifyTwoFactorOTP: {
-                    <C extends [better_call.Context<"/two-factor/verify-otp", {
+                    <C extends [better_auth.Context<"/two-factor/verify-otp", {
                         method: "POST";
                         body: zod.ZodObject<{
                             code: zod.ZodString;
@@ -12631,7 +12711,7 @@ declare const auth: {
                         }, {
                             code: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -12779,7 +12859,7 @@ declare const auth: {
                         }, {
                             code: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -12904,13 +12984,13 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 generateTOTP: {
-                    <C extends [(better_call.Context<"/totp/generate", {
+                    <C extends [(better_auth.Context<"/totp/generate", {
                         method: "POST";
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -12932,7 +13012,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         metadata: {
                             openapi: {
                                 summary: string;
@@ -12964,7 +13044,7 @@ declare const auth: {
                     path: "/totp/generate";
                     options: {
                         method: "POST";
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -12986,7 +13066,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         metadata: {
                             openapi: {
                                 summary: string;
@@ -13011,13 +13091,13 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 getTOTPURI: {
-                    <C extends [better_call.Context<"/two-factor/get-totp-uri", {
+                    <C extends [better_auth.Context<"/two-factor/get-totp-uri", {
                         method: "POST";
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -13039,7 +13119,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         body: zod.ZodObject<{
                             password: zod.ZodString;
                         }, "strip", zod.ZodTypeAny, {
@@ -13078,7 +13158,7 @@ declare const auth: {
                     path: "/two-factor/get-totp-uri";
                     options: {
                         method: "POST";
-                        use: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                             session: {
                                 session: Record<string, any> & {
                                     id: string;
@@ -13100,7 +13180,7 @@ declare const auth: {
                                     image?: string | null | undefined;
                                 };
                             };
-                        }>, better_call.EndpointOptions>[];
+                        }>, better_auth.EndpointOptions>[];
                         body: zod.ZodObject<{
                             password: zod.ZodString;
                         }, "strip", zod.ZodTypeAny, {
@@ -13132,11 +13212,11 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
                 verifyTOTP: {
-                    <C extends [better_call.Context<"/two-factor/verify-totp", {
+                    <C extends [better_auth.Context<"/two-factor/verify-totp", {
                         method: "POST";
                         body: zod.ZodObject<{
                             code: zod.ZodString;
@@ -13145,7 +13225,7 @@ declare const auth: {
                         }, {
                             code: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -13293,7 +13373,7 @@ declare const auth: {
                         }, {
                             code: string;
                         }>;
-                        use: better_call.Endpoint<better_call.Handler<string, {
+                        use: better_auth.Endpoint<better_auth.Handler<string, {
                             body: zod.ZodObject<{
                                 trustDevice: zod.ZodOptional<zod.ZodBoolean>;
                             }, "strip", zod.ZodTypeAny, {
@@ -13418,7 +13498,7 @@ declare const auth: {
                             };
                         };
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
             };
@@ -13426,10 +13506,10 @@ declare const auth: {
             hooks: {
                 after: {
                     matcher(context: better_auth.HookEndpointContext<{
-                        returned: better_call.APIError | Response | Record<string, any>;
-                        endpoint: better_call.Endpoint;
+                        returned: better_auth.APIError | Response | Record<string, any>;
+                        endpoint: better_auth.Endpoint;
                     }>): boolean;
-                    handler: better_call.Endpoint<better_call.Handler<string, better_call.EndpointOptions, {
+                    handler: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, {
                         response: {
                             body: any;
                             status: number;
@@ -13440,7 +13520,7 @@ declare const auth: {
                             twoFactorRedirect: boolean;
                         };
                         _flag: "json";
-                    } | undefined>, better_call.EndpointOptions>;
+                    } | undefined>, better_auth.EndpointOptions>;
                 }[];
             };
             schema: {
@@ -13484,10 +13564,130 @@ declare const auth: {
                 max: number;
             }[];
         } | {
+            id: "expo";
+            init: (ctx: better_auth.AuthContext) => {
+                options: {
+                    trustedOrigins: string[];
+                };
+            };
+            onRequest(request: Request, ctx: better_auth.AuthContext): Promise<{
+                request: Request;
+            } | undefined>;
+            hooks: {
+                after: {
+                    matcher(context: better_auth.HookEndpointContext<{
+                        returned: better_auth.APIError | Response | Record<string, any>;
+                        endpoint: better_auth.Endpoint;
+                    }>): boolean;
+                    handler: (ctx: better_auth.HookEndpointContext<{}>) => Promise<void>;
+                }[];
+            };
+        } | {
+            id: "anonymous";
+            endpoints: {
+                signInAnonymous: {
+                    <C extends [(better_auth.Context<"/sign-in/anonymous", {
+                        method: "POST";
+                        metadata: {
+                            openapi: {
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        user: {
+                                                            $ref: string;
+                                                        };
+                                                        session: {
+                                                            $ref: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    }> | undefined)?]>(...ctx: C): Promise<C extends [{
+                        asResponse: true;
+                    }] ? Response : {
+                        token: string;
+                        user: {
+                            id: string;
+                            email: string;
+                            emailVerified: boolean;
+                            name: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                        };
+                    } | null>;
+                    path: "/sign-in/anonymous";
+                    options: {
+                        method: "POST";
+                        metadata: {
+                            openapi: {
+                                description: string;
+                                responses: {
+                                    200: {
+                                        description: string;
+                                        content: {
+                                            "application/json": {
+                                                schema: {
+                                                    type: "object";
+                                                    properties: {
+                                                        user: {
+                                                            $ref: string;
+                                                        };
+                                                        session: {
+                                                            $ref: string;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    method: better_auth.Method | better_auth.Method[];
+                    headers: Headers;
+                };
+            };
+            hooks: {
+                after: {
+                    matcher(context: better_auth.HookEndpointContext<{
+                        returned: better_auth.APIError | Response | Record<string, any>;
+                        endpoint: better_auth.Endpoint;
+                    }>): boolean;
+                    handler: better_auth.Endpoint<better_auth.Handler<string, better_auth.EndpointOptions, void>, better_auth.EndpointOptions>;
+                }[];
+            };
+            schema: {
+                user: {
+                    fields: {
+                        isAnonymous: {
+                            type: "boolean";
+                            required: false;
+                        };
+                    };
+                };
+            };
+            $ERROR_CODES: {
+                readonly FAILED_TO_CREATE_USER: "Failed to create user";
+                readonly COULD_NOT_CREATE_SESSION: "Could not create session";
+                readonly ANONYMOUS_USERS_CANNOT_SIGN_IN_AGAIN_ANONYMOUSLY: "Anonymous users cannot sign in again anonymously";
+            };
+        } | {
             id: "custom-session";
             endpoints: {
                 getSession: {
-                    <C extends [(better_call.Context<"/get-session", {
+                    <C extends [(better_auth.Context<"/get-session", {
                         method: "GET";
                         metadata: {
                             CUSTOM_SESSION: boolean;
@@ -13554,7 +13754,7 @@ declare const auth: {
                             disableRefresh?: boolean | undefined;
                         }>>;
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
             };
@@ -13562,7 +13762,7 @@ declare const auth: {
             id: "customGetProviders";
             endpoints: {
                 customGetProviders: {
-                    <C extends [(better_call.Context<"/get-providers", {
+                    <C extends [(better_auth.Context<"/get-providers", {
                         method: "GET";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
@@ -13571,7 +13771,7 @@ declare const auth: {
                     options: {
                         method: "GET";
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
             };
@@ -13579,7 +13779,7 @@ declare const auth: {
             id: "customCreateSession";
             endpoints: {
                 customCreateSession: {
-                    <C extends [(better_call.Context<"/create-session", {
+                    <C extends [(better_auth.Context<"/create-session", {
                         method: "GET";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
@@ -13591,7 +13791,7 @@ declare const auth: {
                     options: {
                         method: "GET";
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
             };
@@ -13599,7 +13799,7 @@ declare const auth: {
             id: "getAccountInfo";
             endpoints: {
                 getAccountInfo: {
-                    <C extends [(better_call.Context<"/get-account-info", {
+                    <C extends [(better_auth.Context<"/get-account-info", {
                         method: "GET";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
@@ -13617,7 +13817,7 @@ declare const auth: {
                     options: {
                         method: "GET";
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
             };
@@ -13625,7 +13825,7 @@ declare const auth: {
             id: "customUpdateUser";
             endpoints: {
                 customUpdateUser: {
-                    <C extends [(better_call.Context<"/update-user-ccc", {
+                    <C extends [(better_auth.Context<"/update-user-ccc", {
                         method: "POST";
                     }> | undefined)?]>(...ctx: C): Promise<C extends [{
                         asResponse: true;
@@ -13634,7 +13834,7 @@ declare const auth: {
                     options: {
                         method: "POST";
                     };
-                    method: better_call.Method | better_call.Method[];
+                    method: better_auth.Method | better_auth.Method[];
                     headers: Headers;
                 };
             };
@@ -13663,10 +13863,15 @@ declare const auth: {
                 image?: string | null | undefined | undefined;
                 handle: string;
                 twoFactorEnabled: boolean | null | undefined;
+                isAnonymous?: boolean | null | undefined;
             };
         };
     };
     $ERROR_CODES: {
+        readonly FAILED_TO_CREATE_USER: "Failed to create user";
+        readonly COULD_NOT_CREATE_SESSION: "Could not create session";
+        readonly ANONYMOUS_USERS_CANNOT_SIGN_IN_AGAIN_ANONYMOUSLY: "Anonymous users cannot sign in again anonymously";
+    } & {
         USER_NOT_FOUND: string;
         FAILED_TO_CREATE_USER: string;
         FAILED_TO_CREATE_SESSION: string;
@@ -13719,15 +13924,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $get: {
             input: {
                 query: {
-                    type?: "received" | "checking" | "completed" | "incomplete" | "audit" | "all" | undefined;
+                    type?: "checking" | "completed" | "incomplete" | "audit" | "received" | "all" | undefined;
                 };
             };
             output: {
                 code: number;
                 data: {
-                    type: "received" | "checking" | "completed" | "incomplete" | "audit";
                     id: string;
                     userId: string;
+                    type: "checking" | "completed" | "incomplete" | "audit" | "received";
                     actionId: number;
                     progress: number;
                     progressMax: number;
@@ -13831,7 +14036,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "content" | "all" | "author" | "url" | "order";
+                                field: "title" | "all" | "content" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                             webhooks?: string[] | undefined;
@@ -13874,7 +14079,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "content" | "all" | "author" | "url" | "order";
+                                field: "title" | "all" | "content" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                             webhooks?: string[] | undefined;
@@ -14052,10 +14257,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 data: {
                     entries?: {
+                        id: string;
                         description: string | null;
                         title: string | null;
                         content: string | null;
-                        id: string;
                         author: string | null;
                         url: string | null;
                         language: string | null;
@@ -14090,84 +14295,89 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         } | null | undefined;
                     }[] | undefined;
                     feed?: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     } | undefined;
                     list?: {
-                        type: "list";
                         id: string;
+                        type: "list";
                         view: number;
                         feedIds: string[];
                         fee: number;
                         timelineUpdatedAt: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         feeds?: {
-                            type: "feed";
                             id: string;
+                            type: "feed";
                             url: string;
+                            image?: string | null | undefined;
                             description?: string | null | undefined;
                             title?: string | null | undefined;
-                            image?: string | null | undefined;
                             siteUrl?: string | null | undefined;
                             errorMessage?: string | null | undefined;
                             errorAt?: string | null | undefined;
                             ownerUserId?: string | null | undefined;
                             owner?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                     } | undefined;
                     docs?: string | undefined;
@@ -14193,16 +14403,16 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 data: {
                     [x: string]: {
-                        description: string;
                         name: string;
+                        description: string;
                         url: string;
                         lang: string;
                         routes: {
                             [x: string]: {
                                 path: string;
+                                name: string;
                                 example: string;
                                 description: string;
-                                name: string;
                                 categories: string[];
                                 parameters: {
                                     [x: string]: string;
@@ -14229,8 +14439,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             };
             output: {
                 data: {
-                    description: string;
                     name: string;
+                    description: string;
                     url: string;
                     prefix: string;
                     route?: any;
@@ -14257,9 +14467,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 remaining: number;
                 data?: {
                     entries: {
+                        id: string;
                         description: string | null;
                         title: string | null;
-                        id: string;
                         author: string | null;
                         url: string | null;
                         language: string | null;
@@ -14295,21 +14505,22 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         } | null | undefined;
                     };
                     feeds: {
-                        type: "inbox";
                         id: string;
+                        type: "inbox";
                         secret: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     read: boolean | null;
@@ -14350,10 +14561,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data?: {
                     entries: {
+                        id: string;
                         description: string | null;
                         title: string | null;
                         content: string | null;
-                        id: string;
                         author: string | null;
                         url: string | null;
                         language: string | null;
@@ -14389,21 +14600,22 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         } | null | undefined;
                     };
                     feeds: {
-                        type: "inbox";
                         id: string;
+                        type: "inbox";
                         secret: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                 } | undefined;
@@ -14445,8 +14657,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 data: {
                     users: {
                         [x: string]: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             image: string | null;
                             handle: string | null;
                         };
@@ -14509,9 +14721,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data?: {
                     entries: {
+                        id: string;
                         description: string | null;
                         title: string | null;
-                        id: string;
                         author: string | null;
                         url: string | null;
                         language: string | null;
@@ -14545,33 +14757,35 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         } | null | undefined;
                     };
                     feeds: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     read: boolean | null;
@@ -14611,10 +14825,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data?: {
                     entries: {
+                        id: string;
                         description: string | null;
                         title: string | null;
                         content: string | null;
-                        id: string;
                         author: string | null;
                         url: string | null;
                         language: string | null;
@@ -14648,33 +14862,35 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         } | null | undefined;
                     };
                     feeds: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                 } | undefined;
@@ -14707,10 +14923,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
+                    id: string;
                     description: string | null;
                     title: string | null;
                     content: string | null;
-                    id: string;
                     author: string | null;
                     url: string | null;
                     language: string | null;
@@ -14793,33 +15009,35 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: {
                     feed: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
@@ -14878,40 +15096,42 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     }[];
                     readCount: number;
                     feed: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
                     subscription?: {
-                        title: string | null;
                         createdAt: string;
                         userId: string;
+                        title: string | null;
                         view: number;
                         category: string | null;
                         feedId: string;
@@ -14994,8 +15214,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     code: string;
                     createdAt: string | null;
                     users: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         image: string | null;
                     } | null;
                     usedAt: string | null;
@@ -15030,14 +15250,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    name: string | null;
                     id: string;
+                    name: string | null;
                     emailVerified: boolean | null;
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
                     updatedAt: string;
                     twoFactorEnabled: boolean | null;
+                    isAnonymous: boolean | null;
                 };
             };
             outputFormat: "json";
@@ -15056,14 +15277,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: {
                     [x: string]: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
                         twoFactorEnabled: boolean | null;
+                        isAnonymous: boolean | null;
                     };
                 };
             };
@@ -15207,140 +15429,147 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: ({
-                    title: string | null;
                     createdAt: string;
                     userId: string;
+                    title: string | null;
                     view: number;
                     category: string | null;
                     feeds: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     feedId: string;
                     isPrivate: boolean;
                     boost: {
                         boosters: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
                             twoFactorEnabled: boolean | null;
+                            isAnonymous: boolean | null;
                         }[];
                     };
                 } | {
-                    title: string | null;
                     createdAt: string;
                     userId: string;
+                    title: string | null;
                     view: number;
                     feedId: string;
                     isPrivate: boolean;
                     lists: {
-                        type: "list";
                         id: string;
+                        type: "list";
                         view: number;
                         feedIds: string[];
                         fee: number;
                         timelineUpdatedAt: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         feeds?: {
-                            type: "feed";
                             id: string;
+                            type: "feed";
                             url: string;
+                            image?: string | null | undefined;
                             description?: string | null | undefined;
                             title?: string | null | undefined;
-                            image?: string | null | undefined;
                             siteUrl?: string | null | undefined;
                             errorMessage?: string | null | undefined;
                             errorAt?: string | null | undefined;
                             ownerUserId?: string | null | undefined;
                             owner?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     listId: string;
                     lastViewedAt: string | null;
                     category?: string | undefined;
                 } | {
-                    title: string | null;
                     createdAt: string;
                     userId: string;
+                    title: string | null;
                     view: number;
                     category: string | null;
                     feedId: string;
                     isPrivate: boolean;
                     inboxes: {
-                        type: "inbox";
                         id: string;
+                        type: "inbox";
                         secret: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     inboxId: string;
@@ -15367,10 +15596,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 feed: {
-                    description: string | null;
-                    title: string | null;
                     id: string;
                     image: string | null;
+                    description: string | null;
+                    title: string | null;
                     url: string;
                     siteUrl: string | null;
                     checkedAt: string;
@@ -15384,10 +15613,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     migrateTo: string | null;
                 } | null;
                 list: {
-                    description: string | null;
-                    title: string;
                     id: string;
                     image: string | null;
+                    description: string | null;
+                    title: string;
                     view: number;
                     ownerUserId: string;
                     language: string | null;
@@ -15595,8 +15824,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
                     createdAt: string;
+                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase" | "airdrop";
                     hash: string;
                     powerToken: string;
                     fromUserId: string | null;
@@ -15608,53 +15837,57 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     tax: string;
                     comment: string | null;
                     fromUser?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
                         twoFactorEnabled: boolean | null;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                     toUser?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
                         twoFactorEnabled: boolean | null;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                     toFeed?: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     } | null | undefined;
                 }[];
@@ -15768,14 +16001,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: {
                     user: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
                         twoFactorEnabled: boolean | null;
+                        isAnonymous: boolean | null;
                     };
                     userId: string;
                     rank: number | null;
@@ -15817,40 +16051,42 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                 code: 0;
                 data: {
                     entries: {
+                        id: string;
                         description: string | null;
                         title: string | null;
                         content: string | null;
-                        id: string;
                         author: string | null;
                         url: string | null;
                         feeds: {
-                            type: "feed";
                             id: string;
+                            type: "feed";
                             url: string;
+                            image?: string | null | undefined;
                             description?: string | null | undefined;
                             title?: string | null | undefined;
-                            image?: string | null | undefined;
                             siteUrl?: string | null | undefined;
                             errorMessage?: string | null | undefined;
                             errorAt?: string | null | undefined;
                             ownerUserId?: string | null | undefined;
                             owner?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         };
                         language: string | null;
@@ -15886,62 +16122,65 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     }[];
                     readCount: number;
                     list: {
-                        type: "list";
                         id: string;
+                        type: "list";
                         view: number;
                         feedIds: string[];
                         fee: number;
                         timelineUpdatedAt: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         feeds?: {
-                            type: "feed";
                             id: string;
+                            type: "feed";
                             url: string;
+                            image?: string | null | undefined;
                             description?: string | null | undefined;
                             title?: string | null | undefined;
-                            image?: string | null | undefined;
                             siteUrl?: string | null | undefined;
                             errorMessage?: string | null | undefined;
                             errorAt?: string | null | undefined;
                             ownerUserId?: string | null | undefined;
                             owner?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
-                                name: string | null;
                                 id: string;
+                                name: string | null;
                                 emailVerified: boolean | null;
                                 image: string | null;
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
+                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     subscriptionCount: number;
                     feedCount: number;
                     subscription?: {
-                        title: string | null;
                         createdAt: string;
                         userId: string;
+                        title: string | null;
                         view: number;
                         isPrivate: boolean;
                         listId: string;
@@ -15961,61 +16200,64 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     title: string;
                     view: number;
                     fee: number;
-                    description?: string | null | undefined;
                     image?: string | null | undefined;
+                    description?: string | null | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
-                    type: "list";
                     id: string;
+                    type: "list";
                     view: number;
                     feedIds: string[];
                     fee: number;
                     timelineUpdatedAt: string;
+                    image?: string | null | undefined;
                     description?: string | null | undefined;
                     title?: string | null | undefined;
-                    image?: string | null | undefined;
                     feeds?: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     }[] | undefined;
                     ownerUserId?: string | null | undefined;
                     owner?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                 };
             };
@@ -16047,8 +16289,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     view: number;
                     fee: number;
                     listId: string;
-                    description?: string | null | undefined;
                     image?: string | null | undefined;
+                    description?: string | null | undefined;
                 };
             };
             output: {
@@ -16065,54 +16307,57 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    type: "list";
                     id: string;
+                    type: "list";
                     view: number;
                     feedIds: string[];
                     fee: number;
                     timelineUpdatedAt: string;
+                    image?: string | null | undefined;
                     description?: string | null | undefined;
                     title?: string | null | undefined;
-                    image?: string | null | undefined;
                     feeds?: {
-                        type: "feed";
                         id: string;
+                        type: "feed";
                         url: string;
+                        image?: string | null | undefined;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
                         owner?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
-                            name: string | null;
                             id: string;
+                            name: string | null;
                             emailVerified: boolean | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
+                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     }[] | undefined;
                     ownerUserId?: string | null | undefined;
                     owner?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                     subscriptionCount?: number | undefined;
                     purchaseAmount?: number | undefined;
@@ -16137,33 +16382,35 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    type: "feed";
                     id: string;
+                    type: "feed";
                     url: string;
+                    image?: string | null | undefined;
                     description?: string | null | undefined;
                     title?: string | null | undefined;
-                    image?: string | null | undefined;
                     siteUrl?: string | null | undefined;
                     errorMessage?: string | null | undefined;
                     errorAt?: string | null | undefined;
                     ownerUserId?: string | null | undefined;
                     owner?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                     tipUsers?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        isAnonymous: boolean | null;
                     }[] | null | undefined;
                 }[];
             };
@@ -16272,21 +16519,22 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    type: "inbox";
                     id: string;
+                    type: "inbox";
                     secret: string;
+                    image?: string | null | undefined;
                     description?: string | null | undefined;
                     title?: string | null | undefined;
-                    image?: string | null | undefined;
                     ownerUserId?: string | null | undefined;
                     owner?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                 };
             };
@@ -16388,8 +16636,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
         $put: {
             input: {
                 json: {
-                    title: string;
                     handle: string;
+                    title: string;
                 };
             };
             output: {
@@ -16406,21 +16654,22 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    type: "inbox";
                     id: string;
+                    type: "inbox";
                     secret: string;
+                    image?: string | null | undefined;
                     description?: string | null | undefined;
                     title?: string | null | undefined;
-                    image?: string | null | undefined;
                     ownerUserId?: string | null | undefined;
                     owner?: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         emailVerified: boolean | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
+                        isAnonymous: boolean | null;
                     } | null | undefined;
                 }[];
             };
@@ -16525,14 +16774,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    name: string | null;
                     id: string;
+                    name: string | null;
                     emailVerified: boolean | null;
                     image: string | null;
                     handle: string | null;
                     createdAt: string;
                     updatedAt: string;
                     twoFactorEnabled: boolean | null;
+                    isAnonymous: boolean | null;
                 }[];
             };
             outputFormat: "json";
@@ -16628,12 +16878,12 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             output: {
                 code: 0;
                 data: {
-                    description: string | null;
                     id: string;
+                    description: string | null;
                     ownerUserId: string;
                     owner: {
-                        name: string | null;
                         id: string;
+                        name: string | null;
                         image: string | null;
                         handle: string | null;
                     } | null;
@@ -16694,8 +16944,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         expiresAt: string;
                     } | null;
                     instance: {
-                        description: string | null;
                         id: string;
+                        description: string | null;
                         ownerUserId: string;
                         price: number;
                         userLimit: number | null;

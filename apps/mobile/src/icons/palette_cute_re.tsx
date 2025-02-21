@@ -14,7 +14,6 @@ export const PaletteCuteReIcon = ({
 }: PaletteCuteReIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
-      <Path fill="#fff" fillOpacity={0.01} d="M24 0v24H0V0z" />
       <Path
         fill={color}
         d="M8 12.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M10 8.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M15 8.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"

@@ -9,15 +9,10 @@
     "start": "expo start",
     "web": "expo start --web"
   },
-  "dependencies": {
-    "expo": "^52.0.0",
+  "peerDependencies": {
+    "expo": "52.0.35",
     "react": "18.3.1",
-    "react-native": "0.76.6"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@types/react": "~18.3.12",
-    "typescript": "^5.3.3"
+    "react-native": "0.77.0"
   },
   "expo": {
     "autolinking": {

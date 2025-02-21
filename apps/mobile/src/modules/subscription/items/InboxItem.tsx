@@ -3,7 +3,7 @@ import { memo } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
-import { ItemPressable } from "@/src/components/ui/pressable/item-pressable"
+import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { InboxCuteFiIcon } from "@/src/icons/inbox_cute_fi"
 import { closeDrawer, selectTimeline } from "@/src/modules/screen/atoms"
 import { useSubscription } from "@/src/store/subscription/hooks"

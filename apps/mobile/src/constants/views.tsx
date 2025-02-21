@@ -2,6 +2,8 @@ import { FeedViewType } from "@follow/constants"
 import type * as React from "react"
 import colors from "tailwindcss/colors"
 
+import { AnnouncementCuteFiIcon } from "../icons/announcement_cute_fi"
+import { MicCuteFiIcon } from "../icons/mic_cute_fi"
 import { PaperCuteFiIcon } from "../icons/paper_cute_fi"
 import { PicCuteFiIcon } from "../icons/pic_cute_fi"
 import { TwitterCuteFiIcon } from "../icons/twitter_cute_fi"
@@ -45,5 +47,19 @@ export const views: ViewDefinition[] = [
     activeColor: colors.red[500],
     translation: "title",
     view: FeedViewType.Videos,
+  },
+  {
+    name: "Audios",
+    icon: MicCuteFiIcon,
+    activeColor: colors.purple[500],
+    translation: "title",
+    view: FeedViewType.Audios,
+  },
+  {
+    name: "Notifications",
+    icon: AnnouncementCuteFiIcon,
+    activeColor: colors.yellow[500],
+    translation: "title",
+    view: FeedViewType.Notifications,
   },
 ]

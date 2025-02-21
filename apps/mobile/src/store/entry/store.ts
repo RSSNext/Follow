@@ -50,8 +50,6 @@ export const useEntryStore = createZustandStore<EntryState>("entry")(() => defau
 
 const immerSet = createImmerSetter(useEntryStore)
 
-type UpsertPosition = "all" | "view" | "category" | "feed" | "inbox" | "list"
-
 class EntryActions {
   private addEntryIdToView({
     draft,
@@ -126,7 +124,7 @@ class EntryActions {
     }
   }
 
-  upsertManyInSession(entries: EntryModel[], position: UpsertPosition) {
+  upsertManyInSession(entries: EntryModel[]) {
     if (entries.length === 0) return
 
     immerSet((draft) => {
@@ -135,45 +133,37 @@ class EntryActions {
         draft.data[entry.id] = entry
 
         const { feedId, inboxHandle } = entry
-        if (position === "all" || position === "feed") {
-          this.addEntryIdToFeed({
-            draft,
-            feedId,
-            entryId: entry.id,
-          })
-        }
+        this.addEntryIdToFeed({
+          draft,
+          feedId,
+          entryId: entry.id,
+        })
 
-        if (position === "all" || position === "view") {
-          this.addEntryIdToView({
-            draft,
-            feedId,
-            entryId: entry.id,
-          })
-        }
+        this.addEntryIdToView({
+          draft,
+          feedId,
+          entryId: entry.id,
+        })
 
-        if (position === "all" || position === "inbox") {
-          this.addEntryIdToInbox({
-            draft,
-            inboxHandle,
-            entryId: entry.id,
-          })
-        }
+        this.addEntryIdToInbox({
+          draft,
+          inboxHandle,
+          entryId: entry.id,
+        })
 
-        if (position === "all" || position === "category") {
-          this.addEntryIdToCategory({
-            draft,
-            feedId,
-            entryId: entry.id,
-          })
-        }
+        this.addEntryIdToCategory({
+          draft,
+          feedId,
+          entryId: entry.id,
+        })
       }
     })
   }
 
-  async upsertMany(entries: EntryModel[], position: UpsertPosition) {
+  async upsertMany(entries: EntryModel[]) {
     const tx = createTransaction()
     tx.store(() => {
-      this.upsertManyInSession(entries, position)
+      this.upsertManyInSession(entries)
     })
 
     tx.persist(() => {
@@ -290,20 +280,7 @@ class EntrySyncServices {
       }
     }
 
-    const position =
-      params.view !== undefined
-        ? "view"
-        : params.feedId
-          ? "feed"
-          : params.feedIdList
-            ? "category"
-            : params.inboxId
-              ? "inbox"
-              : params.listId
-                ? "list"
-                : "all"
-
-    await entryActions.upsertMany(entries, position)
+    await entryActions.upsertMany(entries)
     if (params.listId) {
       await listActions.addEntryIds({
         listId: params.listId,
@@ -313,24 +290,24 @@ class EntrySyncServices {
 
     // After initial fetch, we can reset the state to prefer the entries data from the server
     if (!pageParam) {
-      if (position === "view") {
+      if (params.view !== undefined) {
         entryActions.resetByView({ view: params.view, entries })
       }
 
-      if (position === "category") {
-        const category = getSubscription(params.feedIdList?.[0])?.category
+      if (params.feedIdList && params.feedIdList.length > 0) {
+        const category = getSubscription(params.feedIdList[0])?.category
         if (category) {
           entryActions.resetByCategory({ category, entries })
         }
       }
 
-      if (position === "feed") {
+      if (params.feedId) {
         entryActions.resetByFeed({ feedId: params.feedId, entries })
       }
     }
 
     if (isCollection && res.data) {
-      if (!view) {
+      if (view === undefined) {
         console.error("view is required for collection")
       }
       const collections = honoMorph.toCollections(res.data, view ?? 0)

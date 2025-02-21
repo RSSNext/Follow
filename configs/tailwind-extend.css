@@ -32,9 +32,9 @@
       * Use relative syntax to get to: hsl(221 25% 22% / 40%)
     */
     --shade: hsl(from var(--base) calc(h + 8) 25 calc(l - 5));
-    --perfect-shadow: 0 0 0 1px var(--base), 0 1px 1px -0.5px var(--shade),
-      0 3px 3px -1.5px var(--shade), 0 6px 6px -3px var(--shade), 0 12px 12px -6px var(--base),
-      0 24px 24px -12px var(--base);
+    --perfect-shadow:
+      0 0 0 1px var(--base), 0 1px 1px -0.5px var(--shade), 0 3px 3px -1.5px var(--shade),
+      0 6px 6px -3px var(--shade), 0 12px 12px -6px var(--base), 0 24px 24px -12px var(--base);
     box-shadow: var(--perfect-shadow);
   }
 
@@ -194,7 +194,8 @@
     animation: checkmark var(--animation-input, 0.2s) ease-out;
     border-color: theme(colors.theme.accent.DEFAULT);
     background-color: var(--chkbg);
-    background-image: linear-gradient(-45deg, transparent 65%, var(--chkbg) 65.99%),
+    background-image:
+      linear-gradient(-45deg, transparent 65%, var(--chkbg) 65.99%),
       linear-gradient(45deg, transparent 75%, var(--chkbg) 75.99%),
       linear-gradient(-45deg, var(--chkbg) 40%, transparent 40.99%),
       linear-gradient(

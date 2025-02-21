@@ -1,13 +1,13 @@
 import clsx from "clsx"
 import { useAtomValue } from "jotai"
-import { useContext, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
 
+import { entryAtom } from "~/atoms"
+import { useWrappedElementSize } from "~/common/WrappedElementProvider"
 import type { HTMLProps } from "~/HTML"
 
-import { entryAtom } from "../../atoms"
-import { calculateDimensions } from "../../hooks/useCalculateNaturalSize"
-import { MarkdownRenderContainerRefContext } from "./__internal/ctx"
+import { calculateDimensions } from "./__internal/calculateDimensions"
 
 const protocol = "follow-xhr"
 export const MarkdownImage = (props: HTMLProps<"img">) => {
@@ -23,19 +23,21 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
   const entry = useAtomValue(entryAtom)
 
   const [isLoading, setIsLoading] = useState(true)
-  const ref = useContext(MarkdownRenderContainerRefContext)
+
   const image = entry?.media.find((media) => media.url === src)
+
+  const { w } = useWrappedElementSize()
   const { height: scaleHeight, width: scaleWidth } = useMemo(
     () =>
       calculateDimensions({
         width: image?.width,
         height: image?.height,
         max: {
-          width: ref?.clientWidth ?? 0,
+          width: w,
           height: window.innerHeight,
         },
       }),
-    [image?.width, image?.height, ref?.clientWidth],
+    [image?.width, image?.height, w],
   )
 
   return (

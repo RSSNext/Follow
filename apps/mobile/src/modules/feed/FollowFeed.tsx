@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { StackActions } from "@react-navigation/native"
-import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router"
+import { router, Stack, useNavigation } from "expo-router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { ActivityIndicator, ScrollView, Text, View } from "react-native"
@@ -20,7 +20,7 @@ import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
-import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
+import { useFeed, usePrefetchFeed, usePrefetchFeedByUrl } from "@/src/store/feed/hooks"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import type { SubscriptionForm } from "@/src/store/subscription/types"
@@ -45,10 +45,31 @@ export function FollowFeed(props: { id: string }) {
     )
   }
 
-  return <FollowImpl />
+  return <FollowImpl feedId={id} />
 }
-function FollowImpl() {
-  const { id } = useLocalSearchParams()
+
+export function FollowUrl(props: { url: string }) {
+  const { url } = props
+
+  const { isLoading, data, error } = usePrefetchFeedByUrl(url)
+
+  if (isLoading) {
+    return (
+      <View className="mt-24 flex-1 flex-row items-start justify-center">
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
+  if (!data) {
+    return <Text className="text-label">{error?.message}</Text>
+  }
+
+  return <FollowImpl feedId={data.id} />
+}
+
+function FollowImpl(props: { feedId: string }) {
+  const { feedId: id } = props
 
   const feed = useFeed(id as string)!
   const isSubscribed = useSubscriptionByFeedId(feed?.id || "")
@@ -129,7 +150,7 @@ function FollowImpl() {
         </View>
       </GroupedInsetListCard>
       {/* Group 2 */}
-      <GroupedInsetListCard className="gap-y-4 px-5 py-4">
+      <GroupedInsetListCard className="gap-y-4 p-4">
         <FormProvider form={form}>
           <View>
             <Controller
@@ -169,6 +190,7 @@ function FollowImpl() {
               control={form.control}
               render={({ field: { onChange, value } }) => (
                 <FormSwitch
+                  size="sm"
                   value={value}
                   label="Private"
                   description="Private feeds are only visible to you."
