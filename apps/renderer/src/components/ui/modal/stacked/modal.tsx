@@ -1,3 +1,4 @@
+import { Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { RootPortalProvider } from "@follow/components/ui/portal/provider.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
@@ -378,7 +379,9 @@ export const ModalInternal = memo(
                           tabIndex={1}
                           onClick={close}
                         >
-                          <i className="i-mgc-close-cute-re" />
+                          <Button variant="ghost">
+                            <i className="i-mgc-close-cute-re" />
+                          </Button>
                         </Dialog.DialogClose>
                       )}
                     </div>
