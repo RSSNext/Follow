@@ -22,7 +22,7 @@ export function PlayerTabBar({ className }: { className?: string }) {
       <Animated.View
         entering={SlideInDown}
         exiting={SlideOutDown}
-        className={cn("border-opaque-separator/70 border-b px-2 shadow-md", className)}
+        className={cn("border-opaque-separator/70 border-b px-2", className)}
       >
         <Pressable
           onPress={() => {
