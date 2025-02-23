@@ -7,9 +7,9 @@ import { entrySyncServices, useEntryStore } from "./store"
 import type { EntryModel, FetchEntriesProps } from "./types"
 
 export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam"> | null) => {
-  const { feedId, inboxId, listId, view, read, limit, isArchived } = props || {}
+  const { feedId, inboxId, listId, view, read, limit } = props || {}
   return useInfiniteQuery({
-    queryKey: ["entries", feedId, inboxId, listId, view, read, limit, isArchived],
+    queryKey: ["entries", feedId, inboxId, listId, view, read, limit],
     queryFn: ({ pageParam }) => entrySyncServices.fetchEntries({ ...props, pageParam }),
     getNextPageParam: (lastPage) =>
       listId

@@ -361,12 +361,12 @@ export const ModalInternal = memo(
                     defaultSize={resizeDefaultSize}
                     className="flex grow flex-col"
                   >
-                    <div
-                      className={"relative flex items-center"}
-                      onPointerDownCapture={handleDrag}
-                      onPointerDown={relocateModal}
-                    >
-                      <Dialog.Title className="flex w-0 max-w-full grow items-center gap-2 px-4 py-1 text-lg font-semibold">
+                    <div className={"relative flex items-center"}>
+                      <Dialog.Title
+                        className="flex w-0 max-w-full grow items-center gap-2 px-4 py-1 text-lg font-semibold"
+                        onPointerDownCapture={handleDrag}
+                        onPointerDown={relocateModal}
+                      >
                         {!!icon && <span className="size-4">{icon}</span>}
                         <EllipsisHorizontalTextWithTooltip className="truncate">
                           <span>{title}</span>

@@ -1,10 +1,11 @@
 import { cn } from "@follow/utils"
 import { router } from "expo-router"
-import { Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { Slider } from "react-native-awesome-slider"
-import { useDerivedValue, useSharedValue } from "react-native-reanimated"
+import { FadeOut, useDerivedValue, useSharedValue, ZoomIn } from "react-native-reanimated"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
+import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
 import { Back2CuteReIcon } from "@/src/icons/back_2_cute_re"
 import { Forward2CuteReIcon } from "@/src/icons/forward_2_cute_re"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
@@ -31,7 +32,10 @@ export function PlayPauseButton({ size = 24, className, color }: ControlButtonPr
   const label = useColor("label")
   return (
     <View className={className}>
-      <TouchableOpacity
+      <ReAnimatedPressable
+        entering={ZoomIn.springify().damping(10).stiffness(200).mass(1)}
+        exiting={FadeOut}
+        key={playing ? "pause" : "play"}
         onPress={() => {
           playing ? player.pause() : player.play()
         }}
@@ -41,7 +45,7 @@ export function PlayPauseButton({ size = 24, className, color }: ControlButtonPr
         ) : (
           <PlayCuteFiIcon color={color ?? label} width={size} height={size} />
         )}
-      </TouchableOpacity>
+      </ReAnimatedPressable>
     </View>
   )
 }
@@ -191,8 +195,9 @@ export function ProgressBar() {
 
       <View className="mt-3 flex-row justify-between">
         <Text
+          style={styles.text}
           className={cn(
-            "font-mono text-xs font-medium tracking-wider opacity-75",
+            "font-mono text-xs font-medium opacity-75",
             isBackgroundLight ? "text-black" : "text-white",
           )}
         >
@@ -200,12 +205,14 @@ export function ProgressBar() {
         </Text>
 
         <Text
+          style={styles.text}
           className={cn(
-            "font-mono text-xs font-medium tracking-wider opacity-75",
+            "font-mono text-xs font-medium opacity-75",
             isBackgroundLight ? "text-black" : "text-white",
           )}
         >
-          {"-"} {trackRemainingTime}
+          {"-"}
+          {trackRemainingTime}
         </Text>
       </View>
     </View>
@@ -250,3 +257,9 @@ export function VolumeBar() {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  text: {
+    fontVariant: ["tabular-nums"],
+  },
+})
