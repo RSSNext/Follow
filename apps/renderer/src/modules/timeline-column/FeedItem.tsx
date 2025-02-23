@@ -27,7 +27,7 @@ import { FeedTitle } from "~/modules/feed/feed-title"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
-import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+import { useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useSelectedFeedIdsState } from "./atom"
@@ -255,9 +255,6 @@ const ListItemImpl: Component<{
         entryId: null,
         view,
       })
-      subscriptionActions.markReadByFeedIds({
-        listId,
-      })
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
       nextFrame(() => {
         getMainContainerElement()?.focus()
@@ -304,7 +301,7 @@ const ListItemImpl: Component<{
           </Tooltip>
         )}
       </div>
-      <UnreadNumber unread={listUnread} isList className="ml-2" />
+      <UnreadNumber unread={listUnread} className="ml-2" />
     </div>
   )
 }
