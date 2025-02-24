@@ -5,11 +5,14 @@ import { Fragment, memo, useEffect, useState } from "react"
 import type { PressableProps } from "react-native"
 import { StyleSheet } from "react-native"
 import Animated, {
+  cancelAnimation,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
 } from "react-native-reanimated"
 
+import { gentleSpringPreset } from "@/src/constants/spring"
 import { useColor } from "@/src/theme/colors"
 
 import { ReAnimatedPressable } from "../../common/AnimatedComponents"
@@ -33,10 +36,11 @@ export const ItemPressable: FC<ItemPressableProps> = memo(
     const pressed = useSharedValue(0)
 
     useEffect(() => {
+      cancelAnimation(pressed)
       if (isPressing) {
-        pressed.value = 1
+        pressed.value = withSpring(1, { duration: 0.2 })
       } else {
-        pressed.value = 0
+        pressed.value = withSpring(0, gentleSpringPreset)
       }
     }, [isPressing, pressed])
 

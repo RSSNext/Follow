@@ -6,8 +6,6 @@ import { useContext, useEffect } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, View } from "react-native"
 import Animated, {
-  FadeIn,
-  FadeOut,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -21,6 +19,7 @@ import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
+import { ScaleFadeRotateIn } from "../../ux/animations/ScaleFadeRotate"
 import { Grid } from "../grid"
 import { BottomTabBarBackgroundContext } from "./contexts/BottomTabBarBackgroundContext"
 import { BottomTabBarVisibleContext } from "./contexts/BottomTabBarVisibleContext"
@@ -148,11 +147,6 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
   )
 }
 
-const tabIconIconAnimations = {
-  in: FadeIn.springify(),
-  out: FadeOut.springify(),
-}
-
 const TextLabel = (props: {
   focused: boolean
   accessibilityLabel: string | undefined
@@ -198,8 +192,7 @@ const TabIcon = ({
     <View style={styles.wrapperUikit}>
       {focused && (
         <Animated.View
-          entering={tabIconIconAnimations.in}
-          exiting={tabIconIconAnimations.out}
+          entering={ScaleFadeRotateIn}
           style={[styles.icon, { opacity: activeOpacity }]}
         >
           {renderIcon({
@@ -211,8 +204,7 @@ const TabIcon = ({
       )}
       {!focused && (
         <Animated.View
-          entering={tabIconIconAnimations.in}
-          exiting={tabIconIconAnimations.out}
+          entering={ScaleFadeRotateIn}
           style={[styles.icon, { opacity: inactiveOpacity }]}
         >
           {renderIcon({

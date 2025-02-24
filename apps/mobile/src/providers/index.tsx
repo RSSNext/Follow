@@ -10,6 +10,7 @@ import type { ReactNode } from "react"
 import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
+import { RootSiblingParent } from "react-native-root-siblings"
 import { SheetProvider } from "react-native-sheet-transitions"
 
 import { PreviewImageProvider } from "../components/ui/image/PreviewPageProvider"
@@ -36,7 +37,9 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
                   <SheetProvider>
                     <ActionSheetProvider>
                       <PreviewImageProvider>
-                        <PortalProvider>{children}</PortalProvider>
+                        <RootSiblingParent>
+                          <PortalProvider>{children}</PortalProvider>
+                        </RootSiblingParent>
                       </PreviewImageProvider>
                     </ActionSheetProvider>
                   </SheetProvider>
