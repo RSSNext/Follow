@@ -51,7 +51,7 @@ export const GridItemFooter = ({
 
   if (!entry) return null
   return (
-    <div className={cn("relative px-2 py-1 text-sm")}>
+    <div className={cn("relative px-2 text-sm")}>
       <div className="flex items-center">
         <div
           className={cn(

@@ -146,10 +146,9 @@ export const EntryItemWrapper: FC<
     <div data-entry-id={entry.entries.id} style={style}>
       <div
         className={cn(
-          "relative",
+          "group relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
           views[view as FeedViewType]?.wideMode ? "rounded-md" : "px-2",
-          "duration-200 hover:bg-theme-item-hover",
           (isActive || isContextMenuOpen) && "!bg-theme-item-active",
           itemClassName,
         )}
