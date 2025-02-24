@@ -14,7 +14,7 @@ import { getWebUrl } from "@/src/lib/env"
 import {
   HideNoMediaActionButton,
   HomeLeftAction,
-  HomeRightAction,
+  HomeSharedRightAction,
 } from "@/src/modules/screen/action"
 import { headerHideableBottomHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
@@ -43,9 +43,9 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
         headerRight={useMemo(() => {
           if (isTimeline)
             return () => (
-              <HomeRightAction>
+              <HomeSharedRightAction>
                 {view === FeedViewType.Pictures && <HideNoMediaActionButton />}
-              </HomeRightAction>
+              </HomeSharedRightAction>
             )
           if (isFeed)
             return () => (

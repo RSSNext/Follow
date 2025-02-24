@@ -33,7 +33,7 @@ export function HomeLeftAction() {
   )
 }
 
-export function HomeRightAction(props: PropsWithChildren) {
+export function HomeSharedRightAction(props: PropsWithChildren) {
   const insets = useActionPadding()
 
   return (
@@ -42,7 +42,6 @@ export function HomeRightAction(props: PropsWithChildren) {
       style={{ paddingRight: insets.paddingRight }}
     >
       {props.children}
-      <AddFeedButton />
     </View>
   )
 }
@@ -69,7 +68,7 @@ export function HideNoMediaActionButton({
     />
   )
 }
-const AddFeedButton = () => {
+export const AddFeedButton = () => {
   const [isOpen, setIsOpen] = useState(false)
   const label = useColor("label")
   const handleClose = () => setIsOpen(false)
