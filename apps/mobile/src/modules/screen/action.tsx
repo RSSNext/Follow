@@ -17,6 +17,7 @@ import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { AddFeedDialog } from "../dialogs/AddFeedDialog"
+import { MarkAllAsReadDialog } from "../dialogs/MarkAllAsReadDialog"
 
 const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
   return (
@@ -54,6 +55,9 @@ export function HomeSharedRightAction(props: PropsWithChildren) {
       <UIBarButton
         label="Mark All as Read"
         normalIcon={<CheckCircleCuteReIcon height={20} width={20} color={accentColor} />}
+        onPress={() => {
+          Dialog.show(MarkAllAsReadDialog)
+        }}
       />
     </ActionGroup>
   )
