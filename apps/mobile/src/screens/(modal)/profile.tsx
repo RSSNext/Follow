@@ -1,6 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
-import { Stack } from "expo-router"
+import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
 import {
   ActivityIndicator,
@@ -13,32 +13,26 @@ import {
   View,
 } from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { FeedIconRequiredFeed } from "@/src/components/ui/icon/feed-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import type { apiClient } from "@/src/lib/api-fetch"
 import { toast } from "@/src/lib/toast"
+import { useShareSubscription } from "@/src/modules/settings/hooks/useShareSubscription"
+import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
+import { ItemSeparator } from "@/src/modules/subscription/ItemSeparator"
 import type { FeedModel } from "@/src/store/feed/types"
 import type { ListModel } from "@/src/store/list/store"
 import { useWhoami } from "@/src/store/user/hooks"
 import { useColor } from "@/src/theme/colors"
 
-import { ItemSeparator } from "../../subscription/ItemSeparator"
-import { useSettingsNavigation } from "../hooks"
-import { useShareSubscription } from "../hooks/useShareSubscription"
-import { UserHeaderBanner } from "../UserHeaderBanner"
-
 type Subscription = Awaited<ReturnType<typeof apiClient.subscriptions.$get>>["data"][number]
-/**
- * @deprecated
- */
-export const ProfileScreen = () => {
+export default function ProfileScreen() {
   const scrollY = useSharedValue(0)
   const { data: subscriptions, isLoading, isError } = useShareSubscription()
 
@@ -57,7 +51,6 @@ export const ProfileScreen = () => {
   }, [isError])
 
   const insets = useSafeAreaInsets()
-  const settingNavigation = useSettingsNavigation()
 
   const textLabelColor = useColor("label")
   const openShareUrl = useCallback(() => {
@@ -68,46 +61,38 @@ export const ProfileScreen = () => {
     })
   }, [whoami?.id, whoami?.name])
 
+  const frame = useSafeAreaFrame()
+  const headerHeight = getDefaultHeaderHeight(frame, false, 0)
+
   return (
     <View className="bg-system-grouped-background flex-1">
       <ReAnimatedScrollView
         nestedScrollEnabled
         onScroll={scrollHandler}
-        contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+        contentContainerStyle={{ paddingBottom: insets.bottom, paddingTop: headerHeight }}
       >
         <UserHeaderBanner scrollY={scrollY} />
-
-        <Stack.Screen options={{ headerShown: false, animation: "fade" }} />
 
         {isLoading && <ActivityIndicator className="mt-24" size={28} />}
         {!isLoading && subscriptions && <SubscriptionList subscriptions={subscriptions.data} />}
       </ReAnimatedScrollView>
-      {/* Top transparent header buttons */}
-      <TouchableOpacity
-        onPress={() => settingNavigation.goBack()}
-        className="absolute left-4"
-        style={{ top: insets.top }}
-      >
-        <MingcuteLeftLineIcon color="#fff" />
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={openShareUrl}
-        className="absolute right-4"
-        style={{ top: insets.top }}
+      <View
+        style={{ height: headerHeight }}
+        className="absolute top-0 w-full flex-row items-center justify-between px-4"
       >
-        <Share3CuteReIcon color="#fff" />
-      </TouchableOpacity>
+        <View />
+        <TouchableOpacity onPress={openShareUrl}>
+          <Share3CuteReIcon color="#fff" />
+        </TouchableOpacity>
+      </View>
       {/* Header */}
       <Animated.View
         pointerEvents="none"
-        className="border-b-hairline border-opaque-separator absolute inset-x-0 top-0 flex-row items-center px-4 pb-2 pt-safe"
-        style={{ opacity: headerOpacity }}
+        className="border-b-hairline border-opaque-separator absolute inset-x-0 top-0 flex-row items-center px-4"
+        style={{ opacity: headerOpacity, height: headerHeight }}
       >
         <BlurEffect />
-        <TouchableOpacity onPress={() => settingNavigation.goBack()}>
-          <MingcuteLeftLineIcon color={textLabelColor} />
-        </TouchableOpacity>
 
         <Text className="text-label flex-1 text-center text-lg font-medium">
           {whoami?.name}'s Profile

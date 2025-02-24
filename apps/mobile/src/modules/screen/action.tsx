@@ -1,4 +1,5 @@
 import { cn } from "@follow/utils"
+import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { TouchableOpacity, View } from "react-native"
 
@@ -30,7 +31,7 @@ export function HomeLeftAction() {
   if (!user) return null
   return (
     <ActionGroup>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push("/profile")}>
         <UserAvatar image={user.image} name={user.name!} size={28} />
       </TouchableOpacity>
     </ActionGroup>

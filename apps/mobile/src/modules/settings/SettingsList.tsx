@@ -25,7 +25,6 @@ import { SafeLockFilledIcon } from "@/src/icons/safe_lock_filled"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
-import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
 import { UserSettingCuteFiIcon } from "@/src/icons/user_setting_cute_fi"
 import { signOut } from "@/src/lib/auth"
 
@@ -43,17 +42,17 @@ interface GroupNavigationLink {
   todo?: boolean
 }
 const UserGroupNavigationLinks: GroupNavigationLink[] = [
-  {
-    label: "Profile",
-    icon: User3CuteFiIcon,
-    onPress: (navigation, scrollRef) => {
-      scrollRef.current?.scrollTo({ y: 0, animated: true })
-      setTimeout(() => {
-        navigation.navigate("Profile")
-      }, 100)
-    },
-    iconBackgroundColor: "#4F46E5",
-  },
+  // {
+  //   label: "Profile",
+  //   icon: User3CuteFiIcon,
+  //   onPress: (navigation, scrollRef) => {
+  //     scrollRef.current?.scrollTo({ y: 0, animated: true })
+  //     setTimeout(() => {
+  //       navigation.navigate("Profile")
+  //     }, 100)
+  //   },
+  //   iconBackgroundColor: "#4F46E5",
+  // },
   {
     label: "Achievement",
     icon: TrophyCuteFiIcon,
