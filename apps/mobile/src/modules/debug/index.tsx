@@ -4,14 +4,10 @@ import { atomWithStorage } from "jotai/utils"
 import { useMemo } from "react"
 import { Dimensions } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated"
+import { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { JotaiPersistSyncStorage } from "@/src/lib/jotai"
 
@@ -67,7 +63,10 @@ export const DebugButton = () => {
 
   return (
     <GestureDetector gesture={gestureEvent}>
-      <Animated.View
+      <ReAnimatedTouchableOpacity
+        onPress={() => {
+          runOnJS(router.push)("/debug")
+        }}
         style={[
           {
             position: "absolute",
@@ -80,7 +79,7 @@ export const DebugButton = () => {
         className="absolute mt-5 flex size-8 items-center justify-center rounded-l-md bg-accent"
       >
         <BugCuteReIcon height={24} width={24} color="#fff" />
-      </Animated.View>
+      </ReAnimatedTouchableOpacity>
     </GestureDetector>
   )
 }
