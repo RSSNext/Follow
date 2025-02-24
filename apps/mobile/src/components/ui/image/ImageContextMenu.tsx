@@ -1,21 +1,32 @@
+import { FeedViewType } from "@follow/constants"
 import ImageEditor from "@react-native-community/image-editor"
 import { setImageAsync } from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
 import { saveToLibraryAsync } from "expo-media-library"
 import { shareAsync } from "expo-sharing"
-import type { FC, PropsWithChildren } from "react"
-import { Image } from "react-native"
+import type { PropsWithChildren } from "react"
+import { Image, Share } from "react-native"
 
 import { toast } from "@/src/lib/toast"
+import { useSelectedView } from "@/src/modules/screen/atoms"
+import { useIsEntryStarred } from "@/src/store/collection/hooks"
+import { collectionSyncService } from "@/src/store/collection/store"
+import { useEntry } from "@/src/store/entry/hooks"
 
 import { ContextMenu } from "../context-menu"
 
-export const ImageContextMenu: FC<
-  {
-    imageUrl?: string
-  } & PropsWithChildren
-> = ({ imageUrl, children }) => {
-  if (!imageUrl) {
+type ImageContextMenuProps = PropsWithChildren<{
+  imageUrl?: string
+  entryId: string
+}>
+
+export const ImageContextMenu = ({ imageUrl, entryId, children }: ImageContextMenuProps) => {
+  const entry = useEntry(entryId)
+  const feedId = entry?.feedId
+  const view = useSelectedView()
+  const isEntryStarred = useIsEntryStarred(entryId)
+
+  if (!imageUrl || !entry) {
     return children
   }
 
@@ -51,6 +62,32 @@ export const ImageContextMenu: FC<
     <ContextMenu.Root>
       <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
       <ContextMenu.Content>
+        {feedId && view !== undefined && (
+          <ContextMenu.Item
+            key="Star"
+            onSelect={() => {
+              if (isEntryStarred) {
+                collectionSyncService.unstarEntry(entryId)
+                toast.info("Unstarred")
+              } else {
+                collectionSyncService.starEntry({
+                  feedId,
+                  entryId,
+                  view,
+                })
+                toast.info("Starred")
+              }
+            }}
+          >
+            <ContextMenu.ItemIcon
+              ios={{
+                name: isEntryStarred ? "star.slash" : "star",
+              }}
+            />
+            <ContextMenu.ItemTitle>{isEntryStarred ? "Unstar" : "Star"}</ContextMenu.ItemTitle>
+          </ContextMenu.Item>
+        )}
+
         <ContextMenu.Item
           key="Copy"
           onSelect={async () => {
@@ -85,6 +122,15 @@ export const ImageContextMenu: FC<
         <ContextMenu.Item
           key="Share"
           onSelect={async () => {
+            if (view === FeedViewType.Videos) {
+              if (!entry.url) return
+              await Share.share({
+                message: [entry.title, entry.url].filter(Boolean).join("\n"),
+                url: entry.url,
+                title: entry.title || "Shared Video",
+              })
+              return
+            }
             const croppedImage = await getImageData()
             const { filePath, cleanup } = await createTempFile(croppedImage.base64)
             await shareAsync(filePath, {
