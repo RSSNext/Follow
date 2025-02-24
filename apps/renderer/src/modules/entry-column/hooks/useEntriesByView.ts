@@ -13,13 +13,7 @@ import { useFolderFeedsByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
 const anyString = [] as string[]
-export const useEntriesByView = ({
-  onReset,
-  isArchived,
-}: {
-  onReset?: () => void
-  isArchived?: boolean
-}) => {
+export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   const { feedId, isAllFeeds, view, isCollection, inboxId, listId } = useRouteParams()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -36,7 +30,6 @@ export const useEntriesByView = ({
       listId,
       view,
       ...(unreadOnly === true && { read: false }),
-      isArchived,
     }
 
     if (feedId && listId && isBizId(feedId)) {
@@ -44,7 +37,7 @@ export const useEntriesByView = ({
     }
 
     return params
-  }, [feedId, folderIds, inboxId, isArchived, listId, unreadOnly, view])
+  }, [feedId, folderIds, inboxId, listId, unreadOnly, view])
   const query = useEntries(entriesOptions)
 
   const [fetchedTime, setFetchedTime] = useState<number>()
@@ -111,15 +104,12 @@ export const useEntriesByView = ({
   const isFetchingFirstPage = query.isFetching && !query.isFetchingNextPage
 
   useEffect(() => {
-    if (isArchived) {
-      return
-    }
     if (!isFetchingFirstPage) {
       prevEntryIdsRef.current = entryIds
 
       onReset?.()
     }
-  }, [isFetchingFirstPage, isArchived])
+  }, [isFetchingFirstPage])
 
   const entryIdsAsDeps = entryIds.toString()
 
@@ -139,12 +129,8 @@ export const useEntriesByView = ({
 
   const sortEntries = useMemo(
     () =>
-      isCollection
-        ? sortEntriesIdByStarAt(entryIds)
-        : listId
-          ? sortEntriesIdByEntryInsertedAt(entryIds)
-          : sortEntriesIdByEntryPublishedAt(entryIds),
-    [entryIds, isCollection, listId],
+      isCollection ? sortEntriesIdByStarAt(entryIds) : sortEntriesIdByEntryPublishedAt(entryIds),
+    [entryIds, isCollection],
   )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
@@ -212,17 +198,6 @@ function sortEntriesIdByStarAt(entries: string[]) {
     if (!aStar || !bStar) return 0
     return bStar.localeCompare(aStar)
   })
-}
-
-function sortEntriesIdByEntryInsertedAt(entries: string[]) {
-  const entriesId2Map = entryActions.getFlattenMapEntries()
-  return entries
-    .slice()
-    .sort(
-      (a, b) =>
-        entriesId2Map[b]?.entries.insertedAt.localeCompare(entriesId2Map[a]?.entries.insertedAt!) ||
-        0,
-    )
 }
 
 const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {

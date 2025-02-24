@@ -2,15 +2,7 @@ import { cn } from "@follow/utils/utils"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 
-export const UnreadNumber = ({
-  unread,
-  className,
-  isList,
-}: {
-  unread: number
-  className?: string
-  isList?: boolean
-}) => {
+export const UnreadNumber = ({ unread, className }: { unread: number; className?: string }) => {
   const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
   if (!unread) return null
@@ -21,7 +13,7 @@ export const UnreadNumber = ({
         className,
       )}
     >
-      {isList || !showUnreadCount ? <i className="i-mgc-round-cute-fi text-[0.3rem]" /> : unread}
+      {!showUnreadCount ? <i className="i-mgc-round-cute-fi text-[0.3rem]" /> : unread}
     </div>
   )
 }

@@ -7,9 +7,9 @@ import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
+  ROUTE_FEED_IN_INBOX,
+  ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
-  ROUTE_TIMELINE_OF_INBOX,
-  ROUTE_TIMELINE_OF_LIST,
   ROUTE_TIMELINE_OF_VIEW,
 } from "~/constants"
 import { getListById } from "~/store/list"
@@ -38,8 +38,8 @@ export interface BizRouteParams {
 }
 
 const parseRouteParams = (params: Params<any>): BizRouteParams => {
-  const listId = params.timelineId?.startsWith(ROUTE_TIMELINE_OF_LIST)
-    ? params.timelineId.slice(ROUTE_TIMELINE_OF_LIST.length)
+  const listId = params.feedId?.startsWith(ROUTE_FEED_IN_LIST)
+    ? params.feedId.slice(ROUTE_FEED_IN_LIST.length)
     : undefined
   const list = listId ? getListById(listId) : undefined
 
@@ -59,8 +59,8 @@ const parseRouteParams = (params: Params<any>): BizRouteParams => {
     folderName: params.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
       ? params.feedId.slice(ROUTE_FEED_IN_FOLDER.length)
       : undefined,
-    inboxId: params.timelineId?.startsWith(ROUTE_TIMELINE_OF_INBOX)
-      ? params.timelineId.slice(ROUTE_TIMELINE_OF_INBOX.length)
+    inboxId: params.feedId?.startsWith(ROUTE_FEED_IN_INBOX)
+      ? params.feedId.slice(ROUTE_FEED_IN_INBOX.length)
       : undefined,
     listId,
     timelineId: params.timelineId,

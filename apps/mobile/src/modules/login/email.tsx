@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { router } from "expo-router"
 import { useContext, useEffect } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
@@ -34,9 +35,17 @@ async function onSubmit(values: FormValue) {
       email: values.email,
       password: values.password,
     })
+    .then((res) => {
+      if (res.error) {
+        throw new Error(res.error.message)
+      }
+      // @ts-expect-error
+      if (res.data.twoFactorRedirect) {
+        router.push("/2fa")
+      }
+    })
     .catch((error) => {
-      console.error(error)
-      toast.error("Login failed")
+      toast.error(`Failed to login: ${error.message}`)
     })
 }
 
@@ -82,7 +91,7 @@ export function EmailLogin() {
 
   const disableColor = useColor("gray3")
 
-  const canLogin = useSharedValue(0)
+  const canLogin = useSharedValue(1)
   useEffect(() => {
     canLogin.value = withTiming(submitMutation.isPending || !formState.isValid ? 1 : 0)
   }, [submitMutation.isPending, formState.isValid, canLogin])
@@ -139,7 +148,7 @@ export function EmailLogin() {
         {submitMutation.isPending ? (
           <ActivityIndicator className="text-white" />
         ) : (
-          <Text className="text-label text-center font-semibold">Continue</Text>
+          <Text className="text-center font-semibold text-white">Continue</Text>
         )}
       </ReAnimatedPressable>
     </View>

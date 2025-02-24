@@ -4,7 +4,7 @@ import { UserService } from "@/src/services/user"
 
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 
-export type UserModel = Omit<UserSchema, "isMe">
+export type UserModel = UserSchema
 type UserStore = {
   users: Record<string, UserModel>
   whoami: UserModel | null
@@ -40,6 +40,9 @@ class UserActions {
     immerSet((state) => {
       for (const user of users) {
         state.users[user.id] = user
+        if (user.isMe) {
+          state.whoami = user
+        }
       }
     })
   }
@@ -53,6 +56,17 @@ class UserActions {
         users.map((user) => ({ ...user, isMe: whoami?.id === user.id ? 1 : 0 })),
       ),
     )
+    await tx.run()
+  }
+
+  async removeCurrentUser() {
+    const tx = createTransaction()
+    tx.store(() => {
+      immerSet((state) => {
+        state.whoami = null
+      })
+    })
+    tx.persist(() => UserService.removeCurrentUser())
     await tx.run()
   }
 }

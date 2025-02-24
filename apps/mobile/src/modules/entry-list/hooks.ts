@@ -10,6 +10,7 @@ export function useOnViewableItemsChanged(
   idExtractor: (item: ViewToken) => string = defaultIdExtractor,
 ): (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void {
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
+  const markAsReadWhenRendering = useGeneralSettingKey("renderMarkUnread")
 
   const [stableIdExtractor] = useState(() => idExtractor)
 
@@ -23,7 +24,15 @@ export function useOnViewableItemsChanged(
             unreadSyncService.markEntryAsRead(stableIdExtractor(item))
           })
       }
+
+      if (markAsReadWhenRendering) {
+        viewableItems
+          .filter((item) => item.isViewable)
+          .forEach((item) => {
+            unreadSyncService.markEntryAsRead(stableIdExtractor(item))
+          })
+      }
     },
-    [markAsReadWhenScrolling, stableIdExtractor],
+    [markAsReadWhenRendering, markAsReadWhenScrolling, stableIdExtractor],
   )
 }

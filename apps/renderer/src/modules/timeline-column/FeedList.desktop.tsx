@@ -2,6 +2,7 @@ import { useDraggable } from "@dnd-kit/core"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { cn, isKeyForMultiSelectPressed } from "@follow/utils/utils"
 import { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import Selecto from "react-selecto"
 import { useEventListener } from "usehooks-ts"
 
@@ -15,19 +16,37 @@ import {
   useSelectedFeedIdsState,
 } from "./atom"
 import { DraggableContext } from "./context"
-import { EmptyFeedList, ListHeader, StarredItem, useFeedsGroupedData } from "./FeedList.shared"
+import {
+  EmptyFeedList,
+  ListHeader,
+  StarredItem,
+  useFeedsGroupedData,
+  useInboxesGroupedData,
+  useListsGroupedData,
+} from "./FeedList.shared"
 import { useShouldFreeUpSpace } from "./hook"
-import { SortableFeedList } from "./sort-by"
+import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 
 const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: number }>(
   ({ className, view }, ref) => {
     const feedsData = useFeedsGroupedData(view)
+    const listsData = useListsGroupedData(view)
+    const inboxesData = useInboxesGroupedData(view)
+
     const categoryOpenStateData = useCategoryOpenStateByView(view)
 
-    const hasData = Object.keys(feedsData).length > 0
+    const hasData =
+      Object.keys(feedsData).length > 0 ||
+      Object.keys(listsData).length > 0 ||
+      Object.keys(inboxesData).length > 0
+
+    const { t } = useTranslation()
 
     // Data prefetch
     useAuthQuery(Queries.lists.list())
+
+    const hasListData = Object.keys(listsData).length > 0
+    const hasInboxData = Object.keys(inboxesData).length > 0
 
     const scrollerRef = useRef<HTMLDivElement>(null)
     const selectoRef = useRef<Selecto>(null)
@@ -196,6 +215,32 @@ const FeedListImpl = forwardRef<HTMLDivElement, { className?: string; view: numb
           rootClassName={cn("h-full", shouldFreeUpSpace && "overflow-visible")}
         >
           <StarredItem view={view} />
+          {hasListData && (
+            <>
+              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+                {t("words.lists")}
+              </div>
+              <SortByAlphabeticalList view={view} data={listsData} />
+            </>
+          )}
+          {hasInboxData && (
+            <>
+              <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+                {t("words.inbox")}
+              </div>
+              <SortByAlphabeticalInbox view={view} data={inboxesData} />
+            </>
+          )}
+          {(hasListData || hasInboxData) && (
+            <div
+              className={cn(
+                "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+                Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+              )}
+            >
+              {t("words.feeds")}
+            </div>
+          )}
           <DraggableContext.Provider value={draggableContextValue}>
             <div className="space-y-px" id="feeds-area" ref={setNodeRef}>
               {hasData ? (

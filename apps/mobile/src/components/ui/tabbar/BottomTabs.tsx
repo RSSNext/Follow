@@ -2,7 +2,7 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs"
 import { Tabs } from "expo-router"
 import type { ForwardRefExoticComponent } from "react"
 import { forwardRef, useMemo, useRef, useState } from "react"
-import type { FlatList, ScrollView } from "react-native"
+import type { ScrollView } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 
 import { BottomTabHeightProvider } from "./BottomTabHeightProvider"
@@ -15,6 +15,7 @@ import {
   BottomTabBarVisibleContext,
   SetBottomTabBarVisibleContext,
 } from "./contexts/BottomTabBarVisibleContext"
+import { useNavigationScrollToTop } from "./hooks"
 import { Tabbar } from "./Tabbar"
 
 type ExtractReactForwardRefExoticComponent<T> =
@@ -29,6 +30,7 @@ export const BottomTabs: ForwardRefExoticComponent<
     useState<React.RefObject<ScrollView> | null>(null)
 
   const currentTarget = useRef<string | undefined>(undefined)
+  const scrollToTop = useNavigationScrollToTop(attachNavigationScrollViewRef)
   return (
     <AttachNavigationScrollViewContext.Provider value={attachNavigationScrollViewRef}>
       <SetAttachNavigationScrollViewContext.Provider value={setAttachNavigationScrollViewRef}>
@@ -47,24 +49,7 @@ export const BottomTabs: ForwardRefExoticComponent<
                       }
 
                       if (currentTarget.current === e.target) {
-                        const $scroller = attachNavigationScrollViewRef?.current as any
-
-                        if ("scrollTo" in $scroller) {
-                          ;($scroller as ScrollView).scrollTo({
-                            y: 0,
-                            animated: true,
-                          })
-                        } else if ("scrollToIndex" in $scroller) {
-                          ;($scroller as FlatList<any>).scrollToIndex({
-                            index: 0,
-                            animated: true,
-                          })
-                        } else if ("scrollToOffset" in $scroller) {
-                          ;($scroller as FlatList<any>).scrollToOffset({
-                            offset: 0,
-                            animated: true,
-                          })
-                        }
+                        scrollToTop()
                         return
                       }
 

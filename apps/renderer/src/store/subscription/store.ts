@@ -196,14 +196,13 @@ class SubscriptionActions {
           state.listIds.add(subscription.listId)
         } else if (subscription.inboxId) {
           state.inboxIds.add(subscription.inboxId)
-        } else {
-          state.feedIdByView[subscription.view].push(subscription.feedId)
         }
         state.data[subscription.feedId] = omit(subscription, [
           "feeds",
           "lists",
           "inboxes",
         ]) as SubscriptionFlatModel
+        state.feedIdByView[subscription.view].push(subscription.feedId)
       })
     })
   }

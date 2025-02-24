@@ -1,10 +1,15 @@
 import { FeedViewType } from "@follow/constants"
+import type { FlashList } from "@shopify/flash-list"
+import type { RefObject } from "react"
+import { useContext, useEffect, useRef } from "react"
+import type { ScrollView } from "react-native"
 
-import { useScrollToTopRef } from "@/src/atoms/scroll-to-top"
+import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
 import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentGrid"
 
 import { EntryListContentArticle } from "./EntryListContentArticle"
 import { EntryListContentSocial } from "./EntryListContentSocial"
+import { EntryListContextViewContext } from "./EntryListContext"
 
 export function EntryListSelector({
   entryIds,
@@ -15,7 +20,15 @@ export function EntryListSelector({
   viewId: FeedViewType
   active?: boolean
 }) {
-  const ref = useScrollToTopRef(active)
+  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
+
+  const ref = useRef<FlashList<any>>(null)
+  useEffect(() => {
+    if (!active) return
+    if (setAttachNavigationScrollViewRef) {
+      setAttachNavigationScrollViewRef(ref as unknown as RefObject<ScrollView>)
+    }
+  }, [setAttachNavigationScrollViewRef, ref, active])
 
   let ContentComponent: typeof EntryListContentSocial | typeof EntryListContentGrid =
     EntryListContentArticle
@@ -35,5 +48,9 @@ export function EntryListSelector({
     }
   }
 
-  return <ContentComponent ref={ref} entryIds={entryIds} />
+  return (
+    <EntryListContextViewContext.Provider value={viewId}>
+      <ContentComponent ref={ref} entryIds={entryIds} />
+    </EntryListContextViewContext.Provider>
+  )
 }

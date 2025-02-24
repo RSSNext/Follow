@@ -30,6 +30,7 @@ export function TimelineViewSelector() {
     <View className="flex items-center justify-between py-2">
       <ScrollView
         horizontal
+        scrollsToTop={false}
         contentContainerClassName="flex-row gap-3 items-center px-3"
         showsHorizontalScrollIndicator={false}
       >

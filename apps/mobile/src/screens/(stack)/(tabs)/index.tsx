@@ -7,5 +7,6 @@ export default function Index() {
   useEffect(() => {
     prepareEntryRenderWebView()
   }, [])
+
   return <EntryList />
 }
