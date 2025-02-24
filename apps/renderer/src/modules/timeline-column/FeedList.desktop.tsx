@@ -8,7 +8,12 @@ import { useEventListener } from "usehooks-ts"
 
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
-import { useCategoryOpenStateByView } from "~/store/subscription"
+import {
+  useCategoryOpenStateByView,
+  useFeedsGroupedData,
+  useInboxesGroupedData,
+  useListsGroupedData,
+} from "~/store/subscription"
 
 import {
   resetSelectedFeedIds,
@@ -16,14 +21,7 @@ import {
   useSelectedFeedIdsState,
 } from "./atom"
 import { DraggableContext } from "./context"
-import {
-  EmptyFeedList,
-  ListHeader,
-  StarredItem,
-  useFeedsGroupedData,
-  useInboxesGroupedData,
-  useListsGroupedData,
-} from "./FeedList.shared"
+import { EmptyFeedList, ListHeader, StarredItem } from "./FeedList.shared"
 import { useShouldFreeUpSpace } from "./hook"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 

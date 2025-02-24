@@ -39,7 +39,7 @@ const ViewSwitchButton: FC<{
   isActive: boolean
   setActive: () => void
 }> = ({ view, isActive, setActive }) => {
-  const unreadByView = useUnreadByView()
+  const unreadByView = useUnreadByView(view)
   const { t } = useTranslation()
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
   const item = views.find((item) => item.view === view)!
@@ -74,13 +74,13 @@ const ViewSwitchButton: FC<{
       {item.icon}
       {showSidebarUnreadCount ? (
         <div className="text-[0.625rem] font-medium leading-none">
-          {unreadByView[view]! > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[view]}
+          {unreadByView > 99 ? <span className="-mr-0.5">99+</span> : unreadByView}
         </div>
       ) : (
         <i
           className={cn(
             "i-mgc-round-cute-fi text-[0.25rem]",
-            unreadByView[view] ? (isActive ? "opacity-100" : "opacity-60") : "opacity-0",
+            unreadByView ? (isActive ? "opacity-100" : "opacity-60") : "opacity-0",
           )}
         />
       )}

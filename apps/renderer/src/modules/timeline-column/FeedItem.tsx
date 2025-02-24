@@ -29,6 +29,7 @@ import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
+import { useUnreadByListId } from "~/store/unread/hooks"
 
 import { useSelectedFeedIdsState } from "./atom"
 import { DraggableContext } from "./context"
@@ -241,7 +242,7 @@ const ListItemImpl: Component<{
   const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
   const items = useListActions({ listId, view })
 
-  const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
+  const listUnread = useUnreadByListId(listId)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
   const subscription = useSubscriptionByFeedId(listId)!
