@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg from "react-native-svg"
+import Svg, { Circle } from "react-native-svg"
 
 interface RoundCuteFiIconProps {
   width?: number
@@ -7,6 +7,14 @@ interface RoundCuteFiIconProps {
   color?: string
 }
 
-export const RoundCuteFiIcon = ({ width = 24, height = 24 }: RoundCuteFiIconProps) => {
-  return <Svg width={width} height={height} fill="none" viewBox="0 0 24 24" />
+export const RoundCuteFiIcon = ({
+  width = 24,
+  height = 24,
+  color = "#10161F",
+}: RoundCuteFiIconProps) => {
+  return (
+    <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
+      <Circle cx={12} cy={12} r={10} fill={color} />
+    </Svg>
+  )
 }

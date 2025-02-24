@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import Svg, { Circle, Path } from "react-native-svg"
 
 interface Loading3CuteLiIconProps {
   width?: number
@@ -14,6 +14,7 @@ export const Loading3CuteLiIcon = ({
 }: Loading3CuteLiIconProps) => {
   return (
     <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
+      <Circle cx={12} cy={12} r={9} stroke={color} strokeWidth={1.5} opacity={0.1} />
       <Path
         stroke={color}
         strokeLinecap="round"
