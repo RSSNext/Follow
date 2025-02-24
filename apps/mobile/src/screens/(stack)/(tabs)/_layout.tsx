@@ -1,4 +1,4 @@
-import { router, Tabs } from "expo-router"
+import { router, Stack, Tabs } from "expo-router"
 import { Easing, Pressable, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
@@ -21,84 +21,93 @@ const fifthTap = Gesture.Tap()
 
 export default function TabLayout() {
   return (
-    <BottomTabs
-      screenOptions={{
-        animation: "fade",
-        transitionSpec: {
-          animation: "timing",
-          config: {
-            duration: 50,
-            easing: Easing.ease,
-          },
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
+    <>
+      {/* Set navigation screen title */}
+      <Stack.Screen
         options={{
-          title: "Home",
-          headerShown: false,
-          tabBarLabel: "Timeline",
-          tabBarIcon: ({ color, focused }) => {
-            const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
-            return <Icon color={color} width={24} height={24} />
-          },
-          tabBarButton(props) {
-            return <Pressable {...props} />
-          },
+          title: "Follow",
         }}
       />
-      <Tabs.Screen
-        name="subscriptions"
-        options={{
-          title: "Subscriptions",
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => {
-            const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
-            return <Icon color={color} width={24} height={24} />
+      <BottomTabs
+        screenOptions={{
+          title: "Follow",
+          animation: "fade",
+          transitionSpec: {
+            animation: "timing",
+            config: {
+              duration: 50,
+              easing: Easing.ease,
+            },
           },
-          tabBarLabel: "Subscriptions",
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Home",
+            headerShown: false,
+            tabBarLabel: "Timeline",
+            tabBarIcon: ({ color, focused }) => {
+              const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
+              return <Icon color={color} width={24} height={24} />
+            },
+            tabBarButton(props) {
+              return <Pressable {...props} />
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="subscriptions"
+          options={{
+            title: "Subscriptions",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => {
+              const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
+              return <Icon color={color} width={24} height={24} />
+            },
+            tabBarLabel: "Subscriptions",
 
-          tabBarButton(props) {
-            return <Pressable {...props} />
-          },
-        }}
-      />
-      <Tabs.Screen
-        name="discover"
-        options={{
-          title: "Discover",
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => {
-            const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
-            return <Icon color={color} width={24} height={24} />
-          },
-          tabBarButton(props) {
-            return <Pressable {...props} />
-          },
-        }}
-      />
+            tabBarButton(props) {
+              return <Pressable {...props} />
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="discover"
+          options={{
+            title: "Discover",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => {
+              const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
+              return <Icon color={color} width={24} height={24} />
+            },
+            tabBarButton(props) {
+              return <Pressable {...props} />
+            },
+          }}
+        />
 
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: "Settings",
-          headerShown: false,
-          tabBarButton(props) {
-            return (
-              <GestureDetector gesture={fifthTap}>
-                <View className="flex-1">
-                  <Pressable {...props} />
-                </View>
-              </GestureDetector>
-            )
-          },
-          tabBarIcon: ({ color, focused }) => {
-            const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
-            return <Icon color={color} width={24} height={24} />
-          },
-        }}
-      />
-    </BottomTabs>
+        <Tabs.Screen
+          name="settings"
+          options={{
+            title: "Settings",
+            headerShown: false,
+            tabBarButton(props) {
+              return (
+                <GestureDetector gesture={fifthTap}>
+                  <View className="flex-1">
+                    <Pressable {...props} />
+                  </View>
+                </GestureDetector>
+              )
+            },
+            tabBarIcon: ({ color, focused }) => {
+              const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
+              return <Icon color={color} width={24} height={24} />
+            },
+          }}
+        />
+      </BottomTabs>
+    </>
   )
 }

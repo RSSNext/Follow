@@ -41,16 +41,12 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
           [isTimeline],
         )}
         headerRight={useMemo(() => {
-          if (isTimeline)
-            return () => (
-              <HomeSharedRightAction>
-                {view === FeedViewType.Pictures && <HideNoMediaActionButton />}
-              </HomeSharedRightAction>
-            )
+          const extraActions = <>{view === FeedViewType.Pictures && <HideNoMediaActionButton />}</>
+          if (isTimeline) return () => <HomeSharedRightAction>{extraActions}</HomeSharedRightAction>
           if (isFeed)
             return () => (
               <View className="-mr-2 flex-row gap-2">
-                <HideNoMediaActionButton variant="secondary" />
+                {extraActions}
                 <FeedShareAction params={params} />
               </View>
             )

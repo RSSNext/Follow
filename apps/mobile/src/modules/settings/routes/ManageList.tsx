@@ -35,6 +35,7 @@ import type { SettingsStackParamList } from "../types"
 const ManageListContext = createContext<{
   nextSelectedFeedIdRef: MutableRefObject<Set<string>>
 }>(null!)
+
 export const ManageListScreen = ({
   route,
 }: {

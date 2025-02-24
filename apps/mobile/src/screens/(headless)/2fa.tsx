@@ -58,6 +58,7 @@ export default function TwoFactorAuthScreen() {
           <NavigationBlurEffectHeader
             headerShown
             headerTitle=""
+            title="2FA"
             headerLeft={() => {
               return (
                 <TouchableOpacity onPress={() => router.back()}>

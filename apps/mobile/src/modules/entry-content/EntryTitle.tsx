@@ -46,6 +46,7 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
     <>
       <NavigationBlurEffectHeader
         headerShown
+        title={title}
         headerRight={useCallback(
           () => (
             <EntryContentContext.Provider value={ctxValue}>
@@ -119,6 +120,7 @@ export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
   return (
     <>
       <NavigationBlurEffectHeader
+        title="Post"
         headerShown
         headerRight={useCallback(
           () => (

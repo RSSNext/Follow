@@ -27,6 +27,7 @@ export function Login() {
   const [isChecked, setIsChecked] = useState(false)
 
   const termsCheckBoxRef = useRef<{ shake: () => void }>(null)
+
   return (
     <LoginTermsCheckedContext.Provider value={isChecked}>
       <LoginTermsCheckGuardContext.Provider

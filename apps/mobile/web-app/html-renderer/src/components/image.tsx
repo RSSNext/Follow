@@ -34,7 +34,7 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
         height: image?.height,
         max: {
           width: w,
-          height: window.innerHeight,
+          height: Infinity,
         },
       }),
     [image?.width, image?.height, w],
