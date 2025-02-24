@@ -48,6 +48,9 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
         width: scaleWidth || undefined,
         height: scaleHeight || undefined,
       }}
+      data-image-height={image?.height}
+      data-image-width={image?.width}
+      data-container-width={w}
       onClick={() => {
         const $image = imageRef.current
         if (!$image) return

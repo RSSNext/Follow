@@ -34,7 +34,6 @@ interface MenuItem {
   onPress: () => Promise<void> | void
   textClassName?: string
 }
-
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
 
