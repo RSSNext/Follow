@@ -2984,164 +2984,6 @@ declare const subscriptionsRelations: drizzle_orm.Relations<"subscriptions", {
     rsshubUsage: drizzle_orm.One<"rsshub_usage", true>;
 }>;
 
-declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
-    name: "timeline";
-    schema: undefined;
-    columns: {
-        userId: drizzle_orm_pg_core.PgColumn<{
-            name: "user_id";
-            tableName: "timeline";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        feedId: drizzle_orm_pg_core.PgColumn<{
-            name: "feedId";
-            tableName: "timeline";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        entryId: drizzle_orm_pg_core.PgColumn<{
-            name: "entry_id";
-            tableName: "timeline";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        publishedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "published_at";
-            tableName: "timeline";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        insertedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "inserted_at";
-            tableName: "timeline";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        view: drizzle_orm_pg_core.PgColumn<{
-            name: "view";
-            tableName: "timeline";
-            dataType: "number";
-            columnType: "PgSmallInt";
-            data: number;
-            driverParam: string | number;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        read: drizzle_orm_pg_core.PgColumn<{
-            name: "read";
-            tableName: "timeline";
-            dataType: "boolean";
-            columnType: "PgBoolean";
-            data: boolean;
-            driverParam: boolean;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
-}>;
-declare const timelineOpenAPISchema: zod.ZodObject<{
-    userId: zod.ZodString;
-    feedId: zod.ZodString;
-    entryId: zod.ZodString;
-    publishedAt: zod.ZodString;
-    insertedAt: zod.ZodString;
-    view: zod.ZodNumber;
-    read: zod.ZodNullable<zod.ZodBoolean>;
-}, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    userId: string;
-    view: number;
-    feedId: string;
-    insertedAt: string;
-    publishedAt: string;
-    entryId: string;
-    read: boolean | null;
-}, {
-    userId: string;
-    view: number;
-    feedId: string;
-    insertedAt: string;
-    publishedAt: string;
-    entryId: string;
-    read: boolean | null;
-}>;
-declare const timelineRelations: drizzle_orm.Relations<"timeline", {
-    entries: drizzle_orm.One<"entries", true>;
-    feeds: drizzle_orm.One<"feeds", true>;
-    collections: drizzle_orm.One<"collections", true>;
-    subscriptions: drizzle_orm.One<"subscriptions", true>;
-}>;
-
 declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "inboxes_entries";
     schema: undefined;
@@ -4561,6 +4403,7 @@ declare const listsRelations: drizzle_orm.Relations<"lists", {
     owner: drizzle_orm.One<"user", true>;
     listsSubscriptions: drizzle_orm.Many<"lists_subscriptions">;
 }>;
+type ListModel = InferInsertModel<typeof lists>;
 
 declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "lists_subscriptions";
@@ -4634,23 +4477,6 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        lastViewedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "last_viewed_at";
-            tableName: "lists_subscriptions";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
         createdAt: drizzle_orm_pg_core.PgColumn<{
             name: "created_at";
             tableName: "lists_subscriptions";
@@ -4693,7 +4519,6 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     listId: zod.ZodString;
     view: zod.ZodNumber;
     title: zod.ZodNullable<zod.ZodString>;
-    lastViewedAt: zod.ZodNullable<zod.ZodString>;
     createdAt: zod.ZodString;
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
@@ -4703,7 +4528,6 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     view: number;
     isPrivate: boolean;
     listId: string;
-    lastViewedAt: string | null;
 }, {
     createdAt: string;
     userId: string;
@@ -4711,107 +4535,10 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     view: number;
     isPrivate: boolean;
     listId: string;
-    lastViewedAt: string | null;
 }>;
 declare const listsSubscriptionsRelations: drizzle_orm.Relations<"lists_subscriptions", {
     users: drizzle_orm.One<"user", true>;
     lists: drizzle_orm.One<"lists", true>;
-}>;
-
-declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
-    name: "lists_timeline";
-    schema: undefined;
-    columns: {
-        listId: drizzle_orm_pg_core.PgColumn<{
-            name: "list_id";
-            tableName: "lists_timeline";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        feedId: drizzle_orm_pg_core.PgColumn<{
-            name: "feedId";
-            tableName: "lists_timeline";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        entryId: drizzle_orm_pg_core.PgColumn<{
-            name: "entry_id";
-            tableName: "lists_timeline";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        insertedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "inserted_at";
-            tableName: "lists_timeline";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
-}>;
-declare const listsTimelineOpenAPISchema: zod.ZodObject<{
-    listId: zod.ZodString;
-    feedId: zod.ZodString;
-    entryId: zod.ZodString;
-    insertedAt: zod.ZodString;
-}, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    feedId: string;
-    insertedAt: string;
-    entryId: string;
-    listId: string;
-}, {
-    feedId: string;
-    insertedAt: string;
-    entryId: string;
-    listId: string;
-}>;
-declare const listsTimelineRelations: drizzle_orm.Relations<"lists_timeline", {
-    entries: drizzle_orm.One<"entries", true>;
-    feeds: drizzle_orm.One<"feeds", true>;
 }>;
 
 declare const messaging: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -5238,6 +4965,210 @@ declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
         }, {}, {}>;
     };
     dialect: "pg";
+}>;
+
+declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "timeline";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feedId";
+            tableName: "timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        entryId: drizzle_orm_pg_core.PgColumn<{
+            name: "entry_id";
+            tableName: "timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        publishedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "published_at";
+            tableName: "timeline";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        insertedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "inserted_at";
+            tableName: "timeline";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "timeline";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        read: drizzle_orm_pg_core.PgColumn<{
+            name: "read";
+            tableName: "timeline";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        from: drizzle_orm_pg_core.PgColumn<{
+            name: "from";
+            tableName: "timeline";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "from";
+                tableName: "timeline";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            baseBuilder: drizzle_orm_pg_core.PgColumnBuilder<{
+                name: "from";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                enumValues: [string, ...string[]];
+                driverParam: string;
+            }, {}, {}, drizzle_orm.ColumnBuilderExtraConfig>;
+            size: undefined;
+        }>;
+    };
+    dialect: "pg";
+}>;
+declare const timelineOpenAPISchema: zod.ZodObject<{
+    userId: zod.ZodString;
+    feedId: zod.ZodString;
+    entryId: zod.ZodString;
+    publishedAt: zod.ZodString;
+    insertedAt: zod.ZodString;
+    view: zod.ZodNumber;
+    read: zod.ZodNullable<zod.ZodBoolean>;
+    from: zod.ZodNullable<zod.ZodArray<zod.ZodString, "many">>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    userId: string;
+    view: number;
+    from: string[] | null;
+    feedId: string;
+    insertedAt: string;
+    publishedAt: string;
+    entryId: string;
+    read: boolean | null;
+}, {
+    userId: string;
+    view: number;
+    from: string[] | null;
+    feedId: string;
+    insertedAt: string;
+    publishedAt: string;
+    entryId: string;
+    read: boolean | null;
+}>;
+declare const timelineRelations: drizzle_orm.Relations<"timeline", {
+    entries: drizzle_orm.One<"entries", true>;
+    feeds: drizzle_orm.One<"feeds", true>;
+    collections: drizzle_orm.One<"collections", true>;
+    subscriptions: drizzle_orm.One<"subscriptions", true>;
 }>;
 
 declare const user: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -14313,7 +14244,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -14323,7 +14253,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     } | undefined;
                     list?: {
@@ -14355,7 +14284,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
                                 id: string;
@@ -14365,7 +14293,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
@@ -14377,7 +14304,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                     } | undefined;
                     docs?: string | undefined;
@@ -14520,7 +14446,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     read: boolean | null;
@@ -14615,7 +14540,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                 } | undefined;
@@ -14775,7 +14699,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -14785,7 +14708,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     read: boolean | null;
@@ -14880,7 +14802,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -14890,7 +14811,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                 } | undefined;
@@ -15027,7 +14947,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -15037,7 +14956,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
@@ -15114,7 +15032,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -15124,7 +15041,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     subscriptionCount: number;
@@ -15453,7 +15369,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -15463,7 +15378,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     };
                     feedId: string;
@@ -15517,7 +15431,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
                                 id: string;
@@ -15527,7 +15440,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
@@ -15539,11 +15451,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     listId: string;
-                    lastViewedAt: string | null;
                     category?: string | undefined;
                 } | {
                     createdAt: string;
@@ -15569,7 +15479,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     inboxId: string;
@@ -15877,7 +15786,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -15887,7 +15795,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     } | null | undefined;
                 }[];
@@ -16076,7 +15983,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
                                 id: string;
@@ -16086,7 +15992,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         };
                         language: string | null;
@@ -16150,7 +16055,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             } | null | undefined;
                             tipUsers?: {
                                 id: string;
@@ -16160,7 +16064,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                                 handle: string | null;
                                 createdAt: string;
                                 updatedAt: string;
-                                isAnonymous: boolean | null;
                             }[] | null | undefined;
                         }[] | undefined;
                         ownerUserId?: string | null | undefined;
@@ -16172,7 +16075,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                     };
                     subscriptionCount: number;
@@ -16184,7 +16086,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         view: number;
                         isPrivate: boolean;
                         listId: string;
-                        lastViewedAt: string | null;
                     } | undefined;
                 };
             };
@@ -16235,7 +16136,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -16245,7 +16145,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     }[] | undefined;
                     ownerUserId?: string | null | undefined;
@@ -16257,7 +16156,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
-                        isAnonymous: boolean | null;
                     } | null | undefined;
                 };
             };
@@ -16335,7 +16233,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         } | null | undefined;
                         tipUsers?: {
                             id: string;
@@ -16345,7 +16242,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             handle: string | null;
                             createdAt: string;
                             updatedAt: string;
-                            isAnonymous: boolean | null;
                         }[] | null | undefined;
                     }[] | undefined;
                     ownerUserId?: string | null | undefined;
@@ -16357,7 +16253,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
-                        isAnonymous: boolean | null;
                     } | null | undefined;
                     subscriptionCount?: number | undefined;
                     purchaseAmount?: number | undefined;
@@ -16400,7 +16295,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
-                        isAnonymous: boolean | null;
                     } | null | undefined;
                     tipUsers?: {
                         id: string;
@@ -16410,7 +16304,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
-                        isAnonymous: boolean | null;
                     }[] | null | undefined;
                 }[];
             };
@@ -16534,7 +16427,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
-                        isAnonymous: boolean | null;
                     } | null | undefined;
                 };
             };
@@ -16669,7 +16561,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         handle: string | null;
                         createdAt: string;
                         updatedAt: string;
-                        isAnonymous: boolean | null;
                     } | null | undefined;
                 }[];
             };
@@ -16983,4 +16874,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
 }, "/rsshub">, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, type UrlReadsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, twoFactor, urlReads, urlReadsOpenAPISchema, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AirdropActivity, type AppType, type AttachmentsModel, type AuthSession, type AuthUser, CommonEntryFields, type ConditionItem, type DetailModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type ListModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, type UrlReadsModel, account, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, activityEnum, airdrops, airdropsOpenAPISchema, attachmentsZodSchema, authPlugins, boosts, collections, collectionsOpenAPISchema, collectionsRelations, detailModelSchema, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, rsshub, rsshubOpenAPISchema, rsshubPurchase, rsshubUsage, rsshubUsageOpenAPISchema, rsshubUsageRelations, session, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, twoFactor, urlReads, urlReadsOpenAPISchema, user, users, usersOpenApiSchema, usersRelations, verification, wallets, walletsOpenAPISchema, walletsRelations };

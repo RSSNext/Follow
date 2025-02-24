@@ -129,12 +129,8 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
 
   const sortEntries = useMemo(
     () =>
-      isCollection
-        ? sortEntriesIdByStarAt(entryIds)
-        : listId
-          ? sortEntriesIdByEntryInsertedAt(entryIds)
-          : sortEntriesIdByEntryPublishedAt(entryIds),
-    [entryIds, isCollection, listId],
+      isCollection ? sortEntriesIdByStarAt(entryIds) : sortEntriesIdByEntryPublishedAt(entryIds),
+    [entryIds, isCollection],
   )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
@@ -202,17 +198,6 @@ function sortEntriesIdByStarAt(entries: string[]) {
     if (!aStar || !bStar) return 0
     return bStar.localeCompare(aStar)
   })
-}
-
-function sortEntriesIdByEntryInsertedAt(entries: string[]) {
-  const entriesId2Map = entryActions.getFlattenMapEntries()
-  return entries
-    .slice()
-    .sort(
-      (a, b) =>
-        entriesId2Map[b]?.entries.insertedAt.localeCompare(entriesId2Map[a]?.entries.insertedAt!) ||
-        0,
-    )
 }
 
 const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {

@@ -58,7 +58,7 @@ export const useCategoriesByView = (view: FeedViewType) =>
       (state) =>
         new Set(
           subscriptionByViewSelector(view)(state)
-            .map((subscription) => subscription!.category)
+            .map((subscription) => subscription?.category)
             .filter((category) => category !== null && category !== undefined)
             .filter(Boolean),
         ),
