@@ -16,14 +16,14 @@ import { ContextMenu } from "../context-menu"
 
 type ImageContextMenuProps = PropsWithChildren<{
   imageUrl?: string
-  entryId: string
+  entryId?: string
 }>
 
 export const ImageContextMenu = ({ imageUrl, entryId, children }: ImageContextMenuProps) => {
-  const entry = useEntry(entryId)
+  const entry = useEntry(entryId!)
   const feedId = entry?.feedId
   const view = useSelectedView()
-  const isEntryStarred = useIsEntryStarred(entryId)
+  const isEntryStarred = useIsEntryStarred(entryId!)
 
   if (!imageUrl || !entry) {
     return children
@@ -61,7 +61,7 @@ export const ImageContextMenu = ({ imageUrl, entryId, children }: ImageContextMe
     <ContextMenu.Root>
       <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
       <ContextMenu.Content>
-        {feedId && view !== undefined && (
+        {entryId && feedId && view !== undefined && (
           <ContextMenu.Item
             key="Star"
             onSelect={() => {
