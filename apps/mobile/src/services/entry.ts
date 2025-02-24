@@ -1,5 +1,6 @@
 import { eq, inArray, or } from "drizzle-orm"
 
+import { getGeneralSettings } from "../atoms/settings/general"
 import { db } from "../database"
 import { entriesTable } from "../database/schemas"
 import type { EntrySchema } from "../database/schemas/types"
@@ -52,7 +53,11 @@ class EntryServiceStatic implements Hydratable, Resetable {
 
   async hydrate() {
     const entries = await db.query.entriesTable.findMany()
-    entryActions.upsertManyInSession(entries.map((e) => dbStoreMorph.toEntryModel(e)))
+    const { unreadOnly } = getGeneralSettings()
+    entryActions.upsertManyInSession(
+      entries.map((e) => dbStoreMorph.toEntryModel(e)),
+      { unreadOnly },
+    )
   }
 }
 
