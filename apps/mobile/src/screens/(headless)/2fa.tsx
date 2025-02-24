@@ -1,27 +1,28 @@
 import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
-import { useMemo, useState } from "react"
+import { useMemo, useRef } from "react"
 import {
   Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   useAnimatedValue,
   View,
 } from "react-native"
-import { KeyboardAvoidingView, KeyboardController } from "react-native-keyboard-controller"
+import { KeyboardController } from "react-native-keyboard-controller"
+import type { OtpInputRef } from "react-native-otp-entry"
+import { OtpInput } from "react-native-otp-entry"
 import { useColor } from "react-native-uikit-colors"
 
 import {
   NavigationBlurEffectHeader,
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
-import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { twoFactor } from "@/src/lib/auth"
 import { queryClient } from "@/src/lib/query-client"
 import { toast } from "@/src/lib/toast"
 import { whoamiQueryKey } from "@/src/store/user/hooks"
+import { accentColor } from "@/src/theme/colors"
 
 function isAuthCodeValid(authCode: string) {
   return (
@@ -32,7 +33,8 @@ function isAuthCodeValid(authCode: string) {
 export default function TwoFactorAuthScreen() {
   const scrollY = useAnimatedValue(0)
   const label = useColor("label")
-  const [authCode, setAuthCode] = useState("")
+
+  const otpInputRef = useRef<OtpInputRef>(null)
 
   const submitMutation = useMutation({
     mutationFn: async (value: string) => {
@@ -43,8 +45,8 @@ export default function TwoFactorAuthScreen() {
       await queryClient.invalidateQueries({ queryKey: whoamiQueryKey })
     },
     onError(error) {
+      otpInputRef.current?.clear()
       toast.error(`Failed to verify: ${error.message}`)
-      setAuthCode("")
     },
     onSuccess() {
       router.replace("/")
@@ -54,59 +56,49 @@ export default function TwoFactorAuthScreen() {
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <View className="flex-1 p-safe">
-        <KeyboardAvoidingView behavior={"padding"} className="flex-1">
-          <NavigationBlurEffectHeader
-            headerShown
-            headerTitle=""
-            title="2FA"
-            headerLeft={() => {
-              return (
-                <TouchableOpacity onPress={() => router.back()}>
-                  <MingcuteLeftLineIcon color={label} />
-                </TouchableOpacity>
-              )
-            }}
-          />
-          <TouchableWithoutFeedback
-            onPress={() => {
-              KeyboardController.dismiss()
-            }}
-            accessible={false}
-          >
-            <View className="mt-20 flex-1 pb-10">
-              <View className="flex-row items-center justify-center">
-                <Text className="text-label w-72 text-center text-3xl font-bold" numberOfLines={2}>
-                  Verify with your authenticator app
-                </Text>
-              </View>
-
-              <View className="mx-5 mt-10">
-                <Text className="text-label">Enter Follow Auth Code</Text>
-                <View className="bg-secondary-system-background mt-2 rounded-lg p-4">
-                  <TextInput
-                    placeholder="6-digit authentication code"
-                    autoComplete="one-time-code"
-                    keyboardType="numeric"
-                    className="text-text"
-                    value={authCode}
-                    onChangeText={setAuthCode}
-                  />
-                </View>
-              </View>
-
-              <View className="flex-1" />
-
-              <SubmitButton
-                title="Submit"
-                disabled={submitMutation.isPending || !isAuthCodeValid(authCode)}
-                isLoading={submitMutation.isPending}
-                onPress={() => {
-                  submitMutation.mutate(authCode)
-                }}
-              />
+        <NavigationBlurEffectHeader
+          headerShown
+          headerTitle=""
+          title="2FA"
+          headerLeft={() => {
+            return (
+              <TouchableOpacity onPress={() => router.back()}>
+                <MingcuteLeftLineIcon color={label} />
+              </TouchableOpacity>
+            )
+          }}
+        />
+        <TouchableWithoutFeedback
+          onPress={() => {
+            KeyboardController.dismiss()
+          }}
+          accessible={false}
+        >
+          <View className="mt-20 flex-1 pb-10">
+            <View className="mb-10 flex-row items-center justify-center">
+              <Text className="text-label w-72 text-center text-3xl font-bold" numberOfLines={2}>
+                Verify with your authenticator app
+              </Text>
             </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+
+            <OtpInput
+              disabled={submitMutation.isPending}
+              ref={otpInputRef}
+              numberOfDigits={6}
+              autoFocus
+              focusColor={accentColor}
+              theme={{
+                containerStyle: { paddingHorizontal: 20 },
+                pinCodeTextStyle: { color: label },
+              }}
+              onFilled={(code) => {
+                if (isAuthCodeValid(code)) {
+                  submitMutation.mutate(code)
+                }
+              }}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </NavigationContext.Provider>
   )
