@@ -26,22 +26,20 @@ export const AddFeedDialog: DialogComponent<{
 
   return (
     <View>
-      <View className="px-6 py-4">
-        <View className="flex-row items-center gap-2">
-          <LinkCuteReIcon color={label} height={20} width={20} />
-          <Text className="text-label text-base font-medium">Enter Feed URL or RSSHub URL</Text>
-        </View>
-        <TextInput
-          onChangeText={(text) => (ctx.url = text)}
-          autoFocus
-          enterKeyHint="done"
-          cursorColor={accentColor}
-          selectionColor={accentColor}
-          onSubmitEditing={handleAdd}
-          className="bg-system-background dark:bg-secondary-system-fill/30 text-text my-3 rounded-xl"
-          placeholder="https:// or rsshub://"
-        />
+      <View className="flex-row items-center gap-2">
+        <LinkCuteReIcon color={label} height={20} width={20} />
+        <Text className="text-label text-base font-medium">Enter Feed URL or RSSHub URL</Text>
       </View>
+      <TextInput
+        onChangeText={(text) => (ctx.url = text)}
+        autoFocus
+        enterKeyHint="done"
+        cursorColor={accentColor}
+        selectionColor={accentColor}
+        onSubmitEditing={handleAdd}
+        className="bg-system-background dark:bg-secondary-system-fill/30 text-text my-3 rounded-xl"
+        placeholder="https:// or rsshub://"
+      />
     </View>
   )
 }
