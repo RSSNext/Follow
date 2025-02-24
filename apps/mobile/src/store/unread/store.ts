@@ -39,6 +39,11 @@ class UnreadSyncService {
 
     const subscriptionIds = getSubscriptionByView(view)
     await unreadActions.upsertMany(subscriptionIds.map((id) => ({ subscriptionId: id, count: 0 })))
+    entryActions.markEntryReadStatusInSession({ feedIds: subscriptionIds, read: true })
+    await EntryService.patchMany({
+      feedIds: subscriptionIds,
+      entry: { read: true },
+    })
   }
 
   async markFeedAsRead(feedId: string | string[]) {
