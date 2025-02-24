@@ -142,10 +142,7 @@ export const useEntries = ({
 
   return useAuthInfiniteQuery(entries.entries({ feedId, inboxId, listId, view, read }), {
     enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
-    getNextPageParam: (lastPage) =>
-      listId
-        ? lastPage.data?.at(-1)?.entries.insertedAt
-        : lastPage.data?.at(-1)?.entries.publishedAt,
+    getNextPageParam: (lastPage) => lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

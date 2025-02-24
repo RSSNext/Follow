@@ -6,7 +6,6 @@ import { createContext, useContext, useEffect, useMemo, useRef } from "react"
 import type { ScrollView, ScrollViewProps } from "react-native"
 import {
   Animated as RNAnimated,
-  Pressable,
   StyleSheet,
   TouchableOpacity,
   useAnimatedValue,
@@ -21,7 +20,7 @@ import {
   AttachNavigationScrollViewContext,
   SetAttachNavigationScrollViewContext,
 } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
-import { useBottomTabBarHeight, useNavigationScrollToTop } from "@/src/components/ui/tabbar/hooks"
+import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { useDefaultHeaderHeight } from "@/src/hooks/useDefaultHeaderHeight"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 
@@ -147,7 +146,6 @@ export const NavigationBlurEffectHeader = ({
 
   const hideableBottom = headerHideableBottom?.()
   const { headerLeft, ...rest } = props
-  const scrollToTop = useNavigationScrollToTop()
 
   return (
     <Stack.Screen
@@ -176,8 +174,6 @@ export const NavigationBlurEffectHeader = ({
                   <View pointerEvents="box-none" style={[StyleSheet.absoluteFill]}>
                     {options.headerBackground?.()}
                   </View>
-
-                  <Pressable className="absolute inset-x-0 top-0 h-28" onPress={scrollToTop} />
 
                   <Header title={options.title ?? ""} {...options} headerBackground={() => null} />
 
