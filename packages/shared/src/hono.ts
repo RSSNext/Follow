@@ -11662,6 +11662,10 @@ declare const auth: {
         };
         advanced: {
             generateId: false;
+            defaultCookieAttributes: {
+                sameSite: "none";
+                secure: true;
+            };
         };
         session: {
             updateAge: number;

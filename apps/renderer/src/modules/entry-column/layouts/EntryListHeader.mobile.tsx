@@ -27,7 +27,6 @@ import type { EntryListHeaderProps } from "./EntryListHeader.shared"
 import {
   AppendTaildingDivider,
   DailyReportButton,
-  FilterNoImageButton,
   SwitchToMasonryButton,
 } from "./EntryListHeader.shared"
 import { TimelineTabs } from "./TimelineTabs"
@@ -95,7 +94,6 @@ export const EntryListHeader: FC<EntryListHeaderProps> = ({ refetch, isRefreshin
           <AppendTaildingDivider>
             {view === FeedViewType.SocialMedia && <DailyReportButton />}
             {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
-            {view === FeedViewType.Pictures && <FilterNoImageButton />}
           </AppendTaildingDivider>
 
           {isOnline &&

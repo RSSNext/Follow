@@ -24,7 +24,6 @@ import { MarkAllReadWithOverlay } from "../components/mark-all-button"
 import {
   AppendTaildingDivider,
   DailyReportButton,
-  FilterNoImageButton,
   SwitchToMasonryButton,
   WideModeButton,
 } from "./EntryListHeader.shared"
@@ -94,7 +93,6 @@ export const EntryListHeader: FC<{
             {!views[view]!.wideMode && <WideModeButton />}
             {view === FeedViewType.SocialMedia && <DailyReportButton />}
             {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
-            {view === FeedViewType.Pictures && <FilterNoImageButton />}
           </AppendTaildingDivider>
 
           {isOnline &&

@@ -50,25 +50,6 @@ export const DailyReportButton: FC = () => {
   )
 }
 
-export const FilterNoImageButton = () => {
-  const enabled = useUISettingKey("pictureViewFilterNoImage")
-  const { t } = useTranslation()
-
-  return (
-    <ActionButton
-      active={enabled}
-      onClick={() => {
-        setUISetting("pictureViewFilterNoImage", !enabled)
-      }}
-      tooltip={t(
-        enabled ? "entry_list_header.show_all_items" : "entry_list_header.hide_no_image_items",
-      )}
-    >
-      <i className={!enabled ? "i-mgc-photo-album-cute-re" : "i-mgc-photo-album-cute-fi"} />
-    </ActionButton>
-  )
-}
-
 export const SwitchToMasonryButton = () => {
   const isMasonry = useUISettingKey("pictureViewMasonry")
   const { t } = useTranslation()
