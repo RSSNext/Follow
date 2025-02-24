@@ -1,5 +1,7 @@
 import { FeedViewType } from "@follow/constants"
+import { transformVideoUrl } from "@follow/utils"
 import { uniqBy } from "es-toolkit/compat"
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useMemo } from "react"
 import { ScrollView, Text, View } from "react-native"
@@ -7,20 +9,17 @@ import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
-import {
-  EntryContentWebView,
-  setWebViewEntry,
-} from "@/src/components/native/webview/EntryContentWebView"
+import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { openLink } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
+import { VideoContextMenu } from "../../context-menu/video"
 import { useEntryListContextView } from "../EntryListContext"
 
 export function EntryGridItem({ id }: { id: string }) {
@@ -45,32 +44,27 @@ export function EntryGridItem({ id }: { id: string }) {
     )
   }
 
-  const WrapperComponent = view === FeedViewType.Videos ? ItemPressable : View
+  if (view === FeedViewType.Pictures) {
+    return (
+      <View className="m-1 overflow-hidden rounded-md">
+        <MediaItems media={item.media} title={item.title || ""} view={view} entryId={id} />
+      </View>
+    )
+  }
 
   return (
-    <WrapperComponent
-      className="m-1 overflow-hidden rounded-md"
-      onPress={() => {
-        if (!item.url) {
-          return
-        }
-        if (view === FeedViewType.Videos) {
-          openLink(item.url)
-        }
-      }}
-    >
-      <MediaItems
-        media={item.media}
-        title={item.title || ""}
-        view={view!}
-        entryId={id}
-        onPreview={() => {
-          if (item) {
-            setWebViewEntry(item)
-          }
+    <VideoContextMenu entryId={id}>
+      <ItemPressable
+        className="m-1 overflow-hidden rounded-md"
+        onPress={() => {
+          if (!item.url) return
+          const formattedUrl = transformVideoUrl({ url: item.url }) || item.url
+          openLink(formattedUrl)
         }}
-      />
-    </WrapperComponent>
+      >
+        <MediaItems media={item.media} title={item.title || ""} view={view} entryId={id} />
+      </ItemPressable>
+    </VideoContextMenu>
   )
 }
 
@@ -84,7 +78,7 @@ const MediaItems = ({
   media: MediaModel[]
   view: FeedViewType
   entryId: string
-  onPreview: () => void
+  onPreview?: () => void
   title: string
 }) => {
   const firstMedia = media[0]
@@ -108,7 +102,15 @@ const MediaItems = ({
       <View>
         <View className="flex-1" style={{ aspectRatio }}>
           {mediaUrl && (
-            <PreviewImage imageUrl={mediaUrl} aspectRatio={aspectRatio} onPreview={onPreview} />
+            <Image
+              transition={500}
+              source={{ uri: mediaUrl }}
+              placeholder={{ blurhas: firstMedia.blurhash }}
+              className="w-full"
+              style={{ aspectRatio }}
+              placeholderContentFit="cover"
+              recyclingKey={mediaUrl}
+            />
           )}
         </View>
         <Text className="text-label p-2 font-medium" numberOfLines={2}>
@@ -120,6 +122,7 @@ const MediaItems = ({
 
   return (
     <MediaCarousel
+      entryId={entryId}
       media={uniqMedia}
       onPreview={onPreview}
       aspectRatio={aspectRatio}
