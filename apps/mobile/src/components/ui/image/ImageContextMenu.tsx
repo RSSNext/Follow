@@ -1,11 +1,10 @@
-import { FeedViewType } from "@follow/constants"
 import ImageEditor from "@react-native-community/image-editor"
 import { setImageAsync } from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
 import { saveToLibraryAsync } from "expo-media-library"
 import { shareAsync } from "expo-sharing"
 import type { PropsWithChildren } from "react"
-import { Image, Share } from "react-native"
+import { Image } from "react-native"
 
 import { toast } from "@/src/lib/toast"
 import { useSelectedView } from "@/src/modules/screen/atoms"
@@ -122,15 +121,6 @@ export const ImageContextMenu = ({ imageUrl, entryId, children }: ImageContextMe
         <ContextMenu.Item
           key="Share"
           onSelect={async () => {
-            if (view === FeedViewType.Videos) {
-              if (!entry.url) return
-              await Share.share({
-                message: [entry.title, entry.url].filter(Boolean).join("\n"),
-                url: entry.url,
-                title: entry.title || "Shared Video",
-              })
-              return
-            }
             const croppedImage = await getImageData()
             const { filePath, cleanup } = await createTempFile(croppedImage.base64)
             await shareAsync(filePath, {
