@@ -1,1 +1,1 @@
-export { FeedList } from "./FeedList.mobile"
+export { FeedList } from "./FeedList.desktop"
