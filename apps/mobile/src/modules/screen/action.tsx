@@ -49,6 +49,7 @@ export function HomeSharedRightAction(props: PropsWithChildren) {
           setGeneralSetting("unreadOnly", !unreadOnly)
         }}
         selected={unreadOnly}
+        noOverlay
       />
       <UIBarButton
         label="Mark All as Read"
