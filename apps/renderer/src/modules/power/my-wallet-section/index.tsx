@@ -11,6 +11,7 @@ import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { CopyButton } from "~/components/ui/button/CopyButton"
 import { apiClient } from "~/lib/api-fetch"
 import { getBlockchainExplorerUrl } from "~/lib/utils"
@@ -30,6 +31,7 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
   const wallet = useWallet()
   const myWallet = wallet.data?.[0]
 
+  const serverConfigs = useServerConfigs()
   const rewardDescriptionModal = useRewardDescriptionModal()
 
   const refreshMutation = useMutation({
@@ -133,35 +135,39 @@ export const MyWalletSection = ({ className }: { className?: string }) => {
           <WithdrawButton />
         </div>
       </div>
-      <Divider className="my-8" />
-      <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
-      <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
-      <div className="my-1 text-sm">
-        <Trans
-          i18nKey="wallet.power.rewardDescription2"
-          ns="settings"
-          values={{ blockchainName: "VSL" }}
-          components={{
-            Balance: (
-              <Balance withSuffix value={BigInt(myWallet.todayDailyPower || 0n)}>
-                {BigInt(myWallet.todayDailyPower || 0n)}
-              </Balance>
-            ),
-            Link: <Button onClick={rewardDescriptionModal} variant="text" />,
-          }}
-        />
-      </div>
-      <div className="my-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="space-y-1">
-            <Level level={myWallet.level?.level || 0} />
-            <ActivityPoints points={myWallet.level?.prevActivityPoints || 0} />
+      {!!serverConfigs?.DAILY_POWER_SUPPLY && (
+        <>
+          <Divider className="my-8" />
+          <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
+          <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
+          <div className="my-1 text-sm">
+            <Trans
+              i18nKey="wallet.power.rewardDescription2"
+              ns="settings"
+              values={{ blockchainName: "VSL" }}
+              components={{
+                Balance: (
+                  <Balance withSuffix value={BigInt(myWallet.todayDailyPower || 0n)}>
+                    {BigInt(myWallet.todayDailyPower || 0n)}
+                  </Balance>
+                ),
+                Link: <Button onClick={rewardDescriptionModal} variant="text" />,
+              }}
+            />
           </div>
-          <i className="i-mgc-right-cute-li text-3xl" />
-          <Balance withSuffix>{BigInt(myWallet.todayDailyPower || 0n)}</Balance>
-        </div>
-        <ClaimDailyReward />
-      </div>
+          <div className="my-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="space-y-1">
+                <Level level={myWallet.level?.level || 0} />
+                <ActivityPoints points={myWallet.level?.prevActivityPoints || 0} />
+              </div>
+              <i className="i-mgc-right-cute-li text-3xl" />
+              <Balance withSuffix>{BigInt(myWallet.todayDailyPower || 0n)}</Balance>
+            </div>
+            <ClaimDailyReward />
+          </div>
+        </>
+      )}
     </div>
   )
 }
