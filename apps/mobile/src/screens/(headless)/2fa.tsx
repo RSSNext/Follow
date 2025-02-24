@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import {
-  ActivityIndicator,
   Text,
   TextInput,
   TouchableOpacity,
@@ -17,6 +16,7 @@ import {
   NavigationBlurEffectHeader,
   NavigationContext,
 } from "@/src/components/common/SafeNavigationScrollView"
+import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { twoFactor } from "@/src/lib/auth"
 import { queryClient } from "@/src/lib/query-client"
@@ -96,19 +96,14 @@ export default function TwoFactorAuthScreen() {
 
               <View className="flex-1" />
 
-              <TouchableOpacity
-                className="disabled:bg-gray-3 mx-5 rounded-lg bg-accent py-3"
+              <SubmitButton
+                title="Submit"
                 disabled={submitMutation.isPending || !isAuthCodeValid(authCode)}
+                isLoading={submitMutation.isPending}
                 onPress={() => {
                   submitMutation.mutate(authCode)
                 }}
-              >
-                {submitMutation.isPending ? (
-                  <ActivityIndicator className="text-white" />
-                ) : (
-                  <Text className="text-center font-semibold text-white">Submit</Text>
-                )}
-              </TouchableOpacity>
+              />
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

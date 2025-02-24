@@ -1,26 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { ActivityIndicator, Text, TextInput, View } from "react-native"
+import { Text, TextInput, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
-import {
-  interpolate,
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated"
 import { z } from "zod"
 
-import { ReAnimatedPressable } from "@/src/components/common/AnimatedComponents"
+import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { LoginTermsCheckGuardContext } from "@/src/contexts/LoginTermsContext"
 import { signIn } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
-import { accentColor, useColor } from "@/src/theme/colors"
+import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -89,17 +82,6 @@ export function EmailLogin() {
     termsCheckGuard?.(() => submitMutation.mutate(values))
   })
 
-  const disableColor = useColor("gray3")
-
-  const canLogin = useSharedValue(1)
-  useEffect(() => {
-    canLogin.value = withTiming(submitMutation.isPending || !formState.isValid ? 1 : 0)
-  }, [submitMutation.isPending, formState.isValid, canLogin])
-  const buttonStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(canLogin.value, [0, 1], [1, 0.5]),
-    backgroundColor: interpolateColor(canLogin.value, [1, 0], [disableColor, accentColor]),
-  }))
-
   return (
     <View className="mx-auto flex w-full max-w-sm gap-6">
       <View className="gap-4">
@@ -139,18 +121,13 @@ export function EmailLogin() {
           />
         </View>
       </View>
-      <ReAnimatedPressable
+      <SubmitButton
         disabled={submitMutation.isPending || !formState.isValid}
+        isLoading={submitMutation.isPending}
         onPress={login}
-        className="mt-8 h-10 flex-row items-center justify-center rounded-3xl"
-        style={buttonStyle}
-      >
-        {submitMutation.isPending ? (
-          <ActivityIndicator className="text-white" />
-        ) : (
-          <Text className="text-center font-semibold text-white">Continue</Text>
-        )}
-      </ReAnimatedPressable>
+        title="Continue"
+        className="mt-8"
+      />
     </View>
   )
 }
