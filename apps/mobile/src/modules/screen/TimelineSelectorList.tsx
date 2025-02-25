@@ -29,8 +29,6 @@ export const TimelineSelectorList = forwardRef<
   const { refetch: unreadRefetch } = usePrefetchUnread()
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
-  const insets = useSafeAreaInsets()
-
   const headerHeight = useHeaderHeight()
   const { scrollY } = useContext(NavigationContext)!
 
@@ -52,6 +50,8 @@ export const TimelineSelectorList = forwardRef<
 
   return (
     <FlashList
+      automaticallyAdjustsScrollIndicatorInsets={false}
+      automaticallyAdjustContentInsets={false}
       ref={listRef}
       refreshControl={
         <RefreshControl
@@ -67,8 +67,8 @@ export const TimelineSelectorList = forwardRef<
         />
       }
       scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
+        top: headerHeight,
+        bottom: tabBarHeight,
       }}
       contentContainerStyle={{
         paddingTop: headerHeight,

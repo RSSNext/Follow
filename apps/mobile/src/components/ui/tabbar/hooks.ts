@@ -26,6 +26,7 @@ export const useNavigationScrollToTop = (
       ;($scroller as FlatList<any>).scrollToIndex({
         index: 0,
         animated: true,
+        viewOffset: 112,
       })
     } else if ("scrollToOffset" in $scroller) {
       ;($scroller as FlatList<any>).scrollToOffset({

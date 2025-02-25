@@ -1,8 +1,9 @@
 import { Header, useHeaderHeight } from "@react-navigation/elements"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { router, Stack, useNavigation } from "expo-router"
+import { hide } from "expo-router/build/utils/splash"
 import type { FC, PropsWithChildren } from "react"
-import { createContext, useContext, useEffect, useMemo, useRef } from "react"
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
 import type { ScrollView, ScrollViewProps } from "react-native"
 import {
   Animated as RNAnimated,
@@ -11,7 +12,12 @@ import {
   useAnimatedValue,
   View,
 } from "react-native"
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, {
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
@@ -108,8 +114,17 @@ export const NavigationBlurEffectHeader = ({
 
   const lastScrollY = useRef(0)
 
-  const largeDefaultHeaderHeightRef = useRef(originalDefaultHeaderHeight)
+  const largeDefaultHeaderHeightRef = useRef(0)
   const largeHeaderHeight = useSharedValue(originalDefaultHeaderHeight)
+  const [hideableBottomRef, setHideableBottomRef] = useState<View | undefined>()
+
+  useEffect(() => {
+    hideableBottomRef?.measure((x, y, width, height) => {
+      const largeHeight = height + originalDefaultHeaderHeight
+      largeDefaultHeaderHeightRef.current = largeHeight
+      largeHeaderHeight.value = largeHeight
+    })
+  }, [hideableBottomRef, largeHeaderHeight, originalDefaultHeaderHeight])
 
   useEffect(() => {
     const id = scrollY.addListener(({ value }) => {
@@ -117,6 +132,7 @@ export const NavigationBlurEffectHeader = ({
       if (!headerHideableBottom) {
         return
       }
+
       const largeDefaultHeaderHeight = largeDefaultHeaderHeightRef.current
 
       if (value <= 100) {
@@ -175,18 +191,19 @@ export const NavigationBlurEffectHeader = ({
           ? ({ options }) => {
               return (
                 <Animated.View style={{ height: largeHeaderHeight }} className="overflow-hidden">
-                  <View pointerEvents="box-none" style={[StyleSheet.absoluteFill]}>
+                  <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
                     {options.headerBackground?.()}
                   </View>
 
                   <Header title={options.title ?? ""} {...options} headerBackground={() => null} />
                   {hideableBottom && (
                     <View
+                      ref={setHideableBottomRef as any}
                       onLayout={(e) => {
                         const { height } = e.nativeEvent.layout
 
                         largeDefaultHeaderHeightRef.current = height + originalDefaultHeaderHeight
-                        largeHeaderHeight.value = withTiming(largeDefaultHeaderHeightRef.current)
+                        largeHeaderHeight.value = largeDefaultHeaderHeightRef.current
                       }}
                     >
                       {hideableBottom}
