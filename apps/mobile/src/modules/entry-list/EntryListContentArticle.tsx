@@ -31,7 +31,7 @@ export const EntryListContentArticle = forwardRef<
     [isFetching],
   )
 
-  const onViewableItemsChanged = useOnViewableItemsChanged()
+  const onViewableItemsChanged = useOnViewableItemsChanged({ isLoading: isRefetching })
 
   return (
     <TimelineSelectorList

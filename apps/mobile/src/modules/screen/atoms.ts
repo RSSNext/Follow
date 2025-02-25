@@ -173,12 +173,6 @@ export function useSelectedFeed() {
 
   const selectedTimeline = useAtomValue(selectedTimelineAtom)
   const selectedFeed = useAtomValue(selectedFeedAtom)
-
-  const payload = getFetchEntryPayload(
-    entryListContext.type === "feed" ? selectedFeed : selectedTimeline,
-  )
-  usePrefetchEntries(payload)
-
   return entryListContext.type === "feed" ? selectedFeed : selectedTimeline
 }
 

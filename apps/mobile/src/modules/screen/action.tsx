@@ -3,6 +3,7 @@ import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { TouchableOpacity, View } from "react-native"
 
+import { setGeneralSetting, useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { setUISetting, useUISettingKey } from "@/src/atoms/settings/ui"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
@@ -10,6 +11,8 @@ import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { PhotoAlbumCuteFiIcon } from "@/src/icons/photo_album_cute_fi"
 import { PhotoAlbumCuteReIcon } from "@/src/icons/photo_album_cute_re"
+import { RoundCuteFiIcon } from "@/src/icons/round_cute_fi"
+import { RoundCuteReIcon } from "@/src/icons/round_cute_re"
 import { Dialog } from "@/src/lib/dialog"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
@@ -36,9 +39,20 @@ export function HomeLeftAction() {
 }
 
 export function HomeSharedRightAction(props: PropsWithChildren) {
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
   return (
     <ActionGroup className="-mr-2">
       {props.children}
+      <UIBarButton
+        label={unreadOnly ? "Show All" : "Show Unread Only"}
+        normalIcon={<RoundCuteReIcon height={20} width={20} color={accentColor} />}
+        selectedIcon={<RoundCuteFiIcon height={20} width={20} color={accentColor} />}
+        onPress={() => {
+          setGeneralSetting("unreadOnly", !unreadOnly)
+        }}
+        selected={unreadOnly}
+        noOverlay
+      />
       <UIBarButton
         label="Mark All as Read"
         normalIcon={<CheckCircleCuteReIcon height={20} width={20} color={accentColor} />}

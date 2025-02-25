@@ -6,9 +6,13 @@ import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 const defaultIdExtractor = (item: ViewToken) => item.key
-export function useOnViewableItemsChanged(
-  idExtractor: (item: ViewToken) => string = defaultIdExtractor,
-): (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void {
+export function useOnViewableItemsChanged({
+  idExtractor = defaultIdExtractor,
+  isLoading,
+}: {
+  isLoading?: boolean
+  idExtractor?: (item: ViewToken) => string
+} = {}): (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void {
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
   const markAsReadWhenRendering = useGeneralSettingKey("renderMarkUnread")
 
@@ -16,6 +20,8 @@ export function useOnViewableItemsChanged(
 
   return useCallback(
     ({ viewableItems, changed }) => {
+      if (isLoading) return
+
       debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
       if (markAsReadWhenScrolling) {
         changed
@@ -33,6 +39,6 @@ export function useOnViewableItemsChanged(
           })
       }
     },
-    [markAsReadWhenRendering, markAsReadWhenScrolling, stableIdExtractor],
+    [markAsReadWhenRendering, markAsReadWhenScrolling, stableIdExtractor, isLoading],
   )
 }

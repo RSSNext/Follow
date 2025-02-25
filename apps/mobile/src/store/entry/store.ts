@@ -124,15 +124,18 @@ class EntryActions {
     }
   }
 
-  upsertManyInSession(entries: EntryModel[]) {
+  upsertManyInSession(entries: EntryModel[], options?: { unreadOnly?: boolean }) {
     if (entries.length === 0) return
+    const { unreadOnly } = options ?? {}
 
     immerSet((draft) => {
       for (const entry of entries) {
         draft.entryIdSet.add(entry.id)
         draft.data[entry.id] = entry
 
-        const { feedId, inboxHandle } = entry
+        const { feedId, inboxHandle, read } = entry
+        if (unreadOnly && read) continue
+
         this.addEntryIdToFeed({
           draft,
           feedId,
