@@ -151,6 +151,13 @@ export const appRoute = {
   cleanBetterAuthSessionCookie: t.procedure.action(async () => {
     cleanBetterAuthSessionCookie()
     cleanUser()
+
+    const mainWindow = getMainWindow()
+    const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
+    await mainWindow?.webContents.session.cookies.remove(
+      apiURL,
+      "__Secure-better-auth.session_token",
+    )
   }),
   /// clipboard
 
