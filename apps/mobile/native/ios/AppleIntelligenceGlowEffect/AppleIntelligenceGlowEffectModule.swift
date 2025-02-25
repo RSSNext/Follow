@@ -15,6 +15,7 @@ public class AppleIntelligenceGlowEffectModule: Module {
   public func definition() -> ModuleDefinition {
     Name("AppleIntelligenceGlowEffect")
 
+     
     Function("show") {
       DispatchQueue.main.async { [weak self] in
         guard let rootVC = Utils.getRootVC() else { return }
@@ -61,29 +62,5 @@ public class AppleIntelligenceGlowEffectModule: Module {
         }
       }
     }
-  }
-}
-
-final class AppleIntelligenceGlowEffectView: UIViewControllerRepresentable {
-  func makeUIViewController(context: Context) -> UIViewController {
-    let viewController = UIViewController()
-    let hostingController = UIHostingController(rootView: GlowEffect())
-
-    viewController.addChild(hostingController)
-    viewController.view.addSubview(hostingController.view)
-    hostingController.didMove(toParent: viewController)
-
-    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      hostingController.view.topAnchor.constraint(equalTo: viewController.view.topAnchor),
-      hostingController.view.bottomAnchor.constraint(equalTo: viewController.view.bottomAnchor),
-      hostingController.view.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor),
-      hostingController.view.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor),
-    ])
-
-    return viewController
-  }
-  func updateUIViewController(_ viewController: UIViewController, context: Context) {
-
   }
 }
