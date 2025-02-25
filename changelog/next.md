@@ -5,3 +5,5 @@
 ## Improvements
 
 ## Bug Fixes
+
+- The app is stuck after closing the dialog
