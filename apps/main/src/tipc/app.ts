@@ -5,8 +5,10 @@ import { fileURLToPath } from "node:url"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
+import { env } from "@follow/shared/env"
 import { app, BrowserWindow, clipboard, dialog, shell } from "electron"
 
+import { BETTER_AUTH_COOKIE_NAME_SESSION_TOKEN } from "~/constants/app"
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
 import { store, StoreKey } from "~/lib/store"
@@ -151,6 +153,12 @@ export const appRoute = {
   cleanBetterAuthSessionCookie: t.procedure.action(async () => {
     cleanBetterAuthSessionCookie()
     cleanUser()
+
+    const mainWindow = getMainWindow()
+    await mainWindow?.webContents.session.cookies.remove(
+      env.VITE_API_URL,
+      BETTER_AUTH_COOKIE_NAME_SESSION_TOKEN,
+    )
   }),
   /// clipboard
 
