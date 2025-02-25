@@ -9,6 +9,7 @@ import * as React from "react"
 import { useRef, useState } from "react"
 import {
   Alert,
+  findNodeHandle,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -127,6 +128,13 @@ export default function DebugPanel() {
             requireNativeModule("AppleIntelligenceGlowEffect").hide()
           },
         },
+
+        {
+          title: "Testing Native Scroll To Top",
+          onPress: async () => {
+            await requireNativeModule("Helper").scrollToTop(findNodeHandle(ref.current))
+          },
+        },
       ],
     },
 
@@ -141,8 +149,10 @@ export default function DebugPanel() {
     },
   ]
 
+  const ref = useRef<ScrollView>(null)
+
   return (
-    <ScrollView className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
+    <ScrollView ref={ref} className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
       {menuSections.map((section) => (
         <View key={section.title}>
           <Text className="mt-4 px-8 text-2xl font-medium text-white">{section.title}</Text>

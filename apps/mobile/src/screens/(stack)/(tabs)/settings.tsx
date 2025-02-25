@@ -14,7 +14,10 @@ import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
 import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarBackgroundContext"
 import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
+import {
+  useBottomTabBarHeight,
+  useRegisterNavigationScrollView,
+} from "@/src/components/ui/tabbar/hooks"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -67,10 +70,10 @@ function Settings() {
     [opacity],
   )
   const [contentSize, setContentSize] = useState({ height: 0, width: 0 })
-
+  const registerNavigationScrollView = useRegisterNavigationScrollView()
   useEffect(() => {
     if (!isFocused) return
-    const scrollView = scrollRef.current
+    const scrollView = registerNavigationScrollView.current
 
     if (contentSize.height === 0) return
 
@@ -82,7 +85,7 @@ function Settings() {
         })
       }
     }
-  }, [opacity, isFocused, calculateOpacity, contentSize.height])
+  }, [opacity, isFocused, calculateOpacity, contentSize.height, registerNavigationScrollView])
 
   const animatedScrollY = useSharedValue(0)
   const handleScroll = useEventCallback(
@@ -93,20 +96,12 @@ function Settings() {
     },
   )
 
-  const scrollRef = useRef<ScrollView>(null)
-
-  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
   return (
     <>
       <ReAnimatedScrollView
         scrollEventThrottle={16}
         onScroll={handleScroll}
-        ref={scrollRef}
-        onLayout={() => {
-          if (setAttachNavigationScrollViewRef) {
-            setAttachNavigationScrollViewRef(scrollRef)
-          }
-        }}
+        ref={registerNavigationScrollView}
         onContentSizeChange={(w, h) => {
           setContentSize({ height: h, width: w })
         }}
@@ -116,7 +111,7 @@ function Settings() {
       >
         <UserHeaderBanner scrollY={animatedScrollY} />
 
-        <SettingsList scrollRef={scrollRef} />
+        <SettingsList scrollRef={registerNavigationScrollView} />
       </ReAnimatedScrollView>
       <SettingHeader scrollY={animatedScrollY} />
     </>

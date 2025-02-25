@@ -46,6 +46,7 @@ export const TimelineSelectorList = forwardRef<
   const systemFill = useColor("secondaryLabel")
 
   const listRef = useRef<FlashList<any>>(null)
+
   useImperativeHandle(ref, () => listRef.current!)
 
   return (

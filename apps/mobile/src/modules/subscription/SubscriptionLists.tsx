@@ -1,10 +1,15 @@
 import type { FeedViewType } from "@follow/constants"
+import type { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
-import { useMemo, useState } from "react"
+import type { RefObject } from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import type { ScrollView } from "react-native"
 import { Text } from "react-native"
 import { useEventCallback } from "usehooks-ts"
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
+import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
+import { useRegisterNavigationScrollView } from "@/src/components/ui/tabbar/hooks"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
 import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
@@ -45,8 +50,11 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
+  const scrollViewRef = useRegisterNavigationScrollView()
+
   return (
     <TimelineSelectorList
+      ref={scrollViewRef}
       onRefresh={() => {
         setRefreshing(true)
         onRefresh().finally(() => {

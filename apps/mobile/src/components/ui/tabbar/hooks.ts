@@ -1,7 +1,16 @@
-import { useCallback, useContext } from "react"
-import type { FlatList, ScrollView } from "react-native"
+import type { FlashList } from "@shopify/flash-list"
+import { requireNativeModule } from "expo"
+import type { RefObject } from "react"
+import { useCallback, useContext, useEffect, useRef } from "react"
+import type { FlatList, ScrollView, View } from "react-native"
+import { findNodeHandle, Platform } from "react-native"
 
-import { AttachNavigationScrollViewContext } from "./contexts/AttachNavigationScrollViewContext"
+import PlaterScreen from "@/src/screens/player"
+
+import {
+  AttachNavigationScrollViewContext,
+  SetAttachNavigationScrollViewContext,
+} from "./contexts/AttachNavigationScrollViewContext"
 import { BottomTabBarHeightContext } from "./contexts/BottomTabBarHeightContext"
 
 export const useBottomTabBarHeight = () => {
@@ -17,6 +26,12 @@ export const useNavigationScrollToTop = (
     const $scroller = overrideScrollerRef?.current ?? attachNavigationScrollViewRef?.current
     if (!$scroller) return
 
+    if (Platform.OS === "ios") {
+      const reactTag = findNodeHandle($scroller)
+      requireNativeModule("Helper").scrollToTop(reactTag)
+      return
+    }
+
     if ("scrollTo" in $scroller) {
       ;($scroller as ScrollView).scrollTo({
         y: 0,
@@ -26,7 +41,6 @@ export const useNavigationScrollToTop = (
       ;($scroller as FlatList<any>).scrollToIndex({
         index: 0,
         animated: true,
-        viewOffset: 112,
       })
     } else if ("scrollToOffset" in $scroller) {
       ;($scroller as FlatList<any>).scrollToOffset({
@@ -36,4 +50,15 @@ export const useNavigationScrollToTop = (
     }
     return
   }, [attachNavigationScrollViewRef, overrideScrollerRef])
+}
+
+export const useRegisterNavigationScrollView = <T = any>() => {
+  const scrollViewRef = useRef<T>(null)
+  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
+  useEffect(() => {
+    if (setAttachNavigationScrollViewRef) {
+      setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
+    }
+  }, [setAttachNavigationScrollViewRef, scrollViewRef])
+  return scrollViewRef
 }

@@ -20,7 +20,10 @@ import { PanGestureHandler } from "react-native-gesture-handler"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
+import {
+  useBottomTabBarHeight,
+  useRegisterNavigationScrollView,
+} from "@/src/components/ui/tabbar/hooks"
 import type { TabComponent } from "@/src/components/ui/tabview/TabView"
 import { apiClient } from "@/src/lib/api-fetch"
 
@@ -33,11 +36,11 @@ export const Recommendations = () => {
   const currentTab = useAtomValue(currentTabAtom)
 
   const windowWidth = useWindowDimensions().width
-  const contentScrollerRef = useRef<ScrollView>(null)
+  const contentScrollerRef = useRegisterNavigationScrollView<ScrollView>()
 
   useEffect(() => {
     contentScrollerRef.current?.scrollTo({ x: currentTab * windowWidth, y: 0, animated: true })
-  }, [currentTab, windowWidth])
+  }, [contentScrollerRef, currentTab, windowWidth])
 
   const [loadedTabIndex, setLoadedTabIndex] = useState(() => new Set())
   useEffect(() => {
@@ -46,6 +49,7 @@ export const Recommendations = () => {
       return new Set(prev)
     })
   }, [currentTab])
+
   return (
     <AnimatedScrollView
       onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: animatedX } } }], {
