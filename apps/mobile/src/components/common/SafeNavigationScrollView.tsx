@@ -190,7 +190,7 @@ export const NavigationBlurEffectHeader = ({
                   </View>
 
                   <Header title={options.title ?? ""} {...options} headerBackground={() => null} />
-                  {hideableBottom && (
+                  {!!hideableBottom && (
                     <View
                       ref={setHideableBottomRef as any}
                       onLayout={(e) => {

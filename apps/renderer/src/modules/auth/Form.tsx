@@ -23,7 +23,7 @@ import { TOTPForm } from "../profile/two-factor"
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().max(128),
+  password: z.string().min(8).max(128),
 })
 
 export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
@@ -101,6 +101,7 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
                   href={`${env.VITE_WEB_URL}/forget-password`}
                   target="_blank"
                   rel="noreferrer"
+                  tabIndex={-1}
                   className="block py-1 text-xs text-accent hover:underline"
                 >
                   {t("login.forget_password.note")}
@@ -113,29 +114,29 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          buttonClassName="!mt-3 w-full"
-          isLoading={form.formState.isSubmitting}
-          size="lg"
-        >
-          {t("login.continueWith", { provider: t("words.email") })}
-        </Button>
-        <Button
-          buttonClassName="!mt-3"
-          className="w-full"
-          variant="outline"
-          size="lg"
-          onClick={() => {
-            dismiss()
-            present({
-              content: RegisterForm,
-              title: t("register.label", { app_name: APP_NAME }),
-            })
-          }}
-        >
-          {t("login.signUp")}
-        </Button>
+        <div className="flex flex-col space-y-3">
+          <Button
+            type="submit"
+            isLoading={form.formState.isSubmitting}
+            disabled={!form.formState.isValid}
+            size="lg"
+          >
+            {t("login.continueWith", { provider: t("words.email") })}
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => {
+              dismiss()
+              present({
+                content: RegisterForm,
+                title: t("register.label", { app_name: APP_NAME }),
+              })
+            }}
+          >
+            {t("login.signUp")}
+          </Button>
+        </div>
       </form>
     </Form>
   )
