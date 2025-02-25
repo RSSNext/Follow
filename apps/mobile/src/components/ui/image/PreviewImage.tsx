@@ -1,9 +1,9 @@
-import { Image } from "expo-image"
 import type { FC } from "react"
 import { useRef } from "react"
 import { Pressable, View } from "react-native"
 
 import { usePreviewImage } from "./PreviewPageProvider"
+import { ProxiedImage } from "./ProxiedImage"
 
 export interface PreviewImageProps {
   imageUrl: string
@@ -12,6 +12,10 @@ export interface PreviewImageProps {
   Accessory?: FC<any>
   AccessoryProps?: any
   onPreview?: () => void
+  proxy?: {
+    width?: number
+    height?: number
+  }
 }
 
 export const PreviewImage = ({
@@ -21,6 +25,7 @@ export const PreviewImage = ({
   Accessory,
   AccessoryProps,
   onPreview,
+  proxy,
 }: PreviewImageProps) => {
   const imageRef = useRef<View>(null)
 
@@ -37,7 +42,11 @@ export const PreviewImage = ({
       }}
     >
       <View ref={imageRef}>
-        <Image
+        <ProxiedImage
+          proxy={{
+            width: proxy?.width,
+            height: proxy?.height,
+          }}
           transition={500}
           source={{ uri: imageUrl }}
           placeholder={{

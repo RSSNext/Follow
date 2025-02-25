@@ -1,4 +1,3 @@
-import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
@@ -7,6 +6,7 @@ import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
@@ -88,7 +88,11 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
         </View>
         <View className="relative">
           {image && (
-            <Image
+            <ProxiedImage
+              proxy={{
+                width: 80,
+                height: 80,
+              }}
               source={{
                 uri: image,
                 headers: getImageHeaders(image),

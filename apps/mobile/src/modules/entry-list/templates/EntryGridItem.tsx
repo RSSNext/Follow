@@ -1,7 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { transformVideoUrl } from "@follow/utils"
 import { uniqBy } from "es-toolkit/compat"
-import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useMemo } from "react"
 import { ScrollView, Text, View } from "react-native"
@@ -13,6 +12,7 @@ import { EntryContentWebView } from "@/src/components/native/webview/EntryConten
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { openLink } from "@/src/lib/native"
@@ -102,7 +102,11 @@ const MediaItems = ({
       <View>
         <View className="flex-1" style={{ aspectRatio }}>
           {mediaUrl && (
-            <Image
+            <ProxiedImage
+              proxy={{
+                width,
+                height,
+              }}
               transition={500}
               source={{ uri: mediaUrl }}
               placeholder={{ blurhas: firstMedia.blurhash }}

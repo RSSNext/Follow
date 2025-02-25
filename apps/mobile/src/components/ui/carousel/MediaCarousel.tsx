@@ -62,6 +62,9 @@ export const MediaCarousel = ({
                     aspectRatio={m.width && m.height ? m.width / m.height : 1}
                     Accessory={Accessory}
                     AccessoryProps={AccessoryProps}
+                    proxy={{
+                      width: 200,
+                    }}
                   />
                 </ImageContextMenu>
               </View>

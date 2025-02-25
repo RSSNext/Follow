@@ -32,7 +32,7 @@ export function HomeLeftAction() {
   return (
     <ActionGroup>
       <TouchableOpacity onPress={() => router.push("/profile")}>
-        <UserAvatar image={user.image} name={user.name!} size={28} />
+        <UserAvatar image={user.image} name={user.name!} size={28} className="rounded-full" />
       </TouchableOpacity>
     </ActionGroup>
   )

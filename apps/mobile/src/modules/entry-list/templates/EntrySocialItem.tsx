@@ -1,6 +1,5 @@
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
-import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useCallback, useEffect, useState } from "react"
 import { Pressable, Text, View } from "react-native"
@@ -10,6 +9,7 @@ import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -133,7 +133,11 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
                     quickLookImage([...previewImages.slice(idx), ...previewImages.slice(0, idx)])
                   }}
                 >
-                  <Image
+                  <ProxiedImage
+                    proxy={{
+                      width: 80,
+                      height: 80,
+                    }}
                     source={{ uri: image.url, headers: getImageHeaders(image.url) }}
                     transition={500}
                     placeholder={{ blurhash: image.blurhash }}
