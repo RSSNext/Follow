@@ -101,7 +101,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
       <EntryItemWrapper
         view={FeedViewType.Pictures}
         entry={entry}
-        itemClassName="group rounded-md overflow-hidden"
+        itemClassName="group rounded-md overflow-hidden hover:bg-transparent"
         style={{
           width: itemWidth,
         }}

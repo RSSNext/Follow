@@ -27,6 +27,13 @@ export default function ModalLayout() {
           title: "List",
         }}
       />
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          headerShown: false,
+        }}
+      />
     </Stack>
   )
 }

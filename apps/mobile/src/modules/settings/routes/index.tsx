@@ -12,11 +12,10 @@ import { ListsScreen } from "./Lists"
 import { ManageListScreen } from "./ManageList"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
-import { ProfileScreen } from "./Profile"
 
 export const SettingRoutes = (Stack: TypedNavigator<any, any>) => {
   return [
-    <Stack.Screen key="Profile" name="Profile" component={ProfileScreen} />,
+    // <Stack.Screen key="Profile" name="Profile" component={ProfileScreen} />,
     <Stack.Screen key="Achievement" name="Achievement" component={AchievementScreen} />,
     <Stack.Screen key="General" name="General" component={GeneralScreen} />,
     <Stack.Screen key="Notifications" name="Notifications" component={NotificationsScreen} />,

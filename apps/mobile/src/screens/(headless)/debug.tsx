@@ -1,4 +1,5 @@
 import { sleep } from "@follow/utils"
+import { requireNativeModule } from "expo"
 import * as Clipboard from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
 import { Sitemap } from "expo-router/build/views/Sitemap"
@@ -111,6 +112,19 @@ export default function DebugPanel() {
               "https://picsum.photos/200/300?grayscale",
               "https://picsum.photos/200/300?blur",
             ])
+          },
+        },
+
+        {
+          title: "Glow Effect",
+          onPress: () => {
+            requireNativeModule("AppleIntelligenceGlowEffect").show()
+          },
+        },
+        {
+          title: "Hide Glow Effect",
+          onPress: () => {
+            requireNativeModule("AppleIntelligenceGlowEffect").hide()
           },
         },
       ],

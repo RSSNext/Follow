@@ -44,7 +44,7 @@
     "reinstall": "rm -rf node_modules && rm -rf apps/**/node_modules && rm -rf packages/**/node_modules && pnpm install",
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
-    "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx",
+    "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx && eslint --fix apps/mobile/src/icons/**/*.tsx",
     "test": "cross-env CI=1 pnpm --recursive run test",
     "typecheck": "turbo typecheck",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
