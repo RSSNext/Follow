@@ -1,8 +1,8 @@
 import type { FC, PropsWithChildren } from "react"
 import { useMemo } from "react"
 import { Alert, Clipboard } from "react-native"
-import * as ContextMenu from "zeego/context-menu"
 
+import { ContextMenu } from "@/src/components/ui/context-menu"
 import { getWebUrl } from "@/src/lib/env"
 import { toast } from "@/src/lib/toast"
 import { getList } from "@/src/store/list/getters"

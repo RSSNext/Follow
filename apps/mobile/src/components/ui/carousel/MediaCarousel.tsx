@@ -14,14 +14,16 @@ import type { PreviewImageProps } from "../image/PreviewImage"
 import { PreviewImage } from "../image/PreviewImage"
 
 export const MediaCarousel = ({
+  entryId,
   media,
   onPreview,
   aspectRatio,
   Accessory,
   AccessoryProps,
 }: {
+  entryId: string
   media: MediaModel[]
-  onPreview: () => void
+  onPreview?: () => void
   aspectRatio: number
 } & Pick<PreviewImageProps, "Accessory" | "AccessoryProps">) => {
   const [containerWidth, setContainerWidth] = useState(0)
@@ -53,7 +55,7 @@ export const MediaCarousel = ({
           if (m.type === "photo") {
             return (
               <View key={index} className="relative" style={{ width: containerWidth }}>
-                <ImageContextMenu imageUrl={m.url}>
+                <ImageContextMenu entryId={entryId} imageUrl={m.url}>
                   <PreviewImage
                     onPreview={onPreview}
                     imageUrl={m.url}
