@@ -66,7 +66,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               .filter(([key]) => key !== "credential")
               .map(([key, provider]) => (
                 <Tooltip key={key} delayDuration={0}>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <MotionButtonBase
                       onClick={() => {
                         loginHandler(key, "app")
