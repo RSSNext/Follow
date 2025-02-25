@@ -1,8 +1,8 @@
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { findNodeHandle, Text, UIManager } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
@@ -11,7 +11,6 @@ import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
 import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarBackgroundContext"
 import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
 import {
