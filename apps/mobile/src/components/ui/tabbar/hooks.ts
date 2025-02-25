@@ -1,11 +1,9 @@
-import type { FlashList } from "@shopify/flash-list"
-import { requireNativeModule } from "expo"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
-import type { FlatList, ScrollView, View } from "react-native"
+import type { FlatList, ScrollView } from "react-native"
 import { findNodeHandle, Platform } from "react-native"
 
-import PlaterScreen from "@/src/screens/player"
+import { performNativeScrollToTop } from "@/src/lib/native"
 
 import {
   AttachNavigationScrollViewContext,
@@ -28,8 +26,10 @@ export const useNavigationScrollToTop = (
 
     if (Platform.OS === "ios") {
       const reactTag = findNodeHandle($scroller)
-      requireNativeModule("Helper").scrollToTop(reactTag)
-      return
+      if (reactTag) {
+        performNativeScrollToTop(reactTag)
+        return
+      }
     }
 
     if ("scrollTo" in $scroller) {
