@@ -33,6 +33,7 @@ function isAuthCodeValid(authCode: string) {
 export default function TwoFactorAuthScreen() {
   const scrollY = useAnimatedValue(0)
   const label = useColor("label")
+  const secondaryLabel = useColor("secondaryLabel")
 
   const otpInputRef = useRef<OtpInputRef>(null)
 
@@ -90,6 +91,12 @@ export default function TwoFactorAuthScreen() {
               theme={{
                 containerStyle: { paddingHorizontal: 20 },
                 pinCodeTextStyle: { color: label },
+                placeholderTextStyle: { color: secondaryLabel },
+                filledPinCodeContainerStyle: { borderColor: label },
+                pinCodeContainerStyle: {
+                  borderColor: secondaryLabel,
+                },
+                focusedPinCodeContainerStyle: { borderColor: accentColor },
               }}
               onFilled={(code) => {
                 if (isAuthCodeValid(code)) {
