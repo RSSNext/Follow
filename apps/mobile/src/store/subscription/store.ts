@@ -91,9 +91,19 @@ class SubscriptionActions {
       }
     })
   }
-  async upsertMany(subscriptions: SubscriptionModel[]) {
+  async upsertMany(
+    subscriptions: SubscriptionModel[],
+    options: { resetBeforeUpsert?: boolean | FeedViewType } = {},
+  ) {
     const tx = createTransaction()
     tx.store(() => {
+      if (options.resetBeforeUpsert !== undefined) {
+        if (typeof options.resetBeforeUpsert === "boolean") {
+          this.reset()
+        } else {
+          this.resetByView(options.resetBeforeUpsert)
+        }
+      }
       this.upsertManyInSession(subscriptions)
     })
 
@@ -131,12 +141,6 @@ class SubscriptionSyncService {
       },
     })
 
-    if (typeof view === "number") {
-      subscriptionActions.resetByView(view)
-    } else {
-      subscriptionActions.reset()
-    }
-
     const { subscriptions, feeds, lists, inboxes } = honoMorph.toSubscription(res.data)
 
     await SubscriptionService.deleteNotExists(
@@ -145,7 +149,9 @@ class SubscriptionSyncService {
     )
 
     feedActions.upsertMany(feeds)
-    subscriptionActions.upsertMany(subscriptions)
+    subscriptionActions.upsertMany(subscriptions, {
+      resetBeforeUpsert: typeof view === "number" ? view : true,
+    })
     listActions.upsertMany(lists)
 
     inboxActions.upsertMany(inboxes)

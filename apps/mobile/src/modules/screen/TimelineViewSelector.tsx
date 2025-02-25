@@ -1,8 +1,6 @@
-import { Image } from "expo-image"
 import { useEffect } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
-import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { Grayscale } from "react-native-color-matrix-image-filters"
+import { ScrollView, useWindowDimensions, View } from "react-native"
 import Animated, {
   FadeOut,
   useAnimatedStyle,
@@ -11,20 +9,20 @@ import Animated, {
 } from "react-native-reanimated"
 
 import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
-import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import type { ViewDefinition } from "@/src/constants/views"
-import { views } from "@/src/constants/views"
 import { selectTimeline, useSelectedFeed } from "@/src/modules/screen/atoms"
-import { useList } from "@/src/store/list/hooks"
-import { useAllListSubscription } from "@/src/store/subscription/hooks"
+import { useViewWithSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCountByView } from "@/src/store/unread/hooks"
-import { accentColor, useColor } from "@/src/theme/colors"
+import { useColor } from "@/src/theme/colors"
 
 import { TimelineViewSelectorContextMenu } from "./TimelineViewSelectorContextMenu"
 
+const ACTIVE_WIDTH = 180
+const INACTIVE_WIDTH = 48
+
 export function TimelineViewSelector() {
-  const lists = useAllListSubscription()
+  const activeViews = useViewWithSubscription()
 
   return (
     <View className="flex items-center justify-between py-2">
@@ -34,12 +32,8 @@ export function TimelineViewSelector() {
         contentContainerClassName="flex-row gap-3 items-center px-3"
         showsHorizontalScrollIndicator={false}
       >
-        {views.map((view) => (
+        {activeViews.map((view) => (
           <ViewItem key={view.name} view={view} />
-        ))}
-        {lists.length > 0 && <View className="bg-opaque-separator mx-3 h-8 w-px" />}
-        {lists.map((listId) => (
-          <ListItem key={listId} listId={listId} />
         ))}
       </ScrollView>
     </View>
@@ -57,16 +51,26 @@ function ItemWrapper({
   onPress: () => void
   style?: Exclude<StyleProp<ViewStyle>, number>
 }) {
-  const textWidth = useSharedValue(130)
-  const width = useSharedValue(isActive ? Math.max(130, textWidth.value + 48) : 48)
+  const { width: windowWidth } = useWindowDimensions()
+  const activeViews = useViewWithSubscription()
+
+  const activeWidth = Math.max(
+    windowWidth - (INACTIVE_WIDTH + 12) * (activeViews.length - 1) - 8 * 2,
+    ACTIVE_WIDTH,
+  )
+
+  const textWidth = useSharedValue(0)
+  const width = useSharedValue(
+    isActive ? Math.max(activeWidth, textWidth.value + INACTIVE_WIDTH) : INACTIVE_WIDTH,
+  )
   const bgColor = useColor("gray5")
 
   useEffect(() => {
     width.value = withSpring(
-      isActive ? Math.max(130, textWidth.value + 48) : 48,
+      isActive ? Math.max(activeWidth, textWidth.value + INACTIVE_WIDTH) : INACTIVE_WIDTH,
       gentleSpringPreset,
     )
-  }, [isActive, width, textWidth])
+  }, [isActive, width, textWidth, activeWidth])
 
   return (
     <ReAnimatedTouchableOpacity
@@ -98,15 +102,6 @@ function ViewItem({ view }: { view: ViewDefinition }) {
   const isActive = selectedFeed?.type === "view" && selectedFeed.viewId === view.view
   const unreadCount = useUnreadCountByView(view.view)
   const borderColor = useColor("gray5")
-
-  const textWidth = useSharedValue(130)
-  const width = useSharedValue(isActive ? Math.max(130, textWidth.value + 48) : 48)
-
-  useEffect(() => {
-    if (isActive) {
-      width.value = withSpring(Math.max(130, textWidth.value + 48), gentleSpringPreset)
-    }
-  }, [isActive, unreadCount])
 
   return (
     <TimelineViewSelectorContextMenu type="view" viewId={view.view}>
@@ -143,44 +138,3 @@ function ViewItem({ view }: { view: ViewDefinition }) {
     </TimelineViewSelectorContextMenu>
   )
 }
-
-function ListItem({ listId }: { listId: string }) {
-  const list = useList(listId)
-  const selectedFeed = useSelectedFeed()
-
-  if (!selectedFeed) return null
-  const isActive = selectedFeed.type === "list" && selectedFeed.listId === listId
-
-  if (!list) return null
-
-  return (
-    <ItemWrapper
-      isActive={isActive}
-      onPress={() => selectTimeline({ type: "list", listId })}
-      style={isActive ? { backgroundColor: accentColor } : undefined}
-    >
-      {list.image ? (
-        isActive ? (
-          <Image source={list.image} contentFit="cover" className="size-7 rounded-lg" />
-        ) : (
-          <Grayscale>
-            <Image source={list.image} contentFit="cover" className="size-7 rounded-lg" />
-          </Grayscale>
-        )
-      ) : (
-        <FallbackIcon title={list.title} size={28} gray={!isActive} style={styles.fallbackIcon} />
-      )}
-      {isActive && (
-        <Text className="max-w-24 text-sm font-semibold text-white" numberOfLines={1}>
-          {list.title}
-        </Text>
-      )}
-    </ItemWrapper>
-  )
-}
-
-const styles = StyleSheet.create({
-  fallbackIcon: {
-    borderRadius: 8,
-  },
-})
