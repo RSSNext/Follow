@@ -103,7 +103,9 @@ const selectedTimelineAtom = atom<SelectedTimeline>({
 
 const selectedFeedAtom = atom<SelectedFeed>(null)
 
-export const EntryListContext = createContext<{ type: "timeline" | "feed" }>({ type: "timeline" })
+export const EntryListContext = createContext<{ type: "timeline" | "feed" | "subscriptions" }>({
+  type: "timeline",
+})
 export const useEntryListContext = () => {
   return useContext(EntryListContext)
 }

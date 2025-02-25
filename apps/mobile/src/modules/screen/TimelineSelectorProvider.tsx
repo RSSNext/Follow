@@ -15,6 +15,7 @@ import {
   HideNoMediaActionButton,
   HomeLeftAction,
   HomeSharedRightAction,
+  UnreadOnlyActionButton,
 } from "@/src/modules/screen/action"
 import { headerHideableBottomHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
@@ -30,30 +31,48 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
   const params = useLocalSearchParams()
   const isFeed = screenType === "feed"
   const isTimeline = screenType === "timeline"
+  const isSubscriptions = screenType === "subscriptions"
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
-        headerBackTitle={isFeed ? "Subscriptions" : undefined}
         headerShown
         title={viewTitle}
         headerLeft={useMemo(
-          () => (isTimeline ? () => <HomeLeftAction /> : undefined),
-          [isTimeline],
+          () => (isTimeline || isSubscriptions ? () => <HomeLeftAction /> : undefined),
+          [isTimeline, isSubscriptions],
         )}
         headerRight={useMemo(() => {
-          const extraActions = <>{view === FeedViewType.Pictures && <HideNoMediaActionButton />}</>
-          if (isTimeline) return () => <HomeSharedRightAction>{extraActions}</HomeSharedRightAction>
+          const buttonVariant = isFeed ? "secondary" : "primary"
+          const extraActions = (
+            <>
+              {view === FeedViewType.Pictures && (
+                <HideNoMediaActionButton variant={buttonVariant} />
+              )}
+            </>
+          )
+          if (isTimeline)
+            return () => (
+              <HomeSharedRightAction>
+                <UnreadOnlyActionButton variant={buttonVariant} />
+                {extraActions}
+              </HomeSharedRightAction>
+            )
+          if (isSubscriptions)
+            return () => <HomeSharedRightAction>{extraActions}</HomeSharedRightAction>
           if (isFeed)
             return () => (
               <View className="-mr-2 flex-row gap-2">
                 {extraActions}
+                <UnreadOnlyActionButton variant={buttonVariant} />
                 <FeedShareAction params={params} />
               </View>
             )
           return
-        }, [isTimeline, isFeed, view, params])}
-        headerHideableBottomHeight={isTimeline ? headerHideableBottomHeight : undefined}
-        headerHideableBottom={isTimeline ? TimelineViewSelector : undefined}
+        }, [isFeed, view, isTimeline, isSubscriptions, params])}
+        headerHideableBottomHeight={
+          isTimeline || isSubscriptions ? headerHideableBottomHeight : undefined
+        }
+        headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}
       />
       {children}
     </NavigationContext.Provider>

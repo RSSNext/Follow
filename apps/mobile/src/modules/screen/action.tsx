@@ -39,20 +39,10 @@ export function HomeLeftAction() {
 }
 
 export function HomeSharedRightAction(props: PropsWithChildren) {
-  const unreadOnly = useGeneralSettingKey("unreadOnly")
   return (
     <ActionGroup className="-mr-2">
       {props.children}
-      <UIBarButton
-        label={unreadOnly ? "Show All" : "Show Unread Only"}
-        normalIcon={<RoundCuteReIcon height={20} width={20} color={accentColor} />}
-        selectedIcon={<RoundCuteFiIcon height={20} width={20} color={accentColor} />}
-        onPress={() => {
-          setGeneralSetting("unreadOnly", !unreadOnly)
-        }}
-        selected={unreadOnly}
-        overlay={false}
-      />
+
       <UIBarButton
         label="Mark All as Read"
         normalIcon={<CheckCircleCuteReIcon height={20} width={20} color={accentColor} />}
@@ -64,16 +54,40 @@ export function HomeSharedRightAction(props: PropsWithChildren) {
   )
 }
 
+interface HeaderActionButtonProps {
+  variant?: "primary" | "secondary"
+}
+
+const useButtonVariant = ({ variant = "primary" }: HeaderActionButtonProps) => {
+  const label = useColor("label")
+  const size = 20
+  const color = variant === "primary" ? accentColor : label
+  return { size, color }
+}
+export const UnreadOnlyActionButton = ({ variant = "primary" }: HeaderActionButtonProps) => {
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
+  const { size, color } = useButtonVariant({ variant })
+  return (
+    <UIBarButton
+      label={unreadOnly ? "Show All" : "Show Unread Only"}
+      normalIcon={<RoundCuteReIcon height={size} width={size} color={color} />}
+      selectedIcon={<RoundCuteFiIcon height={size} width={size} color={color} />}
+      onPress={() => {
+        setGeneralSetting("unreadOnly", !unreadOnly)
+      }}
+      selected={unreadOnly}
+      overlay={false}
+    />
+  )
+}
 export function HideNoMediaActionButton({
   variant = "primary",
 }: {
   variant?: "primary" | "secondary"
 }) {
   const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
+  const { size, color } = useButtonVariant({ variant })
 
-  const label = useColor("label")
-  const size = variant === "primary" ? 24 : 20
-  const color = variant === "primary" ? accentColor : label
   return (
     <UIBarButton
       label="Hide No Media Item"
