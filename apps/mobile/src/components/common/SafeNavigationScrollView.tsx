@@ -1,7 +1,6 @@
 import { Header, useHeaderHeight } from "@react-navigation/elements"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { router, Stack, useNavigation } from "expo-router"
-import { hide } from "expo-router/build/utils/splash"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
 import type { ScrollView, ScrollViewProps } from "react-native"
@@ -12,12 +11,7 @@ import {
   useAnimatedValue,
   View,
 } from "react-native"
-import Animated, {
-  useAnimatedReaction,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
