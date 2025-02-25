@@ -71,34 +71,38 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
         />
 
         <View className="flex-1 space-y-2">
-          <View className="mb-1 flex-1 flex-row gap-2">
-            <FeedIcon fallback feed={feed} size={14} />
-            <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
+          <View className="mb-1 flex-1 flex-row items-center gap-1.5 pr-2">
+            <FeedIcon fallback feed={feed} size={16} />
+            <Text numberOfLines={1} className="text-secondary-label shrink text-sm font-medium">
+              {feed?.title ?? "Unknown feed"}
+            </Text>
+            <Text className="text-secondary-label text-xs font-medium">·</Text>
+            <RelativeDateTime
+              date={publishedAt}
+              className="text-secondary-label text-xs font-medium"
+              postfixText="ago"
+            />
           </View>
           <Text numberOfLines={2} className="text-label text-lg font-semibold leading-tight">
             {title}
           </Text>
-          <Text className="text-secondary-label mt-1 line-clamp-2 text-sm">{description}</Text>
-
-          <RelativeDateTime
-            date={publishedAt}
-            className="text-tertiary-label text-xs"
-            postfixText="ago"
-          />
+          <Text numberOfLines={2} className="text-secondary-label mt-1 text-base leading-tight">
+            {description}
+          </Text>
         </View>
         <View className="relative">
           {image && (
             <ProxiedImage
               proxy={{
-                width: 80,
-                height: 80,
+                width: 96,
+                height: 96,
               }}
               source={{
                 uri: image,
                 headers: getImageHeaders(image),
               }}
               placeholder={{ blurhash }}
-              className="bg-system-fill ml-2 size-20 rounded-md"
+              className="bg-system-fill ml-2 size-24 rounded-md"
               contentFit="cover"
               recyclingKey={image}
               transition={500}

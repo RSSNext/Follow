@@ -1,7 +1,6 @@
 import { FeedViewType } from "@follow/constants"
-import { cn } from "@follow/utils"
 import { router } from "expo-router"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
@@ -54,7 +53,6 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
     }
   }, [entry, entry?.read, unreadZoomSharedValue])
 
-  const [isTextCollapsed, setIsTextCollapsed] = useState(false)
   const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
   if (!entry) return <EntryItemSkeleton />
 
@@ -72,7 +70,7 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
           style={unreadIndicatorStyle}
         />
 
-        <View className="flex flex-1 flex-row items-center gap-4">
+        <View className="flex flex-1 flex-row items-start gap-4">
           <Pressable
             hitSlop={10}
             onPress={() => {
@@ -86,40 +84,22 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
             )}
           </Pressable>
 
-          <View className="flex flex-row items-end gap-1">
-            <Text className="text-label text-[16px] font-semibold">
+          <View className="flex flex-row items-center gap-1.5">
+            <Text className="text-label text-base font-semibold leading-none">
               {entry.author || feed?.title}
             </Text>
-
-            <RelativeDateTime
-              date={publishedAt}
-              className="text-secondary-label text-[14px] leading-none"
-            />
+            <Text className="text-secondary-label">·</Text>
+            <RelativeDateTime date={publishedAt} className="text-secondary-label text-[14px]" />
           </View>
         </View>
 
-        <View className="relative">
-          <View
-            className={cn(
-              "overflow-hidden",
-              autoExpandLongSocialMedia ? "max-h-none" : "max-h-[120px]",
-            )}
+        <View className="relative -mt-4">
+          <Text
+            numberOfLines={autoExpandLongSocialMedia ? undefined : 7}
+            className="text-label ml-12 text-base"
           >
-            <Text
-              numberOfLines={autoExpandLongSocialMedia ? undefined : 5}
-              className="text-label ml-12 text-[16px] leading-relaxed"
-              onTextLayout={(e) => {
-                if (e.nativeEvent.lines.length > 4) {
-                  setIsTextCollapsed(true)
-                }
-              }}
-            >
-              {description}
-            </Text>
-          </View>
-          {isTextCollapsed && !autoExpandLongSocialMedia && (
-            <Text className="absolute bottom-0 ml-12 font-medium text-accent">See more</Text>
-          )}
+            {description}
+          </Text>
         </View>
 
         {media && media.length > 0 && (
