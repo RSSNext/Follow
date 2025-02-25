@@ -86,12 +86,12 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
 
 export const NavigationBlurEffectHeader = ({
   blurThreshold = 0,
-  headerHideableBottomHeight = 50,
+
   headerHideableBottom,
   ...props
 }: NativeStackNavigationOptions & {
   blurThreshold?: number
-  headerHideableBottomHeight?: number
+
   headerHideableBottom?: () => React.ReactNode
 }) => {
   const label = useColor("label")
@@ -105,23 +105,28 @@ export const NavigationBlurEffectHeader = ({
   const opacityAnimated = useSharedValue(0)
 
   const originalDefaultHeaderHeight = useDefaultHeaderHeight()
-  const largeDefaultHeaderHeight = originalDefaultHeaderHeight + headerHideableBottomHeight
-
-  const largeHeaderHeight = useSharedValue(largeDefaultHeaderHeight)
 
   const lastScrollY = useRef(0)
+
+  const largeDefaultHeaderHeightRef = useRef(originalDefaultHeaderHeight)
+  const largeHeaderHeight = useSharedValue(originalDefaultHeaderHeight)
 
   useEffect(() => {
     const id = scrollY.addListener(({ value }) => {
       opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
-      if (headerHideableBottom && value > 0) {
-        if (value > lastScrollY.current) {
-          largeHeaderHeight.value = withTiming(originalDefaultHeaderHeight)
-        } else {
-          largeHeaderHeight.value = withTiming(largeDefaultHeaderHeight)
-        }
-        lastScrollY.current = value
+      if (!headerHideableBottom) {
+        return
       }
+      const largeDefaultHeaderHeight = largeDefaultHeaderHeightRef.current
+
+      if (value <= 100) {
+        largeHeaderHeight.value = withTiming(largeDefaultHeaderHeight)
+      } else if (value > lastScrollY.current) {
+        largeHeaderHeight.value = withTiming(originalDefaultHeaderHeight)
+      } else {
+        largeHeaderHeight.value = withTiming(largeDefaultHeaderHeight)
+      }
+      lastScrollY.current = value
     })
 
     return () => {
@@ -129,12 +134,11 @@ export const NavigationBlurEffectHeader = ({
     }
   }, [
     blurThreshold,
-    scrollY,
     headerHideableBottom,
     largeHeaderHeight,
-    originalDefaultHeaderHeight,
-    largeDefaultHeaderHeight,
     opacityAnimated,
+    originalDefaultHeaderHeight,
+    scrollY,
   ])
 
   const style = useAnimatedStyle(() => ({
@@ -176,8 +180,18 @@ export const NavigationBlurEffectHeader = ({
                   </View>
 
                   <Header title={options.title ?? ""} {...options} headerBackground={() => null} />
+                  {hideableBottom && (
+                    <View
+                      onLayout={(e) => {
+                        const { height } = e.nativeEvent.layout
 
-                  {hideableBottom}
+                        largeDefaultHeaderHeightRef.current = height + originalDefaultHeaderHeight
+                        largeHeaderHeight.value = withTiming(largeDefaultHeaderHeightRef.current)
+                      }}
+                    >
+                      {hideableBottom}
+                    </View>
+                  )}
                 </Animated.View>
               )
             }

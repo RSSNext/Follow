@@ -17,7 +17,6 @@ import {
   HomeSharedRightAction,
   UnreadOnlyActionButton,
 } from "@/src/modules/screen/action"
-import { headerHideableBottomHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
 import { getFeed } from "@/src/store/feed/getter"
 
@@ -69,9 +68,6 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
             )
           return
         }, [isFeed, view, isTimeline, isSubscriptions, params])}
-        headerHideableBottomHeight={
-          isTimeline || isSubscriptions ? headerHideableBottomHeight : undefined
-        }
         headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}
       />
       {children}
