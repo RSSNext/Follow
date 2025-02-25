@@ -2,6 +2,7 @@ import type { FeedViewType } from "@follow/constants"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import { Text } from "react-native"
+import { useColor } from "react-native-uikit-colors"
 import { useEventCallback } from "usehooks-ts"
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
@@ -92,10 +93,13 @@ const ItemRender = ({
 }
 
 const ListHeaderComponent = () => {
+  const color = useColor("gray")
   return (
     <>
       <StarItem />
-      <Text className="text-secondary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
+      <Text className="mb-2 ml-3 mt-4 text-sm font-semibold" style={{ color }}>
+        Feeds
+      </Text>
     </>
   )
 }
@@ -111,7 +115,7 @@ const StarItem = () => {
       className="mt-4 h-12 w-full flex-row items-center px-3"
     >
       <StarCuteFiIcon color="rgb(245, 158, 11)" height={20} width={20} />
-      <Text className="text-text ml-2">Collections</Text>
+      <Text className="text-text ml-2 font-medium">Starred</Text>
     </ItemPressable>
   )
 }
