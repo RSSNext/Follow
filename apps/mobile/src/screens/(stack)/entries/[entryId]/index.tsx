@@ -121,7 +121,7 @@ const FeedInfo = ({ feedId }: { feedId: string }) => {
   if (!feed) return null
   return (
     <View className="mb-2">
-      <Text className="text-secondary-label">{feed.title}</Text>
+      <Text className="text-secondary-label">{feed.title?.trim()}</Text>
     </View>
   )
 }
