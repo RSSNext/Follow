@@ -70,7 +70,7 @@ function FeedShareAction({ params }: { params: any }) {
   return (
     <UIBarButton
       label="Share"
-      normalIcon={<Share3CuteReIcon height={20} width={20} color={label} />}
+      normalIcon={<Share3CuteReIcon height={24} width={24} color={label} />}
       onPress={() => {
         const feed = getFeed(feedId)
         if (!feed) return

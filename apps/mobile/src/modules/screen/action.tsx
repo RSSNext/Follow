@@ -42,7 +42,7 @@ export function HomeSharedRightAction(props: PropsWithChildren) {
 
       <UIBarButton
         label="Mark All as Read"
-        normalIcon={<CheckCircleCuteReIcon height={20} width={20} color={accentColor} />}
+        normalIcon={<CheckCircleCuteReIcon height={24} width={24} color={accentColor} />}
         onPress={() => {
           Dialog.show(MarkAllAsReadDialog)
         }}
@@ -57,7 +57,7 @@ interface HeaderActionButtonProps {
 
 const useButtonVariant = ({ variant = "primary" }: HeaderActionButtonProps) => {
   const label = useColor("label")
-  const size = 20
+  const size = 24
   const color = variant === "primary" ? accentColor : label
   return { size, color }
 }

@@ -173,6 +173,7 @@ class DialogStatic {
                   text={props.confirmText ?? "Confirm"}
                   type="confirm"
                   className={props.variant === "destructive" ? "bg-red" : "bg-accent"}
+                  textClassName="text-white"
                 />
               </View>
             </DialogDynamicButtonActionProvider>
