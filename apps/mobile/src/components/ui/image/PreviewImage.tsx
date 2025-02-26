@@ -16,6 +16,7 @@ export interface PreviewImageProps {
     width?: number
     height?: number
   }
+  noPreview?: boolean
 }
 
 export const PreviewImage = ({
@@ -26,13 +27,19 @@ export const PreviewImage = ({
   AccessoryProps,
   onPreview,
   proxy,
+  noPreview,
 }: PreviewImageProps) => {
   const imageRef = useRef<View>(null)
 
   const { openPreview } = usePreviewImage()
+
+  const Wrapper = noPreview ? View : Pressable
+
   return (
-    <Pressable
+    <Wrapper
       onPress={() => {
+        if (noPreview) return
+
         onPreview?.()
         openPreview({
           imageRef,
@@ -60,6 +67,6 @@ export const PreviewImage = ({
           recyclingKey={imageUrl}
         />
       </View>
-    </Pressable>
+    </Wrapper>
   )
 }

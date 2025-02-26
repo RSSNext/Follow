@@ -11,15 +11,14 @@ import { EntryContentWebView } from "@/src/components/native/webview/EntryConten
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { openLink } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
+import { unreadSyncService } from "@/src/store/unread/store"
 
 import { VideoContextMenu } from "../../context-menu/video"
-import { EntryGridFooter } from "../../entry-content/EntryGridFooter"
 import { useEntryListContextView } from "../EntryListContext"
 
 export function EntryGridItem({ id }: { id: string }) {
@@ -43,7 +42,11 @@ export function EntryGridItem({ id }: { id: string }) {
   if (view === FeedViewType.Pictures) {
     return (
       <View className="m-1">
-        <MediaItems media={item.media} view={view} entryId={id} />
+        <MediaItems
+          media={item.media}
+          entryId={id}
+          onPreview={() => unreadSyncService.markEntryAsRead(id)}
+        />
       </View>
     )
   }
@@ -53,12 +56,13 @@ export function EntryGridItem({ id }: { id: string }) {
       <ItemPressable
         className="m-1 overflow-hidden rounded-md"
         onPress={() => {
+          unreadSyncService.markEntryAsRead(id)
           if (!item.url) return
           const formattedUrl = transformVideoUrl({ url: item.url }) || item.url
           openLink(formattedUrl)
         }}
       >
-        <MediaItems media={item.media} view={view} entryId={id} />
+        <MediaItems media={item.media} entryId={id} noPreview />
       </ItemPressable>
     </VideoContextMenu>
   )
@@ -66,14 +70,14 @@ export function EntryGridItem({ id }: { id: string }) {
 
 const MediaItems = ({
   media,
-  view,
   entryId,
   onPreview,
+  noPreview,
 }: {
   media: MediaModel[]
-  view: FeedViewType
   entryId: string
   onPreview?: () => void
+  noPreview?: boolean
 }) => {
   const firstMedia = media[0]
 
@@ -89,33 +93,6 @@ const MediaItems = ({
   const { width } = firstMedia
   const aspectRatio = width && height ? width / height : 1
 
-  if (view === FeedViewType.Videos) {
-    const mediaUrl = firstMedia.preview_image_url || firstMedia.url
-    const aspectRatio = 16 / 9
-    return (
-      <View>
-        <View className="flex-1" style={{ aspectRatio }}>
-          {mediaUrl && (
-            <ProxiedImage
-              proxy={{
-                width,
-                height,
-              }}
-              transition={500}
-              source={{ uri: mediaUrl }}
-              placeholder={{ blurhas: firstMedia.blurhash }}
-              className="w-full"
-              style={{ aspectRatio }}
-              placeholderContentFit="cover"
-              recyclingKey={mediaUrl}
-            />
-          )}
-        </View>
-        <EntryGridFooter entryId={entryId} descriptionClassName="h-12" />
-      </View>
-    )
-  }
-
   return (
     <MediaCarousel
       entryId={entryId}
@@ -124,6 +101,7 @@ const MediaItems = ({
       aspectRatio={aspectRatio}
       Accessory={EntryGridItemAccessory}
       AccessoryProps={{ id: entryId }}
+      noPreview={noPreview}
     />
   )
 }

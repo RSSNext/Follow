@@ -21,11 +21,8 @@ export const EntryGridFooter = ({
 
   const unreadIndicatorStyle = useAnimatedStyle(() => {
     return {
-      transform: [
-        {
-          scale: unreadZoomSharedValue.value,
-        },
-      ],
+      width: unreadZoomSharedValue.value * 8,
+      height: unreadZoomSharedValue.value * 8,
     }
   })
 
@@ -35,7 +32,7 @@ export const EntryGridFooter = ({
     <View className="my-2 px-2">
       <View className="flex-row gap-2">
         <ReAnimated.View
-          className="bg-red mt-2 inline-block size-2 rounded-full"
+          className="bg-red mt-2 inline-block rounded-full"
           style={unreadIndicatorStyle}
         />
         {entry.description && (

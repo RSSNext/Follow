@@ -21,11 +21,13 @@ export const MediaCarousel = ({
   aspectRatio,
   Accessory,
   AccessoryProps,
+  noPreview,
 }: {
   entryId: string
   media: MediaModel[]
   onPreview?: () => void
   aspectRatio: number
+  noPreview?: boolean
 } & Pick<PreviewImageProps, "Accessory" | "AccessoryProps">) => {
   const [containerWidth, setContainerWidth] = useState(0)
   const hasMany = media.length > 1
@@ -59,6 +61,7 @@ export const MediaCarousel = ({
                 <View key={index} className="relative" style={{ width: containerWidth }}>
                   <ImageContextMenu entryId={entryId} imageUrl={m.url}>
                     <PreviewImage
+                      noPreview={noPreview}
                       onPreview={onPreview}
                       imageUrl={m.url}
                       aspectRatio={m.width && m.height ? m.width / m.height : 1}
@@ -76,6 +79,7 @@ export const MediaCarousel = ({
             return (
               <PreviewImage
                 key={index}
+                noPreview={noPreview}
                 onPreview={() => {
                   // open player
                 }}
