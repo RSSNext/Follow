@@ -1,5 +1,6 @@
 import type ViewToken from "@shopify/flash-list/dist/viewability/ViewToken"
-import { useCallback, useState } from "react"
+import { useMemo, useRef, useState } from "react"
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 
 import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { debouncedFetchEntryContentByStream } from "@/src/store/entry/store"
@@ -8,37 +9,48 @@ import { unreadSyncService } from "@/src/store/unread/store"
 const defaultIdExtractor = (item: ViewToken) => item.key
 export function useOnViewableItemsChanged({
   idExtractor = defaultIdExtractor,
-  isLoading,
+  disabled,
 }: {
-  isLoading?: boolean
+  disabled?: boolean
   idExtractor?: (item: ViewToken) => string
-} = {}): (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void {
+} = {}): {
+  onViewableItemsChanged: (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void
+  onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
+} {
+  const orientation = useRef<"down" | "up">("down")
+  const lastOffset = useRef(0)
+
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
   const markAsReadWhenRendering = useGeneralSettingKey("renderMarkUnread")
 
   const [stableIdExtractor] = useState(() => idExtractor)
 
-  return useCallback(
-    ({ viewableItems, changed }) => {
-      if (isLoading) return
+  return useMemo(() => {
+    return {
+      onViewableItemsChanged: ({ viewableItems, changed }) => {
+        if (disabled) return
 
-      debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
-      if (markAsReadWhenScrolling) {
-        changed
-          .filter((item) => !item.isViewable)
-          .forEach((item) => {
+        debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
+        if (markAsReadWhenScrolling && orientation.current === "down") {
+          changed
+            .filter((item) => !item.isViewable)
+            .forEach((item) => {
+              unreadSyncService.markEntryAsRead(stableIdExtractor(item))
+            })
+        }
+
+        if (markAsReadWhenRendering && orientation.current === "down") {
+          viewableItems.forEach((item) => {
             unreadSyncService.markEntryAsRead(stableIdExtractor(item))
           })
-      }
-
-      if (markAsReadWhenRendering) {
-        viewableItems
-          .filter((item) => item.isViewable)
-          .forEach((item) => {
-            unreadSyncService.markEntryAsRead(stableIdExtractor(item))
-          })
-      }
-    },
-    [markAsReadWhenRendering, markAsReadWhenScrolling, stableIdExtractor, isLoading],
-  )
+        }
+      },
+      onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const currentOffset = e.nativeEvent.contentOffset.y
+        const currentOrientation = currentOffset > lastOffset.current ? "down" : "up"
+        orientation.current = currentOrientation
+        lastOffset.current = currentOffset
+      },
+    }
+  }, [disabled, markAsReadWhenRendering, markAsReadWhenScrolling, orientation, stableIdExtractor])
 }
