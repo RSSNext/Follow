@@ -285,6 +285,7 @@ const SearchCard: FC<{
   onUnSubscribed?: (item: DiscoverSearchData[number]) => void
 }> = memo(({ item, onSuccess }) => {
   const follow = useFollow()
+  const { t } = useTranslation("external")
 
   return (
     <Card data-feed-id={item.feed?.id || item.list?.id} className="select-text">
@@ -327,6 +328,7 @@ const SearchCard: FC<{
           <CardFooter>
             <Button
               variant={item.isSubscribed ? "outline" : undefined}
+              disabled={item.isSubscribed}
               onClick={() => {
                 follow({
                   isList: !!item.list?.id,
@@ -341,13 +343,13 @@ const SearchCard: FC<{
                 })
               }}
             >
-              {item.isSubscribed ? "Followed" : "Follow"}
+              {item.isSubscribed ? t("feed.actions.followed") : t("feed.actions.follow")}
             </Button>
             <div className="ml-6 text-zinc-500">
               <span className="font-medium text-zinc-800 dark:text-zinc-200">
                 {item.subscriptionCount ?? 0}
               </span>{" "}
-              Followers
+              {t("feed.follower", { count: item.subscriptionCount })}
             </div>
           </CardFooter>
         </>
