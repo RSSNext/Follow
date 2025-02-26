@@ -136,7 +136,9 @@ function bootstrap() {
     session.defaultSession.webRequest.onHeadersReceived(
       {
         urls: [
+          `${apiURL}/better-auth/sign-in/email`,
           `${apiURL}/better-auth/sign-in/email?*`,
+          `${apiURL}/better-auth/two-factor/verify-totp`,
           `${apiURL}/better-auth/two-factor/verify-totp?*`,
         ],
       },
