@@ -104,7 +104,7 @@ const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
   })
 }
 
-const Tab: TabComponent = ({ tab, ...rest }) => {
+const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
   const tabHeight = useBottomTabBarHeight()
 
   const { data, isLoading } = useQuery({
@@ -190,6 +190,12 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
   const headerHeight = useAtomValue(headerHeightAtom)
 
   const insets = useSafeAreaInsets()
+
+  const scrollOffsetRef = useRef(0)
+  const { animatedY } = useContext(DiscoverContext)
+  useEffect(() => {
+    animatedY.value = scrollOffsetRef.current
+  }, [animatedY, isSelected])
   if (isLoading) {
     return <ActivityIndicator className="flex-1 items-center justify-center" />
   }
@@ -197,6 +203,11 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
   return (
     <View className="bg-system-background flex-1" {...rest}>
       <FlashList
+        onScroll={(e) => {
+          scrollOffsetRef.current = e.nativeEvent.contentOffset.y
+          animatedY.value = scrollOffsetRef.current
+        }}
+        scrollEventThrottle={16}
         estimatedItemSize={150}
         ref={listRef}
         data={alphabetGroups}
