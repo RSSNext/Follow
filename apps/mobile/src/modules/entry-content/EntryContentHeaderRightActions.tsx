@@ -152,18 +152,36 @@ const HeaderRightActionsImpl = ({
         <DropdownMenu.Content>
           {isHeaderTitleVisible && (
             <DropdownMenu.Group>
-              <DropdownMenu.Item key="Star" onSelect={handleToggleStar}>
-                <DropdownMenu.ItemTitle>{isStarred ? "Unstar" : "Star"}</DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
+              {!!subscription && (
+                <DropdownMenu.Item key="Star" onSelect={handleToggleStar}>
+                  <DropdownMenu.ItemTitle>{isStarred ? "Unstar" : "Star"}</DropdownMenu.ItemTitle>
+                  <DropdownMenu.ItemIcon
+                    ios={{
+                      name: isStarred ? "star.fill" : "star",
+                      paletteColors: isStarred ? ["#facc15"] : undefined,
+                    }}
+                  />
+                </DropdownMenu.Item>
+              )}
               <DropdownMenu.CheckboxItem
                 value={showAISummary}
                 key="Generate Summary"
                 onSelect={handleAISummary}
               >
                 <DropdownMenu.ItemTitle>Generate Summary</DropdownMenu.ItemTitle>
+                <DropdownMenu.ItemIcon
+                  ios={{
+                    name: "sparkles",
+                  }}
+                />
               </DropdownMenu.CheckboxItem>
               <DropdownMenu.Item key="Share" onSelect={handleShare}>
                 <DropdownMenu.ItemTitle>Share</DropdownMenu.ItemTitle>
+                <DropdownMenu.ItemIcon
+                  ios={{
+                    name: "square.and.arrow.up",
+                  }}
+                />
               </DropdownMenu.Item>
             </DropdownMenu.Group>
           )}
@@ -176,6 +194,11 @@ const HeaderRightActionsImpl = ({
             }}
           >
             <DropdownMenu.ItemTitle>Copy Link</DropdownMenu.ItemTitle>
+            <DropdownMenu.ItemIcon
+              ios={{
+                name: "link",
+              }}
+            />
           </DropdownMenu.Item>
           <DropdownMenu.Item
             key="OpenInBrowser"
@@ -185,6 +208,11 @@ const HeaderRightActionsImpl = ({
             }}
           >
             <DropdownMenu.ItemTitle>Open in Browser</DropdownMenu.ItemTitle>
+            <DropdownMenu.ItemIcon
+              ios={{
+                name: "safari",
+              }}
+            />
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

@@ -174,8 +174,7 @@ export const NavigationHeader = ({
 
       minHeight: defaultHeight,
       position: "relative",
-      flexDirection: "row",
-      alignItems: "center",
+
       overflow: "hidden",
     } satisfies DefaultStyle
     if (hideableBottom) {
@@ -255,6 +254,7 @@ export const NavigationHeader = ({
         style={{
           marginLeft: insets.left,
           marginRight: insets.right,
+          height: !modal ? defaultHeight - insets.top : defaultHeight,
           paddingHorizontal: titlebarPaddingHorizontal,
         }}
         pointerEvents={"box-none"}
