@@ -201,7 +201,7 @@ export const TextSize = () => {
 
   return (
     <div className="mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("appearance.text_size")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("appearance.text_size.label")}</span>
       <Select
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
@@ -215,7 +215,7 @@ export const TextSize = () => {
         <SelectContent position="item-aligned">
           {Object.entries(textSizeMap).map(([size, value]) => (
             <SelectItem className="capitalize" key={size} value={value.toString()}>
-              {size}
+              {t(`appearance.text_size.${size as keyof typeof textSizeMap}`)}
             </SelectItem>
           ))}
         </SelectContent>
