@@ -13,14 +13,14 @@ import Animated, {
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { SetBottomTabBarHeightContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarHeightContext"
+import { SetBottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
 import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
+import { Grid } from "../../ui/grid"
 import { ScaleFadeRotateIn } from "../../ux/animations/ScaleFadeRotate"
-import { Grid } from "../grid"
 import { BottomTabBarBackgroundContext } from "./contexts/BottomTabBarBackgroundContext"
 import { BottomTabBarVisibleContext } from "./contexts/BottomTabBarVisibleContext"
 

@@ -1,4 +1,5 @@
 import { useAtom } from "jotai"
+import { useState } from "react"
 import { Clipboard, Share, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
@@ -31,6 +32,7 @@ interface HeaderRightActionsProps {
   titleOpacityShareValue: SharedValue<number>
   isHeaderTitleVisible: boolean
 }
+
 const HeaderRightActionsImpl = ({
   entryId,
   titleOpacityShareValue,
@@ -93,15 +95,23 @@ const HeaderRightActionsImpl = ({
     })
   }
 
+  const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
+
   return (
     <View className="relative flex-row gap-4">
+      {!isHeaderTitleVisible && (
+        <View style={{ width: extraActionContainerWidth }} pointerEvents="none" />
+      )}
       <Animated.View
+        onLayout={(e) => {
+          setExtraActionContainerWidth(e.nativeEvent.layout.width)
+        }}
         style={useAnimatedStyle(() => {
           return {
             opacity: interpolate(titleOpacityShareValue.value, [0, 1], [1, 0]),
           }
         })}
-        className="absolute right-[32px] flex-row gap-2"
+        className="absolute right-[32px] z-10 flex-row gap-2"
       >
         {!!subscription && (
           <ActionBarItem

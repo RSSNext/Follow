@@ -3,11 +3,10 @@ import { useMemo } from "react"
 import { Share, useAnimatedValue, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
-import {
-  NavigationBlurEffectHeader,
-  NavigationContext,
-} from "@/src/components/common/SafeNavigationScrollView"
+import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
+import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import { getWebUrl } from "@/src/lib/env"
 import {
@@ -56,6 +55,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
           return
         }, [isFeed, isTimeline, isSubscriptions, params])}
         headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}
+        headerHideableBottomHeight={TIMELINE_VIEW_SELECTOR_HEIGHT}
       />
       {children}
     </NavigationContext.Provider>

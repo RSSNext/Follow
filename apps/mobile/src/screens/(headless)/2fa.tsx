@@ -13,10 +13,8 @@ import type { OtpInputRef } from "react-native-otp-entry"
 import { OtpInput } from "react-native-otp-entry"
 import { useColor } from "react-native-uikit-colors"
 
-import {
-  NavigationBlurEffectHeader,
-  NavigationContext,
-} from "@/src/components/common/SafeNavigationScrollView"
+import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { twoFactor } from "@/src/lib/auth"
 import { queryClient } from "@/src/lib/query-client"

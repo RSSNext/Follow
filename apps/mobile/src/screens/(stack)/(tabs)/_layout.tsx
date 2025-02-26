@@ -3,7 +3,7 @@ import { Easing, Pressable, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
 
-import { BottomTabs } from "@/src/components/ui/tabbar/BottomTabs"
+import { BottomTabs } from "@/src/components/layouts/tabbar/BottomTabs"
 import { BlackBoard2CuteFiIcon } from "@/src/icons/black_board_2_cute_fi"
 import { BlackBoard2CuteReIcon } from "@/src/icons/black_board_2_cute_re"
 import { Home5CuteFiIcon } from "@/src/icons/home_5_cute_fi"

@@ -10,6 +10,7 @@ import Animated, {
 
 import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { gentleSpringPreset } from "@/src/constants/spring"
+import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import type { ViewDefinition } from "@/src/constants/views"
 import { selectTimeline, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useViewWithSubscription } from "@/src/store/subscription/hooks"
@@ -25,7 +26,10 @@ export function TimelineViewSelector() {
   const activeViews = useViewWithSubscription()
 
   return (
-    <View className="flex items-center justify-between py-2">
+    <View
+      className="flex items-center justify-between py-2"
+      style={{ height: TIMELINE_VIEW_SELECTOR_HEIGHT }}
+    >
       <ScrollView
         horizontal
         scrollsToTop={false}

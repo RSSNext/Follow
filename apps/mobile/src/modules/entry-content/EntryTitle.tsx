@@ -3,14 +3,13 @@ import { useCallback, useContext, useEffect, useState } from "react"
 import { Text, View } from "react-native"
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 
-import {
-  NavigationBlurEffectHeader,
-  NavigationContext,
-} from "@/src/components/common/SafeNavigationScrollView"
+import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { Portal } from "@/src/components/ui/portal/Portal"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
-import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/HeaderActions"
+import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/EntryContentHeaderRightActions"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
@@ -60,13 +59,17 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
           [ctxValue, entryId, opacityAnimatedValue, isHeaderTitleVisible],
         )}
         headerTitle={() => (
-          <Animated.Text
-            className={"text-label text-[17px] font-semibold"}
-            numberOfLines={1}
-            style={{ opacity: opacityAnimatedValue }}
-          >
-            {title}
-          </Animated.Text>
+          <Portal>
+            <View className="absolute inset-x-12 inset-y-0 flex-row items-center justify-center">
+              <Animated.Text
+                className={"text-label text-center text-[17px] font-semibold"}
+                numberOfLines={1}
+                style={{ opacity: opacityAnimatedValue }}
+              >
+                {title}
+              </Animated.Text>
+            </View>
+          </Portal>
         )}
       />
       <View

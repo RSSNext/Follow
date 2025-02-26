@@ -11,12 +11,12 @@ import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarBackgroundContext"
-import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
+import { BottomTabBarBackgroundContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarBackgroundContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarVisibleContext"
 import {
   useBottomTabBarHeight,
   useRegisterNavigationScrollView,
-} from "@/src/components/ui/tabbar/hooks"
+} from "@/src/components/layouts/tabbar/hooks"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"

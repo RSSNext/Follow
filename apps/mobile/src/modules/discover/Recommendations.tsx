@@ -23,7 +23,7 @@ import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import {
   useBottomTabBarHeight,
   useRegisterNavigationScrollView,
-} from "@/src/components/ui/tabbar/hooks"
+} from "@/src/components/layouts/tabbar/hooks"
 import type { TabComponent } from "@/src/components/ui/tabview/TabView"
 import { apiClient } from "@/src/lib/api-fetch"
 

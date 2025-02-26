@@ -9,7 +9,7 @@ import { Balance } from "@/src/components/common/Balance"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInformationCell,
   GroupedInsetListCard,

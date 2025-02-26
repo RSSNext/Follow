@@ -6,13 +6,13 @@ import type { ScrollView } from "react-native"
 import { Alert, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { SetBottomTabBarVisibleContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarVisibleContext"
+import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 import {
   GroupedInsetListCard,
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
-import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { getDbPath } from "@/src/database"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
 import { CertificateCuteFiIcon } from "@/src/icons/certificate_cute_fi"

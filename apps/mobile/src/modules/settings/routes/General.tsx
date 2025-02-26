@@ -5,7 +5,7 @@ import { setGeneralSetting, useGeneralSettingKey } from "@/src/atoms/settings/ge
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Select } from "@/src/components/ui/form/Select"
 import {
   GroupedInsetListBaseCell,

@@ -18,16 +18,14 @@ import { AddFeedDialog } from "../dialogs/AddFeedDialog"
 import { MarkAllAsReadDialog } from "../dialogs/MarkAllAsReadDialog"
 
 const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
-  return (
-    <View className={cn("flex flex-row items-center gap-2 px-[12px]", className)}>{children}</View>
-  )
+  return <View className={cn("flex flex-row items-center gap-2", className)}>{children}</View>
 }
 
 export function HomeLeftAction() {
   const user = useWhoami()
   if (!user) return null
   return (
-    <ActionGroup>
+    <ActionGroup className="ml-2">
       <TouchableOpacity onPress={() => router.push("/profile")}>
         <UserAvatar image={user.image} name={user.name!} size={28} className="rounded-full" />
       </TouchableOpacity>
@@ -37,7 +35,7 @@ export function HomeLeftAction() {
 
 export function HomeSharedRightAction(props: PropsWithChildren) {
   return (
-    <ActionGroup className="-mr-2">
+    <ActionGroup>
       {props.children}
 
       <UIBarButton

@@ -9,7 +9,7 @@ import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComp
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListBaseCell,
   GroupedInsetListCard,
