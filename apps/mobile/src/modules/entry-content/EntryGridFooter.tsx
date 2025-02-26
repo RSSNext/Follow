@@ -39,7 +39,10 @@ export const EntryGridFooter = ({
           style={unreadIndicatorStyle}
         />
         {entry.description && (
-          <Text numberOfLines={2} className={cn("text-base font-medium", descriptionClassName)}>
+          <Text
+            numberOfLines={2}
+            className={cn("text-label text-base font-medium", descriptionClassName)}
+          >
             {entry.description}
           </Text>
         )}
