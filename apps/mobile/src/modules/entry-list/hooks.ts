@@ -9,9 +9,9 @@ import { unreadSyncService } from "@/src/store/unread/store"
 const defaultIdExtractor = (item: ViewToken) => item.key
 export function useOnViewableItemsChanged({
   idExtractor = defaultIdExtractor,
-  isLoading,
+  disabled,
 }: {
-  isLoading?: boolean
+  disabled?: boolean
   idExtractor?: (item: ViewToken) => string
 } = {}): {
   onViewableItemsChanged: (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void
@@ -28,7 +28,7 @@ export function useOnViewableItemsChanged({
   return useMemo(() => {
     return {
       onViewableItemsChanged: ({ viewableItems, changed }) => {
-        if (isLoading) return
+        if (disabled) return
 
         debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
         if (markAsReadWhenScrolling && orientation.current === "down") {
@@ -54,5 +54,5 @@ export function useOnViewableItemsChanged({
         lastOffset.current = currentOffset
       },
     }
-  }, [isLoading, markAsReadWhenRendering, markAsReadWhenScrolling, orientation, stableIdExtractor])
+  }, [disabled, markAsReadWhenRendering, markAsReadWhenScrolling, orientation, stableIdExtractor])
 }

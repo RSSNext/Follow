@@ -32,7 +32,7 @@ export const EntryListContentArticle = forwardRef<
   )
 
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    isLoading: isRefetching,
+    disabled: isRefetching,
   })
 
   return (

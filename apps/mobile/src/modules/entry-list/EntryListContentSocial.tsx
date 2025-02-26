@@ -26,7 +26,7 @@ export const EntryListContentSocial = forwardRef<
   )
 
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    isLoading: isRefetching,
+    disabled: isRefetching,
   })
 
   return (

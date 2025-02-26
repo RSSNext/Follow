@@ -19,7 +19,7 @@ export const EntryListContentGrid = forwardRef<
 >(({ entryIds, ...rest }, ref) => {
   const { fetchNextPage, refetch, isRefetching, hasNextPage } = useFetchEntriesControls()
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    isLoading: isRefetching,
+    disabled: isRefetching,
   })
 
   return (
