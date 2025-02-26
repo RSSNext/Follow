@@ -20,7 +20,6 @@ import { useColor } from "react-native-uikit-colors"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
-import { PortalHost } from "../../ui/portal"
 import { NavigationContext } from "../views/NavigationContext"
 import { SetNavigationHeaderHeightContext } from "../views/NavigationHeaderContext"
 
@@ -29,6 +28,7 @@ export interface NavigationHeaderRawProps {
     canGoBack: boolean
   }>
   headerTitle?: FC<React.ComponentProps<typeof HeaderTitle>> | ReactNode
+  headerTitleAbsolute?: boolean
   headerRight?: FC<{
     canGoBack: boolean
   }>
@@ -131,6 +131,7 @@ export const NavigationHeader = ({
   modal = false,
   hideableBottom,
   hideableBottomHeight,
+  headerTitleAbsolute,
   ...rest
 }: NavigationHeaderProps) => {
   const insets = useSafeAreaInsets()
@@ -256,36 +257,42 @@ export const NavigationHeader = ({
         }}
         pointerEvents={"box-none"}
       >
-        <PortalHost>
-          {/* Left */}
-          <View
-            className="min-w-6 flex-row items-center justify-start"
-            pointerEvents={"box-none"}
-            onLayout={useCallback((e: LayoutChangeEvent) => {
-              setHeaderLeftWidth(e.nativeEvent.layout.width)
-            }, [])}
-          >
-            <HeaderLeft canGoBack={canBack} />
-          </View>
-          {/* Center */}
-          <Animated.View
-            onLayout={useCallback((e: LayoutChangeEvent) => {
-              setTitleWidth(e.nativeEvent.layout.width)
-            }, [])}
-            className="flex-1 items-center justify-center"
-            pointerEvents={"box-none"}
-            style={{
-              marginHorizontal: titleMarginHorizontal,
-              transform: [{ translateX: titleTransformX }],
-            }}
-          >
-            {headerTitle}
-          </Animated.View>
-          {/* Right */}
-          <View className="min-w-6 flex-row items-center justify-end" pointerEvents={"box-none"}>
-            <RightButton canGoBack={canBack} />
-          </View>
-        </PortalHost>
+        {/* Left */}
+        <View
+          className="min-w-6 flex-row items-center justify-start"
+          pointerEvents={"box-none"}
+          onLayout={useCallback((e: LayoutChangeEvent) => {
+            setHeaderLeftWidth(e.nativeEvent.layout.width)
+          }, [])}
+        >
+          <HeaderLeft canGoBack={canBack} />
+        </View>
+        {/* Center */}
+
+        <Animated.View
+          onLayout={(e: LayoutChangeEvent) => {
+            setTitleWidth(e.nativeEvent.layout.width)
+          }}
+          className="flex-1 items-center justify-center"
+          pointerEvents={"box-none"}
+          style={{
+            marginHorizontal: titleMarginHorizontal,
+            transform: [{ translateX: titleTransformX }],
+          }}
+        >
+          {headerTitleAbsolute ? <View /> : headerTitle}
+        </Animated.View>
+
+        {/* Right */}
+        <View className="min-w-6 flex-row items-center justify-end" pointerEvents={"box-none"}>
+          <RightButton canGoBack={canBack} />
+        </View>
+        <View
+          className="absolute inset-0 flex-row items-center justify-center"
+          pointerEvents={"box-none"}
+        >
+          {headerTitleAbsolute && headerTitle}
+        </View>
       </View>
 
       {!!hideableBottom && (

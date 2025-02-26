@@ -90,11 +90,13 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
 export const NavigationBlurEffectHeader = ({
   headerHideableBottom,
   headerHideableBottomHeight,
+  headerTitleAbsolute,
   ...props
 }: NativeStackNavigationOptions & {
   blurThreshold?: number
   headerHideableBottomHeight?: number
   headerHideableBottom?: () => React.ReactNode
+  headerTitleAbsolute?: boolean
 }) => {
   const label = useColor("label")
 
@@ -134,6 +136,7 @@ export const NavigationBlurEffectHeader = ({
                   headerLeft={options.headerLeft}
                   hideableBottom={hideableBottom}
                   hideableBottomHeight={headerHideableBottomHeight}
+                  headerTitleAbsolute={headerTitleAbsolute}
                   // @ts-expect-error
                   headerTitle={options.headerTitle}
                 />

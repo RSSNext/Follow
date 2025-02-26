@@ -13,7 +13,10 @@ export const UserAvatar = ({ image, size = 24, name, className }: UserAvatarProp
   if (!image) {
     return (
       <View
-        className="bg-secondary-system-background items-center justify-center rounded-full"
+        className={cn(
+          "bg-secondary-system-background items-center justify-center rounded-full",
+          className,
+        )}
         style={{ width: size, height: size }}
       >
         <Text className="text-secondary-label text-xs">{name.slice(0, 2)}</Text>
@@ -24,7 +27,7 @@ export const UserAvatar = ({ image, size = 24, name, className }: UserAvatarProp
   return (
     <ProxiedImage
       source={{ uri: image }}
-      className={cn("rounded", className)}
+      className={cn("rounded-full", className)}
       style={{ width: size, height: size }}
       resizeMode="cover"
       proxy={{

@@ -86,11 +86,11 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
               postfixText="ago"
             />
           </View>
-          <Text numberOfLines={2} className="text-label text-lg font-semibold leading-tight">
+          <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
           {view !== FeedViewType.Notifications && (
-            <Text numberOfLines={2} className="text-secondary-label mt-1 text-base leading-tight">
+            <Text numberOfLines={2} className="text-secondary-label text-base">
               {description}
             </Text>
           )}

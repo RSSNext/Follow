@@ -1,13 +1,25 @@
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useHeaderHeight } from "@react-navigation/elements"
+import { useQuery } from "@tanstack/react-query"
+import { router } from "expo-router"
 import { useCallback, useContext, useEffect, useState } from "react"
-import { Text, View } from "react-native"
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
+import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import type { SharedValue } from "react-native-reanimated"
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
+import { useColor } from "react-native-uikit-colors"
 
+import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { Portal } from "@/src/components/ui/portal/Portal"
+import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
+import { apiClient } from "@/src/lib/api-fetch"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/EntryContentHeaderRightActions"
 import { useEntry } from "@/src/store/entry/hooks"
@@ -41,11 +53,23 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
   }, [scrollY, title, titleHeight, headerHeight, opacityAnimatedValue])
 
   const ctxValue = useEntryContentContext()
+  const headerBarWidth = useWindowDimensions().width
   return (
     <>
       <NavigationBlurEffectHeader
         headerShown
+        headerTitleAbsolute
         title={title}
+        headerLeft={useTypeScriptHappyCallback(
+          ({ canGoBack }) => (
+            <EntryLeftGroup
+              canGoBack={canGoBack ?? false}
+              entryId={entryId}
+              titleOpacityShareValue={opacityAnimatedValue}
+            />
+          ),
+          [entryId],
+        )}
         headerRight={useCallback(
           () => (
             <EntryContentContext.Provider value={ctxValue}>
@@ -58,9 +82,13 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
           ),
           [ctxValue, entryId, opacityAnimatedValue, isHeaderTitleVisible],
         )}
-        headerTitle={() => (
-          <Portal>
-            <View className="absolute inset-x-12 inset-y-0 flex-row items-center justify-center">
+        headerTitle={useCallback(
+          () => (
+            <View
+              className="flex-row items-center justify-center"
+              pointerEvents="none"
+              style={{ width: headerBarWidth - 80 }}
+            >
               <Animated.Text
                 className={"text-label text-center text-[17px] font-semibold"}
                 numberOfLines={1}
@@ -69,7 +97,8 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
                 {title}
               </Animated.Text>
             </View>
-          </Portal>
+          ),
+          [headerBarWidth, opacityAnimatedValue, title],
         )}
       />
       <View
@@ -158,5 +187,76 @@ export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
         </Text>
       </View>
     </>
+  )
+}
+
+interface EntryLeftGroupProps {
+  canGoBack: boolean
+  entryId: string
+  titleOpacityShareValue: SharedValue<number>
+}
+
+const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLeftGroupProps) => {
+  const label = useColor("label")
+
+  const hideRecentReader = useUISettingKey("hideRecentReader")
+  const animatedOpacity = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(titleOpacityShareValue.value, [0, 1], [1, 0]),
+    }
+  })
+  return (
+    <View className="flex-row items-center justify-center">
+      <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
+        {canGoBack && <MingcuteLeftLineIcon height={20} width={20} color={label} />}
+      </TouchableOpacity>
+
+      {!hideRecentReader && (
+        <Animated.View style={animatedOpacity} className="absolute left-[32px] z-10 flex-row gap-2">
+          <EntryReadHistory entryId={entryId} />
+        </Animated.View>
+      )}
+    </View>
+  )
+}
+
+const EntryReadHistory = ({ entryId }: { entryId: string }) => {
+  const { data } = useQuery({
+    queryKey: ["entry-read-history", entryId],
+    queryFn: () => {
+      return apiClient.entries["read-histories"][":id"].$get({
+        param: {
+          id: entryId,
+        },
+        query: {
+          size: 6,
+        },
+      })
+    },
+    staleTime: 1000 * 60 * 5,
+  })
+  if (!data?.data.entryReadHistories) return null
+  return (
+    <View className="flex-row items-center justify-center">
+      {data?.data.entryReadHistories.userIds.map((userId, index) => {
+        const user = data.data.users[userId]
+        if (!user) return null
+        return (
+          <View
+            className="border-system-background bg-tertiary-system-background overflow-hidden rounded-full border-2"
+            key={userId}
+            style={{
+              transform: [
+                {
+                  translateX: index * -10,
+                },
+              ],
+            }}
+          >
+            <UserAvatar size={25} name={user.name!} image={user.image} />
+          </View>
+        )
+      })}
+    </View>
   )
 }

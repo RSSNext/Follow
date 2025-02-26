@@ -110,6 +110,7 @@ const HeaderRightActionsImpl = ({
       {!isHeaderTitleVisible && (
         <View style={{ width: extraActionContainerWidth }} pointerEvents="none" />
       )}
+
       <Animated.View
         onLayout={(e) => {
           setExtraActionContainerWidth(e.nativeEvent.layout.width)

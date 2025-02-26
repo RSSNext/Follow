@@ -11,15 +11,15 @@ interface PortalHostProps {
 
 export function PortalHost(props: PortalHostProps) {
   const id = React.useId()
-  const nextKey = useRef(`${id}-0`)
+  const nextKey = useRef(0)
   const queue = useRef<Operation[]>([])
   const manager = useRef<IPortalManager>()
 
   const mount = useCallback((children: React.ReactNode, _key?: PortalKey) => {
     let key = _key
     if (!key) {
-      key = nextKey.current
-      nextKey.current = `${id}-${Number.parseInt(key) + 1}`
+      nextKey.current++
+      key = `${id}-${nextKey.current}`
     }
 
     if (manager.current) {
