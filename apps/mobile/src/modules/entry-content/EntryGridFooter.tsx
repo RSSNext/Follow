@@ -1,9 +1,11 @@
 import { cn } from "@follow/utils"
+import { useEffect } from "react"
 import { Text, View } from "react-native"
-import ReAnimated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
+import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
@@ -18,6 +20,16 @@ export const EntryGridFooter = ({
   const feed = useFeed(entry?.feedId || "")
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
+
+  useEffect(() => {
+    if (!entry) return
+
+    if (entry.read) {
+      unreadZoomSharedValue.value = withSpring(0, gentleSpringPreset)
+    } else {
+      unreadZoomSharedValue.value = withSpring(1, gentleSpringPreset)
+    }
+  }, [entry, entry?.read, unreadZoomSharedValue])
 
   const unreadIndicatorStyle = useAnimatedStyle(() => {
     return {
