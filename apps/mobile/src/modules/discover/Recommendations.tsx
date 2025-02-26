@@ -193,8 +193,11 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
 
   const scrollOffsetRef = useRef(0)
   const { animatedY } = useContext(DiscoverContext)
+
   useEffect(() => {
-    animatedY.value = scrollOffsetRef.current
+    if (isSelected) {
+      animatedY.value = scrollOffsetRef.current
+    }
   }, [animatedY, isSelected])
   if (isLoading) {
     return <ActivityIndicator className="flex-1 items-center justify-center" />

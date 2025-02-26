@@ -1,4 +1,3 @@
-import { PortalProvider } from "@gorhom/portal"
 import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
@@ -9,6 +8,7 @@ import {
   setWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
 import { ContextMenu } from "@/src/components/ui/context-menu"
+import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 import { useSelectedView } from "@/src/modules/screen/atoms"
@@ -38,14 +38,14 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
       <ContextMenu.Content>
         <ContextMenu.Preview size="STRETCH" onPress={handlePressPreview}>
           {() => (
-            <PortalProvider>
+            <PortalHost>
               <View className="bg-system-background flex-1">
                 <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
                   {entry.title}
                 </Text>
                 <EntryContentWebView entry={entry} />
               </View>
-            </PortalProvider>
+            </PortalHost>
           )}
         </ContextMenu.Preview>
 

@@ -44,7 +44,7 @@ export const AISummary: FC<{
   return (
     <Animated.View
       layout={CurvedTransition}
-      className={cn("border-non-opaque-separator mx-2 rounded border p-3", className)}
+      className={cn("border-system-fill mx-2 rounded-lg border p-3", className)}
     >
       <View className="flex-row items-center gap-2">
         <Magic2CuteReIcon height={16} width={16} color={labelColor} />
@@ -54,7 +54,6 @@ export const AISummary: FC<{
         {error ? (
           <Animated.View entering={FadeIn} exiting={FadeOut} className="mt-3">
             <View className="flex-row items-center gap-2">
-              {/* <ErrorIcon width={16} height={16} color={errorColor} /> */}
               <Text className="text-red flex-1 text-[15px]">{error}</Text>
             </View>
             {onRetry && (

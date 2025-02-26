@@ -24,7 +24,6 @@
     "@follow/models": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
-    "@gorhom/portal": "1.0.14",
     "@hookform/resolvers": "4.1.0",
     "@react-native-community/image-editor": "4.3.0",
     "@react-native-picker/picker": "2.11.0",

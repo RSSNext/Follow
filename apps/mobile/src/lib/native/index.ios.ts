@@ -16,3 +16,13 @@ export const quickLookImage = (images: string[]) => {
 export const performNativeScrollToTop = (reactTag: number) => {
   nativeModule.scrollToTop(reactTag)
 }
+
+export const showIntelligenceGlowEffect = () => {
+  requireNativeModule("AppleIntelligenceGlowEffect").show()
+
+  return hideIntelligenceGlowEffect
+}
+
+export const hideIntelligenceGlowEffect = () => {
+  requireNativeModule("AppleIntelligenceGlowEffect").hide()
+}

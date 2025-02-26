@@ -1,5 +1,4 @@
 import { FeedViewType } from "@follow/constants"
-import { PortalProvider } from "@gorhom/portal"
 import { useLocalSearchParams } from "expo-router"
 import { atom } from "jotai"
 import { useMemo } from "react"
@@ -10,6 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { SafeNavigationScrollView } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
+import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
 import { EntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryAISummary } from "@/src/modules/entry-content/EntryAISummary"
@@ -40,7 +40,7 @@ export default function EntryDetailPage() {
 
   return (
     <EntryContentContext.Provider value={ctxValue}>
-      <PortalProvider>
+      <PortalHost>
         <BottomTabBarHeightContext.Provider value={insets.bottom}>
           <SafeNavigationScrollView
             automaticallyAdjustContentInsets={false}
@@ -80,7 +80,7 @@ export default function EntryDetailPage() {
             )}
           </SafeNavigationScrollView>
         </BottomTabBarHeightContext.Provider>
-      </PortalProvider>
+      </PortalHost>
     </EntryContentContext.Provider>
   )
 }

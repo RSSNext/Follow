@@ -1,6 +1,5 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import { jotaiStore } from "@follow/utils"
-import { PortalProvider } from "@gorhom/portal"
 import { ThemeProvider } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
@@ -14,6 +13,7 @@ import { RootSiblingParent } from "react-native-root-siblings"
 import { SheetProvider } from "react-native-sheet-transitions"
 
 import { PreviewImageProvider } from "../components/ui/image/PreviewPageProvider"
+import { PortalHost } from "../components/ui/portal"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
 import { DarkTheme, DefaultTheme } from "../theme/navigation"
@@ -38,7 +38,7 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
                     <ActionSheetProvider>
                       <PreviewImageProvider>
                         <RootSiblingParent>
-                          <PortalProvider>{children}</PortalProvider>
+                          <PortalHost>{children}</PortalHost>
                         </RootSiblingParent>
                       </PreviewImageProvider>
                     </ActionSheetProvider>

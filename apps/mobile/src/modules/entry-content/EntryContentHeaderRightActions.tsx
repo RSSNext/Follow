@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Clipboard, Share, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
@@ -12,7 +12,7 @@ import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { StarCuteReIcon } from "@/src/icons/star_cute_re"
-import { openLink } from "@/src/lib/native"
+import { hideIntelligenceGlowEffect, openLink, showIntelligenceGlowEffect } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
@@ -84,7 +84,9 @@ const HeaderRightActionsImpl = ({
     const getCachedOrGenerateSummary = async () => {
       const hasSummary = await summaryActions.getSummary(entryId)
       if (hasSummary) return
+      const hideGlowEffect = showIntelligenceGlowEffect()
       await summarySyncService.generateSummary(entryId)
+      hideGlowEffect()
     }
     setShowAISummary((prev) => {
       const n = !prev
@@ -94,6 +96,12 @@ const HeaderRightActionsImpl = ({
       return n
     })
   }
+
+  useEffect(() => {
+    return () => {
+      hideIntelligenceGlowEffect()
+    }
+  }, [])
 
   const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
 
