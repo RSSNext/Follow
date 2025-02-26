@@ -147,12 +147,12 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
       const { width, x } = event.nativeEvent.layout
       setTabWidths((prev) => {
         const newWidths = [...prev]
-        newWidths[index] = width
+        newWidths[index] = width - 16
         return newWidths
       })
       setTabPositions((prev) => {
         const newPositions = [...prev]
-        newPositions[index] = x
+        newPositions[index] = x + 12
         return newPositions
       })
     }, [])
@@ -197,17 +197,19 @@ export const TabBar = forwardRef<ScrollView, TabBarProps>(
         contentContainerStyle={styles.tabScroller}
         style={[styles.root, tabbarStyle]}
       >
-        {tabs.map((tab, index) => (
-          <TarBarItem
-            TabItem={TabItem}
-            key={tab.value}
-            index={index}
-            onTabItemPress={handleChangeTabIndex}
-            onLayout={handleTabItemLayout}
-            isSelected={currentTab === index}
-            tab={tab}
-          />
-        ))}
+        <View className="flex-row gap-x-3">
+          {tabs.map((tab, index) => (
+            <TarBarItem
+              TabItem={TabItem}
+              key={tab.value}
+              index={index}
+              onTabItemPress={handleChangeTabIndex}
+              onLayout={handleTabItemLayout}
+              isSelected={currentTab === index}
+              tab={tab}
+            />
+          ))}
+        </View>
 
         <Animated.View style={[styles.indicator, indicatorStyle]} />
       </ScrollView>
@@ -234,8 +236,11 @@ const styles = StyleSheet.create({
 const TabItemInner = ({ tab, isSelected }: { tab: Tab; isSelected: boolean }) => {
   const gray = useColor("gray")
   return (
-    <View className="p-2">
-      <Text style={{ color: isSelected ? accentColor : gray }} className="text-[15px] leading-none">
+    <View className="px-3 py-2">
+      <Text
+        style={{ color: isSelected ? accentColor : gray }}
+        className={cn("text-[15px] leading-none", isSelected ? "font-bold" : "font-medium")}
+      >
         {tab.name}
       </Text>
     </View>

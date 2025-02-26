@@ -42,8 +42,23 @@ export const RecommendationListItem: FC<{
       <View className="mt-1.5 flex-row self-start overflow-hidden rounded-lg">
         <FeedIcon siteUrl={`https://${data.url}`} size={28} />
       </View>
-      <View className="ml-2 flex-1">
-        <Text className="text-text text-base font-medium">{data.name}</Text>
+      <View className="ml-3 flex-1">
+        <View className="flex-row items-center justify-between gap-4">
+          <Text className="text-text text-lg font-medium">{data.name}</Text>
+          {/* Tags */}
+          <View className="shrink flex-row items-center">
+            {categories.map((c) => (
+              <View
+                className="bg-gray-6 mr-1 items-center justify-center overflow-hidden rounded-full px-3 py-1"
+                key={c}
+              >
+                <Text className="text-text/60 text-xs" numberOfLines={1}>
+                  {RSSHubCategoryCopyMap[c as keyof typeof RSSHubCategoryCopyMap]}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
         {/* Maintainers */}
         <View className="mb-1 flex-row flex-wrap items-center">
           {maintainers.map((m) => (
@@ -91,23 +106,10 @@ export const RecommendationListItem: FC<{
             </ContextMenu.Root>
           ))}
         </View>
-        {/* Tags */}
-        <View className="mt-0.5 flex-row items-center">
-          {categories.map((c) => (
-            <View
-              className="bg-gray-5 mr-1 items-center justify-center overflow-hidden rounded-lg px-2 py-1"
-              key={c}
-            >
-              <Text className="text-text/60 text-sm leading-none">
-                {RSSHubCategoryCopyMap[c as keyof typeof RSSHubCategoryCopyMap]}
-              </Text>
-            </View>
-          ))}
-        </View>
 
         {/* Items */}
 
-        <Grid columns={2} gap={8} className="mt-2">
+        <Grid columns={2} gap={8} className="mt-1">
           {Object.keys(data.routes).map((route) => (
             <View className="relative" key={route}>
               <TouchableOpacity
@@ -121,10 +123,14 @@ export const RecommendationListItem: FC<{
                     },
                   })
                 }}
-                className="bg-gray-5 h-10 flex-row items-center justify-center overflow-hidden rounded px-2"
+                className="bg-gray-6 h-10 flex-row items-center justify-center overflow-hidden rounded-xl px-2"
               />
               <View className="absolute inset-2 items-center justify-center" pointerEvents="none">
-                <Text ellipsizeMode="middle" numberOfLines={1} className="text-text whitespace-pre">
+                <Text
+                  ellipsizeMode="middle"
+                  numberOfLines={1}
+                  className="text-text whitespace-pre font-medium"
+                >
                   {data.routes[route]!.name}
                 </Text>
               </View>
