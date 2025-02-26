@@ -20,6 +20,7 @@ import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
 import { VideoContextMenu } from "../../context-menu/video"
+import { EntryGridFooter } from "../../entry-content/EntryGridFooter"
 import { useEntryListContextView } from "../EntryListContext"
 
 export function EntryGridItem({ id }: { id: string }) {
@@ -46,8 +47,8 @@ export function EntryGridItem({ id }: { id: string }) {
 
   if (view === FeedViewType.Pictures) {
     return (
-      <View className="m-1 overflow-hidden rounded-md">
-        <MediaItems media={item.media} title={item.title || ""} view={view} entryId={id} />
+      <View className="m-1">
+        <MediaItems media={item.media} view={view} entryId={id} />
       </View>
     )
   }
@@ -62,7 +63,7 @@ export function EntryGridItem({ id }: { id: string }) {
           openLink(formattedUrl)
         }}
       >
-        <MediaItems media={item.media} title={item.title || ""} view={view} entryId={id} />
+        <MediaItems media={item.media} view={view} entryId={id} />
       </ItemPressable>
     </VideoContextMenu>
   )
@@ -73,13 +74,11 @@ const MediaItems = ({
   view,
   entryId,
   onPreview,
-  title,
 }: {
   media: MediaModel[]
   view: FeedViewType
   entryId: string
   onPreview?: () => void
-  title: string
 }) => {
   const firstMedia = media[0]
 
@@ -117,9 +116,7 @@ const MediaItems = ({
             />
           )}
         </View>
-        <Text className="text-label p-2 font-medium" numberOfLines={2}>
-          {title}
-        </Text>
+        <EntryGridFooter entryId={entryId} descriptionClassName="h-12" />
       </View>
     )
   }

@@ -9,6 +9,7 @@ import { storeDbMorph } from "@/src/morph/store-db"
 import { EntryService } from "@/src/services/entry"
 
 import { collectionActions } from "../collection/store"
+import { feedActions } from "../feed/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
@@ -314,6 +315,8 @@ class EntrySyncServices {
       const collections = honoMorph.toCollections(res.data, view ?? 0)
       await collectionActions.upsertMany(collections)
     }
+
+    await feedActions.upsertMany(res.data?.map((e) => honoMorph.toFeed(e.feeds)) || [])
 
     return res
   }

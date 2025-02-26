@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
@@ -18,10 +19,12 @@ import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
 import { EntryItemSkeleton } from "../EntryListContentArticle"
+import { useEntryListContextView } from "../EntryListContext"
 
 export function EntryNormalItem({ entryId, extraData }: { entryId: string; extraData: string }) {
   const entry = useEntry(entryId)
   const feed = useFeed(entry?.feedId as string)
+  const view = useEntryListContextView()
 
   const handlePress = useCallback(() => {
     if (!entry) return
@@ -86,58 +89,62 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
           <Text numberOfLines={2} className="text-label text-lg font-semibold leading-tight">
             {title}
           </Text>
-          <Text numberOfLines={2} className="text-secondary-label mt-1 text-base leading-tight">
-            {description}
-          </Text>
-        </View>
-        <View className="relative">
-          {image && (
-            <ProxiedImage
-              proxy={{
-                width: 96,
-                height: 96,
-              }}
-              source={{
-                uri: image,
-                headers: getImageHeaders(image),
-              }}
-              placeholder={{ blurhash }}
-              className="bg-system-fill ml-2 size-24 rounded-md"
-              contentFit="cover"
-              recyclingKey={image}
-              transition={500}
-            />
+          {view !== FeedViewType.Notifications && (
+            <Text numberOfLines={2} className="text-secondary-label mt-1 text-base leading-tight">
+              {description}
+            </Text>
           )}
+        </View>
+        {view !== FeedViewType.Notifications && (
+          <View className="relative">
+            {image && (
+              <ProxiedImage
+                proxy={{
+                  width: 96,
+                  height: 96,
+                }}
+                source={{
+                  uri: image,
+                  headers: getImageHeaders(image),
+                }}
+                placeholder={{ blurhash }}
+                className="bg-system-fill ml-2 size-24 rounded-md"
+                contentFit="cover"
+                recyclingKey={image}
+                transition={500}
+              />
+            )}
 
-          {audio && (
-            <TouchableOpacity
-              className="absolute inset-0 flex items-center justify-center"
-              onPress={() => {
-                if (isLoading) return
-                if (isPlaying) {
-                  player.pause()
-                  return
-                }
-                player.play({
-                  url: audio.url,
-                  title: entry?.title,
-                  artist: feed?.title,
-                  artwork: image,
-                })
-              }}
-            >
-              <View className="bg-gray-6/50 rounded-full p-2">
-                {isPlaying ? (
-                  <PauseCuteFiIcon color="white" width={24} height={24} />
-                ) : isLoading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <PlayCuteFiIcon color="white" width={24} height={24} />
-                )}
-              </View>
-            </TouchableOpacity>
-          )}
-        </View>
+            {audio && (
+              <TouchableOpacity
+                className="absolute inset-0 flex items-center justify-center"
+                onPress={() => {
+                  if (isLoading) return
+                  if (isPlaying) {
+                    player.pause()
+                    return
+                  }
+                  player.play({
+                    url: audio.url,
+                    title: entry?.title,
+                    artist: feed?.title,
+                    artwork: image,
+                  })
+                }}
+              >
+                <View className="bg-gray-6/50 rounded-full p-2">
+                  {isPlaying ? (
+                    <PauseCuteFiIcon color="white" width={24} height={24} />
+                  ) : isLoading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <PlayCuteFiIcon color="white" width={24} height={24} />
+                  )}
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
       </ItemPressable>
     </EntryItemContextMenu>
   )
