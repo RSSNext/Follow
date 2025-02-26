@@ -4,6 +4,7 @@ import { Clipboard, Share, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useColor } from "react-native-uikit-colors"
+import type { MenuItemIconProps } from "zeego/lib/typescript/menu"
 
 import { ActionBarItem } from "@/src/components/ui/action-bar/ActionBarItem"
 import { DropdownMenu } from "@/src/components/ui/context-menu"
@@ -23,6 +24,17 @@ import { summaryActions, summarySyncService } from "@/src/store/summary/store"
 
 import { useEntryContentContext } from "./ctx"
 
+type ActionItem = {
+  key: string
+  title: string
+  icon: React.JSX.Element
+  iconIOS: MenuItemIconProps["ios"]
+  onPress: () => void
+  active?: boolean
+  iconColor?: string
+  isCheckbox?: boolean
+}
+
 export function EntryContentHeaderRightActions(props: HeaderRightActionsProps) {
   return <HeaderRightActionsImpl {...props} />
 }
@@ -40,70 +52,105 @@ const HeaderRightActionsImpl = ({
 }: HeaderRightActionsProps) => {
   const labelColor = useColor("label")
   const isStarred = useIsEntryStarred(entryId)
+  const { showAISummaryAtom } = useEntryContentContext()
+  const [showAISummary, setShowAISummary] = useAtom(showAISummaryAtom)
+  const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
 
-  const entry = useEntry(entryId, (entry) => {
-    if (!entry) return
-    return {
-      url: entry.url,
-      feedId: entry.feedId,
-      title: entry.title,
-    }
-  })
-  const feed = useFeed(entry?.feedId as string, (feed) => {
-    return {
-      feedId: feed.id,
-    }
-  })
+  const entry = useEntry(
+    entryId,
+    (entry) =>
+      entry && {
+        url: entry.url,
+        feedId: entry.feedId,
+        title: entry.title,
+      },
+  )
+
+  const feed = useFeed(entry?.feedId as string, (feed) => feed && { feedId: feed.id })
   const subscription = useSubscription(feed?.feedId as string)
 
   const handleToggleStar = () => {
-    if (!entry) return
-    if (!feed) return
-    if (!subscription) return
-    if (isStarred) collectionSyncService.unstarEntry(entryId)
-    else
-      collectionSyncService.starEntry({
-        entryId,
-        feedId: feed.feedId,
-        view: subscription.view,
-      })
+    if (!entry || !feed || !subscription) return
+
+    isStarred
+      ? collectionSyncService.unstarEntry(entryId)
+      : collectionSyncService.starEntry({
+          entryId,
+          feedId: feed.feedId,
+          view: subscription.view,
+        })
   }
 
   const handleShare = () => {
-    if (!entry) return
-    Share.share({
-      title: entry.title!,
-      url: entry.url!,
-    })
+    if (!entry?.title || !entry?.url) return
+    Share.share({ title: entry.title, url: entry.url })
   }
-  const { showAISummaryAtom } = useEntryContentContext()
-  const [showAISummary, setShowAISummary] = useAtom(showAISummaryAtom)
+
   const handleAISummary = () => {
     if (!entry) return
 
     const getCachedOrGenerateSummary = async () => {
       const hasSummary = await summaryActions.getSummary(entryId)
       if (hasSummary) return
+
       const hideGlowEffect = showIntelligenceGlowEffect()
       await summarySyncService.generateSummary(entryId)
       hideGlowEffect()
     }
+
     setShowAISummary((prev) => {
-      const n = !prev
-      if (n) {
-        getCachedOrGenerateSummary()
-      }
-      return n
+      const newValue = !prev
+      if (newValue) getCachedOrGenerateSummary()
+      return newValue
     })
   }
 
+  const handleCopyLink = () => {
+    if (!entry?.url) return
+    Clipboard.setString(entry.url)
+    toast.info("Link copied to clipboard")
+  }
+
+  const handleOpenInBrowser = () => {
+    if (!entry?.url) return
+    openLink(entry.url)
+  }
+
   useEffect(() => {
-    return () => {
-      hideIntelligenceGlowEffect()
-    }
+    return () => hideIntelligenceGlowEffect()
   }, [])
 
-  const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
+  // Define action items for reuse
+  const actionItems = [
+    subscription && {
+      key: "Star",
+      title: isStarred ? "Unstar" : "Star",
+      icon: isStarred ? <StarCuteFiIcon /> : <StarCuteReIcon />,
+      iconIOS: {
+        name: isStarred ? "star.fill" : "star",
+        paletteColors: isStarred ? ["#facc15"] : undefined,
+      },
+      onPress: handleToggleStar,
+      active: isStarred,
+      iconColor: isStarred ? "#facc15" : undefined,
+    },
+    {
+      key: "GenerateSummary",
+      title: "Generate Summary",
+      icon: <Magic2CuteReIcon />,
+      iconIOS: { name: "sparkles" },
+      onPress: handleAISummary,
+      active: showAISummary,
+      isCheckbox: true,
+    },
+    {
+      key: "Share",
+      title: "Share",
+      icon: <Share3CuteReIcon />,
+      iconIOS: { name: "square.and.arrow.up" },
+      onPress: handleShare,
+    },
+  ].filter(Boolean) as ActionItem[]
 
   return (
     <View className="relative flex-row gap-4">
@@ -112,34 +159,26 @@ const HeaderRightActionsImpl = ({
       )}
 
       <Animated.View
-        onLayout={(e) => {
-          setExtraActionContainerWidth(e.nativeEvent.layout.width)
-        }}
-        style={useAnimatedStyle(() => {
-          return {
-            opacity: interpolate(titleOpacityShareValue.value, [0, 1], [1, 0]),
-          }
-        })}
+        onLayout={(e) => setExtraActionContainerWidth(e.nativeEvent.layout.width)}
+        style={useAnimatedStyle(() => ({
+          opacity: interpolate(titleOpacityShareValue.value, [0, 1], [1, 0]),
+        }))}
         className="absolute right-[32px] z-10 flex-row gap-2"
       >
-        {!!subscription && (
-          <ActionBarItem
-            onPress={handleToggleStar}
-            label={isStarred ? "Unstar" : "Star"}
-            active={isStarred}
-            iconColor={isStarred ? "#facc15" : undefined}
-          >
-            {isStarred ? <StarCuteFiIcon /> : <StarCuteReIcon />}
-          </ActionBarItem>
+        {actionItems.map(
+          (item) =>
+            item && (
+              <ActionBarItem
+                key={item.key}
+                onPress={item.onPress}
+                label={item.title}
+                active={item.active}
+                iconColor={item.iconColor}
+              >
+                {item.icon}
+              </ActionBarItem>
+            ),
         )}
-
-        <ActionBarItem onPress={handleAISummary} label="Generate Summary" active={showAISummary}>
-          <Magic2CuteReIcon />
-        </ActionBarItem>
-
-        <ActionBarItem onPress={handleShare} label="Share">
-          <Share3CuteReIcon />
-        </ActionBarItem>
       </Animated.View>
 
       <DropdownMenu.Root>
@@ -152,67 +191,34 @@ const HeaderRightActionsImpl = ({
         <DropdownMenu.Content>
           {isHeaderTitleVisible && (
             <DropdownMenu.Group>
-              {!!subscription && (
-                <DropdownMenu.Item key="Star" onSelect={handleToggleStar}>
-                  <DropdownMenu.ItemTitle>{isStarred ? "Unstar" : "Star"}</DropdownMenu.ItemTitle>
-                  <DropdownMenu.ItemIcon
-                    ios={{
-                      name: isStarred ? "star.fill" : "star",
-                      paletteColors: isStarred ? ["#facc15"] : undefined,
-                    }}
-                  />
-                </DropdownMenu.Item>
+              {actionItems.map(
+                (item) =>
+                  item &&
+                  (item.isCheckbox ? (
+                    <DropdownMenu.CheckboxItem
+                      key={item.key}
+                      value={item.active!}
+                      onSelect={item.onPress}
+                    >
+                      <DropdownMenu.ItemTitle>{item.title}</DropdownMenu.ItemTitle>
+                      <DropdownMenu.ItemIcon ios={item.iconIOS} />
+                    </DropdownMenu.CheckboxItem>
+                  ) : (
+                    <DropdownMenu.Item key={item.key} onSelect={item.onPress}>
+                      <DropdownMenu.ItemTitle>{item.title}</DropdownMenu.ItemTitle>
+                      <DropdownMenu.ItemIcon ios={item.iconIOS} />
+                    </DropdownMenu.Item>
+                  )),
               )}
-              <DropdownMenu.CheckboxItem
-                value={showAISummary}
-                key="Generate Summary"
-                onSelect={handleAISummary}
-              >
-                <DropdownMenu.ItemTitle>Generate Summary</DropdownMenu.ItemTitle>
-                <DropdownMenu.ItemIcon
-                  ios={{
-                    name: "sparkles",
-                  }}
-                />
-              </DropdownMenu.CheckboxItem>
-              <DropdownMenu.Item key="Share" onSelect={handleShare}>
-                <DropdownMenu.ItemTitle>Share</DropdownMenu.ItemTitle>
-                <DropdownMenu.ItemIcon
-                  ios={{
-                    name: "square.and.arrow.up",
-                  }}
-                />
-              </DropdownMenu.Item>
             </DropdownMenu.Group>
           )}
-          <DropdownMenu.Item
-            key="CopyLink"
-            onSelect={() => {
-              if (!entry?.url) return
-              Clipboard.setString(entry.url)
-              toast.info("Link copied to clipboard")
-            }}
-          >
+          <DropdownMenu.Item key="CopyLink" onSelect={handleCopyLink}>
             <DropdownMenu.ItemTitle>Copy Link</DropdownMenu.ItemTitle>
-            <DropdownMenu.ItemIcon
-              ios={{
-                name: "link",
-              }}
-            />
+            <DropdownMenu.ItemIcon ios={{ name: "link" }} />
           </DropdownMenu.Item>
-          <DropdownMenu.Item
-            key="OpenInBrowser"
-            onSelect={() => {
-              if (!entry?.url) return
-              openLink(entry.url)
-            }}
-          >
+          <DropdownMenu.Item key="OpenInBrowser" onSelect={handleOpenInBrowser}>
             <DropdownMenu.ItemTitle>Open in Browser</DropdownMenu.ItemTitle>
-            <DropdownMenu.ItemIcon
-              ios={{
-                name: "safari",
-              }}
-            />
+            <DropdownMenu.ItemIcon ios={{ name: "safari" }} />
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
