@@ -19,6 +19,7 @@ import { getFeed } from "@/src/store/feed/getter"
 
 import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
+const HEADER_ACTIONS_GROUP_WIDTH = 60
 export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
   const viewTitle = useSelectedFeedTitle()
@@ -33,23 +34,44 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
         headerShown
         title={viewTitle}
         headerLeft={useMemo(
-          () => (isTimeline || isSubscriptions ? () => <HomeLeftAction /> : undefined),
+          () =>
+            isTimeline || isSubscriptions
+              ? () => (
+                  <View style={{ width: HEADER_ACTIONS_GROUP_WIDTH }}>
+                    <HomeLeftAction />
+                  </View>
+                )
+              : undefined,
           [isTimeline, isSubscriptions],
         )}
         headerRight={useMemo(() => {
-          const buttonVariant = isFeed ? "secondary" : "primary"
-          if (isTimeline)
+          const Component = (() => {
+            const buttonVariant = isFeed ? "secondary" : "primary"
+            if (isTimeline)
+              return () => (
+                <HomeSharedRightAction>
+                  <UnreadOnlyActionButton variant={buttonVariant} />
+                </HomeSharedRightAction>
+              )
+            if (isSubscriptions) return () => <HomeSharedRightAction />
+            if (isFeed)
+              return () => (
+                <View className="-mr-2 flex-row gap-2">
+                  <UnreadOnlyActionButton variant={buttonVariant} />
+                  <FeedShareAction params={params} />
+                </View>
+              )
+          })()
+
+          if (Component)
             return () => (
-              <HomeSharedRightAction>
-                <UnreadOnlyActionButton variant={buttonVariant} />
-              </HomeSharedRightAction>
-            )
-          if (isSubscriptions) return () => <HomeSharedRightAction />
-          if (isFeed)
-            return () => (
-              <View className="-mr-2 flex-row gap-2">
-                <UnreadOnlyActionButton variant={buttonVariant} />
-                <FeedShareAction params={params} />
+              <View
+                style={{
+                  width: HEADER_ACTIONS_GROUP_WIDTH,
+                }}
+                className="flex-row items-center justify-end"
+              >
+                {Component()}
               </View>
             )
           return

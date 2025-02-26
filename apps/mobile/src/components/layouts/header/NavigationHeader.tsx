@@ -9,6 +9,7 @@ import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated"
 import type { DefaultStyle } from "react-native-reanimated/lib/typescript/hook/commonTypes"
@@ -212,6 +213,7 @@ export const NavigationHeader = ({
   const [titleWidth, setTitleWidth] = useState(0)
 
   const titleShouldCenterTransformX = useMemo(() => {
+    if (!titleWidth) return 0
     const halfTitleWidth = titleWidth / 2
     const currentTitleCenterX =
       titlebarPaddingHorizontal + headerLeftWidth + titleMarginHorizontal + halfTitleWidth
@@ -220,6 +222,11 @@ export const NavigationHeader = ({
     const transformX = centerX - currentTitleCenterX
     return transformX
   }, [titleBarWidth, titleWidth, headerLeftWidth])
+  const titleTransformX = useSharedValue(0)
+
+  useEffect(() => {
+    titleTransformX.value = withSpring(titleShouldCenterTransformX)
+  }, [titleShouldCenterTransformX, titleTransformX])
 
   return (
     <Animated.View
@@ -261,7 +268,7 @@ export const NavigationHeader = ({
             <HeaderLeft canGoBack={canBack} />
           </View>
           {/* Center */}
-          <View
+          <Animated.View
             onLayout={useCallback((e: LayoutChangeEvent) => {
               setTitleWidth(e.nativeEvent.layout.width)
             }, [])}
@@ -269,11 +276,11 @@ export const NavigationHeader = ({
             pointerEvents={"box-none"}
             style={{
               marginHorizontal: titleMarginHorizontal,
-              transform: [{ translateX: titleShouldCenterTransformX }],
+              transform: [{ translateX: titleTransformX }],
             }}
           >
             {headerTitle}
-          </View>
+          </Animated.View>
           {/* Right */}
           <View className="min-w-6 flex-row items-center justify-end" pointerEvents={"box-none"}>
             <RightButton canGoBack={canBack} />

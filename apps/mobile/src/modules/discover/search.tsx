@@ -14,6 +14,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
@@ -38,6 +39,7 @@ export const SearchHeader: FC<{
       className="relative"
       onLayout={onLayout}
     >
+      <BlurEffect />
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
@@ -56,16 +58,16 @@ const DiscoverHeaderImpl = () => {
   const { animatedX, currentTabAtom, headerHeightAtom } = useContext(DiscoverContext)
   const setCurrentTab = useSetAtom(currentTabAtom)
   const setHeaderHeight = useSetAtom(headerHeightAtom)
-  const bgColor = useColor("systemBackground")
 
   return (
     <View
-      style={{ minHeight: headerHeight, paddingTop: insets.top, backgroundColor: bgColor }}
+      style={{ minHeight: headerHeight, paddingTop: insets.top }}
       className="relative"
       onLayout={(e) => {
         setHeaderHeight(e.nativeEvent.layout.height)
       }}
     >
+      <BlurEffect />
       <View style={[styles.header, styles.discoverHeader]}>
         <PlaceholerSearchBar />
 
