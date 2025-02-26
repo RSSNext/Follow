@@ -168,12 +168,14 @@ export const NavigationHeader = ({
     defaultHeight,
     hideableBottomHeight,
   )
-  const rootHeightStyle = useAnimatedStyle(() => {
+  const rootTitleBarStyle = useAnimatedStyle(() => {
     const styles = {
       paddingTop: insets.top,
 
       minHeight: defaultHeight,
       position: "relative",
+      flexDirection: "row",
+      alignItems: "center",
       overflow: "hidden",
     } satisfies DefaultStyle
     if (hideableBottom) {
@@ -234,7 +236,7 @@ export const NavigationHeader = ({
       ref={animatedRef}
       pointerEvents={"box-none"}
       {...rest}
-      style={[rootHeightStyle, style]}
+      style={[rootTitleBarStyle, style]}
       onLayout={useCallback(
         (e: LayoutChangeEvent) => {
           setHeaderHeight?.(e.nativeEvent.layout.height)
@@ -249,7 +251,7 @@ export const NavigationHeader = ({
       {/* Grid */}
 
       <View
-        className="relative flex-row items-stretch"
+        className="relative flex-row items-center"
         style={{
           marginLeft: insets.left,
           marginRight: insets.right,
