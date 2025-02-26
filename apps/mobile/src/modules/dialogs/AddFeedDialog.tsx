@@ -37,7 +37,7 @@ export const AddFeedDialog: DialogComponent<{
         cursorColor={accentColor}
         selectionColor={accentColor}
         onSubmitEditing={handleAdd}
-        className="bg-system-background dark:bg-secondary-system-fill/30 text-text my-3 rounded-xl"
+        className="bg-system-background text-text my-3 rounded-xl p-2 px-4"
         placeholder="https:// or rsshub://"
       />
     </View>
