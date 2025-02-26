@@ -1,4 +1,3 @@
-import { FeedViewType } from "@follow/constants"
 import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
 import { Share, useAnimatedValue, View } from "react-native"
@@ -12,7 +11,6 @@ import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import { getWebUrl } from "@/src/lib/env"
 import {
-  HideNoMediaActionButton,
   HomeLeftAction,
   HomeSharedRightAction,
   UnreadOnlyActionButton,
@@ -20,13 +18,12 @@ import {
 import { TimelineViewSelector } from "@/src/modules/screen/TimelineViewSelector"
 import { getFeed } from "@/src/store/feed/getter"
 
-import { useEntryListContext, useSelectedFeedTitle, useSelectedView } from "./atoms"
+import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
 export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type
-  const view = useSelectedView()
   const params = useLocalSearchParams()
   const isFeed = screenType === "feed"
   const isTimeline = screenType === "timeline"
@@ -42,32 +39,22 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
         )}
         headerRight={useMemo(() => {
           const buttonVariant = isFeed ? "secondary" : "primary"
-          const extraActions = (
-            <>
-              {view === FeedViewType.Pictures && (
-                <HideNoMediaActionButton variant={buttonVariant} />
-              )}
-            </>
-          )
           if (isTimeline)
             return () => (
               <HomeSharedRightAction>
                 <UnreadOnlyActionButton variant={buttonVariant} />
-                {extraActions}
               </HomeSharedRightAction>
             )
-          if (isSubscriptions)
-            return () => <HomeSharedRightAction>{extraActions}</HomeSharedRightAction>
+          if (isSubscriptions) return () => <HomeSharedRightAction />
           if (isFeed)
             return () => (
               <View className="-mr-2 flex-row gap-2">
-                {extraActions}
                 <UnreadOnlyActionButton variant={buttonVariant} />
                 <FeedShareAction params={params} />
               </View>
             )
           return
-        }, [isFeed, view, isTimeline, isSubscriptions, params])}
+        }, [isFeed, isTimeline, isSubscriptions, params])}
         headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}
       />
       {children}

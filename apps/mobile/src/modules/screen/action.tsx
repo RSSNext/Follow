@@ -4,13 +4,10 @@ import type { PropsWithChildren } from "react"
 import { TouchableOpacity, View } from "react-native"
 
 import { setGeneralSetting, useGeneralSettingKey } from "@/src/atoms/settings/general"
-import { setUISetting, useUISettingKey } from "@/src/atoms/settings/ui"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
-import { PhotoAlbumCuteFiIcon } from "@/src/icons/photo_album_cute_fi"
-import { PhotoAlbumCuteReIcon } from "@/src/icons/photo_album_cute_re"
 import { RoundCuteFiIcon } from "@/src/icons/round_cute_fi"
 import { RoundCuteReIcon } from "@/src/icons/round_cute_re"
 import { Dialog } from "@/src/lib/dialog"
@@ -80,26 +77,7 @@ export const UnreadOnlyActionButton = ({ variant = "primary" }: HeaderActionButt
     />
   )
 }
-export function HideNoMediaActionButton({
-  variant = "primary",
-}: {
-  variant?: "primary" | "secondary"
-}) {
-  const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
-  const { size, color } = useButtonVariant({ variant })
 
-  return (
-    <UIBarButton
-      label="Hide No Media Item"
-      normalIcon={<PhotoAlbumCuteReIcon height={size} width={size} color={color} />}
-      selectedIcon={<PhotoAlbumCuteFiIcon height={size} width={size} color={color} />}
-      onPress={() => {
-        setUISetting("pictureViewFilterNoImage", !pictureViewFilterNoImage)
-      }}
-      selected={pictureViewFilterNoImage}
-    />
-  )
-}
 export const AddFeedButton = () => {
   return (
     <>

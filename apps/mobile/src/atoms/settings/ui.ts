@@ -17,10 +17,6 @@ export const createDefaultSettings = (): UISettings => ({
   guessCodeLanguage: true,
   hideRecentReader: false,
   customCSS: "",
-
-  // View
-
-  pictureViewFilterNoImage: false,
 })
 
 export const {

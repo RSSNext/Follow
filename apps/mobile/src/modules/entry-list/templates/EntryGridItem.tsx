@@ -7,7 +7,6 @@ import { ScrollView, Text, View } from "react-native"
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
@@ -27,16 +26,12 @@ export function EntryGridItem({ id }: { id: string }) {
   const item = useEntry(id)
   const view = useEntryListContextView()
 
-  const pictureViewFilterNoImage = useUISettingKey("pictureViewFilterNoImage")
   if (!item || !item.media) {
     return null
   }
 
   const hasMedia = item.media.length > 0
 
-  if (pictureViewFilterNoImage && !hasMedia && view === FeedViewType.Pictures) {
-    return null
-  }
   if (!hasMedia) {
     return (
       <View className="aspect-video w-full items-center justify-center">
