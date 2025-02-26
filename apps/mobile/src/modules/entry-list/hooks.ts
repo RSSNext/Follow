@@ -40,11 +40,9 @@ export function useOnViewableItemsChanged({
         }
 
         if (markAsReadWhenRendering && orientation.current === "down") {
-          viewableItems
-            .filter((item) => item.isViewable)
-            .forEach((item) => {
-              unreadSyncService.markEntryAsRead(stableIdExtractor(item))
-            })
+          viewableItems.forEach((item) => {
+            unreadSyncService.markEntryAsRead(stableIdExtractor(item))
+          })
         }
       },
       onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
