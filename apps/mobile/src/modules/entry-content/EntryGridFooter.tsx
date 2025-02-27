@@ -1,3 +1,4 @@
+import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
 import { useEffect } from "react"
 import { Text, View } from "react-native"
@@ -9,6 +10,8 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
+import { useEntryListContextView } from "../entry-list/EntryListContext"
+
 export const EntryGridFooter = ({
   entryId,
   descriptionClassName,
@@ -18,6 +21,7 @@ export const EntryGridFooter = ({
 }) => {
   const entry = useEntry(entryId)
   const feed = useFeed(entry?.feedId || "")
+  const view = useEntryListContextView()
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
 
@@ -41,7 +45,7 @@ export const EntryGridFooter = ({
   if (!entry) return null
 
   return (
-    <View className="my-2 px-2">
+    <View className={cn("my-2 px-2", view === FeedViewType.Videos && "h-[64]")}>
       <View className="flex-row gap-2">
         <ReAnimated.View
           className="bg-red mt-2 inline-block rounded-full"
