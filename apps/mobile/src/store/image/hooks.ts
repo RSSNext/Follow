@@ -3,7 +3,7 @@ import { useCallback } from "react"
 
 import { imageSyncService, useImagesStore } from "./store"
 
-export const usePrefetchImageColors = (url?: string) => {
+export const usePrefetchImageColors = (url?: string | null) => {
   useQuery({
     queryKey: ["image", "colors", url],
     queryFn: () => imageSyncService.getColors(url),
@@ -11,7 +11,7 @@ export const usePrefetchImageColors = (url?: string) => {
   })
 }
 
-export const useImageColors = (url?: string) => {
+export const useImageColors = (url?: string | null) => {
   return useImagesStore(
     useCallback(
       (state) => {

@@ -18,7 +18,7 @@ export const useImagesStore = createZustandStore<ImageStore>("images")(() => ({
 const immerSet = createImmerSetter(useImagesStore)
 
 class ImageSyncService {
-  async getColors(url?: string) {
+  async getColors(url?: string | null) {
     if (!url) {
       return
     }
