@@ -90,13 +90,13 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
             {title}
           </Text>
           {view !== FeedViewType.Notifications && (
-            <Text numberOfLines={2} className="text-secondary-label text-base">
+            <Text numberOfLines={2} className="text-secondary-label text-sm">
               {description}
             </Text>
           )}
         </View>
         {view !== FeedViewType.Notifications && (
-          <View className="relative">
+          <View className="relative ml-2">
             {image && (
               <ProxiedImage
                 proxy={{
@@ -108,7 +108,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
                   headers: getImageHeaders(image),
                 }}
                 placeholder={{ blurhash }}
-                className="bg-system-fill ml-2 size-24 rounded-md"
+                className="bg-system-fill size-24 rounded-md"
                 contentFit="cover"
                 recyclingKey={image}
                 transition={500}
