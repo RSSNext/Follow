@@ -103,7 +103,9 @@ const selectedTimelineAtom = atom<SelectedTimeline>({
 
 const selectedFeedAtom = atom<SelectedFeed>(null)
 
-export const EntryListContext = createContext<{ type: "timeline" | "feed" }>({ type: "timeline" })
+export const EntryListContext = createContext<{ type: "timeline" | "feed" | "subscriptions" }>({
+  type: "timeline",
+})
 export const useEntryListContext = () => {
   return useContext(EntryListContext)
 }
@@ -173,12 +175,6 @@ export function useSelectedFeed() {
 
   const selectedTimeline = useAtomValue(selectedTimelineAtom)
   const selectedFeed = useAtomValue(selectedFeedAtom)
-
-  const payload = getFetchEntryPayload(
-    entryListContext.type === "feed" ? selectedFeed : selectedTimeline,
-  )
-  usePrefetchEntries(payload)
-
   return entryListContext.type === "feed" ? selectedFeed : selectedTimeline
 }
 

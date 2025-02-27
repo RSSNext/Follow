@@ -35,6 +35,9 @@ import { useShareSubscription } from "../hooks/useShareSubscription"
 import { UserHeaderBanner } from "../UserHeaderBanner"
 
 type Subscription = Awaited<ReturnType<typeof apiClient.subscriptions.$get>>["data"][number]
+/**
+ * @deprecated
+ */
 export const ProfileScreen = () => {
   const scrollY = useSharedValue(0)
   const { data: subscriptions, isLoading, isError } = useShareSubscription()

@@ -1,8 +1,8 @@
 import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { findNodeHandle, Text, UIManager } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
@@ -11,10 +11,12 @@ import { useEventCallback } from "usehooks-ts"
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
-import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
-import { BottomTabBarBackgroundContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarBackgroundContext"
-import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
+import { BottomTabBarBackgroundContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarBackgroundContext"
+import { SetBottomTabBarVisibleContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarVisibleContext"
+import {
+  useBottomTabBarHeight,
+  useRegisterNavigationScrollView,
+} from "@/src/components/layouts/tabbar/hooks"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -67,10 +69,10 @@ function Settings() {
     [opacity],
   )
   const [contentSize, setContentSize] = useState({ height: 0, width: 0 })
-
+  const registerNavigationScrollView = useRegisterNavigationScrollView()
   useEffect(() => {
     if (!isFocused) return
-    const scrollView = scrollRef.current
+    const scrollView = registerNavigationScrollView.current
 
     if (contentSize.height === 0) return
 
@@ -82,7 +84,7 @@ function Settings() {
         })
       }
     }
-  }, [opacity, isFocused, calculateOpacity, contentSize.height])
+  }, [opacity, isFocused, calculateOpacity, contentSize.height, registerNavigationScrollView])
 
   const animatedScrollY = useSharedValue(0)
   const handleScroll = useEventCallback(
@@ -93,20 +95,12 @@ function Settings() {
     },
   )
 
-  const scrollRef = useRef<ScrollView>(null)
-
-  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
   return (
     <>
       <ReAnimatedScrollView
         scrollEventThrottle={16}
         onScroll={handleScroll}
-        ref={scrollRef}
-        onLayout={() => {
-          if (setAttachNavigationScrollViewRef) {
-            setAttachNavigationScrollViewRef(scrollRef)
-          }
-        }}
+        ref={registerNavigationScrollView}
         onContentSizeChange={(w, h) => {
           setContentSize({ height: h, width: w })
         }}
@@ -116,7 +110,7 @@ function Settings() {
       >
         <UserHeaderBanner scrollY={animatedScrollY} />
 
-        <SettingsList scrollRef={scrollRef} />
+        <SettingsList scrollRef={registerNavigationScrollView} />
       </ReAnimatedScrollView>
       <SettingHeader scrollY={animatedScrollY} />
     </>

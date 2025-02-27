@@ -3,7 +3,7 @@ import { router } from "expo-router"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListCard,
   GroupedInsetListNavigationLink,

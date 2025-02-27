@@ -10,9 +10,9 @@ import { resetShowSourceContent } from "~/atoms/source-content"
 import {
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
+  ROUTE_FEED_IN_INBOX,
+  ROUTE_FEED_IN_LIST,
   ROUTE_FEED_PENDING,
-  ROUTE_TIMELINE_OF_INBOX,
-  ROUTE_TIMELINE_OF_LIST,
   ROUTE_TIMELINE_OF_VIEW,
 } from "~/constants"
 
@@ -44,8 +44,8 @@ export const useNavigateEntry = () => {
 
 /*
  * /timeline/:timelineId/:feedId/:entryId
- * timelineId: view-1, list-xxx, inbox-xxx
- * feedId: xxx, folder-xxx
+ * timelineId: view-1
+ * feedId: xxx, folder-xxx, list-xxx, inbox-xxx
  * entryId: xxx
  */
 export const navigateEntry = (options: NavigateEntryOptions) => {
@@ -63,18 +63,18 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     finalFeedId = `${ROUTE_FEED_IN_FOLDER}${folderName}`
   }
 
+  if (listId) {
+    finalFeedId = `${ROUTE_FEED_IN_LIST}${listId}`
+  }
+
+  if (inboxId) {
+    finalFeedId = `${ROUTE_FEED_IN_INBOX}${inboxId}`
+  }
+
   finalFeedId = encodeURIComponent(finalFeedId)
 
   if (view !== undefined) {
     finalTimelineId = `${ROUTE_TIMELINE_OF_VIEW}${view}`
-  }
-
-  if (inboxId) {
-    finalTimelineId = `${ROUTE_TIMELINE_OF_INBOX}${inboxId}`
-  }
-
-  if (listId) {
-    finalTimelineId = `${ROUTE_TIMELINE_OF_LIST}${listId}`
   }
 
   resetShowSourceContent()

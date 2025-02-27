@@ -1,4 +1,3 @@
-import { PortalProvider } from "@gorhom/portal"
 import { Image } from "expo-image"
 import type { RefObject } from "react"
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
@@ -16,6 +15,7 @@ import { useEventCallback } from "usehooks-ts"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 
+import { PortalHost } from "../portal"
 import { ImageContextMenu } from "./ImageContextMenu"
 
 interface PreviewImageProps {
@@ -393,7 +393,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
       {children}
       {currentState && (
         <Modal transparent visible={previewModalOpen}>
-          <PortalProvider>
+          <PortalHost>
             <Animated.View style={overlayStyle} className="absolute inset-0" />
             <Animated.View style={modalStyle} className="w-full flex-1">
               <GestureHandlerRootView className="w-full flex-1">
@@ -441,7 +441,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
               </GestureHandlerRootView>
               {accessoriesElement}
             </Animated.View>
-          </PortalProvider>
+          </PortalHost>
         </Modal>
       )}
     </PreviewImageContext.Provider>

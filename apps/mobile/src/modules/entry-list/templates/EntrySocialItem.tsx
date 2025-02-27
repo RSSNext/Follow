@@ -1,8 +1,6 @@
 import { FeedViewType } from "@follow/constants"
-import { cn } from "@follow/utils"
-import { Image } from "expo-image"
 import { router } from "expo-router"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
@@ -10,6 +8,7 @@ import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -54,7 +53,6 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
     }
   }, [entry, entry?.read, unreadZoomSharedValue])
 
-  const [isTextCollapsed, setIsTextCollapsed] = useState(false)
   const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
   if (!entry) return <EntryItemSkeleton />
 
@@ -72,7 +70,7 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
           style={unreadIndicatorStyle}
         />
 
-        <View className="flex flex-1 flex-row items-center gap-4">
+        <View className="flex flex-1 flex-row items-start gap-4">
           <Pressable
             hitSlop={10}
             onPress={() => {
@@ -86,40 +84,22 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
             )}
           </Pressable>
 
-          <View className="flex flex-row items-end gap-1">
-            <Text className="text-label text-[16px] font-semibold">
+          <View className="flex flex-row items-center gap-1.5">
+            <Text className="text-label text-base font-semibold leading-none">
               {entry.author || feed?.title}
             </Text>
-
-            <RelativeDateTime
-              date={publishedAt}
-              className="text-secondary-label text-[14px] leading-none"
-            />
+            <Text className="text-secondary-label">·</Text>
+            <RelativeDateTime date={publishedAt} className="text-secondary-label text-[14px]" />
           </View>
         </View>
 
-        <View className="relative">
-          <View
-            className={cn(
-              "overflow-hidden",
-              autoExpandLongSocialMedia ? "max-h-none" : "max-h-[120px]",
-            )}
+        <View className="relative -mt-4">
+          <Text
+            numberOfLines={autoExpandLongSocialMedia ? undefined : 7}
+            className="text-label ml-12 text-base"
           >
-            <Text
-              numberOfLines={autoExpandLongSocialMedia ? undefined : 5}
-              className="text-label ml-12 text-[16px] leading-relaxed"
-              onTextLayout={(e) => {
-                if (e.nativeEvent.lines.length > 4) {
-                  setIsTextCollapsed(true)
-                }
-              }}
-            >
-              {description}
-            </Text>
-          </View>
-          {isTextCollapsed && !autoExpandLongSocialMedia && (
-            <Text className="absolute bottom-0 ml-12 font-medium text-accent">See more</Text>
-          )}
+            {description}
+          </Text>
         </View>
 
         {media && media.length > 0 && (
@@ -133,7 +113,11 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
                     quickLookImage([...previewImages.slice(idx), ...previewImages.slice(0, idx)])
                   }}
                 >
-                  <Image
+                  <ProxiedImage
+                    proxy={{
+                      width: 80,
+                      height: 80,
+                    }}
                     source={{ uri: image.url, headers: getImageHeaders(image.url) }}
                     transition={500}
                     placeholder={{ blurhash: image.blurhash }}

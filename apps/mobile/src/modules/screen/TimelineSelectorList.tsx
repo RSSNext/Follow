@@ -11,8 +11,8 @@ import { RefreshControl } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
-import { NavigationContext } from "@/src/components/common/SafeNavigationScrollView"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
+import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
+import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
@@ -28,8 +28,6 @@ export const TimelineSelectorList = forwardRef<
 >(({ onRefresh, isRefetching, ...props }, ref) => {
   const { refetch: unreadRefetch } = usePrefetchUnread()
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
-
-  const insets = useSafeAreaInsets()
 
   const headerHeight = useHeaderHeight()
   const { scrollY } = useContext(NavigationContext)!
@@ -48,10 +46,13 @@ export const TimelineSelectorList = forwardRef<
   const systemFill = useColor("secondaryLabel")
 
   const listRef = useRef<FlashList<any>>(null)
+
   useImperativeHandle(ref, () => listRef.current!)
 
   return (
     <FlashList
+      automaticallyAdjustsScrollIndicatorInsets={false}
+      automaticallyAdjustContentInsets={false}
       ref={listRef}
       refreshControl={
         <RefreshControl
@@ -67,8 +68,8 @@ export const TimelineSelectorList = forwardRef<
         />
       }
       scrollIndicatorInsets={{
-        top: headerHeight - insets.top,
-        bottom: tabBarHeight ? tabBarHeight - insets.bottom : undefined,
+        top: headerHeight,
+        bottom: tabBarHeight,
       }}
       contentContainerStyle={{
         paddingTop: headerHeight,

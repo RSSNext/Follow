@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import { Text } from "react-native"
 import { useEventCallback } from "usehooks-ts"
 
+import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
@@ -45,8 +46,11 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
+  const scrollViewRef = useRegisterNavigationScrollView()
+
   return (
     <TimelineSelectorList
+      ref={scrollViewRef}
       onRefresh={() => {
         setRefreshing(true)
         onRefresh().finally(() => {
@@ -95,7 +99,7 @@ const ListHeaderComponent = () => {
   return (
     <>
       <StarItem />
-      <Text className="text-secondary-label mb-2 ml-3 mt-4 text-sm font-medium">Feeds</Text>
+      <Text className="text-gray mb-2 ml-3 mt-4 text-sm font-semibold">Feeds</Text>
     </>
   )
 }
@@ -111,7 +115,7 @@ const StarItem = () => {
       className="mt-4 h-12 w-full flex-row items-center px-3"
     >
       <StarCuteFiIcon color="rgb(245, 158, 11)" height={20} width={20} />
-      <Text className="text-text ml-2">Collections</Text>
+      <Text className="text-text ml-2 font-medium">Starred</Text>
     </ItemPressable>
   )
 }

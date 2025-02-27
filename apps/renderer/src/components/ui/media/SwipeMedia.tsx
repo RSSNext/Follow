@@ -60,6 +60,7 @@ export function SwipeMedia({
               <div className="mr-2 size-full flex-none" key={med.url}>
                 <Media
                   className={cn(imgClassName, "size-full rounded-none")}
+                  mediaContainerClassName="object-cover"
                   alt="cover"
                   cacheDimensions={med.type === "photo"}
                   src={med.url}

@@ -66,7 +66,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               .filter(([key]) => key !== "credential")
               .map(([key, provider]) => (
                 <Tooltip key={key} delayDuration={0}>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <MotionButtonBase
                       onClick={() => {
                         loginHandler(key, "app")
@@ -110,7 +110,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
         exit={{ opacity: 0, y: 10, transition: { type: "tween" } }}
         transition={{ type: "spring" }}
       >
-        <div className="rounded-xl border bg-background p-3 px-8 shadow-2xl shadow-stone-300 dark:border-neutral-700 dark:shadow-stone-800">
+        <div className="w-[25rem] rounded-xl border bg-background p-3 px-8 shadow-2xl shadow-stone-300 dark:border-neutral-700 dark:shadow-stone-800">
           {Inner}
         </div>
       </m.div>

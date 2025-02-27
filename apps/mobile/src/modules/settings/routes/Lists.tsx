@@ -9,7 +9,7 @@ import { Balance } from "@/src/components/common/Balance"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInformationCell,
   GroupedInsetListCard,
@@ -108,8 +108,9 @@ const AddListButton = () => {
 const ItemSeparatorComponent = () => {
   return (
     <View
-      className="bg-opaque-separator ml-24 flex-1"
-      style={{ height: StyleSheet.hairlineWidth }}
+      className="bg-opaque-separator ml-24 h-px flex-1"
+      collapsable={false}
+      style={{ transform: [{ scaleY: 0.5 }] }}
     />
   )
 }

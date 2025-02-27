@@ -43,7 +43,6 @@ export const createDefaultSettings = (): UISettings => ({
 
   // View
   pictureViewMasonry: true,
-  pictureViewFilterNoImage: false,
   wideMode: false,
 
   // Action Order

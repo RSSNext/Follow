@@ -2,12 +2,10 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs"
 import { getLabel } from "@react-navigation/elements"
 import { CommonActions, NavigationContext, NavigationRouteContext } from "@react-navigation/native"
 import type { FC } from "react"
-import { useContext, useEffect } from "react"
+import { memo, useContext, useEffect } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, View } from "react-native"
 import Animated, {
-  FadeIn,
-  FadeOut,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -15,13 +13,14 @@ import Animated, {
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { SetBottomTabBarHeightContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarHeightContext"
+import { SetBottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
 import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
-import { Grid } from "../grid"
+import { Grid } from "../../ui/grid"
+import { ScaleFadeRotateIn } from "../../ux/animations/ScaleFadeRotate"
 import { BottomTabBarBackgroundContext } from "./contexts/BottomTabBarBackgroundContext"
 import { BottomTabBarVisibleContext } from "./contexts/BottomTabBarVisibleContext"
 
@@ -128,29 +127,23 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
               />
             )
           }
-          const scene = { route, focused }
+
           return (
-            <NavigationContext.Provider key={route.key} value={descriptors[route.key]?.navigation}>
-              <NavigationRouteContext.Provider value={route}>
-                <Pressable
-                  onPress={onPress}
-                  className="flex-1 flex-col items-center justify-center"
-                >
-                  {renderIcon(scene)}
-                  {renderLabel(scene)}
-                </Pressable>
-              </NavigationRouteContext.Provider>
-            </NavigationContext.Provider>
+            <TabItem
+              key={route.key}
+              route={route}
+              focused={focused}
+              descriptors={descriptors}
+              onPress={onPress}
+              originalRenderIcon={renderIcon}
+              originalRenderLabel={renderLabel}
+              accessibilityLabel={accessibilityLabel}
+            />
           )
         })}
       </Grid>
     </Animated.View>
   )
-}
-
-const tabIconIconAnimations = {
-  in: FadeIn.springify(),
-  out: FadeOut.springify(),
 }
 
 const TextLabel = (props: {
@@ -198,8 +191,7 @@ const TabIcon = ({
     <View style={styles.wrapperUikit}>
       {focused && (
         <Animated.View
-          entering={tabIconIconAnimations.in}
-          exiting={tabIconIconAnimations.out}
+          entering={ScaleFadeRotateIn}
           style={[styles.icon, { opacity: activeOpacity }]}
         >
           {renderIcon({
@@ -211,8 +203,7 @@ const TabIcon = ({
       )}
       {!focused && (
         <Animated.View
-          entering={tabIconIconAnimations.in}
-          exiting={tabIconIconAnimations.out}
+          entering={ScaleFadeRotateIn}
           style={[styles.icon, { opacity: inactiveOpacity }]}
         >
           {renderIcon({
@@ -268,3 +259,57 @@ const TabBarBackground = () => {
   const borderColor = useColor("opaqueSeparator")
   return <AnimatedThemedBlurView style={[styles.blurEffect, animatedStyle, { borderColor }]} />
 }
+
+const TabItem = memo(
+  // eslint-disable-next-line @eslint-react/no-unstable-context-value
+  ({
+    route,
+    focused,
+    descriptors,
+    onPress,
+    originalRenderIcon,
+    originalRenderLabel,
+    accessibilityLabel,
+  }: {
+    route: any
+    focused: boolean
+    descriptors: any
+    onPress: () => void
+    originalRenderIcon: (scene: { route: any; focused: boolean }) => React.ReactNode
+    originalRenderLabel: (scene: { route: any; focused: boolean }) => React.ReactNode
+    accessibilityLabel?: string
+  }) => {
+    const pressed = useSharedValue(0)
+
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: 1 - 0.15 * pressed.value }],
+      }
+    })
+
+    const scene = { route, focused }
+
+    return (
+      <NavigationContext.Provider value={descriptors[route.key]?.navigation}>
+        <NavigationRouteContext.Provider value={route}>
+          <Pressable
+            onPress={onPress}
+            onPressIn={() => {
+              pressed.value = withSpring(1, { damping: 15, stiffness: 150 })
+            }}
+            onPressOut={() => {
+              pressed.value = withSpring(0, { damping: 15, stiffness: 150 })
+            }}
+            className="flex-1 flex-col items-center justify-center"
+            accessibilityLabel={accessibilityLabel}
+            accessibilityRole="button"
+            accessibilityState={{ selected: focused }}
+          >
+            <Animated.View style={animatedStyle}>{originalRenderIcon(scene)}</Animated.View>
+            {originalRenderLabel(scene)}
+          </Pressable>
+        </NavigationRouteContext.Provider>
+      </NavigationContext.Provider>
+    )
+  },
+)

@@ -7,9 +7,8 @@ import {
 import { Skeleton } from "@follow/components/ui/skeleton/index.jsx"
 import { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils/utils"
-import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { memo, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
@@ -65,8 +64,6 @@ const proxySize = {
   height: 0,
 }
 
-const footerAnimate = { opacity: 1, y: 0 }
-const footerExit = { opacity: 0, y: 10 }
 export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryId,
   entryPreview,
@@ -94,34 +91,17 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
     }
   }, [ref, intersectionObserver])
 
-  const [isMouseEnter, setIsMouseEnter] = useState(false)
-
   const media = useMemo(() => filterSmallMedia(entry?.entries.media || []), [entry?.entries.media])
 
-  const handleMouseEnter = useCallback(() => {
-    setIsMouseEnter(true)
-  }, [])
-  const handleMouseLeave = useCallback(() => {
-    setIsMouseEnter(false)
-  }, [])
   if (media?.length === 0) return null
   if (!entry) return null
 
   return (
-    <div
-      ref={setRef}
-      data-entry-id={entryId}
-      data-index={index}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onTouchMove={handleMouseEnter}
-      onTouchEnd={handleMouseLeave}
-      className={className}
-    >
+    <div ref={setRef} data-entry-id={entryId} data-index={index} className={className}>
       <EntryItemWrapper
         view={FeedViewType.Pictures}
         entry={entry}
-        itemClassName="group hover:bg-theme-item-hover rounded-md overflow-hidden"
+        itemClassName="group rounded-md overflow-hidden hover:bg-transparent"
         style={{
           width: itemWidth,
         }}
@@ -130,35 +110,22 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
           <MasonryItemFixedDimensionWrapper url={media[0]!.url}>
             <SwipeMedia
               media={media}
-              className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
+              className={cn(
+                "w-full grow rounded-md after:pointer-events-none after:absolute after:inset-0 after:bg-transparent after:transition-colors after:duration-300 group-hover:after:bg-black/20",
+                isActive && "rounded-b-none",
+              )}
               proxySize={proxySize}
               imgClassName="object-cover"
               onPreview={previewMedia}
             />
 
-            <AnimatePresence>
-              {isMouseEnter && (
-                <m.div
-                  initial={footerExit}
-                  animate={footerAnimate}
-                  exit={footerExit}
-                  className="absolute inset-x-0 -bottom-px z-[3] overflow-hidden rounded-b-md pb-1"
-                  key="footer"
-                >
-                  <div className="absolute inset-x-0 bottom-0 h-[56px]" style={maskStyle}>
-                    <div className="absolute inset-x-0 bottom-0 h-[56px] bg-gradient-to-t from-black/80 to-transparent" />
-                  </div>
-                  <GridItemFooter
-                    entryId={entryId}
-                    entryPreview={entryPreview}
-                    translation={translation}
-                    titleClassName="!text-white"
-                    descriptionClassName="!text-white/80"
-                    timeClassName="!text-white/60"
-                  />
-                </m.div>
-              )}
-            </AnimatePresence>
+            <div className="z-[3] shrink-0 overflow-hidden rounded-b-md pb-1">
+              <GridItemFooter
+                entryId={entryId}
+                entryPreview={entryPreview}
+                translation={translation}
+              />
+            </div>
           </MasonryItemFixedDimensionWrapper>
         ) : (
           <div className="center aspect-video flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
@@ -171,9 +138,6 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   )
 })
 
-const maskStyle = {
-  maskImage: "linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 10px)",
-}
 const MasonryItemFixedDimensionWrapper = (
   props: PropsWithChildren<{
     url: string
@@ -196,7 +160,7 @@ const MasonryItemFixedDimensionWrapper = (
   const style = useMemo(
     () => ({
       width: itemWidth,
-      height: itemWidth / stableRadioCtx!,
+      height: itemWidth / stableRadioCtx! + 60,
     }),
     [itemWidth, stableRadioCtx],
   )
@@ -204,7 +168,7 @@ const MasonryItemFixedDimensionWrapper = (
   if (!style.height) return null
 
   return (
-    <div className="relative flex h-full gap-2 overflow-x-auto overflow-y-hidden" style={style}>
+    <div className="relative flex h-full flex-col overflow-x-auto overflow-y-hidden" style={style}>
       {children}
     </div>
   )

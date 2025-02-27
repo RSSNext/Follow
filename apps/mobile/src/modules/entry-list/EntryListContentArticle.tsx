@@ -31,7 +31,9 @@ export const EntryListContentArticle = forwardRef<
     [isFetching],
   )
 
-  const onViewableItemsChanged = useOnViewableItemsChanged()
+  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
+    disabled: isRefetching,
+  })
 
   return (
     <TimelineSelectorList
@@ -44,6 +46,7 @@ export const EntryListContentArticle = forwardRef<
       estimatedItemSize={100}
       renderItem={renderItem}
       onEndReached={fetchNextPage}
+      onScroll={onScroll}
       onViewableItemsChanged={onViewableItemsChanged}
       ItemSeparatorComponent={ItemSeparator}
       ListFooterComponent={ListFooterComponent}

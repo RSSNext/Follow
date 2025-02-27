@@ -5,7 +5,6 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@follow/utils"
-import { PortalProvider } from "@gorhom/portal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, Stack, useLocalSearchParams } from "expo-router"
 import { memo, useEffect, useMemo, useState } from "react"
@@ -19,10 +18,11 @@ import {
   ModalHeaderCloseButton,
   ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
-import { SafeModalScrollView } from "@/src/components/common/SafeModalScrollView"
+import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
+import { PortalHost } from "@/src/components/ui/portal"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
 import { toast } from "@/src/lib/toast"
 import { feedSyncServices } from "@/src/store/feed/store"
@@ -120,7 +120,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
         routePrefix={routePrefix}
       />
 
-      <PortalProvider>
+      <PortalHost>
         <SafeModalScrollView className="bg-system-grouped-background">
           <View className="bg-secondary-system-grouped-background mx-2 mt-2 gap-4 rounded-lg px-3 py-6">
             {keys.map((keyItem) => {
@@ -195,7 +195,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
             </View>
           )}
         </SafeModalScrollView>
-      </PortalProvider>
+      </PortalHost>
     </FormProvider>
   )
 }

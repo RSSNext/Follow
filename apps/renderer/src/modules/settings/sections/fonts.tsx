@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-react/hooks-extra/ensure-custom-hooks-using-other-hooks */
 import { Button } from "@follow/components/ui/button/index.js"
 import { Input } from "@follow/components/ui/input/index.js"
 import {
@@ -24,15 +23,18 @@ const FALLBACK_FONT = "Default (UI Font)"
 const DEFAULT_FONT = "SN Pro"
 const CUSTOM_FONT = "Custom"
 const useFontDataElectron = () => {
+  const { t } = useTranslation("settings")
   const { data } = useQuery({
     queryFn: () => tipcClient?.getSystemFonts(),
     queryKey: ["systemFonts"],
   })
 
-  return [
-    { label: FALLBACK_FONT, value: "inherit" },
-    { label: "System UI", value: "system-ui" },
-  ].concat(
+  return (
+    [
+      { label: t("appearance.content_font.default"), value: "inherit" },
+      { label: t("appearance.font.system"), value: "system-ui" },
+    ] as { label: string; value: string }[]
+  ).concat(
     (data || []).map((font) => ({
       label: font,
       value: font,
@@ -40,20 +42,22 @@ const useFontDataElectron = () => {
   )
 }
 
-// eslint-disable-next-line @eslint-react/hooks-extra/no-useless-custom-hooks
-const useFontDataWeb = () => [
-  { label: FALLBACK_FONT, value: "inherit" },
-  { label: "System UI", value: "system-ui" },
-  ...["Arial", "PingFang SC", "Microsoft YaHei", "SF Pro"].map((font) => ({
-    label: font,
+const useFontDataWeb = () => {
+  const { t } = useTranslation("settings")
+  return [
+    { label: t("appearance.content_font.default"), value: "inherit" },
+    { label: t("appearance.font.system"), value: "system-ui" },
+    ...["Arial", "PingFang SC", "Microsoft YaHei", "SF Pro"].map((font) => ({
+      label: font,
 
-    value: font,
-  })),
-  {
-    label: "Custom",
-    value: CUSTOM_FONT,
-  },
-]
+      value: font,
+    })),
+    {
+      label: t("appearance.font.custom"),
+      value: CUSTOM_FONT,
+    },
+  ]
+}
 
 const useFontData = IN_ELECTRON ? useFontDataElectron : useFontDataWeb
 export const ContentFontSelector = () => {
@@ -71,7 +75,7 @@ export const ContentFontSelector = () => {
 
   return (
     <div className="mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("appearance.content_font")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("appearance.content_font.label")}</span>
       <Select
         defaultValue={FALLBACK_FONT}
         value={readerFontFamily}

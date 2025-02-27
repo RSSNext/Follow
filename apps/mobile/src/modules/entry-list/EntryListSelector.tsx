@@ -4,7 +4,7 @@ import type { RefObject } from "react"
 import { useContext, useEffect, useRef } from "react"
 import type { ScrollView } from "react-native"
 
-import { SetAttachNavigationScrollViewContext } from "@/src/components/ui/tabbar/contexts/AttachNavigationScrollViewContext"
+import { SetAttachNavigationScrollViewContext } from "@/src/components/layouts/tabbar/contexts/AttachNavigationScrollViewContext"
 import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentGrid"
 
 import { EntryListContentArticle } from "./EntryListContentArticle"

@@ -1,9 +1,7 @@
 import * as AppleAuthentication from "expo-apple-authentication"
 import { useColorScheme } from "nativewind"
-import { useContext } from "react"
 import { Platform, TouchableOpacity, View } from "react-native"
 
-import { LoginTermsCheckGuardContext as LoginTermsCheckGuardContext } from "@/src/contexts/LoginTermsContext"
 import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
 import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
 import { GoogleCuteFiIcon } from "@/src/icons/google_cute_fi"
@@ -40,7 +38,6 @@ const provider: Record<
 
 export function SocialLogin() {
   const { data } = useAuthProviders()
-  const termsCheckGuard = useContext(LoginTermsCheckGuardContext)
   const { colorScheme } = useColorScheme()
 
   return (
@@ -53,42 +50,40 @@ export function SocialLogin() {
             <TouchableOpacity
               key={key}
               className="border-opaque-separator border-hairline rounded-full p-2"
-              onPress={() =>
-                termsCheckGuard?.(async () => {
-                  if (!data?.[providerInfo.id]) return
+              onPress={async () => {
+                if (!data?.[providerInfo.id]) return
 
-                  if (providerInfo.id === "apple") {
-                    try {
-                      const credential = await AppleAuthentication.signInAsync({
-                        requestedScopes: [
-                          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                        ],
+                if (providerInfo.id === "apple") {
+                  try {
+                    const credential = await AppleAuthentication.signInAsync({
+                      requestedScopes: [
+                        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                      ],
+                    })
+
+                    if (credential.identityToken) {
+                      await signIn.social({
+                        provider: "apple",
+                        idToken: {
+                          token: credential.identityToken,
+                        },
                       })
-
-                      if (credential.identityToken) {
-                        await signIn.social({
-                          provider: "apple",
-                          idToken: {
-                            token: credential.identityToken,
-                          },
-                        })
-                      } else {
-                        throw new Error("No identityToken.")
-                      }
-                    } catch (e) {
-                      console.error(e)
-                      // handle errors
+                    } else {
+                      throw new Error("No identityToken.")
                     }
-                    return
+                  } catch (e) {
+                    console.error(e)
+                    // handle errors
                   }
+                  return
+                }
 
-                  signIn.social({
-                    provider: providerInfo.id as any,
-                    callbackURL: "/",
-                  })
+                signIn.social({
+                  provider: providerInfo.id as any,
+                  callbackURL: "/",
                 })
-              }
+              }}
               disabled={!data?.[providerInfo.id]}
             >
               <providerInfo.icon

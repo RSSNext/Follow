@@ -10,8 +10,4 @@ export interface UISettings {
   guessCodeLanguage: boolean
   hideRecentReader: boolean
   customCSS: string
-
-  // view
-
-  pictureViewFilterNoImage: boolean
 }

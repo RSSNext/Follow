@@ -12,7 +12,7 @@ import {
   ModalHeaderCloseButton,
   ModalHeaderSubmitButton,
 } from "@/src/components/common/ModalSharedComponents"
-import { SafeModalScrollView } from "@/src/components/common/SafeModalScrollView"
+import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { NumberField, TextField } from "@/src/components/ui/form/TextField"

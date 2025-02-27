@@ -1,7 +1,9 @@
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import { sortByAlphabet } from "@follow/utils"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
+
+import { views } from "@/src/constants/views"
 
 import { getFeed } from "../feed/getter"
 import { getList } from "../list/getters"
@@ -226,3 +228,21 @@ export const useSubscriptionByFeedId = (feedId: string) =>
 
 export const useSubscriptionByListId = (listId: string) =>
   useSubscriptionStore(useCallback((state) => state.data[listId] || null, [listId]))
+
+export const useViewWithSubscription = () =>
+  useSubscriptionStore(
+    useCallback((state) => {
+      return views.filter((view) => {
+        if (
+          view.view === FeedViewType.Articles ||
+          view.view === FeedViewType.SocialMedia ||
+          view.view === FeedViewType.Pictures ||
+          view.view === FeedViewType.Videos
+        ) {
+          return true
+        } else {
+          return state.feedIdByView[view.view].size > 0
+        }
+      })
+    }, []),
+  )

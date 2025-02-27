@@ -1,116 +1,39 @@
 import { isMobile } from "@follow/components/hooks/useMobile.js"
 import { RootPortal } from "@follow/components/ui/portal/index.js"
-import type { FeedViewType } from "@follow/constants"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useCallback, useMemo, useRef, useState } from "react"
+import { memo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router"
 import { useOnClickOutside } from "usehooks-ts"
 
-import { useGeneralSettingSelector } from "~/atoms/settings/general"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
-import {
-  subscriptionActions,
-  useCategoryOpenStateByView,
-  useSubscriptionByView,
-} from "~/store/subscription"
-import { feedUnreadActions, useFeedUnreadStore } from "~/store/unread"
+import { subscriptionActions, useCategoryOpenStateByView } from "~/store/subscription"
+import { feedUnreadActions } from "~/store/unread"
+import { useUnreadByView } from "~/store/unread/hooks"
 
 import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./UnreadNumber"
 
-export const useFeedsGroupedData = (view: FeedViewType) => {
-  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
-
-  const data = useSubscriptionByView(view) || remoteData
-
-  const autoGroup = useGeneralSettingSelector((state) => state.autoGroup)
-
-  return useMemo(() => {
-    if (!data || data.length === 0) return {}
-
-    const groupFolder = {} as Record<string, string[]>
-
-    for (const subscription of data.filter((s) => !!s)) {
-      const category =
-        subscription.category || (autoGroup ? subscription.defaultCategory : subscription.feedId)
-
-      if (category) {
-        if (!groupFolder[category]) {
-          groupFolder[category] = []
-        }
-        groupFolder[category].push(subscription.feedId)
-      }
-    }
-
-    return groupFolder
-  }, [autoGroup, data])
-}
-
-export const useListsGroupedData = (view: FeedViewType) => {
-  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
-
-  const data = useSubscriptionByView(view) || remoteData
-
-  return useMemo(() => {
-    if (!data || data.length === 0) return {}
-
-    const lists = data.filter((s) => s && "listId" in s)
-
-    const groupFolder = {} as Record<string, string[]>
-
-    for (const subscription of lists.filter((s) => !!s)) {
-      groupFolder[subscription.feedId] = [subscription.feedId]
-    }
-
-    return groupFolder
-  }, [data])
-}
-
-export const useInboxesGroupedData = (view: FeedViewType) => {
-  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
-
-  const data = useSubscriptionByView(view) || remoteData
-
-  return useMemo(() => {
-    if (!data || data.length === 0) return {}
-
-    const inboxes = data.filter((s) => s && "inboxId" in s)
-
-    const groupFolder = {} as Record<string, string[]>
-
-    for (const subscription of inboxes.filter((s) => !!s)) {
-      if (!subscription.inboxId) continue
-      groupFolder[subscription.inboxId] = [subscription.inboxId]
-    }
-
-    return groupFolder
-  }, [data])
-}
-
-const useUpdateUnreadCount = () => {
+export const ListHeader = ({ view }: { view: number }) => {
+  useAuthQuery(Queries.subscription.byView())
   useAuthQuery(Queries.subscription.unreadAll(), {
     refetchInterval: false,
   })
-}
 
-export const ListHeader = ({ view }: { view: number }) => {
   const { t } = useTranslation()
-  const feedsData = useFeedsGroupedData(view)
   const categoryOpenStateData = useCategoryOpenStateByView(view)
   const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
-  useUpdateUnreadCount()
 
   useQuery({
     queryKey: ["fetchUnreadByView", view],
@@ -121,21 +44,7 @@ export const ListHeader = ({ view }: { view: number }) => {
     refetchOnWindowFocus: true,
   })
 
-  const totalUnread = useFeedUnreadStore(
-    useCallback(
-      (state) => {
-        let unread = 0
-
-        for (const category in feedsData) {
-          for (const feedId of feedsData[category]!) {
-            unread += state.data[feedId] || 0
-          }
-        }
-        return unread
-      },
-      [feedsData],
-    ),
-  )
+  const totalUnread = useUnreadByView(view)
 
   const navigateEntry = useNavigateEntry()
 

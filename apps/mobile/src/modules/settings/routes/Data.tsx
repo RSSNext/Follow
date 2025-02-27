@@ -7,7 +7,7 @@ import { setDataSetting, useDataSettingKey } from "@/src/atoms/settings/data"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListActionCell,
   GroupedInsetListCard,

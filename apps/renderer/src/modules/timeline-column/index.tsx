@@ -26,7 +26,7 @@ import { getSelectedFeedIds, resetSelectedFeedIds, setSelectedFeedIds } from "./
 import { useShouldFreeUpSpace } from "./hook"
 import { TimelineColumnHeader } from "./TimelineColumnHeader"
 import TimelineList from "./TimelineList"
-import { TimelineSelector } from "./TimelineSelector"
+import { TimelineSwitchButton } from "./TimelineSwitchButton"
 
 const lethargy = new Lethargy()
 
@@ -66,7 +66,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     (args: string | ((prev: string | undefined, index: number) => string)) => {
       let nextActive
       if (typeof args === "function") {
-        const index = timelineId ? timelineList.all.indexOf(timelineId) : 0
+        const index = timelineId ? timelineList.indexOf(timelineId) : 0
         nextActive = args(timelineId, index)
       } else {
         nextActive = args
@@ -75,7 +75,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       navigateBackHome(nextActive)
       resetSelectedFeedIds()
     },
-    [navigateBackHome, timelineId, timelineList.all],
+    [navigateBackHome, timelineId, timelineList],
   )
 
   useWheel(
@@ -84,7 +84,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         const s = lethargy.check(event)
         if (s) {
           if (!wait && Math.abs(dex) > 20) {
-            setActive((_, i) => timelineList.all[clamp(i + dx, 0, timelineList.all.length - 1)]!)
+            setActive((_, i) => timelineList[clamp(i + dx, 0, timelineList.length - 1)]!)
             return true
           } else {
             return
@@ -108,13 +108,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       if (isHotkeyPressed("Left")) {
         setActive((_, i) => {
           if (i === 0) {
-            return timelineList.all.at(-1)!
+            return timelineList.at(-1)!
           } else {
-            return timelineList.all[i - 1]!
+            return timelineList[i - 1]!
           }
         })
       } else {
-        setActive((_, i) => timelineList.all[(i + 1) % timelineList.all.length]!)
+        setActive((_, i) => timelineList[(i + 1) % timelineList.length]!)
       }
     },
     { scopes: HotKeyScopeMap.Home },
@@ -152,7 +152,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         </RootPortal>
       )}
 
-      <TimelineSelector timelineId={timelineId} />
+      <div className="relative mb-4 mt-3">
+        <div className="flex h-11 justify-between gap-0 px-3 text-xl text-theme-vibrancyFg">
+          {timelineList.map((timelineId) => (
+            <TimelineSwitchButton key={timelineId} timelineId={timelineId} />
+          ))}
+        </div>
+      </div>
       <div
         className={cn("relative mt-1 flex size-full", !shouldFreeUpSpace && "overflow-hidden")}
         ref={carouselRef}
@@ -168,7 +174,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         }, [])}
       >
         <SwipeWrapper active={timelineId!}>
-          {timelineList.all.map((timelineId) => (
+          {timelineList.map((timelineId) => (
             <section key={timelineId} className="h-full w-feed-col shrink-0 snap-center">
               <TimelineList key={timelineId} timelineId={timelineId} />
             </section>
@@ -187,7 +193,7 @@ const SwipeWrapper: FC<{
 }> = memo(({ children, active }) => {
   const reduceMotion = useReduceMotion()
   const timelineList = useTimelineList()
-  const index = timelineList.all.indexOf(active)
+  const index = timelineList.indexOf(active)
 
   const feedColumnWidth = useUISettingKey("feedColWidth")
   const containerRef = useRef<HTMLDivElement>(null)

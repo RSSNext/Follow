@@ -2,6 +2,7 @@ import { Stack } from "expo-router"
 import { atom } from "jotai"
 import { useMemo, useState } from "react"
 import { useAnimatedValue } from "react-native"
+import { useSharedValue } from "react-native-reanimated"
 
 import { DiscoverContext } from "@/src/modules/discover/DiscoverContext"
 import { Recommendations } from "@/src/modules/discover/Recommendations"
@@ -11,9 +12,10 @@ export default function Discover() {
   const animatedX = useAnimatedValue(0)
   const currentTabAtom = useState(() => atom(0))[0]
   const headerHeightAtom = useState(() => atom(0))[0]
+  const animatedY = useSharedValue(0)
   const ctxValue = useMemo(
-    () => ({ animatedX, currentTabAtom, headerHeightAtom }),
-    [animatedX, currentTabAtom, headerHeightAtom],
+    () => ({ animatedX, currentTabAtom, headerHeightAtom, animatedY }),
+    [animatedX, currentTabAtom, headerHeightAtom, animatedY],
   )
   return (
     <DiscoverContext.Provider value={ctxValue}>

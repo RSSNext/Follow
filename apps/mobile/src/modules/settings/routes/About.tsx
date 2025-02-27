@@ -5,7 +5,7 @@ import { Linking, Text, View } from "react-native"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListBaseCell,
   GroupedInsetListCard,

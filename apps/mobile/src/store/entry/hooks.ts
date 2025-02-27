@@ -2,15 +2,19 @@ import type { FeedViewType } from "@follow/constants"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
 
+import { useGeneralSettingKey } from "@/src/atoms/settings/general"
+
 import { getEntry } from "./getter"
 import { entrySyncServices, useEntryStore } from "./store"
 import type { EntryModel, FetchEntriesProps } from "./types"
 
-export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam"> | null) => {
-  const { feedId, inboxId, listId, view, read, limit } = props || {}
+export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam" | "read"> | null) => {
+  const { feedId, inboxId, listId, view, limit } = props || {}
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
   return useInfiniteQuery({
-    queryKey: ["entries", feedId, inboxId, listId, view, read, limit],
-    queryFn: ({ pageParam }) => entrySyncServices.fetchEntries({ ...props, pageParam }),
+    queryKey: ["entries", feedId, inboxId, listId, view, unreadOnly, limit],
+    queryFn: ({ pageParam }) =>
+      entrySyncServices.fetchEntries({ ...props, pageParam, read: unreadOnly ? false : undefined }),
     getNextPageParam: (lastPage) =>
       listId
         ? lastPage.data?.at(-1)?.entries.insertedAt

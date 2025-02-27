@@ -449,9 +449,6 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@gorhom/portal':
-        specifier: 1.0.14
-        version: 1.0.14(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       '@hookform/resolvers':
         specifier: 4.1.0
         version: 4.1.0(react-hook-form@7.54.2(react@18.3.1))
@@ -626,6 +623,9 @@ importers:
       react-native-keyboard-controller:
         specifier: 1.16.3
         version: 1.16.3(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+      react-native-otp-entry:
+        specifier: 1.8.2
+        version: 1.8.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-pager-view:
         specifier: 6.7.0
         version: 6.7.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
@@ -651,8 +651,8 @@ importers:
         specifier: 4.1.1
         version: 4.1.1(patch_hash=ul2ym56izpf2mkfucn2nug6afu)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-uikit-colors:
-        specifier: 0.2.0
-        version: 0.2.0(fe3lmks7adwcuf5fbpjna3wt2m)
+        specifier: 0.3.8
+        version: 0.3.8(fe3lmks7adwcuf5fbpjna3wt2m)
       react-native-volume-manager:
         specifier: 2.0.8
         version: 2.0.8(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
@@ -856,8 +856,8 @@ importers:
         specifier: 0.2.44
         version: 0.2.44(react@18.3.1)
       framer-motion:
-        specifier: 12.4.4
-        version: 12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 12.4.7
+        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       franc-min:
         specifier: 6.2.0
         version: 6.2.0
@@ -1046,8 +1046,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1
       framer-motion:
-        specifier: 12.4.4
-        version: 12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 12.4.7
+        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       i18next:
         specifier: 24.2.2
         version: 24.2.2(typescript@5.7.3)
@@ -1065,7 +1065,7 @@ importers:
         version: 1.4.1
       rc-modal-sheet:
         specifier: 0.3.2
-        version: 0.3.2(@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@3.0.1)(vaul@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        version: 0.3.2(@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@3.0.1)(vaul@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       react-blurhash:
         specifier: 0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
@@ -1284,8 +1284,8 @@ importers:
         specifier: 0.2.44
         version: 0.2.44(react@18.3.1)
       framer-motion:
-        specifier: 12.4.4
-        version: 12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 12.4.7
+        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       hast-util-to-jsx-runtime:
         specifier: 2.3.2
         version: 2.3.2
@@ -1467,8 +1467,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       framer-motion:
-        specifier: 12.4.4
-        version: 12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 12.4.7
+        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nanoid:
         specifier: 5.1.0
         version: 5.1.0
@@ -3240,12 +3240,6 @@ packages:
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
-
-  '@gorhom/portal@1.0.14':
-    resolution: {integrity: sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A==}
-    peerDependencies:
-      react: '*'
-      react-native: npm:react-native@0.77.0
 
   '@grpc/grpc-js@1.9.15':
     resolution: {integrity: sha512-nqE7Hc0AzI+euzUwDAy0aY5hCp10r734gMGRdU+qOPX0XSceI2ULrcXB5U2xSc5VkWwalCj4M7GzCAygZl2KoQ==}
@@ -5955,6 +5949,9 @@ packages:
     engines: {node: '>=8.5'}
     os: [darwin]
     hasBin: true
+
+  apple-uikit-colors@0.3.8:
+    resolution: {integrity: sha512-jnQNUMu2c6e2U/aTTNsR7m5JkrJXrTNC8cJwYFZ2Mb/EPIIzjPeqIPGYTcgpxTATyBHokQILAImJK9v0+6DNIA==}
 
   application-config-path@0.1.1:
     resolution: {integrity: sha512-zy9cHePtMP0YhwG+CfHm0bgwdnga2X3gZexpdCwEj//dpb+TKajtiC8REEUJUSq6Ab4f9cgNy2l8ObXzCXFkEw==}
@@ -8871,8 +8868,8 @@ packages:
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
-  framer-motion@12.4.4:
-    resolution: {integrity: sha512-JWkVwbJBgVkeZHNcnk8ififgwTF+5de9wbJnTLI+g9YqaGo75Xd5uRVDm9FR8chqRDOKcXv/71f40CGescYVmg==}
+  framer-motion@12.4.7:
+    resolution: {integrity: sha512-VhrcbtcAMXfxlrjeHPpWVu2+mkcoR31e02aNSR7OUS/hZAciKa8q6o3YN2mA1h+jjscRsSyKvX6E1CiY/7OLMw==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -11053,8 +11050,8 @@ packages:
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
-  motion-dom@12.4.4:
-    resolution: {integrity: sha512-D8Kjp8oqUNqxoAVmIlOH+YCMov/4koBAmG4OJs0VWfh18xkQEIsx9+S7yrXyx0XaMBEPtre6e9LiSW2Zs7vIhA==}
+  motion-dom@12.4.5:
+    resolution: {integrity: sha512-Q2xmhuyYug1CGTo0jdsL05EQ4RhIYXlggFS/yPhQQRNzbrhjKQ1tbjThx5Plv68aX31LsUQRq4uIkuDxdO5vRQ==}
 
   motion-utils@12.0.0:
     resolution: {integrity: sha512-MNFiBKbbqnmvOjkPyOKgHUp3Q6oiokLkI1bEwm5QA28cxMZrv0CbbBGDNmhF6DIXsi1pCQBSs0dX8xjeER1tmA==}
@@ -12504,6 +12501,12 @@ packages:
       react-native: '*'
       react-native-reanimated: '>=3.0.0'
 
+  react-native-otp-entry@1.8.2:
+    resolution: {integrity: sha512-Ergs1fNpyp69oSrQ3k/PoolBpuutXruwhQDnEmX4xT3RnaZyo9lvcRsj2FafHanbFvghn/v3WcFRGU/GIhIMqQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   react-native-pager-view@6.7.0:
     resolution: {integrity: sha512-sutxKiMqBuQrEyt4mLaLNzy8taIC7IuYpxfcwQBXfSYBSSpAa0qE9G1FXlP/iXqTSlFgBXyK7BESsl9umOjECQ==}
     peerDependencies:
@@ -12559,12 +12562,12 @@ packages:
       shaka-player:
         optional: true
 
-  react-native-uikit-colors@0.2.0:
-    resolution: {integrity: sha512-YYJHejX3JgmfGceo058fC8iFVhXdZtWjjqcb9lfSYVjYX29DnkcHmdjUGNLAK6M5R0/IFv9v7N2V2drpRKRVvA==}
+  react-native-uikit-colors@0.3.8:
+    resolution: {integrity: sha512-0iK5DZv4hOewbm8C8BNN+FCADukhyCjFZbEuabhwkrtXdeTPMFW6BzKEEtdSZ7Q23KSErgVgIC3wOXKXQGijtQ==}
     peerDependencies:
       nativewind: '>=4.1.0'
       react: '>=18.0.0'
-      react-native: npm:react-native@0.77.0
+      react-native: '>=0.76.0'
       tailwindcss: '>=3.0.0'
 
   react-native-volume-manager@2.0.8:
@@ -13777,6 +13780,9 @@ packages:
     engines: {node: '>=16'}
     peerDependencies:
       tailwindcss: ^2.0.0 || >=3.0.0
+
+  tailwindcss-uikit-colors@0.3.8:
+    resolution: {integrity: sha512-MdP9XK5AF48H1XoyOt1XiEmJ5MM/3QYVuvsSmSJin5a/PWYnlw7bLVijXSZveGIbq2TpFqGpuRI+svdxhHK53A==}
 
   tailwindcss@3.4.16:
     resolution: {integrity: sha512-TI4Cyx7gDiZ6r44ewaJmt0o6BrMCT5aK5e0rmJ/G9Xq3w7CX/5VXl/zIPEJZFUK5VEqwByyhqNPycPlvcK4ZNw==}
@@ -17754,12 +17760,6 @@ snapshots:
 
   '@gar/promisify@1.1.3': {}
 
-  '@gorhom/portal@1.0.14(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)':
-    dependencies:
-      nanoid: 3.3.8
-      react: 18.3.1
-      react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
-
   '@grpc/grpc-js@1.9.15':
     dependencies:
       '@grpc/proto-loader': 0.7.13
@@ -21302,6 +21302,8 @@ snapshots:
       path-exists: 4.0.0
       repeat-string: 1.6.1
     optional: true
+
+  apple-uikit-colors@0.3.8: {}
 
   application-config-path@0.1.1: {}
 
@@ -24985,9 +24987,9 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
-  framer-motion@12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  framer-motion@12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      motion-dom: 12.4.4
+      motion-dom: 12.4.5
       motion-utils: 12.0.0
       tslib: 2.8.1
     optionalDependencies:
@@ -27934,7 +27936,7 @@ snapshots:
   moment@2.30.1:
     optional: true
 
-  motion-dom@12.4.4:
+  motion-dom@12.4.5:
     dependencies:
       motion-utils: 12.0.0
 
@@ -29129,11 +29131,11 @@ snapshots:
       iconv-lite: 0.6.3
       unpipe: 1.0.0
 
-  rc-modal-sheet@0.3.2(@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@3.0.1)(vaul@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  rc-modal-sheet@0.3.2(@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@3.0.1)(vaul@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
       '@radix-ui/react-dialog': 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx: 2.1.1
-      framer-motion: 12.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      framer-motion: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-merge: 3.0.1
       vaul: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
@@ -29323,6 +29325,11 @@ snapshots:
       react-native-is-edge-to-edge: 1.1.6(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-reanimated: 3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
 
+  react-native-otp-entry@1.8.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
+
   react-native-pager-view@6.7.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -29381,12 +29388,14 @@ snapshots:
       react: 18.3.1
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
 
-  react-native-uikit-colors@0.2.0(fe3lmks7adwcuf5fbpjna3wt2m):
+  react-native-uikit-colors@0.3.8(fe3lmks7adwcuf5fbpjna3wt2m):
     dependencies:
+      apple-uikit-colors: 0.3.8
       nativewind: 4.1.23(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-safe-area-context@5.2.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-svg@15.11.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
       react: 18.3.1
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
       tailwindcss: 3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))
+      tailwindcss-uikit-colors: 0.3.8
 
   react-native-volume-manager@2.0.8(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
     dependencies:
@@ -30839,6 +30848,10 @@ snapshots:
   tailwindcss-safe-area@0.6.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))):
     dependencies:
       tailwindcss: 3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))
+
+  tailwindcss-uikit-colors@0.3.8:
+    dependencies:
+      apple-uikit-colors: 0.3.8
 
   tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)):
     dependencies:

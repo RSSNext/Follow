@@ -1,64 +1,85 @@
 import { router } from "expo-router"
-import { useRef, useState } from "react"
-import { Animated, Dimensions, PanResponder } from "react-native"
+import { useAtom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
+import { useMemo } from "react"
+import { Dimensions } from "react-native"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
+import { JotaiPersistSyncStorage } from "@/src/lib/jotai"
 
 export const DebugButton = () => {
+  const cachedPositionAtom = useMemo(
+    () =>
+      atomWithStorage("debug-button-position", { x: 0, y: 50 }, JotaiPersistSyncStorage, {
+        getOnInit: true,
+      }),
+    [],
+  )
   const insets = useSafeAreaInsets()
   const windowWidth = Dimensions.get("window").width
-  const pan = useRef(
-    new Animated.ValueXY({
-      x: insets.left,
-      y: 50,
-    }),
-  ).current
-  const [position, setPosition] = useState({ x: 0, y: 50 })
+  const [point, setPoint] = useAtom(cachedPositionAtom)
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      const newX = position.x + gesture.dx
-      const newY = position.y + gesture.dy
+  const translateX = useSharedValue(point.x)
+  const translateY = useSharedValue(point.y)
+  const startX = useSharedValue(point.x)
+  const startY = useSharedValue(point.y)
 
-      pan.setValue({ x: newX, y: newY })
-    },
-
-    onPanResponderRelease: (_, gesture) => {
-      if (Math.abs(gesture.dx) < 5 && Math.abs(gesture.dy) < 5) {
-        router.push("/debug")
-
+  const gestureEvent = Gesture.Pan()
+    .onStart(() => {
+      startX.value = translateX.value
+      startY.value = translateY.value
+    })
+    .onChange((event) => {
+      translateX.value = startX.value + event.translationX
+      translateY.value = startY.value + event.translationY
+    })
+    .onEnd((event) => {
+      if (Math.abs(event.translationX) < 5 && Math.abs(event.translationY) < 5) {
+        runOnJS(router.push)("/debug")
         return
       }
-
-      const newY = position.y + gesture.dy
 
       const snapToLeft = true
       const finalX = snapToLeft ? insets.left : windowWidth - 40 - insets.right
 
-      Animated.spring(pan, {
-        toValue: { x: finalX, y: newY },
-        useNativeDriver: false,
-      }).start()
+      translateX.value = withSpring(finalX)
+      translateY.value = withSpring(startY.value + event.translationY)
 
-      setPosition({ x: finalX, y: newY })
-    },
+      runOnJS(setPoint)({
+        x: finalX,
+        y: startY.value + event.translationY,
+      })
+    })
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
+    }
   })
 
   return (
-    <Animated.View
-      style={{
-        position: "absolute",
-        right: 0,
-        top: -20,
-        zIndex: 1000,
-        transform: pan.getTranslateTransform(),
-      }}
-      {...panResponder.panHandlers}
-      className="absolute mt-5 flex size-8 items-center justify-center rounded-l-md bg-accent"
-    >
-      <BugCuteReIcon height={24} width={24} color="#fff" />
-    </Animated.View>
+    <GestureDetector gesture={gestureEvent}>
+      <ReAnimatedTouchableOpacity
+        onPress={() => {
+          runOnJS(router.push)("/debug")
+        }}
+        style={[
+          {
+            position: "absolute",
+            right: 0,
+            top: -20,
+            zIndex: 1000,
+          },
+          animatedStyle,
+        ]}
+        className="absolute mt-5 flex size-8 items-center justify-center rounded-l-md bg-accent"
+      >
+        <BugCuteReIcon height={24} width={24} color="#fff" />
+      </ReAnimatedTouchableOpacity>
+    </GestureDetector>
   )
 }

@@ -1,23 +1,29 @@
 {
   "cli": {
+    "version": ">= 15.0.10",
     "appVersionSource": "remote"
   },
   "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development"
+    },
     "preview": {
-      "channel": "preview",
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "preview"
     },
     "production": {
-      "channel": "production",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "channel": "production"
     }
   },
   "submit": {
     "production": {
       "ios": {
-        "appleId": "rss3@diygod.me",
+        "appleId": "diygod@rss3.io",
         "ascAppId": "6739802604",
-        "appleTeamId": "NCLY2BLCL2"
+        "appleTeamId": "492J8Q67PF"
       }
     }
   }

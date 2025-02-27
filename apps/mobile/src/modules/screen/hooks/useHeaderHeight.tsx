@@ -8,7 +8,7 @@ export const useHeaderHeight = () => {
   const screenType = useEntryListContext().type
   const originalDefaultHeaderHeight = useDefaultHeaderHeight()
   const headerHeight =
-    screenType === "timeline"
+    screenType === "timeline" || screenType === "subscriptions"
       ? originalDefaultHeaderHeight + headerHideableBottomHeight
       : originalDefaultHeaderHeight
 

@@ -3,7 +3,7 @@ import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { BottomTabBarHeightContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarHeightContext"
+import { BottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { EntryListSelector } from "@/src/modules/entry-list/EntryListSelector"
 import { EntryListContext, useSelectedView } from "@/src/modules/screen/atoms"
 import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorProvider"

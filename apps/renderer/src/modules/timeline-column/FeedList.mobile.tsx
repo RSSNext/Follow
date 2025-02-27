@@ -7,16 +7,14 @@ import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
-import { useCategoryOpenStateByView } from "~/store/subscription"
-
 import {
-  EmptyFeedList,
-  ListHeader,
-  StarredItem,
+  useCategoryOpenStateByView,
   useFeedsGroupedData,
   useInboxesGroupedData,
   useListsGroupedData,
-} from "./FeedList.shared"
+} from "~/store/subscription"
+
+import { EmptyFeedList, ListHeader, StarredItem } from "./FeedList.shared"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { feedColumnStyles } from "./styles"
 

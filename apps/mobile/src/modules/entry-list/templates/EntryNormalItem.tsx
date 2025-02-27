@@ -1,4 +1,4 @@
-import { Image } from "expo-image"
+import { FeedViewType } from "@follow/constants"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
@@ -7,6 +7,7 @@ import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-
 import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
@@ -18,10 +19,12 @@ import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
 import { EntryItemSkeleton } from "../EntryListContentArticle"
+import { useEntryListContextView } from "../EntryListContext"
 
 export function EntryNormalItem({ entryId, extraData }: { entryId: string; extraData: string }) {
   const entry = useEntry(entryId)
   const feed = useFeed(entry?.feedId as string)
+  const view = useEntryListContextView()
 
   const handlePress = useCallback(() => {
     if (!entry) return
@@ -71,65 +74,77 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
         />
 
         <View className="flex-1 space-y-2">
-          <View className="mb-1 flex-1 flex-row gap-2">
-            <FeedIcon fallback feed={feed} size={14} />
-            <Text className="text-secondary-label text-xs">{feed?.title ?? "Unknown feed"}</Text>
+          <View className="mb-1 flex-1 flex-row items-center gap-1.5 pr-2">
+            <FeedIcon fallback feed={feed} size={16} />
+            <Text numberOfLines={1} className="text-secondary-label shrink text-sm font-medium">
+              {feed?.title ?? "Unknown feed"}
+            </Text>
+            <Text className="text-secondary-label text-xs font-medium">·</Text>
+            <RelativeDateTime
+              date={publishedAt}
+              className="text-secondary-label text-xs font-medium"
+              postfixText="ago"
+            />
           </View>
-          <Text numberOfLines={2} className="text-label text-lg font-semibold leading-tight">
+          <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
-          <Text className="text-secondary-label mt-1 line-clamp-2 text-sm">{description}</Text>
-
-          <RelativeDateTime
-            date={publishedAt}
-            className="text-tertiary-label text-xs"
-            postfixText="ago"
-          />
-        </View>
-        <View className="relative">
-          {image && (
-            <Image
-              source={{
-                uri: image,
-                headers: getImageHeaders(image),
-              }}
-              placeholder={{ blurhash }}
-              className="bg-system-fill ml-2 size-20 rounded-md"
-              contentFit="cover"
-              recyclingKey={image}
-              transition={500}
-            />
-          )}
-
-          {audio && (
-            <TouchableOpacity
-              className="absolute inset-0 flex items-center justify-center"
-              onPress={() => {
-                if (isLoading) return
-                if (isPlaying) {
-                  player.pause()
-                  return
-                }
-                player.play({
-                  url: audio.url,
-                  title: entry?.title,
-                  artist: feed?.title,
-                  artwork: image,
-                })
-              }}
-            >
-              <View className="bg-gray-6/50 rounded-full p-2">
-                {isPlaying ? (
-                  <PauseCuteFiIcon color="white" width={24} height={24} />
-                ) : isLoading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <PlayCuteFiIcon color="white" width={24} height={24} />
-                )}
-              </View>
-            </TouchableOpacity>
+          {view !== FeedViewType.Notifications && (
+            <Text numberOfLines={2} className="text-secondary-label text-base">
+              {description}
+            </Text>
           )}
         </View>
+        {view !== FeedViewType.Notifications && (
+          <View className="relative">
+            {image && (
+              <ProxiedImage
+                proxy={{
+                  width: 96,
+                  height: 96,
+                }}
+                source={{
+                  uri: image,
+                  headers: getImageHeaders(image),
+                }}
+                placeholder={{ blurhash }}
+                className="bg-system-fill ml-2 size-24 rounded-md"
+                contentFit="cover"
+                recyclingKey={image}
+                transition={500}
+              />
+            )}
+
+            {audio && (
+              <TouchableOpacity
+                className="absolute inset-0 flex items-center justify-center"
+                onPress={() => {
+                  if (isLoading) return
+                  if (isPlaying) {
+                    player.pause()
+                    return
+                  }
+                  player.play({
+                    url: audio.url,
+                    title: entry?.title,
+                    artist: feed?.title,
+                    artwork: image,
+                  })
+                }}
+              >
+                <View className="bg-gray-6/50 rounded-full p-2">
+                  {isPlaying ? (
+                    <PauseCuteFiIcon color="white" width={24} height={24} />
+                  ) : isLoading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <PlayCuteFiIcon color="white" width={24} height={24} />
+                  )}
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
       </ItemPressable>
     </EntryItemContextMenu>
   )
