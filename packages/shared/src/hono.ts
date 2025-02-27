@@ -14684,6 +14684,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                             }[] | null | undefined;
                         } | null | undefined;
                     };
+                    view: number;
+                    from: string[] | null;
                     feeds: {
                         id: string;
                         type: "feed";
