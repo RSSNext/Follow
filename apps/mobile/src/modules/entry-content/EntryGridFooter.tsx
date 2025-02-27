@@ -55,7 +55,7 @@ export const EntryGridFooter = ({
           <Text
             numberOfLines={2}
             className={cn(
-              "text-label text-base font-medium",
+              "text-label shrink text-base font-medium",
               view === FeedViewType.Videos && "min-h-12",
               descriptionClassName,
             )}
