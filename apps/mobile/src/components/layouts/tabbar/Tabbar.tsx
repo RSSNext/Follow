@@ -163,7 +163,8 @@ const TextLabel = (props: {
     color: interpolateColor(focusedValue.value, [0, 1], [inactiveTintColor, accentColor]),
   }))
   useEffect(() => {
-    focusedValue.value = withSpring(focused ? 1 : 0)
+    cancelAnimation(focusedValue)
+    focusedValue.value = withSpring(focused ? 1 : 0, { duration: 100 })
   }, [focused, focusedValue])
   return (
     <Animated.Text
