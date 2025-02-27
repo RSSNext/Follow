@@ -16,8 +16,8 @@ public class HelperModule: Module {
         return
       }
       DispatchQueue.main.async {
-        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
-        WebViewManager.presentModalWebView(url: url, from: rootVC)
+//        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
+//        WebViewManager.pushModalWebView(url: url, from: rootVC)
       }
     }
 

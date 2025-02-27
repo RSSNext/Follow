@@ -1,13 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
 import { useMemo, useRef } from "react"
-import {
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  useAnimatedValue,
-  View,
-} from "react-native"
+import { Text, TouchableWithoutFeedback, useAnimatedValue, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
 import type { OtpInputRef } from "react-native-otp-entry"
 import { OtpInput } from "react-native-otp-entry"
@@ -15,7 +9,6 @@ import { useColor } from "react-native-uikit-colors"
 
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
-import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { twoFactor } from "@/src/lib/auth"
 import { queryClient } from "@/src/lib/query-client"
 import { toast } from "@/src/lib/toast"
@@ -55,18 +48,7 @@ export default function TwoFactorAuthScreen() {
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <View className="flex-1 p-safe">
-        <NavigationBlurEffectHeader
-          headerShown
-          headerTitle=""
-          title="2FA"
-          headerLeft={() => {
-            return (
-              <TouchableOpacity onPress={() => router.back()}>
-                <MingcuteLeftLineIcon color={label} />
-              </TouchableOpacity>
-            )
-          }}
-        />
+        <NavigationBlurEffectHeader headerShown headerTitle="" title="2FA" />
         <TouchableWithoutFeedback
           onPress={() => {
             KeyboardController.dismiss()

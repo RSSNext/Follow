@@ -11,14 +11,13 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated"
-import { useColor } from "react-native-uikit-colors"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
+import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { apiClient } from "@/src/lib/api-fetch"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/EntryContentHeaderRightActions"
@@ -197,8 +196,6 @@ interface EntryLeftGroupProps {
 }
 
 const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLeftGroupProps) => {
-  const label = useColor("label")
-
   const hideRecentReader = useUISettingKey("hideRecentReader")
   const animatedOpacity = useAnimatedStyle(() => {
     return {
@@ -208,7 +205,7 @@ const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLef
   return (
     <View className="flex-row items-center justify-center">
       <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
-        {canGoBack && <MingcuteLeftLineIcon height={20} width={20} color={label} />}
+        <DefaultHeaderBackButton canGoBack={canGoBack} />
       </TouchableOpacity>
 
       {!hideRecentReader && (

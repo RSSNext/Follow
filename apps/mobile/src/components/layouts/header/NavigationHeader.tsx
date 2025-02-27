@@ -147,10 +147,12 @@ export const NavigationHeader = ({
   const setHeaderHeight = useContext(SetNavigationHeaderHeightContext)
 
   useEffect(() => {
-    const id = scrollY.addListener(({ value }) => {
+    const handler = ({ value }: { value: number }) => {
       opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
-    })
+    }
+    const id = scrollY.addListener(handler)
 
+    handler({ value: (scrollY as any)._value })
     return () => {
       scrollY.removeListener(id)
     }
@@ -191,7 +193,7 @@ export const NavigationHeader = ({
     }
   }, [navigation, title])
 
-  const HeaderLeft = headerLeft ?? DefaultHeaderLeft
+  const HeaderLeft = headerLeft ?? DefaultHeaderBackButton
 
   const renderTitle = customHeaderTitle ?? HeaderTitle
   const headerTitle =
@@ -306,14 +308,27 @@ export const NavigationHeader = ({
   )
 }
 
-const DefaultHeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
+export const DefaultHeaderBackButton = ({ canGoBack }: { canGoBack: boolean }) => {
   const label = useColor("label")
   if (!canGoBack) return null
   return (
-    <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
+    <UINavigationHeaderActionButton onPress={() => router.back()}>
       <MingcuteLeftLineIcon height={20} width={20} color={label} />
-    </TouchableOpacity>
+    </UINavigationHeaderActionButton>
   )
 }
 
+export const UINavigationHeaderActionButton = ({
+  children,
+  onPress,
+}: {
+  children: ReactNode
+  onPress?: () => void
+}) => {
+  return (
+    <TouchableOpacity hitSlop={5} className="p-2" onPress={onPress}>
+      {children}
+    </TouchableOpacity>
+  )
+}
 const Noop = () => null

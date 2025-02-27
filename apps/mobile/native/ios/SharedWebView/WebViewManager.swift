@@ -175,6 +175,11 @@ enum WebViewManager {
         navController.modalPresentationStyle = .fullScreen
         viewController.present(navController, animated: true)
     }
+
+    static func pushModalWebView(url: URL, from navigationController: UINavigationController) {
+        let modalVC = ModalWebViewController(url: url)
+        navigationController.pushViewController(modalVC, animated: true)
+    }
 }
 
 private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate

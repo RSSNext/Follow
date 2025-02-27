@@ -1,11 +1,12 @@
 import { router } from "expo-router"
 import { createContext, createElement, useCallback, useContext, useMemo } from "react"
 import type { ListRenderItem } from "react-native"
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useColor } from "react-native-uikit-colors"
 
 import { Balance } from "@/src/components/common/Balance"
+import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -99,9 +100,9 @@ export const ListsScreen = () => {
 const AddListButton = () => {
   const labelColor = useColor("label")
   return (
-    <TouchableOpacity hitSlop={10} onPress={() => router.push("/list")}>
+    <UINavigationHeaderActionButton onPress={() => router.push("/list")}>
       <AddCuteReIcon height={20} width={20} color={labelColor} />
-    </TouchableOpacity>
+    </UINavigationHeaderActionButton>
   )
 }
 

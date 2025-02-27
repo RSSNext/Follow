@@ -27,6 +27,13 @@ class ModalWebViewController: UIViewController {
         setupNavigationBar()
         setupWebView()
         loadContent()
+        setupInteractivePopGesture()
+
+    }
+
+    private func setupInteractivePopGesture() {
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
 
     private func setupNavigationBar() {
@@ -55,6 +62,7 @@ class ModalWebViewController: UIViewController {
 
     private func setupWebView() {
         view.addSubview(webView)
+        view.backgroundColor = .systemBackground
         webView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.bottom.equalToSuperview()
@@ -79,5 +87,12 @@ class ModalWebViewController: UIViewController {
 extension ModalWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         navigationItem.title = webView.title
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension ModalWebViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

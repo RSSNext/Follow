@@ -1,9 +1,11 @@
-import { router, Stack, useNavigation } from "expo-router"
-import { TouchableOpacity, View } from "react-native"
-import { useColor } from "react-native-uikit-colors"
+import { getDefaultHeaderHeight } from "@react-navigation/elements"
+import { useMemo } from "react"
+import { useAnimatedValue, View } from "react-native"
+import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
-import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 
 const txt = `# Terms of Service
 
@@ -93,26 +95,18 @@ export const TermsMarkdown = () => {
 }
 
 export default function Teams() {
-  const canGoBack = useNavigation().canGoBack()
-  const label = useColor("label")
+  const scrollY = useAnimatedValue(100)
+  const insets = useSafeAreaInsets()
+  const frame = useSafeAreaFrame()
+  const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
   return (
-    <View className="flex-1">
-      <Stack.Screen
-        options={{
-          headerBackTitle: "Login",
-          headerTitle: "Terms of Service",
-          headerShown: true,
-          headerLeft: canGoBack
-            ? () => (
-                <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
-                  <MingcuteLeftLineIcon height={20} width={20} color={label} />
-                </TouchableOpacity>
-              )
-            : undefined,
-        }}
-      />
+    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
+      <View className="flex-1">
+        <NavigationBlurEffectHeader headerShown title="Terms of Service" />
 
-      <TermsMarkdown />
-    </View>
+        <View style={{ height: headerHeight }} />
+        <TermsMarkdown />
+      </View>
+    </NavigationContext.Provider>
   )
 }
