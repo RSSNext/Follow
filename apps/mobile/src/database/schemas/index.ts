@@ -84,6 +84,7 @@ export const entriesTable = sqliteTable("entries", {
 
   inboxHandle: text("inbox_handle"),
   read: integer("read", { mode: "boolean" }),
+  sources: text("sources", { mode: "json" }).$type<string[]>(),
 })
 
 export const collectionsTable = sqliteTable("collections", {
