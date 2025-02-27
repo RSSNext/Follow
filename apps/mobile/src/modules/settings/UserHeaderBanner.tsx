@@ -22,8 +22,7 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) 
 
   const result = useImageColors(whoami?.image)
   const gradientColors = useMemo(() => {
-    if (!result) return []
-    if (result.platform === "web") return defaultGradientColors
+    if (!result || result.platform === "web") return defaultGradientColors
     if (result.platform === "android") {
       return [result.dominant, result.average || result.vibrant, result.vibrant || result.dominant]
     }
