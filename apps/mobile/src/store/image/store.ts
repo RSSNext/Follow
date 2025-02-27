@@ -15,7 +15,6 @@ export const useImagesStore = createZustandStore<ImageStore>("images")(() => ({
   images: {},
 }))
 
-// const set = useUserStore.setState
 const immerSet = createImmerSetter(useImagesStore)
 
 class ImageSyncService {
