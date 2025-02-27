@@ -5,13 +5,35 @@ import { router } from "expo-router"
 import { useEffect, useMemo, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import ImageColors from "react-native-image-colors"
+import Reanimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { SheetScreen } from "react-native-sheet-transitions"
 
-import { useActiveTrack } from "../lib/player"
+import { useActiveTrack, useIsPlaying } from "../lib/player"
 import { PlayerScreenContext } from "../modules/player/context"
 import { ControlGroup, ProgressBar, VolumeBar } from "../modules/player/control"
 
 const defaultBackgroundColor = "#000000"
+
+function CoverArt({ cover }: { cover?: string }) {
+  const scale = useSharedValue(1)
+  const { playing } = useIsPlaying()
+
+  useEffect(() => {
+    scale.value = playing ? 1 : 0.7
+  }, [playing])
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: withSpring(scale.value) }],
+    }
+  })
+
+  return (
+    <Reanimated.View className="mx-auto my-12 aspect-square w-[87%] shadow" style={[animatedStyle]}>
+      <Image source={cover} className="size-full rounded-lg" />
+    </Reanimated.View>
+  )
+}
 
 export default function PlaterScreen() {
   const activeTrack = useActiveTrack()
@@ -66,9 +88,7 @@ export default function PlaterScreen() {
             end={{ x: 1, y: 0 }}
           />
           <DismissIndicator />
-          <View className="mx-auto my-24 aspect-square w-[65%] shadow">
-            <Image source={activeTrack.artwork} className="size-full rounded-lg" />
-          </View>
+          <CoverArt cover={activeTrack.artwork} />
           <View className="mx-10 flex-1">
             <Text
               className={cn(
