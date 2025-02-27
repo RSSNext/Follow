@@ -43,3 +43,10 @@ export const useOwnedLists = () => {
     ),
   )
 }
+
+export const useListsFeedIds = (listIds: string[]) => {
+  const listFeedIds = useListStore(
+    (state) => listIds.flatMap((id) => state.lists[id]?.feedIds).filter(Boolean) as string[],
+  )
+  return listFeedIds
+}

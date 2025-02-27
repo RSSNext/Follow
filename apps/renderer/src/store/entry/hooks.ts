@@ -4,6 +4,7 @@ import { useCallback } from "react"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
 
+import { useListsFeedIds } from "../list"
 import { useFeedIdByView } from "../subscription"
 import { getEntryIsInView, getFilteredFeedIds } from "./helper"
 import { useEntryStore } from "./store"
@@ -81,9 +82,13 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
 
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
+  const listFeedIds = useListsFeedIds(feedIds)
 
   return useEntryStore(
-    useCallback(() => getFilteredFeedIds(feedIds, filter) || [], [feedIds, filter]),
+    useCallback(
+      () => getFilteredFeedIds([...feedIds, ...listFeedIds], filter) || [],
+      [feedIds, listFeedIds, filter],
+    ),
   )
 }
 

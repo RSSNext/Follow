@@ -1,6 +1,7 @@
 import type { FeedViewType } from "@follow/constants"
 import { useCallback, useMemo } from "react"
 
+import { useListsFeedIds } from "../list"
 import { useListStore } from "../list/store"
 import { useSubscriptionByView } from "../subscription/hooks"
 import { useFeedUnreadStore } from "."
@@ -55,21 +56,19 @@ export const useUnreadByView = (view: FeedViewType) => {
 }
 
 export const useUnreadByListId = (listId: string) => {
-  const list = useListStore((state) => state.lists[listId])
+  const listFeedIds = useListsFeedIds([listId])
 
   const totalUnread = useFeedUnreadStore(
     useCallback(
       (state) => {
-        if (!list?.feedIds) return 0
-
         let unread = 0
 
-        for (const feedId of list.feedIds) {
+        for (const feedId of listFeedIds) {
           unread += state.data[feedId] || 0
         }
         return unread
       },
-      [list?.feedIds],
+      [listFeedIds],
     ),
   )
 

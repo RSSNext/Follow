@@ -21,7 +21,7 @@ import { SubscriptionService } from "~/services"
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
 import { inboxActions } from "../inbox"
-import { listActions } from "../list"
+import { getListById, listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createImmerSetter, createTransaction, createZustandStore } from "../utils/helper"
 
@@ -250,13 +250,27 @@ class SubscriptionActions {
       })
     })
 
+    const feedIds = [] as string[]
     tx.optimistic(async () => {
       const state = get()
       for (const feedId in state.data) {
         if (state.data[feedId]!.view === view) {
-          // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
-          !filter && feedUnreadActions.updateByFeedId(feedId, 0)
-          entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+          if (state.data[feedId]?.listId) {
+            const listFeedIds = getListById(state.data[feedId].listId)?.feedIds
+            if (listFeedIds) {
+              feedIds.push(...listFeedIds)
+
+              listFeedIds.forEach((id) => {
+                !filter && feedUnreadActions.updateByFeedId(id, 0)
+                entryActions.patchManyByFeedId(id, { read: true }, filter)
+              })
+            }
+          } else {
+            feedIds.push(feedId)
+            // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+            !filter && feedUnreadActions.updateByFeedId(feedId, 0)
+            entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+          }
         }
       }
       if (filter) {
@@ -270,8 +284,7 @@ class SubscriptionActions {
     })
     await tx.run()
 
-    const feedIdsInView = get().feedIdByView[view]
-    for (const feedId of feedIdsInView) {
+    for (const feedId of feedIds) {
       setFeedUnreadDirty(feedId)
     }
   }
