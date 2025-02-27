@@ -9,6 +9,7 @@ import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentG
 
 import { EntryListContentArticle } from "./EntryListContentArticle"
 import { EntryListContentSocial } from "./EntryListContentSocial"
+import { EntryListContentVideo } from "./EntryListContentVideo"
 import { EntryListContextViewContext } from "./EntryListContext"
 
 export function EntryListSelector({
@@ -37,9 +38,12 @@ export function EntryListSelector({
       ContentComponent = EntryListContentSocial
       break
     }
-    case FeedViewType.Pictures:
-    case FeedViewType.Videos: {
+    case FeedViewType.Pictures: {
       ContentComponent = EntryListContentGrid
+      break
+    }
+    case FeedViewType.Videos: {
+      ContentComponent = EntryListContentVideo
       break
     }
     case FeedViewType.Articles: {
