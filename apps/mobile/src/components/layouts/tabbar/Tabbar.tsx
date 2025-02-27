@@ -2,7 +2,7 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs"
 import { getLabel } from "@react-navigation/elements"
 import { CommonActions, NavigationContext, NavigationRouteContext } from "@react-navigation/native"
 import type { FC } from "react"
-import { memo, useContext, useEffect } from "react"
+import { Fragment, memo, useContext, useEffect } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, View } from "react-native"
 import Animated, {
@@ -75,6 +75,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
               })
             }
           }
+          const tabButton = options?.tabBarButton
           const label =
             typeof options?.tabBarLabel === "function"
               ? options?.tabBarLabel
@@ -130,17 +131,19 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
             )
           }
 
+          const TabButton = tabButton ?? Fragment
           return (
-            <TabItem
-              key={route.key}
-              route={route}
-              focused={focused}
-              descriptors={descriptors}
-              onPress={onPress}
-              originalRenderIcon={renderIcon}
-              originalRenderLabel={renderLabel}
-              accessibilityLabel={accessibilityLabel}
-            />
+            <TabButton key={route.key}>
+              <TabItem
+                route={route}
+                focused={focused}
+                descriptors={descriptors}
+                onPress={onPress}
+                originalRenderIcon={renderIcon}
+                originalRenderLabel={renderLabel}
+                accessibilityLabel={accessibilityLabel}
+              />
+            </TabButton>
           )
         })}
       </Grid>

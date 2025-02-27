@@ -1,5 +1,5 @@
 import { router, Stack, Tabs } from "expo-router"
-import { Easing, Pressable, View } from "react-native"
+import { Easing } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
 
@@ -51,9 +51,6 @@ export default function TabLayout() {
               const Icon = !focused ? Home5CuteReIcon : Home5CuteFiIcon
               return <Icon color={color} width={24} height={24} />
             },
-            tabBarButton(props) {
-              return <Pressable {...props} />
-            },
           }}
         />
         <Tabs.Screen
@@ -66,10 +63,6 @@ export default function TabLayout() {
               return <Icon color={color} width={24} height={24} />
             },
             tabBarLabel: "Subscriptions",
-
-            tabBarButton(props) {
-              return <Pressable {...props} />
-            },
           }}
         />
         <Tabs.Screen
@@ -81,9 +74,6 @@ export default function TabLayout() {
               const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
               return <Icon color={color} width={24} height={24} />
             },
-            tabBarButton(props) {
-              return <Pressable {...props} />
-            },
           }}
         />
 
@@ -93,13 +83,7 @@ export default function TabLayout() {
             title: "Settings",
             headerShown: false,
             tabBarButton(props) {
-              return (
-                <GestureDetector gesture={fifthTap}>
-                  <View className="flex-1">
-                    <Pressable {...props} />
-                  </View>
-                </GestureDetector>
-              )
+              return <GestureDetector gesture={fifthTap}>{props.children}</GestureDetector>
             },
             tabBarIcon: ({ color, focused }) => {
               const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
