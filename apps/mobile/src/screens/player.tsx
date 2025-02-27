@@ -1,4 +1,4 @@
-import { cn, getLuminance, shadeColor } from "@follow/utils"
+import { cn } from "@follow/utils"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
@@ -10,9 +10,8 @@ import { SheetScreen } from "react-native-sheet-transitions"
 import { useActiveTrack, useIsPlaying } from "../lib/player"
 import { PlayerScreenContext } from "../modules/player/context"
 import { ControlGroup, ProgressBar, VolumeBar } from "../modules/player/control"
-import { useImageColors, usePrefetchImageColors } from "../store/image/hooks"
-
-const defaultBackgroundColor = "#000000"
+import { useCoverGradient } from "../modules/player/hooks"
+import { usePrefetchImageColors } from "../store/image/hooks"
 
 function CoverArt({ cover }: { cover?: string }) {
   const scale = useSharedValue(1)
@@ -39,18 +38,7 @@ export default function PlaterScreen() {
   const activeTrack = useActiveTrack()
   usePrefetchImageColors(activeTrack?.artwork)
 
-  const imageColors = useImageColors(activeTrack?.artwork)
-  const backgroundColor = useMemo(() => {
-    if (imageColors?.platform === "ios") {
-      return imageColors.background
-    } else if (imageColors?.platform === "android") {
-      return imageColors.average
-    }
-    return defaultBackgroundColor
-  }, [imageColors])
-  const isGradientLight = useMemo(() => {
-    return getLuminance(backgroundColor) > 0.5
-  }, [backgroundColor])
+  const { gradientColors, isGradientLight } = useCoverGradient(activeTrack?.artwork)
 
   const playerScreenContextValue = useMemo(
     () => ({ isBackgroundLight: isGradientLight }),
@@ -67,7 +55,7 @@ export default function PlaterScreen() {
         <View className="flex-1 px-[1000] p-safe">
           <LinearGradient
             style={StyleSheet.absoluteFill}
-            colors={[backgroundColor, shadeColor(backgroundColor, -50)]}
+            colors={gradientColors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           />
