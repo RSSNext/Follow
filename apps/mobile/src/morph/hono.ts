@@ -129,6 +129,7 @@ class Morph {
         // TODO: handle inboxHandle
         inboxHandle: "",
         read: item.read,
+        sources: item.from,
       })
     }
     return entries
@@ -179,6 +180,7 @@ class Morph {
       // TODO: handle inboxHandle
       inboxHandle: "",
       read: false,
+      sources: null,
     }
   }
 

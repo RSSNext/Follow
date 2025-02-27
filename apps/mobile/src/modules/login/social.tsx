@@ -41,7 +41,7 @@ export function SocialLogin() {
   const { colorScheme } = useColorScheme()
 
   return (
-    <View className="flex flex-row justify-center gap-4">
+    <View className="flex flex-row justify-center gap-8">
       {Object.keys(provider)
         .filter((key) => key !== "apple" || (Platform.OS === "ios" && key === "apple"))
         .map((key) => {
@@ -49,6 +49,7 @@ export function SocialLogin() {
           return (
             <TouchableOpacity
               key={key}
+              hitSlop={20}
               className="border-opaque-separator border-hairline rounded-full p-2"
               onPress={async () => {
                 if (!data?.[providerInfo.id]) return
@@ -87,8 +88,8 @@ export function SocialLogin() {
               disabled={!data?.[providerInfo.id]}
             >
               <providerInfo.icon
-                width={20}
-                height={20}
+                width={24}
+                height={24}
                 color={colorScheme === "dark" ? providerInfo.darkColor : providerInfo.color}
               />
             </TouchableOpacity>

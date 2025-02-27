@@ -108,7 +108,7 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
   const tabHeight = useBottomTabBarHeight()
 
   const { data, isLoading } = useQuery({
-    queryKey: ["rsshub-popular", tab.value],
+    queryKey: ["rsshub-popular", "cache", tab.value],
     queryFn: () => fetchRsshubPopular(tab.value, "all").then((res) => res.data),
   })
   const keys = useMemo(() => {

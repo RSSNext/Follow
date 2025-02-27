@@ -69,7 +69,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
         <ReAnimated.View
-          className="bg-red absolute left-2 top-[40] size-2 rounded-full"
+          className="bg-red absolute left-2 top-[43] size-2 rounded-full"
           style={unreadIndicatorStyle}
         />
 
@@ -89,7 +89,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
-          {view !== FeedViewType.Notifications && (
+          {view !== FeedViewType.Notifications && !!description && (
             <Text numberOfLines={2} className="text-secondary-label text-sm">
               {description}
             </Text>

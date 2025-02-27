@@ -62,7 +62,7 @@ const TermsText = () => {
     <ContextMenu.Root>
       <ContextMenu.Trigger className="w-full overflow-hidden rounded-full">
         <Text className="text-secondary-label text-sm">
-          <Link href="/terms" className="text-primary-label">
+          <Link href="/terms" suppressHighlighting className="text-primary-label">
             Terms of Service
           </Link>
         </Text>

@@ -6,6 +6,7 @@ import { memo, useContext, useEffect } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, View } from "react-native"
 import Animated, {
+  cancelAnimation,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -34,6 +35,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
 
   const translateY = useSharedValue(0)
   useEffect(() => {
+    cancelAnimation(translateY)
     translateY.value = withSpring(
       tabBarVisible ? 0 : 100,
       !tabBarVisible ? quickSpringPreset : softSpringPreset,
@@ -161,7 +163,8 @@ const TextLabel = (props: {
     color: interpolateColor(focusedValue.value, [0, 1], [inactiveTintColor, accentColor]),
   }))
   useEffect(() => {
-    focusedValue.value = withSpring(focused ? 1 : 0)
+    cancelAnimation(focusedValue)
+    focusedValue.value = withSpring(focused ? 1 : 0, { duration: 100 })
   }, [focused, focusedValue])
   return (
     <Animated.Text

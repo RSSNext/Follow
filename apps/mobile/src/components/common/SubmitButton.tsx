@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import type { PressableProps } from "react-native"
 import { ActivityIndicator } from "react-native"
 import Animated, {
+  cancelAnimation,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -25,6 +26,7 @@ export function SubmitButton({
 
   const disabledValue = useSharedValue(1)
   useEffect(() => {
+    cancelAnimation(disabledValue)
     disabledValue.value = withTiming(props.disabled ? 1 : 0)
   }, [props.disabled])
 

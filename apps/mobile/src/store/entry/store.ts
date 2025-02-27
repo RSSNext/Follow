@@ -56,15 +56,26 @@ class EntryActions {
     draft,
     feedId,
     entryId,
+    sources,
   }: {
     draft: EntryState
     feedId?: FeedId | null
     entryId: EntryId
+    sources?: string[] | null
   }) {
     if (!feedId) return
     const subscription = getSubscription(feedId)
     if (typeof subscription?.view === "number") {
       draft.entryIdByView[subscription.view].add(entryId)
+    }
+
+    // lists
+    for (const s of sources ?? []) {
+      const subscription = getSubscription(s)
+
+      if (typeof subscription?.view === "number") {
+        draft.entryIdByView[subscription.view].add(entryId)
+      }
     }
   }
 
@@ -134,7 +145,7 @@ class EntryActions {
         draft.entryIdSet.add(entry.id)
         draft.data[entry.id] = entry
 
-        const { feedId, inboxHandle, read } = entry
+        const { feedId, inboxHandle, read, sources } = entry
         if (unreadOnly && read) continue
 
         this.addEntryIdToFeed({
@@ -147,6 +158,7 @@ class EntryActions {
           draft,
           feedId,
           entryId: entry.id,
+          sources,
         })
 
         this.addEntryIdToInbox({

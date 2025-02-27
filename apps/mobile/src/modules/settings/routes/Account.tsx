@@ -30,7 +30,7 @@ export const AccountScreen = () => {
                 await expo.reloadAppAsync("User sign out")
               }}
             >
-              <Text className="text-label">Delete account</Text>
+              <Text className="text-red">Delete account</Text>
             </TouchableOpacity>
           </GroupedInsetListBaseCell>
         </GroupedInsetListCard>

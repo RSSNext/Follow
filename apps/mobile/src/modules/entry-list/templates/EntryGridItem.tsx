@@ -62,7 +62,7 @@ export function EntryGridItem({ id }: { id: string }) {
           openLink(formattedUrl)
         }}
       >
-        <MediaItems media={item.media} entryId={id} noPreview />
+        <MediaItems media={item.media} entryId={id} noPreview aspectRatio={16 / 9} />
       </ItemPressable>
     </VideoContextMenu>
   )
@@ -73,11 +73,13 @@ const MediaItems = ({
   entryId,
   onPreview,
   noPreview,
+  aspectRatio,
 }: {
   media: MediaModel[]
   entryId: string
   onPreview?: () => void
   noPreview?: boolean
+  aspectRatio?: number
 }) => {
   const firstMedia = media[0]
 
@@ -91,14 +93,14 @@ const MediaItems = ({
 
   const { height } = firstMedia
   const { width } = firstMedia
-  const aspectRatio = width && height ? width / height : 1
+  const realAspectRatio = aspectRatio || (width && height ? width / height : 1)
 
   return (
     <MediaCarousel
       entryId={entryId}
       media={uniqMedia}
       onPreview={onPreview}
-      aspectRatio={aspectRatio}
+      aspectRatio={realAspectRatio}
       Accessory={EntryGridItemAccessory}
       AccessoryProps={{ id: entryId }}
       noPreview={noPreview}

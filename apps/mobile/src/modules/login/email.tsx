@@ -81,9 +81,10 @@ export function EmailLogin() {
 
   return (
     <View className="mx-auto flex w-full max-w-sm gap-6">
-      <View className="bg-system-grouped-background gap-4 rounded-2xl px-6 py-4">
+      <View className="bg-secondary-system-background gap-4 rounded-2xl px-6 py-4">
         <View className="flex-row">
           <Input
+            hitSlop={20}
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="email-address"
@@ -101,6 +102,7 @@ export function EmailLogin() {
         <View className="border-b-opaque-separator border-b-hairline" />
         <View className="flex-row">
           <Input
+            hitSlop={20}
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="current-password"

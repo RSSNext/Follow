@@ -4,7 +4,10 @@ import { Share, useAnimatedValue, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
-import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
+import {
+  NavigationBlurEffectHeader,
+  NavigationHeaderBackButton,
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
@@ -41,7 +44,11 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
                     <HomeLeftAction />
                   </View>
                 )
-              : undefined,
+              : () => (
+                  <View style={{ width: HEADER_ACTIONS_GROUP_WIDTH }}>
+                    <NavigationHeaderBackButton />
+                  </View>
+                ),
           [isTimeline, isSubscriptions],
         )}
         headerRight={useMemo(() => {

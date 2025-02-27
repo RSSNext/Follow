@@ -5,6 +5,7 @@ import { Pressable, Text, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 
 import { useActiveTrack } from "@/src/lib/player"
+import { usePrefetchImageColors } from "@/src/store/image/hooks"
 
 import { PlayPauseButton, SeekButton } from "./control"
 
@@ -13,6 +14,9 @@ const allowedRoutes = new Set(["/", "/subscriptions", "/player"])
 export function PlayerTabBar({ className }: { className?: string }) {
   const activeTrack = useActiveTrack()
   const pathname = usePathname()
+
+  usePrefetchImageColors(activeTrack?.artwork)
+
   if (!activeTrack || !allowedRoutes.has(pathname)) {
     return null
   }
