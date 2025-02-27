@@ -89,7 +89,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
           <Text numberOfLines={2} className="text-label text-lg font-semibold">
             {title}
           </Text>
-          {view !== FeedViewType.Notifications && (
+          {view !== FeedViewType.Notifications && !!description && (
             <Text numberOfLines={2} className="text-secondary-label text-base">
               {description}
             </Text>
