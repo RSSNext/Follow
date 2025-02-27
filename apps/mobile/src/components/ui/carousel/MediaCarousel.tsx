@@ -30,10 +30,13 @@ export const MediaCarousel = ({
   noPreview?: boolean
 } & Pick<PreviewImageProps, "Accessory" | "AccessoryProps">) => {
   const [containerWidth, setContainerWidth] = useState(0)
+  const containerHeight = Math.floor(containerWidth / aspectRatio)
   const hasMany = media.length > 1
 
   // const activeIndex = useSharedValue(0)
   const [activeIndex, setActiveIndex] = useState(0)
+
+  const Wrapper = noPreview ? View : ImageContextMenu
 
   return (
     <View
@@ -41,7 +44,7 @@ export const MediaCarousel = ({
         setContainerWidth(e.nativeEvent.layout.width)
       }}
     >
-      <View className="relative">
+      <View className="relative overflow-hidden rounded-md">
         <ScrollView
           onScroll={(e) => {
             setActiveIndex(Math.round(e.nativeEvent.contentOffset.x / containerWidth))
@@ -52,26 +55,27 @@ export const MediaCarousel = ({
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           className="flex-1"
-          contentContainerClassName="flex-row overflow-hidden rounded-md"
-          style={{ aspectRatio }}
+          // We need to fixed the height of the container to prevent the carousel from resizing
+          // See https://github.com/Shopify/flash-list/issues/797
+          style={{ height: containerHeight }}
         >
           {media.map((m, index) => {
             if (m.type === "photo") {
               return (
                 <View key={index} className="relative" style={{ width: containerWidth }}>
-                  <ImageContextMenu entryId={entryId} imageUrl={m.url}>
+                  <Wrapper entryId={entryId} imageUrl={m.url}>
                     <PreviewImage
                       noPreview={noPreview}
                       onPreview={onPreview}
                       imageUrl={m.url}
-                      aspectRatio={m.width && m.height ? m.width / m.height : 1}
+                      aspectRatio={aspectRatio}
                       Accessory={Accessory}
                       AccessoryProps={AccessoryProps}
                       proxy={{
-                        width: 200,
+                        width: containerWidth,
                       }}
                     />
-                  </ImageContextMenu>
+                  </Wrapper>
                 </View>
               )
             }
@@ -84,7 +88,7 @@ export const MediaCarousel = ({
                   // open player
                 }}
                 imageUrl={m.url}
-                aspectRatio={m.width && m.height ? m.width / m.height : 1}
+                aspectRatio={aspectRatio}
               />
             )
           })}
