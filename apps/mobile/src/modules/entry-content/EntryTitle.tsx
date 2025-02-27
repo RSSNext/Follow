@@ -106,7 +106,7 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
           setTitleHeight(titleHeight)
         }}
       >
-        <Text className="text-label px-2 text-4xl font-bold leading-snug">{title}</Text>
+        <Text className="text-label px-4 text-4xl font-bold leading-snug">{title}</Text>
       </View>
     </>
   )

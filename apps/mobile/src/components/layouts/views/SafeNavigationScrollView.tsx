@@ -73,6 +73,12 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
             onScroll={RNAnimated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
               useNativeDriver: true,
             })}
+            automaticallyAdjustContentInsets={false}
+            automaticallyAdjustsScrollIndicatorInsets={false}
+            scrollIndicatorInsets={{
+              top: headerHeight,
+              bottom: tabBarHeight,
+            }}
             {...props}
           >
             <View style={{ height: headerHeight - (withTopInset ? insets.top : 0) }} />
@@ -98,8 +104,6 @@ export const NavigationBlurEffectHeader = ({
   headerHideableBottom?: () => React.ReactNode
   headerTitleAbsolute?: boolean
 }) => {
-  const label = useColor("label")
-
   const canBack = useNavigation().canGoBack()
 
   const navigationContext = useContext(NavigationContext)!
@@ -115,15 +119,7 @@ export const NavigationBlurEffectHeader = ({
         headerTransparent: true,
 
         headerShown: true,
-        headerLeft:
-          headerLeft ??
-          (canBack
-            ? () => (
-                <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
-                  <MingcuteLeftLineIcon height={20} width={20} color={label} />
-                </TouchableOpacity>
-              )
-            : undefined),
+        headerLeft: headerLeft ?? (canBack ? () => <NavigationHeaderBackButton /> : undefined),
 
         header: useTypeScriptHappyCallback(
           ({ options }) => (
@@ -149,5 +145,17 @@ export const NavigationBlurEffectHeader = ({
         ...rest,
       }}
     />
+  )
+}
+
+export const NavigationHeaderBackButton = () => {
+  return <NavigationHeaderBackButtonImpl />
+}
+const NavigationHeaderBackButtonImpl = () => {
+  const label = useColor("label")
+  return (
+    <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
+      <MingcuteLeftLineIcon height={20} width={20} color={label} />
+    </TouchableOpacity>
   )
 }
