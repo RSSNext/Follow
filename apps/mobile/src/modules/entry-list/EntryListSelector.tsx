@@ -5,7 +5,7 @@ import { useContext, useEffect, useRef } from "react"
 import type { ScrollView } from "react-native"
 
 import { SetAttachNavigationScrollViewContext } from "@/src/components/layouts/tabbar/contexts/AttachNavigationScrollViewContext"
-import { EntryListContentGrid } from "@/src/modules/entry-list/EntryListContentGrid"
+import { EntryListContentPicture } from "@/src/modules/entry-list/EntryListContentPicture"
 
 import { EntryListContentArticle } from "./EntryListContentArticle"
 import { EntryListContentSocial } from "./EntryListContentSocial"
@@ -31,7 +31,7 @@ export function EntryListSelector({
     }
   }, [setAttachNavigationScrollViewRef, ref, active])
 
-  let ContentComponent: typeof EntryListContentSocial | typeof EntryListContentGrid =
+  let ContentComponent: typeof EntryListContentSocial | typeof EntryListContentPicture =
     EntryListContentArticle
   switch (viewId) {
     case FeedViewType.SocialMedia: {
@@ -39,7 +39,7 @@ export function EntryListSelector({
       break
     }
     case FeedViewType.Pictures: {
-      ContentComponent = EntryListContentGrid
+      ContentComponent = EntryListContentPicture
       break
     }
     case FeedViewType.Videos: {

@@ -14,7 +14,7 @@ import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
-export function EntryGridItem({ id }: { id: string }) {
+export function EntryPictureItem({ id }: { id: string }) {
   const item = useEntry(id)
 
   if (!item || !item.media) {

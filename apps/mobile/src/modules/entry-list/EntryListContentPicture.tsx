@@ -9,9 +9,9 @@ import { useFetchEntriesControls } from "@/src/modules/screen/atoms"
 import { TimelineSelectorMasonryList } from "../screen/TimelineSelectorList"
 import { useOnViewableItemsChanged } from "./hooks"
 // import type { MasonryItem } from "./templates/EntryGridItem"
-import { EntryGridItem } from "./templates/EntryGridItem"
+import { EntryPictureItem } from "./templates/EntryPictureItem"
 
-export const EntryListContentGrid = forwardRef<
+export const EntryListContentPicture = forwardRef<
   ElementRef<typeof TimelineSelectorMasonryList>,
   {
     entryIds: string[]
@@ -28,7 +28,7 @@ export const EntryListContentGrid = forwardRef<
       isRefetching={isRefetching}
       data={entryIds}
       renderItem={useTypeScriptHappyCallback(({ item }: { item: string }) => {
-        return <EntryGridItem id={item} />
+        return <EntryPictureItem id={item} />
       }, [])}
       keyExtractor={defaultKeyExtractor}
       onViewableItemsChanged={onViewableItemsChanged}
