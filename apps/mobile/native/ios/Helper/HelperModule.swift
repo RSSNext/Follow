@@ -7,7 +7,10 @@
 import ExpoModulesCore
 import UIKit
 
+ 
 public class HelperModule: Module {
+  
+  
   public func definition() -> ExpoModulesCore.ModuleDefinition {
     Name("Helper")
 
@@ -16,8 +19,17 @@ public class HelperModule: Module {
         return
       }
       DispatchQueue.main.async {
-//        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
-//        WebViewManager.pushModalWebView(url: url, from: rootVC)
+//        
+//        if let navVC = UIWindow.findRNSNavigationController() as? UINavigationController {
+//          debugPrint(navVC)
+//           
+//          navVC.pushViewController(WebViewController(url: url), animated: true)
+////          WebViewManager.pushModalWebView(url: url, from: navVC)
+//          
+//        }
+        
+        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
+        WebViewManager.presentModalWebView(url: url, from: rootVC)
       }
     }
 
@@ -80,7 +92,7 @@ public class HelperModule: Module {
 
 extension UIScrollView {
   func scrollToTopIfPossible(animated: Bool) {
-    let encodedSelector = "X3Njcm9sbFRvVG9wSWZQb3NzaWJsZTo="  // "_scrollToTopIfPossible:" 的 Base64 编码
+    let encodedSelector = "X3Njcm9sbFRvVG9wSWZQb3NzaWJsZTo="  // "_scrollToTopIfPossible:"
 
     if let decodedData = Data(base64Encoded: encodedSelector),
       let decodedString = String(data: decodedData, encoding: .utf8)

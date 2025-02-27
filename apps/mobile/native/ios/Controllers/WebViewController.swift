@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController {
+class WebViewController: RNSViewController {
   private let webView: WKWebView
   private let url: URL
 
@@ -53,10 +53,9 @@ class WebViewController: UIViewController {
   }
 
   private func setupToolbar() {
-    // 确保导航控制器显示工具栏
+
     navigationController?.isToolbarHidden = false
 
-    // 创建工具栏按钮
     let backButton = UIBarButtonItem(
       image: UIImage(systemName: "chevron.backward"), style: .plain, target: self,
       action: #selector(goBack))
@@ -76,10 +75,8 @@ class WebViewController: UIViewController {
       action: #selector(openInSafari))
     safariButton.tintColor = Utils.accentColor
 
-    // 添加弹性空间使按钮均匀分布
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
-    // 设置工具栏项目
     toolbarItems = [
       flexSpace, backButton, flexSpace, forwardButton, flexSpace, refreshButton, flexSpace,
       safariButton, flexSpace,
@@ -117,24 +114,22 @@ extension WebViewController: WKNavigationDelegate {
   func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
     navigationItem.title = webView.title
 
-    // 更新后退/前进按钮状态
     updateToolbarButtonsState()
   }
 
   func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-    // 更新后退/前进按钮状态
+
     updateToolbarButtonsState()
   }
 
   private func updateToolbarButtonsState() {
-    // 找到后退和前进按钮并更新它们的启用状态
+
     if let items = toolbarItems {
-      // 后退按钮在索引1
+
       if let backButton = items[1] as? UIBarButtonItem {
         backButton.isEnabled = webView.canGoBack
       }
 
-      // 前进按钮在索引3
       if let forwardButton = items[3] as? UIBarButtonItem {
         forwardButton.isEnabled = webView.canGoForward
       }

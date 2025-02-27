@@ -177,7 +177,7 @@ enum WebViewManager {
     }
 
     static func pushModalWebView(url: URL, from navigationController: UINavigationController) {
-        let modalVC = ModalWebViewController(url: url)
+        let modalVC = WebViewController(url: url)
         navigationController.pushViewController(modalVC, animated: true)
     }
 }
