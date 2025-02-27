@@ -37,11 +37,9 @@ function CoverArt({ cover }: { cover?: string }) {
 
 export default function PlaterScreen() {
   const activeTrack = useActiveTrack()
-
   usePrefetchImageColors(activeTrack?.artwork)
+
   const imageColors = useImageColors(activeTrack?.artwork)
-  // const [backgroundColor, setBackgroundColor] = useState(defaultBackgroundColor)
-  // const [isGradientLight, setIsGradientLight] = useState(false)
   const backgroundColor = useMemo(() => {
     if (imageColors?.platform === "ios") {
       return imageColors.background
