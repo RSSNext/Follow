@@ -31,6 +31,7 @@
     "@react-navigation/drawer": "7.1.1",
     "@react-navigation/native": "7.0.14",
     "@shopify/flash-list": "1.7.3",
+    "@tanstack/query-sync-storage-persister": "5.66.4",
     "@tanstack/react-query": "5.66.7",
     "better-auth": "1.1.18",
     "cookie-es": "1.2.2",
@@ -104,6 +105,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.26.9",
+    "@tanstack/react-query-persist-client": "5.66.7",
     "@types/react": "18.3.12",
     "babel-plugin-inline-import": "3.0.0",
     "babel-plugin-module-resolver": "5.0.2",

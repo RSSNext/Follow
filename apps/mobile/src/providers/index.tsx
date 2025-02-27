@@ -1,7 +1,7 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import { jotaiStore } from "@follow/utils"
 import { ThemeProvider } from "@react-navigation/native"
-import { QueryClientProvider } from "@tanstack/react-query"
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 import { Provider } from "jotai"
 import { useColorScheme } from "nativewind"
@@ -15,7 +15,7 @@ import { SheetProvider } from "react-native-sheet-transitions"
 import { PreviewImageProvider } from "../components/ui/image/PreviewPageProvider"
 import { PortalHost } from "../components/ui/portal"
 import { sqlite } from "../database"
-import { queryClient } from "../lib/query-client"
+import { kvStoragePersister, queryClient } from "../lib/query-client"
 import { DarkTheme, DefaultTheme } from "../theme/navigation"
 import { getCurrentColors } from "../theme/utils"
 import { MigrationProvider } from "./migration"
@@ -31,7 +31,10 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
       <Provider store={jotaiStore}>
         <KeyboardProvider>
           <View style={[styles.flex, currentThemeColors]}>
-            <QueryClientProvider client={queryClient}>
+            <PersistQueryClientProvider
+              client={queryClient}
+              persistOptions={{ persister: kvStoragePersister }}
+            >
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <GestureHandlerRootView>
                   <SheetProvider>
@@ -45,7 +48,7 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
                   </SheetProvider>
                 </GestureHandlerRootView>
               </ThemeProvider>
-            </QueryClientProvider>
+            </PersistQueryClientProvider>
           </View>
         </KeyboardProvider>
       </Provider>
