@@ -180,6 +180,7 @@ class Morph {
       // TODO: handle inboxHandle
       inboxHandle: "",
       read: false,
+      sources: null,
     }
   }
 
