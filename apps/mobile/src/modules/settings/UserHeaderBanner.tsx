@@ -20,23 +20,27 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) 
   const MAX_PULL = 100
   const SCALE_FACTOR = 1.8
 
-  const result = useImageColors(whoami?.image)
+  const imageColors = useImageColors(whoami?.image)
   const gradientColors = useMemo(() => {
-    if (!result || result.platform === "web") return defaultGradientColors
-    if (result.platform === "android") {
-      return [result.dominant, result.average || result.vibrant, result.vibrant || result.dominant]
+    if (!imageColors || imageColors.platform === "web") return defaultGradientColors
+    if (imageColors.platform === "android") {
+      return [
+        imageColors.dominant,
+        imageColors.average || imageColors.vibrant,
+        imageColors.vibrant || imageColors.dominant,
+      ]
     }
-    return [result.primary, result.secondary, result.background]
-  }, [result])
+    return [imageColors.primary, imageColors.secondary, imageColors.background]
+  }, [imageColors])
 
   const gradientLight = useMemo(() => {
-    if (!result) return false
-    if (result.platform === "web") return false
+    if (!imageColors) return false
+    if (imageColors.platform === "web") return false
     const dominantLuminance = getLuminance(
-      result.platform === "android" ? result.dominant : result.primary,
+      imageColors.platform === "android" ? imageColors.dominant : imageColors.primary,
     )
     return dominantLuminance > 0.5
-  }, [result])
+  }, [imageColors])
 
   const styles = useAnimatedStyle(() => {
     const scaleValue = interpolate(scrollY.value, [-MAX_PULL, 0], [SCALE_FACTOR, 1], {
