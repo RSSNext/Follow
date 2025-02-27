@@ -41,7 +41,7 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
             <PortalHost>
               <View className="bg-system-background flex-1">
                 <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
-                  {entry.title}
+                  {entry.title?.trim()}
                 </Text>
                 <EntryContentWebView entry={entry} />
               </View>
