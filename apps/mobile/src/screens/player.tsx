@@ -4,9 +4,15 @@ import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
 import { useEffect, useMemo } from "react"
 import { StyleSheet, Text, View } from "react-native"
-import Reanimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import Reanimated, {
+  cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
 import { SheetScreen } from "react-native-sheet-transitions"
 
+import { gentleSpringPreset } from "../constants/spring"
 import { useActiveTrack, useIsPlaying } from "../lib/player"
 import { PlayerScreenContext } from "../modules/player/context"
 import { ControlGroup, ProgressBar, VolumeBar } from "../modules/player/control"
@@ -18,12 +24,13 @@ function CoverArt({ cover }: { cover?: string }) {
   const { playing } = useIsPlaying()
 
   useEffect(() => {
-    scale.value = playing ? 1 : 0.7
-  }, [playing])
+    cancelAnimation(scale)
+    scale.value = withSpring(playing ? 1 : 0.7, gentleSpringPreset)
+  }, [playing, scale])
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: withSpring(scale.value) }],
+      transform: [{ scale: scale.value }],
     }
   })
 
