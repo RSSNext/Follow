@@ -1,5 +1,3 @@
-import { FeedViewType } from "@follow/constants"
-import { transformVideoUrl } from "@follow/utils"
 import { uniqBy } from "es-toolkit/compat"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useMemo } from "react"
@@ -11,19 +9,13 @@ import { EntryContentWebView } from "@/src/components/native/webview/EntryConten
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import type { MediaModel } from "@/src/database/schemas/types"
-import { openLink } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
-import { VideoContextMenu } from "../../context-menu/video"
-import { useEntryListContextView } from "../EntryListContext"
-
 export function EntryGridItem({ id }: { id: string }) {
   const item = useEntry(id)
-  const view = useEntryListContextView()
 
   if (!item || !item.media) {
     return null
@@ -39,32 +31,14 @@ export function EntryGridItem({ id }: { id: string }) {
     )
   }
 
-  if (view === FeedViewType.Pictures) {
-    return (
-      <View className="m-1">
-        <MediaItems
-          media={item.media}
-          entryId={id}
-          onPreview={() => unreadSyncService.markEntryAsRead(id)}
-        />
-      </View>
-    )
-  }
-
   return (
-    <VideoContextMenu entryId={id}>
-      <ItemPressable
-        className="m-1 overflow-hidden rounded-md"
-        onPress={() => {
-          unreadSyncService.markEntryAsRead(id)
-          if (!item.url) return
-          const formattedUrl = transformVideoUrl({ url: item.url }) || item.url
-          openLink(formattedUrl)
-        }}
-      >
-        <MediaItems media={item.media} entryId={id} noPreview aspectRatio={16 / 9} />
-      </ItemPressable>
-    </VideoContextMenu>
+    <View className="m-1">
+      <MediaItems
+        media={item.media}
+        entryId={id}
+        onPreview={() => unreadSyncService.markEntryAsRead(id)}
+      />
+    </View>
   )
 }
 
