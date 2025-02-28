@@ -1,3 +1,4 @@
+import { useNavigation } from "expo-router"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
 import type { FlatList, ScrollView } from "react-native"
@@ -54,12 +55,17 @@ export const useNavigationScrollToTop = (
 
 export const useRegisterNavigationScrollView = <T = unknown>(active = true) => {
   const scrollViewRef = useRef<T>(null)
+  const navigation = useNavigation()
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
   useEffect(() => {
     if (!active) return
-    if (setAttachNavigationScrollViewRef) {
+    if (!setAttachNavigationScrollViewRef) return
+
+    setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
+    const unsubscribe = navigation.addListener("focus", () => {
       setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
-    }
-  }, [setAttachNavigationScrollViewRef, scrollViewRef, active])
+    })
+    return unsubscribe
+  }, [setAttachNavigationScrollViewRef, scrollViewRef, active, navigation])
   return scrollViewRef
 }
