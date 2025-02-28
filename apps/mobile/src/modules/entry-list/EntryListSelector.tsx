@@ -1,10 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import type { FlashList } from "@shopify/flash-list"
-import type { RefObject } from "react"
-import { useContext, useEffect, useRef } from "react"
-import type { ScrollView } from "react-native"
 
-import { SetAttachNavigationScrollViewContext } from "@/src/components/layouts/tabbar/contexts/AttachNavigationScrollViewContext"
+import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { EntryListContentPicture } from "@/src/modules/entry-list/EntryListContentPicture"
 
 import { EntryListContentArticle } from "./EntryListContentArticle"
@@ -21,15 +18,7 @@ export function EntryListSelector({
   viewId: FeedViewType
   active?: boolean
 }) {
-  const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
-
-  const ref = useRef<FlashList<any>>(null)
-  useEffect(() => {
-    if (!active) return
-    if (setAttachNavigationScrollViewRef) {
-      setAttachNavigationScrollViewRef(ref as unknown as RefObject<ScrollView>)
-    }
-  }, [setAttachNavigationScrollViewRef, ref, active])
+  const ref = useRegisterNavigationScrollView<FlashList<any>>(active)
 
   let ContentComponent: typeof EntryListContentSocial | typeof EntryListContentPicture =
     EntryListContentArticle
