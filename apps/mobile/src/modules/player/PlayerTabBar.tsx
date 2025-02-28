@@ -19,18 +19,16 @@ const allowedRoutes = new Set(["/", "/subscriptions", "/player"])
 
 export function PlayerTabBar({ className }: { className?: string }) {
   const activeTrack = useActiveTrack()
-  const hasActiveTrack = !!activeTrack
-
   const pathname = usePathname()
-
-  const visible = useSharedValue(hasActiveTrack && allowedRoutes.has(pathname) ? 1 : 0)
+  const isVisible = !!activeTrack && allowedRoutes.has(pathname)
+  const isVisibleSV = useSharedValue(isVisible ? 1 : 0)
   useEffect(() => {
-    visible.value = withTiming(hasActiveTrack && allowedRoutes.has(pathname) ? 1 : 0)
-  }, [pathname, hasActiveTrack])
+    isVisibleSV.value = withTiming(isVisible ? 1 : 0)
+  }, [pathname, isVisible])
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      opacity: visible.value,
-      height: interpolate(visible.value, [0, 1], [0, 56]),
+      opacity: isVisibleSV.value,
+      height: interpolate(isVisibleSV.value, [0, 1], [0, 56]),
       overflow: "hidden",
     }
   })
