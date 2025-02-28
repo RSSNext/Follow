@@ -129,7 +129,7 @@ class Morph {
         // TODO: handle inboxHandle
         inboxHandle: "",
         read: item.read,
-        sources: item.from,
+        sources: item.from ?? null,
       })
     }
     return entries
