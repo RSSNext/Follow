@@ -1,4 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
+import type { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import { Text } from "react-native"
