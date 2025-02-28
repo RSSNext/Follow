@@ -5,7 +5,7 @@ import type { DialogComponent } from "@/src/lib/dialog"
 import { Dialog } from "@/src/lib/dialog"
 import { unreadSyncService } from "@/src/store/unread/store"
 
-import { useSelectedView } from "../feed-drawer/atoms"
+import { useSelectedView } from "../screen/atoms"
 
 export const MarkAllAsReadDialog: DialogComponent = () => {
   const selectedView = useSelectedView()
