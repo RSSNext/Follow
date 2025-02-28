@@ -46,7 +46,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
-  const scrollViewRef = useRegisterNavigationScrollView()
+  const scrollViewRef = useRegisterNavigationScrollView<FlashList<any>>()
 
   return (
     <TimelineSelectorList
