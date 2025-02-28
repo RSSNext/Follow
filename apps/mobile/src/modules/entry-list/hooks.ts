@@ -12,7 +12,7 @@ export function useOnViewableItemsChanged({
 }: {
   idExtractor?: (item: ViewToken) => string
 } = {}) {
-  const orientation = useRef<"down" | "up">("down")
+  const orientation = useRef<"down" | "up" | "initial">("initial")
   const lastOffset = useRef(0)
 
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
@@ -26,7 +26,9 @@ export function useOnViewableItemsChanged({
   }) => void = useNonReactiveCallback(({ viewableItems, changed }) => {
     debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
 
-    if (markAsReadWhenScrolling && orientation.current === "down") {
+    if (orientation.current !== "down") return
+
+    if (markAsReadWhenScrolling) {
       changed
         .filter((item) => !item.isViewable)
         .forEach((item) => {
@@ -34,7 +36,7 @@ export function useOnViewableItemsChanged({
         })
     }
 
-    if (markAsReadWhenRendering && orientation.current === "down") {
+    if (markAsReadWhenRendering) {
       viewableItems.forEach((item) => {
         unreadSyncService.markEntryAsRead(stableIdExtractor(item))
       })
