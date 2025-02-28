@@ -60,6 +60,9 @@ export function FeedIcon({
     }
   }, [fallback, feed, siteUrl])
 
+  if (!src) {
+    return null
+  }
   return (
     <ProxiedImage
       proxy={{

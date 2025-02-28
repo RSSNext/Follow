@@ -1,6 +1,6 @@
-import { router, useLocalSearchParams } from "expo-router"
+import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
-import { Share, TouchableOpacity, useAnimatedValue, View } from "react-native"
+import { Share, useAnimatedValue, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
 import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
@@ -44,9 +44,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
                 )
               : () => (
                   <View style={{ width: HEADER_ACTIONS_GROUP_WIDTH }}>
-                    <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
-                      <DefaultHeaderBackButton canGoBack={true} />
-                    </TouchableOpacity>
+                    <DefaultHeaderBackButton canGoBack={true} />
                   </View>
                 ),
           [isTimeline, isSubscriptions],

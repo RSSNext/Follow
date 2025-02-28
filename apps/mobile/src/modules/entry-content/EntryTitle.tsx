@@ -1,9 +1,8 @@
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { useQuery } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useCallback, useContext, useEffect, useState } from "react"
-import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import { Text, useWindowDimensions, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, {
   interpolate,
@@ -204,9 +203,7 @@ const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLef
   })
   return (
     <View className="flex-row items-center justify-center">
-      <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
-        <DefaultHeaderBackButton canGoBack={canGoBack} />
-      </TouchableOpacity>
+      <DefaultHeaderBackButton canGoBack={canGoBack} />
 
       {!hideRecentReader && (
         <Animated.View style={animatedOpacity} className="absolute left-[32px] z-10 flex-row gap-2">
