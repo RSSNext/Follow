@@ -8,21 +8,21 @@
  * ```
  */
 import { useHeaderHeight } from "@react-navigation/elements"
-import type { KeyboardAwareScrollViewProps } from "react-native-keyboard-controller"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
+import type { ScrollViewProps } from "react-native"
+import { ScrollView } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-interface SafeModalScrollViewProps extends KeyboardAwareScrollViewProps {}
+interface SafeModalScrollViewProps extends ScrollViewProps {}
 export const SafeModalScrollView = (props: SafeModalScrollViewProps) => {
   const headerHeight = useHeaderHeight()
   const insets = useSafeAreaInsets()
   return (
-    <KeyboardAwareScrollView
+    <ScrollView
       {...props}
       scrollIndicatorInsets={{ top: headerHeight, bottom: insets.bottom }}
       contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: insets.bottom }}
     >
       {props.children}
-    </KeyboardAwareScrollView>
+    </ScrollView>
   )
 }

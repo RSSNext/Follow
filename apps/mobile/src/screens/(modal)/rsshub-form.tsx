@@ -8,6 +8,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, Stack, useLocalSearchParams } from "expo-router"
 import { memo, useEffect, useMemo, useState } from "react"
+import type { FieldErrors } from "react-hook-form"
 import { Controller, useForm } from "react-hook-form"
 import { Linking, Text, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
@@ -111,6 +112,9 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
     mode: "all",
   })
 
+  // eslint-disable-next-line unicorn/prefer-structured-clone
+  const nextErrors = JSON.parse(JSON.stringify(form.formState.errors))
+
   return (
     <FormProvider form={form}>
       <ScreenOptions
@@ -118,6 +122,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
         routeName={routeName}
         route={route.path}
         routePrefix={routePrefix}
+        errors={nextErrors}
       />
 
       <PortalHost>
@@ -231,33 +236,40 @@ type ScreenOptionsProps = {
   routeName: string
   route: string
   routePrefix: string
+  errors: FieldErrors
 }
-const ScreenOptions = memo(({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
-  const form = useFormContext()
+const ScreenOptions = memo(
+  ({ name, routeName, route, routePrefix, errors }: ScreenOptionsProps) => {
+    const form = useFormContext()
 
-  return (
-    <Stack.Screen
-      options={{
-        headerLeft: ModalHeaderCloseButton,
-        gestureEnabled: !form.formState.isDirty,
-        headerBackground: BlurEffectWithBottomBorder,
-        headerTransparent: true,
+    return (
+      <Stack.Screen
+        options={{
+          headerLeft: ModalHeaderCloseButton,
+          gestureEnabled: !form.formState.isDirty,
+          headerBackground: BlurEffectWithBottomBorder,
+          headerTransparent: true,
 
-        headerRight: () => (
-          <FormProvider form={form}>
-            <ModalHeaderSubmitButtonImpl routePrefix={routePrefix} route={route} />
-          </FormProvider>
-        ),
+          headerRight: () => (
+            <FormProvider form={form}>
+              <ModalHeaderSubmitButtonImpl
+                errors={errors}
+                routePrefix={routePrefix}
+                route={route}
+              />
+            </FormProvider>
+          ),
 
-        headerTitle: () => (
-          <Title name={name} routeName={routeName} route={route} routePrefix={routePrefix} />
-        ),
-      }}
-    />
-  )
-})
+          headerTitle: () => (
+            <Title name={name} routeName={routeName} route={route} routePrefix={routePrefix} />
+          ),
+        }}
+      />
+    )
+  },
+)
 
-const Title = ({ name, routeName, route, routePrefix }: ScreenOptionsProps) => {
+const Title = ({ name, routeName, route, routePrefix }: Omit<ScreenOptionsProps, "errors">) => {
   return (
     <HeaderTitleExtra subText={`rsshub://${routePrefix}${route}`}>
       {`${name} - ${routeName}`}
@@ -270,12 +282,14 @@ const routeParamsKeyPrefix = "route-params-"
 const ModalHeaderSubmitButtonImpl = ({
   routePrefix,
   route,
+  errors,
 }: {
   routePrefix: string
   route: string
+  errors: FieldErrors
 }) => {
   const form = useFormContext()
-  const { isValid } = form.formState
+  const isValid = Object.keys(errors).length === 0
 
   const [isLoading, setIsLoading] = useState(false)
 
