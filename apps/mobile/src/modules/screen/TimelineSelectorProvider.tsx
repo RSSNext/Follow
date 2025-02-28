@@ -1,13 +1,11 @@
-import { useLocalSearchParams } from "expo-router"
+import { router, useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
-import { Share, useAnimatedValue, View } from "react-native"
+import { Share, TouchableOpacity, useAnimatedValue, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
+import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
-import {
-  NavigationBlurEffectHeader,
-  NavigationHeaderBackButton,
-} from "@/src/components/layouts/views/SafeNavigationScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
@@ -46,7 +44,9 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
                 )
               : () => (
                   <View style={{ width: HEADER_ACTIONS_GROUP_WIDTH }}>
-                    <NavigationHeaderBackButton />
+                    <TouchableOpacity hitSlop={10} onPress={() => router.back()}>
+                      <DefaultHeaderBackButton canGoBack={true} />
+                    </TouchableOpacity>
                   </View>
                 ),
           [isTimeline, isSubscriptions],
