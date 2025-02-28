@@ -84,8 +84,8 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
             )}
           </Pressable>
 
-          <View className="flex flex-row items-center gap-1.5">
-            <Text className="text-label text-base font-semibold leading-none">
+          <View className="flex-1 flex-row items-center gap-1.5">
+            <Text numberOfLines={1} className="text-label shrink text-base font-semibold">
               {entry.author || feed?.title}
             </Text>
             <Text className="text-secondary-label">·</Text>
