@@ -19,15 +19,6 @@ public class HelperModule: Module {
         return
       }
       DispatchQueue.main.async {
-//        
-//        if let navVC = UIWindow.findRNSNavigationController() as? UINavigationController {
-//          debugPrint(navVC)
-//           
-//          navVC.pushViewController(WebViewController(url: url), animated: true)
-////          WebViewManager.pushModalWebView(url: url, from: navVC)
-//          
-//        }
-        
         guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
         WebViewManager.presentModalWebView(url: url, from: rootVC)
       }
