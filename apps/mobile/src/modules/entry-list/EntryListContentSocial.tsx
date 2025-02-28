@@ -25,9 +25,7 @@ export const EntryListContentSocial = forwardRef<
     [isFetching],
   )
 
-  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: isRefetching,
-  })
+  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged()
 
   return (
     <TimelineSelectorList

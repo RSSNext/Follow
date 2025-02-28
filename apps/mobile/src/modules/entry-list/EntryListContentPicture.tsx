@@ -18,9 +18,7 @@ export const EntryListContentPicture = forwardRef<
   } & Omit<MasonryFlashListProps<string>, "data" | "renderItem">
 >(({ entryIds, ...rest }, ref) => {
   const { fetchNextPage, refetch, isRefetching, hasNextPage } = useFetchEntriesControls()
-  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: isRefetching,
-  })
+  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged()
 
   return (
     <TimelineSelectorMasonryList
