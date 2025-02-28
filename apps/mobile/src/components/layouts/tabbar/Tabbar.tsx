@@ -44,7 +44,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
   return (
     <Animated.View
       accessibilityRole="tablist"
-      className="absolute inset-x-0 bottom-0 z-10 py-[7]"
+      className="absolute inset-x-0 bottom-0 z-10"
       style={{
         paddingBottom: insets.bottom,
         transform: [{ translateY }],
@@ -55,7 +55,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
     >
       <TabBarBackground />
       <PlayerTabBar />
-      <Grid columns={routes.length} gap={10}>
+      <Grid columns={routes.length} gap={10} className="mt-[7]">
         {routes.map((route, index) => {
           const focused = index === state.index
           const { options } = descriptors[route.key]!
