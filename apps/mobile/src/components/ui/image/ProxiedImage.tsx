@@ -1,6 +1,8 @@
 import type { ImageProps } from "expo-image"
 import { Image } from "expo-image"
-import { forwardRef, useMemo } from "react"
+import { forwardRef, useCallback, useMemo, useState } from "react"
+
+import { getImageHeaders } from "@/src/lib/image"
 
 const IMAGE_PROXY_URL = "https://webp.follow.is"
 
@@ -25,29 +27,37 @@ export const ProxiedImage = forwardRef<
     }
   }
 >(({ proxy, source, ...rest }, ref) => {
-  const nextSrc = useMemo(() => {
-    if (!source) return source
-
-    if (!proxy?.height && !proxy?.width) {
-      return source
+  let nextSource: ImageProps["source"] = source
+  if (typeof source === "string") {
+    nextSource = {
+      uri: source,
+      headers: getImageHeaders(source),
     }
-    if (typeof source === "string") {
-      return getImageProxyUrl({
-        url: source,
+  } else if (!source.headers) {
+    nextSource = {
+      ...source,
+      headers: getImageHeaders(source.uri),
+    }
+  }
+
+  const finalSource = useMemo(() => {
+    if (!proxy?.height && !proxy?.width) {
+      return nextSource
+    }
+    return {
+      ...nextSource,
+      uri: getImageProxyUrl({
+        url: nextSource.uri,
         width: proxy?.width ? proxy?.width * 3 : undefined,
         height: proxy?.height ? proxy?.height * 3 : undefined,
-      })
-    } else {
-      return {
-        ...source,
-        uri: getImageProxyUrl({
-          url: source.uri,
-          width: proxy?.width ? proxy?.width * 3 : undefined,
-          height: proxy?.height ? proxy?.height * 3 : undefined,
-        }),
-      }
+      }),
     }
-  }, [source, proxy?.height, proxy?.width])
+  }, [proxy?.height, proxy?.width, nextSource])
 
-  return <Image source={nextSrc} {...rest} ref={ref} />
+  const [isError, setIsError] = useState(false)
+  const onError = useCallback(() => {
+    setIsError(true)
+  }, [])
+
+  return <Image source={isError ? nextSource : finalSource} onError={onError} {...rest} ref={ref} />
 })
