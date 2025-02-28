@@ -8,7 +8,7 @@ import { views } from "@/src/constants/views"
 import { toast } from "@/src/lib/toast"
 import { getFeed } from "@/src/store/feed/getter"
 import { getSubscription } from "@/src/store/subscription/getter"
-import { useListSubscriptionCategory } from "@/src/store/subscription/hooks"
+import { useSubscriptionCategory } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import { unreadSyncService } from "@/src/store/unread/store"
 
@@ -18,7 +18,7 @@ export const SubscriptionFeedItemContextMenu: FC<
     view?: FeedViewType
   }
 > = ({ id, children, view }) => {
-  const allCategories = useListSubscriptionCategory(view)
+  const allCategories = useSubscriptionCategory(view)
 
   return (
     <ContextMenu.Root>

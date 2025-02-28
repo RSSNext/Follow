@@ -212,11 +212,11 @@ export const useInboxSubscription = (view: FeedViewType) => {
   )
 }
 
-export const useListSubscriptionCategory = (view?: FeedViewType) => {
+export const useSubscriptionCategory = (view?: FeedViewType) => {
   return useSubscriptionStore(
     useCallback(
       (state) => {
-        return view ? Array.from(state.categories[view]) : []
+        return view === undefined ? [] : Array.from(state.categories[view])
       },
       [view],
     ),
