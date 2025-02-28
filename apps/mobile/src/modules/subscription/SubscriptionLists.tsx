@@ -58,6 +58,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
           setRefreshing(false)
         })
       }}
+      className="bg-system-grouped-background"
       isRefetching={refreshing}
       ItemSeparatorComponent={ItemSeparator}
       data={data}
