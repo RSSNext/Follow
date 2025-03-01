@@ -1,7 +1,6 @@
 {
-  "name": "Follow",
+  "name": "@follow/monorepo",
   "type": "module",
-  "version": "0.3.7",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Follow everything in one place",
@@ -12,7 +11,6 @@
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
   },
-  "main": "./dist/main/index.js",
   "scripts": {
     "analyze:web": "cross-env analyzer=1 vite build",
     "build": "electron-vite build && electron-forge make",
@@ -22,7 +20,7 @@
     "build:rn-web": "rm -rf out/rn-web && cross-env RN_BUILD=1 vite build",
     "build:web": "rm -rf out/web && cross-env WEB_BUILD=1 vite build",
     "bump": "vv",
-    "dedupe:locales": "eslint --fix locales/**/*.json",
+    "dedupe:locales": "eslint --fix apps/desktop/locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
     "dev": "turbo run @follow/web#dev @follow/server#dev",
     "dev:debug": "export DEBUG=true && vite --debug",
@@ -180,7 +178,7 @@
       "git pull --rebase",
       "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
       "git add changelog",
-      "tsx plugins/vite/generate-main-hash.ts",
+      "tsx apps/desktop/plugins/vite/generate-main-hash.ts",
       "eslint --fix package.json",
       "prettier --ignore-unknown --write package.json",
       "git add package.json"

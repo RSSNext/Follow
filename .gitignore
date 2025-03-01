@@ -21,7 +21,7 @@ vite.config.*.mjs
 .generated
 .turbo
 
-apps/desktop/renderer/dev-dist
+apps/desktop/src/renderer/dev-dist
 tsconfig.tsbuildinfo
 
 apps/mobile/ios
