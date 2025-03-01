@@ -10,7 +10,14 @@ export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
         skipSelf: true,
       })
 
-      if (resolvedPath && !resolvedPath.id.includes("node_modules")) {
+      const allowExts = [".js", ".jsx", ".ts", ".tsx"]
+
+      if (
+        resolvedPath &&
+        !resolvedPath.id.includes("node_modules") &&
+        allowExts.some((ext) => importer?.endsWith(ext)) &&
+        allowExts.some((ext) => resolvedPath.id?.endsWith(ext))
+      ) {
         const lastDotIndex = resolvedPath.id.lastIndexOf(".")
 
         const paths = [
