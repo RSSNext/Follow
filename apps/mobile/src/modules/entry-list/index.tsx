@@ -3,7 +3,6 @@ import { useEffect, useMemo } from "react"
 import { Animated, StyleSheet } from "react-native"
 import PagerView from "react-native-pager-view"
 
-import { views } from "@/src/constants/views"
 import { selectTimeline, useSelectedFeed, useSelectedView } from "@/src/modules/screen/atoms"
 import {
   useEntryIdsByCategory,
@@ -12,6 +11,7 @@ import {
   useEntryIdsByView,
 } from "@/src/store/entry/hooks"
 import { useListEntryIds } from "@/src/store/list/hooks"
+import { useViewWithSubscription } from "@/src/store/subscription/hooks"
 
 import { TimelineSelectorProvider } from "../screen/TimelineSelectorProvider"
 import { EntryListSelector } from "./EntryListSelector"
@@ -48,6 +48,7 @@ export function EntryList() {
 const AnimatedPagerView = Animated.createAnimatedComponent<typeof PagerView>(PagerView)
 
 function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
+  const activeViews = useViewWithSubscription()
   const { page, pagerRef, ...rest } = usePagerView({
     initialPage: viewId,
     onIndexChange: (index) => {
@@ -76,10 +77,10 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
     >
       {useMemo(
         () =>
-          views.map((view) => (
+          activeViews.map((view) => (
             <ViewEntryList key={view.view} viewId={view.view} active={page === view.view} />
           )),
-        [page],
+        [activeViews, page],
       )}
     </AnimatedPagerView>
   )
