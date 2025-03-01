@@ -1,26 +1,4 @@
-const imageRefererMatches = [
-  {
-    url: /^https:\/\/\w+\.sinaimg.cn/,
-    referer: "https://weibo.com",
-  },
-  {
-    url: /^https:\/\/i\.pximg\.net/,
-    referer: "https://www.pixiv.net",
-  },
-  {
-    url: /^https:\/\/cdnfile\.sspai\.com/,
-    referer: "https://sspai.com",
-  },
-  {
-    url: /^https:\/\/(?:\w|-)+\.cdninstagram\.com/,
-    referer: "https://www.instagram.com",
-  },
-  {
-    url: /^https:\/\/sp1\.piokok\.com/,
-    referer: "https://www.piokok.com",
-    force: true,
-  },
-]
+import { imageRefererMatches } from "@follow/shared/src/image"
 
 const isValidUrl = (url: string) => {
   try {
