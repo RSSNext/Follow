@@ -1,3 +1,4 @@
+import { env } from "@follow/shared/src/env"
 import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
 import { Share, useAnimatedValue, View } from "react-native"
@@ -9,7 +10,6 @@ import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeN
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
-import { getWebUrl } from "@/src/lib/env"
 import {
   HomeLeftAction,
   HomeSharedRightAction,
@@ -101,8 +101,7 @@ function FeedShareAction({ params }: { params: any }) {
       onPress={() => {
         const feed = getFeed(feedId)
         if (!feed) return
-        const webUrl = getWebUrl()
-        const url = `${webUrl}/share/feeds/${feedId}`
+        const url = `${env.VITE_WEB_URL}/share/feeds/${feedId}`
         Share.share({
           message: `Check out ${feed.title} on Follow: ${url}`,
           title: feed.title!,

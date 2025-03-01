@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { env } from "./env"
 
 export const IMAGE_PROXY_URL = "https://webp.follow.is"
 
@@ -8,7 +8,7 @@ export const selfRefererMatches = [env.VITE_OPENPANEL_API_URL, IMAGE_PROXY_URL].
 
 export const imageRefererMatches = [
   {
-    url: /^https:\/\/\w+\.sinaimg.cn/,
+    url: /^https:\/\/\w+\.sinaimg\.cn/,
     referer: "https://weibo.com",
   },
   {
