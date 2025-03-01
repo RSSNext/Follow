@@ -13,7 +13,7 @@ export const EntryListContentSocial = forwardRef<
   ElementRef<typeof TimelineSelectorList>,
   { entryIds: string[]; active?: boolean }
 >(({ entryIds, active }, ref) => {
-  const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
+  const { fetchNextPage, isFetching, refetch, isRefetching, isLoading } = useFetchEntriesControls()
 
   const renderItem = useCallback(
     ({ item: id }: ListRenderItemInfo<string>) => <EntrySocialItem key={id} entryId={id} />,
@@ -26,7 +26,7 @@ export const EntryListContentSocial = forwardRef<
   )
 
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: active === false || isFetching,
+    disabled: active === false || isLoading,
   })
 
   return (

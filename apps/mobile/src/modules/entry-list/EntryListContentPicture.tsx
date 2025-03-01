@@ -18,10 +18,9 @@ export const EntryListContentPicture = forwardRef<
     "data" | "renderItem"
   >
 >(({ entryIds, active, ...rest }, ref) => {
-  const { fetchNextPage, refetch, isRefetching, hasNextPage, isFetching } =
-    useFetchEntriesControls()
+  const { fetchNextPage, refetch, isRefetching, hasNextPage, isLoading } = useFetchEntriesControls()
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: active === false || isFetching,
+    disabled: active === false || isLoading,
   })
 
   return (
