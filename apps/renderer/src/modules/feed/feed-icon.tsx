@@ -1,13 +1,12 @@
 import { PlatformIcon } from "@follow/components/ui/platform-icon/index.jsx"
 import type { CombinedEntryModel, FeedModel, FeedOrListRespModel } from "@follow/models/types"
 import { getBackgroundGradient } from "@follow/utils/color"
+import { getImageProxyUrl } from "@follow/utils/img-proxy"
 import { cn, getUrlIcon } from "@follow/utils/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { forwardRef, useMemo } from "react"
-
-import { getImageProxyUrl } from "~/lib/img-proxy"
 
 const getFeedIconSrc = ({
   src,

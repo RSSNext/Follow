@@ -1,4 +1,5 @@
 import { nextFrame } from "@follow/utils/dom"
+import { getImageProxyUrl } from "@follow/utils/img-proxy"
 import { cn } from "@follow/utils/utils"
 import { omit } from "es-toolkit/compat"
 import { useForceUpdate } from "framer-motion"
@@ -7,7 +8,6 @@ import { createContext, memo, useContext, useMemo, useState } from "react"
 import { Blurhash, BlurhashCanvas } from "react-blurhash"
 import { useEventCallback } from "usehooks-ts"
 
-import { getImageProxyUrl } from "~/lib/img-proxy"
 import { saveImageDimensionsToDb } from "~/store/image/db"
 
 import { usePreviewMedia } from "./media/hooks"

@@ -22,7 +22,7 @@ export const AvatarImage = React.forwardRef<
   <AvatarPrimitive.Image
     ref={ref}
     className={cn("aspect-square size-full", className)}
-    src={replaceImgUrlIfNeed(props.src)}
+    src={replaceImgUrlIfNeed({ url: props.src })}
     {...props}
   />
 ))
