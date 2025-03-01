@@ -45,7 +45,7 @@
     "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx && eslint --fix apps/mobile/src/icons/**/*.tsx",
     "test": "cross-env CI=1 pnpm --recursive run test",
     "typecheck": "turbo typecheck",
-    "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
+    "update:main-hash": "tsx apps/desktop/plugins/vite/generate-main-hash.ts"
   },
   "devDependencies": {
     "@clack/prompts": "0.10.0",
