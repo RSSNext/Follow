@@ -6,49 +6,24 @@ export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
     name: "platform-specific-import",
     enforce: "pre",
     async resolveId(source, importer) {
-      if (!importer) {
-        return null
-      }
+      const resolvedPath = await this.resolve(source, importer, {
+        skipSelf: true,
+      })
 
-      const allowExts = [".js", ".jsx", ".ts", ".tsx"]
+      if (resolvedPath && !resolvedPath.id.includes("node_modules")) {
+        const lastDotIndex = resolvedPath.id.lastIndexOf(".")
 
-      if (!allowExts.some((ext) => importer.endsWith(ext))) return null
+        const paths = [
+          `${resolvedPath.id.slice(0, lastDotIndex)}.${platform}${resolvedPath.id.slice(lastDotIndex)}`,
+          `${resolvedPath.id.slice(0, lastDotIndex)}.desktop${resolvedPath.id.slice(lastDotIndex)}`,
+        ]
 
-      if (importer.includes("node_modules")) return null
-      const [path, query] = source.split("?")
-
-      if (path.startsWith(".") || path.startsWith("/")) {
-        let priorities: string[] = []
-        switch (platform) {
-          case "electron": {
-            priorities = [".electron.ts", ".electron.tsx", ".electron.js", ".electron.jsx"]
-
-            break
-          }
-          case "web": {
-            priorities = [".web.ts", ".web.tsx", ".web.js", ".web.jsx"]
-
-            break
-          }
-          case "rn": {
-            priorities = [".rn.ts", ".rn.tsx", ".rn.js", ".rn.jsx"]
-
-            break
-          }
-          // No default
-        }
-
-        for (const ext of priorities) {
-          const resolvedPath = await this.resolve(
-            `${path}${ext}${query ? `?${query}` : ""}`,
-            importer,
-            {
-              skipSelf: true,
-            },
-          )
-
-          if (resolvedPath) {
-            return resolvedPath.id
+        for (const path of paths) {
+          const resolvedPlatform = await this.resolve(path, importer, {
+            skipSelf: true,
+          })
+          if (resolvedPlatform) {
+            return resolvedPlatform.id
           }
         }
       }

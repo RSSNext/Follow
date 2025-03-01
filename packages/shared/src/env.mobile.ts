@@ -2,20 +2,23 @@ const profile = "prod"
 
 const appEndpointMap = {
   prod: {
-    api: "https://api.follow.is",
-    web: "https://app.follow.is",
+    VITE_API_URL: "https://api.follow.is",
+    VITE_WEB_URL: "https://app.follow.is",
+    VITE_INBOXES_EMAIL: "@follow.re",
   },
   dev: {
-    api: "https://api.dev.follow.is",
-    web: "https://dev.follow.is",
+    VITE_API_URL: "https://api.dev.follow.is",
+    VITE_WEB_URL: "https://dev.follow.is",
+    VITE_INBOXES_EMAIL: "__devdev@follow.re",
   },
   staging: {
-    api: "https://api.follow.is",
-    web: "https://staging.follow.is",
+    VITE_API_URL: "https://api.follow.is",
+    VITE_WEB_URL: "https://staging.follow.is",
+    VITE_INBOXES_EMAIL: "@follow.re",
   },
 }
 
 export const env = {
-  VITE_WEB_URL: appEndpointMap[profile].web,
-  VITE_API_URL: appEndpointMap[profile].api,
+  VITE_WEB_URL: appEndpointMap[profile].VITE_WEB_URL,
+  VITE_API_URL: appEndpointMap[profile].VITE_API_URL,
 }
