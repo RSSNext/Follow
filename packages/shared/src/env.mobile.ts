@@ -1,4 +1,6 @@
-export const appEndpointMap = {
+const profile = "prod"
+
+const appEndpointMap = {
   prod: {
     api: "https://api.follow.is",
     web: "https://app.follow.is",
@@ -11,4 +13,9 @@ export const appEndpointMap = {
     api: "https://api.follow.is",
     web: "https://staging.follow.is",
   },
+}
+
+export const env = {
+  VITE_WEB_URL: appEndpointMap[profile].web,
+  VITE_API_URL: appEndpointMap[profile].api,
 }
