@@ -19,8 +19,8 @@ export function useOnViewableItemsChanged({
 
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
   const markAsReadWhenRendering = useGeneralSettingKey("renderMarkUnread")
-  const [lastViewableItems, setLastViewableItems] = useState<ViewToken[]>([])
-  const [lastRemovedItems, setLastRemovedItems] = useState<ViewToken[]>([])
+  const [lastViewableItems, setLastViewableItems] = useState<ViewToken[] | null>()
+  const [lastRemovedItems, setLastRemovedItems] = useState<ViewToken[] | null>(null)
 
   const [stableIdExtractor] = useState(() => idExtractor)
 
@@ -30,24 +30,24 @@ export function useOnViewableItemsChanged({
   }) => void = useNonReactiveCallback(({ viewableItems, changed }) => {
     debouncedFetchEntryContentByStream(viewableItems.map((item) => stableIdExtractor(item)))
 
-    setLastViewableItems(viewableItems)
-
-    if (disabled) return
-
-    if (orientation.current !== "down") return
-
-    setLastRemovedItems(changed.filter((item) => !item.isViewable))
+    if (orientation.current === "down") {
+      setLastViewableItems(viewableItems)
+      setLastRemovedItems(changed.filter((item) => !item.isViewable))
+    } else {
+      setLastRemovedItems(null)
+      setLastViewableItems(null)
+    }
   })
 
   useEffect(() => {
     if (!disabled) {
-      if (markAsReadWhenScrolling) {
+      if (markAsReadWhenScrolling && lastRemovedItems) {
         lastRemovedItems.forEach((item) => {
           unreadSyncService.markEntryAsRead(stableIdExtractor(item))
         })
       }
 
-      if (markAsReadWhenRendering) {
+      if (markAsReadWhenRendering && lastViewableItems) {
         lastViewableItems.forEach((item) => {
           unreadSyncService.markEntryAsRead(stableIdExtractor(item))
         })
