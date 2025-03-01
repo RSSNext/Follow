@@ -20,8 +20,11 @@ export function EntryListSelector({
 }) {
   const ref = useRegisterNavigationScrollView<FlashList<any>>(active)
 
-  let ContentComponent: typeof EntryListContentSocial | typeof EntryListContentPicture =
-    EntryListContentArticle
+  let ContentComponent:
+    | typeof EntryListContentSocial
+    | typeof EntryListContentPicture
+    | typeof EntryListContentVideo
+    | typeof EntryListContentArticle = EntryListContentArticle
   switch (viewId) {
     case FeedViewType.SocialMedia: {
       ContentComponent = EntryListContentSocial
@@ -43,7 +46,7 @@ export function EntryListSelector({
 
   return (
     <EntryListContextViewContext.Provider value={viewId}>
-      <ContentComponent ref={ref} entryIds={entryIds} />
+      <ContentComponent ref={ref} entryIds={entryIds} active={active} />
     </EntryListContextViewContext.Provider>
   )
 }

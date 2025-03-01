@@ -12,12 +12,15 @@ import { EntryVideoItem } from "./templates/EntryVideoItem"
 
 export const EntryListContentVideo = forwardRef<
   ElementRef<typeof TimelineSelectorMasonryList>,
-  {
-    entryIds: string[]
-  } & Omit<MasonryFlashListProps<string>, "data" | "renderItem">
->(({ entryIds, ...rest }, ref) => {
+  { entryIds: string[]; active?: boolean } & Omit<
+    MasonryFlashListProps<string>,
+    "data" | "renderItem"
+  >
+>(({ entryIds, active, ...rest }, ref) => {
   const { fetchNextPage, refetch, isRefetching, isFetching } = useFetchEntriesControls()
-  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged()
+  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
+    disabled: active === false || isFetching,
+  })
 
   const ListFooterComponent = useMemo(
     () =>
