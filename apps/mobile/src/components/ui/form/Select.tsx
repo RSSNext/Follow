@@ -58,7 +58,7 @@ export function Select<T>({
           style={wrapperStyle}
         >
           <Text
-            className="flex-1 text-right font-semibold text-accent"
+            className="text-accent flex-1 text-right font-semibold"
             ellipsizeMode="middle"
             numberOfLines={1}
           >

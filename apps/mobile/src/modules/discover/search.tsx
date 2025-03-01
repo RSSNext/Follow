@@ -147,7 +147,7 @@ const ComposeSearchBar = () => {
           }
         }}
       >
-        <Text className="ml-3 text-lg font-medium text-accent">Cancel</Text>
+        <Text className="text-accent ml-3 text-lg font-medium">Cancel</Text>
       </TouchableOpacity>
     </>
   )
