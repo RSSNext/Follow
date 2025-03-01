@@ -13,12 +13,16 @@ import { EntryPictureItem } from "./templates/EntryPictureItem"
 
 export const EntryListContentPicture = forwardRef<
   ElementRef<typeof TimelineSelectorMasonryList>,
-  {
-    entryIds: string[]
-  } & Omit<MasonryFlashListProps<string>, "data" | "renderItem">
->(({ entryIds, ...rest }, ref) => {
-  const { fetchNextPage, refetch, isRefetching, hasNextPage } = useFetchEntriesControls()
-  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged()
+  { entryIds: string[]; active?: boolean } & Omit<
+    MasonryFlashListProps<string>,
+    "data" | "renderItem"
+  >
+>(({ entryIds, active, ...rest }, ref) => {
+  const { fetchNextPage, refetch, isRefetching, hasNextPage, isFetching } =
+    useFetchEntriesControls()
+  const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
+    disabled: active === false || isFetching,
+  })
 
   return (
     <TimelineSelectorMasonryList
