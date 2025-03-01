@@ -22,7 +22,7 @@ import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-impo
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
-const ROOT = "./apps/renderer"
+const ROOT = "./apps/desktop/renderer"
 
 const devPrint = (): PluginOption => ({
   name: "dev-print",

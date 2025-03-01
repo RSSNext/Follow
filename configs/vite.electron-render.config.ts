@@ -13,14 +13,14 @@ export default {
 
   plugins: [...viteRenderBaseConfig.plugins, createPlatformSpecificImportPlugin("electron")],
 
-  root: resolve(root, "apps/renderer"),
+  root: resolve(root, "apps/desktop/renderer"),
   build: {
     outDir: resolve(root, "dist/renderer"),
     sourcemap: !!process.env.CI,
     target: "esnext",
     rollupOptions: {
       input: {
-        main: resolve(root, "apps/renderer/index.html"),
+        main: resolve(root, "apps/desktop/renderer/index.html"),
       },
     },
     minify: true,

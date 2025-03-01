@@ -12,8 +12,8 @@
     "noImplicitOverride": true,
     "baseUrl": ".",
     "paths": {
-      "@pkg": ["../../package.json"],
-      "@locales/*": ["../../locales/*"],
+      "@pkg": ["../../../package.json"],
+      "@locales/*": ["../../../locales/*"],
       "~/*": ["./src/*"]
     }
   }

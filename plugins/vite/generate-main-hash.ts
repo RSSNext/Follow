@@ -29,7 +29,7 @@ export async function calculateMainHash(mainDir: string): Promise<string> {
 }
 
 async function main() {
-  const hash = await calculateMainHash(path.resolve(process.cwd(), "apps/main"))
+  const hash = await calculateMainHash(path.resolve(process.cwd(), "apps/desktop/main"))
 
   const packageJson = JSON.parse(
     await fs.readFile(path.resolve(process.cwd(), "package.json"), "utf-8"),

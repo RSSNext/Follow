@@ -18,7 +18,7 @@ const parseAccelerator = (
 }
 
 export const registerAppGlobalShortcuts = () => {
-  // @see apps/main/menu.ts
+  // @see apps/desktop/main/menu.ts
   const shortcuts: ShortcutDefinition[] = [
     {
       accelerator: "CmdOrCtrl+,",

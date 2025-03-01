@@ -21,8 +21,8 @@
     ],
     "paths": {
       "~/*": ["src/*"],
-      "@pkg": ["../../package.json"],
-      "@locales/*": ["../../locales/*"]
+      "@pkg": ["../../../package.json"],
+      "@locales/*": ["../../../locales/*"]
     }
   },
   "references": [{ "path": "../main" }]

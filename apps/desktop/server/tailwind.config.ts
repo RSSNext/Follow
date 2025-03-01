@@ -2,7 +2,7 @@ import daisyui from "daisyui"
 import { omit } from "es-toolkit/compat"
 import resolveConfig from "tailwindcss/resolveConfig"
 
-import { baseTwConfig } from "../../configs/tailwind.base.config"
+import { baseTwConfig } from "../../../configs/tailwind.base.config"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   ...baseTwConfig,
@@ -20,8 +20,8 @@ export default resolveConfig({
     "./index.html",
     "./node_modules/@follow/components/**/*.{ts,tsx}",
     "./node_modules/rc-modal-sheet/**/*.{ts,tsx}",
-    "../../node_modules/rc-modal-sheet/**/*.{ts,tsx}",
-    "../../packages/**/*.{ts,tsx}",
+    "../../../node_modules/rc-modal-sheet/**/*.{ts,tsx}",
+    "../../../packages/**/*.{ts,tsx}",
   ],
   plugins: [...baseTwConfig.plugins, daisyui],
   daisyui: {

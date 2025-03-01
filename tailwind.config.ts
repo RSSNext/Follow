@@ -8,10 +8,10 @@ const isWebBuild = !!process.env.WEB_BUILD || !!process.env.RN_BUILD || !!proces
 export default resolveConfig({
   ...baseTwConfig,
   content: [
-    "./apps/renderer/src/**/*.{ts,tsx}",
+    "./apps/desktop/renderer/src/**/*.{ts,tsx}",
     "./apps/web/src/**/*.{ts,tsx}",
 
-    "./apps/renderer/index.html",
+    "./apps/desktop/renderer/index.html",
     "./apps/web/index.html",
     "./packages/**/*.{ts,tsx}",
     "!./packages/**/node_modules",

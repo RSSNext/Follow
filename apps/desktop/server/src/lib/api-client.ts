@@ -6,7 +6,7 @@ import type { AppType } from "@follow/shared/hono"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"
 
-import PKG from "../../../../package.json"
+import PKG from "../../../../../package.json"
 import { isDev } from "./env"
 
 const getBaseURL = () => {

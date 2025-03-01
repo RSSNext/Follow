@@ -271,7 +271,8 @@ ${content}
     const allWindows = BrowserWindow.getAllWindows()
     const dynamicRenderEntry = loadDynamicRenderEntry()
 
-    const appLoadEntry = dynamicRenderEntry || path.resolve(__dirname, "../../renderer/index.html")
+    const appLoadEntry =
+      dynamicRenderEntry || path.resolve(__dirname, "../../../renderer/index.html")
     logger.info("appLoadEntry", appLoadEntry)
     const mainWindow = getMainWindow()
 

@@ -12,7 +12,7 @@ export default defineConfig({
     build: {
       outDir: "dist/main",
       lib: {
-        entry: "./apps/main/src/index.ts",
+        entry: "./apps/desktop/main/src/index.ts",
       },
     },
     resolve: {
@@ -20,7 +20,7 @@ export default defineConfig({
         "@shared": resolve("packages/shared/src"),
         "@pkg": resolve("./package.json"),
         "@locales": resolve("./locales"),
-        "~": resolve("./apps/main/src"),
+        "~": resolve("./apps/desktop/main/src"),
       },
     },
     define: {
@@ -32,7 +32,7 @@ export default defineConfig({
     build: {
       outDir: "dist/preload",
       lib: {
-        entry: "./apps/main/preload/index.ts",
+        entry: "./apps/desktop/main/preload/index.ts",
       },
     },
     resolve: {
@@ -45,14 +45,14 @@ export default defineConfig({
   renderer: {
     ...viteRenderBaseConfig,
 
-    root: "apps/renderer",
+    root: "apps/desktop/renderer",
     build: {
       outDir: "dist/renderer",
       sourcemap: !!process.env.CI,
       target: "esnext",
       rollupOptions: {
         input: {
-          main: resolve("./apps/renderer/index.html"),
+          main: resolve("./apps/desktop/renderer/index.html"),
         },
       },
       minify: true,
