@@ -3,6 +3,10 @@
   "type": "module",
   "version": "0.3.7",
   "private": true,
+  "repository": {
+    "url": "https://github.com/RSSNext/follow",
+    "type": "git"
+  },
   "main": "./dist/main/index.js",
   "scripts": {
     "analyze:web": "cross-env analyzer=1 vite build",
