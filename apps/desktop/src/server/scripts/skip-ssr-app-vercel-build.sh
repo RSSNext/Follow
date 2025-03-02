@@ -5,7 +5,7 @@ LAST_DEPLOY_COMMIT=$(git rev-parse HEAD^)
 CHANGED_FILES=$(git diff --name-only $LAST_DEPLOY_COMMIT HEAD)
 
 # Define an array of paths and files to check
-CHECK_PATHS_AND_FILES=("apps/server/" "packages/" "package.json" "pnpm-lock.yaml")
+CHECK_PATHS_AND_FILES=("apps/desktop/src/server/" "packages/" "package.json" "pnpm-lock.yaml")
 
 ONLY_SERVER_OR_PACKAGES_CHANGES=true
 for file in $CHANGED_FILES; do
