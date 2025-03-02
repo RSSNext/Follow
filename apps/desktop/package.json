@@ -1,5 +1,6 @@
 {
   "name": "@follow/desktop",
+  "type": "module",
   "version": "0.3.7",
   "private": true,
   "repository": {
