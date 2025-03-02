@@ -64,36 +64,9 @@ importers:
 
   .:
     devDependencies:
-      '@clack/prompts':
-        specifier: 0.10.0
-        version: 0.10.0
       '@egoist/tailwindcss-icons':
         specifier: 1.9.0
         version: 1.9.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
-      '@electron-forge/cli':
-        specifier: 7.7.0
-        version: 7.7.0(encoding@0.1.13)
-      '@electron-forge/maker-dmg':
-        specifier: 7.7.0
-        version: 7.7.0
-      '@electron-forge/maker-pkg':
-        specifier: 7.7.0
-        version: 7.7.0
-      '@electron-forge/maker-squirrel':
-        specifier: 7.7.0
-        version: 7.7.0
-      '@electron-forge/maker-zip':
-        specifier: 7.7.0
-        version: 7.7.0
-      '@electron-forge/plugin-fuses':
-        specifier: 7.7.0
-        version: 7.7.0(@electron/fuses@1.8.0)
-      '@electron-forge/publisher-github':
-        specifier: 7.7.0
-        version: 7.7.0(encoding@0.1.13)
-      '@electron-toolkit/tsconfig':
-        specifier: 1.0.1
-        version: 1.0.1(@types/node@22.13.4)
       '@eslint/compat':
         specifier: 1.2.6
         version: 1.2.6(eslint@9.20.1(jiti@2.4.2))
@@ -109,15 +82,6 @@ importers:
       '@iconify/tools':
         specifier: 4.1.1
         version: 4.1.1
-      '@pengx17/electron-forge-maker-appimage':
-        specifier: 1.2.1
-        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
-      '@sentry/vite-plugin':
-        specifier: 3.1.2
-        version: 3.1.2(encoding@0.1.13)
-      '@t3-oss/env-core':
-        specifier: 0.12.0
-        version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
@@ -133,12 +97,6 @@ importers:
       '@tsslint/eslint':
         specifier: 1.5.8
         version: 1.5.8(jiti@2.4.2)(typescript@5.7.3)
-      '@types/html-minifier-terser':
-        specifier: 7.0.2
-        version: 7.0.2
-      '@types/js-yaml':
-        specifier: 4.0.9
-        version: 4.0.9
       '@types/node':
         specifier: 22.13.4
         version: 22.13.4
@@ -150,46 +108,16 @@ importers:
         version: 18.3.1
       '@vercel/node':
         specifier: 5.1.7
-        version: 5.1.7(encoding@0.1.13)(rollup@4.34.8)
-      '@vitejs/plugin-legacy':
-        specifier: 6.0.1
-        version: 6.0.1(terser@5.39.0)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
-      '@vitejs/plugin-react':
-        specifier: 4.3.4
-        version: 4.3.4(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
-      async-es:
-        specifier: 3.2.6
-        version: 3.2.6
+        version: 5.1.7(encoding@0.1.13)(rollup@2.79.2)
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.5.2)
-      bufferutil:
-        specifier: 4.0.9
-        version: 4.0.9
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
       cssnano:
         specifier: 7.0.6
         version: 7.0.6(postcss@8.5.2)
-      dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
-      drizzle-orm:
-        specifier: 0.39.3
-        version: 0.39.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.1)(expo-sqlite@15.1.2(expo@52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(kysely@0.27.5)
-      electron:
-        specifier: 34.2.0
-        version: 34.2.0
-      electron-devtools-installer:
-        specifier: 4.0.0
-        version: 4.0.0
-      electron-packager-languages:
-        specifier: 0.6.0
-        version: 0.6.0
-      electron-vite:
-        specifier: 3.0.0
-        version: 3.0.0(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
       eslint:
         specifier: 9.20.1
         version: 9.20.1(jiti@2.4.2)
@@ -199,24 +127,9 @@ importers:
       eslint-plugin-react-native:
         specifier: 5.0.0
         version: 5.0.0(eslint@9.20.1(jiti@2.4.2))
-      fake-indexeddb:
-        specifier: 6.0.0
-        version: 6.0.0
       fast-glob:
         specifier: 3.3.3
         version: 3.3.3
-      happy-dom:
-        specifier: 17.1.1
-        version: 17.1.1
-      hono:
-        specifier: 4.7.2
-        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
-      html-minifier-terser:
-        specifier: 7.2.0
-        version: 7.2.0
-      js-yaml:
-        specifier: 4.1.0
-        version: 4.1.0
       lint-staged:
         specifier: 15.4.3
         version: 15.4.3
@@ -247,9 +160,6 @@ importers:
       rimraf:
         specifier: 6.0.1
         version: 6.0.1
-      shx:
-        specifier: 0.3.4
-        version: 0.3.4
       simple-git-hooks:
         specifier: 2.11.1
         version: 2.11.1
@@ -268,12 +178,6 @@ importers:
       tailwindcss-safe-area:
         specifier: 0.6.0
         version: 0.6.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
-      tar:
-        specifier: 7.4.3
-        version: 7.4.3
-      tsup:
-        specifier: 8.3.6
-        version: 8.3.6(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
       tsx:
         specifier: 4.19.3
         version: 4.19.3
@@ -283,12 +187,6 @@ importers:
       typescript:
         specifier: 5.7.3
         version: 5.7.3
-      unplugin-ast:
-        specifier: 0.14.0
-        version: 0.14.0
-      utf-8-validate:
-        specifier: 6.0.5
-        version: 6.0.5
       vite:
         specifier: 6.1.0
         version: 6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
@@ -313,9 +211,6 @@ importers:
       '@clack/prompts':
         specifier: 0.10.0
         version: 0.10.0
-      '@egoist/tailwindcss-icons':
-        specifier: 1.9.0
-        version: 1.9.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
       '@electron-forge/cli':
         specifier: 7.7.0
         version: 7.7.0(encoding@0.1.13)
@@ -340,9 +235,6 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: 1.0.1
         version: 1.0.1(@types/node@22.13.4)
-      '@eslint/compat':
-        specifier: 1.2.6
-        version: 1.2.6(eslint@9.20.1(jiti@2.4.2))
       '@follow/components':
         specifier: workspace:*
         version: link:../../packages/components
@@ -361,78 +253,30 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@iconify-json/logos':
-        specifier: 1.2.4
-        version: 1.2.4
-      '@iconify-json/mingcute':
-        specifier: 1.2.3
-        version: 1.2.3
-      '@iconify-json/simple-icons':
-        specifier: 1.2.25
-        version: 1.2.25
-      '@iconify/tools':
-        specifier: 4.1.1
-        version: 4.1.1
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
         version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       '@sentry/vite-plugin':
         specifier: 3.1.2
         version: 3.1.2(encoding@0.1.13)
-      '@t3-oss/env-core':
-        specifier: 0.12.0
-        version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
-      '@tailwindcss/container-queries':
-        specifier: 0.1.1
-        version: 0.1.1(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
-      '@tailwindcss/typography':
-        specifier: 0.5.16
-        version: 0.5.16(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
-      '@tsslint/cli':
-        specifier: 1.5.8
-        version: 1.5.8(typescript@5.7.3)
-      '@tsslint/config':
-        specifier: 1.5.8
-        version: 1.5.8(typescript@5.7.3)
-      '@tsslint/eslint':
-        specifier: 1.5.8
-        version: 1.5.8(jiti@2.4.2)(typescript@5.7.3)
       '@types/html-minifier-terser':
         specifier: 7.0.2
         version: 7.0.2
       '@types/js-yaml':
         specifier: 4.0.9
         version: 4.0.9
-      '@types/node':
-        specifier: 22.13.4
-        version: 22.13.4
-      '@types/react':
-        specifier: 18.3.12
-        version: 18.3.12
-      '@types/react-dom':
-        specifier: 18.3.1
-        version: 18.3.1
-      '@vercel/node':
-        specifier: 5.1.7
-        version: 5.1.7(encoding@0.1.13)(rollup@2.79.2)
       '@vitejs/plugin-legacy':
         specifier: 6.0.1
         version: 6.0.1(terser@5.39.0)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
       '@vitejs/plugin-react':
         specifier: 4.3.4
         version: 4.3.4(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
-      async-es:
-        specifier: 3.2.6
-        version: 3.2.6
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.5.2)
       bufferutil:
         specifier: 4.0.9
         version: 4.0.9
-      cross-env:
-        specifier: 7.0.3
-        version: 7.0.3
       cssnano:
         specifier: 7.0.6
         version: 7.0.6(postcss@8.5.2)
@@ -454,21 +298,9 @@ importers:
       electron-vite:
         specifier: 3.0.0
         version: 3.0.0(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
-      eslint:
-        specifier: 9.20.1
-        version: 9.20.1(jiti@2.4.2)
-      eslint-config-hyoban:
-        specifier: 3.2.1
-        version: 3.2.1(@types/estree@1.0.6)(@typescript-eslint/eslint-plugin@8.24.1(@typescript-eslint/parser@8.24.1(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint@9.20.1(jiti@2.4.2))(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))(ts-api-utils@2.0.1(typescript@5.7.3))(typescript@5.7.3)
-      eslint-plugin-react-native:
-        specifier: 5.0.0
-        version: 5.0.0(eslint@9.20.1(jiti@2.4.2))
       fake-indexeddb:
         specifier: 6.0.0
         version: 6.0.0
-      fast-glob:
-        specifier: 3.3.3
-        version: 3.3.3
       happy-dom:
         specifier: 17.1.1
         version: 17.1.1
@@ -481,96 +313,27 @@ importers:
       js-yaml:
         specifier: 4.1.0
         version: 4.1.0
-      lint-staged:
-        specifier: 15.4.3
-        version: 15.4.3
       nbump:
         specifier: 2.0.7
         version: 2.0.7(conventional-commits-filter@5.0.0)
-      postcss:
-        specifier: 8.5.2
-        version: 8.5.2
-      postcss-js:
-        specifier: 4.0.1
-        version: 4.0.1(postcss@8.5.2)
-      prettier:
-        specifier: 3.5.1
-        version: 3.5.1
-      prettier-plugin-tailwindcss:
-        specifier: 0.6.11
-        version: 0.6.11(prettier@3.5.1)
-      raw-body:
-        specifier: 3.0.0
-        version: 3.0.0
       react:
         specifier: 18.3.1
         version: 18.3.1
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
-      rimraf:
-        specifier: 6.0.1
-        version: 6.0.1
-      shx:
-        specifier: 0.3.4
-        version: 0.3.4
-      simple-git-hooks:
-        specifier: 2.11.1
-        version: 2.11.1
-      svg-parser:
-        specifier: 2.0.4
-        version: 2.0.4
-      tailwindcss:
-        specifier: 3.4.16
-        version: 3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))
-      tailwindcss-animate:
-        specifier: 1.0.7
-        version: 1.0.7(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
-      tailwindcss-motion:
-        specifier: 1.1.0
-        version: 1.1.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
-      tailwindcss-safe-area:
-        specifier: 0.6.0
-        version: 0.6.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
       tar:
         specifier: 7.4.3
         version: 7.4.3
       tsup:
         specifier: 8.3.6
         version: 8.3.6(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
-      tsx:
-        specifier: 4.19.3
-        version: 4.19.3
-      turbo:
-        specifier: 2.4.2
-        version: 2.4.2
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
       unplugin-ast:
         specifier: 0.14.0
         version: 0.14.0
       utf-8-validate:
         specifier: 6.0.5
         version: 6.0.5
-      vite:
-        specifier: 6.1.0
-        version: 6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
-      vite-bundle-analyzer:
-        specifier: 0.17.1
-        version: 0.17.1
-      vite-plugin-mkcert:
-        specifier: 1.17.6
-        version: 1.17.6(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
-      vite-plugin-pwa:
-        specifier: 0.21.1
-        version: 0.21.1(@vite-pwa/assets-generator@0.2.6)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
-      vite-tsconfig-paths:
-        specifier: 5.1.4
-        version: 5.1.4(typescript@5.7.3)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
-      vitest:
-        specifier: 3.0.6
-        version: 3.0.6(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@22.13.4)(happy-dom@17.1.1)(jiti@2.4.2)(jsdom@20.0.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   apps/desktop/src/main:
     dependencies:
@@ -886,7 +649,7 @@ importers:
         version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-i18next:
         specifier: 15.4.1
-        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-intersection-observer:
         specifier: 9.15.1
         version: 9.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1040,7 +803,7 @@ importers:
         version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-i18next:
         specifier: 15.4.1
-        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-photo-view:
         specifier: 1.2.7
         version: 1.2.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1588,7 +1351,7 @@ importers:
         version: 7.54.2(react@18.3.1)
       react-i18next:
         specifier: 15.4.1
-        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       rehype-infer-description-meta:
         specifier: 2.0.0
         version: 2.0.0
@@ -6347,9 +6110,6 @@ packages:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
 
-  async-es@3.2.6:
-    resolution: {integrity: sha512-9C2+oOPd7/EzIeneF4k24o75oY7OcHU/Isl7xIot12EBRwXonyuqKsmxwLuAbFWL6B/FucTQip09xTbiu1CA8A==}
-
   async-exit-hook@2.0.1:
     resolution: {integrity: sha512-NW2cX8m1Q7KPA7a5M2ULQeZ2wR5qI5PAbw5L0UOMxdioVk9PMZ0h1TmyZEkPYrCvYjDlFICusOu1dlEKAAeXBw==}
     engines: {node: '>=0.12.0'}
@@ -9834,10 +9594,6 @@ packages:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
     engines: {node: '>= 0.4'}
 
-  interpret@1.4.0:
-    resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
-    engines: {node: '>= 0.10'}
-
   interpret@3.1.1:
     resolution: {integrity: sha512-6xwYfHbajpoF0xLW+iwLkhwgvLoZDfjYfoFNu8ftMoXINzwuymNLd9u/KmwtdT2GbR+/Cz66otEGEVVUHX9QLQ==}
     engines: {node: '>=10.13.0'}
@@ -13058,10 +12814,6 @@ packages:
     resolution: {integrity: sha512-Hx/BGIbwj+Des3+xy5uAtAbdCyqK9y9wbBcDFDYanLS9JnMqf7OeF87HQwUimE87OEc72mr6tkKUKMBBL+hF9Q==}
     engines: {node: '>= 4'}
 
-  rechoir@0.6.2:
-    resolution: {integrity: sha512-HFM8rkZ+i3zrV+4LQjwQ0W+ez98pApMGM3HUrN04j3CqzPOzl9nmP15Y8YXNm8QHGv/eacOVEjqhmWpkRV0NAw==}
-    engines: {node: '>= 0.10'}
-
   rechoir@0.8.0:
     resolution: {integrity: sha512-/vxpCXddiX8NGfGO/mTafwjq4aFa/71pvamip0++IQk3zG8cbCj0fifNPrjjF1XMXUne91jL9OoxmdykoEtifQ==}
     engines: {node: '>= 10.13.0'}
@@ -13558,21 +13310,11 @@ packages:
     resolution: {integrity: sha512-AzqKpGKjrj7EM6rKVQEPpB288oCfnrEIuyoT9cyF4nmGa7V8Zk6f7RRqYisX8X9m+Q7bd632aZW4ky7EhbQztA==}
     engines: {node: '>= 0.4'}
 
-  shelljs@0.8.5:
-    resolution: {integrity: sha512-TiwcRcrkhHvbrZbnRcFYMLl30Dfov3HKqzp5tO5b4pt6G/SezKcYhmDg15zXVBswHmctSAQKznqNW2LO5tTDow==}
-    engines: {node: '>=4'}
-    hasBin: true
-
   shiki@3.0.0:
     resolution: {integrity: sha512-x6MMdYN9auPGx7kMFtyKbaj65eCdetfrfkvQZwqisZLnGMnAZsZxOpcWD0ElvLPFWHOSMukVyN9Opm7TxQjnZA==}
 
   shimmer@1.2.1:
     resolution: {integrity: sha512-sQTKC1Re/rM6XyFM6fIAGHRPVGvyXfgzIDvzoq608vM+jeyVD0Tu1E6Np0Kc2zAIFWIj963V2800iF/9LPieQw==}
-
-  shx@0.3.4:
-    resolution: {integrity: sha512-N6A9MLVqjxZYcVn8hLmtneQWIJtp8IKzMP4eMnx+nqkvXoqinUPCbUFLp2UcWTEIUONhlk0ewxr/jaVGlc+J+g==}
-    engines: {node: '>=6'}
-    hasBin: true
 
   side-channel-list@1.0.0:
     resolution: {integrity: sha512-FCLHtRD/gnpCiCHEiJLOwdmFP+wzCmDEkc9y7NsYxeF4u7Btsn1ZuwgwJGxImImHicJArLP4R0yX4c2KCrMrTA==}
@@ -21139,25 +20881,6 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/nft@0.27.10(encoding@0.1.13)(rollup@4.34.8)':
-    dependencies:
-      '@mapbox/node-pre-gyp': 2.0.0(encoding@0.1.13)
-      '@rollup/pluginutils': 5.1.4(rollup@4.34.8)
-      acorn: 8.14.0
-      acorn-import-attributes: 1.9.5(acorn@8.14.0)
-      async-sema: 3.1.1
-      bindings: 1.5.0
-      estree-walker: 2.0.2
-      glob: 7.2.3
-      graceful-fs: 4.2.11
-      node-gyp-build: 4.8.4
-      picomatch: 4.0.2
-      resolve-from: 5.0.0
-    transitivePeerDependencies:
-      - encoding
-      - rollup
-      - supports-color
-
   '@vercel/node@5.1.7(encoding@0.1.13)(rollup@2.79.2)':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
@@ -21167,36 +20890,6 @@ snapshots:
       '@vercel/build-utils': 10.1.0
       '@vercel/error-utils': 2.0.3
       '@vercel/nft': 0.27.10(encoding@0.1.13)(rollup@2.79.2)
-      '@vercel/static-config': 3.0.0
-      async-listen: 3.0.0
-      cjs-module-lexer: 1.2.3
-      edge-runtime: 2.5.9
-      es-module-lexer: 1.4.1
-      esbuild: 0.24.2
-      etag: 1.8.1
-      node-fetch: 2.6.9(encoding@0.1.13)
-      path-to-regexp: 6.1.0
-      path-to-regexp-updated: path-to-regexp@6.3.0
-      ts-morph: 12.0.0
-      ts-node: 10.9.1(@types/node@16.18.11)(typescript@5.7.3)
-      typescript: 5.7.3
-      undici: 5.28.4
-    transitivePeerDependencies:
-      - '@swc/core'
-      - '@swc/wasm'
-      - encoding
-      - rollup
-      - supports-color
-
-  '@vercel/node@5.1.7(encoding@0.1.13)(rollup@4.34.8)':
-    dependencies:
-      '@edge-runtime/node-utils': 2.3.0
-      '@edge-runtime/primitives': 4.1.0
-      '@edge-runtime/vm': 3.2.0
-      '@types/node': 16.18.11
-      '@vercel/build-utils': 10.1.0
-      '@vercel/error-utils': 2.0.3
-      '@vercel/nft': 0.27.10(encoding@0.1.13)(rollup@4.34.8)
       '@vercel/static-config': 3.0.0
       async-listen: 3.0.0
       cjs-module-lexer: 1.2.3
@@ -21795,8 +21488,6 @@ snapshots:
       tslib: 2.8.1
 
   astral-regex@2.0.0: {}
-
-  async-es@3.2.6: {}
 
   async-exit-hook@2.0.1: {}
 
@@ -26176,8 +25867,6 @@ snapshots:
       hasown: 2.0.2
       side-channel: 1.1.0
 
-  interpret@1.4.0: {}
-
   interpret@3.1.1: {}
 
   invariant@2.2.4:
@@ -29527,7 +29216,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  react-i18next@15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
+  react-i18next@15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.26.9
       html-parse-stringify: 3.0.1
@@ -29535,7 +29224,6 @@ snapshots:
       react: 18.3.1
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
 
   react-intersection-observer@9.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -30019,10 +29707,6 @@ snapshots:
       source-map: 0.6.1
       tiny-invariant: 1.3.3
       tslib: 2.8.1
-
-  rechoir@0.6.2:
-    dependencies:
-      resolve: 1.22.10
 
   rechoir@0.8.0:
     dependencies:
@@ -30652,12 +30336,6 @@ snapshots:
 
   shell-quote@1.8.2: {}
 
-  shelljs@0.8.5:
-    dependencies:
-      glob: 7.2.3
-      interpret: 1.4.0
-      rechoir: 0.6.2
-
   shiki@3.0.0:
     dependencies:
       '@shikijs/core': 3.0.0
@@ -30670,11 +30348,6 @@ snapshots:
       '@types/hast': 3.0.4
 
   shimmer@1.2.1: {}
-
-  shx@0.3.4:
-    dependencies:
-      minimist: 1.2.8
-      shelljs: 0.8.5
 
   side-channel-list@1.0.0:
     dependencies:
