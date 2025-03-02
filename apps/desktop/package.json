@@ -5,6 +5,7 @@
   "private": true,
   "description": "Follow everything in one place",
   "author": "Follow Team",
+  "homepage": "https://github.com/RSSNext",
   "repository": {
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
