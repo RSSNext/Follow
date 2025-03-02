@@ -111,36 +111,6 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.0.6"
   },
-  "pnpm": {
-    "patchedDependencies": {
-      "immer@10.1.1": "patches/immer@10.1.1.patch",
-      "re-resizable": "patches/re-resizable@6.9.17.patch",
-      "hono": "patches/hono.patch",
-      "electron-context-menu": "patches/electron-context-menu.patch",
-      "@mozilla/readability": "patches/@mozilla__readability.patch",
-      "daisyui": "patches/daisyui.patch",
-      "jsonpointer": "patches/jsonpointer.patch",
-      "workbox-precaching": "patches/workbox-precaching.patch",
-      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch",
-      "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch",
-      "devlop": "patches/devlop.patch",
-      "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch",
-      "react-native-track-player": "patches/react-native-track-player.patch",
-      "react-native-sheet-transitions": "patches/react-native-sheet-transitions.patch"
-    },
-    "overrides": {
-      "app-builder-lib": "25.1.8",
-      "electron": "34.2.0",
-      "esbuild": "0.24.2",
-      "expo-modules-core": "2.2.0",
-      "is-core-module": "npm:@nolyfill/is-core-module@1",
-      "isarray": "npm:@nolyfill/isarray@1",
-      "lightningcss": "1.29.1",
-      "typescript": "5.7.3",
-      "unist-util-visit-parents": "5.1.3",
-      "vfile": "5.3.7"
-    }
-  },
   "productName": "Follow",
   "mainHash": "ed3532be011d04d18a4148a025b6ae1282bd25aa8260f8aa7e9121f855d11314"
 }
