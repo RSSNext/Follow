@@ -132,12 +132,12 @@
   "bump": {
     "before": [
       "git pull --rebase",
-      "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
-      "git add changelog",
+      "tsx apps/desktop/scripts/apply-changelog.ts ${NEW_VERSION}",
+      "git add apps/desktop/changelog",
       "tsx apps/desktop/plugins/vite/generate-main-hash.ts",
-      "eslint --fix package.json",
-      "prettier --ignore-unknown --write package.json",
-      "git add package.json"
+      "eslint --fix apps/desktop/package.json",
+      "prettier --ignore-unknown --write apps/desktop/package.json",
+      "git add apps/desktop/package.json"
     ],
     "after": [
       "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
