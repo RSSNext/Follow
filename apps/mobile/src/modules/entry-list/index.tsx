@@ -49,17 +49,18 @@ const AnimatedPagerView = Animated.createAnimatedComponent<typeof PagerView>(Pag
 
 function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
   const activeViews = useViewWithSubscription()
+  const viewIdIndex = activeViews.findIndex((view) => view.view === viewId)
   const { page, pagerRef, ...rest } = usePagerView({
-    initialPage: viewId,
+    initialPage: viewIdIndex,
     onIndexChange: (index) => {
-      selectTimeline({ type: "view", viewId: index })
+      selectTimeline({ type: "view", viewId: activeViews[index]!.view })
     },
   })
 
   useEffect(() => {
-    if (page === viewId) return
-    pagerRef.current?.setPage(viewId)
-  }, [page, pagerRef, viewId])
+    if (page === viewIdIndex) return
+    pagerRef.current?.setPage(viewIdIndex)
+  }, [page, pagerRef, viewIdIndex])
 
   return (
     <AnimatedPagerView
@@ -77,8 +78,8 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
     >
       {useMemo(
         () =>
-          activeViews.map((view) => (
-            <ViewEntryList key={view.view} viewId={view.view} active={page === view.view} />
+          activeViews.map((view, index) => (
+            <ViewEntryList key={view.view} viewId={view.view} active={page === index} />
           )),
         [activeViews, page],
       )}

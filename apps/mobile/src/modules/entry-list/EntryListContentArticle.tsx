@@ -17,7 +17,7 @@ export const EntryListContentArticle = forwardRef<
 >(({ entryIds, active }, ref) => {
   const playingAudioUrl = usePlayingUrl()
 
-  const { fetchNextPage, isFetching, refetch, isRefetching, isLoading } = useFetchEntriesControls()
+  const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
 
   const renderItem = useCallback(
     ({ item: id, extraData }: ListRenderItemInfo<string>) => (
@@ -32,7 +32,7 @@ export const EntryListContentArticle = forwardRef<
   )
 
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: active === false || isLoading,
+    disabled: active === false || isFetching,
   })
 
   return (
