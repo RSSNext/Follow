@@ -112,7 +112,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
             }}
             aria-describedby={undefined}
             className={cn(
-              "fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-3rem)] flex-col rounded-t-[10px] border-t bg-theme-modal-background-opaque pt-4",
+              "bg-theme-modal-background-opaque fixed inset-x-0 bottom-0 flex max-h-[calc(100svh-3rem)] flex-col rounded-t-[10px] border-t pt-4",
               modalClassName,
             )}
           >
@@ -151,7 +151,7 @@ export const PresentSheet = forwardRef<SheetRef, PropsWithChildren<PresentSheetP
               <RootPortalProvider value={contentInnerRef.current!}>
                 <div
                   className={cn(
-                    "flex grow flex-col overflow-auto px-4 pb-safe-offset-4",
+                    "pb-safe-offset-4 flex grow flex-col overflow-auto px-4",
                     contentClassName,
                   )}
                 >

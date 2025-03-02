@@ -13,7 +13,7 @@ import { SocialLogin } from "./social"
 
 export function Login() {
   return (
-    <View className="flex h-full justify-center p-safe">
+    <View className="p-safe flex h-full justify-center">
       <TouchableWithoutFeedback
         onPress={() => {
           KeyboardController.dismiss()

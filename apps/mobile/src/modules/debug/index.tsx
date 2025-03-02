@@ -76,7 +76,7 @@ export const DebugButton = () => {
           },
           animatedStyle,
         ]}
-        className="absolute mt-5 flex size-8 items-center justify-center rounded-l-md bg-accent"
+        className="bg-accent absolute mt-5 flex size-8 items-center justify-center rounded-l-md"
       >
         <BugCuteReIcon height={24} width={24} color="#fff" />
       </ReAnimatedTouchableOpacity>

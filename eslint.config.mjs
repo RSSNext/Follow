@@ -57,10 +57,10 @@ export default defineConfig(
     },
   },
   {
-    files: ["apps/server/**/*"],
+    files: ["apps/desktop/src/server/**/*"],
     settings: {
       tailwindcss: {
-        config: path.join(import.meta.dirname, "apps/server/tailwind.config.ts"),
+        config: path.join(import.meta.dirname, "apps/desktop/src/server/tailwind.config.ts"),
       },
     },
   },

@@ -38,7 +38,7 @@ export const PanelSplitter = (
       ref={ref}
       {...rest}
       className={cn(
-        "absolute inset-0 z-[3] w-[2px] -translate-x-1/2 cursor-ew-resize bg-transparent hover:bg-gray-400 active:!bg-accent hover:dark:bg-neutral-500",
+        "active:!bg-accent absolute inset-0 z-[3] w-[2px] -translate-x-1/2 cursor-ew-resize bg-transparent hover:bg-gray-400 hover:dark:bg-neutral-500",
         isDragging ? "bg-accent" : "",
       )}
     />
