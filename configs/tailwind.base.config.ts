@@ -144,7 +144,7 @@ export const baseTwConfig = {
     iconsPlugin({
       collections: {
         ...getIconCollections(["mingcute", "simple-icons", "logos"]),
-        mgc: getCollections(path.resolve(__dirname, "./icons/mgc")),
+        mgc: getCollections(path.resolve(__dirname, "../icons/mgc")),
       },
     }),
     require("tailwindcss-animate"),
