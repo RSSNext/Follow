@@ -1,9 +1,10 @@
 import "dotenv/config"
 
-// import crypto from "node:crypto"
-// import fs from "node:fs"
-// import { cp, readdir } from "node:fs/promises"
-// import path from "node:path"
+import crypto from "node:crypto"
+import fs, { readdirSync } from "node:fs"
+import { cp, readdir } from "node:fs/promises"
+import path, { resolve } from "node:path"
+
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
 import { MakerPKG } from "@electron-forge/maker-pkg"
@@ -12,80 +13,80 @@ import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
-// import setLanguages from "electron-packager-languages"
-// import yaml from "js-yaml"
-// import { rimraf, rimrafSync } from "rimraf"
+import setLanguages from "electron-packager-languages"
+import yaml from "js-yaml"
+import { rimraf, rimrafSync } from "rimraf"
 
 const platform = process.argv[process.argv.indexOf("--platform") + 1]
 
-// const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
-// const platformNamesMap = {
-//   darwin: "macos",
-//   linux: "linux",
-//   win32: "windows",
-// }
-// const ymlMapsMap = {
-//   darwin: "latest-mac.yml",
-//   linux: "latest-linux.yml",
-//   win32: "latest.yml",
-// }
+const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
+const platformNamesMap = {
+  darwin: "macos",
+  linux: "linux",
+  win32: "windows",
+}
+const ymlMapsMap = {
+  darwin: "latest-mac.yml",
+  linux: "latest-linux.yml",
+  win32: "latest.yml",
+}
 
 const keepModules = new Set(["font-list", "vscode-languagedetection", "fast-folder-size"])
-// const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
+const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
 
 // remove folders & files not to be included in the app
-// async function cleanSources(buildPath, _electronVersion, platform, _arch, callback) {
-//   // folders & files to be included in the app
-//   const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
+async function cleanSources(buildPath, _electronVersion, platform, _arch, callback) {
+  // folders & files to be included in the app
+  const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
 
-//   if (platform === "darwin" || platform === "mas") {
-//     const frameworkResourcePath = resolve(
-//       buildPath,
-//       "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
-//     )
+  if (platform === "darwin" || platform === "mas") {
+    const frameworkResourcePath = resolve(
+      buildPath,
+      "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
+    )
 
-//     for (const file of readdirSync(frameworkResourcePath)) {
-//       if (file.endsWith(".lproj") && !keepLanguages.has(file.split(".")[0]!)) {
-//         rimrafSync(resolve(frameworkResourcePath, file))
-//       }
-//     }
-//   }
+    for (const file of readdirSync(frameworkResourcePath)) {
+      if (file.endsWith(".lproj") && !keepLanguages.has(file.split(".")[0]!)) {
+        rimrafSync(resolve(frameworkResourcePath, file))
+      }
+    }
+  }
 
-//   // Keep only node_modules to be included in the app
+  // Keep only node_modules to be included in the app
 
-//   await Promise.all([
-//     ...(await readdir(buildPath).then((items) =>
-//       items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(buildPath, item))),
-//     )),
-//     ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
-//       items
-//         .filter((item) => !keepModules.has(item))
-//         .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
-//     )),
-//   ])
+  await Promise.all([
+    ...(await readdir(buildPath).then((items) =>
+      items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(buildPath, item))),
+    )),
+    ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
+      items
+        .filter((item) => !keepModules.has(item))
+        .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
+    )),
+  ])
 
-//   // copy needed node_modules to be included in the app
-//   await Promise.all(
-//     Array.from(keepModules.values()).map((item) => {
-//       // Check is exist
-//       if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
-//         // eslint-disable-next-line array-callback-return
-//         return
-//       }
-//       return cp(
-//         path.join(process.cwd(), "node_modules", item),
-//         path.join(buildPath, "node_modules", item),
-//         {
-//           recursive: true,
-//         },
-//       )
-//     }),
-//   )
+  // copy needed node_modules to be included in the app
+  await Promise.all(
+    Array.from(keepModules.values()).map((item) => {
+      // Check is exist
+      if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
+        // eslint-disable-next-line array-callback-return
+        return
+      }
+      return cp(
+        path.join(process.cwd(), "node_modules", item),
+        path.join(buildPath, "node_modules", item),
+        {
+          recursive: true,
+        },
+      )
+    }),
+  )
 
-//   callback()
-// }
+  callback()
+}
 
-// const noopAfterCopy = (_buildPath, _electronVersion, _platform, _arch, callback) => callback()
+const noopAfterCopy = (_buildPath, _electronVersion, _platform, _arch, callback) => callback()
 
 const ignorePattern = new RegExp(`^/node_modules/(?!${[...keepModules].join("|")})`)
 
@@ -103,11 +104,11 @@ const config: ForgeConfig = {
       },
     ],
 
-    // afterCopy: [
-    //   cleanSources,
-    //   process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
-    // ],
-    asar: false,
+    afterCopy: [
+      cleanSources,
+      process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
+    ],
+    asar: true,
     ignore: [ignorePattern],
 
     prune: true,
@@ -223,63 +224,69 @@ const config: ForgeConfig = {
     },
   ],
   hooks: {
-    // postMake: async (_config, makeResults) => {
-    //   const yml: {
-    //     version?: string
-    //     files: {
-    //       url: string
-    //       sha512: string
-    //       size: number
-    //     }[]
-    //     releaseDate?: string
-    //   } = {
-    //     version: makeResults[0]?.packageJSON?.version,
-    //     files: [],
-    //   }
-    //   makeResults = makeResults.map((result) => {
-    //     result.artifacts = result.artifacts.map((artifact) => {
-    //       if (artifactRegex.test(artifact)) {
-    //         const newArtifact = `${path.dirname(artifact)}/${
-    //           result.packageJSON.name
-    //         }-${result.packageJSON.version}-${
-    //           platformNamesMap[result.platform]
-    //         }-${result.arch}${path.extname(artifact)}`
-    //         fs.renameSync(artifact, newArtifact)
-    //         try {
-    //           const fileData = fs.readFileSync(newArtifact)
-    //           const hash = crypto.createHash("sha512").update(fileData).digest("base64")
-    //           const { size } = fs.statSync(newArtifact)
-    //           yml.files.push({
-    //             url: path.basename(newArtifact),
-    //             sha512: hash,
-    //             size,
-    //           })
-    //         } catch {
-    //           console.error(`Failed to hash ${newArtifact}`)
-    //         }
-    //         return newArtifact
-    //       } else {
-    //         return artifact
-    //       }
-    //     })
-    //     return result
-    //   })
-    //   yml.releaseDate = new Date().toISOString()
-    //   const ymlPath = `${path.dirname(makeResults[0]?.artifacts?.[0]!)}/${
-    //     ymlMapsMap[makeResults[0]?.platform!]
-    //   }`
-    //   const ymlStr = yaml.dump(yml, {
-    //     lineWidth: -1,
-    //   })
-    //   fs.writeFileSync(ymlPath, ymlStr)
-    //   makeResults.push({
-    //     artifacts: [ymlPath],
-    //     platform: makeResults[0]!.platform,
-    //     arch: makeResults[0]!.arch,
-    //     packageJSON: makeResults[0]!.packageJSON,
-    //   })
-    //   return makeResults
-    // },
+    postMake: async (_config, makeResults) => {
+      const yml: {
+        version?: string
+        files: {
+          url: string
+          sha512: string
+          size: number
+        }[]
+        releaseDate?: string
+      } = {
+        version: makeResults[0]?.packageJSON?.version,
+        files: [],
+      }
+      makeResults = makeResults.map((result) => {
+        result.artifacts = result.artifacts.map((artifact) => {
+          if (artifactRegex.test(artifact)) {
+            const newArtifact = `${path.dirname(artifact)}/${
+              result.packageJSON.productName
+            }-${result.packageJSON.version}-${
+              platformNamesMap[result.platform]
+            }-${result.arch}${path.extname(artifact)}`
+            fs.renameSync(artifact, newArtifact)
+
+            try {
+              const fileData = fs.readFileSync(newArtifact)
+              const hash = crypto.createHash("sha512").update(fileData).digest("base64")
+              const { size } = fs.statSync(newArtifact)
+
+              yml.files.push({
+                url: path.basename(newArtifact),
+                sha512: hash,
+                size,
+              })
+            } catch {
+              console.error(`Failed to hash ${newArtifact}`)
+            }
+            return newArtifact
+          } else {
+            return artifact
+          }
+        })
+        return result
+      })
+      yml.releaseDate = new Date().toISOString()
+
+      const ymlPath = `${path.dirname(makeResults[0]?.artifacts?.[0]!)}/${
+        ymlMapsMap[makeResults[0]?.platform!]
+      }`
+
+      const ymlStr = yaml.dump(yml, {
+        lineWidth: -1,
+      })
+      fs.writeFileSync(ymlPath, ymlStr)
+
+      makeResults.push({
+        artifacts: [ymlPath],
+        platform: makeResults[0]!.platform,
+        arch: makeResults[0]!.arch,
+        packageJSON: makeResults[0]!.packageJSON,
+      })
+
+      return makeResults
+    },
   },
 }
 
