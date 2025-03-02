@@ -1,10 +1,9 @@
 import "dotenv/config"
 
-import crypto from "node:crypto"
-import fs from "node:fs"
+// import crypto from "node:crypto"
+// import fs from "node:fs"
 // import { cp, readdir } from "node:fs/promises"
-import path from "node:path"
-
+// import path from "node:path"
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
 import { MakerPKG } from "@electron-forge/maker-pkg"
@@ -14,22 +13,22 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 // import setLanguages from "electron-packager-languages"
-import yaml from "js-yaml"
+// import yaml from "js-yaml"
 // import { rimraf, rimrafSync } from "rimraf"
 
 const platform = process.argv[process.argv.indexOf("--platform") + 1]
 
-const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
-const platformNamesMap = {
-  darwin: "macos",
-  linux: "linux",
-  win32: "windows",
-}
-const ymlMapsMap = {
-  darwin: "latest-mac.yml",
-  linux: "latest-linux.yml",
-  win32: "latest.yml",
-}
+// const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
+// const platformNamesMap = {
+//   darwin: "macos",
+//   linux: "linux",
+//   win32: "windows",
+// }
+// const ymlMapsMap = {
+//   darwin: "latest-mac.yml",
+//   linux: "latest-linux.yml",
+//   win32: "latest.yml",
+// }
 
 const keepModules = new Set(["font-list", "vscode-languagedetection", "fast-folder-size"])
 // const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
@@ -224,69 +223,63 @@ const config: ForgeConfig = {
     },
   ],
   hooks: {
-    postMake: async (_config, makeResults) => {
-      const yml: {
-        version?: string
-        files: {
-          url: string
-          sha512: string
-          size: number
-        }[]
-        releaseDate?: string
-      } = {
-        version: makeResults[0]?.packageJSON?.version,
-        files: [],
-      }
-      makeResults = makeResults.map((result) => {
-        result.artifacts = result.artifacts.map((artifact) => {
-          if (artifactRegex.test(artifact)) {
-            const newArtifact = `${path.dirname(artifact)}/${
-              result.packageJSON.name
-            }-${result.packageJSON.version}-${
-              platformNamesMap[result.platform]
-            }-${result.arch}${path.extname(artifact)}`
-            fs.renameSync(artifact, newArtifact)
-
-            try {
-              const fileData = fs.readFileSync(newArtifact)
-              const hash = crypto.createHash("sha512").update(fileData).digest("base64")
-              const { size } = fs.statSync(newArtifact)
-
-              yml.files.push({
-                url: path.basename(newArtifact),
-                sha512: hash,
-                size,
-              })
-            } catch {
-              console.error(`Failed to hash ${newArtifact}`)
-            }
-            return newArtifact
-          } else {
-            return artifact
-          }
-        })
-        return result
-      })
-      yml.releaseDate = new Date().toISOString()
-
-      const ymlPath = `${path.dirname(makeResults[0]?.artifacts?.[0]!)}/${
-        ymlMapsMap[makeResults[0]?.platform!]
-      }`
-
-      const ymlStr = yaml.dump(yml, {
-        lineWidth: -1,
-      })
-      fs.writeFileSync(ymlPath, ymlStr)
-
-      makeResults.push({
-        artifacts: [ymlPath],
-        platform: makeResults[0]!.platform,
-        arch: makeResults[0]!.arch,
-        packageJSON: makeResults[0]!.packageJSON,
-      })
-
-      return makeResults
-    },
+    // postMake: async (_config, makeResults) => {
+    //   const yml: {
+    //     version?: string
+    //     files: {
+    //       url: string
+    //       sha512: string
+    //       size: number
+    //     }[]
+    //     releaseDate?: string
+    //   } = {
+    //     version: makeResults[0]?.packageJSON?.version,
+    //     files: [],
+    //   }
+    //   makeResults = makeResults.map((result) => {
+    //     result.artifacts = result.artifacts.map((artifact) => {
+    //       if (artifactRegex.test(artifact)) {
+    //         const newArtifact = `${path.dirname(artifact)}/${
+    //           result.packageJSON.name
+    //         }-${result.packageJSON.version}-${
+    //           platformNamesMap[result.platform]
+    //         }-${result.arch}${path.extname(artifact)}`
+    //         fs.renameSync(artifact, newArtifact)
+    //         try {
+    //           const fileData = fs.readFileSync(newArtifact)
+    //           const hash = crypto.createHash("sha512").update(fileData).digest("base64")
+    //           const { size } = fs.statSync(newArtifact)
+    //           yml.files.push({
+    //             url: path.basename(newArtifact),
+    //             sha512: hash,
+    //             size,
+    //           })
+    //         } catch {
+    //           console.error(`Failed to hash ${newArtifact}`)
+    //         }
+    //         return newArtifact
+    //       } else {
+    //         return artifact
+    //       }
+    //     })
+    //     return result
+    //   })
+    //   yml.releaseDate = new Date().toISOString()
+    //   const ymlPath = `${path.dirname(makeResults[0]?.artifacts?.[0]!)}/${
+    //     ymlMapsMap[makeResults[0]?.platform!]
+    //   }`
+    //   const ymlStr = yaml.dump(yml, {
+    //     lineWidth: -1,
+    //   })
+    //   fs.writeFileSync(ymlPath, ymlStr)
+    //   makeResults.push({
+    //     artifacts: [ymlPath],
+    //     platform: makeResults[0]!.platform,
+    //     arch: makeResults[0]!.arch,
+    //     packageJSON: makeResults[0]!.packageJSON,
+    //   })
+    //   return makeResults
+    // },
   },
 }
 
