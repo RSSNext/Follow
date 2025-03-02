@@ -17,9 +17,9 @@ export const EntryListContentVideo = forwardRef<
     "data" | "renderItem"
   >
 >(({ entryIds, active, ...rest }, ref) => {
-  const { fetchNextPage, refetch, isRefetching, isFetching, isLoading } = useFetchEntriesControls()
+  const { fetchNextPage, refetch, isRefetching, isFetching } = useFetchEntriesControls()
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: active === false || isLoading,
+    disabled: active === false || isFetching,
   })
 
   const ListFooterComponent = useMemo(
