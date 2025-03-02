@@ -12,13 +12,12 @@
     "type": "git"
   },
   "scripts": {
-    "analyze:web": "cross-env analyzer=1 vite build",
-    "build": "electron-vite build && electron-forge make",
-    "build:macos": "electron-vite build && electron-forge make --arch=x64 --platform=darwin && electron-forge make --arch=arm64 --platform=darwin && tsx scripts/merge-yml.ts",
-    "build:mas": "electron-vite build && electron-forge make --arch=universal --platform=mas",
-    "build:render": "vite build -c vite.config.electron-render.ts",
-    "build:rn-web": "rm -rf out/rn-web && cross-env RN_BUILD=1 vite build",
-    "build:web": "rm -rf out/web && cross-env WEB_BUILD=1 vite build",
+    "build:electron": "turbo run @follow/desktop#build",
+    "build:macos": "turbo run @follow/desktop#build:macos",
+    "build:mas": "turbo run @follow/desktop#build:mas",
+    "build:render": "turbo run @follow/desktop#build:render",
+    "build:rn-web": "turbo run @follow/desktop#build:rn-web",
+    "build:web": "turbo run @follow/desktop#build:web",
     "bump": "vv",
     "dedupe:locales": "eslint --fix apps/desktop/locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
@@ -30,7 +29,6 @@
     "dev:web": "cross-env WEB_BUILD=1 vite",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
     "hotfix": "vv -c bump.hotfix.config.js",
     "lint": "pnpm run lint:tsl && eslint",
     "lint:fix": "eslint --fix",
@@ -38,14 +36,11 @@
     "mitproxy": "bash scripts/run-proxy.sh",
     "polyfill-optimize": "pnpx nolyfill install",
     "prepare": "simple-git-hooks",
-    "publish": "electron-vite build && electron-forge publish",
     "reinstall": "rm -rf node_modules && rm -rf apps/**/node_modules && rm -rf packages/**/node_modules && pnpm install",
     "start": "electron-vite preview",
-    "sync:ab": "tsx scripts/pull-ab-flags.ts",
     "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx && eslint --fix apps/mobile/src/icons/**/*.tsx",
     "test": "cross-env CI=1 pnpm --recursive run test",
-    "typecheck": "turbo typecheck",
-    "update:main-hash": "tsx apps/desktop/plugins/vite/generate-main-hash.ts"
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@clack/prompts": "0.10.0",
