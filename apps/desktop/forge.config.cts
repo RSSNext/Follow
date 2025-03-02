@@ -110,7 +110,7 @@ const config: ForgeConfig = {
       cleanSources,
       process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
     ],
-    asar: true,
+    asar: false,
     ignore: [ignorePattern],
 
     prune: true,
