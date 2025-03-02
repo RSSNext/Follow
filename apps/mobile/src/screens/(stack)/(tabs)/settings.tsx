@@ -131,7 +131,7 @@ const SettingHeader = ({ scrollY }: { scrollY: SharedValue<number> }) => {
   return (
     <Animated.View
       pointerEvents="none"
-      className="border-b-hairline border-opaque-separator absolute inset-x-0 top-0 flex-row items-center px-4 pb-2 pt-safe"
+      className="border-b-hairline border-opaque-separator pt-safe absolute inset-x-0 top-0 flex-row items-center px-4 pb-2"
       style={styles}
     >
       <BlurEffect />

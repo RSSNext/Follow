@@ -57,7 +57,7 @@ const TabsList = React.forwardRef<React.ElementRef<typeof TabsPrimitive.List>, T
       <TabsPrimitive.List
         ref={ref}
         className={cn(
-          "relative inline-flex items-center justify-center text-muted-foreground",
+          "text-muted-foreground relative inline-flex items-center justify-center",
           className,
         )}
       >
@@ -67,8 +67,8 @@ const TabsList = React.forwardRef<React.ElementRef<typeof TabsPrimitive.List>, T
           className={cn(
             "absolute left-0 duration-200 will-change-[transform,width]",
             variant === "rounded"
-              ? "inset-0 z-0 h-full rounded-lg bg-muted group-hover:bg-theme-item-hover"
-              : "bottom-0 h-0.5 rounded bg-accent",
+              ? "bg-muted group-hover:bg-theme-item-hover inset-0 z-0 h-full rounded-lg"
+              : "bg-accent bottom-0 h-0.5 rounded",
           )}
           style={{
             width: indicator?.w,
@@ -135,7 +135,7 @@ const TabsTrigger = React.forwardRef<HTMLDivElement, TabsTriggerProps>(
       <TabsPrimitive.Trigger
         ref={triggerRef as any}
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-theme-foreground",
+          "ring-offset-background data-[state=active]:text-theme-foreground inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50",
           "group relative z-[1]",
           tabsTriggerVariants({ variant }),
         )}
@@ -154,7 +154,7 @@ const TabsContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
-    className={cn("mt-2 ring-offset-background focus-visible:outline-none", className)}
+    className={cn("ring-offset-background mt-2 focus-visible:outline-none", className)}
     {...props}
   />
 ))

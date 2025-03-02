@@ -399,7 +399,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
               <GestureHandlerRootView className="w-full flex-1">
                 <View className="flex-1 items-center justify-center">
                   <Pressable
-                    className="absolute right-2 top-safe-offset-2"
+                    className="top-safe-offset-2 absolute right-2"
                     onPress={fadeOutCloseAnimation}
                   >
                     <CloseCuteReIcon color="#fff" />

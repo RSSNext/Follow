@@ -59,7 +59,7 @@ export default function PlaterScreen() {
   return (
     <SheetScreen onClose={() => router.back()}>
       <PlayerScreenContext.Provider value={playerScreenContextValue}>
-        <View className="flex-1 px-[1000] p-safe">
+        <View className="p-safe flex-1 px-[1000]">
           <LinearGradient
             style={StyleSheet.absoluteFill}
             colors={gradientColors}
@@ -100,7 +100,7 @@ export default function PlaterScreen() {
 
 function DismissIndicator() {
   return (
-    <View className="absolute inset-x-0 flex items-center justify-center top-safe-offset-2">
+    <View className="top-safe-offset-2 absolute inset-x-0 flex items-center justify-center">
       <View className="bg-tertiary-label h-[5] w-[40] rounded-full" />
     </View>
   )

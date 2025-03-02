@@ -33,7 +33,7 @@ export const SegmentGroup = (props: ComponentType<SegmentGroupProps>) => {
       <div
         role="tablist"
         className={cn(
-          "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground outline-none",
+          "bg-muted text-muted-foreground inline-flex h-9 items-center justify-center rounded-lg p-1 outline-none",
           className,
         )}
         tabIndex={0}
@@ -57,8 +57,8 @@ export const SegmentItem: Component<{
       type="button"
       role="tab"
       className={cn(
-        "relative inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground",
-        "h-full rounded-md focus-visible:ring-accent/30",
+        "ring-offset-background data-[state=active]:text-foreground relative inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        "focus-visible:ring-accent/30 h-full rounded-md",
         className,
       )}
       tabIndex={-1}
@@ -74,7 +74,7 @@ export const SegmentItem: Component<{
         <m.span
           layout
           layoutId={layoutId}
-          className="absolute inset-0 z-0 rounded-md bg-background shadow"
+          className="bg-background absolute inset-0 z-0 rounded-md shadow"
         />
       )}
     </button>

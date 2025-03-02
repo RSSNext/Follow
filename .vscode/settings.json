@@ -18,8 +18,8 @@
   ],
   "tailwindCSS.experimental.configFile": {
     "apps/mobile/tailwind.config.ts": "apps/mobile/**",
-    "apps/server/tailwind.config.ts": "apps/server/**",
-    "tailwind.config.ts": ["!apps/mobile/**", "!apps/server/**", "**"]
+    "apps/desktop/src/server/tailwind.config.ts": "apps/desktop/src/server/**",
+    "tailwind.config.ts": ["!apps/mobile/**", "!apps/desktop/src/server/**", "**"]
   },
   "typescript.tsserver.maxTsServerMemory": 8096,
   "typescript.tsserver.nodePath": "node",

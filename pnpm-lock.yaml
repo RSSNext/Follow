@@ -150,6 +150,270 @@ importers:
         version: 18.3.1
       '@vercel/node':
         specifier: 5.1.7
+        version: 5.1.7(encoding@0.1.13)(rollup@4.34.8)
+      '@vitejs/plugin-legacy':
+        specifier: 6.0.1
+        version: 6.0.1(terser@5.39.0)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      '@vitejs/plugin-react':
+        specifier: 4.3.4
+        version: 4.3.4(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      async-es:
+        specifier: 3.2.6
+        version: 3.2.6
+      autoprefixer:
+        specifier: 10.4.20
+        version: 10.4.20(postcss@8.5.2)
+      bufferutil:
+        specifier: 4.0.9
+        version: 4.0.9
+      cross-env:
+        specifier: 7.0.3
+        version: 7.0.3
+      cssnano:
+        specifier: 7.0.6
+        version: 7.0.6(postcss@8.5.2)
+      dotenv:
+        specifier: 16.4.7
+        version: 16.4.7
+      drizzle-orm:
+        specifier: 0.39.3
+        version: 0.39.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.1)(expo-sqlite@15.1.2(expo@52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(kysely@0.27.5)
+      electron:
+        specifier: 34.2.0
+        version: 34.2.0
+      electron-devtools-installer:
+        specifier: 4.0.0
+        version: 4.0.0
+      electron-packager-languages:
+        specifier: 0.6.0
+        version: 0.6.0
+      electron-vite:
+        specifier: 3.0.0
+        version: 3.0.0(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      eslint:
+        specifier: 9.20.1
+        version: 9.20.1(jiti@2.4.2)
+      eslint-config-hyoban:
+        specifier: 3.2.1
+        version: 3.2.1(@types/estree@1.0.6)(@typescript-eslint/eslint-plugin@8.24.1(@typescript-eslint/parser@8.24.1(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint@9.20.1(jiti@2.4.2))(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))(ts-api-utils@2.0.1(typescript@5.7.3))(typescript@5.7.3)
+      eslint-plugin-react-native:
+        specifier: 5.0.0
+        version: 5.0.0(eslint@9.20.1(jiti@2.4.2))
+      fake-indexeddb:
+        specifier: 6.0.0
+        version: 6.0.0
+      fast-glob:
+        specifier: 3.3.3
+        version: 3.3.3
+      happy-dom:
+        specifier: 17.1.1
+        version: 17.1.1
+      hono:
+        specifier: 4.7.2
+        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+      html-minifier-terser:
+        specifier: 7.2.0
+        version: 7.2.0
+      js-yaml:
+        specifier: 4.1.0
+        version: 4.1.0
+      lint-staged:
+        specifier: 15.4.3
+        version: 15.4.3
+      nbump:
+        specifier: 2.0.7
+        version: 2.0.7(conventional-commits-filter@5.0.0)
+      postcss:
+        specifier: 8.5.2
+        version: 8.5.2
+      postcss-js:
+        specifier: 4.0.1
+        version: 4.0.1(postcss@8.5.2)
+      prettier:
+        specifier: 3.5.1
+        version: 3.5.1
+      prettier-plugin-tailwindcss:
+        specifier: 0.6.11
+        version: 0.6.11(prettier@3.5.1)
+      raw-body:
+        specifier: 3.0.0
+        version: 3.0.0
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      rimraf:
+        specifier: 6.0.1
+        version: 6.0.1
+      shx:
+        specifier: 0.3.4
+        version: 0.3.4
+      simple-git-hooks:
+        specifier: 2.11.1
+        version: 2.11.1
+      svg-parser:
+        specifier: 2.0.4
+        version: 2.0.4
+      tailwindcss:
+        specifier: 3.4.16
+        version: 3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))
+      tailwindcss-animate:
+        specifier: 1.0.7
+        version: 1.0.7(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      tailwindcss-motion:
+        specifier: 1.1.0
+        version: 1.1.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      tailwindcss-safe-area:
+        specifier: 0.6.0
+        version: 0.6.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      tar:
+        specifier: 7.4.3
+        version: 7.4.3
+      tsup:
+        specifier: 8.3.6
+        version: 8.3.6(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
+      tsx:
+        specifier: 4.19.3
+        version: 4.19.3
+      turbo:
+        specifier: 2.4.2
+        version: 2.4.2
+      typescript:
+        specifier: 5.7.3
+        version: 5.7.3
+      unplugin-ast:
+        specifier: 0.14.0
+        version: 0.14.0
+      utf-8-validate:
+        specifier: 6.0.5
+        version: 6.0.5
+      vite:
+        specifier: 6.1.0
+        version: 6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+      vite-bundle-analyzer:
+        specifier: 0.17.1
+        version: 0.17.1
+      vite-plugin-mkcert:
+        specifier: 1.17.6
+        version: 1.17.6(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      vite-plugin-pwa:
+        specifier: 0.21.1
+        version: 0.21.1(@vite-pwa/assets-generator@0.2.6)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
+      vite-tsconfig-paths:
+        specifier: 5.1.4
+        version: 5.1.4(typescript@5.7.3)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      vitest:
+        specifier: 3.0.6
+        version: 3.0.6(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@22.13.4)(happy-dom@17.1.1)(jiti@2.4.2)(jsdom@20.0.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+
+  apps/desktop:
+    devDependencies:
+      '@clack/prompts':
+        specifier: 0.10.0
+        version: 0.10.0
+      '@egoist/tailwindcss-icons':
+        specifier: 1.9.0
+        version: 1.9.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      '@electron-forge/cli':
+        specifier: 7.7.0
+        version: 7.7.0(encoding@0.1.13)
+      '@electron-forge/maker-dmg':
+        specifier: 7.7.0
+        version: 7.7.0
+      '@electron-forge/maker-pkg':
+        specifier: 7.7.0
+        version: 7.7.0
+      '@electron-forge/maker-squirrel':
+        specifier: 7.7.0
+        version: 7.7.0
+      '@electron-forge/maker-zip':
+        specifier: 7.7.0
+        version: 7.7.0
+      '@electron-forge/plugin-fuses':
+        specifier: 7.7.0
+        version: 7.7.0(@electron/fuses@1.8.0)
+      '@electron-forge/publisher-github':
+        specifier: 7.7.0
+        version: 7.7.0(encoding@0.1.13)
+      '@electron-toolkit/tsconfig':
+        specifier: 1.0.1
+        version: 1.0.1(@types/node@22.13.4)
+      '@eslint/compat':
+        specifier: 1.2.6
+        version: 1.2.6(eslint@9.20.1(jiti@2.4.2))
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../packages/components
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../packages/models
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+      '@iconify-json/logos':
+        specifier: 1.2.4
+        version: 1.2.4
+      '@iconify-json/mingcute':
+        specifier: 1.2.3
+        version: 1.2.3
+      '@iconify-json/simple-icons':
+        specifier: 1.2.25
+        version: 1.2.25
+      '@iconify/tools':
+        specifier: 4.1.1
+        version: 4.1.1
+      '@pengx17/electron-forge-maker-appimage':
+        specifier: 1.2.1
+        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
+      '@sentry/vite-plugin':
+        specifier: 3.1.2
+        version: 3.1.2(encoding@0.1.13)
+      '@t3-oss/env-core':
+        specifier: 0.12.0
+        version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
+      '@tailwindcss/container-queries':
+        specifier: 0.1.1
+        version: 0.1.1(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      '@tailwindcss/typography':
+        specifier: 0.5.16
+        version: 0.5.16(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      '@tsslint/cli':
+        specifier: 1.5.8
+        version: 1.5.8(typescript@5.7.3)
+      '@tsslint/config':
+        specifier: 1.5.8
+        version: 1.5.8(typescript@5.7.3)
+      '@tsslint/eslint':
+        specifier: 1.5.8
+        version: 1.5.8(jiti@2.4.2)(typescript@5.7.3)
+      '@types/html-minifier-terser':
+        specifier: 7.0.2
+        version: 7.0.2
+      '@types/js-yaml':
+        specifier: 4.0.9
+        version: 4.0.9
+      '@types/node':
+        specifier: 22.13.4
+        version: 22.13.4
+      '@types/react':
+        specifier: 18.3.12
+        version: 18.3.12
+      '@types/react-dom':
+        specifier: 18.3.1
+        version: 18.3.1
+      '@vercel/node':
+        specifier: 5.1.7
         version: 5.1.7(encoding@0.1.13)(rollup@2.79.2)
       '@vitejs/plugin-legacy':
         specifier: 6.0.1
@@ -308,7 +572,7 @@ importers:
         specifier: 3.0.6
         version: 3.0.6(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@22.13.4)(happy-dom@17.1.1)(jiti@2.4.2)(jsdom@20.0.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
-  apps/main:
+  apps/desktop/src/main:
     dependencies:
       '@egoist/tipc':
         specifier: 0.3.2
@@ -324,10 +588,10 @@ importers:
         version: 4.3.0
       '@follow/shared':
         specifier: workspace:*
-        version: link:../../packages/shared
+        version: link:../../../../packages/shared
       '@follow/utils':
         specifier: workspace:*
-        version: link:../../packages/utils
+        version: link:../../../../packages/utils
       '@mozilla/readability':
         specifier: 0.5.0
         version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
@@ -406,7 +670,7 @@ importers:
     devDependencies:
       '@follow/types':
         specifier: workspace:*
-        version: link:../../packages/types
+        version: link:../../../../packages/types
       '@types/js-yaml':
         specifier: 4.0.9
         version: 4.0.9
@@ -422,6 +686,452 @@ importers:
       hono:
         specifier: 4.7.2
         version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+
+  apps/desktop/src/renderer:
+    dependencies:
+      '@dnd-kit/core':
+        specifier: 6.3.1
+        version: 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/sortable':
+        specifier: 10.0.0
+        version: 10.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@egoist/tipc':
+        specifier: 0.3.2
+        version: 0.3.2(electron@34.2.0)(react@18.3.1)
+      '@electron-toolkit/preload':
+        specifier: 3.0.1
+        version: 3.0.1(electron@34.2.0)
+      '@follow/electron-main':
+        specifier: workspace:*
+        version: link:../main
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../../../../packages/shared
+      '@fontsource/sn-pro':
+        specifier: 5.1.0
+        version: 5.1.0
+      '@headlessui/react':
+        specifier: 2.2.0
+        version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@hookform/resolvers':
+        specifier: 4.1.0
+        version: 4.1.0(react-hook-form@7.54.2(react@18.3.1))
+      '@lottiefiles/dotlottie-react':
+        specifier: 0.13.0
+        version: 0.13.0(react@18.3.1)
+      '@openpanel/web':
+        specifier: 1.0.1
+        version: 1.0.1
+      '@radix-ui/react-avatar':
+        specifier: 1.1.3
+        version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-context-menu':
+        specifier: 2.2.6
+        version: 2.2.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: 1.1.6
+        version: 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dropdown-menu':
+        specifier: 2.1.6
+        version: 2.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-hover-card':
+        specifier: 1.1.6
+        version: 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: 2.1.2
+        version: 2.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: 1.1.6
+        version: 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: 1.2.3
+        version: 1.2.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: 1.1.2
+        version: 1.1.2(@types/react@18.3.12)(react@18.3.1)
+      '@sentry/react':
+        specifier: 9.1.0
+        version: 9.1.0(react@18.3.1)
+      '@shikijs/transformers':
+        specifier: 3.0.0
+        version: 3.0.0
+      '@tanstack/query-sync-storage-persister':
+        specifier: 5.66.4
+        version: 5.66.4
+      '@tanstack/react-query':
+        specifier: 5.66.7
+        version: 5.66.7(react@18.3.1)
+      '@tanstack/react-query-devtools':
+        specifier: 5.66.7
+        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-query-persist-client':
+        specifier: 5.66.7
+        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-virtual':
+        specifier: 3.13.0
+        version: 3.13.0(patch_hash=44veyovhgqddxy4cx3biv6jmoa)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@use-gesture/react':
+        specifier: 10.3.1
+        version: 10.3.1(react@18.3.1)
+      '@welldone-software/why-did-you-render':
+        specifier: 10.0.1
+        version: 10.0.1(react@18.3.1)
+      '@yornaath/batshit':
+        specifier: 0.10.1
+        version: 0.10.1
+      camelcase-keys:
+        specifier: 9.1.3
+        version: 9.1.3
+      click-to-react-component:
+        specifier: 1.1.2
+        version: 1.1.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      clsx:
+        specifier: 2.1.1
+        version: 2.1.1
+      cmdk:
+        specifier: 1.0.4
+        version: 1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
+      dexie:
+        specifier: 4.0.11
+        version: 4.0.11
+      dexie-export-import:
+        specifier: 4.1.4
+        version: 4.1.4(dexie@4.0.11)
+      dnum:
+        specifier: 2.14.0
+        version: 2.14.0
+      embla-carousel-react:
+        specifier: 8.5.2
+        version: 8.5.2(react@18.3.1)
+      embla-carousel-wheel-gestures:
+        specifier: 8.0.1
+        version: 8.0.1(embla-carousel@8.5.2)
+      es-toolkit:
+        specifier: 1.32.0
+        version: 1.32.0
+      firebase:
+        specifier: 11.3.1
+        version: 11.3.1
+      foxact:
+        specifier: 0.2.44
+        version: 0.2.44(react@18.3.1)
+      framer-motion:
+        specifier: 12.4.7
+        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      franc-min:
+        specifier: 6.2.0
+        version: 6.2.0
+      fuse.js:
+        specifier: 7.1.0
+        version: 7.1.0
+      hast-util-to-jsx-runtime:
+        specifier: 2.3.2
+        version: 2.3.2
+      hast-util-to-mdast:
+        specifier: 10.1.2
+        version: 10.1.2
+      i18next:
+        specifier: 24.2.2
+        version: 24.2.2(typescript@5.7.3)
+      i18next-browser-languagedetector:
+        specifier: 8.0.3
+        version: 8.0.3
+      idb-keyval:
+        specifier: 6.2.1
+        version: 6.2.1
+      immer:
+        specifier: 10.1.1
+        version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
+      jotai:
+        specifier: 2.12.1
+        version: 2.12.1(@types/react@18.3.12)(react@18.3.1)
+      lethargy:
+        specifier: 1.0.9
+        version: 1.0.9
+      masonic:
+        specifier: 4.0.1
+        version: 4.0.1(react@18.3.1)
+      mdast-util-gfm-table:
+        specifier: 2.0.0
+        version: 2.0.0
+      mdast-util-to-markdown:
+        specifier: 2.1.2
+        version: 2.1.2
+      nanoid:
+        specifier: 5.1.0
+        version: 5.1.0
+      ofetch:
+        specifier: 1.4.1
+        version: 1.4.1
+      plain-shiki:
+        specifier: 0.1.1
+        version: 0.1.1(shiki@3.0.0)
+      re-resizable:
+        specifier: 6.10.3
+        version: 6.10.3(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-blurhash:
+        specifier: 0.3.0
+        version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
+      react-fast-marquee:
+        specifier: 1.6.5
+        version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-hook-form:
+        specifier: 7.54.2
+        version: 7.54.2(react@18.3.1)
+      react-hotkeys-hook:
+        specifier: 4.6.1
+        version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-i18next:
+        specifier: 15.4.1
+        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+      react-intersection-observer:
+        specifier: 9.15.1
+        version: 9.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-ios-pwa-prompt:
+        specifier: 2.0.6
+        version: 2.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-qr-code:
+        specifier: 2.0.15
+        version: 2.0.15(react@18.3.1)
+      react-resizable-layout:
+        specifier: npm:@innei/react-resizable-layout@0.7.3-fork.1
+        version: '@innei/react-resizable-layout@0.7.3-fork.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)'
+      react-router:
+        specifier: 7.2.0
+        version: 7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-selecto:
+        specifier: 1.26.3
+        version: 1.26.3
+      react-shadow:
+        specifier: 20.6.0
+        version: 20.6.0(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-zoom-pan-pinch:
+        specifier: 3.7.0
+        version: 3.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      shiki:
+        specifier: 3.0.0
+        version: 3.0.0
+      sonner:
+        specifier: 2.0.0
+        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tldts:
+        specifier: 6.1.77
+        version: 6.1.77
+      use-context-selector:
+        specifier: 2.0.0
+        version: 2.0.0(react@18.3.1)(scheduler@0.24.0-canary-efb381bbf-20230505)
+      usehooks-ts:
+        specifier: 3.1.1
+        version: 3.1.1(react@18.3.1)
+      zod:
+        specifier: 3.24.2
+        version: 3.24.2
+      zustand:
+        specifier: 5.0.3
+        version: 5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
+    devDependencies:
+      '@follow/atoms':
+        specifier: workspace:*
+        version: link:../../../../packages/atoms
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../../../packages/components
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../../../../packages/constants
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../../../packages/hooks
+      '@follow/logger':
+        specifier: workspace:*
+        version: link:../../../../packages/logger
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../../../packages/models
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../../../../packages/types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../../../../packages/utils
+      '@types/node':
+        specifier: 22.13.4
+        version: 22.13.4
+      '@vite-pwa/assets-generator':
+        specifier: 0.2.6
+        version: 0.2.6
+      fake-indexeddb:
+        specifier: 6.0.0
+        version: 6.0.0
+      happy-dom:
+        specifier: 17.1.1
+        version: 17.1.1
+      react-scan:
+        specifier: 0.1.3
+        version: 0.1.3(react-dom@18.3.1(react@18.3.1))(react-router@7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rollup@4.34.8)
+
+  apps/desktop/src/server:
+    dependencies:
+      '@fastify/middie':
+        specifier: 9.0.3
+        version: 9.0.3
+      '@fastify/request-context':
+        specifier: 6.0.2
+        version: 6.0.2
+      '@fontsource/sn-pro':
+        specifier: 5.1.0
+        version: 5.1.0
+      '@openpanel/web':
+        specifier: 1.0.1
+        version: 1.0.1
+      '@resvg/resvg-js':
+        specifier: 2.6.2
+        version: 2.6.2
+      '@sentry/react':
+        specifier: 9.1.0
+        version: 9.1.0(react@18.3.1)
+      '@tanstack/react-query':
+        specifier: 5.66.7
+        version: 5.66.7(react@18.3.1)
+      blurhash:
+        specifier: 2.0.5
+        version: 2.0.5
+      click-to-react-component:
+        specifier: 1.1.2
+        version: 1.1.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
+      fastify:
+        specifier: 5.2.1
+        version: 5.2.1
+      framer-motion:
+        specifier: 12.4.7
+        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      i18next:
+        specifier: 24.2.2
+        version: 24.2.2(typescript@5.7.3)
+      jotai:
+        specifier: 2.12.1
+        version: 2.12.1(@types/react@18.3.12)(react@18.3.1)
+      kose-font:
+        specifier: 1.0.0
+        version: 1.0.0
+      linkedom:
+        specifier: 0.18.9
+        version: 0.18.9
+      ofetch:
+        specifier: 1.4.1
+        version: 1.4.1
+      rc-modal-sheet:
+        specifier: 0.3.2
+        version: 0.3.2(@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@3.0.1)(vaul@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      react-blurhash:
+        specifier: 0.3.0
+        version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
+      react-hook-form:
+        specifier: 7.54.2
+        version: 7.54.2(react@18.3.1)
+      react-hotkeys-hook:
+        specifier: 4.6.1
+        version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-i18next:
+        specifier: 15.4.1
+        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+      react-photo-view:
+        specifier: 1.2.7
+        version: 1.2.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router:
+        specifier: 7.2.0
+        version: 7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      satori:
+        specifier: 0.12.1
+        version: 0.12.1
+      sonner:
+        specifier: 2.0.0
+        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      use-context-selector:
+        specifier: 2.0.0
+        version: 2.0.0(react@18.3.1)(scheduler@0.24.0-canary-efb381bbf-20230505)
+      xss:
+        specifier: 1.0.15
+        version: 1.0.15
+      zod:
+        specifier: 3.24.2
+        version: 3.24.2
+    devDependencies:
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../../../packages/components
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../../../../packages/constants
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../../../packages/hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../../../packages/models
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../../../../packages/shared
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../../../../packages/types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../../../../packages/utils
+      '@radix-ui/react-avatar':
+        specifier: 1.1.3
+        version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@types/html-minifier-terser':
+        specifier: 7.0.2
+        version: 7.0.2
+      chokidar:
+        specifier: 4.0.3
+        version: 4.0.3
+      daisyui:
+        specifier: 4.12.23
+        version: 4.12.23(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.5.2)
+      dotenv-flow:
+        specifier: 4.1.0
+        version: 4.1.0
+      es-toolkit:
+        specifier: 1.32.0
+        version: 1.32.0
+      fast-glob:
+        specifier: 3.3.3
+        version: 3.3.3
+      foxact:
+        specifier: 0.2.44
+        version: 0.2.44(react@18.3.1)
+      html-minifier-terser:
+        specifier: 7.2.0
+        version: 7.2.0
+      lightningcss:
+        specifier: 1.29.1
+        version: 1.29.1
+      masonic:
+        specifier: 4.0.1
+        version: 4.0.1(react@18.3.1)
+      nanoid:
+        specifier: 5.1.0
+        version: 5.1.0
+      path-to-regexp:
+        specifier: 8.2.0
+        version: 8.2.0
+      tsup:
+        specifier: 8.3.6
+        version: 8.3.6(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
+      tsx:
+        specifier: 4.19.3
+        version: 4.19.3
+      vite:
+        specifier: 6.1.0
+        version: 6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   apps/mobile:
     dependencies:
@@ -732,452 +1442,6 @@ importers:
         version: 4.0.4(v6ktukj2nf4iuhjuuz6cntfrdu)
 
   apps/mobile/web-app: {}
-
-  apps/renderer:
-    dependencies:
-      '@dnd-kit/core':
-        specifier: 6.3.1
-        version: 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@dnd-kit/sortable':
-        specifier: 10.0.0
-        version: 10.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
-      '@egoist/tipc':
-        specifier: 0.3.2
-        version: 0.3.2(electron@34.2.0)(react@18.3.1)
-      '@electron-toolkit/preload':
-        specifier: 3.0.1
-        version: 3.0.1(electron@34.2.0)
-      '@follow/electron-main':
-        specifier: workspace:*
-        version: link:../main
-      '@follow/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      '@fontsource/sn-pro':
-        specifier: 5.1.0
-        version: 5.1.0
-      '@headlessui/react':
-        specifier: 2.2.0
-        version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@hookform/resolvers':
-        specifier: 4.1.0
-        version: 4.1.0(react-hook-form@7.54.2(react@18.3.1))
-      '@lottiefiles/dotlottie-react':
-        specifier: 0.13.0
-        version: 0.13.0(react@18.3.1)
-      '@openpanel/web':
-        specifier: 1.0.1
-        version: 1.0.1
-      '@radix-ui/react-avatar':
-        specifier: 1.1.3
-        version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-context-menu':
-        specifier: 2.2.6
-        version: 2.2.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-dialog':
-        specifier: 1.1.6
-        version: 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-dropdown-menu':
-        specifier: 2.1.6
-        version: 2.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-hover-card':
-        specifier: 1.1.6
-        version: 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-label':
-        specifier: 2.1.2
-        version: 2.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-popover':
-        specifier: 1.1.6
-        version: 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-slider':
-        specifier: 1.2.3
-        version: 1.2.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-slot':
-        specifier: 1.1.2
-        version: 1.1.2(@types/react@18.3.12)(react@18.3.1)
-      '@sentry/react':
-        specifier: 9.1.0
-        version: 9.1.0(react@18.3.1)
-      '@shikijs/transformers':
-        specifier: 3.0.0
-        version: 3.0.0
-      '@tanstack/query-sync-storage-persister':
-        specifier: 5.66.4
-        version: 5.66.4
-      '@tanstack/react-query':
-        specifier: 5.66.7
-        version: 5.66.7(react@18.3.1)
-      '@tanstack/react-query-devtools':
-        specifier: 5.66.7
-        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
-      '@tanstack/react-query-persist-client':
-        specifier: 5.66.7
-        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
-      '@tanstack/react-virtual':
-        specifier: 3.13.0
-        version: 3.13.0(patch_hash=44veyovhgqddxy4cx3biv6jmoa)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@use-gesture/react':
-        specifier: 10.3.1
-        version: 10.3.1(react@18.3.1)
-      '@welldone-software/why-did-you-render':
-        specifier: 10.0.1
-        version: 10.0.1(react@18.3.1)
-      '@yornaath/batshit':
-        specifier: 0.10.1
-        version: 0.10.1
-      camelcase-keys:
-        specifier: 9.1.3
-        version: 9.1.3
-      click-to-react-component:
-        specifier: 1.1.2
-        version: 1.1.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      clsx:
-        specifier: 2.1.1
-        version: 2.1.1
-      cmdk:
-        specifier: 1.0.4
-        version: 1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
-      dexie:
-        specifier: 4.0.11
-        version: 4.0.11
-      dexie-export-import:
-        specifier: 4.1.4
-        version: 4.1.4(dexie@4.0.11)
-      dnum:
-        specifier: 2.14.0
-        version: 2.14.0
-      embla-carousel-react:
-        specifier: 8.5.2
-        version: 8.5.2(react@18.3.1)
-      embla-carousel-wheel-gestures:
-        specifier: 8.0.1
-        version: 8.0.1(embla-carousel@8.5.2)
-      es-toolkit:
-        specifier: 1.32.0
-        version: 1.32.0
-      firebase:
-        specifier: 11.3.1
-        version: 11.3.1
-      foxact:
-        specifier: 0.2.44
-        version: 0.2.44(react@18.3.1)
-      framer-motion:
-        specifier: 12.4.7
-        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      franc-min:
-        specifier: 6.2.0
-        version: 6.2.0
-      fuse.js:
-        specifier: 7.1.0
-        version: 7.1.0
-      hast-util-to-jsx-runtime:
-        specifier: 2.3.2
-        version: 2.3.2
-      hast-util-to-mdast:
-        specifier: 10.1.2
-        version: 10.1.2
-      i18next:
-        specifier: 24.2.2
-        version: 24.2.2(typescript@5.7.3)
-      i18next-browser-languagedetector:
-        specifier: 8.0.3
-        version: 8.0.3
-      idb-keyval:
-        specifier: 6.2.1
-        version: 6.2.1
-      immer:
-        specifier: 10.1.1
-        version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
-      jotai:
-        specifier: 2.12.1
-        version: 2.12.1(@types/react@18.3.12)(react@18.3.1)
-      lethargy:
-        specifier: 1.0.9
-        version: 1.0.9
-      masonic:
-        specifier: 4.0.1
-        version: 4.0.1(react@18.3.1)
-      mdast-util-gfm-table:
-        specifier: 2.0.0
-        version: 2.0.0
-      mdast-util-to-markdown:
-        specifier: 2.1.2
-        version: 2.1.2
-      nanoid:
-        specifier: 5.1.0
-        version: 5.1.0
-      ofetch:
-        specifier: 1.4.1
-        version: 1.4.1
-      plain-shiki:
-        specifier: 0.1.1
-        version: 0.1.1(shiki@3.0.0)
-      re-resizable:
-        specifier: 6.10.3
-        version: 6.10.3(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-blurhash:
-        specifier: 0.3.0
-        version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
-      react-fast-marquee:
-        specifier: 1.6.5
-        version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-hook-form:
-        specifier: 7.54.2
-        version: 7.54.2(react@18.3.1)
-      react-hotkeys-hook:
-        specifier: 4.6.1
-        version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-i18next:
-        specifier: 15.4.1
-        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
-      react-intersection-observer:
-        specifier: 9.15.1
-        version: 9.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-ios-pwa-prompt:
-        specifier: 2.0.6
-        version: 2.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-qr-code:
-        specifier: 2.0.15
-        version: 2.0.15(react@18.3.1)
-      react-resizable-layout:
-        specifier: npm:@innei/react-resizable-layout@0.7.3-fork.1
-        version: '@innei/react-resizable-layout@0.7.3-fork.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)'
-      react-router:
-        specifier: 7.2.0
-        version: 7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-selecto:
-        specifier: 1.26.3
-        version: 1.26.3
-      react-shadow:
-        specifier: 20.6.0
-        version: 20.6.0(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-zoom-pan-pinch:
-        specifier: 3.7.0
-        version: 3.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      shiki:
-        specifier: 3.0.0
-        version: 3.0.0
-      sonner:
-        specifier: 2.0.0
-        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      tldts:
-        specifier: 6.1.77
-        version: 6.1.77
-      use-context-selector:
-        specifier: 2.0.0
-        version: 2.0.0(react@18.3.1)(scheduler@0.24.0-canary-efb381bbf-20230505)
-      usehooks-ts:
-        specifier: 3.1.1
-        version: 3.1.1(react@18.3.1)
-      zod:
-        specifier: 3.24.2
-        version: 3.24.2
-      zustand:
-        specifier: 5.0.3
-        version: 5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
-    devDependencies:
-      '@follow/atoms':
-        specifier: workspace:*
-        version: link:../../packages/atoms
-      '@follow/components':
-        specifier: workspace:*
-        version: link:../../packages/components
-      '@follow/constants':
-        specifier: workspace:*
-        version: link:../../packages/constants
-      '@follow/hooks':
-        specifier: workspace:*
-        version: link:../../packages/hooks
-      '@follow/logger':
-        specifier: workspace:*
-        version: link:../../packages/logger
-      '@follow/models':
-        specifier: workspace:*
-        version: link:../../packages/models
-      '@follow/types':
-        specifier: workspace:*
-        version: link:../../packages/types
-      '@follow/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
-      '@types/node':
-        specifier: 22.13.4
-        version: 22.13.4
-      '@vite-pwa/assets-generator':
-        specifier: 0.2.6
-        version: 0.2.6
-      fake-indexeddb:
-        specifier: 6.0.0
-        version: 6.0.0
-      happy-dom:
-        specifier: 17.1.1
-        version: 17.1.1
-      react-scan:
-        specifier: 0.1.3
-        version: 0.1.3(react-dom@18.3.1(react@18.3.1))(react-router@7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rollup@4.34.8)
-
-  apps/server:
-    dependencies:
-      '@fastify/middie':
-        specifier: 9.0.3
-        version: 9.0.3
-      '@fastify/request-context':
-        specifier: 6.0.2
-        version: 6.0.2
-      '@fontsource/sn-pro':
-        specifier: 5.1.0
-        version: 5.1.0
-      '@openpanel/web':
-        specifier: 1.0.1
-        version: 1.0.1
-      '@resvg/resvg-js':
-        specifier: 2.6.2
-        version: 2.6.2
-      '@sentry/react':
-        specifier: 9.1.0
-        version: 9.1.0(react@18.3.1)
-      '@tanstack/react-query':
-        specifier: 5.66.7
-        version: 5.66.7(react@18.3.1)
-      blurhash:
-        specifier: 2.0.5
-        version: 2.0.5
-      click-to-react-component:
-        specifier: 1.1.2
-        version: 1.1.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
-      fastify:
-        specifier: 5.2.1
-        version: 5.2.1
-      framer-motion:
-        specifier: 12.4.7
-        version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      i18next:
-        specifier: 24.2.2
-        version: 24.2.2(typescript@5.7.3)
-      jotai:
-        specifier: 2.12.1
-        version: 2.12.1(@types/react@18.3.12)(react@18.3.1)
-      kose-font:
-        specifier: 1.0.0
-        version: 1.0.0
-      linkedom:
-        specifier: 0.18.9
-        version: 0.18.9
-      ofetch:
-        specifier: 1.4.1
-        version: 1.4.1
-      rc-modal-sheet:
-        specifier: 0.3.2
-        version: 0.3.2(@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@3.0.1)(vaul@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
-      react-blurhash:
-        specifier: 0.3.0
-        version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
-      react-hook-form:
-        specifier: 7.54.2
-        version: 7.54.2(react@18.3.1)
-      react-hotkeys-hook:
-        specifier: 4.6.1
-        version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-i18next:
-        specifier: 15.4.1
-        version: 15.4.1(i18next@24.2.2(typescript@5.7.3))(react-dom@18.3.1(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
-      react-photo-view:
-        specifier: 1.2.7
-        version: 1.2.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-router:
-        specifier: 7.2.0
-        version: 7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      satori:
-        specifier: 0.12.1
-        version: 0.12.1
-      sonner:
-        specifier: 2.0.0
-        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      use-context-selector:
-        specifier: 2.0.0
-        version: 2.0.0(react@18.3.1)(scheduler@0.24.0-canary-efb381bbf-20230505)
-      xss:
-        specifier: 1.0.15
-        version: 1.0.15
-      zod:
-        specifier: 3.24.2
-        version: 3.24.2
-    devDependencies:
-      '@follow/components':
-        specifier: workspace:*
-        version: link:../../packages/components
-      '@follow/constants':
-        specifier: workspace:*
-        version: link:../../packages/constants
-      '@follow/hooks':
-        specifier: workspace:*
-        version: link:../../packages/hooks
-      '@follow/models':
-        specifier: workspace:*
-        version: link:../../packages/models
-      '@follow/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      '@follow/types':
-        specifier: workspace:*
-        version: link:../../packages/types
-      '@follow/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
-      '@radix-ui/react-avatar':
-        specifier: 1.1.3
-        version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@types/html-minifier-terser':
-        specifier: 7.0.2
-        version: 7.0.2
-      chokidar:
-        specifier: 4.0.3
-        version: 4.0.3
-      daisyui:
-        specifier: 4.12.23
-        version: 4.12.23(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.5.2)
-      dotenv-flow:
-        specifier: 4.1.0
-        version: 4.1.0
-      es-toolkit:
-        specifier: 1.32.0
-        version: 1.32.0
-      fast-glob:
-        specifier: 3.3.3
-        version: 3.3.3
-      foxact:
-        specifier: 0.2.44
-        version: 0.2.44(react@18.3.1)
-      html-minifier-terser:
-        specifier: 7.2.0
-        version: 7.2.0
-      lightningcss:
-        specifier: 1.29.1
-        version: 1.29.1
-      masonic:
-        specifier: 4.0.1
-        version: 4.0.1(react@18.3.1)
-      nanoid:
-        specifier: 5.1.0
-        version: 5.1.0
-      path-to-regexp:
-        specifier: 8.2.0
-        version: 8.2.0
-      tsup:
-        specifier: 8.3.6
-        version: 8.3.6(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
-      tsx:
-        specifier: 4.19.3
-        version: 4.19.3
-      vite:
-        specifier: 6.1.0
-        version: 6.1.0(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   packages/atoms:
     dependencies:
@@ -4542,7 +4806,7 @@ packages:
   '@react-hook/window-size@3.1.1':
     resolution: {integrity: sha512-yWnVS5LKnOUIrEsI44oz3bIIUYqflamPL27n+k/PC//PsX/YeWBky09oPeAoc9As6jSH16Wgo8plI+ECZaHk3g==}
     peerDependencies:
-      react: 18.3.1
+      react: '>=16.8'
 
   '@react-native-community/image-editor@4.3.0':
     resolution: {integrity: sha512-JMHE+6D1hHhLwboEcbxdqk47FQ9nDrSGTlHrxDgmwUnE6wA1bQh0Ver7EyDcKxfxLqBNnHUx54mbtWVuP182vA==}
@@ -4556,7 +4820,7 @@ packages:
     resolution: {integrity: sha512-Uk65PAhwNkCVBAqJu5t2H9biV+m0JLwJc7m3v2X2A/W8SFJmUqYabBsLH4fOWKI3a7kkR9QDT6HruliIKSfM8w==}
     peerDependencies:
       react: '*'
-      react-native: npm:react-native@0.77.0
+      react-native: '*'
 
   '@react-native-picker/picker@2.11.0':
     resolution: {integrity: sha512-QuZU6gbxmOID5zZgd/H90NgBnbJ3VV6qVzp6c7/dDrmWdX8S0X5YFYgDcQFjE3dRen9wB9FWnj2VVdPU64adSg==}
@@ -5282,7 +5546,7 @@ packages:
     peerDependencies:
       jest: '>=28.0.0'
       react: '>=16.8.0'
-      react-native: npm:react-native@0.77.0
+      react-native: '>=0.59'
       react-test-renderer: '>=16.8.0'
     peerDependenciesMeta:
       jest:
@@ -12637,7 +12901,7 @@ packages:
     resolution: {integrity: sha512-pnAi91oOk8g8ABQKGF5/M9qxmmOPxaAnopyTHYfqYEwJhyFrbbBtHuSgtKEoH0jpcxx5o3hXqH1mNd9/Oi+8iQ==}
     engines: {node: '>=10'}
     peerDependencies:
-      '@types/react': npm:@types/react@19.0.10
+      '@types/react': '*'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -20875,6 +21139,25 @@ snapshots:
       - rollup
       - supports-color
 
+  '@vercel/nft@0.27.10(encoding@0.1.13)(rollup@4.34.8)':
+    dependencies:
+      '@mapbox/node-pre-gyp': 2.0.0(encoding@0.1.13)
+      '@rollup/pluginutils': 5.1.4(rollup@4.34.8)
+      acorn: 8.14.0
+      acorn-import-attributes: 1.9.5(acorn@8.14.0)
+      async-sema: 3.1.1
+      bindings: 1.5.0
+      estree-walker: 2.0.2
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      node-gyp-build: 4.8.4
+      picomatch: 4.0.2
+      resolve-from: 5.0.0
+    transitivePeerDependencies:
+      - encoding
+      - rollup
+      - supports-color
+
   '@vercel/node@5.1.7(encoding@0.1.13)(rollup@2.79.2)':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
@@ -20884,6 +21167,36 @@ snapshots:
       '@vercel/build-utils': 10.1.0
       '@vercel/error-utils': 2.0.3
       '@vercel/nft': 0.27.10(encoding@0.1.13)(rollup@2.79.2)
+      '@vercel/static-config': 3.0.0
+      async-listen: 3.0.0
+      cjs-module-lexer: 1.2.3
+      edge-runtime: 2.5.9
+      es-module-lexer: 1.4.1
+      esbuild: 0.24.2
+      etag: 1.8.1
+      node-fetch: 2.6.9(encoding@0.1.13)
+      path-to-regexp: 6.1.0
+      path-to-regexp-updated: path-to-regexp@6.3.0
+      ts-morph: 12.0.0
+      ts-node: 10.9.1(@types/node@16.18.11)(typescript@5.7.3)
+      typescript: 5.7.3
+      undici: 5.28.4
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - encoding
+      - rollup
+      - supports-color
+
+  '@vercel/node@5.1.7(encoding@0.1.13)(rollup@4.34.8)':
+    dependencies:
+      '@edge-runtime/node-utils': 2.3.0
+      '@edge-runtime/primitives': 4.1.0
+      '@edge-runtime/vm': 3.2.0
+      '@types/node': 16.18.11
+      '@vercel/build-utils': 10.1.0
+      '@vercel/error-utils': 2.0.3
+      '@vercel/nft': 0.27.10(encoding@0.1.13)(rollup@4.34.8)
       '@vercel/static-config': 3.0.0
       async-listen: 3.0.0
       cjs-module-lexer: 1.2.3
