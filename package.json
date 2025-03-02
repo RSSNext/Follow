@@ -51,6 +51,7 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vercel/node": "5.1.7",
+    "async-es": "3.2.6",
     "autoprefixer": "10.4.20",
     "cross-env": "7.0.3",
     "cssnano": "7.0.6",

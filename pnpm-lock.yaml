@@ -109,6 +109,9 @@ importers:
       '@vercel/node':
         specifier: 5.1.7
         version: 5.1.7(encoding@0.1.13)(rollup@2.79.2)
+      async-es:
+        specifier: 3.2.6
+        version: 3.2.6
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.5.2)
@@ -6112,6 +6115,9 @@ packages:
   astral-regex@2.0.0:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
+
+  async-es@3.2.6:
+    resolution: {integrity: sha512-9C2+oOPd7/EzIeneF4k24o75oY7OcHU/Isl7xIot12EBRwXonyuqKsmxwLuAbFWL6B/FucTQip09xTbiu1CA8A==}
 
   async-exit-hook@2.0.1:
     resolution: {integrity: sha512-NW2cX8m1Q7KPA7a5M2ULQeZ2wR5qI5PAbw5L0UOMxdioVk9PMZ0h1TmyZEkPYrCvYjDlFICusOu1dlEKAAeXBw==}
@@ -21491,6 +21497,8 @@ snapshots:
       tslib: 2.8.1
 
   astral-regex@2.0.0: {}
+
+  async-es@3.2.6: {}
 
   async-exit-hook@2.0.1: {}
 
