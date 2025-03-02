@@ -1,6 +1,5 @@
 {
   "name": "@follow/desktop",
-  "type": "module",
   "version": "0.3.7",
   "private": true,
   "repository": {
@@ -40,6 +39,12 @@
     "@electron-forge/publisher-github": "7.7.0",
     "@electron-toolkit/tsconfig": "1.0.1",
     "@eslint/compat": "1.2.6",
+    "@follow/components": "workspace:*",
+    "@follow/constants": "workspace:*",
+    "@follow/hooks": "workspace:*",
+    "@follow/models": "workspace:*",
+    "@follow/shared": "workspace:*",
+    "@follow/utils": "workspace:*",
     "@iconify-json/logos": "1.2.4",
     "@iconify-json/mingcute": "1.2.3",
     "@iconify-json/simple-icons": "1.2.25",

@@ -343,6 +343,24 @@ importers:
       '@eslint/compat':
         specifier: 1.2.6
         version: 1.2.6(eslint@9.20.1(jiti@2.4.2))
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../packages/components
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../packages/models
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@iconify-json/logos':
         specifier: 1.2.4
         version: 1.2.4

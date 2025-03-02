@@ -1,9 +1,9 @@
 import "dotenv/config"
 
 import crypto from "node:crypto"
-import fs, { readdirSync } from "node:fs"
-import { cp, readdir } from "node:fs/promises"
-import path, { resolve } from "node:path"
+import fs from "node:fs"
+// import { cp, readdir } from "node:fs/promises"
+import path from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
@@ -13,9 +13,9 @@ import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
-import setLanguages from "electron-packager-languages"
+// import setLanguages from "electron-packager-languages"
 import yaml from "js-yaml"
-import { rimraf, rimrafSync } from "rimraf"
+// import { rimraf, rimrafSync } from "rimraf"
 
 const platform = process.argv[process.argv.indexOf("--platform") + 1]
 
@@ -32,61 +32,61 @@ const ymlMapsMap = {
 }
 
 const keepModules = new Set(["font-list", "vscode-languagedetection", "fast-folder-size"])
-const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
+// const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
 
 // remove folders & files not to be included in the app
-async function cleanSources(buildPath, _electronVersion, platform, _arch, callback) {
-  // folders & files to be included in the app
-  const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
+// async function cleanSources(buildPath, _electronVersion, platform, _arch, callback) {
+//   // folders & files to be included in the app
+//   const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
 
-  if (platform === "darwin" || platform === "mas") {
-    const frameworkResourcePath = resolve(
-      buildPath,
-      "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
-    )
+//   if (platform === "darwin" || platform === "mas") {
+//     const frameworkResourcePath = resolve(
+//       buildPath,
+//       "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
+//     )
 
-    for (const file of readdirSync(frameworkResourcePath)) {
-      if (file.endsWith(".lproj") && !keepLanguages.has(file.split(".")[0]!)) {
-        rimrafSync(resolve(frameworkResourcePath, file))
-      }
-    }
-  }
+//     for (const file of readdirSync(frameworkResourcePath)) {
+//       if (file.endsWith(".lproj") && !keepLanguages.has(file.split(".")[0]!)) {
+//         rimrafSync(resolve(frameworkResourcePath, file))
+//       }
+//     }
+//   }
 
-  // Keep only node_modules to be included in the app
+//   // Keep only node_modules to be included in the app
 
-  await Promise.all([
-    ...(await readdir(buildPath).then((items) =>
-      items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(buildPath, item))),
-    )),
-    ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
-      items
-        .filter((item) => !keepModules.has(item))
-        .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
-    )),
-  ])
+//   await Promise.all([
+//     ...(await readdir(buildPath).then((items) =>
+//       items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(buildPath, item))),
+//     )),
+//     ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
+//       items
+//         .filter((item) => !keepModules.has(item))
+//         .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
+//     )),
+//   ])
 
-  // copy needed node_modules to be included in the app
-  await Promise.all(
-    Array.from(keepModules.values()).map((item) => {
-      // Check is exist
-      if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
-        // eslint-disable-next-line array-callback-return
-        return
-      }
-      return cp(
-        path.join(process.cwd(), "node_modules", item),
-        path.join(buildPath, "node_modules", item),
-        {
-          recursive: true,
-        },
-      )
-    }),
-  )
+//   // copy needed node_modules to be included in the app
+//   await Promise.all(
+//     Array.from(keepModules.values()).map((item) => {
+//       // Check is exist
+//       if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
+//         // eslint-disable-next-line array-callback-return
+//         return
+//       }
+//       return cp(
+//         path.join(process.cwd(), "node_modules", item),
+//         path.join(buildPath, "node_modules", item),
+//         {
+//           recursive: true,
+//         },
+//       )
+//     }),
+//   )
 
-  callback()
-}
+//   callback()
+// }
 
-const noopAfterCopy = (_buildPath, _electronVersion, _platform, _arch, callback) => callback()
+// const noopAfterCopy = (_buildPath, _electronVersion, _platform, _arch, callback) => callback()
 
 const ignorePattern = new RegExp(`^/node_modules/(?!${[...keepModules].join("|")})`)
 
@@ -104,11 +104,11 @@ const config: ForgeConfig = {
       },
     ],
 
-    afterCopy: [
-      cleanSources,
-      process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
-    ],
-    asar: true,
+    // afterCopy: [
+    //   cleanSources,
+    //   process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
+    // ],
+    asar: false,
     ignore: [ignorePattern],
 
     prune: true,
