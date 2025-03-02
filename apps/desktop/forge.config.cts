@@ -36,14 +36,12 @@ const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
 
 // remove folders & files not to be included in the app
 async function cleanSources(buildPath, _electronVersion, platform, _arch, callback) {
-  const rootPath = path.join(buildPath, "../../")
-
   // folders & files to be included in the app
   const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
 
   if (platform === "darwin" || platform === "mas") {
     const frameworkResourcePath = resolve(
-      rootPath,
+      buildPath,
       "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
     )
 
@@ -57,13 +55,13 @@ async function cleanSources(buildPath, _electronVersion, platform, _arch, callba
   // Keep only node_modules to be included in the app
 
   await Promise.all([
-    ...(await readdir(rootPath).then((items) =>
-      items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(rootPath, item))),
+    ...(await readdir(buildPath).then((items) =>
+      items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(buildPath, item))),
     )),
-    ...(await readdir(path.join(rootPath, "node_modules")).then((items) =>
+    ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
       items
         .filter((item) => !keepModules.has(item))
-        .map((item) => rimraf(path.join(rootPath, "node_modules", item))),
+        .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
     )),
   ])
 
@@ -71,13 +69,13 @@ async function cleanSources(buildPath, _electronVersion, platform, _arch, callba
   await Promise.all(
     Array.from(keepModules.values()).map((item) => {
       // Check is exist
-      if (fs.existsSync(path.join(rootPath, "node_modules", item))) {
+      if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
         // eslint-disable-next-line array-callback-return
         return
       }
       return cp(
-        path.join(process.cwd(), "node_modules", item),
-        path.join(rootPath, "node_modules", item),
+        path.join(process.cwd(), "../../node_modules", item),
+        path.join(buildPath, "node_modules", item),
         {
           recursive: true,
         },
@@ -110,7 +108,7 @@ const config: ForgeConfig = {
       cleanSources,
       process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
     ],
-    asar: false,
+    asar: true,
     ignore: [ignorePattern],
 
     prune: true,
