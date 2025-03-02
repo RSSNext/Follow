@@ -1,7 +1,7 @@
 import plugin from "tailwindcss/plugin"
 import resolveConfig from "tailwindcss/resolveConfig"
 
-import { baseTwConfig } from "./configs/tailwind.base.config"
+import { baseTwConfig } from "../../configs/tailwind.base.config"
 
 const isWebBuild = !!process.env.WEB_BUILD || !!process.env.RN_BUILD || !!process.env.VERCEL
 

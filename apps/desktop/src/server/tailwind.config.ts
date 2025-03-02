@@ -2,7 +2,7 @@ import daisyui from "daisyui"
 import { omit } from "es-toolkit/compat"
 import resolveConfig from "tailwindcss/resolveConfig"
 
-import { baseTwConfig } from "../../configs/tailwind.base.config"
+import { baseTwConfig } from "../../../../configs/tailwind.base.config"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   ...baseTwConfig,
