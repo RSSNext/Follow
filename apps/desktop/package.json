@@ -3,6 +3,8 @@
   "type": "module",
   "version": "0.3.7",
   "private": true,
+  "description": "Follow everything in one place",
+  "author": "Follow Team",
   "repository": {
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
