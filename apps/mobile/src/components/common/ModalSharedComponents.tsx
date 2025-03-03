@@ -1,6 +1,6 @@
 import { withOpacity } from "@follow/utils"
 import { router } from "expo-router"
-import { useMemo } from "react"
+import { useCallback,useMemo  } from "react"
 import { TouchableOpacity } from "react-native"
 
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
@@ -21,8 +21,17 @@ const ModalHeaderCloseButtonImpl = () => {
   const routeOnlyOne = useIsRouteOnlyOne()
   const memoedRouteOnlyOne = useMemo(() => routeOnlyOne, [])
 
+  const handlePress = useCallback(() => {
+    if (router.canDismiss()) {
+      router.dismiss()
+    } else {
+      // If we can't dismiss, redirect to the root route
+      router.replace("/")
+    }
+  }, [])
+
   return (
-    <TouchableOpacity onPress={() => router.dismiss()}>
+    <TouchableOpacity onPress={handlePress}>
       {memoedRouteOnlyOne ? (
         <CloseCuteReIcon height={20} width={20} color={label} />
       ) : (

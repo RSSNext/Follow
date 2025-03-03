@@ -104,6 +104,9 @@ function FollowImpl(props: { feedId: string }) {
       if (!routeOnlyOne) {
         parentRoute?.dispatch(StackActions.popToTop())
       }
+    } else {
+      // If we can't dismiss, redirect to the root route
+      router.replace("/")
     }
   }
 
