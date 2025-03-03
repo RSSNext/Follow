@@ -10,7 +10,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router"
 import { memo, useEffect, useMemo, useState } from "react"
 import type { FieldErrors } from "react-hook-form"
 import { Controller, useForm } from "react-hook-form"
-import { Linking, Text, TouchableOpacity, View } from "react-native"
+import { KeyboardAvoidingView, Linking, Text, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 
 import { BlurEffectWithBottomBorder } from "@/src/components/common/BlurEffect"
@@ -127,64 +127,68 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
       <PortalHost>
         <SafeModalScrollView className="bg-system-grouped-background">
-          <View className="bg-secondary-system-grouped-background mx-2 mt-2 gap-4 rounded-lg px-3 py-6">
-            {keys.map((keyItem) => {
-              const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name]!)
+          {keys.length > 0 && (
+            <View className="bg-secondary-system-grouped-background mx-2 mt-2 gap-4 rounded-lg px-3 py-6">
+              {keys.map((keyItem) => {
+                const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name]!)
 
-              return (
-                <View key={keyItem.name}>
-                  {!parameters?.options && (
-                    <Controller
-                      name={keyItem.name}
-                      control={form.control}
-                      rules={{
-                        required: !keyItem.optional,
-                        // validate: (value) => {
-                        //   return dynamicFormSchema.safeParse({
-                        //     [keyItem.name]: value,
-                        //   }).success
-                        // },
-                      }}
-                      render={({ field: { onChange, onBlur, ref, value } }) => (
-                        <TextField
-                          label={keyItem.name}
-                          required={!keyItem.optional}
-                          wrapperClassName="mt-2"
-                          placeholder={formPlaceholder[keyItem.name]}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          defaultValue={defaultValue[keyItem.name] ?? ""}
-                          value={value ?? ""}
-                          ref={ref}
-                        />
-                      )}
-                    />
-                  )}
+                return (
+                  <View key={keyItem.name}>
+                    {!parameters?.options && (
+                      <Controller
+                        name={keyItem.name}
+                        control={form.control}
+                        rules={{
+                          required: !keyItem.optional,
+                          // validate: (value) => {
+                          //   return dynamicFormSchema.safeParse({
+                          //     [keyItem.name]: value,
+                          //   }).success
+                          // },
+                        }}
+                        render={({ field: { onChange, onBlur, ref, value } }) => (
+                          <KeyboardAvoidingView behavior="padding">
+                            <TextField
+                              label={keyItem.name}
+                              required={!keyItem.optional}
+                              wrapperClassName="mt-2"
+                              placeholder={formPlaceholder[keyItem.name]}
+                              onBlur={onBlur}
+                              onChangeText={onChange}
+                              defaultValue={defaultValue[keyItem.name] ?? ""}
+                              value={value ?? ""}
+                              ref={ref}
+                            />
+                          </KeyboardAvoidingView>
+                        )}
+                      />
+                    )}
 
-                  {!!parameters?.options && (
-                    <Controller
-                      name={keyItem.name}
-                      control={form.control}
-                      render={({ field: { onChange, value } }) => (
-                        <Select
-                          label={keyItem.name}
-                          options={parameters.options ?? []}
-                          value={value}
-                          onValueChange={onChange}
-                        />
-                      )}
-                    />
-                  )}
+                    {!!parameters?.options && (
+                      <Controller
+                        name={keyItem.name}
+                        control={form.control}
+                        render={({ field: { onChange, value } }) => (
+                          <Select
+                            label={keyItem.name}
+                            options={parameters.options ?? []}
+                            value={value}
+                            onValueChange={onChange}
+                          />
+                        )}
+                      />
+                    )}
 
-                  {!!parameters && (
-                    <Text className="text-secondary-label ml-2 mt-1 text-xs">
-                      {parameters.description}
-                    </Text>
-                  )}
-                </View>
-              )
-            })}
-          </View>
+                    {!!parameters && (
+                      <Text className="text-secondary-label ml-2 mt-1 text-xs">
+                        {parameters.description}
+                      </Text>
+                    )}
+                  </View>
+                )
+              })}
+            </View>
+          )}
           <Maintainers maintainers={route.maintainers} />
 
           {!!route.description && (

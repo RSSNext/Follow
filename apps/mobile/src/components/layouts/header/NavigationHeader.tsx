@@ -3,13 +3,12 @@ import { router, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { createElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import type { LayoutChangeEvent } from "react-native"
-import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 import type { AnimatedProps } from "react-native-reanimated"
 import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated"
 import type { DefaultStyle } from "react-native-reanimated/lib/typescript/hook/commonTypes"
@@ -211,27 +210,6 @@ export const NavigationHeader = ({
     })
   }, [animatedRef, setHeaderHeight])
 
-  const [headerLeftWidth, setHeaderLeftWidth] = useState(0)
-
-  const titleBarWidth = useWindowDimensions().width
-  const [titleWidth, setTitleWidth] = useState(0)
-
-  const titleShouldCenterTransformX = useMemo(() => {
-    if (!titleWidth) return 0
-    const halfTitleWidth = titleWidth / 2
-    const currentTitleCenterX =
-      titlebarPaddingHorizontal + headerLeftWidth + titleMarginHorizontal + halfTitleWidth
-    const centerX = titleBarWidth / 2
-
-    const transformX = centerX - currentTitleCenterX
-    return transformX
-  }, [titleBarWidth, titleWidth, headerLeftWidth])
-  const titleTransformX = useSharedValue(0)
-
-  useEffect(() => {
-    titleTransformX.value = withSpring(titleShouldCenterTransformX)
-  }, [titleShouldCenterTransformX, titleTransformX])
-
   return (
     <Animated.View
       ref={animatedRef}
@@ -263,32 +241,28 @@ export const NavigationHeader = ({
       >
         {/* Left */}
         <View
-          className="min-w-6 flex-row items-center justify-start"
+          className="min-w-6 flex-1 flex-row items-center justify-start"
           pointerEvents={"box-none"}
-          onLayout={useCallback((e: LayoutChangeEvent) => {
-            setHeaderLeftWidth(e.nativeEvent.layout.width)
-          }, [])}
         >
           <HeaderLeft canGoBack={canBack} />
         </View>
         {/* Center */}
 
         <Animated.View
-          onLayout={(e: LayoutChangeEvent) => {
-            setTitleWidth(e.nativeEvent.layout.width)
-          }}
-          className="flex-1 items-center justify-center"
+          className="items-center justify-center"
           pointerEvents={"box-none"}
           style={{
             marginHorizontal: titleMarginHorizontal,
-            transform: [{ translateX: titleTransformX }],
           }}
         >
           {headerTitleAbsolute ? <View /> : headerTitle}
         </Animated.View>
 
         {/* Right */}
-        <View className="min-w-6 flex-row items-center justify-end" pointerEvents={"box-none"}>
+        <View
+          className="min-w-6 flex-1 flex-row items-center justify-end"
+          pointerEvents={"box-none"}
+        >
           <RightButton canGoBack={canBack} />
         </View>
         <View
