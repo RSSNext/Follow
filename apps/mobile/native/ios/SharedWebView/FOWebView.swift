@@ -26,12 +26,13 @@ class FOWebView: WKWebView {
 
   }
 
-  private let delegate: WebViewDelegate!
+  private var state: WebViewState!
 
   init(frame: CGRect, state: WebViewState) {
     let configuration = WKWebViewConfiguration()
+    self.state = state
     let viewController = Utils.getRootVC()!
-    self.delegate = WebViewDelegate(state: state, viewController: viewController)
+ 
 
     super.init(frame: frame, configuration: configuration)
 
@@ -119,13 +120,12 @@ class FOWebView: WKWebView {
       forMainFrameOnly: true
     )
 
-    configuration.userContentController.add(delegate, name: "message")
+    configuration.userContentController.add(self, name: "message")
     configuration.userContentController.addUserScript(script2)
 
     setupView()
-    navigationDelegate = delegate
-    uiDelegate = delegate
-
+    navigationDelegate = self
+    uiDelegate = self
   }
 
   required init?(coder: NSCoder) {
@@ -157,17 +157,9 @@ extension FOWebView {
 
 }
 
-private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate
+extension FOWebView: WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate
 {
-  private let state: WebViewState
-  private weak var viewController: UIViewController?
-
-  init(state: WebViewState, viewController: UIViewController?) {
-    self.state = state
-    self.viewController = viewController
-    super.init()
-  }
-
+ 
   func userContentController(
     _ userContentController: WKUserContentController, didReceive message: WKScriptMessage
   ) {
@@ -237,7 +229,7 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
     for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures
   ) -> WKWebView? {
     if let url = navigationAction.request.url,
-      let viewController = self.viewController
+      let viewController = Utils.getRootVC()
     {
       WebViewManager.presentModalWebView(url: url, from: viewController)
     }
@@ -250,7 +242,7 @@ private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHa
   ) {
     if navigationAction.targetFrame == nil {
       if let url = navigationAction.request.url,
-        let viewController = self.viewController
+         let viewController = Utils.getRootVC()
       {
         WebViewManager.presentModalWebView(url: url, from: viewController)
         decisionHandler(.cancel)
