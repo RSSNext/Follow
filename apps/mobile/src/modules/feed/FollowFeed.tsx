@@ -30,7 +30,7 @@ const formSchema = z.object({
   isPrivate: z.boolean().optional(),
   title: z.string().optional(),
 })
-const defaultValues = { view: FeedViewType.Articles.toString() }
+const defaultValues = { view: FeedViewType.Articles }
 export function FollowFeed(props: { id: string }) {
   const { id } = props
   const feed = useFeed(id as string)
@@ -87,7 +87,7 @@ function FollowImpl(props: { feedId: string }) {
     const values = form.getValues()
     const body: SubscriptionForm = {
       url: feed.url,
-      view: Number.parseInt(values.view),
+      view: values.view,
       category: values.category ?? "",
       isPrivate: values.isPrivate ?? false,
       title: values.title ?? "",
