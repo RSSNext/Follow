@@ -1,5 +1,7 @@
 import { Stack } from "expo-router"
 
+import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedComponents"
+
 export default function ModalLayout() {
   return (
     <Stack>
@@ -32,6 +34,22 @@ export default function ModalLayout() {
         options={{
           title: "Profile",
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="forget-password"
+        options={{
+          title: "",
+          headerTransparent: true,
+          headerLeft: ModalHeaderCloseButton,
+        }}
+      />
+      <Stack.Screen
+        name="sign-up"
+        options={{
+          title: "",
+          headerTransparent: true,
+          headerLeft: ModalHeaderCloseButton,
         }}
       />
     </Stack>

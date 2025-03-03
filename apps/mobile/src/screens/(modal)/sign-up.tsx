@@ -4,35 +4,41 @@ import { router } from "expo-router"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
 import { z } from "zod"
 
 import { SubmitButton } from "@/src/components/common/SubmitButton"
-import { signIn } from "@/src/lib/auth"
+import { Logo } from "@/src/components/ui/logo"
+import { signUp } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
 import { accentColor } from "@/src/theme/colors"
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(128),
-})
+const formSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8).max(128),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
 
 type FormValue = z.infer<typeof formSchema>
 
 async function onSubmit(values: FormValue) {
-  await signIn
+  await signUp
     .email({
       email: values.email,
       password: values.password,
+      name: values.email.split("@")[0] ?? "",
     })
     .then((res) => {
       if (res.error) {
         throw new Error(res.error.message)
-      }
-      // @ts-expect-error
-      if (res.data.twoFactorRedirect) {
-        router.push("/2fa")
+      } else {
+        router.back()
       }
     })
     .catch((error) => {
@@ -62,12 +68,13 @@ function Input({
   )
 }
 
-export function EmailLogin() {
+function EmailSignUp() {
   const { control, handleSubmit, formState } = useForm<FormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   })
 
@@ -111,6 +118,21 @@ export function EmailLogin() {
             placeholder="Password"
             className="text-text flex-1"
             secureTextEntry
+            returnKeyType="next"
+          />
+        </View>
+        <View className="border-b-opaque-separator border-b-hairline" />
+        <View className="flex-row">
+          <Input
+            hitSlop={20}
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="current-password"
+            control={control}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            className="text-text flex-1"
+            secureTextEntry
             returnKeyType="go"
             onSubmitEditing={() => {
               login()
@@ -118,12 +140,6 @@ export function EmailLogin() {
           />
         </View>
       </View>
-      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/forget-password")}>
-        <Text className="text-link m-[6] text-[16px]">Forgot password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/sign-up")}>
-        <Text className="text-link m-[6] text-[16px]">Don't have an Follow account?</Text>
-      </TouchableOpacity>
       <SubmitButton
         disabled={submitMutation.isPending || !formState.isValid}
         isLoading={submitMutation.isPending}
@@ -131,6 +147,27 @@ export function EmailLogin() {
         title="Continue"
         className="mt-8"
       />
+    </View>
+  )
+}
+
+export default function SignUpModal() {
+  return (
+    <View className="p-safe flex-1">
+      <TouchableWithoutFeedback
+        onPress={() => {
+          KeyboardController.dismiss()
+        }}
+        accessible={false}
+      >
+        <View className="flex-1 items-center gap-8">
+          <Logo style={{ width: 80, height: 80 }} />
+          <Text className="text-label text-3xl">
+            Sign up to <Text className="font-bold">Follow</Text>
+          </Text>
+          <EmailSignUp />
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
