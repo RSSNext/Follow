@@ -20,6 +20,7 @@ import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
+import { useWhoami } from "@/src/store/user/hooks"
 
 const Stack = createNativeStackNavigator()
 const OutIsFocused = createContext(false)
@@ -95,6 +96,8 @@ function Settings() {
     },
   )
 
+  const whoami = useWhoami()
+
   return (
     <>
       <ReAnimatedScrollView
@@ -108,7 +111,7 @@ function Settings() {
         className="bg-system-grouped-background flex-1"
         scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
       >
-        <UserHeaderBanner scrollY={animatedScrollY} />
+        {whoami && <UserHeaderBanner scrollY={animatedScrollY} userId={whoami.id} />}
 
         <SettingsList scrollRef={registerNavigationScrollView} />
       </ReAnimatedScrollView>
