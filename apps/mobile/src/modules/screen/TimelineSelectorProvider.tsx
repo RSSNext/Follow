@@ -20,7 +20,6 @@ import { getFeed } from "@/src/store/feed/getter"
 
 import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
-const HEADER_ACTIONS_GROUP_WIDTH = 60
 export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
   const scrollY = useAnimatedValue(0)
   const viewTitle = useSelectedFeedTitle()
@@ -37,16 +36,8 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
         headerLeft={useMemo(
           () =>
             isTimeline || isSubscriptions
-              ? () => (
-                  <View style={{ width: HEADER_ACTIONS_GROUP_WIDTH }}>
-                    <HomeLeftAction />
-                  </View>
-                )
-              : () => (
-                  <View style={{ width: HEADER_ACTIONS_GROUP_WIDTH }}>
-                    <DefaultHeaderBackButton canGoBack={true} />
-                  </View>
-                ),
+              ? () => <HomeLeftAction />
+              : () => <DefaultHeaderBackButton canGoBack={true} />,
           [isTimeline, isSubscriptions],
         )}
         headerRight={useMemo(() => {
@@ -69,16 +60,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
           })()
 
           if (Component)
-            return () => (
-              <View
-                style={{
-                  width: HEADER_ACTIONS_GROUP_WIDTH,
-                }}
-                className="flex-row items-center justify-end"
-              >
-                {Component()}
-              </View>
-            )
+            return () => <View className="flex-row items-center justify-end">{Component()}</View>
           return
         }, [isFeed, isTimeline, isSubscriptions, params])}
         headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}

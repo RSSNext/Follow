@@ -26,7 +26,7 @@
     "typecheck": {
       "dependsOn": ["@follow/electron-main#build"]
     },
-    "@follow/server#build": {
+    "@follow/ssr#build": {
       "outputs": ["dist/**"]
     },
     "dev": {
