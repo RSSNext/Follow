@@ -14,7 +14,6 @@ import { VitePWA } from "vite-plugin-pwa"
 
 import type { env as EnvType } from "../../packages/shared/src/env"
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
-import { cleanupUnnecessaryFilesPlugin } from "./plugins/vite/cleanup"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
 import manifestPlugin from "./plugins/vite/manifest"
@@ -274,24 +273,10 @@ export default ({ mode }) => {
         ["zod", "react-hook-form", "@hookform/resolvers"],
       ]),
 
-      createPlatformSpecificImportPlugin(isWebBuild ? "web" : isRNBuild ? "rn" : "web"),
+      createPlatformSpecificImportPlugin(isWebBuild ? "web" : "electron"),
       isWebBuild && manifestPlugin(),
       isWebBuild && htmlPlugin(typedEnv),
       process.env.analyzer && analyzer(),
-      isRNBuild &&
-        cleanupUnnecessaryFilesPlugin([
-          "og-image.png",
-          "icon-512x512.png",
-          "opengraph-image.png",
-          "favicon.ico",
-          "icon-192x192.png",
-          "favicon-dev.ico",
-          "apple-touch-icon-180x180.png",
-          "maskable-icon-512x512.png",
-          "pwa-64x64.png",
-          "pwa-192x192.png",
-          "pwa-512x512.png",
-        ]),
     ],
 
     define: {
