@@ -17,7 +17,7 @@ export const SafeModalScrollView = (props: SafeModalScrollViewProps) => {
   const animatedY = useSharedValue(0)
   const animatedRef = useAnimatedRef<ScrollView>()
   return (
-    <View className="bg-yellow flex-1">
+    <View className="flex-1">
       <ModalScrollViewContext.Provider
         value={useMemo(() => ({ scrollViewRef: animatedRef, animatedY }), [animatedRef, animatedY])}
       >

@@ -283,6 +283,7 @@ const ModalHeaderSubmitButtonImpl = ({
   const [isLoading, setIsLoading] = useState(false)
 
   const submit = form.handleSubmit((_data) => {
+    setIsLoading(true)
     const data = Object.fromEntries(
       Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
     )
@@ -307,8 +308,6 @@ const ModalHeaderSubmitButtonImpl = ({
       // if (router.canDismiss()) {
       //   router.dismiss()
       // }
-
-      setIsLoading(true)
 
       feedSyncServices
         .fetchFeedById({ url: finalUrl })

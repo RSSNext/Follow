@@ -117,8 +117,8 @@ const Impl = (props: { id: string }) => {
   }, [isDirty, navigation])
   return (
     <SafeModalScrollView
-      className="bg-system-grouped-background mt-2"
-      contentContainerClassName="gap-y-4"
+      className="bg-system-grouped-background"
+      contentContainerClassName="gap-y-4 mt-2"
     >
       <ModalHeader
         headerTitle={`${isSubscribed ? "Edit" : "Follow"} - ${list?.title}`}

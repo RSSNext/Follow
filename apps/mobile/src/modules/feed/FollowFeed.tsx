@@ -25,7 +25,7 @@ import { subscriptionSyncService } from "@/src/store/subscription/store"
 import type { SubscriptionForm } from "@/src/store/subscription/types"
 
 const formSchema = z.object({
-  view: z.string(),
+  view: z.coerce.number(),
   category: z.string().nullable().optional(),
   isPrivate: z.boolean().optional(),
   title: z.string().optional(),
@@ -123,8 +123,8 @@ function FollowImpl(props: { feedId: string }) {
 
   return (
     <SafeModalScrollView
-      className="bg-system-grouped-background mt-2"
-      contentContainerClassName="gap-y-4"
+      className="bg-system-grouped-background"
+      contentContainerClassName="gap-y-4 mt-2"
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
       <ModalHeader
