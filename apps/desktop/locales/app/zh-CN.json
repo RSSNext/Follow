@@ -105,6 +105,7 @@
   "discover.target.feeds": "订阅源",
   "discover.target.label": "搜索",
   "discover.target.lists": "列表",
+  "entry_actions.image_gallery": "图片库",
   "entry_actions.copied_notify": "{{which}}已复制到剪贴板。",
   "entry_actions.copy_link": "复制链接",
   "entry_actions.copy_title": "复制标题",
