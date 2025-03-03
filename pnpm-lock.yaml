@@ -18,43 +18,43 @@ overrides:
 
 patchedDependencies:
   '@microflash/remark-callout-directives':
-    hash: 6160b1cf0eab6deca36415693dda703746edcd42e0e64b9174294e2210481396
+    hash: bl6uhe4vs4xm3d2jmecdpzbh2m
     path: patches/@microflash__remark-callout-directives.patch
   '@mozilla/readability':
-    hash: b3cfe10b464e980acbe8cc8bbeeab3e1b468381e75d161005192ea3c994eef56
+    hash: 43niildbdafdxi7qfcwhpkkxwa
     path: patches/@mozilla__readability.patch
   '@pengx17/electron-forge-maker-appimage':
-    hash: 5b5ab1ba36e8c0d7ffee912ebf29c1a18bc101c9c661ceb1bb0bda3deaf4c667
+    hash: vov3v67fgv3lrfz3n24bnubw4m
     path: patches/@pengx17__electron-forge-maker-appimage.patch
   daisyui:
-    hash: 3a8f5f7ef76a29355b99bb425ff894e55ccab4335656eedbce80ef95f3e2e3f8
+    hash: igsntdatmoaxzwxof4bkkh35fy
     path: patches/daisyui.patch
   devlop:
-    hash: 85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295
+    hash: xzgzapu45daboiid4fiusduvwa
     path: patches/devlop.patch
   electron-context-menu:
-    hash: c02f44f34d5af2bce9cc9df045523cf9802abd17ae9477959e950f48e370ddfe
+    hash: c53at4t5fflixuwjz35hmcqdu4
     path: patches/electron-context-menu.patch
   hono:
-    hash: 6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7
+    hash: qptujxncoai6tukc4qaqsrqk24
     path: patches/hono.patch
   immer@10.1.1:
-    hash: 594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c
+    hash: og7mbnoo5vh43tjlw5rbmrdbvu
     path: patches/immer@10.1.1.patch
   jsonpointer:
-    hash: ad796d54956ca5a7e9e5232503e5f22d4ffa732fc4552a7e53121ea5fa81d6c1
+    hash: prxuhlhyjugus5tiew4vc3pahu
     path: patches/jsonpointer.patch
   re-resizable:
-    hash: 3ade7aa99a03addf6dd453360e3cebfbaa12c907b138352110ad38cd65495c0d
+    hash: yitcmpfwcomg2fky72uc3lhk2i
     path: patches/re-resizable@6.9.17.patch
   react-native-sheet-transitions:
-    hash: eea5876801b0aa7bd33f0ddfe1a350a37e2bf54a1d4e78537713693db7c79265
+    hash: xmkq4ssu3mefxtr2e65xl27hxi
     path: patches/react-native-sheet-transitions.patch
   react-native-track-player:
-    hash: debcf90daeaf7d38c744ecb11cded73b5bfc671b8d0937865ec21307414761b3
+    hash: ul2ym56izpf2mkfucn2nug6afu
     path: patches/react-native-track-player.patch
   workbox-precaching:
-    hash: 51e57c78af317e292b43fca4b72f57b247b7b1a1faa8b03c8881ddb798c7c52f
+    hash: frtipzgil4wle57aliuhcr746e
     path: patches/workbox-precaching.patch
 
 importers:
@@ -258,7 +258,7 @@ importers:
         version: link:../../packages/utils
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
-        version: 1.2.1(patch_hash=5b5ab1ba36e8c0d7ffee912ebf29c1a18bc101c9c661ceb1bb0bda3deaf4c667)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
+        version: 1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)
       '@sentry/vite-plugin':
         specifier: 3.1.2
         version: 3.1.2(encoding@0.1.13)
@@ -309,7 +309,7 @@ importers:
         version: 17.1.1
       hono:
         specifier: 4.7.2
-        version: 4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7)
+        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
       html-minifier-terser:
         specifier: 7.2.0
         version: 7.2.0
@@ -360,7 +360,7 @@ importers:
         version: link:../../../../packages/utils
       '@mozilla/readability':
         specifier: 0.5.0
-        version: 0.5.0(patch_hash=b3cfe10b464e980acbe8cc8bbeeab3e1b468381e75d161005192ea3c994eef56)
+        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -381,7 +381,7 @@ importers:
         version: 3.2.4
       electron-context-menu:
         specifier: 4.0.5
-        version: 4.0.5(patch_hash=c02f44f34d5af2bce9cc9df045523cf9802abd17ae9477959e950f48e370ddfe)
+        version: 4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
       electron-log:
         specifier: 5.3.0
         version: 5.3.0
@@ -451,7 +451,7 @@ importers:
         version: 4.0.0
       hono:
         specifier: 4.7.2
-        version: 4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7)
+        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
 
   apps/desktop/src/renderer:
     dependencies:
@@ -610,7 +610,7 @@ importers:
         version: 6.2.1
       immer:
         specifier: 10.1.1
-        version: 10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c)
+        version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
       jotai:
         specifier: 2.12.1
         version: 2.12.1(@types/react@18.3.12)(react@18.3.1)
@@ -637,7 +637,7 @@ importers:
         version: 0.1.1(shiki@3.0.0)
       re-resizable:
         specifier: 6.10.3
-        version: 6.10.3(patch_hash=3ade7aa99a03addf6dd453360e3cebfbaa12c907b138352110ad38cd65495c0d)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 6.10.3(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-blurhash:
         specifier: 0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
@@ -697,7 +697,7 @@ importers:
         version: 3.24.2
       zustand:
         specifier: 5.0.3
-        version: 5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
+        version: 5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     devDependencies:
       '@follow/atoms':
         specifier: workspace:*
@@ -782,7 +782,7 @@ importers:
         version: 7.2.0(@react-navigation/native@7.0.14(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-safe-area-context@5.2.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-screens@4.7.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       '@react-navigation/drawer':
         specifier: 7.1.1
-        version: 7.1.1(d7f613461f24e2c40a6cc568f02bb648)
+        version: 7.1.1(dn4ugkyn452xw2pin3a3e5hzee)
       '@react-navigation/native':
         specifier: 7.0.14
         version: 7.0.14(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
@@ -863,7 +863,7 @@ importers:
         version: 17.0.6(expo@52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))
       expo-router:
         specifier: 4.0.17
-        version: 4.0.17(30f303d6cb73ff19a9afec936d8c1f1a)
+        version: 4.0.17(sx2rg5pf3yaycbspmpqenw3xmi)
       expo-secure-store:
         specifier: 14.0.1
         version: 14.0.1(expo@52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))
@@ -893,10 +893,10 @@ importers:
         version: 14.0.2(expo@52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))
       hono:
         specifier: 4.7.2
-        version: 4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7)
+        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
       immer:
         specifier: 10.1.1
-        version: 10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c)
+        version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
       jotai:
         specifier: 2.12.1
         version: 2.12.1(@types/react@18.3.12)(react@18.3.1)
@@ -968,16 +968,16 @@ importers:
         version: 4.7.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-sheet-transitions:
         specifier: 0.1.2
-        version: 0.1.2(patch_hash=eea5876801b0aa7bd33f0ddfe1a350a37e2bf54a1d4e78537713693db7c79265)(react-native-gesture-handler@2.23.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+        version: 0.1.2(patch_hash=xmkq4ssu3mefxtr2e65xl27hxi)(react-native-gesture-handler@2.23.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-svg:
         specifier: 15.11.1
         version: 15.11.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-track-player:
         specifier: 4.1.1
-        version: 4.1.1(patch_hash=debcf90daeaf7d38c744ecb11cded73b5bfc671b8d0937865ec21307414761b3)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+        version: 4.1.1(patch_hash=ul2ym56izpf2mkfucn2nug6afu)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-uikit-colors:
         specifier: 0.3.8
-        version: 0.3.8(ed15ab00377db288d93141a3c7941664)
+        version: 0.3.8(fe3lmks7adwcuf5fbpjna3wt2m)
       react-native-volume-manager:
         specifier: 2.0.8
         version: 2.0.8(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
@@ -1004,7 +1004,7 @@ importers:
         version: 3.24.2
       zustand:
         specifier: 5.0.3
-        version: 5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
+        version: 5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     devDependencies:
       '@babel/core':
         specifier: 7.26.9
@@ -1045,7 +1045,7 @@ importers:
     devDependencies:
       expo-module-scripts:
         specifier: 4.0.4
-        version: 4.0.4(25514b866b587ff076b66a9baf82537e)
+        version: 4.0.4(v6ktukj2nf4iuhjuuz6cntfrdu)
 
   apps/mobile/web-app: {}
 
@@ -1171,7 +1171,7 @@ importers:
         version: 4.0.3
       daisyui:
         specifier: 4.12.23
-        version: 4.12.23(patch_hash=3a8f5f7ef76a29355b99bb425ff894e55ccab4335656eedbce80ef95f3e2e3f8)(postcss@8.5.2)
+        version: 4.12.23(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.5.2)
       dotenv-flow:
         specifier: 4.1.0
         version: 4.1.0
@@ -1249,7 +1249,7 @@ importers:
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@microflash/remark-callout-directives':
         specifier: 4.3.3
-        version: 4.3.3(patch_hash=6160b1cf0eab6deca36415693dda703746edcd42e0e64b9174294e2210481396)
+        version: 4.3.3(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)
       '@radix-ui/react-avatar':
         specifier: 1.1.3
         version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1460,7 +1460,7 @@ importers:
         version: link:../utils
       hono:
         specifier: 4.7.2
-        version: 4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7)
+        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
 
   packages/shared:
     dependencies:
@@ -1472,7 +1472,7 @@ importers:
         version: 1.0.1(@types/node@22.13.4)
       '@hono/node-server':
         specifier: 1.13.8
-        version: 1.13.8(hono@4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7))
+        version: 1.13.8(hono@4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24))
       '@t3-oss/env-core':
         specifier: 0.12.0
         version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
@@ -1484,7 +1484,7 @@ importers:
         version: 0.39.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.1)(expo-sqlite@15.1.2(expo@52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(kysely@0.27.5)
       hono:
         specifier: 4.7.2
-        version: 4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7)
+        version: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
       sonner:
         specifier: 2.0.0
         version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -15162,7 +15162,7 @@ snapshots:
     dependencies:
       ajv: 8.17.1
       json-schema: 0.4.0
-      jsonpointer: 5.0.1(patch_hash=ad796d54956ca5a7e9e5232503e5f22d4ffa732fc4552a7e53121ea5fa81d6c1)
+      jsonpointer: 5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu)
       leven: 3.1.0
 
   '@auth/core@0.37.4':
@@ -17810,9 +17810,9 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hono/node-server@1.13.8(hono@4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7))':
+  '@hono/node-server@1.13.8(hono@4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24))':
     dependencies:
-      hono: 4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7)
+      hono: 4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24)
 
   '@hookform/resolvers@4.1.0(react-hook-form@7.54.2(react@18.3.1))':
     dependencies:
@@ -18216,7 +18216,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@microflash/remark-callout-directives@4.3.3(patch_hash=6160b1cf0eab6deca36415693dda703746edcd42e0e64b9174294e2210481396)':
+  '@microflash/remark-callout-directives@4.3.3(patch_hash=bl6uhe4vs4xm3d2jmecdpzbh2m)':
     dependencies:
       defu: 6.1.4
       hastscript: 9.0.0
@@ -18225,7 +18225,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mozilla/readability@0.5.0(patch_hash=b3cfe10b464e980acbe8cc8bbeeab3e1b468381e75d161005192ea3c994eef56)': {}
+  '@mozilla/readability@0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)': {}
 
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
     optional: true
@@ -18815,7 +18815,7 @@ snapshots:
       pvtsutils: 1.3.6
       tslib: 2.8.1
 
-  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=5b5ab1ba36e8c0d7ffee912ebf29c1a18bc101c9c661ceb1bb0bda3deaf4c667)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)':
+  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=vov3v67fgv3lrfz3n24bnubw4m)(dmg-builder@25.1.8)(electron-builder-squirrel-windows@25.1.8)':
     dependencies:
       '@electron-forge/maker-base': 7.7.0
       '@electron-forge/shared-types': 7.7.0
@@ -19766,7 +19766,7 @@ snapshots:
       use-latest-callback: 0.2.3(react@18.3.1)
       use-sync-external-store: 1.4.0(react@18.3.1)
 
-  '@react-navigation/drawer@7.1.1(d7f613461f24e2c40a6cc568f02bb648)':
+  '@react-navigation/drawer@7.1.1(dn4ugkyn452xw2pin3a3e5hzee)':
     dependencies:
       '@react-navigation/elements': 2.2.5(@react-navigation/native@7.0.14(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-safe-area-context@5.2.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       '@react-navigation/native': 7.0.14(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
@@ -22835,7 +22835,7 @@ snapshots:
 
   culori@3.3.0: {}
 
-  daisyui@4.12.23(patch_hash=3a8f5f7ef76a29355b99bb425ff894e55ccab4335656eedbce80ef95f3e2e3f8)(postcss@8.5.2):
+  daisyui@4.12.23(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.5.2):
     dependencies:
       css-selector-tokenizer: 0.8.0
       culori: 3.3.0
@@ -23037,7 +23037,7 @@ snapshots:
   detect-node@2.1.0:
     optional: true
 
-  devlop@1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295):
+  devlop@1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa):
     dependencies:
       dequal: 2.0.3
 
@@ -23328,7 +23328,7 @@ snapshots:
       - dmg-builder
       - supports-color
 
-  electron-context-menu@4.0.5(patch_hash=c02f44f34d5af2bce9cc9df045523cf9802abd17ae9477959e950f48e370ddfe):
+  electron-context-menu@4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4):
     dependencies:
       cli-truncate: 4.0.0
       electron-dl: 4.0.0
@@ -24465,7 +24465,7 @@ snapshots:
       expo: 52.0.35(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.2(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5)
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
 
-  expo-module-scripts@4.0.4(25514b866b587ff076b66a9baf82537e):
+  expo-module-scripts@4.0.4(v6ktukj2nf4iuhjuuz6cntfrdu):
     dependencies:
       '@babel/cli': 7.26.4(@babel/core@7.26.9)
       '@babel/plugin-transform-export-namespace-from': 7.25.9(@babel/core@7.26.9)
@@ -24480,7 +24480,7 @@ snapshots:
       commander: 12.1.0
       eslint-config-universe: 14.0.0(@types/eslint@9.6.1)(eslint@9.20.1(jiti@2.4.2))(prettier@3.5.1)(typescript@5.7.3)
       glob: 10.4.5
-      jest-expo: 52.0.4(5937d57bbb55980896a92c1ef7b3e587)
+      jest-expo: 52.0.4(2en54dacn5jatfqxv77ym5375i)
       jest-snapshot-prettier: prettier@2.8.8
       jest-watch-typeahead: 2.2.1(jest@29.7.0(@types/node@22.13.4)(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
       resolve-workspace-root: 2.0.0
@@ -24526,7 +24526,7 @@ snapshots:
     dependencies:
       invariant: 2.2.4
 
-  expo-router@4.0.17(30f303d6cb73ff19a9afec936d8c1f1a):
+  expo-router@4.0.17(sx2rg5pf3yaycbspmpqenw3xmi):
     dependencies:
       '@expo/metro-runtime': 4.0.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))
       '@expo/server': 0.5.1(typescript@5.7.3)
@@ -24547,7 +24547,7 @@ snapshots:
       semver: 7.6.3
       server-only: 0.0.1
     optionalDependencies:
-      '@react-navigation/drawer': 7.1.1(d7f613461f24e2c40a6cc568f02bb648)
+      '@react-navigation/drawer': 7.1.1(dn4ugkyn452xw2pin3a3e5hzee)
       react-native-reanimated: 3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
     transitivePeerDependencies:
       - '@react-native-masked-view/masked-view'
@@ -25459,7 +25459,7 @@ snapshots:
   hast-util-from-html@2.0.3:
     dependencies:
       '@types/hast': 3.0.4
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       hast-util-from-parse5: 8.0.2
       parse5: 7.2.1
       vfile: 5.3.7
@@ -25469,7 +25469,7 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.4
       '@types/unist': 3.0.3
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       hastscript: 9.0.0
       property-information: 6.5.0
       vfile: 5.3.7
@@ -25521,7 +25521,7 @@ snapshots:
       bcp-47-match: 2.0.3
       comma-separated-tokens: 2.0.3
       css-selector-parser: 3.0.5
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       direction: 2.0.1
       hast-util-has-property: 3.0.0
       hast-util-to-string: 3.0.1
@@ -25552,7 +25552,7 @@ snapshots:
       '@types/hast': 3.0.4
       '@types/unist': 3.0.3
       comma-separated-tokens: 2.0.3
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       estree-util-is-identifier-name: 3.0.0
       hast-util-whitespace: 3.0.0
       mdast-util-mdx-expression: 2.0.1
@@ -25636,7 +25636,7 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hono@4.7.2(patch_hash=6047bef19d376e1a11e462a082e491d7320d00056c604b105cb9a04be4657bb7): {}
+  hono@4.7.2(patch_hash=qptujxncoai6tukc4qaqsrqk24): {}
 
   hosted-git-info@2.8.9: {}
 
@@ -25806,7 +25806,7 @@ snapshots:
 
   immediate@3.0.6: {}
 
-  immer@10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c): {}
+  immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu): {}
 
   import-fresh@2.0.0:
     dependencies:
@@ -26023,7 +26023,7 @@ snapshots:
       generate-function: 2.3.1
       generate-object-property: 1.2.0
       is-my-ip-valid: 1.0.1
-      jsonpointer: 5.0.1(patch_hash=ad796d54956ca5a7e9e5232503e5f22d4ffa732fc4552a7e53121ea5fa81d6c1)
+      jsonpointer: 5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu)
       xtend: 4.0.2
     optional: true
 
@@ -26318,7 +26318,7 @@ snapshots:
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
-  jest-expo@52.0.4(5937d57bbb55980896a92c1ef7b3e587):
+  jest-expo@52.0.4(2en54dacn5jatfqxv77ym5375i):
     dependencies:
       '@expo/config': 10.0.10
       '@expo/json-file': 9.0.2
@@ -26775,7 +26775,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jsonpointer@5.0.1(patch_hash=ad796d54956ca5a7e9e5232503e5f22d4ffa732fc4552a7e53121ea5fa81d6c1): {}
+  jsonpointer@5.0.1(patch_hash=prxuhlhyjugus5tiew4vc3pahu): {}
 
   jsonwebtoken@9.0.0:
     dependencies:
@@ -27256,7 +27256,7 @@ snapshots:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       ccount: 2.0.1
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
       parse-entities: 4.0.2
@@ -27277,7 +27277,7 @@ snapshots:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       decode-named-character-reference: 1.0.2
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-to-string: 4.0.0
       micromark: 4.0.1
       micromark-util-decode-numeric-character-reference: 2.0.2
@@ -27293,14 +27293,14 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       ccount: 2.0.1
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-find-and-replace: 3.0.2
       micromark-util-character: 2.1.1
 
   mdast-util-gfm-footnote@2.1.0:
     dependencies:
       '@types/mdast': 4.0.4
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
       micromark-util-normalize-identifier: 2.0.1
@@ -27318,7 +27318,7 @@ snapshots:
   mdast-util-gfm-table@2.0.0:
     dependencies:
       '@types/mdast': 4.0.4
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       markdown-table: 3.0.4
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
@@ -27328,7 +27328,7 @@ snapshots:
   mdast-util-gfm-task-list-item@2.0.0:
     dependencies:
       '@types/mdast': 4.0.4
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
@@ -27351,7 +27351,7 @@ snapshots:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
@@ -27364,7 +27364,7 @@ snapshots:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       ccount: 2.0.1
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
       parse-entities: 4.0.2
@@ -27379,7 +27379,7 @@ snapshots:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       mdast-util-from-markdown: 2.0.2
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
@@ -27395,7 +27395,7 @@ snapshots:
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
       '@ungap/structured-clone': 1.3.0
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
@@ -27615,7 +27615,7 @@ snapshots:
   micromark-core-commonmark@2.0.2:
     dependencies:
       decode-named-character-reference: 1.0.2
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-destination: 2.0.1
       micromark-factory-label: 2.0.1
       micromark-factory-space: 2.0.1
@@ -27633,7 +27633,7 @@ snapshots:
 
   micromark-extension-directive@3.0.2:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-space: 2.0.1
       micromark-factory-whitespace: 2.0.1
       micromark-util-character: 2.1.1
@@ -27650,7 +27650,7 @@ snapshots:
 
   micromark-extension-gfm-footnote@2.1.0:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-core-commonmark: 2.0.2
       micromark-factory-space: 2.0.1
       micromark-util-character: 2.1.1
@@ -27661,7 +27661,7 @@ snapshots:
 
   micromark-extension-gfm-strikethrough@2.1.0:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-chunked: 2.0.1
       micromark-util-classify-character: 2.0.1
       micromark-util-resolve-all: 2.0.1
@@ -27670,7 +27670,7 @@ snapshots:
 
   micromark-extension-gfm-table@2.1.1:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-space: 2.0.1
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
@@ -27682,7 +27682,7 @@ snapshots:
 
   micromark-extension-gfm-task-list-item@2.1.0:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-factory-space: 2.0.1
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
@@ -27707,7 +27707,7 @@ snapshots:
 
   micromark-factory-label@2.0.1:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.1
@@ -27782,7 +27782,7 @@ snapshots:
 
   micromark-util-subtokenize@2.0.4:
     dependencies:
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-util-chunked: 2.0.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.1
@@ -27796,7 +27796,7 @@ snapshots:
       '@types/debug': 4.1.12
       debug: 4.4.0(supports-color@8.1.1)
       decode-named-character-reference: 1.0.2
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       micromark-core-commonmark: 2.0.2
       micromark-factory-space: 2.0.1
       micromark-util-character: 2.1.1
@@ -29170,7 +29170,7 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  re-resizable@6.10.3(patch_hash=3ade7aa99a03addf6dd453360e3cebfbaa12c907b138352110ad38cd65495c0d)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  re-resizable@6.10.3(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -29386,7 +29386,7 @@ snapshots:
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
       warn-once: 0.1.1
 
-  react-native-sheet-transitions@0.1.2(patch_hash=eea5876801b0aa7bd33f0ddfe1a350a37e2bf54a1d4e78537713693db7c79265)(react-native-gesture-handler@2.23.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
+  react-native-sheet-transitions@0.1.2(patch_hash=xmkq4ssu3mefxtr2e65xl27hxi)(react-native-gesture-handler@2.23.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
@@ -29401,12 +29401,12 @@ snapshots:
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
       warn-once: 0.1.1
 
-  react-native-track-player@4.1.1(patch_hash=debcf90daeaf7d38c744ecb11cded73b5bfc671b8d0937865ec21307414761b3)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
+  react-native-track-player@4.1.1(patch_hash=ul2ym56izpf2mkfucn2nug6afu)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-native: 0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
 
-  react-native-uikit-colors@0.3.8(ed15ab00377db288d93141a3c7941664):
+  react-native-uikit-colors@0.3.8(fe3lmks7adwcuf5fbpjna3wt2m):
     dependencies:
       apple-uikit-colors: 0.3.8
       nativewind: 4.1.23(react-native-reanimated@3.16.7(@babel/core@7.26.9)(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-safe-area-context@5.2.0(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native-svg@15.11.1(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
@@ -31436,7 +31436,7 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       bail: 2.0.2
-      devlop: 1.1.0(patch_hash=85f2288a0e6d458382af88dcb0cc3faa8a122712c1c5eddda2b9a75379176295)
+      devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       extend: 3.0.2
       is-plain-obj: 4.1.0
       trough: 2.2.0
@@ -32065,7 +32065,7 @@ snapshots:
       workbox-expiration: 7.3.0
       workbox-google-analytics: 7.3.0
       workbox-navigation-preload: 7.3.0
-      workbox-precaching: 7.3.0(patch_hash=51e57c78af317e292b43fca4b72f57b247b7b1a1faa8b03c8881ddb798c7c52f)
+      workbox-precaching: 7.3.0(patch_hash=frtipzgil4wle57aliuhcr746e)
       workbox-range-requests: 7.3.0
       workbox-recipes: 7.3.0
       workbox-routing: 7.3.0
@@ -32099,7 +32099,7 @@ snapshots:
     dependencies:
       workbox-core: 7.3.0
 
-  workbox-precaching@7.3.0(patch_hash=51e57c78af317e292b43fca4b72f57b247b7b1a1faa8b03c8881ddb798c7c52f):
+  workbox-precaching@7.3.0(patch_hash=frtipzgil4wle57aliuhcr746e):
     dependencies:
       workbox-core: 7.3.0
       workbox-routing: 7.3.0
@@ -32114,7 +32114,7 @@ snapshots:
       workbox-cacheable-response: 7.3.0
       workbox-core: 7.3.0
       workbox-expiration: 7.3.0
-      workbox-precaching: 7.3.0(patch_hash=51e57c78af317e292b43fca4b72f57b247b7b1a1faa8b03c8881ddb798c7c52f)
+      workbox-precaching: 7.3.0(patch_hash=frtipzgil4wle57aliuhcr746e)
       workbox-routing: 7.3.0
       workbox-strategies: 7.3.0
 
@@ -32299,10 +32299,10 @@ snapshots:
 
   zod@3.24.2: {}
 
-  zustand@5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1)):
+  zustand@5.0.3(@types/react@18.3.12)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1)):
     optionalDependencies:
       '@types/react': 18.3.12
-      immer: 10.1.1(patch_hash=594c60b929bc0a3b56576f1a1787da1aec2a1fba51e3c21ec09c0ed38280af6c)
+      immer: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
       react: 18.3.1
       use-sync-external-store: 1.4.0(react@18.3.1)
 

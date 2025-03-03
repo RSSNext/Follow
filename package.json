@@ -2,7 +2,7 @@
   "name": "@follow/monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.5.2",
+  "packageManager": "pnpm@9.12.3",
   "description": "Follow everything in one place",
   "author": "Follow Team",
   "license": "GPL-3.0-only",
