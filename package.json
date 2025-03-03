@@ -2,7 +2,7 @@
   "name": "@follow/monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@10.5.2",
   "description": "Follow everything in one place",
   "author": "Follow Team",
   "license": "GPL-3.0-only",
@@ -12,11 +12,12 @@
     "type": "git"
   },
   "scripts": {
+    "build:all": "turbo run @follow/desktop#build @follow/ssr#build",
     "build:electron": "turbo run @follow/desktop#build",
     "build:macos": "turbo run @follow/desktop#build:macos",
     "build:mas": "turbo run @follow/desktop#build:mas",
     "build:render": "turbo run @follow/desktop#build:render",
-    "build:rn-web": "turbo run @follow/desktop#build:rn-web",
+    "build:ssr": "turbo run @follow/ssr#build",
     "build:web": "turbo run @follow/desktop#build:web",
     "bump": "vv",
     "dedupe:locales": "eslint --fix apps/desktop/locales/**/*.json",
@@ -29,7 +30,7 @@
     "lint:tsl": "tsslint --project apps/*/tsconfig.json",
     "mitproxy": "bash scripts/run-proxy.sh",
     "polyfill-optimize": "pnpx nolyfill install",
-    "prepare": "simple-git-hooks",
+    "prepare": "simple-git-hooks && corepack prepare",
     "reinstall": "rm -rf node_modules && rm -rf apps/**/node_modules && rm -rf packages/**/node_modules && pnpm install",
     "sync:icons": "tsx scripts/svg-to-rn.ts && prettier --write apps/mobile/src/icons/**/*.tsx && eslint --fix apps/mobile/src/icons/**/*.tsx",
     "test": "cross-env CI=1 pnpm --recursive run test",
@@ -140,9 +141,9 @@
       "git add apps/desktop/package.json"
     ],
     "after": [
-      "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
+      "gh pr create --title 'release(desktop): Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
     ],
-    "commit_message": "chore(release): release v${NEW_VERSION}",
+    "commit_message": "release(desktop): release v${NEW_VERSION}",
     "tag": false,
     "changelog": true,
     "allowed_branches": [

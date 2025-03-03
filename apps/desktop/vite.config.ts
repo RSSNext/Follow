@@ -44,10 +44,9 @@ const devPrint = (): PluginOption => ({
   },
 })
 
-const isRNBuild = process.env.RN_BUILD === "1"
 const isWebBuild = process.env.WEB_BUILD === "1"
 // eslint-disable-next-line no-console
-console.log(green("Build type:"), isRNBuild ? "RN" : isWebBuild ? "Web" : "Unknown")
+console.log(green("Build type:"), isWebBuild ? "Web" : "Unknown")
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
@@ -56,10 +55,10 @@ export default ({ mode }) => {
   return defineConfig({
     ...viteRenderBaseConfig,
     root: ROOT,
-    base: isRNBuild ? "./" : "/",
+    base: "/",
     envDir: resolve(__dirname, "."),
     build: {
-      outDir: resolve(__dirname, isRNBuild ? "out/rn-web" : "out/web"),
+      outDir: resolve(__dirname, "out/web"),
       target: "ES2022",
       sourcemap: isCI,
       rollupOptions: {

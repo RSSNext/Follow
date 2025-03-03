@@ -1,5 +1,5 @@
 {
-  "name": "@follow/server",
+  "name": "@follow/ssr",
   "private": true,
   "scripts": {
     "build": "cross-env NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
