@@ -1,5 +1,4 @@
 import { RSSHubCategories } from "@follow/constants"
-import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import type { FC } from "react"
@@ -15,6 +14,7 @@ import Animated, {
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { BlurEffect } from "@/src/components/common/BlurEffect"
+import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"

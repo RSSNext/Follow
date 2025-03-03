@@ -1,5 +1,6 @@
 import { withOpacity } from "@follow/utils"
 import { router } from "expo-router"
+import { useMemo } from "react"
 import { TouchableOpacity } from "react-native"
 
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
@@ -18,10 +19,11 @@ const ModalHeaderCloseButtonImpl = () => {
   const label = useColor("label")
 
   const routeOnlyOne = useIsRouteOnlyOne()
+  const memoedRouteOnlyOne = useMemo(() => routeOnlyOne, [])
 
   return (
     <TouchableOpacity onPress={() => router.dismiss()}>
-      {routeOnlyOne ? (
+      {memoedRouteOnlyOne ? (
         <CloseCuteReIcon height={20} width={20} color={label} />
       ) : (
         <MingcuteLeftLineIcon height={20} width={20} color={label} />

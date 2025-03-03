@@ -1,6 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
-import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
 import {
   ActivityIndicator,
@@ -17,6 +16,7 @@ import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-cont
 
 import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
+import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import type { FeedIconRequiredFeed } from "@/src/components/ui/icon/feed-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"

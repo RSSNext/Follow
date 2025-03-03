@@ -1,5 +1,4 @@
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Stack } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
@@ -17,6 +16,7 @@ import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 
 import { AnimatedScrollView } from "../../common/AnimatedComponents"
 import { NavigationHeader } from "../header/NavigationHeader"
+import { getDefaultHeaderHeight } from "../utils"
 import { NavigationContext } from "./NavigationContext"
 import {
   NavigationHeaderHeightContext,

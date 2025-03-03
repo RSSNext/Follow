@@ -1,8 +1,8 @@
-import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useMemo } from "react"
 import { useAnimatedValue, View } from "react-native"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Markdown } from "@/src/components/ui/typography/Markdown"

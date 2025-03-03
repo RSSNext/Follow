@@ -1,17 +1,16 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { StackActions } from "@react-navigation/native"
-import { router, Stack, useNavigation } from "expo-router"
-import { useState } from "react"
+import { router, useNavigation } from "expo-router"
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { ActivityIndicator, ScrollView, Text, View } from "react-native"
+import { ActivityIndicator, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { z } from "zod"
 
-import {
-  ModalHeaderCloseButton,
-  ModalHeaderSubmitButton,
-} from "@/src/components/common/ModalSharedComponents"
+import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
+import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
@@ -111,30 +110,32 @@ function FollowImpl(props: { feedId: string }) {
   const insets = useSafeAreaInsets()
 
   const { isValid, isDirty } = form.formState
+  const navigation = useNavigation()
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: !isDirty,
+    })
+  }, [isDirty, navigation])
 
   if (!feed?.id) {
     return <Text className="text-label">Feed ({id}) not found</Text>
   }
 
   return (
-    <ScrollView
-      className="bg-system-grouped-background"
-      contentContainerClassName="pt-4 gap-y-4"
+    <SafeModalScrollView
+      className="bg-system-grouped-background mt-2"
+      contentContainerClassName="gap-y-4"
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
-      <Stack.Screen
-        options={{
-          title: `${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`,
-          headerLeft: ModalHeaderCloseButton,
-          gestureEnabled: !isDirty,
-          headerRight: () => (
-            <ModalHeaderSubmitButton
-              isValid={isValid}
-              onPress={form.handleSubmit(submit)}
-              isLoading={isLoading}
-            />
-          ),
-        }}
+      <ModalHeader
+        headerTitle={`${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`}
+        headerRight={
+          <ModalHeaderSubmitButton
+            isValid={isValid}
+            onPress={form.handleSubmit(submit)}
+            isLoading={isLoading}
+          />
+        }
       />
 
       {/* Group 1 */}
@@ -213,6 +214,6 @@ function FollowImpl(props: { feedId: string }) {
           </View>
         </FormProvider>
       </GroupedInsetListCard>
-    </ScrollView>
+    </SafeModalScrollView>
   )
 }

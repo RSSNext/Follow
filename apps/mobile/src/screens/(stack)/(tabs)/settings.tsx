@@ -1,4 +1,3 @@
-import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
@@ -17,6 +16,7 @@ import {
   useBottomTabBarHeight,
   useRegisterNavigationScrollView,
 } from "@/src/components/layouts/tabbar/hooks"
+import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
