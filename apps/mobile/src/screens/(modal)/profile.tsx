@@ -1,5 +1,6 @@
 import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
+import { useGlobalSearchParams } from "expo-router"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
 import {
   ActivityIndicator,
@@ -28,13 +29,33 @@ import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
 import { ItemSeparator } from "@/src/modules/subscription/ItemSeparator"
 import type { FeedModel } from "@/src/store/feed/types"
 import type { ListModel } from "@/src/store/list/store"
-import { useWhoami } from "@/src/store/user/hooks"
+import { useUser, useWhoami } from "@/src/store/user/hooks"
 import { useColor } from "@/src/theme/colors"
 
 type Subscription = Awaited<ReturnType<typeof apiClient.subscriptions.$get>>["data"][number]
+
 export default function ProfileScreen() {
+  const whoami = useWhoami()
+  const globalSearchParams = useGlobalSearchParams<{
+    userId: string
+  }>()
+  const { userId } = globalSearchParams
+
+  if (!whoami) {
+    return null
+  }
+  return <ProfileScreenImpl userId={userId || whoami?.id} />
+}
+
+function ProfileScreenImpl(props: { userId: string }) {
   const scrollY = useSharedValue(0)
-  const { data: subscriptions, isLoading, isError } = useShareSubscription()
+  const {
+    data: subscriptions,
+    isLoading,
+    isError,
+  } = useShareSubscription({
+    userId: props.userId,
+  })
 
   const headerOpacity = useSharedValue(0)
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -42,8 +63,7 @@ export default function ProfileScreen() {
     headerOpacity.value = scrollY.value / 100
   })
 
-  const whoami = useWhoami()
-
+  const user = useUser(props.userId)
   useEffect(() => {
     if (isError) {
       toast.error("Failed to fetch subscriptions")
@@ -54,12 +74,12 @@ export default function ProfileScreen() {
 
   const textLabelColor = useColor("label")
   const openShareUrl = useCallback(() => {
-    if (!whoami?.id) return
+    if (!user?.id) return
     Share.share({
-      url: `https://app.follow.is/share/users/${whoami.id}`,
-      title: `Follow | ${whoami.name}'s Profile`,
+      url: `https://app.follow.is/share/users/${user.id}`,
+      title: `Follow | ${user.name}'s Profile`,
     })
-  }, [whoami?.id, whoami?.name])
+  }, [user?.id, user?.name])
 
   const frame = useSafeAreaFrame()
   const headerHeight = getDefaultHeaderHeight(frame, false, 0)
@@ -71,7 +91,7 @@ export default function ProfileScreen() {
         onScroll={scrollHandler}
         contentContainerStyle={{ paddingBottom: insets.bottom, paddingTop: headerHeight }}
       >
-        <UserHeaderBanner scrollY={scrollY} />
+        <UserHeaderBanner scrollY={scrollY} userId={props.userId} />
 
         {isLoading && <ActivityIndicator className="mt-24" size={28} />}
         {!isLoading && subscriptions && <SubscriptionList subscriptions={subscriptions.data} />}
@@ -95,7 +115,7 @@ export default function ProfileScreen() {
         <BlurEffect />
 
         <Text className="text-label flex-1 text-center text-lg font-medium">
-          {whoami?.name}'s Profile
+          {user?.name}'s Profile
         </Text>
 
         <TouchableOpacity onPress={openShareUrl}>

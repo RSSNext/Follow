@@ -1,6 +1,5 @@
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useHeaderHeight } from "@react-navigation/elements"
-import { useQuery } from "@tanstack/react-query"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { Text, useWindowDimensions, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
@@ -17,11 +16,12 @@ import { NavigationContext } from "@/src/components/layouts/views/NavigationCont
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { apiClient } from "@/src/lib/api-fetch"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/EntryContentHeaderRightActions"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
+
+import { EntryReadHistory } from "./EntryReadHistory"
 
 export const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {
   const { scrollY } = useContext(NavigationContext)!
@@ -210,47 +210,6 @@ const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLef
           <EntryReadHistory entryId={entryId} />
         </Animated.View>
       )}
-    </View>
-  )
-}
-
-const EntryReadHistory = ({ entryId }: { entryId: string }) => {
-  const { data } = useQuery({
-    queryKey: ["entry-read-history", entryId],
-    queryFn: () => {
-      return apiClient.entries["read-histories"][":id"].$get({
-        param: {
-          id: entryId,
-        },
-        query: {
-          size: 6,
-        },
-      })
-    },
-    staleTime: 1000 * 60 * 5,
-  })
-  if (!data?.data.entryReadHistories) return null
-  return (
-    <View className="flex-row items-center justify-center">
-      {data?.data.entryReadHistories.userIds.map((userId, index) => {
-        const user = data.data.users[userId]
-        if (!user) return null
-        return (
-          <View
-            className="border-system-background bg-tertiary-system-background overflow-hidden rounded-full border-2"
-            key={userId}
-            style={{
-              transform: [
-                {
-                  translateX: index * -10,
-                },
-              ],
-            }}
-          >
-            <UserAvatar size={25} name={user.name!} image={user.image} />
-          </View>
-        )
-      })}
     </View>
   )
 }

@@ -55,7 +55,7 @@ export const unreadTable = sqliteTable("unread", {
 
 export const usersTable = sqliteTable("users", {
   id: text("id").primaryKey(),
-  email: text("email").notNull(),
+  email: text("email"),
   handle: text("handle"),
   name: text("name"),
   image: text("image"),

@@ -1,21 +1,18 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { apiClient } from "@/src/lib/api-fetch"
-import { useWhoami } from "@/src/store/user/hooks"
 
-export const useShareSubscription = () => {
-  const me = useWhoami()
+export const useShareSubscription = ({ userId }: { userId: string }) => {
   return useQuery({
-    queryKey: ["public", "subscription"],
+    queryKey: ["public", "subscription", userId],
     queryFn: async () => {
       const subscriptions = await apiClient.subscriptions.$get({
         query: {
-          userId: me!.id,
+          userId,
         },
       })
 
       return subscriptions
     },
-    enabled: !!me,
   })
 }
