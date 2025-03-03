@@ -56,6 +56,14 @@ export default defineConfig(
       ],
     },
   },
+  // use correct tailwind config for eslint
+  {
+    settings: {
+      tailwindcss: {
+        config: path.join(import.meta.dirname, "apps/desktop/tailwind.config.ts"),
+      },
+    },
+  },
   {
     files: ["apps/desktop/src/server/**/*"],
     settings: {
