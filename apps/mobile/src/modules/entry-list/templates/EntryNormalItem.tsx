@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
-import { setWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
+import { preloadWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
@@ -27,7 +27,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
 
   const handlePress = useCallback(() => {
     if (!entry) return
-    setWebViewEntry(entry)
+    preloadWebViewEntry(entry)
     router.push(`/entries/${entryId}`)
   }, [entryId, entry])
 

@@ -1,5 +1,6 @@
 import { clsx } from "@follow/utils"
 import { requireNativeView } from "expo"
+import { useAtom } from "jotai"
 import * as React from "react"
 import { useEffect } from "react"
 import type { ViewProps } from "react-native"
@@ -10,6 +11,7 @@ import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import type { EntryModel } from "@/src/store/entry/types"
 
 import { Portal } from "../../ui/portal"
+import { sharedWebViewHeightAtom } from "./atom"
 import { htmlUrl } from "./constants"
 import { prepareEntryRenderWebView, SharedWebViewModule } from "./index"
 
@@ -31,11 +33,12 @@ const setCodeTheme = (light: string, dark: string) => {
   )
 }
 
-export const setWebViewEntry = (entry: EntryModel) => {
+const setWebViewEntry = (entry: EntryModel) => {
   SharedWebViewModule.evaluateJavaScript(
     `setEntry(JSON.parse(${JSON.stringify(JSON.stringify(entry))}))`,
   )
 }
+export { setWebViewEntry as preloadWebViewEntry }
 
 const setNoMedia = (value: boolean) => {
   SharedWebViewModule.evaluateJavaScript(`setNoMedia(${value})`)
@@ -46,7 +49,7 @@ const setReaderRenderInlineStyle = (value: boolean) => {
 }
 
 export function EntryContentWebView(props: EntryContentWebViewProps) {
-  const [contentHeight, setContentHeight] = React.useState(0)
+  const [contentHeight, setContentHeight] = useAtom(sharedWebViewHeightAtom)
 
   const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
   const codeThemeDark = useUISettingKey("codeHighlightThemeDark")
