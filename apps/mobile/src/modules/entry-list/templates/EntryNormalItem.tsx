@@ -4,6 +4,7 @@ import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
+import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { preloadWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -53,11 +54,14 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
     }
   }, [entry, entry?.read, unreadZoomSharedValue])
 
+  const thumbnailRatio = useUISettingKey("thumbnailRatio")
   if (!entry) return <EntryItemSkeleton />
   const { title, description, publishedAt, media, attachments } = entry
 
-  const image = media?.[0]?.url
-  const blurhash = media?.[0]?.blurhash
+  const coverImage = media?.[0]
+
+  const image = coverImage?.url
+  const blurhash = coverImage?.blurhash
 
   const audio = attachments?.find((attachment) => attachment.mime_type?.startsWith("audio/"))
   const audioState = getAttachmentState(extraData, audio)
@@ -98,22 +102,30 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
         </View>
         {view !== FeedViewType.Notifications && (
           <View className="relative ml-2">
-            {image && (
-              <ProxiedImage
-                proxy={{
-                  width: 96,
-                  height: 96,
-                }}
-                source={{
-                  uri: image,
-                }}
-                placeholder={{ blurhash }}
-                className="bg-system-fill size-24 rounded-md"
-                contentFit="cover"
-                recyclingKey={image}
-                transition={500}
-              />
-            )}
+            {image &&
+              (thumbnailRatio === "square" ? (
+                <ProxiedImage
+                  proxy={{
+                    width: 96,
+                    height: 96,
+                  }}
+                  source={{
+                    uri: image,
+                  }}
+                  placeholder={{ blurhash }}
+                  className="bg-system-fill size-24 rounded-md"
+                  contentFit="cover"
+                  recyclingKey={image}
+                  transition={500}
+                />
+              ) : (
+                <AspectRatioImage
+                  blurhash={blurhash}
+                  image={image}
+                  height={coverImage?.height}
+                  width={coverImage?.width}
+                />
+              ))}
 
             {audio && (
               <TouchableOpacity
@@ -147,5 +159,63 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
         )}
       </ItemPressable>
     </EntryItemContextMenu>
+  )
+}
+
+const AspectRatioImage = ({
+  image,
+  blurhash,
+  height = 96,
+  width = 96,
+}: {
+  image: string
+  blurhash?: string
+  height?: number
+  width?: number
+}) => {
+  // Calculate aspect ratio and determine dimensions
+  // Ensure the larger dimension is capped at 96px while maintaining aspect ratio
+
+  const aspect = height / width
+  let scaledWidth, scaledHeight
+
+  if (aspect > 1) {
+    // Image is taller than wide
+    scaledHeight = 96
+    scaledWidth = scaledHeight / aspect
+  } else {
+    // Image is wider than tall or square
+    scaledWidth = 96
+    scaledHeight = scaledWidth * aspect
+  }
+
+  return (
+    <View className="size-24 items-center justify-center">
+      <View
+        style={{
+          width: scaledWidth,
+          height: scaledHeight,
+        }}
+        className="overflow-hidden rounded-md"
+      >
+        <ProxiedImage
+          proxy={{
+            width: 96,
+          }}
+          source={{
+            uri: image,
+          }}
+          style={{
+            width: scaledWidth,
+            height: scaledHeight,
+          }}
+          placeholder={{ blurhash }}
+          className="bg-system-fill"
+          contentFit="cover"
+          recyclingKey={image}
+          transition={500}
+        />
+      </View>
+    </View>
   )
 }
