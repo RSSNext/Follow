@@ -97,7 +97,6 @@
       "daisyui": "patches/daisyui.patch",
       "jsonpointer": "patches/jsonpointer.patch",
       "workbox-precaching": "patches/workbox-precaching.patch",
-      "@tanstack/react-virtual": "patches/@tanstack__react-virtual.patch",
       "@pengx17/electron-forge-maker-appimage": "patches/@pengx17__electron-forge-maker-appimage.patch",
       "devlop": "patches/devlop.patch",
       "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch",

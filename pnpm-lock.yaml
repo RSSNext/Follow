@@ -26,9 +26,6 @@ patchedDependencies:
   '@pengx17/electron-forge-maker-appimage':
     hash: 5b5ab1ba36e8c0d7ffee912ebf29c1a18bc101c9c661ceb1bb0bda3deaf4c667
     path: patches/@pengx17__electron-forge-maker-appimage.patch
-  '@tanstack/react-virtual':
-    hash: 0db4f6dc38be5e94d953967e34f8bdb6a08d3091a8b80ba3964fdd396c73b33c
-    path: patches/@tanstack__react-virtual.patch
   daisyui:
     hash: 3a8f5f7ef76a29355b99bb425ff894e55ccab4335656eedbce80ef95f3e2e3f8
     path: patches/daisyui.patch
@@ -538,7 +535,7 @@ importers:
         version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
       '@tanstack/react-virtual':
         specifier: 3.13.0
-        version: 3.13.0(patch_hash=0db4f6dc38be5e94d953967e34f8bdb6a08d3091a8b80ba3964fdd396c73b33c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 3.13.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@use-gesture/react':
         specifier: 10.3.1
         version: 10.3.1(react@18.3.1)
@@ -17807,7 +17804,7 @@ snapshots:
       '@floating-ui/react': 0.26.28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/focus': 3.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/interactions': 3.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@tanstack/react-virtual': 3.13.0(patch_hash=0db4f6dc38be5e94d953967e34f8bdb6a08d3091a8b80ba3964fdd396c73b33c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-virtual': 3.13.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
@@ -20414,7 +20411,7 @@ snapshots:
       '@tanstack/query-core': 5.66.4
       react: 18.3.1
 
-  '@tanstack/react-virtual@3.13.0(patch_hash=0db4f6dc38be5e94d953967e34f8bdb6a08d3091a8b80ba3964fdd396c73b33c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-virtual@3.13.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/virtual-core': 3.13.0
       react: 18.3.1
