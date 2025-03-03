@@ -101,7 +101,8 @@
       "devlop": "patches/devlop.patch",
       "@microflash/remark-callout-directives": "patches/@microflash__remark-callout-directives.patch",
       "react-native-track-player": "patches/react-native-track-player.patch",
-      "react-native-sheet-transitions": "patches/react-native-sheet-transitions.patch"
+      "react-native-sheet-transitions": "patches/react-native-sheet-transitions.patch",
+      "eslint-plugin-tailwindcss": "patches/eslint-plugin-tailwindcss.patch"
     },
     "overrides": {
       "app-builder-lib": "25.1.8",
