@@ -36,11 +36,11 @@ export const Recommendations = () => {
   const currentTab = useAtomValue(currentTabAtom)
 
   const windowWidth = useWindowDimensions().width
-  const contentScrollerRef = useRegisterNavigationScrollView<ScrollView>()
+  const ref = useRef<ScrollView>(null)
 
   useEffect(() => {
-    contentScrollerRef.current?.scrollTo({ x: currentTab * windowWidth, y: 0, animated: true })
-  }, [contentScrollerRef, currentTab, windowWidth])
+    ref.current?.scrollTo({ x: currentTab * windowWidth, y: 0, animated: true })
+  }, [ref, currentTab, windowWidth])
 
   const [loadedTabIndex, setLoadedTabIndex] = useState(() => new Set())
   useEffect(() => {
@@ -55,7 +55,7 @@ export const Recommendations = () => {
       onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: animatedX } } }], {
         useNativeDriver: true,
       })}
-      ref={contentScrollerRef}
+      ref={ref}
       horizontal
       pagingEnabled
       showsHorizontalScrollIndicator={false}
@@ -176,7 +176,10 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
   }, [data, keys])
 
   // Add ref for FlashList
-  const listRef = useRef<FlashList<{ key: string; data: RSSHubRouteDeclaration } | string>>(null)
+  const listRef =
+    useRegisterNavigationScrollView<
+      FlashList<{ key: string; data: RSSHubRouteDeclaration } | string>
+    >(isSelected)
 
   const getItemType = useCallback((item: string | { key: string }) => {
     return typeof item === "string" ? "sectionHeader" : "row"

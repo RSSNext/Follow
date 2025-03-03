@@ -1,9 +1,9 @@
+import { env } from "@follow/shared/src/env"
 import type { FC, PropsWithChildren } from "react"
 import { useMemo } from "react"
 import { Alert, Clipboard } from "react-native"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
-import { getWebUrl } from "@/src/lib/env"
 import { toast } from "@/src/lib/toast"
 import { getList } from "@/src/store/list/getters"
 import { useIsOwnList } from "@/src/store/list/hooks"
@@ -31,7 +31,7 @@ export const SubscriptionListItemContextMenu: FC<
           const list = getList(id)
           if (!list) return
           toast.info("Link copied to clipboard")
-          Clipboard.setString(`${getWebUrl()}/share/lists/${list.id}`)
+          Clipboard.setString(`${env.VITE_WEB_URL}/share/lists/${list.id}`)
         },
       },
       {

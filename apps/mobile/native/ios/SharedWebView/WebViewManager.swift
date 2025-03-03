@@ -6,6 +6,8 @@
 //
 import Combine
 import ExpoModulesCore
+import SafariServices
+
 @preconcurrency import WebKit
 
 private var pendingJavaScripts: [String] = []
@@ -170,16 +172,13 @@ enum WebViewManager {
     }
 
     static func presentModalWebView(url: URL, from viewController: UIViewController) {
-        let modalVC = ModalWebViewController(url: url)
-        let navController = UINavigationController(rootViewController: modalVC)
-        navController.modalPresentationStyle = .fullScreen
-        viewController.present(navController, animated: true)
+
+      let safariVC = SFSafariViewController(url: url)
+      safariVC.view.tintColor = Utils.accentColor
+      safariVC.preferredControlTintColor = Utils.accentColor
+      viewController.present(safariVC, animated: true)
     }
 
-    static func pushModalWebView(url: URL, from navigationController: UINavigationController) {
-        let modalVC = WebViewController(url: url)
-        navigationController.pushViewController(modalVC, animated: true)
-    }
 }
 
 private class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate

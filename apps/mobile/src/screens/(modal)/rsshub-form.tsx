@@ -217,7 +217,7 @@ const Maintainers = ({ maintainers }: { maintainers?: string[] }) => {
       </Text>
       {maintainers.map((m) => (
         <TouchableOpacity key={m} onPress={() => Linking.openURL(`https://github.com/${m}`)}>
-          <Text className="text-xs text-accent/90">@{m}</Text>
+          <Text className="text-accent/90 text-xs">@{m}</Text>
         </TouchableOpacity>
       ))}
     </View>

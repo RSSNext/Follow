@@ -102,7 +102,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
       </Portal>
       {__DEV__ && (
         <Portal>
-          <View className="absolute left-4 flex-row gap-4 bottom-safe-offset-2">
+          <View className="bottom-safe-offset-2 absolute left-4 flex-row gap-4">
             <TouchableOpacity
               className={clsx(
                 "flex size-12 items-center justify-center rounded-full",

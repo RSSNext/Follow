@@ -1,4 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
+import type { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import { Text } from "react-native"
@@ -46,7 +47,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
-  const scrollViewRef = useRegisterNavigationScrollView()
+  const scrollViewRef = useRegisterNavigationScrollView<FlashList<any>>()
 
   return (
     <TimelineSelectorList
@@ -57,6 +58,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
           setRefreshing(false)
         })
       }}
+      className="bg-system-grouped-background"
       isRefetching={refreshing}
       ItemSeparatorComponent={ItemSeparator}
       data={data}

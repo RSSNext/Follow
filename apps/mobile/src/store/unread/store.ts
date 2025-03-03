@@ -62,7 +62,7 @@ class UnreadSyncService {
 
   async markEntryAsRead(entryId: string) {
     const entry = getEntry(entryId)
-    if (entry?.read) return
+    if (!entry || entry?.read) return
 
     const feedId = entry?.feedId
 

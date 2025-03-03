@@ -47,7 +47,7 @@ export default function TwoFactorAuthScreen() {
 
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <View className="flex-1 p-safe">
+      <View className="p-safe flex-1">
         <NavigationBlurEffectHeader headerShown headerTitle="" title="2FA" />
         <TouchableWithoutFeedback
           onPress={() => {

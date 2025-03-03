@@ -13,8 +13,8 @@ import { EntryNormalItem } from "./templates/EntryNormalItem"
 
 export const EntryListContentArticle = forwardRef<
   ElementRef<typeof TimelineSelectorList>,
-  { entryIds: string[] }
->(({ entryIds }, ref) => {
+  { entryIds: string[]; active?: boolean }
+>(({ entryIds, active }, ref) => {
   const playingAudioUrl = usePlayingUrl()
 
   const { fetchNextPage, isFetching, refetch, isRefetching } = useFetchEntriesControls()
@@ -32,7 +32,7 @@ export const EntryListContentArticle = forwardRef<
   )
 
   const { onViewableItemsChanged, onScroll } = useOnViewableItemsChanged({
-    disabled: isRefetching,
+    disabled: active === false || isFetching,
   })
 
   return (

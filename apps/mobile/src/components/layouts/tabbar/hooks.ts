@@ -1,3 +1,4 @@
+import { useNavigation } from "expo-router"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
 import type { FlatList, ScrollView } from "react-native"
@@ -6,8 +7,8 @@ import { findNodeHandle, Platform } from "react-native"
 import { performNativeScrollToTop } from "@/src/lib/native"
 
 import {
-  AttachNavigationScrollViewContext,
   SetAttachNavigationScrollViewContext,
+  useAttachNavigationScrollView,
 } from "./contexts/AttachNavigationScrollViewContext"
 import { BottomTabBarHeightContext } from "./contexts/BottomTabBarHeightContext"
 
@@ -19,7 +20,7 @@ export const useBottomTabBarHeight = () => {
 export const useNavigationScrollToTop = (
   overrideScrollerRef?: React.RefObject<ScrollView> | React.RefObject<FlatList<any>> | null,
 ) => {
-  const attachNavigationScrollViewRef = useContext(AttachNavigationScrollViewContext)
+  const attachNavigationScrollViewRef = useAttachNavigationScrollView()
   return useCallback(() => {
     const $scroller = overrideScrollerRef?.current ?? attachNavigationScrollViewRef?.current
     if (!$scroller) return
@@ -33,17 +34,17 @@ export const useNavigationScrollToTop = (
     }
 
     if ("scrollTo" in $scroller) {
-      ;($scroller as ScrollView).scrollTo({
+      void ($scroller as ScrollView).scrollTo({
         y: 0,
         animated: true,
       })
     } else if ("scrollToIndex" in $scroller) {
-      ;($scroller as FlatList<any>).scrollToIndex({
+      void ($scroller as FlatList<any>).scrollToIndex({
         index: 0,
         animated: true,
       })
     } else if ("scrollToOffset" in $scroller) {
-      ;($scroller as FlatList<any>).scrollToOffset({
+      void ($scroller as FlatList<any>).scrollToOffset({
         offset: 0,
         animated: true,
       })
@@ -52,13 +53,19 @@ export const useNavigationScrollToTop = (
   }, [attachNavigationScrollViewRef, overrideScrollerRef])
 }
 
-export const useRegisterNavigationScrollView = <T = any>() => {
+export const useRegisterNavigationScrollView = <T = unknown>(active = true) => {
   const scrollViewRef = useRef<T>(null)
+  const navigation = useNavigation()
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
   useEffect(() => {
-    if (setAttachNavigationScrollViewRef) {
+    if (!active) return
+    if (!setAttachNavigationScrollViewRef) return
+
+    setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
+    const unsubscribe = navigation.addListener("focus", () => {
       setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
-    }
-  }, [setAttachNavigationScrollViewRef, scrollViewRef])
+    })
+    return unsubscribe
+  }, [setAttachNavigationScrollViewRef, scrollViewRef, active, navigation])
   return scrollViewRef
 }

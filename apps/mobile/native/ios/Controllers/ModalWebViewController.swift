@@ -22,7 +22,11 @@ class ModalWebViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+      super.viewDidLoad()
+      if let navVC = self.navigationController  {
+        let bar = navVC.navigationBar
+       self.webView.scrollView.contentInset.top = bar.frame.height - view.safeAreaInsets.top
+      }
 
         setupNavigationBar()
         setupWebView()
@@ -64,8 +68,7 @@ class ModalWebViewController: UIViewController {
         view.addSubview(webView)
         view.backgroundColor = .systemBackground
         webView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.left.right.bottom.equalToSuperview()
+          make.edges.equalToSuperview()
         }
     }
 

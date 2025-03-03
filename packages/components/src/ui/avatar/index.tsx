@@ -22,7 +22,7 @@ export const AvatarImage = React.forwardRef<
   <AvatarPrimitive.Image
     ref={ref}
     className={cn("aspect-square size-full", className)}
-    src={replaceImgUrlIfNeed(props.src)}
+    src={replaceImgUrlIfNeed({ url: props.src })}
     {...props}
   />
 ))
@@ -35,7 +35,7 @@ export const AvatarFallback = React.forwardRef<
   <AvatarPrimitive.Fallback
     ref={ref}
     className={cn(
-      "flex size-full items-center justify-center rounded-full bg-muted text-xs",
+      "bg-muted flex size-full items-center justify-center rounded-full text-xs",
       className,
     )}
     {...props}

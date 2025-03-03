@@ -2,7 +2,7 @@ import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
+import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
 import { findNodeHandle, Text, UIManager } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
@@ -69,7 +69,7 @@ function Settings() {
     [opacity],
   )
   const [contentSize, setContentSize] = useState({ height: 0, width: 0 })
-  const registerNavigationScrollView = useRegisterNavigationScrollView()
+  const registerNavigationScrollView = useRegisterNavigationScrollView<ScrollView>()
   useEffect(() => {
     if (!isFocused) return
     const scrollView = registerNavigationScrollView.current
@@ -131,7 +131,7 @@ const SettingHeader = ({ scrollY }: { scrollY: SharedValue<number> }) => {
   return (
     <Animated.View
       pointerEvents="none"
-      className="border-b-hairline border-opaque-separator absolute inset-x-0 top-0 flex-row items-center px-4 pb-2 pt-safe"
+      className="border-b-hairline border-opaque-separator pt-safe absolute inset-x-0 top-0 flex-row items-center px-4 pb-2"
       style={styles}
     >
       <BlurEffect />

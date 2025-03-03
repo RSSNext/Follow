@@ -5,7 +5,7 @@ import type {
 } from "@shopify/flash-list"
 import { FlashList, MasonryFlashList } from "@shopify/flash-list"
 import type { ElementRef, RefObject } from "react"
-import { forwardRef, useCallback, useContext, useImperativeHandle, useRef } from "react"
+import { forwardRef, useCallback, useContext } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { RefreshControl } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -45,15 +45,15 @@ export const TimelineSelectorList = forwardRef<
 
   const systemFill = useColor("secondaryLabel")
 
-  const listRef = useRef<FlashList<any>>(null)
+  // const listRef = useRef<FlashList<any>>(null)
 
-  useImperativeHandle(ref, () => listRef.current!)
+  // useImperativeHandle(ref, () => listRef.current!)
 
   return (
     <FlashList
       automaticallyAdjustsScrollIndicatorInsets={false}
       automaticallyAdjustContentInsets={false}
-      ref={listRef}
+      ref={ref}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}

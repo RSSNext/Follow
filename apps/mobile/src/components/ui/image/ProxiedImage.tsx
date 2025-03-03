@@ -1,22 +1,8 @@
+import { buildSafeHeaders } from "@follow/utils/src/headers"
+import { getImageProxyUrl } from "@follow/utils/src/img-proxy"
 import type { ImageProps } from "expo-image"
 import { Image } from "expo-image"
 import { forwardRef, useCallback, useMemo, useState } from "react"
-
-import { getImageHeaders } from "@/src/lib/image"
-
-const IMAGE_PROXY_URL = "https://webp.follow.is"
-
-const getImageProxyUrl = ({
-  url,
-  width,
-  height,
-}: {
-  url: string
-  width?: number
-  height?: number
-}) => {
-  return `${IMAGE_PROXY_URL}?url=${encodeURIComponent(url)}&width=${width ? Math.floor(width) : ""}&height=${height ? Math.floor(height) : ""}`
-}
 
 export const ProxiedImage = forwardRef<
   Image,
@@ -31,12 +17,15 @@ export const ProxiedImage = forwardRef<
   if (typeof source === "string") {
     nextSource = {
       uri: source,
-      headers: getImageHeaders(source),
+      headers: buildSafeHeaders({ url: source }),
     }
-  } else if (!source.headers) {
+  } else {
     nextSource = {
       ...source,
-      headers: getImageHeaders(source.uri),
+      headers: {
+        ...buildSafeHeaders({ url: source.uri }),
+        ...source.headers,
+      },
     }
   }
 

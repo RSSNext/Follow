@@ -67,7 +67,7 @@ export default function ListScreen() {
 
   return (
     <FormProvider form={form}>
-      <SafeModalScrollView className="bg-system-grouped-background flex-1 pb-safe">
+      <SafeModalScrollView className="bg-system-grouped-background pb-safe flex-1">
         <ScreenOptions title={list?.title} listId={listId} />
 
         <GroupedInsetListCard showSeparator={false} className="mt-6 px-3 py-6">

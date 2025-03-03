@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { FeedViewType } from "@follow/constants"
 import { jotaiStore } from "@follow/utils"
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai"
@@ -108,7 +109,7 @@ export const useEntryListContext = () => {
   return useContext(EntryListContext)
 }
 
-export function useSelectedView() {
+function useSelectedView() {
   const selectedTimeLine = useAtomValue(selectedTimelineAtom)
   const selectedFeed = useAtomValue(selectedFeedAtom)
 

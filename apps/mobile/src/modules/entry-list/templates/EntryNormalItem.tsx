@@ -12,7 +12,6 @@ import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
-import { getImageHeaders } from "@/src/lib/image"
 import { getAttachmentState, player } from "@/src/lib/player"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
@@ -107,7 +106,6 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
                 }}
                 source={{
                   uri: image,
-                  headers: getImageHeaders(image),
                 }}
                 placeholder={{ blurhash }}
                 className="bg-system-fill size-24 rounded-md"
