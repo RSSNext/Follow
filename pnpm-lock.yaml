@@ -35,6 +35,9 @@ patchedDependencies:
   electron-context-menu:
     hash: c53at4t5fflixuwjz35hmcqdu4
     path: patches/electron-context-menu.patch
+  eslint-plugin-tailwindcss:
+    hash: igoijrlnqg6vq3c25a3kjqlyq4
+    path: patches/eslint-plugin-tailwindcss.patch
   hono:
     hash: qptujxncoai6tukc4qaqsrqk24
     path: patches/hono.patch
@@ -23723,7 +23726,7 @@ snapshots:
       eslint-plugin-react-refresh: 0.4.19(eslint@9.20.1(jiti@2.4.2))
       eslint-plugin-regexp: 2.7.0(eslint@9.20.1(jiti@2.4.2))
       eslint-plugin-simple-import-sort: 12.1.1(eslint@9.20.1(jiti@2.4.2))
-      eslint-plugin-tailwindcss: 3.18.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
+      eslint-plugin-tailwindcss: 3.18.0(patch_hash=igoijrlnqg6vq3c25a3kjqlyq4)(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))
       eslint-plugin-unicorn: 56.0.1(eslint@9.20.1(jiti@2.4.2))
       eslint-plugin-unused-imports: 4.1.4(@typescript-eslint/eslint-plugin@8.24.1(@typescript-eslint/parser@8.24.1(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint@9.20.1(jiti@2.4.2))
       globals: 15.15.0
@@ -24107,7 +24110,7 @@ snapshots:
     dependencies:
       eslint: 9.20.1(jiti@2.4.2)
 
-  eslint-plugin-tailwindcss@3.18.0(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))):
+  eslint-plugin-tailwindcss@3.18.0(patch_hash=igoijrlnqg6vq3c25a3kjqlyq4)(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))):
     dependencies:
       fast-glob: 3.3.3
       postcss: 8.5.2
