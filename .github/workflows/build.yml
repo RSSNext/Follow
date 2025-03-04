@@ -223,6 +223,8 @@ jobs:
       - name: Setup Version
         id: version
         uses: ./.github/actions/setup-version
+        with:
+          type: "desktop"
 
       - name: Create Release Draft
         if: github.ref_type == 'tag' || github.event.inputs.tag_version == 'true'

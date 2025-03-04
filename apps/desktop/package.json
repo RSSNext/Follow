@@ -1,7 +1,7 @@
 {
-  "name": "@follow/desktop",
+  "name": "Follow",
   "type": "module",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": true,
   "description": "Follow everything in one place",
   "author": "Follow Team",
@@ -75,5 +75,25 @@
     "utf-8-validate": "6.0.5"
   },
   "productName": "Follow",
-  "mainHash": "ad1913f95d3411e9bc07a90022c0f40d8f2e67e708eb704f64f1229ed31ac2d9"
+  "mainHash": "ad1913f95d3411e9bc07a90022c0f40d8f2e67e708eb704f64f1229ed31ac2d9",
+  "bump": {
+    "before": [
+      "git pull --rebase",
+      "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
+      "git add changelog",
+      "tsx plugins/vite/generate-main-hash.ts",
+      "pnpm eslint --fix package.json",
+      "pnpm prettier --ignore-unknown --write package.json",
+      "git add package.json"
+    ],
+    "after": [
+      "gh pr create --title 'release(desktop): Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
+    ],
+    "commit_message": "release(desktop): release v${NEW_VERSION}",
+    "tag": false,
+    "changelog": true,
+    "allowed_branches": [
+      "dev"
+    ]
+  }
 }

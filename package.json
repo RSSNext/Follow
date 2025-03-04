@@ -129,25 +129,5 @@
       "npm run dedupe:locales",
       "git add locales"
     ]
-  },
-  "bump": {
-    "before": [
-      "git pull --rebase",
-      "tsx apps/desktop/scripts/apply-changelog.ts ${NEW_VERSION}",
-      "git add apps/desktop/changelog",
-      "tsx apps/desktop/plugins/vite/generate-main-hash.ts",
-      "eslint --fix apps/desktop/package.json",
-      "prettier --ignore-unknown --write apps/desktop/package.json",
-      "git add apps/desktop/package.json"
-    ],
-    "after": [
-      "gh pr create --title 'release(desktop): Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
-    ],
-    "commit_message": "release(desktop): release v${NEW_VERSION}",
-    "tag": false,
-    "changelog": true,
-    "allowed_branches": [
-      "dev"
-    ]
   }
 }
