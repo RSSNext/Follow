@@ -36,7 +36,12 @@ export function HomeLeftAction() {
   return (
     <ActionGroup className="ml-2">
       <TouchableOpacity onPress={handlePress}>
-        <UserAvatar image={user?.image} name={user?.name} size={28} className="rounded-full" />
+        <UserAvatar
+          image={user?.image}
+          name={user?.name}
+          className="rounded-full"
+          color={accentColor}
+        />
       </TouchableOpacity>
     </ActionGroup>
   )
