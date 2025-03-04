@@ -1,6 +1,6 @@
 import { withOpacity } from "@follow/utils"
 import { router } from "expo-router"
-import { useCallback,useMemo  } from "react"
+import { useCallback, useMemo } from "react"
 import { TouchableOpacity } from "react-native"
 
 import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
