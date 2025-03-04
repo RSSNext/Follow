@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { formatEstimatedMins } from "@follow/utils"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
@@ -86,14 +87,14 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
               {feed?.title ?? "Unknown feed"}
             </Text>
             <Text className="text-secondary-label text-xs font-medium">·</Text>
-            {estimatedMins && (
+            {estimatedMins ? (
               <>
                 <Text className="text-secondary-label text-xs font-medium">
                   {formatEstimatedMins(estimatedMins)}
                 </Text>
                 <Text className="text-secondary-label text-xs font-medium">·</Text>
               </>
-            )}
+            ) : null}
             <RelativeDateTime
               date={publishedAt}
               className="text-secondary-label text-xs font-medium"
@@ -229,26 +230,4 @@ const AspectRatioImage = ({
       </View>
     </View>
   )
-}
-
-const formatEstimatedMins = (estimatedMins: number) => {
-  const minutesInHour = 60
-  const minutesInDay = minutesInHour * 24
-  const minutesInMonth = minutesInDay * 30
-
-  const months = Math.floor(estimatedMins / minutesInMonth)
-  const days = Math.floor((estimatedMins % minutesInMonth) / minutesInDay)
-  const hours = Math.floor((estimatedMins % minutesInDay) / minutesInHour)
-  const minutes = estimatedMins % minutesInHour
-
-  if (months > 0) {
-    return `${months}M ${days}d`
-  }
-  if (days > 0) {
-    return `${days}d ${hours}h`
-  }
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`
-  }
-  return `${estimatedMins} mins`
 }

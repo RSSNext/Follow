@@ -254,3 +254,25 @@ export function transformShortcut(shortcut: string, platform: OS = getOS()): str
   }
   return shortcut
 }
+
+export const formatEstimatedMins = (estimatedMins: number) => {
+  const minutesInHour = 60
+  const minutesInDay = minutesInHour * 24
+  const minutesInMonth = minutesInDay * 30
+
+  const months = Math.floor(estimatedMins / minutesInMonth)
+  const days = Math.floor((estimatedMins % minutesInMonth) / minutesInDay)
+  const hours = Math.floor((estimatedMins % minutesInDay) / minutesInHour)
+  const minutes = estimatedMins % minutesInHour
+
+  if (months > 0) {
+    return `${months}M ${days}d`
+  }
+  if (days > 0) {
+    return `${days}d ${hours}h`
+  }
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`
+  }
+  return `${estimatedMins} mins`
+}

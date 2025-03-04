@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { clsx, cn, isSafari } from "@follow/utils/utils"
+import { clsx, cn, formatEstimatedMins, isSafari } from "@follow/utils/utils"
 import { useMemo } from "react"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
@@ -319,25 +319,4 @@ function AudioCover({
       )}
     </div>
   )
-}
-const formatEstimatedMins = (estimatedMins: number) => {
-  const minutesInHour = 60
-  const minutesInDay = minutesInHour * 24
-  const minutesInMonth = minutesInDay * 30
-
-  const months = Math.floor(estimatedMins / minutesInMonth)
-  const days = Math.floor((estimatedMins % minutesInMonth) / minutesInDay)
-  const hours = Math.floor((estimatedMins % minutesInDay) / minutesInHour)
-  const minutes = estimatedMins % minutesInHour
-
-  if (months > 0) {
-    return `${months}M ${days}d`
-  }
-  if (days > 0) {
-    return `${days}d ${hours}h`
-  }
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`
-  }
-  return `${estimatedMins} mins`
 }
