@@ -75,7 +75,7 @@ export const ProfileScreen = () => {
         onScroll={scrollHandler}
         contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
       >
-        <UserHeaderBanner scrollY={scrollY} />
+        {!!whoami?.id && <UserHeaderBanner scrollY={scrollY} userId={whoami.id} />}
 
         <Stack.Screen options={{ headerShown: false, animation: "fade" }} />
 
