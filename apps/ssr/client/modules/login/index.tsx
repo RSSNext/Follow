@@ -1,4 +1,5 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
+import { createSession, loginHandler, signOut, twoFactor } from "@client/lib/auth"
 import { queryClient } from "@client/lib/query-client"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
@@ -25,8 +26,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { Link, useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
-
-import { createSession, loginHandler, signOut, twoFactor } from "~/lib/auth"
 
 export function Login() {
   const { status, refetch } = useSession()

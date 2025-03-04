@@ -1,3 +1,4 @@
+import { signUp } from "@client/lib/auth"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import {
@@ -15,8 +16,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
-
-import { signUp } from "~/lib/auth"
 
 export function Component() {
   return (

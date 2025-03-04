@@ -1,3 +1,4 @@
+import { resetPassword } from "@client/lib/auth"
 import { Button, MotionButtonBase } from "@follow/components/ui/button/index.jsx"
 import {
   Card,
@@ -22,8 +23,6 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
-
-import { resetPassword } from "~/lib/auth"
 
 const passwordSchema = z.string().min(8).max(128)
 const initPasswordFormSchema = z
