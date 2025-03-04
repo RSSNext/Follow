@@ -1,7 +1,7 @@
 import { cn } from "@follow/utils/src/utils"
 import { Text, View } from "react-native"
 
-import { User3CuteReIcon } from "@/src/icons/user_3_cute_re"
+import { User4CuteReIcon } from "@/src/icons/user_4_cute_re"
 
 import { ProxiedImage } from "../image/ProxiedImage"
 
@@ -26,7 +26,7 @@ export const UserAvatar = ({ image, size = 24, name, className, color }: UserAva
         {name ? (
           <Text className="text-secondary-label text-xs">{name.slice(0, 2)}</Text>
         ) : (
-          <User3CuteReIcon width={size} height={size} color={color} />
+          <User4CuteReIcon width={size} height={size} color={color} />
         )}
       </View>
     )

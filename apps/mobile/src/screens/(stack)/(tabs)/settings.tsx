@@ -111,7 +111,7 @@ function Settings() {
         className="bg-system-grouped-background flex-1"
         scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
       >
-        {whoami && <UserHeaderBanner scrollY={animatedScrollY} userId={whoami.id} />}
+        <UserHeaderBanner scrollY={animatedScrollY} userId={whoami?.id} />
 
         <SettingsList scrollRef={registerNavigationScrollView} />
       </ReAnimatedScrollView>
