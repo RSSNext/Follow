@@ -114,6 +114,7 @@
     "expo-drizzle-studio-plugin": "0.1.1",
     "postcss": "8.5.2"
   },
+  "appName": "Follow",
   "expo": {
     "install": {
       "exclude": [

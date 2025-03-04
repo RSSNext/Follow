@@ -2,19 +2,19 @@
   "$schema": "https://turbo.build/schema.json",
   "envMode": "loose",
   "tasks": {
-    "@follow/desktop#build": {
+    "Follow#build": {
       "outputs": ["dist/**", "out/**"]
     },
-    "@follow/desktop#build:web": {
+    "Follow#build:web": {
       "outputs": ["out/**"]
     },
-    "@follow/desktop#build:macos": {
+    "Follow#build:macos": {
       "outputs": ["dist/**", "out/**"]
     },
-    "@follow/desktop#build:mas": {
+    "Follow#build:mas": {
       "outputs": ["dist/**", "out/**"]
     },
-    "@follow/desktop#build:render": {
+    "Follow#build:render": {
       "outputs": ["out/**"]
     },
     "//#format:check": {},
