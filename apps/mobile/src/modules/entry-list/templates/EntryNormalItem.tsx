@@ -68,6 +68,9 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
   const isPlaying = audioState === "playing"
   const isLoading = audioState === "loading"
 
+  const durationInSeconds = attachments ? attachments[0]?.duration_in_seconds : 0
+  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
+
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
@@ -83,6 +86,14 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
               {feed?.title ?? "Unknown feed"}
             </Text>
             <Text className="text-secondary-label text-xs font-medium">·</Text>
+            {estimatedMins && (
+              <>
+                <Text className="text-secondary-label text-xs font-medium">
+                  {formatEstimatedMins(estimatedMins)}
+                </Text>
+                <Text className="text-secondary-label text-xs font-medium">·</Text>
+              </>
+            )}
             <RelativeDateTime
               date={publishedAt}
               className="text-secondary-label text-xs font-medium"
@@ -218,4 +229,26 @@ const AspectRatioImage = ({
       </View>
     </View>
   )
+}
+
+const formatEstimatedMins = (estimatedMins: number) => {
+  const minutesInHour = 60
+  const minutesInDay = minutesInHour * 24
+  const minutesInMonth = minutesInDay * 30
+
+  const months = Math.floor(estimatedMins / minutesInMonth)
+  const days = Math.floor((estimatedMins % minutesInMonth) / minutesInDay)
+  const hours = Math.floor((estimatedMins % minutesInDay) / minutesInHour)
+  const minutes = estimatedMins % minutesInHour
+
+  if (months > 0) {
+    return `${months}M ${days}d`
+  }
+  if (days > 0) {
+    return `${days}d ${hours}h`
+  }
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`
+  }
+  return `${estimatedMins} mins`
 }
