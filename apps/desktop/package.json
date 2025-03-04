@@ -82,8 +82,8 @@
       "tsx scripts/apply-changelog.ts ${NEW_VERSION}",
       "git add changelog",
       "tsx plugins/vite/generate-main-hash.ts",
-      "eslint --fix package.json",
-      "prettier --ignore-unknown --write package.json",
+      "pnpm eslint --fix package.json",
+      "pnpm prettier --ignore-unknown --write package.json",
       "git add package.json"
     ],
     "after": [
