@@ -1,7 +1,8 @@
-import { getSession } from "@follow/shared/auth"
 import type { AuthSession } from "@follow/shared/hono"
 import { useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
+
+import { getSession } from "~/lib/auth"
 
 export const useSession = (options?: { enabled?: boolean }) => {
   const { data, isLoading, ...rest } = useQuery({

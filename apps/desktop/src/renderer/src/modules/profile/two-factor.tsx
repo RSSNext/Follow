@@ -9,7 +9,6 @@ import {
 } from "@follow/components/ui/form/index.jsx"
 import { Input, InputOTP, InputOTPGroup, InputOTPSlot } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
-import { twoFactor } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { m, useAnimation } from "framer-motion"
@@ -22,6 +21,7 @@ import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { twoFactor } from "~/lib/auth"
 import { getFetchErrorInfo } from "~/lib/error-parser"
 import { useHasPassword } from "~/queries/auth"
 

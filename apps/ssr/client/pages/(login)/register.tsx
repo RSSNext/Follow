@@ -9,13 +9,14 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { signUp } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
+
+import { signUp } from "~/lib/auth"
 
 export function Component() {
   return (

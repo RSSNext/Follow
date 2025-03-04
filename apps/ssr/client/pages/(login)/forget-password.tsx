@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { forgetPassword } from "@follow/shared/auth"
 import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -24,6 +23,8 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
+
+import { forgetPassword } from "~/lib/auth"
 
 const forgetPasswordFormSchema = z.object({
   email: z.string().email(),

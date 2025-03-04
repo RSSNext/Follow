@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { resetPassword } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -23,6 +22,8 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
+
+import { resetPassword } from "~/lib/auth"
 
 const passwordSchema = z.string().min(8).max(128)
 const initPasswordFormSchema = z
