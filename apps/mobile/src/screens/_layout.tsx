@@ -4,6 +4,7 @@ import { Stack } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { useSheet } from "react-native-sheet-transitions"
 
+import { useIntentHandler } from "../hooks/useIntentHandler"
 import { DebugButton } from "../modules/debug"
 import { RootProviders } from "../providers"
 import { usePrefetchSessionUser } from "../store/user/hooks"
@@ -11,6 +12,7 @@ import { getSystemBackgroundColor } from "../theme/utils"
 
 export default function RootLayout() {
   useColorScheme()
+  useIntentHandler()
 
   return (
     <RootProviders>
