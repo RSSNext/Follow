@@ -39,6 +39,7 @@ export default function ModalLayout() {
       <Stack.Screen
         name="forget-password"
         options={{
+          headerShown: true,
           title: "",
           headerTransparent: true,
           headerLeft: ModalHeaderCloseButton,
@@ -55,6 +56,15 @@ export default function ModalLayout() {
       />
       <Stack.Screen
         name="login"
+        options={{
+          headerShown: true,
+          title: "",
+          headerTransparent: true,
+          headerLeft: ModalHeaderCloseButton,
+        }}
+      />
+      <Stack.Screen
+        name="2fa"
         options={{
           headerShown: true,
           title: "",
