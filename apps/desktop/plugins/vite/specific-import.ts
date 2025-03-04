@@ -23,18 +23,17 @@ export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
         switch (platform) {
           case "electron": {
             priorities = [
-              ...sharedExts,
-
               ".electron.ts",
               ".electron.tsx",
               ".electron.js",
               ".electron.jsx",
+              ...sharedExts,
             ]
 
             break
           }
           case "web": {
-            priorities = [...sharedExts, ".web.ts", ".web.tsx", ".web.js", ".web.jsx"]
+            priorities = [".web.ts", ".web.tsx", ".web.js", ".web.jsx", ...sharedExts]
 
             break
           }
