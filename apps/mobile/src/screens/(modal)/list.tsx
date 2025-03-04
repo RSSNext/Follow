@@ -1,18 +1,15 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { router, Stack, useLocalSearchParams } from "expo-router"
-import { memo, useState } from "react"
+import { router, useLocalSearchParams, useNavigation } from "expo-router"
+import { memo, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { View } from "react-native"
 import { z } from "zod"
 
-import { BlurEffectWithBottomBorder } from "@/src/components/common/BlurEffect"
-import {
-  ModalHeaderCloseButton,
-  ModalHeaderSubmitButton,
-} from "@/src/components/common/ModalSharedComponents"
-import { SafeModalScrollView } from "@/src/components/common/SafeModalScrollView"
+import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
+import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { NumberField, TextField } from "@/src/components/ui/form/TextField"
@@ -67,10 +64,10 @@ export default function ListScreen() {
 
   return (
     <FormProvider form={form}>
-      <SafeModalScrollView className="bg-system-grouped-background flex-1 pb-safe">
+      <SafeModalScrollView className="bg-system-grouped-background pb-safe flex-1">
         <ScreenOptions title={list?.title} listId={listId} />
 
-        <GroupedInsetListCard showSeparator={false} className="mt-6 px-3 py-6">
+        <GroupedInsetListCard showSeparator={false} className="mt-2 px-3 py-6">
           <Controller
             name="title"
             control={form.control}
@@ -204,46 +201,27 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
 
   const isEditing = !!listId
   const [isLoading, setIsLoading] = useState(false)
+  const navigation = useNavigation()
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: !isDirty,
+    })
+  }, [isDirty, navigation])
 
   return (
-    <Stack.Screen
-      options={{
-        headerLeft: ModalHeaderCloseButton,
-        gestureEnabled: !isDirty,
-        headerTransparent: true,
-        headerBackground: BlurEffectWithBottomBorder,
-        headerRight: () => (
-          <FormProvider form={form}>
-            <ModalHeaderSubmitButton
-              isValid={isValid}
-              isLoading={isLoading}
-              onPress={form.handleSubmit((values) => {
-                if (!isEditing) {
-                  setIsLoading(true)
-                  listSyncServices
-                    .createList({
-                      list: values as CreateListModel,
-                    })
-                    .catch((error) => {
-                      toast.error(getBizFetchErrorMessage(error))
-                      console.error(error)
-                    })
-                    .finally(() => {
-                      setIsLoading(false)
-                      router.dismiss()
-                    })
-                  return
-                }
-                const list = getList(listId!)
-                if (!list) return
+    <ModalHeader
+      headerTitle={title ? `Edit List - ${title}` : "Create List"}
+      headerRight={
+        <FormProvider form={form}>
+          <ModalHeaderSubmitButton
+            isValid={isValid}
+            isLoading={isLoading}
+            onPress={form.handleSubmit((values) => {
+              if (!isEditing) {
                 setIsLoading(true)
                 listSyncServices
-                  .updateList({
-                    listId: listId!,
-                    list: {
-                      ...list,
-                      ...values,
-                    },
+                  .createList({
+                    list: values as CreateListModel,
                   })
                   .catch((error) => {
                     toast.error(getBizFetchErrorMessage(error))
@@ -253,13 +231,31 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
                     setIsLoading(false)
                     router.dismiss()
                   })
-              })}
-            />
-          </FormProvider>
-        ),
-
-        headerTitle: title ? `Edit List - ${title}` : "Create List",
-      }}
+                return
+              }
+              const list = getList(listId!)
+              if (!list) return
+              setIsLoading(true)
+              listSyncServices
+                .updateList({
+                  listId: listId!,
+                  list: {
+                    ...list,
+                    ...values,
+                  },
+                })
+                .catch((error) => {
+                  toast.error(getBizFetchErrorMessage(error))
+                  console.error(error)
+                })
+                .finally(() => {
+                  setIsLoading(false)
+                  router.dismiss()
+                })
+            })}
+          />
+        </FormProvider>
+      }
     />
   )
 })

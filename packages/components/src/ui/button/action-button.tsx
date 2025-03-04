@@ -76,7 +76,7 @@ export const ActionButton = React.forwardRef<
         className={cn(
           "no-drag-region pointer-events-auto inline-flex items-center justify-center",
           active && typeof icon !== "function" && "bg-zinc-500/15 hover:bg-zinc-500/20",
-          "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
+          "hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover rounded-md duration-200",
           "disabled:cursor-not-allowed disabled:opacity-50",
           clickableDisabled && "cursor-not-allowed opacity-50",
           actionButtonStyleVariant.size[size],

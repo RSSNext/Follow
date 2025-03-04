@@ -98,10 +98,10 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
             router.push(`/feeds/${id}`)
           }}
         >
-          <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded-full border border-transparent dark:bg-[#222]">
+          <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded border border-transparent dark:bg-[#222]">
             <FeedIcon feed={feed} />
           </View>
-          <Text numberOfLines={1} className="text-text flex-1">
+          <Text numberOfLines={1} className="text-text flex-1 font-medium">
             {subscription?.title || feed.title}
           </Text>
           {!!unreadCount && (

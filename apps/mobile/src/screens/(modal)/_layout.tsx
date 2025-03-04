@@ -2,7 +2,7 @@ import { Stack } from "expo-router"
 
 export default function ModalLayout() {
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="add"
         options={{
@@ -25,6 +25,13 @@ export default function ModalLayout() {
         name="list"
         options={{
           title: "List",
+        }}
+      />
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          headerShown: false,
         }}
       />
     </Stack>

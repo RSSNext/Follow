@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListBaseCell,
   GroupedInsetListCard,
@@ -30,7 +30,7 @@ export const AccountScreen = () => {
                 await expo.reloadAppAsync("User sign out")
               }}
             >
-              <Text className="text-label">Delete account</Text>
+              <Text className="text-red">Delete account</Text>
             </TouchableOpacity>
           </GroupedInsetListBaseCell>
         </GroupedInsetListCard>

@@ -49,7 +49,7 @@ export const RelativeDateTime = ({
   date,
   displayAbsoluteTimeAfterDay,
   dateFormatTemplate,
-  postfixText,
+  postfixText = "ago",
   ...props
 }: RelativeDateTimeProps) => {
   const [relative, setRelative] = useState<string>(() =>

@@ -11662,6 +11662,10 @@ declare const auth: {
         };
         advanced: {
             generateId: false;
+            defaultCookieAttributes: {
+                sameSite: "none";
+                secure: true;
+            };
         };
         session: {
             updateAge: number;
@@ -14711,6 +14715,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         }[] | null | undefined;
                     };
                     read: boolean | null;
+                    view?: number | undefined;
+                    from?: string[] | undefined;
                     collections?: {
                         createdAt: string;
                     } | undefined;

@@ -5,7 +5,7 @@ import { setGeneralSetting, useGeneralSettingKey } from "@/src/atoms/settings/ge
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Select } from "@/src/components/ui/form/Select"
 import {
   GroupedInsetListBaseCell,
@@ -21,7 +21,7 @@ export const GeneralScreen = () => {
   const translationLanguage = useGeneralSettingKey("translationLanguage")
   const autoGroup = useGeneralSettingKey("autoGroup")
   const showUnreadOnLaunch = useGeneralSettingKey("unreadOnly")
-  const groupByDate = useGeneralSettingKey("groupByDate")
+  // const groupByDate = useGeneralSettingKey("groupByDate")
   const expandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
   const markAsReadWhenInView = useGeneralSettingKey("renderMarkUnread")
@@ -36,7 +36,7 @@ export const GeneralScreen = () => {
           <GroupedInsetListBaseCell>
             <Text className="text-label">Language</Text>
 
-            <Text className="text-label">{locales[0]?.languageTag}</Text>
+            <Text className="text-label">{(locales[0]?.languageTag, "English")}</Text>
           </GroupedInsetListBaseCell>
 
           <GroupedInsetListBaseCell>
@@ -87,7 +87,7 @@ export const GeneralScreen = () => {
               />
             </GroupedInsetListCell>
 
-            <GroupedInsetListCell label="Group by date" description="Group entries by date.">
+            {/* <GroupedInsetListCell label="Group by date" description="Group entries by date.">
               <Switch
                 size="sm"
                 value={groupByDate}
@@ -95,7 +95,7 @@ export const GeneralScreen = () => {
                   setGeneralSetting("groupByDate", value)
                 }}
               />
-            </GroupedInsetListCell>
+            </GroupedInsetListCell> */}
 
             <GroupedInsetListCell
               label="Expand long social media"

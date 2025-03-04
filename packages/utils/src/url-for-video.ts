@@ -13,7 +13,7 @@ export const transformVideoUrl = ({
         mime_type?: string
       }[]
     | null
-}) => {
+}): string | null => {
   if (url?.match(/\/\/www.bilibili.com\/video\/BV\w+/)) {
     const player = isIframe
       ? "https://player.bilibili.com/player.html"
@@ -39,7 +39,7 @@ export const transformVideoUrl = ({
   }
 
   if (attachments) {
-    return attachments.find((attachment) => attachment.mime_type === "text/html")?.url
+    return attachments.find((attachment) => attachment.mime_type === "text/html")?.url ?? null
   }
   return null
 }

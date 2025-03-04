@@ -50,7 +50,6 @@ export interface UISettings {
 
   // view
   pictureViewMasonry: boolean
-  pictureViewFilterNoImage: boolean
   wideMode: boolean
   contentFontSize: number
   dateFormat: string

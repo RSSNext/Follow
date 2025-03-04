@@ -1,15 +1,15 @@
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery } from "@tanstack/react-query"
-import { router, Stack } from "expo-router"
+import { router, useNavigation } from "expo-router"
+import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native"
 import { z } from "zod"
 
-import {
-  ModalHeaderCloseButton,
-  ModalHeaderSubmitButton,
-} from "@/src/components/common/ModalSharedComponents"
+import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
+import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
@@ -109,21 +109,26 @@ const Impl = (props: { id: string }) => {
 
   const isLoading = false
 
+  const navigation = useNavigation()
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: !isDirty,
+    })
+  }, [isDirty, navigation])
   return (
-    <ScrollView className="bg-system-grouped-background" contentContainerClassName="pt-4 gap-y-4">
-      <Stack.Screen
-        options={{
-          title: `${isSubscribed ? "Edit" : "Follow"} - ${list?.title}`,
-          headerLeft: ModalHeaderCloseButton,
-          gestureEnabled: !isDirty,
-          headerRight: () => (
-            <ModalHeaderSubmitButton
-              isValid={isValid}
-              onPress={form.handleSubmit(submit)}
-              isLoading={isLoading}
-            />
-          ),
-        }}
+    <SafeModalScrollView
+      className="bg-system-grouped-background"
+      contentContainerClassName="gap-y-4 mt-2"
+    >
+      <ModalHeader
+        headerTitle={`${isSubscribed ? "Edit" : "Follow"} - ${list?.title}`}
+        headerRight={
+          <ModalHeaderSubmitButton
+            isValid={isValid}
+            onPress={form.handleSubmit(submit)}
+            isLoading={isLoading}
+          />
+        }
       />
 
       <GroupedInsetListCard className="px-5 py-4">
@@ -200,7 +205,7 @@ const Impl = (props: { id: string }) => {
           )}
         </FormProvider>
       </GroupedInsetListCard>
-    </ScrollView>
+    </SafeModalScrollView>
   )
 }
 

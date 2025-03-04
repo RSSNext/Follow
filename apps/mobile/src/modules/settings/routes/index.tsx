@@ -1,4 +1,4 @@
-import type { createNativeStackNavigator } from "@react-navigation/native-stack"
+import type { TypedNavigator } from "@react-navigation/native"
 
 import { AboutScreen } from "./About"
 import { AccountScreen } from "./Account"
@@ -12,11 +12,10 @@ import { ListsScreen } from "./Lists"
 import { ManageListScreen } from "./ManageList"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
-import { ProfileScreen } from "./Profile"
 
-export const SettingRoutes = (Stack: ReturnType<typeof createNativeStackNavigator>) => {
+export const SettingRoutes = (Stack: TypedNavigator<any, any>) => {
   return [
-    <Stack.Screen key="Profile" name="Profile" component={ProfileScreen} />,
+    // <Stack.Screen key="Profile" name="Profile" component={ProfileScreen} />,
     <Stack.Screen key="Achievement" name="Achievement" component={AchievementScreen} />,
     <Stack.Screen key="General" name="General" component={GeneralScreen} />,
     <Stack.Screen key="Notifications" name="Notifications" component={NotificationsScreen} />,
@@ -28,6 +27,7 @@ export const SettingRoutes = (Stack: ReturnType<typeof createNativeStackNavigato
     <Stack.Screen key="Feeds" name="Feeds" component={FeedsScreen} />,
     <Stack.Screen key="Privacy" name="Privacy" component={PrivacyScreen} />,
     <Stack.Screen key="About" name="About" component={AboutScreen} />,
+    // @ts-expect-error
     <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />,
   ]
 }

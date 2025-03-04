@@ -29,7 +29,7 @@ export const Radio: FC<
         type="radio"
         id={id ?? fallbackId}
         className={cn(
-          "radio radio-accent radio-sm accent-accent disabled:radio-current disabled:cursor-not-allowed disabled:text-theme-disabled",
+          "radio radio-accent radio-sm accent-accent disabled:radio-current disabled:text-theme-disabled disabled:cursor-not-allowed",
           className,
         )}
         value={value}

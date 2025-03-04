@@ -1,5 +1,5 @@
 import type { FC } from "react"
-import { FlatList } from "react-native"
+import { View } from "react-native"
 
 import { useSortedUngroupedSubscription } from "@/src/store/subscription/hooks"
 
@@ -15,12 +15,13 @@ export const UnGroupedList: FC<{
   const sortedSubscriptionIds = useSortedUngroupedSubscription(subscriptionIds, sortBy, sortOrder)
 
   return (
-    <FlatList
-      data={sortedSubscriptionIds}
-      renderItem={renderSubscriptionItems}
-      ItemSeparatorComponent={ItemSeparator}
-    />
+    <View>
+      {sortedSubscriptionIds.map((id, index) => (
+        <View key={id}>
+          <SubscriptionItem key={id} id={id} />
+          {index !== sortedSubscriptionIds.length - 1 && <ItemSeparator />}
+        </View>
+      ))}
+    </View>
   )
 }
-
-const renderSubscriptionItems = ({ item }: { item: string }) => <SubscriptionItem id={item} />

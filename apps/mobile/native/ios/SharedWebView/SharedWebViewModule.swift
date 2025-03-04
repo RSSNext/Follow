@@ -1,11 +1,14 @@
 //
-//  File.swift
+//  SharedWebViewModule.swift
 //
 //  Created by Innei on 2025/1/29.
 //
 
+import Combine
 import ExpoModulesCore
 import WebKit
+
+let onContentHeightChanged = "onContentHeightChanged"
 
 public class SharedWebViewModule: Module {
     private var pendingJavaScripts: [String] = []
@@ -37,6 +40,19 @@ public class SharedWebViewModule: Module {
                     self.load(urlString: urlString)
                 }
             }
+        }
+
+        Events(onContentHeightChanged)
+        var cancellable: AnyCancellable?
+        OnStartObserving {
+            cancellable = WebViewManager.state.$contentHeight
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] height in
+                    self?.sendEvent(onContentHeightChanged, ["height": height])
+                }
+        }
+        OnStopObserving {
+            cancellable?.cancel()
         }
     }
 

@@ -9,6 +9,7 @@ import { storeDbMorph } from "@/src/morph/store-db"
 import { EntryService } from "@/src/services/entry"
 
 import { collectionActions } from "../collection/store"
+import { feedActions } from "../feed/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
 import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
@@ -55,15 +56,26 @@ class EntryActions {
     draft,
     feedId,
     entryId,
+    sources,
   }: {
     draft: EntryState
     feedId?: FeedId | null
     entryId: EntryId
+    sources?: string[] | null
   }) {
     if (!feedId) return
     const subscription = getSubscription(feedId)
     if (typeof subscription?.view === "number") {
       draft.entryIdByView[subscription.view].add(entryId)
+    }
+
+    // lists
+    for (const s of sources ?? []) {
+      const subscription = getSubscription(s)
+
+      if (typeof subscription?.view === "number") {
+        draft.entryIdByView[subscription.view].add(entryId)
+      }
     }
   }
 
@@ -124,15 +136,18 @@ class EntryActions {
     }
   }
 
-  upsertManyInSession(entries: EntryModel[]) {
+  upsertManyInSession(entries: EntryModel[], options?: { unreadOnly?: boolean }) {
     if (entries.length === 0) return
+    const { unreadOnly } = options ?? {}
 
     immerSet((draft) => {
       for (const entry of entries) {
         draft.entryIdSet.add(entry.id)
         draft.data[entry.id] = entry
 
-        const { feedId, inboxHandle } = entry
+        const { feedId, inboxHandle, read, sources } = entry
+        if (unreadOnly && read) continue
+
         this.addEntryIdToFeed({
           draft,
           feedId,
@@ -143,6 +158,7 @@ class EntryActions {
           draft,
           feedId,
           entryId: entry.id,
+          sources,
         })
 
         this.addEntryIdToInbox({
@@ -311,6 +327,8 @@ class EntrySyncServices {
       const collections = honoMorph.toCollections(res.data, view ?? 0)
       await collectionActions.upsertMany(collections)
     }
+
+    await feedActions.upsertMany(res.data?.map((e) => honoMorph.toFeed(e.feeds)) || [])
 
     return res
   }

@@ -36,15 +36,20 @@ function AnimatedStack() {
       <Stack.Screen
         name="(stack)"
         options={{
+          title: "Follow",
           headerShown: false,
           contentStyle: isScaling ? { borderRadius: 50, overflow: "hidden" } : {},
         }}
       />
-      <Stack.Screen name="(headless)" options={{ headerShown: false }} />
-      <Stack.Screen name="(modal)" options={{ headerShown: false, presentation: "modal" }} />
+      <Stack.Screen name="(headless)" options={{ headerShown: false, title: "Follow" }} />
+      <Stack.Screen
+        name="(modal)"
+        options={{ headerShown: false, presentation: "modal", title: "Modal" }}
+      />
       <Stack.Screen
         name="player"
         options={{
+          title: "Player",
           presentation: "transparentModal",
           headerShown: false,
           contentStyle: {

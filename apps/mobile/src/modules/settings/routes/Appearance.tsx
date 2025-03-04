@@ -5,7 +5,7 @@ import { setUISetting, useUISettingKey } from "@/src/atoms/settings/ui"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Select } from "@/src/components/ui/form/Select"
 import {
   GroupedInsetListCard,

@@ -20,7 +20,10 @@ import { PanGestureHandler } from "react-native-gesture-handler"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
+import {
+  useBottomTabBarHeight,
+  useRegisterNavigationScrollView,
+} from "@/src/components/layouts/tabbar/hooks"
 import type { TabComponent } from "@/src/components/ui/tabview/TabView"
 import { apiClient } from "@/src/lib/api-fetch"
 
@@ -33,11 +36,11 @@ export const Recommendations = () => {
   const currentTab = useAtomValue(currentTabAtom)
 
   const windowWidth = useWindowDimensions().width
-  const contentScrollerRef = useRef<ScrollView>(null)
+  const ref = useRef<ScrollView>(null)
 
   useEffect(() => {
-    contentScrollerRef.current?.scrollTo({ x: currentTab * windowWidth, y: 0, animated: true })
-  }, [currentTab, windowWidth])
+    ref.current?.scrollTo({ x: currentTab * windowWidth, y: 0, animated: true })
+  }, [ref, currentTab, windowWidth])
 
   const [loadedTabIndex, setLoadedTabIndex] = useState(() => new Set())
   useEffect(() => {
@@ -46,12 +49,13 @@ export const Recommendations = () => {
       return new Set(prev)
     })
   }, [currentTab])
+
   return (
     <AnimatedScrollView
       onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: animatedX } } }], {
         useNativeDriver: true,
       })}
-      ref={contentScrollerRef}
+      ref={ref}
       horizontal
       pagingEnabled
       showsHorizontalScrollIndicator={false}
@@ -100,11 +104,11 @@ const fetchRsshubPopular = (category: DiscoverCategories, lang: Language) => {
   })
 }
 
-const Tab: TabComponent = ({ tab, ...rest }) => {
+const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
   const tabHeight = useBottomTabBarHeight()
 
   const { data, isLoading } = useQuery({
-    queryKey: ["rsshub-popular", tab.value],
+    queryKey: ["rsshub-popular", "cache", tab.value],
     queryFn: () => fetchRsshubPopular(tab.value, "all").then((res) => res.data),
   })
   const keys = useMemo(() => {
@@ -172,7 +176,10 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
   }, [data, keys])
 
   // Add ref for FlashList
-  const listRef = useRef<FlashList<{ key: string; data: RSSHubRouteDeclaration } | string>>(null)
+  const listRef =
+    useRegisterNavigationScrollView<
+      FlashList<{ key: string; data: RSSHubRouteDeclaration } | string>
+    >(isSelected)
 
   const getItemType = useCallback((item: string | { key: string }) => {
     return typeof item === "string" ? "sectionHeader" : "row"
@@ -186,6 +193,15 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
   const headerHeight = useAtomValue(headerHeightAtom)
 
   const insets = useSafeAreaInsets()
+
+  const scrollOffsetRef = useRef(0)
+  const { animatedY } = useContext(DiscoverContext)
+
+  useEffect(() => {
+    if (isSelected) {
+      animatedY.value = scrollOffsetRef.current
+    }
+  }, [animatedY, isSelected])
   if (isLoading) {
     return <ActivityIndicator className="flex-1 items-center justify-center" />
   }
@@ -193,6 +209,11 @@ const Tab: TabComponent = ({ tab, ...rest }) => {
   return (
     <View className="bg-system-background flex-1" {...rest}>
       <FlashList
+        onScroll={(e) => {
+          scrollOffsetRef.current = e.nativeEvent.contentOffset.y
+          animatedY.value = scrollOffsetRef.current
+        }}
+        scrollEventThrottle={16}
         estimatedItemSize={150}
         ref={listRef}
         data={alphabetGroups}
@@ -221,8 +242,8 @@ const ItemRenderer = ({
   if (typeof item === "string") {
     // Rendering header
     return (
-      <View className="border-b-opaque-separator border-b-hairline mx-6 mb-1 mt-2 pb-1">
-        <Text className="text-secondary-label text-base">{item}</Text>
+      <View className="border-b-opaque-separator mx-6 mb-1 mt-6 pb-1">
+        <Text className="text-label text-xl font-semibold">{item}</Text>
       </View>
     )
   } else {

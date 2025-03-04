@@ -8,7 +8,7 @@ export const PoweredByFooter: Component = ({ className }) => (
     <Logo className="size-5" />{" "}
     <a
       href="https://github.com/RSSNext"
-      className="cursor-pointer font-default font-bold text-accent no-underline"
+      className="font-default text-accent cursor-pointer font-bold no-underline"
       target="_blank"
       rel="noreferrer"
     >

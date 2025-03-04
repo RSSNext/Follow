@@ -4,7 +4,7 @@ import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
-import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
+import { RightCuteFiIcon } from "@/src/icons/right_cute_fi"
 import { closeDrawer, selectFeed, useSelectedFeed } from "@/src/modules/screen/atoms"
 import { useUnreadCounts } from "@/src/store/unread/hooks"
 import { useColor } from "@/src/theme/colors"
@@ -34,7 +34,7 @@ export const CategoryGrouped = memo(
       }
     }, [rotateSharedValue])
 
-    const tertiaryLabelColor = useColor("tertiaryLabel")
+    const secondaryLabelColor = useColor("label")
     const selectedFeed = useSelectedFeed()
     if (selectedFeed?.type !== "view") {
       return null
@@ -67,11 +67,11 @@ export const CategoryGrouped = memo(
               }}
               className="size-5 flex-row items-center justify-center"
             >
-              <Animated.View style={rotateStyle}>
-                <MingcuteRightLine color={tertiaryLabelColor} height={18} width={18} />
+              <Animated.View style={rotateStyle} className="ml-2">
+                <RightCuteFiIcon color={secondaryLabelColor} height={14} width={14} />
               </Animated.View>
             </TouchableOpacity>
-            <Text className="text-text ml-3">{category}</Text>
+            <Text className="text-text ml-4 font-medium">{category}</Text>
             {!!unreadCounts && (
               <Text className="text-secondary-label ml-auto text-xs">{unreadCounts}</Text>
             )}

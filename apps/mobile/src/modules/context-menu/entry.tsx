@@ -1,14 +1,14 @@
-import { PortalProvider } from "@gorhom/portal"
 import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
 import { Share, Text, View } from "react-native"
-import * as ContextMenu from "zeego/context-menu"
 
 import {
   EntryContentWebView,
-  setWebViewEntry,
+  preloadWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
+import { ContextMenu } from "@/src/components/ui/context-menu"
+import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 import { useSelectedView } from "@/src/modules/screen/atoms"
@@ -19,12 +19,13 @@ import { unreadSyncService } from "@/src/store/unread/store"
 
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)
+  const feedId = entry?.feedId
   const view = useSelectedView()
   const isEntryStarred = useIsEntryStarred(id)
 
   const handlePressPreview = useCallback(() => {
     if (!entry) return
-    setWebViewEntry(entry)
+    preloadWebViewEntry(entry)
     router.push(`/entries/${id}`)
   }, [entry, id])
 
@@ -37,14 +38,14 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
       <ContextMenu.Content>
         <ContextMenu.Preview size="STRETCH" onPress={handlePressPreview}>
           {() => (
-            <PortalProvider>
+            <PortalHost>
               <View className="bg-system-background flex-1">
                 <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
-                  {entry.title}
+                  {entry.title?.trim()}
                 </Text>
                 <EntryContentWebView entry={entry} />
               </View>
-            </PortalProvider>
+            </PortalHost>
           )}
         </ContextMenu.Preview>
 
@@ -62,37 +63,31 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
           />
         </ContextMenu.Item>
 
-        <ContextMenu.Item
-          key="Star"
-          onSelect={() => {
-            if (isEntryStarred) {
-              collectionSyncService.unstarEntry(id)
-              toast.info("Unstarred")
-            } else {
-              if (!entry.feedId) {
-                toast.error("Feed not found")
-                return
+        {feedId && view !== undefined && (
+          <ContextMenu.Item
+            key="Star"
+            onSelect={() => {
+              if (isEntryStarred) {
+                collectionSyncService.unstarEntry(id)
+                toast.info("Unstarred")
+              } else {
+                collectionSyncService.starEntry({
+                  feedId,
+                  entryId: id,
+                  view,
+                })
+                toast.info("Starred")
               }
-              if (!view) {
-                toast.error("View not found")
-                return
-              }
-              collectionSyncService.starEntry({
-                feedId: entry.feedId,
-                entryId: id,
-                view,
-              })
-              toast.info("Starred")
-            }
-          }}
-        >
-          <ContextMenu.ItemIcon
-            ios={{
-              name: isEntryStarred ? "star.slash" : "star",
             }}
-          />
-          <ContextMenu.ItemTitle>{isEntryStarred ? "Unstar" : "Star"}</ContextMenu.ItemTitle>
-        </ContextMenu.Item>
+          >
+            <ContextMenu.ItemIcon
+              ios={{
+                name: isEntryStarred ? "star.slash" : "star",
+              }}
+            />
+            <ContextMenu.ItemTitle>{isEntryStarred ? "Unstar" : "Star"}</ContextMenu.ItemTitle>
+          </ContextMenu.Item>
+        )}
 
         {entry.url && (
           <ContextMenu.Item

@@ -1,7 +1,8 @@
 import type { FeedViewType } from "@follow/constants"
+import { sql } from "drizzle-orm"
 import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core"
 
-import type { AttachmentsModel, ExtraModel, MediaModel } from "./types"
+import type { AttachmentsModel, ExtraModel, ImageColorsResult, MediaModel } from "./types"
 
 export const feedsTable = sqliteTable("feeds", {
   id: text("id").primaryKey(),
@@ -54,7 +55,7 @@ export const unreadTable = sqliteTable("unread", {
 
 export const usersTable = sqliteTable("users", {
   id: text("id").primaryKey(),
-  email: text("email").notNull(),
+  email: text("email"),
   handle: text("handle"),
   name: text("name"),
   image: text("image"),
@@ -83,6 +84,7 @@ export const entriesTable = sqliteTable("entries", {
 
   inboxHandle: text("inbox_handle"),
   read: integer("read", { mode: "boolean" }),
+  sources: text("sources", { mode: "json" }).$type<string[]>(),
 })
 
 export const collectionsTable = sqliteTable("collections", {
@@ -104,3 +106,9 @@ export const summariesTable = sqliteTable(
     unq: uniqueIndex("unq").on(table.entryId, table.language),
   }),
 )
+
+export const imagesTable = sqliteTable("images", (t) => ({
+  url: t.text("url").notNull().primaryKey(),
+  colors: t.text("colors", { mode: "json" }).$type<ImageColorsResult>().notNull(),
+  createdAt: t.integer("created_at", { mode: "timestamp" }).default(sql`(CURRENT_TIMESTAMP)`),
+}))

@@ -114,7 +114,7 @@ export const IconButton = React.forwardRef<
         styledButtonVariant({
           variant: "ghost",
         }),
-        "group relative gap-2 bg-accent/10 px-4 hover:bg-accent dark:bg-accent/20 dark:hover:bg-accent/60",
+        "bg-accent/10 hover:bg-accent dark:bg-accent/20 dark:hover:bg-accent/60 group relative gap-2 px-4",
         rest.className,
       )}
     >

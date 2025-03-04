@@ -6,13 +6,13 @@ import type { ScrollView } from "react-native"
 import { Alert, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { SetBottomTabBarVisibleContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarVisibleContext"
+import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 import {
   GroupedInsetListCard,
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
 } from "@/src/components/ui/grouped/GroupedList"
-import { SetBottomTabBarVisibleContext } from "@/src/components/ui/tabbar/contexts/BottomTabBarVisibleContext"
-import { useBottomTabBarHeight } from "@/src/components/ui/tabbar/hooks"
 import { getDbPath } from "@/src/database"
 import { BellRingingCuteFiIcon } from "@/src/icons/bell_ringing_cute_fi"
 import { CertificateCuteFiIcon } from "@/src/icons/certificate_cute_fi"
@@ -24,8 +24,6 @@ import { RadaCuteFiIcon } from "@/src/icons/rada_cute_fi"
 import { SafeLockFilledIcon } from "@/src/icons/safe_lock_filled"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
-import { TrophyCuteFiIcon } from "@/src/icons/trophy_cute_fi"
-import { User3CuteFiIcon } from "@/src/icons/user_3_cute_fi"
 import { UserSettingCuteFiIcon } from "@/src/icons/user_setting_cute_fi"
 import { signOut } from "@/src/lib/auth"
 
@@ -42,29 +40,6 @@ interface GroupNavigationLink {
 
   todo?: boolean
 }
-const UserGroupNavigationLinks: GroupNavigationLink[] = [
-  {
-    label: "Profile",
-    icon: User3CuteFiIcon,
-    onPress: (navigation, scrollRef) => {
-      scrollRef.current?.scrollTo({ y: 0, animated: true })
-      setTimeout(() => {
-        navigation.navigate("Profile")
-      }, 100)
-    },
-    iconBackgroundColor: "#4F46E5",
-  },
-  {
-    label: "Achievement",
-    icon: TrophyCuteFiIcon,
-    onPress: (navigation) => {
-      navigation.navigate("Achievement")
-    },
-    iconBackgroundColor: "#6366F1",
-    todo: true,
-  },
-]
-
 const SettingGroupNavigationLinks: GroupNavigationLink[] = [
   {
     label: "General",
@@ -189,29 +164,30 @@ const NavigationLinkGroup: FC<{
   scrollRef: RefObject<ScrollView>
 }> = ({ links, navigation, scrollRef }) => (
   <GroupedInsetListCard>
-    {links.map((link) => (
-      <GroupedInsetListNavigationLink
-        key={link.label}
-        label={link.label + (link.todo ? " (Coming Soon)" : "")}
-        disabled={link.todo}
-        icon={
-          <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-            <link.icon height={18} width={18} color="#fff" />
-          </GroupedInsetListNavigationLinkIcon>
-        }
-        onPress={() => {
-          if (link.todo) {
-            return
+    {links.map((link) => {
+      if (link.todo) {
+        return null
+      }
+      return (
+        <GroupedInsetListNavigationLink
+          key={link.label}
+          label={link.label}
+          icon={
+            <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+              <link.icon height={18} width={18} color="#fff" />
+            </GroupedInsetListNavigationLinkIcon>
           }
-          link.onPress(navigation, scrollRef)
-        }}
-      />
-    ))}
+          onPress={() => {
+            link.onPress(navigation, scrollRef)
+          }}
+        />
+      )
+    })}
   </GroupedInsetListCard>
 )
 
 const navigationGroups = [
-  UserGroupNavigationLinks,
+  // UserGroupNavigationLinks,
   DataGroupNavigationLinks,
   SettingGroupNavigationLinks,
   PrivacyGroupNavigationLinks,

@@ -1,18 +1,27 @@
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useHeaderHeight } from "@react-navigation/elements"
 import { useCallback, useContext, useEffect, useState } from "react"
-import { Text, View } from "react-native"
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
+import { Text, useWindowDimensions, View } from "react-native"
+import type { SharedValue } from "react-native-reanimated"
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 
-import {
-  NavigationBlurEffectHeader,
-  NavigationContext,
-} from "@/src/components/common/SafeNavigationScrollView"
+import { useUISettingKey } from "@/src/atoms/settings/ui"
+import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
+import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
-import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/HeaderActions"
+import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/EntryContentHeaderRightActions"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
+
+import { EntryReadHistory } from "./EntryReadHistory"
 
 export const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {
   const { scrollY } = useContext(NavigationContext)!
@@ -42,10 +51,23 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
   }, [scrollY, title, titleHeight, headerHeight, opacityAnimatedValue])
 
   const ctxValue = useEntryContentContext()
+  const headerBarWidth = useWindowDimensions().width
   return (
     <>
       <NavigationBlurEffectHeader
         headerShown
+        headerTitleAbsolute
+        title={title}
+        headerLeft={useTypeScriptHappyCallback(
+          ({ canGoBack }) => (
+            <EntryLeftGroup
+              canGoBack={canGoBack ?? false}
+              entryId={entryId}
+              titleOpacityShareValue={opacityAnimatedValue}
+            />
+          ),
+          [entryId],
+        )}
         headerRight={useCallback(
           () => (
             <EntryContentContext.Provider value={ctxValue}>
@@ -58,14 +80,23 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
           ),
           [ctxValue, entryId, opacityAnimatedValue, isHeaderTitleVisible],
         )}
-        headerTitle={() => (
-          <Animated.Text
-            className={"text-label text-[17px] font-semibold"}
-            numberOfLines={1}
-            style={{ opacity: opacityAnimatedValue }}
-          >
-            {title}
-          </Animated.Text>
+        headerTitle={useCallback(
+          () => (
+            <View
+              className="flex-row items-center justify-center"
+              pointerEvents="none"
+              style={{ width: headerBarWidth - 80 }}
+            >
+              <Animated.Text
+                className={"text-label text-center text-[17px] font-semibold"}
+                numberOfLines={1}
+                style={{ opacity: opacityAnimatedValue }}
+              >
+                {title}
+              </Animated.Text>
+            </View>
+          ),
+          [headerBarWidth, opacityAnimatedValue, title],
         )}
       />
       <View
@@ -73,7 +104,7 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
           setTitleHeight(titleHeight)
         }}
       >
-        <Text className="text-label px-4 text-4xl font-bold leading-snug">{title}</Text>
+        <Text className="text-label px-4 text-4xl font-bold leading-snug">{title.trim()}</Text>
       </View>
     </>
   )
@@ -119,6 +150,7 @@ export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
   return (
     <>
       <NavigationBlurEffectHeader
+        title="Post"
         headerShown
         headerRight={useCallback(
           () => (
@@ -153,5 +185,31 @@ export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
         </Text>
       </View>
     </>
+  )
+}
+
+interface EntryLeftGroupProps {
+  canGoBack: boolean
+  entryId: string
+  titleOpacityShareValue: SharedValue<number>
+}
+
+const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLeftGroupProps) => {
+  const hideRecentReader = useUISettingKey("hideRecentReader")
+  const animatedOpacity = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(titleOpacityShareValue.value, [0, 1], [1, 0]),
+    }
+  })
+  return (
+    <View className="flex-row items-center justify-center">
+      <DefaultHeaderBackButton canGoBack={canGoBack} />
+
+      {!hideRecentReader && (
+        <Animated.View style={animatedOpacity} className="absolute left-[32px] z-10 flex-row gap-2">
+          <EntryReadHistory entryId={entryId} />
+        </Animated.View>
+      )}
+    </View>
   )
 }

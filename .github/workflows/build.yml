@@ -122,10 +122,12 @@ jobs:
       - name: Install dependencies
         run: pnpm i
       - name: Update main hash
-        run: pnpm update:main-hash
+        run: |
+          cd apps/desktop
+          pnpm update:main-hash
       - name: Build
         if: matrix.os != 'macos-latest'
-        run: npm exec turbo run //#build
+        run: pnpm build:electron
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
@@ -141,7 +143,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 10
-          command: npm exec turbo run //#build:macos
+          command: pnpm build:macos
 
       - name: Build (Mac App Store)
         if: matrix.os == 'macos-latest' && github.event.inputs.mas == 'true'
@@ -150,7 +152,7 @@ jobs:
           OSX_SIGN_IDENTITY: ${{ secrets.OSX_SIGN_IDENTITY_MAS }}
           OSX_SIGN_PROVISIONING_PROFILE_PATH: ${{ runner.temp }}/build_pp.provisionprofile
           BUILD_VERSION: ${{ github.event.inputs.build_version }}
-        run: npm exec turbo run //#build:mas
+        run: pnpm build:mas
 
       - name: Build Renderer
         if: matrix.os == 'ubuntu-latest'
@@ -166,14 +168,14 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: |
-            out/make/**/*.dmg
-            out/make/**/*.zip
-            out/make/**/*.exe
-            out/make/**/*.AppImage
-            out/make/**/*.yml
-            out/make/**/*.pkg
-            dist/manifest.yml
-            dist/*.tar.gz
+            apps/desktop/out/make/**/*.dmg
+            apps/desktop/out/make/**/*.zip
+            apps/desktop/out/make/**/*.exe
+            apps/desktop/out/make/**/*.AppImage
+            apps/desktop/out/make/**/*.yml
+            apps/desktop/out/make/**/*.pkg
+            apps/desktop/dist/manifest.yml
+            apps/desktop/dist/*.tar.gz
           retention-days: 90
 
       - name: Upload file (arm64.dmg)
@@ -184,7 +186,7 @@ jobs:
         with:
           name: macos-arm64-dmg
           path: |
-            out/make/**/*arm64.dmg
+            apps/desktop/out/make/**/*arm64.dmg
           retention-days: 90
 
       - name: Upload file (pkg)
@@ -204,13 +206,13 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: |
-            out/make/**/*.dmg
-            out/make/**/*.zip
-            out/make/**/*.exe
-            out/make/**/*.AppImage
-            out/make/**/*.yml
-            dist/manifest.yml
-            dist/*.tar.gz
+            apps/desktop/out/make/**/*.dmg
+            apps/desktop/out/make/**/*.zip
+            apps/desktop/out/make/**/*.exe
+            apps/desktop/out/make/**/*.AppImage
+            apps/desktop/out/make/**/*.yml
+            apps/desktop/dist/manifest.yml
+            apps/desktop/dist/*.tar.gz
 
       - run: npx changelogithub
         if: github.ref_type == 'tag' || github.event.inputs.tag_version == 'true'
@@ -231,10 +233,10 @@ jobs:
           prerelease: true
           tag_name: v${{ steps.version.outputs.APP_VERSION }}
           files: |
-            out/make/**/*.dmg
-            out/make/**/*.zip
-            out/make/**/*.exe
-            out/make/**/*.AppImage
-            out/make/**/*.yml
-            dist/manifest.yml
-            dist/*.tar.gz
+            apps/desktop/out/make/**/*.dmg
+            apps/desktop/out/make/**/*.zip
+            apps/desktop/out/make/**/*.exe
+            apps/desktop/out/make/**/*.AppImage
+            apps/desktop/out/make/**/*.yml
+            apps/desktop/dist/manifest.yml
+            apps/desktop/dist/*.tar.gz

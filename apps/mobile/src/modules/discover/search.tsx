@@ -1,36 +1,32 @@
 import { RSSHubCategories } from "@follow/constants"
-import { getDefaultHeaderHeight } from "@react-navigation/elements"
 import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import type { FC } from "react"
 import { useContext, useEffect, useRef, useState } from "react"
-import type { LayoutChangeEvent } from "react-native"
-import {
-  Animated,
+import type { Animated as RnAnimated, LayoutChangeEvent } from "react-native"
+import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import Animated, {
   Easing,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useAnimatedValue,
-  View,
-} from "react-native"
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { BlurEffect } from "@/src/components/common/BlurEffect"
+import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
-import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { accentColor, useColor } from "@/src/theme/colors"
 
+import { AddFeedButton } from "../screen/action"
 import { RSSHubCategoryCopyMap } from "./copy"
 import { useSearchPageContext } from "./ctx"
 import { DiscoverContext } from "./DiscoverContext"
 import { SearchTabBar } from "./SearchTabBar"
 
 export const SearchHeader: FC<{
-  animatedX: Animated.Value
+  animatedX: RnAnimated.Value
   onLayout: (e: LayoutChangeEvent) => void
 }> = ({ animatedX, onLayout }) => {
   const frame = useSafeAreaFrame()
@@ -44,6 +40,7 @@ export const SearchHeader: FC<{
       onLayout={onLayout}
     >
       <BlurEffect />
+
       <View style={styles.header}>
         <ComposeSearchBar />
       </View>
@@ -52,6 +49,17 @@ export const SearchHeader: FC<{
   )
 }
 
+const DynamicBlurEffect = () => {
+  const { animatedY } = useContext(DiscoverContext)
+  const blurStyle = useAnimatedStyle(() => ({
+    opacity: Math.max(0, Math.min(1, animatedY.value / 50)),
+  }))
+  return (
+    <Animated.View className="absolute inset-0 flex-1" style={blurStyle} pointerEvents={"none"}>
+      <BlurEffect />
+    </Animated.View>
+  )
+}
 export const DiscoverHeader = () => {
   return <DiscoverHeaderImpl />
 }
@@ -71,9 +79,15 @@ const DiscoverHeaderImpl = () => {
         setHeaderHeight(e.nativeEvent.layout.height)
       }}
     >
-      <BlurEffect />
-      <View style={styles.header}>
+      <DynamicBlurEffect />
+
+      <View style={[styles.header, styles.discoverHeader]}>
         <PlaceholerSearchBar />
+
+        {/* Right actions group */}
+        <View className="ml-2">
+          <AddFeedButton />
+        </View>
       </View>
 
       <TabBar
@@ -85,6 +99,7 @@ const DiscoverHeaderImpl = () => {
         onTabItemPress={(index) => {
           setCurrentTab(index)
         }}
+        tabbarClassName="border-b border-b-quaternary-system-fill"
       />
     </View>
   )
@@ -104,7 +119,7 @@ const PlaceholerSearchBar = () => {
         className="absolute inset-0 flex flex-row items-center justify-center"
         pointerEvents="none"
       >
-        <Search3CuteReIcon color={labelColor} height={18} width={18} />
+        <Search2CuteReIcon color={labelColor} height={18} width={18} />
         <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
         </Text>
@@ -132,7 +147,7 @@ const ComposeSearchBar = () => {
           }
         }}
       >
-        <Text className="ml-2 text-accent">Cancel</Text>
+        <Text className="text-accent ml-3 text-lg font-medium">Cancel</Text>
       </TouchableOpacity>
     </>
   )
@@ -146,9 +161,9 @@ const SearchInput = () => {
   const setSearchValue = useSetAtom(searchValueAtom)
   const inputRef = useRef<TextInput>(null)
 
-  const skeletonOpacityValue = useAnimatedValue(0)
-  const skeletonTranslateXValue = useAnimatedValue(0)
-  const placeholderOpacityValue = useAnimatedValue(1)
+  const skeletonOpacity = useSharedValue(0)
+  const skeletonTranslateX = useSharedValue(0)
+  const placeholderOpacity = useSharedValue(1)
 
   const [tempSearchValue, setTempSearchValue] = useState(searchValue)
 
@@ -156,48 +171,46 @@ const SearchInput = () => {
 
   useEffect(() => {
     if (focusOrHasValue) {
-      Animated.timing(skeletonOpacityValue, {
-        toValue: 0,
-        duration: 100,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }).start()
-      Animated.timing(skeletonTranslateXValue, {
-        toValue: -150,
+      skeletonOpacity.value = withTiming(0, { duration: 100, easing: Easing.ease })
+      skeletonTranslateX.value = withTiming(-150, {
         duration: 100,
         easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start()
-
-      Animated.timing(placeholderOpacityValue, {
-        toValue: 1,
-        duration: 200,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }).start()
+      })
+      placeholderOpacity.value = withTiming(1, { duration: 200, easing: Easing.ease })
     } else {
-      Animated.timing(skeletonOpacityValue, {
-        toValue: 1,
-        duration: 100,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }).start()
-
-      Animated.timing(skeletonTranslateXValue, {
-        toValue: 0,
+      skeletonOpacity.value = withTiming(1, { duration: 100, easing: Easing.ease })
+      skeletonTranslateX.value = withTiming(0, {
         duration: 100,
         easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start()
-
-      Animated.timing(placeholderOpacityValue, {
-        toValue: 0,
-        duration: 200,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }).start()
+      })
+      placeholderOpacity.value = withTiming(0, { duration: 200, easing: Easing.ease })
     }
-  }, [focusOrHasValue, skeletonOpacityValue, placeholderOpacityValue, skeletonTranslateXValue])
+  }, [focusOrHasValue, placeholderOpacity, skeletonOpacity, skeletonTranslateX])
+
+  const skeletonAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: skeletonOpacity.value,
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    transform: [{ translateX: skeletonTranslateX.value }],
+  }))
+
+  const placeholderAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: placeholderOpacity.value,
+
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  }))
 
   useEffect(() => {
     if (!isFocused) {
@@ -210,12 +223,7 @@ const SearchInput = () => {
   return (
     <View style={styles.searchbar} className="bg-tertiary-system-fill">
       {focusOrHasValue && (
-        <Animated.View
-          style={{
-            opacity: placeholderOpacityValue,
-          }}
-          className="absolute inset-y-0 left-3 flex flex-row items-center justify-center"
-        >
+        <Animated.View style={placeholderAnimatedStyle}>
           <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
           {!searchValue && !tempSearchValue && (
             <Text className="text-secondary-label ml-2" style={styles.searchPlaceholderText}>
@@ -244,14 +252,7 @@ const SearchInput = () => {
         }}
       />
 
-      <Animated.View
-        style={{
-          opacity: skeletonOpacityValue,
-          transform: [{ translateX: skeletonTranslateXValue }],
-        }}
-        className="absolute inset-0 flex flex-row items-center justify-center"
-        pointerEvents="none"
-      >
+      <Animated.View style={skeletonAnimatedStyle} pointerEvents="none">
         <Search2CuteReIcon color={placeholderTextColor} height={18} width={18} />
         <Text className="text-secondary-label ml-1" style={styles.searchPlaceholderText}>
           Search
@@ -264,11 +265,14 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     alignItems: "center",
-    marginTop: -3,
     flexDirection: "row",
-    marginBottom: 6,
+    marginBottom: 14,
     marginHorizontal: 16,
     position: "relative",
+  },
+
+  discoverHeader: {
+    marginRight: 0,
   },
 
   searchbar: {
@@ -278,7 +282,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
-    height: 32,
+    height: 40,
     position: "relative",
   },
   searchInput: {

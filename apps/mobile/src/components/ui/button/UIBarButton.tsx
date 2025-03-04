@@ -9,13 +9,17 @@ interface UIBarButtonProps extends PressableProps {
 
   normalIcon: React.ReactNode
   selectedIcon?: React.ReactNode
+
+  overlay?: boolean
 }
+
 export const UIBarButton = ({
   normalIcon,
   selectedIcon,
   onPress,
   selected,
   label,
+  overlay = true,
 
   ...props
 }: UIBarButtonProps) => {
@@ -30,7 +34,7 @@ export const UIBarButton = ({
       aria-label={label}
       {...props}
     >
-      {selected && <ButtonOverlay />}
+      {selected && overlay && <ButtonOverlay />}
 
       {!hasDifferentIcon ? (
         normalIcon

@@ -6,10 +6,11 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { Text, View } from "react-native"
 
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
-} from "@/src/components/common/SafeNavigationScrollView"
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListBaseCell,
   GroupedInsetListCard,
@@ -35,6 +36,7 @@ import type { SettingsStackParamList } from "../types"
 const ManageListContext = createContext<{
   nextSelectedFeedIdRef: MutableRefObject<Set<string>>
 }>(null!)
+
 export const ManageListScreen = ({
   route,
 }: {
@@ -46,7 +48,10 @@ export const ManageListScreen = ({
   const list = useList(id)
 
   return (
-    <SafeNavigationScrollView className="bg-system-grouped-background mt-6">
+    <SafeNavigationScrollView
+      className="bg-system-grouped-background"
+      contentContainerClassName="mt-6"
+    >
       <NavigationBlurEffectHeader title={`Manage List - ${list?.title}`} />
 
       {!!list && <ListImpl id={list.id} />}
@@ -85,21 +90,23 @@ const ListImpl: React.FC<{ id: string }> = ({ id }) => {
     <ManageListContext.Provider value={ctxValue}>
       <NavigationBlurEffectHeader
         headerRight={() => (
-          <ModalHeaderSubmitButton
-            isLoading={addFeedsToFeedListMutation.isPending}
-            isValid
-            onPress={() => {
-              addFeedsToFeedListMutation
-                .mutateAsync()
-                .then(() => {
-                  router.back()
-                })
-                .catch((error) => {
-                  toast.error(getBizFetchErrorMessage(error))
-                  console.error(error)
-                })
-            }}
-          />
+          <UINavigationHeaderActionButton>
+            <ModalHeaderSubmitButton
+              isLoading={addFeedsToFeedListMutation.isPending}
+              isValid
+              onPress={() => {
+                addFeedsToFeedListMutation
+                  .mutateAsync()
+                  .then(() => {
+                    router.back()
+                  })
+                  .catch((error) => {
+                    toast.error(getBizFetchErrorMessage(error))
+                    console.error(error)
+                  })
+              }}
+            />
+          </UINavigationHeaderActionButton>
         )}
       />
       <GroupedInsetListSectionHeader label="Select feeds to add to the current list" />
