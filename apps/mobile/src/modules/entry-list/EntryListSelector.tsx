@@ -1,8 +1,10 @@
 import { FeedViewType } from "@follow/constants"
 import type { FlashList } from "@shopify/flash-list"
 
+import { NoLoginInfo } from "@/src/components/common/NoLoginInfo"
 import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { EntryListContentPicture } from "@/src/modules/entry-list/EntryListContentPicture"
+import { useWhoami } from "@/src/store/user/hooks"
 
 import { EntryListContentArticle } from "./EntryListContentArticle"
 import { EntryListContentSocial } from "./EntryListContentSocial"
@@ -18,6 +20,7 @@ export function EntryListSelector({
   viewId: FeedViewType
   active?: boolean
 }) {
+  const whoami = useWhoami()
   const ref = useRegisterNavigationScrollView<FlashList<any>>(active)
 
   let ContentComponent:
@@ -46,7 +49,11 @@ export function EntryListSelector({
 
   return (
     <EntryListContextViewContext.Provider value={viewId}>
-      <ContentComponent ref={ref} entryIds={entryIds} active={active} />
+      {whoami ? (
+        <ContentComponent ref={ref} entryIds={entryIds} active={active} />
+      ) : (
+        <NoLoginInfo target="timeline" />
+      )}
     </EntryListContextViewContext.Provider>
   )
 }
