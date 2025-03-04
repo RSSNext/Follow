@@ -40,15 +40,20 @@ type Subscription = Awaited<ReturnType<typeof apiClient.subscriptions.$get>>["da
  */
 export const ProfileScreen = () => {
   const scrollY = useSharedValue(0)
-  const { data: subscriptions, isLoading, isError } = useShareSubscription()
+  const whoami = useWhoami()
+  const {
+    data: subscriptions,
+    isLoading,
+    isError,
+  } = useShareSubscription({
+    userId: whoami?.id!,
+  })
 
   const headerOpacity = useSharedValue(0)
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y
     headerOpacity.value = scrollY.value / 100
   })
-
-  const whoami = useWhoami()
 
   useEffect(() => {
     if (isError) {
