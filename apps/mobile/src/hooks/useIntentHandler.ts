@@ -4,6 +4,9 @@ import { useEffect } from "react"
 
 // This needs to stay outside of react to persist between account switches
 let previousIntentUrl = ""
+export const resetIntentUrl = () => {
+  previousIntentUrl = ""
+}
 
 export function useIntentHandler() {
   const incomingUrl = Linking.useURL()
@@ -13,33 +16,33 @@ export function useIntentHandler() {
       if (previousIntentUrl === incomingUrl) return
       previousIntentUrl = incomingUrl
     }
-    const id = extractFeedIdFromDeepLink(incomingUrl)
-    if (!id) {
-      console.warn("No feed id found in deep link:", incomingUrl)
+
+    const searchParams = extractParamsFromDeepLink(incomingUrl)
+    if (!searchParams) {
+      console.warn("No valid params found in deep link:", incomingUrl)
       return
     }
-    router.push(`/follow?id=${id}`)
-  }, [incomingUrl])
+
+    router.push(`/follow?${searchParams.toString()}`)
+  })
 }
 
-// follow://add?id=1
-const extractFeedIdFromDeepLink = (incomingUrl: string | null) => {
+// follow://add?id=41147805276726272
+// follow://add?type=list&id=60580187699502080
+// follow://add?type=url&url=rsshub://rsshub/routes/en
+const extractParamsFromDeepLink = (incomingUrl: string | null): URLSearchParams | null => {
   if (!incomingUrl) return null
 
-  const url = parseUrl(incomingUrl)
-  if (!url) return null
-  if (url.protocol !== "follow:" || url.host !== "add") return null
-
-  const feedId = url.searchParams.get("id")
-
-  if (!feedId) return null
-
-  return feedId
-}
-
-const parseUrl = (url: string) => {
   try {
-    return new URL(url)
+    const url = new URL(incomingUrl)
+    if (url.protocol !== "follow:" || url.hostname !== "add") return null
+
+    const { searchParams } = url
+
+    // If no valid parameters were found (neither id nor url)
+    if (!searchParams.has("id") && !searchParams.has("url")) return null
+
+    return searchParams
   } catch {
     return null
   }

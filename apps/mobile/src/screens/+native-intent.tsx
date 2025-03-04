@@ -4,6 +4,9 @@
 //
 // See https://docs.expo.dev/router/advanced/native-intent/#rewrite-incoming-native-deep-links
 
+import { resetIntentUrl } from "../hooks/useIntentHandler"
+
 export function redirectSystemPath(_options: { path: string; initial: boolean }) {
+  resetIntentUrl()
   return "/"
 }
