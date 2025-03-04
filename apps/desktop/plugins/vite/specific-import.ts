@@ -18,7 +18,7 @@ export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
       if (importer.includes("node_modules")) return null
       const [path, query] = source.split("?")
 
-      if (path.startsWith(".") || path.startsWith("/") || path.includes("@follow/")) {
+      if (path.startsWith(".") || path.startsWith("/")) {
         let priorities: string[] = []
         switch (platform) {
           case "electron": {
@@ -28,12 +28,13 @@ export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
               ".electron.js",
               ".electron.jsx",
               ...sharedExts,
+              ...allowExts,
             ]
 
             break
           }
           case "web": {
-            priorities = [".web.ts", ".web.tsx", ".web.js", ".web.jsx", ...sharedExts]
+            priorities = [".web.ts", ".web.tsx", ".web.js", ".web.jsx", ...sharedExts, ...allowExts]
 
             break
           }
