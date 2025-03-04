@@ -1,5 +1,5 @@
 import type { AppType } from "@follow/shared"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import PKG from "@pkg"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"

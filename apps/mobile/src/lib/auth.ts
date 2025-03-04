@@ -1,5 +1,5 @@
 import { expoClient } from "@better-auth/expo/client"
-import { env } from "@follow/shared/src/env"
+import { env } from "@follow/shared/src/env.rn"
 import { useQuery } from "@tanstack/react-query"
 import { twoFactorClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"

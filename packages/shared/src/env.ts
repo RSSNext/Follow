@@ -1,5 +1,5 @@
 /**
- * This env for apps/ssr
+ * This is universal env
  */
 import { z } from "zod"
 

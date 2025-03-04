@@ -16,7 +16,6 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { authProvidersConfig } from "@follow/constants"
-import { createSession, loginHandler, signOut, twoFactor } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,6 +25,8 @@ import { Trans, useTranslation } from "react-i18next"
 import { Link, useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
+
+import { createSession, loginHandler, signOut, twoFactor } from "~/lib/auth"
 
 export function Login() {
   const { status, refetch } = useSession()

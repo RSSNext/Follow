@@ -8,11 +8,12 @@ import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useTitle } from "@follow/hooks"
-import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router"
+
+import { UrlBuilder } from "~/lib/url-builder"
 
 export const Component = () => {
   const params = useParams()

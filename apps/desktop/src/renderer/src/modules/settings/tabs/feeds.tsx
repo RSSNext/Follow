@@ -10,10 +10,10 @@ import {
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { UrlBuilder } from "@follow/utils/url-builder"
 import { useTranslation } from "react-i18next"
 
 import { useAuthQuery } from "~/hooks/common"
+import { UrlBuilder } from "~/lib/url-builder"
 import { FeedIcon } from "~/modules/feed/feed-icon"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
