@@ -22,6 +22,7 @@ export const UserHeaderBanner = ({
   userId?: string
 }) => {
   const bgColor = useColor("systemGroupedBackground")
+  const avatarIconColor = useColor("secondaryLabel")
 
   const user = useUser(userId)
   usePrefetchImageColors(user?.image)
@@ -122,6 +123,7 @@ export const UserHeaderBanner = ({
           name={user?.name}
           size={60}
           className={!user?.name ? "bg-system-grouped-background" : ""}
+          color={avatarIconColor}
         />
       </ReAnimated.View>
 
