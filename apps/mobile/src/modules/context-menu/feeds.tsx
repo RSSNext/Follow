@@ -1,16 +1,22 @@
-import type { FeedViewType } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
+import type { ListRenderItemInfo } from "@shopify/flash-list"
+import { FlashList } from "@shopify/flash-list"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback } from "react"
-import { Alert, Clipboard } from "react-native"
+import { Alert, Clipboard, View } from "react-native"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
 import { views } from "@/src/constants/views"
 import { toast } from "@/src/lib/toast"
+import { useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 import { getFeed } from "@/src/store/feed/getter"
 import { getSubscription } from "@/src/store/subscription/getter"
 import { useSubscriptionCategory } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import { unreadSyncService } from "@/src/store/unread/store"
+
+import { ItemSeparator } from "../entry-list/ItemSeparator"
+import { EntryNormalItem } from "../entry-list/templates/EntryNormalItem"
 
 export const SubscriptionFeedItemContextMenu: FC<
   PropsWithChildren & {
@@ -25,6 +31,11 @@ export const SubscriptionFeedItemContextMenu: FC<
       <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
 
       <ContextMenu.Content>
+        {view === FeedViewType.Articles && (
+          <ContextMenu.Preview size="STRETCH">
+            {() => <PreviewFeeds id={id} view={view!} />}
+          </ContextMenu.Preview>
+        )}
         <ContextMenu.Item
           key="MarkAllAsRead"
           onSelect={useCallback(() => {
@@ -39,23 +50,23 @@ export const SubscriptionFeedItemContextMenu: FC<
           />
         </ContextMenu.Item>
 
-        <ContextMenu.Item key="Claim">
+        {/* <ContextMenu.Item key="Claim">
           <ContextMenu.ItemTitle>Claim</ContextMenu.ItemTitle>
           <ContextMenu.ItemIcon
             ios={{
               name: "checkmark.seal",
             }}
           />
-        </ContextMenu.Item>
+        </ContextMenu.Item> */}
 
-        <ContextMenu.Item key="Boost">
+        {/* <ContextMenu.Item key="Boost">
           <ContextMenu.ItemTitle>Boost</ContextMenu.ItemTitle>
           <ContextMenu.ItemIcon
             ios={{
               name: "bolt",
             }}
           />
-        </ContextMenu.Item>
+        </ContextMenu.Item> */}
 
         <ContextMenu.Sub key="AddToCategory">
           <ContextMenu.SubTrigger key="SubTrigger/AddToCategory">
@@ -243,3 +254,28 @@ export const SubscriptionFeedCategoryContextMenu = ({
     </ContextMenu.Root>
   )
 }
+
+const PreviewFeeds = (props: { id: string; view: FeedViewType }) => {
+  const { id: feedId } = props
+  const entryIds = useEntryIdsByFeedId(feedId)
+
+  const renderItem = useCallback(
+    ({ item: id }: ListRenderItemInfo<string>) => (
+      <EntryNormalItem key={id} entryId={id} extraData="" />
+    ),
+    [],
+  )
+  return (
+    <View className="bg-system-background size-full flex-1">
+      <FlashList
+        data={entryIds}
+        keyExtractor={defaultKeyExtractor}
+        estimatedItemSize={100}
+        renderItem={renderItem}
+        ItemSeparatorComponent={ItemSeparator}
+      />
+    </View>
+  )
+}
+
+const defaultKeyExtractor = (item: string) => item

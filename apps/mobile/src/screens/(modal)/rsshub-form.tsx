@@ -6,19 +6,15 @@ import {
   regexpPathToPath,
 } from "@follow/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { router, Stack, useLocalSearchParams } from "expo-router"
+import { router, useLocalSearchParams, useNavigation } from "expo-router"
 import { memo, useEffect, useMemo, useState } from "react"
 import type { FieldErrors } from "react-hook-form"
 import { Controller, useForm } from "react-hook-form"
 import { KeyboardAvoidingView, Linking, Text, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 
-import { BlurEffectWithBottomBorder } from "@/src/components/common/BlurEffect"
-import { HeaderTitleExtra } from "@/src/components/common/HeaderTitleExtra"
-import {
-  ModalHeaderCloseButton,
-  ModalHeaderSubmitButton,
-} from "@/src/components/common/ModalSharedComponents"
+import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
@@ -117,16 +113,20 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
   return (
     <FormProvider form={form}>
-      <ScreenOptions
-        name={name}
-        routeName={routeName}
-        route={route.path}
-        routePrefix={routePrefix}
-        errors={nextErrors}
-      />
-
       <PortalHost>
         <SafeModalScrollView className="bg-system-grouped-background">
+          <ScreenOptions
+            name={name}
+            routeName={routeName}
+            route={route.path}
+            routePrefix={routePrefix}
+            errors={nextErrors}
+          />
+          {keys.length === 0 && (
+            <View className="bg-secondary-system-grouped-background mx-2 mt-2 gap-4 rounded-lg p-3">
+              <Text className="text-center text-base">This feed has no parameters.</Text>
+            </View>
+          )}
           {keys.length > 0 && (
             <View className="bg-secondary-system-grouped-background mx-2 mt-2 gap-4 rounded-lg px-3 py-6">
               {keys.map((keyItem) => {
@@ -246,40 +246,25 @@ const ScreenOptions = memo(
   ({ name, routeName, route, routePrefix, errors }: ScreenOptionsProps) => {
     const form = useFormContext()
 
+    const navigation = useNavigation()
+    useEffect(() => {
+      navigation.setOptions({
+        gestureEnabled: !form.formState.isDirty,
+      })
+    }, [form.formState.isDirty, navigation])
     return (
-      <Stack.Screen
-        options={{
-          headerLeft: ModalHeaderCloseButton,
-          gestureEnabled: !form.formState.isDirty,
-          headerBackground: BlurEffectWithBottomBorder,
-          headerTransparent: true,
-
-          headerRight: () => (
-            <FormProvider form={form}>
-              <ModalHeaderSubmitButtonImpl
-                errors={errors}
-                routePrefix={routePrefix}
-                route={route}
-              />
-            </FormProvider>
-          ),
-
-          headerTitle: () => (
-            <Title name={name} routeName={routeName} route={route} routePrefix={routePrefix} />
-          ),
-        }}
+      <ModalHeader
+        headerSubtitle={`rsshub://${routePrefix}${route}`}
+        headerTitle={`${name} - ${routeName}`}
+        headerRight={
+          <FormProvider form={form}>
+            <ModalHeaderSubmitButtonImpl errors={errors} routePrefix={routePrefix} route={route} />
+          </FormProvider>
+        }
       />
     )
   },
 )
-
-const Title = ({ name, routeName, route, routePrefix }: Omit<ScreenOptionsProps, "errors">) => {
-  return (
-    <HeaderTitleExtra subText={`rsshub://${routePrefix}${route}`}>
-      {`${name} - ${routeName}`}
-    </HeaderTitleExtra>
-  )
-}
 
 const routeParamsKeyPrefix = "route-params-"
 
@@ -298,6 +283,7 @@ const ModalHeaderSubmitButtonImpl = ({
   const [isLoading, setIsLoading] = useState(false)
 
   const submit = form.handleSubmit((_data) => {
+    setIsLoading(true)
     const data = Object.fromEntries(
       Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
     )
@@ -322,8 +308,6 @@ const ModalHeaderSubmitButtonImpl = ({
       // if (router.canDismiss()) {
       //   router.dismiss()
       // }
-
-      setIsLoading(true)
 
       feedSyncServices
         .fetchFeedById({ url: finalUrl })

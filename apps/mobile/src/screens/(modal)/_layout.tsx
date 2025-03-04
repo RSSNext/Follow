@@ -4,7 +4,7 @@ import { ModalHeaderCloseButton } from "@/src/components/common/ModalSharedCompo
 
 export default function ModalLayout() {
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="add"
         options={{

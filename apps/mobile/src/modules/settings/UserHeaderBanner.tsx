@@ -8,19 +8,25 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { useImageColors, usePrefetchImageColors } from "@/src/store/image/hooks"
-import { useWhoami } from "@/src/store/user/hooks"
+import { useUser } from "@/src/store/user/hooks"
 
 const defaultGradientColors = ["#000", "#100", "#200"]
 
-export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) => {
-  const whoami = useWhoami()
-  usePrefetchImageColors(whoami?.image)
+export const UserHeaderBanner = ({
+  scrollY,
+  userId,
+}: {
+  scrollY: SharedValue<number>
+  userId: string
+}) => {
+  const user = useUser(userId)
+  usePrefetchImageColors(user?.image)
   const insets = useSafeAreaInsets()
 
   const MAX_PULL = 100
   const SCALE_FACTOR = 1.8
 
-  const imageColors = useImageColors(whoami?.image)
+  const imageColors = useImageColors(user?.image)
   const gradientColors = useMemo(() => {
     if (!imageColors || imageColors.platform === "web") return defaultGradientColors
     if (imageColors.platform === "android") {
@@ -75,7 +81,7 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) 
     }
   })
 
-  if (!whoami) return null
+  if (!user) return null
   return (
     <View
       className="relative h-[200px] items-center justify-center"
@@ -107,16 +113,16 @@ export const UserHeaderBanner = ({ scrollY }: { scrollY: SharedValue<number> }) 
         className="bg-system-background overflow-hidden rounded-full"
         style={avatarStyles}
       >
-        <UserAvatar image={whoami.image} name={whoami.name!} size={60} />
+        <UserAvatar image={user.image} name={user.name!} size={60} />
       </ReAnimated.View>
 
       <View className="mt-2">
         <Text className={cn("text-2xl font-bold", gradientLight ? "text-black" : "text-white/95")}>
-          {whoami.name}
+          {user.name}
         </Text>
-        {!!whoami.handle && (
+        {!!user.handle && (
           <Text className={cn(gradientLight ? "text-black/70" : "text-white/70")}>
-            @{whoami.handle}
+            @{user.handle}
           </Text>
         )}
       </View>
