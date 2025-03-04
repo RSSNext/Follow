@@ -1,4 +1,4 @@
-import { getSession } from "@follow/shared/auth"
+import { getSession } from "@client/lib/auth"
 import type { AuthSession } from "@follow/shared/hono"
 import { useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"

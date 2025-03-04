@@ -9,7 +9,6 @@ import {
 } from "@follow/components/ui/form/index.js"
 import { Input } from "@follow/components/ui/input/Input.js"
 import { Label } from "@follow/components/ui/label/index.js"
-import { changeEmail, sendVerificationEmail } from "@follow/shared/auth"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -23,6 +22,7 @@ import { setWhoami, useWhoami } from "~/atoms/user"
 import { AnimatedCommandButton } from "~/components/ui/button/base"
 import { CopyButton } from "~/components/ui/button/CopyButton"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { changeEmail, sendVerificationEmail } from "~/lib/auth"
 
 const formSchema = z.object({
   email: z.string().email(),

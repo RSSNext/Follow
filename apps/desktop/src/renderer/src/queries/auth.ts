@@ -1,8 +1,8 @@
-import { getAccountInfo, getSession } from "@follow/shared/auth"
 import type { AuthSession } from "@follow/shared/hono"
 import type { FetchError } from "ofetch"
 
 import { useAuthQuery } from "~/hooks/common"
+import { getAccountInfo, getSession } from "~/lib/auth"
 import { defineQuery } from "~/lib/defineQuery"
 
 export const auth = {
