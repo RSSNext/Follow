@@ -1,36 +1,58 @@
 import type { Plugin } from "vite"
 
-type Platform = "electron" | "web" | "rn"
+type Platform = "electron" | "web"
 export function createPlatformSpecificImportPlugin(platform: Platform): Plugin {
   return {
     name: "platform-specific-import",
     enforce: "pre",
     async resolveId(source, importer) {
-      const resolvedPath = await this.resolve(source, importer, {
-        skipSelf: true,
-      })
+      if (!importer) {
+        return null
+      }
 
       const allowExts = [".js", ".jsx", ".ts", ".tsx"]
+      const sharedExts = [".desktop.ts", ".desktop.tsx", ".desktop.js", ".desktop.jsx"]
 
-      if (
-        resolvedPath &&
-        !resolvedPath.id.includes("node_modules") &&
-        allowExts.some((ext) => importer?.endsWith(ext)) &&
-        allowExts.some((ext) => resolvedPath.id?.endsWith(ext))
-      ) {
-        const lastDotIndex = resolvedPath.id.lastIndexOf(".")
+      if (!allowExts.some((ext) => importer.endsWith(ext))) return null
 
-        const paths = [
-          `${resolvedPath.id.slice(0, lastDotIndex)}.${platform}${resolvedPath.id.slice(lastDotIndex)}`,
-          `${resolvedPath.id.slice(0, lastDotIndex)}.desktop${resolvedPath.id.slice(lastDotIndex)}`,
-        ]
+      if (importer.includes("node_modules")) return null
+      const [path, query] = source.split("?")
 
-        for (const path of paths) {
-          const resolvedPlatform = await this.resolve(path, importer, {
-            skipSelf: true,
-          })
-          if (resolvedPlatform) {
-            return resolvedPlatform.id
+      if (path.startsWith(".") || path.startsWith("/")) {
+        let priorities: string[] = []
+        switch (platform) {
+          case "electron": {
+            priorities = [
+              ...sharedExts,
+
+              ".electron.ts",
+              ".electron.tsx",
+              ".electron.js",
+              ".electron.jsx",
+            ]
+
+            break
+          }
+          case "web": {
+            priorities = [...sharedExts, ".web.ts", ".web.tsx", ".web.js", ".web.jsx"]
+
+            break
+          }
+
+          // No default
+        }
+
+        for (const ext of priorities) {
+          const resolvedPath = await this.resolve(
+            `${path}${ext}${query ? `?${query}` : ""}`,
+            importer,
+            {
+              skipSelf: true,
+            },
+          )
+
+          if (resolvedPath) {
+            return resolvedPath.id
           }
         }
       }

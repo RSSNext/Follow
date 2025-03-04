@@ -1,3 +1,6 @@
+/**
+ * This env for apps/ssr
+ */
 import { z } from "zod"
 
 export const envSchema = {

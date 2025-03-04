@@ -12,6 +12,7 @@ export function withResponsiveComponent<P extends object>(
 
   return function ResponsiveLayout(props: P) {
     const isMobile = useMobile()
+
     return (
       <Suspense fallback={fallbackElement}>
         {isMobile ? <LazyMobileLayout {...props} /> : <LazyDesktopLayout {...props} />}

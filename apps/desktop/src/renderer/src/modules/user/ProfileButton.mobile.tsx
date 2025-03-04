@@ -19,7 +19,7 @@ import { usePresentUserProfileModal } from "../profile/hooks"
 import { useSettingModal } from "../settings/modal/use-setting-modal-hack"
 import { ActivityPoints } from "../wallet/activity-points"
 import { Level } from "../wallet/level"
-import type { ProfileButtonProps } from "./ProfileButton.desktop"
+import type { ProfileButtonProps } from "./ProfileButton.electron"
 import { PowerButton } from "./ProfileButton.shared"
 import { UserAvatar } from "./UserAvatar"
 
