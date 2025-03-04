@@ -1,3 +1,6 @@
+/**
+ * This env for apps/mobile
+ */
 const profile = "prod"
 
 const appEndpointMap = {

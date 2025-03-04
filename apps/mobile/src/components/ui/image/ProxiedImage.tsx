@@ -1,9 +1,14 @@
-import { buildSafeHeaders } from "@follow/utils/src/headers"
-import { getImageProxyUrl } from "@follow/utils/src/img-proxy"
+import { env } from "@follow/shared/src/env.rn"
+import { createBuildSafeHeaders } from "@follow/utils/src/headers"
+import { getImageProxyUrl, IMAGE_PROXY_URL } from "@follow/utils/src/img-proxy"
 import type { ImageProps } from "expo-image"
 import { Image } from "expo-image"
 import { forwardRef, useCallback, useMemo, useState } from "react"
 
+const buildSafeHeaders = createBuildSafeHeaders(env.VITE_WEB_URL, [
+  IMAGE_PROXY_URL,
+  env.VITE_API_URL,
+])
 export const ProxiedImage = forwardRef<
   Image,
   ImageProps & {

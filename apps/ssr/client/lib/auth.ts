@@ -4,8 +4,7 @@ import type { BetterAuthClientPlugin } from "better-auth/client"
 import { inferAdditionalFields, twoFactorClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
 
-import { IN_ELECTRON, WEB_URL } from "./constants"
-
+const WEB_URL = env.VITE_WEB_URL
 type AuthPlugin = (typeof authPlugins)[number]
 const serverPlugins = [
   {
@@ -66,20 +65,17 @@ export const loginHandler = async (
   },
 ) => {
   const { email, password } = args ?? {}
-  if (IN_ELECTRON && provider !== "credential") {
-    window.open(`${WEB_URL}/login?provider=${provider}`)
-  } else {
-    if (provider === "credential") {
-      if (!email || !password) {
-        window.location.href = "/login"
-        return
-      }
-      return signIn.email({ email, password })
-    }
 
-    signIn.social({
-      provider: provider as "google" | "github" | "apple",
-      callbackURL: runtime === "app" ? `${WEB_URL}/login` : WEB_URL,
-    })
+  if (provider === "credential") {
+    if (!email || !password) {
+      window.location.href = "/login"
+      return
+    }
+    return signIn.email({ email, password })
   }
+
+  signIn.social({
+    provider: provider as "google" | "github" | "apple",
+    callbackURL: runtime === "app" ? `${WEB_URL}/login` : WEB_URL,
+  })
 }

@@ -1,3 +1,6 @@
+/**
+ * This env for apps/desktop
+ */
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
@@ -15,13 +18,6 @@ export const env = createEnv({
 
     VITE_OPENPANEL_CLIENT_ID: z.string().optional(),
     VITE_OPENPANEL_API_URL: z.string().url().optional(),
-
-    // For external, use api_url if you don't want to fill it in.
-    VITE_EXTERNAL_PROD_API_URL: z.string().optional(),
-    VITE_EXTERNAL_DEV_API_URL: z.string().optional(),
-    VITE_EXTERNAL_API_URL: z.string().optional(),
-    VITE_WEB_PROD_URL: z.string().optional(),
-    VITE_WEB_DEV_URL: z.string().optional(),
   },
 
   emptyStringAsUndefined: true,

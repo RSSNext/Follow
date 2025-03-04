@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { initializeApp } from "firebase/app"
 import { getMessaging, getToken } from "firebase/messaging"
 

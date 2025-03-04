@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import type { AppType } from "@follow/shared"
-import { env } from "@follow/shared/src/env"
+import { env } from "@follow/shared/src/env.rn"
 import { FetchError, ofetch } from "ofetch"
 
 import { userActions } from "../store/user/store"

@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callWindowExpose } from "@follow/shared/bridge"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { app, BrowserWindow, clipboard, dialog, shell } from "electron"
 
 import { BETTER_AUTH_COOKIE_NAME_SESSION_TOKEN } from "~/constants/app"

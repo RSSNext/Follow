@@ -5,7 +5,7 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.jsx"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 
 import { useUserRole } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"

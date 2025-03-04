@@ -1,5 +1,7 @@
 import { FeedViewType } from "@follow/constants"
-import { buildSafeHeaders } from "@follow/utils/src/headers"
+import { env } from "@follow/shared/src/env.rn"
+import { createBuildSafeHeaders } from "@follow/utils/src/headers"
+import { IMAGE_PROXY_URL } from "@follow/utils/src/img-proxy"
 import { useQuery } from "@tanstack/react-query"
 import { Image } from "expo-image"
 import { router } from "expo-router"
@@ -18,6 +20,11 @@ import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 import { useSearchPageContext } from "../ctx"
 import { BaseSearchPageFlatList, ItemSeparator, RenderScrollComponent } from "./__base"
 import { useDataSkeleton } from "./hooks"
+
+const buildSafeHeaders = createBuildSafeHeaders(env.VITE_WEB_URL, [
+  IMAGE_PROXY_URL,
+  env.VITE_API_URL,
+])
 
 type SearchResultItem = Awaited<ReturnType<typeof apiClient.discover.$post>>["data"][number]
 

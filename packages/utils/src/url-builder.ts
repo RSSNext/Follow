@@ -1,8 +1,7 @@
-import { WEB_URL } from "@follow/shared/constants"
-
-class UrlBuilderStatic {
+export class UrlBuilder {
+  constructor(private readonly webUrl: string) {}
   private join(path: string, query?: Record<string, string>) {
-    const nextUrl = new URL(WEB_URL)
+    const nextUrl = new URL(this.webUrl)
     nextUrl.pathname = path
     if (query) {
       for (const [key, value] of Object.entries(query)) {
@@ -22,5 +21,3 @@ class UrlBuilderStatic {
     return this.join(`share/users/${id}`)
   }
 }
-
-export const UrlBuilder = new UrlBuilderStatic()
