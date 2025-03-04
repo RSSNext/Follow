@@ -6,7 +6,7 @@ import { ProxiedImage } from "../image/ProxiedImage"
 interface UserAvatarProps {
   image?: string | null
   size?: number
-  name: string
+  name?: string | null
   className?: string
 }
 export const UserAvatar = ({ image, size = 24, name, className }: UserAvatarProps) => {
@@ -19,7 +19,7 @@ export const UserAvatar = ({ image, size = 24, name, className }: UserAvatarProp
         )}
         style={{ width: size, height: size }}
       >
-        <Text className="text-secondary-label text-xs">{name.slice(0, 2)}</Text>
+        <Text className="text-secondary-label text-xs">{name?.slice(0, 2)}</Text>
       </View>
     )
   }

@@ -47,6 +47,16 @@ export default function ModalLayout() {
       <Stack.Screen
         name="sign-up"
         options={{
+          headerShown: true,
+          title: "",
+          headerTransparent: true,
+          headerLeft: ModalHeaderCloseButton,
+        }}
+      />
+      <Stack.Screen
+        name="login"
+        options={{
+          headerShown: true,
           title: "",
           headerTransparent: true,
           headerLeft: ModalHeaderCloseButton,
