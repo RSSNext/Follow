@@ -4,9 +4,12 @@ import { Pressable, View } from "react-native"
 
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { apiClient } from "@/src/lib/api-fetch"
+import { useEntry } from "@/src/store/entry/hooks"
+import { isInboxEntry } from "@/src/store/entry/utils"
 import { userActions } from "@/src/store/user/store"
 
 export const EntryReadHistory = ({ entryId }: { entryId: string }) => {
+  const entry = useEntry(entryId)
   const { data } = useQuery({
     queryKey: ["entry-read-history", entryId],
     queryFn: () => {
@@ -20,6 +23,7 @@ export const EntryReadHistory = ({ entryId }: { entryId: string }) => {
       })
     },
     staleTime: 1000 * 60 * 5,
+    enabled: !isInboxEntry(entry),
   })
   if (!data?.data.entryReadHistories) return null
   return (

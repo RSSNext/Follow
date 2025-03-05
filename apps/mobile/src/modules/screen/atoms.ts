@@ -44,15 +44,10 @@ export function useSetDrawerSwipeDisabled() {
 
 // collection panel selected state
 
-type CollectionPanelState =
-  | {
-      type: "view"
-      viewId: FeedViewType
-    }
-  | {
-      type: "list"
-      listId: string
-    }
+type CollectionPanelState = {
+  type: "view"
+  viewId: FeedViewType
+}
 
 const collectionPanelStateAtom = atom<CollectionPanelState>({
   type: "view",
@@ -71,19 +66,10 @@ export const selectCollection = (state: CollectionPanelState) => {
 
 // feed panel selected state
 
-export type SelectedTimeline =
-  | {
-      type: "view"
-      viewId: FeedViewType
-    }
-  | {
-      type: "list"
-      listId: string
-    }
-  | {
-      type: "inbox"
-      inboxId: string
-    }
+export type SelectedTimeline = {
+  type: "view"
+  viewId: FeedViewType
+}
 
 export type SelectedFeed =
   | {
@@ -93,6 +79,14 @@ export type SelectedFeed =
   | {
       type: "category"
       categoryName: string
+    }
+  | {
+      type: "list"
+      listId: string
+    }
+  | {
+      type: "inbox"
+      inboxId: string
     }
   | null
 
@@ -114,7 +108,7 @@ export function useSelectedView() {
   const selectedTimeLine = useAtomValue(selectedTimelineAtom)
   const selectedFeed = useAtomValue(selectedFeedAtom)
 
-  const list = useList(selectedTimeLine.type === "list" ? selectedTimeLine.listId : "")
+  const list = useList(selectedFeed?.type === "list" ? selectedFeed.listId : "")
   const subscription = useSubscription(
     selectedFeed && selectedFeed.type === "feed" ? selectedFeed.feedId : "",
   )
