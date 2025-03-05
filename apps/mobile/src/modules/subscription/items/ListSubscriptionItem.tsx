@@ -1,9 +1,10 @@
 import { router } from "expo-router"
 import { memo } from "react"
-import { Image, Text, View } from "react-native"
+import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { useList } from "@/src/store/list/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
@@ -30,9 +31,16 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
         >
           <View className="overflow-hidden rounded">
             {!!list.image && (
-              <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
+              <ProxiedImage
+                proxy={{
+                  width: 20,
+                  height: 20,
+                }}
+                style={{ height: 20, width: 20 }}
+                source={list.image}
+              />
             )}
-            {!list.image && <FallbackIcon title={list.title} size={24} />}
+            {!list.image && <FallbackIcon title={list.title} size={20} />}
           </View>
 
           <Text className="text-text ml-2">{list.title}</Text>
