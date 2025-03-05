@@ -13,14 +13,14 @@ import { SocialLogin } from "./social"
 
 export function Login() {
   return (
-    <View className="p-safe flex h-full justify-center">
+    <View className="p-safe flex-1">
       <TouchableWithoutFeedback
         onPress={() => {
           KeyboardController.dismiss()
         }}
         accessible={false}
       >
-        <View className="mb-16 items-center gap-8 pt-20">
+        <View className="mb-16 items-center gap-8">
           <Logo style={{ width: 80, height: 80 }} />
           <Text className="text-label text-3xl">
             Sign in to <Text className="font-bold">Follow</Text>

@@ -1,10 +1,12 @@
 import { cn, getLuminance } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
+import { router } from "expo-router"
 import { useMemo } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import ReAnimated, { FadeIn, FadeOut, interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useColor } from "react-native-uikit-colors"
 
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { useImageColors, usePrefetchImageColors } from "@/src/store/image/hooks"
@@ -17,8 +19,11 @@ export const UserHeaderBanner = ({
   userId,
 }: {
   scrollY: SharedValue<number>
-  userId: string
+  userId?: string
 }) => {
+  const bgColor = useColor("systemGroupedBackground")
+  const avatarIconColor = useColor("secondaryLabel")
+
   const user = useUser(userId)
   usePrefetchImageColors(user?.image)
   const insets = useSafeAreaInsets()
@@ -28,7 +33,8 @@ export const UserHeaderBanner = ({
 
   const imageColors = useImageColors(user?.image)
   const gradientColors = useMemo(() => {
-    if (!imageColors || imageColors.platform === "web") return defaultGradientColors
+    if (!imageColors || imageColors.platform === "web")
+      return user ? defaultGradientColors : [bgColor, bgColor, bgColor]
     if (imageColors.platform === "android") {
       return [
         imageColors.dominant,
@@ -37,7 +43,7 @@ export const UserHeaderBanner = ({
       ]
     }
     return [imageColors.primary, imageColors.secondary, imageColors.background]
-  }, [imageColors])
+  }, [bgColor, imageColors, user])
 
   const gradientLight = useMemo(() => {
     if (!imageColors) return false
@@ -81,7 +87,6 @@ export const UserHeaderBanner = ({
     }
   })
 
-  if (!user) return null
   return (
     <View
       className="relative h-[200px] items-center justify-center"
@@ -113,18 +118,35 @@ export const UserHeaderBanner = ({
         className="bg-system-background overflow-hidden rounded-full"
         style={avatarStyles}
       >
-        <UserAvatar image={user.image} name={user.name!} size={60} />
+        <UserAvatar
+          image={user?.image}
+          name={user?.name}
+          size={60}
+          className={!user?.name ? "bg-system-grouped-background" : ""}
+          color={avatarIconColor}
+        />
       </ReAnimated.View>
 
-      <View className="mt-2">
-        <Text className={cn("text-2xl font-bold", gradientLight ? "text-black" : "text-white/95")}>
-          {user.name}
-        </Text>
-        {!!user.handle && (
+      <View className="mt-2 items-center">
+        {user?.name ? (
+          <Text
+            className={cn("text-2xl font-bold", gradientLight ? "text-black" : "text-white/95")}
+          >
+            {user.name}
+          </Text>
+        ) : (
+          <Text className="text-text text-2xl font-bold">Follow Account</Text>
+        )}
+
+        {user?.handle ? (
           <Text className={cn(gradientLight ? "text-black/70" : "text-white/70")}>
             @{user.handle}
           </Text>
-        )}
+        ) : !user ? (
+          <TouchableOpacity className="mx-auto" onPress={() => router.push("/login")}>
+            <Text className="text-accent m-[6] text-[16px]">Sign in to your account</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   )

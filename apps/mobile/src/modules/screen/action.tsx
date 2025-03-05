@@ -1,6 +1,7 @@
 import { cn } from "@follow/utils"
 import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
+import { useCallback } from "react"
 import { TouchableOpacity, View } from "react-native"
 
 import { setGeneralSetting, useGeneralSettingKey } from "@/src/atoms/settings/general"
@@ -23,11 +24,24 @@ const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: st
 
 export function HomeLeftAction() {
   const user = useWhoami()
-  if (!user) return null
+
+  const handlePress = useCallback(() => {
+    if (user) {
+      router.push("/profile")
+    } else {
+      router.push("/login")
+    }
+  }, [user])
+
   return (
     <ActionGroup className="ml-2">
-      <TouchableOpacity onPress={() => router.push("/profile")}>
-        <UserAvatar image={user.image} name={user.name!} size={28} className="rounded-full" />
+      <TouchableOpacity onPress={handlePress}>
+        <UserAvatar
+          image={user?.image}
+          name={user?.name}
+          className="rounded-full"
+          color={accentColor}
+        />
       </TouchableOpacity>
     </ActionGroup>
   )

@@ -38,7 +38,16 @@ const authClient = createAuthClient({
 })
 
 // @keep-sorted
-export const { getCookie, getProviders, signIn, signOut, twoFactor, useSession } = authClient
+export const {
+  forgetPassword,
+  getCookie,
+  getProviders,
+  signIn,
+  signOut,
+  signUp,
+  twoFactor,
+  useSession,
+} = authClient
 
 export interface AuthProvider {
   name: string
