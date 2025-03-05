@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { formatEstimatedMins } from "@follow/utils"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
@@ -68,6 +69,9 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
   const isPlaying = audioState === "playing"
   const isLoading = audioState === "loading"
 
+  const durationInSeconds = attachments ? attachments[0]?.duration_in_seconds : 0
+  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
+
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
@@ -83,6 +87,14 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
               {feed?.title ?? "Unknown feed"}
             </Text>
             <Text className="text-secondary-label text-xs font-medium">·</Text>
+            {estimatedMins ? (
+              <>
+                <Text className="text-secondary-label text-xs font-medium">
+                  {formatEstimatedMins(estimatedMins)}
+                </Text>
+                <Text className="text-secondary-label text-xs font-medium">·</Text>
+              </>
+            ) : null}
             <RelativeDateTime
               date={publishedAt}
               className="text-secondary-label text-xs font-medium"
