@@ -1,9 +1,9 @@
 import { FeedViewType } from "@follow/constants"
-import type { ListRenderItemInfo } from "@shopify/flash-list"
-import { FlashList } from "@shopify/flash-list"
+import { router } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
-import { useCallback } from "react"
-import { Alert, Clipboard, View } from "react-native"
+import { useCallback, useMemo } from "react"
+import type { ListRenderItemInfo } from "react-native"
+import { Alert, Clipboard, FlatList, View } from "react-native"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
 import { views } from "@/src/constants/views"
@@ -32,7 +32,12 @@ export const SubscriptionFeedItemContextMenu: FC<
 
       <ContextMenu.Content>
         {view === FeedViewType.Articles && (
-          <ContextMenu.Preview size="STRETCH">
+          <ContextMenu.Preview
+            size="STRETCH"
+            onPress={() => {
+              router.push(`/feeds/${id}`)
+            }}
+          >
             {() => <PreviewFeeds id={id} view={view!} />}
           </ContextMenu.Preview>
         )}
@@ -267,15 +272,12 @@ const PreviewFeeds = (props: { id: string; view: FeedViewType }) => {
   )
   return (
     <View className="bg-system-background size-full flex-1">
-      <FlashList
-        data={entryIds}
-        keyExtractor={defaultKeyExtractor}
-        estimatedItemSize={100}
+      <FlatList
+        scrollEnabled={false}
+        data={useMemo(() => entryIds.slice(0, 5), [entryIds])}
         renderItem={renderItem}
         ItemSeparatorComponent={ItemSeparator}
       />
     </View>
   )
 }
-
-const defaultKeyExtractor = (item: string) => item
