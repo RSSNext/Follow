@@ -52,13 +52,64 @@ export const parseHtml = (content: string, options?: ParseHtmlOptions) => {
       (tag) => tag !== "img" && tag !== "picture",
     )
   } else {
-    rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "video", "style", "figure"]
+    rehypeSchema.tagNames = [
+      ...rehypeSchema.tagNames!,
+      "video",
+      "style",
+      "figure",
+      // SVG
+      "svg",
+      "g",
+      "ellipse",
+      "text",
+      "polygon",
+      "path",
+      "title",
+      "rect",
+      "line",
+      "circle",
+      "use",
+    ]
     rehypeSchema.attributes = {
       ...rehypeSchema.attributes,
       "*": renderInlineStyle
         ? [...rehypeSchema.attributes!["*"]!, "style", "class"]
         : rehypeSchema.attributes!["*"]!,
       video: ["src", "poster"],
+
+      svg: [
+        "width",
+        "height",
+        "viewBox",
+        "xmlns",
+        "version",
+        "preserveAspectRatio",
+        "xmlns:xlink",
+        "xml:space",
+        "fill",
+        "stroke",
+        "stroke-width",
+      ],
+      g: ["transform", "fill", "stroke", "stroke-width"],
+      path: ["d", "fill", "stroke", "stroke-width", "transform"],
+      polygon: ["points", "fill", "stroke", "stroke-width", "transform"],
+      circle: ["cx", "cy", "r", "fill", "stroke", "stroke-width", "transform"],
+      ellipse: ["cx", "cy", "rx", "ry", "fill", "stroke", "stroke-width", "transform"],
+      rect: [
+        "x",
+        "y",
+        "width",
+        "height",
+        "fill",
+        "stroke",
+        "stroke-width",
+        "transform",
+        "rx",
+        "ry",
+      ],
+      line: ["x1", "y1", "x2", "y2", "stroke", "stroke-width", "transform"],
+      text: ["x", "y", "fill", "font-size", "font-family", "text-anchor", "transform"],
+      use: ["href", "xlink:href", "x", "y", "width", "height", "transform"],
     }
   }
 

@@ -1,6 +1,7 @@
 import { useWhoami } from "@client/atoms/user"
 import { MainContainer } from "@client/components/layout/main"
 import { askOpenInFollowApp } from "@client/lib/helper"
+import { UrlBuilder } from "@client/lib/url-builder"
 import { useUserQuery, useUserSubscriptionsQuery } from "@client/query/users"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -12,8 +13,6 @@ import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router"
-
-import { UrlBuilder } from "~/lib/url-builder"
 
 export const Component = () => {
   const params = useParams()
