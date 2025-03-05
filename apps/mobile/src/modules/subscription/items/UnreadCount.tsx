@@ -1,14 +1,15 @@
+import { cn } from "@follow/utils"
 import { Text, View } from "react-native"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
 
-export function UnreadCount({ unread }: { unread?: number }) {
+export function UnreadCount({ unread, className }: { unread?: number; className?: string }) {
   const showUnreadCount = useUISettingKey("subscriptionShowUnreadCount")
 
   if (!unread) return null
   return showUnreadCount ? (
-    <Text className="text-tertiary-label ml-auto pl-2 text-xs">{unread}</Text>
+    <Text className={cn("text-tertiary-label text-xs", className)}>{unread}</Text>
   ) : (
-    <View className="bg-tertiary-label ml-auto size-1 rounded-full" />
+    <View className={cn("bg-tertiary-label size-1 rounded-full", className)} />
   )
 }

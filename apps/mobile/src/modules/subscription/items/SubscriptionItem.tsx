@@ -105,7 +105,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
           <Text numberOfLines={1} className="text-text flex-1 font-medium">
             {subscription?.title || feed.title}
           </Text>
-          <UnreadCount unread={unreadCount} />
+          <UnreadCount unread={unreadCount} className="ml-auto" />
         </ItemPressable>
       </SubscriptionFeedItemContextMenu>
     </Animated.View>

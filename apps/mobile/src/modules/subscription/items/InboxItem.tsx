@@ -36,7 +36,7 @@ export const InboxItem = memo(({ id }: { id: string }) => {
         </View>
 
         <Text className="text-text ml-2.5">{subscription.title}</Text>
-        <UnreadCount unread={unreadCount} />
+        <UnreadCount unread={unreadCount} className="ml-auto" />
       </ItemPressable>
     </Animated.View>
   )

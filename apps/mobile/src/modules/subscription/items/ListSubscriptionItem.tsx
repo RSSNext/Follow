@@ -45,7 +45,7 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
           </View>
 
           <Text className="text-text ml-2">{list.title}</Text>
-          <UnreadCount unread={unreadCount} />
+          <UnreadCount unread={unreadCount} className="ml-auto" />
         </ItemPressable>
       </SubscriptionListItemContextMenu>
     </Animated.View>
