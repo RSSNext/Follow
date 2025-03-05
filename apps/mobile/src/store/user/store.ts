@@ -1,3 +1,5 @@
+import analytics from "@react-native-firebase/analytics"
+
 import type { UserSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
 import { UserService } from "@/src/services/user"
@@ -28,6 +30,19 @@ class UserSyncService {
         state.whoami = res.user
       })
       userActions.upsertMany([res.user])
+
+      try {
+        await Promise.all([
+          analytics().setUserId(res.user.id),
+          analytics().setUserProperties({
+            userId: res.user.id,
+            email: res.user.email,
+            name: res.user.name,
+          }),
+        ])
+      } catch (err: any) {
+        console.warn(`[Error] setUserId: ${err}`)
+      }
       return res.user
     } else {
       return null

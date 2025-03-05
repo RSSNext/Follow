@@ -1,7 +1,9 @@
 import "../global.css"
 
-import { Stack } from "expo-router"
+import analytics from "@react-native-firebase/analytics"
+import { Stack, usePathname } from "expo-router"
 import { useColorScheme } from "nativewind"
+import { useEffect } from "react"
 import { useSheet } from "react-native-sheet-transitions"
 
 import { useIntentHandler } from "../hooks/useIntentHandler"
@@ -13,6 +15,22 @@ import { getSystemBackgroundColor } from "../theme/utils"
 export default function RootLayout() {
   useColorScheme()
   useIntentHandler()
+
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const logScreenView = async () => {
+      try {
+        await analytics().logScreenView({
+          screen_name: pathname,
+          screen_class: pathname,
+        })
+      } catch (err: any) {
+        console.warn(`[Error] logScreenView: ${err}`)
+      }
+    }
+    logScreenView()
+  }, [pathname])
 
   return (
     <RootProviders>
