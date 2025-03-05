@@ -121,9 +121,7 @@ export function EmailLogin() {
       <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/forget-password")}>
         <Text className="text-accent m-[6] text-[16px]">Forgot password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/sign-up")}>
-        <Text className="text-accent m-[6] text-[16px]">Don't have an Follow account?</Text>
-      </TouchableOpacity>
+
       <SubmitButton
         disabled={submitMutation.isPending || !formState.isValid}
         isLoading={submitMutation.isPending}
@@ -131,6 +129,9 @@ export function EmailLogin() {
         title="Continue"
         className="mt-8"
       />
+      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/sign-up")}>
+        <Text className="text-secondary-label m-1 text-sm">Don't have an Follow account?</Text>
+      </TouchableOpacity>
     </View>
   )
 }
