@@ -12,6 +12,7 @@ interface UserAvatarProps {
   className?: string
   color?: string
 }
+
 export const UserAvatar = ({ image, size = 24, name, className, color }: UserAvatarProps) => {
   if (!image) {
     return (
@@ -24,7 +25,13 @@ export const UserAvatar = ({ image, size = 24, name, className, color }: UserAva
         style={{ width: size, height: size }}
       >
         {name ? (
-          <Text className="text-secondary-label text-xs">{name.slice(0, 2)}</Text>
+          <Text
+            className="text-secondary-label p-3 text-center uppercase"
+            style={{ fontSize: size }}
+            adjustsFontSizeToFit
+          >
+            {name.slice(0, 2)}
+          </Text>
         ) : (
           <User4CuteReIcon width={size} height={size} color={color} />
         )}

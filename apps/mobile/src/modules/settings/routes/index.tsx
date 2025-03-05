@@ -6,6 +6,7 @@ import { AchievementScreen } from "./Achievement"
 import { ActionsScreen } from "./Actions"
 import { AppearanceScreen } from "./Appearance"
 import { DataScreen } from "./Data"
+import { EditProfileScreen } from "./EditProfile"
 import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
@@ -29,5 +30,6 @@ export const SettingRoutes = (Stack: TypedNavigator<any, any>) => {
     <Stack.Screen key="About" name="About" component={AboutScreen} />,
     // @ts-expect-error
     <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />,
+    <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />,
   ]
 }

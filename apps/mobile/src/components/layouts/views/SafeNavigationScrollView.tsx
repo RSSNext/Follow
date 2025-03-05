@@ -3,8 +3,14 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { Stack } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
 import { useContext, useEffect, useMemo, useRef, useState } from "react"
-import type { ScrollView, ScrollViewProps } from "react-native"
+import type {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  ScrollViewProps,
+} from "react-native"
 import { Animated as RNAnimated, useAnimatedValue, View } from "react-native"
+import type { SharedValue } from "react-native-reanimated"
 import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -30,6 +36,9 @@ type SafeNavigationScrollViewProps = Omit<ScrollViewProps, "onScroll"> & {
   // For scroll view content adjustment behavior
   withTopInset?: boolean
   withBottomInset?: boolean
+
+  // to sharedValue
+  reanimatedScrollY?: SharedValue<number>
 } & PropsWithChildren
 
 export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
@@ -40,6 +49,7 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
 
   withBottomInset = false,
   withTopInset = false,
+  reanimatedScrollY,
 
   ...props
 }) => {
@@ -70,6 +80,11 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
             ref={scrollViewRef}
             onScroll={RNAnimated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
               useNativeDriver: true,
+              listener(event: NativeSyntheticEvent<NativeScrollEvent>) {
+                if (reanimatedScrollY) {
+                  reanimatedScrollY.value = event.nativeEvent.contentOffset.y
+                }
+              },
             })}
             automaticallyAdjustContentInsets={false}
             automaticallyAdjustsScrollIndicatorInsets={false}
