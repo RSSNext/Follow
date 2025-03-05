@@ -11,6 +11,8 @@ import { useSubscription } from "@/src/store/subscription/hooks"
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
+import { UnreadCount } from "./UnreadCount"
+
 export const InboxItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(getInboxStoreId(id))
   const unreadCount = useUnreadCount(id)
@@ -34,9 +36,7 @@ export const InboxItem = memo(({ id }: { id: string }) => {
         </View>
 
         <Text className="text-text ml-2.5">{subscription.title}</Text>
-        {!!unreadCount && (
-          <Text className="text-tertiary-label ml-auto text-xs">{unreadCount}</Text>
-        )}
+        <UnreadCount unread={unreadCount} />
       </ItemPressable>
     </Animated.View>
   )

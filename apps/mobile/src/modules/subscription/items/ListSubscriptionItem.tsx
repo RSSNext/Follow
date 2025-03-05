@@ -11,6 +11,7 @@ import { useListUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
 import { selectFeed } from "../../screen/atoms"
+import { UnreadCount } from "./UnreadCount"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
@@ -44,9 +45,7 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
           </View>
 
           <Text className="text-text ml-2">{list.title}</Text>
-          {!!unreadCount && (
-            <Text className="text-tertiary-label ml-auto pl-2 text-xs">{unreadCount}</Text>
-          )}
+          <UnreadCount unread={unreadCount} />
         </ItemPressable>
       </SubscriptionListItemContextMenu>
     </Animated.View>

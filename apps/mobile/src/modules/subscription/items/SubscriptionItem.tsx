@@ -13,6 +13,7 @@ import { useUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionFeedItemContextMenu } from "../../context-menu/feeds"
 import { GroupedContext } from "../ctx"
+import { UnreadCount } from "./UnreadCount"
 
 // const renderRightActions = () => {
 //   return (
@@ -104,9 +105,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
           <Text numberOfLines={1} className="text-text flex-1 font-medium">
             {subscription?.title || feed.title}
           </Text>
-          {!!unreadCount && (
-            <Text className="text-tertiary-label ml-auto pl-2 text-xs">{unreadCount}</Text>
-          )}
+          <UnreadCount unread={unreadCount} />
         </ItemPressable>
       </SubscriptionFeedItemContextMenu>
     </Animated.View>
