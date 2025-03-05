@@ -6,8 +6,9 @@ import { useColorScheme } from "nativewind"
 import { useEffect } from "react"
 import { useSheet } from "react-native-sheet-transitions"
 
+import { FullWindowOverlay } from "../components/common/FullWindowOverlay"
 import { useIntentHandler } from "../hooks/useIntentHandler"
-import { DebugButton } from "../modules/debug"
+import { DebugButton, EnvProfileIndicator } from "../modules/debug"
 import { RootProviders } from "../providers"
 import { usePrefetchSessionUser } from "../store/user/hooks"
 import { getSystemBackgroundColor } from "../theme/utils"
@@ -38,6 +39,9 @@ export default function RootLayout() {
       <AnimatedStack />
 
       {__DEV__ && <DebugButton />}
+      <FullWindowOverlay>
+        <EnvProfileIndicator />
+      </FullWindowOverlay>
     </RootProviders>
   )
 }

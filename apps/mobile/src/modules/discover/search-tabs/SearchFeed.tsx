@@ -1,5 +1,4 @@
 import { FeedViewType } from "@follow/constants"
-import { env } from "@follow/shared/src/env.rn"
 import { createBuildSafeHeaders } from "@follow/utils/src/headers"
 import { IMAGE_PROXY_URL } from "@follow/utils/src/img-proxy"
 import { useQuery } from "@tanstack/react-query"
@@ -15,15 +14,16 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
+import { proxyEnv } from "@/src/lib/proxy-env"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 
 import { useSearchPageContext } from "../ctx"
 import { BaseSearchPageFlatList, ItemSeparator, RenderScrollComponent } from "./__base"
 import { useDataSkeleton } from "./hooks"
 
-const buildSafeHeaders = createBuildSafeHeaders(env.VITE_WEB_URL, [
+const buildSafeHeaders = createBuildSafeHeaders(proxyEnv.VITE_WEB_URL, [
   IMAGE_PROXY_URL,
-  env.VITE_API_URL,
+  proxyEnv.VITE_API_URL,
 ])
 
 type SearchResultItem = Awaited<ReturnType<typeof apiClient.discover.$post>>["data"][number]

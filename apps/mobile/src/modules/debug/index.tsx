@@ -2,7 +2,7 @@ import { router } from "expo-router"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { useMemo } from "react"
-import { Dimensions } from "react-native"
+import { Dimensions, Text, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { JotaiPersistSyncStorage } from "@/src/lib/jotai"
+import { useEnvProfile } from "@/src/lib/proxy-env"
 
 export const DebugButton = () => {
   const cachedPositionAtom = useMemo(
@@ -81,5 +82,19 @@ export const DebugButton = () => {
         <BugCuteReIcon height={24} width={24} color="#fff" />
       </ReAnimatedTouchableOpacity>
     </GestureDetector>
+  )
+}
+
+export const EnvProfileIndicator = () => {
+  const envProfile = useEnvProfile()
+
+  if (!__DEV__ && envProfile === "prod") return null
+
+  return (
+    <View className="absolute bottom-0 left-16 items-center justify-center" pointerEvents="none">
+      <View className="bg-accent rounded p-1">
+        <Text className="text-xs uppercase text-white">{envProfile}</Text>
+      </View>
+    </View>
   )
 }
