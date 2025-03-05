@@ -1,4 +1,3 @@
-import { name } from "@pkg"
 import { app, Menu, nativeImage, Tray } from "electron"
 
 import { isMacOS } from "~/env"
@@ -23,16 +22,17 @@ export const registerAppTray = () => {
   const trayIcon = isMacOS ? icon.resize({ width: 16 }) : icon
   trayIcon.setTemplateImage(true)
   tray = new Tray(trayIcon)
+  const appName = app.getName()
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: t("menu.open", { name }),
+      label: t("menu.open", { name: appName }),
       click: showWindow,
     },
-    { label: t("menu.quit", { name }), click: () => app.quit() },
+    { label: t("menu.quit", { name: appName }), click: () => app.quit() },
   ])
   tray.setContextMenu(contextMenu)
-  tray.setToolTip(app.getName())
+  tray.setToolTip(appName)
   tray.on("click", showWindow)
 }
 
