@@ -16,12 +16,6 @@ export const useIsOwnList = (id: string) => {
   })
 }
 
-export const useListEntryIds = (id: string) => {
-  return useListStore((state) => {
-    return state.lists[id]?.entryIds ?? []
-  })
-}
-
 export const useOwnedLists = () => {
   return useListStore(
     useCallback((state) => {

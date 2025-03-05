@@ -11,7 +11,6 @@ import { EntryService } from "@/src/services/entry"
 import { collectionActions } from "../collection/store"
 import { feedActions } from "../feed/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
-import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
 import { getEntry } from "./getter"
 import type { EntryModel, FetchEntriesProps } from "./types"
@@ -21,6 +20,7 @@ type EntryId = string
 type FeedId = string
 type InboxId = string
 type Category = string
+type ListId = string
 
 interface EntryState {
   data: Record<EntryId, EntryModel>
@@ -28,6 +28,7 @@ interface EntryState {
   entryIdByCategory: Record<Category, Set<EntryId>>
   entryIdByFeed: Record<FeedId, Set<EntryId>>
   entryIdByInbox: Record<InboxId, Set<EntryId>>
+  entryIdByList: Record<ListId, Set<EntryId>>
   entryIdSet: Set<EntryId>
 }
 
@@ -44,6 +45,7 @@ const defaultState: EntryState = {
   entryIdByCategory: {},
   entryIdByFeed: {},
   entryIdByInbox: {},
+  entryIdByList: {},
   entryIdSet: new Set(),
 }
 
@@ -136,6 +138,24 @@ class EntryActions {
     }
   }
 
+  private addEntryIdToList({
+    draft,
+    listId,
+    entryId,
+  }: {
+    draft: EntryState
+    listId?: ListId | null
+    entryId: EntryId
+  }) {
+    if (!listId) return
+    const entryIdSetByList = draft.entryIdByList[listId]
+    if (!entryIdSetByList) {
+      draft.entryIdByList[listId] = new Set([entryId])
+    } else {
+      entryIdSetByList.add(entryId)
+    }
+  }
+
   upsertManyInSession(entries: EntryModel[], options?: { unreadOnly?: boolean }) {
     if (entries.length === 0) return
     const { unreadOnly } = options ?? {}
@@ -148,11 +168,19 @@ class EntryActions {
         const { feedId, inboxHandle, read, sources } = entry
         if (unreadOnly && read) continue
 
-        this.addEntryIdToFeed({
-          draft,
-          feedId,
-          entryId: entry.id,
-        })
+        if (inboxHandle) {
+          this.addEntryIdToInbox({
+            draft,
+            inboxHandle,
+            entryId: entry.id,
+          })
+        } else {
+          this.addEntryIdToFeed({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
 
         this.addEntryIdToView({
           draft,
@@ -161,17 +189,21 @@ class EntryActions {
           sources,
         })
 
-        this.addEntryIdToInbox({
-          draft,
-          inboxHandle,
-          entryId: entry.id,
-        })
-
         this.addEntryIdToCategory({
           draft,
           feedId,
           entryId: entry.id,
         })
+
+        entry.sources
+          ?.filter((s) => s !== "feed")
+          .forEach((s) => {
+            this.addEntryIdToList({
+              draft,
+              listId: s,
+              entryId: entry.id,
+            })
+          })
       }
     })
   }
@@ -264,6 +296,20 @@ class EntryActions {
       draft.entryIdByFeed[feedId] = new Set(entries.map((e) => e.id))
     })
   }
+
+  resetByInbox({ inboxId, entries }: { inboxId?: InboxId; entries: EntryModel[] }) {
+    if (!inboxId) return
+    immerSet((draft) => {
+      draft.entryIdByInbox[inboxId] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByList({ listId, entries }: { listId?: ListId; entries: EntryModel[] }) {
+    if (!listId) return
+    immerSet((draft) => {
+      draft.entryIdByList[listId] = new Set(entries.map((e) => e.id))
+    })
+  }
 }
 
 class EntrySyncServices {
@@ -306,12 +352,6 @@ class EntrySyncServices {
     }
 
     await entryActions.upsertMany(entries)
-    if (params.listId) {
-      await listActions.addEntryIds({
-        listId: params.listId,
-        entryIds: entries.map((e) => e.id),
-      })
-    }
 
     // After initial fetch, we can reset the state to prefer the entries data from the server
     if (!pageParam) {
@@ -328,6 +368,14 @@ class EntrySyncServices {
 
       if (params.feedId) {
         entryActions.resetByFeed({ feedId: params.feedId, entries })
+      }
+
+      if (params.inboxId) {
+        entryActions.resetByInbox({ inboxId: params.inboxId, entries })
+      }
+
+      if (params.listId) {
+        entryActions.resetByList({ listId: params.listId, entries })
       }
     }
 

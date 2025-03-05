@@ -77,7 +77,6 @@ class Morph {
             ownerUserId: list.owner.id,
             feedIds: list.feedIds!,
             fee: list.fee!,
-            entryIds: [],
           })
       }
 
@@ -97,7 +96,6 @@ class Morph {
       ownerUserId: data.ownerUserId!,
       feedIds: data.feedIds!,
       fee: data.fee!,
-      entryIds: [],
     }
   }
 

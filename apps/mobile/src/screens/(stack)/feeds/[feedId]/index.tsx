@@ -12,9 +12,9 @@ import {
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
   useEntryIdsByInboxId,
+  useEntryIdsByListId,
 } from "@/src/store/entry/hooks"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
-import { useListEntryIds } from "@/src/store/list/hooks"
 
 export default function Feed() {
   const insets = useSafeAreaInsets()
@@ -27,7 +27,7 @@ export default function Feed() {
 
   const entryIdsByFeedId = useEntryIdsByFeedId(feedIdentifier)
   const entryIdsByCategory = useEntryIdsByCategory(feedIdentifier)
-  const entryIdsByListId = useListEntryIds(feedIdentifier)
+  const entryIdsByListId = useEntryIdsByListId(feedIdentifier)
   const entryIdsByInboxId = useEntryIdsByInboxId(feedIdentifier)
 
   const entryIds = isCollection

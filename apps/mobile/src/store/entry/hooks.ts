@@ -102,6 +102,19 @@ export const useEntryIdsByCategory = (category: string) => {
   )
 }
 
+export const useEntryIdsByListId = (listId: string) => {
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const ids = state.entryIdByList[listId]
+        if (!ids) return []
+        return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
+      },
+      [listId],
+    ),
+  )
+}
+
 export const useFetchEntryContentByStream = (remoteEntryIds?: string[]) => {
   const { mutate: updateEntryContent } = useMutation({
     mutationKey: ["stream-entry-content", remoteEntryIds],
