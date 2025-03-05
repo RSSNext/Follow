@@ -36,7 +36,7 @@ export default function ForgetPassword() {
       }}
       accessible={false}
     >
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} keyboardVerticalOffset={-70}>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <View className="p-safe px-safe-offset-4 flex-1 justify-between">
           <View className="items-center">
             <Text className="text-text text-4xl font-bold">Forgotten password?</Text>
@@ -65,7 +65,7 @@ export default function ForgetPassword() {
             title="Continue"
             className="self-stretch"
             style={{
-              bottom: offset.bottom + 100,
+              bottom: offset.bottom + 30,
             }}
             disabled={!email || forgetPasswordMutation.isPending}
             isLoading={forgetPasswordMutation.isPending}
