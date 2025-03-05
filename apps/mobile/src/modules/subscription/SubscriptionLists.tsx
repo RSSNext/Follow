@@ -62,12 +62,19 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     [inboxes, sortedListIds, sortedGrouped, sortedUnGrouped],
   )
 
-  const listsIndexStart = 2
-  const listsIndexEnd = listsIndexStart + sortedListIds.length - 1
-  const inboxIndexStart = listsIndexEnd + 2
-  const inboxIndexEnd = inboxIndexStart + inboxes.length - 1
-  const feedsIndexStart = inboxIndexEnd + 2
-  const feedsIndexEnd = feedsIndexStart + sortedGrouped.length + sortedUnGrouped.length - 1
+  const extraData = useMemo(() => {
+    const listsIndexStart = 2
+    const listsIndexEnd = listsIndexStart + sortedListIds.length - 1
+    const inboxIndexStart = listsIndexEnd + 2
+    const inboxIndexEnd = inboxIndexStart + inboxes.length - 1
+    const feedsIndexStart = inboxIndexEnd + 2
+    const feedsIndexEnd = feedsIndexStart + sortedGrouped.length + sortedUnGrouped.length - 1
+    return {
+      inboxIndexRange: [inboxIndexStart, inboxIndexEnd],
+      feedsIndexRange: [feedsIndexStart, feedsIndexEnd],
+      listsIndexRange: [listsIndexStart, listsIndexEnd],
+    }
+  }, [inboxes.length, sortedGrouped.length, sortedListIds.length, sortedUnGrouped.length])
 
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = useEventCallback(() => {
@@ -92,11 +99,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
       renderItem={ItemRender}
       keyExtractor={keyExtractor}
       // itemLayoutAnimation={LinearTransition}
-      extraData={{
-        inboxIndexRange: [inboxIndexStart, inboxIndexEnd],
-        feedsIndexRange: [feedsIndexStart, feedsIndexEnd],
-        listsIndexRange: [listsIndexStart, listsIndexEnd],
-      }}
+      extraData={extraData}
     />
   )
 }
