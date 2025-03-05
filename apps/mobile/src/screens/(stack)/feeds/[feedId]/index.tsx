@@ -8,31 +8,36 @@ import { EntryListSelector } from "@/src/modules/entry-list/EntryListSelector"
 import { EntryListContext, useSelectedView } from "@/src/modules/screen/atoms"
 import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorProvider"
 import { useCollectionEntryList } from "@/src/store/collection/hooks"
-import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
+import {
+  useEntryIdsByCategory,
+  useEntryIdsByFeedId,
+  useEntryIdsByInboxId,
+} from "@/src/store/entry/hooks"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import { useListEntryIds } from "@/src/store/list/hooks"
 
 export default function Feed() {
   const insets = useSafeAreaInsets()
-  const { feedId: feedIdOrListIdOrCategory } = useLocalSearchParams()
+  const { feedId } = useLocalSearchParams()
+  const feedIdentifier = feedId as string
 
-  const isCollection = feedIdOrListIdOrCategory === FEED_COLLECTION_LIST
+  const isCollection = feedIdentifier === FEED_COLLECTION_LIST
   const view = useSelectedView() ?? FeedViewType.Articles
   const collectionEntryIds = useCollectionEntryList(view)
 
-  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrListIdOrCategory as string)
-  const entryIdsByCategory = useEntryIdsByCategory(feedIdOrListIdOrCategory as string)
-  const entryIdsByListId = useListEntryIds(feedIdOrListIdOrCategory as string)
+  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdentifier)
+  const entryIdsByCategory = useEntryIdsByCategory(feedIdentifier)
+  const entryIdsByListId = useListEntryIds(feedIdentifier)
+  const entryIdsByInboxId = useEntryIdsByInboxId(feedIdentifier)
 
   const entryIds = isCollection
     ? collectionEntryIds
-    : entryIdsByFeedId.length > 0
-      ? entryIdsByFeedId
-      : entryIdsByCategory.length > 0
-        ? entryIdsByCategory
-        : entryIdsByListId.length > 0
-          ? entryIdsByListId
-          : []
+    : getEntryIdsFromMultiplePlace(
+        entryIdsByFeedId,
+        entryIdsByCategory,
+        entryIdsByListId,
+        entryIdsByInboxId,
+      )
 
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
@@ -43,4 +48,8 @@ export default function Feed() {
       </BottomTabBarHeightContext.Provider>
     </EntryListContext.Provider>
   )
+}
+
+function getEntryIdsFromMultiplePlace(...entryIds: Array<string[] | undefined>) {
+  return entryIds.find((ids) => ids?.length) ?? []
 }

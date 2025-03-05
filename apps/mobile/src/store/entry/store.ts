@@ -275,15 +275,26 @@ class EntrySyncServices {
       listId,
       view,
     })
-    const res = await apiClient.entries.$post({
-      json: {
-        publishedAfter: pageParam,
-        read,
-        limit,
-        isCollection,
-        ...params,
-      },
-    })
+    const res = params.inboxId
+      ? await apiClient.entries.inbox.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isCollection,
+            inboxId: params.inboxId,
+            ...params,
+          },
+        })
+      : await apiClient.entries.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isCollection,
+            ...params,
+          },
+        })
 
     const entries = honoMorph.toEntryList(res.data)
     const entriesInDB = await EntryService.getEntryMany(entries.map((e) => e.id))
@@ -328,13 +339,21 @@ class EntrySyncServices {
       await collectionActions.upsertMany(collections)
     }
 
-    await feedActions.upsertMany(res.data?.map((e) => honoMorph.toFeed(e.feeds)) || [])
+    const feeds =
+      res.data
+        ?.map((e) => e.feeds)
+        .filter((f) => f.type === "feed")
+        .map((f) => honoMorph.toFeed(f)) ?? []
+    feedActions.upsertMany(feeds)
 
     return res
   }
 
   async fetchEntryContent(entryId: EntryId) {
-    const res = await apiClient.entries.$get({ query: { id: entryId } })
+    const currentEntry = getEntry(entryId)
+    const res = currentEntry?.inboxHandle
+      ? await apiClient.entries.inbox.$get({ query: { id: entryId } })
+      : await apiClient.entries.$get({ query: { id: entryId } })
     const entry = honoMorph.toEntry(res.data)
     if (!entry) return null
     if (entry.content && getEntry(entryId)?.content !== entry.content) {
