@@ -1,8 +1,5 @@
 import { getViewport } from "@follow/components/hooks/useViewport.js"
-import {
-  CircleProgress,
-  MaterialSymbolsProgressActivity,
-} from "@follow/components/icons/Progress.js"
+import { CircleProgress } from "@follow/components/icons/Progress.js"
 import { AutoResizeHeight } from "@follow/components/ui/auto-resize-height/index.js"
 import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
@@ -27,7 +24,6 @@ import {
 import { enableShowSourceContent } from "~/atoms/source-content"
 import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Toc } from "~/components/ui/markdown/components/Toc"
-import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { isWebBuild } from "~/constants"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -270,7 +266,6 @@ export const ContainerToc: FC = memo(() => {
             className={cn(
               "animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft flex flex-col items-end",
               "scrollbar-none max-h-[calc(100vh-100px)] overflow-auto",
-
               "@[700px]:-translate-x-12 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
             )}
           />
@@ -289,6 +284,9 @@ export const ContainerToc: FC = memo(() => {
 const BackTopIndicator: Component = memo(({ className }) => {
   const [readPercent] = useReadPercent()
   const scrollElement = useScrollViewElement()
+
+  if (readPercent === 0) return
+
   return (
     <span
       className={cn(
@@ -297,11 +295,7 @@ const BackTopIndicator: Component = memo(({ className }) => {
       )}
     >
       <div className="flex items-center gap-2 tabular-nums">
-        <IconOpacityTransition
-          icon1={<MaterialSymbolsProgressActivity />}
-          icon2={<CircleProgress percent={readPercent!} size={14} strokeWidth={2} />}
-          status={readPercent === 0 ? "init" : "done"}
-        />
+        <CircleProgress percent={readPercent!} size={14} strokeWidth={2} />
         <span>{readPercent}%</span>
         <br />
       </div>
