@@ -2,7 +2,7 @@ import { cn, getLuminance } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
 import { useMemo } from "react"
-import { Button, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import ReAnimated, { FadeIn, FadeOut, interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -143,12 +143,9 @@ export const UserHeaderBanner = ({
             @{user.handle}
           </Text>
         ) : !user ? (
-          <Button
-            title="Sign in to your account"
-            onPress={() => {
-              router.push("/login")
-            }}
-          />
+          <TouchableOpacity className="mx-auto" onPress={() => router.push("/login")}>
+            <Text className="text-accent m-[6] text-[16px]">Sign in to your account</Text>
+          </TouchableOpacity>
         ) : null}
       </View>
     </View>
