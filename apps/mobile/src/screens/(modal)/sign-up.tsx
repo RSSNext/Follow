@@ -82,7 +82,7 @@ function EmailSignUp() {
     mutationFn: onSubmit,
   })
 
-  const login = handleSubmit((values) => {
+  const signup = handleSubmit((values) => {
     submitMutation.mutate(values)
   })
 
@@ -112,7 +112,7 @@ function EmailSignUp() {
             hitSlop={20}
             autoCapitalize="none"
             autoCorrect={false}
-            autoComplete="current-password"
+            autoComplete="password-new"
             control={control}
             name="password"
             placeholder="Password"
@@ -127,7 +127,7 @@ function EmailSignUp() {
             hitSlop={20}
             autoCapitalize="none"
             autoCorrect={false}
-            autoComplete="current-password"
+            autoComplete="password-new"
             control={control}
             name="confirmPassword"
             placeholder="Confirm Password"
@@ -135,7 +135,7 @@ function EmailSignUp() {
             secureTextEntry
             returnKeyType="go"
             onSubmitEditing={() => {
-              login()
+              signup()
             }}
           />
         </View>
@@ -143,7 +143,7 @@ function EmailSignUp() {
       <SubmitButton
         disabled={submitMutation.isPending || !formState.isValid}
         isLoading={submitMutation.isPending}
-        onPress={login}
+        onPress={signup}
         title="Continue"
         className="mt-8"
       />

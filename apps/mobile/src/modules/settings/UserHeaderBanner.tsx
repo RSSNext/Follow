@@ -142,14 +142,14 @@ export const UserHeaderBanner = ({
           <Text className={cn(gradientLight ? "text-black/70" : "text-white/70")}>
             @{user.handle}
           </Text>
-        ) : (
+        ) : !user ? (
           <Button
             title="Sign in to your account"
             onPress={() => {
               router.push("/login")
             }}
           />
-        )}
+        ) : null}
       </View>
     </View>
   )
