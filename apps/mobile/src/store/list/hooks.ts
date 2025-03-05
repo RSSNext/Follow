@@ -18,7 +18,7 @@ export const useIsOwnList = (id: string) => {
 
 export const useListEntryIds = (id: string) => {
   return useListStore((state) => {
-    return state.lists[id]?.entryIds
+    return state.lists[id]?.entryIds ?? []
   })
 }
 

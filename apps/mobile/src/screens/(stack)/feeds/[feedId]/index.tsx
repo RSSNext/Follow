@@ -10,21 +10,29 @@ import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorP
 import { useCollectionEntryList } from "@/src/store/collection/hooks"
 import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
+import { useListEntryIds } from "@/src/store/list/hooks"
 
 export default function Feed() {
   const insets = useSafeAreaInsets()
-  const { feedId: feedIdOrCategory } = useLocalSearchParams()
-  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrCategory as string)
-  const entryIdsByCategory = useEntryIdsByCategory(feedIdOrCategory as string)
-  const isCollection = feedIdOrCategory === FEED_COLLECTION_LIST
+  const { feedId: feedIdOrListIdOrCategory } = useLocalSearchParams()
+
+  const isCollection = feedIdOrListIdOrCategory === FEED_COLLECTION_LIST
   const view = useSelectedView() ?? FeedViewType.Articles
   const collectionEntryIds = useCollectionEntryList(view)
+
+  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrListIdOrCategory as string)
+  const entryIdsByCategory = useEntryIdsByCategory(feedIdOrListIdOrCategory as string)
+  const entryIdsByListId = useListEntryIds(feedIdOrListIdOrCategory as string)
 
   const entryIds = isCollection
     ? collectionEntryIds
     : entryIdsByFeedId.length > 0
       ? entryIdsByFeedId
-      : entryIdsByCategory
+      : entryIdsByCategory.length > 0
+        ? entryIdsByCategory
+        : entryIdsByListId.length > 0
+          ? entryIdsByListId
+          : []
 
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>

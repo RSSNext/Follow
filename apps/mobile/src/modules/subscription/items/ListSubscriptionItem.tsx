@@ -1,14 +1,15 @@
+import { router } from "expo-router"
 import { memo } from "react"
 import { Image, Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
-import { closeDrawer, selectTimeline } from "@/src/modules/screen/atoms"
 import { useList } from "@/src/store/list/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
+import { selectFeed } from "../../screen/atoms"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
@@ -20,11 +21,11 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
         <ItemPressable
           className="h-12 flex-row items-center px-3"
           onPress={() => {
-            selectTimeline({
+            selectFeed({
               type: "list",
               listId: id,
             })
-            closeDrawer()
+            router.push(`/feeds/${id}`)
           }}
         >
           <View className="overflow-hidden rounded">
