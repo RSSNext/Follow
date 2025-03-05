@@ -35,14 +35,12 @@ async function onSubmit(values: FormValue) {
       name: values.email.split("@")[0] ?? "",
     })
     .then((res) => {
-      if (res.error) {
-        throw new Error(res.error.message)
+      if (res.error?.message) {
+        toast.error(res.error.message)
       } else {
+        toast.success("Sign up successful")
         router.back()
       }
-    })
-    .catch((error) => {
-      toast.error(error.message)
     })
 }
 
