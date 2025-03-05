@@ -7,14 +7,14 @@ import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { useList } from "@/src/store/list/hooks"
-import { useUnreadCount } from "@/src/store/unread/hooks"
+import { useListUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
 import { selectFeed } from "../../screen/atoms"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
-  const unreadCount = useUnreadCount(id)
+  const unreadCount = useListUnreadCount(id)
   if (!list) return null
   return (
     <Animated.View exiting={FadeOutUp}>
@@ -44,7 +44,9 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
           </View>
 
           <Text className="text-text ml-2">{list.title}</Text>
-          {!!unreadCount && <View className="bg-tertiary-label ml-auto size-1 rounded-full" />}
+          {!!unreadCount && (
+            <Text className="text-tertiary-label ml-auto pl-2 text-xs">{unreadCount}</Text>
+          )}
         </ItemPressable>
       </SubscriptionListItemContextMenu>
     </Animated.View>

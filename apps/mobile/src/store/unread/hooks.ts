@@ -2,6 +2,7 @@ import type { FeedViewType } from "@follow/constants"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
 
+import { useListFeedIds } from "../list/hooks"
 import { useFeedSubscriptionByView } from "../subscription/hooks"
 import { unreadSyncService, useUnreadStore } from "./store"
 
@@ -24,6 +25,11 @@ export const useAutoMarkAsRead = (entryId: string) => {
 
 export const useUnreadCount = (subscriptionId: string) => {
   return useUnreadStore((state) => state.data[subscriptionId])
+}
+
+export const useListUnreadCount = (listId: string) => {
+  const feedIds = useListFeedIds(listId)
+  return useUnreadCounts(feedIds ?? [])
 }
 
 export const useUnreadCounts = (subscriptionIds: string[]): number => {

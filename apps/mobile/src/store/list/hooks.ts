@@ -10,6 +10,12 @@ export const useList = (id: string) => {
   })
 }
 
+export const useListFeedIds = (id: string) => {
+  return useListStore((state) => {
+    return state.lists[id]?.feedIds
+  })
+}
+
 export const useIsOwnList = (id: string) => {
   return useListStore((state) => {
     return state.lists[id]?.userId === whoami()?.id
