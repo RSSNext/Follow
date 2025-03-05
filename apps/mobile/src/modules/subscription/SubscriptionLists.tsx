@@ -88,6 +88,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
       className="bg-system-grouped-background"
       isRefetching={refreshing}
       data={data}
+      estimatedItemSize={50}
       renderItem={ItemRender}
       keyExtractor={keyExtractor}
       // itemLayoutAnimation={LinearTransition}
