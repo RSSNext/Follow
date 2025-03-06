@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { formatEstimatedMins } from "@follow/utils"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
@@ -15,6 +16,7 @@ import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
 import { getAttachmentState, player } from "@/src/lib/player"
 import { useEntry } from "@/src/store/entry/hooks"
+import { getInboxFrom } from "@/src/store/entry/utils"
 import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
@@ -23,6 +25,7 @@ import { useEntryListContextView } from "../EntryListContext"
 
 export function EntryNormalItem({ entryId, extraData }: { entryId: string; extraData: string }) {
   const entry = useEntry(entryId)
+  const from = getInboxFrom(entry)
   const feed = useFeed(entry?.feedId as string)
   const view = useEntryListContextView()
 
@@ -68,6 +71,9 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
   const isPlaying = audioState === "playing"
   const isLoading = audioState === "loading"
 
+  const durationInSeconds = attachments ? attachments[0]?.duration_in_seconds : 0
+  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
+
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
@@ -80,9 +86,17 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
           <View className="mb-1 flex-1 flex-row items-center gap-1.5 pr-2">
             <FeedIcon fallback feed={feed} size={16} />
             <Text numberOfLines={1} className="text-secondary-label shrink text-sm font-medium">
-              {feed?.title ?? "Unknown feed"}
+              {feed?.title || from || "Unknown feed"}
             </Text>
             <Text className="text-secondary-label text-xs font-medium">·</Text>
+            {estimatedMins ? (
+              <>
+                <Text className="text-secondary-label text-xs font-medium">
+                  {formatEstimatedMins(estimatedMins)}
+                </Text>
+                <Text className="text-secondary-label text-xs font-medium">·</Text>
+              </>
+            ) : null}
             <RelativeDateTime
               date={publishedAt}
               className="text-secondary-label text-xs font-medium"

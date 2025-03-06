@@ -8,13 +8,13 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@follow/components/ui/tooltip/index.js"
-import type { LoginRuntime } from "@follow/shared/auth"
-import { loginHandler } from "@follow/shared/auth"
 import { clsx } from "@follow/utils/utils"
 import { m } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
+import type { LoginRuntime } from "~/lib/auth"
+import { loginHandler } from "~/lib/auth"
 import { isInMAS } from "~/lib/utils"
 import { useAuthProviders } from "~/queries/users"
 

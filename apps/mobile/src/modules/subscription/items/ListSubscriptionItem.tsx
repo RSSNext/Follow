@@ -1,18 +1,21 @@
+import { router } from "expo-router"
 import { memo } from "react"
-import { Image, Text, View } from "react-native"
+import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
+import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
-import { closeDrawer, selectTimeline } from "@/src/modules/screen/atoms"
 import { useList } from "@/src/store/list/hooks"
-import { useUnreadCount } from "@/src/store/unread/hooks"
+import { useListUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
+import { selectFeed } from "../../screen/atoms"
+import { UnreadCount } from "./UnreadCount"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
-  const unreadCount = useUnreadCount(id)
+  const unreadCount = useListUnreadCount(id)
   if (!list) return null
   return (
     <Animated.View exiting={FadeOutUp}>
@@ -20,22 +23,29 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
         <ItemPressable
           className="h-12 flex-row items-center px-3"
           onPress={() => {
-            selectTimeline({
+            selectFeed({
               type: "list",
               listId: id,
             })
-            closeDrawer()
+            router.push(`/feeds/${id}`)
           }}
         >
           <View className="overflow-hidden rounded">
             {!!list.image && (
-              <Image source={{ uri: list.image, width: 24, height: 24 }} resizeMode="cover" />
+              <ProxiedImage
+                proxy={{
+                  width: 20,
+                  height: 20,
+                }}
+                style={{ height: 20, width: 20 }}
+                source={list.image}
+              />
             )}
-            {!list.image && <FallbackIcon title={list.title} size={24} />}
+            {!list.image && <FallbackIcon title={list.title} size={20} />}
           </View>
 
           <Text className="text-text ml-2">{list.title}</Text>
-          {!!unreadCount && <View className="bg-tertiary-label ml-auto size-1 rounded-full" />}
+          <UnreadCount unread={unreadCount} className="ml-auto" />
         </ItemPressable>
       </SubscriptionListItemContextMenu>
     </Animated.View>

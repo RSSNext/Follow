@@ -22,7 +22,6 @@ export function SubmitButton({
 }: PressableProps & { isLoading?: boolean; title: string }) {
   const disableColor = useColor("gray6")
   const disabledTextColor = useColor("gray2")
-  const textColor = useColor("gray6")
 
   const disabledValue = useSharedValue(1)
   useEffect(() => {
@@ -35,7 +34,7 @@ export function SubmitButton({
   }))
 
   const textStyle = useAnimatedStyle(() => ({
-    color: interpolateColor(disabledValue.value, [1, 0], [disabledTextColor, textColor]),
+    color: interpolateColor(disabledValue.value, [1, 0], [disabledTextColor, "white"]),
   }))
 
   return (

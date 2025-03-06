@@ -8,23 +8,36 @@ import { EntryListSelector } from "@/src/modules/entry-list/EntryListSelector"
 import { EntryListContext, useSelectedView } from "@/src/modules/screen/atoms"
 import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorProvider"
 import { useCollectionEntryList } from "@/src/store/collection/hooks"
-import { useEntryIdsByCategory, useEntryIdsByFeedId } from "@/src/store/entry/hooks"
+import {
+  useEntryIdsByCategory,
+  useEntryIdsByFeedId,
+  useEntryIdsByInboxId,
+  useEntryIdsByListId,
+} from "@/src/store/entry/hooks"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 
 export default function Feed() {
   const insets = useSafeAreaInsets()
-  const { feedId: feedIdOrCategory } = useLocalSearchParams()
-  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdOrCategory as string)
-  const entryIdsByCategory = useEntryIdsByCategory(feedIdOrCategory as string)
-  const isCollection = feedIdOrCategory === FEED_COLLECTION_LIST
+  const { feedId } = useLocalSearchParams()
+  const feedIdentifier = feedId as string
+
+  const isCollection = feedIdentifier === FEED_COLLECTION_LIST
   const view = useSelectedView() ?? FeedViewType.Articles
   const collectionEntryIds = useCollectionEntryList(view)
 
+  const entryIdsByFeedId = useEntryIdsByFeedId(feedIdentifier)
+  const entryIdsByCategory = useEntryIdsByCategory(feedIdentifier)
+  const entryIdsByListId = useEntryIdsByListId(feedIdentifier)
+  const entryIdsByInboxId = useEntryIdsByInboxId(feedIdentifier)
+
   const entryIds = isCollection
     ? collectionEntryIds
-    : entryIdsByFeedId.length > 0
-      ? entryIdsByFeedId
-      : entryIdsByCategory
+    : getEntryIdsFromMultiplePlace(
+        entryIdsByFeedId,
+        entryIdsByCategory,
+        entryIdsByListId,
+        entryIdsByInboxId,
+      )
 
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "feed" }), [])}>
@@ -35,4 +48,8 @@ export default function Feed() {
       </BottomTabBarHeightContext.Provider>
     </EntryListContext.Provider>
   )
+}
+
+function getEntryIdsFromMultiplePlace(...entryIds: Array<string[] | undefined>) {
+  return entryIds.find((ids) => ids?.length) ?? []
 }

@@ -1,6 +1,9 @@
+/**
+ * This env for apps/mobile
+ */
 const profile = "prod"
 
-const appEndpointMap = {
+export const envProfileMap = {
   prod: {
     VITE_API_URL: "https://api.follow.is",
     VITE_WEB_URL: "https://app.follow.is",
@@ -19,6 +22,6 @@ const appEndpointMap = {
 }
 
 export const env = {
-  VITE_WEB_URL: appEndpointMap[profile].VITE_WEB_URL,
-  VITE_API_URL: appEndpointMap[profile].VITE_API_URL,
+  VITE_WEB_URL: envProfileMap[profile].VITE_WEB_URL,
+  VITE_API_URL: envProfileMap[profile].VITE_API_URL,
 }

@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import type { AppType } from "@follow/shared/hono"
 import PKG from "@pkg"
 import { hc } from "hono/client"

@@ -8,8 +8,7 @@ import {
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
 import { Label } from "@follow/components/ui/label/index.js"
-import { changePassword } from "@follow/shared/auth"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -18,6 +17,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { changePassword } from "~/lib/auth"
 import { useHasPassword } from "~/queries/auth"
 
 const passwordSchema = z.string().min(8).max(128)

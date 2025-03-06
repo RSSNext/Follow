@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import type { TrackProperties } from "@openpanel/web"
 
 import { getGeneralSettings } from "~/atoms/settings/general"

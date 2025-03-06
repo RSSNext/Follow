@@ -1,12 +1,12 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import { authProvidersConfig } from "@follow/constants"
-import { linkSocial, unlinkAccount } from "@follow/shared/auth"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
+import { linkSocial, unlinkAccount } from "~/lib/auth"
 import { auth, useSocialAccounts } from "~/queries/auth"
 import { useAuthProviders } from "~/queries/users"
 

@@ -1,11 +1,11 @@
-import { sendVerificationEmail } from "@follow/shared/auth"
-import { WEB_URL } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { lazy, Suspense, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import { useWhoami } from "~/atoms/user"
+import { WEB_URL } from "~/constants/env"
 import { useAuthQuery } from "~/hooks/common/useBizQuery"
+import { sendVerificationEmail } from "~/lib/auth"
 import { settings } from "~/queries/settings"
 
 const LazyNewUserGuideModal = lazy(() =>

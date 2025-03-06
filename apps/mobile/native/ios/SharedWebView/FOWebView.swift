@@ -29,14 +29,26 @@ class FOWebView: WKWebView {
   private var state: WebViewState!
 
   init(frame: CGRect, state: WebViewState) {
-    let configuration = WKWebViewConfiguration()
-    self.state = state
-    let viewController = Utils.getRootVC()!
- 
+    let configuration = FOWKWebViewConfiguration()
 
     super.init(frame: frame, configuration: configuration)
+    configuration.userContentController.add(self, name: "message")
+    self.state = state
 
-    let bundle = Utils.bundle
+    setupView()
+    navigationDelegate = self
+    uiDelegate = self
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
+
+private class FOWKWebViewConfiguration: WKWebViewConfiguration {
+  override init() {
+    super.init()
+    let configuration = self
 
     let hexAccentColor = Utils.accentColor.toHex()
     let css = """
@@ -63,7 +75,7 @@ class FOWebView: WKWebView {
       forMainFrameOnly: true
     )
 
-    let atStartScripts = loadInjectedJs(forResource: "at_start")
+    let atStartScripts = WKWebView.loadInjectedJs(forResource: "at_start")
 
     if let jsString = atStartScripts {
       let script = WKUserScript(
@@ -75,6 +87,17 @@ class FOWebView: WKWebView {
     }
 
     configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+
+    let atEndScripts = WKWebView.loadInjectedJs(forResource: "at_end")
+    guard let jsString = atEndScripts else {
+      print("Failed to load injected js")
+      return
+    }
+    let script2 = WKUserScript(
+      source: jsString,
+      injectionTime: .atDocumentEnd,
+      forMainFrameOnly: true
+    )
 
     let schemeHandler = CustomURLSchemeHandler()
     configuration.setURLSchemeHandler(
@@ -109,23 +132,8 @@ class FOWebView: WKWebView {
     )
     configuration.userContentController.addUserScript(customSchemeScript)
 
-    let atEndScripts = self.loadInjectedJs(forResource: "at_end")
-    guard let jsString = atEndScripts else {
-      print("Failed to load injected js")
-      return
-    }
-    let script2 = WKUserScript(
-      source: jsString,
-      injectionTime: .atDocumentEnd,
-      forMainFrameOnly: true
-    )
-
-    configuration.userContentController.add(self, name: "message")
     configuration.userContentController.addUserScript(script2)
 
-    setupView()
-    navigationDelegate = self
-    uiDelegate = self
   }
 
   required init?(coder: NSCoder) {
@@ -133,9 +141,9 @@ class FOWebView: WKWebView {
   }
 }
 
-extension FOWebView {
+extension WKWebView {
 
-  private func loadInjectedJs(forResource: String) -> String? {
+  fileprivate static func loadInjectedJs(forResource: String) -> String? {
     if let bundleURL = Bundle(for: WebViewView.self).url(
       forResource: "js", withExtension: "bundle"),
       let resourceBundle = Bundle(url: bundleURL)
@@ -157,9 +165,8 @@ extension FOWebView {
 
 }
 
-extension FOWebView: WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate
-{
- 
+extension FOWebView: WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
+
   func userContentController(
     _ userContentController: WKUserContentController, didReceive message: WKScriptMessage
   ) {
@@ -242,7 +249,7 @@ extension FOWebView: WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate
   ) {
     if navigationAction.targetFrame == nil {
       if let url = navigationAction.request.url,
-         let viewController = Utils.getRootVC()
+        let viewController = Utils.getRootVC()
       {
         WebViewManager.presentModalWebView(url: url, from: viewController)
         decisionHandler(.cancel)

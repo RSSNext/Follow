@@ -14,6 +14,7 @@ import m0010 from "./0010_legal_ben_grimm.sql"
 import m0011 from "./0011_mysterious_stark_industries.sql"
 import m0012 from "./0012_magenta_thing.sql"
 import m0013 from "./0013_chunky_stephen_strange.sql"
+import m0014 from "./0014_chemical_shocker.sql"
 import journal from "./meta/_journal.json"
 
 export default {
@@ -33,5 +34,6 @@ export default {
     m0011,
     m0012,
     m0013,
+    m0014,
   },
 }

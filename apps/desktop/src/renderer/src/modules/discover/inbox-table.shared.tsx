@@ -1,6 +1,6 @@
 import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { FeedViewType } from "@follow/constants"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"

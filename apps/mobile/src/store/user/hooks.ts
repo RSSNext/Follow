@@ -15,6 +15,6 @@ export const useWhoami = () => {
   return useUserStore((state) => state.whoami)
 }
 
-export const useUser = (userId: string) => {
-  return useUserStore((state) => state.users[userId])
+export const useUser = (userId?: string) => {
+  return useUserStore((state) => (userId ? state.users[userId] : undefined))
 }

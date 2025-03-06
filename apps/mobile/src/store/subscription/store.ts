@@ -230,7 +230,6 @@ class SubscriptionSyncService {
         {
           ...data.list,
           userId: data.list.ownerUserId,
-          entryIds: [],
         },
       ])
     }

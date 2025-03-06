@@ -1,5 +1,4 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { UrlBuilder } from "@follow/utils/url-builder"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
@@ -7,6 +6,7 @@ import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { useDeleteSubscription } from "~/hooks/biz/useSubscriptionActions"
+import { UrlBuilder } from "~/lib/url-builder"
 import { ListForm } from "~/modules/discover/list-form"
 
 import { useRegisterCommandEffect } from "../hooks/use-register-command"

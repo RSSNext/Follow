@@ -1,4 +1,5 @@
 import { UserAvatar } from "@client/components/ui/user-avatar"
+import { createSession, loginHandler, signOut, twoFactor } from "@client/lib/auth"
 import { queryClient } from "@client/lib/query-client"
 import { useSession } from "@client/query/auth"
 import { useAuthProviders } from "@client/query/users"
@@ -16,7 +17,6 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { authProvidersConfig } from "@follow/constants"
-import { createSession, loginHandler, signOut, twoFactor } from "@follow/shared/auth"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"

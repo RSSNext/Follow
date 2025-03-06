@@ -1,7 +1,7 @@
-import { getProviders } from "@follow/shared/auth"
 import { useQuery } from "@tanstack/react-query"
 
 import { apiClient } from "~/lib/api-fetch"
+import { getProviders } from "~/lib/auth"
 import { defineQuery } from "~/lib/defineQuery"
 
 export const users = {

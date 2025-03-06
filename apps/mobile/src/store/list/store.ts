@@ -50,26 +50,6 @@ class ListActions {
     tx.run()
   }
 
-  addEntryIdsInSession(params: { listId: string; entryIds: string[] }) {
-    immerSet((draft) => {
-      const list = draft.lists[params.listId]
-      if (!list) return
-      list.entryIds = [...new Set([...(list.entryIds ?? []), ...params.entryIds])]
-    })
-  }
-
-  async addEntryIds(params: { listId: string; entryIds: string[] }) {
-    const tx = createTransaction()
-    tx.store(() => {
-      this.addEntryIdsInSession(params)
-    })
-
-    tx.persist(() => {
-      return ListService.addEntryIds(params)
-    })
-    await tx.run()
-  }
-
   deleteList(params: { listId: string }) {
     const tx = createTransaction()
     tx.store(() => {

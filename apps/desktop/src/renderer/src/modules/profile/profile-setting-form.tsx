@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { updateUser } from "@follow/shared/auth"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -20,6 +19,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { setWhoami, useWhoami } from "~/atoms/user"
+import { updateUser } from "~/lib/auth"
 import { toastFetchError } from "~/lib/error-parser"
 
 const formSchema = z.object({

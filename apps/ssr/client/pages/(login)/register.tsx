@@ -1,3 +1,4 @@
+import { signUp } from "@client/lib/auth"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import {
@@ -9,7 +10,6 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { signUp } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
