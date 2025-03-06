@@ -108,7 +108,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
       </View>
 
       <Portal>
-        {!entry.content && !entry.sourceContent && (
+        {(showSource ? !entry.sourceContent : !entry.content) && (
           <View className="absolute inset-0 items-center justify-center">
             <ActivityIndicator />
           </View>

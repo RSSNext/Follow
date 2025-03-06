@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Clipboard, Share, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
@@ -19,6 +19,7 @@ import { toast } from "@/src/lib/toast"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
+import { entrySyncServices } from "@/src/store/entry/store"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { summaryActions, summarySyncService } from "@/src/store/summary/store"
@@ -107,6 +108,11 @@ const HeaderRightActionsImpl = ({
     })
   }
 
+  const handleShowSource = useCallback(() => {
+    entrySyncServices.fetchEntrySourceContent(entryId)
+    setShowSource((prev) => !prev)
+  }, [entryId, setShowSource])
+
   const handleCopyLink = () => {
     if (!entry?.url) return
     Clipboard.setString(entry.url)
@@ -141,7 +147,7 @@ const HeaderRightActionsImpl = ({
       title: "Show Source",
       icon: <DocmentCuteReIcon />,
       iconIOS: { name: "doc.text" },
-      onPress: () => setShowSource((prev) => !prev),
+      onPress: handleShowSource,
       active: showSource,
       isCheckbox: true,
     },

@@ -435,13 +435,18 @@ class EntrySyncServices {
     if (entry?.content && currentEntry?.content !== entry.content) {
       await entryActions.updateEntryContent({ entryId, content: entry.content })
     }
-    if (entry?.url && !currentEntry?.sourceContent) {
+    return entry
+  }
+
+  async fetchEntrySourceContent(entryId: EntryId) {
+    const entry = getEntry(entryId)
+
+    if (entry?.url && !entry?.sourceContent) {
       const contentByFetch = await readability(entry.url)
-      if (contentByFetch?.content && currentEntry?.sourceContent !== contentByFetch.content) {
+      if (contentByFetch?.content && entry?.sourceContent !== contentByFetch.content) {
         await entryActions.updateEntryContent({ entryId, sourceContent: contentByFetch.content })
       }
     }
-
     return entry
   }
 
