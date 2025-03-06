@@ -140,6 +140,7 @@ const HeaderRightActionsImpl = ({
       key: "ShowSource",
       title: "Show Source",
       icon: <DocmentCuteReIcon />,
+      iconIOS: { name: "doc.text" },
       onPress: () => setShowSource((prev) => !prev),
       active: showSource,
       isCheckbox: true,
