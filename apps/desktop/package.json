@@ -18,6 +18,7 @@
     "build:mas": "electron-vite build && electron-forge make --arch=universal --platform=mas",
     "build:render": "vite build -c vite.config.electron-render.ts",
     "build:web": "rm -rf out/web && cross-env WEB_BUILD=1 vite build",
+    "bump": "vv",
     "dedupe:locales": "eslint --fix locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
     "dev": "turbo run @follow/web#dev @follow/ssr#dev",

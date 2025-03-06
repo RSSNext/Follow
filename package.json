@@ -19,7 +19,6 @@
     "build:render": "turbo run Follow#build:render",
     "build:ssr": "turbo run @follow/ssr#build",
     "build:web": "turbo run Follow#build:web",
-    "bump": "vv",
     "dedupe:locales": "eslint --fix apps/desktop/locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
     "format": "prettier --write .",
