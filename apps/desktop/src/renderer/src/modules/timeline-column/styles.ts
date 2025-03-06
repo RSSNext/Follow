@@ -1,5 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
-import clsx from "clsx"
+import { clsx } from "@follow/utils/utils"
 
 export const feedColumnStyles = {
   item: clsx(

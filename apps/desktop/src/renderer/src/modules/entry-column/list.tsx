@@ -3,9 +3,9 @@ import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js
 import type { FeedViewType } from "@follow/constants"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { LRUCache } from "@follow/utils/lru-cache"
+import { clsx } from "@follow/utils/utils"
 import type { Range, VirtualItem, Virtualizer } from "@tanstack/react-virtual"
 import { defaultRangeExtractor, useVirtualizer } from "@tanstack/react-virtual"
-import clsx from "clsx"
 import type { HTMLMotionProps } from "framer-motion"
 import type { FC, MutableRefObject, ReactNode } from "react"
 import {
