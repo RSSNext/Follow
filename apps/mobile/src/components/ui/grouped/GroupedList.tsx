@@ -240,8 +240,9 @@ export const GroupedInformationCell: FC<{
 export const GroupedPlainButtonCell: FC<
   {
     label: string
+    textClassName?: string
   } & PressableProps
-> = ({ label, ...props }) => {
+> = ({ label, textClassName, ...props }) => {
   return (
     <GroupedInsetListBaseCell className="p-0">
       <Pressable {...props} className="flex-1">
@@ -256,7 +257,7 @@ export const GroupedPlainButtonCell: FC<
                   exiting={FadeOut.duration(100)}
                 />
               )}
-              <Text className="text-accent text-center">{label}</Text>
+              <Text className={cn("text-accent text-center", textClassName)}>{label}</Text>
             </View>
           )
         }}
