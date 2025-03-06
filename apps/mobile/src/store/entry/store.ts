@@ -437,7 +437,7 @@ class EntrySyncServices {
     }
     if (entry?.url && !currentEntry?.sourceContent) {
       const contentByFetch = await readability(entry.url)
-      if (contentByFetch?.content) {
+      if (contentByFetch?.content && currentEntry?.sourceContent !== contentByFetch.content) {
         await entryActions.updateEntryContent({ entryId, sourceContent: contentByFetch.content })
       }
     }
