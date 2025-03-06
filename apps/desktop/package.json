@@ -96,7 +96,7 @@
     ],
     "commit_message": "release(desktop): release v${NEW_VERSION}",
     "tag": false,
-    "changelog": true,
+    "changelog": false,
     "allowed_branches": [
       "dev"
     ]
