@@ -34,7 +34,11 @@ import { SettingSync } from "./setting-sync"
 import { UserProvider } from "./user-provider"
 
 export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
-  <GoogleReCaptchaProvider reCaptchaKey={env.VITE_RECAPTCHA_V3_SITE_KEY} useEnterprise={true}>
+  <GoogleReCaptchaProvider
+    reCaptchaKey={env.VITE_RECAPTCHA_V3_SITE_KEY}
+    useEnterprise={true}
+    useRecaptchaNet={true}
+  >
     <MotionProvider>
       <PersistQueryClientProvider persistOptions={persistConfig} client={queryClient}>
         <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
