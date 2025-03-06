@@ -30,6 +30,10 @@
     "start": "electron-vite preview",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
   },
+  "dependencies": {
+    "react-google-recaptcha": "3.1.0",
+    "react-google-recaptcha-v3": "1.10.1"
+  },
   "devDependencies": {
     "@clack/prompts": "0.10.0",
     "@electron-forge/cli": "7.7.0",

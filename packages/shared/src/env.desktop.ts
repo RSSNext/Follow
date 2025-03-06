@@ -18,6 +18,9 @@ export const env = createEnv({
 
     VITE_OPENPANEL_CLIENT_ID: z.string().optional(),
     VITE_OPENPANEL_API_URL: z.string().url().optional(),
+
+    VITE_RECAPTCHA_V2_SITE_KEY: z.string().default("6LdxQ-sqAAAAAN-_za3hUdFkJEO_cu2xHSpLKVan"),
+    VITE_RECAPTCHA_V3_SITE_KEY: z.string().default("6LdG-asqAAAAAEXr96565MKbRvxGEv31XEykRSHV"),
   },
 
   emptyStringAsUndefined: true,
