@@ -91,7 +91,8 @@ export const useClaimWalletDailyRewardMutation = () => {
 
   return useMutation({
     mutationKey: ["claimWalletDailyReward"],
-    mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
+    mutationFn: ({ tokenV2, tokenV3 }: { tokenV2?: string; tokenV3?: string }) =>
+      apiClient.wallets.transactions.claim_daily.$post({ json: { t2: tokenV2, t3: tokenV3 } }),
     async onError(err) {
       toastFetchError(err)
     },
