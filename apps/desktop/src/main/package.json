@@ -28,7 +28,6 @@
     "@eneris/push-receiver": "4.3.0",
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
-    "@mozilla/readability": "0.5.0",
     "@openpanel/web": "1.0.1",
     "@sentry/electron": "5.11.0",
     "builder-util-runtime": "9.2.10",

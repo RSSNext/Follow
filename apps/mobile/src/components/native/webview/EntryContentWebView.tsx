@@ -1,6 +1,6 @@
 import { clsx } from "@follow/utils"
 import { requireNativeView } from "expo"
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import * as React from "react"
 import { useEffect } from "react"
 import type { ViewProps } from "react-native"
@@ -8,6 +8,7 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
+import { useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import type { EntryModel } from "@/src/store/entry/types"
 
 import { Portal } from "../../ui/portal"
@@ -48,7 +49,17 @@ const setReaderRenderInlineStyle = (value: boolean) => {
   SharedWebViewModule.evaluateJavaScript(`setReaderRenderInlineStyle(${value})`)
 }
 
+const setShowSource = (value: boolean) => {
+  SharedWebViewModule.evaluateJavaScript(`setShowSource(${value})`)
+}
+
 export function EntryContentWebView(props: EntryContentWebViewProps) {
+  const { showSourceAtom } = useEntryContentContext()
+  const showSource = useAtomValue(showSourceAtom)
+  useEffect(() => {
+    setShowSource(!!showSource)
+  }, [showSource])
+
   const [contentHeight, setContentHeight] = useAtom(sharedWebViewHeightAtom)
 
   const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
@@ -70,7 +81,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
     setCodeTheme(codeThemeLight, codeThemeDark)
   }, [codeThemeLight, codeThemeDark, mode])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setWebViewEntry(entry)
   }, [entry])
 
@@ -97,7 +108,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
       </View>
 
       <Portal>
-        {!entry.content && (
+        {!entry.content && !entry.sourceContent && (
           <View className="absolute inset-0 items-center justify-center">
             <ActivityIndicator />
           </View>

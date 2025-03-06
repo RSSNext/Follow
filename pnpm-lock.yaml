@@ -361,9 +361,6 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../../../packages/utils
-      '@mozilla/readability':
-        specifier: 0.5.0
-        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -1514,6 +1511,9 @@ importers:
       '@follow/types':
         specifier: workspace:*
         version: link:../types
+      '@mozilla/readability':
+        specifier: 0.5.0
+        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       clsx:
         specifier: 2.1.1
         version: 2.1.1

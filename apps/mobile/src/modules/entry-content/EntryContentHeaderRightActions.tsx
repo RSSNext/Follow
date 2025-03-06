@@ -8,6 +8,7 @@ import type { MenuItemIconProps } from "zeego/lib/typescript/menu"
 
 import { ActionBarItem } from "@/src/components/ui/action-bar/ActionBarItem"
 import { DropdownMenu } from "@/src/components/ui/context-menu"
+import { DocmentCuteReIcon } from "@/src/icons/docment_cute_re"
 import { Magic2CuteReIcon } from "@/src/icons/magic_2_cute_re"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
@@ -52,8 +53,9 @@ const HeaderRightActionsImpl = ({
 }: HeaderRightActionsProps) => {
   const labelColor = useColor("label")
   const isStarred = useIsEntryStarred(entryId)
-  const { showAISummaryAtom } = useEntryContentContext()
+  const { showAISummaryAtom, showSourceAtom } = useEntryContentContext()
   const [showAISummary, setShowAISummary] = useAtom(showAISummaryAtom)
+  const [showSource, setShowSource] = useAtom(showSourceAtom)
   const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
 
   const entry = useEntry(
@@ -133,6 +135,14 @@ const HeaderRightActionsImpl = ({
       onPress: handleToggleStar,
       active: isStarred,
       iconColor: isStarred ? "#facc15" : undefined,
+    },
+    {
+      key: "ShowSource",
+      title: "Show Source",
+      icon: <DocmentCuteReIcon />,
+      onPress: () => setShowSource((prev) => !prev),
+      active: showSource,
+      isCheckbox: true,
     },
     {
       key: "GenerateSummary",

@@ -2,13 +2,13 @@ import fs from "node:fs"
 import path from "node:path"
 
 import { callWindowExpose } from "@follow/shared/bridge"
+import { readability } from "@follow/utils/readability"
 import { app, BrowserWindow } from "electron"
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts"
 import type { ModelResult } from "vscode-languagedetection"
 
 import { detectCodeStringLanguage } from "~/modules/language-detection"
 
-import { readability } from "../lib/readability"
 import { t } from "./_instance"
 
 const tts = new MsEdgeTTS()

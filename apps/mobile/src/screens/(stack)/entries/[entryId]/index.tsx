@@ -34,6 +34,7 @@ export default function EntryDetailPage() {
   const ctxValue = useMemo(
     () => ({
       showAISummaryAtom: atom(false),
+      showSourceAtom: atom(false),
     }),
     [],
   )
