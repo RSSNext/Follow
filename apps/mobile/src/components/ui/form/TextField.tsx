@@ -1,9 +1,13 @@
+import { composeEventHandlers } from "@follow/utils"
 import { cn } from "@follow/utils/src/utils"
-import { forwardRef } from "react"
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native"
-import { StyleSheet, Text, TextInput, View } from "react-native"
+import { StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
-import { accentColor } from "@/src/theme/colors"
+import { gentleSpringPreset } from "@/src/constants/spring"
+import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
+import { accentColor, useColor } from "@/src/theme/colors"
 
 import { FormLabel } from "./Label"
 
@@ -83,6 +87,70 @@ export const NumberField = forwardRef<
     defaultValue={defaultValue?.toString()}
   />
 ))
+
+export const PlainTextField = forwardRef<TextInput, TextInputProps>((props, ref) => {
+  const secondaryLabelColor = useColor("secondaryLabel")
+
+  const [isFocused, setIsFocused] = useState(false)
+  const textInputRef = useRef<TextInput>(null)
+  useImperativeHandle(ref, () => textInputRef.current!)
+
+  const pressableButtonXSharedValue = useSharedValue(20)
+  const pressableButtonOpacity = useSharedValue(0)
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: pressableButtonXSharedValue.value }],
+      opacity: pressableButtonOpacity.value,
+      position: "absolute",
+      right: 0,
+    }
+  })
+
+  const pressableWidthSharedValue = useSharedValue(isFocused ? 20 : 0)
+
+  useEffect(() => {
+    if (isFocused) {
+      pressableButtonXSharedValue.value = withSpring(0, gentleSpringPreset)
+      pressableButtonOpacity.value = withSpring(1, gentleSpringPreset)
+      pressableWidthSharedValue.value = withSpring(20, gentleSpringPreset)
+    } else {
+      pressableButtonXSharedValue.value = withSpring(20, gentleSpringPreset)
+      pressableButtonOpacity.value = withSpring(0, gentleSpringPreset)
+      pressableWidthSharedValue.value = withSpring(0, gentleSpringPreset)
+    }
+  }, [isFocused, pressableButtonXSharedValue, pressableButtonOpacity, pressableWidthSharedValue])
+
+  return (
+    <View className="flex-1 flex-row items-center">
+      <TextInput
+        {...props}
+        ref={textInputRef}
+        onFocus={composeEventHandlers(props.onFocus, () => setIsFocused(true))}
+        onBlur={composeEventHandlers(props.onBlur, () => setIsFocused(false))}
+        selectionColor={accentColor}
+        className={cn("text-label placeholder:text-secondary-label w-full flex-1", props.className)}
+      />
+
+      <Animated.View
+        className="ml-2 shrink-0"
+        style={{
+          width: pressableWidthSharedValue,
+        }}
+      />
+      <Animated.View style={animatedStyle}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            textInputRef.current?.clear()
+            props.onChangeText?.("")
+          }}
+        >
+          <CloseCircleFillIcon height={16} width={16} color={secondaryLabelColor} />
+        </TouchableWithoutFeedback>
+      </Animated.View>
+    </View>
+  )
+})
 
 const styles = StyleSheet.create({
   textField: {

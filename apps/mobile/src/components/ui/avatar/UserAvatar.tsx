@@ -26,7 +26,7 @@ export const UserAvatar = ({ image, size = 24, name, className, color }: UserAva
       >
         {name ? (
           <Text
-            className="text-secondary-label p-3 text-center uppercase"
+            className="text-secondary-label p-2 text-center uppercase"
             style={{ fontSize: size }}
             adjustsFontSizeToFit
           >

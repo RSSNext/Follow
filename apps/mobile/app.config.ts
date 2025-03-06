@@ -110,6 +110,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-secure-store",
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
+    [
+      "expo-image-picker",
+      {
+        photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,

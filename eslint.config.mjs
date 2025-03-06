@@ -79,14 +79,6 @@ export default defineConfig(
         config: path.join(import.meta.dirname, "apps/mobile/tailwind.config.ts"),
       },
     },
-    rules: {
-      "tailwindcss/no-custom-classname": [
-        "error",
-        {
-          whitelist: ["pb-safe", "pt-safe", "border-t-hairline", "border-b-hairline"],
-        },
-      ],
-    },
   },
   {
     files: ["**/*.tsx"],
