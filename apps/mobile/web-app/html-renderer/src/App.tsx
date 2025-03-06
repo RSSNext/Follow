@@ -46,7 +46,7 @@ export const App = () => {
   return (
     <Provider store={store}>
       <HTML
-        children={showSource ? entry?.sourceContent : entry?.content || entry?.sourceContent}
+        children={showSource ? entry?.sourceContent : entry?.content}
         renderInlineStyle={readerRenderInlineStyle}
         noMedia={noMedia}
       />
