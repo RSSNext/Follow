@@ -3,7 +3,7 @@ import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { DividerVertical } from "@follow/components/ui/divider/Divider.js"
 import { views } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
-import clsx from "clsx"
+import { clsx } from "@follow/utils/utils"
 import { m, useAnimationControls } from "framer-motion"
 import { useCallback, useEffect, useRef, useState } from "react"
 
