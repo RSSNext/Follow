@@ -4,7 +4,7 @@ import { router } from "expo-router"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { TextInput, View } from "react-native"
+import { Text, TextInput, TouchableOpacity, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
 import { z } from "zod"
 
@@ -36,7 +36,7 @@ async function onSubmit(values: FormValue) {
       }
     })
     .catch((error) => {
-      toast.error(`Failed to login: ${error.message}`)
+      toast.error(error.message)
     })
 }
 
@@ -80,7 +80,7 @@ export function EmailLogin() {
   })
 
   return (
-    <View className="mx-auto flex w-full max-w-sm gap-6">
+    <View className="mx-auto flex w-full max-w-sm">
       <View className="bg-secondary-system-background gap-4 rounded-2xl px-6 py-4">
         <View className="flex-row">
           <Input
@@ -118,6 +118,10 @@ export function EmailLogin() {
           />
         </View>
       </View>
+      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/forget-password")}>
+        <Text className="text-accent m-[6] text-[16px]">Forgot password?</Text>
+      </TouchableOpacity>
+
       <SubmitButton
         disabled={submitMutation.isPending || !formState.isValid}
         isLoading={submitMutation.isPending}
@@ -125,6 +129,9 @@ export function EmailLogin() {
         title="Continue"
         className="mt-8"
       />
+      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/sign-up")}>
+        <Text className="text-secondary-label m-1 text-sm">Don't have an Follow account?</Text>
+      </TouchableOpacity>
     </View>
   )
 }

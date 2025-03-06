@@ -3,6 +3,7 @@ import { createContext, useContext } from "react"
 
 interface EntryContentContextType {
   showAISummaryAtom: PrimitiveAtom<boolean>
+  showSourceAtom: PrimitiveAtom<boolean>
 }
 export const EntryContentContext = createContext<EntryContentContextType>(null!)
 export const useEntryContentContext = () => {

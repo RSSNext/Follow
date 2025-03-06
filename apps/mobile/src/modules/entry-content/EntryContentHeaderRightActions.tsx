@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Clipboard, Share, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
@@ -8,6 +8,7 @@ import type { MenuItemIconProps } from "zeego/lib/typescript/menu"
 
 import { ActionBarItem } from "@/src/components/ui/action-bar/ActionBarItem"
 import { DropdownMenu } from "@/src/components/ui/context-menu"
+import { DocmentCuteReIcon } from "@/src/icons/docment_cute_re"
 import { Magic2CuteReIcon } from "@/src/icons/magic_2_cute_re"
 import { More1CuteReIcon } from "@/src/icons/more_1_cute_re"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
@@ -18,6 +19,7 @@ import { toast } from "@/src/lib/toast"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
+import { entrySyncServices } from "@/src/store/entry/store"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { summaryActions, summarySyncService } from "@/src/store/summary/store"
@@ -52,8 +54,9 @@ const HeaderRightActionsImpl = ({
 }: HeaderRightActionsProps) => {
   const labelColor = useColor("label")
   const isStarred = useIsEntryStarred(entryId)
-  const { showAISummaryAtom } = useEntryContentContext()
+  const { showAISummaryAtom, showSourceAtom } = useEntryContentContext()
   const [showAISummary, setShowAISummary] = useAtom(showAISummaryAtom)
+  const [showSource, setShowSource] = useAtom(showSourceAtom)
   const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
 
   const entry = useEntry(
@@ -105,6 +108,11 @@ const HeaderRightActionsImpl = ({
     })
   }
 
+  const handleShowSource = useCallback(() => {
+    entrySyncServices.fetchEntrySourceContent(entryId)
+    setShowSource((prev) => !prev)
+  }, [entryId, setShowSource])
+
   const handleCopyLink = () => {
     if (!entry?.url) return
     Clipboard.setString(entry.url)
@@ -133,6 +141,15 @@ const HeaderRightActionsImpl = ({
       onPress: handleToggleStar,
       active: isStarred,
       iconColor: isStarred ? "#facc15" : undefined,
+    },
+    {
+      key: "ShowSource",
+      title: "Show Source",
+      icon: <DocmentCuteReIcon />,
+      iconIOS: { name: "doc.text" },
+      onPress: handleShowSource,
+      active: showSource,
+      isCheckbox: true,
     },
     {
       key: "GenerateSummary",

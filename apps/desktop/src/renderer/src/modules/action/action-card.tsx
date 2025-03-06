@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@follow/components/ui/card/index.
 import { Input } from "@follow/components/ui/input/index.js"
 import { Switch } from "@follow/components/ui/switch/index.jsx"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@follow/components/ui/tooltip/index.js"
-import clsx from "clsx"
+import { clsx } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 
 import { actionActions, useActionByIndex } from "~/store/action"

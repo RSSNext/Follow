@@ -1,9 +1,9 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/Divider.js"
 import { Label } from "@follow/components/ui/label/index.js"
-import { signOut } from "@follow/shared/auth"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { signOut } from "~/lib/auth"
 import { isInMAS } from "~/lib/utils"
 import { AccountManagement } from "~/modules/profile/account-management"
 import { EmailManagement } from "~/modules/profile/email-management"

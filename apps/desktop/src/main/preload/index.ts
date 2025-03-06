@@ -50,3 +50,10 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.platform = process.platform
 }
+
+// Options for react-google-recaptcha
+// @ts-ignore (define in dts)
+window.recaptchaOptions = {
+  useRecaptchaNet: true,
+  enterprise: true,
+}

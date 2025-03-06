@@ -30,20 +30,6 @@ class ListServiceStatic implements Hydratable, Resetable {
         set: conflictUpdateAllExcept(listsTable, ["id"]),
       })
   }
-  async addEntryIds(params: { listId: string; entryIds: string[] }) {
-    const list = await db.query.listsTable.findFirst({
-      where: eq(listsTable.id, params.listId),
-    })
-
-    if (!list) return
-
-    await db
-      .update(listsTable)
-      .set({
-        entryIds: [...new Set([...(list.entryIds ?? []), ...params.entryIds])],
-      })
-      .where(eq(listsTable.id, params.listId))
-  }
 
   async deleteList(params: { listId: string }) {
     await db.delete(listsTable).where(eq(listsTable.id, params.listId))

@@ -15,10 +15,7 @@ export const usePrefetchEntries = (props: Omit<FetchEntriesProps, "pageParam" | 
     queryKey: ["entries", feedId, inboxId, listId, view, unreadOnly, limit],
     queryFn: ({ pageParam }) =>
       entrySyncServices.fetchEntries({ ...props, pageParam, read: unreadOnly ? false : undefined }),
-    getNextPageParam: (lastPage) =>
-      listId
-        ? lastPage.data?.at(-1)?.entries.insertedAt
-        : lastPage.data?.at(-1)?.entries.publishedAt,
+    getNextPageParam: (lastPage) => lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined as undefined | string,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -101,6 +98,19 @@ export const useEntryIdsByCategory = (category: string) => {
         return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
       },
       [category],
+    ),
+  )
+}
+
+export const useEntryIdsByListId = (listId: string) => {
+  return useEntryStore(
+    useCallback(
+      (state) => {
+        const ids = state.entryIdByList[listId]
+        if (!ids) return []
+        return Array.from(ids).sort((a, b) => sortEntryIdsByPublishDate(a, b))
+      },
+      [listId],
     ),
   )
 }

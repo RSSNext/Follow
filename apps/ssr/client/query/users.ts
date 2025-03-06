@@ -1,7 +1,7 @@
 import { apiClient } from "@client/lib/api-fetch"
+import { getProviders } from "@client/lib/auth"
 import { getHydrateData } from "@client/lib/helper"
 import type { LoginHydrateData } from "@client/pages/(login)/login/metadata"
-import { getProviders } from "@follow/shared/auth"
 import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 

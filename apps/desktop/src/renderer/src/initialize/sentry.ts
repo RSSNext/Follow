@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { appSessionTraceId } from "@follow/utils/environment"
 import { version } from "@pkg"
 import { nanoid } from "nanoid"

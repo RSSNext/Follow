@@ -12,4 +12,5 @@ export type SettingsStackParamList = {
   Privacy: undefined
   About: undefined
   ManageList: { id: string }
+  EditProfile: undefined
 }

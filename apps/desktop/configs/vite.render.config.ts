@@ -92,5 +92,6 @@ export const viteRenderBaseConfig = {
 
     I18N_COMPLETENESS_MAP: JSON.stringify({ ...i18nCompleteness, en: 100 }),
     CHANGELOG_CONTENT: JSON.stringify(changelogFile),
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
   },
 } satisfies UserConfig

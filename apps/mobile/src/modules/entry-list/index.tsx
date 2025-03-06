@@ -8,9 +8,9 @@ import {
   useEntryIdsByCategory,
   useEntryIdsByFeedId,
   useEntryIdsByInboxId,
+  useEntryIdsByListId,
   useEntryIdsByView,
 } from "@/src/store/entry/hooks"
-import { useListEntryIds } from "@/src/store/list/hooks"
 import { useViewWithSubscription } from "@/src/store/subscription/hooks"
 
 import { TimelineSelectorProvider } from "../screen/TimelineSelectorProvider"
@@ -106,7 +106,7 @@ function CategoryEntryList({ categoryName }: { categoryName: string }) {
 
 function ListEntryList({ listId }: { listId: string }) {
   const view = useSelectedView() ?? FeedViewType.Articles
-  const entryIds = useListEntryIds(listId)
+  const entryIds = useEntryIdsByListId(listId)
   if (!entryIds) return null
   return <EntryListSelector entryIds={entryIds} viewId={view} />
 }

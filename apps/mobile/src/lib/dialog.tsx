@@ -65,6 +65,7 @@ export type DialogComponent<Ctx = unknown> = FC<DialogContextType & { ctx: Ctx }
   Omit<DialogProps<Ctx>, "content">
 class DialogStatic {
   useDialogContext = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useContext(DialogContext)
   }
 
@@ -72,8 +73,10 @@ class DialogStatic {
 
   // Components
   DialogConfirm: FC<{ onPress: () => void }> = ({ onPress }) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { setOnConfirm } = useContext(SetDialogDynamicButtonActionContext)
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       setOnConfirm(() => {
         return onPress
@@ -83,9 +86,12 @@ class DialogStatic {
   }
 
   DialogCancel: FC<{ onPress: () => void }> = ({ onPress }) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { setOnCancel } = useContext(SetDialogDynamicButtonActionContext)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { dismiss } = useContext(DialogContext)!
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       let timeout: NodeJS.Timeout
       setOnCancel(() => {

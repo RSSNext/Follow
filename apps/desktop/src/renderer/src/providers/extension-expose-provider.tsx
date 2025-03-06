@@ -1,5 +1,5 @@
 import { registerGlobalContext } from "@follow/shared/bridge"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { useEffect, useLayoutEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"

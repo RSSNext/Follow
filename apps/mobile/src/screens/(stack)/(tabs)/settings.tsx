@@ -2,7 +2,7 @@ import { useIsFocused } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
-import { findNodeHandle, Text, UIManager } from "react-native"
+import { findNodeHandle, Text, TouchableOpacity, UIManager, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
@@ -17,6 +17,7 @@ import {
   useRegisterNavigationScrollView,
 } from "@/src/components/layouts/tabbar/hooks"
 import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
+import { useSettingsNavigation } from "@/src/modules/settings/hooks"
 import { SettingRoutes } from "@/src/modules/settings/routes"
 import { SettingsList } from "@/src/modules/settings/SettingsList"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -111,7 +112,7 @@ function Settings() {
         className="bg-system-grouped-background flex-1"
         scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
       >
-        {whoami && <UserHeaderBanner scrollY={animatedScrollY} userId={whoami.id} />}
+        <UserHeaderBanner scrollY={animatedScrollY} userId={whoami?.id} />
 
         <SettingsList scrollRef={registerNavigationScrollView} />
       </ReAnimatedScrollView>
@@ -131,15 +132,33 @@ const SettingHeader = ({ scrollY }: { scrollY: SharedValue<number> }) => {
     }
   })
 
+  const whoami = useWhoami()
   return (
-    <Animated.View
-      pointerEvents="none"
-      className="border-b-hairline border-opaque-separator pt-safe absolute inset-x-0 top-0 flex-row items-center px-4 pb-2"
-      style={styles}
+    <View className="pt-safe absolute inset-x-0 top-0" style={{ height: headerHeight }}>
+      <Animated.View
+        pointerEvents="none"
+        className="border-b-hairline border-opaque-separator absolute inset-x-0 top-0 flex-row items-center px-4 pb-2"
+        style={styles}
+      >
+        <BlurEffect />
+        <Text className="text-label flex-1 text-center text-[17px] font-semibold">Settings</Text>
+      </Animated.View>
+      {!!whoami?.id && <EditProfileButton />}
+    </View>
+  )
+}
+
+const EditProfileButton = () => {
+  const navigation = useSettingsNavigation()
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      className="absolute bottom-2 right-4 overflow-hidden rounded-full px-3 py-1.5"
+      onPress={() => navigation.navigate("EditProfile")}
     >
       <BlurEffect />
-
-      <Text className="text-label flex-1 text-center text-[17px] font-semibold">Settings</Text>
-    </Animated.View>
+      <Text className="text-label text-sm font-medium">Edit</Text>
+    </TouchableOpacity>
   )
 }

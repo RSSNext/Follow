@@ -1,3 +1,4 @@
+import { resetPassword } from "@client/lib/auth"
 import { Button, MotionButtonBase } from "@follow/components/ui/button/index.jsx"
 import {
   Card,
@@ -15,7 +16,6 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { resetPassword } from "@follow/shared/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"

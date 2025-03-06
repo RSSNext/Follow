@@ -3,11 +3,13 @@ import { EventProvider } from "@follow/components/providers/event-provider.js"
 import { StableRouterProvider } from "@follow/components/providers/stable-router-provider.js"
 import { Toaster } from "@follow/components/ui/toast/index.jsx"
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { env } from "@follow/shared/env.desktop"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { Suspense } from "react"
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import { HotkeysProvider } from "react-hotkeys-hook"
 
 import { HotKeyScopeMap } from "~/constants/hotkeys"
@@ -32,40 +34,42 @@ import { SettingSync } from "./setting-sync"
 import { UserProvider } from "./user-provider"
 
 export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
-  <MotionProvider>
-    <PersistQueryClientProvider persistOptions={persistConfig} client={queryClient}>
-      <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
-        <Provider store={jotaiStore}>
-          <I18nProvider>
-            <Toaster />
-            <EventProvider />
+  <GoogleReCaptchaProvider reCaptchaKey={env.VITE_RECAPTCHA_V3_SITE_KEY} useEnterprise={true}>
+    <MotionProvider>
+      <PersistQueryClientProvider persistOptions={persistConfig} client={queryClient}>
+        <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
+          <Provider store={jotaiStore}>
+            <I18nProvider>
+              <Toaster />
+              <EventProvider />
 
-            <UserProvider />
-            <ServerConfigsProvider />
+              <UserProvider />
+              <ServerConfigsProvider />
 
-            <StableRouterProvider />
-            <SettingSync />
-            <FollowCommandManager />
-            {import.meta.env.DEV && <Devtools />}
+              <StableRouterProvider />
+              <SettingSync />
+              <FollowCommandManager />
+              {import.meta.env.DEV && <Devtools />}
 
-            {children}
+              {children}
 
-            <Suspense>
-              <LazyExtensionExposeProvider />
-              <LazyModalStackProvider />
-              <LazyContextMenuProvider />
-              <LazyLottieRenderContainer />
-              <LazyExternalJumpInProvider />
-              <LazyReloadPrompt />
-              {!window.__RN__ && <LazyPWAPrompt />}
-            </Suspense>
-          </I18nProvider>
-        </Provider>
-      </HotkeysProvider>
+              <Suspense>
+                <LazyExtensionExposeProvider />
+                <LazyModalStackProvider />
+                <LazyContextMenuProvider />
+                <LazyLottieRenderContainer />
+                <LazyExternalJumpInProvider />
+                <LazyReloadPrompt />
+                {!window.__RN__ && <LazyPWAPrompt />}
+              </Suspense>
+            </I18nProvider>
+          </Provider>
+        </HotkeysProvider>
 
-      <InvalidateQueryProvider />
-    </PersistQueryClientProvider>
-  </MotionProvider>
+        <InvalidateQueryProvider />
+      </PersistQueryClientProvider>
+    </MotionProvider>
+  </GoogleReCaptchaProvider>
 )
 
 const Devtools = () =>

@@ -77,7 +77,6 @@ class Morph {
             ownerUserId: list.owner.id,
             feedIds: list.feedIds!,
             fee: list.fee!,
-            entryIds: [],
           })
       }
 
@@ -97,18 +96,18 @@ class Morph {
       ownerUserId: data.ownerUserId!,
       feedIds: data.feedIds!,
       fee: data.fee!,
-      entryIds: [],
     }
   }
 
-  toEntryList(data?: HonoApiClient.Entry_Post): EntryModel[] {
+  toEntryList(data?: HonoApiClient.Entry_Post | HonoApiClient.Entry_Inbox_Post): EntryModel[] {
     const entries: EntryModel[] = []
     for (const item of data ?? []) {
       entries.push({
         id: item.entries.id,
         title: item.entries.title,
         url: item.entries.url,
-        content: "",
+        content: null,
+        sourceContent: null,
         description: item.entries.description,
         guid: item.entries.guid,
         author: item.entries.author,
@@ -126,16 +125,18 @@ class Morph {
           : null,
         language: item.entries.language,
         feedId: item.feeds.id,
-        // TODO: handle inboxHandle
-        inboxHandle: "",
+        inboxHandle: item.feeds.type === "inbox" ? item.feeds.id : null,
         read: item.read,
-        sources: item.from ?? null,
+        sources: "from" in item ? (item.from ?? null) : null,
       })
     }
     return entries
   }
 
-  toCollections(data: HonoApiClient.Entry_Post, view: FeedViewType): CollectionModel[] {
+  toCollections(
+    data: HonoApiClient.Entry_Post | HonoApiClient.Entry_Inbox_Post,
+    view: FeedViewType,
+  ): CollectionModel[] {
     if (!data) return [] satisfies CollectionModel[]
     return data
       .map((item) => {
@@ -152,7 +153,7 @@ class Morph {
       .filter((i) => i !== null)
   }
 
-  toEntry(data?: HonoApiClient.Entry_Get): EntryModel | null {
+  toEntry(data?: HonoApiClient.Entry_Get | HonoApiClient.Entry_Inbox_Get): EntryModel | null {
     if (!data) return null
 
     return {
@@ -160,6 +161,7 @@ class Morph {
       title: data.entries.title,
       url: data.entries.url,
       content: data.entries.content,
+      sourceContent: null,
       description: data.entries.description,
       guid: data.entries.guid,
       author: data.entries.author,

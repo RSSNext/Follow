@@ -45,7 +45,6 @@ export const listsTable = sqliteTable("lists", {
   image: text("image"),
   fee: integer("fee"),
   ownerUserId: text("owner_user_id"),
-  entryIds: text("entry_ids", { mode: "json" }).$type<string[]>(),
 })
 
 export const unreadTable = sqliteTable("unread", {
@@ -67,6 +66,7 @@ export const entriesTable = sqliteTable("entries", {
   title: text("title"),
   url: text("url"),
   content: text("content"),
+  sourceContent: text("source_content"),
   description: text("description"),
   guid: text("guid").notNull(),
   author: text("author"),

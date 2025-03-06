@@ -274,7 +274,6 @@ const TabBarBackground = () => {
 }
 
 const TabItem = memo(
-  // eslint-disable-next-line @eslint-react/no-unstable-context-value
   ({
     route,
     focused,

@@ -24,7 +24,7 @@ export const MarkdownImage = (props: HTMLProps<"img">) => {
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const image = entry?.media.find((media) => media.url === src)
+  const image = entry?.media?.find((media) => media.url === src)
 
   const { w } = useWrappedElementSize()
   const { height: scaleHeight, width: scaleWidth } = useMemo(

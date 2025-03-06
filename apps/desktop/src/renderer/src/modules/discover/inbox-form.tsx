@@ -12,7 +12,7 @@ import {
 import { Input } from "@follow/components/ui/input/index.js"
 import { FeedViewType } from "@follow/constants"
 import type { InboxModel } from "@follow/models/types"
-import { env } from "@follow/shared/env"
+import { env } from "@follow/shared/env.desktop"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"

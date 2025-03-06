@@ -1,7 +1,7 @@
 {
-  "name": "@follow/desktop",
+  "name": "Follow",
   "type": "module",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "private": true,
   "description": "Follow everything in one place",
   "author": "Follow Team",
@@ -18,6 +18,7 @@
     "build:mas": "electron-vite build && electron-forge make --arch=universal --platform=mas",
     "build:render": "vite build -c vite.config.electron-render.ts",
     "build:web": "rm -rf out/web && cross-env WEB_BUILD=1 vite build",
+    "bump": "vv",
     "dedupe:locales": "eslint --fix locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
     "dev": "turbo run @follow/web#dev @follow/ssr#dev",
@@ -29,6 +30,10 @@
     "publish": "electron-vite build && electron-forge publish",
     "start": "electron-vite preview",
     "update:main-hash": "tsx plugins/vite/generate-main-hash.ts"
+  },
+  "dependencies": {
+    "react-google-recaptcha": "3.1.0",
+    "react-google-recaptcha-v3": "1.10.1"
   },
   "devDependencies": {
     "@clack/prompts": "0.10.0",
@@ -75,7 +80,7 @@
     "utf-8-validate": "6.0.5"
   },
   "productName": "Follow",
-  "mainHash": "ad1913f95d3411e9bc07a90022c0f40d8f2e67e708eb704f64f1229ed31ac2d9",
+  "mainHash": "b12c4c0f19198ba7a50c0027bcacf4dbf2a42406b6753f3f18aeebf9627b2d43",
   "bump": {
     "before": [
       "git pull --rebase",
@@ -91,7 +96,7 @@
     ],
     "commit_message": "release(desktop): release v${NEW_VERSION}",
     "tag": false,
-    "changelog": true,
+    "changelog": false,
     "allowed_branches": [
       "dev"
     ]

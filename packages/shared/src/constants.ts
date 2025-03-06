@@ -1,6 +1,6 @@
 import type { ElectronAPI } from "@electron-toolkit/preload"
 
-import { env, isDev } from "./env"
+const isDev = process.env.NODE_ENV !== "production"
 
 declare const globalThis: {
   window: Window & {
@@ -12,8 +12,6 @@ declare const globalThis: {
 
 export const APP_PROTOCOL = isDev ? "follow-dev" : "follow"
 export const DEEPLINK_SCHEME = `${APP_PROTOCOL}://` as const
-
-export const WEB_URL = env.VITE_WEB_URL
 
 export const SYSTEM_CAN_UNDER_BLUR_WINDOW = globalThis?.window?.electron
   ? globalThis?.window.api?.canWindowBlur

@@ -28,9 +28,9 @@ extension ToastType {
   func haptic() -> SPIndicatorHaptic {
     switch self {
     case .error: .error
-    case .info: .success
+    case .info: .none
     case .warn: .warning
-    case .success: .error
+    case .success: .success
     }
   }
 }

@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { readability } from "@follow/utils"
 import { debounce } from "es-toolkit/compat"
 import { fetch as expoFetch } from "expo/fetch"
 
@@ -11,7 +12,6 @@ import { EntryService } from "@/src/services/entry"
 import { collectionActions } from "../collection/store"
 import { feedActions } from "../feed/store"
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
-import { listActions } from "../list/store"
 import { getSubscription } from "../subscription/getter"
 import { getEntry } from "./getter"
 import type { EntryModel, FetchEntriesProps } from "./types"
@@ -21,6 +21,7 @@ type EntryId = string
 type FeedId = string
 type InboxId = string
 type Category = string
+type ListId = string
 
 interface EntryState {
   data: Record<EntryId, EntryModel>
@@ -28,6 +29,7 @@ interface EntryState {
   entryIdByCategory: Record<Category, Set<EntryId>>
   entryIdByFeed: Record<FeedId, Set<EntryId>>
   entryIdByInbox: Record<InboxId, Set<EntryId>>
+  entryIdByList: Record<ListId, Set<EntryId>>
   entryIdSet: Set<EntryId>
 }
 
@@ -44,6 +46,7 @@ const defaultState: EntryState = {
   entryIdByCategory: {},
   entryIdByFeed: {},
   entryIdByInbox: {},
+  entryIdByList: {},
   entryIdSet: new Set(),
 }
 
@@ -136,6 +139,24 @@ class EntryActions {
     }
   }
 
+  private addEntryIdToList({
+    draft,
+    listId,
+    entryId,
+  }: {
+    draft: EntryState
+    listId?: ListId | null
+    entryId: EntryId
+  }) {
+    if (!listId) return
+    const entryIdSetByList = draft.entryIdByList[listId]
+    if (!entryIdSetByList) {
+      draft.entryIdByList[listId] = new Set([entryId])
+    } else {
+      entryIdSetByList.add(entryId)
+    }
+  }
+
   upsertManyInSession(entries: EntryModel[], options?: { unreadOnly?: boolean }) {
     if (entries.length === 0) return
     const { unreadOnly } = options ?? {}
@@ -148,11 +169,19 @@ class EntryActions {
         const { feedId, inboxHandle, read, sources } = entry
         if (unreadOnly && read) continue
 
-        this.addEntryIdToFeed({
-          draft,
-          feedId,
-          entryId: entry.id,
-        })
+        if (inboxHandle) {
+          this.addEntryIdToInbox({
+            draft,
+            inboxHandle,
+            entryId: entry.id,
+          })
+        } else {
+          this.addEntryIdToFeed({
+            draft,
+            feedId,
+            entryId: entry.id,
+          })
+        }
 
         this.addEntryIdToView({
           draft,
@@ -161,17 +190,21 @@ class EntryActions {
           sources,
         })
 
-        this.addEntryIdToInbox({
-          draft,
-          inboxHandle,
-          entryId: entry.id,
-        })
-
         this.addEntryIdToCategory({
           draft,
           feedId,
           entryId: entry.id,
         })
+
+        entry.sources
+          ?.filter((s) => s !== "feed")
+          .forEach((s) => {
+            this.addEntryIdToList({
+              draft,
+              listId: s,
+              entryId: entry.id,
+            })
+          })
       }
     })
   }
@@ -189,22 +222,49 @@ class EntryActions {
     await tx.run()
   }
 
-  updateEntryContentInSession(entryId: EntryId, content: string) {
+  updateEntryContentInSession({
+    entryId,
+    content,
+    sourceContent,
+  }: {
+    entryId: EntryId
+    content?: string
+    sourceContent?: string
+  }) {
     immerSet((draft) => {
       const entry = draft.data[entryId]
       if (!entry) return
-      entry.content = content
+      if (content) {
+        entry.content = content
+      }
+      if (sourceContent) {
+        entry.sourceContent = sourceContent
+      }
     })
   }
 
-  async updateEntryContent(entryId: EntryId, content: string) {
+  async updateEntryContent({
+    entryId,
+    content,
+    sourceContent,
+  }: {
+    entryId: EntryId
+    content?: string
+    sourceContent?: string
+  }) {
     const tx = createTransaction()
     tx.store(() => {
-      this.updateEntryContentInSession(entryId, content)
+      this.updateEntryContentInSession({ entryId, content, sourceContent })
     })
 
     tx.persist(() => {
-      return EntryService.patch({ id: entryId, content })
+      if (content) {
+        EntryService.patch({ id: entryId, content })
+      }
+
+      if (sourceContent) {
+        EntryService.patch({ id: entryId, sourceContent })
+      }
     })
 
     await tx.run()
@@ -264,6 +324,20 @@ class EntryActions {
       draft.entryIdByFeed[feedId] = new Set(entries.map((e) => e.id))
     })
   }
+
+  resetByInbox({ inboxId, entries }: { inboxId?: InboxId; entries: EntryModel[] }) {
+    if (!inboxId) return
+    immerSet((draft) => {
+      draft.entryIdByInbox[inboxId] = new Set(entries.map((e) => e.id))
+    })
+  }
+
+  resetByList({ listId, entries }: { listId?: ListId; entries: EntryModel[] }) {
+    if (!listId) return
+    immerSet((draft) => {
+      draft.entryIdByList[listId] = new Set(entries.map((e) => e.id))
+    })
+  }
 }
 
 class EntrySyncServices {
@@ -275,32 +349,38 @@ class EntrySyncServices {
       listId,
       view,
     })
-    const res = await apiClient.entries.$post({
-      json: {
-        publishedAfter: pageParam,
-        read,
-        limit,
-        isCollection,
-        ...params,
-      },
-    })
+    const res = params.inboxId
+      ? await apiClient.entries.inbox.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isCollection,
+            inboxId: params.inboxId,
+            ...params,
+          },
+        })
+      : await apiClient.entries.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isCollection,
+            ...params,
+          },
+        })
 
     const entries = honoMorph.toEntryList(res.data)
     const entriesInDB = await EntryService.getEntryMany(entries.map((e) => e.id))
     for (const entry of entries) {
-      const entryContent = entriesInDB.find((e) => e.id === entry.id)
-      if (entryContent) {
-        entry.content = entryContent.content
+      const entryInDB = entriesInDB.find((e) => e.id === entry.id)
+      if (entryInDB) {
+        entry.content = entryInDB.content
+        entry.sourceContent = entryInDB.sourceContent
       }
     }
 
     await entryActions.upsertMany(entries)
-    if (params.listId) {
-      await listActions.addEntryIds({
-        listId: params.listId,
-        entryIds: entries.map((e) => e.id),
-      })
-    }
 
     // After initial fetch, we can reset the state to prefer the entries data from the server
     if (!pageParam) {
@@ -318,6 +398,14 @@ class EntrySyncServices {
       if (params.feedId) {
         entryActions.resetByFeed({ feedId: params.feedId, entries })
       }
+
+      if (params.inboxId) {
+        entryActions.resetByInbox({ inboxId: params.inboxId, entries })
+      }
+
+      if (params.listId) {
+        entryActions.resetByList({ listId: params.listId, entries })
+      }
     }
 
     if (isCollection && res.data) {
@@ -328,17 +416,36 @@ class EntrySyncServices {
       await collectionActions.upsertMany(collections)
     }
 
-    await feedActions.upsertMany(res.data?.map((e) => honoMorph.toFeed(e.feeds)) || [])
+    const feeds =
+      res.data
+        ?.map((e) => e.feeds)
+        .filter((f) => f.type === "feed")
+        .map((f) => honoMorph.toFeed(f)) ?? []
+    feedActions.upsertMany(feeds)
 
     return res
   }
 
   async fetchEntryContent(entryId: EntryId) {
-    const res = await apiClient.entries.$get({ query: { id: entryId } })
+    const currentEntry = getEntry(entryId)
+    const res = currentEntry?.inboxHandle
+      ? await apiClient.entries.inbox.$get({ query: { id: entryId } })
+      : await apiClient.entries.$get({ query: { id: entryId } })
     const entry = honoMorph.toEntry(res.data)
-    if (!entry) return null
-    if (entry.content && getEntry(entryId)?.content !== entry.content) {
-      await entryActions.updateEntryContent(entryId, entry.content)
+    if (entry?.content && currentEntry?.content !== entry.content) {
+      await entryActions.updateEntryContent({ entryId, content: entry.content })
+    }
+    return entry
+  }
+
+  async fetchEntrySourceContent(entryId: EntryId) {
+    const entry = getEntry(entryId)
+
+    if (entry?.url && !entry?.sourceContent) {
+      const contentByFetch = await readability(entry.url)
+      if (contentByFetch?.content && entry?.sourceContent !== contentByFetch.content) {
+        await entryActions.updateEntryContent({ entryId, sourceContent: contentByFetch.content })
+      }
     }
     return entry
   }
@@ -394,7 +501,7 @@ class EntrySyncServices {
             if (lines[i]!.trim()) {
               const json = JSON.parse(lines[i]!)
               // Handle each JSON line here
-              entryActions.updateEntryContent(json.id, json.content)
+              entryActions.updateEntryContent({ entryId: json.id, content: json.content })
             }
           }
 
@@ -406,7 +513,7 @@ class EntrySyncServices {
         if (buffer.trim()) {
           const json = JSON.parse(buffer)
 
-          entryActions.updateEntryContent(json.id, json.content)
+          entryActions.updateEntryContent({ entryId: json.id, content: json.content })
         }
       } catch (error) {
         console.error("Error reading stream:", error)

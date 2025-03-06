@@ -1,3 +1,6 @@
+/**
+ * This is universal env
+ */
 import { z } from "zod"
 
 export const envSchema = {

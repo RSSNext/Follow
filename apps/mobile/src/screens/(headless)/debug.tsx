@@ -1,3 +1,4 @@
+import type { envProfileMap } from "@follow/shared/src/env.rn"
 import { sleep } from "@follow/utils"
 import { requireNativeModule } from "expo"
 import * as Clipboard from "expo-clipboard"
@@ -20,10 +21,12 @@ import {
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { Select } from "@/src/components/ui/form/Select"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
 import { quickLookImage } from "@/src/lib/native"
+import { setEnvProfile, useEnvProfile } from "@/src/lib/proxy-env"
 import { toast } from "@/src/lib/toast"
 
 interface MenuSection {
@@ -38,6 +41,7 @@ interface MenuItem {
 }
 export default function DebugPanel() {
   const insets = useSafeAreaInsets()
+  const envProfile = useEnvProfile()
 
   const menuSections: MenuSection[] = [
     {
@@ -153,6 +157,20 @@ export default function DebugPanel() {
 
   return (
     <ScrollView ref={ref} className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
+      <View className="flex-row items-center justify-between px-8">
+        <Text className="text-2xl font-medium text-white">Current Env Profile: {envProfile}</Text>
+        <Select
+          options={[
+            { label: "Dev", value: "dev" },
+            { label: "Prod", value: "prod" },
+            { label: "Staging", value: "staging" },
+          ]}
+          value={envProfile}
+          onValueChange={(value) => {
+            setEnvProfile(value as keyof typeof envProfileMap)
+          }}
+        />
+      </View>
       {menuSections.map((section) => (
         <View key={section.title}>
           <Text className="mt-4 px-8 text-2xl font-medium text-white">{section.title}</Text>

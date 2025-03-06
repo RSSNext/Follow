@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@follow/components/ui/card/index.jsx"
 import { getDominantColor } from "@follow/utils/color"
-import { cn, getUrlIcon } from "@follow/utils/utils"
-import clsx from "clsx"
+import { clsx, cn, getUrlIcon } from "@follow/utils/utils"
 import { upperFirst } from "es-toolkit/compat"
 import type { FC } from "react"
 import { memo, useEffect, useMemo, useState } from "react"

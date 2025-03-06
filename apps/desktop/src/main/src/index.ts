@@ -1,8 +1,9 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import { APP_PROTOCOL } from "@follow/shared/constants"
-import { env } from "@follow/shared/env"
-import { buildSafeHeaders } from "@follow/utils/headers"
+import { env } from "@follow/shared/env.desktop"
+import { createBuildSafeHeaders } from "@follow/utils/headers"
+import { IMAGE_PROXY_URL } from "@follow/utils/img-proxy"
 import { parse } from "cookie-es"
 import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
@@ -107,6 +108,12 @@ function bootstrap() {
     updateProxy()
     registerUpdater()
     registerAppTray()
+
+    const buildSafeHeaders = createBuildSafeHeaders(env.VITE_WEB_URL, [
+      env.VITE_OPENPANEL_API_URL || "",
+      IMAGE_PROXY_URL,
+      env.VITE_API_URL,
+    ])
 
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
       details.requestHeaders = buildSafeHeaders({
