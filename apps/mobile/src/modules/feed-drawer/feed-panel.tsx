@@ -135,7 +135,6 @@ const GroupedContext = createContext<string | null>(null)
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 const CategoryGrouped = memo(
-  // eslint-disable-next-line @eslint-react/no-unstable-context-value
   ({ category, subscriptionIds }: { category: string; subscriptionIds: string[] }) => {
     const unreadCounts = useUnreadCounts(subscriptionIds)
     const isExpanded = useSharedValue(false)
