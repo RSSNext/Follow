@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { readability } from "@follow/utils"
 import { debounce } from "es-toolkit/compat"
 import { fetch as expoFetch } from "expo/fetch"
 
@@ -221,22 +222,49 @@ class EntryActions {
     await tx.run()
   }
 
-  updateEntryContentInSession(entryId: EntryId, content: string) {
+  updateEntryContentInSession({
+    entryId,
+    content,
+    sourceContent,
+  }: {
+    entryId: EntryId
+    content?: string
+    sourceContent?: string
+  }) {
     immerSet((draft) => {
       const entry = draft.data[entryId]
       if (!entry) return
-      entry.content = content
+      if (content) {
+        entry.content = content
+      }
+      if (sourceContent) {
+        entry.sourceContent = sourceContent
+      }
     })
   }
 
-  async updateEntryContent(entryId: EntryId, content: string) {
+  async updateEntryContent({
+    entryId,
+    content,
+    sourceContent,
+  }: {
+    entryId: EntryId
+    content?: string
+    sourceContent?: string
+  }) {
     const tx = createTransaction()
     tx.store(() => {
-      this.updateEntryContentInSession(entryId, content)
+      this.updateEntryContentInSession({ entryId, content, sourceContent })
     })
 
     tx.persist(() => {
-      return EntryService.patch({ id: entryId, content })
+      if (content) {
+        EntryService.patch({ id: entryId, content })
+      }
+
+      if (sourceContent) {
+        EntryService.patch({ id: entryId, sourceContent })
+      }
     })
 
     await tx.run()
@@ -345,9 +373,10 @@ class EntrySyncServices {
     const entries = honoMorph.toEntryList(res.data)
     const entriesInDB = await EntryService.getEntryMany(entries.map((e) => e.id))
     for (const entry of entries) {
-      const entryContent = entriesInDB.find((e) => e.id === entry.id)
-      if (entryContent) {
-        entry.content = entryContent.content
+      const entryInDB = entriesInDB.find((e) => e.id === entry.id)
+      if (entryInDB) {
+        entry.content = entryInDB.content
+        entry.sourceContent = entryInDB.sourceContent
       }
     }
 
@@ -403,9 +432,20 @@ class EntrySyncServices {
       ? await apiClient.entries.inbox.$get({ query: { id: entryId } })
       : await apiClient.entries.$get({ query: { id: entryId } })
     const entry = honoMorph.toEntry(res.data)
-    if (!entry) return null
-    if (entry.content && getEntry(entryId)?.content !== entry.content) {
-      await entryActions.updateEntryContent(entryId, entry.content)
+    if (entry?.content && currentEntry?.content !== entry.content) {
+      await entryActions.updateEntryContent({ entryId, content: entry.content })
+    }
+    return entry
+  }
+
+  async fetchEntrySourceContent(entryId: EntryId) {
+    const entry = getEntry(entryId)
+
+    if (entry?.url && !entry?.sourceContent) {
+      const contentByFetch = await readability(entry.url)
+      if (contentByFetch?.content && entry?.sourceContent !== contentByFetch.content) {
+        await entryActions.updateEntryContent({ entryId, sourceContent: contentByFetch.content })
+      }
     }
     return entry
   }
@@ -461,7 +501,7 @@ class EntrySyncServices {
             if (lines[i]!.trim()) {
               const json = JSON.parse(lines[i]!)
               // Handle each JSON line here
-              entryActions.updateEntryContent(json.id, json.content)
+              entryActions.updateEntryContent({ entryId: json.id, content: json.content })
             }
           }
 
@@ -473,7 +513,7 @@ class EntrySyncServices {
         if (buffer.trim()) {
           const json = JSON.parse(buffer)
 
-          entryActions.updateEntryContent(json.id, json.content)
+          entryActions.updateEntryContent({ entryId: json.id, content: json.content })
         }
       } catch (error) {
         console.error("Error reading stream:", error)

@@ -361,9 +361,6 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../../../../packages/utils
-      '@mozilla/readability':
-        specifier: 0.5.0
-        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -373,15 +370,9 @@ importers:
       builder-util-runtime:
         specifier: 9.2.10
         version: 9.2.10
-      chardet:
-        specifier: 2.0.0
-        version: 2.0.0
       cookie-es:
         specifier: 1.2.2
         version: 1.2.2
-      dompurify:
-        specifier: 3.2.4
-        version: 3.2.4
       electron-context-menu:
         specifier: 4.0.5
         version: 4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
@@ -1514,12 +1505,24 @@ importers:
       '@follow/types':
         specifier: workspace:*
         version: link:../types
+      '@mozilla/readability':
+        specifier: 0.5.0
+        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
+      chardet:
+        specifier: 2.0.0
+        version: 2.0.0
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      dompurify:
+        specifier: 3.2.4
+        version: 3.2.4
       framer-motion:
         specifier: 12.4.7
         version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      linkedom:
+        specifier: 0.18.9
+        version: 0.18.9
       nanoid:
         specifier: 5.1.0
         version: 5.1.0

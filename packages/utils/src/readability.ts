@@ -1,13 +1,13 @@
 import { Readability } from "@mozilla/readability"
-import { name, version } from "@pkg"
 import chardet from "chardet"
 import DOMPurify from "dompurify"
 import { parseHTML } from "linkedom"
 import { fetch } from "ofetch"
 
-import { isDev } from "~/env"
+const isDev = process.env.NODE_ENV === "development"
 
-const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 ${name}/${version}`
+const userAgents =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
 
 // For avoiding xss attack from readability, the raw document string should be sanitized.
 // The xss attack in electron may lead to more serious outcomes than browser environment.

@@ -23,7 +23,6 @@ import { UnGroupedList } from "./UnGroupedList"
 //   })
 // }
 export const CategoryGrouped = memo(
-  // eslint-disable-next-line @eslint-react/no-unstable-context-value
   ({ category, subscriptionIds }: { category: string; subscriptionIds: string[] }) => {
     const unreadCounts = useUnreadCounts(subscriptionIds)
     const [expanded, setExpanded] = useState(false)

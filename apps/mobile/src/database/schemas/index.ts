@@ -66,6 +66,7 @@ export const entriesTable = sqliteTable("entries", {
   title: text("title"),
   url: text("url"),
   content: text("content"),
+  sourceContent: text("source_content"),
   description: text("description"),
   guid: text("guid").notNull(),
   author: text("author"),

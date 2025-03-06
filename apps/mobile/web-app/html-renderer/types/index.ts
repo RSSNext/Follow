@@ -8,7 +8,8 @@ export interface MediaModel {
 }
 
 export interface EntryModel {
-  content: string
-  title: string
-  media: MediaModel[]
+  content?: string
+  sourceContent?: string
+  title?: string
+  media?: MediaModel[]
 }
