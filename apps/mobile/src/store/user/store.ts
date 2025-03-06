@@ -2,14 +2,21 @@ import analytics from "@react-native-firebase/analytics"
 
 import type { UserSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
+import { changeEmail, sendVerificationEmail, updateUser } from "@/src/lib/auth"
+import { toast } from "@/src/lib/toast"
 import { UserService } from "@/src/services/user"
 
 import { createImmerSetter, createTransaction, createZustandStore } from "../internal/helper"
+import type { UserProfileEditable } from "./types"
 
 export type UserModel = UserSchema
+
+export type MeModel = UserModel & {
+  emailVerified?: boolean
+}
 type UserStore = {
   users: Record<string, UserModel>
-  whoami: UserModel | null
+  whoami: MeModel | null
 }
 
 export const useUserStore = createZustandStore<UserStore>("user")(() => ({
@@ -17,7 +24,7 @@ export const useUserStore = createZustandStore<UserStore>("user")(() => ({
   whoami: null,
 }))
 
-// const set = useUserStore.setState
+const get = useUserStore.getState
 const immerSet = createImmerSetter(useUserStore)
 
 class UserSyncService {
@@ -47,6 +54,77 @@ class UserSyncService {
     } else {
       return null
     }
+  }
+
+  async updateProfile(data: Partial<UserProfileEditable>) {
+    const me = get().whoami
+    if (!me) return
+    const tx = createTransaction(me)
+
+    tx.store(() => {
+      immerSet((state) => {
+        if (!state.whoami) return
+        state.whoami = { ...state.whoami, ...data }
+      })
+    })
+
+    tx.request(async () => {
+      await updateUser({
+        ...data,
+      })
+    })
+    tx.persist(async () => {
+      const { whoami } = get()
+      if (!whoami) return
+      const nextUser = {
+        ...whoami,
+        ...data,
+      }
+      userActions.upsertMany([nextUser])
+    })
+    tx.rollback(() => {
+      immerSet((state) => {
+        if (!state.whoami) return
+        state.whoami = me
+      })
+    })
+    await tx.run()
+  }
+
+  async sendVerificationEmail() {
+    const me = get().whoami
+    if (!me?.email) return
+    await sendVerificationEmail({ email: me.email! })
+    toast.success("Verification email sent")
+  }
+
+  async updateEmail(email: string) {
+    const oldEmail = get().whoami?.email
+    if (!oldEmail) return
+    const tx = createTransaction(oldEmail)
+    tx.store(() => {
+      immerSet((state) => {
+        if (!state.whoami) return
+        state.whoami = { ...state.whoami, email }
+      })
+    })
+    tx.request(async () => {
+      const { whoami } = get()
+      if (!whoami) return
+      await changeEmail({ newEmail: email })
+    })
+    tx.rollback(() => {
+      immerSet((state) => {
+        if (!state.whoami) return
+        state.whoami.email = oldEmail
+      })
+    })
+    tx.persist(async () => {
+      const { whoami } = get()
+      if (!whoami) return
+      userActions.upsertMany([{ ...whoami, email }])
+    })
+    await tx.run()
   }
 }
 

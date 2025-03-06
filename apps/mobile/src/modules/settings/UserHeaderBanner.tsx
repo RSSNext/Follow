@@ -130,7 +130,11 @@ export const UserHeaderBanner = ({
       <View className="mt-2 items-center">
         {user?.name ? (
           <Text
-            className={cn("text-2xl font-bold", gradientLight ? "text-black" : "text-white/95")}
+            numberOfLines={1}
+            className={cn(
+              "px-8 text-2xl font-bold",
+              gradientLight ? "text-black" : "text-white/95",
+            )}
           >
             {user.name}
           </Text>

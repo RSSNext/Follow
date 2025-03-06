@@ -111,7 +111,6 @@ function EmailManagementForm() {
 
   const updateEmailMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
       const res = await changeEmail({ newEmail: values.email })
       if (res.error) {
         throw new Error(res.error.message)

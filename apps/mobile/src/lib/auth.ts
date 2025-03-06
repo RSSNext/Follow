@@ -39,13 +39,16 @@ const authClient = createAuthClient({
 
 // @keep-sorted
 export const {
+  changeEmail,
   forgetPassword,
   getCookie,
   getProviders,
+  sendVerificationEmail,
   signIn,
   signOut,
   signUp,
   twoFactor,
+  updateUser,
   useSession,
 } = authClient
 
