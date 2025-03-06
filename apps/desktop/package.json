@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "private": true,
   "description": "Follow everything in one place",
   "author": "Follow Team",
@@ -80,7 +80,7 @@
     "utf-8-validate": "6.0.5"
   },
   "productName": "Follow",
-  "mainHash": "b12c4c0f19198ba7a50c0027bcacf4dbf2a42406b6753f3f18aeebf9627b2d43",
+  "mainHash": "c92a47e6439382c1fdab1de5a29a0265ad1b6019b0868d3b2acb6b83509afc55",
   "bump": {
     "before": [
       "git pull --rebase",
