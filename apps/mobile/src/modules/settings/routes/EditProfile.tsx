@@ -29,7 +29,7 @@ import {
 import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
-import { apiClient } from "@/src/lib/api-fetch"
+import { apiClient, apiFetch, getBizFetchErrorMessage } from "@/src/lib/api-fetch"
 import { pickImage } from "@/src/lib/native/picker"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
@@ -75,17 +75,29 @@ const AvatarSection: FC<{
         onPress={async () => {
           const result = await pickImage({
             fileName: "avatar.jpg",
+            maxSizeKB: 290,
           })
 
           if (!result) return
           const { formData } = result
-          const res = await apiClient.upload.avatar.$post({
-            body: {
-              file: formData,
+          const res = await apiFetch<{
+            url: string
+          }>(apiClient.upload.avatar.$url().toString(), {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
             },
+            body: formData,
+          }).catch((err) => {
+            toast.error(getBizFetchErrorMessage(err))
+            throw err
           })
 
-          void res
+          const { url } = res
+
+          userSyncService.updateProfile({
+            image: url,
+          })
         }}
       >
         <Text className="text-accent text-lg">Set Avatar</Text>

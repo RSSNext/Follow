@@ -17,7 +17,12 @@ export const AccountScreen = () => {
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Account" />
-      {/* Language */}
+      <View className="mt-6">
+        <GroupedInsetListSectionHeader label="Authentication" />
+        <GroupedInsetListCard />
+      </View>
+
+      {/* Danger Zone */}
       <View className="mt-6">
         <GroupedInsetListSectionHeader label="Danger Zone" />
         <GroupedInsetListCard>
