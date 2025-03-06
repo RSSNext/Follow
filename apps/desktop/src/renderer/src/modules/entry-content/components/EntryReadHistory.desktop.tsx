@@ -1,11 +1,11 @@
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
+import { clsx } from "@follow/utils/utils"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardPortal,
   HoverCardTrigger,
 } from "@radix-ui/react-hover-card"
-import clsx from "clsx"
 
 import { useWhoami } from "~/atoms/user"
 import { useAuthQuery } from "~/hooks/common"

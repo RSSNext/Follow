@@ -10,7 +10,7 @@ import {
 } from "@follow/components/ui/tooltip/index.js"
 import type { LoginRuntime } from "@follow/shared/auth"
 import { loginHandler } from "@follow/shared/auth"
-import clsx from "clsx"
+import { clsx } from "@follow/utils/utils"
 import { m } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
