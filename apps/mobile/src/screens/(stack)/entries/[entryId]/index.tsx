@@ -1,6 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { useLocalSearchParams } from "expo-router"
-import { atom } from "jotai"
+import { atom, useAtomValue } from "jotai"
 import { useMemo } from "react"
 import { Pressable, Text, View } from "react-native"
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
@@ -11,9 +11,10 @@ import { SafeNavigationScrollView } from "@/src/components/layouts/views/SafeNav
 import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
 import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
-import { EntryContentContext } from "@/src/modules/entry-content/ctx"
+import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryAISummary } from "@/src/modules/entry-content/EntryAISummary"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
+import type { EntryModel } from "@/src/store/entry/types"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useAutoMarkAsRead } from "@/src/store/unread/hooks"
 
@@ -71,7 +72,7 @@ export default function EntryDetailPage() {
             <EntryAISummary entryId={entryId as string} />
             {entry && (
               <View className="mt-3">
-                <EntryContentWebView entry={entry} />
+                <EntryContentWebViewWithContext entry={entry} />
               </View>
             )}
             {viewType === FeedViewType.SocialMedia && (
@@ -84,6 +85,12 @@ export default function EntryDetailPage() {
       </PortalHost>
     </EntryContentContext.Provider>
   )
+}
+
+const EntryContentWebViewWithContext = ({ entry }: { entry: EntryModel }) => {
+  const { showSourceAtom } = useEntryContentContext()
+  const showSource = useAtomValue(showSourceAtom)
+  return <EntryContentWebView entry={entry} showSource={showSource} />
 }
 
 const EntryInfo = ({ entryId }: { entryId: string }) => {

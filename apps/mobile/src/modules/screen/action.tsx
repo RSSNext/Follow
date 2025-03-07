@@ -12,6 +12,7 @@ import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { RoundCuteFiIcon } from "@/src/icons/round_cute_fi"
 import { RoundCuteReIcon } from "@/src/icons/round_cute_re"
 import { Dialog } from "@/src/lib/dialog"
+import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -83,6 +84,7 @@ export const UnreadOnlyActionButton = ({ variant = "primary" }: HeaderActionButt
       selectedIcon={<RoundCuteFiIcon height={size} width={size} color={color} />}
       onPress={() => {
         setGeneralSetting("unreadOnly", !unreadOnly)
+        toast.info(`Showing ${unreadOnly ? "all" : "unread"} entries`, { position: "bottom" })
       }}
       selected={unreadOnly}
       overlay={false}
