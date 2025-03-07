@@ -1,8 +1,10 @@
-import { openVideo } from "@follow/utils"
+import { transformVideoUrl } from "@follow/utils"
+import * as Linking from "expo-linking"
 
 import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
+import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
@@ -42,4 +44,39 @@ export function EntryVideoItem({ id }: { id: string }) {
       </ItemPressable>
     </VideoContextMenu>
   )
+}
+
+const parseSchemeLink = (url: string) => {
+  if (!URL.canParse(url)) return null
+  const urlObject = new URL(url)
+  switch (urlObject.hostname) {
+    case "www.bilibili.com": {
+      // bilibili://video/{av}or{bv}
+      const bvid = urlObject.pathname.match(/video\/(BV\w+)/)?.[1]
+      return bvid ? `bilibili://video/${bvid}` : null
+    }
+    case "www.youtube.com": {
+      // youtube://watch?v=xxx
+      const videoId = urlObject.searchParams.get("v")
+      return videoId ? `youtube://watch?v=${videoId}` : null
+    }
+    default: {
+      return null
+    }
+  }
+}
+
+const openVideo = async (url: string, openVideoInApp = false) => {
+  if (openVideoInApp) {
+    const schemeLink = parseSchemeLink(url)
+    const isInstalled = schemeLink && (await Linking.canOpenURL(schemeLink))
+    if (schemeLink && isInstalled) {
+      await Linking.openURL(schemeLink)
+      return
+    }
+  }
+
+  // Fallback to opening in in-app browser
+  const formattedUrl = transformVideoUrl({ url }) || url
+  openLink(formattedUrl)
 }
