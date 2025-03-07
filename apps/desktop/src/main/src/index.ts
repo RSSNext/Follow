@@ -18,6 +18,7 @@ import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
 import { registerAppTray } from "./lib/tray"
 import { setBetterAuthSessionCookie, updateNotificationsToken } from "./lib/user"
+import { logger } from "./logger"
 import { registerUpdater } from "./updater"
 import { cleanupOldRender } from "./updater/hot-updater"
 import {
@@ -74,8 +75,13 @@ function bootstrap() {
   // Some APIs can only be used after this event occurs.
   app.whenReady().then(async () => {
     protocol.handle("app", (request) => {
-      const filePath = request.url.slice("app://follow.is".length)
-      return net.fetch(url.pathToFileURL(filePath).toString())
+      try {
+        const urlObj = new URL(request.url)
+        return net.fetch(url.pathToFileURL(urlObj.pathname).toString())
+      } catch {
+        logger.error("app protocol error", request.url)
+        return new Response("Not found", { status: 404 })
+      }
     })
 
     // Default open or close DevTools by F12 in development
