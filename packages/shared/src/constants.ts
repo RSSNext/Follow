@@ -1,7 +1,5 @@
 import type { ElectronAPI } from "@electron-toolkit/preload"
 
-const isDev = process.env.NODE_ENV !== "production"
-
 declare const globalThis: {
   window: Window & {
     electron?: ElectronAPI
@@ -10,6 +8,7 @@ declare const globalThis: {
   electron?: ElectronAPI
 }
 
+const isDev = "process" in globalThis ? process.env.NODE_ENV === "development" : import.meta.env.DEV
 export const APP_PROTOCOL = isDev ? "follow-dev" : "follow"
 export const DEEPLINK_SCHEME = `${APP_PROTOCOL}://` as const
 
