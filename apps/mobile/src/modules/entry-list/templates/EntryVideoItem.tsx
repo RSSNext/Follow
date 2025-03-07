@@ -47,8 +47,13 @@ export function EntryVideoItem({ id }: { id: string }) {
 }
 
 const parseSchemeLink = (url: string) => {
-  if (!URL.canParse(url)) return null
-  const urlObject = new URL(url)
+  let urlObject: URL
+  try {
+    urlObject = new URL(url)
+  } catch {
+    return null
+  }
+
   switch (urlObject.hostname) {
     case "www.bilibili.com": {
       // bilibili://video/{av}or{bv}
