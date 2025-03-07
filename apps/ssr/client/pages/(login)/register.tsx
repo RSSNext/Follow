@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@follow/components/ui/form/index.jsx"
 import { Input } from "@follow/components/ui/input/index.js"
-import { env } from "@follow/shared/env.desktop"
+import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
@@ -138,13 +138,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
-          {env.VITE_RECAPTCHA_V2_SITE_KEY && (
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY}
-              size="invisible"
-            />
-          )}
+          <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
           <Button disabled={!isValid} type="submit" className="w-full" size="lg">
             {t("register.submit")}
           </Button>

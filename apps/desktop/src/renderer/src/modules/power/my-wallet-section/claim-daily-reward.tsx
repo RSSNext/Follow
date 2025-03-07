@@ -23,13 +23,7 @@ export const ClaimDailyReward = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <>
-          {env.VITE_RECAPTCHA_V2_SITE_KEY && (
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY}
-              size="invisible"
-            />
-          )}
+          <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
           <Button
             variant="primary"
             isLoading={mutation.isPending}

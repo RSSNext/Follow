@@ -18,9 +18,11 @@ import { Input } from "@follow/components/ui/input/index.js"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { authProvidersConfig } from "@follow/constants"
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import ReCAPTCHA from "react-google-recaptcha"
 import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { Link, useLocation, useNavigate } from "react-router"
@@ -225,6 +227,8 @@ function LoginWithPassword() {
   const { isSubmitting } = form.formState
   const navigate = useNavigate()
 
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (needTwoFactor && values.code) {
       const res = await twoFactor.verifyTotp({ code: values.code })
@@ -236,7 +240,13 @@ function LoginWithPassword() {
       return
     }
 
-    const res = await loginHandler("credential", "app", values)
+    const token = await recaptchaRef.current?.executeAsync()
+    const res = await loginHandler("credential", "app", {
+      ...values,
+      headers: {
+        "x-token": `r2:${token}`,
+      },
+    })
     if (res?.error) {
       toast.error(res.error.message)
       return
@@ -303,6 +313,7 @@ function LoginWithPassword() {
             )}
           />
         )}
+        <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
         <Button type="submit" buttonClassName="!mt-3 w-full" isLoading={isSubmitting} size="lg">
           {t("login.continueWith", { provider: t("words.email") })}
         </Button>

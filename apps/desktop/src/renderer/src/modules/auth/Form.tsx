@@ -42,10 +42,16 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
   const { present } = useModalStack()
   const { dismiss } = useCurrentModal()
 
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const token = await recaptchaRef.current?.executeAsync()
     const res = await loginHandler("credential", runtime, {
       email: values.email,
       password: values.password,
+      headers: {
+        "x-token": `r2:${token}`,
+      },
     })
     if (res?.error) {
       toast.error(res.error.message)
@@ -117,6 +123,7 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
           )}
         />
         <div className="flex flex-col space-y-3">
+          <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
           <Button
             type="submit"
             isLoading={form.formState.isSubmitting}
@@ -235,13 +242,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
-          {env.VITE_RECAPTCHA_V2_SITE_KEY && (
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY}
-              size="invisible"
-            />
-          )}
+          <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
           <Button disabled={!isValid} type="submit" className="w-full" size="lg">
             {t("register.submit")}
           </Button>

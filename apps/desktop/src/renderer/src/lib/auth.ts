@@ -64,9 +64,10 @@ export const loginHandler = async (
   args?: {
     email?: string
     password?: string
+    headers?: Record<string, string>
   },
 ) => {
-  const { email, password } = args ?? {}
+  const { email, password, headers } = args ?? {}
   if (IN_ELECTRON && provider !== "credential") {
     window.open(`${WEB_URL}/login?provider=${provider}`)
   } else {
@@ -75,7 +76,7 @@ export const loginHandler = async (
         window.location.href = "/login"
         return
       }
-      return signIn.email({ email, password })
+      return signIn.email({ email, password }, { headers })
     }
 
     signIn.social({

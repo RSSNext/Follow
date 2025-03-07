@@ -19,6 +19,8 @@ import { Input } from "@follow/components/ui/input/index.js"
 import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { useRef } from "react"
+import ReCAPTCHA from "react-google-recaptcha"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
@@ -38,13 +40,23 @@ export function Component() {
     },
   })
 
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+
   const { isValid } = form.formState
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof forgetPasswordFormSchema>) => {
-      const res = await forgetPassword({
-        email: values.email,
-        redirectTo: `${env.VITE_WEB_URL}/reset-password`,
-      })
+      const token = await recaptchaRef.current?.executeAsync()
+      const res = await forgetPassword(
+        {
+          email: values.email,
+          redirectTo: `${env.VITE_WEB_URL}/reset-password`,
+        },
+        {
+          headers: {
+            "x-token": `r2:${token}`,
+          },
+        },
+      )
       if (res.error) {
         throw new Error(res.error.message)
       }
@@ -97,6 +109,11 @@ export function Component() {
                     <FormMessage />
                   </FormItem>
                 )}
+              />
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY}
+                size="invisible"
               />
               <div className="text-right">
                 <Button disabled={!isValid} type="submit" isLoading={updateMutation.isPending}>

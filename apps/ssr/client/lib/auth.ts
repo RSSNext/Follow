@@ -62,16 +62,17 @@ export const loginHandler = async (
   args?: {
     email?: string
     password?: string
+    headers?: Record<string, string>
   },
 ) => {
-  const { email, password } = args ?? {}
+  const { email, password, headers } = args ?? {}
 
   if (provider === "credential") {
     if (!email || !password) {
       window.location.href = "/login"
       return
     }
-    return signIn.email({ email, password })
+    return signIn.email({ email, password }, { headers })
   }
 
   signIn.social({
