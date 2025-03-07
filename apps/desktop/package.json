@@ -55,6 +55,7 @@
     "@sentry/vite-plugin": "3.1.2",
     "@types/html-minifier-terser": "7.0.2",
     "@types/js-yaml": "4.0.9",
+    "@types/react-google-recaptcha": "2.1.9",
     "@vitejs/plugin-legacy": "6.0.1",
     "@vitejs/plugin-react": "4.3.4",
     "autoprefixer": "10.4.20",

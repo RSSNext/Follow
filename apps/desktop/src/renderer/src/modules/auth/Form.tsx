@@ -10,6 +10,8 @@ import {
 import { Input } from "@follow/components/ui/input/Input.js"
 import { env } from "@follow/shared/env.desktop"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRef } from "react"
+import ReCAPTCHA from "react-google-recaptcha"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -167,7 +169,10 @@ function RegisterForm() {
 
   const { isValid } = form.formState
 
-  function onSubmit(values: z.infer<typeof registerFormSchema>) {
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    const token = await recaptchaRef.current?.executeAsync()
     return signUp.email({
       email: values.email,
       password: values.password,
@@ -179,6 +184,9 @@ function RegisterForm() {
         },
         onError(context) {
           toast.error(context.error.message)
+        },
+        headers: {
+          "x-token": `r2:${token}`,
         },
       },
     })
@@ -227,6 +235,13 @@ function RegisterForm() {
               </FormItem>
             )}
           />
+          {env.VITE_RECAPTCHA_V2_SITE_KEY && (
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY}
+              size="invisible"
+            />
+          )}
           <Button disabled={!isValid} type="submit" className="w-full" size="lg">
             {t("register.submit")}
           </Button>
