@@ -1,3 +1,7 @@
+import * as Linking from "expo-linking"
+
+import { openLink } from "@/src/lib/native"
+
 export const transformVideoUrl = ({
   url,
   mini = false,
@@ -42,4 +46,39 @@ export const transformVideoUrl = ({
     return attachments.find((attachment) => attachment.mime_type === "text/html")?.url ?? null
   }
   return null
+}
+
+const parseSchemeLink = (url: string) => {
+  if (!URL.canParse(url)) return null
+  const urlObject = new URL(url)
+  switch (urlObject.hostname) {
+    case "www.bilibili.com": {
+      // bilibili://video/{av}or{bv}
+      const bvid = urlObject.pathname.match(/video\/(BV\w+)/)?.[1]
+      return bvid ? `bilibili://video/${bvid}` : null
+    }
+    case "www.youtube.com": {
+      // youtube://watch?v=xxx
+      const videoId = urlObject.searchParams.get("v")
+      return videoId ? `youtube://watch?v=${videoId}` : null
+    }
+    default: {
+      return null
+    }
+  }
+}
+
+export const openVideo = async (url: string, openVideoInApp = false) => {
+  if (openVideoInApp) {
+    const schemeLink = parseSchemeLink(url)
+    const isInstalled = schemeLink && (await Linking.canOpenURL(schemeLink))
+    if (schemeLink && isInstalled) {
+      await Linking.openURL(schemeLink)
+      return
+    }
+  }
+
+  // Fallback to opening in in-app browser
+  const formattedUrl = transformVideoUrl({ url }) || url
+  openLink(formattedUrl)
 }
