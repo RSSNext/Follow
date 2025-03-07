@@ -4,11 +4,12 @@ import { router } from "expo-router"
 import type { Control } from "react-hook-form"
 import { useController, useForm } from "react-hook-form"
 import type { TextInputProps } from "react-native"
-import { Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Text, TouchableOpacity, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
 import { z } from "zod"
 
 import { SubmitButton } from "@/src/components/common/SubmitButton"
+import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { signIn } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
 import { accentColor } from "@/src/theme/colors"
@@ -53,7 +54,8 @@ function Input({
     name,
   })
   return (
-    <TextInput
+    <PlainTextField
+      hitSlop={10}
       selectionColor={accentColor}
       {...rest}
       value={field.value}

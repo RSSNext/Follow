@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
 import { useState } from "react"
-import { Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
+import { Text, TouchableWithoutFeedback, View } from "react-native"
 import { KeyboardAvoidingView, KeyboardController } from "react-native-keyboard-controller"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { SubmitButton } from "@/src/components/common/SubmitButton"
+import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { forgetPassword } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
 
@@ -46,7 +47,7 @@ export default function ForgetPassword() {
 
             <View className="bg-secondary-system-background mt-6 gap-4 self-stretch rounded-2xl px-6 py-4">
               <View className="flex-row">
-                <TextInput
+                <PlainTextField
                   autoCapitalize="none"
                   autoCorrect={false}
                   keyboardType="email-address"
