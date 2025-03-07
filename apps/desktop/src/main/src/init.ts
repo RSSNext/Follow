@@ -5,7 +5,7 @@ import { PushReceiver } from "@eneris/push-receiver"
 import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env.desktop"
 import type { MessagingData } from "@follow/shared/hono"
-import { app, nativeTheme, Notification, shell } from "electron"
+import { app, nativeTheme, Notification, protocol, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
@@ -61,6 +61,17 @@ export const initializeAppStage1 = () => {
   registerPushNotifications()
   clearCacheCronJob()
   checkAndCleanCodeCache()
+
+  protocol.registerSchemesAsPrivileged([
+    {
+      scheme: "app",
+      privileges: {
+        standard: true,
+        bypassCSP: true,
+        supportFetchAPI: true,
+      },
+    },
+  ])
 }
 
 let contextMenuDisposer: () => void

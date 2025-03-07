@@ -1,3 +1,5 @@
+import url from "node:url"
+
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import { APP_PROTOCOL } from "@follow/shared/constants"
@@ -5,7 +7,7 @@ import { env } from "@follow/shared/env.desktop"
 import { createBuildSafeHeaders } from "@follow/utils/headers"
 import { IMAGE_PROXY_URL } from "@follow/utils/img-proxy"
 import { parse } from "cookie-es"
-import { app, BrowserWindow, session } from "electron"
+import { app, BrowserWindow, net, protocol, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { DEVICE_ID } from "./constants/system"
@@ -71,6 +73,11 @@ function bootstrap() {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.whenReady().then(async () => {
+    protocol.handle("app", (request) => {
+      const filePath = request.url.slice("app://follow.is".length)
+      return net.fetch(url.pathToFileURL(filePath).toString())
+    })
+
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
