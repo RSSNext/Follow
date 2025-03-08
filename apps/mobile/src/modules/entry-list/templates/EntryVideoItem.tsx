@@ -1,5 +1,5 @@
 import { transformVideoUrl } from "@follow/utils"
-import * as Linking from "expo-linking"
+import { Linking } from "react-native"
 
 import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
@@ -74,10 +74,14 @@ const parseSchemeLink = (url: string) => {
 const openVideo = async (url: string, openVideoInApp = false) => {
   if (openVideoInApp) {
     const schemeLink = parseSchemeLink(url)
-    const isInstalled = schemeLink && (await Linking.canOpenURL(schemeLink))
-    if (schemeLink && isInstalled) {
-      await Linking.openURL(schemeLink)
-      return
+    try {
+      const isInstalled = !!schemeLink && (await Linking.canOpenURL(schemeLink))
+      if (schemeLink && isInstalled) {
+        await Linking.openURL(schemeLink)
+        return
+      }
+    } catch {
+      // Ignore error
     }
   }
 
