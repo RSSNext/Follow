@@ -13,10 +13,11 @@ import { ListsScreen } from "./Lists"
 import { ManageListScreen } from "./ManageList"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
+import { ResetPassword } from "./ResetPassword"
 
 const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
   return (
-    <Stack.Group>
+    <Stack.Group screenOptions={{ headerShown: false }}>
       <Stack.Screen key="Achievement" name="Achievement" component={AchievementScreen} />
       <Stack.Screen key="General" name="General" component={GeneralScreen} />
       <Stack.Screen key="Notifications" name="Notifications" component={NotificationsScreen} />
@@ -32,6 +33,7 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       {/* @ts-expect-error */}
       <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
       <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
     </Stack.Group>
   )
 }

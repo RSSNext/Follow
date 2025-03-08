@@ -67,6 +67,7 @@ const authClient = createAuthClient({
 // @keep-sorted
 export const {
   changeEmail,
+  changePassword,
   forgetPassword,
   getAccountInfo,
   getCookie,

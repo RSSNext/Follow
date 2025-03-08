@@ -14,6 +14,7 @@ import {
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
   GroupedInsetListSectionHeader,
+  GroupedOutlineDescription,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
 import { getDbPath } from "@/src/database"
@@ -21,9 +22,19 @@ import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
 import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
 import { GoogleCuteFiIcon } from "@/src/icons/google_cute_fi"
 import type { AuthProvider } from "@/src/lib/auth"
-import { getAccountInfo, getProviders, linkSocial, signOut, unlinkAccount } from "@/src/lib/auth"
+import {
+  forgetPassword,
+  getAccountInfo,
+  getProviders,
+  linkSocial,
+  signOut,
+  unlinkAccount,
+} from "@/src/lib/auth"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
+import { useWhoami } from "@/src/store/user/hooks"
+
+import { useSettingsNavigation } from "../hooks"
 
 type Account = {
   id: string
@@ -37,49 +48,23 @@ type Account = {
 }
 
 const accountInfoKey = ["account-info"]
-export const AccountScreen = () => {
-  const { data: accounts } = useQuery({
+
+const useAccount = () => {
+  return useQuery({
     queryKey: accountInfoKey,
     queryFn: () => getAccountInfo(),
   })
-
-  const { data: providers, isLoading } = useQuery({
-    queryKey: ["providers"],
-    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
-  })
-
-  const providerToAccountMap = useMemo(() => {
-    return Object.keys(providers || {}).reduce(
-      (acc, provider) => {
-        acc[provider] = accounts?.data?.find((account) => account.provider === provider)!
-        return acc
-      },
-      {} as Record<string, Account>,
-    )
-  }, [accounts?.data, providers])
-
+}
+export const AccountScreen = () => {
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Account" />
 
       <View className="mt-6">
-        <GroupedInsetListSectionHeader label="Authentication" />
-        <GroupedInsetListCard>
-          {providers ? (
-            Object.keys(providers).map((provider) => (
-              <AccountLinker
-                key={provider}
-                provider={provider as any}
-                account={providerToAccountMap[provider]}
-              />
-            ))
-          ) : isLoading ? (
-            <View className="flex h-12 flex-1 items-center justify-center">
-              <ActivityIndicator />
-            </View>
-          ) : null}
-        </GroupedInsetListCard>
+        <AuthenticationSection />
       </View>
+
+      <SecuritySection />
 
       {/* Danger Zone */}
       <View className="mt-6">
@@ -158,7 +143,7 @@ const AccountLinker: FC<{
       label={provider2LabelMap[provider]}
       icon={provider2IconMap[provider]}
       postfix={
-        <Text className="text-secondary-label mr-1 max-w-[100px]">
+        <Text ellipsizeMode="tail" className="text-secondary-label mr-1 max-w-[100px]">
           {account?.profile?.email || account?.profile?.name || ""}
         </Text>
       }
@@ -189,3 +174,75 @@ const AccountLinker: FC<{
   )
 }
 ;(AccountLinker as any).itemStyle = GroupedInsetListCardItemStyle.NavigationLink
+
+const AuthenticationSection = () => {
+  const { data: accounts } = useAccount()
+
+  const { data: providers, isLoading } = useQuery({
+    queryKey: ["providers"],
+    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
+  })
+
+  const providerToAccountMap = useMemo(() => {
+    return Object.keys(providers || {}).reduce(
+      (acc, provider) => {
+        acc[provider] = accounts?.data?.find((account) => account.provider === provider)!
+        return acc
+      },
+      {} as Record<string, Account>,
+    )
+  }, [accounts?.data, providers])
+  return (
+    <>
+      <GroupedInsetListSectionHeader label="Authentication" />
+      <GroupedInsetListCard>
+        {providers ? (
+          Object.keys(providers).map((provider) => (
+            <AccountLinker
+              key={provider}
+              provider={provider as any}
+              account={providerToAccountMap[provider]}
+            />
+          ))
+        ) : isLoading ? (
+          <View className="flex h-12 flex-1 items-center justify-center">
+            <ActivityIndicator />
+          </View>
+        ) : null}
+      </GroupedInsetListCard>
+      <GroupedOutlineDescription description="You can currently only connect social accounts with the same email." />
+    </>
+  )
+}
+
+const SecuritySection = () => {
+  const { data: account } = useAccount()
+  const hasPassword = account?.data?.find((account) => account.provider === "credential")
+  const router = useSettingsNavigation()
+  const whoAmI = useWhoami()
+  return (
+    <View className="mt-6">
+      <GroupedInsetListSectionHeader label="Security" />
+      <GroupedInsetListCard>
+        <GroupedPlainButtonCell
+          textClassName="text-left"
+          label="Change password"
+          onPress={() => {
+            const email = whoAmI?.email || ""
+            if (!email) {
+              toast.error("You need to login with email first")
+              return
+            }
+            if (!hasPassword) {
+              forgetPassword({ email })
+              toast.success("We have sent you an email with instructions to reset your password.")
+            } else {
+              router.navigate("ResetPassword")
+            }
+          }}
+        />
+        <GroupedPlainButtonCell textClassName="text-left" label="Setting 2FA" onPress={() => {}} />
+      </GroupedInsetListCard>
+    </View>
+  )
+}

@@ -13,4 +13,5 @@ export type SettingsStackParamList = {
   About: undefined
   ManageList: { id: string }
   EditProfile: undefined
+  ResetPassword: undefined
 }
