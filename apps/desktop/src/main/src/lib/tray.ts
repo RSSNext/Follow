@@ -32,12 +32,22 @@ export const registerAppTray = () => {
       click: showWindow,
     },
     {
-      role: "help",
       label: t("menu.help"),
       submenu: [
-        { role: "reload", label: t("menu.reload") },
-        { role: "forceReload", label: t("menu.forceReload") },
-        { role: "toggleDevTools", label: t("menu.toggleDevTools") },
+        {
+          label: t("menu.reload"),
+          click: () => {
+            const mainWindow = getMainWindowOrCreate()
+            mainWindow.webContents.reload()
+          },
+        },
+        {
+          label: t("menu.toggleDevTools"),
+          click: () => {
+            const mainWindow = getMainWindowOrCreate()
+            mainWindow.webContents.toggleDevTools()
+          },
+        },
         {
           label: t("menu.openLogFile"),
           click: async () => {
