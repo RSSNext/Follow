@@ -41,6 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       LSApplicationCategoryType: "public.app-category.news",
       ITSAppUsesNonExemptEncryption: false,
       UIBackgroundModes: ["audio"],
+      LSApplicationQueriesSchemes: ["bilibili", "youtube"],
     },
     googleServicesFile: "./build/GoogleService-Info.plist",
   },
