@@ -1,5 +1,5 @@
 import path from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { APP_PROTOCOL } from "@follow/shared"
@@ -150,7 +150,8 @@ export function createWindow(
     const dynamicRenderEntry = loadDynamicRenderEntry()
     logger.info("load dynamic render entry", dynamicRenderEntry)
     const appLoadFileEntry = dynamicRenderEntry || path.resolve(__dirname, "../renderer/index.html")
-    const appLoadEntry = `app://follow.is${appLoadFileEntry}${options?.extraPath || ""}`
+
+    const appLoadEntry = `app://follow.is${pathToFileURL(appLoadFileEntry).pathname}${options?.extraPath || ""}`
 
     window.loadURL(appLoadEntry)
     logger.log("load URL", appLoadEntry)

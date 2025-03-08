@@ -1,5 +1,3 @@
-import url from "node:url"
-
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
 import { APP_PROTOCOL } from "@follow/shared/constants"
@@ -77,7 +75,7 @@ function bootstrap() {
     protocol.handle("app", (request) => {
       try {
         const urlObj = new URL(request.url)
-        return net.fetch(url.pathToFileURL(urlObj.pathname).toString())
+        return net.fetch(`file://${urlObj.pathname}`)
       } catch {
         logger.error("app protocol error", request.url)
         return new Response("Not found", { status: 404 })
