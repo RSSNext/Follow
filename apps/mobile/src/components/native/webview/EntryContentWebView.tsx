@@ -1,6 +1,6 @@
 import { clsx } from "@follow/utils"
 import { requireNativeView } from "expo"
-import { useAtom, useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import * as React from "react"
 import { useEffect } from "react"
 import type { ViewProps } from "react-native"
@@ -8,7 +8,6 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
-import { useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import type { EntryModel } from "@/src/store/entry/types"
 
 import { Portal } from "../../ui/portal"
@@ -26,6 +25,7 @@ const NativeView: React.ComponentType<
 type EntryContentWebViewProps = {
   entry: EntryModel
   noMedia?: boolean
+  showSource?: boolean
 }
 
 const setCodeTheme = (light: string, dark: string) => {
@@ -54,20 +54,18 @@ const setShowSource = (value: boolean) => {
 }
 
 export function EntryContentWebView(props: EntryContentWebViewProps) {
-  const { showSourceAtom } = useEntryContentContext()
-  const showSource = useAtomValue(showSourceAtom)
-  useEffect(() => {
-    setShowSource(!!showSource)
-  }, [showSource])
-
   const [contentHeight, setContentHeight] = useAtom(sharedWebViewHeightAtom)
 
   const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
   const codeThemeDark = useUISettingKey("codeHighlightThemeDark")
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-  const { entry, noMedia } = props
+  const { entry, noMedia, showSource } = props
 
   const [mode, setMode] = React.useState<"normal" | "debug">("normal")
+
+  useEffect(() => {
+    setShowSource(!!showSource)
+  }, [showSource])
 
   useEffect(() => {
     setNoMedia(!!noMedia)

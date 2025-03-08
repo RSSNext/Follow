@@ -20,6 +20,9 @@ export const envSchema = {
   VITE_EXTERNAL_API_URL: z.string().optional(),
   VITE_WEB_PROD_URL: z.string().optional(),
   VITE_WEB_DEV_URL: z.string().optional(),
+
+  VITE_RECAPTCHA_V2_SITE_KEY: z.string().default("6LdxQ-sqAAAAAN-_za3hUdFkJEO_cu2xHSpLKVan"),
+  VITE_RECAPTCHA_V3_SITE_KEY: z.string().default("6LdG-asqAAAAAEXr96565MKbRvxGEv31XEykRSHV"),
 }
 
 export const isDev = false

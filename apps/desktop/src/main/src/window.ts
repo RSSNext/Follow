@@ -1,5 +1,5 @@
 import path from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { APP_PROTOCOL } from "@follow/shared"
@@ -112,7 +112,7 @@ export function createWindow(
   const handleExternalProtocol = async (e: Event, url: string, window: BrowserWindow) => {
     const { protocol } = new URL(url)
 
-    const ignoreProtocols = ["http", "https", APP_PROTOCOL, "file", "code", "cursor"]
+    const ignoreProtocols = ["http", "https", APP_PROTOCOL, "file", "code", "cursor", "app"]
     if (ignoreProtocols.includes(protocol.slice(0, -1))) {
       return
     }
@@ -149,14 +149,12 @@ export function createWindow(
     // Production entry
     const dynamicRenderEntry = loadDynamicRenderEntry()
     logger.info("load dynamic render entry", dynamicRenderEntry)
-    const appLoadEntry = dynamicRenderEntry || path.resolve(__dirname, "../renderer/index.html")
+    const appLoadFileEntry = dynamicRenderEntry || path.resolve(__dirname, "../renderer/index.html")
 
-    window.loadFile(appLoadEntry, {
-      hash: options?.extraPath,
-    })
-    logger.log(appLoadEntry, {
-      hash: options?.extraPath,
-    })
+    const appLoadEntry = `app://follow.is${pathToFileURL(appLoadFileEntry).pathname}${options?.extraPath || ""}`
+
+    window.loadURL(appLoadEntry)
+    logger.log("load URL", appLoadEntry)
   }
 
   if (isWindows) {

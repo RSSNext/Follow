@@ -5,7 +5,7 @@ import { env } from "@follow/shared/env.desktop"
 import { createBuildSafeHeaders } from "@follow/utils/headers"
 import { IMAGE_PROXY_URL } from "@follow/utils/img-proxy"
 import { parse } from "cookie-es"
-import { app, BrowserWindow, session } from "electron"
+import { app, BrowserWindow, net, protocol, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { DEVICE_ID } from "./constants/system"
@@ -16,6 +16,7 @@ import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
 import { registerAppTray } from "./lib/tray"
 import { setBetterAuthSessionCookie, updateNotificationsToken } from "./lib/user"
+import { logger } from "./logger"
 import { registerUpdater } from "./updater"
 import { cleanupOldRender } from "./updater/hot-updater"
 import {
@@ -71,6 +72,16 @@ function bootstrap() {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.whenReady().then(async () => {
+    protocol.handle("app", (request) => {
+      try {
+        const urlObj = new URL(request.url)
+        return net.fetch(`file://${urlObj.pathname}`)
+      } catch {
+        logger.error("app protocol error", request.url)
+        return new Response("Not found", { status: 404 })
+      }
+    })
+
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils

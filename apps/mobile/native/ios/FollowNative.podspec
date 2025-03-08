@@ -21,14 +21,14 @@ Pod::Spec.new do |s|
   s.dependency 'ExpoModulesCore'
   s.dependency 'SnapKit', '~> 5.7.0'
   s.dependency 'SDWebImage', '~> 5.0'
-  s.dependency 'SPIndicator', '~> 1.0.0'
+  s.dependency 'SPIndicator', '~> 1.6.4'
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
   }
 
   s.source_files = "**/*.{h,m,mm,swift,hpp,cpp,js}"
-  
+
   s.resource_bundles = {
     'js' => ['SharedWebView/injected/**/*'],
     'FollowNative' => ['Media.xcassets'],

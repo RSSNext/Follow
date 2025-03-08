@@ -10,6 +10,8 @@ import {
 import { Input } from "@follow/components/ui/input/Input.js"
 import { env } from "@follow/shared/env.desktop"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRef } from "react"
+import ReCAPTCHA from "react-google-recaptcha"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -40,10 +42,16 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
   const { present } = useModalStack()
   const { dismiss } = useCurrentModal()
 
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const token = await recaptchaRef.current?.executeAsync()
     const res = await loginHandler("credential", runtime, {
       email: values.email,
       password: values.password,
+      headers: {
+        "x-token": `r2:${token}`,
+      },
     })
     if (res?.error) {
       toast.error(res.error.message)
@@ -115,6 +123,7 @@ export function LoginWithPassword({ runtime }: { runtime: LoginRuntime }) {
           )}
         />
         <div className="flex flex-col space-y-3">
+          <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
           <Button
             type="submit"
             isLoading={form.formState.isSubmitting}
@@ -167,7 +176,10 @@ function RegisterForm() {
 
   const { isValid } = form.formState
 
-  function onSubmit(values: z.infer<typeof registerFormSchema>) {
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    const token = await recaptchaRef.current?.executeAsync()
     return signUp.email({
       email: values.email,
       password: values.password,
@@ -179,6 +191,9 @@ function RegisterForm() {
         },
         onError(context) {
           toast.error(context.error.message)
+        },
+        headers: {
+          "x-token": `r2:${token}`,
         },
       },
     })
@@ -227,6 +242,7 @@ function RegisterForm() {
               </FormItem>
             )}
           />
+          <ReCAPTCHA ref={recaptchaRef} sitekey={env.VITE_RECAPTCHA_V2_SITE_KEY} size="invisible" />
           <Button disabled={!isValid} type="submit" className="w-full" size="lg">
             {t("register.submit")}
           </Button>

@@ -34,17 +34,34 @@ extension ToastType {
     }
   }
 }
+
+enum Position: String, Enumerable {
+  case top
+  case center
+  case bottom
+}
+
+extension Position {
+  func toSPPresentSide() -> SPIndicatorPresentSide {
+    switch self {
+    case .top: .top
+    case .center: .center
+    case .bottom: .bottom
+    }
+  }
+}
+
 struct ToastOptions: Record {
   @Field
   var message: String?
   @Field
   var type: ToastType = .info
-
   @Field
   var duration: Double = 1.5
   @Field
   var title: String
-
+  @Field
+  var position: Position?
 }
 
 public class ToasterModule: Module {
@@ -56,6 +73,11 @@ public class ToasterModule: Module {
       DispatchQueue.main.sync {
         let indicatorView = SPIndicatorView(
           title: value.title, message: value.message, preset: value.type.type())
+
+        if value.position != nil {
+          indicatorView.presentSide = value.position!.toSPPresentSide()
+        }
+
         indicatorView.present(duration: value.duration, haptic: value.type.haptic())
       }
     }
