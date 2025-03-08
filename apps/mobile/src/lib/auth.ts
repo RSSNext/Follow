@@ -71,11 +71,13 @@ export const {
   getAccountInfo,
   getCookie,
   getProviders,
+  linkSocial,
   sendVerificationEmail,
   signIn,
   signOut,
   signUp,
   twoFactor,
+  unlinkAccount,
   updateUser,
   useSession,
 } = authClient

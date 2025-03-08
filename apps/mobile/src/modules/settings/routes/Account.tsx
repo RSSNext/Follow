@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import * as FileSystem from "expo-file-system"
 import type { FC } from "react"
 import { useMemo } from "react"
@@ -20,7 +20,9 @@ import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
 import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
 import { GoogleCuteFiIcon } from "@/src/icons/google_cute_fi"
 import type { AuthProvider } from "@/src/lib/auth"
-import { getAccountInfo, getProviders, signOut } from "@/src/lib/auth"
+import { getAccountInfo, getProviders, linkSocial, signOut, unlinkAccount } from "@/src/lib/auth"
+import { openLink } from "@/src/lib/native"
+import { toast } from "@/src/lib/toast"
 
 type Account = {
   id: string
@@ -32,9 +34,11 @@ type Account = {
     image?: string
   } | null
 }
+
+const accountInfoKey = ["account-info"]
 export const AccountScreen = () => {
   const { data: accounts } = useQuery({
-    queryKey: ["account-info"],
+    queryKey: accountInfoKey,
     queryFn: () => getAccountInfo(),
   })
 
@@ -127,6 +131,21 @@ const AccountLinker: FC<{
   provider: keyof typeof provider2IconMap
   account?: Account
 }> = ({ provider, account }) => {
+  const queryClient = useQueryClient()
+  const unlinkAccountMutation = useMutation({
+    mutationFn: async () => {
+      const res = await unlinkAccount({ providerId: provider })
+      if (res.error) throw new Error(res.error.message)
+    },
+    onSuccess: () => {
+      toast.success("Unlinked account success")
+      queryClient.invalidateQueries({ queryKey: accountInfoKey })
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
   if (!provider2LabelMap[provider]) return null
   return (
     <GroupedInsetListNavigationLink
@@ -137,7 +156,27 @@ const AccountLinker: FC<{
           {account?.profile?.email || account?.profile?.name || ""}
         </Text>
       }
-      onPress={() => {}}
+      onPress={() => {
+        if (!account) {
+          linkSocial({
+            provider: provider as any,
+          }).then((res) => {
+            if (res.data) {
+              openLink(res.data.url)
+            }
+          })
+          return
+        }
+
+        Alert.alert("Unlink account", "Are you sure you want to unlink your account?", [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Unlink",
+            style: "destructive",
+            onPress: () => unlinkAccountMutation.mutate(),
+          },
+        ])
+      }}
     />
   )
 }
