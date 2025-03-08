@@ -92,3 +92,8 @@
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+[title="recaptcha challenge expires in two minutes"] {
+  pointer-events: auto !important;
+  -webkit-app-region: no-drag !important;
+}
