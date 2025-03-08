@@ -9,6 +9,9 @@ import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { useColor } from "@/src/theme/colors"
 
+export enum GroupedInsetListCardItemStyle {
+  NavigationLink = "NavigationLink",
+}
 type GroupedInsetListCardProps = {
   showSeparator?: boolean
 }
@@ -43,7 +46,8 @@ export const GroupedInsetListCard: FC<
             const isNavigationLink =
               React.isValidElement(child) &&
               // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-              (child.type as Function).name === GroupedInsetListNavigationLink.name
+              ((child.type as Function).name === GroupedInsetListNavigationLink.name ||
+                (child.type as any).itemStyle === GroupedInsetListCardItemStyle.NavigationLink)
 
             return (
               <Fragment key={index}>

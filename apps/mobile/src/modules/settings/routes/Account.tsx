@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import * as FileSystem from "expo-file-system"
 import type { FC } from "react"
 import { useMemo } from "react"
-import { Alert, Text, View } from "react-native"
+import { ActivityIndicator, Alert, Text, View } from "react-native"
 
 import {
   NavigationBlurEffectHeader,
@@ -10,6 +10,7 @@ import {
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListCard,
+  GroupedInsetListCardItemStyle,
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
   GroupedInsetListSectionHeader,
@@ -42,7 +43,7 @@ export const AccountScreen = () => {
     queryFn: () => getAccountInfo(),
   })
 
-  const { data: providers } = useQuery({
+  const { data: providers, isLoading } = useQuery({
     queryKey: ["providers"],
     queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
   })
@@ -60,20 +61,25 @@ export const AccountScreen = () => {
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Account" />
-      {providers && (
-        <View className="mt-6">
-          <GroupedInsetListSectionHeader label="Authentication" />
-          <GroupedInsetListCard>
-            {Object.keys(providers).map((provider) => (
+
+      <View className="mt-6">
+        <GroupedInsetListSectionHeader label="Authentication" />
+        <GroupedInsetListCard>
+          {providers ? (
+            Object.keys(providers).map((provider) => (
               <AccountLinker
                 key={provider}
                 provider={provider as any}
                 account={providerToAccountMap[provider]}
               />
-            ))}
-          </GroupedInsetListCard>
-        </View>
-      )}
+            ))
+          ) : isLoading ? (
+            <View className="flex h-12 flex-1 items-center justify-center">
+              <ActivityIndicator />
+            </View>
+          ) : null}
+        </GroupedInsetListCard>
+      </View>
 
       {/* Danger Zone */}
       <View className="mt-6">
@@ -163,6 +169,8 @@ const AccountLinker: FC<{
           }).then((res) => {
             if (res.data) {
               openLink(res.data.url)
+            } else {
+              toast.error("Failed to link account")
             }
           })
           return
@@ -180,3 +188,4 @@ const AccountLinker: FC<{
     />
   )
 }
+;(AccountLinker as any).itemStyle = GroupedInsetListCardItemStyle.NavigationLink
