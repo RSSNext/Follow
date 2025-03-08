@@ -1,5 +1,8 @@
+import { useQuery } from "@tanstack/react-query"
 import * as FileSystem from "expo-file-system"
-import { Alert, View } from "react-native"
+import type { FC } from "react"
+import { useMemo } from "react"
+import { Alert, Text, View } from "react-native"
 
 import {
   NavigationBlurEffectHeader,
@@ -7,20 +10,66 @@ import {
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import {
   GroupedInsetListCard,
+  GroupedInsetListNavigationLink,
+  GroupedInsetListNavigationLinkIcon,
   GroupedInsetListSectionHeader,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
 import { getDbPath } from "@/src/database"
-import { signOut } from "@/src/lib/auth"
+import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
+import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
+import { GoogleCuteFiIcon } from "@/src/icons/google_cute_fi"
+import type { AuthProvider } from "@/src/lib/auth"
+import { getAccountInfo, getProviders, signOut } from "@/src/lib/auth"
 
+type Account = {
+  id: string
+  provider: string
+  profile: {
+    id?: string
+    email?: string
+    name?: string
+    image?: string
+  } | null
+}
 export const AccountScreen = () => {
+  const { data: accounts } = useQuery({
+    queryKey: ["account-info"],
+    queryFn: () => getAccountInfo(),
+  })
+
+  const { data: providers } = useQuery({
+    queryKey: ["providers"],
+    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
+  })
+
+  const providerToAccountMap = useMemo(() => {
+    return Object.keys(providers || {}).reduce(
+      (acc, provider) => {
+        acc[provider] = accounts?.data?.find((account) => account.provider === provider)!
+        return acc
+      },
+      {} as Record<string, Account>,
+    )
+  }, [accounts?.data, providers])
+
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Account" />
-      <View className="mt-6">
-        <GroupedInsetListSectionHeader label="Authentication" />
-        <GroupedInsetListCard />
-      </View>
+      {providers && (
+        <View className="mt-6">
+          <GroupedInsetListSectionHeader label="Authentication" />
+          <GroupedInsetListCard>
+            {Object.keys(providers).map((provider) => (
+              <AccountLinker
+                key={provider}
+                provider={provider as any}
+                account={providerToAccountMap[provider]}
+              />
+            ))}
+          </GroupedInsetListCard>
+        </View>
+      )}
 
       {/* Danger Zone */}
       <View className="mt-6">
@@ -48,5 +97,47 @@ export const AccountScreen = () => {
         </GroupedInsetListCard>
       </View>
     </SafeNavigationScrollView>
+  )
+}
+
+const provider2IconMap = {
+  google: (
+    <GroupedInsetListNavigationLinkIcon backgroundColor="#4081EC">
+      <GoogleCuteFiIcon height={24} width={24} color="#fff" />
+    </GroupedInsetListNavigationLinkIcon>
+  ),
+  github: (
+    <GroupedInsetListNavigationLinkIcon backgroundColor="#000">
+      <GithubCuteFiIcon height={24} width={24} color="#fff" />
+    </GroupedInsetListNavigationLinkIcon>
+  ),
+  apple: (
+    <GroupedInsetListNavigationLinkIcon backgroundColor="#000">
+      <AppleCuteFiIcon height={24} width={24} color="#fff" />
+    </GroupedInsetListNavigationLinkIcon>
+  ),
+}
+
+const provider2LabelMap = {
+  google: "Google",
+  github: "GitHub",
+  apple: "Apple",
+}
+const AccountLinker: FC<{
+  provider: keyof typeof provider2IconMap
+  account?: Account
+}> = ({ provider, account }) => {
+  if (!provider2LabelMap[provider]) return null
+  return (
+    <GroupedInsetListNavigationLink
+      label={provider2LabelMap[provider]}
+      icon={provider2IconMap[provider]}
+      postfix={
+        <Text className="text-secondary-label mr-1 max-w-[100px]">
+          {account?.profile?.email || account?.profile?.name || ""}
+        </Text>
+      }
+      onPress={() => {}}
+    />
   )
 }
