@@ -3,6 +3,8 @@ import { app, Menu, nativeImage, Tray } from "electron"
 
 import { isMacOS } from "~/env"
 import { getTrayIconPath } from "~/helper"
+import { revealLogFile } from "~/logger"
+import { checkForAppUpdates } from "~/updater"
 
 import { getMainWindowOrCreate } from "../window"
 import { t } from "./i18n"
@@ -28,6 +30,28 @@ export const registerAppTray = () => {
     {
       label: t("menu.open", { name }),
       click: showWindow,
+    },
+    {
+      role: "help",
+      label: t("menu.help"),
+      submenu: [
+        { role: "reload", label: t("menu.reload") },
+        { role: "forceReload", label: t("menu.forceReload") },
+        { role: "toggleDevTools", label: t("menu.toggleDevTools") },
+        {
+          label: t("menu.openLogFile"),
+          click: async () => {
+            await revealLogFile()
+          },
+        },
+        {
+          label: t("menu.checkForUpdates"),
+          click: async () => {
+            showWindow()
+            await checkForAppUpdates()
+          },
+        },
+      ],
     },
     { label: t("menu.quit", { name }), click: () => app.quit() },
   ])
