@@ -54,6 +54,7 @@ export default defineConfig(
             "You can use `useLocaltion` or `getReadonlyRoute` to get the route info.",
         },
       ],
+      "@eslint-react/naming-convention/use-state": "off",
     },
   },
   // use correct tailwind config for eslint
