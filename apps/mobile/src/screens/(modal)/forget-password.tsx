@@ -8,8 +8,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { forgetPassword } from "@/src/lib/auth"
-import { getDeviceTokenHeaders } from "@/src/lib/device-token"
 import { toast } from "@/src/lib/toast"
+import { getTokenHeaders } from "@/src/lib/token"
 
 export default function ForgetPassword() {
   const offset = useSafeAreaInsets()
@@ -20,7 +20,7 @@ export default function ForgetPassword() {
       const res = await forgetPassword(
         { email },
         {
-          headers: await getDeviceTokenHeaders(),
+          headers: await getTokenHeaders(),
         },
       )
       if (res.error) {

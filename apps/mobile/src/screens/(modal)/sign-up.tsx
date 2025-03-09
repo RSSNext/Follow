@@ -12,8 +12,8 @@ import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { Logo } from "@/src/components/ui/logo"
 import { signUp } from "@/src/lib/auth"
-import { getDeviceTokenHeaders } from "@/src/lib/device-token"
 import { toast } from "@/src/lib/toast"
+import { getTokenHeaders } from "@/src/lib/token"
 import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z
@@ -38,7 +38,7 @@ async function onSubmit(values: FormValue) {
         name: values.email.split("@")[0] ?? "",
       },
       {
-        headers: await getDeviceTokenHeaders(),
+        headers: await getTokenHeaders(),
       },
     )
     .then((res) => {

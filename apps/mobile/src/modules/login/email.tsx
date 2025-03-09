@@ -11,8 +11,8 @@ import { z } from "zod"
 import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { signIn } from "@/src/lib/auth"
-import { getDeviceTokenHeaders } from "@/src/lib/device-token"
 import { toast } from "@/src/lib/toast"
+import { getTokenHeaders } from "@/src/lib/token"
 import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
@@ -30,7 +30,7 @@ async function onSubmit(values: FormValue) {
         password: values.password,
       },
       {
-        headers: await getDeviceTokenHeaders(),
+        headers: await getTokenHeaders(),
       },
     )
     .then((res) => {

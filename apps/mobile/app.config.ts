@@ -111,6 +111,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-secure-store",
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
+    "@react-native-firebase/app-check",
     [
       "expo-image-picker",
       {

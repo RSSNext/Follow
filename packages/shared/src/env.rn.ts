@@ -24,4 +24,5 @@ export const envProfileMap = {
 export const env = {
   VITE_WEB_URL: envProfileMap[profile].VITE_WEB_URL,
   VITE_API_URL: envProfileMap[profile].VITE_API_URL,
+  APP_CHECK_DEBUG_TOKEN: "",
 }
