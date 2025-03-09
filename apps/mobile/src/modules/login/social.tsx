@@ -50,7 +50,7 @@ export function SocialLogin() {
             <TouchableOpacity
               key={key}
               hitSlop={20}
-              className="border-opaque-separator border-hairline rounded-full p-2"
+              className="border-opaque-separator border-hairline rounded-full p-3"
               onPress={async () => {
                 if (!data?.[providerInfo.id]) return
 
@@ -88,8 +88,8 @@ export function SocialLogin() {
               disabled={!data?.[providerInfo.id]}
             >
               <providerInfo.icon
-                width={24}
-                height={24}
+                width={26}
+                height={26}
                 color={colorScheme === "dark" ? providerInfo.darkColor : providerInfo.color}
               />
             </TouchableOpacity>
