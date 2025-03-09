@@ -22,6 +22,10 @@ export const imageRefererMatches = [
     referer: "https://www.piokok.com",
     force: true,
   },
+  {
+    url: /^https?:\/\/[\w-]+\.xhscdn\.com/,
+    referer: "https://www.xiaohongshu.com",
+  },
 ]
 
 const webpCloudPublicServicesMatches = [

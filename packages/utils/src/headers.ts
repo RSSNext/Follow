@@ -21,10 +21,12 @@ export const createBuildSafeHeaders =
       const referer = refererMatch?.referer
       if (referer) {
         headers.Referer = referer
+        headers.Origin = referer
       } else {
         try {
           const urlObj = new URL(url)
           headers.Referer = urlObj.origin
+          headers.Origin = urlObj.origin
         } catch (error) {
           console.error(error)
         }
