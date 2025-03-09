@@ -9,6 +9,7 @@ import { env } from "@follow/shared/env.desktop"
 import { app, BrowserWindow, clipboard, dialog, shell } from "electron"
 
 import { BETTER_AUTH_COOKIE_NAME_SESSION_TOKEN } from "~/constants/app"
+import { filePathToAppUrl } from "~/helper"
 import { registerMenuAndContextMenu } from "~/init"
 import { clearAllData, getCacheSize } from "~/lib/cleaner"
 import { store, StoreKey } from "~/lib/store"
@@ -210,7 +211,7 @@ export const appRoute = {
 
   getAppPath: t.procedure.action(async () => app.getAppPath()),
   resolveAppAsarPath: t.procedure.input<string>().action(async ({ input }) => {
-    return path.resolve(app.getAppPath(), input)
+    return filePathToAppUrl(path.resolve(app.getAppPath(), input))
   }),
 
   switchAppLocale: t.procedure.input<string>().action(async ({ input }) => {

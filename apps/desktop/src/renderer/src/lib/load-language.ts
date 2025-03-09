@@ -1,6 +1,6 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { EventBus } from "@follow/utils/event-bus"
-import { getOS, isEmptyObject } from "@follow/utils/utils"
+import { isEmptyObject } from "@follow/utils/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"
@@ -76,11 +76,6 @@ export const loadLanguageAndApply = async (lang: string) => {
     if (IN_ELECTRON) {
       importFilePath =
         (await tipcClient?.resolveAppAsarPath(`dist/renderer/locales/${lang}.js`)) || ""
-
-      // FUCK windows
-      if (getOS() === "Windows") {
-        importFilePath = importFilePath.replaceAll("\\", "/")
-      }
     } else {
       importFilePath = `/locales/${lang}.js`
     }

@@ -1,5 +1,5 @@
 import path from "node:path"
-import { fileURLToPath, pathToFileURL } from "node:url"
+import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { APP_PROTOCOL } from "@follow/shared"
@@ -10,7 +10,7 @@ import type { Event } from "electron/main"
 
 import { START_IN_TRAY_ARGS } from "./constants/app"
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
-import { getIconPath } from "./helper"
+import { filePathToAppUrl, getIconPath } from "./helper"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { getTrayConfig } from "./lib/tray"
@@ -151,7 +151,7 @@ export function createWindow(
     logger.info("load dynamic render entry", dynamicRenderEntry)
     const appLoadFileEntry = dynamicRenderEntry || path.resolve(__dirname, "../renderer/index.html")
 
-    const appLoadEntry = `app://follow.is${pathToFileURL(appLoadFileEntry).pathname}${options?.extraPath || ""}`
+    const appLoadEntry = `${filePathToAppUrl(appLoadFileEntry)}${options?.extraPath || ""}`
 
     window.loadURL(appLoadEntry)
     logger.log("load URL", appLoadEntry)

@@ -1,5 +1,5 @@
 import path from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
 import { isMacOS, isWindows } from "./env"
 
@@ -18,4 +18,8 @@ export const getTrayIconPath = () => {
     return path.join(__dirname, "../../resources/icon-no-padding.ico")
   }
   return getIconPath()
+}
+
+export const filePathToAppUrl = (filePath: string) => {
+  return `app://follow.is${pathToFileURL(filePath).pathname}`
 }
