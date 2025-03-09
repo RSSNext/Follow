@@ -12,6 +12,7 @@ import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { Logo } from "@/src/components/ui/logo"
 import { signUp } from "@/src/lib/auth"
+import { getDeviceTokenHeaders } from "@/src/lib/device-token"
 import { toast } from "@/src/lib/toast"
 import { accentColor } from "@/src/theme/colors"
 
@@ -30,11 +31,16 @@ type FormValue = z.infer<typeof formSchema>
 
 async function onSubmit(values: FormValue) {
   await signUp
-    .email({
-      email: values.email,
-      password: values.password,
-      name: values.email.split("@")[0] ?? "",
-    })
+    .email(
+      {
+        email: values.email,
+        password: values.password,
+        name: values.email.split("@")[0] ?? "",
+      },
+      {
+        headers: await getDeviceTokenHeaders(),
+      },
+    )
     .then((res) => {
       if (res.error?.message) {
         toast.error(res.error.message)

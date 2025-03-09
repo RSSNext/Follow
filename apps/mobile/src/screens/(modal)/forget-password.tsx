@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { forgetPassword } from "@/src/lib/auth"
+import { getDeviceTokenHeaders } from "@/src/lib/device-token"
 import { toast } from "@/src/lib/toast"
 
 export default function ForgetPassword() {
@@ -16,7 +17,12 @@ export default function ForgetPassword() {
 
   const forgetPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      const res = await forgetPassword({ email })
+      const res = await forgetPassword(
+        { email },
+        {
+          headers: await getDeviceTokenHeaders(),
+        },
+      )
       if (res.error) {
         throw new Error(res.error.message)
       }

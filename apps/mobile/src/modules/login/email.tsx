@@ -11,6 +11,7 @@ import { z } from "zod"
 import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { signIn } from "@/src/lib/auth"
+import { getDeviceTokenHeaders } from "@/src/lib/device-token"
 import { toast } from "@/src/lib/toast"
 import { accentColor } from "@/src/theme/colors"
 
@@ -23,10 +24,15 @@ type FormValue = z.infer<typeof formSchema>
 
 async function onSubmit(values: FormValue) {
   await signIn
-    .email({
-      email: values.email,
-      password: values.password,
-    })
+    .email(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        headers: await getDeviceTokenHeaders(),
+      },
+    )
     .then((res) => {
       if (res.error) {
         throw new Error(res.error.message)
