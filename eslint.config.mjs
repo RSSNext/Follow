@@ -11,7 +11,7 @@ import packageJsonExtend from "./plugins/eslint/eslint-package-json.js"
 import recursiveSort from "./plugins/eslint/eslint-recursive-sort.js"
 
 // for nativewind preset
-process.env["TAILWIND_MODE"] = "true"
+process.env.TAILWIND_MODE = "build"
 
 export default defineConfig(
   {
