@@ -10,6 +10,9 @@ import noDebug from "./plugins/eslint/eslint-no-debug.js"
 import packageJsonExtend from "./plugins/eslint/eslint-package-json.js"
 import recursiveSort from "./plugins/eslint/eslint-recursive-sort.js"
 
+// for nativewind preset
+process.env["TAILWIND_MODE"] = "true"
+
 export default defineConfig(
   {
     formatting: false,
