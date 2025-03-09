@@ -9,7 +9,7 @@ export const useSetState = <T extends object>(
   const [state, set] = useState<T>(initialState)
   const setState = useCallback((patch: any) => {
     set((prevState) =>
-      Object.assign({}, prevState, patch instanceof Function ? patch(prevState) : patch),
+      Object.assign({}, prevState, typeof patch === "function" ? patch(prevState) : patch),
     )
   }, [])
 
