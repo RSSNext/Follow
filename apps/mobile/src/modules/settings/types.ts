@@ -12,6 +12,7 @@ export type SettingsStackParamList = {
   Privacy: undefined
   About: undefined
   ManageList: { id: string }
+  ManageRule: { index?: number }
   EditProfile: undefined
   ResetPassword: undefined
 }

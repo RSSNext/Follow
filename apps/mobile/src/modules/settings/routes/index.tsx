@@ -11,6 +11,7 @@ import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
 import { ManageListScreen } from "./ManageList"
+import { ManageRuleScreen } from "./ManageRule"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
 import { ResetPassword } from "./ResetPassword"
@@ -32,6 +33,8 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
 
       {/* @ts-expect-error */}
       <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
+      {/* @ts-expect-error */}
+      <Stack.Screen key="ManageRule" name="ManageRule" component={ManageRuleScreen} />
       <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
     </Stack.Group>
