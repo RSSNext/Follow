@@ -1,11 +1,16 @@
 {
-  "platforms": ["apple", "android"],
+  "platforms": [
+    "apple",
+    "android"
+  ],
   "apple": {
     "modules": [
       "SharedWebViewModule",
       "HelperModule",
       "ToasterModule",
-      "AppleIntelligenceGlowEffectModule"
+      "AppleIntelligenceGlowEffectModule",
+      "FollowNative.GaleriaModule",
+      "GaleriaAccessoryModule"
     ]
   },
   "android": {

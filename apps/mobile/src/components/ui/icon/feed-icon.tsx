@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 import { useMemo } from "react"
 
 import type { FeedSchema } from "@/src/database/schemas/types"
+import { getFeedIconSource } from "@/src/lib/image"
 
 import { ProxiedImage } from "../image/ProxiedImage"
 
@@ -15,13 +16,8 @@ export type FeedIconRequiredFeed = Pick<
   type: FeedViewType
   siteUrl?: string
 }
-type FeedIconFeed = FeedIconRequiredFeed | FeedSchema
+export type FeedIconFeed = FeedIconRequiredFeed | FeedSchema
 
-const getFeedIconSrc = (siteUrl: string, fallback: boolean) => {
-  const ret = getUrlIcon(siteUrl, fallback)
-
-  return [ret.src, ret.fallbackUrl]
-}
 interface FeedIconProps {
   feed?: FeedIconFeed
   fallbackUrl?: string
@@ -45,19 +41,7 @@ export function FeedIcon({
   ...props
 }: FeedIconProps & ImageProps) {
   const src = useMemo(() => {
-    switch (true) {
-      case !feed && !!siteUrl: {
-        const [src] = getFeedIconSrc(siteUrl, fallback)
-        return src
-      }
-      case !!feed && !!feed.image: {
-        return feed.image
-      }
-      case !!feed && !feed.image && !!feed.siteUrl: {
-        const [src] = getFeedIconSrc(feed.siteUrl, fallback)
-        return src
-      }
-    }
+    return getFeedIconSource(feed, siteUrl, fallback)
   }, [fallback, feed, siteUrl])
 
   if (!src) {

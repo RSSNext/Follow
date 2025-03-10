@@ -1,5 +1,3 @@
-import { Galeria } from "@nandorojo/galeria"
-import { Image } from "expo-image"
 import { useEffect, useState } from "react"
 import { ScrollView, View } from "react-native"
 import Animated, {
@@ -9,11 +7,11 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated"
 
+import { Galeria } from "@/src/components/ui/image/galeria"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { EntryGridFooter } from "@/src/modules/entry-content/EntryGridFooter"
 
 import { ImageContextMenu } from "../image/ImageContextMenu"
-import type { PreviewImageProps } from "../image/PreviewImage"
 import { PreviewImage } from "../image/PreviewImage"
 import { ProxiedImage } from "../image/ProxiedImage"
 
@@ -22,8 +20,7 @@ export const MediaCarousel = ({
   media,
   onPreview,
   aspectRatio,
-  Accessory,
-  AccessoryProps,
+
   noPreview,
 }: {
   entryId: string
@@ -31,7 +28,7 @@ export const MediaCarousel = ({
   onPreview?: () => void
   aspectRatio: number
   noPreview?: boolean
-} & Pick<PreviewImageProps, "Accessory" | "AccessoryProps">) => {
+}) => {
   const [containerWidth, setContainerWidth] = useState(0)
   const containerHeight = Math.floor(containerWidth / aspectRatio)
   const hasMany = media.length > 1
@@ -79,7 +76,7 @@ export const MediaCarousel = ({
                           width: containerWidth,
                         }}
                       /> */}
-                      <Galeria.Image>
+                      <Galeria.Image onPreview={onPreview}>
                         <ProxiedImage
                           proxy={{
                             height: 400,
