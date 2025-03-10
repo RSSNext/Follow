@@ -9,9 +9,9 @@ import {
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
+  GroupedInsetListActionCellRadio,
   GroupedInsetListCard,
   GroupedInsetListCell,
-  GroupedInsetListCellRadio,
   GroupedInsetListSectionHeader,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
@@ -82,14 +82,14 @@ const FilterSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
     <View>
       <GroupedInsetListSectionHeader label="When feeds match..." />
       <GroupedInsetListCard>
-        <GroupedInsetListCellRadio
+        <GroupedInsetListActionCellRadio
           label="All"
           selected={!hasCustomFilters}
           onPress={() => {
             actionActions.toggleRuleFilter(rule.index)
           }}
         />
-        <GroupedInsetListCellRadio
+        <GroupedInsetListActionCellRadio
           label="Custom filters"
           selected={hasCustomFilters}
           onPress={() => {
