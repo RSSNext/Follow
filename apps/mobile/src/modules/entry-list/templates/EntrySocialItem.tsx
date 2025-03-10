@@ -8,7 +8,7 @@ import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -104,15 +104,16 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
           <View className="ml-10 flex flex-row flex-wrap gap-2">
             {media.map((image, idx) => {
               return (
-                <PreviewImage
+                <Image
                   key={`${entryId}-${idx}`}
-                  className="ml-2 h-20 rounded-md"
+                  className="ml-2 h-20 w-auto rounded-md"
                   blurhash={image.blurhash}
-                  imageUrl={image.url}
+                  source={{ uri: image.url }}
                   aspectRatio={image.width && image.height ? image.width / image.height : 1}
                   proxy={{
                     height: 80,
                   }}
+                  enablePreview
                 />
               )
             })}
