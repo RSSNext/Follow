@@ -1,3 +1,4 @@
+import { Image } from "expo-image"
 import type { RefObject } from "react"
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { Dimensions, Modal, Pressable, useWindowDimensions, View } from "react-native"
@@ -15,13 +16,18 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 
 import { PortalHost } from "../portal"
-import type { ImageProps } from "./Image"
-import { Image } from "./Image"
 import { ImageContextMenu } from "./ImageContextMenu"
+
+interface PreviewImageProps {
+  imageUrl: string
+  blurhash?: string | undefined
+  aspectRatio: number
+  recyclingKey?: string
+}
 
 interface OpenPreviewParams {
   imageRef: RefObject<View>
-  images: ImageProps[]
+  images: PreviewImageProps[]
   initialIndex?: number
   accessoriesElement?: React.ReactNode
 }
@@ -43,7 +49,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   const { width, height } = useWindowDimensions()
   const [previewModalOpen, setPreviewModalOpen] = useState(false)
 
-  const [currentState, setCurrentState] = useState<ImageProps[] | null>(null)
+  const [currentState, setCurrentState] = useState<PreviewImageProps[] | null>(null)
   const [imageRef, setImageRef] = useState<View | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [accessoriesElement, setAccessoriesElement] = useState<React.ReactNode | null>(null)
@@ -385,7 +391,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   return (
     <PreviewImageContext.Provider value={ctxValue}>
       {children}
-      {currentState?.[currentIndex] && (
+      {currentState && (
         <Modal transparent visible={previewModalOpen}>
           <PortalHost>
             <Animated.View style={overlayStyle} className="absolute inset-0" />
@@ -415,8 +421,18 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
                           ],
                         }}
                       >
-                        <ImageContextMenu imageUrl={currentState[currentIndex].source?.uri}>
-                          <Image {...currentState[currentIndex]} className="w-full" />
+                        <ImageContextMenu imageUrl={currentState[currentIndex]?.imageUrl}>
+                          <Image
+                            recyclingKey={currentState[currentIndex]?.recyclingKey}
+                            source={{ uri: currentState[currentIndex]?.imageUrl }}
+                            className="w-full"
+                            style={{
+                              aspectRatio: currentState[currentIndex]?.aspectRatio,
+                            }}
+                            placeholder={{
+                              blurhash: currentState[currentIndex]?.blurhash,
+                            }}
+                          />
                         </ImageContextMenu>
                       </Animated.View>
                     </Animated.View>

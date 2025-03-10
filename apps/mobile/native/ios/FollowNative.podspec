@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
   s.dependency 'SnapKit', '~> 5.7.0'
   s.dependency 'SDWebImage', '~> 5.0'
   s.dependency 'SPIndicator', '~> 1.6.4'
+ 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
