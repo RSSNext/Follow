@@ -43,11 +43,15 @@ export default function EntryDetailPage() {
   )
 
   useEffect(() => {
-    entrySyncServices.fetchEntrySourceContent(entryId)
+    if (entry?.settings?.readability) {
+      entrySyncServices.fetchEntrySourceContent(entryId)
+    }
   }, [entry?.settings?.readability, entryId])
 
   useEffect(() => {
-    summarySyncService.generateSummary(entryId)
+    if (entry?.settings?.summary) {
+      summarySyncService.generateSummary(entryId)
+    }
   }, [entry?.settings?.summary, entryId])
 
   return (
