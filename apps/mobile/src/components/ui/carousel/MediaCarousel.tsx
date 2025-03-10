@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ScrollView, View } from "react-native"
 import Animated, {
   interpolateColor,
@@ -45,7 +45,7 @@ export const MediaCarousel = ({
       }}
     >
       <View className="relative overflow-hidden rounded-md">
-        <Galeria urls={media.map((m) => m.url)}>
+        <Galeria urls={useMemo(() => media.map((m) => m.url), [media])}>
           <ScrollView
             onScroll={(e) => {
               setActiveIndex(Math.round(e.nativeEvent.contentOffset.x / containerWidth))
@@ -65,18 +65,7 @@ export const MediaCarousel = ({
                 return (
                   <View key={index} className="relative" style={{ width: containerWidth }}>
                     <Wrapper entryId={entryId} imageUrl={m.url}>
-                      {/* <PreviewImage
-                        noPreview={noPreview}
-                        onPreview={onPreview}
-                        imageUrl={m.url}
-                        aspectRatio={aspectRatio}
-                        Accessory={Accessory}
-                        AccessoryProps={AccessoryProps}
-                        proxy={{
-                          width: containerWidth,
-                        }}
-                      /> */}
-                      <Galeria.Image onPreview={onPreview}>
+                      <Galeria.Image onPreview={onPreview} index={index}>
                         <ProxiedImage
                           proxy={{
                             height: 400,

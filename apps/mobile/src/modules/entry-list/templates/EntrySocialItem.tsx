@@ -1,6 +1,6 @@
 import { FeedViewType } from "@follow/constants"
 import { router } from "expo-router"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { Pressable, Text, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
@@ -8,11 +8,11 @@ import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { Galeria } from "@/src/components/ui/image/galeria"
 import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
-import { quickLookImage } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
@@ -53,6 +53,10 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
   }, [entry, entry?.read, unreadZoomSharedValue])
 
   const autoExpandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
+
+  const memoedMediaUrlList = useMemo(() => {
+    return entry?.media?.map((i) => i.url) ?? []
+  }, [entry])
   if (!entry) return <EntryItemSkeleton />
 
   const { description, publishedAt, media } = entry
@@ -103,30 +107,28 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
 
         {media && media.length > 0 && (
           <View className="ml-10 flex flex-row flex-wrap gap-2">
-            {media.map((image, idx) => {
-              return (
-                <Pressable
-                  key={image.url}
-                  onPress={() => {
-                    const previewImages = media.map((i) => i.url)
-                    quickLookImage([...previewImages.slice(idx), ...previewImages.slice(0, idx)])
-                  }}
-                >
-                  <ProxiedImage
-                    proxy={{
-                      width: 80,
-                      height: 80,
-                    }}
-                    source={{ uri: image.url }}
-                    transition={500}
-                    placeholder={{ blurhash: image.blurhash }}
-                    className="bg-system-fill ml-2 size-20 rounded-md"
-                    contentFit="cover"
-                    recyclingKey={image.url}
-                  />
-                </Pressable>
-              )
-            })}
+            <Galeria urls={memoedMediaUrlList}>
+              {media.map((image, index) => {
+                return (
+                  <Pressable key={image.url}>
+                    <Galeria.Image index={index}>
+                      <ProxiedImage
+                        proxy={{
+                          width: 80,
+                          height: 80,
+                        }}
+                        source={{ uri: image.url }}
+                        transition={500}
+                        placeholder={{ blurhash: image.blurhash }}
+                        className="bg-system-fill ml-2 size-20 rounded-md"
+                        contentFit="cover"
+                        recyclingKey={image.url}
+                      />
+                    </Galeria.Image>
+                  </Pressable>
+                )
+              })}
+            </Galeria>
           </View>
         )}
       </ItemPressable>
