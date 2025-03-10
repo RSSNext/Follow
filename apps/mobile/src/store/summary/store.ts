@@ -56,7 +56,7 @@ class SummaryActions {
     }
   }
 
-  async getSummary(entryId: string) {
+  getSummary(entryId: string) {
     const state = get()
     const summary = state.data[entryId]
 

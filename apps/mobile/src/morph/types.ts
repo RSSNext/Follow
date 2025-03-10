@@ -14,4 +14,6 @@ export namespace HonoApiClient {
   export type Entry_Inbox_Get = ExtractData<typeof apiClient.entries.inbox.$get>
   export type List_List_Get = ExtractData<typeof apiClient.lists.list.$get>[number]
   export type Feed_Get = ExtractData<typeof apiClient.feeds.$get>
+
+  export type ActionSettings = Exclude<Entry_Post[number]["settings"], undefined>
 }

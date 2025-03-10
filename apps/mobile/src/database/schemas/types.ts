@@ -1,3 +1,5 @@
+import type { HonoApiClient } from "@/src/morph/types"
+
 import type {
   collectionsTable,
   entriesTable,
@@ -30,6 +32,8 @@ export type CollectionSchema = typeof collectionsTable.$inferSelect
 export type SummarySchema = typeof summariesTable.$inferSelect
 
 export type ImageSchema = typeof imagesTable.$inferInsert
+
+export type ActionSettings = HonoApiClient.ActionSettings
 
 export type MediaModel = {
   url: string
