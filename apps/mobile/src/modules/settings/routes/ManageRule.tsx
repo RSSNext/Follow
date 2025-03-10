@@ -1,42 +1,18 @@
 import type { RouteProp } from "@react-navigation/native"
-import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
-import type { MutableRefObject } from "react"
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { Text, View } from "react-native"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
-import {
-  GroupedInsetListBaseCell,
-  GroupedInsetListCard,
-  GroupedInsetListSectionHeader,
-} from "@/src/components/ui/grouped/GroupedList"
-import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
-import { CheckLineIcon } from "@/src/icons/check_line"
-import { getBizFetchErrorMessage } from "@/src/lib/api-fetch"
-import { toast } from "@/src/lib/toast"
+import { PlainTextField } from "@/src/components/ui/form/TextField"
+import { GroupedInsetListCard, GroupedInsetListCell } from "@/src/components/ui/grouped/GroupedList"
 import { useActionRule } from "@/src/store/action/hooks"
-import { useFeed } from "@/src/store/feed/hooks"
-import { useList } from "@/src/store/list/hooks"
-import { listSyncServices } from "@/src/store/list/store"
-import {
-  useFeedSubscriptionByView,
-  usePrefetchSubscription,
-  useSortedFeedSubscriptionByAlphabet,
-} from "@/src/store/subscription/hooks"
+import { actionActions } from "@/src/store/action/store"
+import type { ActionRule } from "@/src/store/action/types"
 import { accentColor } from "@/src/theme/colors"
 
 import type { SettingsStackParamList } from "../types"
-
-const ManageListContext = createContext<{
-  nextSelectedFeedIdRef: MutableRefObject<Set<string>>
-}>(null!)
 
 export const ManageRuleScreen = ({
   route,
@@ -46,8 +22,6 @@ export const ManageRuleScreen = ({
   const { index } = route.params
   const rule = useActionRule(index)
 
-  const list = useList(index?.toString() ?? "")
-
   return (
     <SafeNavigationScrollView
       className="bg-system-grouped-background"
@@ -56,108 +30,37 @@ export const ManageRuleScreen = ({
       <NavigationBlurEffectHeader
         title={index !== undefined ? `Edit Rule - ${rule?.name}` : "Create Rule"}
       />
-
-      {!!list && <ListImpl id={list.id} />}
+      <RuleImpl index={index} />
     </SafeNavigationScrollView>
   )
 }
 
-const ListImpl: React.FC<{ id: string }> = ({ id }) => {
-  const list = useList(id)!
-  usePrefetchSubscription(list.view)
+const RuleImpl: React.FC<{ index?: number }> = ({ index }) => {
+  const rule = useActionRule(index)
 
-  const subscriptionIds = useFeedSubscriptionByView(list.view)
-
-  const sortedSubscriptionIds = useSortedFeedSubscriptionByAlphabet(subscriptionIds)
-
-  const nextSelectedFeedIdRef = useRef(new Set<string>())
-  const ctxValue = useMemo(() => ({ nextSelectedFeedIdRef }), [nextSelectedFeedIdRef])
-
-  const initOnceRef = useRef(false)
-
-  useEffect(() => {
-    if (initOnceRef.current) return
-    initOnceRef.current = true
-
-    nextSelectedFeedIdRef.current = new Set(list.feedIds)
-  }, [list.feedIds])
-
-  const addFeedsToFeedListMutation = useMutation({
-    mutationFn: () =>
-      listSyncServices.addFeedsToFeedList({
-        listId: id,
-        feedIds: Array.from(nextSelectedFeedIdRef.current),
-      }),
-  })
   return (
-    <ManageListContext.Provider value={ctxValue}>
-      <NavigationBlurEffectHeader
-        headerRight={() => (
-          <UINavigationHeaderActionButton>
-            <ModalHeaderSubmitButton
-              isLoading={addFeedsToFeedListMutation.isPending}
-              isValid
-              onPress={() => {
-                addFeedsToFeedListMutation
-                  .mutateAsync()
-                  .then(() => {
-                    router.back()
-                  })
-                  .catch((error) => {
-                    toast.error(getBizFetchErrorMessage(error))
-                    console.error(error)
-                  })
-              }}
-            />
-          </UINavigationHeaderActionButton>
-        )}
-      />
-      <GroupedInsetListSectionHeader label="Select feeds to add to the current list" />
+    <View>
       <GroupedInsetListCard>
-        {sortedSubscriptionIds.map((id) => (
-          <FeedCell key={id} feedId={id} isSelected={list.feedIds.includes(id)} />
-        ))}
+        {rule ? <EditRuleNameSection rule={rule} /> : <Text>No rule available</Text>}
       </GroupedInsetListCard>
-    </ManageListContext.Provider>
+    </View>
   )
 }
 
-const FeedCell = (props: { feedId: string; isSelected: boolean }) => {
-  const feed = useFeed(props.feedId)
-
-  const { nextSelectedFeedIdRef } = useContext(ManageListContext)
-
-  const [currentSelected, setCurrentSelected] = useState(props.isSelected)
-  if (!feed) return null
+const EditRuleNameSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
   return (
-    <ItemPressable
-      onPress={() => {
-        const has = nextSelectedFeedIdRef.current.has(feed.id)
-        if (has) {
-          nextSelectedFeedIdRef.current.delete(feed.id)
-        } else {
-          nextSelectedFeedIdRef.current.add(feed.id)
-        }
-
-        setCurrentSelected(!has)
-      }}
-    >
-      <GroupedInsetListBaseCell>
-        <View className="flex-1 flex-row items-center gap-4">
-          <View className="size-4 items-center justify-center">
-            <View className="overflow-hidden rounded-lg">
-              <FeedIcon feed={feed} size={24} />
-            </View>
-          </View>
-          <Text className="text-label ml-2 flex-1" ellipsizeMode="middle" numberOfLines={1}>
-            {feed?.title || "Untitled Feed"}
-          </Text>
-        </View>
-
-        <View className="ml-2 flex size-4 shrink-0 items-center justify-center">
-          {currentSelected && <CheckLineIcon color={accentColor} height={18} width={18} />}
-        </View>
-      </GroupedInsetListBaseCell>
-    </ItemPressable>
+    <GroupedInsetListCell label="Name" leftClassName="flex-none" rightClassName="flex-1">
+      <View className="flex-1">
+        <PlainTextField
+          className="text-secondary-label w-full flex-1 text-right"
+          value={rule.name}
+          hitSlop={10}
+          selectionColor={accentColor}
+          onChangeText={(text) => {
+            actionActions.patchRule(rule.index, { name: text })
+          }}
+        />
+      </View>
+    </GroupedInsetListCell>
   )
 }

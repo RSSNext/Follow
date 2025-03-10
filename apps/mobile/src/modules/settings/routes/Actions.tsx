@@ -169,7 +169,11 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
           size="sm"
           value={!rule.result.disabled}
           onValueChange={() => {
-            actionActions.updateRuleState(rule.index, !!rule.result.disabled)
+            actionActions.patchRule(rule.index, {
+              result: {
+                disabled: !rule.result.disabled,
+              },
+            })
           }}
         />
       </ItemPressable>

@@ -1,7 +1,9 @@
+import { merge } from "es-toolkit/compat"
+
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { createImmerSetter, createZustandStore } from "../internal/helper"
-import type { ActionRules } from "./types"
+import type { ActionRule, ActionRules } from "./types"
 
 type ActionStore = {
   rules: ActionRules
@@ -45,10 +47,10 @@ class ActionActions {
     })
   }
 
-  updateRuleState(index: number, enabled: boolean) {
+  patchRule(index: number, rule: Partial<ActionRule>) {
     immerSet((state) => {
       if (state.rules[index]) {
-        state.rules[index].result.disabled = !enabled
+        state.rules[index] = merge(state.rules[index], rule)
         state.isDirty = true
       }
     })
