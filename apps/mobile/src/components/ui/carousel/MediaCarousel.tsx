@@ -1,3 +1,5 @@
+import { Galeria } from "@nandorojo/galeria"
+import { Image } from "expo-image"
 import { useEffect, useState } from "react"
 import { ScrollView, View } from "react-native"
 import Animated, {
@@ -13,6 +15,7 @@ import { EntryGridFooter } from "@/src/modules/entry-content/EntryGridFooter"
 import { ImageContextMenu } from "../image/ImageContextMenu"
 import type { PreviewImageProps } from "../image/PreviewImage"
 import { PreviewImage } from "../image/PreviewImage"
+import { ProxiedImage } from "../image/ProxiedImage"
 
 export const MediaCarousel = ({
   entryId,
@@ -45,54 +48,74 @@ export const MediaCarousel = ({
       }}
     >
       <View className="relative overflow-hidden rounded-md">
-        <ScrollView
-          onScroll={(e) => {
-            setActiveIndex(Math.round(e.nativeEvent.contentOffset.x / containerWidth))
-          }}
-          scrollEventThrottle={16}
-          scrollEnabled={hasMany}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          className="flex-1"
-          // We need to fixed the height of the container to prevent the carousel from resizing
-          // See https://github.com/Shopify/flash-list/issues/797
-          style={{ height: containerHeight }}
-        >
-          {media.map((m, index) => {
-            if (m.type === "photo") {
-              return (
-                <View key={index} className="relative" style={{ width: containerWidth }}>
-                  <Wrapper entryId={entryId} imageUrl={m.url}>
-                    <PreviewImage
-                      noPreview={noPreview}
-                      onPreview={onPreview}
-                      imageUrl={m.url}
-                      aspectRatio={aspectRatio}
-                      Accessory={Accessory}
-                      AccessoryProps={AccessoryProps}
-                      proxy={{
-                        width: containerWidth,
-                      }}
-                    />
-                  </Wrapper>
-                </View>
-              )
-            }
+        <Galeria urls={media.map((m) => m.url)}>
+          <ScrollView
+            onScroll={(e) => {
+              setActiveIndex(Math.round(e.nativeEvent.contentOffset.x / containerWidth))
+            }}
+            scrollEventThrottle={16}
+            scrollEnabled={hasMany}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            className="flex-1"
+            // We need to fixed the height of the container to prevent the carousel from resizing
+            // See https://github.com/Shopify/flash-list/issues/797
+            style={{ height: containerHeight }}
+          >
+            {media.map((m, index) => {
+              if (m.type === "photo") {
+                return (
+                  <View key={index} className="relative" style={{ width: containerWidth }}>
+                    <Wrapper entryId={entryId} imageUrl={m.url}>
+                      {/* <PreviewImage
+                        noPreview={noPreview}
+                        onPreview={onPreview}
+                        imageUrl={m.url}
+                        aspectRatio={aspectRatio}
+                        Accessory={Accessory}
+                        AccessoryProps={AccessoryProps}
+                        proxy={{
+                          width: containerWidth,
+                        }}
+                      /> */}
+                      <Galeria.Image>
+                        <ProxiedImage
+                          proxy={{
+                            height: 400,
+                          }}
+                          transition={500}
+                          source={{ uri: m.url }}
+                          placeholder={{
+                            blurhash: m.blurhash,
+                          }}
+                          className="w-full"
+                          style={{
+                            aspectRatio,
+                          }}
+                          placeholderContentFit="cover"
+                          recyclingKey={m.url}
+                        />
+                      </Galeria.Image>
+                    </Wrapper>
+                  </View>
+                )
+              }
 
-            return (
-              <PreviewImage
-                key={index}
-                noPreview={noPreview}
-                onPreview={() => {
-                  // open player
-                }}
-                imageUrl={m.url}
-                aspectRatio={aspectRatio}
-              />
-            )
-          })}
-        </ScrollView>
+              return (
+                <PreviewImage
+                  key={index}
+                  noPreview={noPreview}
+                  onPreview={() => {
+                    // open player
+                  }}
+                  imageUrl={m.url}
+                  aspectRatio={aspectRatio}
+                />
+              )
+            })}
+          </ScrollView>
+        </Galeria>
 
         {/* Indicators */}
         {hasMany && (

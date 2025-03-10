@@ -2,7 +2,7 @@ import type { FC } from "react"
 import { useRef } from "react"
 import { Pressable, View } from "react-native"
 
-import { usePreviewImage } from "./PreviewPageProvider"
+import { usePreviewImage } from "./usePreviewImage"
 import { ProxiedImage } from "./ProxiedImage"
 
 export interface PreviewImageProps {

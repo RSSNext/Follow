@@ -25,6 +25,7 @@
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
     "@hookform/resolvers": "4.1.0",
+    "@nandorojo/galeria": "1.0.0",
     "@react-native-community/image-editor": "4.3.0",
     "@react-native-firebase/analytics": "21.12.0",
     "@react-native-firebase/app": "21.12.0",
