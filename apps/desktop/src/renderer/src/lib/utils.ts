@@ -1,5 +1,4 @@
 import { FeedViewType } from "@follow/constants"
-import type { MediaModel } from "@follow/models/types"
 
 import { getServerConfigs } from "~/atoms/server-configs"
 import type { RSSHubRoute } from "~/modules/discover/types"
@@ -68,12 +67,6 @@ export const getViewFromRoute = (route: RSSHubRoute) => {
     }
   }
   return null
-}
-
-export const filterSmallMedia = (media: MediaModel) => {
-  return media?.filter(
-    (m) => !(m.type === "photo" && m.width && m.width < 65 && m.height && m.height < 65),
-  )
 }
 
 export const getLevelMultiplier = (level: number) => {

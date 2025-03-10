@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next"
 
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { filterSmallMedia } from "~/lib/utils"
 import { EntryContent } from "~/modules/entry-content"
 import { useEntry } from "~/store/entry/hooks"
 import { useImageDimensions } from "~/store/image"
@@ -91,7 +90,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
     }
   }, [ref, intersectionObserver])
 
-  const media = useMemo(() => filterSmallMedia(entry?.entries.media || []), [entry?.entries.media])
+  const media = entry?.entries.media || []
 
   if (media?.length === 0) return null
   if (!entry) return null
