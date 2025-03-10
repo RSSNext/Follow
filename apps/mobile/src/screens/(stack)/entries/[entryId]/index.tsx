@@ -102,9 +102,9 @@ export default function EntryDetailPage() {
 }
 
 const EntryContentWebViewWithContext = ({ entry }: { entry: EntryModel }) => {
-  const { showReadabilityAtom: showSourceAtom } = useEntryContentContext()
-  const showSource = useAtomValue(showSourceAtom)
-  return <EntryContentWebView entry={entry} showReadability={showSource} />
+  const { showReadabilityAtom } = useEntryContentContext()
+  const showReadability = useAtomValue(showReadabilityAtom)
+  return <EntryContentWebView entry={entry} showReadability={showReadability} />
 }
 
 const EntryInfo = ({ entryId }: { entryId: string }) => {
