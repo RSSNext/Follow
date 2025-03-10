@@ -225,11 +225,11 @@ class EntryActions {
   updateEntryContentInSession({
     entryId,
     content,
-    sourceContent,
+    readabilityContent,
   }: {
     entryId: EntryId
     content?: string
-    sourceContent?: string
+    readabilityContent?: string
   }) {
     immerSet((draft) => {
       const entry = draft.data[entryId]
@@ -237,8 +237,8 @@ class EntryActions {
       if (content) {
         entry.content = content
       }
-      if (sourceContent) {
-        entry.sourceContent = sourceContent
+      if (readabilityContent) {
+        entry.readabilityContent = readabilityContent
       }
     })
   }
@@ -246,15 +246,15 @@ class EntryActions {
   async updateEntryContent({
     entryId,
     content,
-    sourceContent,
+    readabilityContent,
   }: {
     entryId: EntryId
     content?: string
-    sourceContent?: string
+    readabilityContent?: string
   }) {
     const tx = createTransaction()
     tx.store(() => {
-      this.updateEntryContentInSession({ entryId, content, sourceContent })
+      this.updateEntryContentInSession({ entryId, content, readabilityContent })
     })
 
     tx.persist(() => {
@@ -262,8 +262,8 @@ class EntryActions {
         EntryService.patch({ id: entryId, content })
       }
 
-      if (sourceContent) {
-        EntryService.patch({ id: entryId, sourceContent })
+      if (readabilityContent) {
+        EntryService.patch({ id: entryId, readabilityContent })
       }
     })
 
@@ -376,7 +376,7 @@ class EntrySyncServices {
       const entryInDB = entriesInDB.find((e) => e.id === entry.id)
       if (entryInDB) {
         entry.content = entryInDB.content
-        entry.sourceContent = entryInDB.sourceContent
+        entry.readabilityContent = entryInDB.readabilityContent
       }
     }
 
@@ -438,13 +438,16 @@ class EntrySyncServices {
     return entry
   }
 
-  async fetchEntrySourceContent(entryId: EntryId) {
+  async fetchEntryReadabilityContent(entryId: EntryId) {
     const entry = getEntry(entryId)
 
-    if (entry?.url && !entry?.sourceContent) {
+    if (entry?.url && !entry?.readabilityContent) {
       const contentByFetch = await readability(entry.url)
-      if (contentByFetch?.content && entry?.sourceContent !== contentByFetch.content) {
-        await entryActions.updateEntryContent({ entryId, sourceContent: contentByFetch.content })
+      if (contentByFetch?.content && entry?.readabilityContent !== contentByFetch.content) {
+        await entryActions.updateEntryContent({
+          entryId,
+          readabilityContent: contentByFetch.content,
+        })
       }
     }
     return entry
