@@ -25,7 +25,7 @@ const NativeView: React.ComponentType<
 type EntryContentWebViewProps = {
   entry: EntryModel
   noMedia?: boolean
-  showSource?: boolean
+  showReadability?: boolean
 }
 
 const setCodeTheme = (light: string, dark: string) => {
@@ -49,8 +49,8 @@ const setReaderRenderInlineStyle = (value: boolean) => {
   SharedWebViewModule.evaluateJavaScript(`setReaderRenderInlineStyle(${value})`)
 }
 
-const setShowSource = (value: boolean) => {
-  SharedWebViewModule.evaluateJavaScript(`setShowSource(${value})`)
+const setShowReadability = (value: boolean) => {
+  SharedWebViewModule.evaluateJavaScript(`setShowReadability(${value})`)
 }
 
 export function EntryContentWebView(props: EntryContentWebViewProps) {
@@ -59,13 +59,13 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
   const codeThemeLight = useUISettingKey("codeHighlightThemeLight")
   const codeThemeDark = useUISettingKey("codeHighlightThemeDark")
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-  const { entry, noMedia, showSource } = props
+  const { entry, noMedia, showReadability } = props
 
   const [mode, setMode] = React.useState<"normal" | "debug">("normal")
 
   useEffect(() => {
-    setShowSource(!!showSource)
-  }, [showSource])
+    setShowReadability(!!showReadability)
+  }, [showReadability])
 
   useEffect(() => {
     setNoMedia(!!noMedia)
@@ -106,7 +106,7 @@ export function EntryContentWebView(props: EntryContentWebViewProps) {
       </View>
 
       <Portal>
-        {(showSource ? !entry.sourceContent : !entry.content) && (
+        {(showReadability ? !entry.readabilityContent : !entry.content) && (
           <View className="absolute inset-0 items-center justify-center">
             <ActivityIndicator />
           </View>

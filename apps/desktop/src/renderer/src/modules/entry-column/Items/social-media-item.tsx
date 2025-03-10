@@ -25,7 +25,6 @@ import { FeedTitle } from "~/modules/feed/feed-title"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
-import { filterSmallMedia } from "../../../lib/utils"
 import { StarIcon } from "../star-icon"
 import { EntryTranslation } from "../translation"
 import type { EntryItemStatelessProps, EntryListItemFC } from "../types"
@@ -61,7 +60,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   const content = entry.entries.content || entry.entries.description
 
   const parsed = parseSocialMedia(entry.entries)
-  const media = filterSmallMedia(entry.entries.media)
+  const { media } = entry.entries
   const EntryContentWrapper = autoExpandLongSocialMedia
     ? PassviseFragment
     : CollapsedSocialMediaItem

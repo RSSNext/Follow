@@ -1,4 +1,3 @@
-import { Image } from "expo-image"
 import type { RefObject } from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Dimensions, Modal, Pressable, ScrollView, useWindowDimensions, View } from "react-native"
@@ -16,37 +15,43 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 
 import { PortalHost } from "../portal"
+import type { ImageProps } from "./Image"
+import { Image } from "./Image"
 import { ImageContextMenu } from "./ImageContextMenu"
 import { PreviewImageContext } from "./PreviewImageContext"
 
-interface PreviewImageProps {
-  imageUrl: string
-  blurhash?: string | undefined
-  aspectRatio: number
-  recyclingKey?: string
-}
-
-export interface OpenPreviewParams {
+interface OpenPreviewParams {
   imageRef: RefObject<View>
-  images: PreviewImageProps[]
+  images: ImageProps[]
   initialIndex?: number
   accessoriesElement?: React.ReactNode
 }
 
-const PreviewImage = ({
-  imageUrl,
-  blurhash,
-  aspectRatio,
-  recyclingKey,
+interface PreviewImageContextType {
+  openPreview: (params: OpenPreviewParams) => void
+}
+const PreviewImageContext = createContext<PreviewImageContextType | null>(null)
 
-  onClose,
-  width,
-  height,
-}: PreviewImageProps & {
-  onClose: () => void
-  width: number
-  height: number
-}) => {
+export const usePreviewImage = () => {
+  const context = useContext(PreviewImageContext)
+  if (!context) {
+    throw new Error("usePreviewImage must be used within PreviewImageProvider")
+  }
+  return context
+}
+
+export const PreviewImageProvider = ({ children }: { children: React.ReactNode }) => {
+  const { width, height } = useWindowDimensions()
+  const [previewModalOpen, setPreviewModalOpen] = useState(false)
+
+  const [currentState, setCurrentState] = useState<ImageProps[] | null>(null)
+  const [imageRef, setImageRef] = useState<View | null>(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [accessoriesElement, setAccessoriesElement] = useState<React.ReactNode | null>(null)
+  const layoutScale = useSharedValue(1)
+  const layoutTransformX = useSharedValue(0)
+  const layoutTransformY = useSharedValue(0)
+
   const scale = useSharedValue(1)
   const savedScale = useSharedValue(1)
   const pinchCenter = useSharedValue({ x: 0, y: 0 })
@@ -91,7 +96,6 @@ const PreviewImage = ({
     () =>
       Gesture.Pan()
         .runOnJS(true)
-        .enabled(false)
         .onUpdate((e) => {
           if (isClosing.value) return
 
@@ -388,7 +392,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   return (
     <PreviewImageContext.Provider value={ctxValue}>
       {children}
-      {currentState && (
+      {currentState?.[currentIndex] && (
         <Modal transparent visible={previewModalOpen}>
           <PortalHost>
             <Animated.View style={overlayStyle} className="absolute inset-0" />
@@ -398,39 +402,29 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
                   <Pressable className="top-safe-offset-2 absolute right-2" onPress={handleClose}>
                     <CloseCuteReIcon color="#fff" />
                   </Pressable>
-                  <Animated.View
-                    className="absolute inset-0 flex-1"
-                    style={{
-                      transform: [
-                        { scale: layoutScale },
-                        { translateX: layoutTransformX },
-                        { translateY: layoutTransformY },
-                      ],
-                    }}
-                  >
-                    {/* {currentState[currentIndex] && (
-                      <PreviewImage
-                        {...currentState[currentIndex]}
-                        onClose={handleClose}
-                        width={width}
-                        height={height}
-                      />
-                    )} */}
-
-                    <ScrollView horizontal className="absolute inset-0 size-full flex-1">
-                      {[...currentState, ...currentState].map((image, index) => (
-                        <View className="flex w-screen items-center justify-center" key={index}>
-                          <PreviewImage
-                            {...image}
-                            key={index}
-                            onClose={handleClose}
-                            width={width}
-                            height={height}
-                          />
-                        </View>
-                      ))}
-                    </ScrollView>
-                  </Animated.View>
+                  <GestureDetector gesture={composed}>
+                    <Animated.View style={animatedStyle}>
+                      <Animated.View
+                        style={{
+                          transform: [
+                            {
+                              scale: layoutScale,
+                            },
+                            {
+                              translateX: layoutTransformX,
+                            },
+                            {
+                              translateY: layoutTransformY,
+                            },
+                          ],
+                        }}
+                      >
+                        <ImageContextMenu imageUrl={currentState[currentIndex].source?.uri}>
+                          <Image {...currentState[currentIndex]} className="w-full" />
+                        </ImageContextMenu>
+                      </Animated.View>
+                    </Animated.View>
+                  </GestureDetector>
                 </View>
               </GestureHandlerRootView>
               {accessoriesElement}

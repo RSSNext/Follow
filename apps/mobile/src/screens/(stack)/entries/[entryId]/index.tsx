@@ -1,7 +1,7 @@
 import { FeedViewType } from "@follow/constants"
 import { useLocalSearchParams } from "expo-router"
 import { atom, useAtomValue } from "jotai"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { Pressable, Text, View } from "react-native"
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -14,8 +14,10 @@ import { openLink } from "@/src/lib/native"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryAISummary } from "@/src/modules/entry-content/EntryAISummary"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
+import { entrySyncServices } from "@/src/store/entry/store"
 import type { EntryModel } from "@/src/store/entry/types"
 import { useFeed } from "@/src/store/feed/hooks"
+import { summarySyncService } from "@/src/store/summary/store"
 import { useAutoMarkAsRead } from "@/src/store/unread/hooks"
 
 import { EntrySocialTitle, EntryTitle } from "../../../../modules/entry-content/EntryTitle"
@@ -34,11 +36,23 @@ export default function EntryDetailPage() {
   const insets = useSafeAreaInsets()
   const ctxValue = useMemo(
     () => ({
-      showAISummaryAtom: atom(false),
-      showSourceAtom: atom(false),
+      showAISummaryAtom: atom(entry?.settings?.summary || false),
+      showReadabilityAtom: atom(entry?.settings?.readability || false),
     }),
-    [],
+    [entry?.settings?.readability, entry?.settings?.summary],
   )
+
+  useEffect(() => {
+    if (entry?.settings?.readability) {
+      entrySyncServices.fetchEntryReadabilityContent(entryId)
+    }
+  }, [entry?.settings?.readability, entryId])
+
+  useEffect(() => {
+    if (entry?.settings?.summary) {
+      summarySyncService.generateSummary(entryId)
+    }
+  }, [entry?.settings?.summary, entryId])
 
   return (
     <EntryContentContext.Provider value={ctxValue}>
@@ -88,9 +102,9 @@ export default function EntryDetailPage() {
 }
 
 const EntryContentWebViewWithContext = ({ entry }: { entry: EntryModel }) => {
-  const { showSourceAtom } = useEntryContentContext()
-  const showSource = useAtomValue(showSourceAtom)
-  return <EntryContentWebView entry={entry} showSource={showSource} />
+  const { showReadabilityAtom } = useEntryContentContext()
+  const showReadability = useAtomValue(showReadabilityAtom)
+  return <EntryContentWebView entry={entry} showReadability={showReadability} />
 }
 
 const EntryInfo = ({ entryId }: { entryId: string }) => {

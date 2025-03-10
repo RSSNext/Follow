@@ -54,9 +54,9 @@ const HeaderRightActionsImpl = ({
 }: HeaderRightActionsProps) => {
   const labelColor = useColor("label")
   const isStarred = useIsEntryStarred(entryId)
-  const { showAISummaryAtom, showSourceAtom } = useEntryContentContext()
+  const { showAISummaryAtom, showReadabilityAtom } = useEntryContentContext()
   const [showAISummary, setShowAISummary] = useAtom(showAISummaryAtom)
-  const [showSource, setShowSource] = useAtom(showSourceAtom)
+  const [showReadability, setShowReadability] = useAtom(showReadabilityAtom)
   const [extraActionContainerWidth, setExtraActionContainerWidth] = useState(0)
 
   const entry = useEntry(
@@ -93,7 +93,7 @@ const HeaderRightActionsImpl = ({
     if (!entry) return
 
     const getCachedOrGenerateSummary = async () => {
-      const hasSummary = await summaryActions.getSummary(entryId)
+      const hasSummary = summaryActions.getSummary(entryId)
       if (hasSummary) return
 
       const hideGlowEffect = showIntelligenceGlowEffect()
@@ -108,10 +108,10 @@ const HeaderRightActionsImpl = ({
     })
   }
 
-  const handleShowSource = useCallback(() => {
-    entrySyncServices.fetchEntrySourceContent(entryId)
-    setShowSource((prev) => !prev)
-  }, [entryId, setShowSource])
+  const handleShowReadability = useCallback(() => {
+    entrySyncServices.fetchEntryReadabilityContent(entryId)
+    setShowReadability((prev) => !prev)
+  }, [entryId, setShowReadability])
 
   const handleCopyLink = () => {
     if (!entry?.url) return
@@ -143,12 +143,12 @@ const HeaderRightActionsImpl = ({
       iconColor: isStarred ? "#facc15" : undefined,
     },
     {
-      key: "ShowSource",
-      title: "Show Source",
+      key: "ShowReadability",
+      title: "Show Readability",
       icon: <DocmentCuteReIcon />,
       iconIOS: { name: "doc.text" },
-      onPress: handleShowSource,
-      active: showSource,
+      onPress: handleShowReadability,
+      active: showReadability,
       isCheckbox: true,
     },
     {
