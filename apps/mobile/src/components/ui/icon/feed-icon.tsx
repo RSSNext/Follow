@@ -1,5 +1,4 @@
 import type { FeedViewType } from "@follow/constants"
-import { getUrlIcon } from "@follow/utils/src/utils"
 import type { ImageProps } from "expo-image"
 import type { ReactNode } from "react"
 import { useMemo } from "react"

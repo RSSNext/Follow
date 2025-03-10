@@ -1,4 +1,4 @@
-import { requireNativeModule, requireNativeView } from "expo"
+import { requireNativeView } from "expo"
 import { useContext, useMemo } from "react"
 import { Image } from "react-native"
 

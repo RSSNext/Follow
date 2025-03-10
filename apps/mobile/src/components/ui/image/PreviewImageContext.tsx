@@ -1,4 +1,5 @@
 import { createContext } from "react"
+
 import type { OpenPreviewParams } from "./PreviewPageProvider"
 
 interface PreviewImageContextType {

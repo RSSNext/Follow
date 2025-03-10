@@ -1,7 +1,6 @@
 import "../global.css"
 
 import analytics from "@react-native-firebase/analytics"
-import { requireNativeModule, requireNativeView } from "expo"
 import { Stack, usePathname } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { useEffect } from "react"
