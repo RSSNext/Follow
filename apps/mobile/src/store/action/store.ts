@@ -3,7 +3,7 @@ import { merge } from "es-toolkit/compat"
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { createImmerSetter, createZustandStore } from "../internal/helper"
-import type { ActionRule, ActionRules } from "./types"
+import type { ActionId, ActionRule, ActionRules } from "./types"
 
 type ActionStore = {
   rules: ActionRules
@@ -51,6 +51,24 @@ class ActionActions {
     immerSet((state) => {
       if (state.rules[index]) {
         state.rules[index] = merge(state.rules[index], rule)
+        state.isDirty = true
+      }
+    })
+  }
+
+  toggleRuleFilter(index: number) {
+    immerSet((state) => {
+      if (state.rules[index]) {
+        const hasCustomFilters = state.rules[index].condition.length > 0
+        state.rules[index].condition = hasCustomFilters ? [] : [[]]
+      }
+    })
+  }
+
+  deleteRuleAction(index: number, actionId: ActionId) {
+    immerSet((state) => {
+      if (state.rules[index]) {
+        delete state.rules[index].result[actionId]
         state.isDirty = true
       }
     })

@@ -3,7 +3,7 @@ import type { FC, PropsWithChildren } from "react"
 import * as React from "react"
 import { Fragment } from "react"
 import type { PressableProps, ViewProps } from "react-native"
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
@@ -163,10 +163,49 @@ export const GroupedInsetListCell: FC<
   )
 }
 
+export const GroupedInsetListCellRadio: FC<
+  {
+    label: string
+    description?: string
+    children?: React.ReactNode
+    selected?: boolean
+    onPress?: () => void
+  } & BaseCellClassNames
+> = ({ label, description, children, selected, onPress, leftClassName, rightClassName }) => {
+  return (
+    <GroupedInsetListBaseCell className="flex-1">
+      <TouchableWithoutFeedback onPress={onPress}>
+        <View className="flex-row items-center">
+          <View className="mr-4">
+            <View
+              className={cn(
+                "border-system-fill size-[18px] items-center justify-center rounded-full border",
+                selected ? "bg-accent" : "bg-system-grouped-background",
+              )}
+            >
+              {selected && (
+                <View className="bg-secondary-system-grouped-background size-[9px] rounded-full" />
+              )}
+            </View>
+          </View>
+          <View className={cn("flex-1", leftClassName)}>
+            <Text className="text-label">{label}</Text>
+            {!!description && (
+              <Text className="text-secondary-label text-sm leading-tight">{description}</Text>
+            )}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+
+      <View className={cn("mb-auto ml-4 shrink-0", rightClassName)}>{children}</View>
+    </GroupedInsetListBaseCell>
+  )
+}
+
 export const GroupedInsetListActionCell: FC<{
   label: string
   description?: string
-  onPress: () => void
+  onPress?: () => void
   disabled?: boolean
 }> = ({ label, description, onPress, disabled }) => {
   const rightIconColor = useColor("tertiaryLabel")
@@ -194,7 +233,7 @@ export const GroupedInsetListActionCell: FC<{
 
 export const GroupedInsetButtonCell: FC<{
   label: string
-  onPress: () => void
+  onPress?: () => void
   disabled?: boolean
   style?: "destructive" | "primary"
 }> = ({ label, onPress, disabled, style = "primary" }) => {
