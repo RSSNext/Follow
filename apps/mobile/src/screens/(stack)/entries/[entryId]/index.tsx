@@ -37,14 +37,14 @@ export default function EntryDetailPage() {
   const ctxValue = useMemo(
     () => ({
       showAISummaryAtom: atom(entry?.settings?.summary || false),
-      showSourceAtom: atom(entry?.settings?.readability || false),
+      showReadabilityAtom: atom(entry?.settings?.readability || false),
     }),
     [entry?.settings?.readability, entry?.settings?.summary],
   )
 
   useEffect(() => {
     if (entry?.settings?.readability) {
-      entrySyncServices.fetchEntrySourceContent(entryId)
+      entrySyncServices.fetchEntryReadabilityContent(entryId)
     }
   }, [entry?.settings?.readability, entryId])
 
@@ -102,9 +102,9 @@ export default function EntryDetailPage() {
 }
 
 const EntryContentWebViewWithContext = ({ entry }: { entry: EntryModel }) => {
-  const { showSourceAtom } = useEntryContentContext()
+  const { showReadabilityAtom: showSourceAtom } = useEntryContentContext()
   const showSource = useAtomValue(showSourceAtom)
-  return <EntryContentWebView entry={entry} showSource={showSource} />
+  return <EntryContentWebView entry={entry} showReadability={showSource} />
 }
 
 const EntryInfo = ({ entryId }: { entryId: string }) => {

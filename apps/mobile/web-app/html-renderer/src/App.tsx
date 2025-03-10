@@ -7,7 +7,7 @@ import {
   entryAtom,
   noMediaAtom,
   readerRenderInlineStyleAtom,
-  showSourceAtom,
+  showReadabilityAtom,
 } from "./atoms"
 import { HTML } from "./HTML"
 
@@ -28,8 +28,8 @@ Object.assign(window, {
   setNoMedia(value: boolean) {
     store.set(noMediaAtom, value)
   },
-  setShowSource(value: boolean) {
-    store.set(showSourceAtom, value)
+  setShowReadability(value: boolean) {
+    store.set(showReadabilityAtom, value)
   },
   reset() {
     store.set(entryAtom, null)
@@ -41,12 +41,12 @@ export const App = () => {
   const entry = useAtomValue(entryAtom, { store })
   const readerRenderInlineStyle = useAtomValue(readerRenderInlineStyleAtom, { store })
   const noMedia = useAtomValue(noMediaAtom, { store })
-  const showSource = useAtomValue(showSourceAtom, { store })
+  const showReadability = useAtomValue(showReadabilityAtom, { store })
 
   return (
     <Provider store={store}>
       <HTML
-        children={showSource ? entry?.sourceContent : entry?.content}
+        children={showReadability ? entry?.readabilityContent : entry?.content}
         renderInlineStyle={readerRenderInlineStyle}
         noMedia={noMedia}
       />
