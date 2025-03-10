@@ -1,6 +1,7 @@
+import { Image } from "expo-image"
 import type { RefObject } from "react"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { Dimensions, Modal, Pressable, ScrollView, useWindowDimensions, View } from "react-native"
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { Dimensions, Modal, Pressable, useWindowDimensions, View } from "react-native"
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler"
 import Animated, {
   runOnJS,
@@ -15,14 +16,18 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 
 import { PortalHost } from "../portal"
-import type { ImageProps } from "./Image"
-import { Image } from "./Image"
 import { ImageContextMenu } from "./ImageContextMenu"
-import { PreviewImageContext } from "./PreviewImageContext"
+
+interface PreviewImageProps {
+  imageUrl: string
+  blurhash?: string | undefined
+  aspectRatio: number
+  recyclingKey?: string
+}
 
 interface OpenPreviewParams {
   imageRef: RefObject<View>
-  images: ImageProps[]
+  images: PreviewImageProps[]
   initialIndex?: number
   accessoriesElement?: React.ReactNode
 }
@@ -44,7 +49,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   const { width, height } = useWindowDimensions()
   const [previewModalOpen, setPreviewModalOpen] = useState(false)
 
-  const [currentState, setCurrentState] = useState<ImageProps[] | null>(null)
+  const [currentState, setCurrentState] = useState<PreviewImageProps[] | null>(null)
   const [imageRef, setImageRef] = useState<View | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [accessoriesElement, setAccessoriesElement] = useState<React.ReactNode | null>(null)
@@ -59,13 +64,6 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   const translateY = useSharedValue(0)
   const savedTranslateX = useSharedValue(0)
   const savedTranslateY = useSharedValue(0)
-
-  // Animation opacity value
-  const opacity = useSharedValue(1)
-
-  // Animation closing state
-  const isClosing = useSharedValue(false)
-
   const pinchGesture = useMemo(
     () =>
       Gesture.Pinch()
@@ -83,14 +81,14 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
     [pinchCenter, savedScale, scale],
   )
 
-  const fadeOutCloseAnimation = useEventCallback(() => {
-    scale.value = withSpring(1.2, gentleSpringPreset, (finished) => {
-      if (finished) {
-        runOnJS(onClose)()
-      }
-    })
-    opacity.value = withSpring(0, gentleSpringPreset)
-  })
+  // Animation closing state
+  const isClosing = useSharedValue(false)
+
+  // Animation opacity value
+  const opacity = useSharedValue(1)
+
+  // Overlay opacity animation value
+  const overlayOpacity = useSharedValue(0)
 
   const panGesture = useMemo(
     () =>
@@ -105,23 +103,87 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
             const progress = Math.abs(e.translationY) / (height * 2)
             scale.value = Math.max(0.8, 1 - progress)
             opacity.value = Math.max(0.3, 1 - progress * 1.5)
+            // Update overlay opacity simultaneously
+            overlayOpacity.value = Math.max(0, 0.9 - progress * 1.5)
           } else {
             translateX.value = savedTranslateX.value + e.translationX
             translateY.value = savedTranslateY.value + e.translationY
           }
         })
         .onEnd((e) => {
+          if (!currentState) return
+          if (!currentState[currentIndex]) return
+          const { aspectRatio } = currentState[currentIndex]
           if (isClosing.value) return
 
           if (scale.value <= 1 && e.translationY > 100) {
             isClosing.value = true
-            runOnJS(onClose)()
+
+            // Measure original image position
+            imageRef?.measureInWindow((pageX, pageY, w1, h1) => {
+              const duration = 300
+
+              overlayOpacity.value = withTiming(0, {
+                duration,
+              })
+
+              opacity.value = withTiming(0, {
+                duration,
+              })
+
+              const { width: w2 } = Dimensions.get("window")
+              const s = w2 / w1
+
+              const x1 = pageX + w1 / 2
+              const y1 = pageY + h1 / 2
+              const x2 = w2 / 2
+              const y2 = height / 2
+
+              const xDelta = (x1 - x2) * s
+              const yDelta = (y1 - y2) * s
+
+              layoutScale.value = withTiming(
+                1 / s,
+                {
+                  duration,
+                },
+                (finished) => {
+                  if (finished) {
+                    runOnJS(setPreviewModalOpen)(false)
+                  }
+                },
+              )
+              layoutTransformX.value = withTiming(xDelta, {
+                duration,
+              })
+              layoutTransformY.value = withTiming(yDelta, {
+                duration,
+              })
+
+              scale.value = withTiming(1, {
+                duration,
+              })
+              translateX.value = withTiming(0, {
+                duration,
+              })
+              translateY.value = withTiming(0, {
+                duration,
+              })
+            })
           } else {
             // Restore opacity
             opacity.value = withTiming(1, {
               duration: 100,
             })
-
+            overlayOpacity.value = withTiming(0.9, {
+              duration: 100,
+            })
+            // Handle horizontal swipe
+            if (e.translationX < -50 && currentIndex < currentState.length - 1) {
+              setCurrentIndex((prevIndex) => prevIndex + 1)
+            } else if (e.translationX > 50 && currentIndex > 0) {
+              setCurrentIndex((prevIndex) => prevIndex - 1)
+            }
             // Boundary check logic
             const scaledWidth = width * scale.value
             const scaledHeight = height * aspectRatio * scale.value
@@ -149,20 +211,34 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
           }
         }),
     [
-      isClosing,
-      scale,
-      translateY,
-      savedTranslateY,
-      translateX,
-      savedTranslateX,
+      currentState,
+      currentIndex,
       height,
+      imageRef,
+      isClosing,
+      layoutScale,
+      layoutTransformX,
+      layoutTransformY,
       opacity,
-      onClose,
+      overlayOpacity,
+      savedTranslateX,
+      savedTranslateY,
+      scale,
+      translateX,
+      translateY,
       width,
-      aspectRatio,
     ],
   )
 
+  const fadeOutCloseAnimation = useEventCallback(() => {
+    scale.value = withSpring(1.2, gentleSpringPreset, (finished) => {
+      if (finished) {
+        runOnJS(setPreviewModalOpen)(false)
+      }
+    })
+    opacity.value = withSpring(0, gentleSpringPreset)
+    overlayOpacity.value = withSpring(0, gentleSpringPreset)
+  })
   const doubleTapGesture = useMemo(
     () =>
       Gesture.Tap()
@@ -186,6 +262,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
             savedScale.value = targetScale
 
             // Calculate offset from double tap point to center
+
             const centerX = width / 2
             const centerY = height / 2
 
@@ -201,7 +278,6 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
         }),
     [height, savedScale, savedTranslateX, savedTranslateY, scale, translateX, translateY, width],
   )
-
   const singleTapGesture = useMemo(
     () =>
       Gesture.Tap()
@@ -229,47 +305,7 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
       { translateY: translateY.value },
       { scale: scale.value },
     ],
-    opacity: opacity.value,
   }))
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <GestureDetector gesture={composed}>
-        <ImageContextMenu imageUrl={imageUrl}>
-          <Image
-            recyclingKey={recyclingKey}
-            source={{ uri: imageUrl }}
-            className="w-full"
-            style={{
-              aspectRatio,
-            }}
-            placeholder={{
-              blurhash,
-            }}
-          />
-        </ImageContextMenu>
-      </GestureDetector>
-    </Animated.View>
-  )
-}
-
-export const PreviewImageProvider = ({ children }: { children: React.ReactNode }) => {
-  const { width, height } = useWindowDimensions()
-  const [previewModalOpen, setPreviewModalOpen] = useState(false)
-
-  const [currentState, setCurrentState] = useState<PreviewImageProps[] | null>(null)
-  const [imageRef, setImageRef] = useState<View | null>(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [accessoriesElement, setAccessoriesElement] = useState<React.ReactNode | null>(null)
-  const layoutScale = useSharedValue(1)
-  const layoutTransformX = useSharedValue(0)
-  const layoutTransformY = useSharedValue(0)
-
-  // Animation opacity value
-  const opacity = useSharedValue(1)
-
-  // Overlay opacity animation value
-  const overlayOpacity = useSharedValue(0)
 
   const modalStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -299,53 +335,16 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
     layoutScale.value = 1
     layoutTransformX.value = 0
     layoutTransformY.value = 0
+    scale.value = 1
+    savedScale.value = 1
+    translateX.value = 0
+    translateY.value = 0
+    savedTranslateX.value = 0
+    savedTranslateY.value = 0
     opacity.value = 0
+    isClosing.value = false
     overlayOpacity.value = 0
   }
-
-  const handleClose = useCallback(() => {
-    // Measure original image position
-    imageRef?.measureInWindow((pageX, pageY, w1, h1) => {
-      const duration = 300
-
-      overlayOpacity.value = withTiming(0, {
-        duration,
-      })
-
-      opacity.value = withTiming(0, {
-        duration,
-      })
-
-      const { width: w2 } = Dimensions.get("window")
-      const s = w2 / w1
-
-      const x1 = pageX + w1 / 2
-      const y1 = pageY + h1 / 2
-      const x2 = w2 / 2
-      const y2 = height / 2
-
-      const xDelta = (x1 - x2) * s
-      const yDelta = (y1 - y2) * s
-
-      layoutScale.value = withTiming(
-        1 / s,
-        {
-          duration,
-        },
-        (finished) => {
-          if (finished) {
-            runOnJS(setPreviewModalOpen)(false)
-          }
-        },
-      )
-      layoutTransformX.value = withTiming(xDelta, {
-        duration,
-      })
-      layoutTransformY.value = withTiming(yDelta, {
-        duration,
-      })
-    })
-  }, [height, imageRef, layoutScale, layoutTransformX, layoutTransformY, opacity, overlayOpacity])
 
   const openPreview = useCallback(
     (params: OpenPreviewParams) => {
@@ -392,14 +391,17 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
   return (
     <PreviewImageContext.Provider value={ctxValue}>
       {children}
-      {currentState?.[currentIndex] && (
+      {currentState && (
         <Modal transparent visible={previewModalOpen}>
           <PortalHost>
             <Animated.View style={overlayStyle} className="absolute inset-0" />
             <Animated.View style={modalStyle} className="w-full flex-1">
               <GestureHandlerRootView className="w-full flex-1">
                 <View className="flex-1 items-center justify-center">
-                  <Pressable className="top-safe-offset-2 absolute right-2" onPress={handleClose}>
+                  <Pressable
+                    className="top-safe-offset-2 absolute right-2"
+                    onPress={fadeOutCloseAnimation}
+                  >
                     <CloseCuteReIcon color="#fff" />
                   </Pressable>
                   <GestureDetector gesture={composed}>
@@ -419,8 +421,18 @@ export const PreviewImageProvider = ({ children }: { children: React.ReactNode }
                           ],
                         }}
                       >
-                        <ImageContextMenu imageUrl={currentState[currentIndex].source?.uri}>
-                          <Image {...currentState[currentIndex]} className="w-full" />
+                        <ImageContextMenu imageUrl={currentState[currentIndex]?.imageUrl}>
+                          <Image
+                            recyclingKey={currentState[currentIndex]?.recyclingKey}
+                            source={{ uri: currentState[currentIndex]?.imageUrl }}
+                            className="w-full"
+                            style={{
+                              aspectRatio: currentState[currentIndex]?.aspectRatio,
+                            }}
+                            placeholder={{
+                              blurhash: currentState[currentIndex]?.blurhash,
+                            }}
+                          />
                         </ImageContextMenu>
                       </Animated.View>
                     </Animated.View>

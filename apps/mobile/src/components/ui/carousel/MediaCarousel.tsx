@@ -63,7 +63,11 @@ export const MediaCarousel = ({
             {media.map((m, index) => {
               if (m.type === "photo") {
                 return (
-                  <View key={index} className="relative" style={{ width: containerWidth }}>
+                  <View
+                    key={index}
+                    className="relative"
+                    style={{ width: containerWidth, height: containerHeight }}
+                  >
                     <Wrapper entryId={entryId} imageUrl={m.url}>
                       <Galeria.Image onPreview={onPreview} index={index}>
                         <ProxiedImage
