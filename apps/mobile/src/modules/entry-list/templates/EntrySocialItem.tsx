@@ -8,11 +8,10 @@ import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
+import { PreviewImage } from "@/src/components/ui/image/PreviewImage"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
-import { quickLookImage } from "@/src/lib/native"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
@@ -105,26 +104,16 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
           <View className="ml-10 flex flex-row flex-wrap gap-2">
             {media.map((image, idx) => {
               return (
-                <Pressable
-                  key={image.url}
-                  onPress={() => {
-                    const previewImages = media.map((i) => i.url)
-                    quickLookImage([...previewImages.slice(idx), ...previewImages.slice(0, idx)])
+                <PreviewImage
+                  key={`${entryId}-${idx}`}
+                  className="ml-2 h-20 rounded-md"
+                  blurhash={image.blurhash}
+                  imageUrl={image.url}
+                  aspectRatio={image.width && image.height ? image.width / image.height : 1}
+                  proxy={{
+                    height: 80,
                   }}
-                >
-                  <ProxiedImage
-                    proxy={{
-                      width: 80,
-                      height: 80,
-                    }}
-                    source={{ uri: image.url }}
-                    transition={500}
-                    placeholder={{ blurhash: image.blurhash }}
-                    className="bg-system-fill ml-2 size-20 rounded-md"
-                    contentFit="cover"
-                    recyclingKey={image.url}
-                  />
-                </Pressable>
+                />
               )
             })}
           </View>

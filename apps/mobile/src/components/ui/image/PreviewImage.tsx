@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils"
 import type { FC } from "react"
 import { useRef } from "react"
 import { Pressable, View } from "react-native"
@@ -17,6 +18,7 @@ export interface PreviewImageProps {
     height?: number
   }
   noPreview?: boolean
+  className?: string
 }
 
 export const PreviewImage = ({
@@ -28,6 +30,7 @@ export const PreviewImage = ({
   onPreview,
   proxy,
   noPreview,
+  className,
 }: PreviewImageProps) => {
   const imageRef = useRef<View>(null)
 
@@ -59,7 +62,7 @@ export const PreviewImage = ({
           placeholder={{
             blurhash,
           }}
-          className="w-full"
+          className={cn("w-full", className)}
           style={{
             aspectRatio,
           }}
