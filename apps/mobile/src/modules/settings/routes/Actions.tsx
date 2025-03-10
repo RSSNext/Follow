@@ -151,6 +151,13 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
           },
           backgroundColor: "red",
         },
+        {
+          label: "Edit",
+          onPress: () => {
+            navigation.navigate("ManageRule", { index: rule.index })
+          },
+          backgroundColor: "#0ea5e9",
+        },
       ]}
     >
       <ItemPressable
