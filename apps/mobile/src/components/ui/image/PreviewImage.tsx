@@ -3,8 +3,8 @@ import type { FC } from "react"
 import { useRef } from "react"
 import { Pressable, View } from "react-native"
 
+import { usePreviewImage } from "./PreviewPageProvider"
 import { ProxiedImage } from "./ProxiedImage"
-import { usePreviewImage } from "./usePreviewImage"
 
 export interface PreviewImageProps {
   imageUrl: string
@@ -46,7 +46,16 @@ export const PreviewImage = ({
         onPreview?.()
         openPreview({
           imageRef,
-          images: [{ imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl }],
+          images: [
+            {
+              source: {
+                uri: imageUrl,
+              },
+              aspectRatio,
+              blurhash,
+              recyclingKey: imageUrl,
+            },
+          ],
           accessoriesElement: Accessory ? <Accessory {...AccessoryProps} /> : undefined,
         })
       }}
