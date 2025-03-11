@@ -28,6 +28,55 @@ class PreviewControllerController: QLPreviewController, QLPreviewControllerDataS
     self.initialIndex = initialIndex
   }
 
+  func prepareImages(imageUrls: [String], initialIndex: Int = 0) {
+    self.initialIndex = initialIndex
+    self.imageDataArray = []
+
+    // Create a dispatch group to wait for all downloads
+    let group = DispatchGroup()
+
+    for url in imageUrls {
+      group.enter()
+
+      // Use the same caching mechanism as FollowImageURLSchemeHandler
+      let originalURLString = url.removingPercentEncoding ?? url
+      let cacheKey = originalURLString
+      let imageCache = SDImageCache.shared
+
+      // Check if image is already cached
+      if let cachedData = imageCache.diskImageData(forKey: cacheKey) {
+        self.imageDataArray.append(cachedData)
+        group.leave()
+      } else {
+        // Download the image if not cached
+        SDWebImageManager.shared.loadImage(
+          with: URL(string: url),
+          options: [],
+          progress: nil
+        ) { (image, data, error, _, _, _) in
+          if let imageData = data {
+            // Store in cache using the same key as FollowImageURLSchemeHandler
+            imageCache.storeImageData(toDisk: imageData, forKey: cacheKey)
+            self.imageDataArray.append(imageData)
+          } else if let image = image, let data = image.sd_imageData() {
+            // Store in cache using the same key as FollowImageURLSchemeHandler
+            imageCache.storeImageData(toDisk: data, forKey: cacheKey)
+            self.imageDataArray.append(data)
+          }
+          group.leave()
+        }
+      }
+    }
+
+    // Wait for all downloads to complete
+    group.notify(queue: .main) {
+      // Refresh the view if it's already loaded
+      if self.isViewLoaded {
+        self.reloadData()
+      }
+    }
+  }
+
   func previewController(_ controller: QLPreviewController, previewItemAt index: Int)
     -> QLPreviewItem
   {
@@ -116,6 +165,22 @@ class ImagePreview: NSObject {
 
     let previewController = PreviewControllerController()
     previewController.prepareImages(images, initialIndex: index)
+
+    rootViewController.present(previewController, animated: true)
+  }
+
+  public static func quickLookImageUrls(_ imageUrls: [String], index: Int = 0) {
+    guard let rootViewController = Utils.getRootVC() else {
+      return
+    }
+
+    if imageUrls.count == 0 {
+      print("no preview urls")
+      return
+    }
+
+    let previewController = PreviewControllerController()
+    previewController.prepareImages(imageUrls: imageUrls, initialIndex: index)
 
     rootViewController.present(previewController, animated: true)
   }

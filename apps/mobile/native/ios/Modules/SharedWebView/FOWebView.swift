@@ -29,7 +29,7 @@ class FOWebView: WKWebView {
   private var state: WebViewState!
 
   init(frame: CGRect, state: WebViewState) {
-    let configuration = FOWKWebViewConfiguration()
+    let configuration = FOWKWebViewConfiguration.shared
 
     super.init(frame: frame, configuration: configuration)
     configuration.userContentController.add(self, name: "message")
@@ -46,6 +46,7 @@ class FOWebView: WKWebView {
 }
 
 private class FOWKWebViewConfiguration: WKWebViewConfiguration {
+  static public let shared = FOWKWebViewConfiguration()
   override init() {
     super.init()
     let configuration = self
@@ -76,6 +77,8 @@ private class FOWKWebViewConfiguration: WKWebViewConfiguration {
     )
 
     let atStartScripts = WKWebView.loadInjectedJs(forResource: "at_start")
+    
+    
 
     if let jsString = atStartScripts {
       let script = WKUserScript(
@@ -99,29 +102,29 @@ private class FOWKWebViewConfiguration: WKWebViewConfiguration {
       forMainFrameOnly: true
     )
 
-    let schemeHandler = CustomURLSchemeHandler()
+    let schemeHandler = FollowImageURLSchemeHandler()
     configuration.setURLSchemeHandler(
-      schemeHandler, forURLScheme: CustomURLSchemeHandler.rewriteScheme)
+      schemeHandler, forURLScheme: FollowImageURLSchemeHandler.rewriteScheme)
 
     let customSchemeScript = WKUserScript(
       source: """
         (function() {
             const originalXHROpen = XMLHttpRequest.prototype.open;
             XMLHttpRequest.prototype.open = function(method, url, ...args) {
-                const modifiedUrl = url.replace(/^https?:/, '\(CustomURLSchemeHandler.rewriteScheme):');
+                const modifiedUrl = url.replace(/^https?:/, '\(FollowImageURLSchemeHandler.rewriteScheme):');
                 originalXHROpen.call(this, method, modifiedUrl, ...args);
             };
 
             const originalFetch = window.fetch;
             window.fetch = function(url, options) {
-                const modifiedUrl = url.replace(/^https?:/, '\(CustomURLSchemeHandler.rewriteScheme):');
+                const modifiedUrl = url.replace(/^https?:/, '\(FollowImageURLSchemeHandler.rewriteScheme):');
                 return originalFetch(modifiedUrl, options);
             };
 
             const originalImageSrc = Object.getOwnPropertyDescriptor(Image.prototype, 'src');
             Object.defineProperty(Image.prototype, 'src', {
                 set: function(url) {
-                    const modifiedUrl = url.replace(/^https?:/, '\(CustomURLSchemeHandler.rewriteScheme):');
+                    const modifiedUrl = url.replace(/^https?:/, '\(FollowImageURLSchemeHandler.rewriteScheme):');
                     originalImageSrc.set.call(this, modifiedUrl);
                 }
             });
@@ -197,8 +200,10 @@ extension FOWebView: WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate 
 
           guard let data = data else { return }
           DispatchQueue.main.async {
-            ImagePreview.quickLookImage(
-              data.payload.images.compactMap { Data($0) })
+            let urls = data.payload.imageUrls
+            if !urls.isEmpty {
+              ImagePreview.quickLookImageUrls(urls)
+            }
           }
 
         default:

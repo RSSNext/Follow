@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   s.source_files = "**/*.{h,m,mm,swift,hpp,cpp,js}"
 
   s.resource_bundles = {
-    'js' => ['SharedWebView/injected/**/*'],
+    'js' => ['Modules/SharedWebView/injected/**/*'],
     'FollowNative' => ['Media.xcassets'],
   }
 

@@ -27,10 +27,8 @@
       send({
         type: "previewImage",
         payload: {
-          images: data.images.map((image) => Array.from(image)),
-          index: data.index,
-          ext: data.ext,
-          filename: data.filename,
+          imageUrls: data.imageUrls,
+          index: data.index || 0,
         },
       })
     },

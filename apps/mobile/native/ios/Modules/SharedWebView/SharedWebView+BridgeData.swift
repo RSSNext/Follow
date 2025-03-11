@@ -20,7 +20,7 @@ struct BridgeDataBasePayload: Codable {
 }
 
 struct PreviewImagePayloadProps: Codable {
-  var images: [[UInt8]]
+  var imageUrls: [String]
   var index: Int = 0
 }
 
