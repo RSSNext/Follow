@@ -14,6 +14,7 @@ class GaleriaView: ExpoView {
     super.init(appContext: appContext)
   }
 
+ 
   func getChildImageView() -> UIImageView? {
     var reactSubviews: [UIView]? = nil
     if RCTIsNewArchEnabled() {
@@ -119,18 +120,18 @@ class GaleriaView: ExpoView {
     }
 
     options.append(
-      ImageViewerOption.onPreview { index in
-        self.onPreview(["index": index])
+      ImageViewerOption.onPreview { [weak self] index in
+        self?.onPreview(["index": index])
       })
 
     options.append(
-      ImageViewerOption.onClosePreview {
-        self.onClosePreview()
+      ImageViewerOption.onClosePreview { [weak self] in
+        self?.onClosePreview()
       })
 
     options.append(
-      ImageViewerOption.onIndexChange { index in
-        self.onIndexChange(["index": index])
+      ImageViewerOption.onIndexChange { [weak self] index in
+        self?.onIndexChange(["index": index])
       })
     return options
   }
