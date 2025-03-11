@@ -28,8 +28,8 @@ export const createBuildSafeHeaders =
     }
 
     if (
-      (headers.Referer && !headers.Referer.startsWith("app://follow.is")) ||
-      (headers.Origin && !headers.Origin.startsWith("app://follow.is"))
+      (headers.Referer && headers.Referer !== "app://follow.is") ||
+      (headers.Origin && headers.Origin !== "app://follow.is")
     ) {
       return headers
     }
