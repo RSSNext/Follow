@@ -5,7 +5,9 @@
       "SharedWebViewModule",
       "HelperModule",
       "ToasterModule",
-      "AppleIntelligenceGlowEffectModule"
+      "AppleIntelligenceGlowEffectModule",
+      "FollowNative.GaleriaModule",
+      "GaleriaAccessoryModule"
     ]
   },
   "android": {

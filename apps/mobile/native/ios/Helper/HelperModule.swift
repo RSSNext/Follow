@@ -45,18 +45,18 @@ public class HelperModule: Module {
 
       }
 
-      Function("previewImage") { (images: [String]) in
-        let imagesData: [Data] =
-          images.compactMap { image in
-            let url = URL(string: image)
-            let data = try? Data(contentsOf: url!)
-            return data
-          }
-        DispatchQueue.main.async {
-          ImagePreview.quickLookImage(imagesData)
+    }
+    
+    Function("previewImage") { (images: [String]) in
+      let imagesData: [Data] =
+        images.compactMap { image in
+          let url = URL(string: image)
+          let data = try? Data(contentsOf: url!)
+          return data
         }
+      DispatchQueue.main.async {
+        ImagePreview.quickLookImage(imagesData)
       }
-
     }
   }
 

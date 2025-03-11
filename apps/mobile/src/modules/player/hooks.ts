@@ -17,13 +17,14 @@ export function useCoverGradient(url?: string) {
     return defaultBackgroundColor
   }, [imageColors])
 
-  const isGradientLight = useMemo(() => {
-    return getLuminance(backgroundColor) > 0.5
+  const gradientColors = useMemo(() => {
+    const shadedColor = shadeColor(backgroundColor, -51)
+    return [shadedColor, shadedColor] as const
   }, [backgroundColor])
 
-  const gradientColors = useMemo(() => {
-    return [backgroundColor, shadeColor(backgroundColor, -50)] as const
-  }, [backgroundColor])
+  const isGradientLight = useMemo(() => {
+    return getLuminance(gradientColors[0]) > 0.5
+  }, [gradientColors])
 
   return { isGradientLight, gradientColors }
 }

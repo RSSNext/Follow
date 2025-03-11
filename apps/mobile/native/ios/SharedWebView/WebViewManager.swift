@@ -7,6 +7,7 @@
 import Combine
 import ExpoModulesCore
 import SafariServices
+import SwiftUI
 @preconcurrency import WebKit
 
 private var pendingJavaScripts: [String] = []
@@ -35,14 +36,11 @@ enum WebViewManager {
             } else {
                 webView.evaluateJavaScript(js)
             }
-
         }
-
     }
 
     static private(set) var shared: WKWebView = {
         FOWebView(frame: .zero, state: state)
-
     }()
 
     static func resetWebView() {
@@ -51,35 +49,27 @@ enum WebViewManager {
     }
 
     static func presentModalWebView(url: URL, from viewController: UIViewController) {
-
         let safariVC = SFSafariViewController(url: url)
         safariVC.view.tintColor = Utils.accentColor
         safariVC.preferredControlTintColor = Utils.accentColor
         viewController.present(safariVC, animated: true)
     }
-
 }
-//
-//extension WebViewManager {
-//    private static var contentHeightChangeListeners: [Int: (Float) -> Void] = [:]
-//    private static var contentHeightChangeListenerId = 0
-//
-//    static func addContentHeightChangeListener(_ listener: @escaping (Float) -> Void) -> Int {
-//        let listenerId = contentHeightChangeListenerId
-//        contentHeightChangeListenerId += 1
-//        contentHeightChangeListeners[listenerId] = listener
-//        return listenerId
-//    }
-//
-//    static func removeContentHeightChangeListener(_ listenerId: Int) {
-//        contentHeightChangeListeners.removeValue(forKey: listenerId)
-//    }
-//
-////    static func notifyContentHeightChange(_ height: Float) {
-////        for listener in contentHeightChangeListeners.values {
-////            DispatchQueue.main.async {
-////                listener(height)
-////            }
-////        }
-////    }
-//}
+
+// SwiftUI wrapper for the shared WKWebView
+struct SharedWebViewUI: UIViewRepresentable {
+    func makeUIView(context: Context) -> WKWebView {
+        return WebViewManager.shared
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+
+    }
+}
+
+extension WebViewManager {
+    static var swiftUIView: some View {
+        SharedWebViewUI()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}

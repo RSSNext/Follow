@@ -46,7 +46,16 @@ export const PreviewImage = ({
         onPreview?.()
         openPreview({
           imageRef,
-          images: [{ imageUrl, aspectRatio, blurhash, recyclingKey: imageUrl }],
+          images: [
+            {
+              source: {
+                uri: imageUrl,
+              },
+              aspectRatio,
+              blurhash,
+              recyclingKey: imageUrl,
+            },
+          ],
           accessoriesElement: Accessory ? <Accessory {...AccessoryProps} /> : undefined,
         })
       }}

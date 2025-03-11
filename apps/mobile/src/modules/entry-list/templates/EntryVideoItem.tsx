@@ -38,7 +38,7 @@ export function EntryVideoItem({ id }: { id: string }) {
           entryId={id}
           media={firstMedia}
           aspectRatio={16 / 9}
-          AccessoryProps={{ id }}
+          // AccessoryProps={{ id }}
           noPreview={true}
         />
       </ItemPressable>
