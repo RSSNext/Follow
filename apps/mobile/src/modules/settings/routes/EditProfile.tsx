@@ -29,14 +29,14 @@ import {
 import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
-import { apiClient, apiFetch, getBizFetchErrorMessage } from "@/src/lib/api-fetch"
-import { pickImage } from "@/src/lib/native/picker"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 import type { MeModel } from "@/src/store/user/store"
 import { userSyncService } from "@/src/store/user/store"
 import type { UserProfileEditable } from "@/src/store/user/types"
 import { accentColor, useColor } from "@/src/theme/colors"
+
+import { setAvatar } from "../utils"
 
 export const EditProfileScreen = () => {
   const whoami = useWhoami()
@@ -69,37 +69,7 @@ const AvatarSection: FC<{
         className={!whoami?.name || !whoami.image ? "bg-system-background" : ""}
       />
 
-      <TouchableOpacity
-        className="mt-2"
-        hitSlop={10}
-        onPress={async () => {
-          const result = await pickImage({
-            fileName: "avatar.jpg",
-            maxSizeKB: 290,
-          })
-
-          if (!result) return
-          const { formData } = result
-          const res = await apiFetch<{
-            url: string
-          }>(apiClient.upload.avatar.$url().toString(), {
-            method: "POST",
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            body: formData,
-          }).catch((err) => {
-            toast.error(getBizFetchErrorMessage(err))
-            throw err
-          })
-
-          const { url } = res
-
-          userSyncService.updateProfile({
-            image: url,
-          })
-        }}
-      >
+      <TouchableOpacity className="mt-2" hitSlop={10} onPress={setAvatar}>
         <Text className="text-accent text-lg">Set Avatar</Text>
       </TouchableOpacity>
     </View>
