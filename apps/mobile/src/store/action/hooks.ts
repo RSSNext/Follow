@@ -20,6 +20,23 @@ export const useActionRule = (index?: number) => {
   )
 }
 
+export function useActionRuleCondition({
+  ruleIndex,
+  groupIndex,
+  conditionIndex,
+}: {
+  ruleIndex: number
+  groupIndex: number
+  conditionIndex: number
+}) {
+  return useActionStore(
+    useCallback(
+      (state) => state.rules[ruleIndex]?.condition[groupIndex]?.[conditionIndex],
+      [ruleIndex, groupIndex, conditionIndex],
+    ),
+  )
+}
+
 export const useIsActionDataDirty = () => {
   return useActionStore((state) => state.isDirty)
 }

@@ -75,7 +75,7 @@ export const ActionsScreen = () => {
               />
             </SwipeableGroupProvider>
           ) : isLoading && rules.length === 0 ? (
-            <View className="mt-1">
+            <View className="my-4">
               <ActivityIndicator />
             </View>
           ) : null}

@@ -10,6 +10,7 @@ import { EditProfileScreen } from "./EditProfile"
 import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
+import { ManageConditionScreen } from "./ManageCondition"
 import { ManageListScreen } from "./ManageList"
 import { ManageRuleScreen } from "./ManageRule"
 import { NotificationsScreen } from "./Notifications"
@@ -35,6 +36,15 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
       {/* @ts-expect-error */}
       <Stack.Screen key="ManageRule" name="ManageRule" component={ManageRuleScreen} />
+      <Stack.Screen
+        key="ManageCondition"
+        name="ManageCondition"
+        /* @ts-expect-error */
+        component={ManageConditionScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
       <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
     </Stack.Group>

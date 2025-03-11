@@ -3,7 +3,7 @@ import { merge } from "es-toolkit/compat"
 import { apiClient } from "@/src/lib/api-fetch"
 
 import { createImmerSetter, createZustandStore } from "../internal/helper"
-import type { ActionId, ActionRule, ActionRules } from "./types"
+import type { ActionFilterItem, ActionId, ActionRule, ActionRules, ConditionIndex } from "./types"
 
 type ActionStore = {
   rules: ActionRules
@@ -21,7 +21,9 @@ class ActionSyncService {
   async fetchRules() {
     const res = await apiClient.actions.$get()
     if (res.data) {
-      actionActions.updateRules((res.data.rules ?? []).map((rule, index) => ({ ...rule, index })))
+      actionActions.updateRules(
+        (res.data.rules ?? []).map((rule, index) => ({ ...rule, index })) as any,
+      )
 
       actionActions.setDirty(false)
     }
@@ -53,6 +55,17 @@ class ActionActions {
         state.rules[index] = merge(state.rules[index], rule)
         state.isDirty = true
       }
+    })
+  }
+
+  pathCondition(index: ConditionIndex, condition: Partial<ActionFilterItem>) {
+    immerSet((state) => {
+      const rule = state.rules[index.ruleIndex]
+      if (!rule) return
+      const group = rule.condition[index.groupIndex]
+      if (!group) return
+      group[index.conditionIndex] = merge(group[index.conditionIndex], condition)
+      state.isDirty = true
     })
   }
 

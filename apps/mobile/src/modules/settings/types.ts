@@ -1,3 +1,5 @@
+import type { ConditionIndex } from "@/src/store/action/types"
+
 export type SettingsStackParamList = {
   Profile: undefined
   Achievement: undefined
@@ -13,6 +15,7 @@ export type SettingsStackParamList = {
   About: undefined
   ManageList: { id: string }
   ManageRule: { index?: number }
+  ManageCondition: ConditionIndex
   EditProfile: undefined
   ResetPassword: undefined
 }
