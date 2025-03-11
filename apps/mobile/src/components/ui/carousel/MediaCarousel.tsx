@@ -6,6 +6,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated"
+import Video from "react-native-video"
 
 import { Galeria } from "@/src/components/ui/image/galeria"
 import type { MediaModel } from "@/src/database/schemas/types"
@@ -31,6 +32,8 @@ export const MediaCarousel = ({
 
   // const activeIndex = useSharedValue(0)
   const [activeIndex, setActiveIndex] = useState(0)
+
+  const [isVideoInFullscreen, setIsVideoInFullscreen] = useState(false)
 
   return (
     <View
@@ -78,17 +81,25 @@ export const MediaCarousel = ({
                     </ImageContextMenu>
                   </View>
                 )
-              } else if (m.preview_image_url) {
-                // TODO: video preview
+              } else if (m.type === "video") {
                 return (
-                  <Image
-                    key={index}
-                    source={{ uri: m.preview_image_url }}
-                    aspectRatio={aspectRatio}
-                  />
+                  <ImageContextMenu key={index} entryId={entryId} imageUrl={m.url}>
+                    <Video
+                      source={{ uri: m.url }}
+                      style={{ width: containerWidth, height: containerHeight }}
+                      muted={!isVideoInFullscreen}
+                      repeat
+                      poster={{
+                        source: { uri: m.preview_image_url },
+                        resizeMode: "cover",
+                      }}
+                      controls
+                      onFullscreenPlayerWillPresent={() => setIsVideoInFullscreen(true)}
+                      onFullscreenPlayerWillDismiss={() => setIsVideoInFullscreen(false)}
+                    />
+                  </ImageContextMenu>
                 )
               } else {
-                // TODO: video preview
                 return null
               }
             })}
