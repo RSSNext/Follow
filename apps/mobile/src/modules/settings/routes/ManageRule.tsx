@@ -65,7 +65,7 @@ const RuleImpl: React.FC<{ index?: number }> = ({ index }) => {
       {rule ? <ActionSection rule={rule} /> : <Text>No rule available</Text>}
       {__DEV__ && (
         <View className="mx-6">
-          <Text>{JSON.stringify(rule, null, 2)}</Text>
+          <Text className="text-label">{JSON.stringify(rule, null, 2)}</Text>
         </View>
       )}
     </View>

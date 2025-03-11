@@ -47,10 +47,10 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
       <GroupedInsetListSectionHeader label="Condition" />
       <GroupedInsetListCard>
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
-          <Text>Field</Text>
+          <Text className="text-label">Field</Text>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Text>{currentField?.label || "Select"}</Text>
+              <Text className="text-label">{currentField?.label || "Select"}</Text>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               {filterFieldOptions.map((field) => (
@@ -71,10 +71,10 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
         </GroupedInsetListBaseCell>
 
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
-          <Text>Operator</Text>
+          <Text className="text-label">Operator</Text>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Text>{currentOperator?.label || "Select"}</Text>
+              <Text className="text-label">{currentOperator?.label || "Select"}</Text>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               {filterOperatorOptions
@@ -97,7 +97,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
         </GroupedInsetListBaseCell>
 
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
-          <Text>Value</Text>
+          <Text className="text-label">Value</Text>
           {currentField?.type === "view" ? (
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
@@ -107,7 +107,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
                     width: 17,
                     color: currentView?.activeColor,
                   })}
-                  <Text>{currentView?.name || "Select"}</Text>
+                  <Text className="text-label">{currentView?.name || "Select"}</Text>
                 </View>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content>
@@ -142,7 +142,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
       </GroupedInsetListCard>
       {__DEV__ && (
         <View className="m-5">
-          <Text>{JSON.stringify(item)}</Text>
+          <Text className="text-label">{JSON.stringify(item)}</Text>
         </View>
       )}
     </>
