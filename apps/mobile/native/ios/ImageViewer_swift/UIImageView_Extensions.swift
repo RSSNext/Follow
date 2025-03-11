@@ -153,7 +153,7 @@ extension UIImageView {
         let imageCarousel = ImageCarouselViewController.init(
             sourceView: sourceView,
             imageDataSource: sender.imageDatasource,
-            imageLoader: sender.imageLoader ?? URLSessionImageLoader(),
+            imageLoader: sender.imageLoader ?? SDWebImageLoader(),
             options: sender.options,
             initialIndex: sender.initialIndex)
         let presentFromVC = sender.from ?? vc

@@ -57,12 +57,8 @@ UIGestureRecognizerDelegate {
         scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.showsVerticalScrollIndicator = false
-        
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
+        scrollView.contentInsetAdjustmentBehavior = .never
+      
         view.addSubview(scrollView)
         scrollView.bindFrameToSuperview()
         scrollView.backgroundColor = .clear
