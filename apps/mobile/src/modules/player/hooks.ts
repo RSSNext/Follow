@@ -18,7 +18,7 @@ export function useCoverGradient(url?: string) {
   }, [imageColors])
 
   const gradientColors = useMemo(() => {
-    const shadedColor = shadeColor(backgroundColor, -50)
+    const shadedColor = shadeColor(backgroundColor, -51)
     return [shadedColor, shadedColor] as const
   }, [backgroundColor])
 
