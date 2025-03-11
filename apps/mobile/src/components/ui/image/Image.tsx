@@ -82,6 +82,7 @@ export const Image = forwardRef<ExpoImage, ImageProps>(
           aspectRatio,
           ...(typeof rest.style === "object" && { ...rest.style }),
         }}
+        recyclingKey={source?.uri}
         {...rest}
         ref={ref}
       />
