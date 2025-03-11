@@ -1,11 +1,11 @@
 import type { FeedViewType } from "@follow/constants"
-import type { ImageProps } from "expo-image"
 import type { ReactNode } from "react"
 import { useMemo } from "react"
 
 import type { FeedSchema } from "@/src/database/schemas/types"
 import { getFeedIconSource } from "@/src/lib/image"
 
+import type { ImageProps } from "../image/Image"
 import { Image } from "../image/Image"
 
 export type FeedIconRequiredFeed = Pick<

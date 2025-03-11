@@ -1,6 +1,6 @@
 import { createBuildSafeHeaders } from "@follow/utils/src/headers"
 import { getImageProxyUrl, IMAGE_PROXY_URL } from "@follow/utils/src/img-proxy"
-import type { ImageProps as ExpoImageProps } from "expo-image"
+import type { ImageErrorEventData, ImageProps as ExpoImageProps } from "expo-image"
 import { Image as ExpoImage } from "expo-image"
 import { forwardRef, useCallback, useMemo, useState } from "react"
 
@@ -55,9 +55,16 @@ export const Image = forwardRef<ExpoImage, ImageProps>(
     }, [proxy?.height, proxy?.width, safeSource])
 
     const [isError, setIsError] = useState(false)
-    const onError = useCallback(() => {
-      setIsError(true)
-    }, [])
+    const onError = useCallback(
+      (e: ImageErrorEventData) => {
+        if (isError) {
+          rest.onError?.(e)
+        } else {
+          setIsError(true)
+        }
+      },
+      [isError, rest],
+    )
 
     return (
       <ExpoImage

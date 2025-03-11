@@ -40,7 +40,7 @@ export const createBuildSafeHeaders =
       headers.Referer = urlObj.origin
       headers.Origin = urlObj.origin
     } catch (error) {
-      console.error(error)
+      console.warn(error)
     }
 
     return headers

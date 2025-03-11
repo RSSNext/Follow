@@ -1,5 +1,4 @@
 import { cn } from "@follow/utils"
-import { Image } from "expo-image"
 import { router, usePathname } from "expo-router"
 import { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
@@ -10,6 +9,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 
+import { Image } from "@/src/components/ui/image/Image"
 import { useActiveTrack } from "@/src/lib/player"
 import { usePrefetchImageColors } from "@/src/store/image/hooks"
 
@@ -46,7 +46,7 @@ export function PlayerTabBar({ className }: { className?: string }) {
         }}
       >
         <View className="flex flex-row items-center gap-4 overflow-hidden rounded-2xl p-2">
-          <Image source={activeTrack?.artwork} className="size-12 rounded-lg" />
+          <Image source={{ uri: activeTrack?.artwork ?? "" }} className="size-12 rounded-lg" />
           <View className="flex-1 overflow-hidden">
             <Text className="text-label text-lg font-semibold" numberOfLines={1}>
               {activeTrack?.title ?? ""}

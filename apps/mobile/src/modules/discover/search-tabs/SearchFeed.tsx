@@ -1,8 +1,5 @@
 import { FeedViewType } from "@follow/constants"
-import { createBuildSafeHeaders } from "@follow/utils/src/headers"
-import { IMAGE_PROXY_URL } from "@follow/utils/src/img-proxy"
 import { useQuery } from "@tanstack/react-query"
-import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useAtomValue } from "jotai"
 import type { FC } from "react"
@@ -12,19 +9,14 @@ import { ScrollView } from "react-native-gesture-handler"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
-import { proxyEnv } from "@/src/lib/proxy-env"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 
 import { useSearchPageContext } from "../ctx"
 import { BaseSearchPageFlatList, ItemSeparator, RenderScrollComponent } from "./__base"
 import { useDataSkeleton } from "./hooks"
-
-const buildSafeHeaders = createBuildSafeHeaders(proxyEnv.VITE_WEB_URL, [
-  IMAGE_PROXY_URL,
-  proxyEnv.VITE_API_URL,
-])
 
 type SearchResultItem = Awaited<ReturnType<typeof apiClient.discover.$post>>["data"][number]
 
@@ -168,12 +160,11 @@ const PreviewItem = ({ entry }: { entry: NonNullable<SearchResultItem["entries"]
       {!!firstMedia && (
         <View className="bg-gray-6 ml-auto size-[52px] shrink-0 overflow-hidden rounded-lg">
           <Image
-            source={{ uri: firstMedia.url, headers: buildSafeHeaders({ url: firstMedia.url }) }}
+            source={{ uri: firstMedia.url }}
             className="size-full rounded-lg"
             contentFit="cover"
-            transition={500}
             placeholder={{
-              blurHash: firstMedia.blurhash,
+              blurhash: firstMedia.blurhash,
             }}
           />
         </View>
