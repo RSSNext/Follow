@@ -142,6 +142,11 @@ class DialogStatic {
       }, 16)
     }
 
+    const handleConfirm = () => {
+      props.onConfirm?.(mergeCtx(ctx))
+      handleClose()
+    }
+
     const Header = props.HeaderComponent ? (
       createElement(props.HeaderComponent, {
         title: props.title ?? "",
@@ -175,7 +180,7 @@ class DialogStatic {
                 />
 
                 <DialogDynamicButtonAction
-                  fallbackCaller={handleClose}
+                  fallbackCaller={handleConfirm}
                   text={props.confirmText ?? "Confirm"}
                   type="confirm"
                   className={props.variant === "destructive" ? "bg-red" : "bg-accent"}
