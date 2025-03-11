@@ -1,5 +1,6 @@
 import { createAtomHooks } from "@follow/utils/jotai"
-import { atom } from "jotai"
+import { getStorageNS } from "@follow/utils/ns"
+import { atomWithStorage } from "jotai/utils"
 
 export const [, , useMasonryColumnValue, , getMasonryColumnValue, setMasonryColumnValue] =
-  createAtomHooks(atom(-1))
+  createAtomHooks(atomWithStorage(getStorageNS("masonry-column"), -1))
