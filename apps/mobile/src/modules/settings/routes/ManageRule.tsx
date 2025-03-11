@@ -54,11 +54,6 @@ const RuleImpl: React.FC<{ index?: number }> = ({ index }) => {
 
   return (
     <View className="gap-6">
-      {__DEV__ && (
-        <View className="mx-6">
-          <Text>{JSON.stringify(rule, null, 2)}</Text>
-        </View>
-      )}
       {rule ? <NameSection rule={rule} /> : <Text>No rule available</Text>}
       {rule ? <FilterSection rule={rule} /> : <Text>No rule available</Text>}
       {rule ? (
@@ -67,6 +62,11 @@ const RuleImpl: React.FC<{ index?: number }> = ({ index }) => {
         <Text>No rule available</Text>
       )}
       {rule ? <ActionSection rule={rule} /> : <Text>No rule available</Text>}
+      {__DEV__ && (
+        <View className="mx-6">
+          <Text>{JSON.stringify(rule, null, 2)}</Text>
+        </View>
+      )}
     </View>
   )
 }
@@ -128,18 +128,22 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
           return (
             <Fragment key={groupIndex}>
               {group.map((item, itemIndex) => {
-                const currentField = filterFieldOptions.find((field) => field.value === item.field)!
+                const currentField = filterFieldOptions.find((field) => field.value === item.field)
                 const currentOperator = filterOperatorOptions.find(
                   (field) => field.value === item.operator,
-                )!
+                )
                 const currentValue =
-                  currentField.type === "view"
+                  currentField?.type === "view"
                     ? views.find((view) => view.view === Number(item.value))?.name
                     : item.value
                 return (
                   <Fragment key={itemIndex}>
                     <GroupedInsetListActionCell
-                      label={`${currentField.label} ${currentOperator.label} ${currentValue}`}
+                      label={
+                        [currentField?.label, currentOperator?.label, currentValue]
+                          .filter(Boolean)
+                          .join(" ") || "Unknown"
+                      }
                       onPress={() => {
                         navigation.navigate("ManageCondition", {
                           ruleIndex: index,
@@ -148,10 +152,21 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                         })
                       }}
                     />
-                    {itemIndex !== group.length - 1 ? (
-                      <Text className="text-secondary-label ml-5">And</Text>
-                    ) : (
-                      <GroupedPlainButtonCell label="And" textClassName="text-left" />
+                    {itemIndex === group.length - 1 && (
+                      <GroupedPlainButtonCell
+                        label="And"
+                        textClassName="text-left"
+                        onPress={() => {
+                          actionActions.addConditionItem({ ruleIndex: index, groupIndex })
+                          setTimeout(() => {
+                            navigation.navigate("ManageCondition", {
+                              ruleIndex: index,
+                              groupIndex,
+                              conditionIndex: group.length,
+                            })
+                          }, 0)
+                        }}
+                      />
                     )}
                   </Fragment>
                 )

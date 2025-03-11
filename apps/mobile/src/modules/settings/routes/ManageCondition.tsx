@@ -35,10 +35,10 @@ export function ManageConditionScreen({
 
 function ConditionForm({ index }: { index: ConditionIndex }) {
   const item = useActionRuleCondition(index)!
-  const currentField = filterFieldOptions.find((field) => field.value === item.field)!
-  const currentOperator = filterOperatorOptions.find((field) => field.value === item.operator)!
+  const currentField = filterFieldOptions.find((field) => field.value === item.field)
+  const currentOperator = filterOperatorOptions.find((field) => field.value === item.operator)
   const currentView =
-    currentField.type === "view"
+    currentField?.type === "view"
       ? views.find((view) => view.view === Number(item.value))
       : undefined
 
@@ -50,7 +50,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
           <Text>Field</Text>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Text>{currentField.label}</Text>
+              <Text>{currentField?.label || "Select"}</Text>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               {filterFieldOptions.map((field) => (
@@ -74,11 +74,11 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
           <Text>Operator</Text>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Text>{currentOperator.label}</Text>
+              <Text>{currentOperator?.label || "Select"}</Text>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               {filterOperatorOptions
-                .filter((operator) => operator.types.includes(currentField.type ?? "text"))
+                .filter((operator) => operator.types.includes(currentField?.type ?? "text"))
                 .map((operator) => (
                   <DropdownMenu.CheckboxItem
                     value={operator.value === item.operator}
@@ -98,7 +98,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
 
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
           <Text>Value</Text>
-          {currentField.type === "view" ? (
+          {currentField?.type === "view" ? (
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <View className="flex-row items-center gap-1">
@@ -107,7 +107,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
                     width: 17,
                     color: currentView?.activeColor,
                   })}
-                  <Text>{currentView?.name}</Text>
+                  <Text>{currentView?.name || "Select"}</Text>
                 </View>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content>
@@ -135,6 +135,7 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
               }}
               hitSlop={10}
               selectionColor={accentColor}
+              placeholder="Enter value"
             />
           )}
         </GroupedInsetListBaseCell>

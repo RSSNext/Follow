@@ -33,7 +33,7 @@ class ActionSyncService {
   async saveRules() {
     const { rules, isDirty } = useActionStore.getState()
     if (isDirty) {
-      const res = await apiClient.actions.$put({ json: { rules } })
+      const res = await apiClient.actions.$put({ json: { rules: rules as any } })
       actionActions.setDirty(false)
       return res
     }
@@ -65,6 +65,17 @@ class ActionActions {
       const group = rule.condition[index.groupIndex]
       if (!group) return
       group[index.conditionIndex] = merge(group[index.conditionIndex], condition)
+      state.isDirty = true
+    })
+  }
+
+  addConditionItem(index: Omit<ConditionIndex, "conditionIndex">) {
+    immerSet((state) => {
+      const rule = state.rules[index.ruleIndex]
+      if (!rule) return
+      const group = rule.condition[index.groupIndex]
+      if (!group) return
+      group.push({})
       state.isDirty = true
     })
   }
