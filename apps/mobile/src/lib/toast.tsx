@@ -35,7 +35,7 @@ export const toast = {
     if (Platform.OS === "ios") {
       const NativeToaster = requireNativeModule("Toaster")
       NativeToaster.toast({
-        title: "",
+        // title: message,
         message,
         type,
         duration: options.duration ? options.duration / 1000 : 1.5,

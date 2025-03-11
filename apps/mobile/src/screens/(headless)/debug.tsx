@@ -106,7 +106,7 @@ export default function DebugPanel() {
         {
           title: "Toast",
           onPress: () => {
-            toast.error("Hello, world!".repeat(10))
+            toast.success("Hello, world!".repeat(3))
           },
         },
         {

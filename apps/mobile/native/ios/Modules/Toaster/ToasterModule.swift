@@ -5,7 +5,6 @@
 //
 
 import ExpoModulesCore
-import SPIndicator
 
 enum ToastType: String, Enumerable {
   case error
