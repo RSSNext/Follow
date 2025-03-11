@@ -80,6 +80,15 @@ class ActionActions {
     })
   }
 
+  addConditionGroup(index: Omit<ConditionIndex, "conditionIndex" | "groupIndex">) {
+    immerSet((state) => {
+      const rule = state.rules[index.ruleIndex]
+      if (!rule) return
+      rule.condition.push([{}])
+      state.isDirty = true
+    })
+  }
+
   toggleRuleFilter(index: number) {
     immerSet((state) => {
       if (state.rules[index]) {

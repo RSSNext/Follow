@@ -174,7 +174,12 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
             </Fragment>
           )
         })}
-        <GroupedPlainButtonCell label="Or" />
+        <GroupedPlainButtonCell
+          label="Or"
+          onPress={() => {
+            actionActions.addConditionGroup({ ruleIndex: index })
+          }}
+        />
       </GroupedInsetListCard>
     </View>
   )
