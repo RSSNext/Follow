@@ -165,7 +165,9 @@ public class ImageCarouselViewController: UIPageViewController,
             let initialVC: ImageViewerController = .init(
                 index: initialIndex,
                 imageItem: imageDatasource.imageItem(at: initialIndex),
-                imageLoader: imageLoader)
+                imageLoader: imageLoader,
+                sourceView: initialSourceView
+            )
             setViewControllers([initialVC], direction: .forward, animated: true)
             onPreview?(initialIndex)
         }
@@ -229,7 +231,8 @@ extension ImageCarouselViewController: UIPageViewControllerDataSource {
         return ImageViewerController.init(
             index: newIndex,
             imageItem: imageDatasource.imageItem(at: newIndex),
-            imageLoader: vc.imageLoader)
+            imageLoader: vc.imageLoader
+        )
     }
 
     public func pageViewController(
