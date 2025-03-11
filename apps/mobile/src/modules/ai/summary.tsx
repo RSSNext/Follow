@@ -77,7 +77,7 @@ export const AISummary: FC<{
           <Animated.Text
             entering={FadeIn}
             exiting={FadeOut}
-            className="text-secondary-label mt-3 text-[15px] leading-normal"
+            className="text-label mt-3 text-[14px] leading-normal"
           >
             {summary.trim()}
           </Animated.Text>

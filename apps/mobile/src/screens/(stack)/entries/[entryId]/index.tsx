@@ -62,7 +62,7 @@ export default function EntryDetailPage() {
             automaticallyAdjustContentInsets={false}
             className="bg-system-background"
           >
-            <Pressable onPress={() => entry?.url && openLink(entry.url)} className="relative py-3">
+            <Pressable onPress={() => entry?.url && openLink(entry.url)} className="relative py-4">
               {({ pressed }) => (
                 <>
                   {pressed && (
@@ -115,9 +115,9 @@ const EntryInfo = ({ entryId }: { entryId: string }) => {
   const { publishedAt } = entry
 
   return (
-    <View className="mt-3 px-4">
+    <View className="mt-4 px-4">
       <FeedInfo feedId={entry.feedId as string} />
-      <Text className="text-secondary-label">
+      <Text className="text-label text-sm leading-tight">
         {publishedAt.toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}
       </Text>
     </View>
@@ -143,7 +143,7 @@ const FeedInfo = ({ feedId }: { feedId: string }) => {
   if (!feed) return null
   return (
     <View className="mb-2">
-      <Text className="text-secondary-label">{feed.title?.trim()}</Text>
+      <Text className="text-label text-sm leading-tight">{feed.title?.trim()}</Text>
     </View>
   )
 }
