@@ -13,14 +13,6 @@ public class GaleriaModule: Module {
   public func definition() -> ModuleDefinition {
     Name("FollowGaleria")
 
-    Function("attachView") { () in
-      guard let vc = UIWindow.findViewController(ofType: ImageCarouselViewController.self) else {
-        return
-      }
-
-      debugPrint(vc)
-    }
-
     View(GaleriaView.self) {
       Events("onPreview")
       Events("onClosePreview")
