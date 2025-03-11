@@ -103,8 +103,7 @@ class SummarySyncService {
       state.generatingStatus[entryId] = SummaryGeneratingStatus.Pending
     })
 
-    // TODO: Use the language of the entry
-    const language = "en"
+    const language = entry.settings?.translation
     // Use Our AI to generate summary
     const summary = await apiClient.ai.summary
       .$get({
