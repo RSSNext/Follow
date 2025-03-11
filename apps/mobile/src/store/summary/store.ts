@@ -9,7 +9,7 @@ import { SummaryGeneratingStatus } from "./enum"
 type SummaryModel = Omit<SummarySchema, "createdAt">
 
 interface SummaryData {
-  lang: string
+  lang?: string
   summary: string
   lastAccessed: number
 }
@@ -38,7 +38,7 @@ class SummaryActions {
     summaries.forEach((summary) => {
       immerSet((state) => {
         state.data[summary.entryId] = {
-          lang: summary.language,
+          lang: summary.language ?? undefined,
           summary: summary.summary,
           lastAccessed: now,
         }
@@ -142,7 +142,7 @@ class SummarySyncService {
         {
           entryId,
           summary,
-          language,
+          language: language ?? null,
         },
       ])
     }

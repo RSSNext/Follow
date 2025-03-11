@@ -107,7 +107,7 @@ export const summariesTable = sqliteTable(
     entryId: text("entry_id").notNull().primaryKey(),
     summary: text("summary").notNull(),
     createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
-    language: text("language").notNull(),
+    language: text("language"),
   },
   (table) => ({
     unq: uniqueIndex("unq").on(table.entryId, table.language),
