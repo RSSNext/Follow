@@ -138,7 +138,9 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                     ? views.find((view) => view.view === Number(item.value))?.name
                     : item.value
                 return (
-                  <Fragment key={itemIndex}>
+                  <Fragment
+                    key={`${groupIndex}-${itemIndex}-${item.field}-${item.operator}-${item.value}`}
+                  >
                     <SwipeableItem
                       swipeRightToCallAction
                       rightActions={[
