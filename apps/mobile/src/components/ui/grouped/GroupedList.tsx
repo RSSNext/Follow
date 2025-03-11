@@ -201,7 +201,11 @@ export const GroupedInsetListActionCell: FC<{
 }> = ({ label, description, onPress, disabled }) => {
   const rightIconColor = useColor("tertiaryLabel")
   return (
-    <Pressable onPress={onPress} disabled={disabled}>
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      className="bg-secondary-system-grouped-background"
+    >
       {({ pressed }) => (
         <GroupedInsetListBaseCell
           className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}

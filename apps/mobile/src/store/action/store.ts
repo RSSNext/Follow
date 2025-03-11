@@ -79,6 +79,19 @@ class ActionActions {
       state.isDirty = true
     })
   }
+  deleteConditionItem(index: ConditionIndex) {
+    immerSet((state) => {
+      const rule = state.rules[index.ruleIndex]
+      if (!rule) return
+      const group = rule.condition[index.groupIndex]
+      if (!group) return
+      group.splice(index.conditionIndex, 1)
+      if (group.length === 0) {
+        rule.condition.splice(index.groupIndex, 1)
+      }
+      state.isDirty = true
+    })
+  }
 
   addConditionGroup(index: Omit<ConditionIndex, "conditionIndex" | "groupIndex">) {
     immerSet((state) => {

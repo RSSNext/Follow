@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
+import { SwipeableItem } from "@/src/components/common/SwipeableItem"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -138,20 +139,48 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                     : item.value
                 return (
                   <Fragment key={itemIndex}>
-                    <GroupedInsetListActionCell
-                      label={
-                        [currentField?.label, currentOperator?.label, currentValue]
-                          .filter(Boolean)
-                          .join(" ") || "Unknown"
-                      }
-                      onPress={() => {
-                        navigation.navigate("ManageCondition", {
-                          ruleIndex: index,
-                          groupIndex,
-                          conditionIndex: itemIndex,
-                        })
-                      }}
-                    />
+                    <SwipeableItem
+                      swipeRightToCallAction
+                      rightActions={[
+                        {
+                          label: "Delete",
+                          onPress: () => {
+                            actionActions.deleteConditionItem({
+                              ruleIndex: index,
+                              groupIndex,
+                              conditionIndex: itemIndex,
+                            })
+                          },
+                          backgroundColor: "red",
+                        },
+                        {
+                          label: "Edit",
+                          onPress: () => {
+                            navigation.navigate("ManageCondition", {
+                              ruleIndex: index,
+                              groupIndex,
+                              conditionIndex: itemIndex,
+                            })
+                          },
+                          backgroundColor: "#0ea5e9",
+                        },
+                      ]}
+                    >
+                      <GroupedInsetListActionCell
+                        label={
+                          [currentField?.label, currentOperator?.label, currentValue]
+                            .filter(Boolean)
+                            .join(" ") || "Unknown"
+                        }
+                        onPress={() => {
+                          navigation.navigate("ManageCondition", {
+                            ruleIndex: index,
+                            groupIndex,
+                            conditionIndex: itemIndex,
+                          })
+                        }}
+                      />
+                    </SwipeableItem>
                     {itemIndex === group.length - 1 && (
                       <GroupedPlainButtonCell
                         label="And"
