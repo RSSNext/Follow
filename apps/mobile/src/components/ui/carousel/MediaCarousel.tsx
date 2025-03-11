@@ -19,14 +19,11 @@ export const MediaCarousel = ({
   media,
   onPreview,
   aspectRatio,
-
-  noPreview,
 }: {
   entryId: string
   media: MediaModel[]
   onPreview?: () => void
   aspectRatio: number
-  noPreview?: boolean
 }) => {
   const [containerWidth, setContainerWidth] = useState(0)
   const containerHeight = Math.floor(containerWidth / aspectRatio)
@@ -34,8 +31,6 @@ export const MediaCarousel = ({
 
   // const activeIndex = useSharedValue(0)
   const [activeIndex, setActiveIndex] = useState(0)
-
-  const Wrapper = noPreview ? View : ImageContextMenu
 
   return (
     <View
@@ -67,7 +62,7 @@ export const MediaCarousel = ({
                     className="relative"
                     style={{ width: containerWidth, height: containerHeight }}
                   >
-                    <Wrapper entryId={entryId} imageUrl={m.url}>
+                    <ImageContextMenu entryId={entryId} imageUrl={m.url}>
                       <Galeria.Image onPreview={onPreview} index={index}>
                         <Image
                           proxy={{
@@ -80,7 +75,7 @@ export const MediaCarousel = ({
                           placeholderContentFit="cover"
                         />
                       </Galeria.Image>
-                    </Wrapper>
+                    </ImageContextMenu>
                   </View>
                 )
               } else if (m.preview_image_url) {
