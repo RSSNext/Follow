@@ -3,7 +3,7 @@ import { Text, View } from "react-native"
 
 import { User4CuteReIcon } from "@/src/icons/user_4_cute_re"
 
-import { ProxiedImage } from "../image/ProxiedImage"
+import { Image } from "../image/Image"
 
 interface UserAvatarProps {
   image?: string | null
@@ -40,11 +40,10 @@ export const UserAvatar = ({ image, size = 24, name, className, color }: UserAva
   }
 
   return (
-    <ProxiedImage
+    <Image
       source={{ uri: image }}
       className={cn("rounded-full", className)}
       style={{ width: size, height: size }}
-      resizeMode="cover"
       proxy={{
         width: size,
         height: size,

@@ -9,7 +9,7 @@ import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { preloadWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
-import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
@@ -118,7 +118,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
           <View className="relative ml-2">
             {image &&
               (thumbnailRatio === "square" ? (
-                <ProxiedImage
+                <Image
                   proxy={{
                     width: 96,
                     height: 96,
@@ -126,11 +126,9 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
                   source={{
                     uri: image,
                   }}
-                  placeholder={{ blurhash }}
-                  className="bg-system-fill size-24 rounded-md"
+                  blurhash={blurhash}
+                  className="border-secondary-system-background size-24 rounded-md border"
                   contentFit="cover"
-                  recyclingKey={image}
-                  transition={500}
                 />
               ) : (
                 <AspectRatioImage
@@ -212,7 +210,7 @@ const AspectRatioImage = ({
         }}
         className="overflow-hidden rounded-md"
       >
-        <ProxiedImage
+        <Image
           proxy={{
             width: 96,
           }}
@@ -223,11 +221,9 @@ const AspectRatioImage = ({
             width: scaledWidth,
             height: scaledHeight,
           }}
-          placeholder={{ blurhash }}
-          className="bg-system-fill"
+          blurhash={blurhash}
+          className="border-secondary-system-background border"
           contentFit="cover"
-          recyclingKey={image}
-          transition={500}
         />
       </View>
     </View>

@@ -63,7 +63,10 @@ export const Image = forwardRef<ExpoImage, ImageProps>(
       <ExpoImage
         source={isError ? safeSource : proxiesSafeSource}
         onError={onError}
-        placeholder={{ blurhash }}
+        placeholder={{
+          blurhash,
+          ...(typeof rest.placeholder === "object" && { ...rest.placeholder }),
+        }}
         style={{
           aspectRatio,
           ...(typeof rest.style === "object" && { ...rest.style }),
