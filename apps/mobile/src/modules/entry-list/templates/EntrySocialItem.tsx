@@ -9,7 +9,7 @@ import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { Galeria } from "@/src/components/ui/image/galeria"
-import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -110,19 +110,18 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
             <Galeria urls={memoedMediaUrlList}>
               {media.map((image, index) => {
                 return (
-                  <Pressable key={image.url}>
+                  <Pressable key={`${entryId}-${image.url}`}>
                     <Galeria.Image index={index}>
-                      <ProxiedImage
+                      <Image
                         proxy={{
-                          width: 80,
                           height: 80,
                         }}
                         source={{ uri: image.url }}
-                        transition={500}
-                        placeholder={{ blurhash: image.blurhash }}
-                        className="bg-system-fill ml-2 size-20 rounded-md"
+                        blurhash={image.blurhash}
+                        className="border-secondary-system-background ml-2 h-20 rounded-md border"
                         contentFit="cover"
                         recyclingKey={image.url}
+                        aspectRatio={image.width && image.height ? image.width / image.height : 1}
                       />
                     </Galeria.Image>
                   </Pressable>

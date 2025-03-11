@@ -11,9 +11,8 @@ import { Galeria } from "@/src/components/ui/image/galeria"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { EntryGridFooter } from "@/src/modules/entry-content/EntryGridFooter"
 
+import { Image } from "../image/Image"
 import { ImageContextMenu } from "../image/ImageContextMenu"
-import { PreviewImage } from "../image/PreviewImage"
-import { ProxiedImage } from "../image/ProxiedImage"
 
 export const MediaCarousel = ({
   entryId,
@@ -70,39 +69,33 @@ export const MediaCarousel = ({
                   >
                     <Wrapper entryId={entryId} imageUrl={m.url}>
                       <Galeria.Image onPreview={onPreview} index={index}>
-                        <ProxiedImage
+                        <Image
                           proxy={{
                             height: 400,
                           }}
-                          transition={500}
                           source={{ uri: m.url }}
-                          placeholder={{
-                            blurhash: m.blurhash,
-                          }}
+                          blurhash={m.blurhash}
                           className="w-full"
-                          style={{
-                            aspectRatio,
-                          }}
+                          aspectRatio={aspectRatio}
                           placeholderContentFit="cover"
-                          recyclingKey={m.url}
                         />
                       </Galeria.Image>
                     </Wrapper>
                   </View>
                 )
+              } else if (m.preview_image_url) {
+                // TODO: video preview
+                return (
+                  <Image
+                    key={index}
+                    source={{ uri: m.preview_image_url }}
+                    aspectRatio={aspectRatio}
+                  />
+                )
+              } else {
+                // TODO: video preview
+                return null
               }
-
-              return (
-                <PreviewImage
-                  key={index}
-                  noPreview={noPreview}
-                  onPreview={() => {
-                    // open player
-                  }}
-                  imageUrl={m.url}
-                  aspectRatio={aspectRatio}
-                />
-              )
             })}
           </ScrollView>
         </Galeria>
