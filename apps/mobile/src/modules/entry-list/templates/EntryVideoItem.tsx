@@ -2,7 +2,7 @@ import { transformVideoUrl } from "@follow/utils"
 import { Linking } from "react-native"
 
 import { useGeneralSettingKey } from "@/src/atoms/settings/general"
-import { MediaCarousel } from "@/src/components/ui/carousel/MediaCarousel"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
@@ -10,6 +10,7 @@ import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 import { VideoContextMenu } from "../../context-menu/video"
+import { EntryGridFooter } from "../../entry-content/EntryGridFooter"
 
 export function EntryVideoItem({ id }: { id: string }) {
   const item = useEntry(id)
@@ -19,12 +20,10 @@ export function EntryVideoItem({ id }: { id: string }) {
     return null
   }
 
-  const firstMedia = item.media.slice(0, 1)
-
   return (
     <VideoContextMenu entryId={id}>
       <ItemPressable
-        className="m-1 overflow-hidden rounded-md"
+        className="m-1"
         onPress={() => {
           unreadSyncService.markEntryAsRead(id)
           if (!item.url) {
@@ -34,13 +33,15 @@ export function EntryVideoItem({ id }: { id: string }) {
           openVideo(item.url, needOpenVideoInApp)
         }}
       >
-        <MediaCarousel
-          entryId={id}
-          media={firstMedia}
+        <Image
+          source={{ uri: item.media[0]?.url || "" }}
           aspectRatio={16 / 9}
-          // AccessoryProps={{ id }}
-          noPreview={true}
+          className="w-full rounded-lg"
+          proxy={{
+            width: 200,
+          }}
         />
+        <EntryGridFooter entryId={id} />
       </ItemPressable>
     </VideoContextMenu>
   )

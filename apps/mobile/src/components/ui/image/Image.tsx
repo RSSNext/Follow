@@ -27,7 +27,7 @@ export type ImageProps = Omit<ExpoImageProps, "source"> & {
 export const Image = forwardRef<ExpoImage, ImageProps>(
   ({ proxy, source, blurhash, aspectRatio, ...rest }, ref) => {
     const safeSource: ImageProps["source"] = useMemo(() => {
-      return source
+      return source?.uri
         ? {
             ...source,
             headers: {
@@ -65,6 +65,10 @@ export const Image = forwardRef<ExpoImage, ImageProps>(
       },
       [isError, rest],
     )
+
+    if (!source?.uri) {
+      return null
+    }
 
     return (
       <ExpoImage

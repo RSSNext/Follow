@@ -118,7 +118,7 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
                     <Galeria.Image index={index}>
                       <Image
                         proxy={{
-                          height: 80,
+                          width: fullWidth ? 400 : 200,
                         }}
                         source={{ uri: image.url }}
                         blurhash={image.blurhash}
