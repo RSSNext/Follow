@@ -32,12 +32,13 @@ class ActionSyncService {
 
   async saveRules() {
     const { rules, isDirty } = useActionStore.getState()
-    if (isDirty) {
-      const res = await apiClient.actions.$put({ json: { rules: rules as any } })
-      actionActions.setDirty(false)
-      return res
+    if (!isDirty) {
+      return null
     }
-    return null
+
+    const res = await apiClient.actions.$put({ json: { rules: rules as any } })
+    actionActions.setDirty(false)
+    return res
   }
 }
 
@@ -119,6 +120,7 @@ class ActionActions {
       if (state.rules[index]) {
         const hasCustomFilters = state.rules[index].condition.length > 0
         state.rules[index].condition = hasCustomFilters ? [] : [[{}]]
+        state.isDirty = true
       }
     })
   }

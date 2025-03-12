@@ -1,6 +1,4 @@
 import { withOpacity } from "@follow/utils"
-import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useCallback } from "react"
 import type { ListRenderItem } from "react-native"
 import { ActivityIndicator, Text, View } from "react-native"
@@ -27,8 +25,9 @@ import {
   useActionRules,
   useIsActionDataDirty,
   usePrefetchActionRules,
+  useSaveActionMutation,
 } from "@/src/store/action/hooks"
-import { actionActions, actionSyncService } from "@/src/store/action/store"
+import { actionActions } from "@/src/store/action/store"
 import type { ActionRule } from "@/src/store/action/types"
 
 import { useSettingsNavigation } from "../hooks"
@@ -104,19 +103,11 @@ const NewRuleButton = () => {
 }
 
 const SaveRuleButton = ({ disabled }: { disabled?: boolean }) => {
-  const mutation = useMutation({
-    mutationFn: () => actionSyncService.saveRules(),
-    onSuccess() {
-      router.back()
-    },
-  })
+  const { mutate, isPending } = useSaveActionMutation()
   const label = useColor("label")
   return (
-    <UINavigationHeaderActionButton
-      onPress={mutation.mutate}
-      disabled={disabled || mutation.isPending}
-    >
-      {mutation.isPending ? (
+    <UINavigationHeaderActionButton onPress={mutate} disabled={disabled || isPending}>
+      {isPending ? (
         <RotateableLoading size={20} color={withOpacity(label, 0.5)} />
       ) : (
         <CheckLineIcon height={20} width={20} color={disabled ? withOpacity(label, 0.5) : label} />
