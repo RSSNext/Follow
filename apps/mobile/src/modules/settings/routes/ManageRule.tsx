@@ -220,6 +220,8 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
     (action) => rule.result[action.value] === undefined,
   )
 
+  const navigation = useSettingsNavigation()
+
   return (
     <View>
       <GroupedInsetListSectionHeader label="Then do..." />
@@ -239,6 +241,11 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
           >
             {action.component ? (
               <action.component rule={rule} />
+            ) : action.onNavigate ? (
+              <GroupedInsetListActionCell
+                label={action.label}
+                onPress={() => action.onNavigate?.(navigation, rule.index)}
+              />
             ) : (
               <GroupedInsetListCell
                 label={action.label}

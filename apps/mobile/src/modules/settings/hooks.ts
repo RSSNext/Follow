@@ -6,3 +6,5 @@ import type { SettingsStackParamList } from "./types"
 export const useSettingsNavigation = () => {
   return useNavigation<NativeStackNavigationProp<SettingsStackParamList>>()
 }
+
+export type SettingsNavigation = ReturnType<typeof useSettingsNavigation>
