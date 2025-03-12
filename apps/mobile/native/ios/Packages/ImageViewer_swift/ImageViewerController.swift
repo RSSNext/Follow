@@ -124,7 +124,7 @@ class ImageViewerController: UIViewController,
         }
 
         addGestureRecognizers()
-        setupOptionsButton()
+
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -231,51 +231,6 @@ class ImageViewerController: UIViewController,
         zoomInOrOut(at: pointInView)
     }
 
-    private func setupOptionsButton() {
-        if let parent = parent as? ImageCarouselViewController {
-            let saveAction = UIAction(
-                title: "Save to Photos",
-                image: UIImage(systemName: "square.and.arrow.down")
-            ) { [weak self] _ in
-                self?.saveImageToPhotos()
-            }
-
-            let copyAction = UIAction(
-                title: "Copy",
-                image: UIImage(systemName: "doc.on.doc")
-            ) { [weak self] _ in
-                self?.copyImageToClipboard()
-            }
-
-            let shareAction = UIAction(
-                title: "Share",
-                image: UIImage(systemName: "square.and.arrow.up")
-            ) { [weak self] _ in
-                self?.shareImage()
-            }
-
-            let menu = UIMenu(title: "", children: [saveAction, copyAction, shareAction])
-
-            let optionsButton = UIBarButtonItem(
-                image: UIImage(systemName: "ellipsis.circle")?.withAlpha(0.9).withTintColor(
-                    .white, renderingMode: .alwaysOriginal
-                ),
-                primaryAction: nil,
-                menu: menu
-            )
-
-            parent.setRightNavItem(item: optionsButton)
-
-        }
-    }
-
-    private func saveImageToPhotos() {
-        guard let image = imageView.image else { return }
-
-        UIImageWriteToSavedPhotosAlbum(
-            image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-    }
-
     @objc func image(
         _ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer
     ) {
@@ -286,31 +241,6 @@ class ImageViewerController: UIViewController,
         } else {
             SPIndicator.present(title: "Saved", preset: .done, haptic: .success)
         }
-    }
-
-    private func copyImageToClipboard() {
-        guard let image = imageView.image else { return }
-
-        UIPasteboard.general.image = image
-        SPIndicator.present(title: "Copied", preset: .done, haptic: .success)
-    }
-
-    private func shareImage() {
-        guard let image = imageView.image else { return }
-
-        let activityViewController = UIActivityViewController(
-            activityItems: [image],
-            applicationActivities: nil)
-
-        // For iPad support
-        if let popoverController = activityViewController.popoverPresentationController {
-            popoverController.sourceView = imageView
-            popoverController.sourceRect = CGRect(
-                x: imageView.bounds.midX, y: imageView.bounds.midY, width: 0, height: 0)
-            popoverController.permittedArrowDirections = []
-        }
-
-        present(activityViewController, animated: true)
     }
 
     func gestureRecognizerShouldBegin(
@@ -401,4 +331,40 @@ extension ImageViewerController: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
     }
+}
+
+extension ImageViewerController: ImageCarouselViewControllerProtocol {
+
+    public func saveImageToPhotos() {
+        guard let image = imageView.image else { return }
+
+        UIImageWriteToSavedPhotosAlbum(
+            image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+
+    public func copyImageToClipboard() {
+        guard let image = imageView.image else { return }
+
+        UIPasteboard.general.image = image
+        SPIndicator.present(title: "Copied", preset: .done, haptic: .success)
+    }
+
+    public func shareImage() {
+        guard let image = imageView.image else { return }
+
+        let activityViewController = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil)
+
+        // For iPad support
+        if let popoverController = activityViewController.popoverPresentationController {
+            popoverController.sourceView = imageView
+            popoverController.sourceRect = CGRect(
+                x: imageView.bounds.midX, y: imageView.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+
+        present(activityViewController, animated: true)
+    }
+
 }

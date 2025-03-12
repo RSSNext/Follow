@@ -60,7 +60,7 @@ public class ImageCarouselViewController: UIPageViewController,
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = .gray
-        pageControl.isUserInteractionEnabled = false
+        pageControl.isUserInteractionEnabled = true
         return pageControl
     }()
 
@@ -114,10 +114,61 @@ public class ImageCarouselViewController: UIPageViewController,
             target: self,
             action: #selector(dismiss(_:)))
 
+        let saveAction = UIAction(
+            title: "Save to Photos",
+            image: UIImage(systemName: "square.and.arrow.down")
+        ) { [weak self] _ in
+            self?.saveImageToPhotos()
+        }
+
+        let copyAction = UIAction(
+            title: "Copy",
+            image: UIImage(systemName: "doc.on.doc")
+        ) { [weak self] _ in
+            self?.copyImageToClipboard()
+        }
+
+        let shareAction = UIAction(
+            title: "Share",
+            image: UIImage(systemName: "square.and.arrow.up")
+        ) { [weak self] _ in
+            self?.shareImage()
+        }
+
+        let menu = UIMenu(title: "", children: [saveAction, copyAction, shareAction])
+
+        let optionsButton = UIBarButtonItem(
+            image: UIImage(systemName: "ellipsis.circle")?.withAlpha(0.9).withTintColor(
+                .white, renderingMode: .alwaysOriginal
+            ),
+            primaryAction: nil,
+            menu: menu
+        )
+
         navItem.leftBarButtonItem = closeBarButton
+        navItem.rightBarButtonItem = optionsButton
         navBar.alpha = 0.0
         navBar.items = [navItem]
+
         navBar.insert(to: view)
+    }
+
+    private func saveImageToPhotos() {
+        if let vc = viewControllers?.first as? ImageCarouselViewControllerProtocol {
+            vc.saveImageToPhotos()
+        }
+
+    }
+    private func copyImageToClipboard() {
+        if let vc = viewControllers?.first as? ImageCarouselViewControllerProtocol {
+            vc.copyImageToClipboard()
+        }
+    }
+    private func shareImage() {
+        if let vc = viewControllers?.first as? ImageCarouselViewControllerProtocol {
+            vc.shareImage()
+
+        }
     }
 
     private func addBackgroundView() {
@@ -201,14 +252,6 @@ public class ImageCarouselViewController: UIPageViewController,
     deinit {
         initialSourceView?.alpha = 1.0
         onClosePreview?()
-    }
-
-    @objc
-    func diTapRightNavBarItem(_ sender: UIBarButtonItem) {
-        guard let onTap = onRightNavBarTapped,
-            let _firstVC = viewControllers?.first as? ImageViewerController
-        else { return }
-        onTap(_firstVC.index)
     }
 
 }
