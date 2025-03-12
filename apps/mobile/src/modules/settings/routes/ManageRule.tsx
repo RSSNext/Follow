@@ -1,7 +1,6 @@
 import type { RouteProp } from "@react-navigation/native"
 import { Fragment } from "react"
-import { Text, TouchableOpacity, View } from "react-native"
-import { useColor } from "react-native-uikit-colors"
+import { Text, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { SwipeableItem } from "@/src/components/common/SwipeableItem"
@@ -19,7 +18,6 @@ import {
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
 import { views } from "@/src/constants/views"
-import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionFilter, ActionRule } from "@/src/store/action/types"
@@ -215,7 +213,6 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
 }
 
 const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
-  const secondaryLabelColor = useColor("secondaryLabel")
   const enabledActions = availableActionList.filter(
     (action) => rule.result[action.value] !== undefined,
   )
@@ -227,26 +224,30 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
     <View>
       <GroupedInsetListSectionHeader label="Then do..." />
       <GroupedInsetListCard>
-        {enabledActions.map((action) =>
-          action.component ? (
-            <action.component key={action.value} rule={rule} />
-          ) : (
-            <GroupedInsetListCell
-              label={action.label}
-              key={action.value}
-              leftClassName="flex-none"
-              rightClassName="flex-1 flex-row justify-end"
-            >
-              <TouchableOpacity
-                onPress={() => {
+        {enabledActions.map((action) => (
+          <SwipeableItem
+            key={action.value}
+            rightActions={[
+              {
+                label: "Delete",
+                onPress: () => {
                   actionActions.deleteRuleAction(rule.index, action.value)
-                }}
-              >
-                <CloseCircleFillIcon height={16} width={16} color={secondaryLabelColor} />
-              </TouchableOpacity>
-            </GroupedInsetListCell>
-          ),
-        )}
+                },
+                backgroundColor: "red",
+              },
+            ]}
+          >
+            {action.component ? (
+              <action.component rule={rule} />
+            ) : (
+              <GroupedInsetListCell
+                label={action.label}
+                leftClassName="flex-none"
+                rightClassName="flex-1 flex-row justify-end"
+              />
+            )}
+          </SwipeableItem>
+        ))}
         {notEnabledActions.length > 0 && (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>

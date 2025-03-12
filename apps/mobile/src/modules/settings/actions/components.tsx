@@ -1,16 +1,13 @@
-import { Text, TouchableOpacity } from "react-native"
-import { useColor } from "react-native-uikit-colors"
+import { Text } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { GroupedInsetListCell } from "@/src/components/ui/grouped/GroupedList"
-import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionRule } from "@/src/store/action/types"
 
 import { translationOptions } from "./constant"
 
 export const ActionFormTranslation: React.FC<{ rule: ActionRule }> = ({ rule }) => {
-  const secondaryLabelColor = useColor("secondaryLabel")
   const currentTranslation = translationOptions.find(
     (translation) => translation.value === rule.result?.translation,
   )
@@ -38,13 +35,6 @@ export const ActionFormTranslation: React.FC<{ rule: ActionRule }> = ({ rule }) 
           ))}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
-      <TouchableOpacity
-        onPress={() => {
-          actionActions.deleteRuleAction(rule.index, "translation")
-        }}
-      >
-        <CloseCircleFillIcon height={16} width={16} color={secondaryLabelColor} />
-      </TouchableOpacity>
     </GroupedInsetListCell>
   )
 }

@@ -151,7 +151,7 @@ export const GroupedInsetListCell: FC<
   } & BaseCellClassNames
 > = ({ label, description, children, leftClassName, rightClassName }) => {
   return (
-    <GroupedInsetListBaseCell className="flex-1">
+    <GroupedInsetListBaseCell className="bg-secondary-system-grouped-background flex-1">
       <View className={cn("flex-1", leftClassName)}>
         <Text className="text-label">{label}</Text>
         {!!description && (
