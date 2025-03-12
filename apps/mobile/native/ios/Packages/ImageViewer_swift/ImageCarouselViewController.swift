@@ -55,6 +55,15 @@ public class ImageCarouselViewController: UIPageViewController,
 
     private(set) lazy var navItem = UINavigationItem()
 
+    private(set) lazy var pageIndicator: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.currentPageIndicatorTintColor = .white
+        pageControl.pageIndicatorTintColor = .gray
+        pageControl.isUserInteractionEnabled = false
+        return pageControl
+    }()
+
     private let imageViewerPresentationDelegate: ImageViewerTransitionPresentationManager
 
     public init(
@@ -118,6 +127,24 @@ public class ImageCarouselViewController: UIPageViewController,
         view.sendSubviewToBack(backgroundView)
     }
 
+    private func addPageIndicator() {
+        view.addSubview(pageIndicator)
+        NSLayoutConstraint.activate([
+            pageIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pageIndicator.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+        ])
+
+        if let imageDatasource = imageDatasource {
+            pageIndicator.numberOfPages = imageDatasource.numberOfImages()
+            pageIndicator.currentPage = initialIndex
+        }
+    }
+
+    public func setRightNavItem(item: UIBarButtonItem) {
+        navItem.rightBarButtonItem = item
+    }
+
     private func applyOptions() {
 
         options.forEach {
@@ -125,22 +152,6 @@ public class ImageCarouselViewController: UIPageViewController,
 
             case .contentMode(let contentMode):
                 self.imageContentMode = contentMode
-            case .closeIcon(let icon):
-                navItem.leftBarButtonItem?.image = icon
-            case .rightNavItemTitle(let title, let onTap):
-                navItem.rightBarButtonItem = UIBarButtonItem(
-                    title: title,
-                    style: .plain,
-                    target: self,
-                    action: #selector(diTapRightNavBarItem(_:)))
-                onRightNavBarTapped = onTap
-            case .rightNavItemIcon(let icon, let onTap):
-                navItem.rightBarButtonItem = UIBarButtonItem(
-                    image: icon,
-                    style: .plain,
-                    target: self,
-                    action: #selector(diTapRightNavBarItem(_:)))
-                onRightNavBarTapped = onTap
             case .onPreview(let callback):
                 self.onPreview = callback
             case .onClosePreview(let callback):
@@ -156,6 +167,7 @@ public class ImageCarouselViewController: UIPageViewController,
 
         addBackgroundView()
         addNavBar()
+        addPageIndicator()
         applyOptions()
 
         dataSource = self
@@ -212,6 +224,7 @@ extension ImageCarouselViewController {
         if completed,
             let currentVC = pageViewController.viewControllers?.first as? ImageViewerController
         {
+            pageIndicator.currentPage = currentVC.index
             onIndexChange?(currentVC.index)
         }
     }

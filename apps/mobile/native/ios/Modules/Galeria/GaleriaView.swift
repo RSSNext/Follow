@@ -99,26 +99,6 @@ class GaleriaView: ExpoView {
     var options: [ImageViewerOption] = []
     let iconColor: UIColor = .white
 
-    if let closeIconName = closeIconName,
-      let closeIconImage = UIImage(systemName: closeIconName)?.withTintColor(
-        iconColor, renderingMode: .alwaysOriginal)
-    {
-      options.append(ImageViewerOption.closeIcon(closeIconImage))
-
-    }
-
-    if let rightIconName = rightNavItemIconName,
-      let rightIconImage = UIImage(systemName: rightIconName)?.withTintColor(
-        iconColor, renderingMode: .alwaysOriginal)
-    {
-      let rightNavItemOption = ImageViewerOption.rightNavItemIcon(
-        rightIconImage,
-        onTap: { index in
-          self.onPressRightNavItemIcon(["index": index])
-        })
-      options.append(rightNavItemOption)
-    }
-
     options.append(
       ImageViewerOption.onPreview { [weak self] index in
         self?.onPreview(["index": index])

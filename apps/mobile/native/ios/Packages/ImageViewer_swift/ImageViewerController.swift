@@ -64,6 +64,7 @@ class ImageViewerController: UIViewController,
         scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
 
         view.addSubview(scrollView)
@@ -123,6 +124,7 @@ class ImageViewerController: UIViewController,
         }
 
         addGestureRecognizers()
+        setupOptionsButton()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -173,10 +175,6 @@ class ImageViewerController: UIViewController,
         scrollView.addGestureRecognizer(doubleTapRecognizer)
 
         singleTapGesture.require(toFail: doubleTapRecognizer)
-
-        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
-        imageView.isUserInteractionEnabled = true
-        imageView.addInteraction(contextMenuInteraction)
     }
 
     @objc
@@ -233,6 +231,44 @@ class ImageViewerController: UIViewController,
         zoomInOrOut(at: pointInView)
     }
 
+    private func setupOptionsButton() {
+        if let parent = parent as? ImageCarouselViewController {
+            let saveAction = UIAction(
+                title: "Save to Photos",
+                image: UIImage(systemName: "square.and.arrow.down")
+            ) { [weak self] _ in
+                self?.saveImageToPhotos()
+            }
+
+            let copyAction = UIAction(
+                title: "Copy",
+                image: UIImage(systemName: "doc.on.doc")
+            ) { [weak self] _ in
+                self?.copyImageToClipboard()
+            }
+
+            let shareAction = UIAction(
+                title: "Share",
+                image: UIImage(systemName: "square.and.arrow.up")
+            ) { [weak self] _ in
+                self?.shareImage()
+            }
+
+            let menu = UIMenu(title: "", children: [saveAction, copyAction, shareAction])
+
+            let optionsButton = UIBarButtonItem(
+                image: UIImage(systemName: "ellipsis.circle")?.withAlpha(0.9).withTintColor(
+                    .white, renderingMode: .alwaysOriginal
+                ),
+                primaryAction: nil,
+                menu: menu
+            )
+
+            parent.setRightNavItem(item: optionsButton)
+
+        }
+    }
+
     private func saveImageToPhotos() {
         guard let image = imageView.image else { return }
 
@@ -256,6 +292,7 @@ class ImageViewerController: UIViewController,
         guard let image = imageView.image else { return }
 
         UIPasteboard.general.image = image
+        SPIndicator.present(title: "Copied", preset: .done, haptic: .success)
     }
 
     private func shareImage() {
@@ -363,39 +400,5 @@ extension ImageViewerController: UIScrollViewDelegate {
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
-    }
-}
-
-// MARK: - UIContextMenuInteractionDelegate
-extension ImageViewerController: UIContextMenuInteractionDelegate {
-    func contextMenuInteraction(
-        _ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint
-    ) -> UIContextMenuConfiguration? {
-        guard let currentImage = imageView.image else { return nil }
-
-        return UIContextMenuConfiguration(
-            identifier: nil,
-            previewProvider: nil,
-            actionProvider: { _ in
-                let saveAction = UIAction(
-                    title: "Save to Photos", image: UIImage(systemName: "square.and.arrow.down")
-                ) { [weak self] _ in
-                    self?.saveImageToPhotos()
-                }
-
-                let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc")) {
-                    [weak self] _ in
-                    self?.copyImageToClipboard()
-                }
-
-                let shareAction = UIAction(
-                    title: "Share", image: UIImage(systemName: "square.and.arrow.up")
-                ) { [weak self] _ in
-                    self?.shareImage()
-                }
-
-                return UIMenu(title: "", children: [saveAction, copyAction, shareAction])
-            }
-        )
     }
 }
