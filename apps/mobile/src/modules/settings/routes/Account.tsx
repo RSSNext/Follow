@@ -48,6 +48,7 @@ type Account = {
 }
 
 const accountInfoKey = ["account-info"]
+const userProviderKey = ["providers"]
 
 const useAccount = () => {
   return useQuery({
@@ -153,7 +154,14 @@ const AccountLinker: FC<{
             provider: provider as any,
           }).then((res) => {
             if (res.data) {
-              openLink(res.data.url)
+              openLink(res.data.url, () => {
+                queryClient.invalidateQueries({
+                  queryKey: [accountInfoKey],
+                })
+                queryClient.invalidateQueries({
+                  queryKey: [userProviderKey],
+                })
+              })
             } else {
               toast.error("Failed to link account")
             }
@@ -179,7 +187,7 @@ const AuthenticationSection = () => {
   const { data: accounts } = useAccount()
 
   const { data: providers, isLoading } = useQuery({
-    queryKey: ["providers"],
+    queryKey: userProviderKey,
     queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
   })
 
@@ -192,6 +200,7 @@ const AuthenticationSection = () => {
       {} as Record<string, Account>,
     )
   }, [accounts?.data, providers])
+
   return (
     <>
       <GroupedInsetListSectionHeader label="Authentication" />
@@ -241,7 +250,13 @@ const SecuritySection = () => {
             }
           }}
         />
-        <GroupedPlainButtonCell textClassName="text-left" label="Setting 2FA" onPress={() => {}} />
+        <GroupedPlainButtonCell
+          textClassName="text-left"
+          label="Setting 2FA"
+          onPress={() => {
+            router.navigate("Setting2FA")
+          }}
+        />
       </GroupedInsetListCard>
     </View>
   )

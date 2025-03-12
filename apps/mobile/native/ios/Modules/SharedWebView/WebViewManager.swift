@@ -48,11 +48,13 @@ enum WebViewManager {
         self.shared = FOWebView(frame: .zero, state: state)
     }
 
-    static func presentModalWebView(url: URL, from viewController: UIViewController) {
-        let safariVC = SFSafariViewController(url: url)
-        safariVC.view.tintColor = Utils.accentColor
-        safariVC.preferredControlTintColor = Utils.accentColor
-        viewController.present(safariVC, animated: true)
+  static func presentModalWebView(url: URL, from viewController: UIViewController, onDismiss: (() -> Void)? = nil) {
+      let safariVC = SafariViewController(url: url)
+      safariVC.view.tintColor = Utils.accentColor
+      safariVC.preferredControlTintColor = Utils.accentColor
+    
+      if let onDismiss = onDismiss { safariVC.setOnDismiss(onDismiss) }
+      viewController.present(safariVC, animated: true)
     }
 }
 
@@ -72,4 +74,18 @@ extension WebViewManager {
         SharedWebViewUI()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+}
+
+fileprivate class SafariViewController: SFSafariViewController {
+  
+  private var onDismiss: (() -> Void)?
+  
+  public func setOnDismiss(_ onDismiss: @escaping () -> Void) {
+    self.onDismiss = onDismiss
+  }
+  
+  override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+    onDismiss?()
+  }
 }

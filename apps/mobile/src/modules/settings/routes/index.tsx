@@ -14,6 +14,7 @@ import { ManageListScreen } from "./ManageList"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
 import { ResetPassword } from "./ResetPassword"
+import { Setting2FAScreen } from "./Setting2FAScreen"
 
 const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
   return (
@@ -34,6 +35,7 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
       <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
+      <Stack.Screen key="Setting2FA" name="Setting2FA" component={Setting2FAScreen} />
     </Stack.Group>
   )
 }

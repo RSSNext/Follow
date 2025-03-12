@@ -71,6 +71,7 @@ export const ResetPassword = () => {
       <GroupedInsetListCard>
         <GroupedInsetListBaseCell className="py-3">
           <PlainTextField
+            autoFocus
             className="w-full"
             hitSlop={10}
             secureTextEntry={true}

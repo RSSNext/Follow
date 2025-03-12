@@ -14,18 +14,22 @@ public class HelperModule: Module {
   public func definition() -> ExpoModulesCore.ModuleDefinition {
     Name("Helper")
 
-    Function("openLink") { (urlString: String) in
+    AsyncFunction("openLink") { (urlString: String, promise: Promise) in
       guard let url = URL(string: urlString) else {
         return
       }
       DispatchQueue.main.async {
-        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
-        WebViewManager.presentModalWebView(url: url, from: rootVC)
+        guard let rootVC = Utils.getRootVC() else { return }
+        
+        let onDismiss = {
+          promise.resolve(["type": "dismiss"])
+        }
+        
+        WebViewManager.presentModalWebView(url: url, from: rootVC, onDismiss: onDismiss)
       }
     }
 
     Function("scrollToTop") { (reactTag: Int) in
-
       DispatchQueue.main.async { [weak self] in
         guard let bridge = self?.appContext?.reactBridge else {
 
@@ -33,7 +37,6 @@ public class HelperModule: Module {
         }
 
         if let sourceView = bridge.uiManager.view(forReactTag: NSNumber(value: reactTag)) {
-//          debugPrint(sourceView, "sourceView")
 
           let scrollView = self?.findUIScrollView(view: sourceView)
           guard let scrollView = scrollView else {

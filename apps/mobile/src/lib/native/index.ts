@@ -1,6 +1,7 @@
 import { openURL } from "expo-linking"
 
-export const openLink = (url: string) => {
+// eslint-disable-next-line unused-imports/no-unused-vars
+export const openLink = (url: string, onDismiss?: () => void) => {
   openURL(url)
 }
 
