@@ -39,18 +39,19 @@ public class ImageCarouselViewController: UIPageViewController,
     private var onIndexChange: ((Int) -> Void)?
 
     private(set) lazy var navBar: UINavigationBar = {
-        let _navBar = UINavigationBar(frame: .zero)
-        _navBar.isTranslucent = true
-        _navBar.setBackgroundImage(UIImage(), for: .default)
-        _navBar.shadowImage = UIImage()
-        return _navBar
+        let navbar = UINavigationBar(frame: .zero)
+        navbar.backgroundColor = .clear
+        navbar.isTranslucent = true
+        navbar.setBackgroundImage(UIImage(), for: .default)
+        navbar.shadowImage = UIImage()
+        return navbar
     }()
 
     private(set) lazy var backgroundView: UIView? = {
-        let _v = UIView()
-        _v.backgroundColor = .black
-        _v.alpha = 1.0
-        return _v
+        let v = UIView()
+        v.backgroundColor = .black
+        v.alpha = 1.0
+        return v
     }()
 
     private(set) lazy var navItem = UINavigationItem()
@@ -60,7 +61,7 @@ public class ImageCarouselViewController: UIPageViewController,
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = .gray
-        pageControl.isUserInteractionEnabled = true
+        pageControl.isUserInteractionEnabled = false
         return pageControl
     }()
 
@@ -110,7 +111,6 @@ public class ImageCarouselViewController: UIPageViewController,
     private func addNavBar() {
         let closeBarButton = UIBarButtonItem(
             barButtonSystemItem: .close,
-
             target: self,
             action: #selector(dismiss(_:)))
 
@@ -179,6 +179,7 @@ public class ImageCarouselViewController: UIPageViewController,
     }
 
     private func addPageIndicator() {
+        if imageDatasource?.numberOfImages() == 1 { return }
         view.addSubview(pageIndicator)
         NSLayoutConstraint.activate([
             pageIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
