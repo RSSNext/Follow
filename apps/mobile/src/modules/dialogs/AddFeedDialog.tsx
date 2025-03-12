@@ -4,13 +4,15 @@ import { useColor } from "react-native-uikit-colors"
 
 import { LinkCuteReIcon } from "@/src/icons/link_cute_re"
 import type { DialogComponent } from "@/src/lib/dialog"
+import { Dialog } from "@/src/lib/dialog"
 import { accentColor } from "@/src/theme/colors"
 
 export const AddFeedDialog: DialogComponent<{
   url: string
-}> = ({ dismiss, ctx }) => {
+}> = ({ ctx }) => {
   const label = useColor("label")
 
+  const { dismiss } = Dialog.useDialogContext()!
   const handleAdd = () => {
     dismiss()
     const value = ctx.url

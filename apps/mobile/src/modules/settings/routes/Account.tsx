@@ -28,12 +28,15 @@ import {
   getProviders,
   linkSocial,
   signOut,
+  twoFactor,
   unlinkAccount,
 } from "@/src/lib/auth"
+import { Dialog } from "@/src/lib/dialog"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 
+import { ConfirmPasswordDialog } from "../../dialogs/ConfirmPasswordDialog"
 import { useSettingsNavigation } from "../hooks"
 
 type Account = {
@@ -254,7 +257,26 @@ const SecuritySection = () => {
           textClassName="text-left"
           label="Setting 2FA"
           onPress={() => {
-            router.navigate("Setting2FA")
+            Dialog.show(ConfirmPasswordDialog, {
+              override: {
+                async onConfirm(ctx) {
+                  const { password } = ctx
+                  ctx.dismiss()
+                  const res = await twoFactor.enable({ password })
+                  if (res.error?.message) {
+                    toast.error("Invalid password or something went wrong")
+                    return
+                  }
+                  if (res.data && "totpURI" in res.data) {
+                    router.navigate("Setting2FA", {
+                      totpURI: res.data.totpURI,
+                    })
+                  } else {
+                    toast.error("Failed to enable 2FA")
+                  }
+                },
+              },
+            })
           }}
         />
       </GroupedInsetListCard>

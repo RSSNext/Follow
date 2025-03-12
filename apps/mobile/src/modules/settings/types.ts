@@ -14,5 +14,5 @@ export type SettingsStackParamList = {
   ManageList: { id: string }
   EditProfile: undefined
   ResetPassword: undefined
-  Setting2FA: undefined
+  Setting2FA: { totpURI: string }
 }

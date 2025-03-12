@@ -35,6 +35,8 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
       <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
+
+      {/* @ts-expect-error */}
       <Stack.Screen key="Setting2FA" name="Setting2FA" component={Setting2FAScreen} />
     </Stack.Group>
   )

@@ -148,7 +148,7 @@ open class SPIndicatorView: UIView {
         let label = UILabel()
         label.font = UIFont.preferredFont(
             forTextStyle: .footnote, weight: .semibold, addPoints: 0)
-        label.numberOfLines = 0
+        label.numberOfLines = 3
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = .byTruncatingTail
         style.lineSpacing = 2
