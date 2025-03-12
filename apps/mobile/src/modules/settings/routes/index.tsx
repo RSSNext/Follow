@@ -7,6 +7,8 @@ import { ActionsScreen } from "./Actions"
 import { AppearanceScreen } from "./Appearance"
 import { DataScreen } from "./Data"
 import { EditProfileScreen } from "./EditProfile"
+import { EditRewriteRulesScreen } from "./EditRewriteRules"
+import { EditWebhooksScreen } from "./EditWebhooks"
 import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
@@ -32,15 +34,41 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       <Stack.Screen key="Privacy" name="Privacy" component={PrivacyScreen} />
       <Stack.Screen key="About" name="About" component={AboutScreen} />
 
-      {/* @ts-expect-error */}
-      <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
-      {/* @ts-expect-error */}
-      <Stack.Screen key="ManageRule" name="ManageRule" component={ManageRuleScreen} />
+      <Stack.Screen
+        key="ManageList"
+        name="ManageList"
+        /* @ts-expect-error */
+        component={ManageListScreen}
+      />
+      <Stack.Screen
+        key="ManageRule"
+        name="ManageRule"
+        /* @ts-expect-error */
+        component={ManageRuleScreen}
+      />
       <Stack.Screen
         key="ManageCondition"
         name="ManageCondition"
         /* @ts-expect-error */
         component={ManageConditionScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        key="EditRewriteRules"
+        name="EditRewriteRules"
+        /* @ts-expect-error */
+        component={EditRewriteRulesScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        key="EditWebhooks"
+        name="EditWebhooks"
+        /* @ts-expect-error */
+        component={EditWebhooksScreen}
         options={{
           presentation: "modal",
         }}

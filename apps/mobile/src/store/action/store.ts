@@ -144,6 +144,26 @@ class ActionActions {
       state.isDirty = isDirty
     })
   }
+
+  addWebhook(index: number) {
+    immerSet((state) => {
+      const rule = state.rules[index]
+      if (!rule) return
+      const { webhooks } = rule.result
+      if (!webhooks) return
+      webhooks.push("")
+    })
+  }
+
+  updateWebhook(index: number, webhookIndex: number, value: string) {
+    immerSet((state) => {
+      const rule = state.rules[index]
+      if (!rule) return
+      const { webhooks } = rule.result
+      if (!webhooks) return
+      webhooks[webhookIndex] = value
+    })
+  }
 }
 
 export const actionSyncService = new ActionSyncService()
