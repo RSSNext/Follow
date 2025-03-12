@@ -1,3 +1,6 @@
+import { actionActions } from "@/src/store/action/store"
+import type { ActionId, ActionRule } from "@/src/store/action/types"
+
 export const filterFieldOptions = [
   {
     label: "Subscription View",
@@ -78,5 +81,58 @@ export const filterOperatorOptions = [
     label: "matches regex",
     value: "regex",
     types: ["text"],
+  },
+]
+
+export const availableActionList: Array<{
+  value: ActionId
+  label: string
+  onEnable?: (index: number) => void
+  component?: React.FC<{ rule: ActionRule }>
+}> = [
+  {
+    value: "summary",
+    label: "Generate summary using AI",
+  },
+  {
+    value: "translation",
+    label: "Translate into",
+    onEnable: (index) => {
+      actionActions.patchRule(index, { result: { translation: "zh-CN" } })
+    },
+  },
+  {
+    value: "readability",
+    label: "Enable readability",
+  },
+  {
+    value: "sourceContent",
+    label: "View source content",
+  },
+  {
+    value: "newEntryNotification",
+    label: "Notification of new entry",
+  },
+  {
+    value: "silence",
+    label: "Silence",
+  },
+  {
+    value: "block",
+    label: "Block",
+  },
+  {
+    value: "rewriteRules",
+    label: "Rewrite Rules",
+    onEnable: (index: number) => {
+      actionActions.patchRule(index, { result: { rewriteRules: [] } })
+    },
+  },
+  {
+    value: "webhooks",
+    label: "Webhooks",
+    onEnable: (index) => {
+      actionActions.patchRule(index, { result: { webhooks: [] } })
+    },
   },
 ]

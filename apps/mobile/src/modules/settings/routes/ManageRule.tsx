@@ -22,10 +22,10 @@ import { views } from "@/src/constants/views"
 import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
-import type { ActionFilter, ActionId, ActionRule } from "@/src/store/action/types"
+import type { ActionFilter, ActionRule } from "@/src/store/action/types"
 import { accentColor } from "@/src/theme/colors"
 
-import { filterFieldOptions, filterOperatorOptions } from "../actions"
+import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions"
 import { useSettingsNavigation } from "../hooks"
 import type { SettingsStackParamList } from "../types"
 
@@ -216,8 +216,12 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
 
 const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
   const secondaryLabelColor = useColor("secondaryLabel")
-  const enabledActions = actionList.filter((action) => rule.result[action.value] !== undefined)
-  const notEnabledActions = actionList.filter((action) => rule.result[action.value] === undefined)
+  const enabledActions = availableActionList.filter(
+    (action) => rule.result[action.value] !== undefined,
+  )
+  const notEnabledActions = availableActionList.filter(
+    (action) => rule.result[action.value] === undefined,
+  )
 
   return (
     <View>
@@ -270,56 +274,3 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
     </View>
   )
 }
-
-const actionList: Array<{
-  value: ActionId
-  label: string
-  onEnable?: (index: number) => void
-  component?: React.FC<{ rule: ActionRule }>
-}> = [
-  {
-    value: "summary",
-    label: "Generate summary using AI",
-  },
-  {
-    value: "translation",
-    label: "Translate into",
-    onEnable: (index) => {
-      actionActions.patchRule(index, { result: { translation: "zh-CN" } })
-    },
-  },
-  {
-    value: "readability",
-    label: "Enable readability",
-  },
-  {
-    value: "sourceContent",
-    label: "View source content",
-  },
-  {
-    value: "newEntryNotification",
-    label: "Notification of new entry",
-  },
-  {
-    value: "silence",
-    label: "Silence",
-  },
-  {
-    value: "block",
-    label: "Block",
-  },
-  {
-    value: "rewriteRules",
-    label: "Rewrite Rules",
-    onEnable: (index: number) => {
-      actionActions.patchRule(index, { result: { rewriteRules: [] } })
-    },
-  },
-  {
-    value: "webhooks",
-    label: "Webhooks",
-    onEnable: (index) => {
-      actionActions.patchRule(index, { result: { webhooks: [] } })
-    },
-  },
-]
