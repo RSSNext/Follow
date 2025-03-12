@@ -25,7 +25,7 @@ import { actionActions } from "@/src/store/action/store"
 import type { ActionFilter, ActionRule } from "@/src/store/action/types"
 import { accentColor } from "@/src/theme/colors"
 
-import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions"
+import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions/constant"
 import { useSettingsNavigation } from "../hooks"
 import type { SettingsStackParamList } from "../types"
 

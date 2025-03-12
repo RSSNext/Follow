@@ -16,7 +16,7 @@ import { actionActions } from "@/src/store/action/store"
 import type { ConditionIndex } from "@/src/store/action/types"
 import { accentColor } from "@/src/theme/colors"
 
-import { filterFieldOptions, filterOperatorOptions } from "../actions"
+import { filterFieldOptions, filterOperatorOptions } from "../actions/constant"
 import type { SettingsStackParamList } from "../types"
 
 export function ManageConditionScreen({

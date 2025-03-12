@@ -1,5 +1,8 @@
+import type { SupportedLanguages } from "@/src/lib/language"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionId, ActionRule } from "@/src/store/action/types"
+
+import { ActionFormTranslation } from "./components"
 
 export const filterFieldOptions = [
   {
@@ -100,6 +103,7 @@ export const availableActionList: Array<{
     onEnable: (index) => {
       actionActions.patchRule(index, { result: { translation: "zh-CN" } })
     },
+    component: ActionFormTranslation,
   },
   {
     value: "readability",
@@ -134,5 +138,27 @@ export const availableActionList: Array<{
     onEnable: (index) => {
       actionActions.patchRule(index, { result: { webhooks: [] } })
     },
+  },
+]
+
+export const translationOptions: {
+  label: string
+  value: SupportedLanguages
+}[] = [
+  {
+    label: "English",
+    value: "en",
+  },
+  {
+    label: "日本語",
+    value: "ja",
+  },
+  {
+    label: "简体中文",
+    value: "zh-CN",
+  },
+  {
+    label: "繁體中文",
+    value: "zh-TW",
   },
 ]
