@@ -56,13 +56,11 @@ const MediaItems = ({
   media,
   entryId,
   onPreview,
-  noPreview,
   aspectRatio,
 }: {
   media: MediaModel[]
   entryId: string
   onPreview?: () => void
-  noPreview?: boolean
   aspectRatio?: number
 }) => {
   const firstMedia = media[0]
@@ -85,7 +83,6 @@ const MediaItems = ({
       media={uniqMedia}
       onPreview={onPreview}
       aspectRatio={realAspectRatio}
-      noPreview={noPreview}
     />
   )
 }

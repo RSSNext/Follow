@@ -35,12 +35,14 @@ export const createBuildSafeHeaders =
     }
 
     try {
-      const urlObj = new URL(url)
+      if (url) {
+        const urlObj = new URL(url)
 
-      headers.Referer = urlObj.origin
-      headers.Origin = urlObj.origin
+        headers.Referer = urlObj.origin
+        headers.Origin = urlObj.origin
+      }
     } catch (error) {
-      console.error(error)
+      console.warn(`Url parsing error: ${error}, url: ${url}.`)
     }
 
     return headers

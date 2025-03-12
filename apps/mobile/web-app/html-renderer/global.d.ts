@@ -5,7 +5,7 @@ import "../../../../packages/types/global"
 interface Bridge {
   measure: () => void
   setContentHeight: (height: number) => void
-  previewImage: (data: { images: Uint8Array[]; index: number }) => void
+  previewImage: (data: { imageUrls: string[]; index: number }) => void
 }
 
 declare global {

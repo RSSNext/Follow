@@ -44,7 +44,7 @@ export const AISummary: FC<{
   return (
     <Animated.View
       layout={CurvedTransition}
-      className={cn("border-system-fill mx-2 rounded-lg border p-3", className)}
+      className={cn("border-system-fill mx-2 rounded-lg border p-4", className)}
     >
       <View className="flex-row items-center gap-2">
         <Magic2CuteReIcon height={16} width={16} color={labelColor} />
@@ -77,7 +77,7 @@ export const AISummary: FC<{
           <Animated.Text
             entering={FadeIn}
             exiting={FadeOut}
-            className="text-secondary-label mt-3 text-[15px] leading-normal"
+            className="text-label mt-3 text-[14px] leading-normal"
           >
             {summary.trim()}
           </Animated.Text>

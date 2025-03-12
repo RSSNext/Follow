@@ -12,7 +12,6 @@ import { KeyboardProvider } from "react-native-keyboard-controller"
 import { RootSiblingParent } from "react-native-root-siblings"
 import { SheetProvider } from "react-native-sheet-transitions"
 
-import { PreviewImageProvider } from "../components/ui/image/PreviewPageProvider"
 import { PortalHost } from "../components/ui/portal"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
@@ -36,11 +35,9 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
                 <GestureHandlerRootView>
                   <SheetProvider>
                     <ActionSheetProvider>
-                      <PreviewImageProvider>
-                        <RootSiblingParent>
-                          <PortalHost>{children}</PortalHost>
-                        </RootSiblingParent>
-                      </PreviewImageProvider>
+                      <RootSiblingParent>
+                        <PortalHost>{children}</PortalHost>
+                      </RootSiblingParent>
                     </ActionSheetProvider>
                   </SheetProvider>
                 </GestureHandlerRootView>

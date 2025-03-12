@@ -1,12 +1,12 @@
 import type { FeedViewType } from "@follow/constants"
-import type { ImageProps } from "expo-image"
 import type { ReactNode } from "react"
 import { useMemo } from "react"
 
 import type { FeedSchema } from "@/src/database/schemas/types"
 import { getFeedIconSource } from "@/src/lib/image"
 
-import { ProxiedImage } from "../image/ProxiedImage"
+import type { ImageProps } from "../image/Image"
+import { Image } from "../image/Image"
 
 export type FeedIconRequiredFeed = Pick<
   FeedSchema,
@@ -47,14 +47,14 @@ export function FeedIcon({
     return null
   }
   return (
-    <ProxiedImage
+    <Image
       proxy={{
         width: size,
         height: size,
       }}
       className="rounded"
       style={{ height: size, width: size }}
-      source={src}
+      source={{ uri: src }}
       {...props}
     />
   )

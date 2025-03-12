@@ -1,13 +1,10 @@
 import { createBuildSafeHeaders } from "@follow/utils/src/headers"
 import { getImageProxyUrl, IMAGE_PROXY_URL } from "@follow/utils/src/img-proxy"
-import type { ImageProps as ExpoImageProps } from "expo-image"
+import type { ImageErrorEventData, ImageProps as ExpoImageProps } from "expo-image"
 import { Image as ExpoImage } from "expo-image"
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react"
-import { Pressable, View } from "react-native"
+import { forwardRef, useCallback, useMemo, useState } from "react"
 
 import { proxyEnv } from "@/src/lib/proxy-env"
-
-import { usePreviewImage } from "./PreviewPageProvider"
 
 const buildSafeHeaders = createBuildSafeHeaders(proxyEnv.VITE_WEB_URL, [
   IMAGE_PROXY_URL,
@@ -19,20 +16,18 @@ export type ImageProps = Omit<ExpoImageProps, "source"> & {
     width?: number
     height?: number
   }
-  enablePreview?: boolean
-  onPreview?: () => void
   source?: {
     uri: string
     headers?: Record<string, string>
   }
   blurhash?: string
-  aspectRatio: number
+  aspectRatio?: number
 }
 
 export const Image = forwardRef<ExpoImage, ImageProps>(
-  ({ proxy, source, enablePreview, onPreview, blurhash, aspectRatio, ...rest }, ref) => {
+  ({ proxy, source, blurhash, aspectRatio, ...rest }, ref) => {
     const safeSource: ImageProps["source"] = useMemo(() => {
-      return source
+      return source?.uri
         ? {
             ...source,
             headers: {
@@ -60,42 +55,37 @@ export const Image = forwardRef<ExpoImage, ImageProps>(
     }, [proxy?.height, proxy?.width, safeSource])
 
     const [isError, setIsError] = useState(false)
-    const onError = useCallback(() => {
-      setIsError(true)
-    }, [])
+    const onError = useCallback(
+      (e: ImageErrorEventData) => {
+        if (isError) {
+          rest.onError?.(e)
+        } else {
+          setIsError(true)
+        }
+      },
+      [isError, rest],
+    )
 
-    const Wrapper = enablePreview ? Pressable : View
-
-    const { openPreview } = usePreviewImage()
-    const imageRef = useRef<View>(null)
+    if (!source?.uri) {
+      return null
+    }
 
     return (
-      <Wrapper
-        onPress={() => {
-          if (enablePreview) {
-            onPreview?.()
-            openPreview({
-              imageRef,
-              images: [{ source, blurhash, aspectRatio, ...rest }],
-              // accessoriesElement: Accessory ? <Accessory {...AccessoryProps} /> : undefined,
-            })
-          }
+      <ExpoImage
+        source={isError ? safeSource : proxiesSafeSource}
+        onError={onError}
+        placeholder={{
+          blurhash,
+          ...(typeof rest.placeholder === "object" && { ...rest.placeholder }),
         }}
-      >
-        <View ref={imageRef}>
-          <ExpoImage
-            source={isError ? safeSource : proxiesSafeSource}
-            onError={onError}
-            placeholder={{ blurhash }}
-            style={{
-              aspectRatio,
-              ...(typeof rest.style === "object" && { ...rest.style }),
-            }}
-            {...rest}
-            ref={ref}
-          />
-        </View>
-      </Wrapper>
+        style={{
+          aspectRatio,
+          ...(typeof rest.style === "object" && { ...rest.style }),
+        }}
+        recyclingKey={source?.uri}
+        {...rest}
+        ref={ref}
+      />
     )
   },
 )

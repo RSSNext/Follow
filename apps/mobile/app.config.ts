@@ -118,6 +118,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
       },
     ],
+    "react-native-video",
   ],
   experiments: {
     typedRoutes: true,

@@ -49,6 +49,7 @@ AddFeedDialog.cancelText = "Cancel"
 
 AddFeedDialog.onConfirm = (ctx) => {
   const value = ctx.url
+
   if (!value) return
   ctx.dismiss()
 

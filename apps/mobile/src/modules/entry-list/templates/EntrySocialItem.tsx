@@ -9,7 +9,7 @@ import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { Galeria } from "@/src/components/ui/image/galeria"
-import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
@@ -106,23 +106,26 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
         </View>
 
         {media && media.length > 0 && (
-          <View className="ml-10 flex flex-row flex-wrap gap-2">
+          <View className="ml-10 flex flex-row flex-wrap justify-between">
             <Galeria urls={memoedMediaUrlList}>
               {media.map((image, index) => {
+                const fullWidth = index === media.length - 1 && media.length % 2 === 1
                 return (
-                  <Pressable key={image.url}>
+                  <Pressable
+                    key={`${entryId}-${image.url}`}
+                    className={fullWidth ? "w-full" : "w-1/2 p-0.5"}
+                  >
                     <Galeria.Image index={index}>
-                      <ProxiedImage
+                      <Image
                         proxy={{
-                          width: 80,
-                          height: 80,
+                          width: fullWidth ? 400 : 200,
                         }}
                         source={{ uri: image.url }}
-                        transition={500}
-                        placeholder={{ blurhash: image.blurhash }}
-                        className="bg-system-fill ml-2 size-20 rounded-md"
-                        contentFit="cover"
-                        recyclingKey={image.url}
+                        blurhash={image.blurhash}
+                        className="border-secondary-system-background w-full rounded-lg border"
+                        aspectRatio={
+                          fullWidth && image.width && image.height ? image.width / image.height : 1
+                        }
                       />
                     </Galeria.Image>
                   </Pressable>

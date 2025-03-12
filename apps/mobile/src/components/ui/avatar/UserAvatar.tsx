@@ -3,7 +3,8 @@ import { Text, View } from "react-native"
 
 import { User4CuteReIcon } from "@/src/icons/user_4_cute_re"
 
-import { ProxiedImage } from "../image/ProxiedImage"
+import { Galeria } from "../image/galeria"
+import { Image } from "../image/Image"
 
 interface UserAvatarProps {
   image?: string | null
@@ -40,15 +41,18 @@ export const UserAvatar = ({ image, size = 24, name, className, color }: UserAva
   }
 
   return (
-    <ProxiedImage
-      source={{ uri: image }}
-      className={cn("rounded-full", className)}
-      style={{ width: size, height: size }}
-      resizeMode="cover"
-      proxy={{
-        width: size,
-        height: size,
-      }}
-    />
+    <Galeria urls={[image]}>
+      <Galeria.Image index={0}>
+        <Image
+          source={{ uri: image }}
+          className={cn("rounded-full", className)}
+          style={{ width: size, height: size }}
+          proxy={{
+            width: size,
+            height: size,
+          }}
+        />
+      </Galeria.Image>
+    </Galeria>
   )
 }

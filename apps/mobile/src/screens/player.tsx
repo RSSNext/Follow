@@ -1,5 +1,4 @@
 import { cn } from "@follow/utils"
-import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
 import { useEffect, useMemo } from "react"
@@ -11,6 +10,8 @@ import Reanimated, {
   withSpring,
 } from "react-native-reanimated"
 import { SheetScreen } from "react-native-sheet-transitions"
+
+import { Image } from "@/src/components/ui/image/Image"
 
 import { gentleSpringPreset } from "../constants/spring"
 import { useActiveTrack, useIsPlaying } from "../lib/player"
@@ -36,7 +37,7 @@ function CoverArt({ cover }: { cover?: string }) {
 
   return (
     <Reanimated.View className="mx-auto my-12 aspect-square w-[87%] shadow" style={[animatedStyle]}>
-      <Image source={cover} className="size-full rounded-lg" />
+      <Image source={{ uri: cover ?? "" }} className="size-full rounded-lg" />
     </Reanimated.View>
   )
 }

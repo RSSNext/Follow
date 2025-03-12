@@ -4,7 +4,7 @@ import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
-import { ProxiedImage } from "@/src/components/ui/image/ProxiedImage"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { useList } from "@/src/store/list/hooks"
 import { useListUnreadCount } from "@/src/store/unread/hooks"
@@ -32,13 +32,13 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
         >
           <View className="overflow-hidden rounded">
             {!!list.image && (
-              <ProxiedImage
+              <Image
                 proxy={{
                   width: 20,
                   height: 20,
                 }}
                 style={{ height: 20, width: 20 }}
-                source={list.image}
+                source={{ uri: list.image }}
               />
             )}
             {!list.image && <FallbackIcon title={list.title} size={20} />}

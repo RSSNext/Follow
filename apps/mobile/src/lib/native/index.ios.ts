@@ -9,9 +9,6 @@ const nativeModule = requireNativeModule("Helper") as NativeModule
 export const openLink = (url: string) => {
   nativeModule.openLink(url)
 }
-export const quickLookImage = (images: string[]) => {
-  nativeModule.previewImage(images)
-}
 
 export const performNativeScrollToTop = (reactTag: number) => {
   nativeModule.scrollToTop(reactTag)

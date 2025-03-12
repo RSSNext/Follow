@@ -6,28 +6,25 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated"
+import Video from "react-native-video"
 
 import { Galeria } from "@/src/components/ui/image/galeria"
 import type { MediaModel } from "@/src/database/schemas/types"
 import { EntryGridFooter } from "@/src/modules/entry-content/EntryGridFooter"
 
+import { Image } from "../image/Image"
 import { ImageContextMenu } from "../image/ImageContextMenu"
-import { PreviewImage } from "../image/PreviewImage"
-import { ProxiedImage } from "../image/ProxiedImage"
 
 export const MediaCarousel = ({
   entryId,
   media,
   onPreview,
   aspectRatio,
-
-  noPreview,
 }: {
   entryId: string
   media: MediaModel[]
   onPreview?: () => void
   aspectRatio: number
-  noPreview?: boolean
 }) => {
   const [containerWidth, setContainerWidth] = useState(0)
   const containerHeight = Math.floor(containerWidth / aspectRatio)
@@ -36,7 +33,7 @@ export const MediaCarousel = ({
   // const activeIndex = useSharedValue(0)
   const [activeIndex, setActiveIndex] = useState(0)
 
-  const Wrapper = noPreview ? View : ImageContextMenu
+  const [isVideoInFullscreen, setIsVideoInFullscreen] = useState(false)
 
   return (
     <View
@@ -68,41 +65,43 @@ export const MediaCarousel = ({
                     className="relative"
                     style={{ width: containerWidth, height: containerHeight }}
                   >
-                    <Wrapper entryId={entryId} imageUrl={m.url}>
+                    <ImageContextMenu entryId={entryId} imageUrl={m.url}>
                       <Galeria.Image onPreview={onPreview} index={index}>
-                        <ProxiedImage
+                        <Image
                           proxy={{
                             height: 400,
                           }}
-                          transition={500}
                           source={{ uri: m.url }}
-                          placeholder={{
-                            blurhash: m.blurhash,
-                          }}
+                          blurhash={m.blurhash}
                           className="w-full"
-                          style={{
-                            aspectRatio,
-                          }}
+                          aspectRatio={aspectRatio}
                           placeholderContentFit="cover"
-                          recyclingKey={m.url}
                         />
                       </Galeria.Image>
-                    </Wrapper>
+                    </ImageContextMenu>
                   </View>
                 )
+              } else if (m.type === "video") {
+                return (
+                  <ImageContextMenu key={index} entryId={entryId} imageUrl={m.url}>
+                    <Video
+                      source={{ uri: m.url }}
+                      style={{ width: containerWidth, height: containerHeight }}
+                      muted={!isVideoInFullscreen}
+                      repeat
+                      poster={{
+                        source: { uri: m.preview_image_url },
+                        resizeMode: "cover",
+                      }}
+                      controls
+                      onFullscreenPlayerWillPresent={() => setIsVideoInFullscreen(true)}
+                      onFullscreenPlayerWillDismiss={() => setIsVideoInFullscreen(false)}
+                    />
+                  </ImageContextMenu>
+                )
+              } else {
+                return null
               }
-
-              return (
-                <PreviewImage
-                  key={index}
-                  noPreview={noPreview}
-                  onPreview={() => {
-                    // open player
-                  }}
-                  imageUrl={m.url}
-                  aspectRatio={aspectRatio}
-                />
-              )
             })}
           </ScrollView>
         </Galeria>
