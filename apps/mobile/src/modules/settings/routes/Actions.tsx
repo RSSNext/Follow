@@ -24,8 +24,8 @@ import { Magic2CuteFiIcon } from "@/src/icons/magic_2_cute_fi"
 import {
   useActionRules,
   useIsActionDataDirty,
-  usePrefetchActionRules,
-  useSaveActionMutation,
+  usePrefetchActions,
+  useUpdateActionsMutation,
 } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionRule } from "@/src/store/action/types"
@@ -33,7 +33,7 @@ import type { ActionRule } from "@/src/store/action/types"
 import { useSettingsNavigation } from "../hooks"
 
 export const ActionsScreen = () => {
-  const { isLoading } = usePrefetchActionRules()
+  const { isLoading } = usePrefetchActions()
   const rules = useActionRules()
   const isDirty = useIsActionDataDirty()
 
@@ -103,7 +103,7 @@ const NewRuleButton = () => {
 }
 
 const SaveRuleButton = ({ disabled }: { disabled?: boolean }) => {
-  const { mutate, isPending } = useSaveActionMutation()
+  const { mutate, isPending } = useUpdateActionsMutation()
   const label = useColor("label")
   return (
     <UINavigationHeaderActionButton onPress={mutate} disabled={disabled || isPending}>

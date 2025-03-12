@@ -7,18 +7,19 @@ import { toast } from "@/src/lib/toast"
 
 import { actionSyncService, useActionStore } from "./store"
 
-export const usePrefetchActionRules = () => {
+export const usePrefetchActions = () => {
   return useQuery({
     queryKey: ["action", "rules"],
     queryFn: () => actionSyncService.fetchRules(),
   })
 }
 
-export const useSaveActionMutation = () => {
+export const useUpdateActionsMutation = () => {
   return useMutation({
     mutationFn: () => actionSyncService.saveRules(),
     onSuccess() {
       router.back()
+      toast.success("Actions saved")
     },
     onError(err) {
       if (err instanceof FetchError && err.response?._data) {
@@ -27,7 +28,7 @@ export const useSaveActionMutation = () => {
         return
       }
 
-      toast.error("Error saving action rules")
+      toast.error("Error saving actions")
     },
   })
 }
