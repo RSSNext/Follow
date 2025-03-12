@@ -42,27 +42,25 @@ export const ManageRuleScreen = ({
       className="bg-system-grouped-background"
       contentContainerClassName="mt-6"
     >
-      <NavigationBlurEffectHeader
-        title={index !== undefined ? `Edit Rule - ${rule?.name}` : "Create Rule"}
-      />
+      <NavigationBlurEffectHeader title={`Edit Rule - ${rule?.name}`} />
       <RuleImpl index={index} />
     </SafeNavigationScrollView>
   )
 }
 
-const RuleImpl: React.FC<{ index?: number }> = ({ index }) => {
+const RuleImpl: React.FC<{ index: number }> = ({ index }) => {
   const rule = useActionRule(index)
+
+  if (!rule) {
+    return <Text>No rule available</Text>
+  }
 
   return (
     <View className="gap-6">
-      {rule ? <NameSection rule={rule} /> : <Text>No rule available</Text>}
-      {rule ? <FilterSection rule={rule} /> : <Text>No rule available</Text>}
-      {rule ? (
-        <ConditionSection filter={rule.condition as any} index={rule.index} />
-      ) : (
-        <Text>No rule available</Text>
-      )}
-      {rule ? <ActionSection rule={rule} /> : <Text>No rule available</Text>}
+      <NameSection rule={rule} />
+      <FilterSection rule={rule} />
+      <ConditionSection filter={rule.condition as any} index={rule.index} />
+      <ActionSection rule={rule} />
       {__DEV__ && (
         <View className="mx-6">
           <Text className="text-label">{JSON.stringify(rule, null, 2)}</Text>
