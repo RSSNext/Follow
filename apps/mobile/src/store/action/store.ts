@@ -118,7 +118,7 @@ class ActionActions {
     immerSet((state) => {
       if (state.rules[index]) {
         const hasCustomFilters = state.rules[index].condition.length > 0
-        state.rules[index].condition = hasCustomFilters ? [] : [[]]
+        state.rules[index].condition = hasCustomFilters ? [] : [[{}]]
       }
     })
   }
