@@ -58,6 +58,18 @@ class ActionActions {
     })
   }
 
+  addRule() {
+    immerSet((state) => {
+      state.rules.push({
+        name: `Action ${state.rules.length + 1}`,
+        condition: [],
+        index: state.rules.length,
+        result: {},
+      })
+      state.isDirty = true
+    })
+  }
+
   pathCondition(index: ConditionIndex, condition: Partial<ActionFilterItem>) {
     immerSet((state) => {
       const rule = state.rules[index.ruleIndex]

@@ -87,12 +87,13 @@ export const ActionsScreen = () => {
 }
 
 const NewRuleButton = () => {
-  const navigation = useSettingsNavigation()
   const label = useColor("label")
   return (
     <GroupedInsetListCard className="mt-6">
       <UINavigationHeaderActionButton
-        onPress={() => navigation.navigate("ManageRule", { index: undefined })}
+        onPress={() => {
+          actionActions.addRule()
+        }}
         className="flex-row items-center gap-3 py-4"
       >
         <AddCuteReIcon height={20} width={20} color={label} />
