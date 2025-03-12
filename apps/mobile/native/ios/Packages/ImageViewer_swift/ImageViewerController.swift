@@ -173,6 +173,10 @@ class ImageViewerController: UIViewController,
         scrollView.addGestureRecognizer(doubleTapRecognizer)
 
         singleTapGesture.require(toFail: doubleTapRecognizer)
+
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+        imageView.isUserInteractionEnabled = true
+        imageView.addInteraction(contextMenuInteraction)
     }
 
     @objc
@@ -227,6 +231,49 @@ class ImageViewerController: UIViewController,
     func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
         let pointInView = recognizer.location(in: imageView)
         zoomInOrOut(at: pointInView)
+    }
+
+    private func saveImageToPhotos() {
+        guard let image = imageView.image else { return }
+
+        UIImageWriteToSavedPhotosAlbum(
+            image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+
+    @objc func image(
+        _ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer
+    ) {
+        if let error = error {
+            SPIndicator.present(
+                title: "Save Error", message: error.localizedDescription, preset: .error,
+                haptic: .error)
+        } else {
+            SPIndicator.present(title: "Saved", preset: .done, haptic: .success)
+        }
+    }
+
+    private func copyImageToClipboard() {
+        guard let image = imageView.image else { return }
+
+        UIPasteboard.general.image = image
+    }
+
+    private func shareImage() {
+        guard let image = imageView.image else { return }
+
+        let activityViewController = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil)
+
+        // For iPad support
+        if let popoverController = activityViewController.popoverPresentationController {
+            popoverController.sourceView = imageView
+            popoverController.sourceRect = CGRect(
+                x: imageView.bounds.midX, y: imageView.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+
+        present(activityViewController, animated: true)
     }
 
     func gestureRecognizerShouldBegin(
@@ -316,5 +363,39 @@ extension ImageViewerController: UIScrollViewDelegate {
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+extension ImageViewerController: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let currentImage = imageView.image else { return nil }
+
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider: { _ in
+                let saveAction = UIAction(
+                    title: "Save to Photos", image: UIImage(systemName: "square.and.arrow.down")
+                ) { [weak self] _ in
+                    self?.saveImageToPhotos()
+                }
+
+                let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc")) {
+                    [weak self] _ in
+                    self?.copyImageToClipboard()
+                }
+
+                let shareAction = UIAction(
+                    title: "Share", image: UIImage(systemName: "square.and.arrow.up")
+                ) { [weak self] _ in
+                    self?.shareImage()
+                }
+
+                return UIMenu(title: "", children: [saveAction, copyAction, shareAction])
+            }
+        )
     }
 }
