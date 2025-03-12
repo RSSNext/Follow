@@ -35,7 +35,7 @@ export const EditWebhooksScreen = ({
               inputMode="url"
               value={webhook}
               onChangeText={(value) => {
-                actionActions.updateWebhook(index, webhookIndex, value)
+                actionActions.updateWebhook({ index, webhookIndex, value })
               }}
             />
           </GroupedInsetListBaseCell>

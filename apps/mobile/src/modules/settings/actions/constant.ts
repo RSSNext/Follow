@@ -131,7 +131,16 @@ export const availableActionList: Array<{
     value: "rewriteRules",
     label: "Rewrite Rules",
     onEnable: (index: number) => {
-      actionActions.patchRule(index, { result: { rewriteRules: [] } })
+      actionActions.patchRule(index, {
+        result: {
+          rewriteRules: [
+            {
+              from: "",
+              to: "",
+            },
+          ],
+        },
+      })
     },
     onNavigate: (router, index) => {
       router.navigate("EditRewriteRules", { index })
@@ -141,7 +150,7 @@ export const availableActionList: Array<{
     value: "webhooks",
     label: "Webhooks",
     onEnable: (index) => {
-      actionActions.patchRule(index, { result: { webhooks: [] } })
+      actionActions.patchRule(index, { result: { webhooks: [""] } })
     },
     onNavigate: (router, index) => {
       router.navigate("EditWebhooks", { index })

@@ -152,16 +152,60 @@ class ActionActions {
       const { webhooks } = rule.result
       if (!webhooks) return
       webhooks.push("")
+      state.isDirty = true
     })
   }
 
-  updateWebhook(index: number, webhookIndex: number, value: string) {
+  updateWebhook({
+    index,
+    webhookIndex,
+    value,
+  }: {
+    index: number
+    webhookIndex: number
+    value: string
+  }) {
     immerSet((state) => {
       const rule = state.rules[index]
       if (!rule) return
       const { webhooks } = rule.result
       if (!webhooks) return
       webhooks[webhookIndex] = value
+      state.isDirty = true
+    })
+  }
+
+  addRewriteRule(index: number) {
+    immerSet((state) => {
+      const rule = state.rules[index]
+      if (!rule) return
+      const { rewriteRules } = rule.result
+      if (!rewriteRules) return
+      rewriteRules.push({ from: "", to: "" })
+      state.isDirty = true
+    })
+  }
+
+  updateRewriteRule({
+    index,
+    rewriteRuleIndex,
+    key,
+    value,
+  }: {
+    index: number
+    rewriteRuleIndex: number
+    key: "from" | "to"
+    value: string
+  }) {
+    immerSet((state) => {
+      const rule = state.rules[index]
+      if (!rule) return
+      const { rewriteRules } = rule.result
+      if (!rewriteRules) return
+      const rewriteRule = rewriteRules[rewriteRuleIndex]
+      if (!rewriteRule) return
+      rewriteRule[key] = value
+      state.isDirty = true
     })
   }
 }
