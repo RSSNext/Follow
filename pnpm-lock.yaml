@@ -381,8 +381,8 @@ importers:
         specifier: 9.2.10
         version: 9.2.10
       cookie-es:
-        specifier: 1.2.2
-        version: 1.2.2
+        specifier: 2.0.0
+        version: 2.0.0
       electron-context-menu:
         specifier: 4.0.5
         version: 4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
@@ -818,8 +818,8 @@ importers:
         specifier: 1.1.18
         version: 1.1.18
       cookie-es:
-        specifier: 1.2.2
-        version: 1.2.2
+        specifier: 2.0.0
+        version: 2.0.0
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
@@ -4258,7 +4258,7 @@ packages:
   '@radix-ui/react-compose-refs@1.1.1':
     resolution: {integrity: sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4280,7 +4280,7 @@ packages:
   '@radix-ui/react-context@1.1.1':
     resolution: {integrity: sha512-UASk9zi+crv9WteK/NU4PLvOoL3OuE6BWVKNF6hPRBtYBDXQ2u5iu3O59zUlJiTVvkyuycnqrztsHVJwcK9K+Q==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4337,7 +4337,7 @@ packages:
   '@radix-ui/react-focus-guards@1.1.1':
     resolution: {integrity: sha512-pSIwfrT1a6sIoDASCSpFwOasEwKTZWDw/iBdtnqKO7v6FeOzYJ7U53cPzYFVR3geGGXgVHaH+CdngrrAzqUGxg==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4625,7 +4625,7 @@ packages:
   '@radix-ui/react-use-controllable-state@1.1.0':
     resolution: {integrity: sha512-MtfMVJiSr2NjzS0Aa90NPTnvTSg6C/JLCV7ma0W6+OMV78vd8OyRpID+Ng9LxzsPbLeuBnWBA1Nq30AtBIDChw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -7189,8 +7189,8 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  cookie-es@1.2.2:
-    resolution: {integrity: sha512-+W7VmiVINB+ywl1HGXJXmrqkOhpKrIiVZV6tQuV54ZyQC7MMuBt81Vc336GMLoHBq5hV/F9eXgt5Mnx0Rha5Fg==}
+  cookie-es@2.0.0:
+    resolution: {integrity: sha512-RAj4E421UYRgqokKUmotqAwuplYw15qtdXfY+hGzgCJ/MBjCVZcSoHK/kH9kocfjRjcDME7IiDWR/1WX1TM2Pg==}
 
   cookie@1.0.2:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
@@ -17114,7 +17114,7 @@ snapshots:
       '@expo/env': 0.4.2
       '@expo/image-utils': 0.6.5
       '@expo/json-file': 9.0.2
-      '@expo/metro-config': 0.19.10
+      '@expo/metro-config': 0.19.12
       '@expo/osascript': 2.1.6
       '@expo/package-manager': 1.7.2
       '@expo/plist': 0.2.2
@@ -23120,7 +23120,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cookie-es@1.2.2: {}
+  cookie-es@2.0.0: {}
 
   cookie@1.0.2: {}
 
