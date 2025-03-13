@@ -56,7 +56,7 @@
     "cross-env": "7.0.3",
     "cssnano": "7.0.6",
     "eslint": "9.22.0",
-    "eslint-config-hyoban": "4.0.0",
+    "eslint-config-hyoban": "4.0.1",
     "eslint-plugin-react-native": "5.0.0",
     "fast-glob": "3.3.3",
     "lint-staged": "15.4.3",
