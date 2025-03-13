@@ -78,7 +78,7 @@
     "use-context-selector": "2.0.0",
     "usehooks-ts": "3.1.1",
     "vaul": "1.1.2",
-    "vfile": "5.3.7"
+    "vfile": "6.0.3"
   },
   "devDependencies": {
     "@types/katex": "0.16.7"
