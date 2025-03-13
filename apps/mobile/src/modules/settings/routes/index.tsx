@@ -6,13 +6,13 @@ import { AchievementScreen } from "./Achievement"
 import { ActionsScreen } from "./Actions"
 import { AppearanceScreen } from "./Appearance"
 import { DataScreen } from "./Data"
+import { EditConditionScreen } from "./EditCondition"
 import { EditProfileScreen } from "./EditProfile"
 import { EditRewriteRulesScreen } from "./EditRewriteRules"
 import { EditWebhooksScreen } from "./EditWebhooks"
 import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
-import { ManageConditionScreen } from "./ManageCondition"
 import { ManageListScreen } from "./ManageList"
 import { ManageRuleScreen } from "./ManageRule"
 import { NotificationsScreen } from "./Notifications"
@@ -47,10 +47,10 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
         component={ManageRuleScreen}
       />
       <Stack.Screen
-        key="ManageCondition"
-        name="ManageCondition"
+        key="EditCondition"
+        name="EditCondition"
         /* @ts-expect-error */
-        component={ManageConditionScreen}
+        component={EditConditionScreen}
         options={{
           presentation: "modal",
         }}

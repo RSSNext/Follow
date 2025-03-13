@@ -15,7 +15,7 @@ export type SettingsStackParamList = {
   About: undefined
   ManageList: { id: string }
   ManageRule: { index: number }
-  ManageCondition: ConditionIndex
+  EditCondition: ConditionIndex
   EditRewriteRules: { index: number }
   EditWebhooks: { index: number }
   EditProfile: undefined

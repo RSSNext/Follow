@@ -154,7 +154,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                         {
                           label: "Edit",
                           onPress: () => {
-                            navigation.navigate("ManageCondition", {
+                            navigation.navigate("EditCondition", {
                               ruleIndex: index,
                               groupIndex,
                               conditionIndex: itemIndex,
@@ -171,7 +171,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                             .join(" ") || "Unknown"
                         }
                         onPress={() => {
-                          navigation.navigate("ManageCondition", {
+                          navigation.navigate("EditCondition", {
                             ruleIndex: index,
                             groupIndex,
                             conditionIndex: itemIndex,
@@ -186,7 +186,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                         onPress={() => {
                           actionActions.addConditionItem({ ruleIndex: index, groupIndex })
                           setTimeout(() => {
-                            navigation.navigate("ManageCondition", {
+                            navigation.navigate("EditCondition", {
                               ruleIndex: index,
                               groupIndex,
                               conditionIndex: group.length,

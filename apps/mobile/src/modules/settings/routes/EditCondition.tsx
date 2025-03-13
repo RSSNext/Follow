@@ -19,10 +19,10 @@ import { accentColor } from "@/src/theme/colors"
 import { filterFieldOptions, filterOperatorOptions } from "../actions/constant"
 import type { SettingsStackParamList } from "../types"
 
-export function ManageConditionScreen({
+export function EditConditionScreen({
   route,
 }: {
-  route: RouteProp<SettingsStackParamList, "ManageCondition">
+  route: RouteProp<SettingsStackParamList, "EditCondition">
 }) {
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
