@@ -52,7 +52,7 @@
     "class-variance-authority": "0.7.1",
     "dayjs": "1.11.13",
     "foxact": "0.2.44",
-    "framer-motion": "12.4.7",
+    "framer-motion": "12.5.0",
     "hast-util-to-jsx-runtime": "2.3.2",
     "hast-util-to-text": "4.0.2",
     "input-otp": "1.4.2",
