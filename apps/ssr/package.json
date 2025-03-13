@@ -58,7 +58,7 @@
     "fast-glob": "3.3.3",
     "foxact": "0.2.44",
     "html-minifier-terser": "7.2.0",
-    "lightningcss": "1.29.1",
+    "lightningcss": "1.29.2",
     "masonic": "4.0.1",
     "nanoid": "5.1.0",
     "path-to-regexp": "8.2.0",
