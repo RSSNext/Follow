@@ -48,7 +48,7 @@ export const UserAvatar = ({
     )
   }
 
-  const ImageComponent = (
+  const imageContent = (
     <Image
       source={{ uri: image }}
       className={cn("rounded-full", className)}
@@ -61,10 +61,10 @@ export const UserAvatar = ({
   )
 
   return noPreview ? (
-    ImageComponent
+    imageContent
   ) : (
     <Galeria urls={[image]}>
-      <Galeria.Image index={0}>{ImageComponent}</Galeria.Image>
+      <Galeria.Image index={0}>{imageContent}</Galeria.Image>
     </Galeria>
   )
 }
