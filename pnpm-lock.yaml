@@ -345,8 +345,8 @@ importers:
         specifier: 8.3.6
         version: 8.3.6(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
       unplugin-ast:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.3
+        version: 0.14.3
       utf-8-validate:
         specifier: 6.0.5
         version: 6.0.5
@@ -10709,9 +10709,9 @@ packages:
     resolution: {integrity: sha512-yiLHa7cfJcGRFq4FrR4tMlpNHb4Vy4mWnpajlSSIFM5k4Lv8/7BbbDLzCAVogWNl0LlLhizRp1drXv0hK9h0Yw==}
     os: [darwin]
 
-  magic-string-ast@0.7.1:
-    resolution: {integrity: sha512-ub9iytsEbT7Yw/Pd29mSo/cNQpaEu67zR1VVcXDiYjSFwzeBxNdTd0FMnSslLQXiRj8uGPzwsaoefrMD5XAmdw==}
-    engines: {node: '>=16.14.0'}
+  magic-string-ast@0.8.0:
+    resolution: {integrity: sha512-e9eH6YOYl2OuDd3fNt2ciFhj/l2vxJmGeWLLcY+0NcW6k0Xitq7XIxN2++QVVhswXeJLy95SjF8oVKRyJC95GQ==}
+    engines: {node: '>=20.18.0'}
 
   magic-string@0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
@@ -14534,8 +14534,8 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  unplugin-ast@0.14.0:
-    resolution: {integrity: sha512-a9MPyEyrecxmaMGS7xmwYVXcdZIAPaAr+ePmPR1duTh3Bk6/QxR70udb4dkvggZzy9AuzD/7b0RVCcA/N9HmzQ==}
+  unplugin-ast@0.14.3:
+    resolution: {integrity: sha512-IolafxIoszpJ0Phx+wjZmNZxvh81PXLJEGnnIm3NPRaYUsgrZ9En05ScuEhbL8UZ/nry2aKPmy7CsM6arZI1Sg==}
     engines: {node: '>=18.12.0'}
 
   unplugin-utils@0.2.4:
@@ -27462,7 +27462,7 @@ snapshots:
       nan: 2.22.2
     optional: true
 
-  magic-string-ast@0.7.1:
+  magic-string-ast@0.8.0:
     dependencies:
       magic-string: 0.30.17
 
@@ -31904,12 +31904,11 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-ast@0.14.0:
+  unplugin-ast@0.14.3:
     dependencies:
-      '@antfu/utils': 8.1.1
       '@babel/generator': 7.26.10
       ast-kit: 1.4.2
-      magic-string-ast: 0.7.1
+      magic-string-ast: 0.8.0
       unplugin: 2.2.0
       unplugin-utils: 0.2.4
 
