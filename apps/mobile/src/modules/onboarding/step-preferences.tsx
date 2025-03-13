@@ -26,6 +26,16 @@ export const StepPreferences = () => {
 
   return (
     <View className="mt-4 flex-1 p-4">
+      <View className="mb-6">
+        <Text className="text-text text-center text-xl font-medium">
+          Personalize Your Experience
+        </Text>
+        <Text className="text-secondary-label mt-2 text-center text-base">
+          Set your preferences to make Folo work best for you. You can always change these later in
+          Settings.
+        </Text>
+      </View>
+
       <EditProfileSection />
 
       <View className="mb-6 gap-4">
