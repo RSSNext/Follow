@@ -10,6 +10,7 @@ overrides:
   isarray: npm:@nolyfill/isarray@1
   react: 18.3.1
   react-dom: 18.3.1
+  unist-util-visit-parents: 5.1.3
   vfile: 5.3.7
 
 patchedDependencies:
@@ -5929,7 +5930,7 @@ packages:
     resolution: {integrity: sha512-ty2ZxHrRPAtGlu/v3DZheU4ciQxodSIvkzuRYLy7Or16JoDcjUjIMcBBOCADuw1lsj45HERCzUDX7HBMTE5Wjw==}
     hasBin: true
     peerDependencies:
-      typescript: '*'
+      typescript: 5.7.3
 
   '@tsslint/config@1.5.8':
     resolution: {integrity: sha512-kJjCgp8+4IQDvUpUNIMA6YUg+D6Cl3FtxKw6ZMol+mFAhEbxcZ1PPtYc/oDTAmejvOG2TWFHmeJRQzSyPnCbWA==}
@@ -15287,9 +15288,6 @@ packages:
 
   unist-util-visit-parents@5.1.3:
     resolution: {integrity: sha512-x6+y8g7wWMyQhL1iZfhIPhDAs7Xwbn9nRosDXl7qoPTSCy0yNxnKc+hWokFifWQIDGi154rdUqKvbCa4+1kLhg==}
-
-  unist-util-visit-parents@6.0.1:
-    resolution: {integrity: sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw==}
 
   unist-util-visit@5.0.0:
     resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==}
@@ -29234,7 +29232,7 @@ snapshots:
       mdast-util-to-markdown: 2.1.2
       parse-entities: 4.0.2
       stringify-entities: 4.0.4
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 5.1.3
     transitivePeerDependencies:
       - supports-color
 
@@ -29243,7 +29241,7 @@ snapshots:
       '@types/mdast': 4.0.4
       escape-string-regexp: 5.0.0
       unist-util-is: 6.0.0
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 5.1.3
 
   mdast-util-from-markdown@2.0.2:
     dependencies:
@@ -33671,16 +33669,11 @@ snapshots:
       '@types/unist': 2.0.11
       unist-util-is: 5.2.1
 
-  unist-util-visit-parents@6.0.1:
-    dependencies:
-      '@types/unist': 3.0.3
-      unist-util-is: 6.0.0
-
   unist-util-visit@5.0.0:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.0
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 5.1.3
 
   universal-user-agent@6.0.1: {}
 
