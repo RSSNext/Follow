@@ -113,8 +113,8 @@ importers:
         specifier: 3.2.6
         version: 3.2.6
       autoprefixer:
-        specifier: 10.4.20
-        version: 10.4.20(postcss@8.5.2)
+        specifier: 10.4.21
+        version: 10.4.21(postcss@8.5.2)
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
@@ -288,8 +288,8 @@ importers:
         specifier: 4.3.4
         version: 4.3.4(vite@6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
       autoprefixer:
-        specifier: 10.4.20
-        version: 10.4.20(postcss@8.5.2)
+        specifier: 10.4.21
+        version: 10.4.21(postcss@8.5.2)
       bufferutil:
         specifier: 4.0.9
         version: 4.0.9
@@ -6239,8 +6239,8 @@ packages:
     resolution: {integrity: sha512-KbWgR8wOYRAPekEmMXrYYdc7BRyhn2Ftk7KWfMUnQ43hFdojWEFRxhhRUm3/OFEdPa1r0KAvTTg9YQK57xTe0g==}
     engines: {node: '>=0.8'}
 
-  autoprefixer@10.4.20:
-    resolution: {integrity: sha512-XY25y5xSv/wEoqzDyXXME4AFfkZI0P23z6Fs3YgymDnKJkCGOnkL0iTxCa85UTqaSgfcqyf3UA6+c7wUvx/16g==}
+  autoprefixer@10.4.21:
+    resolution: {integrity: sha512-O+A6LWV5LDHSJD3LjHYoNi4VLsj/Whi7k6zG12xTYaU4cQ8oxQGckXNX8cRHK5yOZ/ppVHe0ZBXGzSV9jXdVbQ==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -21780,7 +21780,7 @@ snapshots:
 
   author-regex@1.0.0: {}
 
-  autoprefixer@10.4.20(postcss@8.5.2):
+  autoprefixer@10.4.21(postcss@8.5.2):
     dependencies:
       browserslist: 4.24.4
       caniuse-lite: 1.0.30001703
