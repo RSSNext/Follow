@@ -2,7 +2,7 @@ import { withOpacity } from "@follow/utils/src/color"
 import { useMutation } from "@tanstack/react-query"
 import { router } from "expo-router"
 import type { FC } from "react"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import {
   ActivityIndicator,
   Text,
@@ -13,6 +13,8 @@ import {
 import { KeyboardController } from "react-native-keyboard-controller"
 
 import { RotateableLoading } from "@/src/components/common/RotateableLoading"
+import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
+import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -29,14 +31,14 @@ import {
 import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
-import { apiClient, apiFetch, getBizFetchErrorMessage } from "@/src/lib/api-fetch"
-import { pickImage } from "@/src/lib/native/picker"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 import type { MeModel } from "@/src/store/user/store"
 import { userSyncService } from "@/src/store/user/store"
 import type { UserProfileEditable } from "@/src/store/user/types"
 import { accentColor, useColor } from "@/src/theme/colors"
+
+import { setAvatar } from "../utils"
 
 export const EditProfileScreen = () => {
   const whoami = useWhoami()
@@ -57,6 +59,26 @@ export const EditProfileScreen = () => {
   )
 }
 
+export const EditProfileModal = () => {
+  const whoami = useWhoami()
+
+  if (!whoami) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
+  return (
+    <SafeModalScrollView className="bg-system-grouped-background">
+      <ModalHeader headerTitle="111Edit Profile" />
+      <AvatarSection whoami={whoami} />
+      <ProfileForm layout="modal" whoami={whoami} />
+    </SafeModalScrollView>
+  )
+}
+
 const AvatarSection: FC<{
   whoami: MeModel
 }> = ({ whoami }) => {
@@ -69,37 +91,7 @@ const AvatarSection: FC<{
         className={!whoami?.name || !whoami.image ? "bg-system-background" : ""}
       />
 
-      <TouchableOpacity
-        className="mt-2"
-        hitSlop={10}
-        onPress={async () => {
-          const result = await pickImage({
-            fileName: "avatar.jpg",
-            maxSizeKB: 290,
-          })
-
-          if (!result) return
-          const { formData } = result
-          const res = await apiFetch<{
-            url: string
-          }>(apiClient.upload.avatar.$url().toString(), {
-            method: "POST",
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            body: formData,
-          }).catch((err) => {
-            toast.error(getBizFetchErrorMessage(err))
-            throw err
-          })
-
-          const { url } = res
-
-          userSyncService.updateProfile({
-            image: url,
-          })
-        }}
-      >
+      <TouchableOpacity className="mt-2" hitSlop={10} onPress={setAvatar}>
         <Text className="text-accent text-lg">Set Avatar</Text>
       </TouchableOpacity>
     </View>
@@ -108,7 +100,8 @@ const AvatarSection: FC<{
 
 const ProfileForm: FC<{
   whoami: MeModel
-}> = ({ whoami }) => {
+  layout?: "modal" | "screen"
+}> = ({ whoami, layout = "screen" }) => {
   const [dirtyFields, setDirtyFields] = useState<Partial<UserProfileEditable>>({})
 
   const { mutateAsync: updateProfile, isPending } = useMutation({
@@ -124,27 +117,36 @@ const ProfileForm: FC<{
   })
 
   const label = useColor("label")
+  const headerRight = useCallback(
+    () => (
+      <UIBarButton
+        label="Save"
+        disabled={isPending || Object.keys(dirtyFields).length === 0}
+        normalIcon={
+          isPending ? (
+            <RotateableLoading size={20} color={withOpacity(label, 0.5)} />
+          ) : (
+            <CheckLineIcon height={20} width={20} />
+          )
+        }
+        onPress={() => {
+          updateProfile()
+        }}
+      />
+    ),
+    [dirtyFields, isPending, label, updateProfile],
+  )
+
+  const Header =
+    layout === "modal" ? (
+      <ModalHeader headerRight={headerRight()} headerTitle="Edit Profile" />
+    ) : (
+      <NavigationBlurEffectHeader headerRight={headerRight} title="Edit Profile" />
+    )
+
   return (
     <View className="mt-4">
-      <NavigationBlurEffectHeader
-        headerRight={() => (
-          <UIBarButton
-            label="Save"
-            disabled={isPending || Object.keys(dirtyFields).length === 0}
-            normalIcon={
-              isPending ? (
-                <RotateableLoading size={20} color={withOpacity(label, 0.5)} />
-              ) : (
-                <CheckLineIcon height={20} width={20} />
-              )
-            }
-            onPress={() => {
-              updateProfile()
-            }}
-          />
-        )}
-        title="Edit Profile"
-      />
+      {Header}
 
       <TouchableWithoutFeedback
         onPress={() => {

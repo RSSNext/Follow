@@ -104,17 +104,10 @@
     },
     "overrides": {
       "@electron/node-gyp": "10.2.0-electron.2",
-      "app-builder-lib": "25.1.8",
-      "electron": "34.2.0",
-      "esbuild": "0.24.2",
-      "expo-modules-core": "2.2.0",
       "is-core-module": "npm:@nolyfill/is-core-module@1",
       "isarray": "npm:@nolyfill/isarray@1",
-      "lightningcss": "1.29.1",
       "react": "18.3.1",
       "react-dom": "18.3.1",
-      "typescript": "5.7.3",
-      "unist-util-visit-parents": "5.1.3",
       "vfile": "5.3.7"
     }
   },

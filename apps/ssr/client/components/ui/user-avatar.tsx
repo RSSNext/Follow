@@ -22,8 +22,10 @@ export const UserAvatar = ({ className }: { className?: string }) => {
   if (!user) {
     if (import.meta.env.DEV) {
       user = {
+        id: "1",
         name: "Innei",
         image: "https://avatars-githubusercontent-webp.webp.se/u/41265413?v=4",
+        handle: "innei",
       }
     } else {
       return null

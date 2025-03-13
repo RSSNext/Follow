@@ -3,7 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "dist",
-    "types": ["electron-vite/node", "@follow/types/vite"],
+    "types": ["electron-vite/node", "@follow/types/vite", "@follow/types/global"],
     "moduleResolution": "Bundler",
     "noImplicitReturns": false,
     "noUnusedLocals": false,

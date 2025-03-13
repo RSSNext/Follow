@@ -81,6 +81,17 @@ function AnimatedStack() {
           },
         }}
       />
+      <Stack.Screen
+        name="onboarding"
+        options={{
+          title: "Onboarding",
+          presentation: "transparentModal",
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: "transparent",
+          },
+        }}
+      />
     </Stack>
   )
 }

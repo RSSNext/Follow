@@ -3,8 +3,38 @@ import * as FileSystem from "expo-file-system"
 import * as Sharing from "expo-sharing"
 
 import { getDbPath } from "@/src/database"
-import { apiFetch, getBizFetchErrorMessage } from "@/src/lib/api-fetch"
+import { apiClient, apiFetch, getBizFetchErrorMessage } from "@/src/lib/api-fetch"
+import { pickImage } from "@/src/lib/native/picker"
 import { toast } from "@/src/lib/toast"
+import { userSyncService } from "@/src/store/user/store"
+
+export const setAvatar = async () => {
+  const result = await pickImage({
+    fileName: "avatar.jpg",
+    maxSizeKB: 290,
+  })
+
+  if (!result) return
+  const { formData } = result
+  const res = await apiFetch<{
+    url: string
+  }>(apiClient.upload.avatar.$url().toString(), {
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    body: formData,
+  }).catch((err) => {
+    toast.error(getBizFetchErrorMessage(err))
+    throw err
+  })
+
+  const { url } = res
+
+  userSyncService.updateProfile({
+    image: url,
+  })
+}
 
 type FeedResponseList = {
   id: string
