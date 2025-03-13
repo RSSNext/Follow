@@ -4,10 +4,13 @@ import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SheetScreen } from "react-native-sheet-transitions"
 
+import { kv } from "../lib/kv"
+import { queryClient } from "../lib/query-client"
 import { StepFinished } from "../modules/onboarding/step-finished"
 import { StepInterests } from "../modules/onboarding/step-interests"
 import { StepPreferences } from "../modules/onboarding/step-preferences"
 import { StepWelcome } from "../modules/onboarding/step-welcome"
+import { isNewUserQueryKey, isOnboardingFinishedStorageKey } from "../store/user/constants"
 
 export default function Onboarding() {
   const insets = useSafeAreaInsets()
@@ -19,7 +22,10 @@ export default function Onboarding() {
       setCurrentStep(currentStep + 1)
     } else {
       // Complete onboarding
-      router.replace("/")
+      kv.set(isOnboardingFinishedStorageKey, "true")
+      queryClient.invalidateQueries({ queryKey: isNewUserQueryKey }).then(() => {
+        router.back()
+      })
     }
   }, [currentStep])
 

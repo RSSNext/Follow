@@ -29,10 +29,13 @@ export function useIsNewUser() {
   const { data } = useQuery({
     queryKey: isNewUserQueryKey,
     queryFn: async () => {
-      const subscriptions = await apiClient.subscriptions.$get({ query: {} })
       const isOnboardingFinished = await kv.get(isOnboardingFinishedStorageKey)
+      if (isOnboardingFinished) {
+        return false
+      }
 
-      return subscriptions.data.length < 5 && !isOnboardingFinished
+      const subscriptions = await apiClient.subscriptions.$get({ query: {} })
+      return subscriptions.data.length < 5
     },
   })
   return !!data
@@ -42,7 +45,6 @@ export function useOnboarding() {
   const isNewUser = useIsNewUser()
   useEffect(() => {
     if (isNewUser) {
-      // @ts-expect-error
       router.push("/onboarding")
     }
   }, [isNewUser])
