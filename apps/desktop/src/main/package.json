@@ -55,7 +55,7 @@
     "@follow/types": "workspace:*",
     "@types/js-yaml": "4.0.9",
     "@types/node": "22.13.10",
-    "electron": "34.2.0",
+    "electron": "35.0.1",
     "electron-devtools-installer": "4.0.0",
     "hono": "4.7.4"
   }
