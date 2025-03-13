@@ -81,7 +81,7 @@
     "typescript": "5.7.3",
     "vite": "6.1.0",
     "vite-bundle-analyzer": "0.17.1",
-    "vite-plugin-mkcert": "1.17.6",
+    "vite-plugin-mkcert": "1.17.7",
     "vite-plugin-pwa": "0.21.1",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.0.6"
