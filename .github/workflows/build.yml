@@ -203,7 +203,7 @@ jobs:
       - name: Generate artifact attestation
         if: github.ref_type == 'tag' || github.event.inputs.tag_version == 'true'
         continue-on-error: true
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
             apps/desktop/out/make/**/*.dmg
