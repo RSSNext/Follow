@@ -76,7 +76,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tar": "7.4.3",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "unplugin-ast": "0.14.0",
     "utf-8-validate": "6.0.5"
   },
