@@ -1080,8 +1080,8 @@ importers:
         specifier: 9.0.3
         version: 9.0.3
       '@fastify/request-context':
-        specifier: 6.0.2
-        version: 6.0.2
+        specifier: 6.1.0
+        version: 6.1.0
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
@@ -3082,8 +3082,8 @@ packages:
   '@fastify/proxy-addr@5.0.0':
     resolution: {integrity: sha512-37qVVA1qZ5sgH7KpHkkC4z9SK6StIsIcOmpjvMPXNb3vx2GQxhZocogVYbr2PbbeLCQxYIPDok307xEvRZOzGA==}
 
-  '@fastify/request-context@6.0.2':
-    resolution: {integrity: sha512-VASejjzqd0+L/JNNtNdvbTt+bS8ESgQ3NUwxBFAtIRzMx49Ej52YbSTpiqzTmyUykvXoE/m2UNyhMGvLrstPgg==}
+  '@fastify/request-context@6.1.0':
+    resolution: {integrity: sha512-8Gu7nTIx8+lDVliyk1Re+1VYCjJNA5A14MfA9OOZXBba06XWl59YzKThsFRWB+4z4dUH4Va1OFBV4JsSV74uHg==}
 
   '@firebase/analytics-compat@0.2.17':
     resolution: {integrity: sha512-SJNVOeTvzdqZQvXFzj7yAirXnYcLDxh57wBFROfeowq/kRN1AqOw1tG6U4OiFOEhqi7s3xLze/LMkZatk2IEww==}
@@ -17639,7 +17639,7 @@ snapshots:
       '@fastify/forwarded': 3.0.0
       ipaddr.js: 2.2.0
 
-  '@fastify/request-context@6.0.2':
+  '@fastify/request-context@6.1.0':
     dependencies:
       fastify-plugin: 5.0.1
 
