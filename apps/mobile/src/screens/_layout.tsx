@@ -4,14 +4,13 @@ import analytics from "@react-native-firebase/analytics"
 import { Stack, usePathname } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { useEffect } from "react"
-import { useSheet } from "react-native-sheet-transitions"
+import { View } from "react-native"
 
 import { FullWindowOverlay } from "../components/common/FullWindowOverlay"
 import { useIntentHandler } from "../hooks/useIntentHandler"
 import { DebugButton, EnvProfileIndicator } from "../modules/debug"
 import { RootProviders } from "../providers"
 import { usePrefetchSessionUser } from "../store/user/hooks"
-import { getSystemBackgroundColor } from "../theme/utils"
 
 export default function RootLayout() {
   useColorScheme()
@@ -34,27 +33,28 @@ export default function RootLayout() {
   }, [pathname])
 
   return (
-    <RootProviders>
-      <Session />
-      <AnimatedStack />
+    <View className="flex-1 bg-black">
+      <RootProviders>
+        <Session />
+        <AnimatedStack />
 
-      {__DEV__ && <DebugButton />}
-      <FullWindowOverlay>
-        <EnvProfileIndicator />
-      </FullWindowOverlay>
-    </RootProviders>
+        {__DEV__ && <DebugButton />}
+        <FullWindowOverlay>
+          <EnvProfileIndicator />
+        </FullWindowOverlay>
+      </RootProviders>
+    </View>
   )
 }
 
 function AnimatedStack() {
-  const systemBackgroundColor = getSystemBackgroundColor()
-  const { isScaling } = useSheet()
-
   return (
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: systemBackgroundColor },
         headerShown: false,
+        contentStyle: {
+          backgroundColor: "#000",
+        },
       }}
     >
       <Stack.Screen
@@ -62,7 +62,6 @@ function AnimatedStack() {
         options={{
           title: "Follow",
           headerShown: false,
-          contentStyle: isScaling ? { borderRadius: 50, overflow: "hidden" } : {},
         }}
       />
       <Stack.Screen name="(headless)" options={{ headerShown: false, title: "Follow" }} />
