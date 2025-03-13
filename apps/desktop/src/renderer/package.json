@@ -82,7 +82,7 @@
     "react-ios-pwa-prompt": "2.0.6",
     "react-qr-code": "2.0.15",
     "react-resizable-layout": "npm:@innei/react-resizable-layout@0.7.3-fork.1",
-    "react-router": "7.2.0",
+    "react-router": "7.3.0",
     "react-selecto": "1.26.3",
     "react-shadow": "20.6.0",
     "react-zoom-pan-pinch": "3.7.0",
