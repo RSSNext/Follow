@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    target-branch: dev
+    ignore:
+      - dependency-name: react
+        versions: [">=19.0.0"]
+      - dependency-name: react-dom
+        versions: [">=19.0.0"]
+      - dependency-name: "@types/react"
+        versions: [">=19.0.0"]
+      - dependency-name: "@types/react-dom"
+        versions: [">=19.0.0"]
+      - dependency-name: tailwindcss
+        versions: [">=4.0.0"]
+      - dependency-name: react-native
+        versions: [">=0.78.0"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    target-branch: dev
