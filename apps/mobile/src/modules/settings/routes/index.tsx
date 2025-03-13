@@ -6,7 +6,11 @@ import { AchievementScreen } from "./Achievement"
 import { ActionsScreen } from "./Actions"
 import { AppearanceScreen } from "./Appearance"
 import { DataScreen } from "./Data"
+import { EditConditionScreen } from "./EditCondition"
 import { EditProfileScreen } from "./EditProfile"
+import { EditRewriteRulesScreen } from "./EditRewriteRules"
+import { EditRuleScreen } from "./EditRule"
+import { EditWebhooksScreen } from "./EditWebhooks"
 import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
@@ -31,8 +35,45 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       <Stack.Screen key="Privacy" name="Privacy" component={PrivacyScreen} />
       <Stack.Screen key="About" name="About" component={AboutScreen} />
 
-      {/* @ts-expect-error */}
-      <Stack.Screen key="ManageList" name="ManageList" component={ManageListScreen} />
+      <Stack.Screen
+        key="ManageList"
+        name="ManageList"
+        /* @ts-expect-error */
+        component={ManageListScreen}
+      />
+      <Stack.Screen
+        key="EditRule"
+        name="EditRule"
+        /* @ts-expect-error */
+        component={EditRuleScreen}
+      />
+      <Stack.Screen
+        key="EditCondition"
+        name="EditCondition"
+        /* @ts-expect-error */
+        component={EditConditionScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        key="EditRewriteRules"
+        name="EditRewriteRules"
+        /* @ts-expect-error */
+        component={EditRewriteRulesScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        key="EditWebhooks"
+        name="EditWebhooks"
+        /* @ts-expect-error */
+        component={EditWebhooksScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
       <Stack.Screen key="EditProfile" name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
 

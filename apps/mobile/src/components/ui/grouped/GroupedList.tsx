@@ -6,8 +6,9 @@ import type { PressableProps, ViewProps } from "react-native"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 
+import { CheckFilledIcon } from "@/src/icons/check_filled"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
-import { useColor } from "@/src/theme/colors"
+import { accentColor, useColor } from "@/src/theme/colors"
 
 export enum GroupedInsetListCardItemStyle {
   NavigationLink = "NavigationLink",
@@ -150,7 +151,7 @@ export const GroupedInsetListCell: FC<
   } & BaseCellClassNames
 > = ({ label, description, children, leftClassName, rightClassName }) => {
   return (
-    <GroupedInsetListBaseCell className="flex-1">
+    <GroupedInsetListBaseCell className="bg-secondary-system-grouped-background flex-1">
       <View className={cn("flex-1", leftClassName)}>
         <Text className="text-label">{label}</Text>
         {!!description && (
@@ -163,15 +164,48 @@ export const GroupedInsetListCell: FC<
   )
 }
 
+export const GroupedInsetListActionCellRadio: FC<{
+  label: string
+  description?: string
+  onPress?: () => void
+  disabled?: boolean
+  selected?: boolean
+}> = ({ label, description, onPress, disabled, selected }) => {
+  return (
+    <Pressable onPress={onPress} disabled={disabled}>
+      {({ pressed }) => (
+        <GroupedInsetListBaseCell
+          className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
+        >
+          <View className="flex-1">
+            <Text className="text-label">{label}</Text>
+            {!!description && (
+              <Text className="text-secondary-label text-sm leading-tight">{description}</Text>
+            )}
+          </View>
+
+          <View className="ml-4 size-[18px]">
+            {selected && <CheckFilledIcon height={18} width={18} color={accentColor} />}
+          </View>
+        </GroupedInsetListBaseCell>
+      )}
+    </Pressable>
+  )
+}
+
 export const GroupedInsetListActionCell: FC<{
   label: string
   description?: string
-  onPress: () => void
+  onPress?: () => void
   disabled?: boolean
 }> = ({ label, description, onPress, disabled }) => {
   const rightIconColor = useColor("tertiaryLabel")
   return (
-    <Pressable onPress={onPress} disabled={disabled}>
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      className="bg-secondary-system-grouped-background"
+    >
       {({ pressed }) => (
         <GroupedInsetListBaseCell
           className={cn(pressed ? "bg-system-fill" : undefined, disabled && "opacity-40")}
@@ -194,7 +228,7 @@ export const GroupedInsetListActionCell: FC<{
 
 export const GroupedInsetButtonCell: FC<{
   label: string
-  onPress: () => void
+  onPress?: () => void
   disabled?: boolean
   style?: "destructive" | "primary"
 }> = ({ label, onPress, disabled, style = "primary" }) => {
