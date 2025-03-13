@@ -529,14 +529,14 @@ importers:
         specifier: 5.66.4
         version: 5.66.4
       '@tanstack/react-query':
-        specifier: 5.66.7
-        version: 5.66.7(react@18.3.1)
+        specifier: 5.67.3
+        version: 5.67.3(react@18.3.1)
       '@tanstack/react-query-devtools':
         specifier: 5.66.7
-        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
+        version: 5.66.7(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query-persist-client':
         specifier: 5.66.7
-        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
+        version: 5.66.7(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)
       '@tanstack/react-virtual':
         specifier: 3.13.3
         version: 3.13.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -809,11 +809,11 @@ importers:
         specifier: 5.66.4
         version: 5.66.4
       '@tanstack/react-query':
-        specifier: 5.66.7
-        version: 5.66.7(react@18.3.1)
+        specifier: 5.67.3
+        version: 5.67.3(react@18.3.1)
       '@tanstack/react-query-persist-client':
         specifier: 5.66.7
-        version: 5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)
+        version: 5.66.7(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)
       better-auth:
         specifier: 1.1.18
         version: 1.1.18
@@ -1095,8 +1095,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(react@18.3.1)
       '@tanstack/react-query':
-        specifier: 5.66.7
-        version: 5.66.7(react@18.3.1)
+        specifier: 5.67.3
+        version: 5.67.3(react@18.3.1)
       blurhash:
         specifier: 2.0.5
         version: 2.0.5
@@ -5346,6 +5346,9 @@ packages:
   '@tanstack/query-core@5.66.4':
     resolution: {integrity: sha512-skM/gzNX4shPkqmdTCSoHtJAPMTtmIJNS0hE+xwTTUVYwezArCT34NMermABmBVUg5Ls5aiUXEDXfqwR1oVkcA==}
 
+  '@tanstack/query-core@5.67.3':
+    resolution: {integrity: sha512-pq76ObpjcaspAW4OmCbpXLF6BCZP2Zr/J5ztnyizXhSlNe7fIUp0QKZsd0JMkw9aDa+vxDX/OY7N+hjNY/dCGg==}
+
   '@tanstack/query-devtools@5.65.0':
     resolution: {integrity: sha512-g5y7zc07U9D3esMdqUfTEVu9kMHoIaVBsD0+M3LPdAdD710RpTcLiNvJY1JkYXqkq9+NV+CQoemVNpQPBXVsJg==}
 
@@ -5369,6 +5372,11 @@ packages:
 
   '@tanstack/react-query@5.66.7':
     resolution: {integrity: sha512-qd3q/tUpF2K1xItfPZddk1k/8pSXnovg41XyCqJgPoyYEirMBtB0sVEVVQ/CsAOngzgWtBPXimVf4q4kM9uO6A==}
+    peerDependencies:
+      react: 18.3.1
+
+  '@tanstack/react-query@5.67.3':
+    resolution: {integrity: sha512-u/n2HsQeH1vpZIOzB/w2lqKlXUDUKo6BxTdGXSMvNzIq5MHYFckRMVuFABp+QB7RN8LFXWV6X1/oSkuDq+MPIA==}
     peerDependencies:
       react: 18.3.1
 
@@ -20629,6 +20637,8 @@ snapshots:
 
   '@tanstack/query-core@5.66.4': {}
 
+  '@tanstack/query-core@5.67.3': {}
+
   '@tanstack/query-devtools@5.65.0': {}
 
   '@tanstack/query-persist-client-core@5.66.4':
@@ -20640,21 +20650,27 @@ snapshots:
       '@tanstack/query-core': 5.66.4
       '@tanstack/query-persist-client-core': 5.66.4
 
-  '@tanstack/react-query-devtools@5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-devtools@5.66.7(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-devtools': 5.65.0
-      '@tanstack/react-query': 5.66.7(react@18.3.1)
+      '@tanstack/react-query': 5.67.3(react@18.3.1)
       react: 18.3.1
 
-  '@tanstack/react-query-persist-client@5.66.7(@tanstack/react-query@5.66.7(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-persist-client@5.66.7(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-persist-client-core': 5.66.4
-      '@tanstack/react-query': 5.66.7(react@18.3.1)
+      '@tanstack/react-query': 5.67.3(react@18.3.1)
       react: 18.3.1
 
   '@tanstack/react-query@5.66.7(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.66.4
+      react: 18.3.1
+    optional: true
+
+  '@tanstack/react-query@5.67.3(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.67.3
       react: 18.3.1
 
   '@tanstack/react-virtual@3.13.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
