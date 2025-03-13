@@ -29,7 +29,7 @@
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
     "@openpanel/web": "1.0.1",
-    "@sentry/electron": "5.11.0",
+    "@sentry/electron": "6.1.0",
     "builder-util-runtime": "9.2.10",
     "cookie-es": "1.2.2",
     "electron-context-menu": "4.0.5",
