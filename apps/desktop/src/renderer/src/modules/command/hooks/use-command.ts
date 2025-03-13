@@ -6,6 +6,11 @@ import { useCallback, useMemo } from "react"
 import { CommandRegistry } from "../registry/registry"
 import type { FollowCommandId, FollowCommandMap } from "../types"
 
+export const hasCommand = <T extends FollowCommandId>(id: T) => {
+  const commands = jotaiStore.get(CommandRegistry.atom) as FollowCommandMap
+  return id in commands
+}
+
 export const getCommand = <T extends FollowCommandId>(id: T) => {
   const commands = jotaiStore.get(CommandRegistry.atom) as FollowCommandMap
   return id in commands ? commands[id] : null
