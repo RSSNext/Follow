@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: weekly
       day: friday
-      time: 12:00
+      time: "12:00"
       timezone: Asia/Singapore
     target-branch: dev
     ignore:
