@@ -29,8 +29,8 @@ const createDefaultSettings = (): GeneralSettings => ({
   // TTS
   voice: "en-US-AndrewMultilingualNeural",
 
-  // Video
-  openVideoInApp: true,
+  // Content
+  openLinksInApp: true,
 })
 
 export const {

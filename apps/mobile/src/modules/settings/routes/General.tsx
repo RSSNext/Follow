@@ -25,7 +25,7 @@ export const GeneralScreen = () => {
   const expandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
   const markAsReadWhenInView = useGeneralSettingKey("renderMarkUnread")
-  const openVideoInApp = useGeneralSettingKey("openVideoInApp")
+  const openLinksInApp = useGeneralSettingKey("openLinksInApp")
 
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
@@ -147,17 +147,14 @@ export const GeneralScreen = () => {
 
         {/* Content Behavior */}
         <View className="mt-8">
-          <GroupedInsetListSectionHeader label="Video" />
+          <GroupedInsetListSectionHeader label="Content" />
           <GroupedInsetListCard>
-            <GroupedInsetListCell
-              label="Open videos in app"
-              description="Open videos in their respective apps, if available, instead of the in-app browser."
-            >
+            <GroupedInsetListCell label="Open Links in app">
               <Switch
                 size="sm"
-                value={openVideoInApp}
+                value={openLinksInApp}
                 onValueChange={(value) => {
-                  setGeneralSetting("openVideoInApp", value)
+                  setGeneralSetting("openLinksInApp", value)
                 }}
               />
             </GroupedInsetListCell>
