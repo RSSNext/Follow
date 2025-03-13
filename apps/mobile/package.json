@@ -15,7 +15,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@better-auth/expo": "1.1.18",
+    "@better-auth/expo": "1.2.3",
     "@expo/react-native-action-sheet": "4.1.1",
     "@expo/vector-icons": "14.0.4",
     "@follow/components": "workspace:*",
