@@ -1,5 +1,6 @@
 import type { TypedNavigator } from "@react-navigation/native"
 
+import { TwoFASetting } from "./2FASetting"
 import { AboutScreen } from "./About"
 import { AccountScreen } from "./Account"
 import { AchievementScreen } from "./Achievement"
@@ -18,7 +19,6 @@ import { ManageListScreen } from "./ManageList"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
 import { ResetPassword } from "./ResetPassword"
-import { Setting2FAScreen } from "./Setting2FAScreen"
 
 const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
   return (
@@ -78,7 +78,7 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
       <Stack.Screen key="ResetPassword" name="ResetPassword" component={ResetPassword} />
 
       {/* @ts-expect-error */}
-      <Stack.Screen key="Setting2FA" name="Setting2FA" component={Setting2FAScreen} />
+      <Stack.Screen key="TwoFASetting" name="TwoFASetting" component={TwoFASetting} />
     </Stack.Group>
   )
 }

@@ -20,5 +20,5 @@ export type SettingsStackParamList = {
   EditWebhooks: { index: number }
   EditProfile: undefined
   ResetPassword: undefined
-  Setting2FA: { totpURI: string }
+  TwoFASetting: { totpURI: string }
 }

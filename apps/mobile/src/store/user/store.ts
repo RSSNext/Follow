@@ -2,7 +2,7 @@ import analytics from "@react-native-firebase/analytics"
 
 import type { UserSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
-import { changeEmail, sendVerificationEmail, updateUser } from "@/src/lib/auth"
+import { changeEmail, sendVerificationEmail, twoFactor, updateUser } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
 import { UserService } from "@/src/services/user"
 
@@ -97,6 +97,26 @@ class UserSyncService {
     if (!me?.email) return
     await sendVerificationEmail({ email: me.email! })
     toast.success("Verification email sent")
+  }
+
+  async updateTwoFactor(enabled: boolean, password: string) {
+    const me = get().whoami
+
+    if (!me) throw new Error("user not login")
+
+    const method = enabled ? twoFactor.enable : twoFactor.disable
+    const res = await method({ password })
+
+    if (!res.error) {
+      immerSet((state) => {
+        if (!state.whoami) return
+
+        // If set enable 2FA, we can't check the 2FA status immediately, must to bind the 2FA app and verify code first
+        if (!enabled) state.whoami.twoFactorEnabled = false
+      })
+    }
+
+    return res
   }
 
   async updateEmail(email: string) {
