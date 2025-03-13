@@ -387,8 +387,8 @@ importers:
         specifier: 4.0.5
         version: 4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
       electron-log:
-        specifier: 5.3.0
-        version: 5.3.0
+        specifier: 5.3.2
+        version: 5.3.2
       electron-squirrel-startup:
         specifier: 1.0.1
         version: 1.0.1
@@ -1469,8 +1469,8 @@ importers:
   packages/logger:
     dependencies:
       electron-log:
-        specifier: 5.3.0
-        version: 5.3.0
+        specifier: 5.3.2
+        version: 5.3.2
 
   packages/models:
     dependencies:
@@ -7772,8 +7772,8 @@ packages:
     resolution: {integrity: sha512-8TjjAh8Ec51hUi3o4TaU0mD3GMTOESi866oRNavj9A3IQJ7pmv+MJVmdZBFGw4GFT36X7bkqnuDNYvkQgvyI8Q==}
     engines: {node: '>=18'}
 
-  electron-log@5.3.0:
-    resolution: {integrity: sha512-ILgbh2k9IKbSaN8NAbQriVteEhmkdLo/e4J1dg+JIBTFzXS/kO8zNRZBh/4YPwIT/zeyxF1jP6Xz8GLsPE2IBQ==}
+  electron-log@5.3.2:
+    resolution: {integrity: sha512-EFI5MFFEzFJU5gyhJNpKQhfGfrRP9IWzSu0sSxrWXasWKvVAOFgBySafX8W1pbPKa/w8/DDPu2bBBtVZJdDsnw==}
     engines: {node: '>= 14'}
 
   electron-packager-languages@0.6.0:
@@ -23578,7 +23578,7 @@ snapshots:
 
   electron-is-dev@3.0.1: {}
 
-  electron-log@5.3.0: {}
+  electron-log@5.3.2: {}
 
   electron-packager-languages@0.6.0:
     dependencies:

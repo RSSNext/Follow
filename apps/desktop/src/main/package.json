@@ -33,7 +33,7 @@
     "builder-util-runtime": "9.2.10",
     "cookie-es": "1.2.2",
     "electron-context-menu": "4.0.5",
-    "electron-log": "5.3.0",
+    "electron-log": "5.3.2",
     "electron-squirrel-startup": "1.0.1",
     "electron-store": "10.0.1",
     "electron-updater": "6.3.9",
