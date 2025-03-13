@@ -106,7 +106,7 @@
     "@types/node": "22.13.4",
     "@vite-pwa/assets-generator": "0.2.6",
     "fake-indexeddb": "6.0.0",
-    "happy-dom": "17.1.1",
+    "happy-dom": "17.4.4",
     "react-scan": "0.1.3"
   }
 }
