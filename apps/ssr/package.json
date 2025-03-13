@@ -52,7 +52,7 @@
     "@types/html-minifier-terser": "7.0.2",
     "@types/react-google-recaptcha": "2.1.9",
     "chokidar": "4.0.3",
-    "daisyui": "4.12.23",
+    "daisyui": "5.0.3",
     "dotenv-flow": "4.1.0",
     "es-toolkit": "1.33.0",
     "fast-glob": "3.3.3",
