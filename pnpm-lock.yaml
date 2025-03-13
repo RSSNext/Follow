@@ -134,8 +134,8 @@ importers:
         specifier: 3.3.3
         version: 3.3.3
       lint-staged:
-        specifier: 15.4.3
-        version: 15.4.3
+        specifier: 15.5.0
+        version: 15.5.0
       nbump:
         specifier: 2.0.7
         version: 2.0.7(conventional-commits-filter@5.0.0)
@@ -10521,8 +10521,8 @@ packages:
   linkedom@0.18.9:
     resolution: {integrity: sha512-Pfvhwjs46nBrcQdauQjMXDJZqj6VwN7KStT84xQqmIgD9bPH6UVJ/ESW8y4VHVF2h7di0/P+f4Iln4U5emRcmg==}
 
-  lint-staged@15.4.3:
-    resolution: {integrity: sha512-FoH1vOeouNh1pw+90S+cnuoFwRfUD9ijY2GKy5h7HS3OR7JVir2N2xrsa0+Twc1B7cW72L+88geG5cW4wIhn7g==}
+  lint-staged@15.5.0:
+    resolution: {integrity: sha512-WyCzSbfYGhK7cU+UuDDkzUiytbfbi0ZdPy2orwtM75P3WTtQBzmG40cCxIa8Ii2+XjfxzLH6Be46tUfWS85Xfg==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -27264,7 +27264,7 @@ snapshots:
       htmlparser2: 10.0.0
       uhyphen: 0.2.0
 
-  lint-staged@15.4.3:
+  lint-staged@15.5.0:
     dependencies:
       chalk: 5.4.1
       commander: 13.1.0

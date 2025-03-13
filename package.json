@@ -59,7 +59,7 @@
     "eslint-config-hyoban": "4.0.1",
     "eslint-plugin-react-native": "5.0.0",
     "fast-glob": "3.3.3",
-    "lint-staged": "15.4.3",
+    "lint-staged": "15.5.0",
     "nbump": "2.0.7",
     "postcss": "8.5.2",
     "postcss-js": "4.0.1",
