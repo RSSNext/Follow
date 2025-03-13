@@ -84,7 +84,7 @@
     "vite-plugin-mkcert": "1.17.6",
     "vite-plugin-pwa": "0.21.1",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.0.6"
+    "vitest": "3.0.8"
   },
   "pnpm": {
     "patchedDependencies": {
