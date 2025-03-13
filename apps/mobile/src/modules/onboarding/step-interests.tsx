@@ -42,7 +42,7 @@ export const StepInterests = () => {
     setDisplayFeeds(shuffled)
   }, [])
   return (
-    <View className="mt-[15vh] flex-1 items-center">
+    <View className="mt-[20vh] flex-1 items-center">
       <Text className="text-text mb-4 text-2xl font-bold">Discover Interests</Text>
       <Text className="text-text mb-8 px-6 text-center text-lg">
         Subscribe to feeds that match your interests.
