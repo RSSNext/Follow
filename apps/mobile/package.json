@@ -50,7 +50,7 @@
     "expo-build-properties": "0.13.2",
     "expo-clipboard": "7.0.1",
     "expo-constants": "17.0.8",
-    "expo-dev-client": "5.0.12",
+    "expo-dev-client": "5.0.13",
     "expo-document-picker": "13.0.3",
     "expo-file-system": "18.0.11",
     "expo-haptics": "14.0.1",
@@ -95,7 +95,7 @@
     "react-native-reanimated": "3.17.1",
     "react-native-root-siblings": "5.0.1",
     "react-native-safe-area-context": "5.3.0",
-    "react-native-screens": "4.9.1",
+    "react-native-screens": "4.9.2",
     "react-native-sheet-transitions": "0.1.2",
     "react-native-svg": "15.11.2",
     "react-native-track-player": "4.1.1",
@@ -107,7 +107,7 @@
     "shiki": "3.2.1",
     "tailwindcss": "3.4.17",
     "usehooks-ts": "3.1.1",
-    "zeego": "3.0.3",
+    "zeego": "3.0.5",
     "zod": "3.24.2",
     "zustand": "5.0.3"
   },
@@ -119,7 +119,7 @@
     "drizzle-kit": "0.30.5",
     "eas-cli": "15.0.15",
     "expo-drizzle-studio-plugin": "0.1.1",
-    "postcss": "8.5.2"
+    "postcss": "8.5.3"
   },
   "appName": "Follow",
   "expo": {
