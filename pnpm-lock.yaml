@@ -478,8 +478,8 @@ importers:
         specifier: workspace:*
         version: link:../../../../packages/shared
       '@fontsource/sn-pro':
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 5.2.5
+        version: 5.2.5
       '@headlessui/react':
         specifier: 2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1083,8 +1083,8 @@ importers:
         specifier: 6.0.2
         version: 6.0.2
       '@fontsource/sn-pro':
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 5.2.5
+        version: 5.2.5
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -3332,8 +3332,8 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
-  '@fontsource/sn-pro@5.1.0':
-    resolution: {integrity: sha512-k7cdU1hftD/pyrnrmQg+egKAssbuPORbtgQM/9JG5b76EchEKZdl/juO8xBjN3O/H5BQ16iu8/9vNPgzyExZeg==}
+  '@fontsource/sn-pro@5.2.5':
+    resolution: {integrity: sha512-rBdBv/0ygj6bkO7xDMMFpwobLdSrcQ2Jncb6DIwdeYGoAgeWkQRwVYhGDKasfLjEYCNYxrqr6wsXsM9+aU39RA==}
 
   '@freakycoder/react-native-bounceable@1.0.3':
     resolution: {integrity: sha512-+iMq2tnqxCwFjitbPUz9nZ+VfJ8OU9waIlDJAAsoq1229QEwCmERCNy5zVtDsz75q3i4FLXX/n7fimdMzmP21A==}
@@ -18012,7 +18012,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@fontsource/sn-pro@5.1.0': {}
+  '@fontsource/sn-pro@5.2.5': {}
 
   '@freakycoder/react-native-bounceable@1.0.3': {}
 

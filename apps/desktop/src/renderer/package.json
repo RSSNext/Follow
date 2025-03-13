@@ -18,7 +18,7 @@
     "@electron-toolkit/preload": "3.0.1",
     "@follow/electron-main": "workspace:*",
     "@follow/shared": "workspace:*",
-    "@fontsource/sn-pro": "5.1.0",
+    "@fontsource/sn-pro": "5.2.5",
     "@headlessui/react": "2.2.0",
     "@hookform/resolvers": "4.1.0",
     "@lottiefiles/dotlottie-react": "0.13.0",
