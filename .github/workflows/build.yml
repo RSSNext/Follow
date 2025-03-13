@@ -120,7 +120,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Install dependencies
-        run: pnpm install --unsafe-perm
+        run: pnpm i
       - name: Update main hash
         run: |
           cd apps/desktop

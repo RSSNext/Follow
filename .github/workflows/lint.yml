@@ -7,6 +7,18 @@ env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
   VITE_API_URL: ${{ vars.VITE_API_URL }}
 
+permissions:
+  actions: read
+  checks: read
+  contents: read|write|none
+  deployments: read|write|none
+  issues: read|write|none
+  packages: read|write|none
+  pull-requests: read|write|none
+  repository-projects: read|write|none
+  security-events: read|write|none
+  statuses: read|write|none
+
 name: CI Format, Typecheck and Lint
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-lint
@@ -43,7 +55,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install --unsafe-perm
+        run: pnpm install
       - name: Format, Lint and Typecheck
         run: |
           export NODE_OPTIONS="--max_old_space_size=16384"

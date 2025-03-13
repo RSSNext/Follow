@@ -25,7 +25,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --unsafe-perm
+        run: pnpm install
 
       - name: Run linter and fix issues
         run: |

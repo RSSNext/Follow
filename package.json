@@ -103,6 +103,7 @@
       "react-native-sheet-transitions": "patches/react-native-sheet-transitions.patch"
     },
     "overrides": {
+      "@electron/node-gyp": "10.2.0-electron.2",
       "app-builder-lib": "25.1.8",
       "electron": "34.2.0",
       "esbuild": "0.24.2",
