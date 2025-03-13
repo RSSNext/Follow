@@ -39,7 +39,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --unsafe-perm
       - name: Build web and SSR server
         run: |
           npm exec turbo run Follow#build:web @follow/ssr#build

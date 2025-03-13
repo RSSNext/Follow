@@ -43,7 +43,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --unsafe-perm
       - name: Format, Lint and Typecheck
         run: |
           export NODE_OPTIONS="--max_old_space_size=16384"
