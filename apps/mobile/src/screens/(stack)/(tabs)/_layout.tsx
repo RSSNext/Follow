@@ -1,5 +1,4 @@
 import { router, Stack, Tabs } from "expo-router"
-import { Easing } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS } from "react-native-reanimated"
 
@@ -31,14 +30,14 @@ export default function TabLayout() {
       <BottomTabs
         screenOptions={{
           title: "Follow",
-          animation: "fade",
-          transitionSpec: {
-            animation: "timing",
-            config: {
-              duration: 50,
-              easing: Easing.ease,
-            },
-          },
+          // animation: "fade",
+          // transitionSpec: {
+          //   animation: "timing",
+          //   config: {
+          //     duration: 50,
+          //     easing: Easing.ease,
+          //   },
+          // },
         }}
       >
         <Tabs.Screen

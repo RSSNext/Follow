@@ -1,5 +1,4 @@
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs"
-import { Tabs } from "expo-router"
 import type { ForwardRefExoticComponent } from "react"
 import { forwardRef, useMemo, useRef, useState } from "react"
 import type { ScrollView } from "react-native"
@@ -17,6 +16,7 @@ import {
 } from "./contexts/BottomTabBarVisibleContext"
 import { useNavigationScrollToTop } from "./hooks"
 import { Tabbar } from "./Tabbar"
+import { Tabs } from "./TabClient"
 
 type ExtractReactForwardRefExoticComponent<T> =
   T extends React.ForwardRefExoticComponent<infer P> ? P : never
