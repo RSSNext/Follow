@@ -58,7 +58,7 @@
     "framer-motion": "12.4.7",
     "franc-min": "6.2.0",
     "fuse.js": "7.1.0",
-    "hast-util-to-jsx-runtime": "2.3.2",
+    "hast-util-to-jsx-runtime": "2.3.6",
     "hast-util-to-mdast": "10.1.2",
     "i18next": "24.2.2",
     "i18next-browser-languagedetector": "8.0.4",
