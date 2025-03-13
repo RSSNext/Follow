@@ -3,7 +3,10 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
+      day: friday
+      time: 12:00
+      timezone: Asia/Singapore
     target-branch: dev
     ignore:
       - dependency-name: react
@@ -19,6 +22,15 @@ updates:
       - dependency-name: react-native
         versions: [">=0.78.0"]
     open-pull-requests-limit: 100
+    groups:
+      minor:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+      patch:
+        applies-to: version-updates
+        update-types:
+          - "patch"
 
   - package-ecosystem: github-actions
     directory: /
