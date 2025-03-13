@@ -62,7 +62,7 @@
     "bufferutil": "4.0.9",
     "cssnano": "7.0.6",
     "dotenv": "16.4.7",
-    "drizzle-orm": "0.39.3",
+    "drizzle-orm": "0.40.0",
     "electron": "34.2.0",
     "electron-devtools-installer": "4.0.0",
     "electron-packager-languages": "0.6.0",
