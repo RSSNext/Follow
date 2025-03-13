@@ -1022,8 +1022,8 @@ importers:
         specifier: 3.1.1
         version: 3.1.1(react@18.3.1)
       zeego:
-        specifier: 3.0.3
-        version: 3.0.3(r6gcii3uu7jnmmaigjmuiyjoqi)
+        specifier: 3.0.5
+        version: 3.0.5(r6gcii3uu7jnmmaigjmuiyjoqi)
       zod:
         specifier: 3.24.2
         version: 3.24.2
@@ -4262,7 +4262,7 @@ packages:
   '@radix-ui/react-compose-refs@1.1.1':
     resolution: {integrity: sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4284,7 +4284,7 @@ packages:
   '@radix-ui/react-context@1.1.1':
     resolution: {integrity: sha512-UASk9zi+crv9WteK/NU4PLvOoL3OuE6BWVKNF6hPRBtYBDXQ2u5iu3O59zUlJiTVvkyuycnqrztsHVJwcK9K+Q==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4341,7 +4341,7 @@ packages:
   '@radix-ui/react-focus-guards@1.1.1':
     resolution: {integrity: sha512-pSIwfrT1a6sIoDASCSpFwOasEwKTZWDw/iBdtnqKO7v6FeOzYJ7U53cPzYFVR3geGGXgVHaH+CdngrrAzqUGxg==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4629,7 +4629,7 @@ packages:
   '@radix-ui/react-use-controllable-state@1.1.0':
     resolution: {integrity: sha512-MtfMVJiSr2NjzS0Aa90NPTnvTSg6C/JLCV7ma0W6+OMV78vd8OyRpID+Ng9LxzsPbLeuBnWBA1Nq30AtBIDChw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -15315,8 +15315,8 @@ packages:
   yoga-wasm-web@0.3.3:
     resolution: {integrity: sha512-N+d4UJSJbt/R3wqY7Coqs5pcV0aUj2j9IaQ3rNj9bVCLld8tTGKRa2USARjnvZJWVx1NDmQev8EknoczaOQDOA==}
 
-  zeego@3.0.3:
-    resolution: {integrity: sha512-YonC72+xx/yh0+N3WbhPBTNBTjoZ47f4nw8C2zLTMcsCKyxMRHFlX9bxGEpey1G0+jyA7Ye88y7M2yUJcw7fDg==}
+  zeego@3.0.5:
+    resolution: {integrity: sha512-ex+bNsxHzXWWO6dCF5759dFa6NssXilRex3+S/Nuk7pRYLs99JnamWdKq5TCxowpZop5lhb16EAs9ZsonaOT3w==}
     peerDependencies:
       '@react-native-menu/menu': 1.2.2
       react: 18.3.1
@@ -17141,7 +17141,7 @@ snapshots:
       '@expo/env': 0.4.2
       '@expo/image-utils': 0.6.5
       '@expo/json-file': 9.0.2
-      '@expo/metro-config': 0.19.10
+      '@expo/metro-config': 0.19.12
       '@expo/osascript': 2.1.6
       '@expo/package-manager': 1.7.2
       '@expo/plist': 0.2.2
@@ -33210,7 +33210,7 @@ snapshots:
 
   yoga-wasm-web@0.3.3: {}
 
-  zeego@3.0.3(r6gcii3uu7jnmmaigjmuiyjoqi):
+  zeego@3.0.5(r6gcii3uu7jnmmaigjmuiyjoqi):
     dependencies:
       '@radix-ui/react-context-menu': 2.2.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dropdown-menu': 2.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
