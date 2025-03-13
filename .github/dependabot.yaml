@@ -9,6 +9,7 @@ updates:
       timezone: Asia/Singapore
     target-branch: dev
     ignore:
+      # Stuck by react 19
       - dependency-name: react
         versions: [">=19.0.0"]
       - dependency-name: react-dom
@@ -17,10 +18,20 @@ updates:
         versions: [">=19.0.0"]
       - dependency-name: "@types/react-dom"
         versions: [">=19.0.0"]
+
+      # Stuck by tailwindcss 4
       - dependency-name: tailwindcss
         versions: [">=4.0.0"]
+      - dependency-name: daisyui
+        versions: [">=5.0.0"]
+
+      # Stuck by expo 52
       - dependency-name: react-native
         versions: [">=0.78.0"]
+
+      # Stuck by unified 11
+      - dependency-name: vfile
+        versions: [">=6.0.0"]
     open-pull-requests-limit: 100
     groups:
       minor:
