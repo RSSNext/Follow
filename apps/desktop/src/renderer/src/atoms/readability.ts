@@ -3,16 +3,16 @@ import { atom } from "jotai"
 import { createAtomHooks } from "~/lib/jotai"
 
 type Readability = {
-  title: string
-  content: string
-  textContent: string
-  length: number
-  excerpt: string
-  byline: string
-  dir: string
-  siteName: string
-  lang: string
-  publishedTime: string
+  title?: string | null
+  content?: string | null
+  textContent?: string | null
+  length?: number | null
+  excerpt?: string | null
+  byline?: string | null
+  dir?: string | null
+  siteName?: string | null
+  lang?: string | null
+  publishedTime?: string | null
 }
 
 const mergeObjectSetter =
