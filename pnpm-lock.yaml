@@ -487,8 +487,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0(react-hook-form@7.54.2(react@18.3.1))
       '@lottiefiles/dotlottie-react':
-        specifier: 0.13.0
-        version: 0.13.0(react@18.3.1)
+        specifier: 0.13.2
+        version: 0.13.2(react@18.3.1)
       '@openpanel/web':
         specifier: 1.0.1
         version: 1.0.1
@@ -3592,13 +3592,13 @@ packages:
   '@levischuck/tiny-cbor@0.2.11':
     resolution: {integrity: sha512-llBRm4dT4Z89aRsm6u2oEZ8tfwL/2l6BwpZ7JcyieouniDECM5AqNgr/y08zalEIvW3RSK4upYyybDcmjXqAow==}
 
-  '@lottiefiles/dotlottie-react@0.13.0':
-    resolution: {integrity: sha512-zSOqA/P6MAOjHWTBiQd2T/NAbIFDVM2rsCSVHjjBHvYZ1yB5ehdggUBVnj83Fb99xAgCdcHYWTC1c9Yl70zxMg==}
+  '@lottiefiles/dotlottie-react@0.13.2':
+    resolution: {integrity: sha512-l/3xBWPN235/pY8C1nUtCD65F6CfjlAYK1zie1YvVB00r6V86Uljy1wCG76vpHT6tXqNK5cBjwBH5MtlrM0U8Q==}
     peerDependencies:
       react: 18.3.1
 
-  '@lottiefiles/dotlottie-web@0.40.1':
-    resolution: {integrity: sha512-iNz1rr8zRTSJ0xCZEPeoCX6YnaNhBdkF7gJWhSa8bwB4NTrYZm0vAuC0jF/aLLhU7q9nf6ykxffrz0Sf4JPSPg==}
+  '@lottiefiles/dotlottie-web@0.41.0':
+    resolution: {integrity: sha512-hJR3zN9DiQkNjEA0+OJbuPJPXZtbySrfYa61WD5qFc7dBPHGDUaSC6APvwM2FSrzPy0AU4nrOPfExEe6VNznkg==}
 
   '@malept/cross-spawn-promise@2.0.0':
     resolution: {integrity: sha512-1DpKU0Z5ThltBwjNySMC14g0CkbyhCaz9FkhxqNsZI6uAPJXFS8cMXlBKo26FJ8ZuW6S9GCMcR9IO5k2X5/9Fg==}
@@ -18426,12 +18426,12 @@ snapshots:
 
   '@levischuck/tiny-cbor@0.2.11': {}
 
-  '@lottiefiles/dotlottie-react@0.13.0(react@18.3.1)':
+  '@lottiefiles/dotlottie-react@0.13.2(react@18.3.1)':
     dependencies:
-      '@lottiefiles/dotlottie-web': 0.40.1
+      '@lottiefiles/dotlottie-web': 0.41.0
       react: 18.3.1
 
-  '@lottiefiles/dotlottie-web@0.40.1': {}
+  '@lottiefiles/dotlottie-web@0.41.0': {}
 
   '@malept/cross-spawn-promise@2.0.0':
     dependencies:
