@@ -15,10 +15,10 @@ import {
 import {
   GroupedInformationCell,
   GroupedInsetListCard,
+  GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { Switch } from "@/src/components/ui/switch/Switch"
-import { AddCuteReIcon } from "@/src/icons/add_cute_re"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { Magic2CuteFiIcon } from "@/src/icons/magic_2_cute_fi"
 import {
@@ -86,18 +86,14 @@ export const ActionsScreen = () => {
 }
 
 const NewRuleButton = () => {
-  const label = useColor("label")
   return (
     <GroupedInsetListCard className="mt-6">
-      <UINavigationHeaderActionButton
+      <GroupedPlainButtonCell
+        label="New Rule"
         onPress={() => {
           actionActions.addRule()
         }}
-        className="flex-row items-center gap-3 py-4"
-      >
-        <AddCuteReIcon height={20} width={20} color={label} />
-        <Text className="text-label text-lg">New Rule</Text>
-      </UINavigationHeaderActionButton>
+      />
     </GroupedInsetListCard>
   )
 }
@@ -156,7 +152,7 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
         className="flex-row justify-between p-4"
         onPress={() => navigation.navigate("EditRule", { index: rule.index })}
       >
-        <Text className="text-label text-lg">{rule.name}</Text>
+        <Text className="text-label text-base">{rule.name}</Text>
         <Switch
           size="sm"
           value={!rule.result.disabled}
