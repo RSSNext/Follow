@@ -146,7 +146,7 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
         {
           label: "Edit",
           onPress: () => {
-            navigation.navigate("ManageRule", { index: rule.index })
+            navigation.navigate("EditRule", { index: rule.index })
           },
           backgroundColor: "#0ea5e9",
         },
@@ -154,7 +154,7 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
     >
       <ItemPressable
         className="flex-row justify-between p-4"
-        onPress={() => navigation.navigate("ManageRule", { index: rule.index })}
+        onPress={() => navigation.navigate("EditRule", { index: rule.index })}
       >
         <Text className="text-label text-lg">{rule.name}</Text>
         <Switch

@@ -9,12 +9,12 @@ import { DataScreen } from "./Data"
 import { EditConditionScreen } from "./EditCondition"
 import { EditProfileScreen } from "./EditProfile"
 import { EditRewriteRulesScreen } from "./EditRewriteRules"
+import { EditRuleScreen } from "./EditRule"
 import { EditWebhooksScreen } from "./EditWebhooks"
 import { FeedsScreen } from "./Feeds"
 import { GeneralScreen } from "./General"
 import { ListsScreen } from "./Lists"
 import { ManageListScreen } from "./ManageList"
-import { ManageRuleScreen } from "./ManageRule"
 import { NotificationsScreen } from "./Notifications"
 import { PrivacyScreen } from "./Privacy"
 import { ResetPassword } from "./ResetPassword"
@@ -41,10 +41,10 @@ const SettingFlatRoutes = (Stack: TypedNavigator<any, any>) => {
         component={ManageListScreen}
       />
       <Stack.Screen
-        key="ManageRule"
-        name="ManageRule"
+        key="EditRule"
+        name="EditRule"
         /* @ts-expect-error */
-        component={ManageRuleScreen}
+        component={EditRuleScreen}
       />
       <Stack.Screen
         key="EditCondition"

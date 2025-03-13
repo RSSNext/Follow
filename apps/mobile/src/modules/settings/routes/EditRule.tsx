@@ -27,10 +27,10 @@ import { availableActionList, filterFieldOptions, filterOperatorOptions } from "
 import { useSettingsNavigation } from "../hooks"
 import type { SettingsStackParamList } from "../types"
 
-export const ManageRuleScreen = ({
+export const EditRuleScreen = ({
   route,
 }: {
-  route: RouteProp<SettingsStackParamList, "ManageRule">
+  route: RouteProp<SettingsStackParamList, "EditRule">
 }) => {
   const { index } = route.params
   const rule = useActionRule(index)
