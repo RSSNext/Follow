@@ -2,7 +2,10 @@ import { Stack } from "expo-router"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
 import { useSheet } from "react-native-sheet-transitions"
 
+import { useOnboarding } from "@/src/store/user/hooks"
+
 export default function AppRootLayout() {
+  useOnboarding()
   const { scale } = useSheet()
 
   const style = useAnimatedStyle(() => ({
