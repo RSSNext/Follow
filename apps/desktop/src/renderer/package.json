@@ -71,7 +71,7 @@
     "mdast-util-to-markdown": "2.1.2",
     "nanoid": "5.1.3",
     "ofetch": "1.4.1",
-    "plain-shiki": "0.1.1",
+    "plain-shiki": "0.2.0",
     "re-resizable": "6.11.2",
     "react-blurhash": "0.3.0",
     "react-fast-marquee": "1.6.5",

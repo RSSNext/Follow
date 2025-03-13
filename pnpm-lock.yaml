@@ -637,8 +637,8 @@ importers:
         specifier: 1.4.1
         version: 1.4.1
       plain-shiki:
-        specifier: 0.1.1
-        version: 0.1.1(shiki@3.2.1)
+        specifier: 0.2.0
+        version: 0.2.0(shiki@3.2.1)
       re-resizable:
         specifier: 6.11.2
         version: 6.11.2(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -4265,7 +4265,7 @@ packages:
   '@radix-ui/react-compose-refs@1.1.1':
     resolution: {integrity: sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4287,7 +4287,7 @@ packages:
   '@radix-ui/react-context@1.1.1':
     resolution: {integrity: sha512-UASk9zi+crv9WteK/NU4PLvOoL3OuE6BWVKNF6hPRBtYBDXQ2u5iu3O59zUlJiTVvkyuycnqrztsHVJwcK9K+Q==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4344,7 +4344,7 @@ packages:
   '@radix-ui/react-focus-guards@1.1.1':
     resolution: {integrity: sha512-pSIwfrT1a6sIoDASCSpFwOasEwKTZWDw/iBdtnqKO7v6FeOzYJ7U53cPzYFVR3geGGXgVHaH+CdngrrAzqUGxg==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4632,7 +4632,7 @@ packages:
   '@radix-ui/react-use-controllable-state@1.1.0':
     resolution: {integrity: sha512-MtfMVJiSr2NjzS0Aa90NPTnvTSg6C/JLCV7ma0W6+OMV78vd8OyRpID+Ng9LxzsPbLeuBnWBA1Nq30AtBIDChw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -12093,8 +12093,8 @@ packages:
     resolution: {integrity: sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==}
     engines: {node: '>=8'}
 
-  plain-shiki@0.1.1:
-    resolution: {integrity: sha512-eHM+HdYYZsl0jUG7rlvImPOgda7Q/P4OPOaj/DcC60yAlhmtIBwn3rqvQfLlF2bNmyuO9W1RrkMmK2AO5Dc38w==}
+  plain-shiki@0.2.0:
+    resolution: {integrity: sha512-G6U9nvjc6cs1LYqNItjkX6DUgaeLXcOdgfxpLys9XByYQoWK1IxgudRBZt2WQfWrqtjmoEhB1t/nbeh41clwCg==}
     peerDependencies:
       shiki: '>=1.22.0'
 
@@ -30259,7 +30259,7 @@ snapshots:
     dependencies:
       find-up: 3.0.0
 
-  plain-shiki@0.1.1(shiki@3.2.1):
+  plain-shiki@0.2.0(shiki@3.2.1):
     dependencies:
       shiki: 3.2.1
 
