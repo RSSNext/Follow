@@ -32,6 +32,10 @@ updates:
       # Stuck by unified 11
       - dependency-name: vfile
         versions: [">=6.0.0"]
+
+      # It's using export map and metro doesn't support it well
+      - dependency-name: unist-util-visit-parents
+        versions: [">=6.0.0"]
     open-pull-requests-limit: 100
     groups:
       minor:
