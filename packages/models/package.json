@@ -20,7 +20,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "0.37.4",
+    "@auth/core": "0.38.0",
     "@follow/constants": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
