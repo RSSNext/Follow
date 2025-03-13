@@ -12,9 +12,17 @@ interface UserAvatarProps {
   name?: string | null
   className?: string
   color?: string
+  noPreview?: boolean
 }
 
-export const UserAvatar = ({ image, size = 24, name, className, color }: UserAvatarProps) => {
+export const UserAvatar = ({
+  image,
+  size = 24,
+  name,
+  className,
+  color,
+  noPreview,
+}: UserAvatarProps) => {
   if (!image) {
     return (
       <View
@@ -40,19 +48,23 @@ export const UserAvatar = ({ image, size = 24, name, className, color }: UserAva
     )
   }
 
-  return (
+  const imageContent = (
+    <Image
+      source={{ uri: image }}
+      className={cn("rounded-full", className)}
+      style={{ width: size, height: size }}
+      proxy={{
+        width: size,
+        height: size,
+      }}
+    />
+  )
+
+  return noPreview ? (
+    imageContent
+  ) : (
     <Galeria urls={[image]}>
-      <Galeria.Image index={0}>
-        <Image
-          source={{ uri: image }}
-          className={cn("rounded-full", className)}
-          style={{ width: size, height: size }}
-          proxy={{
-            width: size,
-            height: size,
-          }}
-        />
-      </Galeria.Image>
+      <Galeria.Image index={0}>{imageContent}</Galeria.Image>
     </Galeria>
   )
 }
