@@ -75,7 +75,7 @@
     "immer": "10.1.1",
     "jotai": "2.12.1",
     "lru-cache": "11.0.2",
-    "nanoid": "5.1.0",
+    "nanoid": "5.1.3",
     "nativewind": "4.1.23",
     "ofetch": "1.4.1",
     "react": "18.3.1",

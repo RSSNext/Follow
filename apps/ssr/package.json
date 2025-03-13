@@ -60,7 +60,7 @@
     "html-minifier-terser": "7.2.0",
     "lightningcss": "1.29.2",
     "masonic": "4.0.1",
-    "nanoid": "5.1.0",
+    "nanoid": "5.1.3",
     "path-to-regexp": "8.2.0",
     "tsup": "8.3.6",
     "tsx": "4.19.3",

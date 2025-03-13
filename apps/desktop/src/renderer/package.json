@@ -69,7 +69,7 @@
     "masonic": "4.0.1",
     "mdast-util-gfm-table": "2.0.0",
     "mdast-util-to-markdown": "2.1.2",
-    "nanoid": "5.1.0",
+    "nanoid": "5.1.3",
     "ofetch": "1.4.1",
     "plain-shiki": "0.1.1",
     "re-resizable": "6.10.3",
