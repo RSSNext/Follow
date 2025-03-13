@@ -688,8 +688,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tldts:
-        specifier: 6.1.77
-        version: 6.1.77
+        specifier: 6.1.84
+        version: 6.1.84
       use-context-selector:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.24.0-canary-efb381bbf-20230505)
@@ -1561,8 +1561,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1
       tldts:
-        specifier: 6.1.77
-        version: 6.1.77
+        specifier: 6.1.84
+        version: 6.1.84
       uniqolor:
         specifier: 1.1.1
         version: 1.1.1
@@ -14072,8 +14072,8 @@ packages:
   tldts-core@6.1.84:
     resolution: {integrity: sha512-NaQa1W76W2aCGjXybvnMYzGSM4x8fvG2AN/pla7qxcg0ZHbooOPhA8kctmOZUDfZyhDL27OGNbwAeig8P4p1vg==}
 
-  tldts@6.1.77:
-    resolution: {integrity: sha512-lBpoWgy+kYmuXWQ83+R7LlJCnsd9YW8DGpZSHhrMl4b8Ly/1vzOie3OdtmUJDkKxcgRGOehDu5btKkty+JEe+g==}
+  tldts@6.1.84:
+    resolution: {integrity: sha512-aRGIbCIF3teodtUFAYSdQONVmDRy21REM3o6JnqWn5ZkQBJJ4gHxhw6OfwQ+WkSAi3ASamrS4N4nyazWx6uTYg==}
     hasBin: true
 
   tmp-promise@3.0.3:
@@ -31428,7 +31428,7 @@ snapshots:
 
   tldts-core@6.1.84: {}
 
-  tldts@6.1.77:
+  tldts@6.1.84:
     dependencies:
       tldts-core: 6.1.84
 
