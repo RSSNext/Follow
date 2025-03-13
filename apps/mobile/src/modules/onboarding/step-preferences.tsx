@@ -82,7 +82,7 @@ export const StepPreferences = () => {
         >
           <View className="flex-row">
             <Text className="text-secondary-label flex-1">
-              If you have used RSS before, You can import OPML file
+              If you have used RSS before, you can import an OPML file
             </Text>
           </View>
         </PreferenceCard>

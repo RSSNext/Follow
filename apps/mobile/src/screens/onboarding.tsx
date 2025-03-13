@@ -4,14 +4,15 @@ import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SheetScreen } from "react-native-sheet-transitions"
 
+import { StepFinished } from "../modules/onboarding/step-finished"
 import { StepInterests } from "../modules/onboarding/step-interests"
 import { StepPreferences } from "../modules/onboarding/step-preferences"
-import { StepWelcome } from "../modules/onboarding/welcome"
+import { StepWelcome } from "../modules/onboarding/step-welcome"
 
 export default function Onboarding() {
   const insets = useSafeAreaInsets()
   const [currentStep, setCurrentStep] = useState(1)
-  const totalSteps = 3
+  const totalSteps = 4
 
   const handleNext = useCallback(() => {
     if (currentStep < totalSteps) {
@@ -42,6 +43,7 @@ export default function Onboarding() {
         {currentStep === 1 && <StepWelcome />}
         {currentStep === 2 && <StepPreferences />}
         {currentStep === 3 && <StepInterests />}
+        {currentStep === 4 && <StepFinished />}
 
         {/* Navigation buttons */}
         <View className="mb-6 px-6" style={{ marginBottom: insets.bottom || 24 }}>
@@ -50,7 +52,11 @@ export default function Onboarding() {
             className="bg-accent w-full items-center rounded-xl py-4"
           >
             <Text className="text-lg font-bold text-white">
-              {currentStep < totalSteps ? "Next" : "Get Started"}
+              {currentStep < totalSteps - 1
+                ? "Next"
+                : currentStep === totalSteps - 1
+                  ? "Finish Setup"
+                  : "Let's Go!"}
             </Text>
           </TouchableOpacity>
         </View>
