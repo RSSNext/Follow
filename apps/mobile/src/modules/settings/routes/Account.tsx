@@ -28,13 +28,14 @@ import {
   getProviders,
   linkSocial,
   signOut,
-  twoFactor,
   unlinkAccount,
 } from "@/src/lib/auth"
 import { Dialog } from "@/src/lib/dialog"
+import { loading } from "@/src/lib/loading"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
+import { userSyncService } from "@/src/store/user/store"
 
 import { ConfirmPasswordDialog } from "../../dialogs/ConfirmPasswordDialog"
 import { useSettingsNavigation } from "../hooks"
@@ -232,6 +233,9 @@ const SecuritySection = () => {
   const hasPassword = account?.data?.find((account) => account.provider === "credential")
   const router = useSettingsNavigation()
   const whoAmI = useWhoami()
+
+  const twoFactorEnabled = whoAmI?.twoFactorEnabled
+
   return (
     <View className="mt-6">
       <GroupedInsetListSectionHeader label="Security" />
@@ -255,20 +259,39 @@ const SecuritySection = () => {
         />
         <GroupedPlainButtonCell
           textClassName="text-left"
-          label="Setting 2FA"
+          label={twoFactorEnabled ? "Disable 2FA" : "Setting 2FA"}
           onPress={() => {
             Dialog.show(ConfirmPasswordDialog, {
               override: {
                 async onConfirm(ctx) {
-                  const { password } = ctx
                   ctx.dismiss()
-                  const res = await twoFactor.enable({ password })
+
+                  const { done } = loading.start()
+
+                  if (twoFactorEnabled) {
+                    const res = await userSyncService
+                      .updateTwoFactor(false, ctx.password)
+                      .finally(() => done())
+
+                    if (res.error?.message) {
+                      toast.error("Invalid password or something went wrong")
+                      return
+                    }
+                    toast.success("2FA disabled")
+                    return
+                  }
+                  const { password } = ctx
+
+                  const res = await userSyncService
+                    .updateTwoFactor(true, password)
+                    .finally(() => done())
+
                   if (res.error?.message) {
                     toast.error("Invalid password or something went wrong")
                     return
                   }
                   if (res.data && "totpURI" in res.data) {
-                    router.navigate("Setting2FA", {
+                    router.navigate("TwoFASetting", {
                       totpURI: res.data.totpURI,
                     })
                   } else {

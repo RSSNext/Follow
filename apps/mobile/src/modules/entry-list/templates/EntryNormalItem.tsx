@@ -2,10 +2,11 @@ import { FeedViewType } from "@follow/constants"
 import { formatEstimatedMins } from "@follow/utils"
 import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
+import { ThemedBlurView } from "@/src/components/common/ThemedBlurView"
 import { preloadWebViewEntry } from "@/src/components/native/webview/EntryContentWebView"
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -127,7 +128,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
                     uri: image,
                   }}
                   blurhash={blurhash}
-                  className="border-secondary-system-background size-24 rounded-md border"
+                  className="border-secondary-system-background size-24 overflow-hidden rounded-lg border"
                   contentFit="cover"
                 />
               ) : (
@@ -156,7 +157,8 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
                   })
                 }}
               >
-                <View className="bg-gray-6/50 rounded-full p-2">
+                <View className="overflow-hidden rounded-full p-2">
+                  <ThemedBlurView style={StyleSheet.absoluteFillObject} intensity={30} />
                   {isPlaying ? (
                     <PauseCuteFiIcon color="white" width={24} height={24} />
                   ) : isLoading ? (
@@ -222,7 +224,7 @@ const AspectRatioImage = ({
             height: scaledHeight,
           }}
           blurhash={blurhash}
-          className="border-secondary-system-background border"
+          className="border-secondary-system-background rounded-md border"
           contentFit="cover"
         />
       </View>
