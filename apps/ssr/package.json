@@ -14,7 +14,7 @@
     "@fontsource/sn-pro": "5.2.5",
     "@openpanel/web": "1.0.1",
     "@resvg/resvg-js": "2.6.2",
-    "@sentry/react": "9.1.0",
+    "@sentry/react": "9.5.0",
     "@tanstack/react-query": "5.67.3",
     "blurhash": "2.0.5",
     "click-to-react-component": "1.1.2",
