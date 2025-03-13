@@ -1,4 +1,7 @@
 import { requireNativeModule } from "expo"
+import { openURL } from "expo-linking"
+
+import { getGeneralSettings } from "@/src/atoms/settings/general"
 
 interface NativeModule {
   openLink: (url: string) => Promise<{
@@ -9,6 +12,11 @@ interface NativeModule {
 }
 const nativeModule = requireNativeModule("Helper") as NativeModule
 export const openLink = (url: string, onDismiss?: () => void) => {
+  const { openLinksInApp } = getGeneralSettings()
+  if (!openLinksInApp) {
+    openURL(url)
+    return
+  }
   nativeModule.openLink(url).then((res) => {
     if (res.type === "dismiss") {
       onDismiss?.()

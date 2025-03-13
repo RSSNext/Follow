@@ -18,8 +18,5 @@ export interface GeneralSettings {
    */
   autoExpandLongSocialMedia: boolean
 
-  /**
-   * Open YouTube/Bilibili videos in their respective apps rather than in-app browser
-   */
-  openVideoInApp: boolean
+  openLinksInApp: boolean
 }

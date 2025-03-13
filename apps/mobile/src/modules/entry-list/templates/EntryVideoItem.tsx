@@ -1,7 +1,7 @@
 import { transformVideoUrl } from "@follow/utils"
 import { Linking } from "react-native"
 
-import { useGeneralSettingKey } from "@/src/atoms/settings/general"
+import { getGeneralSettings } from "@/src/atoms/settings/general"
 import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { openLink } from "@/src/lib/native"
@@ -14,7 +14,6 @@ import { EntryGridFooter } from "../../entry-content/EntryGridFooter"
 
 export function EntryVideoItem({ id }: { id: string }) {
   const item = useEntry(id)
-  const needOpenVideoInApp = useGeneralSettingKey("openVideoInApp")
 
   if (!item || !item.media) {
     return null
@@ -30,7 +29,7 @@ export function EntryVideoItem({ id }: { id: string }) {
             toast.error("No video URL found")
             return
           }
-          openVideo(item.url, needOpenVideoInApp)
+          openVideo(item.url)
         }}
       >
         <Image
@@ -72,8 +71,9 @@ const parseSchemeLink = (url: string) => {
   }
 }
 
-const openVideo = async (url: string, openVideoInApp = false) => {
-  if (openVideoInApp) {
+const openVideo = async (url: string) => {
+  const { openLinksInApp } = getGeneralSettings()
+  if (!openLinksInApp) {
     const schemeLink = parseSchemeLink(url)
     try {
       const isInstalled = !!schemeLink && (await Linking.canOpenURL(schemeLink))
