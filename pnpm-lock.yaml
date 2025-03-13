@@ -10,6 +10,7 @@ overrides:
   isarray: npm:@nolyfill/isarray@1
   react: 18.3.1
   react-dom: 18.3.1
+  vfile: 5.3.7
 
 patchedDependencies:
   '@microflash/remark-callout-directives':
@@ -2354,9 +2355,6 @@ packages:
 
   '@better-fetch/fetch@1.1.12':
     resolution: {integrity: sha512-B3bfloI/2UBQWIATRN6qmlORrvx3Mp0kkNjmXLv0b+DtbtR+pP4/I5kQA/rDUv+OReLywCCldf6co4LdDmh8JA==}
-
-  '@better-fetch/fetch@1.1.15':
-    resolution: {integrity: sha512-0Bl8YYj1f8qCTNHeSn5+1DWv2hy7rLBrQ8rS8Y9XYloiwZEfc3k4yspIG0llRxafxqhGCwlGRg+F8q1HZRCMXA==}
 
   '@canvas/image-data@1.0.0':
     resolution: {integrity: sha512-BxOqI5LgsIQP1odU5KMwV9yoijleOPzHL18/YvNqF9KFSGF2K/DLlYAbDQsWqd/1nbaFuSkYD/191dpMtNh4vw==}
@@ -15414,9 +15412,6 @@ packages:
   vfile@5.3.7:
     resolution: {integrity: sha512-r7qlzkgErKjobAmyNIkkSpizsFPYiUPuJb5pNW1RB4JcYVZhs4lIbVqk8XPk033CV/1z8ss5pkax8SuhGpcG8g==}
 
-  vfile@6.0.3:
-    resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
-
   vite-bundle-analyzer@0.17.1:
     resolution: {integrity: sha512-ubjLhkuRgOSBNck+6xBbQmjmh8SeLTG4alEM5PX2TNzyGhKLwWlyCz1YG0an3RQnscbhVzSb6kYteoHXhP///A==}
     hasBin: true
@@ -16914,8 +16909,6 @@ snapshots:
       uncrypto: 0.1.3
 
   '@better-fetch/fetch@1.1.12': {}
-
-  '@better-fetch/fetch@1.1.15': {}
 
   '@canvas/image-data@1.0.0': {}
 
@@ -23089,7 +23082,7 @@ snapshots:
 
   better-call@0.3.3:
     dependencies:
-      '@better-fetch/fetch': 1.1.15
+      '@better-fetch/fetch': 1.1.12
       rou3: 0.5.1
       uncrypto: 0.1.3
       zod: 3.24.2
@@ -27148,7 +27141,7 @@ snapshots:
       devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       hast-util-from-parse5: 8.0.3
       parse5: 7.2.1
-      vfile: 6.0.3
+      vfile: 5.3.7
       vfile-message: 4.0.2
 
   hast-util-from-parse5@8.0.3:
@@ -27158,7 +27151,7 @@ snapshots:
       devlop: 1.1.0(patch_hash=xzgzapu45daboiid4fiusduvwa)
       hastscript: 9.0.1
       property-information: 7.0.0
-      vfile: 6.0.3
+      vfile: 5.3.7
       vfile-location: 5.0.3
       web-namespaces: 2.0.1
 
@@ -29112,7 +29105,7 @@ snapshots:
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
       unist-util-visit: 5.0.0
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   mdast-util-to-markdown@2.1.2:
     dependencies:
@@ -31697,7 +31690,7 @@ snapshots:
       hast-util-truncate: 2.0.0
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   rehype-minify-whitespace@6.0.2:
     dependencies:
@@ -31764,7 +31757,7 @@ snapshots:
       '@types/mdast': 4.0.4
       mdast-util-to-hast: 13.2.0
       unified: 11.0.5
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   remark-stringify@11.0.0:
     dependencies:
@@ -33317,7 +33310,7 @@ snapshots:
       extend: 3.0.2
       is-plain-obj: 4.1.0
       trough: 2.2.0
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   uniqolor@1.1.1: {}
 
@@ -33570,7 +33563,7 @@ snapshots:
   vfile-location@5.0.3:
     dependencies:
       '@types/unist': 3.0.3
-      vfile: 6.0.3
+      vfile: 5.3.7
 
   vfile-message@3.1.4:
     dependencies:
@@ -33588,11 +33581,6 @@ snapshots:
       is-buffer: 2.0.5
       unist-util-stringify-position: 3.0.3
       vfile-message: 3.1.4
-
-  vfile@6.0.3:
-    dependencies:
-      '@types/unist': 3.0.3
-      vfile-message: 4.0.2
 
   vite-bundle-analyzer@0.17.1: {}
 
