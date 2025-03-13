@@ -18,9 +18,11 @@ updates:
         versions: [">=4.0.0"]
       - dependency-name: react-native
         versions: [">=0.78.0"]
+    open-pull-requests-limit: 100
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
     target-branch: dev
+    open-pull-requests-limit: 100
