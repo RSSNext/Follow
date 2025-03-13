@@ -3,42 +3,52 @@ import type { PropsWithChildren } from "react"
 import { ActivityIndicator, Pressable, Text, TouchableOpacity, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
-import { useGeneralSettingKey } from "@/src/atoms/settings/general"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { GroupedInsetListNavigationLinkIcon } from "@/src/components/ui/grouped/GroupedList"
 import { DocmentCuteReIcon } from "@/src/icons/docment_cute_re"
 import { FileImportCuteReIcon } from "@/src/icons/file_import_cute_re"
-import { Magic2CuteReIcon } from "@/src/icons/magic_2_cute_re"
+import { ListCheck2CuteReIcon } from "@/src/icons/list_check_2_cute_re"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
-import { LanguageMap } from "@/src/lib/language"
+import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
 import { useWhoami } from "@/src/store/user/hooks"
+import { accentColor } from "@/src/theme/colors"
 
 import { importOpml, setAvatar } from "../settings/utils"
 import { useReadingBehavior } from "./hooks/use-reading-behavior"
 
 export const StepPreferences = () => {
-  const translationLanguage = useGeneralSettingKey("translationLanguage")
-  const language =
-    translationLanguage in LanguageMap
-      ? LanguageMap[translationLanguage as keyof typeof LanguageMap].label
-      : translationLanguage
   const { behavior } = useReadingBehavior()
 
   return (
-    <View className="mt-4 flex-1 p-4">
-      <View className="mb-6">
-        <Text className="text-text text-center text-xl font-medium">
+    <View className="mt-[10vh] flex-1 p-4">
+      <View className="mb-10 flex items-center gap-4">
+        <ListCheck2CuteReIcon height={80} width={80} color={accentColor} />
+        <Text className="text-text mt-2 text-center text-xl font-bold">
           Personalize Your Experience
         </Text>
-        <Text className="text-secondary-label mt-2 text-center text-base">
-          Set your preferences to make Folo work best for you. You can always change these later in
-          Settings.
+        <Text className="text-label text-center text-base">
+          Set your preferences to make Follow work best for you. You can always change these later
+          in Settings.
         </Text>
       </View>
 
-      <EditProfileSection />
-
       <View className="mb-6 gap-4">
+        <PreferenceCard
+          title="Edit Profile"
+          icon={
+            <GroupedInsetListNavigationLinkIcon backgroundColor="#34D399">
+              <Settings1CuteReIcon color="#fff" width={40} height={40} />
+            </GroupedInsetListNavigationLinkIcon>
+          }
+          onPress={() => {
+            router.push("/onboarding/edit-profile")
+          }}
+        >
+          <Text className="text-secondary-label text-sm">
+            Change your name, email, and profile picture
+          </Text>
+        </PreferenceCard>
+
         {/* Reading Preferences Card */}
         <PreferenceCard
           title="Reading Preferences"
@@ -48,7 +58,7 @@ export const StepPreferences = () => {
             </GroupedInsetListNavigationLinkIcon>
           }
           onPress={() => {
-            router.push("/select-reading-mode")
+            router.push("/onboarding/select-reading-mode")
           }}
         >
           {behavior === "radical" && (
@@ -66,18 +76,6 @@ export const StepPreferences = () => {
               Mark entries as read only when clicked
             </Text>
           )}
-        </PreferenceCard>
-
-        {/* Translation Language Card */}
-        <PreferenceCard
-          title="Translation Language"
-          icon={
-            <GroupedInsetListNavigationLinkIcon backgroundColor="#34D399">
-              <Magic2CuteReIcon color="#fff" width={40} height={40} />
-            </GroupedInsetListNavigationLinkIcon>
-          }
-        >
-          <Text className="text-secondary-label text-sm">{language}</Text>
         </PreferenceCard>
 
         {/* Import Card */}
@@ -139,7 +137,7 @@ const PreferenceCard = ({ title, children, onPress, icon }: PreferenceCardProps)
 
   return (
     <Pressable
-      className="bg-secondary-system-grouped-background flex flex-row items-center gap-4 rounded-xl p-4"
+      className="bg-secondary-system-grouped-background flex flex-row items-center gap-2 rounded-xl p-4"
       onPress={onPress}
     >
       {icon}

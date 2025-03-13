@@ -3,6 +3,7 @@ import { useCallback, useState } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 
+import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { Shuffle2CuteReIcon } from "@/src/icons/shuffle_2_cute_re"
 import { toast } from "@/src/lib/toast"
 import { useSubscription } from "@/src/store/subscription/hooks"
@@ -42,15 +43,18 @@ export const StepInterests = () => {
     setDisplayFeeds(shuffled)
   }, [])
   return (
-    <View className="mt-[20vh] flex-1 items-center">
-      <Text className="text-text mb-4 text-2xl font-bold">Discover Interests</Text>
-      <Text className="text-text mb-8 px-6 text-center text-lg">
-        Subscribe to feeds that match your interests.
-      </Text>
+    <View className="mt-[10vh] flex-1 items-center">
+      <View className="mb-10 flex items-center gap-4">
+        <Search3CuteReIcon height={80} width={80} color={accentColor} />
+        <Text className="text-text mt-2 text-2xl font-bold">Discover Interests</Text>
+        <Text className="text-label mb-8 px-6 text-center text-lg">
+          Subscribe to feeds that match your interests.
+        </Text>
+      </View>
 
-      <View className="mb-8 w-full items-center">
-        <View className="mb-4 flex-row items-center">
-          <Text className="mr-2 text-base">Suggestions for you</Text>
+      <View className="w-full items-center gap-4">
+        <View className="flex flex-row">
+          <Text className="mr-2 text-base">Suggestions feed</Text>
           <TouchableOpacity
             onPress={shuffleFeeds}
             className="bg-accent/10 flex-row items-center rounded-full px-3 py-1"
