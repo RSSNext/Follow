@@ -21,7 +21,7 @@
     "dayjs": "1.11.13",
     "fastify": "5.2.1",
     "framer-motion": "12.5.0",
-    "i18next": "24.2.2",
+    "i18next": "24.2.3",
     "jotai": "2.12.2",
     "kose-font": "1.0.0",
     "linkedom": "0.18.9",
@@ -52,7 +52,7 @@
     "@types/html-minifier-terser": "7.0.2",
     "@types/react-google-recaptcha": "2.1.9",
     "chokidar": "4.0.3",
-    "daisyui": "4.12.23",
+    "daisyui": "4.12.24",
     "dotenv-flow": "4.1.0",
     "es-toolkit": "1.33.0",
     "fast-glob": "3.3.3",
@@ -64,6 +64,6 @@
     "path-to-regexp": "8.2.0",
     "tsup": "8.4.0",
     "tsx": "4.19.3",
-    "vite": "6.2.1"
+    "vite": "6.2.2"
   }
 }
