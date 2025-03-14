@@ -29,15 +29,15 @@
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
     "@openpanel/web": "1.0.1",
-    "@sentry/electron": "5.11.0",
+    "@sentry/electron": "6.1.0",
     "builder-util-runtime": "9.2.10",
-    "cookie-es": "1.2.2",
+    "cookie-es": "2.0.0",
     "electron-context-menu": "4.0.5",
-    "electron-log": "5.3.0",
+    "electron-log": "5.3.2",
     "electron-squirrel-startup": "1.0.1",
     "electron-store": "10.0.1",
     "electron-updater": "6.3.9",
-    "es-toolkit": "1.32.0",
+    "es-toolkit": "1.33.0",
     "fast-folder-size": "2.4.0",
     "font-list": "1.5.1",
     "i18next": "24.2.2",
@@ -52,11 +52,12 @@
     "vscode-languagedetection": "npm:@vscode/vscode-languagedetection@1.0.22"
   },
   "devDependencies": {
+    "@follow/models": "workspace:*",
     "@follow/types": "workspace:*",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "22.13.4",
-    "electron": "34.2.0",
+    "@types/node": "22.13.10",
+    "electron": "35.0.1",
     "electron-devtools-installer": "4.0.0",
-    "hono": "4.7.2"
+    "hono": "4.7.4"
   }
 }

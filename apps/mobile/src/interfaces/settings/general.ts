@@ -17,4 +17,6 @@ export interface GeneralSettings {
    * Auto expand long social media
    */
   autoExpandLongSocialMedia: boolean
+
+  openLinksInApp: boolean
 }

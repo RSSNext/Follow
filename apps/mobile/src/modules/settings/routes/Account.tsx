@@ -14,6 +14,7 @@ import {
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
   GroupedInsetListSectionHeader,
+  GroupedOutlineDescription,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
 import { getDbPath } from "@/src/database"
@@ -21,9 +22,23 @@ import { AppleCuteFiIcon } from "@/src/icons/apple_cute_fi"
 import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
 import { GoogleCuteFiIcon } from "@/src/icons/google_cute_fi"
 import type { AuthProvider } from "@/src/lib/auth"
-import { getAccountInfo, getProviders, linkSocial, signOut, unlinkAccount } from "@/src/lib/auth"
+import {
+  forgetPassword,
+  getAccountInfo,
+  getProviders,
+  linkSocial,
+  signOut,
+  unlinkAccount,
+} from "@/src/lib/auth"
+import { Dialog } from "@/src/lib/dialog"
+import { loading } from "@/src/lib/loading"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
+import { useWhoami } from "@/src/store/user/hooks"
+import { userSyncService } from "@/src/store/user/store"
+
+import { ConfirmPasswordDialog } from "../../dialogs/ConfirmPasswordDialog"
+import { useSettingsNavigation } from "../hooks"
 
 type Account = {
   id: string
@@ -37,49 +52,24 @@ type Account = {
 }
 
 const accountInfoKey = ["account-info"]
-export const AccountScreen = () => {
-  const { data: accounts } = useQuery({
+const userProviderKey = ["providers"]
+
+const useAccount = () => {
+  return useQuery({
     queryKey: accountInfoKey,
     queryFn: () => getAccountInfo(),
   })
-
-  const { data: providers, isLoading } = useQuery({
-    queryKey: ["providers"],
-    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
-  })
-
-  const providerToAccountMap = useMemo(() => {
-    return Object.keys(providers || {}).reduce(
-      (acc, provider) => {
-        acc[provider] = accounts?.data?.find((account) => account.provider === provider)!
-        return acc
-      },
-      {} as Record<string, Account>,
-    )
-  }, [accounts?.data, providers])
-
+}
+export const AccountScreen = () => {
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Account" />
 
       <View className="mt-6">
-        <GroupedInsetListSectionHeader label="Authentication" />
-        <GroupedInsetListCard>
-          {providers ? (
-            Object.keys(providers).map((provider) => (
-              <AccountLinker
-                key={provider}
-                provider={provider as any}
-                account={providerToAccountMap[provider]}
-              />
-            ))
-          ) : isLoading ? (
-            <View className="flex h-12 flex-1 items-center justify-center">
-              <ActivityIndicator />
-            </View>
-          ) : null}
-        </GroupedInsetListCard>
+        <AuthenticationSection />
       </View>
+
+      <SecuritySection />
 
       {/* Danger Zone */}
       <View className="mt-6">
@@ -140,7 +130,8 @@ const AccountLinker: FC<{
   const queryClient = useQueryClient()
   const unlinkAccountMutation = useMutation({
     mutationFn: async () => {
-      const res = await unlinkAccount({ providerId: provider })
+      if (!account) throw new Error("Account not found")
+      const res = await unlinkAccount({ providerId: provider, accountId: account.id })
       if (res.error) throw new Error(res.error.message)
     },
     onSuccess: () => {
@@ -158,7 +149,7 @@ const AccountLinker: FC<{
       label={provider2LabelMap[provider]}
       icon={provider2IconMap[provider]}
       postfix={
-        <Text className="text-secondary-label mr-1 max-w-[100px]">
+        <Text ellipsizeMode="tail" className="text-secondary-label mr-1 max-w-[100px]">
           {account?.profile?.email || account?.profile?.name || ""}
         </Text>
       }
@@ -168,7 +159,14 @@ const AccountLinker: FC<{
             provider: provider as any,
           }).then((res) => {
             if (res.data) {
-              openLink(res.data.url)
+              openLink(res.data.url, () => {
+                queryClient.invalidateQueries({
+                  queryKey: [accountInfoKey],
+                })
+                queryClient.invalidateQueries({
+                  queryKey: [userProviderKey],
+                })
+              })
             } else {
               toast.error("Failed to link account")
             }
@@ -189,3 +187,123 @@ const AccountLinker: FC<{
   )
 }
 ;(AccountLinker as any).itemStyle = GroupedInsetListCardItemStyle.NavigationLink
+
+const AuthenticationSection = () => {
+  const { data: accounts } = useAccount()
+
+  const { data: providers, isLoading } = useQuery({
+    queryKey: userProviderKey,
+    queryFn: async () => (await getProviders()).data as Record<string, AuthProvider>,
+  })
+
+  const providerToAccountMap = useMemo(() => {
+    return Object.keys(providers || {}).reduce(
+      (acc, provider) => {
+        acc[provider] = accounts?.data?.find((account) => account.provider === provider)!
+        return acc
+      },
+      {} as Record<string, Account>,
+    )
+  }, [accounts?.data, providers])
+
+  return (
+    <>
+      <GroupedInsetListSectionHeader label="Authentication" />
+      <GroupedInsetListCard>
+        {providers ? (
+          Object.keys(providers).map((provider) => (
+            <AccountLinker
+              key={provider}
+              provider={provider as any}
+              account={providerToAccountMap[provider]}
+            />
+          ))
+        ) : isLoading ? (
+          <View className="flex h-12 flex-1 items-center justify-center">
+            <ActivityIndicator />
+          </View>
+        ) : null}
+      </GroupedInsetListCard>
+      <GroupedOutlineDescription description="You can currently only connect social accounts with the same email." />
+    </>
+  )
+}
+
+const SecuritySection = () => {
+  const { data: account } = useAccount()
+  const hasPassword = account?.data?.find((account) => account.provider === "credential")
+  const router = useSettingsNavigation()
+  const whoAmI = useWhoami()
+
+  const twoFactorEnabled = whoAmI?.twoFactorEnabled
+
+  return (
+    <View className="mt-6">
+      <GroupedInsetListSectionHeader label="Security" />
+      <GroupedInsetListCard>
+        <GroupedPlainButtonCell
+          textClassName="text-left"
+          label="Change password"
+          onPress={() => {
+            const email = whoAmI?.email || ""
+            if (!email) {
+              toast.error("You need to login with email first")
+              return
+            }
+            if (!hasPassword) {
+              forgetPassword({ email })
+              toast.success("We have sent you an email with instructions to reset your password.")
+            } else {
+              router.navigate("ResetPassword")
+            }
+          }}
+        />
+        <GroupedPlainButtonCell
+          textClassName="text-left"
+          label={twoFactorEnabled ? "Disable 2FA" : "Setting 2FA"}
+          onPress={() => {
+            Dialog.show(ConfirmPasswordDialog, {
+              override: {
+                async onConfirm(ctx) {
+                  ctx.dismiss()
+
+                  const { done } = loading.start()
+
+                  if (twoFactorEnabled) {
+                    const res = await userSyncService
+                      .updateTwoFactor(false, ctx.password)
+                      .finally(() => done())
+
+                    if (res.error?.message) {
+                      toast.error("Invalid password or something went wrong")
+                      return
+                    }
+                    toast.success("2FA disabled")
+                    return
+                  }
+                  const { password } = ctx
+
+                  const res = await userSyncService
+                    .updateTwoFactor(true, password)
+                    .finally(() => done())
+
+                  if (res.error?.message) {
+                    toast.error("Invalid password or something went wrong")
+                    return
+                  }
+                  if (res.data && "totpURI" in res.data) {
+                    router.navigate("TwoFASetting", {
+                      totpURI: res.data.totpURI,
+                    })
+                  } else {
+                    toast.error("Failed to enable 2FA")
+                  }
+                },
+              },
+            })
+          }}
+        />
+      </GroupedInsetListCard>
+    </View>
+  )
+}

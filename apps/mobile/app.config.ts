@@ -41,6 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       LSApplicationCategoryType: "public.app-category.news",
       ITSAppUsesNonExemptEncryption: false,
       UIBackgroundModes: ["audio"],
+      LSApplicationQueriesSchemes: ["bilibili", "youtube"],
     },
     googleServicesFile: "./build/GoogleService-Info.plist",
   },
@@ -110,12 +111,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-secure-store",
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
+    "@react-native-firebase/app-check",
     [
       "expo-image-picker",
       {
         photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
       },
     ],
+    "react-native-video",
   ],
   experiments: {
     typedRoutes: true,

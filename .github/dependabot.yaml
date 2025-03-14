@@ -1,0 +1,55 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+      time: "12:00"
+      timezone: Asia/Singapore
+    target-branch: dev
+    ignore:
+      # Stuck by react 19
+      - dependency-name: react
+        versions: [">=19.0.0"]
+      - dependency-name: react-dom
+        versions: [">=19.0.0"]
+      - dependency-name: "@types/react"
+        versions: [">=19.0.0"]
+      - dependency-name: "@types/react-dom"
+        versions: [">=19.0.0"]
+
+      # Stuck by tailwindcss 4
+      - dependency-name: tailwindcss
+        versions: [">=4.0.0"]
+      - dependency-name: daisyui
+        versions: [">=5.0.0"]
+
+      # Stuck by expo 52
+      - dependency-name: react-native
+        versions: [">=0.78.0"]
+
+      # Stuck by unified 11
+      - dependency-name: vfile
+        versions: [">=6.0.0"]
+
+      # It's using export map and metro doesn't support it well
+      - dependency-name: unist-util-visit-parents
+        versions: [">=6.0.0"]
+    open-pull-requests-limit: 100
+    groups:
+      minor:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+      patch:
+        applies-to: version-updates
+        update-types:
+          - "patch"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    target-branch: dev
+    open-pull-requests-limit: 100

@@ -20,7 +20,7 @@ export const EntryAISummary: FC<{
 
   return (
     <AISummary
-      className="mb-3"
+      className="my-3"
       summary={summary?.summary || ""}
       pending={status === SummaryGeneratingStatus.Pending}
       error={status === SummaryGeneratingStatus.Error ? "Failed to generate summary" : undefined}

@@ -25,6 +25,7 @@ export const GeneralScreen = () => {
   const expandLongSocialMedia = useGeneralSettingKey("autoExpandLongSocialMedia")
   const markAsReadWhenScrolling = useGeneralSettingKey("scrollMarkUnread")
   const markAsReadWhenInView = useGeneralSettingKey("renderMarkUnread")
+  const openLinksInApp = useGeneralSettingKey("openLinksInApp")
 
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
@@ -138,6 +139,22 @@ export const GeneralScreen = () => {
                 value={markAsReadWhenInView}
                 onValueChange={(value) => {
                   setGeneralSetting("renderMarkUnread", value)
+                }}
+              />
+            </GroupedInsetListCell>
+          </GroupedInsetListCard>
+        </View>
+
+        {/* Content Behavior */}
+        <View className="mt-8">
+          <GroupedInsetListSectionHeader label="Content" />
+          <GroupedInsetListCard>
+            <GroupedInsetListCell label="Open Links in app">
+              <Switch
+                size="sm"
+                value={openLinksInApp}
+                onValueChange={(value) => {
+                  setGeneralSetting("openLinksInApp", value)
                 }}
               />
             </GroupedInsetListCell>

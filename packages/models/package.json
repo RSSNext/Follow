@@ -20,11 +20,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "0.37.4",
     "@follow/constants": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
-    "hono": "4.7.2"
+    "hono": "4.7.4"
   }
 }

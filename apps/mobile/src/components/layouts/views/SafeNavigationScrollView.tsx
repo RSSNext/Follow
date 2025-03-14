@@ -21,7 +21,7 @@ import {
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 
 import { AnimatedScrollView } from "../../common/AnimatedComponents"
-import { NavigationHeader } from "../header/NavigationHeader"
+import { InternalNavigationHeader } from "../header/NavigationHeader"
 import { getDefaultHeaderHeight } from "../utils"
 import { NavigationContext } from "./NavigationContext"
 import {
@@ -136,7 +136,7 @@ export const NavigationBlurEffectHeader = ({
           ({ options }) => (
             <NavigationContext.Provider value={navigationContext}>
               <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
-                <NavigationHeader
+                <InternalNavigationHeader
                   modal={options.presentation === "modal" || options.presentation === "formSheet"}
                   title={options.title}
                   headerRight={options.headerRight}

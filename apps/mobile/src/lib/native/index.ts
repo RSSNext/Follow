@@ -1,10 +1,9 @@
 import { openURL } from "expo-linking"
 
-export const openLink = (url: string) => {
+// eslint-disable-next-line unused-imports/no-unused-vars
+export const openLink = (url: string, onDismiss?: () => void) => {
   openURL(url)
 }
-
-export const quickLookImage = (_images: string[]) => {}
 
 export const performNativeScrollToTop = (_reactTag: number) => {
   throw new Error("performNativeScrollToTop is not supported on this platform")

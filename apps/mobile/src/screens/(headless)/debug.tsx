@@ -25,7 +25,6 @@ import { Select } from "@/src/components/ui/form/Select"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
-import { quickLookImage } from "@/src/lib/native"
 import { setEnvProfile, useEnvProfile } from "@/src/lib/proxy-env"
 import { toast } from "@/src/lib/toast"
 
@@ -75,6 +74,16 @@ export default function DebugPanel() {
           },
         },
         {
+          title: "Copy Cache Directory",
+          onPress: async () => {
+            const { cacheDirectory } = FileSystem
+            if (!cacheDirectory) {
+              return
+            }
+            await Clipboard.setStringAsync(cacheDirectory)
+          },
+        },
+        {
           title: "Clear Sqlite Data",
           textClassName: "!text-red",
           onPress: async () => {
@@ -98,6 +107,10 @@ export default function DebugPanel() {
       title: "Debug",
       items: [
         {
+          title: "Reload App",
+          onPress: () => expo.reloadAppAsync("Reload App"),
+        },
+        {
           title: "Loading",
           onPress: () => {
             loading.start(sleep(2000))
@@ -106,17 +119,7 @@ export default function DebugPanel() {
         {
           title: "Toast",
           onPress: () => {
-            toast.error("Hello, world!".repeat(10))
-          },
-        },
-        {
-          title: "Quick Look Image",
-          onPress: () => {
-            quickLookImage([
-              "https://picsum.photos/200/300",
-              "https://picsum.photos/200/300?grayscale",
-              "https://picsum.photos/200/300?blur",
-            ])
+            toast.success("Hello, world!".repeat(3))
           },
         },
 
@@ -138,16 +141,6 @@ export default function DebugPanel() {
           onPress: async () => {
             await requireNativeModule("Helper").scrollToTop(findNodeHandle(ref.current))
           },
-        },
-      ],
-    },
-
-    {
-      title: "App",
-      items: [
-        {
-          title: "Reload App",
-          onPress: () => expo.reloadAppAsync("Reload App"),
         },
       ],
     },

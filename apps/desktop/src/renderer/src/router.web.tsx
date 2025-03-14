@@ -15,22 +15,15 @@ if (window.SENTRY_RELEASE) {
   routerCreator = wrapCreateBrowserRouterV7(routerCreator)
 }
 
-export const router = routerCreator(
-  [
-    {
-      path: "/",
-      lazy: () => import("./App"),
-      children: tree,
-      errorElement: <ErrorElement />,
-    },
-    {
-      path: "*",
-      element: <NotFound />,
-    },
-  ],
+export const router = routerCreator([
   {
-    future: {
-      v7_startTransition: true,
-    },
+    path: "/",
+    lazy: () => import("./App"),
+    children: tree,
+    errorElement: <ErrorElement />,
   },
-)
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+])

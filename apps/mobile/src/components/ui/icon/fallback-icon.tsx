@@ -1,10 +1,11 @@
 import { getBackgroundGradient, isCJKChar } from "@follow/utils"
-import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useMemo, useState } from "react"
 import type { DimensionValue, StyleProp, TextStyle, ViewStyle } from "react-native"
 import { StyleSheet, Text, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
+
+import { Image } from "@/src/components/ui/image/Image"
 
 export const FallbackIcon = ({
   title,

@@ -6,6 +6,7 @@ import { createAuthClient } from "better-auth/react"
 import type { BetterAuthClientPlugin } from "better-auth/types"
 import * as SecureStore from "expo-secure-store"
 
+import { isNewUserQueryKey } from "../store/user/constants"
 import { whoamiQueryKey } from "../store/user/hooks"
 import { proxyEnv } from "./proxy-env"
 import { queryClient } from "./query-client"
@@ -56,6 +57,7 @@ const authClient = createAuthClient({
           SecureStore.setItem(key, value)
           if (key === cookieKey) {
             queryClient.invalidateQueries({ queryKey: whoamiQueryKey })
+            queryClient.invalidateQueries({ queryKey: isNewUserQueryKey })
           }
         },
         getItem: SecureStore.getItem,
@@ -67,6 +69,7 @@ const authClient = createAuthClient({
 // @keep-sorted
 export const {
   changeEmail,
+  changePassword,
   forgetPassword,
   getAccountInfo,
   getCookie,

@@ -2,7 +2,13 @@ import type { FeedViewType } from "@follow/constants"
 import { sql } from "drizzle-orm"
 import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core"
 
-import type { AttachmentsModel, ExtraModel, ImageColorsResult, MediaModel } from "./types"
+import type {
+  ActionSettings,
+  AttachmentsModel,
+  ExtraModel,
+  ImageColorsResult,
+  MediaModel,
+} from "./types"
 
 export const feedsTable = sqliteTable("feeds", {
   id: text("id").primaryKey(),
@@ -66,7 +72,7 @@ export const entriesTable = sqliteTable("entries", {
   title: text("title"),
   url: text("url"),
   content: text("content"),
-  sourceContent: text("source_content"),
+  readabilityContent: text("source_content"),
   description: text("description"),
   guid: text("guid").notNull(),
   author: text("author"),
@@ -85,6 +91,7 @@ export const entriesTable = sqliteTable("entries", {
   inboxHandle: text("inbox_handle"),
   read: integer("read", { mode: "boolean" }),
   sources: text("sources", { mode: "json" }).$type<string[]>(),
+  settings: text("settings", { mode: "json" }).$type<ActionSettings>(),
 })
 
 export const collectionsTable = sqliteTable("collections", {
@@ -100,7 +107,7 @@ export const summariesTable = sqliteTable(
     entryId: text("entry_id").notNull().primaryKey(),
     summary: text("summary").notNull(),
     createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
-    language: text("language").notNull(),
+    language: text("language"),
   },
   (table) => ({
     unq: uniqueIndex("unq").on(table.entryId, table.language),

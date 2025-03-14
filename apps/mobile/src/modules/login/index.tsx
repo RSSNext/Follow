@@ -20,7 +20,7 @@ export function Login() {
         }}
         accessible={false}
       >
-        <View className="mb-16 items-center gap-8">
+        <View className="mb-10 items-center gap-8">
           <Logo style={{ width: 80, height: 80 }} />
           <Text className="text-label text-3xl">
             Sign in to <Text className="font-bold">Follow</Text>

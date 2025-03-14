@@ -45,7 +45,9 @@ const useRegisterEagleCommands = () => {
     enabled: ELECTRON && enableEagle && view !== undefined,
     queryFn: async () => {
       try {
-        await ofetch("http://localhost:41595")
+        await ofetch("http://localhost:41595", {
+          mode: "no-cors",
+        })
         return true
       } catch (error: unknown) {
         return (error as FetchError).data?.code === 401

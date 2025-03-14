@@ -144,7 +144,7 @@ export const useEntryActions = ({ entryId, view }: { entryId: string; view?: Fee
         id: COMMAND_ID.entry.copyLink,
         onClick: runCmdFn(COMMAND_ID.entry.copyLink, [{ entryId }]),
         hide: !entry?.entries.url,
-        shortcut: shortcuts.entry.copyTitle.key,
+        shortcut: shortcuts.entry.copyLink.key,
       },
       {
         id: COMMAND_ID.entry.openInBrowser,

@@ -28,6 +28,9 @@ const createDefaultSettings = (): GeneralSettings => ({
   jumpOutLinkWarn: true,
   // TTS
   voice: "en-US-AndrewMultilingualNeural",
+
+  // Content
+  openLinksInApp: true,
 })
 
 export const {

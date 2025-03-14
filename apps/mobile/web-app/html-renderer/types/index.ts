@@ -9,7 +9,7 @@ export interface MediaModel {
 
 export interface EntryModel {
   content?: string
-  sourceContent?: string
+  readabilityContent?: string
   title?: string
   media?: MediaModel[]
 }

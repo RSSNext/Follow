@@ -1,5 +1,5 @@
-import type { User } from "@auth/core/types"
 import type { Credentials } from "@eneris/push-receiver/dist/types"
+import type { UserModel } from "@follow/models"
 
 import { logger } from "~/logger"
 
@@ -12,8 +12,8 @@ export const getBetterAuthSessionCookie = () => store.get(BetterAuthKey)
 export const cleanBetterAuthSessionCookie = () => store.set(BetterAuthKey, null)
 
 const UserKey = "user"
-export const setUser = (user: User) => store.set(UserKey, JSON.stringify(user))
-export const getUser = (): User | null => {
+export const setUser = (user: UserModel) => store.set(UserKey, JSON.stringify(user))
+export const getUser = (): UserModel | null => {
   const user = store.get(UserKey)
   return user ? JSON.parse(user) : null
 }

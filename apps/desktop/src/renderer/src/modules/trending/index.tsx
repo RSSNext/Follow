@@ -1,4 +1,3 @@
-import type { User } from "@auth/core/types"
 import { isMobile, useMobile } from "@follow/components/hooks/useMobile.js"
 import { PhUsersBold } from "@follow/components/icons/users.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -6,7 +5,7 @@ import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { ScrollArea } from "@follow/components/ui/scroll-area/index.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import type { FeedModel, Models } from "@follow/models"
+import type { FeedModel, Models, UserModel } from "@follow/models"
 import { stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -150,7 +149,7 @@ const UserCount: Component<{ count: number }> = ({ count, className }) => {
 }
 
 interface TopUserAvatarProps {
-  user: User
+  user: UserModel
   position: string
 }
 
@@ -170,7 +169,7 @@ const TopUserAvatar: React.FC<TopUserAvatarProps> = ({ user, position }) => (
   </div>
 )
 
-const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
+const TrendingUsers: FC<{ data: UserModel[] }> = ({ data }) => {
   const profile = usePresentUserProfileModal("dialog")
   const { t } = useTranslation()
   return (

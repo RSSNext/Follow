@@ -12,6 +12,7 @@ import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { signIn } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
+import { getTokenHeaders } from "@/src/lib/token"
 import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
@@ -23,10 +24,15 @@ type FormValue = z.infer<typeof formSchema>
 
 async function onSubmit(values: FormValue) {
   await signIn
-    .email({
-      email: values.email,
-      password: values.password,
-    })
+    .email(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        headers: await getTokenHeaders(),
+      },
+    )
     .then((res) => {
       if (res.error) {
         throw new Error(res.error.message)
@@ -120,9 +126,6 @@ export function EmailLogin() {
           />
         </View>
       </View>
-      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/forget-password")}>
-        <Text className="text-accent m-[6] text-[16px]">Forgot password?</Text>
-      </TouchableOpacity>
 
       <SubmitButton
         disabled={submitMutation.isPending || !formState.isValid}
@@ -131,8 +134,11 @@ export function EmailLogin() {
         title="Continue"
         className="mt-8"
       />
-      <TouchableOpacity className="mx-auto mt-2" onPress={() => router.push("/sign-up")}>
-        <Text className="text-secondary-label m-1 text-sm">Don't have an Follow account?</Text>
+      <TouchableOpacity className="mx-auto mt-10" onPress={() => router.push("/sign-up")}>
+        <Text className="text-accent m-1 text-[15px]">Don't have an account? Sign Up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity className="mx-auto mt-4" onPress={() => router.push("/forget-password")}>
+        <Text className="text-secondary-label m-[6] text-[15px]">Forgot password?</Text>
       </TouchableOpacity>
     </View>
   )

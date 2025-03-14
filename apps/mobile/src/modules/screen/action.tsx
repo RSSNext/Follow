@@ -42,6 +42,7 @@ export function HomeLeftAction() {
           name={user?.name}
           className="rounded-full"
           color={accentColor}
+          noPreview
         />
       </TouchableOpacity>
     </ActionGroup>

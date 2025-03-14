@@ -16,19 +16,33 @@ export const createBuildSafeHeaders =
     // referer and origin
     if (selfRefererMatches.some((item) => url.startsWith(item))) {
       headers.Referer = webUrl
-    } else {
-      const refererMatch = imageRefererMatches.find((item) => item.url.test(url))
-      const referer = refererMatch?.referer
-      if (referer) {
-        headers.Referer = referer
-      } else {
-        try {
-          const urlObj = new URL(url)
-          headers.Referer = urlObj.origin
-        } catch (error) {
-          console.error(error)
-        }
+      return headers
+    }
+
+    const refererMatch = imageRefererMatches.find((item) => item.url.test(url))
+    const referer = refererMatch?.referer
+    if (referer) {
+      headers.Referer = referer
+      headers.Origin = referer
+      return headers
+    }
+
+    if (
+      (headers.Referer && headers.Referer !== "app://follow.is") ||
+      (headers.Origin && headers.Origin !== "app://follow.is")
+    ) {
+      return headers
+    }
+
+    try {
+      if (url) {
+        const urlObj = new URL(url)
+
+        headers.Referer = urlObj.origin
+        headers.Origin = urlObj.origin
       }
+    } catch (error) {
+      console.warn(`Url parsing error: ${error}, url: ${url}.`)
     }
 
     return headers

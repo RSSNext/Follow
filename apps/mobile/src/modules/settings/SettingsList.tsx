@@ -97,7 +97,6 @@ const DataGroupNavigationLinks: GroupNavigationLink[] = [
       navigation.navigate("Actions")
     },
     iconBackgroundColor: "#059669",
-    todo: true,
     anonymous: false,
   },
 

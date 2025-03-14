@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useAtomValue } from "jotai"
 import { memo } from "react"
 import { Text, View } from "react-native"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
+import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useSubscriptionByListId } from "@/src/store/subscription/hooks"
@@ -71,12 +71,7 @@ const SearchListCard = memo(({ item }: { item: SearchResultItem }) => {
       <View className="flex-row items-center gap-2 pl-4 pr-2">
         <View className="size-[32px] overflow-hidden rounded-lg">
           {item.list?.image ? (
-            <Image
-              source={item.list.image}
-              className="size-full"
-              contentFit="cover"
-              transition={1000}
-            />
+            <Image source={{ uri: item.list.image }} className="size-full" contentFit="cover" />
           ) : (
             !!item.list?.title && <FallbackIcon title={item.list.title} size={32} />
           )}

@@ -9,6 +9,7 @@ import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { forgetPassword } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
+import { getTokenHeaders } from "@/src/lib/token"
 
 export default function ForgetPassword() {
   const offset = useSafeAreaInsets()
@@ -16,7 +17,12 @@ export default function ForgetPassword() {
 
   const forgetPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      const res = await forgetPassword({ email })
+      const res = await forgetPassword(
+        { email },
+        {
+          headers: await getTokenHeaders(),
+        },
+      )
       if (res.error) {
         throw new Error(res.error.message)
       }
@@ -40,7 +46,7 @@ export default function ForgetPassword() {
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <View className="p-safe px-safe-offset-4 flex-1 justify-between">
           <View className="items-center">
-            <Text className="text-text text-4xl font-bold">Forgotten password?</Text>
+            <Text className="text-text text-4xl font-bold">Forgot password?</Text>
             <Text className="text-text mx-10 mt-6 text-lg">
               Enter your email address that you use with your account to continue.
             </Text>

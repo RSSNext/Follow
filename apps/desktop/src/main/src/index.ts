@@ -35,6 +35,12 @@ if (squirrelStartup) {
   app.quit()
 }
 
+const buildSafeHeaders = createBuildSafeHeaders(env.VITE_WEB_URL, [
+  env.VITE_OPENPANEL_API_URL || "",
+  IMAGE_PROXY_URL,
+  env.VITE_API_URL,
+])
+
 function bootstrap() {
   initializeAppStage0()
   const gotTheLock = app.requestSingleInstanceLock()
@@ -92,6 +98,15 @@ function bootstrap() {
     // Set app user model id for windows
     electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`)
 
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+      details.requestHeaders = buildSafeHeaders({
+        url: details.url,
+        headers: details.requestHeaders,
+      })
+
+      callback({ cancel: false, requestHeaders: details.requestHeaders })
+    })
+
     mainWindow = createMainWindow()
 
     // restore cookies
@@ -119,21 +134,6 @@ function bootstrap() {
     updateProxy()
     registerUpdater()
     registerAppTray()
-
-    const buildSafeHeaders = createBuildSafeHeaders(env.VITE_WEB_URL, [
-      env.VITE_OPENPANEL_API_URL || "",
-      IMAGE_PROXY_URL,
-      env.VITE_API_URL,
-    ])
-
-    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-      details.requestHeaders = buildSafeHeaders({
-        url: details.url,
-        headers: details.requestHeaders,
-      })
-
-      callback({ cancel: false, requestHeaders: details.requestHeaders })
-    })
 
     // handle session cookie when sign in with email in electron
     session.defaultSession.webRequest.onHeadersReceived(

@@ -13,6 +13,7 @@ import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { Logo } from "@/src/components/ui/logo"
 import { signUp } from "@/src/lib/auth"
 import { toast } from "@/src/lib/toast"
+import { getTokenHeaders } from "@/src/lib/token"
 import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z
@@ -30,11 +31,16 @@ type FormValue = z.infer<typeof formSchema>
 
 async function onSubmit(values: FormValue) {
   await signUp
-    .email({
-      email: values.email,
-      password: values.password,
-      name: values.email.split("@")[0] ?? "",
-    })
+    .email(
+      {
+        email: values.email,
+        password: values.password,
+        name: values.email.split("@")[0] ?? "",
+      },
+      {
+        headers: await getTokenHeaders(),
+      },
+    )
     .then((res) => {
       if (res.error?.message) {
         toast.error(res.error.message)

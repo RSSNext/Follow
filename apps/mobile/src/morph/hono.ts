@@ -107,7 +107,7 @@ class Morph {
         title: item.entries.title,
         url: item.entries.url,
         content: null,
-        sourceContent: null,
+        readabilityContent: null,
         description: item.entries.description,
         guid: item.entries.guid,
         author: item.entries.author,
@@ -128,6 +128,7 @@ class Morph {
         inboxHandle: item.feeds.type === "inbox" ? item.feeds.id : null,
         read: item.read,
         sources: "from" in item ? (item.from ?? null) : null,
+        settings: item.settings ?? null,
       })
     }
     return entries
@@ -161,7 +162,7 @@ class Morph {
       title: data.entries.title,
       url: data.entries.url,
       content: data.entries.content,
-      sourceContent: null,
+      readabilityContent: null,
       description: data.entries.description,
       guid: data.entries.guid,
       author: data.entries.author,
@@ -179,10 +180,10 @@ class Morph {
         : null,
       language: data.entries.language,
       feedId: data.feeds.id,
-      // TODO: handle inboxHandle
-      inboxHandle: "",
+      inboxHandle: data.feeds.type === "inbox" ? data.feeds.id : null,
       read: false,
       sources: null,
+      settings: null,
     }
   }
 

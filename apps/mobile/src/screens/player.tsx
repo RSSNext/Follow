@@ -1,5 +1,4 @@
 import { cn } from "@follow/utils"
-import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
 import { useEffect, useMemo } from "react"
@@ -12,9 +11,11 @@ import Reanimated, {
 } from "react-native-reanimated"
 import { SheetScreen } from "react-native-sheet-transitions"
 
+import { Image } from "@/src/components/ui/image/Image"
+
 import { gentleSpringPreset } from "../constants/spring"
 import { useActiveTrack, useIsPlaying } from "../lib/player"
-import { PlayerScreenContext } from "../modules/player/context"
+import { PlayerScreenContext, usePlayerScreenContext } from "../modules/player/context"
 import { ControlGroup, ProgressBar, VolumeBar } from "../modules/player/control"
 import { useCoverGradient } from "../modules/player/hooks"
 import { usePrefetchImageColors } from "../store/image/hooks"
@@ -36,7 +37,7 @@ function CoverArt({ cover }: { cover?: string }) {
 
   return (
     <Reanimated.View className="mx-auto my-12 aspect-square w-[87%] shadow" style={[animatedStyle]}>
-      <Image source={cover} className="size-full rounded-lg" />
+      <Image source={{ uri: cover ?? "" }} className="size-full rounded-lg" />
     </Reanimated.View>
   )
 }
@@ -99,9 +100,15 @@ export default function PlaterScreen() {
 }
 
 function DismissIndicator() {
+  const { isBackgroundLight } = usePlayerScreenContext()
   return (
     <View className="top-safe-offset-2 absolute inset-x-0 flex items-center justify-center">
-      <View className="bg-tertiary-label h-[5] w-[40] rounded-full" />
+      <View
+        className={cn(
+          "h-[5] w-[40] rounded-full",
+          isBackgroundLight ? "bg-black/60" : "bg-white/60",
+        )}
+      />
     </View>
   )
 }

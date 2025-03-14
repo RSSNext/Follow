@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SetBottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { gentleSpringPreset, quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
 import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
-import { accentColor, useColor } from "@/src/theme/colors"
+import { accentColor } from "@/src/theme/colors"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
 import { Grid } from "../../ui/grid"
@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     overflow: "hidden",
     backgroundColor: "transparent",
-    borderTopWidth: StyleSheet.hairlineWidth,
   },
   icon: {
     // We render the icon twice at the same position on top of each other:
@@ -269,8 +268,23 @@ const TabBarBackground = () => {
     opacity: opacity.value,
     ...styles.blurEffect,
   }))
-  const borderColor = useColor("opaqueSeparator")
-  return <AnimatedThemedBlurView style={[styles.blurEffect, animatedStyle, { borderColor }]} />
+  const separatorStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }))
+  return (
+    <View style={styles.blurEffect}>
+      <AnimatedThemedBlurView style={[styles.blurEffect, animatedStyle]} />
+      <Animated.View
+        className="bg-opaque-separator absolute top-0 w-full"
+        style={[
+          separatorStyle,
+          {
+            height: StyleSheet.hairlineWidth,
+          },
+        ]}
+      />
+    </View>
+  )
 }
 
 const TabItem = memo(

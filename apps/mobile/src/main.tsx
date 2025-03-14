@@ -1,5 +1,3 @@
-import "@expo/metro-runtime"
-
 import { registerRootComponent } from "expo"
 import { Image } from "expo-image"
 import { App } from "expo-router/build/qualified-entry"

@@ -1,3 +1,4 @@
+import { cn } from "@follow/utils"
 import { getDefaultHeaderHeight, HeaderTitle } from "@react-navigation/elements"
 import { router, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren, ReactNode } from "react"
@@ -120,7 +121,7 @@ interface NavigationHeaderProps
 const blurThreshold = 0
 const titlebarPaddingHorizontal = 8
 const titleMarginHorizontal = 16
-export const NavigationHeader = ({
+export const InternalNavigationHeader = ({
   style,
   children,
   headerLeft,
@@ -295,12 +296,21 @@ export const DefaultHeaderBackButton = ({ canGoBack }: { canGoBack: boolean }) =
 export const UINavigationHeaderActionButton = ({
   children,
   onPress,
+  disabled,
+  className,
 }: {
   children: ReactNode
   onPress?: () => void
+  disabled?: boolean
+  className?: string
 }) => {
   return (
-    <TouchableOpacity hitSlop={5} className="p-2" onPress={onPress}>
+    <TouchableOpacity
+      hitSlop={5}
+      className={cn("p-2", className)}
+      onPress={onPress}
+      disabled={disabled}
+    >
       {children}
     </TouchableOpacity>
   )
