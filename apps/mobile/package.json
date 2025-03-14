@@ -34,7 +34,7 @@
     "@react-navigation/bottom-tabs": "7.2.1",
     "@react-navigation/drawer": "7.1.2",
     "@react-navigation/native": "7.0.15",
-    "@shopify/flash-list": "1.7.3",
+    "@shopify/flash-list": "1.7.5",
     "@tanstack/query-sync-storage-persister": "5.67.3",
     "@tanstack/react-query": "5.67.3",
     "@tanstack/react-query-persist-client": "5.67.3",
@@ -51,7 +51,7 @@
     "expo-build-properties": "0.13.2",
     "expo-clipboard": "7.0.1",
     "expo-constants": "17.0.8",
-    "expo-dev-client": "5.0.12",
+    "expo-dev-client": "5.0.14",
     "expo-document-picker": "13.0.3",
     "expo-file-system": "18.0.11",
     "expo-haptics": "14.0.1",
@@ -121,7 +121,7 @@
     "drizzle-kit": "0.30.5",
     "eas-cli": "15.0.15",
     "expo-drizzle-studio-plugin": "0.1.1",
-    "postcss": "8.5.2"
+    "postcss": "8.5.3"
   },
   "appName": "Follow",
   "expo": {
