@@ -25,8 +25,9 @@ export const useUser = (userId?: string) => {
   return useUserStore((state) => (userId ? state.users[userId] : undefined))
 }
 
-export function useIsNewUser() {
+export function useIsNewUser(enabled = true) {
   const { data } = useQuery({
+    enabled,
     queryKey: isNewUserQueryKey,
     queryFn: async () => {
       const isOnboardingFinished = await kv.get(isOnboardingFinishedStorageKey)
@@ -42,7 +43,8 @@ export function useIsNewUser() {
 }
 
 export function useOnboarding() {
-  const isNewUser = useIsNewUser()
+  const whoami = useWhoami()
+  const isNewUser = useIsNewUser(!!whoami)
   useEffect(() => {
     if (isNewUser) {
       router.push("/onboarding")
