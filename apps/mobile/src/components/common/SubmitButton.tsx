@@ -20,14 +20,15 @@ export function SubmitButton({
   title,
   ...props
 }: PressableProps & { isLoading?: boolean; title: string }) {
+  const disabled = props.disabled || isLoading
   const disableColor = useColor("gray6")
   const disabledTextColor = useColor("gray2")
 
   const disabledValue = useSharedValue(1)
   useEffect(() => {
     cancelAnimation(disabledValue)
-    disabledValue.value = withTiming(props.disabled ? 1 : 0)
-  }, [props.disabled])
+    disabledValue.value = withTiming(disabled ? 1 : 0)
+  }, [disabled])
 
   const buttonStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(disabledValue.value, [1, 0], [disableColor, accentColor]),
@@ -40,7 +41,7 @@ export function SubmitButton({
   return (
     <ReAnimatedPressable
       {...props}
-      disabled={props.disabled || isLoading}
+      disabled={disabled}
       style={[buttonStyle, props.style]}
       className={cn("h-[48] flex-row items-center justify-center rounded-2xl", props.className)}
     >
