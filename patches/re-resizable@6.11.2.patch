@@ -1,9 +1,9 @@
 diff --git a/lib/resizer.js b/lib/resizer.js
-index a051e406e92de35277d9aa335302a9216943f5b4..6214d334cf4840748e0ea192ace51129b414acc8 100644
+index c465561d31edf2087c45cdf7b7a2af16e3edd9c3..31c0a258f0c8176eb274e4b292fde1b12040891e 100644
 --- a/lib/resizer.js
 +++ b/lib/resizer.js
-@@ -25,32 +25,32 @@ var __assign = (this && this.__assign) || function () {
- import * as React from 'react';
+@@ -13,33 +13,33 @@ import { jsx as _jsx } from "react/jsx-runtime";
+ import { memo, useCallback, useMemo } from 'react';
  var rowSizeBase = {
      width: '100%',
 -    height: '10px',
@@ -26,6 +26,7 @@ index a051e406e92de35277d9aa335302a9216943f5b4..6214d334cf4840748e0ea192ace51129
 +    width: '40px',
 +    height: '40px',
      position: 'absolute',
+     zIndex: 1,
  };
  var styles = {
 -    top: __assign(__assign({}, rowSizeBase), { top: '-5px' }),
@@ -45,5 +46,5 @@ index a051e406e92de35277d9aa335302a9216943f5b4..6214d334cf4840748e0ea192ace51129
 +    bottomLeft: __assign(__assign({}, edgeBase), { left: '-20px', bottom: '-20px', cursor: 'sw-resize' }),
 +    topLeft: __assign(__assign({}, edgeBase), { left: '-20px', top: '-20px', cursor: 'nw-resize' }),
  };
- var Resizer = /** @class */ (function (_super) {
-     __extends(Resizer, _super);
+ export var Resizer = memo(function (props) {
+     var onResizeStart = props.onResizeStart, direction = props.direction, children = props.children, replaceStyles = props.replaceStyles, className = props.className;

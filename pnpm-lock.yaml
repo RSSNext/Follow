@@ -18,23 +18,23 @@ patchedDependencies:
   '@microflash/remark-callout-directives':
     hash: bl6uhe4vs4xm3d2jmecdpzbh2m
     path: patches/@microflash__remark-callout-directives.patch
-  '@mozilla/readability':
-    hash: 43niildbdafdxi7qfcwhpkkxwa
-    path: patches/@mozilla__readability.patch
+  '@mozilla/readability@0.6.0':
+    hash: tcrtng7itw73xfw4zpcltvxf4e
+    path: patches/@mozilla__readability@0.6.0.patch
   '@pengx17/electron-forge-maker-appimage':
     hash: vov3v67fgv3lrfz3n24bnubw4m
     path: patches/@pengx17__electron-forge-maker-appimage.patch
-  daisyui:
-    hash: igsntdatmoaxzwxof4bkkh35fy
-    path: patches/daisyui.patch
+  daisyui@4.12.24:
+    hash: kauabb6uyb6mqty5xbraxqjogy
+    path: patches/daisyui@4.12.24.patch
   devlop:
     hash: xzgzapu45daboiid4fiusduvwa
     path: patches/devlop.patch
-  electron-context-menu:
-    hash: c53at4t5fflixuwjz35hmcqdu4
-    path: patches/electron-context-menu.patch
+  electron-context-menu@4.0.5:
+    hash: idx5ni4vivbczlm3odxrcnocbm
+    path: patches/electron-context-menu@4.0.5.patch
   hono:
-    hash: qptujxncoai6tukc4qaqsrqk24
+    hash: ilgmwbmxq7ndzom6bsxwnexiky
     path: patches/hono.patch
   immer@10.1.1:
     hash: og7mbnoo5vh43tjlw5rbmrdbvu
@@ -42,9 +42,9 @@ patchedDependencies:
   jsonpointer:
     hash: prxuhlhyjugus5tiew4vc3pahu
     path: patches/jsonpointer.patch
-  re-resizable:
-    hash: yitcmpfwcomg2fky72uc3lhk2i
-    path: patches/re-resizable@6.9.17.patch
+  re-resizable@6.11.2:
+    hash: yyoomfolrhjt3tvpzaxibro3iu
+    path: patches/re-resizable@6.11.2.patch
   react-native-sheet-transitions:
     hash: xmkq4ssu3mefxtr2e65xl27hxi
     path: patches/react-native-sheet-transitions.patch
@@ -317,7 +317,7 @@ importers:
         version: 17.4.4
       hono:
         specifier: 4.7.4
-        version: 4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+        version: 4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky)
       html-minifier-terser:
         specifier: 7.2.0
         version: 7.2.0
@@ -380,7 +380,7 @@ importers:
         version: 2.0.0
       electron-context-menu:
         specifier: 4.0.5
-        version: 4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
+        version: 4.0.5(patch_hash=idx5ni4vivbczlm3odxrcnocbm)
       electron-log:
         specifier: 5.3.2
         version: 5.3.2
@@ -453,7 +453,7 @@ importers:
         version: 4.0.0
       hono:
         specifier: 4.7.4
-        version: 4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+        version: 4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky)
 
   apps/desktop/src/renderer:
     dependencies:
@@ -639,7 +639,7 @@ importers:
         version: 0.2.0(shiki@3.2.1)
       re-resizable:
         specifier: 6.11.2
-        version: 6.11.2(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 6.11.2(patch_hash=yyoomfolrhjt3tvpzaxibro3iu)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-blurhash:
         specifier: 0.3.0
         version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
@@ -916,7 +916,7 @@ importers:
         version: 14.0.2(expo@52.0.38(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)))(bufferutil@4.0.9)(encoding@0.1.13)(graphql@16.8.1)(react-native-webview@13.13.4(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1))(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)(utf-8-validate@6.0.5))(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))
       hono:
         specifier: 4.7.4
-        version: 4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+        version: 4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky)
       immer:
         specifier: 10.1.1
         version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
@@ -1206,7 +1206,7 @@ importers:
         version: 4.0.3
       daisyui:
         specifier: 4.12.24
-        version: 4.12.24(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.5.3)
+        version: 4.12.24(patch_hash=kauabb6uyb6mqty5xbraxqjogy)(postcss@8.5.3)
       dotenv-flow:
         specifier: 4.1.0
         version: 4.1.0
@@ -1492,7 +1492,7 @@ importers:
         version: link:../utils
       hono:
         specifier: 4.7.4
-        version: 4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+        version: 4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky)
 
   packages/shared:
     dependencies:
@@ -1504,7 +1504,7 @@ importers:
         version: 1.0.1(@types/node@22.13.10)
       '@hono/node-server':
         specifier: 1.13.8
-        version: 1.13.8(hono@4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24))
+        version: 1.13.8(hono@4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky))
       '@t3-oss/env-core':
         specifier: 0.12.0
         version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
@@ -1516,7 +1516,7 @@ importers:
         version: 0.40.0(lfgoa6uvatktntjnogv3tipozy)
       hono:
         specifier: 4.7.4
-        version: 4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+        version: 4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky)
       sonner:
         specifier: 2.0.1
         version: 2.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1536,7 +1536,7 @@ importers:
         version: link:../types
       '@mozilla/readability':
         specifier: 0.6.0
-        version: 0.6.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
+        version: 0.6.0(patch_hash=tcrtng7itw73xfw4zpcltvxf4e)
       chardet:
         specifier: 2.1.0
         version: 2.1.0
@@ -19286,9 +19286,9 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hono/node-server@1.13.8(hono@4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24))':
+  '@hono/node-server@1.13.8(hono@4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky))':
     dependencies:
-      hono: 4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24)
+      hono: 4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky)
 
   '@hookform/resolvers@4.1.3(react-hook-form@7.54.2(react@18.3.1))':
     dependencies:
@@ -19711,7 +19711,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mozilla/readability@0.6.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)': {}
+  '@mozilla/readability@0.6.0(patch_hash=tcrtng7itw73xfw4zpcltvxf4e)': {}
 
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
     optional: true
@@ -24261,7 +24261,7 @@ snapshots:
 
   culori@3.3.0: {}
 
-  daisyui@4.12.24(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.5.3):
+  daisyui@4.12.24(patch_hash=kauabb6uyb6mqty5xbraxqjogy)(postcss@8.5.3):
     dependencies:
       css-selector-tokenizer: 0.8.0
       culori: 3.3.0
@@ -24763,7 +24763,7 @@ snapshots:
       - dmg-builder
       - supports-color
 
-  electron-context-menu@4.0.5(patch_hash=c53at4t5fflixuwjz35hmcqdu4):
+  electron-context-menu@4.0.5(patch_hash=idx5ni4vivbczlm3odxrcnocbm):
     dependencies:
       cli-truncate: 4.0.0
       electron-dl: 4.0.0
@@ -27366,7 +27366,7 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hono@4.7.4(patch_hash=qptujxncoai6tukc4qaqsrqk24): {}
+  hono@4.7.4(patch_hash=ilgmwbmxq7ndzom6bsxwnexiky): {}
 
   hosted-git-info@2.8.9: {}
 
@@ -30913,7 +30913,7 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  re-resizable@6.11.2(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  re-resizable@6.11.2(patch_hash=yyoomfolrhjt3tvpzaxibro3iu)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
