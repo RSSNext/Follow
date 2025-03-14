@@ -1,0 +1,13 @@
+diff --git a/dist/types/client/types.d.ts b/dist/types/client/types.d.ts
+index fb6f879fd1975b72b6c392e540dc3e2a1110e589..1489c6f3b8d5772723802dd942094c2608366227 100644
+--- a/dist/types/client/types.d.ts
++++ b/dist/types/client/types.d.ts
+@@ -51,7 +51,7 @@ type ClientResponseOfEndpoint<T extends Endpoint = Endpoint> = T extends {
+     output: infer O;
+     outputFormat: infer F;
+     status: infer S;
+-} ? ClientResponse<O, S extends number ? S : never, F extends ResponseFormat ? F : never> : never;
++} ? 0 : never;
+ export interface ClientResponse<T, U extends number = StatusCode, F extends ResponseFormat = ResponseFormat> extends globalThis.Response {
+     readonly body: ReadableStream | null;
+     readonly bodyUsed: boolean;
