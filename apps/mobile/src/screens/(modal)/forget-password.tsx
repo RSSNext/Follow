@@ -46,7 +46,7 @@ export default function ForgetPassword() {
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <View className="p-safe px-safe-offset-4 flex-1 justify-between">
           <View className="items-center">
-            <Text className="text-text text-4xl font-bold">Forgot password?</Text>
+            <Text className="text-text text-center text-4xl font-bold">Forgot password?</Text>
             <Text className="text-text mx-10 mt-6 text-lg">
               Enter your email address that you use with your account to continue.
             </Text>

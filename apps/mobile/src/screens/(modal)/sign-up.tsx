@@ -12,6 +12,7 @@ import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { Logo } from "@/src/components/ui/logo"
 import { signUp } from "@/src/lib/auth"
+import { useScaleHeight } from "@/src/lib/responsive"
 import { toast } from "@/src/lib/toast"
 import { getTokenHeaders } from "@/src/lib/token"
 import { accentColor } from "@/src/theme/colors"
@@ -157,6 +158,10 @@ function EmailSignUp() {
 }
 
 export default function SignUpModal() {
+  const logoSize = useScaleHeight()(80)
+  const gapSize = useScaleHeight()(28)
+  const fontSize = useScaleHeight()(28)
+  const lineHeight = useScaleHeight()(32)
   return (
     <View className="p-safe flex-1">
       <TouchableWithoutFeedback
@@ -165,9 +170,20 @@ export default function SignUpModal() {
         }}
         accessible={false}
       >
-        <View className="flex-1 items-center gap-8">
-          <Logo style={{ width: 80, height: 80 }} />
-          <Text className="text-label text-3xl">
+        <View
+          className="flex-1 items-center"
+          style={{
+            gap: gapSize,
+          }}
+        >
+          <Logo style={{ width: logoSize, height: logoSize }} />
+          <Text
+            className="text-label"
+            style={{
+              fontSize,
+              lineHeight,
+            }}
+          >
             Sign up to <Text className="font-bold">Follow</Text>
           </Text>
           <EmailSignUp />
