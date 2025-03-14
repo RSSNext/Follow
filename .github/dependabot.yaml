@@ -18,6 +18,8 @@ updates:
         versions: [">=19.0.0"]
       - dependency-name: "@types/react-dom"
         versions: [">=19.0.0"]
+      - dependency-name: "@shopify/flash-list"
+        versions: [">1.7.3"]
 
       # Stuck by tailwindcss 4
       - dependency-name: tailwindcss

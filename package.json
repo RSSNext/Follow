@@ -104,6 +104,7 @@
     },
     "overrides": {
       "@electron/node-gyp": "10.2.0-electron.2",
+      "expo-dev-menu": "6.0.21",
       "is-core-module": "npm:@nolyfill/is-core-module@1",
       "isarray": "npm:@nolyfill/isarray@1",
       "react": "18.3.1",
