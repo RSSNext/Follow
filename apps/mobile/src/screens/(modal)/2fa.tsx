@@ -34,7 +34,6 @@ export default function TwoFactorAuthScreen() {
       await queryClient.invalidateQueries({ queryKey: whoamiQueryKey })
     },
     onError(error) {
-      otpInputRef.current?.clear()
       toast.error(`Failed to verify: ${error.message}`)
     },
     onSuccess() {

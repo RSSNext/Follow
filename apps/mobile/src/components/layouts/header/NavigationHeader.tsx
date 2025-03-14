@@ -121,7 +121,7 @@ interface NavigationHeaderProps
 const blurThreshold = 0
 const titlebarPaddingHorizontal = 8
 const titleMarginHorizontal = 16
-export const NavigationHeader = ({
+export const InternalNavigationHeader = ({
   style,
   children,
   headerLeft,

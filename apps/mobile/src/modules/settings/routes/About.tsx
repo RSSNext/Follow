@@ -15,13 +15,13 @@ import {
 } from "@/src/components/ui/grouped/GroupedList"
 import { Logo } from "@/src/components/ui/logo"
 import { DiscordCuteFiIcon } from "@/src/icons/discord_cute_fi"
-import { Github2CuteFiIcon } from "@/src/icons/github_2_cute_fi"
+import { GithubCuteFiIcon } from "@/src/icons/github_cute_fi"
 import { SocialXCuteReIcon } from "@/src/icons/social_x_cute_re"
 
 const links = [
   {
     title: "Github",
-    icon: Github2CuteFiIcon,
+    icon: GithubCuteFiIcon,
     url: "https://github.com/RSSNext/follow",
     iconBackgroundColor: "#000000",
     iconColor: "#FFFFFF",
@@ -47,7 +47,7 @@ export const AboutScreen = () => {
   const appVersion = Constants.expoConfig?.version || "0.0.0"
 
   return (
-    <SafeNavigationScrollView className="bg-system-grouped-background">
+    <SafeNavigationScrollView className="bg-system-grouped-background mt-6">
       <NavigationBlurEffectHeader title="About" />
 
       <GroupedInsetListCard>

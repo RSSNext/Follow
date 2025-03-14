@@ -1,10 +1,11 @@
 import { useMemo } from "react"
-import { useAnimatedValue, View } from "react-native"
-import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useAnimatedValue } from "react-native"
 
-import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
-import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
 
 const txt = `# Terms of Service
@@ -88,25 +89,22 @@ export const TermsMarkdown = () => {
   return (
     <Markdown
       value={txt}
-      webViewProps={{ matchContents: true, scrollEnabled: false }}
-      style={{ padding: 16 }}
+      webViewProps={{ scrollEnabled: false, matchContents: true }}
+      style={{ padding: 16, flex: 1 }}
     />
   )
 }
 
 export default function Teams() {
   const scrollY = useAnimatedValue(100)
-  const insets = useSafeAreaInsets()
-  const frame = useSafeAreaFrame()
-  const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
+
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <View className="flex-1">
+      <SafeNavigationScrollView>
         <NavigationBlurEffectHeader headerShown title="Terms of Service" />
 
-        <View style={{ height: headerHeight }} />
         <TermsMarkdown />
-      </View>
+      </SafeNavigationScrollView>
     </NavigationContext.Provider>
   )
 }
