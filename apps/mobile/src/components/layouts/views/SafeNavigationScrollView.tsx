@@ -137,6 +137,7 @@ export const NavigationBlurEffectHeader = ({
             <NavigationContext.Provider value={navigationContext}>
               <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
                 <InternalNavigationHeader
+                  {...options}
                   modal={options.presentation === "modal" || options.presentation === "formSheet"}
                   title={options.title}
                   headerRight={options.headerRight}

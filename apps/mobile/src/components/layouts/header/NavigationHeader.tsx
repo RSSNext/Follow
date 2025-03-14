@@ -1,6 +1,6 @@
 import { cn } from "@follow/utils"
-import { getDefaultHeaderHeight, HeaderTitle } from "@react-navigation/elements"
-import { router, useNavigation } from "expo-router"
+import { HeaderTitle } from "@react-navigation/elements"
+import { router, Stack, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { createElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import type { LayoutChangeEvent } from "react-native"
@@ -14,12 +14,14 @@ import Animated, {
 } from "react-native-reanimated"
 import type { DefaultStyle } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
+import type { NativeStackNavigationOptions } from "react-native-screens/lib/typescript/native-stack/types"
 import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils"
 import { useColor } from "react-native-uikit-colors"
 
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
+import { getDefaultHeaderHeight } from "../utils"
 import { NavigationContext } from "../views/NavigationContext"
 import { SetNavigationHeaderHeightContext } from "../views/NavigationHeaderContext"
 
@@ -137,9 +139,10 @@ export const InternalNavigationHeader = ({
   const insets = useSafeAreaInsets()
   const frame = useSafeAreaFrame()
   const defaultHeight = useMemo(
-    () => getDefaultHeaderHeight(frame, modal, insets.top),
+    () => getDefaultHeaderHeight(frame, modal, modal ? 0 : insets.top),
     [frame, insets.top, modal],
   )
+
   const border = useColor("opaqueSeparator")
   const opacityAnimated = useSharedValue(0)
   const { scrollY } = useContext(NavigationContext)!
@@ -172,11 +175,8 @@ export const InternalNavigationHeader = ({
   )
   const rootTitleBarStyle = useAnimatedStyle(() => {
     const styles = {
-      paddingTop: insets.top,
-
-      minHeight: defaultHeight,
+      paddingTop: modal ? 0 : insets.top,
       position: "relative",
-
       overflow: "hidden",
     } satisfies DefaultStyle
     if (hideableBottom) {
@@ -316,3 +316,24 @@ export const UINavigationHeaderActionButton = ({
   )
 }
 const Noop = () => null
+
+/**
+ * NativeNavigationHeader wrapped react navigation native-stack is universal in modal and stack, but there are significant limitations in UI customization.
+ */
+export interface NativeNavigationHeaderProps
+  extends Pick<NativeStackNavigationOptions, "headerLeft" | "headerRight" | "headerTitle"> {}
+export const NativeNavigationHeader: FC<NativeNavigationHeaderProps> = (props) => {
+  const navigation = useNavigation()
+  return (
+    <Stack.Screen
+      options={{
+        headerShown: true,
+
+        headerLeft: () => <DefaultHeaderBackButton canGoBack={navigation.canGoBack()} />,
+        headerTransparent: true,
+        headerBlurEffect: "systemChromeMaterial",
+        ...props,
+      }}
+    />
+  )
+}

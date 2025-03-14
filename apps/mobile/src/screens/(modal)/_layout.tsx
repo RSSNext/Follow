@@ -9,30 +9,35 @@ export default function ModalLayout() {
         name="add"
         options={{
           title: "Add Subscription",
+          presentation: "modal",
         }}
       />
       <Stack.Screen
         name="rsshub-form"
         options={{
           title: "RSSHub Form",
+          presentation: "modal",
         }}
       />
       <Stack.Screen
         name="follow"
         options={{
           title: "Follow",
+          presentation: "modal",
         }}
       />
       <Stack.Screen
         name="list"
         options={{
           title: "List",
+          presentation: "modal",
         }}
       />
       <Stack.Screen
         name="profile"
         options={{
           title: "Profile",
+          presentation: "modal",
           headerShown: false,
         }}
       />
@@ -42,6 +47,7 @@ export default function ModalLayout() {
           headerShown: true,
           title: "",
           headerTransparent: true,
+          presentation: "modal",
           headerLeft: ModalHeaderCloseButton,
         }}
       />
@@ -51,6 +57,7 @@ export default function ModalLayout() {
           headerShown: true,
           title: "",
           headerTransparent: true,
+          presentation: "modal",
           headerLeft: ModalHeaderCloseButton,
         }}
       />
@@ -61,6 +68,7 @@ export default function ModalLayout() {
           title: "",
           headerTransparent: true,
           headerLeft: ModalHeaderCloseButton,
+          presentation: "modal",
         }}
       />
       <Stack.Screen
@@ -70,6 +78,7 @@ export default function ModalLayout() {
           title: "",
           headerTransparent: true,
           headerLeft: ModalHeaderCloseButton,
+          presentation: "modal",
         }}
       />
     </Stack>

@@ -1,11 +1,6 @@
-import { useMemo } from "react"
-import { useAnimatedValue } from "react-native"
+import { ScrollView } from "react-native"
 
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
-import {
-  NavigationBlurEffectHeader,
-  SafeNavigationScrollView,
-} from "@/src/components/layouts/views/SafeNavigationScrollView"
+import { NativeNavigationHeader } from "@/src/components/layouts/header/NavigationHeader"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
 
 const txt = `# Terms of Service
@@ -96,15 +91,11 @@ export const TermsMarkdown = () => {
 }
 
 export default function Teams() {
-  const scrollY = useAnimatedValue(100)
-
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <SafeNavigationScrollView>
-        <NavigationBlurEffectHeader headerShown title="Terms of Service" />
+    <ScrollView className="bg-system-background" contentInsetAdjustmentBehavior="always">
+      <NativeNavigationHeader headerTitle="Terms of Service" />
 
-        <TermsMarkdown />
-      </SafeNavigationScrollView>
-    </NavigationContext.Provider>
+      <TermsMarkdown />
+    </ScrollView>
   )
 }

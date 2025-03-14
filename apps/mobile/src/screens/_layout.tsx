@@ -36,6 +36,7 @@ export default function RootLayout() {
     <View className="flex-1 bg-black">
       <RootProviders>
         <Session />
+
         <AnimatedStack />
 
         {__DEV__ && <DebugButton />}

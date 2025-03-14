@@ -135,7 +135,7 @@ export function EmailLogin() {
         className="mt-8"
       />
       <TouchableOpacity className="mx-auto mt-10" onPress={() => router.push("/sign-up")}>
-        <Text className="text-accent m-1 text-[15px]">Don't have an account? Sign Up</Text>
+        <Text className="text-accent m-1 text-[15px]">Don't have an account?</Text>
       </TouchableOpacity>
       <TouchableOpacity className="mx-auto mt-4" onPress={() => router.push("/forget-password")}>
         <Text className="text-secondary-label m-[6] text-[15px]">Forgot password?</Text>

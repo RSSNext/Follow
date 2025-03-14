@@ -18,7 +18,7 @@ export function getDefaultHeaderHeight(
 
   const isLandscape = layout.width > layout.height
 
-  if (Platform.OS === "ios" && (Platform.isPad || Platform.isTV)) {
+  if (Platform.OS === "ios" && Platform.isPad) {
     if (modalPresentation) {
       headerHeight = 56
     } else {
