@@ -11,9 +11,10 @@ module.exports = function (api) {
           alias: {
             "es-toolkit/compat": "../../node_modules/es-toolkit/dist/compat/index.js",
             "es-toolkit": "../../node_modules/es-toolkit/dist/index.js",
-            "better-auth/react": "../../node_modules/better-auth/dist/react.js",
-            "better-auth/client/plugins": "../../node_modules/better-auth/dist/client/plugins.js",
-            "@better-auth/expo/client": "../../node_modules/@better-auth/expo/dist/client.js",
+            "better-auth/react": "../../node_modules/better-auth/dist/client/react/index.cjs",
+            "better-auth/client/plugins":
+              "../../node_modules/better-auth/dist/client/plugins/index.cjs",
+            "@better-auth/expo/client": "../../node_modules/@better-auth/expo/dist/client.cjs",
           },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
         },
