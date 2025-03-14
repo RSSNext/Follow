@@ -5,7 +5,6 @@ import { KeyboardController } from "react-native-keyboard-controller"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import * as ContextMenu from "zeego/context-menu"
 
-import { SafeNavigationScrollView } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Logo } from "@/src/components/ui/logo"
 import { TermsMarkdown } from "@/src/screens/(headless)/terms"
 
@@ -14,7 +13,7 @@ import { SocialLogin } from "./social"
 
 export function Login() {
   return (
-    <SafeNavigationScrollView>
+    <View className="p-safe flex-1">
       <TouchableWithoutFeedback
         onPress={() => {
           KeyboardController.dismiss()
@@ -39,7 +38,7 @@ export function Login() {
         <SocialLogin />
       </View>
       <TermsCheckBox />
-    </SafeNavigationScrollView>
+    </View>
   )
 }
 
