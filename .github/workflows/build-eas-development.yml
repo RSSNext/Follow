@@ -11,15 +11,6 @@ on:
     paths:
       - "apps/mobile/**"
       - "pnpm-lock.yaml"
-  workflow_dispatch:
-    inputs:
-      profile:
-        type: choice
-        default: preview
-        options:
-          - preview
-          - production
-        description: "Build profile"
 
 jobs:
   build:
@@ -49,7 +40,7 @@ jobs:
       - name: 🔨 Build iOS IPA
         run: |
           cd apps/mobile
-          eas build --platform ios --profile ${{ github.event.inputs.profile || 'preview' }} --non-interactive --local --output=./build.ipa
+          eas build --platform ios --profile development --non-interactive --local --output=./build.ipa
         env:
           CI: true
 
@@ -60,9 +51,3 @@ jobs:
           name: app-ios
           path: apps/mobile/build.ipa
           retention-days: 90
-
-      - name: Submit to App Store
-        if: github.event.inputs.profile == 'production'
-        run: |
-          cd apps/mobile
-          eas submit --platform ios --path build.ipa --non-interactive
