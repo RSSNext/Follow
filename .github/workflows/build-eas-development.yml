@@ -4,12 +4,12 @@ on:
   push:
     branches: [dev, main]
     paths:
-      - "apps/mobile/**"
+      - "apps/mobile/web-app/**"
       - "pnpm-lock.yaml"
   pull_request:
     branches: [dev, main]
     paths:
-      - "apps/mobile/**"
+      - "apps/mobile/web-app/**"
       - "pnpm-lock.yaml"
 
 jobs:
