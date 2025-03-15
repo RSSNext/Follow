@@ -91,6 +91,6 @@ jobs:
       - name: 📤 Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: app-ios
+          name: app-ios-simulator
           path: apps/mobile/build-simulator.ipa
           retention-days: 90
