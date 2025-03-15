@@ -1,13 +1,13 @@
 import { jotaiStore } from "@follow/utils"
 import { NavigationContainer, useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { registerRootComponent } from "expo"
+import { registerRootComponent, requireNativeView } from "expo"
 import { Image } from "expo-image"
 import { Provider } from "jotai"
 import { cssInterop } from "nativewind"
 import type { ReactNode } from "react"
 import { useState } from "react"
-import { Button, StyleSheet, Text, View } from "react-native"
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native"
 import {
   enableFreeze,
   FullWindowOverlay,
@@ -28,16 +28,18 @@ initializeApp()
 
 registerRootComponent(() => <App4 />)
 
+const TabBarRoot = requireNativeView("TabBarRoot")
 const App4 = () => {
   return (
     <Provider store={jotaiStore}>
       <View style={{ flex: 1 }}>
-        <RootStackNavigation>
-          <View style={{ flex: 1, backgroundColor: "blue" }}>
-            <Text>Root View</Text>
-          </View>
-        </RootStackNavigation>
-
+        <TabBarRoot style={StyleSheet.absoluteFill}>
+          <RootStackNavigation>
+            <View style={{ flex: 1, backgroundColor: "blue" }}>
+              <Text>Root View</Text>
+            </View>
+          </RootStackNavigation>
+        </TabBarRoot>
         <FullWindowOverlay>
           <View style={{ position: "absolute", bottom: 40, left: 0, right: 0 }}>
             <Button
@@ -197,18 +199,15 @@ const App2 = () => {
 
 const TestScreen = () => {
   return (
-    <View style={[{ backgroundColor: "blue", flex: 1 }]}>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-    </View>
+    <ScrollView style={[{ backgroundColor: "blue", flex: 1 }]}>
+      {Array.from({ length: 100 }).map((_, index) => {
+        return (
+          <Text key={index} className="text-white">
+            Hello2
+          </Text>
+        )
+      })}
+    </ScrollView>
   )
 }
 

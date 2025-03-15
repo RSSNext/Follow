@@ -1,9 +1,9 @@
 import { atom, useAtomValue } from "jotai"
 import type { FC } from "react"
 import { memo, useContext, useMemo } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 import type { StackPresentationTypes } from "react-native-screens"
-import { ScreenContainer, ScreenStack, ScreenStackItem } from "react-native-screens"
+import { ScreenStack, ScreenStackItem } from "react-native-screens"
 
 import type { Route } from "./ChainNavigationContext"
 import { ChainNavigationContext } from "./ChainNavigationContext"
@@ -99,7 +99,6 @@ const MapScreenStackItems: FC<{
 const ModalScreenStackItems: FC<{
   routes: Route[]
 }> = ({ routes }) => {
-  // TODO Only formSheet is supported for stack modal
   const rootModalRoute = routes.at(0)
   if (!rootModalRoute) {
     return null
