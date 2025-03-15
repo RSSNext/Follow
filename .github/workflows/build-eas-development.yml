@@ -5,12 +5,14 @@ on:
     branches: [dev, main]
     paths:
       - "apps/mobile/web-app/**"
-      - "pnpm-lock.yaml"
+      - "apps/mobile/native/**"
+      - "apps/mobile/package.json"
   pull_request:
     branches: [dev, main]
     paths:
       - "apps/mobile/web-app/**"
-      - "pnpm-lock.yaml"
+      - "apps/mobile/native/**"
+      - "apps/mobile/package.json"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
