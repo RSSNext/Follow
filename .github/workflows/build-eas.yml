@@ -50,6 +50,7 @@ jobs:
         run: |
           cd apps/mobile
           eas build --platform ios --profile ${{ github.event.inputs.profile || 'preview' }} --non-interactive --local --output=./build.ipa
+          eas build --platform ios --profile development --non-interactive --local --output=./build-development.ipa
         env:
           CI: true
 
@@ -58,7 +59,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-ios
-          path: apps/mobile/build.ipa
+          path: |
+            apps/mobile/build.ipa
+            apps/mobile/build-development.ipa
           retention-days: 90
 
       - name: Submit to App Store
