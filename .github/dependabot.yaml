@@ -48,6 +48,21 @@ updates:
         applies-to: version-updates
         update-types:
           - "patch"
+      pathed:
+        patterns:
+          - immer
+          - re-resizable
+          - hono
+          - electron-context-menu
+          - "@mozilla/readability"
+          - daisyui
+          - jsonpointer
+          - workbox-precaching
+          - "@pengx17/electron-forge-maker-appimage"
+          - devlop
+          - "@microflash/remark-callout-directives"
+          - react-native-track-player
+          - react-native-sheet-transitions
 
   - package-ecosystem: github-actions
     directory: /
