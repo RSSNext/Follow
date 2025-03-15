@@ -524,17 +524,17 @@ importers:
         specifier: 3.2.1
         version: 3.2.1
       '@tanstack/query-sync-storage-persister':
-        specifier: 5.67.3
-        version: 5.67.3
+        specifier: 5.68.0
+        version: 5.68.0
       '@tanstack/react-query':
-        specifier: 5.67.3
-        version: 5.67.3(react@18.3.1)
+        specifier: 5.68.0
+        version: 5.68.0(react@18.3.1)
       '@tanstack/react-query-devtools':
-        specifier: 5.67.3
-        version: 5.67.3(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)
+        specifier: 5.68.0
+        version: 5.68.0(@tanstack/react-query@5.68.0(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query-persist-client':
-        specifier: 5.67.3
-        version: 5.67.3(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)
+        specifier: 5.68.0
+        version: 5.68.0(@tanstack/react-query@5.68.0(react@18.3.1))(react@18.3.1)
       '@tanstack/react-virtual':
         specifier: 3.13.4
         version: 3.13.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -557,8 +557,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       cmdk:
-        specifier: 1.0.4
-        version: 1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 1.1.1
+        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
@@ -804,14 +804,14 @@ importers:
         specifier: 1.7.3
         version: 1.7.3(@babel/runtime@7.26.10)(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       '@tanstack/query-sync-storage-persister':
-        specifier: 5.67.3
-        version: 5.67.3
+        specifier: 5.68.0
+        version: 5.68.0
       '@tanstack/react-query':
-        specifier: 5.67.3
-        version: 5.67.3(react@18.3.1)
+        specifier: 5.68.0
+        version: 5.68.0(react@18.3.1)
       '@tanstack/react-query-persist-client':
-        specifier: 5.67.3
-        version: 5.67.3(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)
+        specifier: 5.68.0
+        version: 5.68.0(@tanstack/react-query@5.68.0(react@18.3.1))(react@18.3.1)
       '@types/qrcode':
         specifier: 1.5.5
         version: 1.5.5
@@ -1099,8 +1099,8 @@ importers:
         specifier: 9.5.0
         version: 9.5.0(react@18.3.1)
       '@tanstack/react-query':
-        specifier: 5.67.3
-        version: 5.67.3(react@18.3.1)
+        specifier: 5.68.0
+        version: 5.68.0(react@18.3.1)
       blurhash:
         specifier: 2.0.5
         version: 2.0.5
@@ -4669,7 +4669,7 @@ packages:
   '@radix-ui/react-compose-refs@1.1.1':
     resolution: {integrity: sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4691,7 +4691,7 @@ packages:
   '@radix-ui/react-context@1.1.1':
     resolution: {integrity: sha512-UASk9zi+crv9WteK/NU4PLvOoL3OuE6BWVKNF6hPRBtYBDXQ2u5iu3O59zUlJiTVvkyuycnqrztsHVJwcK9K+Q==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -4748,7 +4748,7 @@ packages:
   '@radix-ui/react-focus-guards@1.1.1':
     resolution: {integrity: sha512-pSIwfrT1a6sIoDASCSpFwOasEwKTZWDw/iBdtnqKO7v6FeOzYJ7U53cPzYFVR3geGGXgVHaH+CdngrrAzqUGxg==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -5036,7 +5036,7 @@ packages:
   '@radix-ui/react-use-controllable-state@1.1.0':
     resolution: {integrity: sha512-MtfMVJiSr2NjzS0Aa90NPTnvTSg6C/JLCV7ma0W6+OMV78vd8OyRpID+Ng9LxzsPbLeuBnWBA1Nq30AtBIDChw==}
     peerDependencies:
-      '@types/react': npm:@types/react@18.3.12
+      '@types/react': '*'
       react: 18.3.1
     peerDependenciesMeta:
       '@types/react':
@@ -5862,29 +5862,37 @@ packages:
   '@tanstack/query-core@5.67.3':
     resolution: {integrity: sha512-pq76ObpjcaspAW4OmCbpXLF6BCZP2Zr/J5ztnyizXhSlNe7fIUp0QKZsd0JMkw9aDa+vxDX/OY7N+hjNY/dCGg==}
 
+  '@tanstack/query-core@5.68.0':
+    resolution: {integrity: sha512-r8rFYYo8/sY/LNaOqX84h12w7EQev4abFXDWy4UoDVUJzJ5d9Fbmb8ayTi7ScG+V0ap44SF3vNs/45mkzDGyGw==}
+
   '@tanstack/query-devtools@5.67.2':
     resolution: {integrity: sha512-O4QXFFd7xqp6EX7sdvc9tsVO8nm4lpWBqwpgjpVLW5g7IeOY6VnS/xvs/YzbRhBVkKTMaJMOUGU7NhSX+YGoNg==}
 
-  '@tanstack/query-persist-client-core@5.67.3':
-    resolution: {integrity: sha512-Jt7rVlxU3n4FMHR72ETob5c+29RWYmrJ558dzal1S/iYW57xdXqhAaeayQJD1MweD+q2UNZbbpRemdfO/V2fIg==}
+  '@tanstack/query-persist-client-core@5.68.0':
+    resolution: {integrity: sha512-SP5E9lyC1/yHqfIrfIoGD5By0hh3zv0kMMWWtWjznHPb6Ghb0INCoNJr0oD5f+DQZAen+mJmwQ0x9LlAZdle6Q==}
 
-  '@tanstack/query-sync-storage-persister@5.67.3':
-    resolution: {integrity: sha512-i+O/nA7kBbX3+7lXA6/NVDk7V295Qxv0g6ipTO+vgIdQ46UDqJmL4X46XmcwMyGIzt9X10XkN47xEAkKGwnT5w==}
+  '@tanstack/query-sync-storage-persister@5.68.0':
+    resolution: {integrity: sha512-Zd0ukP58F4uLDol5QoP6NCgRdMl9+3InW4ojg7VITpP6QLcjbJqQ4DG5miOhSElM/xASbW2wS/AoSSguboA5Lw==}
 
-  '@tanstack/react-query-devtools@5.67.3':
-    resolution: {integrity: sha512-+PM2UnCyXAQozXB32cnawx38wwnaHPTtFAhX1V5QmHy/FL1u9k7nd8nxn2+GTwf15SGbUaGfxA/vq/9EARUEIQ==}
+  '@tanstack/react-query-devtools@5.68.0':
+    resolution: {integrity: sha512-h9ArHkfa7SD5eGnJ9h+9M5uYWBdeVeY+WalrtGLCAtJJvHx6/RrtbbzxeoEQbPyx3f0kPcwJ58DGQ+7CBXelpg==}
     peerDependencies:
-      '@tanstack/react-query': ^5.67.3
+      '@tanstack/react-query': ^5.68.0
       react: 18.3.1
 
-  '@tanstack/react-query-persist-client@5.67.3':
-    resolution: {integrity: sha512-ztu7fVoZ4WnjHbfNEieOgI/Lyj/i0PdaoYf7j+09i2/Y6C/XjqZ9UgxUnt0Hw1tCN5OZJ35qFA1cDHBQuxCW8A==}
+  '@tanstack/react-query-persist-client@5.68.0':
+    resolution: {integrity: sha512-USJZICO6iRhH3oM40NFJhQH1kXMhGNS/RmFaXIfdgF4rtjfbmAdejaGEhq7DPuTgzd+mhcgGC3wdl/A8YFMp8g==}
     peerDependencies:
-      '@tanstack/react-query': ^5.67.3
+      '@tanstack/react-query': ^5.68.0
       react: 18.3.1
 
   '@tanstack/react-query@5.67.3':
     resolution: {integrity: sha512-u/n2HsQeH1vpZIOzB/w2lqKlXUDUKo6BxTdGXSMvNzIq5MHYFckRMVuFABp+QB7RN8LFXWV6X1/oSkuDq+MPIA==}
+    peerDependencies:
+      react: 18.3.1
+
+  '@tanstack/react-query@5.68.0':
+    resolution: {integrity: sha512-mMOdGDKlwTP/WV72QqSNf4PAMeoBp/DqBHQ222wBfb51Looi8QUqnCnb9O98ZgvNISmy6fzxRGBJdZ+9IBvX2Q==}
     peerDependencies:
       react: 18.3.1
 
@@ -7389,8 +7397,8 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
-  cmdk@1.0.4:
-    resolution: {integrity: sha512-AnsjfHyHpQ/EFeAnG216WY7A5LiYCoZzCSygiLvfXC3H3LFGCprErteUcszaVluGOhuOTbJS3jWHrSDYPBBygg==}
+  cmdk@1.1.1:
+    resolution: {integrity: sha512-Vsv7kFaXm+ptHDMZ7izaRsP70GgrW9NBNGswt9OZaVBLlE0SNpDq8eu/VGXyF9r7M0azK3Wy7OlYXsuyYLFzHg==}
     peerDependencies:
       react: 18.3.1
       react-dom: 18.3.1
@@ -21804,34 +21812,43 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2))
 
-  '@tanstack/query-core@5.67.3': {}
+  '@tanstack/query-core@5.67.3':
+    optional: true
+
+  '@tanstack/query-core@5.68.0': {}
 
   '@tanstack/query-devtools@5.67.2': {}
 
-  '@tanstack/query-persist-client-core@5.67.3':
+  '@tanstack/query-persist-client-core@5.68.0':
     dependencies:
-      '@tanstack/query-core': 5.67.3
+      '@tanstack/query-core': 5.68.0
 
-  '@tanstack/query-sync-storage-persister@5.67.3':
+  '@tanstack/query-sync-storage-persister@5.68.0':
     dependencies:
-      '@tanstack/query-core': 5.67.3
-      '@tanstack/query-persist-client-core': 5.67.3
+      '@tanstack/query-core': 5.68.0
+      '@tanstack/query-persist-client-core': 5.68.0
 
-  '@tanstack/react-query-devtools@5.67.3(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-devtools@5.68.0(@tanstack/react-query@5.68.0(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-devtools': 5.67.2
-      '@tanstack/react-query': 5.67.3(react@18.3.1)
+      '@tanstack/react-query': 5.68.0(react@18.3.1)
       react: 18.3.1
 
-  '@tanstack/react-query-persist-client@5.67.3(@tanstack/react-query@5.67.3(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-persist-client@5.68.0(@tanstack/react-query@5.68.0(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/query-persist-client-core': 5.67.3
-      '@tanstack/react-query': 5.67.3(react@18.3.1)
+      '@tanstack/query-persist-client-core': 5.68.0
+      '@tanstack/react-query': 5.68.0(react@18.3.1)
       react: 18.3.1
 
   '@tanstack/react-query@5.67.3(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.67.3
+      react: 18.3.1
+    optional: true
+
+  '@tanstack/react-query@5.68.0(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.68.0
       react: 18.3.1
 
   '@tanstack/react-virtual@3.13.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -23773,14 +23790,14 @@ snapshots:
 
   clsx@2.1.1: {}
 
-  cmdk@1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  cmdk@1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
+      '@radix-ui/react-compose-refs': 1.1.1(@types/react@18.3.12)(react@18.3.1)
       '@radix-ui/react-dialog': 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-id': 1.1.0(@types/react@18.3.12)(react@18.3.1)
       '@radix-ui/react-primitive': 2.0.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      use-sync-external-store: 1.4.0(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
