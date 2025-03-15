@@ -1,4 +1,4 @@
-name: Build iOS IPA
+name: Build iOS IPA for development
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    name: Build iOS IPA
+    name: Build iOS IPA for development
     runs-on: macos-latest
 
     steps:
