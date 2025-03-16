@@ -175,7 +175,7 @@ export function ListItem({
             )}
           >
             <EntryTranslation
-              className={cn("break-all", lineClamp.description)}
+              className={cn("hyphens-auto", lineClamp.description)}
               source={entry.entries.description}
               target={translation?.description}
             />
