@@ -11,7 +11,8 @@
       "AppleIntelligenceGlowEffectModule",
       "FollowNative.GaleriaModule",
       "GaleriaAccessoryModule",
-      "TabBarModule"
+      "TabBarModule",
+      "TabScreenModule"
     ]
   },
   "android": {

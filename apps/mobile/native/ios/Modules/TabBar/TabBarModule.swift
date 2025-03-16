@@ -12,16 +12,26 @@ public class TabBarModule: Module {
     public func definition() -> ModuleDefinition {
         Name("TabBarRoot")
 
-//        AsyncFunction("switchTab") { (index: Int, promise: Promise) in
-//            if let tabBarController = self.tabBarController {
-//              tabBarController.switchTab(index, promise: promise)
-//            } else {
-//                promise.reject("NO_TAB_CONTROLLER", "TabBarController not initialized")
-//            }
-//        }
+        Function("switchTab") { [weak self] (reactTag: Int, index: Int) in
+          DispatchQueue.main.async {
+            guard let bridge = self?.appContext?.reactBridge else {
+                return
+            }
 
-      View(TabBarRootView.self) {
-        
-      }
+            if let sourceView = bridge.uiManager.view(forReactTag: NSNumber(value: reactTag)) as! TabBarRootView?
+               
+            {
+              sourceView.switchToTab(index: index)
+            }
+          }
+        }
+
+        View(TabBarRootView.self) {
+          Prop("selectedIndex") { (view, index: Int) in
+            view.switchToTab(index: index)
+          }
+          
+          Events("onTabIndexChange")
+        }
     }
 }

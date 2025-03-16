@@ -1,13 +1,13 @@
 import { jotaiStore } from "@follow/utils"
 import { NavigationContainer, useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { registerRootComponent, requireNativeView } from "expo"
+import { registerRootComponent, requireNativeModule, requireNativeView } from "expo"
 import { Image } from "expo-image"
 import { Provider } from "jotai"
 import { cssInterop } from "nativewind"
 import type { ReactNode } from "react"
-import { useState } from "react"
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native"
+import { useRef, useState } from "react"
+import { Button, findNodeHandle, ScrollView, StyleSheet, Text, View } from "react-native"
 import {
   enableFreeze,
   FullWindowOverlay,
@@ -29,19 +29,48 @@ initializeApp()
 registerRootComponent(() => <App4 />)
 
 const TabBarRoot = requireNativeView("TabBarRoot")
+const TabScreen = requireNativeView("TabScreen")
+const TabModule = requireNativeModule("TabBarRoot")
 const App4 = () => {
+  const tabBarRootRef = useRef<any>(null)
+
+  const [tabIndex, setTabIndex] = useState(0)
   return (
     <Provider store={jotaiStore}>
       <View style={{ flex: 1 }}>
-        <TabBarRoot style={StyleSheet.absoluteFill}>
-          <RootStackNavigation>
-            <View style={{ flex: 1, backgroundColor: "blue" }}>
-              <Text>Root View</Text>
-            </View>
-          </RootStackNavigation>
-        </TabBarRoot>
+        <RootStackNavigation>
+          <TabBarRoot
+            style={StyleSheet.absoluteFill}
+            ref={tabBarRootRef}
+            onTabIndexChange={(e) => {
+              setTabIndex(e.nativeEvent.index)
+            }}
+            selectedIndex={tabIndex}
+          >
+            <TabScreen style={StyleSheet.absoluteFill}>
+              {/* <View style={{ flex: 1, backgroundColor: "blue" }}>
+                <Text>Root View</Text>
+              </View> */}
+            </TabScreen>
+
+            <TabScreen style={StyleSheet.absoluteFill}>
+              <View style={{ flex: 1, backgroundColor: "red" }}>
+                <Text>Root View 2</Text>
+              </View>
+            </TabScreen>
+          </TabBarRoot>
+        </RootStackNavigation>
         <FullWindowOverlay>
-          <View style={{ position: "absolute", bottom: 40, left: 0, right: 0 }}>
+          <View style={{ position: "absolute", bottom: 70, left: 0, right: 0 }}>
+            <Button
+              title="Switch Tab"
+              onPress={() => {
+                // const handle = findNodeHandle(tabBarRootRef.current)
+                // TabModule.switchTab(handle, tabIndex === 0 ? 1 : 0)
+
+                setTabIndex(tabIndex === 0 ? 1 : 0)
+              }}
+            />
             <Button
               title="Push"
               onPress={() => {
