@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { clsx, cn, formatEstimatedMins, isSafari } from "@follow/utils/utils"
+import { clsx, cn, formatEstimatedMins, formatTimeToSeconds, isSafari } from "@follow/utils/utils"
 import { useMemo } from "react"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
@@ -110,6 +110,18 @@ export function ListItem({
     savedWidth += mediaWidth
   }
 
+  let durationInSeconds = entry.entries?.attachments?.[0]?.duration_in_seconds
+
+  // Some duration_in_seconds's format is not correct like 1:00:00, we need to transform it
+  if (durationInSeconds && Number.isNaN(+durationInSeconds)) {
+    // @ts-expect-error durationInSeconds is string
+    durationInSeconds = formatTimeToSeconds(durationInSeconds)
+  }
+
+  const estimatedMins = durationInSeconds
+    ? formatEstimatedMins(Math.floor(durationInSeconds / 60))
+    : undefined
+
   return (
     <div
       className={cn(
@@ -140,6 +152,13 @@ export function ListItem({
               className="space-x-0.5"
             />
           </EllipsisHorizontalTextWithTooltip>
+
+          {estimatedMins && (
+            <>
+              <span>·</span>
+              <span>{estimatedMins}</span>
+            </>
+          )}
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
         </div>
@@ -187,10 +206,7 @@ export function ListItem({
         <AudioCover
           entryId={entryId}
           src={entry.entries!.attachments![0]!.url}
-          durationInSeconds={Number.parseInt(
-            String(entry.entries!.attachments![0]!.duration_in_seconds ?? 0),
-            10,
-          )}
+          estimatedMins={estimatedMins}
           feedIcon={
             <FeedIcon
               fallback={true}
@@ -243,20 +259,18 @@ export function ListItem({
 function AudioCover({
   entryId,
   src,
-  durationInSeconds,
+  estimatedMins,
   feedIcon,
 }: {
   entryId: string
   src: string
-  durationInSeconds?: number
+  estimatedMins?: string
   feedIcon: React.ReactNode
 }) {
   const isMobile = useMobile()
   const playStatus = useAudioPlayerAtomSelector((playerValue) =>
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
-
-  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
 
   const handleClickPlay = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile) e.stopPropagation()
@@ -313,7 +327,7 @@ function AudioCover({
               isMobile && "opacity-100 backdrop-blur-sm",
             )}
           >
-            {formatEstimatedMins(estimatedMins)}
+            {estimatedMins}
           </div>
         </div>
       )}
