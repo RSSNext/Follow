@@ -12,18 +12,17 @@ export function useIntentHandler() {
   const incomingUrl = Linking.useURL()
 
   useEffect(() => {
-    if (incomingUrl) {
-      if (previousIntentUrl === incomingUrl) return
+    if (incomingUrl && incomingUrl !== previousIntentUrl) {
       previousIntentUrl = incomingUrl
-    }
 
-    const searchParams = extractParamsFromDeepLink(incomingUrl)
-    if (!searchParams) {
-      console.warn("No valid params found in deep link:", incomingUrl)
-      return
-    }
+      const searchParams = extractParamsFromDeepLink(incomingUrl)
+      if (!searchParams) {
+        console.warn("No valid params found in deep link:", incomingUrl)
+        return
+      }
 
-    router.push(`/follow?${searchParams.toString()}`)
+      router.push(`/follow?${searchParams.toString()}`)
+    }
   })
 }
 
