@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai"
 import type { FC } from "react"
-import { Fragment, memo, useContext, useEffect } from "react"
+import { memo, useContext, useEffect } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, {
@@ -22,7 +22,6 @@ import { ThemedBlurView } from "../../common/ThemedBlurView"
 import { Grid } from "../../ui/grid"
 import { BottomTabBarBackgroundContext } from "./contexts/BottomTabBarBackgroundContext"
 import { BottomTabBarVisibleContext } from "./contexts/BottomTabBarVisibleContext"
-import { useNavigationScrollToTop, useRegisterNavigationScrollView } from "./hooks"
 
 export const Tabbar: FC<{
   onPress?: (index: number) => void
@@ -44,6 +43,7 @@ export const Tabbar: FC<{
       !tabBarVisible ? quickSpringPreset : softSpringPreset,
     )
   }, [tabBarVisible, translateY])
+  if (tabScreens.length === 0) return null
   return (
     <Animated.View
       accessibilityRole="tablist"

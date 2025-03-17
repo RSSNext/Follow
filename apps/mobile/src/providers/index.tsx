@@ -13,6 +13,7 @@ import { RootSiblingParent } from "react-native-root-siblings"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { SheetProvider } from "react-native-sheet-transitions"
 
+import { BottomTabProvider } from "../components/layouts/tabbar/BottomTabProvider"
 import { PortalHost } from "../components/ui/portal"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
@@ -38,7 +39,9 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
                     <SheetProvider>
                       <ActionSheetProvider>
                         <RootSiblingParent>
-                          <PortalHost>{children}</PortalHost>
+                          <BottomTabProvider>
+                            <PortalHost>{children}</PortalHost>
+                          </BottomTabProvider>
                         </RootSiblingParent>
                       </ActionSheetProvider>
                     </SheetProvider>
