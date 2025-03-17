@@ -9,7 +9,7 @@ declare const globalThis: {
 }
 
 const isDev = "process" in globalThis ? process.env.NODE_ENV === "development" : import.meta.env.DEV
-export const APP_PROTOCOL = !isDev ? "follow-dev" : "follow"
+export const APP_PROTOCOL = isDev ? "follow-dev" : "follow"
 export const DEEPLINK_SCHEME = `${APP_PROTOCOL}://` as const
 
 export const SYSTEM_CAN_UNDER_BLUR_WINDOW = globalThis?.window?.electron
