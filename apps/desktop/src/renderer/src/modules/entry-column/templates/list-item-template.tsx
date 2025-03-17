@@ -79,6 +79,21 @@ export function ListItem({
     }
   }, [settingWideMode])
 
+  const estimatedMins = useMemo(() => {
+    if (!entry?.entries?.attachments?.[0]?.duration_in_seconds) {
+      return
+    }
+
+    let durationInSeconds = entry?.entries?.attachments?.[0]?.duration_in_seconds
+
+    if (Number.isNaN(+durationInSeconds)) {
+      // @ts-expect-error durationInSeconds is string
+      durationInSeconds = formatTimeToSeconds(durationInSeconds)
+    }
+
+    return formatEstimatedMins(Math.floor(durationInSeconds / 60))
+  }, [entry])
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return null
 
@@ -109,18 +124,6 @@ export function ListItem({
   if (hasMedia && !hasAudio) {
     savedWidth += mediaWidth
   }
-
-  let durationInSeconds = entry.entries?.attachments?.[0]?.duration_in_seconds
-
-  // Some duration_in_seconds's format is not correct like 1:00:00, we need to transform it
-  if (durationInSeconds && Number.isNaN(+durationInSeconds)) {
-    // @ts-expect-error durationInSeconds is string
-    durationInSeconds = formatTimeToSeconds(durationInSeconds)
-  }
-
-  const estimatedMins = durationInSeconds
-    ? formatEstimatedMins(Math.floor(durationInSeconds / 60))
-    : undefined
 
   return (
     <div
@@ -153,12 +156,13 @@ export function ListItem({
             />
           </EllipsisHorizontalTextWithTooltip>
 
-          {estimatedMins && (
+          {hasAudio && estimatedMins && (
             <>
               <span>·</span>
               <span>{estimatedMins}</span>
             </>
           )}
+
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
         </div>
