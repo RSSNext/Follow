@@ -33,7 +33,6 @@ class TabBarRootView: ExpoView {
   }
 
   public func switchToTab(index: Int) {
-
     tabBarController.selectedIndex = index
     if let selectedViewController = tabBarController.selectedViewController {
       tabBarController(tabBarController, didSelect: selectedViewController)
@@ -42,28 +41,46 @@ class TabBarRootView: ExpoView {
 
   override func insertSubview(_ subview: UIView, at atIndex: Int) {
     if let tabScreenView = subview as? TabScreenView {
-      let containerView = UIView(frame: tabScreenView.bounds)
-
-      for subview in tabScreenView.subviews {
-        let copy = subview.snapshotView(afterScreenUpdates: true) ?? UIView()
-        containerView.addSubview(copy)
-        copy.frame = subview.frame
-      }
-
+//      let containerView = UIView(frame: tabScreenView.bounds)
+//
+//      for subview in tabScreenView.subviews {
+//        let copy = subview.snapshotView(afterScreenUpdates: true) ?? UIView()
+//        containerView.addSubview(copy)
+//        copy.frame = subview.frame
+//      }
+//
+//      let screenVC = UIViewController()
+//      screenVC.view = containerView
+//
+//      screenVC.view.tag = tabScreenView.tag
+//
+//      tabViewControllers.append(screenVC)
+//
+//      tabBarController.viewControllers = tabViewControllers
+//      tabBarController.didMove(toParent: vc)
+//
+//      super.insertSubview(tabScreenView, at: atIndex)
+//      tabScreenView.isHidden = true
+      
+      
+      // FIXME: it is necessary to let RN know that the position of view has moved, otherwise unmount will report an error.
+      
+      tabScreenView.removeFromSuperview()
+ 
+      self.removeReactSubview(subview)
       let screenVC = UIViewController()
-      screenVC.view = containerView
-
+      screenVC.view = tabScreenView
       screenVC.view.tag = tabScreenView.tag
-
       tabViewControllers.append(screenVC)
-
       tabBarController.viewControllers = tabViewControllers
       tabBarController.didMove(toParent: vc)
-
-      super.insertSubview(tabScreenView, at: atIndex)
-      tabScreenView.isHidden = true
-    } else {
-      super.insertSubview(subview, at: atIndex)
+    }
+     
+    
+    if let tabBarPortalView = subview as? TabBarPortalView {
+      let tabBarView = self.tabBarController.view!
+      tabBarView.addSubview(tabBarPortalView)
+ 
     }
   }
 
@@ -86,7 +103,7 @@ class TabBarRootView: ExpoView {
   // open override func didAddSubview(_ subview: UIView) {
 
   // }
-
+ 
   override func willRemoveSubview(_ subview: UIView) {
     if let tabScreenView = subview as? TabScreenView {
       tabViewControllers.removeAll { viewController in

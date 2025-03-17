@@ -12,7 +12,8 @@
       "FollowNative.GaleriaModule",
       "GaleriaAccessoryModule",
       "TabBarModule",
-      "TabScreenModule"
+      "TabScreenModule",
+      "TabBarPortalModule"
     ]
   },
   "android": {

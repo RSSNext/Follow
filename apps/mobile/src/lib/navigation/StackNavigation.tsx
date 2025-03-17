@@ -1,17 +1,25 @@
-import { atom, useAtomValue } from "jotai"
+import { atom, useAtomValue, useSetAtom } from "jotai"
 import type { FC } from "react"
 import { memo, useContext, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import type { StackPresentationTypes } from "react-native-screens"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import type { ScreenStackHeaderConfigProps, StackPresentationTypes } from "react-native-screens"
 import { ScreenStack, ScreenStackItem } from "react-native-screens"
 
+import { useCombinedLifecycleEvents } from "./__internal/hooks"
 import type { Route } from "./ChainNavigationContext"
 import { ChainNavigationContext } from "./ChainNavigationContext"
 import { Navigation } from "./Navigation"
 import { NavigationInstanceContext, useNavigation } from "./NavigationInstanceContext"
+import { ScreenItemContext } from "./ScreenItemContext"
 import type { NavigationControllerView } from "./types"
 
-export const RootStackNavigation = ({ children }: { children: React.ReactNode }) => {
+interface RootStackNavigationProps {
+  children: React.ReactNode
+
+  headerConfig?: ScreenStackHeaderConfigProps
+}
+export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigationProps) => {
   const chainCtxValue = useMemo(
     () => ({
       routesAtom: atom<Route[]>([]),
@@ -26,17 +34,19 @@ export const RootStackNavigation = ({ children }: { children: React.ReactNode })
   }, [chainCtxValue])
 
   return (
-    <ChainNavigationContext.Provider value={chainCtxValue}>
-      <NavigationInstanceContext.Provider value={navigation}>
-        <ScreenStack style={StyleSheet.absoluteFill}>
-          <ScreenStackItem screenId="root" style={StyleSheet.absoluteFill}>
-            {children}
-          </ScreenStackItem>
+    <SafeAreaProvider>
+      <ChainNavigationContext.Provider value={chainCtxValue}>
+        <NavigationInstanceContext.Provider value={navigation}>
+          <ScreenStack style={StyleSheet.absoluteFill}>
+            <WrappedScreenItem headerConfig={headerConfig} screenId="root">
+              {children}
+            </WrappedScreenItem>
 
-          <ScreenItemsMapper />
-        </ScreenStack>
-      </NavigationInstanceContext.Provider>
-    </ChainNavigationContext.Provider>
+            <ScreenItemsMapper />
+          </ScreenStack>
+        </NavigationInstanceContext.Provider>
+      </ChainNavigationContext.Provider>
+    </SafeAreaProvider>
   )
 }
 
@@ -89,7 +99,7 @@ const MapScreenStackItems: FC<{
 }> = ({ routes }) => {
   return routes.map((route) => {
     return (
-      <WrappedScreenItem stackPresentation={"push"} key={route.id} routeId={route.id}>
+      <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
         <ResolveView comp={route.Component} element={route.element} />
       </WrappedScreenItem>
     )
@@ -109,15 +119,15 @@ const ModalScreenStackItems: FC<{
       <WrappedScreenItem
         stackPresentation={rootModalRoute?.type}
         key={rootModalRoute.id}
-        routeId={rootModalRoute.id}
+        screenId={rootModalRoute.id}
       >
         <ScreenStack style={StyleSheet.absoluteFill}>
-          <WrappedScreenItem routeId={rootModalRoute.id}>
+          <WrappedScreenItem screenId={rootModalRoute.id}>
             <ResolveView comp={rootModalRoute.Component} element={rootModalRoute.element} />
           </WrappedScreenItem>
           {routes.slice(1).map((route) => {
             return (
-              <WrappedScreenItem stackPresentation={"push"} key={route.id} routeId={route.id}>
+              <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
                 <ResolveView comp={route.Component} element={route.element} />
               </WrappedScreenItem>
             )
@@ -128,7 +138,7 @@ const ModalScreenStackItems: FC<{
   }
   return routes.map((route) => {
     return (
-      <WrappedScreenItem key={route.id} routeId={route.id} stackPresentation={"formSheet"}>
+      <WrappedScreenItem key={route.id} screenId={route.id} stackPresentation={"formSheet"}>
         <ResolveView comp={route.Component} element={route.element} />
       </WrappedScreenItem>
     )
@@ -136,23 +146,64 @@ const ModalScreenStackItems: FC<{
 }
 
 const WrappedScreenItem: FC<{
-  routeId: string
+  screenId: string
   children: React.ReactNode
   stackPresentation?: StackPresentationTypes
-}> = memo(({ routeId, children, stackPresentation }) => {
+
+  headerConfig?: ScreenStackHeaderConfigProps
+}> = memo(({ screenId, children, stackPresentation, headerConfig }) => {
   const navigation = useNavigation()
+  const ctxValue = useMemo(
+    () => ({
+      screenId,
+      isFocusedAtom: atom(false),
+      isAppearedAtom: atom(false),
+      isDisappearedAtom: atom(false),
+    }),
+    [screenId],
+  )
+  const setIsFocused = useSetAtom(ctxValue.isFocusedAtom)
+  const setIsAppeared = useSetAtom(ctxValue.isAppearedAtom)
+  const setIsDisappeared = useSetAtom(ctxValue.isDisappearedAtom)
+
+  const combinedLifecycleEvents = useCombinedLifecycleEvents(ctxValue.screenId, {
+    onAppear: () => {
+      setIsFocused(true)
+      setIsAppeared(true)
+      setIsDisappeared(false)
+    },
+    onDisappear: () => {
+      setIsFocused(false)
+      setIsAppeared(false)
+      setIsDisappeared(true)
+    },
+    onWillAppear: () => {
+      setIsFocused(false)
+      setIsAppeared(true)
+      setIsDisappeared(false)
+    },
+    onWillDisappear: () => {
+      setIsFocused(false)
+      setIsAppeared(false)
+      setIsDisappeared(true)
+    },
+  })
   return (
-    <ScreenStackItem
-      key={routeId}
-      screenId={routeId}
-      stackPresentation={stackPresentation}
-      style={StyleSheet.absoluteFill}
-      onDismissed={() => {
-        navigation.__internal_dismiss(routeId)
-      }}
-    >
-      {children}
-    </ScreenStackItem>
+    <ScreenItemContext.Provider value={ctxValue}>
+      <ScreenStackItem
+        {...combinedLifecycleEvents}
+        headerConfig={headerConfig}
+        key={screenId}
+        screenId={screenId}
+        stackPresentation={stackPresentation}
+        style={StyleSheet.absoluteFill}
+        onDismissed={() => {
+          navigation.__internal_dismiss(screenId)
+        }}
+      >
+        {children}
+      </ScreenStackItem>
+    </ScreenItemContext.Provider>
   )
 })
 const ResolveView: FC<{

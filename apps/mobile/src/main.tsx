@@ -3,11 +3,20 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { registerRootComponent, requireNativeModule, requireNativeView } from "expo"
 import { Image } from "expo-image"
-import { Provider } from "jotai"
+import { Provider, useAtomValue, useSetAtom } from "jotai"
 import { cssInterop } from "nativewind"
 import type { ReactNode } from "react"
-import { useRef, useState } from "react"
-import { Button, findNodeHandle, ScrollView, StyleSheet, Text, View } from "react-native"
+import { useContext, useEffect, useRef, useState } from "react"
+import {
+  Button,
+  findNodeHandle,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import {
   enableFreeze,
   FullWindowOverlay,
@@ -17,9 +26,22 @@ import {
   ScreenStackItem,
 } from "react-native-screens"
 
+import { BottomTabs } from "./components/layouts/tabbar/BottomTabs"
+import { Grid } from "./components/ui/grid"
+import { CheckCircleCuteReIcon } from "./icons/check_circle_cute_re"
 import { initializeApp } from "./initialize"
+import { BottomTabContext } from "./lib/navigation/bottom-tab/BottomTabContext"
+import { useTabScreenIsFocused } from "./lib/navigation/bottom-tab/hooks"
+import { TabBarPortal } from "./lib/navigation/bottom-tab/TabBarPortal"
+import { TabRoot } from "./lib/navigation/bottom-tab/TabRoot"
+import { TabScreen } from "./lib/navigation/bottom-tab/TabScreen"
+import { TabScreenContext } from "./lib/navigation/bottom-tab/TabScreenContext"
 import { Navigation } from "./lib/navigation/Navigation"
 import { RootStackNavigation } from "./lib/navigation/StackNavigation"
+import { DebugButton, EnvProfileIndicator } from "./modules/debug"
+import { RootProviders } from "./providers"
+import { IndexTabScreen } from "./screens/(stack)/(tabs)"
+import { usePrefetchSessionUser } from "./store/user/hooks"
 
 enableFreeze(true)
 cssInterop(Image, { className: "style" })
@@ -28,37 +50,87 @@ initializeApp()
 
 registerRootComponent(() => <App4 />)
 
-const TabBarRoot = requireNativeView("TabBarRoot")
-const TabScreen = requireNativeView("TabScreen")
 const TabModule = requireNativeModule("TabBarRoot")
-const App4 = () => {
-  const tabBarRootRef = useRef<any>(null)
 
+const Session = () => {
+  usePrefetchSessionUser()
+  return null
+}
+
+const App5 = () => {
   const [tabIndex, setTabIndex] = useState(0)
   return (
-    <Provider store={jotaiStore}>
-      <View style={{ flex: 1 }}>
+    <View className="flex-1 bg-black">
+      <RootProviders>
+        <Session />
         <RootStackNavigation>
           <TabBarRoot
             style={StyleSheet.absoluteFill}
-            ref={tabBarRootRef}
             onTabIndexChange={(e) => {
               setTabIndex(e.nativeEvent.index)
             }}
             selectedIndex={tabIndex}
           >
             <TabScreen style={StyleSheet.absoluteFill}>
-              {/* <View style={{ flex: 1, backgroundColor: "blue" }}>
-                <Text>Root View</Text>
-              </View> */}
+              <IndexTabScreen />
             </TabScreen>
 
-            <TabScreen style={StyleSheet.absoluteFill}>
+            <TabScreen style={StyleSheet.absoluteFill}></TabScreen>
+          </TabBarRoot>
+        </RootStackNavigation>
+        {__DEV__ && <DebugButton />}
+        <FullWindowOverlay>
+          <EnvProfileIndicator />
+        </FullWindowOverlay>
+      </RootProviders>
+    </View>
+  )
+}
+const App4 = () => {
+  useEffect(() => {
+    const disposers: (() => void)[] = []
+    disposers.push(
+      Navigation.rootNavigation.on("willAppear", (payload) => {
+        console.log("willAppear", payload)
+      }),
+      Navigation.rootNavigation.on("didAppear", (payload) => {
+        console.log("didAppear", payload)
+      }),
+      Navigation.rootNavigation.on("willDisappear", (payload) => {
+        console.log("willDisappear", payload)
+      }),
+      Navigation.rootNavigation.on("didDisappear", (payload) => {
+        console.log("didDisappear", payload)
+      }),
+    )
+    return () => {
+      disposers.forEach((disposer) => disposer())
+    }
+  }, [])
+  return (
+    <Provider store={jotaiStore}>
+      <View style={{ flex: 1 }}>
+        <RootStackNavigation
+          headerConfig={{
+            hidden: true,
+          }}
+        >
+          <TabRoot>
+            <TabScreen title="Test">
+              <TestTabScreen />
+            </TabScreen>
+
+            <TabScreen title="Test2">
               <View style={{ flex: 1, backgroundColor: "red" }}>
                 <Text>Root View 2</Text>
+                <TestTabScreen />
               </View>
             </TabScreen>
-          </TabBarRoot>
+
+            <TabBarPortal>
+              <TabbarTest />
+            </TabBarPortal>
+          </TabRoot>
         </RootStackNavigation>
         <FullWindowOverlay>
           <View style={{ position: "absolute", bottom: 70, left: 0, right: 0 }}>
@@ -67,15 +139,13 @@ const App4 = () => {
               onPress={() => {
                 // const handle = findNodeHandle(tabBarRootRef.current)
                 // TabModule.switchTab(handle, tabIndex === 0 ? 1 : 0)
-
-                setTabIndex(tabIndex === 0 ? 1 : 0)
               }}
             />
             <Button
               title="Push"
               onPress={() => {
                 const random = Math.random()
-                Navigation.getRootShared().pushControllerView(
+                Navigation.rootNavigation.pushControllerView(
                   random > 0.5 ? TestScreen : TestScreen3,
                 )
               }}
@@ -84,7 +154,7 @@ const App4 = () => {
               title="formSheet"
               onPress={() => {
                 const random = Math.random()
-                Navigation.getRootShared().presentControllerView(
+                Navigation.rootNavigation.presentControllerView(
                   random > 0.5 ? TestScreen : TestScreen3,
                   "formSheet",
                 )
@@ -94,7 +164,7 @@ const App4 = () => {
               title="Modal"
               onPress={() => {
                 const random = Math.random()
-                Navigation.getRootShared().presentControllerView(
+                Navigation.rootNavigation.presentControllerView(
                   random > 0.5 ? TestScreen : TestScreen3,
                 )
               }}
@@ -253,6 +323,68 @@ const TestScreen3 = () => {
       <Text className="text-white">Hello2</Text>
       <Text className="text-white">Hello2</Text>
       <Text className="text-white">Hello2</Text>
+    </View>
+  )
+}
+
+const TestTabScreen = () => {
+  const isFocused = useTabScreenIsFocused()
+
+  const insets = useSafeAreaInsets()
+
+  const { tabScreenIndex } = useContext(TabScreenContext)
+
+  console.log(tabScreenIndex, "isFocused", isFocused)
+  return (
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <View style={{ height: insets.top, backgroundColor: "red" }} />
+      <ScrollView>
+        {Array.from({ length: 100 }).map((_, index) => {
+          return (
+            <Text key={index} className="text-white">
+              Hello2
+            </Text>
+          )
+        })}
+      </ScrollView>
+      <Text className="text-white">
+        {/* Hello {tabScreenIndex} */}
+
+        <TouchableOpacity
+          onPress={() => {
+            console.log("pressed", isFocused)
+          }}
+        >
+          <Text>Modal</Text>
+        </TouchableOpacity>
+      </Text>
+    </View>
+  )
+}
+
+const TabbarTest = () => {
+  const insets = useSafeAreaInsets()
+  const { currentIndexAtom, tabScreensAtom } = useContext(BottomTabContext)
+  const setCurrentIndex = useSetAtom(currentIndexAtom)
+
+  const tabScreens = useAtomValue(tabScreensAtom)
+  console.log(tabScreens, "tabScreens")
+  return (
+    <View style={{ backgroundColor: "blue", flex: 1, paddingBottom: insets.bottom }}>
+      <Grid columns={tabScreens.length} gap={10}>
+        {tabScreens.map((tabScreen) => {
+          return (
+            <TouchableOpacity
+              key={tabScreen.tabScreenIndex}
+              onPress={() => {
+                setCurrentIndex(tabScreen.tabScreenIndex)
+              }}
+            >
+              <Text key={tabScreen.tabScreenIndex}>{tabScreen.title}</Text>
+            </TouchableOpacity>
+          )
+        })}
+      </Grid>
     </View>
   )
 }

@@ -1,4 +1,6 @@
 import { jotaiStore } from "@follow/utils"
+import { EventEmitter } from "expo"
+import { DeviceEventEmitter } from "react-native"
 
 import type { ChainNavigationContextType, Route } from "./ChainNavigationContext"
 import type { NavigationControllerView, NavigationControllerViewType } from "./types"
@@ -17,7 +19,7 @@ export class Navigation {
     this.shared = navigation
   }
 
-  public static getRootShared() {
+  public static get rootNavigation() {
     if (!this.shared) {
       throw new Error("Navigation not found")
     }
@@ -88,4 +90,36 @@ export class Navigation {
     }
     jotaiStore.set(this.ctxValue.routesAtom, routes.slice(0, lastModalIndex))
   }
+
+  // eslint-disable-next-line unicorn/prefer-event-target
+  private bus = new EventEmitter<{
+    willAppear: (payload: LifecycleEventPayload) => void
+    didAppear: (payload: LifecycleEventPayload) => void
+    willDisappear: (payload: LifecycleEventPayload) => void
+    didDisappear: (payload: LifecycleEventPayload) => void
+  }>()
+  on(event: "willAppear", callback: (payload: LifecycleEventPayload) => void): Disposer
+  on(event: "didAppear", callback: (payload: LifecycleEventPayload) => void): Disposer
+  on(event: "willDisappear", callback: (payload: LifecycleEventPayload) => void): Disposer
+  on(event: "didDisappear", callback: (payload: LifecycleEventPayload) => void): Disposer
+  on(event: string, callback: (payload: LifecycleEventPayload) => void): Disposer {
+    const subscription = this.bus.addListener(event as any, callback)
+    return () => {
+      subscription.remove()
+    }
+  }
+
+  emit(event: "willAppear", payload: LifecycleEventPayload): void
+  emit(event: "didAppear", payload: LifecycleEventPayload): void
+  emit(event: "willDisappear", payload: LifecycleEventPayload): void
+  emit(event: "didDisappear", payload: LifecycleEventPayload): void
+  emit(event: string, payload: LifecycleEventPayload): void {
+    this.bus.emit(event as any, payload)
+  }
+}
+
+type Disposer = () => void
+
+type LifecycleEventPayload = {
+  screenId: string
 }

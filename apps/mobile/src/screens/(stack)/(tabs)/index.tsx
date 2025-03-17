@@ -10,3 +10,5 @@ export default function Index() {
 
   return <EntryList />
 }
+
+export const IndexTabScreen = Index
