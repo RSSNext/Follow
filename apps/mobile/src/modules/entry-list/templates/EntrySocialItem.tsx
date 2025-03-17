@@ -18,6 +18,7 @@ import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
+import { getHorizontalScrolling } from "../atoms"
 import { EntryItemSkeleton } from "../EntryListContentSocial"
 
 export function EntrySocialItem({ entryId }: { entryId: string }) {
@@ -26,8 +27,11 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
   const feed = useFeed(entry?.feedId || "")
 
   const handlePress = useCallback(() => {
-    unreadSyncService.markEntryAsRead(entryId)
-    router.push(`/entries/${entryId}?view=${FeedViewType.SocialMedia}`)
+    const isHorizontalScrolling = getHorizontalScrolling()
+    if (!isHorizontalScrolling) {
+      unreadSyncService.markEntryAsRead(entryId)
+      router.push(`/entries/${entryId}?view=${FeedViewType.SocialMedia}`)
+    }
   }, [entryId])
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)

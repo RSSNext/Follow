@@ -17,6 +17,8 @@ import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
+import { getHorizontalScrolling } from "../entry-list/atoms"
+
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)
   const feedId = entry?.feedId
@@ -24,9 +26,11 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
   const isEntryStarred = useIsEntryStarred(id)
 
   const handlePressPreview = useCallback(() => {
-    if (!entry) return
-    preloadWebViewEntry(entry)
-    router.push(`/entries/${id}`)
+    const isHorizontalScrolling = getHorizontalScrolling()
+    if (entry && !isHorizontalScrolling) {
+      preloadWebViewEntry(entry)
+      router.push(`/entries/${id}`)
+    }
   }, [entry, id])
 
   if (!entry) return null

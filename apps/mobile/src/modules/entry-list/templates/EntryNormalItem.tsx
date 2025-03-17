@@ -21,6 +21,7 @@ import { getInboxFrom } from "@/src/store/entry/utils"
 import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
+import { getHorizontalScrolling } from "../atoms"
 import { EntryItemSkeleton } from "../EntryListContentArticle"
 import { useEntryListContextView } from "../EntryListContext"
 
@@ -31,9 +32,11 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
   const view = useEntryListContextView()
 
   const handlePress = useCallback(() => {
-    if (!entry) return
-    preloadWebViewEntry(entry)
-    router.push(`/entries/${entryId}`)
+    const isHorizontalScrolling = getHorizontalScrolling()
+    if (entry && !isHorizontalScrolling) {
+      preloadWebViewEntry(entry)
+      router.push(`/entries/${entryId}`)
+    }
   }, [entryId, entry])
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)

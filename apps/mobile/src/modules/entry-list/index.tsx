@@ -15,6 +15,7 @@ import {
 import { useViewWithSubscription } from "@/src/store/subscription/hooks"
 
 import { TimelineSelectorProvider } from "../screen/TimelineSelectorProvider"
+import { setHorizontalScrolling } from "./atoms"
 import { EntryListSelector } from "./EntryListSelector"
 import { usePagerView } from "./usePagerView"
 
@@ -75,6 +76,7 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
       onPageSelected={rest.onPageSelected}
       onPageScrollStateChanged={(e) => {
         rest.onPageScrollStateChanged(e)
+        setHorizontalScrolling(e.nativeEvent.pageScrollState !== "idle")
         if (e.nativeEvent.pageScrollState === "settling") {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         }
