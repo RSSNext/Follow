@@ -18,7 +18,7 @@ import { LanguageMap } from "@/src/lib/language"
 
 export const GeneralScreen = () => {
   const locales = useLocales()
-  const translationLanguage = useGeneralSettingKey("translationLanguage")
+  const actionLanguage = useGeneralSettingKey("actionLanguage")
   const autoGroup = useGeneralSettingKey("autoGroup")
   const showUnreadOnLaunch = useGeneralSettingKey("unreadOnly")
   // const groupByDate = useGeneralSettingKey("groupByDate")
@@ -41,13 +41,13 @@ export const GeneralScreen = () => {
           </GroupedInsetListBaseCell>
 
           <GroupedInsetListBaseCell>
-            <Text className="text-label">Translation Language</Text>
+            <Text className="text-label">Action Language</Text>
 
             <View className="w-[150px]">
               <Select
-                value={translationLanguage}
+                value={actionLanguage}
                 onValueChange={(value) => {
-                  setGeneralSetting("translationLanguage", value)
+                  setGeneralSetting("actionLanguage", value)
                 }}
                 options={Object.values(LanguageMap)}
               />

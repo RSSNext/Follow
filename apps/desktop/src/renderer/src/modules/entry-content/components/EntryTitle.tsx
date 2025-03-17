@@ -49,12 +49,12 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   }, [entry?.entries.authorUrl, entry?.entries.url, feed?.siteUrl, feed?.type, inbox])
 
   const showAITranslation = useShowAITranslation() || !!entry?.settings?.translation
-  const translationLanguage = useGeneralSettingSelector((s) => s.translationLanguage)
+  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
 
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry: entry!,
-      language: entry?.settings?.translation || (translationLanguage as SupportedLanguages),
+      language: entry?.settings?.translation || (actionLanguage as SupportedLanguages),
       extraFields: ["title"],
     }),
     {

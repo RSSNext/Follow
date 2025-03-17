@@ -245,18 +245,18 @@ export const LanguageSelector = ({
 
 const TranslateLanguageSelector = () => {
   const { t } = useTranslation("settings")
-  const translationLanguage = useGeneralSettingKey("translationLanguage")
+  const actionLanguage = useGeneralSettingKey("actionLanguage")
 
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("general.translation_language")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("general.action_language")}</span>
       <ResponsiveSelect
         size="sm"
         triggerClassName="w-48"
-        defaultValue={translationLanguage}
-        value={translationLanguage}
+        defaultValue={actionLanguage}
+        value={actionLanguage}
         onValueChange={(value) => {
-          setGeneralSetting("translationLanguage", value)
+          setGeneralSetting("actionLanguage", value)
           setTranslationCache({})
         }}
         items={Object.values(LanguageMap)}

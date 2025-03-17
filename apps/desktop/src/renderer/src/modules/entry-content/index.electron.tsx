@@ -117,9 +117,7 @@ export const EntryContent: Component<EntryContentProps> = ({
   )
   const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
-  const translationLanguage = useGeneralSettingSelector(
-    (s) => s.translationLanguage,
-  ) as SupportedLanguages
+  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage) as SupportedLanguages
 
   if (!entry) return null
 
@@ -132,7 +130,7 @@ export const EntryContent: Component<EntryContentProps> = ({
     if (!fullText) return
 
     const translation =
-      entry.settings?.translation ?? (showAITranslation ? translationLanguage : undefined)
+      entry.settings?.translation ?? (showAITranslation ? actionLanguage : undefined)
 
     if (translation) {
       const isLanguageMatch = checkLanguage({
