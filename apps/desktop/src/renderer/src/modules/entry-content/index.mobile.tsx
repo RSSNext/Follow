@@ -1,7 +1,7 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
-import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
+import type { FeedModel, InboxModel } from "@follow/models/types"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
@@ -104,7 +104,7 @@ export const EntryContent: Component<{
 
   const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
-  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage) as SupportedLanguages
+  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
 
   const contentLineHeight = useUISettingKey("contentLineHeight")
   const contentFontSize = useUISettingKey("contentFontSize")
@@ -149,7 +149,7 @@ export const EntryContent: Component<{
     immersiveTranslate({
       html,
       entry,
-      targetLanguage: translation as SupportedLanguages,
+      targetLanguage: translation,
       cache: {
         get: (key: string) => getTranslationCache()[key],
         set: (key: string, value: string) =>

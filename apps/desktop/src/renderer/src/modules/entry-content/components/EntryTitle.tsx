@@ -1,4 +1,3 @@
-import type { SupportedLanguages } from "@follow/models/types"
 import { cn } from "@follow/utils/utils"
 import dayjs from "dayjs"
 import { useMemo } from "react"
@@ -54,7 +53,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry: entry!,
-      language: entry?.settings?.translation || (actionLanguage as SupportedLanguages),
+      language: entry?.settings?.translation || actionLanguage,
       extraFields: ["title"],
     }),
     {

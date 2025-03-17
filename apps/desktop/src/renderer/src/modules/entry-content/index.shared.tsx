@@ -5,7 +5,6 @@ import { Button, MotionButtonBase } from "@follow/components/ui/button/index.js"
 import { LoadingWithIcon } from "@follow/components/ui/loading/index.jsx"
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useScrollViewElement } from "@follow/components/ui/scroll-area/hooks.js"
-import type { SupportedLanguages } from "@follow/models"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { EventBus } from "@follow/utils/event-bus"
 import { springScrollTo } from "@follow/utils/scroller"
@@ -321,7 +320,7 @@ export function AISummary({ entryId }: { entryId: string }) {
   const { t } = useTranslation()
   const entry = useEntry(entryId)
   const showAISummary = useShowAISummary() || !!entry?.settings?.summary
-  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage) as SupportedLanguages
+  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
