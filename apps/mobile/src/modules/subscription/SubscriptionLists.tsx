@@ -8,7 +8,7 @@ import { useEventCallback } from "usehooks-ts"
 import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
-import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
+import { closeDrawer, getHorizontalScrolling, selectFeed } from "@/src/modules/screen/atoms"
 import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import {
@@ -178,6 +178,10 @@ const StarItem = () => {
   return (
     <ItemPressable
       onPress={() => {
+        const isHorizontalScrolling = getHorizontalScrolling()
+        if (isHorizontalScrolling) {
+          return
+        }
         selectFeed({ type: "feed", feedId: FEED_COLLECTION_LIST })
         closeDrawer()
         router.push(`/feeds/${FEED_COLLECTION_LIST}`)
