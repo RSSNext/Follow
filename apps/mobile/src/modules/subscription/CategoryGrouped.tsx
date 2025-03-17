@@ -11,7 +11,6 @@ import { useColor } from "@/src/theme/colors"
 
 import { SubscriptionFeedCategoryContextMenu } from "../context-menu/feeds"
 import { GroupedContext } from "./ctx"
-import { ItemSeparator } from "./ItemSeparator"
 import { UnGroupedList } from "./UnGroupedList"
 
 // const CategoryList: FC<{
@@ -79,7 +78,6 @@ export const CategoryGrouped = memo(
 
         {expanded && (
           <GroupedContext.Provider value={category}>
-            <ItemSeparator />
             <UnGroupedList subscriptionIds={subscriptionIds} />
           </GroupedContext.Provider>
         )}

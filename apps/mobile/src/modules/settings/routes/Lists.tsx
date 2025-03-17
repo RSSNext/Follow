@@ -109,7 +109,7 @@ const AddListButton = () => {
 const ItemSeparatorComponent = () => {
   return (
     <View
-      className="bg-opaque-separator ml-24 h-px flex-1"
+      className="bg-opaque-separator/50 ml-24 h-px flex-1"
       collapsable={false}
       style={{ transform: [{ scaleY: 0.5 }] }}
     />
