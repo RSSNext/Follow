@@ -28,6 +28,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
   const isFeed = screenType === "feed"
   const isTimeline = screenType === "timeline"
   const isSubscriptions = screenType === "subscriptions"
+
   return (
     <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
       <NavigationBlurEffectHeader
