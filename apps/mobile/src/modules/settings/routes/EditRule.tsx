@@ -1,5 +1,4 @@
 import type { RouteProp } from "@react-navigation/native"
-import { Fragment } from "react"
 import { Text, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
@@ -120,87 +119,82 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
   return (
     <View>
       <GroupedInsetListSectionHeader label="Conditions" />
+
+      {filter.map((group, groupIndex) => {
+        return (
+          <GroupedInsetListCard key={groupIndex} className="mb-6">
+            {group.map((item, itemIndex) => {
+              const currentField = filterFieldOptions.find((field) => field.value === item.field)
+              const currentOperator = filterOperatorOptions.find(
+                (field) => field.value === item.operator,
+              )
+              const currentValue =
+                currentField?.type === "view"
+                  ? views.find((view) => view.view === Number(item.value))?.name
+                  : item.value
+              return (
+                <SwipeableItem
+                  key={`${groupIndex}-${itemIndex}-${item.field}-${item.operator}-${item.value}`}
+                  swipeRightToCallAction
+                  rightActions={[
+                    {
+                      label: "Delete",
+                      onPress: () => {
+                        actionActions.deleteConditionItem({
+                          ruleIndex: index,
+                          groupIndex,
+                          conditionIndex: itemIndex,
+                        })
+                      },
+                      backgroundColor: "red",
+                    },
+                    {
+                      label: "Edit",
+                      onPress: () => {
+                        navigation.navigate("EditCondition", {
+                          ruleIndex: index,
+                          groupIndex,
+                          conditionIndex: itemIndex,
+                        })
+                      },
+                      backgroundColor: "#0ea5e9",
+                    },
+                  ]}
+                >
+                  <GroupedInsetListActionCell
+                    label={
+                      [currentField?.label, currentOperator?.label, currentValue]
+                        .filter(Boolean)
+                        .join(" ") || "Unknown"
+                    }
+                    onPress={() => {
+                      navigation.navigate("EditCondition", {
+                        ruleIndex: index,
+                        groupIndex,
+                        conditionIndex: itemIndex,
+                      })
+                    }}
+                  />
+                </SwipeableItem>
+              )
+            })}
+            <GroupedPlainButtonCell
+              label="And"
+              onPress={() => {
+                actionActions.addConditionItem({ ruleIndex: index, groupIndex })
+                setTimeout(() => {
+                  navigation.navigate("EditCondition", {
+                    ruleIndex: index,
+                    groupIndex,
+                    conditionIndex: group.length,
+                  })
+                }, 0)
+              }}
+            />
+          </GroupedInsetListCard>
+        )
+      })}
       <GroupedInsetListCard>
-        {filter.map((group, groupIndex) => {
-          return (
-            <Fragment key={groupIndex}>
-              {group.map((item, itemIndex) => {
-                const currentField = filterFieldOptions.find((field) => field.value === item.field)
-                const currentOperator = filterOperatorOptions.find(
-                  (field) => field.value === item.operator,
-                )
-                const currentValue =
-                  currentField?.type === "view"
-                    ? views.find((view) => view.view === Number(item.value))?.name
-                    : item.value
-                return (
-                  <Fragment
-                    key={`${groupIndex}-${itemIndex}-${item.field}-${item.operator}-${item.value}`}
-                  >
-                    <SwipeableItem
-                      swipeRightToCallAction
-                      rightActions={[
-                        {
-                          label: "Delete",
-                          onPress: () => {
-                            actionActions.deleteConditionItem({
-                              ruleIndex: index,
-                              groupIndex,
-                              conditionIndex: itemIndex,
-                            })
-                          },
-                          backgroundColor: "red",
-                        },
-                        {
-                          label: "Edit",
-                          onPress: () => {
-                            navigation.navigate("EditCondition", {
-                              ruleIndex: index,
-                              groupIndex,
-                              conditionIndex: itemIndex,
-                            })
-                          },
-                          backgroundColor: "#0ea5e9",
-                        },
-                      ]}
-                    >
-                      <GroupedInsetListActionCell
-                        label={
-                          [currentField?.label, currentOperator?.label, currentValue]
-                            .filter(Boolean)
-                            .join(" ") || "Unknown"
-                        }
-                        onPress={() => {
-                          navigation.navigate("EditCondition", {
-                            ruleIndex: index,
-                            groupIndex,
-                            conditionIndex: itemIndex,
-                          })
-                        }}
-                      />
-                    </SwipeableItem>
-                    {itemIndex === group.length - 1 && (
-                      <GroupedPlainButtonCell
-                        label="And"
-                        textClassName="text-left"
-                        onPress={() => {
-                          actionActions.addConditionItem({ ruleIndex: index, groupIndex })
-                          setTimeout(() => {
-                            navigation.navigate("EditCondition", {
-                              ruleIndex: index,
-                              groupIndex,
-                              conditionIndex: group.length,
-                            })
-                          }, 0)
-                        }}
-                      />
-                    )}
-                  </Fragment>
-                )
-              })}
-            </Fragment>
-          )
-        })}
         <GroupedPlainButtonCell
           label="Or"
           onPress={() => {

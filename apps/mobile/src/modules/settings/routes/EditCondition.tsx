@@ -1,9 +1,9 @@
 import type { RouteProp } from "@react-navigation/native"
 import { Text, View } from "react-native"
-import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { Select } from "@/src/components/ui/form/Select"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
   GroupedInsetListBaseCell,
@@ -48,84 +48,48 @@ function ConditionForm({ index }: { index: ConditionIndex }) {
       <GroupedInsetListCard>
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
           <Text className="text-label">Field</Text>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Text className="text-label">{currentField?.label || "Select"}</Text>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              {filterFieldOptions.map((field) => (
-                <DropdownMenu.CheckboxItem
-                  value={field.value === item.field}
-                  key={field.value}
-                  onSelect={() => {
-                    actionActions.pathCondition(index, {
-                      field: field.value as any,
-                    })
-                  }}
-                >
-                  <DropdownMenu.ItemTitle>{field.label}</DropdownMenu.ItemTitle>
-                </DropdownMenu.CheckboxItem>
-              ))}
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          <Select
+            options={filterFieldOptions}
+            value={currentField?.value}
+            onValueChange={(value) => {
+              actionActions.pathCondition(index, {
+                field: value as any,
+              })
+            }}
+            wrapperClassName="min-w-48"
+          />
         </GroupedInsetListBaseCell>
 
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
           <Text className="text-label">Operator</Text>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Text className="text-label">{currentOperator?.label || "Select"}</Text>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              {filterOperatorOptions
-                .filter((operator) => operator.types.includes(currentField?.type ?? "text"))
-                .map((operator) => (
-                  <DropdownMenu.CheckboxItem
-                    value={operator.value === item.operator}
-                    key={operator.value}
-                    onSelect={() => {
-                      actionActions.pathCondition(index, {
-                        operator: operator.value as any,
-                      })
-                    }}
-                  >
-                    <DropdownMenu.ItemTitle>{operator.label}</DropdownMenu.ItemTitle>
-                  </DropdownMenu.CheckboxItem>
-                ))}
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          <Select
+            options={filterOperatorOptions.filter((operator) =>
+              operator.types.includes(currentField?.type ?? "text"),
+            )}
+            value={currentOperator?.value}
+            onValueChange={(value) => {
+              actionActions.pathCondition(index, {
+                operator: value as any,
+              })
+            }}
+            wrapperClassName="min-w-44"
+          />
         </GroupedInsetListBaseCell>
 
         <GroupedInsetListBaseCell className="flex flex-row justify-between">
           <Text className="text-label">Value</Text>
           {currentField?.type === "view" ? (
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <View className="flex-row items-center gap-1">
-                  {currentView?.icon({
-                    height: 17,
-                    width: 17,
-                    color: currentView?.activeColor,
-                  })}
-                  <Text className="text-label">{currentView?.name || "Select"}</Text>
-                </View>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                {views.map((field) => (
-                  <DropdownMenu.CheckboxItem
-                    value={String(field.view) === item.value}
-                    key={String(field.view)}
-                    onSelect={() => {
-                      actionActions.pathCondition(index, {
-                        value: String(field.view),
-                      })
-                    }}
-                  >
-                    <DropdownMenu.ItemTitle>{field.name}</DropdownMenu.ItemTitle>
-                  </DropdownMenu.CheckboxItem>
-                ))}
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
+            <Select
+              options={views.map((field) => ({
+                label: field.name,
+                value: String(field.view),
+              }))}
+              value={currentView?.view ? String(currentView.view) : undefined}
+              onValueChange={(val) => {
+                actionActions.pathCondition(index, { value: val })
+              }}
+              wrapperClassName="min-w-40"
+            />
           ) : (
             <PlainTextField
               className="w-full flex-1 text-right"

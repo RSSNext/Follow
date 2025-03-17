@@ -62,7 +62,7 @@ export function Select<T>({
             ellipsizeMode="middle"
             numberOfLines={1}
           >
-            {valueToLabelMap.get(currentValue)}
+            {valueToLabelMap.get(currentValue) || "Select"}
           </Text>
           <View className="ml-auto shrink-0 pl-1">
             <MingcuteDownLineIcon color={accentColor} height={18} width={18} />
