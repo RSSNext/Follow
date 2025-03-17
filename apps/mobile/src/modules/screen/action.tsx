@@ -1,4 +1,5 @@
 import { cn } from "@follow/utils"
+import * as Haptics from "expo-haptics"
 import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
@@ -84,8 +85,9 @@ export const UnreadOnlyActionButton = ({ variant = "primary" }: HeaderActionButt
       normalIcon={<RoundCuteReIcon height={size} width={size} color={color} />}
       selectedIcon={<RoundCuteFiIcon height={size} width={size} color={color} />}
       onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         setGeneralSetting("unreadOnly", !unreadOnly)
-        toast.info(`Showing ${unreadOnly ? "all" : "unread"} entries`, { position: "bottom" })
+        toast.success(`Showing ${unreadOnly ? "all" : "unread"} entries`, { position: "bottom" })
       }}
       selected={unreadOnly}
       overlay={false}

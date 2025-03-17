@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import * as Haptics from "expo-haptics"
 import { useEffect, useMemo } from "react"
 import { Animated, StyleSheet } from "react-native"
 import PagerView from "react-native-pager-view"
@@ -72,7 +73,12 @@ function ViewPagerList({ viewId }: { viewId: FeedViewType }) {
       overdrag
       onPageScroll={rest.onPageScroll}
       onPageSelected={rest.onPageSelected}
-      onPageScrollStateChanged={rest.onPageScrollStateChanged}
+      onPageScrollStateChanged={(e) => {
+        rest.onPageScrollStateChanged(e)
+        if (e.nativeEvent.pageScrollState === "settling") {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        }
+      }}
       pageMargin={10}
       orientation="horizontal"
     >

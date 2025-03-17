@@ -4,6 +4,7 @@ import type {
   MasonryFlashListRef,
 } from "@shopify/flash-list"
 import { FlashList, MasonryFlashList } from "@shopify/flash-list"
+import * as Haptics from "expo-haptics"
 import type { ElementRef, RefObject } from "react"
 import { forwardRef, useCallback, useContext } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
@@ -62,6 +63,7 @@ export const TimelineSelectorList = forwardRef<
           onRefresh={() => {
             unreadRefetch()
             subscriptionRefetch()
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             onRefresh()
           }}
           refreshing={isRefetching}
