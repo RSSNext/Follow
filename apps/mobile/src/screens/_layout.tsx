@@ -1,6 +1,6 @@
 import "../global.css"
 
-import analytics from "@react-native-firebase/analytics"
+import { getAnalytics } from "@react-native-firebase/analytics"
 import { Stack, usePathname } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { useEffect } from "react"
@@ -21,7 +21,7 @@ export default function RootLayout() {
   useEffect(() => {
     const logScreenView = async () => {
       try {
-        await analytics().logScreenView({
+        await getAnalytics().logScreenView({
           screen_name: pathname,
           screen_class: pathname,
         })
