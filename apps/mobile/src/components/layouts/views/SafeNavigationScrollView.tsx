@@ -1,6 +1,5 @@
 import { useTypeScriptHappyCallback } from "@follow/hooks"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Stack } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
 import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import type {
@@ -21,6 +20,7 @@ import {
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 
 import { AnimatedScrollView } from "../../common/AnimatedComponents"
+import { Portal } from "../../ui/portal"
 import { InternalNavigationHeader } from "../header/NavigationHeader"
 import { getDefaultHeaderHeight } from "../utils"
 import { NavigationContext } from "./NavigationContext"
@@ -117,45 +117,61 @@ export const NavigationBlurEffectHeader = ({
   headerHideableBottom?: () => React.ReactNode
   headerTitleAbsolute?: boolean
 }) => {
-  const navigationContext = useContext(NavigationContext)!
-
   const setHeaderHeight = useContext(SetNavigationHeaderHeightContext)
 
   const hideableBottom = headerHideableBottom?.()
   const { headerLeft, ...rest } = props
 
   return (
-    <Stack.Screen
-      options={{
-        headerTransparent: true,
+    <Portal>
+      <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
+        <InternalNavigationHeader
+          // {...options}
+          // modal={options.presentation === "modal" || options.presentation === "formSheet"}
+          // title={options.title}
+          // headerRight={options.headerRight}
+          // headerLeft={options.headerLeft}
+          hideableBottom={hideableBottom}
+          hideableBottomHeight={headerHideableBottomHeight}
+          headerTitleAbsolute={headerTitleAbsolute}
 
-        headerShown: true,
-        headerLeft,
-
-        header: useTypeScriptHappyCallback(
-          ({ options }) => (
-            <NavigationContext.Provider value={navigationContext}>
-              <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
-                <InternalNavigationHeader
-                  {...options}
-                  modal={options.presentation === "modal" || options.presentation === "formSheet"}
-                  title={options.title}
-                  headerRight={options.headerRight}
-                  headerLeft={options.headerLeft}
-                  hideableBottom={hideableBottom}
-                  hideableBottomHeight={headerHideableBottomHeight}
-                  headerTitleAbsolute={headerTitleAbsolute}
-                  // @ts-expect-error
-                  headerTitle={options.headerTitle}
-                />
-              </SetNavigationHeaderHeightContext.Provider>
-            </NavigationContext.Provider>
-          ),
-          [hideableBottom, navigationContext],
-        ),
-
-        ...rest,
-      }}
-    />
+          // headerTitle={options.headerTitle}
+        />
+      </SetNavigationHeaderHeightContext.Provider>
+    </Portal>
   )
+  // return (
+  //   <Stack.Screen
+  //     options={{
+  //       headerTransparent: true,
+
+  //       headerShown: true,
+  //       headerLeft,
+
+  //       header: useTypeScriptHappyCallback(
+  //         ({ options }) => (
+  //           <NavigationContext.Provider value={navigationContext}>
+  //             <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
+  //               <InternalNavigationHeader
+  //                 {...options}
+  //                 modal={options.presentation === "modal" || options.presentation === "formSheet"}
+  //                 title={options.title}
+  //                 headerRight={options.headerRight}
+  //                 headerLeft={options.headerLeft}
+  //                 hideableBottom={hideableBottom}
+  //                 hideableBottomHeight={headerHideableBottomHeight}
+  //                 headerTitleAbsolute={headerTitleAbsolute}
+  //                 // @ts-expect-error
+  //                 headerTitle={options.headerTitle}
+  //               />
+  //             </SetNavigationHeaderHeightContext.Provider>
+  //           </NavigationContext.Provider>
+  //         ),
+  //         [hideableBottom, navigationContext],
+  //       ),
+
+  //       ...rest,
+  //     }}
+  //   />
+  // )
 }

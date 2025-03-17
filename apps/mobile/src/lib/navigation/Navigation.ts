@@ -1,5 +1,6 @@
 import { jotaiStore } from "@follow/utils"
 import { EventEmitter } from "expo"
+import { atom } from "jotai"
 import { DeviceEventEmitter } from "react-native"
 
 import type { ChainNavigationContextType, Route } from "./ChainNavigationContext"
@@ -13,18 +14,9 @@ export class Navigation {
 
   private viewIdCounter = 0
 
-  private static shared: Navigation | null = null
-
-  public static setRootShared(navigation: Navigation) {
-    this.shared = navigation
-  }
-
-  public static get rootNavigation() {
-    if (!this.shared) {
-      throw new Error("Navigation not found")
-    }
-    return this.shared
-  }
+  static readonly rootNavigation: Navigation = new Navigation({
+    routesAtom: atom<Route[]>([]),
+  })
 
   private __push(route: Route) {
     const routes = jotaiStore.get(this.ctxValue.routesAtom)
@@ -58,7 +50,7 @@ export class Navigation {
       Component: view,
     })
   }
-  __pop() {
+  private __pop() {
     const routes = jotaiStore.get(this.ctxValue.routesAtom)
     const lastRoute = routes.at(-1)
     if (!lastRoute) {

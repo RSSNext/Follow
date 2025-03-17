@@ -5,6 +5,7 @@ import type { FlatList, ScrollView } from "react-native"
 import { findNodeHandle, Platform } from "react-native"
 
 import { performNativeScrollToTop } from "@/src/lib/native"
+import { useTabScreenIsFocused } from "@/src/lib/navigation/bottom-tab/hooks"
 
 import {
   SetAttachNavigationScrollViewContext,
@@ -55,17 +56,14 @@ export const useNavigationScrollToTop = (
 
 export const useRegisterNavigationScrollView = <T = unknown>(active = true) => {
   const scrollViewRef = useRef<T>(null)
-  const navigation = useNavigation()
+  const tabScreenIsFocused = useTabScreenIsFocused()
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
   useEffect(() => {
     if (!active) return
     if (!setAttachNavigationScrollViewRef) return
+    if (!tabScreenIsFocused) return
 
     setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
-    const unsubscribe = navigation.addListener("focus", () => {
-      setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
-    })
-    return unsubscribe
-  }, [setAttachNavigationScrollViewRef, scrollViewRef, active, navigation])
+  }, [setAttachNavigationScrollViewRef, scrollViewRef, active, tabScreenIsFocused])
   return scrollViewRef
 }

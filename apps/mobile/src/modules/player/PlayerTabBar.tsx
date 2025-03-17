@@ -1,5 +1,4 @@
 import { cn } from "@follow/utils"
-import { router, usePathname } from "expo-router"
 import { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
 import Animated, {
@@ -15,16 +14,15 @@ import { usePrefetchImageColors } from "@/src/store/image/hooks"
 
 import { PlayPauseButton, SeekButton } from "./control"
 
-const allowedRoutes = new Set(["/", "/subscriptions", "/player"])
-
 export function PlayerTabBar({ className }: { className?: string }) {
   const activeTrack = useActiveTrack()
-  const pathname = usePathname()
-  const isVisible = !!activeTrack && allowedRoutes.has(pathname)
+
+  // TODO
+  const isVisible = !!activeTrack
   const isVisibleSV = useSharedValue(isVisible ? 1 : 0)
   useEffect(() => {
     isVisibleSV.value = withTiming(isVisible ? 1 : 0)
-  }, [pathname, isVisible])
+  }, [isVisible, isVisibleSV])
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: isVisibleSV.value,
@@ -42,7 +40,8 @@ export function PlayerTabBar({ className }: { className?: string }) {
     >
       <Pressable
         onPress={() => {
-          router.push("/player")
+          // router.push("/player")
+          // TODO
         }}
       >
         <View className="flex flex-row items-center gap-4 overflow-hidden rounded-2xl p-2">

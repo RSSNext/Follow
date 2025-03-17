@@ -9,5 +9,6 @@ export interface BottomTabContextType {
   loadedableIndexAtom: PrimitiveAtom<Set<number>>
 
   tabScreensAtom: PrimitiveAtom<TabScreenProps[]>
+  tabHeightAtom: PrimitiveAtom<number>
 }
 export const BottomTabContext = createContext<BottomTabContextType>(null!)

@@ -16,7 +16,7 @@ import {
 } from "./contexts/BottomTabBarVisibleContext"
 import { useNavigationScrollToTop } from "./hooks"
 import { Tabbar } from "./Tabbar"
-import { Tabs } from "./TabClient"
+// import { Tabs } from "./TabClient"
 
 type ExtractReactForwardRefExoticComponent<T> =
   T extends React.ForwardRefExoticComponent<infer P> ? P : never
@@ -29,7 +29,7 @@ export const BottomTabs: ForwardRefExoticComponent<
   const [attachNavigationScrollViewRef, setAttachNavigationScrollViewRef] =
     useState<React.RefObject<ScrollView> | null>(null)
 
-  const currentTarget = useRef<string | undefined>(undefined)
+  const currentIndex = useRef<number | undefined>(undefined)
   const scrollToTop = useNavigationScrollToTop(attachNavigationScrollViewRef)
   return (
     <AttachNavigationScrollViewContext.Provider value={attachNavigationScrollViewRef}>
@@ -38,7 +38,7 @@ export const BottomTabs: ForwardRefExoticComponent<
           <SetBottomTabBarVisibleContext.Provider value={setTabBarVisible}>
             <BottomTabBarVisibleContext.Provider value={tabBarVisible}>
               <BottomTabHeightProvider>
-                <Tabs
+                {/* <Tabs
                   {...props}
                   tabBar={TabBar}
                   screenListeners={{
@@ -65,6 +65,18 @@ export const BottomTabs: ForwardRefExoticComponent<
                     },
                   }}
                   ref={ref}
+                /> */}
+                <Tabbar
+                  onPress={(index) => {
+                    opacity.value = 1
+
+                    if (currentIndex.current === index) {
+                      scrollToTop()
+                      return
+                    }
+
+                    currentIndex.current = index
+                  }}
                 />
               </BottomTabHeightProvider>
             </BottomTabBarVisibleContext.Provider>
@@ -74,4 +86,3 @@ export const BottomTabs: ForwardRefExoticComponent<
     </AttachNavigationScrollViewContext.Provider>
   )
 })
-const TabBar = (props: BottomTabBarProps) => <Tabbar {...props} />

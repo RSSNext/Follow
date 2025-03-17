@@ -1,12 +1,11 @@
 import { cn } from "@follow/utils"
-import { HeaderTitle } from "@react-navigation/elements"
-import { router, Stack, useNavigation } from "expo-router"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { createElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import type { LayoutChangeEvent } from "react-native"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import type { AnimatedProps } from "react-native-reanimated"
 import Animated, {
+  useAnimatedReaction,
   useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
@@ -19,17 +18,19 @@ import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils"
 import { useColor } from "react-native-uikit-colors"
 
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
 import { getDefaultHeaderHeight } from "../utils"
-import { NavigationContext } from "../views/NavigationContext"
 import { SetNavigationHeaderHeightContext } from "../views/NavigationHeaderContext"
+import { FakeNativeHeaderTitle } from "./FakeNativeHeaderTitle"
 
 export interface NavigationHeaderRawProps {
   headerLeft?: FC<{
     canGoBack: boolean
   }>
-  headerTitle?: FC<React.ComponentProps<typeof HeaderTitle>> | ReactNode
+  headerTitle?: FC<React.ComponentProps<typeof FakeNativeHeaderTitle>> | ReactNode
   headerTitleAbsolute?: boolean
   headerRight?: FC<{
     canGoBack: boolean
@@ -63,9 +64,10 @@ const useHideableBottom = (
     })
   }, [hideableBottomRef, largeHeaderHeight, originalDefaultHeaderHeight])
 
-  const { scrollY } = useContext(NavigationContext)!
-  useEffect(() => {
-    const id = scrollY.addListener(({ value }) => {
+  const { reAnimatedScrollY } = useContext(ScreenItemContext)!
+  useAnimatedReaction(
+    () => reAnimatedScrollY.value,
+    (value) => {
       if (!enable) {
         return
       }
@@ -80,12 +82,8 @@ const useHideableBottom = (
         largeHeaderHeight.value = withTiming(largeDefaultHeaderHeight)
       }
       lastScrollY.current = value
-    })
-
-    return () => {
-      scrollY.removeListener(id)
-    }
-  }, [enable, largeHeaderHeight, originalDefaultHeaderHeight, scrollY])
+    },
+  )
 
   const layoutHeightOnceRef = useRef(false)
   const onLayout = useCallback(
@@ -145,21 +143,21 @@ export const InternalNavigationHeader = ({
 
   const border = useColor("opaqueSeparator")
   const opacityAnimated = useSharedValue(0)
-  const { scrollY } = useContext(NavigationContext)!
+  const { reAnimatedScrollY } = useContext(ScreenItemContext)!
 
   const setHeaderHeight = useContext(SetNavigationHeaderHeightContext)
 
-  useEffect(() => {
-    const handler = ({ value }: { value: number }) => {
+  useAnimatedReaction(
+    () => reAnimatedScrollY.value,
+    (value) => {
       opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
-    }
-    const id = scrollY.addListener(handler)
+    },
+  )
 
-    handler({ value: (scrollY as any)._value })
-    return () => {
-      scrollY.removeListener(id)
-    }
-  }, [opacityAnimated, scrollY])
+  useEffect(() => {
+    const { value } = reAnimatedScrollY
+    opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
+  }, [opacityAnimated, reAnimatedScrollY])
 
   const blurStyle = useAnimatedStyle(() => ({
     opacity: opacityAnimated.value,
@@ -185,17 +183,9 @@ export const InternalNavigationHeader = ({
     return styles
   })
 
-  const navigation = useNavigation()
-  const canBack = navigation.canGoBack()
-  useEffect(() => {
-    if (title) {
-      navigation.setOptions({ title })
-    }
-  }, [navigation, title])
-
   const HeaderLeft = headerLeft ?? DefaultHeaderBackButton
 
-  const renderTitle = customHeaderTitle ?? HeaderTitle
+  const renderTitle = customHeaderTitle ?? FakeNativeHeaderTitle
   const headerTitle =
     typeof renderTitle !== "function"
       ? renderTitle
@@ -245,7 +235,8 @@ export const InternalNavigationHeader = ({
           className="min-w-6 flex-1 flex-row items-center justify-start"
           pointerEvents={"box-none"}
         >
-          <HeaderLeft canGoBack={canBack} />
+          {/* TODO */}
+          <HeaderLeft canGoBack />
         </View>
         {/* Center */}
 
@@ -264,7 +255,8 @@ export const InternalNavigationHeader = ({
           className="min-w-6 flex-1 flex-row items-center justify-end"
           pointerEvents={"box-none"}
         >
-          <RightButton canGoBack={canBack} />
+          {/* TODO */}
+          <RightButton canGoBack />
         </View>
         <View
           className="absolute inset-0 flex-row items-center justify-center"
@@ -285,9 +277,10 @@ export const InternalNavigationHeader = ({
 
 export const DefaultHeaderBackButton = ({ canGoBack }: { canGoBack: boolean }) => {
   const label = useColor("label")
+  const navigation = useNavigation()
   if (!canGoBack) return null
   return (
-    <UINavigationHeaderActionButton onPress={() => router.back()}>
+    <UINavigationHeaderActionButton onPress={() => navigation.back()}>
       <MingcuteLeftLineIcon height={20} width={20} color={label} />
     </UINavigationHeaderActionButton>
   )
@@ -323,17 +316,5 @@ const Noop = () => null
 export interface NativeNavigationHeaderProps
   extends Pick<NativeStackNavigationOptions, "headerLeft" | "headerRight" | "headerTitle"> {}
 export const NativeNavigationHeader: FC<NativeNavigationHeaderProps> = (props) => {
-  const navigation = useNavigation()
-  return (
-    <Stack.Screen
-      options={{
-        headerShown: true,
-
-        headerLeft: () => <DefaultHeaderBackButton canGoBack={navigation.canGoBack()} />,
-        headerTransparent: true,
-        headerBlurEffect: "systemChromeMaterial",
-        ...props,
-      }}
-    />
-  )
+  return null
 }

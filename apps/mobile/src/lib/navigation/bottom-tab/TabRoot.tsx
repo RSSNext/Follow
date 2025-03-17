@@ -28,11 +28,13 @@ export const TabRoot: FC<TabRootProps & PropsWithChildren> = ({
 }) => {
   const [tabIndexAtom] = useState(() => atom(initialTabIndex))
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom)
+
   const ctxValue = useMemo<BottomTabContextType>(
     () => ({
       currentIndexAtom: tabIndexAtom,
       loadedableIndexAtom: atom(new Set<number>()),
       tabScreensAtom: atom<TabScreenProps[]>([]),
+      tabHeightAtom: atom(0),
     }),
     [tabIndexAtom],
   )

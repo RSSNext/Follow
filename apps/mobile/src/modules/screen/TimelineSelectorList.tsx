@@ -14,6 +14,7 @@ import { useColor } from "react-native-uikit-colors"
 
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
@@ -31,15 +32,15 @@ export const TimelineSelectorList = forwardRef<
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
   const headerHeight = useHeaderHeight()
-  const { scrollY } = useContext(NavigationContext)!
+  const { reAnimatedScrollY } = useContext(ScreenItemContext)!
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       props.onScroll?.(e)
 
-      scrollY?.setValue(e.nativeEvent.contentOffset.y)
+      reAnimatedScrollY.value = e.nativeEvent.contentOffset.y
     },
-    [scrollY, props.onScroll],
+    [props, reAnimatedScrollY],
   )
 
   const tabBarHeight = useBottomTabBarHeight()
@@ -93,14 +94,15 @@ export const TimelineSelectorMasonryList = forwardRef<
   const insets = useSafeAreaInsets()
 
   const headerHeight = useHeaderHeight()
-  const scrollY = useContext(NavigationContext)?.scrollY
+
+  const { reAnimatedScrollY } = useContext(ScreenItemContext)!
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       props.onScroll?.(e)
-      scrollY?.setValue(e.nativeEvent.contentOffset.y)
+      reAnimatedScrollY.value = e.nativeEvent.contentOffset.y
     },
-    [scrollY, props.onScroll],
+    [props, reAnimatedScrollY],
   )
 
   const tabBarHeight = useBottomTabBarHeight()

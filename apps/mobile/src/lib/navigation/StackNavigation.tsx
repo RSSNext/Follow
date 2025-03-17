@@ -2,13 +2,17 @@ import { atom, useAtomValue, useSetAtom } from "jotai"
 import type { FC } from "react"
 import { memo, useContext, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import { useSharedValue } from "react-native-reanimated"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import type { ScreenStackHeaderConfigProps, StackPresentationTypes } from "react-native-screens"
 import { ScreenStack, ScreenStackItem } from "react-native-screens"
 
+import { PortalHost } from "@/src/components/ui/portal"
+
 import { useCombinedLifecycleEvents } from "./__internal/hooks"
 import type { Route } from "./ChainNavigationContext"
 import { ChainNavigationContext } from "./ChainNavigationContext"
+import { GroupedNavigationRouteContext } from "./GroupedNavigationRouteContext"
 import { Navigation } from "./Navigation"
 import { NavigationInstanceContext, useNavigation } from "./NavigationInstanceContext"
 import { ScreenItemContext } from "./ScreenItemContext"
@@ -27,16 +31,10 @@ export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigat
     [],
   )
 
-  const navigation = useMemo(() => {
-    const navigation = new Navigation(chainCtxValue)
-    Navigation.setRootShared(navigation)
-    return navigation
-  }, [chainCtxValue])
-
   return (
     <SafeAreaProvider>
       <ChainNavigationContext.Provider value={chainCtxValue}>
-        <NavigationInstanceContext.Provider value={navigation}>
+        <NavigationInstanceContext.Provider value={Navigation.rootNavigation}>
           <ScreenStack style={StyleSheet.absoluteFill}>
             <WrappedScreenItem headerConfig={headerConfig} screenId="root">
               {children}
@@ -81,22 +79,22 @@ const ScreenItemsMapper = () => {
     return groups
   }, [routes])
 
-  // TODO remove this
-  // eslint-disable-next-line no-console
-  console.log(routeGroups)
-
-  return routeGroups.map((group) => {
-    const isPushGroup = group.at(0)?.type === "push"
-    if (!isPushGroup) {
-      return <ModalScreenStackItems key={group.at(0)?.id} routes={group} />
-    }
-    return <MapScreenStackItems key={group.at(0)?.id} routes={group} />
-  })
+  return (
+    <GroupedNavigationRouteContext.Provider value={routeGroups}>
+      {routeGroups.map((group) => {
+        const isPushGroup = group.at(0)?.type === "push"
+        if (!isPushGroup) {
+          return <ModalScreenStackItems key={group.at(0)?.id} routes={group} />
+        }
+        return <MapScreenStackItems key={group.at(0)?.id} routes={group} />
+      })}
+    </GroupedNavigationRouteContext.Provider>
+  )
 }
 
 const MapScreenStackItems: FC<{
   routes: Route[]
-}> = ({ routes }) => {
+}> = memo(({ routes }) => {
   return routes.map((route) => {
     return (
       <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
@@ -104,11 +102,11 @@ const MapScreenStackItems: FC<{
       </WrappedScreenItem>
     )
   })
-}
+})
 
 const ModalScreenStackItems: FC<{
   routes: Route[]
-}> = ({ routes }) => {
+}> = memo(({ routes }) => {
   const rootModalRoute = routes.at(0)
   if (!rootModalRoute) {
     return null
@@ -143,7 +141,7 @@ const ModalScreenStackItems: FC<{
       </WrappedScreenItem>
     )
   })
-}
+})
 
 const WrappedScreenItem: FC<{
   screenId: string
@@ -153,14 +151,16 @@ const WrappedScreenItem: FC<{
   headerConfig?: ScreenStackHeaderConfigProps
 }> = memo(({ screenId, children, stackPresentation, headerConfig }) => {
   const navigation = useNavigation()
+  const reAnimatedScrollY = useSharedValue(0)
   const ctxValue = useMemo(
     () => ({
       screenId,
       isFocusedAtom: atom(false),
       isAppearedAtom: atom(false),
       isDisappearedAtom: atom(false),
+      reAnimatedScrollY,
     }),
-    [screenId],
+    [screenId, reAnimatedScrollY],
   )
   const setIsFocused = useSetAtom(ctxValue.isFocusedAtom)
   const setIsAppeared = useSetAtom(ctxValue.isAppearedAtom)
@@ -201,7 +201,7 @@ const WrappedScreenItem: FC<{
           navigation.__internal_dismiss(screenId)
         }}
       >
-        {children}
+        <PortalHost>{children}</PortalHost>
       </ScreenStackItem>
     </ScreenItemContext.Provider>
   )

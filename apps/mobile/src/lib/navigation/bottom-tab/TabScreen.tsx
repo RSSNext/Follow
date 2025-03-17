@@ -7,15 +7,20 @@ import { StyleSheet } from "react-native"
 
 import { BottomTabContext } from "./BottomTabContext"
 import { TabScreenContext } from "./TabScreenContext"
+import type { TabbarIconProps, TabScreenComponent } from "./types"
 
 const TabScreenNative = requireNativeView<ViewProps>("TabScreen")
 
 export interface TabScreenProps {
   title: string
   tabScreenIndex: number
+  renderIcon?: (props: TabbarIconProps) => React.ReactNode
 }
-export const TabScreen: FC<PropsWithChildren<TabScreenProps>> = ({ children, ...props }) => {
-  const { tabScreenIndex } = props
+export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenIndex">>> = ({
+  children,
+  ...props
+}) => {
+  const { tabScreenIndex } = props as any as TabScreenProps
 
   const {
     loadedableIndexAtom,
@@ -25,14 +30,29 @@ export const TabScreen: FC<PropsWithChildren<TabScreenProps>> = ({ children, ...
 
   const setTabScreens = useSetAtom(tabScreens)
   useEffect(() => {
-    setTabScreens((prev) => [...prev, props])
+    let propsFromChildren: Partial<TabScreenProps> = {}
+    if (children && typeof children === "object") {
+      const childType = (children as any).type as TabScreenComponent
+      if ("tabBarIcon" in childType) {
+        propsFromChildren.renderIcon = childType.tabBarIcon
+      }
+    }
+
+    setTabScreens((prev) => [
+      ...prev,
+      {
+        ...propsFromChildren,
+        ...props,
+        tabScreenIndex,
+      },
+    ])
 
     return () => {
       setTabScreens((prev) =>
         prev.filter((tabScreen) => tabScreen.tabScreenIndex !== tabScreenIndex),
       )
     }
-  }, [setTabScreens, props, tabScreenIndex])
+  }, [setTabScreens, props, tabScreenIndex, children])
 
   const currentSelectedIndex = useAtomValue(currentIndexAtom)
 

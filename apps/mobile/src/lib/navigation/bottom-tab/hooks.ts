@@ -25,3 +25,8 @@ export const useSwitchTab = () => {
     [setCurrentIndex],
   )
 }
+
+export const useBottomTabHeight = () => {
+  const { tabHeightAtom } = useContext(BottomTabContext)
+  return useAtomValue(tabHeightAtom)
+}

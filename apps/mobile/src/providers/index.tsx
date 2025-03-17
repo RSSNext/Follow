@@ -10,6 +10,7 @@ import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { RootSiblingParent } from "react-native-root-siblings"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 import { SheetProvider } from "react-native-sheet-transitions"
 
 import { PortalHost } from "../components/ui/portal"
@@ -26,27 +27,29 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
   const currentThemeColors = getCurrentColors()!
 
   return (
-    <MigrationProvider>
-      <Provider store={jotaiStore}>
-        <KeyboardProvider>
-          <View style={[styles.flex, currentThemeColors]}>
-            <QueryClientProvider client={queryClient}>
-              <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                <GestureHandlerRootView>
-                  <SheetProvider>
-                    <ActionSheetProvider>
-                      <RootSiblingParent>
-                        <PortalHost>{children}</PortalHost>
-                      </RootSiblingParent>
-                    </ActionSheetProvider>
-                  </SheetProvider>
-                </GestureHandlerRootView>
-              </ThemeProvider>
-            </QueryClientProvider>
-          </View>
-        </KeyboardProvider>
-      </Provider>
-    </MigrationProvider>
+    <SafeAreaProvider>
+      <MigrationProvider>
+        <Provider store={jotaiStore}>
+          <KeyboardProvider>
+            <View style={[styles.flex, currentThemeColors]}>
+              <QueryClientProvider client={queryClient}>
+                <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                  <GestureHandlerRootView>
+                    <SheetProvider>
+                      <ActionSheetProvider>
+                        <RootSiblingParent>
+                          <PortalHost>{children}</PortalHost>
+                        </RootSiblingParent>
+                      </ActionSheetProvider>
+                    </SheetProvider>
+                  </GestureHandlerRootView>
+                </ThemeProvider>
+              </QueryClientProvider>
+            </View>
+          </KeyboardProvider>
+        </Provider>
+      </MigrationProvider>
+    </SafeAreaProvider>
   )
 }
 

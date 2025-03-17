@@ -1,5 +1,4 @@
 import * as Linking from "expo-linking"
-import { router } from "expo-router"
 import { useEffect } from "react"
 
 // This needs to stay outside of react to persist between account switches
@@ -21,8 +20,8 @@ export function useIntentHandler() {
         return
       }
 
-      router.push(`/follow?${searchParams.toString()}`)
-    }
+    // TODO
+    // router.push(`/follow?${searchParams.toString()}`)
   })
 }
 
