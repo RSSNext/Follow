@@ -14,6 +14,7 @@ import {
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
 import { Switch } from "@/src/components/ui/switch/Switch"
+import type { SupportedLanguages } from "@/src/lib/language"
 import { LanguageMap } from "@/src/lib/language"
 
 export const GeneralScreen = () => {
@@ -47,7 +48,7 @@ export const GeneralScreen = () => {
               <Select
                 value={actionLanguage}
                 onValueChange={(value) => {
-                  setGeneralSetting("actionLanguage", value)
+                  setGeneralSetting("actionLanguage", value as SupportedLanguages)
                 }}
                 options={Object.values(LanguageMap)}
               />
