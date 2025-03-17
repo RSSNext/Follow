@@ -29,8 +29,7 @@ jobs:
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          run_install: true
+
       - name: 🏗 Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,6 +41,9 @@ jobs:
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: 🔨 Build iOS IPA
         run: |
@@ -68,8 +70,7 @@ jobs:
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          run_install: true
+
       - name: 🏗 Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -81,6 +82,9 @@ jobs:
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: 🔨 Build iOS IPA
         run: |
