@@ -13,12 +13,12 @@ import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
+import { getHorizontalScrolling } from "@/src/modules/screen/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
-import { getHorizontalScrolling } from "../atoms"
 import { EntryItemSkeleton } from "../EntryListContentSocial"
 
 export function EntrySocialItem({ entryId }: { entryId: string }) {
