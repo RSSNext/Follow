@@ -1,6 +1,6 @@
 export interface GeneralSettings {
   language: string
-  actionLanguage: string
+  actionLanguage: "en" | "ja" | "zh-CN" | "zh-TW"
 
   sendAnonymousData: boolean
   unreadOnly: boolean

@@ -1,3 +1,4 @@
+import { getGeneralSettings } from "@/src/atoms/settings/general"
 import type { SummarySchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
 import { summaryService } from "@/src/services/summary"
@@ -103,7 +104,9 @@ class SummarySyncService {
       state.generatingStatus[entryId] = SummaryGeneratingStatus.Pending
     })
 
-    const language = entry.settings?.translation
+    const { actionLanguage } = getGeneralSettings()
+
+    const language = entry.settings?.translation ?? actionLanguage
     // Use Our AI to generate summary
     const summary = await apiClient.ai.summary
       .$get({
