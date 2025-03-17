@@ -21,7 +21,6 @@ import { getFeed } from "@/src/store/feed/getter"
 import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
 export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
-  const scrollY = useAnimatedValue(0)
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type
   const params = useLocalSearchParams()
@@ -30,15 +29,14 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
   const isSubscriptions = screenType === "subscriptions"
 
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
+    <>
       <NavigationBlurEffectHeader
-        headerShown
         title={viewTitle}
         headerLeft={useMemo(
           () =>
             isTimeline || isSubscriptions
               ? () => <HomeLeftAction />
-              : () => <DefaultHeaderBackButton canGoBack={true} />,
+              : () => <DefaultHeaderBackButton canDismiss={false} canGoBack={true} />,
           [isTimeline, isSubscriptions],
         )}
         headerRight={useMemo(() => {
@@ -68,7 +66,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
         headerHideableBottomHeight={TIMELINE_VIEW_SELECTOR_HEIGHT}
       />
       {children}
-    </NavigationContext.Provider>
+    </>
   )
 }
 

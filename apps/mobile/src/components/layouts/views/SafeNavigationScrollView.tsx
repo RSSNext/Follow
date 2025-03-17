@@ -1,15 +1,10 @@
-import { useTypeScriptHappyCallback } from "@follow/hooks"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { useSetAtom, useStore } from "jotai"
 import type { FC, PropsWithChildren } from "react"
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
-import type {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  ScrollViewProps,
-} from "react-native"
-import { Animated as RNAnimated, useAnimatedValue, View } from "react-native"
+import { useContext, useEffect, useRef, useState } from "react"
+import type { ScrollView, ScrollViewProps } from "react-native"
+import { View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
+import { useAnimatedScrollHandler } from "react-native-reanimated"
 import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -18,20 +13,19 @@ import {
   SetAttachNavigationScrollViewContext,
 } from "@/src/components/layouts/tabbar/contexts/AttachNavigationScrollViewContext"
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
+import { TabScreenContext } from "@/src/lib/navigation/bottom-tab/TabScreenContext"
+import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 
-import { AnimatedScrollView } from "../../common/AnimatedComponents"
-import { Portal } from "../../ui/portal"
+import { ReAnimatedScrollView } from "../../common/AnimatedComponents"
 import type { InternalNavigationHeaderProps } from "../header/NavigationHeader"
 import { InternalNavigationHeader } from "../header/NavigationHeader"
 import { getDefaultHeaderHeight } from "../utils"
-import { NavigationContext } from "./NavigationContext"
 import {
   NavigationHeaderHeightContext,
   SetNavigationHeaderHeightContext,
 } from "./NavigationHeaderContext"
 
 type SafeNavigationScrollViewProps = Omit<ScrollViewProps, "onScroll"> & {
-  withHeaderBlur?: boolean
   onScroll?: (e: ReanimatedScrollEvent) => void
 
   // For scroll view content adjustment behavior
@@ -45,7 +39,6 @@ type SafeNavigationScrollViewProps = Omit<ScrollViewProps, "onScroll"> & {
 export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   children,
 
-  withHeaderBlur = true,
   onScroll,
 
   withBottomInset = false,
@@ -57,7 +50,6 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   const insets = useSafeAreaInsets()
   const tabBarHeight = useBottomTabBarHeight()
 
-  const scrollY = useAnimatedValue(0)
   const scrollViewRef = useRef<ScrollView>(null)
 
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
@@ -71,39 +63,39 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   const [headerHeight, setHeaderHeight] = useState(() =>
     getDefaultHeaderHeight(frame, false, insets.top),
   )
+  const screenCtxValue = useContext(ScreenItemContext)
 
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (reanimatedScrollY) {
+        reanimatedScrollY.value = event.contentOffset.y
+      }
+
+      screenCtxValue.reAnimatedScrollY.value = event.contentOffset.y
+    },
+  })
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <NavigationHeaderHeightContext.Provider value={headerHeight}>
-        <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
-          {withHeaderBlur && <NavigationBlurEffectHeader />}
-          <AnimatedScrollView
-            ref={scrollViewRef}
-            onScroll={RNAnimated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-              useNativeDriver: true,
-              listener(event: NativeSyntheticEvent<NativeScrollEvent>) {
-                if (reanimatedScrollY) {
-                  reanimatedScrollY.value = event.nativeEvent.contentOffset.y
-                }
-              },
-            })}
-            automaticallyAdjustContentInsets={false}
-            automaticallyAdjustsScrollIndicatorInsets={false}
-            scrollIndicatorInsets={{
-              top: headerHeight,
-              bottom: tabBarHeight,
-            }}
-            {...props}
-          >
-            <View style={{ height: headerHeight - (withTopInset ? insets.top : 0) }} />
-            <AttachNavigationScrollViewContext.Provider value={scrollViewRef}>
-              <View>{children}</View>
-            </AttachNavigationScrollViewContext.Provider>
-            <View style={{ height: tabBarHeight - (withBottomInset ? insets.bottom : 0) }} />
-          </AnimatedScrollView>
-        </SetNavigationHeaderHeightContext.Provider>
-      </NavigationHeaderHeightContext.Provider>
-    </NavigationContext.Provider>
+    <NavigationHeaderHeightContext.Provider value={headerHeight}>
+      <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
+        <ReAnimatedScrollView
+          ref={scrollViewRef}
+          onScroll={scrollHandler}
+          automaticallyAdjustContentInsets={false}
+          automaticallyAdjustsScrollIndicatorInsets={false}
+          scrollIndicatorInsets={{
+            top: headerHeight,
+            bottom: tabBarHeight,
+          }}
+          {...props}
+        >
+          <View style={{ height: headerHeight - (withTopInset ? insets.top : 0) }} />
+          <AttachNavigationScrollViewContext.Provider value={scrollViewRef}>
+            <View>{children}</View>
+          </AttachNavigationScrollViewContext.Provider>
+          <View style={{ height: tabBarHeight - (withBottomInset ? insets.bottom : 0) }} />
+        </ReAnimatedScrollView>
+      </SetNavigationHeaderHeightContext.Provider>
+    </NavigationHeaderHeightContext.Provider>
   )
 }
 
@@ -121,53 +113,40 @@ export const NavigationBlurEffectHeader = ({
   const setHeaderHeight = useContext(SetNavigationHeaderHeightContext)
 
   const hideableBottom = headerHideableBottom?.()
+  const screenCtxValue = useContext(ScreenItemContext)
+  const tabScreenCtxValue = useContext(TabScreenContext)
 
-  return (
-    <Portal>
-      <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
-        <InternalNavigationHeader
-          title={props.title}
-          headerRight={props.headerRight}
-          headerLeft={props.headerLeft}
-          hideableBottom={hideableBottom}
-          hideableBottomHeight={headerHideableBottomHeight}
-          headerTitleAbsolute={headerTitleAbsolute}
-        />
-      </SetNavigationHeaderHeightContext.Provider>
-    </Portal>
-  )
-  // return (
-  //   <Stack.Screen
-  //     options={{
-  //       headerTransparent: true,
+  const setSlot = useSetAtom(tabScreenCtxValue?.Slot || screenCtxValue.Slot)
+  const store = useStore()
+  useEffect(() => {
+    setSlot({
+      ...store.get(tabScreenCtxValue?.Slot || screenCtxValue.Slot),
+      header: (
+        <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
+          <InternalNavigationHeader
+            title={props.title}
+            headerRight={props.headerRight}
+            headerLeft={props.headerLeft}
+            hideableBottom={hideableBottom}
+            hideableBottomHeight={headerHideableBottomHeight}
+            headerTitleAbsolute={headerTitleAbsolute}
+          />
+        </SetNavigationHeaderHeightContext.Provider>
+      ),
+    })
+  }, [
+    tabScreenCtxValue?.Slot,
+    screenCtxValue.Slot,
+    headerHideableBottomHeight,
+    headerTitleAbsolute,
+    hideableBottom,
+    props.headerLeft,
+    props.headerRight,
+    props.title,
+    setHeaderHeight,
+    setSlot,
+    store,
+  ])
 
-  //       headerShown: true,
-  //       headerLeft,
-
-  //       header: useTypeScriptHappyCallback(
-  //         ({ options }) => (
-  //           <NavigationContext.Provider value={navigationContext}>
-  //             <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
-  //               <InternalNavigationHeader
-  //                 {...options}
-  //                 modal={options.presentation === "modal" || options.presentation === "formSheet"}
-  //                 title={options.title}
-  //                 headerRight={options.headerRight}
-  //                 headerLeft={options.headerLeft}
-  //                 hideableBottom={hideableBottom}
-  //                 hideableBottomHeight={headerHideableBottomHeight}
-  //                 headerTitleAbsolute={headerTitleAbsolute}
-  //                 // @ts-expect-error
-  //                 headerTitle={options.headerTitle}
-  //               />
-  //             </SetNavigationHeaderHeightContext.Provider>
-  //           </NavigationContext.Provider>
-  //         ),
-  //         [hideableBottom, navigationContext],
-  //       ),
-
-  //       ...rest,
-  //     }}
-  //   />
-  // )
+  return null
 }

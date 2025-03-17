@@ -5,6 +5,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@follow/utils"
+import { PortalProvider } from "@gorhom/portal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router, useLocalSearchParams, useNavigation } from "expo-router"
 import { memo, useEffect, useMemo, useState } from "react"
@@ -113,7 +114,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
   return (
     <FormProvider form={form}>
-      <PortalHost>
+      <PortalProvider>
         <KeyboardAvoidingView className="flex-1" behavior="padding">
           <SafeModalScrollView className="bg-system-grouped-background">
             <ScreenOptions
@@ -203,7 +204,7 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
             )}
           </SafeModalScrollView>
         </KeyboardAvoidingView>
-      </PortalHost>
+      </PortalProvider>
     </FormProvider>
   )
 }

@@ -181,6 +181,8 @@ export const InternalNavigationHeader = ({
   const canBack = useCanBack()
   const canDismiss = useCanDismiss()
 
+  console.log(canBack, canDismiss)
+
   useEffect(() => {
     const { value } = reAnimatedScrollY
     opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
@@ -308,11 +310,7 @@ export const InternalNavigationHeader = ({
   )
 }
 
-export const DefaultHeaderBackButton = ({
-  canGoBack,
-
-  canDismiss,
-}: NavigationHeaderButtonProps) => {
+export const DefaultHeaderBackButton = ({ canGoBack, canDismiss }: NavigationHeaderButtonProps) => {
   const label = useColor("label")
   const navigation = useNavigation()
   if (!canGoBack && !canDismiss) return null

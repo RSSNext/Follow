@@ -13,9 +13,13 @@ export const useCanBack = () => {
   const routeGroup = routeGroups.find((group) => group.some((r) => r.id === screenId))
   if (!routeGroup) return false
 
-  if (routeGroup.length === 1) return false
+  if (routeGroup.length === 0) return false
   // If routeGroup is M, P, P and current route is P, then we can back
-  return routeGroup.findIndex((r) => r.id === screenId) > 0
+
+  const firstIsModal = routeGroup.at(0)?.type !== "push"
+  const onlyOne = routeGroup.length === 1
+  if (firstIsModal && onlyOne) return false
+  return true
 }
 
 /**

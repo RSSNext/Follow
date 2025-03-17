@@ -1,11 +1,12 @@
 import { requireNativeView } from "expo"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import type { FC, PropsWithChildren } from "react"
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai"
+import type { FC, PropsWithChildren, ReactNode } from "react"
 import { useContext, useEffect, useId, useMemo, useState } from "react"
 import type { ViewProps } from "react-native"
-import { StyleSheet } from "react-native"
+import { StyleSheet, View } from "react-native"
 
 import { BottomTabContext } from "./BottomTabContext"
+import type { TabScreenContextType } from "./TabScreenContext"
 import { TabScreenContext } from "./TabScreenContext"
 import type { TabbarIconProps, TabScreenComponent } from "./types"
 
@@ -73,15 +74,35 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
     }
   }, [setLoadedableIndex, tabScreenIndex, isSelected])
 
-  const ctxValue = useMemo(() => ({ tabScreenIndex }), [tabScreenIndex])
-
+  const ctxValue = useMemo<TabScreenContextType>(
+    () => ({
+      tabScreenIndex,
+      Slot: atom<{
+        header: ReactNode
+      }>({
+        header: null,
+      }),
+    }),
+    [tabScreenIndex],
+  )
   const shouldLoadReact = isSelected || isLoadedBefore
 
   return (
     <TabScreenNative style={StyleSheet.absoluteFill}>
       <TabScreenContext.Provider value={ctxValue}>
-        {shouldLoadReact && children}
+        {shouldLoadReact && (
+          <>
+            <Header />
+            {children}
+          </>
+        )}
       </TabScreenContext.Provider>
     </TabScreenNative>
   )
+}
+
+const Header = () => {
+  const ctxValue = useContext(TabScreenContext)
+  const Slot = useAtomValue(ctxValue.Slot)
+  return <View className="absolute inset-x-0 top-0 z-[99]">{Slot.header}</View>
 }

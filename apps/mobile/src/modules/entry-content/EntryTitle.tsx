@@ -5,6 +5,7 @@ import { Text, useWindowDimensions, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, {
   interpolate,
+  useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -16,6 +17,7 @@ import { NavigationContext } from "@/src/components/layouts/views/NavigationCont
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/EntryContentHeaderRightActions"
 import { useEntry } from "@/src/store/entry/hooks"
@@ -24,8 +26,7 @@ import { useFeed } from "@/src/store/feed/hooks"
 import { EntryReadHistory } from "./EntryReadHistory"
 
 export const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {
-  const { scrollY } = useContext(NavigationContext)!
-
+  const reanimatedScrollY = useContext(ScreenItemContext).reAnimatedScrollY
   const [titleHeight, setTitleHeight] = useState(0)
 
   const opacityAnimatedValue = useSharedValue(0)
@@ -34,28 +35,24 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
 
   const [isHeaderTitleVisible, setIsHeaderTitleVisible] = useState(true)
 
-  useEffect(() => {
-    const id = scrollY.addListener((value) => {
-      if (value.value > titleHeight + headerHeight) {
+  useAnimatedReaction(
+    () => reanimatedScrollY.value,
+    (value) => {
+      if (value > titleHeight + headerHeight) {
         opacityAnimatedValue.value = withTiming(1, { duration: 100 })
         setIsHeaderTitleVisible(true)
       } else {
         opacityAnimatedValue.value = withTiming(0, { duration: 100 })
         setIsHeaderTitleVisible(false)
       }
-    })
-
-    return () => {
-      scrollY.removeListener(id)
-    }
-  }, [scrollY, title, titleHeight, headerHeight, opacityAnimatedValue])
+    },
+  )
 
   const ctxValue = useEntryContentContext()
   const headerBarWidth = useWindowDimensions().width
   return (
     <>
       <NavigationBlurEffectHeader
-        headerShown
         headerTitleAbsolute
         title={title}
         headerLeft={useTypeScriptHappyCallback(
@@ -111,7 +108,7 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
 }
 
 export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
-  const { scrollY } = useContext(NavigationContext)!
+  const reanimatedScrollY = useContext(ScreenItemContext).reAnimatedScrollY
 
   const opacityAnimatedValue = useSharedValue(0)
 
@@ -130,28 +127,24 @@ export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
   const titleHeight = -60
   const [isHeaderTitleVisible, setIsHeaderTitleVisible] = useState(true)
 
-  useEffect(() => {
-    const id = scrollY.addListener((value) => {
-      if (value.value > titleHeight + headerHeight) {
+  useAnimatedReaction(
+    () => reanimatedScrollY.value,
+    (value) => {
+      if (value > titleHeight + headerHeight) {
         opacityAnimatedValue.value = withTiming(1, { duration: 100 })
         setIsHeaderTitleVisible(true)
       } else {
         opacityAnimatedValue.value = withTiming(0, { duration: 100 })
         setIsHeaderTitleVisible(false)
       }
-    })
-
-    return () => {
-      scrollY.removeListener(id)
-    }
-  }, [scrollY, titleHeight, headerHeight, opacityAnimatedValue])
+    },
+  )
 
   const ctxValue = useEntryContentContext()
   return (
     <>
       <NavigationBlurEffectHeader
         title="Post"
-        headerShown
         headerRight={useCallback(
           () => (
             <EntryContentContext.Provider value={ctxValue}>
@@ -203,7 +196,7 @@ const EntryLeftGroup = ({ canGoBack, entryId, titleOpacityShareValue }: EntryLef
   })
   return (
     <View className="flex-row items-center justify-center">
-      <DefaultHeaderBackButton canGoBack={canGoBack} />
+      <DefaultHeaderBackButton canGoBack={canGoBack} canDismiss={false} />
 
       {!hideRecentReader && (
         <Animated.View style={animatedOpacity} className="absolute left-[32px] z-10 flex-row gap-2">

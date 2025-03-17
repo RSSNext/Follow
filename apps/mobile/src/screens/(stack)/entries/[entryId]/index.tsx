@@ -1,4 +1,5 @@
 import { FeedViewType } from "@follow/constants"
+import { PortalProvider } from "@gorhom/portal"
 import { useLocalSearchParams } from "expo-router"
 import { atom, useAtomValue } from "jotai"
 import { useEffect, useMemo } from "react"
@@ -56,7 +57,7 @@ export default function EntryDetailPage() {
 
   return (
     <EntryContentContext.Provider value={ctxValue}>
-      <PortalHost>
+      <PortalProvider>
         <BottomTabBarHeightContext.Provider value={insets.bottom}>
           <SafeNavigationScrollView
             automaticallyAdjustContentInsets={false}
@@ -96,7 +97,7 @@ export default function EntryDetailPage() {
             )}
           </SafeNavigationScrollView>
         </BottomTabBarHeightContext.Provider>
-      </PortalHost>
+      </PortalProvider>
     </EntryContentContext.Provider>
   )
 }

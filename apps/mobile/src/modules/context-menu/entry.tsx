@@ -1,3 +1,4 @@
+import { PortalProvider } from "@gorhom/portal"
 import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
@@ -40,14 +41,14 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
       <ContextMenu.Content>
         <ContextMenu.Preview size="STRETCH" onPress={handlePressPreview}>
           {() => (
-            <PortalHost>
+            <PortalProvider>
               <View className="bg-system-background flex-1">
                 <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
                   {entry.title?.trim()}
                 </Text>
                 <EntryContentWebView entry={entry} />
               </View>
-            </PortalHost>
+            </PortalProvider>
           )}
         </ContextMenu.Preview>
 

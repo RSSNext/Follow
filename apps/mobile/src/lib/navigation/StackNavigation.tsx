@@ -1,13 +1,12 @@
+import { PortalHost, PortalProvider } from "@gorhom/portal"
 import { atom, useAtomValue, useSetAtom } from "jotai"
-import type { FC } from "react"
-import { memo, useContext, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import type { FC, ReactNode } from "react"
+import { memo, useContext, useId, useMemo } from "react"
+import { StyleSheet, View } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import type { ScreenStackHeaderConfigProps, StackPresentationTypes } from "react-native-screens"
 import { ScreenStack, ScreenStackItem } from "react-native-screens"
-
-import { PortalHost } from "@/src/components/ui/portal"
 
 import { useCombinedLifecycleEvents } from "./__internal/hooks"
 import type { Route } from "./ChainNavigationContext"
@@ -16,6 +15,7 @@ import { defaultHeaderConfig } from "./config"
 import { GroupedNavigationRouteContext } from "./GroupedNavigationRouteContext"
 import { Navigation } from "./Navigation"
 import { NavigationInstanceContext, useNavigation } from "./NavigationInstanceContext"
+import type { ScreenItemContextType } from "./ScreenItemContext"
 import { ScreenItemContext } from "./ScreenItemContext"
 import type { NavigationControllerView } from "./types"
 
@@ -150,13 +150,18 @@ const WrappedScreenItem: FC<{
 }> = memo(({ screenId, children, stackPresentation, headerConfig }) => {
   const navigation = useNavigation()
   const reAnimatedScrollY = useSharedValue(0)
-  const ctxValue = useMemo(
+  const ctxValue = useMemo<ScreenItemContextType>(
     () => ({
       screenId,
       isFocusedAtom: atom(false),
       isAppearedAtom: atom(false),
       isDisappearedAtom: atom(false),
       reAnimatedScrollY,
+      Slot: atom<{
+        header: ReactNode
+      }>({
+        header: null,
+      }),
     }),
     [screenId, reAnimatedScrollY],
   )
@@ -186,6 +191,7 @@ const WrappedScreenItem: FC<{
       setIsDisappeared(true)
     },
   })
+
   return (
     <ScreenItemContext.Provider value={ctxValue}>
       <ScreenStackItem
@@ -202,11 +208,22 @@ const WrappedScreenItem: FC<{
           navigation.__internal_dismiss(screenId)
         }}
       >
-        <PortalHost>{children}</PortalHost>
+        <Header />
+        {children}
       </ScreenStackItem>
     </ScreenItemContext.Provider>
   )
 })
+const Header = () => {
+  const ctxValue = useContext(ScreenItemContext)
+
+  const Slot = useAtomValue(ctxValue.Slot)
+
+  if (!Slot.header) {
+    return null
+  }
+  return <View className="absolute inset-x-0 top-0 z-[99]">{Slot.header}</View>
+}
 const ResolveView: FC<{
   comp?: NavigationControllerView<any>
   element?: React.ReactElement

@@ -13,6 +13,7 @@ import {
   useRegisterNavigationScrollView,
 } from "@/src/components/layouts/tabbar/hooks"
 import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
 import type { TabScreenComponent } from "@/src/lib/navigation/bottom-tab/types"
