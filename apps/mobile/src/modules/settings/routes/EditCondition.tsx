@@ -1,8 +1,7 @@
-import type { RouteProp } from "@react-navigation/native"
 import { Text, View } from "react-native"
 
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Select } from "@/src/components/ui/form/Select"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
@@ -11,24 +10,24 @@ import {
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
 import { views } from "@/src/constants/views"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRuleCondition } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 import type { ConditionIndex } from "@/src/store/action/types"
 import { accentColor } from "@/src/theme/colors"
 
 import { filterFieldOptions, filterOperatorOptions } from "../actions/constant"
-import type { SettingsStackParamList } from "../types"
 
-export function EditConditionScreen({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "EditCondition">
-}) {
+export const EditConditionScreen: NavigationControllerView<{
+  ruleIndex: number
+  groupIndex: number
+  conditionIndex: number
+}> = (params) => {
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader headerTitle="Edit Condition" />
+      <NavigationBlurEffectHeader headerTitle="Edit Condition" />
 
-      <ConditionForm index={route.params} />
+      <ConditionForm index={params} />
     </SafeModalScrollView>
   )
 }

@@ -40,3 +40,5 @@ export const useNavigation = () => {
   }
   return navigation
 }
+
+export const useScreenIsInModal = useCanDismiss

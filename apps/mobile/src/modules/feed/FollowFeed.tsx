@@ -11,6 +11,7 @@ import { z } from "zod"
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
 import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
@@ -130,7 +131,7 @@ function FollowImpl(props: { feedId: string }) {
       contentContainerClassName="gap-y-4 mt-2"
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
-      <ModalHeader
+      <NavigationBlurEffectHeader
         headerTitle={`${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`}
         headerRight={
           <ModalHeaderSubmitButton

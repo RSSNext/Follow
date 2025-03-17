@@ -10,17 +10,13 @@ import {
   GroupedInsetListSectionHeader,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 
 import type { SettingsStackParamList } from "../types"
 
-export const EditRewriteRulesScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "EditRewriteRules">
-}) => {
-  const { index } = route.params
+export const EditRewriteRulesScreen: NavigationControllerView<{ index: number }> = ({ index }) => {
   const rule = useActionRule(index)
 
   return (

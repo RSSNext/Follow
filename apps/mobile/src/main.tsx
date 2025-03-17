@@ -15,6 +15,9 @@ import { TabRoot } from "./lib/navigation/bottom-tab/TabRoot"
 import { TabScreen } from "./lib/navigation/bottom-tab/TabScreen"
 import { RootStackNavigation } from "./lib/navigation/StackNavigation"
 import { IndexTabScreen } from "./screens/(stack)/(tabs)"
+import { DiscoverTabScreen } from "./screens/(stack)/(tabs)/discover"
+import { SettingsTabScreen } from "./screens/(stack)/(tabs)/settings"
+import { SubscriptionsTabScreen } from "./screens/(stack)/(tabs)/subscriptions"
 
 enableFreeze(true)
 cssInterop(Image, { className: "style" })
@@ -32,14 +35,19 @@ const App4 = () => {
         }}
       >
         <TabRoot>
-          <TabScreen title="Test">
+          <TabScreen title="Home">
             <IndexTabScreen />
           </TabScreen>
 
-          <TabScreen title="Test2">
-            <View style={{ flex: 1, backgroundColor: "red" }}>
-              <Text>Root View 2</Text>
-            </View>
+          <TabScreen title="Subscriptions">
+            <SubscriptionsTabScreen />
+          </TabScreen>
+
+          <TabScreen title="Discover">
+            <DiscoverTabScreen />
+          </TabScreen>
+          <TabScreen title="Settings">
+            <SettingsTabScreen />
           </TabScreen>
 
           <TabBarPortal>

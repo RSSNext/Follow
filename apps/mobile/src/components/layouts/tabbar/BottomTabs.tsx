@@ -21,9 +21,7 @@ import { Tabbar } from "./Tabbar"
 type ExtractReactForwardRefExoticComponent<T> =
   T extends React.ForwardRefExoticComponent<infer P> ? P : never
 
-export const BottomTabs: ForwardRefExoticComponent<
-  Omit<ExtractReactForwardRefExoticComponent<typeof Tabs>, "tabBar">
-> = forwardRef((props, ref) => {
+export const BottomTabs = () => {
   const opacity = useSharedValue(1)
   const [tabBarVisible, setTabBarVisible] = useState(true)
   const [attachNavigationScrollViewRef, setAttachNavigationScrollViewRef] =
@@ -85,4 +83,4 @@ export const BottomTabs: ForwardRefExoticComponent<
       </SetAttachNavigationScrollViewContext.Provider>
     </AttachNavigationScrollViewContext.Provider>
   )
-})
+}

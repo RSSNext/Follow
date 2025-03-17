@@ -11,7 +11,8 @@ export interface NavigationPushOptions<T> {
   id?: string
 }
 
-export type NavigationControllerView<P> = FC<P> & {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type NavigationControllerView<P = {}> = FC<P> & {
   /**
    * Unique identifier for the view.
    */

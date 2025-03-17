@@ -12,6 +12,10 @@ export class Navigation {
     this.ctxValue = ctxValue
   }
 
+  __internal_getCtxValue() {
+    return this.ctxValue
+  }
+
   private viewIdCounter = 0
 
   static readonly rootNavigation: Navigation = new Navigation({
@@ -29,18 +33,21 @@ export class Navigation {
     }
     jotaiStore.set(this.ctxValue.routesAtom, [...routes, route])
   }
-  pushControllerView<T>(view: NavigationControllerView<T>) {
+
+  pushControllerView<T>(view: NavigationControllerView<T>, props?: T) {
     const viewId = view.id ?? view.name ?? `view-${this.viewIdCounter++}`
 
     this.__push({
       id: viewId,
       type: "push",
       Component: view,
+      props,
     })
   }
 
   presentControllerView<T>(
     view: NavigationControllerView<T>,
+    props?: T,
     type: Exclude<NavigationControllerViewType, "push"> = "modal",
   ) {
     const viewId = view.id ?? view.name ?? `view-${this.viewIdCounter++}`
@@ -48,6 +55,7 @@ export class Navigation {
       id: viewId,
       type,
       Component: view,
+      props,
     })
   }
   private __pop() {

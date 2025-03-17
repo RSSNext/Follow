@@ -10,6 +10,7 @@ import { z } from "zod"
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
 import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
@@ -120,8 +121,8 @@ const Impl = (props: { id: string }) => {
       className="bg-system-grouped-background"
       contentContainerClassName="gap-y-4 mt-2"
     >
-      <ModalHeader
-        headerTitle={`${isSubscribed ? "Edit" : "Follow"} - ${list?.title}`}
+      <NavigationBlurEffectHeader
+        title={`${isSubscribed ? "Edit" : "Follow"} - ${list?.title}`}
         headerRight={
           <ModalHeaderSubmitButton
             isValid={isValid}

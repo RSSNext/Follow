@@ -12,6 +12,7 @@ import { PortalHost } from "@/src/components/ui/portal"
 import { useCombinedLifecycleEvents } from "./__internal/hooks"
 import type { Route } from "./ChainNavigationContext"
 import { ChainNavigationContext } from "./ChainNavigationContext"
+import { defaultHeaderConfig } from "./config"
 import { GroupedNavigationRouteContext } from "./GroupedNavigationRouteContext"
 import { Navigation } from "./Navigation"
 import { NavigationInstanceContext, useNavigation } from "./NavigationInstanceContext"
@@ -24,16 +25,9 @@ interface RootStackNavigationProps {
   headerConfig?: ScreenStackHeaderConfigProps
 }
 export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigationProps) => {
-  const chainCtxValue = useMemo(
-    () => ({
-      routesAtom: atom<Route[]>([]),
-    }),
-    [],
-  )
-
   return (
     <SafeAreaProvider>
-      <ChainNavigationContext.Provider value={chainCtxValue}>
+      <ChainNavigationContext.Provider value={Navigation.rootNavigation.__internal_getCtxValue()}>
         <NavigationInstanceContext.Provider value={Navigation.rootNavigation}>
           <ScreenStack style={StyleSheet.absoluteFill}>
             <WrappedScreenItem headerConfig={headerConfig} screenId="root">
@@ -98,7 +92,7 @@ const MapScreenStackItems: FC<{
   return routes.map((route) => {
     return (
       <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
-        <ResolveView comp={route.Component} element={route.element} />
+        <ResolveView comp={route.Component} element={route.element} props={route.props} />
       </WrappedScreenItem>
     )
   })
@@ -121,12 +115,16 @@ const ModalScreenStackItems: FC<{
       >
         <ScreenStack style={StyleSheet.absoluteFill}>
           <WrappedScreenItem screenId={rootModalRoute.id}>
-            <ResolveView comp={rootModalRoute.Component} element={rootModalRoute.element} />
+            <ResolveView
+              comp={rootModalRoute.Component}
+              element={rootModalRoute.element}
+              props={rootModalRoute.props}
+            />
           </WrappedScreenItem>
           {routes.slice(1).map((route) => {
             return (
               <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
-                <ResolveView comp={route.Component} element={route.element} />
+                <ResolveView comp={route.Component} element={route.element} props={route.props} />
               </WrappedScreenItem>
             )
           })}
@@ -137,7 +135,7 @@ const ModalScreenStackItems: FC<{
   return routes.map((route) => {
     return (
       <WrappedScreenItem key={route.id} screenId={route.id} stackPresentation={"formSheet"}>
-        <ResolveView comp={route.Component} element={route.element} />
+        <ResolveView comp={route.Component} element={route.element} props={route.props} />
       </WrappedScreenItem>
     )
   })
@@ -192,7 +190,10 @@ const WrappedScreenItem: FC<{
     <ScreenItemContext.Provider value={ctxValue}>
       <ScreenStackItem
         {...combinedLifecycleEvents}
-        headerConfig={headerConfig}
+        headerConfig={{
+          ...defaultHeaderConfig,
+          ...headerConfig,
+        }}
         key={screenId}
         screenId={screenId}
         stackPresentation={stackPresentation}
@@ -209,9 +210,10 @@ const WrappedScreenItem: FC<{
 const ResolveView: FC<{
   comp?: NavigationControllerView<any>
   element?: React.ReactElement
-}> = ({ comp: Component, element }) => {
+  props?: unknown
+}> = ({ comp: Component, element, props }) => {
   if (Component && typeof Component === "function") {
-    return <Component />
+    return <Component {...(props as any)} />
   }
   if (element) {
     return element

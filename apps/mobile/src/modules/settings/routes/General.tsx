@@ -15,8 +15,9 @@ import {
 } from "@/src/components/ui/grouped/GroupedList"
 import { Switch } from "@/src/components/ui/switch/Switch"
 import { LanguageMap } from "@/src/lib/language"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 
-export const GeneralScreen = () => {
+export const GeneralScreen: NavigationControllerView = () => {
   const locales = useLocales()
   const translationLanguage = useGeneralSettingKey("translationLanguage")
   const autoGroup = useGeneralSettingKey("autoGroup")

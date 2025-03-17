@@ -21,6 +21,7 @@ import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 
 import { AnimatedScrollView } from "../../common/AnimatedComponents"
 import { Portal } from "../../ui/portal"
+import type { InternalNavigationHeaderProps } from "../header/NavigationHeader"
 import { InternalNavigationHeader } from "../header/NavigationHeader"
 import { getDefaultHeaderHeight } from "../utils"
 import { NavigationContext } from "./NavigationContext"
@@ -111,7 +112,7 @@ export const NavigationBlurEffectHeader = ({
   headerHideableBottomHeight,
   headerTitleAbsolute,
   ...props
-}: NativeStackNavigationOptions & {
+}: InternalNavigationHeaderProps & {
   blurThreshold?: number
   headerHideableBottomHeight?: number
   headerHideableBottom?: () => React.ReactNode
@@ -120,22 +121,17 @@ export const NavigationBlurEffectHeader = ({
   const setHeaderHeight = useContext(SetNavigationHeaderHeightContext)
 
   const hideableBottom = headerHideableBottom?.()
-  const { headerLeft, ...rest } = props
 
   return (
     <Portal>
       <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
         <InternalNavigationHeader
-          // {...options}
-          // modal={options.presentation === "modal" || options.presentation === "formSheet"}
-          // title={options.title}
-          // headerRight={options.headerRight}
-          // headerLeft={options.headerLeft}
+          title={props.title}
+          headerRight={props.headerRight}
+          headerLeft={props.headerLeft}
           hideableBottom={hideableBottom}
           hideableBottomHeight={headerHideableBottomHeight}
           headerTitleAbsolute={headerTitleAbsolute}
-
-          // headerTitle={options.headerTitle}
         />
       </SetNavigationHeaderHeightContext.Provider>
     </Portal>

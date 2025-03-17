@@ -10,6 +10,7 @@ export interface Route {
   element?: React.ReactElement
 
   type: NavigationControllerViewType
+  props?: unknown
 }
 export type ChainNavigationContextType = {
   routesAtom: PrimitiveAtom<Route[]>

@@ -10,17 +10,13 @@ import {
   GroupedInsetListCard,
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 
 import type { SettingsStackParamList } from "../types"
 
-export const EditWebhooksScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "EditWebhooks">
-}) => {
-  const { index } = route.params
+export const EditWebhooksScreen: NavigationControllerView<{ index: number }> = ({ index }) => {
   const rule = useActionRule(index)
 
   return (

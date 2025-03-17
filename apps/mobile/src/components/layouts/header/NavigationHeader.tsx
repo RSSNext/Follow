@@ -17,8 +17,14 @@ import type { NativeStackNavigationOptions } from "react-native-screens/lib/type
 import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils"
 import { useColor } from "react-native-uikit-colors"
 
+import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
-import { useNavigation } from "@/src/lib/navigation/hooks"
+import {
+  useCanBack,
+  useCanDismiss,
+  useNavigation,
+  useScreenIsInModal,
+} from "@/src/lib/navigation/hooks"
 import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 
 import { ThemedBlurView } from "../../common/ThemedBlurView"
@@ -26,15 +32,16 @@ import { getDefaultHeaderHeight } from "../utils"
 import { SetNavigationHeaderHeightContext } from "../views/NavigationHeaderContext"
 import { FakeNativeHeaderTitle } from "./FakeNativeHeaderTitle"
 
+interface NavigationHeaderButtonProps {
+  canGoBack: boolean
+  canDismiss: boolean
+  modal?: boolean
+}
 export interface NavigationHeaderRawProps {
-  headerLeft?: FC<{
-    canGoBack: boolean
-  }>
+  headerLeft?: FC<NavigationHeaderButtonProps>
+  headerRight?: FC<NavigationHeaderButtonProps>
   headerTitle?: FC<React.ComponentProps<typeof FakeNativeHeaderTitle>> | ReactNode
   headerTitleAbsolute?: boolean
-  headerRight?: FC<{
-    canGoBack: boolean
-  }>
 
   title?: string
 
@@ -113,10 +120,26 @@ const useHideableBottom = (
     onLayout,
   }
 }
-interface NavigationHeaderProps
+export interface InternalNavigationHeaderProps
   extends Omit<AnimatedProps<ViewProps>, "children">,
-    NavigationHeaderRawProps,
-    PropsWithChildren {}
+    PropsWithChildren {
+  headerLeft?:
+    | FC<{
+        canGoBack: boolean
+      }>
+    | ReactNode
+  headerRight?:
+    | FC<{
+        canGoBack: boolean
+      }>
+    | ReactNode
+  title?: string
+
+  hideableBottom?: ReactNode
+  hideableBottomHeight?: number
+  headerTitleAbsolute?: boolean
+  headerTitle?: FC<React.ComponentProps<typeof FakeNativeHeaderTitle>> | ReactNode
+}
 
 const blurThreshold = 0
 const titlebarPaddingHorizontal = 8
@@ -128,14 +151,15 @@ export const InternalNavigationHeader = ({
   headerRight,
   title,
   headerTitle: customHeaderTitle,
-  modal = false,
+
   hideableBottom,
   hideableBottomHeight,
   headerTitleAbsolute,
   ...rest
-}: NavigationHeaderProps) => {
+}: InternalNavigationHeaderProps) => {
   const insets = useSafeAreaInsets()
   const frame = useSafeAreaFrame()
+  const modal = useScreenIsInModal()
   const defaultHeight = useMemo(
     () => getDefaultHeaderHeight(frame, modal, modal ? 0 : insets.top),
     [frame, insets.top, modal],
@@ -153,6 +177,9 @@ export const InternalNavigationHeader = ({
       opacityAnimated.value = Math.max(0, Math.min(1, (value + blurThreshold) / 10))
     },
   )
+
+  const canBack = useCanBack()
+  const canDismiss = useCanDismiss()
 
   useEffect(() => {
     const { value } = reAnimatedScrollY
@@ -192,7 +219,7 @@ export const InternalNavigationHeader = ({
       : createElement(renderTitle, {
           children: title,
         })
-  const RightButton = headerRight ?? Noop
+  const RightButton = headerRight ?? (Noop as FC<NavigationHeaderButtonProps>)
 
   const animatedRef = useAnimatedRef<Animated.View>()
   useEffect(() => {
@@ -235,8 +262,11 @@ export const InternalNavigationHeader = ({
           className="min-w-6 flex-1 flex-row items-center justify-start"
           pointerEvents={"box-none"}
         >
-          {/* TODO */}
-          <HeaderLeft canGoBack />
+          {typeof HeaderLeft === "function" ? (
+            <HeaderLeft canGoBack={canBack} canDismiss={canDismiss} modal={modal} />
+          ) : (
+            HeaderLeft
+          )}
         </View>
         {/* Center */}
 
@@ -255,8 +285,11 @@ export const InternalNavigationHeader = ({
           className="min-w-6 flex-1 flex-row items-center justify-end"
           pointerEvents={"box-none"}
         >
-          {/* TODO */}
-          <RightButton canGoBack />
+          {typeof RightButton === "function" ? (
+            <RightButton canGoBack={canBack} canDismiss={canDismiss} modal={modal} />
+          ) : (
+            RightButton
+          )}
         </View>
         <View
           className="absolute inset-0 flex-row items-center justify-center"
@@ -275,13 +308,29 @@ export const InternalNavigationHeader = ({
   )
 }
 
-export const DefaultHeaderBackButton = ({ canGoBack }: { canGoBack: boolean }) => {
+export const DefaultHeaderBackButton = ({
+  canGoBack,
+
+  canDismiss,
+}: NavigationHeaderButtonProps) => {
   const label = useColor("label")
   const navigation = useNavigation()
-  if (!canGoBack) return null
+  if (!canGoBack && !canDismiss) return null
   return (
-    <UINavigationHeaderActionButton onPress={() => navigation.back()}>
-      <MingcuteLeftLineIcon height={20} width={20} color={label} />
+    <UINavigationHeaderActionButton
+      onPress={() => {
+        if (canGoBack) {
+          navigation.back()
+        } else if (canDismiss) {
+          navigation.dismiss()
+        }
+      }}
+    >
+      {canGoBack ? (
+        <MingcuteLeftLineIcon height={20} width={20} color={label} />
+      ) : (
+        <CloseCuteReIcon height={20} width={20} color={label} />
+      )}
     </UINavigationHeaderActionButton>
   )
 }

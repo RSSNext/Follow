@@ -10,6 +10,7 @@ import { z } from "zod"
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
 import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { NumberField, TextField } from "@/src/components/ui/form/TextField"
@@ -209,8 +210,8 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
   }, [isDirty, navigation])
 
   return (
-    <ModalHeader
-      headerTitle={title ? `Edit List - ${title}` : "Create List"}
+    <NavigationBlurEffectHeader
+      title={title ? `Edit List - ${title}` : "Create List"}
       headerRight={
         <FormProvider form={form}>
           <ModalHeaderSubmitButton

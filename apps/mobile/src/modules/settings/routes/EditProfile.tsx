@@ -72,7 +72,7 @@ export const EditProfileModal = () => {
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader headerTitle="111Edit Profile" />
+      <NavigationBlurEffectHeader title="Edit Profile" />
       <AvatarSection whoami={whoami} />
       <ProfileForm layout="modal" whoami={whoami} />
     </SafeModalScrollView>
@@ -137,12 +137,7 @@ const ProfileForm: FC<{
     [dirtyFields, isPending, label, updateProfile],
   )
 
-  const Header =
-    layout === "modal" ? (
-      <ModalHeader headerRight={headerRight()} headerTitle="Edit Profile" />
-    ) : (
-      <NavigationBlurEffectHeader headerRight={headerRight} title="Edit Profile" />
-    )
+  const Header = <NavigationBlurEffectHeader headerRight={headerRight} title="Edit Profile" />
 
   return (
     <View className="mt-4">

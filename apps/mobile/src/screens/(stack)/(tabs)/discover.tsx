@@ -4,6 +4,9 @@ import { useMemo, useState } from "react"
 import { useAnimatedValue } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 
+import { Search3CuteFiIcon } from "@/src/icons/search_3_cute_fi"
+import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
+import type { TabScreenComponent } from "@/src/lib/navigation/bottom-tab/types"
 import { DiscoverContext } from "@/src/modules/discover/DiscoverContext"
 import { Recommendations } from "@/src/modules/discover/Recommendations"
 import { DiscoverHeader } from "@/src/modules/discover/search"
@@ -37,4 +40,10 @@ export default function Discover() {
       <Recommendations />
     </DiscoverContext.Provider>
   )
+}
+
+export const DiscoverTabScreen: TabScreenComponent = Discover
+DiscoverTabScreen.tabBarIcon = ({ focused, color }) => {
+  const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
+  return <Icon color={color} width={24} height={24} />
 }

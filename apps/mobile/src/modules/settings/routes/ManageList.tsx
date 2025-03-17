@@ -20,6 +20,7 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { getBizFetchErrorMessage } from "@/src/lib/api-fetch"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useList, usePrefetchOwnedLists } from "@/src/store/list/hooks"
@@ -37,13 +38,7 @@ const ManageListContext = createContext<{
   nextSelectedFeedIdRef: MutableRefObject<Set<string>>
 }>(null!)
 
-export const ManageListScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "ManageList">
-}) => {
-  const { id } = route.params
-
+export const ManageListScreen: NavigationControllerView<{ id: string }> = ({ id }) => {
   usePrefetchOwnedLists()
   const list = useList(id)
 

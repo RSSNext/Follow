@@ -6,6 +6,7 @@ import { View } from "react-native"
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
 import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
   GroupedInsetListCard,
@@ -43,8 +44,8 @@ const EditEmailScreen = () => {
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader
-        headerTitle="Edit Email"
+      <NavigationBlurEffectHeader
+        title="Edit Email"
         headerRight={
           <ModalHeaderSubmitButton
             isLoading={isPending}

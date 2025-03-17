@@ -14,8 +14,8 @@ import { KeyboardAvoidingView, Linking, Text, TouchableOpacity, View } from "rea
 import { z } from "zod"
 
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
@@ -252,9 +252,8 @@ const ScreenOptions = memo(
       })
     }, [form.formState.isDirty, navigation])
     return (
-      <ModalHeader
-        headerSubtitle={`rsshub://${routePrefix}${route}`}
-        headerTitle={`${name} - ${routeName}`}
+      <NavigationBlurEffectHeader
+        title={`${name} - ${routeName}`}
         headerRight={
           <FormProvider form={form}>
             <ModalHeaderSubmitButtonImpl errors={errors} routePrefix={routePrefix} route={route} />
