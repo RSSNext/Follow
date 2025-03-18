@@ -188,7 +188,7 @@ export function ListItem({
         <AudioCover
           entryId={entryId}
           src={entry.entries!.attachments![0]!.url}
-          durationInSeconds={Number.parseInt(String(audioAttachment?.duration_in_seconds ?? 0), 10)}
+          durationInSeconds={audioAttachment?.duration_in_seconds}
           feedIcon={
             <FeedIcon
               fallback={true}
@@ -246,7 +246,7 @@ function AudioCover({
 }: {
   entryId: string
   src: string
-  durationInSeconds: number
+  durationInSeconds?: number
   feedIcon: React.ReactNode
 }) {
   const isMobile = useMobile()
@@ -255,7 +255,7 @@ function AudioCover({
   )
 
   // durationInSeconds's format like 00:00:00 or 4000
-  if (Number.isNaN(+durationInSeconds)) {
+  if (durationInSeconds && Number.isNaN(+durationInSeconds)) {
     // @ts-expect-error durationInSeconds is string
     durationInSeconds = formatTimeToSeconds(durationInSeconds)
   }
