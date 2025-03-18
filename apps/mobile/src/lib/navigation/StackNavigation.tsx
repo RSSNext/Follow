@@ -1,7 +1,7 @@
 import { PortalHost, PortalProvider } from "@gorhom/portal"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import type { FC, ReactNode } from "react"
-import { memo, useContext, useId, useMemo } from "react"
+import { memo, useContext, useId, useMemo, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -17,6 +17,7 @@ import { Navigation } from "./Navigation"
 import { NavigationInstanceContext, useNavigation } from "./NavigationInstanceContext"
 import type { ScreenItemContextType } from "./ScreenItemContext"
 import { ScreenItemContext } from "./ScreenItemContext"
+import { ScreenNameContext } from "./ScreenNameContext"
 import type { NavigationControllerView } from "./types"
 
 interface RootStackNavigationProps {
@@ -27,17 +28,19 @@ interface RootStackNavigationProps {
 export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigationProps) => {
   return (
     <SafeAreaProvider>
-      <ChainNavigationContext.Provider value={Navigation.rootNavigation.__internal_getCtxValue()}>
-        <NavigationInstanceContext.Provider value={Navigation.rootNavigation}>
-          <ScreenStack style={StyleSheet.absoluteFill}>
-            <WrappedScreenItem headerConfig={headerConfig} screenId="root">
-              {children}
-            </WrappedScreenItem>
+      <ScreenNameContext.Provider value={useMemo(() => atom(""), [])}>
+        <ChainNavigationContext.Provider value={Navigation.rootNavigation.__internal_getCtxValue()}>
+          <NavigationInstanceContext.Provider value={Navigation.rootNavigation}>
+            <ScreenStack style={StyleSheet.absoluteFill}>
+              <WrappedScreenItem headerConfig={headerConfig} screenId="root">
+                {children}
+              </WrappedScreenItem>
 
-            <ScreenItemsMapper />
-          </ScreenStack>
-        </NavigationInstanceContext.Provider>
-      </ChainNavigationContext.Provider>
+              <ScreenItemsMapper />
+            </ScreenStack>
+          </NavigationInstanceContext.Provider>
+        </ChainNavigationContext.Provider>
+      </ScreenNameContext.Provider>
     </SafeAreaProvider>
   )
 }

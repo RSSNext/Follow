@@ -9,16 +9,19 @@ import Animated, {
 } from "react-native-reanimated"
 
 import { Image } from "@/src/components/ui/image/Image"
+import { useScreenName } from "@/src/lib/navigation/ScreenNameContext"
 import { useActiveTrack } from "@/src/lib/player"
 import { usePrefetchImageColors } from "@/src/store/image/hooks"
 
 import { PlayPauseButton, SeekButton } from "./control"
 
+const allowedScreenNames = new Set(["Home", "Subscriptions", "Player"])
+
 export function PlayerTabBar({ className }: { className?: string }) {
   const activeTrack = useActiveTrack()
+  const screenName = useScreenName()
 
-  // TODO
-  const isVisible = !!activeTrack
+  const isVisible = !!activeTrack && allowedScreenNames.has(screenName)
   const isVisibleSV = useSharedValue(isVisible ? 1 : 0)
   useEffect(() => {
     isVisibleSV.value = withTiming(isVisible ? 1 : 0)

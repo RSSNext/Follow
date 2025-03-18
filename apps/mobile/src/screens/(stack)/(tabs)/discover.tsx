@@ -47,3 +47,5 @@ DiscoverTabScreen.tabBarIcon = ({ focused, color }) => {
   const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
   return <Icon color={color} width={24} height={24} />
 }
+
+DiscoverTabScreen.title = "Discover"

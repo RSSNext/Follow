@@ -17,6 +17,11 @@ export type NavigationControllerView<P = {}> = FC<P> & {
    * Unique identifier for the view.
    */
   id?: string
+
+  /**
+   * Title for the view.
+   */
+  title?: string
 }
 
 export type NavigationControllerViewType = StackPresentationTypes

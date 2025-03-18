@@ -143,3 +143,5 @@ SettingsTabScreen.tabBarIcon = ({ focused, color }) => {
   const Icon = !focused ? Settings1CuteReIcon : Settings1CuteFiIcon
   return <Icon color={color} width={24} height={24} />
 }
+
+SettingsTabScreen.title = "Settings"

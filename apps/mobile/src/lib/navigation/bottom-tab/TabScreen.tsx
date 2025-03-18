@@ -1,11 +1,13 @@
 import { requireNativeView } from "expo"
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai"
+import { atom, useAtom, useAtomValue, useSetAtom, useStore } from "jotai"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { useContext, useEffect, useId, useMemo, useState } from "react"
 import type { ViewProps } from "react-native"
 import { StyleSheet, View } from "react-native"
 
+import { ScreenNameContext } from "../ScreenNameContext"
 import { BottomTabContext } from "./BottomTabContext"
+import { useTabScreenIsFocused } from "./hooks"
 import type { TabScreenContextType } from "./TabScreenContext"
 import { TabScreenContext } from "./TabScreenContext"
 import type { TabbarIconProps, TabScreenComponent } from "./types"
@@ -36,6 +38,9 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
       const childType = (children as any).type as TabScreenComponent
       if ("tabBarIcon" in childType) {
         propsFromChildren.renderIcon = childType.tabBarIcon
+      }
+      if ("title" in childType) {
+        propsFromChildren.title = childType.title
       }
     }
 
@@ -82,8 +87,9 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
       }>({
         header: null,
       }),
+      titleAtom: atom(props.title),
     }),
-    [tabScreenIndex],
+    [tabScreenIndex, props.title],
   )
   const shouldLoadReact = isSelected || isLoadedBefore
 
@@ -94,6 +100,7 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
           <>
             <Header />
             {children}
+            <ScreenNameRegister />
           </>
         )}
       </TabScreenContext.Provider>
@@ -105,4 +112,18 @@ const Header = () => {
   const ctxValue = useContext(TabScreenContext)
   const Slot = useAtomValue(ctxValue.Slot)
   return <View className="absolute inset-x-0 top-0 z-[99]">{Slot.header}</View>
+}
+
+const ScreenNameRegister = () => {
+  const nameAtom = useContext(ScreenNameContext)
+  const { titleAtom } = useContext(TabScreenContext)
+  const isFocused = useTabScreenIsFocused()
+  const title = useAtomValue(titleAtom)
+  const store = useStore()
+  useEffect(() => {
+    if (isFocused) {
+      store.set(nameAtom, title)
+    }
+  }, [isFocused, title, nameAtom, store])
+  return null
 }

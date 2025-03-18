@@ -31,3 +31,5 @@ SubscriptionsTabScreen.tabBarIcon = ({ focused, color }) => {
   const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
   return <Icon color={color} width={24} height={24} />
 }
+
+SubscriptionsTabScreen.title = "Subscriptions"

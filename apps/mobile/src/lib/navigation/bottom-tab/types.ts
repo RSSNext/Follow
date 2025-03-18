@@ -7,4 +7,5 @@ export type TabbarIconProps = {
 }
 export type TabScreenComponent = FC & {
   tabBarIcon?: (props: TabbarIconProps) => React.ReactNode
+  title?: string
 }

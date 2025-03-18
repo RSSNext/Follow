@@ -7,5 +7,6 @@ export interface TabScreenContextType {
   Slot: PrimitiveAtom<{
     header: ReactNode
   }>
+  titleAtom: PrimitiveAtom<string>
 }
 export const TabScreenContext = createContext<TabScreenContextType>(null!)
