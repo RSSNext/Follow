@@ -1,11 +1,9 @@
 import { env } from "@follow/shared/src/env"
-import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
-import { Share, useAnimatedValue, View } from "react-native"
+import { Share, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
 import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
@@ -20,10 +18,16 @@ import { getFeed } from "@/src/store/feed/getter"
 
 import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
-export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
+export function TimelineSelectorProvider({
+  children,
+  feedId,
+}: {
+  children: React.ReactNode
+  feedId?: string
+}) {
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type
-  const params = useLocalSearchParams()
+
   const isFeed = screenType === "feed"
   const isTimeline = screenType === "timeline"
   const isSubscriptions = screenType === "subscriptions"
@@ -53,7 +57,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
               return () => (
                 <View className="-mr-2 flex-row gap-2">
                   <UnreadOnlyActionButton variant={buttonVariant} />
-                  <FeedShareAction params={params} />
+                  <FeedShareAction feedId={feedId} />
                 </View>
               )
           })()
@@ -61,7 +65,7 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
           if (Component)
             return () => <View className="flex-row items-center justify-end">{Component()}</View>
           return
-        }, [isFeed, isTimeline, isSubscriptions, params])}
+        }, [isFeed, isTimeline, isSubscriptions, feedId])}
         headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}
         headerHideableBottomHeight={TIMELINE_VIEW_SELECTOR_HEIGHT}
       />
@@ -70,9 +74,8 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
   )
 }
 
-function FeedShareAction({ params }: { params: any }) {
+function FeedShareAction({ feedId }: { feedId?: string }) {
   const label = useColor("label")
-  const { feedId } = params
 
   if (!feedId) return null
   return (

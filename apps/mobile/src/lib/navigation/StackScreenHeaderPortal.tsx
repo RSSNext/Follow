@@ -1,5 +1,5 @@
 import { jotaiStore } from "@follow/utils"
-import { useAtomValue, useStore } from "jotai"
+import { useStore } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useContext, useEffect } from "react"
 

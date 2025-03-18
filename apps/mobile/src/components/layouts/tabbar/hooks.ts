@@ -1,4 +1,3 @@
-import { useNavigation } from "expo-router"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
 import type { FlatList, ScrollView } from "react-native"

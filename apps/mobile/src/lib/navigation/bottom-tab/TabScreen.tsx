@@ -1,9 +1,9 @@
 import { requireNativeView } from "expo"
 import { atom, useAtom, useAtomValue, useSetAtom, useStore } from "jotai"
-import type { FC, PropsWithChildren, ReactNode } from "react"
-import { useContext, useEffect, useId, useMemo, useState } from "react"
+import type { FC, PropsWithChildren } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import type { ViewProps } from "react-native"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 
 import { ScreenNameContext } from "../ScreenNameContext"
 import { WrappedScreenItem } from "../WrappedScreenItem"
@@ -34,7 +34,7 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
 
   const setTabScreens = useSetAtom(tabScreens)
   useEffect(() => {
-    let propsFromChildren: Partial<TabScreenProps> = {}
+    const propsFromChildren: Partial<TabScreenProps> = {}
     if (children && typeof children === "object") {
       const childType = (children as any).type as TabScreenComponent
       if ("tabBarIcon" in childType) {

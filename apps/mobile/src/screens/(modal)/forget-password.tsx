@@ -1,20 +1,24 @@
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useState } from "react"
 import { Text, TouchableWithoutFeedback, View } from "react-native"
 import { KeyboardAvoidingView, KeyboardController } from "react-native-keyboard-controller"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { SubmitButton } from "@/src/components/common/SubmitButton"
+import { HeaderCloseButton, HeaderCloseOnly } from "@/src/components/layouts/header/HeaderElements"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { forgetPassword } from "@/src/lib/auth"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { StackScreenHeaderPortal } from "@/src/lib/navigation/StackScreenHeaderPortal"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { getTokenHeaders } from "@/src/lib/token"
 
-export default function ForgetPassword() {
+export const ForgetPasswordScreen: NavigationControllerView = () => {
   const offset = useSafeAreaInsets()
   const [email, setEmail] = useState("")
 
+  const navigation = useNavigation()
   const forgetPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
       const res = await forgetPassword(
@@ -32,7 +36,7 @@ export default function ForgetPassword() {
     },
     onSuccess: () => {
       toast.success("We have sent you an email with instructions to reset your password.")
-      router.back()
+      navigation.back()
     },
   })
 
@@ -43,6 +47,7 @@ export default function ForgetPassword() {
       }}
       accessible={false}
     >
+      <HeaderCloseOnly />
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <View className="p-safe px-safe-offset-4 flex-1 justify-between">
           <View className="items-center">

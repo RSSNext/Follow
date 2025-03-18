@@ -1,4 +1,3 @@
-import type { RouteProp } from "@react-navigation/native"
 import { Text, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
@@ -25,7 +24,6 @@ import type { ActionFilter, ActionRule } from "@/src/store/action/types"
 import { accentColor } from "@/src/theme/colors"
 
 import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions/constant"
-import type { SettingsStackParamList } from "../types"
 import { EditConditionScreen } from "./EditCondition"
 
 export const EditRuleScreen: NavigationControllerView<{ index: number }> = ({ index }) => {

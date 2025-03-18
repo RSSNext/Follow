@@ -1,5 +1,4 @@
 import type { PrimitiveAtom } from "jotai"
-import type { ReactNode } from "react"
 import { createContext } from "react"
 
 export interface TabScreenContextType {

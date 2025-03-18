@@ -6,8 +6,7 @@ import { ActivityIndicator, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { z } from "zod"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -19,10 +18,7 @@ import { TextField } from "@/src/components/ui/form/TextField"
 import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { useCanDismiss, useNavigation } from "@/src/lib/navigation/hooks"
-import {
-  useSetModalScreenOptions,
-  useSetScreenOptions,
-} from "@/src/lib/navigation/ScreenOptionsContext"
+import { useSetModalScreenOptions } from "@/src/lib/navigation/ScreenOptionsContext"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { useFeed, usePrefetchFeed, usePrefetchFeedByUrl } from "@/src/store/feed/hooks"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
@@ -135,7 +131,7 @@ function FollowImpl(props: { feedId: string }) {
       <NavigationBlurEffectHeader
         title={`${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`}
         headerRight={
-          <ModalHeaderSubmitButton
+          <HeaderSubmitButton
             isValid={isValid}
             onPress={form.handleSubmit(submit)}
             isLoading={isLoading}

@@ -1,6 +1,5 @@
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import { useHeaderHeight } from "@react-navigation/elements"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { Text, useWindowDimensions, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, {
@@ -13,7 +12,6 @@ import Animated, {
 
 import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
@@ -23,6 +21,7 @@ import { EntryContentHeaderRightActions } from "@/src/modules/entry-content/Entr
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 
+import { useHeaderHeight } from "../screen/hooks/useHeaderHeight"
 import { EntryReadHistory } from "./EntryReadHistory"
 
 export const EntryTitle = ({ title, entryId }: { title: string; entryId: string }) => {

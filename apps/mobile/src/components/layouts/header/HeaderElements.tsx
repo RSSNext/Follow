@@ -1,38 +1,39 @@
 import { withOpacity } from "@follow/utils"
-import { router } from "expo-router"
 import { useCallback, useMemo } from "react"
-import { TouchableOpacity } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 
-import { useIsRouteOnlyOne } from "@/src/hooks/useIsRouteOnlyOne"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
+import {
+  useCanDismiss,
+  useIsSingleRouteInGroup,
+  useNavigation,
+  useScreenIsInSheetModal,
+} from "@/src/lib/navigation/hooks"
+import { StackScreenHeaderPortal } from "@/src/lib/navigation/StackScreenHeaderPortal"
 import { useColor } from "@/src/theme/colors"
 
-import { RotateableLoading } from "./RotateableLoading"
+import { RotateableLoading } from "../../common/RotateableLoading"
 
-export const ModalHeaderCloseButton = () => {
-  return <ModalHeaderCloseButtonImpl />
-}
-
-const ModalHeaderCloseButtonImpl = () => {
+export const HeaderCloseButton = () => {
   const label = useColor("label")
 
-  const routeOnlyOne = useIsRouteOnlyOne()
-  const memoedRouteOnlyOne = useMemo(() => routeOnlyOne, [])
-
+  const navigation = useNavigation()
+  const canDismiss = useCanDismiss()
+  const isInModal = useScreenIsInSheetModal()
+  const isSingleRouteInGroup = useIsSingleRouteInGroup()
   const handlePress = useCallback(() => {
-    if (router.canDismiss()) {
-      router.dismiss()
+    if (canDismiss) {
+      navigation.dismiss()
     } else {
-      // If we can't dismiss, redirect to the root route
-      router.replace("/")
+      navigation.back()
     }
-  }, [])
+  }, [canDismiss, navigation])
 
   return (
     <TouchableOpacity onPress={handlePress}>
-      {memoedRouteOnlyOne ? (
+      {isInModal && isSingleRouteInGroup ? (
         <CloseCuteReIcon height={20} width={20} color={label} />
       ) : (
         <MingcuteLeftLineIcon height={20} width={20} color={label} />
@@ -46,15 +47,8 @@ export interface ModalHeaderSubmitButtonProps {
   onPress: () => void
   isLoading?: boolean
 }
-export const ModalHeaderSubmitButton = ({
-  isValid,
-  onPress,
-  isLoading,
-}: ModalHeaderSubmitButtonProps) => {
-  return <ModalHeaderShubmitButtonImpl isValid={isValid} onPress={onPress} isLoading={isLoading} />
-}
 
-const ModalHeaderShubmitButtonImpl = ({
+export const HeaderSubmitButton = ({
   isValid,
   onPress,
   isLoading,
@@ -69,5 +63,15 @@ const ModalHeaderShubmitButtonImpl = ({
         <CheckLineIcon height={20} width={20} color={isValid ? label : withOpacity(label, 0.5)} />
       )}
     </TouchableOpacity>
+  )
+}
+
+export const HeaderCloseOnly = () => {
+  return (
+    <StackScreenHeaderPortal>
+      <View className="absolute left-3 top-3">
+        <HeaderCloseButton />
+      </View>
+    </StackScreenHeaderPortal>
   )
 }

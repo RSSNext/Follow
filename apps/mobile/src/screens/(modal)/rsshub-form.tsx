@@ -13,8 +13,7 @@ import { Controller, useForm } from "react-hook-form"
 import { KeyboardAvoidingView, Linking, Text, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -23,11 +22,8 @@ import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvi
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
-import { useNavigation } from "@/src/lib/navigation/NavigationInstanceContext"
-import {
-  useSetModalScreenOptions,
-  useSetScreenOptions,
-} from "@/src/lib/navigation/ScreenOptionsContext"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { useSetModalScreenOptions } from "@/src/lib/navigation/ScreenOptionsContext"
 import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { feedSyncServices } from "@/src/store/feed/store"
@@ -343,5 +339,5 @@ const ModalHeaderSubmitButtonImpl = ({
     }
   })
 
-  return <ModalHeaderSubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
+  return <HeaderSubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
 }

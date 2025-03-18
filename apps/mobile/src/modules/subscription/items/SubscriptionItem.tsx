@@ -1,17 +1,18 @@
 import { cn } from "@follow/utils"
-import { router } from "expo-router"
 import { memo, useContext } from "react"
 import { ActivityIndicator, Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import {
   closeDrawer,
   getHorizontalScrolling,
   selectFeed,
   useSelectedFeed,
 } from "@/src/modules/screen/atoms"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
@@ -59,6 +60,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
   const selectedFeed = useSelectedFeed()
   const view = selectedFeed?.type === "view" ? selectedFeed.viewId : undefined
 
+  const navigation = useNavigation()
   if (isLoading) {
     return (
       <View className="mt-24 flex-1 flex-row items-start justify-center">
@@ -105,7 +107,9 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
               feedId: id,
             })
             closeDrawer()
-            router.push(`/feeds/${id}`)
+            navigation.pushControllerView(FeedScreen, {
+              feedId: id,
+            })
           }}
         >
           <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded border border-transparent dark:bg-[#222]">

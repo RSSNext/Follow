@@ -1,6 +1,5 @@
 import { cn } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
-import { router } from "expo-router"
 import { useEffect, useMemo } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import Reanimated, {
@@ -12,6 +11,7 @@ import Reanimated, {
 import { SheetScreen } from "react-native-sheet-transitions"
 
 import { Image } from "@/src/components/ui/image/Image"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 
 import { gentleSpringPreset } from "../constants/spring"
 import { useActiveTrack, useIsPlaying } from "../lib/player"
@@ -53,12 +53,13 @@ export default function PlaterScreen() {
     [isGradientLight],
   )
 
+  const navigation = useNavigation()
   if (!activeTrack) {
     return null
   }
 
   return (
-    <SheetScreen onClose={() => router.back()}>
+    <SheetScreen onClose={() => navigation.dismiss()}>
       <PlayerScreenContext.Provider value={playerScreenContextValue}>
         <View className="p-safe flex-1 px-[1000]">
           <LinearGradient

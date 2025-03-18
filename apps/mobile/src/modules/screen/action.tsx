@@ -1,6 +1,5 @@
 import { cn } from "@follow/utils"
 import * as Haptics from "expo-haptics"
-import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
 import { TouchableOpacity, View } from "react-native"
@@ -13,7 +12,10 @@ import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { RoundCuteFiIcon } from "@/src/icons/round_cute_fi"
 import { RoundCuteReIcon } from "@/src/icons/round_cute_re"
 import { Dialog } from "@/src/lib/dialog"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
+import { LoginScreen } from "@/src/screens/(modal)/login"
+import { ProfileScreen } from "@/src/screens/(modal)/profile"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
@@ -27,13 +29,14 @@ const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: st
 export function HomeLeftAction() {
   const user = useWhoami()
 
+  const navigation = useNavigation()
   const handlePress = useCallback(() => {
     if (user) {
-      router.push("/profile")
+      navigation.presentControllerView(ProfileScreen, { userId: user.id })
     } else {
-      router.push("/login")
+      navigation.presentControllerView(LoginScreen)
     }
-  }, [user])
+  }, [navigation, user])
 
   return (
     <ActionGroup className="ml-2">

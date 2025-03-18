@@ -1,6 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
 import type { FlashList } from "@shopify/flash-list"
-import { router } from "expo-router"
 import { useMemo, useState } from "react"
 import { Text, View } from "react-native"
 import { useEventCallback } from "usehooks-ts"
@@ -8,8 +7,10 @@ import { useEventCallback } from "usehooks-ts"
 import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { closeDrawer, getHorizontalScrolling, selectFeed } from "@/src/modules/screen/atoms"
 import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import {
   useGroupedSubscription,
@@ -175,6 +176,7 @@ const SectionTitle = ({ title }: { title: string }) => {
 }
 
 const StarItem = () => {
+  const navigation = useNavigation()
   return (
     <ItemPressable
       onPress={() => {
@@ -184,7 +186,9 @@ const StarItem = () => {
         }
         selectFeed({ type: "feed", feedId: FEED_COLLECTION_LIST })
         closeDrawer()
-        router.push(`/feeds/${FEED_COLLECTION_LIST}`)
+        navigation.pushControllerView(FeedScreen, {
+          feedId: FEED_COLLECTION_LIST,
+        })
       }}
       className="mt-4 h-12 w-full flex-row items-center px-3"
     >

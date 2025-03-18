@@ -1,10 +1,12 @@
-import { router } from "expo-router"
 import { Text, TextInput, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
 import { LinkCuteReIcon } from "@/src/icons/link_cute_re"
 import type { DialogComponent } from "@/src/lib/dialog"
 import { Dialog } from "@/src/lib/dialog"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { Navigation } from "@/src/lib/navigation/Navigation"
+import { FollowScreen } from "@/src/screens/(modal)/follow"
 import { accentColor } from "@/src/theme/colors"
 
 export const AddFeedDialog: DialogComponent<{
@@ -12,17 +14,15 @@ export const AddFeedDialog: DialogComponent<{
 }> = ({ ctx }) => {
   const label = useColor("label")
 
+  const navigation = useNavigation()
   const { dismiss } = Dialog.useDialogContext()!
   const handleAdd = () => {
     dismiss()
     const value = ctx.url
     if (!value) return
-    router.push({
-      pathname: "/follow",
-      params: {
-        url: value,
-        type: "url",
-      },
+    navigation.pushControllerView(FollowScreen, {
+      url: value,
+      type: "url",
     })
   }
 
@@ -56,12 +56,9 @@ AddFeedDialog.onConfirm = (ctx) => {
   ctx.dismiss()
 
   setTimeout(() => {
-    router.push({
-      pathname: "/follow",
-      params: {
-        url: value,
-        type: "url",
-      },
+    Navigation.rootNavigation.pushControllerView(FollowScreen, {
+      url: value,
+      type: "url",
     })
   }, 16)
 }

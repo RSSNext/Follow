@@ -61,3 +61,14 @@ export const useScreenIsInSheetModal = () => {
   if (!first) return false
   return sheetTypes.has(first.type)
 }
+
+export const useIsSingleRouteInGroup = () => {
+  const { screenId } = useContext(ScreenItemContext)
+
+  const routeGroups = useContext(GroupedNavigationRouteContext)
+  if (!routeGroups) return false
+
+  const routeGroup = routeGroups.find((group) => group.some((r) => r.id === screenId))
+  if (!routeGroup || routeGroup.length === 0) return false
+  return routeGroup.length === 1
+}

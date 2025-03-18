@@ -1,4 +1,3 @@
-import { Stack } from "expo-router"
 import { useAtomValue } from "jotai"
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"

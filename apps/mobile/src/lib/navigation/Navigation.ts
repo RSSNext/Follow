@@ -1,7 +1,6 @@
 import { jotaiStore } from "@follow/utils"
 import { EventEmitter } from "expo"
 import { atom } from "jotai"
-import { DeviceEventEmitter } from "react-native"
 
 import type { ChainNavigationContextType, Route } from "./ChainNavigationContext"
 import type { NavigationControllerView, NavigationControllerViewType } from "./types"
@@ -120,6 +119,19 @@ export class Navigation {
   canGoBack() {
     const routes = jotaiStore.get(this.ctxValue.routesAtom)
     return routes.length > 0
+  }
+
+  popTo(routeId: string) {
+    const routes = jotaiStore.get(this.ctxValue.routesAtom)
+    const index = routes.findIndex((r) => r.id === routeId)
+    if (index === -1) {
+      return
+    }
+    jotaiStore.set(this.ctxValue.routesAtom, routes.slice(0, index + 1))
+  }
+
+  popToRoot() {
+    jotaiStore.set(this.ctxValue.routesAtom, [])
   }
 }
 

@@ -66,12 +66,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     "expo-localization",
-    [
-      "expo-router",
-      {
-        root: "./src/screens",
-      },
-    ],
+
     [
       "expo-splash-screen",
       {

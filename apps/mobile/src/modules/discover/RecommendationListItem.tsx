@@ -9,7 +9,7 @@ import * as ContextMenu from "zeego/context-menu"
 import { Grid } from "@/src/components/ui/grid"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { openLink } from "@/src/lib/native"
-import { useNavigation } from "@/src/lib/navigation/NavigationInstanceContext"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
 import { RsshubFormScreen } from "@/src/screens/(modal)/rsshub-form"
 

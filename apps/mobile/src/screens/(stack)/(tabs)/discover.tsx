@@ -1,4 +1,3 @@
-import { Stack } from "expo-router"
 import { atom } from "jotai"
 import { useMemo, useState } from "react"
 import { useAnimatedValue } from "react-native"

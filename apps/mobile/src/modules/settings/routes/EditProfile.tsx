@@ -1,6 +1,5 @@
 import { withOpacity } from "@follow/utils/src/color"
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import type { FC } from "react"
 import { useCallback, useState } from "react"
 import {
@@ -13,7 +12,6 @@ import {
 import { KeyboardController } from "react-native-keyboard-controller"
 
 import { RotateableLoading } from "@/src/components/common/RotateableLoading"
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import {
   NavigationBlurEffectHeader,
@@ -31,7 +29,10 @@ import {
 import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
+import { EditEmailScreen } from "@/src/screens/(modal)/edit-email"
 import { useWhoami } from "@/src/store/user/hooks"
 import type { MeModel } from "@/src/store/user/store"
 import { userSyncService } from "@/src/store/user/store"
@@ -53,29 +54,10 @@ export const EditProfileScreen = () => {
 
   return (
     <SafeNavigationScrollView className="bg-system-grouped-background">
+      <NavigationBlurEffectHeader title="Edit Profile" />
       <AvatarSection whoami={whoami} />
       <ProfileForm whoami={whoami} />
     </SafeNavigationScrollView>
-  )
-}
-
-export const EditProfileModal = () => {
-  const whoami = useWhoami()
-
-  if (!whoami) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator />
-      </View>
-    )
-  }
-
-  return (
-    <SafeModalScrollView className="bg-system-grouped-background">
-      <NavigationBlurEffectHeader title="Edit Profile" />
-      <AvatarSection whoami={whoami} />
-      <ProfileForm layout="modal" whoami={whoami} />
-    </SafeModalScrollView>
   )
 }
 
@@ -100,8 +82,7 @@ const AvatarSection: FC<{
 
 const ProfileForm: FC<{
   whoami: MeModel
-  layout?: "modal" | "screen"
-}> = ({ whoami, layout = "screen" }) => {
+}> = ({ whoami }) => {
   const [dirtyFields, setDirtyFields] = useState<Partial<UserProfileEditable>>({})
 
   const { mutateAsync: updateProfile, isPending } = useMutation({
@@ -139,6 +120,7 @@ const ProfileForm: FC<{
 
   const Header = <NavigationBlurEffectHeader headerRight={headerRight} title="Edit Profile" />
 
+  const navigation = useNavigation()
   return (
     <View className="mt-4">
       {Header}
@@ -193,7 +175,7 @@ const ProfileForm: FC<{
             <GroupedInsetListNavigationLink
               label="Email"
               onPress={() => {
-                router.push("/edit-email")
+                navigation.presentControllerView(EditEmailScreen)
               }}
               leftClassName="flex-none"
               rightClassName="flex-1"

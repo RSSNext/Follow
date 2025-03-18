@@ -1,5 +1,4 @@
 import { PortalProvider } from "@gorhom/portal"
-import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
 import { Share, Text, View } from "react-native"
@@ -9,10 +8,11 @@ import {
   preloadWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
 import { ContextMenu } from "@/src/components/ui/context-menu"
-import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
 import { getHorizontalScrolling, useSelectedView } from "@/src/modules/screen/atoms"
+import { EntryDetailScreen } from "@/src/screens/(stack)/entries/[entryId]"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
@@ -24,13 +24,17 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
   const view = useSelectedView()
   const isEntryStarred = useIsEntryStarred(id)
 
+  const navigation = useNavigation()
   const handlePressPreview = useCallback(() => {
     const isHorizontalScrolling = getHorizontalScrolling()
     if (entry && !isHorizontalScrolling) {
       preloadWebViewEntry(entry)
-      router.push(`/entries/${id}`)
+      navigation.pushControllerView(EntryDetailScreen, {
+        entryId: id,
+        view: view!,
+      })
     }
-  }, [entry, id])
+  }, [entry, id, navigation, view])
 
   if (!entry) return null
 

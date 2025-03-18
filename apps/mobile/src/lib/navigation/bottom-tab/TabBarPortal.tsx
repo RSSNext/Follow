@@ -1,5 +1,5 @@
 import { requireNativeView } from "expo"
-import { useAtomValue, useSetAtom } from "jotai"
+import { useSetAtom } from "jotai"
 import { useContext } from "react"
 import type { ViewProps } from "react-native"
 import { StyleSheet, View } from "react-native"

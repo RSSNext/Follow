@@ -1,4 +1,3 @@
-import { router } from "expo-router"
 import type { PropsWithChildren } from "react"
 import { ActivityIndicator, Pressable, Text, TouchableOpacity, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
@@ -10,15 +9,19 @@ import { FileImportCuteReIcon } from "@/src/icons/file_import_cute_re"
 import { ListCheck2CuteReIcon } from "@/src/icons/list_check_2_cute_re"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { SelectReadingModeScreen } from "@/src/screens/(modal)/onboarding/select-reading-mode"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor } from "@/src/theme/colors"
 
+import { EditProfileScreen } from "../settings/routes/EditProfile"
 import { importOpml, setAvatar } from "../settings/utils"
 import { useReadingBehavior } from "./hooks/use-reading-behavior"
 
 export const StepPreferences = () => {
   const { behavior } = useReadingBehavior()
 
+  const navigation = useNavigation()
   return (
     <View className="mt-[10vh] flex-1 p-4">
       <View className="mb-10 flex items-center gap-4">
@@ -41,7 +44,7 @@ export const StepPreferences = () => {
             </GroupedInsetListNavigationLinkIcon>
           }
           onPress={() => {
-            router.push("/onboarding/edit-profile")
+            navigation.pushControllerView(EditProfileScreen)
           }}
         >
           <Text className="text-secondary-label text-sm">
@@ -58,7 +61,7 @@ export const StepPreferences = () => {
             </GroupedInsetListNavigationLinkIcon>
           }
           onPress={() => {
-            router.push("/onboarding/select-reading-mode")
+            navigation.pushControllerView(SelectReadingModeScreen)
           }}
         >
           {behavior === "radical" && (

@@ -1,7 +1,6 @@
-import { useContext, useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 
-import { useNavigation } from "../NavigationInstanceContext"
-import { ScreenItemContext } from "../ScreenItemContext"
+import { useNavigation } from "../hooks"
 
 export const useCombinedLifecycleEvents = (
   screenId: string,

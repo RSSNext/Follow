@@ -1,6 +1,5 @@
 import { FeedViewType } from "@follow/constants"
 import { useQuery } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useAtomValue } from "jotai"
 import type { FC } from "react"
 import type { ListRenderItem, ListRenderItemInfo } from "react-native"
@@ -12,6 +11,8 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { FollowScreen } from "@/src/screens/(modal)/follow"
 import { useSubscriptionByFeedId } from "@/src/store/subscription/hooks"
 
 import { useSearchPageContext } from "../ctx"
@@ -64,13 +65,17 @@ const renderItem: ListRenderItem<SearchResultItem> = (props) => (
 
 const SearchFeedItem: FC<ListRenderItemInfo<SearchResultItem>> = ({ item }) => {
   const isSubscribed = useSubscriptionByFeedId(item.feed?.id ?? "")
+  const navigation = useNavigation()
   return (
     <Animated.View entering={FadeInUp}>
       <ItemPressable
         className="py-4"
         onPress={() => {
           if (item.feed?.id) {
-            router.push(`/follow?id=${item.feed.id}`)
+            navigation.pushControllerView(FollowScreen, {
+              id: item.feed.id,
+              type: "feed",
+            })
           }
         }}
       >

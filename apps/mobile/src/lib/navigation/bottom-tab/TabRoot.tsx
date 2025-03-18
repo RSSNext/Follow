@@ -2,7 +2,7 @@ import { requireNativeView } from "expo"
 import { atom, useAtom } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import * as React from "react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import type { NativeSyntheticEvent, ViewProps } from "react-native"
 import { StyleSheet } from "react-native"
 

@@ -3,6 +3,8 @@ import {
   SafeNavigationScrollView,
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
+import { NavigationSitemapRegistry } from "@/src/lib/navigation/sitemap/registry"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 
 const txt = `# Terms of Service
 
@@ -91,7 +93,7 @@ export const TermsMarkdown = () => {
   )
 }
 
-export default function Teams() {
+export const TermsScreen: NavigationControllerView = () => {
   return (
     <SafeNavigationScrollView
       className="bg-system-background"
@@ -103,3 +105,5 @@ export default function Teams() {
     </SafeNavigationScrollView>
   )
 }
+
+NavigationSitemapRegistry.registerByComponent(TermsScreen)

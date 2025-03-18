@@ -1,5 +1,5 @@
 import type { PrimitiveAtom } from "jotai"
-import type { FC, ReactNode } from "react"
+import type { ReactNode } from "react"
 import { createContext } from "react"
 import type { SharedValue } from "react-native-reanimated"
 

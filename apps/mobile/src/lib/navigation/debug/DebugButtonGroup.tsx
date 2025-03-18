@@ -9,7 +9,6 @@ import { FullWindowOverlay } from "@/src/components/common/FullWindowOverlay"
 import { Grid } from "@/src/components/ui/grid"
 import { BottomTabContext } from "@/src/lib/navigation/bottom-tab/BottomTabContext"
 import { useTabScreenIsFocused } from "@/src/lib/navigation/bottom-tab/hooks"
-import { TabScreenContext } from "@/src/lib/navigation/bottom-tab/TabScreenContext"
 
 import { Navigation } from "../Navigation"
 

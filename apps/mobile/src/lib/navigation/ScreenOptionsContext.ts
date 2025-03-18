@@ -1,4 +1,3 @@
-import { useCalendars } from "expo-localization"
 import type { PrimitiveAtom } from "jotai"
 import { useStore } from "jotai"
 import { createContext, useCallback, useContext } from "react"

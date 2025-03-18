@@ -3,7 +3,6 @@ import { sleep } from "@follow/utils"
 import { requireNativeModule } from "expo"
 import * as Clipboard from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
-import { Sitemap } from "expo-router/build/views/Sitemap"
 import * as SecureStore from "expo-secure-store"
 import type { FC } from "react"
 import * as React from "react"
@@ -25,6 +24,8 @@ import { Select } from "@/src/components/ui/form/Select"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
+import { NavigationSitemapRegistry } from "@/src/lib/navigation/sitemap/registry"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { setEnvProfile, useEnvProfile } from "@/src/lib/proxy-env"
 import { toast } from "@/src/lib/toast"
 
@@ -38,7 +39,7 @@ interface MenuItem {
   onPress: () => Promise<void> | void
   textClassName?: string
 }
-export default function DebugPanel() {
+export const DebugScreen: NavigationControllerView = () => {
   const insets = useSafeAreaInsets()
   const envProfile = useEnvProfile()
 
@@ -192,7 +193,25 @@ export default function DebugPanel() {
       ))}
 
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
-      <Sitemap />
+      {[...NavigationSitemapRegistry].map(([title, register]) => {
+        return (
+          <View key={title} style={styles.container}>
+            <View style={styles.itemContainer}>
+              <TouchableOpacity
+                style={styles.itemPressable}
+                onPress={() => {
+                  // Navigate to the registered component
+                  const { Component, props, stackPresentation } = register
+                  // You might want to implement navigation here
+                  Alert.alert(`Would navigate to: ${title}`, `Presentation: ${stackPresentation}`)
+                }}
+              >
+                <Text style={styles.filename}>{title}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )
+      })}
     </ScrollView>
   )
 }

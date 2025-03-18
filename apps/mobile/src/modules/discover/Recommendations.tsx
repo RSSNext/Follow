@@ -17,7 +17,6 @@ import {
 } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import {

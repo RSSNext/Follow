@@ -1,7 +1,6 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import { jotaiStore } from "@follow/utils"
 import { PortalProvider } from "@gorhom/portal"
-import { ThemeProvider } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 import { Provider } from "jotai"
@@ -15,16 +14,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { SheetProvider } from "react-native-sheet-transitions"
 
 import { BottomTabProvider } from "../components/layouts/tabbar/BottomTabProvider"
-import { PortalHost } from "../components/ui/portal"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
-import { DarkTheme, DefaultTheme } from "../theme/navigation"
 import { getCurrentColors } from "../theme/utils"
 import { MigrationProvider } from "./migration"
 
 export const RootProviders = ({ children }: { children: ReactNode }) => {
   useDrizzleStudio(sqlite)
-  const { colorScheme } = useColorScheme()
 
   const currentThemeColors = getCurrentColors()!
 
@@ -35,19 +31,17 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
           <KeyboardProvider>
             <View style={[styles.flex, currentThemeColors]}>
               <QueryClientProvider client={queryClient}>
-                <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-                  <GestureHandlerRootView>
-                    <SheetProvider>
-                      <ActionSheetProvider>
-                        <RootSiblingParent>
-                          <BottomTabProvider>
-                            <PortalProvider>{children}</PortalProvider>
-                          </BottomTabProvider>
-                        </RootSiblingParent>
-                      </ActionSheetProvider>
-                    </SheetProvider>
-                  </GestureHandlerRootView>
-                </ThemeProvider>
+                <GestureHandlerRootView>
+                  <SheetProvider>
+                    <ActionSheetProvider>
+                      <RootSiblingParent>
+                        <BottomTabProvider>
+                          <PortalProvider>{children}</PortalProvider>
+                        </BottomTabProvider>
+                      </RootSiblingParent>
+                    </ActionSheetProvider>
+                  </SheetProvider>
+                </GestureHandlerRootView>
               </QueryClientProvider>
             </View>
           </KeyboardProvider>

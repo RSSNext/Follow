@@ -1,16 +1,17 @@
-import { router } from "expo-router"
 import { memo, useState } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { RightCuteFiIcon } from "@/src/icons/right_cute_fi"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import {
   closeDrawer,
   getHorizontalScrolling,
   selectFeed,
   useSelectedFeed,
 } from "@/src/modules/screen/atoms"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useUnreadCounts } from "@/src/store/unread/hooks"
 import { useColor } from "@/src/theme/colors"
 
@@ -39,6 +40,7 @@ export const CategoryGrouped = memo(
 
     const secondaryLabelColor = useColor("label")
     const selectedFeed = useSelectedFeed()
+    const navigation = useNavigation()
     if (selectedFeed?.type !== "view") {
       return null
     }
@@ -62,7 +64,9 @@ export const CategoryGrouped = memo(
                 categoryName: category,
               })
               closeDrawer()
-              router.push(`/feeds/${category}`)
+              navigation.pushControllerView(FeedScreen, {
+                feedId: category,
+              })
             }}
             className="h-12 flex-row items-center px-3"
           >

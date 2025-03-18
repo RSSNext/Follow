@@ -1,10 +1,11 @@
-import { router } from "expo-router"
 import { useCallback, useState } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SheetScreen } from "react-native-sheet-transitions"
 
 import { kv } from "../lib/kv"
+import { useNavigation } from "../lib/navigation/hooks"
+import type { NavigationControllerView } from "../lib/navigation/types"
 import { queryClient } from "../lib/query-client"
 import { StepFinished } from "../modules/onboarding/step-finished"
 import { StepInterests } from "../modules/onboarding/step-interests"
@@ -12,11 +13,12 @@ import { StepPreferences } from "../modules/onboarding/step-preferences"
 import { StepWelcome } from "../modules/onboarding/step-welcome"
 import { isNewUserQueryKey, isOnboardingFinishedStorageKey } from "../store/user/constants"
 
-export default function Onboarding() {
+export const OnboardingScreen: NavigationControllerView = () => {
   const insets = useSafeAreaInsets()
   const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 4
 
+  const navigation = useNavigation()
   const handleNext = useCallback(() => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
@@ -24,15 +26,15 @@ export default function Onboarding() {
       // Complete onboarding
       kv.set(isOnboardingFinishedStorageKey, "true")
       queryClient.invalidateQueries({ queryKey: isNewUserQueryKey }).then(() => {
-        router.back()
+        navigation.back()
       })
     }
-  }, [currentStep])
+  }, [currentStep, navigation])
 
   return (
     <SheetScreen
       onClose={() => {
-        router.back()
+        navigation.back()
       }}
     >
       <View
@@ -71,7 +73,7 @@ export default function Onboarding() {
   )
 }
 
-export function ProgressIndicator({
+function ProgressIndicator({
   currentStep,
   totalSteps,
   setCurrentStep,

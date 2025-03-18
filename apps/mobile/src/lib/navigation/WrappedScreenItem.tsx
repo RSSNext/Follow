@@ -15,7 +15,7 @@ import { defaultHeaderConfig } from "./config"
 import type { ScreenItemContextType } from "./ScreenItemContext"
 import { ScreenItemContext } from "./ScreenItemContext"
 import type { ScreenOptionsContextType } from "./ScreenOptionsContext"
-import { ModalScreenItemOptionsContext, ScreenOptionsContext } from "./ScreenOptionsContext"
+import { ScreenOptionsContext } from "./ScreenOptionsContext"
 
 export const WrappedScreenItem: FC<
   {

@@ -1,5 +1,4 @@
 import { FeedViewType } from "@follow/constants"
-import { router } from "expo-router"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback, useMemo } from "react"
 import type { ListRenderItemInfo } from "react-native"
@@ -7,7 +6,9 @@ import { Alert, Clipboard, FlatList, View } from "react-native"
 
 import { ContextMenu } from "@/src/components/ui/context-menu"
 import { views } from "@/src/constants/views"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useEntryIdsByFeedId } from "@/src/store/entry/hooks"
 import { getFeed } from "@/src/store/feed/getter"
 import { getSubscription } from "@/src/store/subscription/getter"
@@ -25,7 +26,7 @@ export const SubscriptionFeedItemContextMenu: FC<
   }
 > = ({ id, children, view }) => {
   const allCategories = useSubscriptionCategory(view)
-
+  const navigation = useNavigation()
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
@@ -35,7 +36,9 @@ export const SubscriptionFeedItemContextMenu: FC<
           <ContextMenu.Preview
             size="STRETCH"
             onPress={() => {
-              router.push(`/feeds/${id}`)
+              navigation.pushControllerView(FeedScreen, {
+                feedId: id,
+              })
             }}
           >
             {() => <PreviewFeeds id={id} view={view!} />}

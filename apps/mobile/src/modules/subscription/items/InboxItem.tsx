@@ -1,4 +1,3 @@
-import { router } from "expo-router"
 import { useColorScheme } from "nativewind"
 import { memo } from "react"
 import { Text, View } from "react-native"
@@ -6,7 +5,9 @@ import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { InboxCuteFiIcon } from "@/src/icons/inbox_cute_fi"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { getHorizontalScrolling, selectFeed } from "@/src/modules/screen/atoms"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount } from "@/src/store/unread/hooks"
@@ -17,6 +18,7 @@ export const InboxItem = memo(({ id }: { id: string }) => {
   const subscription = useSubscription(getInboxStoreId(id))
   const unreadCount = useUnreadCount(id)
   const { colorScheme } = useColorScheme()
+  const navigation = useNavigation()
   if (!subscription) return null
   return (
     <Animated.View exiting={FadeOutUp}>
@@ -28,7 +30,9 @@ export const InboxItem = memo(({ id }: { id: string }) => {
             return
           }
           selectFeed({ type: "inbox", inboxId: id })
-          router.push(`/feeds/${id}`)
+          navigation.pushControllerView(FeedScreen, {
+            feedId: id,
+          })
         }}
       >
         <View className="ml-0.5 overflow-hidden rounded">

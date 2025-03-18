@@ -3,7 +3,6 @@ import "./global.css"
 import { registerRootComponent } from "expo"
 import { Image } from "expo-image"
 import { cssInterop } from "nativewind"
-import { Text, View } from "react-native"
 import { enableFreeze } from "react-native-screens"
 
 import { Analytics } from "./Analytics"
