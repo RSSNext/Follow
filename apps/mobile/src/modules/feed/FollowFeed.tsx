@@ -8,7 +8,10 @@ import { z } from "zod"
 
 import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
-import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { FormSwitch } from "@/src/components/ui/form/Switch"
@@ -124,13 +127,13 @@ function FollowImpl(props: { feedId: string }) {
   }
 
   return (
-    <SafeModalScrollView
+    <SafeNavigationScrollView
       className="bg-system-grouped-background"
-      contentContainerClassName="gap-y-4 mt-2"
+      contentViewClassName="gap-y-4 mt-2"
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
       <NavigationBlurEffectHeader
-        headerTitle={`${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`}
+        title={`${isSubscribed ? "Edit" : "Follow"} - ${feed?.title}`}
         headerRight={
           <ModalHeaderSubmitButton
             isValid={isValid}
@@ -216,6 +219,6 @@ function FollowImpl(props: { feedId: string }) {
           </View>
         </FormProvider>
       </GroupedInsetListCard>
-    </SafeModalScrollView>
+    </SafeNavigationScrollView>
   )
 }

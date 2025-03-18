@@ -25,7 +25,7 @@ export const EditConditionScreen: NavigationControllerView<{
 }> = (params) => {
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <NavigationBlurEffectHeader headerTitle="Edit Condition" />
+      <NavigationBlurEffectHeader title="Edit Condition" />
 
       <ConditionForm index={params} />
     </SafeModalScrollView>

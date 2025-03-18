@@ -1,7 +1,7 @@
 import { useSetAtom, useStore } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useContext, useEffect, useRef, useState } from "react"
-import type { ScrollView, ScrollViewProps } from "react-native"
+import type { ScrollView, ScrollViewProps, StyleProp, ViewStyle } from "react-native"
 import { View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import { useAnimatedScrollHandler } from "react-native-reanimated"
@@ -34,6 +34,9 @@ type SafeNavigationScrollViewProps = Omit<ScrollViewProps, "onScroll"> & {
 
   // to sharedValue
   reanimatedScrollY?: SharedValue<number>
+
+  contentViewStyle?: StyleProp<ViewStyle>
+  contentViewClassName?: string
 } & PropsWithChildren
 
 export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
@@ -44,6 +47,9 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   withBottomInset = false,
   withTopInset = false,
   reanimatedScrollY,
+
+  contentViewClassName,
+  contentViewStyle,
 
   ...props
 }) => {
@@ -91,7 +97,9 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
         >
           <View style={{ height: headerHeight - (withTopInset ? insets.top : 0) }} />
           <AttachNavigationScrollViewContext.Provider value={scrollViewRef}>
-            <View>{children}</View>
+            <View style={contentViewStyle} className={contentViewClassName}>
+              {children}
+            </View>
           </AttachNavigationScrollViewContext.Provider>
           <View style={{ height: tabBarHeight - (withBottomInset ? insets.bottom : 0) }} />
         </ReAnimatedScrollView>

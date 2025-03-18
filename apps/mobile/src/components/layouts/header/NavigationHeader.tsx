@@ -13,7 +13,6 @@ import Animated, {
 } from "react-native-reanimated"
 import type { DefaultStyle } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
-import type { NativeStackNavigationOptions } from "react-native-screens/lib/typescript/native-stack/types"
 import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils"
 import { useColor } from "react-native-uikit-colors"
 
@@ -23,7 +22,6 @@ import {
   useCanBack,
   useCanDismiss,
   useNavigation,
-  useScreenIsInModal,
   useScreenIsInSheetModal,
 } from "@/src/lib/navigation/hooks"
 import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
@@ -356,12 +354,3 @@ export const UINavigationHeaderActionButton = ({
   )
 }
 const Noop = () => null
-
-/**
- * NativeNavigationHeader wrapped react navigation native-stack is universal in modal and stack, but there are significant limitations in UI customization.
- */
-export interface NativeNavigationHeaderProps
-  extends Pick<NativeStackNavigationOptions, "headerLeft" | "headerRight" | "headerTitle"> {}
-export const NativeNavigationHeader: FC<NativeNavigationHeaderProps> = (props) => {
-  return null
-}
