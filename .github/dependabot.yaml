@@ -38,6 +38,9 @@ updates:
       # It's using export map and metro doesn't support it well
       - dependency-name: unist-util-visit-parents
         versions: [">=6.0.0"]
+      # electron 35
+      - dependency-name: electron
+        versions: [">=35.0.0"]
     open-pull-requests-limit: 100
     groups:
       minor:

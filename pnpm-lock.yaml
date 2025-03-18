@@ -350,13 +350,13 @@ importers:
     dependencies:
       '@egoist/tipc':
         specifier: 0.3.2
-        version: 0.3.2(electron@35.0.1)(react@18.3.1)
+        version: 0.3.2(electron@34.2.0)(react@18.3.1)
       '@electron-toolkit/preload':
         specifier: 3.0.1
-        version: 3.0.1(electron@35.0.1)
+        version: 3.0.1(electron@34.2.0)
       '@electron-toolkit/utils':
         specifier: 4.0.0
-        version: 4.0.0(electron@35.0.1)
+        version: 4.0.0(electron@34.2.0)
       '@eneris/push-receiver':
         specifier: 4.3.0
         version: 4.3.0
@@ -446,8 +446,8 @@ importers:
         specifier: 22.13.10
         version: 22.13.10
       electron:
-        specifier: 35.0.1
-        version: 35.0.1
+        specifier: 34.2.0
+        version: 34.2.0
       electron-devtools-installer:
         specifier: 4.0.0
         version: 4.0.0
@@ -8417,6 +8417,11 @@ packages:
   electron-winstaller@5.4.0:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
+
+  electron@34.2.0:
+    resolution: {integrity: sha512-SYwBJNeXBTm1q/ErybQMUBZAYqEreBUqBwTrNkw1rV4YatDZk5Aittpcus3PPeC4UoI/tqmJ946uG8AKHTd6CA==}
+    engines: {node: '>= 12.20.55'}
+    hasBin: true
 
   electron@35.0.1:
     resolution: {integrity: sha512-iQonj6lnPhqfqha2KXx6LzV1dnu6UPTCWK+b7f9Zvg828umGemi22DKbcJ3/q+Opn7iUVTWyqp9z1JQqkIi6OA==}
@@ -17172,6 +17177,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@egoist/tipc@0.3.2(electron@34.2.0)(react@18.3.1)':
+    dependencies:
+      electron: 34.2.0
+    optionalDependencies:
+      '@tanstack/react-query': 5.67.3(react@18.3.1)
+    transitivePeerDependencies:
+      - react
+
   '@egoist/tipc@0.3.2(electron@35.0.1)(react@18.3.1)':
     dependencies:
       electron: 35.0.1
@@ -17407,6 +17420,10 @@ snapshots:
     dependencies:
       chrome-trace-event: 1.0.4
 
+  '@electron-toolkit/preload@3.0.1(electron@34.2.0)':
+    dependencies:
+      electron: 34.2.0
+
   '@electron-toolkit/preload@3.0.1(electron@35.0.1)':
     dependencies:
       electron: 35.0.1
@@ -17415,9 +17432,9 @@ snapshots:
     dependencies:
       '@types/node': 22.13.10
 
-  '@electron-toolkit/utils@4.0.0(electron@35.0.1)':
+  '@electron-toolkit/utils@4.0.0(electron@34.2.0)':
     dependencies:
-      electron: 35.0.1
+      electron: 34.2.0
 
   '@electron/asar@3.3.1':
     dependencies:
@@ -25112,6 +25129,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
     optional: true
+
+  electron@34.2.0:
+    dependencies:
+      '@electron/get': 2.0.3
+      '@types/node': 20.17.24
+      extract-zip: 2.0.1
+    transitivePeerDependencies:
+      - supports-color
 
   electron@35.0.1:
     dependencies:

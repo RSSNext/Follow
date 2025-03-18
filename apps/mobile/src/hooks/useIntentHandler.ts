@@ -20,9 +20,10 @@ export function useIntentHandler() {
         return
       }
 
-    // TODO
-    // router.push(`/follow?${searchParams.toString()}`)
-  })
+      // TODO
+      // router.push(`/follow?${searchParams.toString()}`)
+    }
+  }, [incomingUrl])
 }
 
 // follow://add?id=41147805276726272
