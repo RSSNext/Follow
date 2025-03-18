@@ -27,7 +27,7 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { useGeneralSettingKey, useGeneralSettingSelector } from "~/atoms/settings/general"
+import { useActionLanguage, useGeneralSettingKey } from "~/atoms/settings/general"
 import { MediaContainerWidthProvider } from "~/components/ui/media"
 import { useAuthQuery } from "~/hooks/common/useBizQuery"
 import { Queries } from "~/queries"
@@ -248,7 +248,7 @@ const MasonryRender: React.ComponentType<
 > = ({ data, index }) => {
   const firstScreenReady = useContext(FirstScreenReadyContext)
   const entry = useEntry(data.entryId)
-  const actionLanguage = useGeneralSettingSelector((i) => i.actionLanguage)
+  const actionLanguage = useActionLanguage()
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry: entry!,

@@ -1,4 +1,5 @@
 import { createSettingAtom } from "@follow/atoms/helper/setting.js"
+import type { SupportedLanguages } from "@follow/models"
 import type { GeneralSettings } from "@follow/shared/interface/settings"
 
 import { jotaiStore } from "~/lib/jotai"
@@ -46,6 +47,10 @@ export const {
 
   settingAtom: __generalSettingAtom,
 } = createSettingAtom("general", createDefaultSettings)
+
+export function useActionLanguage() {
+  return useGeneralSettingSelector((s) => s.actionLanguage) as SupportedLanguages
+}
 
 export const subscribeShouldUseIndexedDB = (callback: (value: boolean) => void) =>
   jotaiStore.sub(__generalSettingAtom, () => callback(getGeneralSettings().dataPersist))

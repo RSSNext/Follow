@@ -1,7 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
-import type { SupportedLanguages } from "@follow/models/types"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -257,7 +256,7 @@ const TranslateLanguageSelector = () => {
         defaultValue={actionLanguage}
         value={actionLanguage}
         onValueChange={(value) => {
-          setGeneralSetting("actionLanguage", value as SupportedLanguages)
+          setGeneralSetting("actionLanguage", value)
           setTranslationCache({})
         }}
         items={Object.values(LanguageMap)}

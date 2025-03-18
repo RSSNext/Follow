@@ -111,7 +111,7 @@ class SummarySyncService {
       .$get({
         query: {
           id: entryId,
-          language: actionLanguage,
+          language: actionLanguage as any,
         },
       })
       .then((summary) => {

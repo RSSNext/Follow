@@ -11,7 +11,7 @@ import { useEffect, useMemo, useRef } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useEntryIsInReadability } from "~/atoms/readability"
-import { useGeneralSettingSelector } from "~/atoms/settings/general"
+import { useActionLanguage } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
@@ -117,7 +117,7 @@ export const EntryContent: Component<EntryContentProps> = ({
   )
   const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
-  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
+  const actionLanguage = useActionLanguage()
 
   if (!entry) return null
 

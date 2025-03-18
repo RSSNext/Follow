@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
-import { useGeneralSettingSelector } from "~/atoms/settings/general"
+import { useActionLanguage } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -104,7 +104,7 @@ export const EntryContent: Component<{
 
   const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
-  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
+  const actionLanguage = useActionLanguage()
 
   const contentLineHeight = useUISettingKey("contentLineHeight")
   const contentFontSize = useUISettingKey("contentFontSize")

@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import { useMemo } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
-import { useGeneralSettingSelector } from "~/atoms/settings/general"
+import { useActionLanguage } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useWhoami } from "~/atoms/user"
 import { RelativeTime } from "~/components/ui/datetime"
@@ -48,7 +48,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   }, [entry?.entries.authorUrl, entry?.entries.url, feed?.siteUrl, feed?.type, inbox])
 
   const showAITranslation = useShowAITranslation() || !!entry?.settings?.translation
-  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
+  const actionLanguage = useActionLanguage()
 
   const translation = useAuthQuery(
     Queries.ai.translation({
