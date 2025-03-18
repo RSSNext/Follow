@@ -79,12 +79,16 @@ export function ListItem({
     }
   }, [settingWideMode])
 
+  const audioAttachment = useMemo(() => {
+    return entry?.entries?.attachments?.find((a) => a.mime_type?.startsWith("audio") && a.url)
+  }, [entry?.entries?.attachments])
+
   const estimatedMins = useMemo(() => {
-    if (!entry?.entries?.attachments?.[0]?.duration_in_seconds) {
+    if (!audioAttachment?.duration_in_seconds) {
       return
     }
 
-    let durationInSeconds = entry?.entries?.attachments?.[0]?.duration_in_seconds
+    let durationInSeconds = audioAttachment.duration_in_seconds
 
     if (Number.isNaN(+durationInSeconds)) {
       // @ts-expect-error durationInSeconds is string
@@ -92,7 +96,7 @@ export function ListItem({
     }
 
     return formatEstimatedMins(Math.floor(durationInSeconds / 60))
-  }, [entry])
+  }, [audioAttachment])
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return null
@@ -101,10 +105,7 @@ export function ListItem({
 
   const related = feed || inbox
 
-  const hasAudio = simple
-    ? false
-    : !!entry.entries?.attachments?.[0]?.url &&
-      entry.entries?.attachments?.[0]?.mime_type?.startsWith("audio")
+  const hasAudio = simple ? false : !!audioAttachment
   const hasMedia = simple ? false : !!entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
@@ -159,7 +160,7 @@ export function ListItem({
           {hasAudio && estimatedMins && (
             <>
               <span>·</span>
-              <span>{estimatedMins}</span>
+              <span className="shrink-0">{estimatedMins}</span>
             </>
           )}
 
