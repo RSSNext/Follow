@@ -13,10 +13,11 @@ import { EmailLogin } from "./email"
 import { SocialLogin } from "./social"
 
 export function Login() {
-  const logoSize = useScaleHeight()(80)
-  const gapSize = useScaleHeight()(28)
-  const fontSize = useScaleHeight()(28)
-  const lineHeight = useScaleHeight()(32)
+  const scaledHeight = useScaleHeight()
+  const logoSize = scaledHeight(80)
+  const gapSize = scaledHeight(28)
+  const fontSize = scaledHeight(28)
+  const lineHeight = scaledHeight(32)
 
   return (
     <View className="p-safe pb-safe-or-2 flex-1 justify-between">
