@@ -20,7 +20,7 @@ import { views } from "@/src/constants/views"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionFilter, ActionRule } from "@/src/store/action/types"
-import { accentColor } from "@/src/theme/colors"
+import { accentColor, useColors } from "@/src/theme/colors"
 
 import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions/constant"
 import { useSettingsNavigation } from "../hooks"
@@ -114,6 +114,7 @@ const FilterSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
 
 const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ filter, index }) => {
   const navigation = useSettingsNavigation()
+  const colors = useColors()
 
   if (filter.length === 0) return null
   return (
@@ -146,7 +147,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                           conditionIndex: itemIndex,
                         })
                       },
-                      backgroundColor: "red",
+                      backgroundColor: colors.red,
                     },
                     {
                       label: "Edit",
@@ -157,7 +158,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                           conditionIndex: itemIndex,
                         })
                       },
-                      backgroundColor: "#0ea5e9",
+                      backgroundColor: colors.blue,
                     },
                   ]}
                 >
@@ -214,6 +215,7 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
     (action) => rule.result[action.value] === undefined,
   )
 
+  const colors = useColors()
   const navigation = useSettingsNavigation()
 
   return (
@@ -229,7 +231,7 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
                 onPress: () => {
                   actionActions.deleteRuleAction(rule.index, action.value)
                 },
-                backgroundColor: "red",
+                backgroundColor: colors.red,
               },
             ]}
           >

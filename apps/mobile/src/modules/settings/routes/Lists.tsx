@@ -3,7 +3,7 @@ import { createContext, createElement, useCallback, useContext, useMemo } from "
 import type { ListRenderItem } from "react-native"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
-import { useColor } from "react-native-uikit-colors"
+import { useColor, useColors } from "react-native-uikit-colors"
 
 import { Balance } from "@/src/components/common/Balance"
 import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
@@ -125,6 +125,7 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
   const { title, description } = list
   const listData = useContext(ListContext)[list.id]
   const navigation = useSettingsNavigation()
+  const colors = useColors()
   return (
     <SwipeableItem
       swipeRightToCallAction
@@ -141,7 +142,7 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
           onPress: () => {
             router.push(`/list?id=${list.id}`)
           },
-          backgroundColor: "#0ea5e9",
+          backgroundColor: colors.blue,
         },
       ]}
     >
