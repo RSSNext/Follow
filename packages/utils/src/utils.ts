@@ -1,5 +1,6 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
+import dayjs from "dayjs"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
@@ -253,6 +254,16 @@ export function transformShortcut(shortcut: string, platform: OS = getOS()): str
     return shortcut.replace("Meta", "Ctrl").replace("meta", "ctrl")
   }
   return shortcut
+}
+
+// time like 1:30:00
+export const formatTimeToSeconds = (time: string) => {
+  const date = dayjs(time, "h:mm:ss")
+  if (!date.isValid()) {
+    return 0
+  }
+  const totalSeconds = date.hour() * 3600 + date.minute() * 60 + date.second()
+  return totalSeconds
 }
 
 export const formatEstimatedMins = (estimatedMins: number) => {
