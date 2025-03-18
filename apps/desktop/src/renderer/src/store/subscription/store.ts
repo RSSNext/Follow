@@ -183,7 +183,7 @@ class SubscriptionActions {
     listActions.upsertMany(lists)
     inboxActions.upsertMany(inboxes)
 
-    return res.data
+    return null
   }
 
   upsertMany(subscriptions: SubscriptionFlatModel[]) {
