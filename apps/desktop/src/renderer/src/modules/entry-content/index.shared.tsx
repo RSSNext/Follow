@@ -324,7 +324,7 @@ export function AISummary({ entryId }: { entryId: string }) {
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
-      language: entry?.settings?.translation || actionLanguage,
+      language: actionLanguage,
     }),
     {
       enabled: showAISummary,

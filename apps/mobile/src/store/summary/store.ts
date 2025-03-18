@@ -106,14 +106,12 @@ class SummarySyncService {
 
     const { actionLanguage } = getGeneralSettings()
 
-    const language = entry.settings?.translation ?? actionLanguage
     // Use Our AI to generate summary
     const summary = await apiClient.ai.summary
       .$get({
         query: {
           id: entryId,
-
-          language,
+          language: actionLanguage,
         },
       })
       .then((summary) => {
@@ -124,7 +122,7 @@ class SummarySyncService {
           }
 
           state.data[entryId] = {
-            lang: language,
+            lang: actionLanguage,
             summary: summary.data,
             lastAccessed: Date.now(),
           }
@@ -145,7 +143,7 @@ class SummarySyncService {
         {
           entryId,
           summary,
-          language: language ?? null,
+          language: actionLanguage ?? null,
         },
       ])
     }

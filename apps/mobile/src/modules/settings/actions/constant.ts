@@ -3,7 +3,6 @@ import { actionActions } from "@/src/store/action/store"
 import type { ActionId, ActionRule } from "@/src/store/action/types"
 
 import type { SettingsNavigation } from "../hooks"
-import { ActionFormTranslation } from "./components"
 
 export const filterFieldOptions = [
   {
@@ -102,10 +101,6 @@ export const availableActionList: Array<{
   {
     value: "translation",
     label: "Translate into",
-    onEnable: (index) => {
-      actionActions.patchRule(index, { result: { translation: "zh-CN" } })
-    },
-    component: ActionFormTranslation,
   },
   {
     value: "readability",

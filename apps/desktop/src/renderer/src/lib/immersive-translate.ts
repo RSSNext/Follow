@@ -36,11 +36,9 @@ export function immersiveTranslate({
     return
   }
 
-  const translation = entry.settings?.translation ?? targetLanguage
-
   const immersiveTranslateMark = html.querySelectorAll("[data-immersive-translate-mark=true]")
   if (immersiveTranslateMark.length > 0) {
-    if (translation) {
+    if (targetLanguage) {
       return
     }
 
@@ -49,7 +47,7 @@ export function immersiveTranslate({
     }
   }
 
-  if (!translation) {
+  if (!targetLanguage) {
     return
   }
 
@@ -61,7 +59,7 @@ export function immersiveTranslate({
 
     translate({
       entry,
-      language: translation,
+      language: targetLanguage,
       part: textNode.textContent,
       extraFields: ["content"],
     }).then((transformed) => {
@@ -96,7 +94,7 @@ export function immersiveTranslate({
     if (tag.textContent) {
       const isLanguageMatch = checkLanguage({
         content: tag.textContent,
-        language: translation,
+        language: targetLanguage,
       })
       if (isLanguageMatch) {
         continue
@@ -151,7 +149,7 @@ export function immersiveTranslate({
 
         translate({
           entry,
-          language: translation,
+          language: targetLanguage,
           part: textContent,
           extraFields: ["content"],
         }).then((transformed) => {

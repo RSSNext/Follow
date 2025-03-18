@@ -132,8 +132,7 @@ export const EntryContent: Component<{
     const fullText = html.textContent ?? ""
     if (!fullText) return
 
-    const translation =
-      entry.settings?.translation ?? (showAITranslation ? actionLanguage : undefined)
+    const translation = showAITranslation ? actionLanguage : undefined
 
     if (translation) {
       const isLanguageMatch = checkLanguage({

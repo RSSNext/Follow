@@ -51,17 +51,7 @@ class ActionActionStatic {
     }
 
     const res = await apiClient.actions.$get()
-    const rules = (res.data?.rules?.map((rule) => {
-      const { condition } = rule
-      // fix old data
-      const finalCondition =
-        condition.length === 0 || Array.isArray(condition[0]) ? condition : [condition]
-
-      return {
-        ...rule,
-        condition: finalCondition as any,
-      }
-    }) || []) as ActionModel[]
+    const rules = res.data?.rules ?? []
     this.init(rules)
     return rules
   }

@@ -1,7 +1,6 @@
 import { ActionButton, Button } from "@follow/components/ui/button/index.js"
 import { Divider } from "@follow/components/ui/divider/index.js"
 import { Input } from "@follow/components/ui/input/index.js"
-import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import {
   Table,
   TableBody,
@@ -10,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@follow/components/ui/table/index.jsx"
-import type { ActionModel, SupportedLanguages } from "@follow/models/types"
+import type { ActionModel } from "@follow/models/types"
 import { Fragment, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -30,28 +29,6 @@ type Action = {
   onInit: (data: ActionModel) => void
   onRemove: (data: ActionModel) => void
 }
-
-const TransitionOptions: {
-  label: string
-  value: SupportedLanguages
-}[] = [
-  {
-    label: "English",
-    value: "en",
-  },
-  {
-    label: "日本語",
-    value: "ja",
-  },
-  {
-    label: "简体中文",
-    value: "zh-CN",
-  },
-  {
-    label: "繁體中文",
-    value: "zh-TW",
-  },
-]
 
 const AddTableRow = ({ onClick, disabled }: { onClick?: () => void; disabled?: boolean }) => {
   const { t } = useTranslation("settings")
@@ -108,26 +85,11 @@ export const TargetActionList = ({ index }: { index: number }) => {
         title: t("actions.action_card.translate_into"),
         enabled: !!translation,
         onInit: (data) => {
-          data.result.translation = "zh-CN"
+          data.result.translation = true
         },
         onRemove: (data) => {
           delete data.result.translation
         },
-        config: () => (
-          <ResponsiveSelect
-            disabled={disabled}
-            size="sm"
-            value={translation}
-            onValueChange={(value) => {
-              onChange((data) => {
-                data.result.translation = value
-              })
-            }}
-            items={TransitionOptions}
-            triggerClassName="w-fit max-w-44 text-sm"
-          />
-        ),
-        configInline: true,
       },
       {
         title: t("actions.action_card.enable_readability"),

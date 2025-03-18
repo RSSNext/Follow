@@ -53,7 +53,7 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry: entry!,
-      language: entry?.settings?.translation || actionLanguage,
+      language: actionLanguage,
       extraFields: ["title"],
     }),
     {
