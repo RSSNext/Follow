@@ -19,9 +19,9 @@ export default resolveConfig({
     "./client/**/*.{ts,tsx}",
     "./index.html",
     "./node_modules/@follow/components/**/*.{ts,tsx}",
-    "./node_modules/rc-modal-sheet/**/*.{ts,tsx}",
-    "../../../node_modules/rc-modal-sheet/**/*.{ts,tsx}",
-    "../../../packages/**/*.{ts,tsx}",
+    "./node_modules/rc-modal-sheet/**/*.{js,ts,tsx}",
+    "../../node_modules/rc-modal-sheet/**/*.{js,ts,tsx}",
+    "../../packages/**/*.{ts,tsx}",
   ],
   plugins: [...baseTwConfig.plugins, daisyui],
   daisyui: {
