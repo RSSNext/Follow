@@ -9,6 +9,7 @@ import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import {
+  ActionGroup,
   HomeLeftAction,
   HomeSharedRightAction,
   UnreadOnlyActionButton,
@@ -55,10 +56,10 @@ export function TimelineSelectorProvider({
             if (isSubscriptions) return () => <HomeSharedRightAction />
             if (isFeed)
               return () => (
-                <View className="-mr-2 flex-row gap-2">
+                <ActionGroup>
                   <UnreadOnlyActionButton variant={buttonVariant} />
                   <FeedShareAction feedId={feedId} />
-                </View>
+                </ActionGroup>
               )
           })()
 

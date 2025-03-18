@@ -22,7 +22,7 @@ import { accentColor, useColor } from "@/src/theme/colors"
 import { AddFeedDialog } from "../dialogs/AddFeedDialog"
 import { MarkAllAsReadDialog } from "../dialogs/MarkAllAsReadDialog"
 
-const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+export const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
   return <View className={cn("flex flex-row items-center gap-2", className)}>{children}</View>
 }
 

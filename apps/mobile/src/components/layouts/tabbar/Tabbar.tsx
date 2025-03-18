@@ -5,7 +5,6 @@ import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, {
   cancelAnimation,
-  useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -231,14 +230,6 @@ const styles = StyleSheet.create({
 const TabBarBackground = () => {
   const { opacity } = useContext(BottomTabBarBackgroundContext)
 
-  useAnimatedReaction(
-    () => {
-      return opacity.value
-    },
-    (opacityValue) => {
-      console.log("opacityValue -------", opacityValue)
-    },
-  )
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     ...styles.blurEffect,

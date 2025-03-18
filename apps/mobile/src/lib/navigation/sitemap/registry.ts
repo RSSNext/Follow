@@ -33,6 +33,9 @@ class NavigationSitemapRegistryStatic {
   [Symbol.iterator]() {
     return this.map.entries()
   }
+  entries() {
+    return [...this.map.entries()]
+  }
 }
 
 export const NavigationSitemapRegistry = new NavigationSitemapRegistryStatic()

@@ -1,5 +1,5 @@
 import { withOpacity } from "@follow/utils"
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 import { TouchableOpacity, View } from "react-native"
 
 import { CheckLineIcon } from "@/src/icons/check_line"
@@ -69,7 +69,7 @@ export const HeaderSubmitButton = ({
 export const HeaderCloseOnly = () => {
   return (
     <StackScreenHeaderPortal>
-      <View className="absolute left-3 top-3">
+      <View className="absolute left-4 top-4">
         <HeaderCloseButton />
       </View>
     </StackScreenHeaderPortal>

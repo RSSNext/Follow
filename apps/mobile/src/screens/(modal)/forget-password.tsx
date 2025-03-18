@@ -5,11 +5,10 @@ import { KeyboardAvoidingView, KeyboardController } from "react-native-keyboard-
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { SubmitButton } from "@/src/components/common/SubmitButton"
-import { HeaderCloseButton, HeaderCloseOnly } from "@/src/components/layouts/header/HeaderElements"
+import { HeaderCloseOnly } from "@/src/components/layouts/header/HeaderElements"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { forgetPassword } from "@/src/lib/auth"
 import { useNavigation } from "@/src/lib/navigation/hooks"
-import { StackScreenHeaderPortal } from "@/src/lib/navigation/StackScreenHeaderPortal"
 import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { getTokenHeaders } from "@/src/lib/token"
@@ -47,8 +46,8 @@ export const ForgetPasswordScreen: NavigationControllerView = () => {
       }}
       accessible={false}
     >
-      <HeaderCloseOnly />
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+        <HeaderCloseOnly />
         <View className="p-safe px-safe-offset-4 flex-1 justify-between">
           <View className="items-center">
             <Text className="text-text text-center text-4xl font-bold">Forgot password?</Text>

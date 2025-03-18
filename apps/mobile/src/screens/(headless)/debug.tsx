@@ -24,6 +24,7 @@ import { Select } from "@/src/components/ui/form/Select"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { NavigationSitemapRegistry } from "@/src/lib/navigation/sitemap/registry"
 import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { setEnvProfile, useEnvProfile } from "@/src/lib/proxy-env"
@@ -149,6 +150,8 @@ export const DebugScreen: NavigationControllerView = () => {
 
   const ref = useRef<ScrollView>(null)
 
+  const navigation = useNavigation()
+
   return (
     <ScrollView ref={ref} className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
       <View className="flex-row items-center justify-between px-8">
@@ -193,25 +196,29 @@ export const DebugScreen: NavigationControllerView = () => {
       ))}
 
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
-      {[...NavigationSitemapRegistry].map(([title, register]) => {
-        return (
-          <View key={title} style={styles.container}>
-            <View style={styles.itemContainer}>
+      <View style={styles.container}>
+        <View style={styles.itemContainer}>
+          {NavigationSitemapRegistry.entries().map(([title, register]) => {
+            return (
               <TouchableOpacity
+                key={title}
                 style={styles.itemPressable}
                 onPress={() => {
-                  // Navigate to the registered component
                   const { Component, props, stackPresentation } = register
-                  // You might want to implement navigation here
-                  Alert.alert(`Would navigate to: ${title}`, `Presentation: ${stackPresentation}`)
+
+                  if (stackPresentation === "push") {
+                    navigation.pushControllerView(Component, props)
+                  } else {
+                    navigation.presentControllerView(Component, props, stackPresentation)
+                  }
                 }}
               >
                 <Text style={styles.filename}>{title}</Text>
               </TouchableOpacity>
-            </View>
-          </View>
-        )
-      })}
+            )
+          })}
+        </View>
+      </View>
     </ScrollView>
   )
 }

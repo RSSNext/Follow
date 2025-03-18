@@ -13,7 +13,13 @@ import { initializeApp } from "./initialize"
 import { TabBarPortal } from "./lib/navigation/bottom-tab/TabBarPortal"
 import { TabRoot } from "./lib/navigation/bottom-tab/TabRoot"
 import { TabScreen } from "./lib/navigation/bottom-tab/TabScreen"
+import { NavigationSitemapRegistry } from "./lib/navigation/sitemap/registry"
 import { RootStackNavigation } from "./lib/navigation/StackNavigation"
+import { TermsScreen } from "./screens/(headless)/terms"
+import { TwoFactorAuthScreen } from "./screens/(modal)/2fa"
+import { ForgetPasswordScreen } from "./screens/(modal)/forget-password"
+import { LoginScreen } from "./screens/(modal)/login"
+import { SignUpScreen } from "./screens/(modal)/sign-up"
 import { IndexTabScreen } from "./screens/(stack)/(tabs)"
 import { DiscoverTabScreen } from "./screens/(stack)/(tabs)/discover"
 import { SettingsTabScreen } from "./screens/(stack)/(tabs)/settings"
@@ -61,3 +67,12 @@ const App4 = () => {
     </App>
   )
 }
+
+;[TermsScreen].forEach((Component) => {
+  NavigationSitemapRegistry.registerByComponent(Component)
+})
+;[LoginScreen, SignUpScreen, ForgetPasswordScreen, TwoFactorAuthScreen].forEach((Component) => {
+  NavigationSitemapRegistry.registerByComponent(Component, void 0, {
+    stackPresentation: "modal",
+  })
+})

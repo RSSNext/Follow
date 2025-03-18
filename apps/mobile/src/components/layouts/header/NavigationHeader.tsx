@@ -258,10 +258,7 @@ export const InternalNavigationHeader = ({
         pointerEvents={"box-none"}
       >
         {/* Left */}
-        <View
-          className="min-w-6 flex-1 flex-row items-center justify-start"
-          pointerEvents={"box-none"}
-        >
+        <View className="flex-1 flex-row items-center justify-start" pointerEvents={"box-none"}>
           {typeof HeaderLeft === "function" ? (
             <HeaderLeft canGoBack={canBack} canDismiss={canDismiss} modal={sheetModal} />
           ) : (
@@ -271,7 +268,7 @@ export const InternalNavigationHeader = ({
         {/* Center */}
 
         <Animated.View
-          className="shrink items-center justify-center"
+          className="flex min-w-0 shrink items-center justify-center"
           pointerEvents={"box-none"}
           style={{
             marginHorizontal: titleMarginHorizontal,
@@ -282,7 +279,7 @@ export const InternalNavigationHeader = ({
 
         {/* Right */}
         <View
-          className="min-w-6 flex-1 flex-row items-center justify-end"
+          className="flex flex-1 shrink-0 flex-row items-center justify-end"
           pointerEvents={"box-none"}
         >
           {typeof RightButton === "function" ? (
