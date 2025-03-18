@@ -5,13 +5,17 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { RightCuteFiIcon } from "@/src/icons/right_cute_fi"
-import { closeDrawer, selectFeed, useSelectedFeed } from "@/src/modules/screen/atoms"
+import {
+  closeDrawer,
+  getHorizontalScrolling,
+  selectFeed,
+  useSelectedFeed,
+} from "@/src/modules/screen/atoms"
 import { useUnreadCounts } from "@/src/store/unread/hooks"
 import { useColor } from "@/src/theme/colors"
 
 import { SubscriptionFeedCategoryContextMenu } from "../context-menu/feeds"
 import { GroupedContext } from "./ctx"
-import { ItemSeparator } from "./ItemSeparator"
 import { UnGroupedList } from "./UnGroupedList"
 
 // const CategoryList: FC<{
@@ -49,6 +53,10 @@ export const CategoryGrouped = memo(
         >
           <ItemPressable
             onPress={() => {
+              const isHorizontalScrolling = getHorizontalScrolling()
+              if (isHorizontalScrolling) {
+                return
+              }
               selectFeed({
                 type: "category",
                 categoryName: category,
@@ -79,7 +87,6 @@ export const CategoryGrouped = memo(
 
         {expanded && (
           <GroupedContext.Provider value={category}>
-            <ItemSeparator />
             <UnGroupedList subscriptionIds={subscriptionIds} />
           </GroupedContext.Provider>
         )}

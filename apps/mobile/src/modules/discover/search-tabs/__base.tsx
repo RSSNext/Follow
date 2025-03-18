@@ -76,7 +76,7 @@ export function BaseSearchPageFlatList<T>({
 }
 
 const itemSeparator = (
-  <View className="bg-opaque-separator ml-16 h-px" style={{ transform: [{ scaleY: 0.5 }] }} />
+  <View className="bg-opaque-separator/50 ml-16 h-px" style={{ transform: [{ scaleY: 0.5 }] }} />
 )
 export const ItemSeparator = () => itemSeparator
 

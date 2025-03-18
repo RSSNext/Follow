@@ -3,7 +3,7 @@ import { useCallback } from "react"
 import type { ListRenderItem } from "react-native"
 import { ActivityIndicator, Text, View } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
-import { useColor } from "react-native-uikit-colors"
+import { useColor, useColors } from "react-native-uikit-colors"
 
 import { RotateableLoading } from "@/src/components/common/RotateableLoading"
 import { SwipeableGroupProvider, SwipeableItem } from "@/src/components/common/SwipeableItem"
@@ -115,7 +115,7 @@ const SaveRuleButton = ({ disabled }: { disabled?: boolean }) => {
 const ItemSeparatorComponent = () => {
   return (
     <View
-      className="bg-opaque-separator ml-24 h-px flex-1"
+      className="bg-opaque-separator/50 ml-24 h-px flex-1"
       collapsable={false}
       style={{ transform: [{ scaleY: 0.5 }] }}
     />
@@ -128,6 +128,7 @@ const ListItemCell: ListRenderItem<ActionRule> = (props) => {
 }
 const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
   const navigation = useSettingsNavigation()
+  const colors = useColors()
   return (
     <SwipeableItem
       swipeRightToCallAction
@@ -137,14 +138,14 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
           onPress: () => {
             actionActions.deleteRule(rule.index)
           },
-          backgroundColor: "red",
+          backgroundColor: colors.red,
         },
         {
           label: "Edit",
           onPress: () => {
             navigation.navigate("EditRule", { index: rule.index })
           },
-          backgroundColor: "#0ea5e9",
+          backgroundColor: colors.blue,
         },
       ]}
     >

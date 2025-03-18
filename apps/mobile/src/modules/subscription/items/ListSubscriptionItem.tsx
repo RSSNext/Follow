@@ -10,7 +10,7 @@ import { useList } from "@/src/store/list/hooks"
 import { useListUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
-import { selectFeed } from "../../screen/atoms"
+import { getHorizontalScrolling, selectFeed } from "../../screen/atoms"
 import { UnreadCount } from "./UnreadCount"
 
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
@@ -23,6 +23,10 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
         <ItemPressable
           className="h-12 flex-row items-center px-3"
           onPress={() => {
+            const isHorizontalScrolling = getHorizontalScrolling()
+            if (isHorizontalScrolling) {
+              return
+            }
             selectFeed({
               type: "list",
               listId: id,

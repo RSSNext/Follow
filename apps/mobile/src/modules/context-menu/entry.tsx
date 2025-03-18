@@ -11,13 +11,11 @@ import { ContextMenu } from "@/src/components/ui/context-menu"
 import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
 import { toast } from "@/src/lib/toast"
-import { useSelectedView } from "@/src/modules/screen/atoms"
+import { getHorizontalScrolling, useSelectedView } from "@/src/modules/screen/atoms"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
-
-import { getHorizontalScrolling } from "../entry-list/atoms"
 
 export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: string }>) => {
   const entry = useEntry(id)

@@ -52,7 +52,7 @@ const useHideableBottom = (
   const largeDefaultHeaderHeightRef = useRef(
     originalDefaultHeaderHeight + (hideableBottomHeight || 0),
   )
-  const largeHeaderHeight = useSharedValue(originalDefaultHeaderHeight)
+  const largeHeaderHeight = useSharedValue(largeDefaultHeaderHeightRef.current)
   const [hideableBottomRef, setHideableBottomRef] = useState<View | undefined>()
 
   useEffect(() => {

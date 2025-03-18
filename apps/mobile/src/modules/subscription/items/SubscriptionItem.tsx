@@ -6,7 +6,12 @@ import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
-import { closeDrawer, selectFeed, useSelectedFeed } from "@/src/modules/screen/atoms"
+import {
+  closeDrawer,
+  getHorizontalScrolling,
+  selectFeed,
+  useSelectedFeed,
+} from "@/src/modules/screen/atoms"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { useUnreadCount } from "@/src/store/unread/hooks"
@@ -91,6 +96,10 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
             className,
           )}
           onPress={() => {
+            const isHorizontalScrolling = getHorizontalScrolling()
+            if (isHorizontalScrolling) {
+              return
+            }
             selectFeed({
               type: "feed",
               feedId: id,

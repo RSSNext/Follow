@@ -23,7 +23,7 @@ export function useIntentHandler() {
 
       router.push(`/follow?${searchParams.toString()}`)
     }
-  })
+  }, [incomingUrl])
 }
 
 // follow://add?id=41147805276726272

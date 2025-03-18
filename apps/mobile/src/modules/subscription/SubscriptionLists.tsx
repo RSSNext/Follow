@@ -2,13 +2,13 @@ import type { FeedViewType } from "@follow/constants"
 import type { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
-import { Text } from "react-native"
+import { Text, View } from "react-native"
 import { useEventCallback } from "usehooks-ts"
 
 import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
-import { closeDrawer, selectFeed } from "@/src/modules/screen/atoms"
+import { closeDrawer, getHorizontalScrolling, selectFeed } from "@/src/modules/screen/atoms"
 import { TimelineSelectorList } from "@/src/modules/screen/TimelineSelectorList"
 import { FEED_COLLECTION_LIST } from "@/src/store/entry/utils"
 import {
@@ -92,7 +92,6 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
           setRefreshing(false)
         })
       }}
-      className="bg-system-grouped-background"
       isRefetching={refreshing}
       data={data}
       estimatedItemSize={50}
@@ -145,30 +144,15 @@ const ItemRender = ({
         const { inboxIndexRange, feedsIndexRange, listsIndexRange } = extraData
 
         if (listsIndexRange[0] <= index && index <= listsIndexRange[1]) {
-          return (
-            <>
-              <ListSubscriptionItem id={item} />
-              {index !== listsIndexRange[1] ? <ItemSeparator /> : ""}
-            </>
-          )
+          return <ListSubscriptionItem id={item} />
         }
 
         if (inboxIndexRange[0] <= index && index <= inboxIndexRange[1]) {
-          return (
-            <>
-              <InboxItem id={item} />
-              {index !== inboxIndexRange[1] ? <ItemSeparator /> : ""}
-            </>
-          )
+          return <InboxItem id={item} />
         }
 
         if (feedsIndexRange[0] <= index && index <= feedsIndexRange[1]) {
-          return (
-            <>
-              <SubscriptionItem id={item} />
-              {index !== feedsIndexRange[1] ? <ItemSeparator /> : ""}
-            </>
-          )
+          return <SubscriptionItem id={item} />
         }
 
         return null
@@ -178,22 +162,26 @@ const ItemRender = ({
 
   const { category, subscriptionIds } = item
 
-  return (
-    <>
-      <CategoryGrouped category={category} subscriptionIds={subscriptionIds} />
-      {extraData && index !== extraData.feedsIndexRange[1] ? <ItemSeparator /> : ""}
-    </>
-  )
+  return <CategoryGrouped category={category} subscriptionIds={subscriptionIds} />
 }
 
 const SectionTitle = ({ title }: { title: string }) => {
-  return <Text className="text-gray mb-2 ml-3 mt-4 text-sm font-semibold">{title}</Text>
+  return (
+    <View className="my-2">
+      <ItemSeparator />
+      <Text className="text-gray ml-3 mt-3 text-sm font-semibold">{title}</Text>
+    </View>
+  )
 }
 
 const StarItem = () => {
   return (
     <ItemPressable
       onPress={() => {
+        const isHorizontalScrolling = getHorizontalScrolling()
+        if (isHorizontalScrolling) {
+          return
+        }
         selectFeed({ type: "feed", feedId: FEED_COLLECTION_LIST })
         closeDrawer()
         router.push(`/feeds/${FEED_COLLECTION_LIST}`)

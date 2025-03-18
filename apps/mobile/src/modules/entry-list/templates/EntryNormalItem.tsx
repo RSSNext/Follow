@@ -16,12 +16,12 @@ import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
 import { getAttachmentState, player } from "@/src/lib/player"
+import { getHorizontalScrolling } from "@/src/modules/screen/atoms"
 import { useEntry } from "@/src/store/entry/hooks"
 import { getInboxFrom } from "@/src/store/entry/utils"
 import { useFeed } from "@/src/store/feed/hooks"
 
 import { EntryItemContextMenu } from "../../context-menu/entry"
-import { getHorizontalScrolling } from "../atoms"
 import { EntryItemSkeleton } from "../EntryListContentArticle"
 import { useEntryListContextView } from "../EntryListContext"
 

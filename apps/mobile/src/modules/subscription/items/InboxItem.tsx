@@ -6,7 +6,7 @@ import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { InboxCuteFiIcon } from "@/src/icons/inbox_cute_fi"
-import { selectFeed } from "@/src/modules/screen/atoms"
+import { getHorizontalScrolling, selectFeed } from "@/src/modules/screen/atoms"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { getInboxStoreId } from "@/src/store/subscription/utils"
 import { useUnreadCount } from "@/src/store/unread/hooks"
@@ -23,6 +23,10 @@ export const InboxItem = memo(({ id }: { id: string }) => {
       <ItemPressable
         className="h-12 flex-row items-center px-3"
         onPress={() => {
+          const isHorizontalScrolling = getHorizontalScrolling()
+          if (isHorizontalScrolling) {
+            return
+          }
           selectFeed({ type: "inbox", inboxId: id })
           router.push(`/feeds/${id}`)
         }}
