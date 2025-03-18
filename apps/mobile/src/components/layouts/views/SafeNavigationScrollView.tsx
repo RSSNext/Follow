@@ -1,3 +1,4 @@
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import { useSetAtom, useStore } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useContext, useEffect, useRef, useState } from "react"
@@ -8,11 +9,12 @@ import { useAnimatedScrollHandler } from "react-native-reanimated"
 import type { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 import {
   AttachNavigationScrollViewContext,
   SetAttachNavigationScrollViewContext,
-} from "@/src/components/layouts/tabbar/contexts/AttachNavigationScrollViewContext"
-import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
+} from "@/src/lib/navigation/AttachNavigationScrollViewContext"
+import { useScreenIsAppeared } from "@/src/lib/navigation/bottom-tab/hooks"
 import { useScreenIsInSheetModal } from "@/src/lib/navigation/hooks"
 import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 
@@ -59,11 +61,12 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   const scrollViewRef = useRef<ScrollView>(null)
 
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
+  const isFocused = useScreenIsAppeared()
   useEffect(() => {
-    if (setAttachNavigationScrollViewRef) {
+    if (setAttachNavigationScrollViewRef && isFocused) {
       setAttachNavigationScrollViewRef(scrollViewRef)
     }
-  }, [setAttachNavigationScrollViewRef, scrollViewRef])
+  }, [setAttachNavigationScrollViewRef, scrollViewRef, isFocused])
 
   const frame = useSafeAreaFrame()
   const sheetModal = useScreenIsInSheetModal()
@@ -81,12 +84,25 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
       screenCtxValue.reAnimatedScrollY.value = event.contentOffset.y
     },
   })
+
   return (
     <NavigationHeaderHeightContext.Provider value={headerHeight}>
       <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
         <ReAnimatedScrollView
           ref={scrollViewRef}
           onScroll={scrollHandler}
+          onContentSizeChange={useTypeScriptHappyCallback(
+            (w, h) => {
+              screenCtxValue.scrollViewContentHeight.value = h
+            },
+            [screenCtxValue.scrollViewContentHeight],
+          )}
+          onLayout={useTypeScriptHappyCallback(
+            (e) => {
+              screenCtxValue.scrollViewHeight.value = e.nativeEvent.layout.height - headerHeight
+            },
+            [screenCtxValue.scrollViewHeight, headerHeight],
+          )}
           automaticallyAdjustContentInsets={false}
           automaticallyAdjustsScrollIndicatorInsets={false}
           scrollIndicatorInsets={{
@@ -138,6 +154,7 @@ export const NavigationBlurEffectHeader = ({
             hideableBottom={hideableBottom}
             hideableBottomHeight={headerHideableBottomHeight}
             headerTitleAbsolute={headerTitleAbsolute}
+            headerTitle={props.headerTitle}
           />
         </SetNavigationHeaderHeightContext.Provider>
       ),
@@ -153,6 +170,7 @@ export const NavigationBlurEffectHeader = ({
     setHeaderHeight,
     setSlot,
     store,
+    props.headerTitle,
   ])
 
   return null

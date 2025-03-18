@@ -7,6 +7,7 @@ import { enableFreeze } from "react-native-screens"
 
 import { Analytics } from "./Analytics"
 import { App } from "./App"
+import { BottomTabProvider } from "./components/layouts/tabbar/BottomTabProvider"
 import { BottomTabs } from "./components/layouts/tabbar/BottomTabs"
 import { initializeApp } from "./initialize"
 import { TabBarPortal } from "./lib/navigation/bottom-tab/TabBarPortal"
@@ -28,33 +29,35 @@ registerRootComponent(() => <App4 />)
 const App4 = () => {
   return (
     <App>
-      <RootStackNavigation
-        headerConfig={{
-          hidden: true,
-        }}
-      >
-        <TabRoot>
-          <TabScreen title="Home">
-            <IndexTabScreen />
-          </TabScreen>
+      <BottomTabProvider>
+        <RootStackNavigation
+          headerConfig={{
+            hidden: true,
+          }}
+        >
+          <TabRoot>
+            <TabScreen title="Home">
+              <IndexTabScreen />
+            </TabScreen>
 
-          <TabScreen title="Subscriptions">
-            <SubscriptionsTabScreen />
-          </TabScreen>
+            <TabScreen title="Subscriptions">
+              <SubscriptionsTabScreen />
+            </TabScreen>
 
-          <TabScreen title="Discover">
-            <DiscoverTabScreen />
-          </TabScreen>
-          <TabScreen title="Settings">
-            <SettingsTabScreen />
-          </TabScreen>
+            <TabScreen title="Discover">
+              <DiscoverTabScreen />
+            </TabScreen>
+            <TabScreen title="Settings">
+              <SettingsTabScreen />
+            </TabScreen>
 
-          <TabBarPortal>
-            <BottomTabs />
-          </TabBarPortal>
-        </TabRoot>
-        <Analytics />
-      </RootStackNavigation>
+            <TabBarPortal>
+              <BottomTabs />
+            </TabBarPortal>
+          </TabRoot>
+          <Analytics />
+        </RootStackNavigation>
+      </BottomTabProvider>
     </App>
   )
 }

@@ -97,7 +97,7 @@ export const TermsScreen: NavigationControllerView = () => {
   return (
     <SafeNavigationScrollView
       className="bg-system-background"
-      contentInsetAdjustmentBehavior="always"
+      contentInsetAdjustmentBehavior="never"
     >
       <NavigationBlurEffectHeader title="Terms of Service" />
 

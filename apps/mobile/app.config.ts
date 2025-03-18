@@ -53,11 +53,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     googleServicesFile: "./build/google-services.json",
   },
-  web: {
-    bundler: "metro",
-    output: "static",
-    favicon: iconPath,
-  },
+  // web: {
+  //   bundler: "metro",
+  //   output: "static",
+  //   favicon: iconPath,
+  // },
   plugins: [
     [
       "expo-document-picker",

@@ -83,6 +83,7 @@
     "qrcode": "1.5.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-error-boundary": "5.0.0",
     "react-hook-form": "7.54.2",
     "react-native": "0.77.1",
     "react-native-awesome-slider": "2.9.0",

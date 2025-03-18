@@ -1,3 +1,4 @@
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import type {
   FlashListProps,
   MasonryFlashListProps,
@@ -8,7 +9,7 @@ import * as Haptics from "expo-haptics"
 import type { ElementRef, RefObject } from "react"
 import { forwardRef, useCallback, useContext } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { RefreshControl } from "react-native"
+import { RefreshControl, useWindowDimensions } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
@@ -31,7 +32,8 @@ export const TimelineSelectorList = forwardRef<
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
   const headerHeight = useHeaderHeight()
-  const { reAnimatedScrollY } = useContext(ScreenItemContext)!
+  const { reAnimatedScrollY, scrollViewHeight, scrollViewContentHeight } =
+    useContext(ScreenItemContext)!
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -51,6 +53,18 @@ export const TimelineSelectorList = forwardRef<
       automaticallyAdjustsScrollIndicatorInsets={false}
       automaticallyAdjustContentInsets={false}
       ref={ref}
+      onLayout={useTypeScriptHappyCallback(
+        (e) => {
+          scrollViewHeight.value = e.nativeEvent.layout.height - headerHeight - tabBarHeight
+        },
+        [scrollViewHeight],
+      )}
+      onContentSizeChange={useTypeScriptHappyCallback(
+        (w, h) => {
+          scrollViewContentHeight.value = h
+        },
+        [scrollViewContentHeight],
+      )}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}

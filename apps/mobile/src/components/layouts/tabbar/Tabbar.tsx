@@ -5,6 +5,7 @@ import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, {
   cancelAnimation,
+  useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -227,10 +228,17 @@ const styles = StyleSheet.create({
   },
 })
 
-const AnimatedThemedBlurView = Animated.createAnimatedComponent(ThemedBlurView)
 const TabBarBackground = () => {
   const { opacity } = useContext(BottomTabBarBackgroundContext)
 
+  useAnimatedReaction(
+    () => {
+      return opacity.value
+    },
+    (opacityValue) => {
+      console.log("opacityValue -------", opacityValue)
+    },
+  )
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     ...styles.blurEffect,
@@ -240,7 +248,9 @@ const TabBarBackground = () => {
   }))
   return (
     <View style={styles.blurEffect}>
-      <AnimatedThemedBlurView style={[styles.blurEffect, animatedStyle]} />
+      <Animated.View style={[styles.blurEffect, animatedStyle]}>
+        <ThemedBlurView style={styles.blurEffect} />
+      </Animated.View>
       <Animated.View
         className="bg-opaque-separator absolute top-0 w-full"
         style={[

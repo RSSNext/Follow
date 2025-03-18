@@ -10,7 +10,10 @@ export interface ScreenItemContextType {
   isAppearedAtom: PrimitiveAtom<boolean>
   isDisappearedAtom: PrimitiveAtom<boolean>
 
+  // For Layout ScrollView
   reAnimatedScrollY: SharedValue<number>
+  scrollViewHeight: SharedValue<number>
+  scrollViewContentHeight: SharedValue<number>
 
   Slot: PrimitiveAtom<{
     header: ReactNode

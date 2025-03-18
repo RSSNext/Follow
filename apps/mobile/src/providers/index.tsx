@@ -13,6 +13,7 @@ import { RootSiblingParent } from "react-native-root-siblings"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { SheetProvider } from "react-native-sheet-transitions"
 
+import { ErrorBoundary } from "../components/common/ErrorBoundary"
 import { BottomTabProvider } from "../components/layouts/tabbar/BottomTabProvider"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
@@ -28,23 +29,23 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
     <SafeAreaProvider>
       <MigrationProvider>
         <Provider store={jotaiStore}>
-          <KeyboardProvider>
-            <View style={[styles.flex, currentThemeColors]}>
-              <QueryClientProvider client={queryClient}>
-                <GestureHandlerRootView>
-                  <SheetProvider>
-                    <ActionSheetProvider>
-                      <RootSiblingParent>
-                        <BottomTabProvider>
+          <ErrorBoundary>
+            <KeyboardProvider>
+              <View style={[styles.flex, currentThemeColors]}>
+                <QueryClientProvider client={queryClient}>
+                  <GestureHandlerRootView>
+                    <SheetProvider>
+                      <ActionSheetProvider>
+                        <RootSiblingParent>
                           <PortalProvider>{children}</PortalProvider>
-                        </BottomTabProvider>
-                      </RootSiblingParent>
-                    </ActionSheetProvider>
-                  </SheetProvider>
-                </GestureHandlerRootView>
-              </QueryClientProvider>
-            </View>
-          </KeyboardProvider>
+                        </RootSiblingParent>
+                      </ActionSheetProvider>
+                    </SheetProvider>
+                  </GestureHandlerRootView>
+                </QueryClientProvider>
+              </View>
+            </KeyboardProvider>
+          </ErrorBoundary>
         </Provider>
       </MigrationProvider>
     </SafeAreaProvider>

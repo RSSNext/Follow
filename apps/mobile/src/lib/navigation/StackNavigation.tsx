@@ -1,12 +1,17 @@
 import type { PrimitiveAtom } from "jotai"
 import { atom, useAtomValue } from "jotai"
 import type { FC } from "react"
-import { memo, useContext, useMemo } from "react"
+import { memo, useContext, useMemo, useState } from "react"
+import type { ScrollView } from "react-native"
 import { StyleSheet } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import type { ScreenStackHeaderConfigProps } from "react-native-screens"
 import { ScreenStack } from "react-native-screens"
 
+import {
+  AttachNavigationScrollViewContext,
+  SetAttachNavigationScrollViewContext,
+} from "./AttachNavigationScrollViewContext"
 import type { Route } from "./ChainNavigationContext"
 import { ChainNavigationContext } from "./ChainNavigationContext"
 import { GroupedNavigationRouteContext } from "./GroupedNavigationRouteContext"
@@ -24,22 +29,30 @@ interface RootStackNavigationProps {
   headerConfig?: ScreenStackHeaderConfigProps
 }
 export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigationProps) => {
+  const [attachNavigationScrollViewRef, setAttachNavigationScrollViewRef] =
+    useState<React.RefObject<ScrollView> | null>(null)
   return (
-    <SafeAreaProvider>
-      <ScreenNameContext.Provider value={useMemo(() => atom(""), [])}>
-        <ChainNavigationContext.Provider value={Navigation.rootNavigation.__internal_getCtxValue()}>
-          <NavigationInstanceContext.Provider value={Navigation.rootNavigation}>
-            <ScreenStack style={StyleSheet.absoluteFill}>
-              <WrappedScreenItem headerConfig={headerConfig} screenId="root">
-                {children}
-              </WrappedScreenItem>
+    <AttachNavigationScrollViewContext.Provider value={attachNavigationScrollViewRef}>
+      <SetAttachNavigationScrollViewContext.Provider value={setAttachNavigationScrollViewRef}>
+        <SafeAreaProvider>
+          <ScreenNameContext.Provider value={useMemo(() => atom(""), [])}>
+            <ChainNavigationContext.Provider
+              value={Navigation.rootNavigation.__internal_getCtxValue()}
+            >
+              <NavigationInstanceContext.Provider value={Navigation.rootNavigation}>
+                <ScreenStack style={StyleSheet.absoluteFill}>
+                  <WrappedScreenItem headerConfig={headerConfig} screenId="root">
+                    {children}
+                  </WrappedScreenItem>
 
-              <ScreenItemsMapper />
-            </ScreenStack>
-          </NavigationInstanceContext.Provider>
-        </ChainNavigationContext.Provider>
-      </ScreenNameContext.Provider>
-    </SafeAreaProvider>
+                  <ScreenItemsMapper />
+                </ScreenStack>
+              </NavigationInstanceContext.Provider>
+            </ChainNavigationContext.Provider>
+          </ScreenNameContext.Provider>
+        </SafeAreaProvider>
+      </SetAttachNavigationScrollViewContext.Provider>
+    </AttachNavigationScrollViewContext.Provider>
   )
 }
 

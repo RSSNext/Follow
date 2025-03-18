@@ -1,9 +1,17 @@
 import { useAtomValue, useSetAtom } from "jotai"
 import { useCallback, useContext } from "react"
 
+import { useAutoMarkAsRead } from "@/src/store/unread/hooks"
+
 import { ScreenItemContext } from "../ScreenItemContext"
 import { BottomTabContext } from "./BottomTabContext"
 import { TabScreenContext } from "./TabScreenContext"
+
+export const useScreenIsAppeared = () => {
+  const { isAppearedAtom } = useContext(ScreenItemContext)
+
+  return useAtomValue(isAppearedAtom)
+}
 
 export const useTabScreenIsFocused = () => {
   const { currentIndexAtom } = useContext(BottomTabContext)

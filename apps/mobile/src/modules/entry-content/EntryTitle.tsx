@@ -4,6 +4,7 @@ import { Text, useWindowDimensions, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, {
   interpolate,
+  runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
@@ -39,10 +40,10 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
     (value) => {
       if (value > titleHeight + headerHeight) {
         opacityAnimatedValue.value = withTiming(1, { duration: 100 })
-        setIsHeaderTitleVisible(true)
+        runOnJS(setIsHeaderTitleVisible)(true)
       } else {
         opacityAnimatedValue.value = withTiming(0, { duration: 100 })
-        setIsHeaderTitleVisible(false)
+        runOnJS(setIsHeaderTitleVisible)(false)
       }
     },
   )
@@ -53,7 +54,6 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
     <>
       <NavigationBlurEffectHeader
         headerTitleAbsolute
-        title={title}
         headerLeft={useTypeScriptHappyCallback(
           ({ canGoBack }) => (
             <EntryLeftGroup
@@ -64,36 +64,30 @@ export const EntryTitle = ({ title, entryId }: { title: string; entryId: string 
           ),
           [entryId],
         )}
-        headerRight={useCallback(
-          () => (
-            <EntryContentContext.Provider value={ctxValue}>
-              <EntryContentHeaderRightActions
-                entryId={entryId}
-                titleOpacityShareValue={opacityAnimatedValue}
-                isHeaderTitleVisible={isHeaderTitleVisible}
-              />
-            </EntryContentContext.Provider>
-          ),
-          [ctxValue, entryId, opacityAnimatedValue, isHeaderTitleVisible],
-        )}
-        headerTitle={useCallback(
-          () => (
-            <View
-              className="flex-row items-center justify-center"
-              pointerEvents="none"
-              style={{ width: headerBarWidth - 80 }}
+        headerRight={
+          <EntryContentContext.Provider value={ctxValue}>
+            <EntryContentHeaderRightActions
+              entryId={entryId}
+              titleOpacityShareValue={opacityAnimatedValue}
+              isHeaderTitleVisible={isHeaderTitleVisible}
+            />
+          </EntryContentContext.Provider>
+        }
+        headerTitle={
+          <View
+            className="flex-row items-center justify-center"
+            pointerEvents="none"
+            style={{ width: headerBarWidth - 80 }}
+          >
+            <Animated.Text
+              className={"text-label text-center text-[17px] font-semibold"}
+              numberOfLines={1}
+              style={{ opacity: opacityAnimatedValue }}
             >
-              <Animated.Text
-                className={"text-label text-center text-[17px] font-semibold"}
-                numberOfLines={1}
-                style={{ opacity: opacityAnimatedValue }}
-              >
-                {title}
-              </Animated.Text>
-            </View>
-          ),
-          [headerBarWidth, opacityAnimatedValue, title],
-        )}
+              {title}
+            </Animated.Text>
+          </View>
+        }
       />
       <View
         onLayout={() => {
@@ -131,10 +125,10 @@ export const EntrySocialTitle = ({ entryId }: { entryId: string }) => {
     (value) => {
       if (value > titleHeight + headerHeight) {
         opacityAnimatedValue.value = withTiming(1, { duration: 100 })
-        setIsHeaderTitleVisible(true)
+        runOnJS(setIsHeaderTitleVisible)(true)
       } else {
         opacityAnimatedValue.value = withTiming(0, { duration: 100 })
-        setIsHeaderTitleVisible(false)
+        runOnJS(setIsHeaderTitleVisible)(false)
       }
     },
   )

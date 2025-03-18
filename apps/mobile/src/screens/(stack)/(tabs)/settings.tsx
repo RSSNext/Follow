@@ -1,18 +1,14 @@
-import { useContext, useState } from "react"
-import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native"
+import { useContext } from "react"
+import type { ScrollView } from "react-native"
 import { Text, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
 import Animated, { useAnimatedStyle } from "react-native-reanimated"
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context"
-import { useEventCallback } from "usehooks-ts"
 
-import { ReAnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import { BlurEffect } from "@/src/components/common/BlurEffect"
-import {
-  useBottomTabBarHeight,
-  useRegisterNavigationScrollView,
-} from "@/src/components/layouts/tabbar/hooks"
+import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
 import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
+import { SafeNavigationScrollView } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Settings1CuteFiIcon } from "@/src/icons/settings_1_cute_fi"
 import { Settings1CuteReIcon } from "@/src/icons/settings_1_cute_re"
 import type { TabScreenComponent } from "@/src/lib/navigation/bottom-tab/types"
@@ -26,72 +22,25 @@ import { useWhoami } from "@/src/store/user/hooks"
 export function Settings() {
   const insets = useSafeAreaInsets()
 
-  // const { opacity } = useContext(BottomTabBarBackgroundContext)
-  const tabBarHeight = useBottomTabBarHeight()
-
-  // const calculateOpacity = useCallback(
-  //   (contentHeight: number, viewportHeight: number, scrollY: number) => {
-  //     const distanceFromBottom = contentHeight - viewportHeight - scrollY
-  //     const fadeThreshold = 20
-
-  //     if (distanceFromBottom <= fadeThreshold) {
-  //       const newOpacity = Math.max(0, distanceFromBottom / fadeThreshold)
-  //       opacity.value = withTiming(newOpacity, { duration: 50 })
-  //     } else {
-  //       opacity.value = withTiming(1, { duration: 50 })
-  //     }
-  //   },
-  //   [opacity],
-  // )
-  const [contentSize, setContentSize] = useState({ height: 0, width: 0 })
   const registerNavigationScrollView = useRegisterNavigationScrollView<ScrollView>()
-  // useEffect(() => {
-  //   const scrollView = registerNavigationScrollView.current
-
-  //   if (contentSize.height === 0) return
-
-  //   if (scrollView) {
-  //     const node = findNodeHandle(scrollView)
-  //     if (node) {
-  //       UIManager.measure(node, (x, y, width, height) => {
-  //         calculateOpacity(contentSize.height, height, 0)
-  //       })
-  //     }
-  //   }
-  // }, [opacity, calculateOpacity, contentSize.height, registerNavigationScrollView])
 
   const screenContext = useContext(ScreenItemContext)
-  const reanimatedScrollViewRef = screenContext.reAnimatedScrollY
-
-  const handleScroll = useEventCallback(
-    ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const { contentOffset, contentSize, layoutMeasurement } = nativeEvent
-      // calculateOpacity(contentSize.height, layoutMeasurement.height, contentOffset.y)
-
-      reanimatedScrollViewRef.value = contentOffset.y
-    },
-  )
 
   const whoami = useWhoami()
 
   return (
     <>
-      <ReAnimatedScrollView
+      <SafeNavigationScrollView
         scrollEventThrottle={16}
-        onScroll={handleScroll}
-        ref={registerNavigationScrollView}
-        onContentSizeChange={(w, h) => {
-          setContentSize({ height: h, width: w })
-        }}
         style={{ paddingTop: insets.top }}
         className="bg-system-grouped-background flex-1"
-        scrollIndicatorInsets={{ bottom: tabBarHeight - insets.bottom }}
+        contentViewClassName="-mt-24"
       >
-        <UserHeaderBanner scrollY={reanimatedScrollViewRef} userId={whoami?.id} />
+        <UserHeaderBanner scrollY={screenContext.reAnimatedScrollY} userId={whoami?.id} />
 
         <SettingsList scrollRef={registerNavigationScrollView} />
-      </ReAnimatedScrollView>
-      <SettingHeader scrollY={reanimatedScrollViewRef} />
+      </SafeNavigationScrollView>
+      <SettingHeader scrollY={screenContext.reAnimatedScrollY} />
     </>
   )
 }

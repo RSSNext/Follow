@@ -5,9 +5,11 @@ import { useContext, useEffect, useMemo } from "react"
 import type { ViewProps } from "react-native"
 import { StyleSheet } from "react-native"
 
+import { ScreenItemContext } from "../ScreenItemContext"
 import { ScreenNameContext } from "../ScreenNameContext"
 import { WrappedScreenItem } from "../WrappedScreenItem"
 import { BottomTabContext } from "./BottomTabContext"
+import { CalculateTabBarOpacity } from "./CalculateTabBarOpacity"
 import { useTabScreenIsFocused } from "./hooks"
 import type { TabScreenContextType } from "./TabScreenContext"
 import { TabScreenContext } from "./TabScreenContext"
@@ -97,6 +99,8 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
           <WrappedScreenItem screenId={`tab-screen-${tabScreenIndex}`}>
             {children}
             <ScreenNameRegister />
+            <LifecycleEvents isSelected={isSelected} />
+            {/* <CalculateTabBarOpacity /> */}
           </WrappedScreenItem>
         )}
       </TabScreenContext.Provider>
@@ -115,5 +119,24 @@ const ScreenNameRegister = () => {
       store.set(nameAtom, title)
     }
   }, [isFocused, title, nameAtom, store])
+  return null
+}
+
+const LifecycleEvents = ({ isSelected }: { isSelected: boolean }) => {
+  const { isFocusedAtom, isAppearedAtom, isDisappearedAtom } = useContext(ScreenItemContext)
+  const setIsFocused = useSetAtom(isFocusedAtom)
+  const setIsAppeared = useSetAtom(isAppearedAtom)
+  const setIsDisappeared = useSetAtom(isDisappearedAtom)
+  useEffect(() => {
+    if (isSelected) {
+      setIsFocused(true)
+      setIsAppeared(true)
+      setIsDisappeared(false)
+    } else {
+      setIsFocused(false)
+      setIsAppeared(false)
+      setIsDisappeared(true)
+    }
+  }, [isSelected, setIsAppeared, setIsDisappeared, setIsFocused])
   return null
 }

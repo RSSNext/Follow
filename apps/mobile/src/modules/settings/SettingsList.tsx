@@ -227,10 +227,7 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
       .filter((group) => group !== false)
   }, [whoami])
   return (
-    <View
-      className="bg-system-grouped-background flex-1 py-4"
-      style={{ paddingBottom: insets.bottom + tabBarHeight }}
-    >
+    <View className="bg-system-grouped-background flex-1 py-4">
       {filteredNavigationGroups.map((group, index) => (
         <Fragment key={`nav-group-${index}`}>
           <NavigationLinkGroup key={`nav-group-${index}`} links={group} scrollRef={scrollRef} />

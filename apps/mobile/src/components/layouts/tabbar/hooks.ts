@@ -1,15 +1,17 @@
+import { useAtomValue } from "jotai"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
 import type { FlatList, ScrollView } from "react-native"
 import { findNodeHandle, Platform } from "react-native"
 
 import { performNativeScrollToTop } from "@/src/lib/native"
-import { useTabScreenIsFocused } from "@/src/lib/navigation/bottom-tab/hooks"
-
 import {
   SetAttachNavigationScrollViewContext,
   useAttachNavigationScrollView,
-} from "./contexts/AttachNavigationScrollViewContext"
+} from "@/src/lib/navigation/AttachNavigationScrollViewContext"
+import { useScreenIsAppeared, useTabScreenIsFocused } from "@/src/lib/navigation/bottom-tab/hooks"
+import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
+
 import { BottomTabBarHeightContext } from "./contexts/BottomTabBarHeightContext"
 
 export const useBottomTabBarHeight = () => {
@@ -55,8 +57,9 @@ export const useNavigationScrollToTop = (
 
 export const useRegisterNavigationScrollView = <T = unknown>(active = true) => {
   const scrollViewRef = useRef<T>(null)
-  const tabScreenIsFocused = useTabScreenIsFocused()
+  const tabScreenIsFocused = useScreenIsAppeared()
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
+
   useEffect(() => {
     if (!active) return
     if (!setAttachNavigationScrollViewRef) return

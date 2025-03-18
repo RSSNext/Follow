@@ -28,6 +28,8 @@ export const WrappedScreenItem: FC<
 > = memo(({ screenId, children, stackPresentation, headerConfig, ...rest }) => {
   const navigation = useNavigation()
   const reAnimatedScrollY = useSharedValue(0)
+  const scrollViewHeight = useSharedValue(0)
+  const scrollViewContentHeight = useSharedValue(0)
   const ctxValue = useMemo<ScreenItemContextType>(
     () => ({
       screenId,
@@ -40,8 +42,10 @@ export const WrappedScreenItem: FC<
       }>({
         header: null,
       }),
+      scrollViewHeight,
+      scrollViewContentHeight,
     }),
-    [screenId, reAnimatedScrollY],
+    [screenId, reAnimatedScrollY, scrollViewHeight, scrollViewContentHeight],
   )
   const setIsFocused = useSetAtom(ctxValue.isFocusedAtom)
   const setIsAppeared = useSetAtom(ctxValue.isAppearedAtom)

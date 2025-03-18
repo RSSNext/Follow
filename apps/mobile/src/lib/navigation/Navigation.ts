@@ -9,6 +9,13 @@ export class Navigation {
   private ctxValue: ChainNavigationContextType
   constructor(ctxValue: ChainNavigationContextType) {
     this.ctxValue = ctxValue
+
+    this.pushControllerView = this.pushControllerView.bind(this)
+    this.presentControllerView = this.presentControllerView.bind(this)
+    this.dismiss = this.dismiss.bind(this)
+    this.back = this.back.bind(this)
+    this.popTo = this.popTo.bind(this)
+    this.popToRoot = this.popToRoot.bind(this)
   }
 
   __internal_getCtxValue() {
