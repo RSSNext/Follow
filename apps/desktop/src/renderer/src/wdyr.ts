@@ -7,5 +7,5 @@ if (import.meta.env.DEV) {
     trackAllPureComponents: true,
   })
   const { scan } = await import("react-scan")
-  scan({ enabled: true, log: true, showToolbar: true })
+  scan({ enabled: true, log: false, showToolbar: true })
 }
