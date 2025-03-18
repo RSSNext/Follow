@@ -8,19 +8,22 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report!
 
-  - type: checkboxes
+  - type: dropdown
     id: platform
     attributes:
       label: Platform
       description: On which platforms does this bug occur?
+      multiple: true
       options:
-        - label: Desktop - macOS
-        - label: Desktop - Windows
-        - label: Desktop - Linux
-        - label: Desktop - Web
-        - label: Mobile - iOS
-        - label: Mobile - Android
-        - label: Mobile - Web
+        - Desktop - macOS
+        - Desktop - Windows
+        - Desktop - Linux
+        - Desktop - Web
+        - Mobile - iOS
+        - Mobile - Android
+        - Mobile - Web
+    validations:
+      required: true
 
   - type: textarea
     id: bug-description
