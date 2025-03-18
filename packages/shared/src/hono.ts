@@ -359,7 +359,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     tx: string | null;
 }>;
 
-declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
+declare const languageSchema: z.ZodEnum<["ar-DZ", "ar-IQ", "ar-KW", "ar-MA", "ar-SA", "ar-TN", "de", "en", "es", "fi", "fr", "it", "ja", "ko", "pt", "ru", "tr", "zh-CN", "zh-HK", "zh-TW"]>;
 declare const ruleFieldSchema: z.ZodEnum<["all", "title", "content", "author", "url", "order"]>;
 declare const ruleOperatorSchema: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
 declare const conditionItemSchema: z.ZodObject<{
@@ -12958,7 +12958,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     id: string;
-                    language: "en" | "ja" | "zh-CN" | "zh-TW";
+                    language: "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW";
                     fields: string;
                     part?: string | undefined;
                 };
@@ -12981,7 +12981,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     id: string;
-                    language?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                    language?: "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                 };
             };
             output: {
