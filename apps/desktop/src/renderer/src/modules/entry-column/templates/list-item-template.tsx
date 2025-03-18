@@ -83,21 +83,6 @@ export function ListItem({
     return entry?.entries?.attachments?.find((a) => a.mime_type?.startsWith("audio") && a.url)
   }, [entry?.entries?.attachments])
 
-  const estimatedMins = useMemo(() => {
-    if (!audioAttachment?.duration_in_seconds) {
-      return
-    }
-
-    let durationInSeconds = audioAttachment.duration_in_seconds
-
-    if (Number.isNaN(+durationInSeconds)) {
-      // @ts-expect-error durationInSeconds is string
-      durationInSeconds = formatTimeToSeconds(durationInSeconds)
-    }
-
-    return formatEstimatedMins(Math.floor(durationInSeconds / 60))
-  }, [audioAttachment])
-
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return null
 
@@ -156,14 +141,6 @@ export function ListItem({
               className="space-x-0.5"
             />
           </EllipsisHorizontalTextWithTooltip>
-
-          {hasAudio && estimatedMins && (
-            <>
-              <span>·</span>
-              <span className="shrink-0">{estimatedMins}</span>
-            </>
-          )}
-
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
         </div>
@@ -211,7 +188,7 @@ export function ListItem({
         <AudioCover
           entryId={entryId}
           src={entry.entries!.attachments![0]!.url}
-          estimatedMins={estimatedMins}
+          durationInSeconds={Number.parseInt(String(audioAttachment?.duration_in_seconds ?? 0), 10)}
           feedIcon={
             <FeedIcon
               fallback={true}
@@ -264,18 +241,26 @@ export function ListItem({
 function AudioCover({
   entryId,
   src,
-  estimatedMins,
+  durationInSeconds,
   feedIcon,
 }: {
   entryId: string
   src: string
-  estimatedMins?: string
+  durationInSeconds: number
   feedIcon: React.ReactNode
 }) {
   const isMobile = useMobile()
   const playStatus = useAudioPlayerAtomSelector((playerValue) =>
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
+
+  // durationInSeconds's format like 00:00:00 or 4000
+  if (Number.isNaN(+durationInSeconds)) {
+    // @ts-expect-error durationInSeconds is string
+    durationInSeconds = formatTimeToSeconds(durationInSeconds)
+  }
+
+  const estimatedMins = durationInSeconds && Math.floor(durationInSeconds / 60)
 
   const handleClickPlay = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile) e.stopPropagation()
@@ -332,7 +317,7 @@ function AudioCover({
               isMobile && "opacity-100 backdrop-blur-sm",
             )}
           >
-            {estimatedMins}
+            {formatEstimatedMins(estimatedMins)}
           </div>
         </div>
       )}
