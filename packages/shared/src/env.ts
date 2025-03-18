@@ -26,4 +26,4 @@ export const envSchema = {
 }
 
 export const isDev = false
-export const env = z.object(envSchema).parse({})
+export const env = z.object(envSchema).parse(process.env || {})
