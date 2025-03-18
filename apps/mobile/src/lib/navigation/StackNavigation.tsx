@@ -1,24 +1,22 @@
-import { PortalHost, PortalProvider } from "@gorhom/portal"
-import { atom, useAtomValue, useSetAtom } from "jotai"
-import type { FC, ReactNode } from "react"
-import { memo, useContext, useId, useMemo, useState } from "react"
-import { StyleSheet, View } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
+import type { PrimitiveAtom } from "jotai"
+import { atom, useAtomValue } from "jotai"
+import type { FC } from "react"
+import { memo, useContext, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import type { ScreenStackHeaderConfigProps, StackPresentationTypes } from "react-native-screens"
-import { ScreenStack, ScreenStackItem } from "react-native-screens"
+import type { ScreenStackHeaderConfigProps } from "react-native-screens"
+import { ScreenStack } from "react-native-screens"
 
-import { useCombinedLifecycleEvents } from "./__internal/hooks"
 import type { Route } from "./ChainNavigationContext"
 import { ChainNavigationContext } from "./ChainNavigationContext"
-import { defaultHeaderConfig } from "./config"
 import { GroupedNavigationRouteContext } from "./GroupedNavigationRouteContext"
 import { Navigation } from "./Navigation"
-import { NavigationInstanceContext, useNavigation } from "./NavigationInstanceContext"
-import type { ScreenItemContextType } from "./ScreenItemContext"
-import { ScreenItemContext } from "./ScreenItemContext"
+import { NavigationInstanceContext } from "./NavigationInstanceContext"
 import { ScreenNameContext } from "./ScreenNameContext"
+import type { ScreenOptionsContextType } from "./ScreenOptionsContext"
+import { ModalScreenItemOptionsContext } from "./ScreenOptionsContext"
 import type { NavigationControllerView } from "./types"
+import { WrappedScreenItem } from "./WrappedScreenItem"
 
 interface RootStackNavigationProps {
   children: React.ReactNode
@@ -105,34 +103,44 @@ const ModalScreenStackItems: FC<{
   routes: Route[]
 }> = memo(({ routes }) => {
   const rootModalRoute = routes.at(0)
+  const modalScreenOptionsCtxValue = useMemo<PrimitiveAtom<ScreenOptionsContextType>>(
+    () => atom({}),
+    [],
+  )
+
+  const modalScreenOptions = useAtomValue(modalScreenOptionsCtxValue)
+
   if (!rootModalRoute) {
     return null
   }
   const isStackModal = rootModalRoute.type !== "formSheet"
   if (isStackModal) {
     return (
-      <WrappedScreenItem
-        stackPresentation={rootModalRoute?.type}
-        key={rootModalRoute.id}
-        screenId={rootModalRoute.id}
-      >
-        <ScreenStack style={StyleSheet.absoluteFill}>
-          <WrappedScreenItem screenId={rootModalRoute.id}>
-            <ResolveView
-              comp={rootModalRoute.Component}
-              element={rootModalRoute.element}
-              props={rootModalRoute.props}
-            />
-          </WrappedScreenItem>
-          {routes.slice(1).map((route) => {
-            return (
-              <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
-                <ResolveView comp={route.Component} element={route.element} props={route.props} />
-              </WrappedScreenItem>
-            )
-          })}
-        </ScreenStack>
-      </WrappedScreenItem>
+      <ModalScreenItemOptionsContext.Provider value={modalScreenOptionsCtxValue}>
+        <WrappedScreenItem
+          stackPresentation={rootModalRoute?.type}
+          key={rootModalRoute.id}
+          screenId={rootModalRoute.id}
+          {...modalScreenOptions}
+        >
+          <ScreenStack style={StyleSheet.absoluteFill}>
+            <WrappedScreenItem screenId={rootModalRoute.id}>
+              <ResolveView
+                comp={rootModalRoute.Component}
+                element={rootModalRoute.element}
+                props={rootModalRoute.props}
+              />
+            </WrappedScreenItem>
+            {routes.slice(1).map((route) => {
+              return (
+                <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
+                  <ResolveView comp={route.Component} element={route.element} props={route.props} />
+                </WrappedScreenItem>
+              )
+            })}
+          </ScreenStack>
+        </WrappedScreenItem>
+      </ModalScreenItemOptionsContext.Provider>
     )
   }
   return routes.map((route) => {
@@ -144,89 +152,6 @@ const ModalScreenStackItems: FC<{
   })
 })
 
-const WrappedScreenItem: FC<{
-  screenId: string
-  children: React.ReactNode
-  stackPresentation?: StackPresentationTypes
-
-  headerConfig?: ScreenStackHeaderConfigProps
-}> = memo(({ screenId, children, stackPresentation, headerConfig }) => {
-  const navigation = useNavigation()
-  const reAnimatedScrollY = useSharedValue(0)
-  const ctxValue = useMemo<ScreenItemContextType>(
-    () => ({
-      screenId,
-      isFocusedAtom: atom(false),
-      isAppearedAtom: atom(false),
-      isDisappearedAtom: atom(false),
-      reAnimatedScrollY,
-      Slot: atom<{
-        header: ReactNode
-      }>({
-        header: null,
-      }),
-    }),
-    [screenId, reAnimatedScrollY],
-  )
-  const setIsFocused = useSetAtom(ctxValue.isFocusedAtom)
-  const setIsAppeared = useSetAtom(ctxValue.isAppearedAtom)
-  const setIsDisappeared = useSetAtom(ctxValue.isDisappearedAtom)
-
-  const combinedLifecycleEvents = useCombinedLifecycleEvents(ctxValue.screenId, {
-    onAppear: () => {
-      setIsFocused(true)
-      setIsAppeared(true)
-      setIsDisappeared(false)
-    },
-    onDisappear: () => {
-      setIsFocused(false)
-      setIsAppeared(false)
-      setIsDisappeared(true)
-    },
-    onWillAppear: () => {
-      setIsFocused(false)
-      setIsAppeared(true)
-      setIsDisappeared(false)
-    },
-    onWillDisappear: () => {
-      setIsFocused(false)
-      setIsAppeared(false)
-      setIsDisappeared(true)
-    },
-  })
-
-  return (
-    <ScreenItemContext.Provider value={ctxValue}>
-      <ScreenStackItem
-        {...combinedLifecycleEvents}
-        headerConfig={{
-          ...defaultHeaderConfig,
-          ...headerConfig,
-        }}
-        key={screenId}
-        screenId={screenId}
-        stackPresentation={stackPresentation}
-        style={StyleSheet.absoluteFill}
-        onDismissed={() => {
-          navigation.__internal_dismiss(screenId)
-        }}
-      >
-        <Header />
-        {children}
-      </ScreenStackItem>
-    </ScreenItemContext.Provider>
-  )
-})
-const Header = () => {
-  const ctxValue = useContext(ScreenItemContext)
-
-  const Slot = useAtomValue(ctxValue.Slot)
-
-  if (!Slot.header) {
-    return null
-  }
-  return <View className="absolute inset-x-0 top-0 z-[99]">{Slot.header}</View>
-}
 const ResolveView: FC<{
   comp?: NavigationControllerView<any>
   element?: React.ReactElement

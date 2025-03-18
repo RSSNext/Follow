@@ -24,6 +24,7 @@ import {
   useCanDismiss,
   useNavigation,
   useScreenIsInModal,
+  useScreenIsInSheetModal,
 } from "@/src/lib/navigation/hooks"
 import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 
@@ -159,10 +160,11 @@ export const InternalNavigationHeader = ({
 }: InternalNavigationHeaderProps) => {
   const insets = useSafeAreaInsets()
   const frame = useSafeAreaFrame()
-  const modal = useScreenIsInModal()
+
+  const sheetModal = useScreenIsInSheetModal()
   const defaultHeight = useMemo(
-    () => getDefaultHeaderHeight(frame, modal, modal ? 0 : insets.top),
-    [frame, insets.top, modal],
+    () => getDefaultHeaderHeight(frame, sheetModal, sheetModal ? 0 : insets.top),
+    [frame, insets.top, sheetModal],
   )
 
   const border = useColor("opaqueSeparator")
@@ -200,7 +202,7 @@ export const InternalNavigationHeader = ({
   )
   const rootTitleBarStyle = useAnimatedStyle(() => {
     const styles = {
-      paddingTop: modal ? 0 : insets.top,
+      paddingTop: sheetModal ? 0 : insets.top,
       position: "relative",
       overflow: "hidden",
     } satisfies DefaultStyle
@@ -252,7 +254,7 @@ export const InternalNavigationHeader = ({
         style={{
           marginLeft: insets.left,
           marginRight: insets.right,
-          height: !modal ? defaultHeight - insets.top : defaultHeight,
+          height: !sheetModal ? defaultHeight - insets.top : defaultHeight,
           paddingHorizontal: titlebarPaddingHorizontal,
         }}
         pointerEvents={"box-none"}
@@ -263,7 +265,7 @@ export const InternalNavigationHeader = ({
           pointerEvents={"box-none"}
         >
           {typeof HeaderLeft === "function" ? (
-            <HeaderLeft canGoBack={canBack} canDismiss={canDismiss} modal={modal} />
+            <HeaderLeft canGoBack={canBack} canDismiss={canDismiss} modal={sheetModal} />
           ) : (
             HeaderLeft
           )}
@@ -271,7 +273,7 @@ export const InternalNavigationHeader = ({
         {/* Center */}
 
         <Animated.View
-          className="items-center justify-center"
+          className="shrink items-center justify-center"
           pointerEvents={"box-none"}
           style={{
             marginHorizontal: titleMarginHorizontal,
@@ -286,7 +288,7 @@ export const InternalNavigationHeader = ({
           pointerEvents={"box-none"}
         >
           {typeof RightButton === "function" ? (
-            <RightButton canGoBack={canBack} canDismiss={canDismiss} modal={modal} />
+            <RightButton canGoBack={canBack} canDismiss={canDismiss} modal={sheetModal} />
           ) : (
             RightButton
           )}

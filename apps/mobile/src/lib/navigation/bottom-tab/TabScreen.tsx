@@ -6,6 +6,7 @@ import type { ViewProps } from "react-native"
 import { StyleSheet, View } from "react-native"
 
 import { ScreenNameContext } from "../ScreenNameContext"
+import { WrappedScreenItem } from "../WrappedScreenItem"
 import { BottomTabContext } from "./BottomTabContext"
 import { useTabScreenIsFocused } from "./hooks"
 import type { TabScreenContextType } from "./TabScreenContext"
@@ -82,11 +83,7 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
   const ctxValue = useMemo<TabScreenContextType>(
     () => ({
       tabScreenIndex,
-      Slot: atom<{
-        header: ReactNode
-      }>({
-        header: null,
-      }),
+
       titleAtom: atom(props.title),
     }),
     [tabScreenIndex, props.title],
@@ -97,21 +94,14 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
     <TabScreenNative style={StyleSheet.absoluteFill}>
       <TabScreenContext.Provider value={ctxValue}>
         {shouldLoadReact && (
-          <>
-            <Header />
+          <WrappedScreenItem screenId={`tab-screen-${tabScreenIndex}`}>
             {children}
             <ScreenNameRegister />
-          </>
+          </WrappedScreenItem>
         )}
       </TabScreenContext.Provider>
     </TabScreenNative>
   )
-}
-
-const Header = () => {
-  const ctxValue = useContext(TabScreenContext)
-  const Slot = useAtomValue(ctxValue.Slot)
-  return <View className="absolute inset-x-0 top-0 z-[99]">{Slot.header}</View>
 }
 
 const ScreenNameRegister = () => {

@@ -13,7 +13,7 @@ import {
   SetAttachNavigationScrollViewContext,
 } from "@/src/components/layouts/tabbar/contexts/AttachNavigationScrollViewContext"
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
-import { TabScreenContext } from "@/src/lib/navigation/bottom-tab/TabScreenContext"
+import { useScreenIsInSheetModal } from "@/src/lib/navigation/hooks"
 import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 
 import { ReAnimatedScrollView } from "../../common/AnimatedComponents"
@@ -60,8 +60,9 @@ export const SafeNavigationScrollView: FC<SafeNavigationScrollViewProps> = ({
   }, [setAttachNavigationScrollViewRef, scrollViewRef])
 
   const frame = useSafeAreaFrame()
+  const sheetModal = useScreenIsInSheetModal()
   const [headerHeight, setHeaderHeight] = useState(() =>
-    getDefaultHeaderHeight(frame, false, insets.top),
+    getDefaultHeaderHeight(frame, sheetModal, insets.top),
   )
   const screenCtxValue = useContext(ScreenItemContext)
 
@@ -114,13 +115,12 @@ export const NavigationBlurEffectHeader = ({
 
   const hideableBottom = headerHideableBottom?.()
   const screenCtxValue = useContext(ScreenItemContext)
-  const tabScreenCtxValue = useContext(TabScreenContext)
 
-  const setSlot = useSetAtom(tabScreenCtxValue?.Slot || screenCtxValue.Slot)
+  const setSlot = useSetAtom(screenCtxValue.Slot)
   const store = useStore()
   useEffect(() => {
     setSlot({
-      ...store.get(tabScreenCtxValue?.Slot || screenCtxValue.Slot),
+      ...store.get(screenCtxValue.Slot),
       header: (
         <SetNavigationHeaderHeightContext.Provider value={setHeaderHeight}>
           <InternalNavigationHeader
@@ -135,7 +135,6 @@ export const NavigationBlurEffectHeader = ({
       ),
     })
   }, [
-    tabScreenCtxValue?.Slot,
     screenCtxValue.Slot,
     headerHideableBottomHeight,
     headerTitleAbsolute,

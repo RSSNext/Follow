@@ -1,4 +1,5 @@
 import { useContext } from "react"
+import type { StackPresentationTypes } from "react-native-screens"
 
 import { GroupedNavigationRouteContext } from "./GroupedNavigationRouteContext"
 import { NavigationInstanceContext } from "./NavigationInstanceContext"
@@ -46,3 +47,17 @@ export const useNavigation = () => {
 }
 
 export const useScreenIsInModal = useCanDismiss
+
+const sheetTypes = new Set<StackPresentationTypes>(["formSheet", "modal"])
+export const useScreenIsInSheetModal = () => {
+  const { screenId } = useContext(ScreenItemContext)
+
+  const routeGroups = useContext(GroupedNavigationRouteContext)
+  if (!routeGroups) return false
+
+  const routeGroup = routeGroups.find((group) => group.some((r) => r.id === screenId))
+  if (!routeGroup || routeGroup.length === 0) return false
+  const first = routeGroup.at(0)
+  if (!first) return false
+  return sheetTypes.has(first.type)
+}

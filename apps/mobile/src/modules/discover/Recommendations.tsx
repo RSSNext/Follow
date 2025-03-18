@@ -192,8 +192,6 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
   const { headerHeightAtom } = useContext(DiscoverContext)
   const headerHeight = useAtomValue(headerHeightAtom)
 
-  const insets = useSafeAreaInsets()
-
   const scrollOffsetRef = useRef(0)
   const { animatedY } = useContext(DiscoverContext)
 
@@ -220,10 +218,11 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
         keyExtractor={keyExtractor}
         getItemType={getItemType}
         renderItem={ItemRenderer}
+        automaticallyAdjustsScrollIndicatorInsets={false}
         scrollIndicatorInsets={{
           right: -2,
-          top: headerHeight - insets.top,
-          bottom: tabHeight - insets.bottom,
+          top: headerHeight,
+          bottom: tabHeight,
         }}
         contentContainerStyle={{ paddingBottom: tabHeight, paddingTop: headerHeight }}
         removeClippedSubviews

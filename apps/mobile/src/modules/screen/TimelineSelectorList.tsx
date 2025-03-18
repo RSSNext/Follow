@@ -13,7 +13,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
@@ -46,10 +45,6 @@ export const TimelineSelectorList = forwardRef<
   const tabBarHeight = useBottomTabBarHeight()
 
   const systemFill = useColor("secondaryLabel")
-
-  // const listRef = useRef<FlashList<any>>(null)
-
-  // useImperativeHandle(ref, () => listRef.current!)
 
   return (
     <FlashList

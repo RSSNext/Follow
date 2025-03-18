@@ -116,6 +116,11 @@ export class Navigation {
   emit(event: string, payload: LifecycleEventPayload): void {
     this.bus.emit(event as any, payload)
   }
+
+  canGoBack() {
+    const routes = jotaiStore.get(this.ctxValue.routesAtom)
+    return routes.length > 0
+  }
 }
 
 type Disposer = () => void
