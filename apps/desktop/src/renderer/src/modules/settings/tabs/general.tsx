@@ -1,6 +1,7 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { LANGUAGE_MAP } from "@follow/shared"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -22,7 +23,6 @@ import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTraySetting"
 import { fallbackLanguage } from "~/i18n"
 import { tipcClient } from "~/lib/client"
-import { LanguageMap } from "~/lib/translate"
 import { setTranslationCache } from "~/modules/entry-content/atoms"
 
 import { SettingDescription, SettingInput, SettingSwitch } from "../control"
@@ -259,7 +259,7 @@ const TranslateLanguageSelector = () => {
           setGeneralSetting("actionLanguage", value)
           setTranslationCache({})
         }}
-        items={Object.values(LanguageMap)}
+        items={Object.values(LANGUAGE_MAP)}
       />
     </div>
   )

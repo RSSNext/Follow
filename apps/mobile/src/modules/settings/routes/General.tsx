@@ -1,3 +1,4 @@
+import { LANGUAGE_MAP } from "@follow/shared"
 import { useLocales } from "expo-localization"
 import { Text, View } from "react-native"
 
@@ -14,7 +15,6 @@ import {
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
 import { Switch } from "@/src/components/ui/switch/Switch"
-import { LanguageMap } from "@/src/lib/language"
 
 export const GeneralScreen = () => {
   const locales = useLocales()
@@ -49,7 +49,7 @@ export const GeneralScreen = () => {
                 onValueChange={(value) => {
                   setGeneralSetting("actionLanguage", value)
                 }}
-                options={Object.values(LanguageMap)}
+                options={Object.values(LANGUAGE_MAP)}
               />
             </View>
           </GroupedInsetListBaseCell>
