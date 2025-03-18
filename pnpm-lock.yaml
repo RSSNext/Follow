@@ -192,8 +192,8 @@ importers:
         specifier: 6.2.2
         version: 6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
       vite-bundle-analyzer:
-        specifier: 0.17.3
-        version: 0.17.3
+        specifier: 0.18.0
+        version: 0.18.0
       vite-plugin-mkcert:
         specifier: 1.17.8
         version: 1.17.8(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
@@ -298,8 +298,8 @@ importers:
         specifier: 0.40.0
         version: 0.40.0(24e0690c6324b6a0afe7453ce5597c7f)
       electron:
-        specifier: 34.2.0
-        version: 34.2.0
+        specifier: 34.3.3
+        version: 34.3.3
       electron-devtools-installer:
         specifier: 4.0.0
         version: 4.0.0
@@ -350,13 +350,13 @@ importers:
     dependencies:
       '@egoist/tipc':
         specifier: 0.3.2
-        version: 0.3.2(electron@34.2.0)(react@18.3.1)
+        version: 0.3.2(electron@34.3.3)(react@18.3.1)
       '@electron-toolkit/preload':
         specifier: 3.0.1
-        version: 3.0.1(electron@34.2.0)
+        version: 3.0.1(electron@34.3.3)
       '@electron-toolkit/utils':
         specifier: 4.0.0
-        version: 4.0.0(electron@34.2.0)
+        version: 4.0.0(electron@34.3.3)
       '@eneris/push-receiver':
         specifier: 4.3.0
         version: 4.3.0
@@ -446,8 +446,8 @@ importers:
         specifier: 22.13.10
         version: 22.13.10
       electron:
-        specifier: 34.2.0
-        version: 34.2.0
+        specifier: 34.3.3
+        version: 34.3.3
       electron-devtools-installer:
         specifier: 4.0.0
         version: 4.0.0
@@ -518,8 +518,8 @@ importers:
         specifier: 1.1.2
         version: 1.1.2(@types/react@18.3.12)(react@18.3.1)
       '@sentry/react':
-        specifier: 9.5.0
-        version: 9.5.0(react@18.3.1)
+        specifier: 9.6.0
+        version: 9.6.0(react@18.3.1)
       '@shikijs/transformers':
         specifier: 3.2.1
         version: 3.2.1
@@ -738,8 +738,8 @@ importers:
         specifier: 17.4.4
         version: 17.4.4
       react-scan:
-        specifier: 0.2.14
-        version: 0.2.14(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-router@7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rollup@4.35.0)
+        specifier: 0.3.2
+        version: 0.3.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-router@7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rollup@4.35.0)
 
   apps/mobile:
     dependencies:
@@ -1005,8 +1005,8 @@ importers:
         specifier: 0.3.8
         version: 0.3.8(d4c721057694a6ad309a156a4338c29b)
       react-native-video:
-        specifier: 6.10.2
-        version: 6.10.2(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
+        specifier: 6.11.0
+        version: 6.11.0(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
       react-native-volume-manager:
         specifier: 2.0.8
         version: 2.0.8(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1)
@@ -1096,8 +1096,8 @@ importers:
         specifier: 2.6.2
         version: 2.6.2
       '@sentry/react':
-        specifier: 9.5.0
-        version: 9.5.0(react@18.3.1)
+        specifier: 9.6.0
+        version: 9.6.0(react@18.3.1)
       '@tanstack/react-query':
         specifier: 5.68.0
         version: 5.68.0(react@18.3.1)
@@ -5625,32 +5625,32 @@ packages:
     resolution: {integrity: sha512-S1uT+kkFlstWpwnaBTIJSwwAID8PS3aA0fIidOjNezeoUE5gOvpsjDATo9q+sl6FbGWynxMz6EnYSrq/5tuaBQ==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/browser-utils@9.5.0':
-    resolution: {integrity: sha512-AE9jgeI5+KyGvLR0vf1I6sesi0NZXZe6pDlZNXyg+pWZB2vkE9dksE8ZsoU+YiD9zjUqazgPcVyb3O0VvmaCGw==}
+  '@sentry-internal/browser-utils@9.6.0':
+    resolution: {integrity: sha512-zk64wOc3jIHDeZ26sksRg4TfdpuAG6VP0/VZyXKX0f3QVi/jzb1VoVGfP7/BdtLo2Be1+60f7gGPyt/wvcJkqg==}
     engines: {node: '>=18'}
 
   '@sentry-internal/feedback@9.1.0':
     resolution: {integrity: sha512-jTDCqkqH3QDC8m9WO4mB06hqnBRsl3p7ozoh0E774UvNB6blOEZjShhSGMMEy5jbbJajPWsOivCofUtFAwbfGw==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/feedback@9.5.0':
-    resolution: {integrity: sha512-p+yOTufEYHP1RLwkD+aZwpCNS4/2l6t4uHgphjYrEC2U/U2mtZQh+EvlBAt0wY/eiKC4/acPNrF5yFD/4A7a0A==}
+  '@sentry-internal/feedback@9.6.0':
+    resolution: {integrity: sha512-SWGJC2eRl28KU7IHLDhHj1Kv0S9a6m1F+YYuve3ypIoYNkIyLJjy8EV6KM/Byepm+QhVTlFLh2bOQl8LUMjsNw==}
     engines: {node: '>=18'}
 
   '@sentry-internal/replay-canvas@9.1.0':
     resolution: {integrity: sha512-gxredVe+mOgfNqDJ3dTLiRON3FK1rZ8d0LHp7TICK/umLkWFkuso0DbNeyKU+3XCEjCr9VM7ZRqTDMzmY6zyVg==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/replay-canvas@9.5.0':
-    resolution: {integrity: sha512-W7MS7/9Z8uP2i0pbndxqz2VcGlFPc7Bv6gCoxRdGIWUWSBS9rsRbryO0sM0PwwuHt2mQtWMqwjYykcR441RBRA==}
+  '@sentry-internal/replay-canvas@9.6.0':
+    resolution: {integrity: sha512-xNZPQvgNJ4CJSn+3tGaYao57yRqDLh79r2cf29P69jLSmKN5TT04thdMr/urCb9Ba9rcmG3uIAcJv8Y3SNm8gA==}
     engines: {node: '>=18'}
 
   '@sentry-internal/replay@9.1.0':
     resolution: {integrity: sha512-E2xrUoms90qvm0BVOuaZ8QfkMoTUEgoIW/35uOeaqNcL7uOIj8c5cSEQQKit2Dr7CL6W+Ci5c6Khdyd5C0NL5w==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/replay@9.5.0':
-    resolution: {integrity: sha512-fBBNimElAnu865HT3MJ6xH2P26KvkZvAYt+yRrWr+x5zS5KvjBYUPsSI+F0FTE14XmLW9q7DlNUl5iAZhXSy3g==}
+  '@sentry-internal/replay@9.6.0':
+    resolution: {integrity: sha512-+F9xcc4XIMzLgItis3kScbUZgOPrtMIwRL61gzSoYFyYAAp+in3Kq9vJ1eY+LcQKKnJ0DgzUFXU8YVs3yRTWxg==}
     engines: {node: '>=18'}
 
   '@sentry/babel-plugin-component-annotate@3.2.2':
@@ -5661,8 +5661,8 @@ packages:
     resolution: {integrity: sha512-G55e5j77DqRW3LkalJLAjRRfuyKrjHaKTnwIYXa6ycO+Q1+l14pEUxu+eK5Abu2rtSdViwRSb5/G6a/miSUlYA==}
     engines: {node: '>=18'}
 
-  '@sentry/browser@9.5.0':
-    resolution: {integrity: sha512-HYSPW8GjknuYykJgOialKFyWg7ldmrbD1AKTIhksqdsNXLER07YeVWFAbe+xSYa1ZwwC8/s6vQJP9ZOoH1BaVg==}
+  '@sentry/browser@9.6.0':
+    resolution: {integrity: sha512-8tOmdbaEUVcousqnqhQ0bx+IG8kXVYV1dXgSvFQUaCsm0TEWMosoN25cSridImTN9B0M6YBY0ONx1cdKdRmw/w==}
     engines: {node: '>=18'}
 
   '@sentry/bundler-plugin-core@3.2.2':
@@ -5719,8 +5719,8 @@ packages:
     resolution: {integrity: sha512-djWEzSBpMgqdF3GQuxO+kXCUX+Mgq42G4Uah/HSUBvPDHKipMmyWlutGRoFyVPPOnCDgpHu3wCt83wbpEyVmDw==}
     engines: {node: '>=18'}
 
-  '@sentry/core@9.5.0':
-    resolution: {integrity: sha512-NMqyFdyg26ECAfnibAPKT8vvAt4zXp4R7dYtQnwJKhEJEVkgAshcNYeJ2D95ZLMVOqlqhTtTPnw1vqf+v9ePZg==}
+  '@sentry/core@9.6.0':
+    resolution: {integrity: sha512-t51h6HKlPYW3TfeM09mZ6uDd95A7lgYpD5lUV54ilBA3TefS+M9I32MKwAW7yHzzWs0WQxOdm56eoDBOmRDpHQ==}
     engines: {node: '>=18'}
 
   '@sentry/electron@6.1.0':
@@ -5741,8 +5741,8 @@ packages:
       '@opentelemetry/sdk-trace-base': ^1.30.1
       '@opentelemetry/semantic-conventions': ^1.28.0
 
-  '@sentry/react@9.5.0':
-    resolution: {integrity: sha512-ixOlKuMxWKSK73u41vY2wQNkQpZJo4fwRkA6r4oy745ldcwhGlOy/TMACdotbHCn4ULC86rVZN5r49mH6SV5+w==}
+  '@sentry/react@9.6.0':
+    resolution: {integrity: sha512-ozBeIyPwCGa1g+poqbONpR6QFObp1+y4MErEiMiR27msgpBGhE5xjuS+WEHHLt/HPJp1uNB4XxRr6ovoD53BPQ==}
     engines: {node: '>=18'}
     peerDependencies:
       react: 18.3.1
@@ -8358,8 +8358,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@34.2.0:
-    resolution: {integrity: sha512-SYwBJNeXBTm1q/ErybQMUBZAYqEreBUqBwTrNkw1rV4YatDZk5Aittpcus3PPeC4UoI/tqmJ946uG8AKHTd6CA==}
+  electron@34.3.3:
+    resolution: {integrity: sha512-7m1FiO1mwc1K/UqqnnkG7Ik/kAngDzmLfHwcl+xaWgCQ+Sts9rlEqzOh6g1GHhDqebrbs4bO/aU+NDi32fCciQ==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -9643,8 +9643,8 @@ packages:
     resolution: {integrity: sha512-ic38pWErePVYNrZZlcOLPW9vjJXcq7a1kZJyoSZE2xXioNd2FuGA09Y7iBfHiwpVb67Av2KgBkhwbdcRVflWKw==}
     engines: {node: '>=0.4.0'}
 
-  flow-parser@0.265.2:
-    resolution: {integrity: sha512-DX2mp5u3lNJHl5dH8R1KrcrDsiJC02zFcG95p4b0YcDCzZZW+v9za2Csv5bQ0cq4jNzGx0gFU9jFZyM7FOyNFw==}
+  flow-parser@0.265.3:
+    resolution: {integrity: sha512-YH50TTYgnzDnuaZlAxLYQ0UZtXSbbizMO3OCpoY8obvLReJmvQ5UUW22efsC3SZJmze/tATfQ0PtkKul2XwWBw==}
     engines: {node: '>=0.4.0'}
 
   fmix@0.1.0:
@@ -11974,6 +11974,11 @@ packages:
   nan@2.22.2:
     resolution: {integrity: sha512-DANghxFkS1plDdRsX0X9pm0Z6SJNN6gBdtXfanwoZ8hooC5gosGFSBGRYHUVPz1asKA/kMRqDRdHrluZ61SpBQ==}
 
+  nanoid@3.3.10:
+    resolution: {integrity: sha512-vSJJTG+t/dIKAUhUDw/dLdZ9s//5OxcHqLaDWWrW4Cdq7o6tdLIczUkMXt2MBNmk6sJRZBZRXVixs7URY1CmIg==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   nanoid@3.3.8:
     resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -12640,13 +12645,13 @@ packages:
     peerDependencies:
       shiki: '>=1.22.0'
 
-  playwright-core@1.51.0:
-    resolution: {integrity: sha512-x47yPE3Zwhlil7wlNU/iktF7t2r/URR3VLbH6EknJd/04Qc/PSJ0EY3CMXipmglLG+zyRxW6HNo2EGbKLHPWMg==}
+  playwright-core@1.51.1:
+    resolution: {integrity: sha512-/crRMj8+j/Nq5s8QcvegseuyeZPxpQCZb6HNk3Sos3BlZyAknRjoyJPFWkpNn8v0+P3WiwqFF8P+zQo4eqiNuw==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.51.0:
-    resolution: {integrity: sha512-442pTfGM0xxfCYxuBa/Pu6B2OqxqqaYq39JS8QDMGThUvIOCd6s0ANDog3uwA0cHavVlnTQzGCN7Id2YekDSXA==}
+  playwright@1.51.1:
+    resolution: {integrity: sha512-kkx+MB2KQRkyxjYPc3a0wLZZoDczmppyGJIvQ43l+aZihkaVvmu/21kiyaHeHjiFxjxNNFnUncKmcGIyOojsaw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -13462,8 +13467,8 @@ packages:
       react-native: '>=0.76.0'
       tailwindcss: '>=3.0.0'
 
-  react-native-video@6.10.2:
-    resolution: {integrity: sha512-ua/7mGZVJYe0pUh5tWccG4h+Jj3IGemGSwsc6E7HFV+nfvUfULtWuCth4dYDU1HPeuVW+aDlD660AnKD+mdS1w==}
+  react-native-video@6.11.0:
+    resolution: {integrity: sha512-+lxuyQqUwowWQ5vx82mSnPiAW7ZHvyZrgCRy/6WHREAyCcdveA118SIAjPurRc5bASXPDeit7WkYF4xRlonyYQ==}
     peerDependencies:
       react: 18.3.1
       react-native: '*'
@@ -13542,8 +13547,8 @@ packages:
       react-dom:
         optional: true
 
-  react-scan@0.2.14:
-    resolution: {integrity: sha512-Kw3vD0jC0xX69u5BlNG8FNjX+4h+yS4c9uuHb7Vpvz7+kvnPSU4xyhNhsS0ZfYrztcO29W4GV6FV5HThCfJwXA==}
+  react-scan@0.3.2:
+    resolution: {integrity: sha512-lJb/klITqM95+MT+tR4nhfMl+ApXUeQ4iH0A0CsKYKkc66Wu01bOv+SxzZR1ksIPUWon7m2S3/83maZENtLEAQ==}
     hasBin: true
     peerDependencies:
       '@remix-run/react': '>=1.0.0'
@@ -15469,8 +15474,8 @@ packages:
   vfile@5.3.7:
     resolution: {integrity: sha512-r7qlzkgErKjobAmyNIkkSpizsFPYiUPuJb5pNW1RB4JcYVZhs4lIbVqk8XPk033CV/1z8ss5pkax8SuhGpcG8g==}
 
-  vite-bundle-analyzer@0.17.3:
-    resolution: {integrity: sha512-auy3vYMXErXYf78e12cAaaD7JmGaTa0DOipKRKx83KSR4kEttJ416HH/OmmzjWa0XI2AH5f21ax+WkVFPsB0fw==}
+  vite-bundle-analyzer@0.18.0:
+    resolution: {integrity: sha512-FCVZ7zN3hEdn65QZoV0VpbsbVO3QekfESO1DgFd3algXWqiEIM+DgpdCzCoc5fKKEh3CmUCMbuyIL7HEu7Eiog==}
     hasBin: true
 
   vite-node@3.0.8:
@@ -17084,9 +17089,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@egoist/tipc@0.3.2(electron@34.2.0)(react@18.3.1)':
+  '@egoist/tipc@0.3.2(electron@34.3.3)(react@18.3.1)':
     dependencies:
-      electron: 34.2.0
+      electron: 34.3.3
     optionalDependencies:
       '@tanstack/react-query': 5.67.3(react@18.3.1)
     transitivePeerDependencies:
@@ -17327,9 +17332,9 @@ snapshots:
     dependencies:
       chrome-trace-event: 1.0.4
 
-  '@electron-toolkit/preload@3.0.1(electron@34.2.0)':
+  '@electron-toolkit/preload@3.0.1(electron@34.3.3)':
     dependencies:
-      electron: 34.2.0
+      electron: 34.3.3
 
   '@electron-toolkit/preload@3.0.1(electron@35.0.1)':
     dependencies:
@@ -17339,9 +17344,9 @@ snapshots:
     dependencies:
       '@types/node': 22.13.10
 
-  '@electron-toolkit/utils@4.0.0(electron@34.2.0)':
+  '@electron-toolkit/utils@4.0.0(electron@34.3.3)':
     dependencies:
-      electron: 34.2.0
+      electron: 34.3.3
 
   '@electron/asar@3.3.1':
     dependencies:
@@ -21518,37 +21523,37 @@ snapshots:
     dependencies:
       '@sentry/core': 9.1.0
 
-  '@sentry-internal/browser-utils@9.5.0':
+  '@sentry-internal/browser-utils@9.6.0':
     dependencies:
-      '@sentry/core': 9.5.0
+      '@sentry/core': 9.6.0
 
   '@sentry-internal/feedback@9.1.0':
     dependencies:
       '@sentry/core': 9.1.0
 
-  '@sentry-internal/feedback@9.5.0':
+  '@sentry-internal/feedback@9.6.0':
     dependencies:
-      '@sentry/core': 9.5.0
+      '@sentry/core': 9.6.0
 
   '@sentry-internal/replay-canvas@9.1.0':
     dependencies:
       '@sentry-internal/replay': 9.1.0
       '@sentry/core': 9.1.0
 
-  '@sentry-internal/replay-canvas@9.5.0':
+  '@sentry-internal/replay-canvas@9.6.0':
     dependencies:
-      '@sentry-internal/replay': 9.5.0
-      '@sentry/core': 9.5.0
+      '@sentry-internal/replay': 9.6.0
+      '@sentry/core': 9.6.0
 
   '@sentry-internal/replay@9.1.0':
     dependencies:
       '@sentry-internal/browser-utils': 9.1.0
       '@sentry/core': 9.1.0
 
-  '@sentry-internal/replay@9.5.0':
+  '@sentry-internal/replay@9.6.0':
     dependencies:
-      '@sentry-internal/browser-utils': 9.5.0
-      '@sentry/core': 9.5.0
+      '@sentry-internal/browser-utils': 9.6.0
+      '@sentry/core': 9.6.0
 
   '@sentry/babel-plugin-component-annotate@3.2.2': {}
 
@@ -21560,13 +21565,13 @@ snapshots:
       '@sentry-internal/replay-canvas': 9.1.0
       '@sentry/core': 9.1.0
 
-  '@sentry/browser@9.5.0':
+  '@sentry/browser@9.6.0':
     dependencies:
-      '@sentry-internal/browser-utils': 9.5.0
-      '@sentry-internal/feedback': 9.5.0
-      '@sentry-internal/replay': 9.5.0
-      '@sentry-internal/replay-canvas': 9.5.0
-      '@sentry/core': 9.5.0
+      '@sentry-internal/browser-utils': 9.6.0
+      '@sentry-internal/feedback': 9.6.0
+      '@sentry-internal/replay': 9.6.0
+      '@sentry-internal/replay-canvas': 9.6.0
+      '@sentry/core': 9.6.0
 
   '@sentry/bundler-plugin-core@3.2.2(encoding@0.1.13)':
     dependencies:
@@ -21624,7 +21629,7 @@ snapshots:
 
   '@sentry/core@9.1.0': {}
 
-  '@sentry/core@9.5.0': {}
+  '@sentry/core@9.6.0': {}
 
   '@sentry/electron@6.1.0':
     dependencies:
@@ -21684,10 +21689,10 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.30.0
       '@sentry/core': 9.1.0
 
-  '@sentry/react@9.5.0(react@18.3.1)':
+  '@sentry/react@9.6.0(react@18.3.1)':
     dependencies:
-      '@sentry/browser': 9.5.0
-      '@sentry/core': 9.5.0
+      '@sentry/browser': 9.6.0
+      '@sentry/core': 9.6.0
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
 
@@ -21932,7 +21937,7 @@ snapshots:
     dependencies:
       '@tsslint/types': 1.5.8
       error-stack-parser: 2.1.4
-      esbuild: 0.24.2
+      esbuild: 0.25.1
       minimatch: 10.0.1
 
   '@tsslint/eslint@1.5.8(jiti@2.4.2)(typescript@5.8.2)':
@@ -24895,7 +24900,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@34.2.0:
+  electron@34.3.3:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.17.24
@@ -26726,7 +26731,7 @@ snapshots:
 
   flow-parser@0.264.0: {}
 
-  flow-parser@0.265.2: {}
+  flow-parser@0.265.3: {}
 
   fmix@0.1.0:
     dependencies:
@@ -28399,7 +28404,7 @@ snapshots:
       '@babel/register': 7.25.9(@babel/core@7.26.10)
       babel-core: 7.0.0-bridge.0(@babel/core@7.26.10)
       chalk: 4.1.2
-      flow-parser: 0.265.2
+      flow-parser: 0.265.3
       graceful-fs: 4.2.11
       micromatch: 4.0.8
       neo-async: 2.6.2
@@ -29809,6 +29814,8 @@ snapshots:
   nan@2.22.2:
     optional: true
 
+  nanoid@3.3.10: {}
+
   nanoid@3.3.8: {}
 
   nanoid@3.3.9: {}
@@ -30480,11 +30487,11 @@ snapshots:
     dependencies:
       shiki: 3.2.1
 
-  playwright-core@1.51.0: {}
+  playwright-core@1.51.1: {}
 
-  playwright@1.51.0:
+  playwright@1.51.1:
     dependencies:
-      playwright-core: 1.51.0
+      playwright-core: 1.51.1
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -30708,7 +30715,7 @@ snapshots:
 
   postcss@8.4.49:
     dependencies:
-      nanoid: 3.3.9
+      nanoid: 3.3.10
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -31219,7 +31226,7 @@ snapshots:
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2))
       tailwindcss-uikit-colors: 0.3.8
 
-  react-native-video@6.10.2(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
+  react-native-video@6.11.0(react-native@0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-native: 0.77.1(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.12)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@6.0.5)
@@ -31343,7 +31350,7 @@ snapshots:
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
-  react-scan@0.2.14(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-router@7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rollup@4.35.0):
+  react-scan@0.3.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-router@7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rollup@4.35.0):
     dependencies:
       '@babel/core': 7.26.10
       '@babel/generator': 7.26.10
@@ -31359,7 +31366,7 @@ snapshots:
       estree-walker: 3.0.3
       kleur: 4.1.5
       mri: 1.2.0
-      playwright: 1.51.0
+      playwright: 1.51.1
       preact: 10.26.4
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -33513,7 +33520,7 @@ snapshots:
       unist-util-stringify-position: 3.0.3
       vfile-message: 3.1.4
 
-  vite-bundle-analyzer@0.17.3: {}
+  vite-bundle-analyzer@0.18.0: {}
 
   vite-node@3.0.8(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0):
     dependencies:
