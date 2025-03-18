@@ -187,7 +187,7 @@ export function ListItem({
       {hasAudio && (
         <AudioCover
           entryId={entryId}
-          src={entry.entries!.attachments![0]!.url}
+          src={audioAttachment!.url}
           durationInSeconds={audioAttachment?.duration_in_seconds}
           feedIcon={
             <FeedIcon
