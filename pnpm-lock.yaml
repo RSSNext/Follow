@@ -298,8 +298,8 @@ importers:
         specifier: 0.40.0
         version: 0.40.0(24e0690c6324b6a0afe7453ce5597c7f)
       electron:
-        specifier: 35.0.1
-        version: 35.0.1
+        specifier: 34.2.0
+        version: 34.2.0
       electron-devtools-installer:
         specifier: 4.0.0
         version: 4.0.0
