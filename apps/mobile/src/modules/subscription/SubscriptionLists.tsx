@@ -27,7 +27,6 @@ import { CategoryGrouped } from "./CategoryGrouped"
 import { InboxItem } from "./items/InboxItem"
 import { ListSubscriptionItem } from "./items/ListSubscriptionItem"
 import { SubscriptionItem } from "./items/SubscriptionItem"
-import { ItemSeparator } from "./ItemSeparator"
 
 const keyExtractor = (item: string | { category: string; subscriptionIds: string[] }) => {
   if (typeof item === "string") {
@@ -169,7 +168,6 @@ const ItemRender = ({
 const SectionTitle = ({ title }: { title: string }) => {
   return (
     <View className="my-2">
-      <ItemSeparator />
       <Text className="text-gray ml-3 mt-3 text-sm font-semibold">{title}</Text>
     </View>
   )
