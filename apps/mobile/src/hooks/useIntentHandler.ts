@@ -1,6 +1,9 @@
 import * as Linking from "expo-linking"
 import { useEffect } from "react"
 
+import { useNavigation } from "../lib/navigation/hooks"
+import { FollowScreen } from "../screens/(modal)/follow"
+
 // This needs to stay outside of react to persist between account switches
 let previousIntentUrl = ""
 export const resetIntentUrl = () => {
@@ -9,6 +12,8 @@ export const resetIntentUrl = () => {
 
 export function useIntentHandler() {
   const incomingUrl = Linking.useURL()
+
+  const navigation = useNavigation()
 
   useEffect(() => {
     if (incomingUrl && incomingUrl !== previousIntentUrl) {
@@ -20,10 +25,13 @@ export function useIntentHandler() {
         return
       }
 
-      // TODO
-      // router.push(`/follow?${searchParams.toString()}`)
+      navigation.presentControllerView(FollowScreen, {
+        id: searchParams.get("id") ?? undefined,
+        type: (searchParams.get("type") as "url" | "feed" | "list") ?? undefined,
+        url: searchParams.get("url") ?? undefined,
+      })
     }
-  }, [incomingUrl])
+  }, [incomingUrl, navigation])
 }
 
 // follow://add?id=41147805276726272
