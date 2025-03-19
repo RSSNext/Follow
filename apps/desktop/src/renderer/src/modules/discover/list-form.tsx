@@ -225,13 +225,12 @@ const ListInnerForm = ({
     },
     onSuccess: (_, variables) => {
       if (isSubscribed && variables.view !== `${subscription?.view}`) {
-        subscriptionQuery.byView(subscription?.view).invalidate()
-        tipcClient?.invalidateQuery(subscriptionQuery.byView(subscription?.view).key)
         feedUnreadActions.fetchUnreadByView(subscription?.view)
+      } else {
+        feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
       }
-      subscriptionQuery.byView(Number.parseInt(variables.view)).invalidate()
-      tipcClient?.invalidateQuery(subscriptionQuery.byView(Number.parseInt(variables.view)).key)
-      feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
+      subscriptionQuery.all().invalidate()
+      tipcClient?.invalidateQuery(subscriptionQuery.all().key)
 
       const listId = list.id
       if (listId) {
