@@ -17,7 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: "a6335b14-fb84-45aa-ba80-6f6ab8926920",
     },
   },
-  owner: "folo",
+  owner: "follow",
   updates: {
     url: "https://u.expo.dev/a6335b14-fb84-45aa-ba80-6f6ab8926920",
   },
@@ -26,7 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   name: "Folo",
-  slug: "folo",
+  slug: "follow",
   version: PKG.version,
   orientation: "portrait",
   icon: iconPath,
