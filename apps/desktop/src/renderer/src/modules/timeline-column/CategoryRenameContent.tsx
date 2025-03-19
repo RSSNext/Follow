@@ -25,12 +25,10 @@ export function CategoryRenameContent({
   feedIdList,
   onSuccess,
   category,
-  view,
 }: {
   feedIdList: string[]
   onSuccess?: () => void
   category: string
-  view?: number
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,7 +46,7 @@ export function CategoryRenameContent({
         },
       }),
     onSuccess: () => {
-      Queries.subscription.byView(view).invalidate()
+      Queries.subscription.all().invalidate()
 
       onSuccess?.()
     },
