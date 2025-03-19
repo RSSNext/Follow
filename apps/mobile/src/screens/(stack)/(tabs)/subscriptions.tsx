@@ -14,7 +14,7 @@ export default function Subscriptions() {
     <EntryListContext.Provider value={useMemo(() => ({ type: "subscriptions" }), [])}>
       <TimelineSelectorProvider>
         {whoami ? (
-          <PagerList renderItem={(view) => <SubscriptionList view={view} />} />
+          <PagerList renderItem={(view) => <SubscriptionList key={view} view={view} />} />
         ) : (
           <NoLoginInfo target="subscriptions" />
         )}
