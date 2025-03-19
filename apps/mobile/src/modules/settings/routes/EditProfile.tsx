@@ -72,7 +72,6 @@ export const EditProfileModal = () => {
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader headerTitle="111Edit Profile" />
       <AvatarSection whoami={whoami} />
       <ProfileForm layout="modal" whoami={whoami} />
     </SafeModalScrollView>
