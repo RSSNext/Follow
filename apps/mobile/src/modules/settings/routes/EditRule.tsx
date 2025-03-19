@@ -21,7 +21,7 @@ import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionFilter, ActionRule } from "@/src/store/action/types"
-import { accentColor } from "@/src/theme/colors"
+import { accentColor, useColors } from "@/src/theme/colors"
 
 import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions/constant"
 import { EditConditionScreen } from "./EditCondition"
@@ -109,6 +109,7 @@ const FilterSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
 
 const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ filter, index }) => {
   const navigation = useNavigation()
+  const colors = useColors()
 
   if (filter.length === 0) return null
   return (
@@ -141,7 +142,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                           conditionIndex: itemIndex,
                         })
                       },
-                      backgroundColor: "red",
+                      backgroundColor: colors.red,
                     },
                     {
                       label: "Edit",
@@ -152,7 +153,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                           conditionIndex: itemIndex,
                         })
                       },
-                      backgroundColor: "#0ea5e9",
+                      backgroundColor: colors.blue,
                     },
                   ]}
                 >
@@ -210,6 +211,7 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
   )
 
   const navigation = useNavigation()
+  const colors = useColors()
 
   return (
     <View>
@@ -224,7 +226,7 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
                 onPress: () => {
                   actionActions.deleteRuleAction(rule.index, action.value)
                 },
-                backgroundColor: "red",
+                backgroundColor: colors.red,
               },
             ]}
           >

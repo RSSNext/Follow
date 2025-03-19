@@ -129,9 +129,10 @@ function EntryColumnImpl() {
               })
       }
     >
-      {entriesIds.length === 0 && !entries.isLoading && !entries.error && feed?.type === "feed" && (
-        <AddFeedHelper />
-      )}
+      {entriesIds.length === 0 &&
+        !entries.isLoading &&
+        !entries.error &&
+        (!feed || feed?.type === "feed") && <AddFeedHelper />}
 
       <EntryListHeader
         refetch={entries.refetch}

@@ -160,10 +160,11 @@ function EmailSignUp() {
 }
 
 export const SignUpScreen: NavigationControllerView = () => {
-  const logoSize = useScaleHeight()(80)
-  const gapSize = useScaleHeight()(28)
-  const fontSize = useScaleHeight()(28)
-  const lineHeight = useScaleHeight()(32)
+  const scaledHeight = useScaleHeight()
+  const logoSize = scaledHeight(80)
+  const gapSize = scaledHeight(28)
+  const fontSize = scaledHeight(28)
+  const lineHeight = scaledHeight(32)
   return (
     <View className="p-safe flex-1">
       <HeaderCloseOnly />
