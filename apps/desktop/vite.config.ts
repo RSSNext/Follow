@@ -160,7 +160,7 @@ export default ({ mode }) => {
 
           manifest: {
             theme_color: "#000000",
-            name: "Follow",
+            name: "Folo",
             display: "standalone",
             background_color: "#ffffff",
             icons: [
@@ -289,7 +289,7 @@ export default ({ mode }) => {
 function checkBrowserSupport() {
   if (!("findLastIndex" in Array.prototype) || !("structuredClone" in window)) {
     window.alert(
-      "Follow is not compatible with your browser because your browser version is too old. You can download and use the Follow app or continue using it with the latest browser.",
+      "Folo is not compatible with your browser because your browser version is too old. You can download and use the Folo app or continue using it with the latest browser.",
     )
 
     window.location.href = "https://follow.is/download"

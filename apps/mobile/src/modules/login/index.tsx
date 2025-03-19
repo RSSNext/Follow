@@ -43,7 +43,7 @@ export function Login() {
                 lineHeight,
               }}
             >
-              Sign in to <Text className="font-bold">Follow</Text>
+              Sign in to <Text className="font-bold">Folo</Text>
             </Text>
             <EmailLogin />
           </View>

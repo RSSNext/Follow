@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     policy: "appVersion",
   },
 
-  name: "Follow",
+  name: "Folo",
   slug: "follow",
   version: PKG.version,
   orientation: "portrait",

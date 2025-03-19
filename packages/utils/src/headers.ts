@@ -7,7 +7,7 @@ export const createBuildSafeHeaders =
     if (headers["User-Agent"]) {
       headers["User-Agent"] = headers["User-Agent"]
         .replace(/\s?Electron\/[\d.]+/, "")
-        .replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
+        .replace(/\s?Folo\/[\d.a-zA-Z-]+/, "")
     } else {
       headers["User-Agent"] =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"

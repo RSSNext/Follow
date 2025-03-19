@@ -142,7 +142,7 @@ export const UserHeaderBanner = ({
             {user.name}
           </Text>
         ) : (
-          <Text className="text-text text-2xl font-bold">Follow Account</Text>
+          <Text className="text-text text-2xl font-bold">Folo Account</Text>
         )}
 
         {user?.handle ? (

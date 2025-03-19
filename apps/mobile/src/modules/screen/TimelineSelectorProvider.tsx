@@ -88,7 +88,7 @@ function FeedShareAction({ feedId }: { feedId?: string }) {
         if (!feed) return
         const url = `${env.VITE_WEB_URL}/share/feeds/${feedId}`
         Share.share({
-          message: `Check out ${feed.title} on Follow: ${url}`,
+          message: `Check out ${feed.title} on Folo: ${url}`,
           title: feed.title!,
           url,
         })

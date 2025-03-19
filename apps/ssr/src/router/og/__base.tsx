@@ -47,7 +47,7 @@ export const OGCanvas = ({ children, seed }: { children: React.ReactNode; seed: 
           }}
         >
           <FollowIcon />
-          <span style={{ fontSize: "2.5rem", color: "#FF5C02", fontWeight: 600 }}>Follow</span>
+          <span style={{ fontSize: "2.5rem", color: "#FF5C02", fontWeight: 600 }}>Folo</span>
         </div>
 
         {children}

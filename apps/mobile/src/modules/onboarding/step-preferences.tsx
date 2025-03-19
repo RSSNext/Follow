@@ -30,8 +30,8 @@ export const StepPreferences = () => {
           Personalize Your Experience
         </Text>
         <Text className="text-label text-center text-base">
-          Set your preferences to make Follow work best for you. You can always change these later
-          in Settings.
+          Set your preferences to make Folo work best for you. You can always change these later in
+          Settings.
         </Text>
       </View>
 

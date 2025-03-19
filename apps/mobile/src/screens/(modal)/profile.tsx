@@ -75,7 +75,7 @@ function ProfileScreenImpl(props: { userId: string }) {
     if (!user?.id) return
     Share.share({
       url: `https://app.follow.is/share/users/${user.id}`,
-      title: `Follow | ${user.name}'s Profile`,
+      title: `Folo | ${user.name}'s Profile`,
     })
   }, [user?.id, user?.name])
 

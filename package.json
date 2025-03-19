@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@10.6.3",
   "description": "Follow everything in one place",
-  "author": "Follow Team",
+  "author": "Folo Team",
   "license": "GPL-3.0-only",
   "homepage": "https://github.com/RSSNext",
   "repository": {
@@ -12,13 +12,13 @@
     "type": "git"
   },
   "scripts": {
-    "build:all": "turbo run Follow#build @follow/ssr#build",
-    "build:electron": "turbo run Follow#build",
-    "build:macos": "turbo run Follow#build:macos",
-    "build:mas": "turbo run Follow#build:mas",
-    "build:render": "turbo run Follow#build:render",
+    "build:all": "turbo run Folo#build @follow/ssr#build",
+    "build:electron": "turbo run Folo#build",
+    "build:macos": "turbo run Folo#build:macos",
+    "build:mas": "turbo run Folo#build:mas",
+    "build:render": "turbo run Folo#build:render",
     "build:ssr": "turbo run @follow/ssr#build",
-    "build:web": "turbo run Follow#build:web",
+    "build:web": "turbo run Folo#build:web",
     "dedupe:locales": "eslint --fix apps/desktop/locales/**/*.json",
     "depcheck": "npx depcheck --quiet",
     "format": "prettier --write .",
