@@ -39,25 +39,46 @@ class TabBarRootView: ExpoView {
 
     override func unmountChildComponentView(_ childComponentView: UIView, index: Int) {
       self.willRemoveSubview(childComponentView)
-//      gestureRecognizers?.removeAll()
-      
+      //      gestureRecognizers?.removeAll()
+
     }
   #endif
 
   public func switchToTab(index: Int) {
+    let beforeIndex = tabBarController.selectedIndex
+    if beforeIndex == index {
+      return
+    }
+
+    if tabViewControllers.count < beforeIndex || tabViewControllers.count < index {
+      return
+    }
+    if let fromView = tabViewControllers[beforeIndex].view,
+      let toView = tabViewControllers[index].view
+    {
+      if fromView != toView {
+        UIView.transition(
+          from: fromView,
+          to: toView,
+          duration: 0.1,
+          options: [.transitionCrossDissolve, .preferredFramesPerSecond60],
+          completion: nil)
+      }
+    }
+
     tabBarController.selectedIndex = index
     if let selectedViewController = tabBarController.selectedViewController {
       tabBarController(tabBarController, didSelect: selectedViewController)
     }
+
   }
 
   override func insertSubview(_ subview: UIView, at atIndex: Int) {
 
     if let tabScreenView = subview as? TabScreenView {
-  
+
       let screenVC = UIViewController()
       screenVC.view = tabScreenView
-      screenVC.view.tag = tabScreenView.tag
       tabViewControllers.append(screenVC)
       tabBarController.viewControllers = tabViewControllers
       tabBarController.didMove(toParent: vc)
@@ -69,11 +90,11 @@ class TabBarRootView: ExpoView {
 
     }
   }
- 
+
   override func willRemoveSubview(_ subview: UIView) {
     if let tabScreenView = subview as? TabScreenView {
       tabViewControllers.removeAll { viewController in
-        return viewController.view.tag == tabScreenView.tag
+        return viewController.view == tabScreenView
       }
 
       tabBarController.viewControllers = tabViewControllers
@@ -85,6 +106,7 @@ class TabBarRootView: ExpoView {
 
 // MARK: - UITabBarControllerDelegate
 extension TabBarRootView: UITabBarControllerDelegate {
+
   func tabBarController(
     _ tabBarController: UITabBarController, didSelect viewController: UIViewController
   ) {
@@ -92,5 +114,13 @@ extension TabBarRootView: UITabBarControllerDelegate {
       "index": tabBarController.selectedIndex
     ])
   }
+
+  // func tabBarController(
+  //   _ tabBarController: UITabBarController,
+  //   animationControllerForTransitionFrom fromVC: UIViewController, to toVC: UIViewController
+  // ) -> (any UIViewControllerAnimatedTransitioning)? {
+
+  //   return nil
+  // }
 
 }

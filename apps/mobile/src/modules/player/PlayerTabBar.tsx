@@ -9,8 +9,10 @@ import Animated, {
 } from "react-native-reanimated"
 
 import { Image } from "@/src/components/ui/image/Image"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { useScreenName } from "@/src/lib/navigation/ScreenNameContext"
 import { useActiveTrack } from "@/src/lib/player"
+import { PlayerScreen } from "@/src/screens/player"
 import { usePrefetchImageColors } from "@/src/store/image/hooks"
 
 import { PlayPauseButton, SeekButton } from "./control"
@@ -35,6 +37,7 @@ export function PlayerTabBar({ className }: { className?: string }) {
   })
 
   usePrefetchImageColors(activeTrack?.artwork)
+  const navigation = useNavigation()
 
   return (
     <Animated.View
@@ -43,7 +46,7 @@ export function PlayerTabBar({ className }: { className?: string }) {
     >
       <Pressable
         onPress={() => {
-          // router.push("/player")
+          navigation.presentControllerView(PlayerScreen, void 0, "transparentModal")
           // TODO
         }}
       >

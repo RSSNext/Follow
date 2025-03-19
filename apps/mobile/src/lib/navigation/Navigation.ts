@@ -3,7 +3,11 @@ import { EventEmitter } from "expo"
 import { atom } from "jotai"
 
 import type { ChainNavigationContextType, Route } from "./ChainNavigationContext"
-import type { NavigationControllerView, NavigationControllerViewType } from "./types"
+import type {
+  NavigationControllerView,
+  NavigationControllerViewExtraProps,
+  NavigationControllerViewType,
+} from "./types"
 
 export class Navigation {
   private ctxValue: ChainNavigationContextType
@@ -40,14 +44,24 @@ export class Navigation {
     jotaiStore.set(this.ctxValue.routesAtom, [...routes, route])
   }
 
-  pushControllerView<T>(view: NavigationControllerView<T>, props?: T) {
-    const viewId = view.id ?? view.name ?? `view-${this.viewIdCounter++}`
+  private resolveScreenOptions<T>(
+    view: NavigationControllerView<T>,
+  ): Required<NavigationControllerViewExtraProps> {
+    return {
+      transparent: view.transparent ?? false,
+      id: view.id ?? view.name ?? `view-${this.viewIdCounter++}`,
+      title: view.title ?? "",
+    }
+  }
 
+  pushControllerView<T>(view: NavigationControllerView<T>, props?: T) {
+    const screenOptions = this.resolveScreenOptions(view)
     this.__push({
-      id: viewId,
+      id: screenOptions.id,
       type: "push",
       Component: view,
       props,
+      screenOptions,
     })
   }
 
@@ -56,12 +70,13 @@ export class Navigation {
     props?: T,
     type: Exclude<NavigationControllerViewType, "push"> = "modal",
   ) {
-    const viewId = view.id ?? view.name ?? `view-${this.viewIdCounter++}`
+    const screenOptions = this.resolveScreenOptions(view)
     this.__push({
-      id: viewId,
+      id: screenOptions.id,
       type,
       Component: view,
       props,
+      screenOptions,
     })
   }
   private __pop() {
@@ -72,12 +87,13 @@ export class Navigation {
     }
     jotaiStore.set(this.ctxValue.routesAtom, routes.slice(0, -1))
   }
+
   /**
    * Dismiss the current modal.
    */
   dismiss() {
     const routes = jotaiStore.get(this.ctxValue.routesAtom)
-    const lastModalIndex = routes.findLastIndex((r) => r.type === "modal")
+    const lastModalIndex = routes.findLastIndex((r) => r.type !== "push")
     if (lastModalIndex === -1) {
       return
     }
@@ -108,7 +124,8 @@ export class Navigation {
   on(event: "didAppear", callback: (payload: LifecycleEventPayload) => void): Disposer
   on(event: "willDisappear", callback: (payload: LifecycleEventPayload) => void): Disposer
   on(event: "didDisappear", callback: (payload: LifecycleEventPayload) => void): Disposer
-  on(event: string, callback: (payload: LifecycleEventPayload) => void): Disposer {
+  on(event: "screenChange", callback: (payload: ScreenChangeEventPayload) => void): Disposer
+  on(event: string, callback: (payload: any) => void): Disposer {
     const subscription = this.bus.addListener(event as any, callback)
     return () => {
       subscription.remove()
@@ -119,6 +136,7 @@ export class Navigation {
   emit(event: "didAppear", payload: LifecycleEventPayload): void
   emit(event: "willDisappear", payload: LifecycleEventPayload): void
   emit(event: "didDisappear", payload: LifecycleEventPayload): void
+  emit(event: "screenChange", payload: ScreenChangeEventPayload): void
   emit(event: string, payload: LifecycleEventPayload): void {
     this.bus.emit(event as any, payload)
   }
@@ -146,4 +164,9 @@ type Disposer = () => void
 
 type LifecycleEventPayload = {
   screenId: string
+}
+
+type ScreenChangeEventPayload = {
+  screenId: string
+  type: "appear" | "disappear"
 }

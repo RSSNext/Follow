@@ -32,9 +32,9 @@ export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigat
   const [attachNavigationScrollViewRef, setAttachNavigationScrollViewRef] =
     useState<React.RefObject<ScrollView> | null>(null)
   return (
-    <AttachNavigationScrollViewContext.Provider value={attachNavigationScrollViewRef}>
-      <SetAttachNavigationScrollViewContext.Provider value={setAttachNavigationScrollViewRef}>
-        <SafeAreaProvider>
+    <SafeAreaProvider>
+      <AttachNavigationScrollViewContext.Provider value={attachNavigationScrollViewRef}>
+        <SetAttachNavigationScrollViewContext.Provider value={setAttachNavigationScrollViewRef}>
           <ScreenNameContext.Provider value={useMemo(() => atom(""), [])}>
             <ChainNavigationContext.Provider
               value={Navigation.rootNavigation.__internal_getCtxValue()}
@@ -50,9 +50,9 @@ export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigat
               </NavigationInstanceContext.Provider>
             </ChainNavigationContext.Provider>
           </ScreenNameContext.Provider>
-        </SafeAreaProvider>
-      </SetAttachNavigationScrollViewContext.Provider>
-    </AttachNavigationScrollViewContext.Provider>
+        </SetAttachNavigationScrollViewContext.Provider>
+      </AttachNavigationScrollViewContext.Provider>
+    </SafeAreaProvider>
   )
 }
 
@@ -105,7 +105,12 @@ const MapScreenStackItems: FC<{
 }> = memo(({ routes }) => {
   return routes.map((route) => {
     return (
-      <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
+      <WrappedScreenItem
+        stackPresentation={"push"}
+        key={route.id}
+        screenId={route.id}
+        screenOptions={route.screenOptions}
+      >
         <ResolveView comp={route.Component} element={route.element} props={route.props} />
       </WrappedScreenItem>
     )
@@ -134,10 +139,14 @@ const ModalScreenStackItems: FC<{
           stackPresentation={rootModalRoute?.type}
           key={rootModalRoute.id}
           screenId={rootModalRoute.id}
+          screenOptions={rootModalRoute.screenOptions}
           {...modalScreenOptions}
         >
           <ScreenStack style={StyleSheet.absoluteFill}>
-            <WrappedScreenItem screenId={rootModalRoute.id}>
+            <WrappedScreenItem
+              screenId={rootModalRoute.id}
+              screenOptions={rootModalRoute.screenOptions}
+            >
               <ResolveView
                 comp={rootModalRoute.Component}
                 element={rootModalRoute.element}
@@ -146,7 +155,12 @@ const ModalScreenStackItems: FC<{
             </WrappedScreenItem>
             {routes.slice(1).map((route) => {
               return (
-                <WrappedScreenItem stackPresentation={"push"} key={route.id} screenId={route.id}>
+                <WrappedScreenItem
+                  stackPresentation={"push"}
+                  key={route.id}
+                  screenId={route.id}
+                  screenOptions={route.screenOptions}
+                >
                   <ResolveView comp={route.Component} element={route.element} props={route.props} />
                 </WrappedScreenItem>
               )
@@ -158,7 +172,12 @@ const ModalScreenStackItems: FC<{
   }
   return routes.map((route) => {
     return (
-      <WrappedScreenItem key={route.id} screenId={route.id} stackPresentation={"formSheet"}>
+      <WrappedScreenItem
+        key={route.id}
+        screenId={route.id}
+        stackPresentation={route.type}
+        screenOptions={route.screenOptions}
+      >
         <ResolveView comp={route.Component} element={route.element} props={route.props} />
       </WrappedScreenItem>
     )

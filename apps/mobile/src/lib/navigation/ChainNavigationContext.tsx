@@ -1,7 +1,11 @@
 import type { PrimitiveAtom } from "jotai"
 import { createContext } from "react"
 
-import type { NavigationControllerView, NavigationControllerViewType } from "./types"
+import type {
+  NavigationControllerView,
+  NavigationControllerViewExtraProps,
+  NavigationControllerViewType,
+} from "./types"
 
 export interface Route {
   id: string
@@ -11,6 +15,7 @@ export interface Route {
 
   type: NavigationControllerViewType
   props?: unknown
+  screenOptions?: NavigationControllerViewExtraProps
 }
 export type ChainNavigationContextType = {
   routesAtom: PrimitiveAtom<Route[]>
