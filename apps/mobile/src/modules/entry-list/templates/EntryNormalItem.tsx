@@ -1,6 +1,5 @@
 import { FeedViewType } from "@follow/constants"
 import { formatEstimatedMins } from "@follow/utils"
-import { router } from "expo-router"
 import { useCallback, useEffect } from "react"
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
@@ -15,8 +14,10 @@ import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
 import { PlayCuteFiIcon } from "@/src/icons/play_cute_fi"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { getAttachmentState, player } from "@/src/lib/player"
 import { getHorizontalScrolling } from "@/src/modules/screen/atoms"
+import { EntryDetailScreen } from "@/src/screens/(stack)/entries/[entryId]"
 import { useEntry } from "@/src/store/entry/hooks"
 import { getInboxFrom } from "@/src/store/entry/utils"
 import { useFeed } from "@/src/store/feed/hooks"
@@ -30,14 +31,17 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
   const from = getInboxFrom(entry)
   const feed = useFeed(entry?.feedId as string)
   const view = useEntryListContextView()
-
+  const navigation = useNavigation()
   const handlePress = useCallback(() => {
     const isHorizontalScrolling = getHorizontalScrolling()
     if (entry && !isHorizontalScrolling) {
       preloadWebViewEntry(entry)
-      router.push(`/entries/${entryId}`)
+      navigation.pushControllerView(EntryDetailScreen, {
+        entryId,
+        view,
+      })
     }
-  }, [entryId, entry])
+  }, [entryId, entry, navigation, view])
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
 

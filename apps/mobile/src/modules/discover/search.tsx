@@ -1,5 +1,4 @@
 import { RSSHubCategories } from "@follow/constants"
-import { router } from "expo-router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import type { FC } from "react"
 import { useContext, useEffect, useRef, useState } from "react"
@@ -17,6 +16,9 @@ import { BlurEffect } from "@/src/components/common/BlurEffect"
 import { getDefaultHeaderHeight } from "@/src/components/layouts/utils"
 import { TabBar } from "@/src/components/ui/tabview/TabBar"
 import { Search2CuteReIcon } from "@/src/icons/search_2_cute_re"
+import { useScreenIsInSheetModal } from "@/src/lib/navigation/hooks"
+import { Navigation } from "@/src/lib/navigation/Navigation"
+import SearchScreen from "@/src/screens/(headless)/search"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { AddFeedButton } from "../screen/action"
@@ -31,7 +33,9 @@ export const SearchHeader: FC<{
 }> = ({ animatedX, onLayout }) => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
-  const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
+
+  const sheetModal = useScreenIsInSheetModal()
+  const headerHeight = getDefaultHeaderHeight(frame, sheetModal, insets.top)
 
   return (
     <View
@@ -66,7 +70,8 @@ export const DiscoverHeader = () => {
 const DiscoverHeaderImpl = () => {
   const frame = useSafeAreaFrame()
   const insets = useSafeAreaInsets()
-  const headerHeight = getDefaultHeaderHeight(frame, false, insets.top)
+  const sheetModal = useScreenIsInSheetModal()
+  const headerHeight = getDefaultHeaderHeight(frame, sheetModal, insets.top)
   const { animatedX, currentTabAtom, headerHeightAtom } = useContext(DiscoverContext)
   const setCurrentTab = useSetAtom(currentTabAtom)
   const setHeaderHeight = useSetAtom(headerHeightAtom)
@@ -112,7 +117,7 @@ const PlaceholerSearchBar = () => {
       style={styles.searchbar}
       className="bg-tertiary-system-fill"
       onPress={() => {
-        router.push("/search")
+        Navigation.rootNavigation.pushControllerView(SearchScreen)
       }}
     >
       <View
@@ -142,8 +147,8 @@ const ComposeSearchBar = () => {
           setIsFocused(false)
           setSearchValue("")
 
-          if (router.canGoBack()) {
-            router.back()
+          if (Navigation.rootNavigation.canGoBack()) {
+            Navigation.rootNavigation.back()
           }
         }}
       >

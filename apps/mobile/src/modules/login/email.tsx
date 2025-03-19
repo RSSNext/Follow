@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useCallback, useRef } from "react"
 import { Alert, Text, TouchableOpacity, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
@@ -8,7 +7,12 @@ import { z } from "zod"
 import { SubmitButton } from "@/src/components/common/SubmitButton"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import { signIn } from "@/src/lib/auth"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { Navigation } from "@/src/lib/navigation/Navigation"
 import { getTokenHeaders } from "@/src/lib/token"
+import { TwoFactorAuthScreen } from "@/src/screens/(modal)/2fa"
+import { ForgetPasswordScreen } from "@/src/screens/(modal)/forget-password"
+import { SignUpScreen } from "@/src/screens/(modal)/sign-up"
 import { accentColor } from "@/src/theme/colors"
 
 const formSchema = z.object({
@@ -42,7 +46,7 @@ async function onSubmit(values: FormValue) {
       }
       // @ts-expect-error
       if (res.data.twoFactorRedirect) {
-        router.push("/2fa")
+        Navigation.rootNavigation.presentControllerView(TwoFactorAuthScreen)
       }
     })
     .catch((error) => {
@@ -65,6 +69,7 @@ export function EmailLogin() {
     })
   }, [submitMutation])
 
+  const navigation = useNavigation()
   return (
     <View className="mx-auto flex w-full max-w-sm">
       <View className="bg-secondary-system-background gap-4 rounded-2xl px-6 py-4">
@@ -113,10 +118,16 @@ export function EmailLogin() {
         title="Continue"
         className="mt-8"
       />
-      <TouchableOpacity className="mx-auto mt-10" onPress={() => router.push("/sign-up")}>
+      <TouchableOpacity
+        className="mx-auto mt-10"
+        onPress={() => navigation.presentControllerView(SignUpScreen)}
+      >
         <Text className="text-accent m-1 text-[15px]">Don't have an account?</Text>
       </TouchableOpacity>
-      <TouchableOpacity className="mx-auto mt-4" onPress={() => router.push("/forget-password")}>
+      <TouchableOpacity
+        className="mx-auto mt-4"
+        onPress={() => navigation.presentControllerView(ForgetPasswordScreen)}
+      >
         <Text className="text-secondary-label m-[6] text-[15px]">Forgot password?</Text>
       </TouchableOpacity>
     </View>

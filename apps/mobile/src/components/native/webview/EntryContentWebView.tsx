@@ -1,4 +1,5 @@
 import { clsx } from "@follow/utils"
+import { Portal } from "@gorhom/portal"
 import { requireNativeView } from "expo"
 import { useAtom } from "jotai"
 import * as React from "react"
@@ -10,7 +11,6 @@ import { useUISettingKey } from "@/src/atoms/settings/ui"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import type { EntryModel } from "@/src/store/entry/types"
 
-import { Portal } from "../../ui/portal"
 import { sharedWebViewHeightAtom } from "./atom"
 import { htmlUrl } from "./constants"
 import { prepareEntryRenderWebView, SharedWebViewModule } from "./index"

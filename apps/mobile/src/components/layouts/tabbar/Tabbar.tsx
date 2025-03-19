@@ -1,8 +1,6 @@
-import type { BottomTabBarProps } from "@react-navigation/bottom-tabs"
-import { getLabel } from "@react-navigation/elements"
-import { CommonActions, NavigationContext, NavigationRouteContext } from "@react-navigation/native"
+import { useAtom, useAtomValue } from "jotai"
 import type { FC } from "react"
-import { Fragment, memo, useContext, useEffect } from "react"
+import { memo, useContext, useEffect } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, {
@@ -15,6 +13,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { SetBottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { gentleSpringPreset, quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
+import { BottomTabContext } from "@/src/lib/navigation/bottom-tab/BottomTabContext"
+import type { TabbarIconProps } from "@/src/lib/navigation/bottom-tab/types"
 import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
 import { accentColor } from "@/src/theme/colors"
 
@@ -23,15 +23,19 @@ import { Grid } from "../../ui/grid"
 import { BottomTabBarBackgroundContext } from "./contexts/BottomTabBarBackgroundContext"
 import { BottomTabBarVisibleContext } from "./contexts/BottomTabBarVisibleContext"
 
-export const Tabbar: FC<BottomTabBarProps> = (props) => {
-  const { state, navigation, descriptors } = props
-  const { routes } = state
+export const Tabbar: FC<{
+  onPress?: (index: number) => void
+}> = ({ onPress: onPressProp }) => {
   const setTabBarHeight = useContext(SetBottomTabBarHeightContext)
 
   const insets = useSafeAreaInsets()
   const tabBarVisible = useContext(BottomTabBarVisibleContext)
 
+  const tabContext = useContext(BottomTabContext)
+  const tabScreens = useAtomValue(tabContext.tabScreensAtom)
+  const [selectedIndex, setSelectedIndex] = useAtom(tabContext.currentIndexAtom)
   const translateY = useSharedValue(0)
+
   useEffect(() => {
     cancelAnimation(translateY)
     translateY.value = withSpring(
@@ -39,6 +43,7 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
       !tabBarVisible ? quickSpringPreset : softSpringPreset,
     )
   }, [tabBarVisible, translateY])
+  if (tabScreens.length === 0) return null
   return (
     <Animated.View
       accessibilityRole="tablist"
@@ -53,38 +58,22 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
     >
       <TabBarBackground />
       <PlayerTabBar />
-      <Grid columns={routes.length} gap={10} className="mt-[7]">
-        {routes.map((route, index) => {
-          const focused = index === state.index
-          const { options } = descriptors[route.key]!
+      <Grid columns={tabScreens.length} gap={10} className="mt-[7]">
+        {tabScreens.map((route, index) => {
+          const focused = index === selectedIndex
 
           const inactiveTintColor = "#999"
           const onPress = () => {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: route.key,
-              canPreventDefault: true,
-            })
-
-            if (!focused && !event.defaultPrevented) {
-              navigation.dispatch({
-                ...CommonActions.navigate(route),
-                target: state.key,
-              })
-            }
+            setSelectedIndex(index)
+            onPressProp?.(index)
           }
-          const tabButton = options?.tabBarButton
-          const label =
-            typeof options?.tabBarLabel === "function"
-              ? options?.tabBarLabel
-              : getLabel({ label: options?.tabBarLabel, title: options?.title }, route.name)
+
+          const label = route.title
 
           const accessibilityLabel =
-            options?.tabBarAccessibilityLabel !== undefined
-              ? options?.tabBarAccessibilityLabel
-              : typeof label === "string" && Platform.OS === "ios"
-                ? `${label}, tab, ${index + 1} of ${routes.length}`
-                : undefined
+            typeof label === "string" && Platform.OS === "ios"
+              ? `${label}, tab, ${index + 1} of ${tabScreens.length}`
+              : undefined
 
           const renderIcon = ({ focused }: { focused: boolean }) => {
             const iconSize = ICON_SIZE_ROUND
@@ -93,31 +82,12 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
                 focused={focused}
                 iconSize={iconSize}
                 inactiveTintColor={inactiveTintColor}
-                renderIcon={options.tabBarIcon!}
+                renderIcon={route.renderIcon! || noop}
               />
             )
           }
 
           const renderLabel = ({ focused }: { focused: boolean }) => {
-            const color = focused ? accentColor : accentColor
-
-            if (typeof label !== "string") {
-              const labelString = getLabel(
-                {
-                  label: typeof options?.tabBarLabel === "string" ? options.tabBarLabel : undefined,
-                  title: options?.title,
-                },
-                route.name,
-              )
-
-              return label({
-                focused,
-                color,
-                position: "beside-icon",
-                children: labelString,
-              })
-            }
-
             return (
               <TextLabel
                 focused={focused}
@@ -129,19 +99,16 @@ export const Tabbar: FC<BottomTabBarProps> = (props) => {
             )
           }
 
-          const TabButton = tabButton ?? Fragment
           return (
-            <TabButton key={route.key}>
-              <TabItem
-                route={route}
-                focused={focused}
-                descriptors={descriptors}
-                onPress={onPress}
-                originalRenderIcon={renderIcon}
-                originalRenderLabel={renderLabel}
-                accessibilityLabel={accessibilityLabel}
-              />
-            </TabButton>
+            <TabItem
+              key={route.tabScreenIndex}
+              route={route}
+              focused={focused}
+              onPress={onPress}
+              originalRenderIcon={renderIcon}
+              originalRenderLabel={renderLabel}
+              accessibilityLabel={accessibilityLabel}
+            />
           )
         })}
       </Grid>
@@ -178,7 +145,7 @@ const TabIcon = ({
   focused: boolean
   iconSize: number
   inactiveTintColor: string
-  renderIcon: (options: { focused: boolean; size: number; color: string }) => React.ReactNode
+  renderIcon: (options: TabbarIconProps) => React.ReactNode
 }) => {
   const activeOpacity = focused ? 1 : 0
   const inactiveOpacity = focused ? 0 : 1
@@ -260,7 +227,6 @@ const styles = StyleSheet.create({
   },
 })
 
-const AnimatedThemedBlurView = Animated.createAnimatedComponent(ThemedBlurView)
 const TabBarBackground = () => {
   const { opacity } = useContext(BottomTabBarBackgroundContext)
 
@@ -273,7 +239,9 @@ const TabBarBackground = () => {
   }))
   return (
     <View style={styles.blurEffect}>
-      <AnimatedThemedBlurView style={[styles.blurEffect, animatedStyle]} />
+      <Animated.View style={[styles.blurEffect, animatedStyle]}>
+        <ThemedBlurView style={styles.blurEffect} />
+      </Animated.View>
       <Animated.View
         className="bg-opaque-separator absolute top-0 w-full"
         style={[
@@ -291,7 +259,7 @@ const TabItem = memo(
   ({
     route,
     focused,
-    descriptors,
+
     onPress,
     originalRenderIcon,
     originalRenderLabel,
@@ -299,7 +267,7 @@ const TabItem = memo(
   }: {
     route: any
     focused: boolean
-    descriptors: any
+
     onPress: () => void
     originalRenderIcon: (scene: { route: any; focused: boolean }) => React.ReactNode
     originalRenderLabel: (scene: { route: any; focused: boolean }) => React.ReactNode
@@ -316,26 +284,24 @@ const TabItem = memo(
     const scene = { route, focused }
 
     return (
-      <NavigationContext.Provider value={descriptors[route.key]?.navigation}>
-        <NavigationRouteContext.Provider value={route}>
-          <Pressable
-            onPress={onPress}
-            onPressIn={() => {
-              pressed.value = withSpring(1, gentleSpringPreset)
-            }}
-            onPressOut={() => {
-              pressed.value = withSpring(0, gentleSpringPreset)
-            }}
-            className="flex-1 flex-col items-center justify-center"
-            accessibilityLabel={accessibilityLabel}
-            accessibilityRole="button"
-            accessibilityState={{ selected: focused }}
-          >
-            <Animated.View style={animatedStyle}>{originalRenderIcon(scene)}</Animated.View>
-            {originalRenderLabel(scene)}
-          </Pressable>
-        </NavigationRouteContext.Provider>
-      </NavigationContext.Provider>
+      <Pressable
+        onPress={onPress}
+        onPressIn={() => {
+          pressed.value = withSpring(1, gentleSpringPreset)
+        }}
+        onPressOut={() => {
+          pressed.value = withSpring(0, gentleSpringPreset)
+        }}
+        className="flex-1 flex-col items-center justify-center"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="button"
+        accessibilityState={{ selected: focused }}
+      >
+        <Animated.View style={animatedStyle}>{originalRenderIcon(scene)}</Animated.View>
+        {originalRenderLabel(scene)}
+      </Pressable>
     )
   },
 )
+
+const noop = () => null

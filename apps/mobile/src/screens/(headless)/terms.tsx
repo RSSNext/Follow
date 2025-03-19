@@ -1,7 +1,9 @@
-import { ScrollView } from "react-native"
-
-import { NativeNavigationHeader } from "@/src/components/layouts/header/NavigationHeader"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 
 const txt = `# Terms of Service
 
@@ -90,12 +92,15 @@ export const TermsMarkdown = () => {
   )
 }
 
-export default function Teams() {
+export const TermsScreen: NavigationControllerView = () => {
   return (
-    <ScrollView className="bg-system-background" contentInsetAdjustmentBehavior="always">
-      <NativeNavigationHeader headerTitle="Terms of Service" />
+    <SafeNavigationScrollView
+      className="bg-system-background"
+      contentInsetAdjustmentBehavior="never"
+    >
+      <NavigationBlurEffectHeader title="Terms of Service" />
 
       <TermsMarkdown />
-    </ScrollView>
+    </SafeNavigationScrollView>
   )
 }

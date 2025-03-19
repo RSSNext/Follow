@@ -1,4 +1,3 @@
-import { router } from "expo-router"
 import { memo } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
@@ -6,6 +5,8 @@ import Animated, { FadeOutUp } from "react-native-reanimated"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useList } from "@/src/store/list/hooks"
 import { useListUnreadCount } from "@/src/store/unread/hooks"
 
@@ -16,6 +17,7 @@ import { UnreadCount } from "./UnreadCount"
 export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
   const list = useList(id)
   const unreadCount = useListUnreadCount(id)
+  const navigation = useNavigation()
   if (!list) return null
   return (
     <Animated.View exiting={FadeOutUp}>
@@ -31,7 +33,9 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
               type: "list",
               listId: id,
             })
-            router.push(`/feeds/${id}`)
+            navigation.pushControllerView(FeedScreen, {
+              feedId: id,
+            })
           }}
         >
           <View className="overflow-hidden rounded">

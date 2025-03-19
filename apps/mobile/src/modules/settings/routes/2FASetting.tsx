@@ -1,4 +1,3 @@
-import type { RouteProp } from "@react-navigation/native"
 import { useMutation } from "@tanstack/react-query"
 import { useRef } from "react"
 import { KeyboardAvoidingView, Text, View } from "react-native"
@@ -11,26 +10,21 @@ import {
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { QRCode } from "@/src/components/ui/qrcode/QRCode"
 import { twoFactor } from "@/src/lib/auth"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { queryClient } from "@/src/lib/query-client"
 import { toast } from "@/src/lib/toast"
 import { whoamiQueryKey } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-import { useSettingsNavigation } from "../hooks"
-import type { SettingsStackParamList } from "../types"
-
 const isAuthCodeValid = (code: string) => {
   return code.length === 6 && Number(code) > 0
 }
-export const TwoFASetting = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "TwoFASetting">
-}) => {
+export const TwoFASetting: NavigationControllerView<{ totpURI: string }> = ({ totpURI }) => {
   const label = useColor("label")
   const tertiaryLabel = useColor("tertiaryLabel")
 
-  const navigation = useSettingsNavigation()
+  const navigation = useNavigation()
   const submitMutation = useMutation({
     mutationFn: async (value: string) => {
       const res = await twoFactor.verifyTotp({ code: value })
@@ -43,7 +37,7 @@ export const TwoFASetting = ({
       toast.error(`Failed to verify: ${error.message}`)
     },
     onSuccess() {
-      navigation.goBack()
+      navigation.back()
       toast.success("2FA enabled!")
     },
   })
@@ -56,7 +50,7 @@ export const TwoFASetting = ({
 
         <View className="my-8 items-center justify-center">
           <QRCode
-            data={route.params.totpURI}
+            data={totpURI}
             padding={20}
             pieceSize={7}
             pieceBorderRadius={4}

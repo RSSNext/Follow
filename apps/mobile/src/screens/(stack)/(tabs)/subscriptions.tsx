@@ -1,6 +1,9 @@
 import { useMemo } from "react"
 
 import { NoLoginInfo } from "@/src/components/common/NoLoginInfo"
+import { BlackBoard2CuteFiIcon } from "@/src/icons/black_board_2_cute_fi"
+import { BlackBoard2CuteReIcon } from "@/src/icons/black_board_2_cute_re"
+import type { TabScreenComponent } from "@/src/lib/navigation/bottom-tab/types"
 import { EntryListContext } from "@/src/modules/screen/atoms"
 import { PagerList } from "@/src/modules/screen/PageList"
 import { TimelineSelectorProvider } from "@/src/modules/screen/TimelineSelectorProvider"
@@ -22,3 +25,11 @@ export default function Subscriptions() {
     </EntryListContext.Provider>
   )
 }
+
+export const SubscriptionsTabScreen: TabScreenComponent = Subscriptions
+SubscriptionsTabScreen.tabBarIcon = ({ focused, color }) => {
+  const Icon = !focused ? BlackBoard2CuteReIcon : BlackBoard2CuteFiIcon
+  return <Icon color={color} width={24} height={24} />
+}
+
+SubscriptionsTabScreen.title = "Subscriptions"

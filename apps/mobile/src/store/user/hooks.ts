@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useEffect } from "react"
 
 import { apiClient } from "@/src/lib/api-fetch"
 import { kv } from "@/src/lib/kv"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { OnboardingScreen } from "@/src/screens/onboarding"
 
 import { isNewUserQueryKey, isOnboardingFinishedStorageKey } from "./constants"
 import { userSyncService, useUserStore } from "./store"
@@ -45,9 +46,10 @@ export function useIsNewUser(enabled = true) {
 export function useOnboarding() {
   const whoami = useWhoami()
   const isNewUser = useIsNewUser(!!whoami)
+  const navigation = useNavigation()
   useEffect(() => {
     if (isNewUser) {
-      router.push("/onboarding")
+      navigation.presentControllerView(OnboardingScreen, undefined, "transparentModal")
     }
-  }, [isNewUser])
+  }, [isNewUser, navigation])
 }

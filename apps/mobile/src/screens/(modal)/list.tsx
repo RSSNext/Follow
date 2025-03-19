@@ -1,15 +1,14 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
 import { FeedViewType } from "@follow/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { router, useLocalSearchParams, useNavigation } from "expo-router"
 import { memo, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { View } from "react-native"
 import { z } from "zod"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { FormLabel } from "@/src/components/ui/form/Label"
 import { NumberField, TextField } from "@/src/components/ui/form/TextField"
@@ -19,6 +18,9 @@ import {
 } from "@/src/components/ui/grouped/GroupedList"
 import { PowerIcon } from "@/src/icons/power"
 import { getBizFetchErrorMessage } from "@/src/lib/api-fetch"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { useSetModalScreenOptions } from "@/src/lib/navigation/ScreenOptionsContext"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { FeedViewSelector } from "@/src/modules/feed/view-selector"
 import { getList } from "@/src/store/list/getters"
@@ -49,9 +51,9 @@ const defaultValues = {
   fee: 0,
   view: FeedViewType.Articles,
 } as ListModel
-export default function ListScreen() {
-  const listId = useLocalSearchParams<{ id?: string }>().id
-
+export const ListScreen: NavigationControllerView<{
+  listId?: string
+}> = ({ listId }) => {
   const list = useList(listId || "")
   const form = useForm({
     defaultValues: list || defaultValues,
@@ -61,7 +63,7 @@ export default function ListScreen() {
   })
   const isEditing = !!listId
   const { showActionSheetWithOptions } = useActionSheet()
-
+  const navigation = useNavigation()
   return (
     <FormProvider form={form}>
       <SafeModalScrollView className="bg-system-grouped-background pb-safe flex-1">
@@ -177,7 +179,7 @@ export default function ListScreen() {
                   async (index) => {
                     if (index === 0) {
                       await listSyncServices.deleteList({ listId: listId! })
-                      router.dismiss()
+                      navigation.dismiss()
                     }
                   },
                 )
@@ -201,19 +203,21 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
 
   const isEditing = !!listId
   const [isLoading, setIsLoading] = useState(false)
-  const navigation = useNavigation()
+
+  const setModalOptions = useSetModalScreenOptions()
   useEffect(() => {
-    navigation.setOptions({
+    setModalOptions({
       gestureEnabled: !isDirty,
     })
-  }, [isDirty, navigation])
+  }, [isDirty, setModalOptions])
+  const navigation = useNavigation()
 
   return (
-    <ModalHeader
-      headerTitle={title ? `Edit List - ${title}` : "Create List"}
+    <NavigationBlurEffectHeader
+      title={title ? `Edit List - ${title}` : "Create List"}
       headerRight={
         <FormProvider form={form}>
-          <ModalHeaderSubmitButton
+          <HeaderSubmitButton
             isValid={isValid}
             isLoading={isLoading}
             onPress={form.handleSubmit((values) => {
@@ -229,7 +233,7 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
                   })
                   .finally(() => {
                     setIsLoading(false)
-                    router.dismiss()
+                    navigation.dismiss()
                   })
                 return
               }
@@ -250,7 +254,7 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
                 })
                 .finally(() => {
                   setIsLoading(false)
-                  router.dismiss()
+                  navigation.dismiss()
                 })
             })}
           />

@@ -33,12 +33,14 @@ import {
 import { Dialog } from "@/src/lib/dialog"
 import { loading } from "@/src/lib/loading"
 import { openLink } from "@/src/lib/native"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 import { userSyncService } from "@/src/store/user/store"
 
 import { ConfirmPasswordDialog } from "../../dialogs/ConfirmPasswordDialog"
-import { useSettingsNavigation } from "../hooks"
+import { TwoFASetting } from "./2FASetting"
+import { ResetPassword } from "./ResetPassword"
 
 type Account = {
   id: string
@@ -232,11 +234,11 @@ const AuthenticationSection = () => {
 const SecuritySection = () => {
   const { data: account } = useAccount()
   const hasPassword = account?.data?.find((account) => account.provider === "credential")
-  const router = useSettingsNavigation()
   const whoAmI = useWhoami()
 
   const twoFactorEnabled = whoAmI?.twoFactorEnabled
 
+  const navigation = useNavigation()
   return (
     <View className="mt-6">
       <GroupedInsetListSectionHeader label="Security" />
@@ -254,7 +256,7 @@ const SecuritySection = () => {
               forgetPassword({ email })
               toast.success("We have sent you an email with instructions to reset your password.")
             } else {
-              router.navigate("ResetPassword")
+              navigation.pushControllerView(ResetPassword)
             }
           }}
         />
@@ -292,7 +294,7 @@ const SecuritySection = () => {
                     return
                   }
                   if (res.data && "totpURI" in res.data) {
-                    router.navigate("TwoFASetting", {
+                    navigation.pushControllerView(TwoFASetting, {
                       totpURI: res.data.totpURI,
                     })
                   } else {

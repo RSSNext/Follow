@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useRef } from "react"
 import { Text, TouchableWithoutFeedback, View } from "react-native"
 import { KeyboardController } from "react-native-keyboard-controller"
@@ -7,7 +6,10 @@ import type { OtpInputRef } from "react-native-otp-entry"
 import { OtpInput } from "react-native-otp-entry"
 import { useColor } from "react-native-uikit-colors"
 
+import { HeaderCloseOnly } from "@/src/components/layouts/header/HeaderElements"
 import { twoFactor } from "@/src/lib/auth"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { queryClient } from "@/src/lib/query-client"
 import { toast } from "@/src/lib/toast"
 import { whoamiQueryKey } from "@/src/store/user/hooks"
@@ -19,11 +21,13 @@ function isAuthCodeValid(authCode: string) {
   )
 }
 
-export default function TwoFactorAuthScreen() {
+export const TwoFactorAuthScreen: NavigationControllerView = () => {
   const label = useColor("label")
   const tertiaryLabel = useColor("tertiaryLabel")
 
   const otpInputRef = useRef<OtpInputRef>(null)
+
+  const navigation = useNavigation()
 
   const submitMutation = useMutation({
     mutationFn: async (value: string) => {
@@ -37,12 +41,13 @@ export default function TwoFactorAuthScreen() {
       toast.error(`Failed to verify: ${error.message}`)
     },
     onSuccess() {
-      router.replace("/")
+      navigation.popToRoot()
     },
   })
 
   return (
     <View className="p-safe flex-1">
+      <HeaderCloseOnly />
       <TouchableWithoutFeedback
         onPress={() => {
           KeyboardController.dismiss()

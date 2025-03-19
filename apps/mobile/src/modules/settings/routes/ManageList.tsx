@@ -1,11 +1,9 @@
-import type { RouteProp } from "@react-navigation/native"
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import type { MutableRefObject } from "react"
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { Text, View } from "react-native"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
 import {
   NavigationBlurEffectHeader,
@@ -20,6 +18,8 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { getBizFetchErrorMessage } from "@/src/lib/api-fetch"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useList, usePrefetchOwnedLists } from "@/src/store/list/hooks"
@@ -31,19 +31,11 @@ import {
 } from "@/src/store/subscription/hooks"
 import { accentColor } from "@/src/theme/colors"
 
-import type { SettingsStackParamList } from "../types"
-
 const ManageListContext = createContext<{
   nextSelectedFeedIdRef: MutableRefObject<Set<string>>
 }>(null!)
 
-export const ManageListScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "ManageList">
-}) => {
-  const { id } = route.params
-
+export const ManageListScreen: NavigationControllerView<{ id: string }> = ({ id }) => {
   usePrefetchOwnedLists()
   const list = useList(id)
 
@@ -86,19 +78,20 @@ const ListImpl: React.FC<{ id: string }> = ({ id }) => {
         feedIds: Array.from(nextSelectedFeedIdRef.current),
       }),
   })
+  const navigation = useNavigation()
   return (
     <ManageListContext.Provider value={ctxValue}>
       <NavigationBlurEffectHeader
         headerRight={() => (
           <UINavigationHeaderActionButton>
-            <ModalHeaderSubmitButton
+            <HeaderSubmitButton
               isLoading={addFeedsToFeedListMutation.isPending}
               isValid
               onPress={() => {
                 addFeedsToFeedListMutation
                   .mutateAsync()
                   .then(() => {
-                    router.back()
+                    navigation.back()
                   })
                   .catch((error) => {
                     toast.error(getBizFetchErrorMessage(error))

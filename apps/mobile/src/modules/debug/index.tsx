@@ -1,4 +1,3 @@
-import { router } from "expo-router"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { useMemo } from "react"
@@ -10,7 +9,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ReAnimatedTouchableOpacity } from "@/src/components/common/AnimatedComponents"
 import { BugCuteReIcon } from "@/src/icons/bug_cute_re"
 import { JotaiPersistSyncStorage } from "@/src/lib/jotai"
+import { Navigation } from "@/src/lib/navigation/Navigation"
 import { useEnvProfile } from "@/src/lib/proxy-env"
+import { DebugScreen } from "@/src/screens/(headless)/debug"
 
 export const DebugButton = () => {
   const cachedPositionAtom = useMemo(
@@ -40,7 +41,8 @@ export const DebugButton = () => {
     })
     .onEnd((event) => {
       if (Math.abs(event.translationX) < 5 && Math.abs(event.translationY) < 5) {
-        runOnJS(router.push)("/debug")
+        // @ts-expect-error
+        runOnJS(Navigation.rootNavigation.pushControllerView)(DebugScreen)
         return
       }
 
@@ -66,7 +68,7 @@ export const DebugButton = () => {
     <GestureDetector gesture={gestureEvent}>
       <ReAnimatedTouchableOpacity
         onPress={() => {
-          runOnJS(router.push)("/debug")
+          Navigation.rootNavigation.pushControllerView(DebugScreen)
         }}
         style={[
           {

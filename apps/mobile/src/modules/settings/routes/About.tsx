@@ -1,7 +1,7 @@
 import Constants from "expo-constants"
-import { Link } from "expo-router"
 import { Linking, Text, View } from "react-native"
 
+import { Link } from "@/src/components/common/Link"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
