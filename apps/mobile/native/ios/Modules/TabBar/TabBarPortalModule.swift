@@ -17,4 +17,5 @@ public class TabBarPortalModule: Module {
 }
 
 class TabBarPortalView: ExpoView {
+
 }

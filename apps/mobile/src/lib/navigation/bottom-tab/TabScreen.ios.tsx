@@ -1,7 +1,9 @@
+import { requireNativeView } from "expo"
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useContext, useEffect, useMemo } from "react"
-import { StyleSheet, View } from "react-native"
+import type { ViewProps } from "react-native"
+import { StyleSheet } from "react-native"
 
 import { WrappedScreenItem } from "../WrappedScreenItem"
 import { BottomTabContext } from "./BottomTabContext"
@@ -9,6 +11,8 @@ import { LifecycleEvents, ScreenNameRegister } from "./shared"
 import type { TabScreenContextType } from "./TabScreenContext"
 import { TabScreenContext } from "./TabScreenContext"
 import type { TabbarIconProps, TabScreenComponent } from "./types"
+
+const TabScreenNative = requireNativeView<ViewProps>("TabScreen")
 
 export interface TabScreenProps {
   title: string
@@ -86,7 +90,7 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
   const shouldLoadReact = isSelected || isLoadedBefore
 
   return (
-    <View className={isSelected ? "flex-1" : "hidden"} style={StyleSheet.absoluteFill}>
+    <TabScreenNative style={StyleSheet.absoluteFill}>
       <TabScreenContext.Provider value={ctxValue}>
         {shouldLoadReact && (
           <WrappedScreenItem screenId={`tab-screen-${tabScreenIndex}`}>
@@ -97,6 +101,6 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
           </WrappedScreenItem>
         )}
       </TabScreenContext.Provider>
-    </View>
+    </TabScreenNative>
   )
 }

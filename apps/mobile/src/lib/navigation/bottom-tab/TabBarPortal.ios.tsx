@@ -1,14 +1,18 @@
+import { requireNativeView } from "expo"
 import { useSetAtom } from "jotai"
 import { useContext } from "react"
+import type { ViewProps } from "react-native"
 import { StyleSheet, View } from "react-native"
 
 import { BottomTabContext } from "./BottomTabContext"
+
+const TabBarPortalNative = requireNativeView<ViewProps>("TabBarPortal")
 
 export const TabBarPortal = ({ children }: { children: React.ReactNode }) => {
   const { tabHeightAtom } = useContext(BottomTabContext)
   const setTabHeight = useSetAtom(tabHeightAtom)
   return (
-    <View style={styles.container}>
+    <TabBarPortalNative style={styles.container}>
       <View
         onLayout={(e) => {
           setTabHeight(e.nativeEvent.layout.height)
@@ -16,7 +20,7 @@ export const TabBarPortal = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
       </View>
-    </View>
+    </TabBarPortalNative>
   )
 }
 
