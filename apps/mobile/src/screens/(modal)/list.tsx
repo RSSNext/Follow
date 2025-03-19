@@ -6,7 +6,6 @@ import { Controller, useForm } from "react-hook-form"
 import { View } from "react-native"
 import { z } from "zod"
 
-import { router } from "@/.expo/types/router"
 import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
@@ -211,6 +210,7 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
       gestureEnabled: !isDirty,
     })
   }, [isDirty, setModalOptions])
+  const navigation = useNavigation()
 
   return (
     <NavigationBlurEffectHeader
@@ -233,7 +233,7 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
                   })
                   .finally(() => {
                     setIsLoading(false)
-                    router.dismiss()
+                    navigation.dismiss()
                   })
                 return
               }
@@ -254,7 +254,7 @@ const ScreenOptions = memo(({ title, listId }: ScreenOptionsProps) => {
                 })
                 .finally(() => {
                   setIsLoading(false)
-                  router.dismiss()
+                  navigation.dismiss()
                 })
             })}
           />
