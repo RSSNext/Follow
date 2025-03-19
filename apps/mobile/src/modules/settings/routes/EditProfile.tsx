@@ -191,7 +191,7 @@ const ProfileForm: FC<{
               </View>
             </GroupedInsetListCell>
           </GroupedInsetListCard>
-          <GroupedOutlineDescription description="Your handle is used to identify you on Follow." />
+          <GroupedOutlineDescription description="Your handle is used to identify you on Folo." />
 
           {/* Email */}
           <GroupedInsetListCard className="mt-4">

@@ -24,12 +24,12 @@ export default function TabLayout() {
       {/* Set navigation screen title */}
       <Stack.Screen
         options={{
-          title: "Follow",
+          title: "Folo",
         }}
       />
       <BottomTabs
         screenOptions={{
-          title: "Follow",
+          title: "Folo",
           // animation: "fade",
           // transitionSpec: {
           //   animation: "timing",

@@ -123,7 +123,7 @@
     "expo-drizzle-studio-plugin": "0.1.1",
     "postcss": "8.5.3"
   },
-  "appName": "Follow",
+  "appName": "Folo",
   "expo": {
     "install": {
       "exclude": [
