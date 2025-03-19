@@ -1,3 +1,3 @@
 export const Component = () => {
-  return <div>(*‘ v`*) Hello, Follow</div>
+  return <div>(*‘ v`*) Hello, Folo</div>
 }

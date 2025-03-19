@@ -69,7 +69,7 @@ export const ProfileScreen = () => {
     if (!whoami?.id) return
     Share.share({
       url: `https://app.follow.is/share/users/${whoami.id}`,
-      title: `Follow | ${whoami.name}'s Profile`,
+      title: `Folo | ${whoami.name}'s Profile`,
     })
   }, [whoami?.id, whoami?.name])
 

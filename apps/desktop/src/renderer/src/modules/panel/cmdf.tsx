@@ -1,6 +1,6 @@
 /**
  * @see https://github.com/toeverything/AFFiNE/blob/98e35384a6f71bf64c668b8f13afcaf28c9b8e97/packages/frontend/core/src/modules/find-in-page/view/find-in-page-modal.tsx
- * @copyright AFFiNE, Follow
+ * @copyright AFFiNE, Folo
  */
 import { RootPortal } from "@follow/components/ui/portal/index.jsx"
 import { useInputComposition, useRefValue } from "@follow/hooks"

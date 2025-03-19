@@ -22,7 +22,7 @@ export default function ModalLayout() {
       <Stack.Screen
         name="follow"
         options={{
-          title: "Follow",
+          title: "Folo",
           presentation: "modal",
         }}
       />

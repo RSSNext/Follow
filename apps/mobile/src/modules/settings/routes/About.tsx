@@ -54,14 +54,14 @@ export const AboutScreen = () => {
         <GroupedInsetListBaseCell className="flex-col py-6">
           <View className="flex-1 items-center justify-center">
             <Logo height={80} width={80} />
-            <Text className="text-label mt-4 text-2xl font-semibold">Follow</Text>
+            <Text className="text-label mt-4 text-2xl font-semibold">Folo</Text>
             <Text className="text-tertiary-label font-mono text-sm">
               {appVersion} ({buildId})
             </Text>
           </View>
           <View className="mt-6 flex-1">
             <Text className="text-label text-[15px]">
-              Follow is in the early stages of development. If you have any feedback or suggestions,
+              Folo is in the early stages of development. If you have any feedback or suggestions,
               please feel free to open an issue on the{" "}
               <Link className="text-accent" href="https://github.com/RSSNext/follow">
                 GitHub repository
@@ -77,7 +77,7 @@ export const AboutScreen = () => {
             </Text>
 
             <Text className="text-label mt-4 text-[15px]">
-              Copyright © 2025 Follow. All rights reserved.
+              Copyright © 2025 Folo. All rights reserved.
             </Text>
           </View>
         </GroupedInsetListBaseCell>

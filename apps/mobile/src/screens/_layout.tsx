@@ -61,11 +61,11 @@ function AnimatedStack() {
       <Stack.Screen
         name="(stack)"
         options={{
-          title: "Follow",
+          title: "Folo",
           headerShown: false,
         }}
       />
-      <Stack.Screen name="(headless)" options={{ headerShown: false, title: "Follow" }} />
+      <Stack.Screen name="(headless)" options={{ headerShown: false, title: "Folo" }} />
       <Stack.Screen
         name="(modal)"
         options={{ headerShown: false, presentation: "modal", title: "Modal" }}

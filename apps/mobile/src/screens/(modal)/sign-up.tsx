@@ -185,7 +185,7 @@ export default function SignUpModal() {
               lineHeight,
             }}
           >
-            Sign up to <Text className="font-bold">Follow</Text>
+            Sign up to <Text className="font-bold">Folo</Text>
           </Text>
           <EmailSignUp />
         </View>
