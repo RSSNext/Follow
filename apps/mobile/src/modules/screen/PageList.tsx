@@ -36,7 +36,6 @@ export function PagerList({
 
   return (
     <AnimatedPagerView
-      key={viewId}
       testID="pager-view"
       ref={pagerRef}
       style={styles.PagerView}
