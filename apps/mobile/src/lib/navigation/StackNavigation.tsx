@@ -31,6 +31,7 @@ interface RootStackNavigationProps {
 export const RootStackNavigation = ({ children, headerConfig }: RootStackNavigationProps) => {
   const [attachNavigationScrollViewRef, setAttachNavigationScrollViewRef] =
     useState<React.RefObject<ScrollView> | null>(null)
+
   return (
     <SafeAreaProvider>
       <AttachNavigationScrollViewContext.Provider value={attachNavigationScrollViewRef}>
@@ -132,6 +133,7 @@ const ModalScreenStackItems: FC<{
     return null
   }
   const isStackModal = rootModalRoute.type !== "formSheet"
+
   if (isStackModal) {
     return (
       <ModalScreenItemOptionsContext.Provider value={modalScreenOptionsCtxValue}>

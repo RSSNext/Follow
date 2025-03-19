@@ -10,17 +10,17 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { RootSiblingParent } from "react-native-root-siblings"
 import { SheetProvider } from "react-native-sheet-transitions"
+import { useCurrentColors } from "react-native-uikit-colors"
 
 import { ErrorBoundary } from "../components/common/ErrorBoundary"
 import { sqlite } from "../database"
 import { queryClient } from "../lib/query-client"
-import { getCurrentColors } from "../theme/utils"
 import { MigrationProvider } from "./migration"
 
 export const RootProviders = ({ children }: { children: ReactNode }) => {
   useDrizzleStudio(sqlite)
 
-  const currentThemeColors = getCurrentColors()!
+  const currentThemeColors = useCurrentColors()
 
   return (
     <MigrationProvider>

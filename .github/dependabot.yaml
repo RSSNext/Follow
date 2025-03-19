@@ -41,6 +41,8 @@ updates:
       # electron 35
       - dependency-name: electron
         versions: [">=35.0.0"]
+      - dependency-name: react-native-sheet-transitions
+        versions: [">0.1.2"]
     open-pull-requests-limit: 100
     groups:
       minor:

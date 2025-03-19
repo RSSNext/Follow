@@ -24,6 +24,7 @@ import { Select } from "@/src/components/ui/form/Select"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
+import { DebugButtonGroup } from "@/src/lib/navigation/debug/DebugButtonGroup"
 import { useNavigation } from "@/src/lib/navigation/hooks"
 import { NavigationSitemapRegistry } from "@/src/lib/navigation/sitemap/registry"
 import type { NavigationControllerView } from "@/src/lib/navigation/types"
@@ -142,6 +143,12 @@ export const DebugScreen: NavigationControllerView = () => {
           title: "Testing Native Scroll To Top",
           onPress: async () => {
             await requireNativeModule("Helper").scrollToTop(findNodeHandle(ref.current))
+          },
+        },
+        {
+          title: "Test navigation",
+          onPress: () => {
+            navigation.pushControllerView(DebugButtonGroup)
           },
         },
       ],

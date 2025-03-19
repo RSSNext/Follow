@@ -89,10 +89,16 @@ export const WrappedScreenItem: FC<
       [],
     )
 
-    const screenOptions = useAtomValue(screenOptionsCtxValue)
+    const screenOptionsFromCtx = useAtomValue(screenOptionsCtxValue)
 
     const backgroundColor = useColor("systemBackground")
 
+    // Priority: Ctx > Define on Component
+
+    const mergedScreenOptions = {
+      ...screenOptionsProp,
+      ...screenOptionsFromCtx,
+    }
     return (
       <ScreenItemContext.Provider value={ctxValue}>
         <ScreenOptionsContext.Provider value={screenOptionsCtxValue}>
@@ -113,7 +119,7 @@ export const WrappedScreenItem: FC<
               navigation.__internal_dismiss(screenId)
             }}
             {...rest}
-            {...screenOptions}
+            {...mergedScreenOptions}
           >
             <Header />
             {children}

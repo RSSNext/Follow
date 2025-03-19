@@ -51,6 +51,14 @@ export class Navigation {
       transparent: view.transparent ?? false,
       id: view.id ?? view.name ?? `view-${this.viewIdCounter++}`,
       title: view.title ?? "",
+      // Form Sheet
+      sheetAllowedDetents: view.sheetAllowedDetents ?? "fitToContents",
+      sheetCornerRadius: view.sheetCornerRadius ?? 16,
+      sheetExpandsWhenScrolledToEdge: view.sheetExpandsWhenScrolledToEdge ?? true,
+      sheetElevation: view.sheetElevation ?? 24,
+      sheetGrabberVisible: view.sheetGrabberVisible ?? true,
+      sheetInitialDetentIndex: view.sheetInitialDetentIndex ?? 0,
+      sheetLargestUndimmedDetentIndex: view.sheetLargestUndimmedDetentIndex ?? "medium",
     }
   }
 

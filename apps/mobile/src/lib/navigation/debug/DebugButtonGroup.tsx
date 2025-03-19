@@ -1,16 +1,13 @@
-/* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
-import { useAtomValue, useSetAtom } from "jotai"
-import { useContext, useEffect } from "react"
-import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useEffect, useRef } from "react"
+import { Button, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native"
 
 import { FullWindowOverlay } from "@/src/components/common/FullWindowOverlay"
-import { Grid } from "@/src/components/ui/grid"
-import { BottomTabContext } from "@/src/lib/navigation/bottom-tab/BottomTabContext"
-import { useTabScreenIsFocused } from "@/src/lib/navigation/bottom-tab/hooks"
+import { CloseCuteReIcon } from "@/src/icons/close_cute_re"
 
+import { useNavigation } from "../hooks"
 import { Navigation } from "../Navigation"
+import type { NavigationControllerView } from "../types"
 
 export const DebugButtonGroup = () => {
   useEffect(() => {
@@ -33,124 +30,130 @@ export const DebugButtonGroup = () => {
       disposers.forEach((disposer) => disposer())
     }
   }, [])
-  return (
-    <FullWindowOverlay>
-      <View style={{ position: "absolute", bottom: 70, left: 0, right: 0 }}>
-        <Button
-          title="Push"
-          onPress={() => {
-            const random = Math.random()
-            Navigation.rootNavigation.pushControllerView(random > 0.5 ? TestScreen : TestScreen3)
-          }}
-        />
-        <Button
-          title="formSheet"
-          onPress={() => {
-            const random = Math.random()
-            Navigation.rootNavigation.presentControllerView(
-              random > 0.5 ? TestScreen : TestScreen3,
-              "formSheet",
-            )
-          }}
-        />
-        <Button
-          title="Modal"
-          onPress={() => {
-            const random = Math.random()
-            Navigation.rootNavigation.presentControllerView(random > 0.5 ? TestScreen : TestScreen3)
-          }}
-        />
-      </View>
-    </FullWindowOverlay>
-  )
-}
 
-const TestScreen3 = () => {
+  const cntRef = useRef(0)
   return (
-    <View style={[{ backgroundColor: "red", flex: 1 }]}>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
-      <Text className="text-white">Hello2</Text>
+    <View className="flex-1 bg-gray-50">
+      <SafeAreaView>
+        <Text>
+          Ad eveniet laboriosam hic voluptas non facilis sint. Laborum rem et provident blanditiis
+          iure rem. Porro voluptate ipsa explicabo voluptatem cumque est architecto. Sit
+          voluptatibus exercitationem recusandae cupiditate tenetur inventore amet repellendus
+          ratione. Nobis nulla harum soluta aliquam iure unde saepe. Modi ipsam harum aspernatur
+          aperiam quod pariatur nisi corporis. Doloribus molestiae a dolore. Veniam commodi nesciunt
+          beatae itaque aliquid nemo. Ut labore rem voluptates. Reprehenderit recusandae voluptate
+          earum consectetur tempora corrupti. Nulla ducimus enim sit ipsam eum esse debitis saepe.
+          Nobis ut voluptas. Id sapiente voluptate soluta ipsa esse corrupti facere nemo recusandae.
+          Dignissimos eum mollitia hic corrupti. Reiciendis voluptates et provident sed laborum
+          consequuntur. Quod nemo nesciunt dignissimos doloribus veniam odio.
+        </Text>
+      </SafeAreaView>
+      <FullWindowOverlay>
+        <View className="absolute inset-x-0 bottom-24">
+          <Button
+            title="Push"
+            onPress={() => {
+              Navigation.rootNavigation.pushControllerView(
+                cntRef.current++ % 2 === 0 ? TestScreen : TestScreen3,
+              )
+            }}
+          />
+          <Button
+            title="formSheet"
+            onPress={() => {
+              Navigation.rootNavigation.presentControllerView(
+                cntRef.current++ % 2 === 0 ? TestScreen : TestScreen3,
+                void 0,
+                "formSheet",
+              )
+            }}
+          />
+          <Button
+            title="Modal"
+            onPress={() => {
+              Navigation.rootNavigation.presentControllerView(
+                cntRef.current++ % 2 === 0 ? TestScreen : TestScreen3,
+              )
+            }}
+          />
+          <Button
+            title="Transparent Modal"
+            onPress={() => {
+              Navigation.rootNavigation.presentControllerView(
+                cntRef.current++ % 2 === 0 ? TestScreen : TestScreen3,
+                void 0,
+                "transparentModal",
+              )
+            }}
+          />
+          <Button
+            title="Full Screen Modal"
+            onPress={() => {
+              Navigation.rootNavigation.presentControllerView(
+                cntRef.current++ % 2 === 0 ? TestScreen : TestScreen3,
+                void 0,
+                "fullScreenModal",
+              )
+            }}
+          />
+        </View>
+      </FullWindowOverlay>
     </View>
   )
 }
 
-const TestTabScreen = () => {
-  const isFocused = useTabScreenIsFocused()
-
-  const insets = useSafeAreaInsets()
-
+const TestScreen3: NavigationControllerView = () => {
+  const navigation = useNavigation()
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
-      <View style={{ height: insets.top, backgroundColor: "red" }} />
-      <ScrollView>
+    <View className="flex-1 bg-white">
+      <TouchableOpacity
+        className="absolute right-5 top-12 z-10 p-4"
+        onPress={() => {
+          navigation.back()
+        }}
+      >
+        <CloseCuteReIcon height={20} width={20} color="black" />
+      </TouchableOpacity>
+
+      <Text>TestScreen3</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+      <Text>Hello2</Text>
+    </View>
+  )
+}
+TestScreen3.sheetAllowedDetents = [0.7, 1]
+TestScreen3.sheetCornerRadius = 0
+
+const TestScreen: NavigationControllerView = () => {
+  const navigation = useNavigation()
+  return (
+    <View className="flex-1">
+      <TouchableOpacity
+        className="absolute right-5 top-12 z-10 p-4"
+        onPress={() => {
+          navigation.back()
+        }}
+      >
+        <CloseCuteReIcon height={20} width={20} color="black" />
+      </TouchableOpacity>
+      <ScrollView className="flex-1 bg-white">
         {Array.from({ length: 100 }).map((_, index) => {
           return (
-            <Text key={index} className="text-white">
-              Hello2
+            <Text key={index} className="text-black">
+              TestScreen
             </Text>
           )
         })}
       </ScrollView>
-      <Text className="text-white">
-        {/* Hello {tabScreenIndex} */}
-
-        <TouchableOpacity
-          onPress={() => {
-            console.log("pressed", isFocused)
-          }}
-        >
-          <Text>Modal</Text>
-        </TouchableOpacity>
-      </Text>
     </View>
   )
 }
 
-const TabbarTest = () => {
-  const insets = useSafeAreaInsets()
-  const { currentIndexAtom, tabScreensAtom } = useContext(BottomTabContext)
-  const setCurrentIndex = useSetAtom(currentIndexAtom)
-
-  const tabScreens = useAtomValue(tabScreensAtom)
-  console.log(tabScreens, "tabScreens")
-  return (
-    <View style={{ backgroundColor: "blue", flex: 1, paddingBottom: insets.bottom }}>
-      <Grid columns={tabScreens.length} gap={10}>
-        {tabScreens.map((tabScreen) => {
-          return (
-            <TouchableOpacity
-              key={tabScreen.tabScreenIndex}
-              onPress={() => {
-                setCurrentIndex(tabScreen.tabScreenIndex)
-              }}
-            >
-              <Text key={tabScreen.tabScreenIndex}>{tabScreen.title}</Text>
-            </TouchableOpacity>
-          )
-        })}
-      </Grid>
-    </View>
-  )
-}
-
-const TestScreen = () => {
-  return (
-    <ScrollView style={[{ backgroundColor: "blue", flex: 1 }]}>
-      {Array.from({ length: 100 }).map((_, index) => {
-        return (
-          <Text key={index} className="text-white">
-            Hello2
-          </Text>
-        )
-      })}
-    </ScrollView>
-  )
-}
+TestScreen.sheetAllowedDetents = [0.5, 1]
