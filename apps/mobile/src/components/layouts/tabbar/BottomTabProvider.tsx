@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react"
-import type { ScrollView } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 
 import { BottomTabHeightProvider } from "./BottomTabHeightProvider"

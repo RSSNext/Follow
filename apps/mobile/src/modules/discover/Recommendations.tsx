@@ -1,5 +1,4 @@
 import { RSSHubCategories } from "@follow/constants"
-import { useTypeScriptHappyCallback } from "@follow/hooks"
 import type { RSSHubRouteDeclaration } from "@follow/models/src/rsshub"
 import { isASCII } from "@follow/utils"
 import { FlashList } from "@shopify/flash-list"

@@ -3,9 +3,7 @@ import type { FC, RefObject } from "react"
 import { Fragment, useMemo } from "react"
 import type { ScrollView } from "react-native"
 import { Alert, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
 import {
   GroupedInsetListCard,
   GroupedInsetListNavigationLink,
@@ -210,9 +208,6 @@ const navigationGroups = [
 ] as const
 
 export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollRef }) => {
-  const insets = useSafeAreaInsets()
-  const tabBarHeight = useBottomTabBarHeight()
-
   const whoami = useWhoami()
 
   const filteredNavigationGroups = useMemo(() => {

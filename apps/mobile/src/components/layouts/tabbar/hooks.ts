@@ -1,4 +1,3 @@
-import { useAtomValue } from "jotai"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
 import type { FlatList, ScrollView } from "react-native"
@@ -9,8 +8,7 @@ import {
   SetAttachNavigationScrollViewContext,
   useAttachNavigationScrollView,
 } from "@/src/lib/navigation/AttachNavigationScrollViewContext"
-import { useScreenIsAppeared, useTabScreenIsFocused } from "@/src/lib/navigation/bottom-tab/hooks"
-import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
+import { useScreenIsAppeared } from "@/src/lib/navigation/bottom-tab/hooks"
 
 import { BottomTabBarHeightContext } from "./contexts/BottomTabBarHeightContext"
 

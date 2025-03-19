@@ -12,7 +12,6 @@ import {
 import { KeyboardController } from "react-native-keyboard-controller"
 
 import { RotateableLoading } from "@/src/components/common/RotateableLoading"
-import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -30,7 +29,6 @@ import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { CloseCircleFillIcon } from "@/src/icons/close_circle_fill"
 import { useNavigation } from "@/src/lib/navigation/hooks"
-import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { EditEmailScreen } from "@/src/screens/(modal)/edit-email"
 import { useWhoami } from "@/src/store/user/hooks"

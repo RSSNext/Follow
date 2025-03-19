@@ -9,7 +9,7 @@ import * as Haptics from "expo-haptics"
 import type { ElementRef, RefObject } from "react"
 import { forwardRef, useCallback, useContext } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { RefreshControl, useWindowDimensions } from "react-native"
+import { RefreshControl } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
