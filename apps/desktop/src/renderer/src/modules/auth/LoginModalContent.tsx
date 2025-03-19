@@ -52,50 +52,56 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
       </div>
 
       <LoginWithPassword runtime={runtime} />
-      {!isInMAS() && (
-        <>
-          <div className="my-3 w-full space-y-2">
-            <div className="flex items-center justify-center">
-              <Divider className="flex-1" />
-              <p className="text-muted-foreground px-4 text-center text-sm">{t("login.or")}</p>
-              <Divider className="flex-1" />
-            </div>
-          </div>
-          <div className="mb-3 flex items-center justify-center gap-4">
-            {Object.entries(authProviders || [])
-              .filter(([key]) => key !== "credential")
-              .map(([key, provider]) => (
-                <Tooltip key={key} delayDuration={0}>
-                  <TooltipTrigger asChild>
-                    <MotionButtonBase
-                      onClick={() => {
-                        loginHandler(key, "app")
-                      }}
-                    >
-                      <div
-                        className={clsx(
-                          "center hover:bg-muted inline-flex rounded-full border p-2.5 duration-200 [&_svg]:size-6",
-                          overrideAuthProvidersClassName[key],
-                        )}
-                        dangerouslySetInnerHTML={{
-                          __html: provider.icon,
-                        }}
-                        style={{
-                          color: provider.color,
-                        }}
-                      />
-                    </MotionButtonBase>
-                  </TooltipTrigger>
-                  <TooltipPortal>
-                    <TooltipContent>
-                      {t("login.continueWith", { provider: provider.name })}
-                    </TooltipContent>
-                  </TooltipPortal>
-                </Tooltip>
-              ))}
-          </div>
-        </>
-      )}
+      <div className="my-3 w-full space-y-2">
+        <div className="flex items-center justify-center">
+          <Divider className="flex-1" />
+          <p className="text-muted-foreground px-4 text-center text-sm">{t("login.or")}</p>
+          <Divider className="flex-1" />
+        </div>
+      </div>
+      <div className="mb-3 flex items-center justify-center gap-4">
+        {Object.entries(authProviders || [])
+          .filter(([key]) => {
+            if (key === "credential") {
+              return false
+            }
+            const inMAS = isInMAS()
+            if (inMAS) {
+              return key !== "apple"
+            } else {
+              return true
+            }
+          })
+          .map(([key, provider]) => (
+            <Tooltip key={key} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <MotionButtonBase
+                  onClick={() => {
+                    loginHandler(key, "app")
+                  }}
+                >
+                  <div
+                    className={clsx(
+                      "center hover:bg-muted inline-flex rounded-full border p-2.5 duration-200 [&_svg]:size-6",
+                      overrideAuthProvidersClassName[key],
+                    )}
+                    dangerouslySetInnerHTML={{
+                      __html: provider.icon,
+                    }}
+                    style={{
+                      color: provider.color,
+                    }}
+                  />
+                </MotionButtonBase>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent>
+                  {t("login.continueWith", { provider: provider.name })}
+                </TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+          ))}
+      </div>
     </>
   )
   if (isMobile) {
