@@ -4,6 +4,8 @@ import type { GeneralSettings } from "@follow/shared/interface/settings"
 
 import { jotaiStore } from "~/lib/jotai"
 
+export const DEFAULT_ACTION_LANGUAGE = "default"
+
 const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
@@ -47,8 +49,6 @@ export const {
 
   settingAtom: __generalSettingAtom,
 } = createSettingAtom("general", createDefaultSettings)
-
-export const DEFAULT_ACTION_LANGUAGE = "default"
 
 export function useActionLanguage() {
   const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
