@@ -1,4 +1,6 @@
+import type { FeedViewType } from "@follow/constants"
 import { useMemo } from "react"
+import { View } from "react-native"
 
 import { NoLoginInfo } from "@/src/components/common/NoLoginInfo"
 import { BlackBoard2CuteFiIcon } from "@/src/icons/black_board_2_cute_fi"
@@ -16,11 +18,7 @@ export default function Subscriptions() {
   return (
     <EntryListContext.Provider value={useMemo(() => ({ type: "subscriptions" }), [])}>
       <TimelineSelectorProvider>
-        {whoami ? (
-          <PagerList renderItem={(view) => <SubscriptionList key={view} view={view} />} />
-        ) : (
-          <NoLoginInfo target="subscriptions" />
-        )}
+        {whoami ? <PagerList renderItem={renderItem} /> : <NoLoginInfo target="subscriptions" />}
       </TimelineSelectorProvider>
     </EntryListContext.Provider>
   )
@@ -33,3 +31,9 @@ SubscriptionsTabScreen.tabBarIcon = ({ focused, color }) => {
 }
 
 SubscriptionsTabScreen.title = "Subscriptions"
+
+const renderItem = (view: FeedViewType) => (
+  <View key={view} className="bg-system-grouped-background">
+    <SubscriptionList view={view} />
+  </View>
+)

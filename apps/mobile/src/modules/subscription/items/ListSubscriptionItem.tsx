@@ -1,7 +1,9 @@
+import { cn } from "@follow/utils"
 import { memo } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
+import { GROUPED_ICON_TEXT_GAP } from "@/src/components/ui/grouped/constants"
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
@@ -13,18 +15,27 @@ import { useListUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionListItemContextMenu } from "../../context-menu/lists"
 import { getHorizontalScrolling, selectFeed } from "../../screen/atoms"
+import type { SubscriptionItemBaseProps } from "./types"
 import { UnreadCount } from "./UnreadCount"
 
-export const ListSubscriptionItem = memo(({ id }: { id: string; className?: string }) => {
+interface ListSubscriptionItemProps extends SubscriptionItemBaseProps {}
+export const ListSubscriptionItem = memo(({ id, isFirst, isLast }: ListSubscriptionItemProps) => {
   const list = useList(id)
   const unreadCount = useListUnreadCount(id)
   const navigation = useNavigation()
+
   if (!list) return null
   return (
-    <Animated.View exiting={FadeOutUp}>
+    <Animated.View
+      exiting={FadeOutUp}
+      className={cn("mx-2 overflow-hidden", {
+        "rounded-t-[10px]": isFirst,
+        "rounded-b-[10px]": isLast,
+      })}
+    >
       <SubscriptionListItemContextMenu id={id}>
         <ItemPressable
-          itemStyle={ItemPressableStyle.Plain}
+          itemStyle={ItemPressableStyle.Grouped}
           className="h-12 flex-row items-center px-3"
           onPress={() => {
             const isHorizontalScrolling = getHorizontalScrolling()
@@ -40,7 +51,7 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
             })
           }}
         >
-          <View className="overflow-hidden rounded">
+          <View className="ml-1 overflow-hidden rounded">
             {!!list.image && (
               <Image
                 proxy={{
@@ -54,7 +65,9 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
             {!list.image && <FallbackIcon title={list.title} size={20} />}
           </View>
 
-          <Text className="text-text ml-2">{list.title}</Text>
+          <Text className="text-label font-medium" style={{ marginLeft: GROUPED_ICON_TEXT_GAP }}>
+            {list.title}
+          </Text>
           <UnreadCount unread={unreadCount} className="ml-auto" />
         </ItemPressable>
       </SubscriptionListItemContextMenu>
