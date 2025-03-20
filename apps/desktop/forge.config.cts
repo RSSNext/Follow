@@ -199,7 +199,7 @@ const config: ForgeConfig = {
       ["mas"],
     ),
     new MakerAppX({
-      publisher: "Natural Selection Labs",
+      publisher: "CN=Natural Selection Labs",
       devCert: "build/dev.pfx",
     }),
   ],
