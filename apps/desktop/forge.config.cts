@@ -6,6 +6,7 @@ import { cp, readdir } from "node:fs/promises"
 import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
+import { MakerAppX } from "@electron-forge/maker-appx"
 import { MakerDMG } from "@electron-forge/maker-dmg"
 import { MakerPKG } from "@electron-forge/maker-pkg"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
@@ -198,6 +199,7 @@ const config: ForgeConfig = {
       },
       ["mas"],
     ),
+    new MakerAppX(),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality
