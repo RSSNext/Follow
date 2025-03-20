@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next"
 import { useCurrentModal } from "~/components/ui/modal/stacked/hooks"
 import type { LoginRuntime } from "~/lib/auth"
 import { loginHandler } from "~/lib/auth"
-import { isInMAS } from "~/lib/utils"
 import { useAuthProviders } from "~/queries/users"
 
 import { LoginWithPassword } from "./Form"
@@ -61,17 +60,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
       </div>
       <div className="mb-3 flex items-center justify-center gap-4">
         {Object.entries(authProviders || [])
-          .filter(([key]) => {
-            if (key === "credential") {
-              return false
-            }
-            const inMAS = isInMAS()
-            if (inMAS) {
-              return key !== "apple"
-            } else {
-              return true
-            }
-          })
+          .filter(([key]) => key !== "credential")
           .map(([key, provider]) => (
             <Tooltip key={key} delayDuration={0}>
               <TooltipTrigger asChild>
