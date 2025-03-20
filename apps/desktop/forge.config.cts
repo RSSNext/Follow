@@ -198,7 +198,10 @@ const config: ForgeConfig = {
       },
       ["mas"],
     ),
-    new MakerAppX(),
+    new MakerAppX({
+      publisher: "Natural Selection Labs",
+      devCert: "build/dev.pfx",
+    }),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality
