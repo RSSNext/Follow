@@ -29,7 +29,7 @@ export const DataScreen = () => {
         <GroupedInsetListCard>
           <GroupedInsetListCell
             label="Send anonymous data"
-            description="By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Follow."
+            description="By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Folo."
           >
             <Switch
               size="sm"

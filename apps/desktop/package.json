@@ -1,10 +1,10 @@
 {
-  "name": "Follow",
+  "name": "Folo",
   "type": "module",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "private": true,
   "description": "Follow everything in one place",
-  "author": "Follow Team",
+  "author": "Folo Team",
   "homepage": "https://github.com/RSSNext",
   "repository": {
     "url": "https://github.com/RSSNext/follow",
@@ -80,8 +80,8 @@
     "unplugin-ast": "0.14.3",
     "utf-8-validate": "6.0.5"
   },
-  "productName": "Follow",
-  "mainHash": "03d744e78f7b1eedc24f83c05939b1faaa07b3b5ff15cfc6242594c74c726637",
+  "productName": "Folo",
+  "mainHash": "569e7dd06fa94fcc22fc451346fbf1c9e8203d364cb84d49a7a08bf7dff39630",
   "bump": {
     "before": [
       "git pull --rebase",

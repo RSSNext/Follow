@@ -38,7 +38,7 @@ export const apiClient = hc<AppType>("", {
       "X-App-Version": PKG.version,
       "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
       Cookie: betterAuthSessionCookie ? atob(betterAuthSessionCookie) : "",
-      "User-Agent": `Follow/${PKG.version}${user?.id ? ` uid: ${user.id}` : ""}`,
+      "User-Agent": `Folo/${PKG.version}${user?.id ? ` uid: ${user.id}` : ""}`,
     }
   },
 })

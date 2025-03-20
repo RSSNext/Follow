@@ -90,7 +90,7 @@ export function DiscoverImport({ isInit = false }: { isInit?: boolean }) {
       return data
     },
     onSuccess: () => {
-      Queries.subscription.byView().invalidateRoot()
+      Queries.subscription.all().invalidateRoot()
     },
     async onError(err) {
       toastFetchError(err)

@@ -3,7 +3,6 @@ import { sleep } from "@follow/utils"
 import { requireNativeModule } from "expo"
 import * as Clipboard from "expo-clipboard"
 import * as FileSystem from "expo-file-system"
-import { Sitemap } from "expo-router/build/views/Sitemap"
 import * as SecureStore from "expo-secure-store"
 import type { FC } from "react"
 import * as React from "react"
@@ -25,6 +24,10 @@ import { Select } from "@/src/components/ui/form/Select"
 import { getDbPath } from "@/src/database"
 import { cookieKey, getCookie, sessionTokenKey, signOut } from "@/src/lib/auth"
 import { loading } from "@/src/lib/loading"
+import { DebugButtonGroup } from "@/src/lib/navigation/debug/DebugButtonGroup"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { NavigationSitemapRegistry } from "@/src/lib/navigation/sitemap/registry"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { setEnvProfile, useEnvProfile } from "@/src/lib/proxy-env"
 import { toast } from "@/src/lib/toast"
 
@@ -38,7 +41,7 @@ interface MenuItem {
   onPress: () => Promise<void> | void
   textClassName?: string
 }
-export default function DebugPanel() {
+export const DebugScreen: NavigationControllerView = () => {
   const insets = useSafeAreaInsets()
   const envProfile = useEnvProfile()
 
@@ -142,11 +145,19 @@ export default function DebugPanel() {
             await requireNativeModule("Helper").scrollToTop(findNodeHandle(ref.current))
           },
         },
+        {
+          title: "Test navigation",
+          onPress: () => {
+            navigation.pushControllerView(DebugButtonGroup)
+          },
+        },
       ],
     },
   ]
 
   const ref = useRef<ScrollView>(null)
+
+  const navigation = useNavigation()
 
   return (
     <ScrollView ref={ref} className="flex-1 bg-black" style={{ paddingTop: insets.top }}>
@@ -192,7 +203,29 @@ export default function DebugPanel() {
       ))}
 
       <Text className="mt-4 px-8 text-2xl font-medium text-white">Sitemap</Text>
-      <Sitemap />
+      <View style={styles.container}>
+        <View style={styles.itemContainer}>
+          {NavigationSitemapRegistry.entries().map(([title, register]) => {
+            return (
+              <TouchableOpacity
+                key={title}
+                style={styles.itemPressable}
+                onPress={() => {
+                  const { Component, props, stackPresentation } = register
+
+                  if (stackPresentation === "push") {
+                    navigation.pushControllerView(Component, props)
+                  } else {
+                    navigation.presentControllerView(Component, props, stackPresentation)
+                  }
+                }}
+              >
+                <Text style={styles.filename}>{title}</Text>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+      </View>
     </ScrollView>
   )
 }

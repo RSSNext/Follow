@@ -2,20 +2,21 @@ import { cn } from "@follow/utils"
 import type { PropsWithChildren } from "react"
 import { Pressable, Text, View } from "react-native"
 
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { GroupedInsetListNavigationLinkIcon } from "@/src/components/ui/grouped/GroupedList"
 import { Eye2CuteReIcon } from "@/src/icons/eye_2_cute_re"
 import { Grid2CuteReIcon } from "@/src/icons/grid_2_cute_re"
 import { PowerIcon } from "@/src/icons/power"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useReadingBehavior } from "@/src/modules/onboarding/hooks/use-reading-behavior"
 
-const SelectReadingModeScreen = () => {
+export const SelectReadingModeScreen: NavigationControllerView = () => {
   const { behavior, updateSettings } = useReadingBehavior()
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader headerTitle="Select Reading Mode" />
+      <NavigationBlurEffectHeader title="Select Reading Mode" />
 
       <View className="mt-8 flex w-full gap-4">
         <Card
@@ -92,5 +93,3 @@ const Card = ({
     </Pressable>
   )
 }
-
-export default SelectReadingModeScreen

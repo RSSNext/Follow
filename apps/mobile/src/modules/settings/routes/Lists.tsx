@@ -1,4 +1,3 @@
-import { router } from "expo-router"
 import { createContext, createElement, useCallback, useContext, useMemo } from "react"
 import type { ListRenderItem } from "react-native"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
@@ -23,13 +22,15 @@ import { PowerIcon } from "@/src/icons/power"
 import { RadaCuteFiIcon } from "@/src/icons/rada_cute_fi"
 import { UserAdd2CuteFiIcon } from "@/src/icons/user_add_2_cute_fi"
 import { Wallet2CuteFiIcon } from "@/src/icons/wallet_2_cute_fi"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import type { HonoApiClient } from "@/src/morph/types"
+import { ListScreen } from "@/src/screens/(modal)/list"
 import { useOwnedLists, usePrefetchOwnedLists } from "@/src/store/list/hooks"
 import type { ListModel } from "@/src/store/list/store"
 import { accentColor } from "@/src/theme/colors"
 
 import { SwipeableGroupProvider, SwipeableItem } from "../../../components/common/SwipeableItem"
-import { useSettingsNavigation } from "../hooks"
+import { ManageListScreen } from "./ManageList"
 
 const ListContext = createContext({} as Record<string, HonoApiClient.List_List_Get>)
 export const ListsScreen = () => {
@@ -72,7 +73,7 @@ export const ListsScreen = () => {
         )}
       >
         <View className="mt-6">
-          <GroupedInsetListCard>
+          <GroupedInsetListCard showSeparator={false}>
             {lists.length > 0 && (
               <SwipeableGroupProvider>
                 <Animated.FlatList
@@ -99,8 +100,13 @@ export const ListsScreen = () => {
 
 const AddListButton = () => {
   const labelColor = useColor("label")
+  const navigation = useNavigation()
   return (
-    <UINavigationHeaderActionButton onPress={() => router.push("/list")}>
+    <UINavigationHeaderActionButton
+      onPress={() => {
+        navigation.presentControllerView(ListScreen)
+      }}
+    >
       <AddCuteReIcon height={20} width={20} color={labelColor} />
     </UINavigationHeaderActionButton>
   )
@@ -124,8 +130,10 @@ const ListItemCell: ListRenderItem<ListModel> = (props) => {
 const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
   const { title, description } = list
   const listData = useContext(ListContext)[list.id]
-  const navigation = useSettingsNavigation()
+
+  const navigation = useNavigation()
   const colors = useColors()
+
   return (
     <SwipeableItem
       swipeRightToCallAction
@@ -133,14 +141,14 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
         {
           label: "Manage",
           onPress: () => {
-            navigation.navigate("ManageList", { id: list.id })
+            navigation.pushControllerView(ManageListScreen, { id: list.id })
           },
           backgroundColor: accentColor,
         },
         {
           label: "Edit",
           onPress: () => {
-            router.push(`/list?id=${list.id}`)
+            navigation.presentControllerView(ListScreen, { listId: list.id })
           },
           backgroundColor: colors.blue,
         },
@@ -148,7 +156,7 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
     >
       <ItemPressable
         className="flex-row p-4"
-        onPress={() => navigation.navigate("ManageList", { id: list.id })}
+        onPress={() => navigation.pushControllerView(ManageListScreen, { id: list.id })}
       >
         <View className="size-16 overflow-hidden rounded-lg">
           {list.image ? (

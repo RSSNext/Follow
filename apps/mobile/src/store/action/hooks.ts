@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { FetchError } from "ofetch"
 import { useCallback } from "react"
 
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
 
 import { actionSyncService, useActionStore } from "./store"
@@ -15,10 +15,11 @@ export const usePrefetchActions = () => {
 }
 
 export const useUpdateActionsMutation = () => {
+  const navigation = useNavigation()
   return useMutation({
     mutationFn: () => actionSyncService.saveRules(),
     onSuccess() {
-      router.back()
+      navigation.back()
       toast.success("Actions saved")
     },
     onError(err) {

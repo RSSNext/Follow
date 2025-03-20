@@ -34,7 +34,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void } 
       if (!subscription) return
 
       subscriptionActions.unfollow([subscription.feedId]).then(([feed]) => {
-        subscriptionQuery.byView(subscription.view).invalidate()
+        subscriptionQuery.all().invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
         if (!subscription) return
@@ -51,7 +51,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void } 
             },
           })
 
-          subscriptionQuery.byView(subscription.view).invalidate()
+          subscriptionQuery.all().invalidate()
           feedUnreadActions.fetchUnreadByView(subscription.view)
 
           toast.dismiss(toastId)

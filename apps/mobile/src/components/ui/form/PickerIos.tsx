@@ -1,5 +1,6 @@
 /* eslint-disable @eslint-react/no-array-index-key */
 import { cn } from "@follow/utils"
+import { Portal } from "@gorhom/portal"
 import { Picker } from "@react-native-picker/picker"
 import { useMemo, useState } from "react"
 import type { StyleProp, ViewStyle } from "react-native"
@@ -11,7 +12,6 @@ import { MingcuteDownLineIcon } from "@/src/icons/mingcute_down_line"
 import { useColor } from "@/src/theme/colors"
 
 import { BlurEffect } from "../../common/BlurEffect"
-import { Portal } from "../portal"
 
 interface PickerIosProps<T> {
   options: { label: string; value: T }[]

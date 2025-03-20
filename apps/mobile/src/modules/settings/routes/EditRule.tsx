@@ -1,4 +1,3 @@
-import type { RouteProp } from "@react-navigation/native"
 import { Text, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
@@ -17,21 +16,17 @@ import {
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
 import { views } from "@/src/constants/views"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionFilter, ActionRule } from "@/src/store/action/types"
 import { accentColor, useColors } from "@/src/theme/colors"
 
 import { availableActionList, filterFieldOptions, filterOperatorOptions } from "../actions/constant"
-import { useSettingsNavigation } from "../hooks"
-import type { SettingsStackParamList } from "../types"
+import { EditConditionScreen } from "./EditCondition"
 
-export const EditRuleScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "EditRule">
-}) => {
-  const { index } = route.params
+export const EditRuleScreen: NavigationControllerView<{ index: number }> = ({ index }) => {
   const rule = useActionRule(index)
 
   return (
@@ -113,7 +108,7 @@ const FilterSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
 }
 
 const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ filter, index }) => {
-  const navigation = useSettingsNavigation()
+  const navigation = useNavigation()
   const colors = useColors()
 
   if (filter.length === 0) return null
@@ -122,6 +117,9 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
       <GroupedInsetListSectionHeader label="Conditions" />
 
       {filter.map((group, groupIndex) => {
+        if (!Array.isArray(group)) {
+          group = [group]
+        }
         return (
           <GroupedInsetListCard key={groupIndex} className="mb-6">
             {group.map((item, itemIndex) => {
@@ -152,7 +150,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                     {
                       label: "Edit",
                       onPress: () => {
-                        navigation.navigate("EditCondition", {
+                        navigation.pushControllerView(EditConditionScreen, {
                           ruleIndex: index,
                           groupIndex,
                           conditionIndex: itemIndex,
@@ -169,7 +167,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
                         .join(" ") || "Unknown"
                     }
                     onPress={() => {
-                      navigation.navigate("EditCondition", {
+                      navigation.pushControllerView(EditConditionScreen, {
                         ruleIndex: index,
                         groupIndex,
                         conditionIndex: itemIndex,
@@ -184,7 +182,7 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
               onPress={() => {
                 actionActions.addConditionItem({ ruleIndex: index, groupIndex })
                 setTimeout(() => {
-                  navigation.navigate("EditCondition", {
+                  navigation.pushControllerView(EditConditionScreen, {
                     ruleIndex: index,
                     groupIndex,
                     conditionIndex: group.length,
@@ -215,8 +213,8 @@ const ActionSection: React.FC<{ rule: ActionRule }> = ({ rule }) => {
     (action) => rule.result[action.value] === undefined,
   )
 
+  const navigation = useNavigation()
   const colors = useColors()
-  const navigation = useSettingsNavigation()
 
   return (
     <View>

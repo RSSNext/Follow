@@ -1,6 +1,4 @@
 import { cn } from "@follow/utils"
-import { HeaderHeightContext } from "@react-navigation/elements"
-import { router } from "expo-router"
 import type { FC } from "react"
 import { createContext, memo, useContext, useState } from "react"
 import {
@@ -18,10 +16,13 @@ import { useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { BottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
+import { NavigationHeaderHeightContext } from "@/src/components/layouts/views/NavigationHeaderContext"
 import { AccordionItem } from "@/src/components/ui/accordion/AccordionItem"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useFeed, usePrefetchFeed } from "@/src/store/feed/hooks"
 import { useList } from "@/src/store/list/hooks"
 import { useSortedUngroupedSubscription, useSubscription } from "@/src/store/subscription/hooks"
@@ -53,7 +54,7 @@ export const FeedPanel = () => {
           }}
         />
 
-        <HeaderHeightContext.Provider value={headerHeight}>
+        <NavigationHeaderHeightContext.Provider value={headerHeight}>
           <BottomTabBarHeightContext.Provider value={insets.bottom}>
             <ViewPageCurrentViewProvider
               key={selectedCollection.viewId}
@@ -62,7 +63,7 @@ export const FeedPanel = () => {
               <SubscriptionList view={selectedCollection.viewId} />
             </ViewPageCurrentViewProvider>
           </BottomTabBarHeightContext.Provider>
-        </HeaderHeightContext.Provider>
+        </NavigationHeaderHeightContext.Provider>
       </View>
     )
   }
@@ -141,10 +142,12 @@ const CategoryGrouped = memo(
     const rotateValue = useAnimatedValue(1)
     const selectedCollection = useSelectedCollection()
     const view = selectedCollection.type === "view" ? selectedCollection.viewId : undefined
+    const navigation = useNavigation()
     if (view === undefined) {
       console.warn("view is undefined", selectedCollection)
       return null
     }
+
     return (
       <SubscriptionFeedCategoryContextMenu
         view={view}
@@ -158,7 +161,9 @@ const CategoryGrouped = memo(
               categoryName: category,
             })
             closeDrawer()
-            router.push(`/feeds/${category}`)
+            navigation.pushControllerView(FeedScreen, {
+              feedId: category,
+            })
           }}
           className="h-12 flex-row items-center px-3"
         >

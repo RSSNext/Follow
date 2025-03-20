@@ -17,7 +17,7 @@ import setLanguages from "electron-packager-languages"
 import yaml from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
 
-const platform = process.argv[process.argv.indexOf("--platform") + 1]
+const platform = process.argv.find((arg) => arg.startsWith("--platform"))?.split("=")[1]
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
 const platformNamesMap = {
@@ -99,7 +99,7 @@ const config: ForgeConfig = {
     extraResource: ["./resources/app-update.yml"],
     protocols: [
       {
-        name: "Follow",
+        name: "Folo",
         schemes: ["follow"],
       },
     ],
@@ -130,7 +130,6 @@ const config: ForgeConfig = {
       keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
       identity: process.env.OSX_SIGN_IDENTITY,
       provisioningProfile: process.env.OSX_SIGN_PROVISIONING_PROFILE_PATH,
-      preAutoEntitlements: platform !== "mas",
     },
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
@@ -177,7 +176,7 @@ const config: ForgeConfig = {
       ["darwin", "mas"],
     ),
     new MakerSquirrel({
-      name: "Follow",
+      name: "Folo",
       setupIcon: "resources/icon.ico",
       iconUrl: "https://app.follow.is/favicon.ico",
     }),
@@ -193,7 +192,7 @@ const config: ForgeConfig = {
     }),
     new MakerPKG(
       {
-        name: "Follow",
+        name: "Folo",
         keychain: process.env.KEYCHAIN_PATH,
       },
       ["mas"],

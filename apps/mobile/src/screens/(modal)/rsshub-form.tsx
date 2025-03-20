@@ -5,35 +5,42 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@follow/utils"
+import { PortalProvider } from "@gorhom/portal"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { router, useLocalSearchParams, useNavigation } from "expo-router"
 import { memo, useEffect, useMemo, useState } from "react"
 import type { FieldErrors } from "react-hook-form"
 import { Controller, useForm } from "react-hook-form"
 import { KeyboardAvoidingView, Linking, Text, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
-import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
+import {
+  NavigationBlurEffectHeader,
+  SafeNavigationScrollView,
+} from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { FormProvider, useFormContext } from "@/src/components/ui/form/FormProvider"
 import { Select } from "@/src/components/ui/form/Select"
 import { TextField } from "@/src/components/ui/form/TextField"
-import { PortalHost } from "@/src/components/ui/portal"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { useSetModalScreenOptions } from "@/src/lib/navigation/ScreenOptionsContext"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { feedSyncServices } from "@/src/store/feed/store"
+
+import { FollowScreen } from "./follow"
 
 interface RsshubFormParams {
   route: RSSHubRoute
   routePrefix: string
   name: string
 }
-export default function RsshubForm() {
-  const params = useLocalSearchParams()
 
-  const { route, routePrefix, name } = (params || {}) as Record<string, string>
-
+export const RsshubFormScreen: NavigationControllerView<RsshubFormParams> = ({
+  route,
+  routePrefix,
+  name,
+}) => {
   const parsedRoute = useMemo(() => {
     if (!route) return null
     try {
@@ -43,12 +50,13 @@ export default function RsshubForm() {
     }
   }, [route])
 
-  const canBack = router.canDismiss()
+  const navigation = useNavigation()
+  const canBack = navigation.canGoBack()
   useEffect(() => {
     if (!parsedRoute && canBack) {
-      router.dismiss()
+      navigation.back()
     }
-  }, [canBack, parsedRoute])
+  }, [canBack, navigation, parsedRoute])
   if (!parsedRoute || !routePrefix) {
     return null
   }
@@ -113,9 +121,9 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
 
   return (
     <FormProvider form={form}>
-      <PortalHost>
+      <PortalProvider>
         <KeyboardAvoidingView className="flex-1" behavior="padding">
-          <SafeModalScrollView className="bg-system-grouped-background">
+          <SafeNavigationScrollView className="bg-system-grouped-background">
             <ScreenOptions
               name={name}
               routeName={routeName}
@@ -201,9 +209,9 @@ function FormImpl({ route, routePrefix, name }: RsshubFormParams) {
                 />
               </View>
             )}
-          </SafeModalScrollView>
+          </SafeNavigationScrollView>
         </KeyboardAvoidingView>
-      </PortalHost>
+      </PortalProvider>
     </FormProvider>
   )
 }
@@ -245,16 +253,16 @@ const ScreenOptions = memo(
   ({ name, routeName, route, routePrefix, errors }: ScreenOptionsProps) => {
     const form = useFormContext()
 
-    const navigation = useNavigation()
+    const setScreenOptions = useSetModalScreenOptions()
     useEffect(() => {
-      navigation.setOptions({
+      setScreenOptions({
+        preventNativeDismiss: form.formState.isDirty,
         gestureEnabled: !form.formState.isDirty,
       })
-    }, [form.formState.isDirty, navigation])
+    }, [form.formState.isDirty, setScreenOptions])
     return (
-      <ModalHeader
-        headerSubtitle={`rsshub://${routePrefix}${route}`}
-        headerTitle={`${name} - ${routeName}`}
+      <NavigationBlurEffectHeader
+        title={`${name} - ${routeName}`}
         headerRight={
           <FormProvider form={form}>
             <ModalHeaderSubmitButtonImpl errors={errors} routePrefix={routePrefix} route={route} />
@@ -279,6 +287,7 @@ const ModalHeaderSubmitButtonImpl = ({
   const form = useFormContext()
   const isValid = Object.keys(errors).length === 0
 
+  const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
 
   const submit = form.handleSubmit((_data) => {
@@ -304,19 +313,13 @@ const ModalHeaderSubmitButtonImpl = ({
 
       const finalUrl = routeParamsPath ? `${url}/${routeParamsPath}` : url
 
-      // if (router.canDismiss()) {
-      //   router.dismiss()
-      // }
-
       feedSyncServices
         .fetchFeedById({ url: finalUrl })
         .then((feed) => {
-          router.push({
-            pathname: "/follow",
-            params: {
-              url: finalUrl,
-              id: feed?.id,
-            },
+          navigation.pushControllerView(FollowScreen, {
+            id: feed?.id,
+            type: "url" as const,
+            url: finalUrl,
           })
         })
         .catch(() => {
@@ -336,5 +339,5 @@ const ModalHeaderSubmitButtonImpl = ({
     }
   })
 
-  return <ModalHeaderSubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
+  return <HeaderSubmitButton isLoading={isLoading} isValid={isValid} onPress={submit} />
 }

@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     policy: "appVersion",
   },
 
-  name: "Follow",
+  name: "Folo",
   slug: "follow",
   version: PKG.version,
   orientation: "portrait",
@@ -53,11 +53,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     googleServicesFile: "./build/google-services.json",
   },
-  web: {
-    bundler: "metro",
-    output: "static",
-    favicon: iconPath,
-  },
+  // web: {
+  //   bundler: "metro",
+  //   output: "static",
+  //   favicon: iconPath,
+  // },
   plugins: [
     [
       "expo-document-picker",
@@ -66,12 +66,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     "expo-localization",
-    [
-      "expo-router",
-      {
-        root: "./src/screens",
-      },
-    ],
+
     [
       "expo-splash-screen",
       {
