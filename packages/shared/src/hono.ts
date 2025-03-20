@@ -407,7 +407,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                 condition: ConditionItem[] | ConditionItem[][];
                 result: {
                     disabled?: boolean;
-                    translation?: boolean;
+                    translation?: z.infer<typeof languageSchema> | boolean;
                     summary?: boolean;
                     readability?: boolean;
                     sourceContent?: boolean;
@@ -442,7 +442,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                 condition: ConditionItem[] | ConditionItem[][];
                 result: {
                     disabled?: boolean;
-                    translation?: boolean;
+                    translation?: z.infer<typeof languageSchema> | boolean;
                     summary?: boolean;
                     readability?: boolean;
                     sourceContent?: boolean;
@@ -494,7 +494,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     }>, "many">, "many">]>;
     result: z.ZodObject<{
         disabled: z.ZodOptional<z.ZodBoolean>;
-        translation: z.ZodOptional<z.ZodBoolean>;
+        translation: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["ar-DZ", "ar-IQ", "ar-KW", "ar-MA", "ar-SA", "ar-TN", "de", "en", "es", "fi", "fr", "it", "ja", "ko", "pt", "ru", "tr", "zh-CN", "zh-HK", "zh-TW"]>, z.ZodBoolean]>>;
         summary: z.ZodOptional<z.ZodBoolean>;
         readability: z.ZodOptional<z.ZodBoolean>;
         sourceContent: z.ZodOptional<z.ZodBoolean>;
@@ -527,7 +527,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         disabled?: boolean | undefined;
-        translation?: boolean | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -546,7 +546,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         webhooks?: string[] | undefined;
     }, {
         disabled?: boolean | undefined;
-        translation?: boolean | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -577,7 +577,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     }[][];
     result: {
         disabled?: boolean | undefined;
-        translation?: boolean | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -608,7 +608,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     }[][];
     result: {
         disabled?: boolean | undefined;
-        translation?: boolean | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -708,7 +708,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }>, "many">, "many">]>;
         result: z.ZodObject<{
             disabled: z.ZodOptional<z.ZodBoolean>;
-            translation: z.ZodOptional<z.ZodBoolean>;
+            translation: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["ar-DZ", "ar-IQ", "ar-KW", "ar-MA", "ar-SA", "ar-TN", "de", "en", "es", "fi", "fr", "it", "ja", "ko", "pt", "ru", "tr", "zh-CN", "zh-HK", "zh-TW"]>, z.ZodBoolean]>>;
             summary: z.ZodOptional<z.ZodBoolean>;
             readability: z.ZodOptional<z.ZodBoolean>;
             sourceContent: z.ZodOptional<z.ZodBoolean>;
@@ -741,7 +741,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             disabled?: boolean | undefined;
-            translation?: boolean | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -760,7 +760,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             webhooks?: string[] | undefined;
         }, {
             disabled?: boolean | undefined;
-            translation?: boolean | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -791,7 +791,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: boolean | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -822,7 +822,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: boolean | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -856,7 +856,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: boolean | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -890,7 +890,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: boolean | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -12937,7 +12937,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         }[][];
                         result: {
                             disabled?: boolean | undefined;
-                            translation?: boolean | undefined;
+                            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             readability?: boolean | undefined;
                             sourceContent?: boolean | undefined;
@@ -12980,7 +12980,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         }[][];
                         result: {
                             disabled?: boolean | undefined;
-                            translation?: boolean | undefined;
+                            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             readability?: boolean | undefined;
                             sourceContent?: boolean | undefined;
@@ -13443,7 +13443,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                     settings?: {
                         disabled?: boolean | undefined;
-                        translation?: boolean | undefined;
+                        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                         summary?: boolean | undefined;
                         readability?: boolean | undefined;
                         sourceContent?: boolean | undefined;
@@ -13710,7 +13710,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                     settings?: {
                         disabled?: boolean | undefined;
-                        translation?: boolean | undefined;
+                        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                         summary?: boolean | undefined;
                         readability?: boolean | undefined;
                         sourceContent?: boolean | undefined;
