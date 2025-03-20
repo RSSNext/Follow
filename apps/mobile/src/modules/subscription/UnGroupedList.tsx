@@ -14,12 +14,12 @@ export const UnGroupedList: FC<{
   const sortedSubscriptionIds = useSortedUngroupedSubscription(subscriptionIds, sortBy, sortOrder)
 
   return (
-    <View>
+    <>
       {sortedSubscriptionIds.map((id) => (
         <View key={id}>
-          <SubscriptionItem key={id} id={id} />
+          <SubscriptionItem key={id} id={id} isFirst={false} isLast={false} />
         </View>
       ))}
-    </View>
+    </>
   )
 }

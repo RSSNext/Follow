@@ -18,7 +18,7 @@ import setLanguages from "electron-packager-languages"
 import yaml from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
 
-const platform = process.argv[process.argv.indexOf("--platform") + 1]
+const platform = process.argv.find((arg) => arg.startsWith("--platform"))?.split("=")[1]
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip|appx)$/
 const platformNamesMap = {
@@ -131,7 +131,6 @@ const config: ForgeConfig = {
       keychain: process.env.OSX_SIGN_KEYCHAIN_PATH,
       identity: process.env.OSX_SIGN_IDENTITY,
       provisioningProfile: process.env.OSX_SIGN_PROVISIONING_PROFILE_PATH,
-      preAutoEntitlements: platform !== "mas",
     },
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&

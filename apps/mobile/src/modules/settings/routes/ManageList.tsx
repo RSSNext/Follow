@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import type { MutableRefObject } from "react"
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { Text, View } from "react-native"
+import { PixelRatio, StyleSheet, Text, View } from "react-native"
 
 import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
@@ -44,8 +44,6 @@ export const ManageListScreen: NavigationControllerView<{ id: string }> = ({ id 
       className="bg-system-grouped-background"
       contentContainerClassName="mt-6"
     >
-      <NavigationBlurEffectHeader title={`Manage List - ${list?.title}`} />
-
       {!!list && <ListImpl id={list.id} />}
     </SafeNavigationScrollView>
   )
@@ -82,6 +80,7 @@ const ListImpl: React.FC<{ id: string }> = ({ id }) => {
   return (
     <ManageListContext.Provider value={ctxValue}>
       <NavigationBlurEffectHeader
+        title={`Manage List - ${list?.title}`}
         headerRight={() => (
           <UINavigationHeaderActionButton>
             <HeaderSubmitButton
@@ -103,12 +102,22 @@ const ListImpl: React.FC<{ id: string }> = ({ id }) => {
         )}
       />
       <GroupedInsetListSectionHeader label="Select feeds to add to the current list" />
-      <GroupedInsetListCard>
+      <GroupedInsetListCard SeparatorComponent={SeparatorComponent}>
         {sortedSubscriptionIds.map((id) => (
           <FeedCell key={id} feedId={id} isSelected={list.feedIds.includes(id)} />
         ))}
       </GroupedInsetListCard>
     </ManageListContext.Provider>
+  )
+}
+
+const SeparatorComponent = () => {
+  return (
+    <View
+      className="bg-opaque-separator ml-16"
+      style={{ height: StyleSheet.hairlineWidth }}
+      collapsable={false}
+    />
   )
 }
 
@@ -118,6 +127,8 @@ const FeedCell = (props: { feedId: string; isSelected: boolean }) => {
   const { nextSelectedFeedIdRef } = useContext(ManageListContext)
 
   const [currentSelected, setCurrentSelected] = useState(props.isSelected)
+
+  const iconMariginRight = 36 / PixelRatio.get()
   if (!feed) return null
   return (
     <ItemPressable
@@ -134,12 +145,15 @@ const FeedCell = (props: { feedId: string; isSelected: boolean }) => {
     >
       <GroupedInsetListBaseCell>
         <View className="flex-1 flex-row items-center gap-4">
-          <View className="size-4 items-center justify-center">
+          <View
+            className="size-4 items-center justify-center"
+            style={{ marginRight: iconMariginRight }}
+          >
             <View className="overflow-hidden rounded-lg">
               <FeedIcon feed={feed} size={24} />
             </View>
           </View>
-          <Text className="text-label ml-2 flex-1" ellipsizeMode="middle" numberOfLines={1}>
+          <Text className="text-label flex-1" ellipsizeMode="middle" numberOfLines={1}>
             {feed?.title || "Untitled Feed"}
           </Text>
         </View>

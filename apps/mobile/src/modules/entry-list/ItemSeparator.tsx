@@ -3,7 +3,7 @@ import { View } from "react-native"
 const el = (
   <View className="bg-secondary-system-grouped-background">
     <View
-      className="bg-opaque-separator/50 mx-4 h-px"
+      className="bg-opaque-separator/50 ml-4 h-px"
       style={{ transform: [{ scaleY: 0.5 }] }}
       collapsable={false}
     />

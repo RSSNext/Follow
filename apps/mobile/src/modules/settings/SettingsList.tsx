@@ -2,7 +2,7 @@ import * as FileSystem from "expo-file-system"
 import type { FC, RefObject } from "react"
 import { Fragment, useMemo } from "react"
 import type { ScrollView } from "react-native"
-import { Alert, View } from "react-native"
+import { Alert, PixelRatio, View } from "react-native"
 
 import {
   GroupedInsetListCard,
@@ -175,27 +175,27 @@ const NavigationLinkGroup: FC<{
   scrollRef: RefObject<ScrollView>
 }> = ({ links, scrollRef }) => {
   const navigation = useNavigation()
+
   return (
     <GroupedInsetListCard>
-      {links.map((link) => {
-        if (link.todo) {
-          return null
-        }
-        return (
-          <GroupedInsetListNavigationLink
-            key={link.label}
-            label={link.label}
-            icon={
-              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                <link.icon height={18} width={18} color="#fff" />
-              </GroupedInsetListNavigationLinkIcon>
-            }
-            onPress={() => {
-              link.onPress(navigation, scrollRef)
-            }}
-          />
-        )
-      })}
+      {links
+        .filter((link) => !link.todo)
+        .map((link) => {
+          return (
+            <GroupedInsetListNavigationLink
+              key={link.label}
+              label={link.label}
+              icon={
+                <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+                  <link.icon height={18} width={18} color="#fff" />
+                </GroupedInsetListNavigationLinkIcon>
+              }
+              onPress={() => {
+                link.onPress(navigation, scrollRef)
+              }}
+            />
+          )
+        })}
     </GroupedInsetListCard>
   )
 }
@@ -221,12 +221,17 @@ export const SettingsList: FC<{ scrollRef: RefObject<ScrollView> }> = ({ scrollR
       })
       .filter((group) => group !== false)
   }, [whoami])
+
+  const pixelRatio = PixelRatio.get()
+  const groupGap = 100 / pixelRatio
+  const marginTop = 44 / pixelRatio
+
   return (
-    <View className="bg-system-grouped-background flex-1 py-4">
+    <View className="bg-system-grouped-background flex-1 pb-4" style={{ marginTop }}>
       {filteredNavigationGroups.map((group, index) => (
         <Fragment key={`nav-group-${index}`}>
           <NavigationLinkGroup key={`nav-group-${index}`} links={group} scrollRef={scrollRef} />
-          {index < filteredNavigationGroups.length - 1 && <View className="h-8" />}
+          {index < filteredNavigationGroups.length - 1 && <View style={{ height: groupGap }} />}
         </Fragment>
       ))}
     </View>

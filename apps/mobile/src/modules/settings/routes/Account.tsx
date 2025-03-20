@@ -8,9 +8,9 @@ import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
+import { GroupedInsetListCardItemStyle } from "@/src/components/ui/grouped/GroupedInsetListCardItemStyle"
 import {
   GroupedInsetListCard,
-  GroupedInsetListCardItemStyle,
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
   GroupedInsetListSectionHeader,

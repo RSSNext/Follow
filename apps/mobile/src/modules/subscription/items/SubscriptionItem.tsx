@@ -3,6 +3,7 @@ import { memo, useContext } from "react"
 import { ActivityIndicator, Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
+import { GROUPED_ICON_TEXT_GAP, GROUPED_LIST_MARGIN } from "@/src/components/ui/grouped/constants"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
@@ -20,110 +21,82 @@ import { useUnreadCount } from "@/src/store/unread/hooks"
 
 import { SubscriptionFeedItemContextMenu } from "../../context-menu/feeds"
 import { GroupedContext } from "../ctx"
+import { ItemSeparator, SecondaryItemSeparator } from "../ItemSeparator"
+import type { SubscriptionItemBaseProps } from "./types"
 import { UnreadCount } from "./UnreadCount"
 
-// const renderRightActions = () => {
-//   return (
-//     <ReAnimated.View entering={FadeIn} className="flex-row items-center">
-//       <TouchableOpacity
-//         className="bg-red h-full justify-center px-4"
-//         onPress={() => {
-//           // TODO: Handle unsubscribe
-//         }}
-//       >
-//         <Text className="text-base font-semibold text-white">Unsubscribe</Text>
-//       </TouchableOpacity>
-//     </ReAnimated.View>
-//   )
-// }
-// const renderLeftActions = () => {
-//   return (
-//     <ReAnimated.View entering={FadeIn} className="flex-row items-center">
-//       <TouchableOpacity
-//         className="bg-blue h-full justify-center px-4"
-//         onPress={() => {
-//           // TODO: Handle unsubscribe
-//         }}
-//       >
-//         <Text className="text-base font-semibold text-white">Read</Text>
-//       </TouchableOpacity>
-//     </ReAnimated.View>
-//   )
-// }
-// let prevOpenedRow: SwipeableMethods | null = null
-export const SubscriptionItem = memo(({ id, className }: { id: string; className?: string }) => {
-  const subscription = useSubscription(id)
-  const unreadCount = useUnreadCount(id)
-  const feed = useFeed(id)!
-  const inGrouped = !!useContext(GroupedContext)
-  const { isLoading } = usePrefetchFeed(id, { enabled: !subscription && !feed })
+export const SubscriptionItem = memo(
+  ({ id, isFirst, isLast, className }: SubscriptionItemBaseProps) => {
+    const subscription = useSubscription(id)
+    const unreadCount = useUnreadCount(id)
+    const feed = useFeed(id)!
+    const inGrouped = !!useContext(GroupedContext)
+    const { isLoading } = usePrefetchFeed(id, { enabled: !subscription && !feed })
 
-  const selectedFeed = useSelectedFeed()
-  const view = selectedFeed?.type === "view" ? selectedFeed.viewId : undefined
+    const selectedFeed = useSelectedFeed()
+    const view = selectedFeed?.type === "view" ? selectedFeed.viewId : undefined
 
-  const navigation = useNavigation()
-  if (isLoading) {
+    const navigation = useNavigation()
+    if (isLoading) {
+      return (
+        <View className="mt-24 flex-1 flex-row items-start justify-center">
+          <ActivityIndicator />
+        </View>
+      )
+    }
+
+    if (!subscription && !feed) return null
+
     return (
-      <View className="mt-24 flex-1 flex-row items-start justify-center">
-        <ActivityIndicator />
-      </View>
-    )
-  }
-
-  // const swipeableRef: SwipeableRef = useRef(null)
-  if (!subscription && !feed) return null
-
-  return (
-    // FIXME: Here leads to very serious performance issues, the frame rate of both the UI and JS threads has dropped
-    // <Swipeable
-    //   renderRightActions={renderRightActions}
-    //   renderLeftActions={renderLeftActions}
-    //   leftThreshold={40}
-    //   rightThreshold={40}
-    //   ref={swipeableRef}
-    //   onSwipeableWillOpen={() => {
-    //     if (prevOpenedRow && prevOpenedRow !== swipeableRef.current) {
-    //       prevOpenedRow.close()
-    //     }
-    //     prevOpenedRow = swipeableRef.current
-    //   }}
-    // >
-    // <ReAnimated.View key={id} layout={CurvedTransition} exiting={FadeOut}>
-    <Animated.View exiting={FadeOutUp}>
-      <SubscriptionFeedItemContextMenu id={id} view={view}>
-        <ItemPressable
-          itemStyle={ItemPressableStyle.Plain}
-          className={cn(
-            "flex h-12 flex-row items-center",
-            inGrouped ? "pl-8 pr-4" : "px-4",
-
-            className,
-          )}
-          onPress={() => {
-            const isHorizontalScrolling = getHorizontalScrolling()
-            if (isHorizontalScrolling) {
-              return
-            }
-            selectFeed({
-              type: "feed",
-              feedId: id,
-            })
-            closeDrawer()
-            navigation.pushControllerView(FeedScreen, {
-              feedId: id,
-            })
-          }}
+      <>
+        <Animated.View
+          exiting={FadeOutUp}
+          style={{ marginHorizontal: GROUPED_LIST_MARGIN }}
+          className={cn("overflow-hidden", {
+            "rounded-t-[10px]": isFirst,
+            "rounded-b-[10px]": isLast,
+          })}
         >
-          <View className="dark:border-tertiary-system-background mr-3 size-5 items-center justify-center overflow-hidden rounded border border-transparent dark:bg-[#222]">
-            <FeedIcon feed={feed} />
-          </View>
-          <Text numberOfLines={1} className="text-text flex-1 font-medium">
-            {subscription?.title || feed.title}
-          </Text>
-          <UnreadCount unread={unreadCount} className="ml-auto" />
-        </ItemPressable>
-      </SubscriptionFeedItemContextMenu>
-    </Animated.View>
-    // </Swipeable>
-  )
-})
+          <SubscriptionFeedItemContextMenu id={id} view={view}>
+            <ItemPressable
+              itemStyle={ItemPressableStyle.Grouped}
+              className={cn(
+                "flex h-12 flex-row items-center",
+                inGrouped ? "pl-8 pr-4" : "px-4",
+
+                className,
+              )}
+              onPress={() => {
+                const isHorizontalScrolling = getHorizontalScrolling()
+                if (isHorizontalScrolling) {
+                  return
+                }
+                selectFeed({
+                  type: "feed",
+                  feedId: id,
+                })
+                closeDrawer()
+                navigation.pushControllerView(FeedScreen, {
+                  feedId: id,
+                })
+              }}
+            >
+              <View className="dark:border-tertiary-system-background size-5 items-center justify-center overflow-hidden rounded border border-transparent dark:bg-[#222]">
+                <FeedIcon feed={feed} />
+              </View>
+              <Text
+                numberOfLines={1}
+                className="text-text flex-1 font-medium"
+                style={{ marginLeft: GROUPED_ICON_TEXT_GAP }}
+              >
+                {subscription?.title || feed.title}
+              </Text>
+              <UnreadCount unread={unreadCount} className="ml-auto" />
+            </ItemPressable>
+          </SubscriptionFeedItemContextMenu>
+        </Animated.View>
+        {!isLast && (inGrouped ? <SecondaryItemSeparator /> : <ItemSeparator />)}
+      </>
+    )
+  },
+)
