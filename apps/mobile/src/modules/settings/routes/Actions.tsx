@@ -130,6 +130,7 @@ const ListItemCell: ListRenderItem<ActionRule> = (props) => {
 const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
   const navigation = useNavigation()
   const colors = useColors()
+
   return (
     <SwipeableItem
       swipeRightToCallAction

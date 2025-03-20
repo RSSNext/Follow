@@ -9,7 +9,7 @@ import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { SheetProvider } from "react-native-sheet-transitions"
-import { useCurrentColors } from "react-native-uikit-colors"
+import { useCurrentColorsVariants } from "react-native-uikit-colors"
 
 import { ErrorBoundary } from "../components/common/ErrorBoundary"
 import { sqlite } from "../database"
@@ -19,7 +19,7 @@ import { MigrationProvider } from "./migration"
 export const RootProviders = ({ children }: { children: ReactNode }) => {
   useDrizzleStudio(sqlite)
 
-  const currentThemeColors = useCurrentColors()
+  const currentThemeColors = useCurrentColorsVariants()
 
   return (
     <MigrationProvider>
