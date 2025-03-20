@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai"
 import type { FC } from "react"
-import { memo, useContext, useEffect } from "react"
+import { memo, useContext, useEffect, useMemo } from "react"
 import type { StyleProp, TextStyle } from "react-native"
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, {
@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SetBottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { gentleSpringPreset, quickSpringPreset, softSpringPreset } from "@/src/constants/spring"
 import { BottomTabContext } from "@/src/lib/navigation/bottom-tab/BottomTabContext"
+import type { TabScreenProps } from "@/src/lib/navigation/bottom-tab/TabScreen"
 import type { TabbarIconProps } from "@/src/lib/navigation/bottom-tab/types"
 import { PlayerTabBar } from "@/src/modules/player/PlayerTabBar"
 import { accentColor } from "@/src/theme/colors"
@@ -43,9 +44,16 @@ export const Tabbar: FC<{
       !tabBarVisible ? quickSpringPreset : softSpringPreset,
     )
   }, [tabBarVisible, translateY])
-  if (tabScreens.length === 0) return null
+
+  const placeholderTabScreens = useMemo<TabScreenProps[]>(() => {
+    return [{ tabScreenIndex: 0, title: "", renderIcon: () => <View className="size-5" /> }]
+  }, [])
+
+  const renderTabScreens = tabScreens.length > 0 ? tabScreens : placeholderTabScreens
+
   return (
     <Animated.View
+      pointerEvents={tabScreens.length > 0 ? "auto" : "none"}
       accessibilityRole="tablist"
       className="absolute inset-x-0 bottom-0 z-10"
       style={{
@@ -57,9 +65,10 @@ export const Tabbar: FC<{
       }}
     >
       <TabBarBackground />
+
       <PlayerTabBar />
-      <Grid columns={tabScreens.length} gap={10} className="mt-[7]">
-        {tabScreens.map((route, index) => {
+      <Grid columns={renderTabScreens.length} gap={10} className="mt-[7]">
+        {renderTabScreens.map((route, index) => {
           const focused = index === selectedIndex
 
           const inactiveTintColor = "#999"
