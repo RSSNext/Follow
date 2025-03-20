@@ -24,6 +24,7 @@ import { UserAdd2CuteFiIcon } from "@/src/icons/user_add_2_cute_fi"
 import { Wallet2CuteFiIcon } from "@/src/icons/wallet_2_cute_fi"
 import { useNavigation } from "@/src/lib/navigation/hooks"
 import type { HonoApiClient } from "@/src/morph/types"
+import { ListScreen } from "@/src/screens/(modal)/list"
 import { useOwnedLists, usePrefetchOwnedLists } from "@/src/store/list/hooks"
 import type { ListModel } from "@/src/store/list/store"
 import { accentColor } from "@/src/theme/colors"
@@ -72,7 +73,7 @@ export const ListsScreen = () => {
         )}
       >
         <View className="mt-6">
-          <GroupedInsetListCard>
+          <GroupedInsetListCard showSeparator={false}>
             {lists.length > 0 && (
               <SwipeableGroupProvider>
                 <Animated.FlatList
@@ -99,10 +100,11 @@ export const ListsScreen = () => {
 
 const AddListButton = () => {
   const labelColor = useColor("label")
+  const navigation = useNavigation()
   return (
     <UINavigationHeaderActionButton
       onPress={() => {
-        // TODO
+        navigation.presentControllerView(ListScreen)
       }}
     >
       <AddCuteReIcon height={20} width={20} color={labelColor} />
@@ -146,8 +148,7 @@ const ListItemCellImpl: ListRenderItem<ListModel> = ({ item: list }) => {
         {
           label: "Edit",
           onPress: () => {
-            // router.push(`/list?id=${list.id}`)
-            // TODO
+            navigation.presentControllerView(ListScreen, { listId: list.id })
           },
           backgroundColor: colors.blue,
         },
