@@ -3,14 +3,14 @@ import type { FC, PropsWithChildren } from "react"
 import * as React from "react"
 import { Fragment } from "react"
 import type { PressableProps, ViewProps } from "react-native"
-import { PixelRatio, Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 
 import { CheckFilledIcon } from "@/src/icons/check_filled"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-import { GROUPED_ICON_TEXT_GAP } from "./constants"
+import { GROUPED_ICON_TEXT_GAP, GROUPED_LIST_ITEM_PADDING, GROUPED_LIST_MARGIN } from "./constants"
 import { GroupedInsetListCardItemStyle } from "./GroupedInsetListCardItemStyle"
 
 type GroupedInsetListCardProps = {
@@ -35,8 +35,9 @@ export const GroupedInsetListCard: FC<
   return (
     <View
       {...props}
+      style={[{ marginHorizontal: GROUPED_LIST_MARGIN }, props.style]}
       className={cn(
-        "bg-secondary-system-grouped-background mx-2 flex-1 overflow-hidden rounded-[10px]",
+        "bg-secondary-system-grouped-background flex-1 overflow-hidden rounded-[10px]",
         className,
       )}
     >
@@ -74,10 +75,14 @@ export const GroupedInsetListCard: FC<
 export const GroupedInsetListSectionHeader: FC<{
   label: string
 }> = ({ label }) => {
-  const pixelRatio = PixelRatio.get()
-
   return (
-    <View className="mx-4 h-[23px]" style={{ paddingHorizontal: 32 / pixelRatio }}>
+    <View
+      className="h-[23px]"
+      style={{
+        paddingHorizontal: GROUPED_LIST_ITEM_PADDING,
+        marginHorizontal: GROUPED_LIST_MARGIN,
+      }}
+    >
       <Text className="text-secondary-label" ellipsizeMode="tail" numberOfLines={1}>
         {label}
       </Text>
@@ -92,7 +97,8 @@ export const GroupedInsetListBaseCell: FC<PropsWithChildren & ViewProps> = ({
   return (
     <View
       {...props}
-      className={cn("flex-row items-center justify-between px-5 py-4", props.className)}
+      className={cn("flex-row items-center justify-between py-4", props.className)}
+      style={[{ paddingHorizontal: GROUPED_LIST_ITEM_PADDING }, props.style]}
     >
       {children}
     </View>

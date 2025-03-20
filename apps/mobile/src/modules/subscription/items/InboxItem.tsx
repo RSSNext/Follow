@@ -4,7 +4,7 @@ import { memo } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
-import { GROUPED_ICON_TEXT_GAP } from "@/src/components/ui/grouped/constants"
+import { GROUPED_ICON_TEXT_GAP, GROUPED_LIST_MARGIN } from "@/src/components/ui/grouped/constants"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { InboxCuteFiIcon } from "@/src/icons/inbox_cute_fi"
@@ -27,7 +27,8 @@ export const InboxItem = memo(({ id, isFirst, isLast }: SubscriptionItemBaseProp
   return (
     <Animated.View
       exiting={FadeOutUp}
-      className={cn("mx-2 overflow-hidden", {
+      style={{ marginHorizontal: GROUPED_LIST_MARGIN }}
+      className={cn("overflow-hidden", {
         "rounded-t-[10px]": isFirst,
         "rounded-b-[10px]": isLast,
       })}

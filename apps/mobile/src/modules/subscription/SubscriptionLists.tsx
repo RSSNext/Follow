@@ -1,10 +1,15 @@
 import type { FeedViewType } from "@follow/constants"
 import type { FlashList } from "@shopify/flash-list"
 import { useMemo, useState } from "react"
-import { PixelRatio, Text, View } from "react-native"
+import { Text, View } from "react-native"
 import { useEventCallback } from "usehooks-ts"
 
 import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
+import {
+  GROUPED_ICON_TEXT_GAP,
+  GROUPED_LIST_ITEM_PADDING,
+  GROUPED_LIST_MARGIN,
+} from "@/src/components/ui/grouped/constants"
 import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
@@ -191,7 +196,13 @@ const ItemRender = ({
 
 const SectionTitle = ({ title }: { title: string }) => {
   return (
-    <View className="mx-4 mb-1 mt-5 h-[23px] px-[6]">
+    <View
+      className="mb-1 mt-5 h-[23px]"
+      style={{
+        marginHorizontal: GROUPED_LIST_MARGIN,
+        paddingHorizontal: GROUPED_LIST_ITEM_PADDING,
+      }}
+    >
       <Text className="text-secondary-label uppercase" ellipsizeMode="tail" numberOfLines={1}>
         {title}
       </Text>
@@ -201,7 +212,7 @@ const SectionTitle = ({ title }: { title: string }) => {
 
 const StarItem = () => {
   const navigation = useNavigation()
-  const textGap = 36 / PixelRatio.get()
+
   return (
     <GroupedInsetListCard showSeparator={false} className="mt-4">
       <ItemPressable
@@ -220,7 +231,7 @@ const StarItem = () => {
         className="h-12 w-full flex-row items-center px-3"
       >
         <StarCuteFiIcon color="rgb(245, 158, 11)" height={20} width={20} />
-        <Text className="text-text ml-2 font-medium" style={{ marginLeft: textGap }}>
+        <Text className="text-text ml-2 font-medium" style={{ marginLeft: GROUPED_ICON_TEXT_GAP }}>
           Starred
         </Text>
       </ItemPressable>

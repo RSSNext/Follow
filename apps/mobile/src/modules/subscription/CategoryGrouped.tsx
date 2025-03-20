@@ -3,6 +3,7 @@ import { memo, useState } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
+import { GROUPED_LIST_MARGIN } from "@/src/components/ui/grouped/constants"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { RightCuteFiIcon } from "@/src/icons/right_cute_fi"
@@ -74,10 +75,11 @@ export const CategoryGrouped = memo(
                 feedId: category,
               })
             }}
-            className={cn("mx-2 h-12 flex-row items-center px-3", {
+            className={cn("h-12 flex-row items-center px-3", {
               "rounded-t-[10px]": isFirst,
               "rounded-b-[10px]": isLast,
             })}
+            style={{ marginHorizontal: GROUPED_LIST_MARGIN }}
           >
             <TouchableOpacity
               hitSlop={10}
