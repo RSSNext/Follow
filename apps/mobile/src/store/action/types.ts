@@ -1,6 +1,8 @@
 import type { HonoApiClient } from "@/src/morph/types"
 
-export type ActionFilterItem = Partial<HonoApiClient.ActionRule["condition"][number][number]>
+export type ActionFilterItem = Partial<
+  Exclude<HonoApiClient.ActionRule["condition"][number], { length: number }>
+>
 export type ActionFilterGroup = ActionFilterItem[]
 export type ActionFilter = ActionFilterGroup[]
 
