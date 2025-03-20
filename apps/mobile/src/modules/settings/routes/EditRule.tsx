@@ -117,6 +117,9 @@ const ConditionSection: React.FC<{ filter: ActionFilter; index: number }> = ({ f
       <GroupedInsetListSectionHeader label="Conditions" />
 
       {filter.map((group, groupIndex) => {
+        if (!Array.isArray(group)) {
+          group = [group]
+        }
         return (
           <GroupedInsetListCard key={groupIndex} className="mb-6">
             {group.map((item, itemIndex) => {
