@@ -2,6 +2,7 @@ import { memo, useState } from "react"
 import { Text, TouchableOpacity } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { RightCuteFiIcon } from "@/src/icons/right_cute_fi"
 import { useNavigation } from "@/src/lib/navigation/hooks"
@@ -54,6 +55,7 @@ export const CategoryGrouped = memo(
           view={view}
         >
           <ItemPressable
+            itemStyle={ItemPressableStyle.Plain}
             onPress={() => {
               const isHorizontalScrolling = getHorizontalScrolling()
               if (isHorizontalScrolling) {

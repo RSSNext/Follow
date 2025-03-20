@@ -5,6 +5,7 @@ import { Text, View } from "react-native"
 import { useEventCallback } from "usehooks-ts"
 
 import { useRegisterNavigationScrollView } from "@/src/components/layouts/tabbar/hooks"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { StarCuteFiIcon } from "@/src/icons/star_cute_fi"
 import { useNavigation } from "@/src/lib/navigation/hooks"
@@ -179,6 +180,7 @@ const StarItem = () => {
   const navigation = useNavigation()
   return (
     <ItemPressable
+      itemStyle={ItemPressableStyle.Plain}
       onPress={() => {
         const isHorizontalScrolling = getHorizontalScrolling()
         if (isHorizontalScrolling) {
