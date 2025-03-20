@@ -251,7 +251,7 @@ const ActionLanguageSelector = () => {
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
       <div>
-        <span className="shrink-0 text-sm font-medium">{t("general.action_language")}</span>
+        <span className="shrink-0 text-sm font-medium">{t("general.action_language.label")}</span>
         <SettingDescription className="w-auto">
           {t("general.action_language.description")}
         </SettingDescription>

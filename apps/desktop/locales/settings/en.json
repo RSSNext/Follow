@@ -187,7 +187,7 @@
   "general.startup_screen.timeline": "Timeline",
   "general.startup_screen.title": "Startup Screen",
   "general.timeline": "Timeline",
-  "general.action_language": "Action Language",
+  "general.action_language.label": "Action Language",
   "general.action_language.default": "Default (UI Language)",
   "general.action_language.description": "The language used for translation and summary",
   "general.unread": "Unread",
