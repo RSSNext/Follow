@@ -5,6 +5,7 @@
   "main": "src/main.tsx",
   "scripts": {
     "android": "expo run:android",
+    "bump": "vv",
     "db:generate": "drizzle-kit generate",
     "dev": "npm run start",
     "ios": "expo run:ios",
@@ -120,6 +121,7 @@
     "drizzle-kit": "0.30.5",
     "eas-cli": "15.0.15",
     "expo-drizzle-studio-plugin": "0.1.1",
+    "nbump": "2.0.7",
     "postcss": "8.5.3"
   },
   "appName": "Folo",
@@ -136,5 +138,19 @@
     "autolinking": {
       "nativeModulesDir": "./native"
     }
+  },
+  "bump": {
+    "before": [
+      "git pull --rebase",
+      "pnpm eslint --fix package.json",
+      "pnpm prettier --ignore-unknown --write package.json",
+      "git add package.json"
+    ],
+    "commit_message": "release(mobile): release v${NEW_VERSION}",
+    "tag": false,
+    "changelog": false,
+    "allowed_branches": [
+      "dev"
+    ]
   }
 }
