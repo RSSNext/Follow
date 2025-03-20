@@ -4,6 +4,7 @@ import { ActivityIndicator, Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { useNavigation } from "@/src/lib/navigation/hooks"
 import {
@@ -91,6 +92,7 @@ export const SubscriptionItem = memo(({ id, className }: { id: string; className
     <Animated.View exiting={FadeOutUp}>
       <SubscriptionFeedItemContextMenu id={id} view={view}>
         <ItemPressable
+          itemStyle={ItemPressableStyle.Plain}
           className={cn(
             "flex h-12 flex-row items-center",
             inGrouped ? "pl-8 pr-4" : "px-4",

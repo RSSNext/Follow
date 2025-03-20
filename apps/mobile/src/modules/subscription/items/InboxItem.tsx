@@ -3,6 +3,7 @@ import { memo } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeOutUp } from "react-native-reanimated"
 
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { InboxCuteFiIcon } from "@/src/icons/inbox_cute_fi"
 import { useNavigation } from "@/src/lib/navigation/hooks"
@@ -23,6 +24,7 @@ export const InboxItem = memo(({ id }: { id: string }) => {
   return (
     <Animated.View exiting={FadeOutUp}>
       <ItemPressable
+        itemStyle={ItemPressableStyle.Plain}
         className="h-12 flex-row items-center px-3"
         onPress={() => {
           const isHorizontalScrolling = getHorizontalScrolling()

@@ -4,6 +4,7 @@ import Animated, { FadeOutUp } from "react-native-reanimated"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { Image } from "@/src/components/ui/image/Image"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { useNavigation } from "@/src/lib/navigation/hooks"
 import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
@@ -23,6 +24,7 @@ export const ListSubscriptionItem = memo(({ id }: { id: string; className?: stri
     <Animated.View exiting={FadeOutUp}>
       <SubscriptionListItemContextMenu id={id}>
         <ItemPressable
+          itemStyle={ItemPressableStyle.Plain}
           className="h-12 flex-row items-center px-3"
           onPress={() => {
             const isHorizontalScrolling = getHorizontalScrolling()

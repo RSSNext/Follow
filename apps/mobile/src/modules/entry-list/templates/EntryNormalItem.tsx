@@ -10,6 +10,7 @@ import { preloadWebViewEntry } from "@/src/components/native/webview/EntryConten
 import { RelativeDateTime } from "@/src/components/ui/datetime/RelativeDateTime"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { Image } from "@/src/components/ui/image/Image"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
 import { PauseCuteFiIcon } from "@/src/icons/pause_cute_fi"
@@ -84,7 +85,11 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
 
   return (
     <EntryItemContextMenu id={entryId}>
-      <ItemPressable className="flex flex-row items-center p-4 pl-6" onPress={handlePress}>
+      <ItemPressable
+        itemStyle={ItemPressableStyle.Plain}
+        className="flex flex-row items-center p-4 pl-6"
+        onPress={handlePress}
+      >
         <ReAnimated.View
           className="bg-red absolute left-2 top-[43] size-2 rounded-full"
           style={unreadIndicatorStyle}
