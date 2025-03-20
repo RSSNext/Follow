@@ -3,10 +3,8 @@ import type { Navigation } from "@/src/lib/navigation/Navigation"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionId, ActionRule } from "@/src/store/action/types"
 
-import type { SettingsNavigation } from "../hooks"
 import { EditRewriteRulesScreen } from "../routes/EditRewriteRules"
 import { EditWebhooksScreen } from "../routes/EditWebhooks"
-import { ActionFormTranslation } from "./components"
 
 export const filterFieldOptions = [
   {
