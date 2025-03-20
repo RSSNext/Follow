@@ -5,5 +5,3 @@
 ## Improvements
 
 ## Bug Fixes
-
-- Unable to update subscription information in time
