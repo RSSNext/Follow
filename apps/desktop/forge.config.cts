@@ -20,7 +20,7 @@ import { rimraf, rimrafSync } from "rimraf"
 
 const platform = process.argv[process.argv.indexOf("--platform") + 1]
 
-const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
+const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip|appx)$/
 const platformNamesMap = {
   darwin: "macos",
   linux: "linux",
