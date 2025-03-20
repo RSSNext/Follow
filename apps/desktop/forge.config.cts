@@ -199,8 +199,12 @@ const config: ForgeConfig = {
       ["mas"],
     ),
     new MakerAppX({
-      publisher: "CN=Natural Selection Labs",
+      publisher: "CN=7CBBEB6A-9B0E-4387-BAE3-576D0ACA279E",
+      packageDisplayName: "Folo - Follow everything in one place",
       devCert: "build/dev.pfx",
+      // @ts-ignore
+      publisherDisplayName: "Natural Selection Labs",
+      identityName: "NaturalSelectionLabs.Follow-Yourfavoritesinoneinbo",
     }),
   ],
   plugins: [
