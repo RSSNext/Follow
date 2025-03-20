@@ -57,7 +57,7 @@ export const Tabbar: FC<{
       accessibilityRole="tablist"
       className="absolute inset-x-0 bottom-0 z-10"
       style={{
-        paddingBottom: insets.bottom,
+        paddingBottom: Math.max(insets.bottom, 8),
         transform: [{ translateY }],
       }}
       onLayout={(e) => {
