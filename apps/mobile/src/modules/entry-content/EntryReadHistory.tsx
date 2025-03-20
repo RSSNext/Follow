@@ -61,7 +61,7 @@ export const EntryReadHistory = ({ entryId }: { entryId: string }) => {
               ],
             }}
           >
-            <UserAvatar size={25} name={user.name!} image={user.image} />
+            <UserAvatar preview={false} size={25} name={user.name!} image={user.image} />
           </Pressable>
         )
       })}
