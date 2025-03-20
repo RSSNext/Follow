@@ -8,7 +8,6 @@ import type { ReactNode } from "react"
 import { StyleSheet, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
-import { RootSiblingParent } from "react-native-root-siblings"
 import { SheetProvider } from "react-native-sheet-transitions"
 import { useCurrentColors } from "react-native-uikit-colors"
 
@@ -32,9 +31,7 @@ export const RootProviders = ({ children }: { children: ReactNode }) => {
                 <GestureHandlerRootView>
                   <SheetProvider>
                     <ActionSheetProvider>
-                      <RootSiblingParent>
-                        <PortalProvider>{children}</PortalProvider>
-                      </RootSiblingParent>
+                      <PortalProvider>{children}</PortalProvider>
                     </ActionSheetProvider>
                   </SheetProvider>
                 </GestureHandlerRootView>

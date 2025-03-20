@@ -1,5 +1,6 @@
 import { View } from "react-native"
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated"
+import { RootSiblingParent } from "react-native-root-siblings"
 import { useSheet } from "react-native-sheet-transitions"
 
 import { FullWindowOverlay } from "./components/common/FullWindowOverlay"
@@ -25,7 +26,7 @@ export function App({ children }: { children: React.ReactNode }) {
       <Session />
 
       <Animated.View className="flex-1 overflow-hidden" style={style}>
-        {children}
+        <RootSiblingParent>{children}</RootSiblingParent>
       </Animated.View>
       {__DEV__ && <DebugButton />}
       <FullWindowOverlay>

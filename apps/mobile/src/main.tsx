@@ -32,9 +32,9 @@ cssInterop(Image, { className: "style" })
 
 initializeApp()
 
-registerRootComponent(() => <App4 />)
+registerRootComponent(() => <Entry />)
 
-const App4 = () => {
+const Entry = () => {
   return (
     <RootProviders>
       <BottomTabProvider>
