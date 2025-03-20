@@ -250,7 +250,12 @@ const ActionLanguageSelector = () => {
 
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("general.action_language")}</span>
+      <div>
+        <span className="shrink-0 text-sm font-medium">{t("general.action_language")}</span>
+        <SettingDescription className="w-auto">
+          {t("general.action_language.description")}
+        </SettingDescription>
+      </div>
       <ResponsiveSelect
         size="sm"
         triggerClassName="w-48"
