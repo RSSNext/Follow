@@ -9,6 +9,7 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { Image } from "@/src/components/ui/image/Image"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useNavigation } from "@/src/lib/navigation/hooks"
@@ -69,10 +70,11 @@ const SearchFeedItem: FC<ListRenderItemInfo<SearchResultItem>> = ({ item }) => {
   return (
     <Animated.View entering={FadeInUp}>
       <ItemPressable
+        itemStyle={ItemPressableStyle.Plain}
         className="py-4"
         onPress={() => {
           if (item.feed?.id) {
-            navigation.pushControllerView(FollowScreen, {
+            navigation.presentControllerView(FollowScreen, {
               id: item.feed.id,
               type: "feed",
             })

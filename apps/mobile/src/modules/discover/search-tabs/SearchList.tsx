@@ -5,6 +5,7 @@ import { Text, View } from "react-native"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { Image } from "@/src/components/ui/image/Image"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
 import { useNavigation } from "@/src/lib/navigation/hooks"
@@ -62,10 +63,11 @@ const SearchListCard = memo(({ item }: { item: SearchResultItem }) => {
   const navigation = useNavigation()
   return (
     <ItemPressable
+      itemStyle={ItemPressableStyle.Plain}
       className="py-2"
       onPress={() => {
         if (item.list?.id) {
-          navigation.pushControllerView(FollowScreen, {
+          navigation.presentControllerView(FollowScreen, {
             id: item.list.id,
             type: "list",
           })
