@@ -40,3 +40,4 @@ DiscoverTabScreen.tabBarIcon = ({ focused, color }) => {
 }
 
 DiscoverTabScreen.title = "Discover"
+DiscoverTabScreen.lazy = true

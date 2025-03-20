@@ -18,6 +18,7 @@ export interface TabScreenProps {
   title: string
   tabScreenIndex: number
   renderIcon?: (props: TabbarIconProps) => React.ReactNode
+  lazy?: boolean
 }
 export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenIndex">>> = ({
   children,
@@ -32,7 +33,8 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
   } = useContext(BottomTabContext)
 
   const setTabScreens = useSetAtom(tabScreens)
-  useEffect(() => {
+
+  const mergedProps = useMemo(() => {
     const propsFromChildren: Partial<TabScreenProps> = {}
     if (children && typeof children === "object") {
       const childType = (children as any).type as TabScreenComponent
@@ -42,13 +44,20 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
       if ("title" in childType) {
         propsFromChildren.title = childType.title
       }
+      if ("lazy" in childType) {
+        propsFromChildren.lazy = childType.lazy
+      }
     }
-
+    return {
+      ...propsFromChildren,
+      ...props,
+    }
+  }, [children, props])
+  useEffect(() => {
     setTabScreens((prev) => [
       ...prev,
       {
-        ...propsFromChildren,
-        ...props,
+        ...mergedProps,
         tabScreenIndex,
       },
     ])
@@ -58,7 +67,7 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
         prev.filter((tabScreen) => tabScreen.tabScreenIndex !== tabScreenIndex),
       )
     }
-  }, [setTabScreens, props, tabScreenIndex, children])
+  }, [setTabScreens, props, tabScreenIndex, children, mergedProps])
 
   const currentSelectedIndex = useAtomValue(currentIndexAtom)
 
@@ -87,7 +96,7 @@ export const TabScreen: FC<PropsWithChildren<Omit<TabScreenProps, "tabScreenInde
     }),
     [tabScreenIndex, props.title],
   )
-  const shouldLoadReact = isSelected || isLoadedBefore
+  const shouldLoadReact = mergedProps.lazy ? isSelected || isLoadedBefore : true
 
   return (
     <TabScreenNative style={StyleSheet.absoluteFill}>
