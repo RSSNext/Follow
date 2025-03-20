@@ -8,7 +8,7 @@ const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
   language: "en",
-  actionLanguage: "zh-CN",
+  actionLanguage: DEFAULT_ACTION_LANGUAGE,
 
   // mobile app
   startupScreen: "timeline",
@@ -48,8 +48,14 @@ export const {
   settingAtom: __generalSettingAtom,
 } = createSettingAtom("general", createDefaultSettings)
 
+export const DEFAULT_ACTION_LANGUAGE = "default"
+
 export function useActionLanguage() {
-  return useGeneralSettingSelector((s) => s.actionLanguage) as SupportedLanguages
+  const actionLanguage = useGeneralSettingSelector((s) => s.actionLanguage)
+  const language = useGeneralSettingSelector((s) => s.language)
+  return (
+    actionLanguage === DEFAULT_ACTION_LANGUAGE ? language : actionLanguage
+  ) as SupportedLanguages
 }
 
 export const subscribeShouldUseIndexedDB = (callback: (value: boolean) => void) =>

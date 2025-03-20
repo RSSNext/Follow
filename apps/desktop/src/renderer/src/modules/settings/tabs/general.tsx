@@ -14,6 +14,7 @@ import { currentSupportedLanguages } from "~/@types/constants"
 import { defaultResources } from "~/@types/default-resource"
 import { langLoadingLockMapAtom } from "~/atoms/lang"
 import {
+  DEFAULT_ACTION_LANGUAGE,
   setGeneralSetting,
   useGeneralSettingKey,
   useGeneralSettingSelector,
@@ -68,7 +69,7 @@ export const SettingGeneral = () => {
           IN_ELECTRON && MinimizeToTraySetting,
           isMobile && StartupScreenSelector,
           LanguageSelector,
-          TranslateLanguageSelector,
+          ActionLanguageSelector,
 
           {
             type: "title",
@@ -243,7 +244,7 @@ export const LanguageSelector = ({
   )
 }
 
-const TranslateLanguageSelector = () => {
+const ActionLanguageSelector = () => {
   const { t } = useTranslation("settings")
   const actionLanguage = useGeneralSettingKey("actionLanguage")
 
@@ -259,7 +260,10 @@ const TranslateLanguageSelector = () => {
           setGeneralSetting("actionLanguage", value)
           setTranslationCache({})
         }}
-        items={Object.values(LANGUAGE_MAP)}
+        items={[
+          { label: t("general.action_language.default"), value: DEFAULT_ACTION_LANGUAGE },
+          ...Object.values(LANGUAGE_MAP),
+        ]}
       />
     </div>
   )

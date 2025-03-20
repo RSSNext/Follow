@@ -188,6 +188,7 @@
   "general.startup_screen.title": "Startup Screen",
   "general.timeline": "Timeline",
   "general.action_language": "Action Language",
+  "general.action_language.default": "Default (UI Language)",
   "general.unread": "Unread",
   "general.voices": "Voices",
   "integration.eagle.enable.description": "Display 'Save media to Eagle' button when available.",
