@@ -202,9 +202,11 @@ const config: ForgeConfig = {
       publisher: "CN=7CBBEB6A-9B0E-4387-BAE3-576D0ACA279E",
       packageDisplayName: "Folo - Follow everything in one place",
       devCert: "build/dev.pfx",
+      assets: "static/appx",
       // @ts-ignore
       publisherDisplayName: "Natural Selection Labs",
       identityName: "NaturalSelectionLabs.Follow-Yourfavoritesinoneinbo",
+      packageBackgroundColor: "#FF5C00",
     }),
   ],
   plugins: [
