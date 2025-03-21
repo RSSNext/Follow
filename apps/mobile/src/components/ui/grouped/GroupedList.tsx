@@ -333,7 +333,7 @@ export const GroupedPlainButtonCell: FC<
   } & PressableProps
 > = ({ label, textClassName, ...props }) => {
   return (
-    <GroupedInsetListBaseCell as={OverlayInterectionPressable} {...props}>
+    <GroupedInsetListBaseCell as={OverlayInterectionPressable} {...(props as any)}>
       <Text className={cn("text-accent text-center", textClassName)}>{label}</Text>
     </GroupedInsetListBaseCell>
   )
