@@ -3,7 +3,11 @@ import "./global.css"
 import { registerRootComponent } from "expo"
 import { Image } from "expo-image"
 import { cssInterop } from "nativewind"
-import { enableFreeze } from "react-native-screens"
+import type { ReactNode } from "react"
+import { useRef, useState } from "react"
+import { Button, StyleSheet, Text, View } from "react-native"
+import { enableFreeze, ScreenStack, ScreenStackItem } from "react-native-screens"
+import { useEventCallback } from "usehooks-ts"
 
 import { Analytics } from "./Analytics"
 import { App } from "./App"
@@ -32,8 +36,52 @@ cssInterop(Image, { className: "style" })
 
 initializeApp()
 
-registerRootComponent(() => <Entry />)
+registerRootComponent(() => <Demo />)
 
+const Demo = () => {
+  const [otherRoutes, setOtherRoutes] = useState<
+    {
+      screenId: string
+      route: ReactNode
+    }[]
+  >([])
+  const cnt = useRef(0)
+  const pushNewRoute = useEventCallback(() => {
+    const screenId = `new-route-${cnt.current}`
+    cnt.current++
+    setOtherRoutes((prev) => [
+      ...prev,
+      {
+        screenId,
+        route: (
+          <ScreenStackItem
+            style={StyleSheet.absoluteFill}
+            key={prev.length}
+            screenId={screenId}
+            onDismissed={() => {
+              setOtherRoutes((prev) => prev.filter((route) => route.screenId !== screenId))
+            }}
+          >
+            <View className="flex-1 items-center justify-center bg-white">
+              <Text>New Route</Text>
+            </View>
+          </ScreenStackItem>
+        ),
+      },
+    ])
+  })
+  return (
+    <ScreenStack style={StyleSheet.absoluteFill}>
+      <ScreenStackItem screenId="root" style={StyleSheet.absoluteFill}>
+        <View className="flex-1 items-center justify-center bg-white">
+          <Text>Root Route</Text>
+          <Button title="Push New Route" onPress={pushNewRoute} />
+        </View>
+      </ScreenStackItem>
+      {otherRoutes.map((route) => route.route)}
+    </ScreenStack>
+  )
+}
 const Entry = () => {
   return (
     <RootProviders>
