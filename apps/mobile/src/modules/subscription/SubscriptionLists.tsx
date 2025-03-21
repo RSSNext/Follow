@@ -44,7 +44,13 @@ const keyExtractor = (item: string | { category: string; subscriptionIds: string
   return item.category
 }
 
-export const SubscriptionList = ({ view, active }: { view: FeedViewType; active: boolean }) => {
+export const SubscriptionList = ({
+  view,
+  active = true,
+}: {
+  view: FeedViewType
+  active?: boolean
+}) => {
   const listIds = useListSubscription(view)
   const sortedListIds = useSortedListSubscription(listIds, "alphabet")
 
