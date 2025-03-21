@@ -44,7 +44,7 @@ const keyExtractor = (item: string | { category: string; subscriptionIds: string
   return item.category
 }
 
-export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
+export const SubscriptionList = ({ view, active }: { view: FeedViewType; active: boolean }) => {
   const listIds = useListSubscription(view)
   const sortedListIds = useSortedListSubscription(listIds, "alphabet")
 
@@ -93,7 +93,7 @@ export const SubscriptionList = ({ view }: { view: FeedViewType }) => {
     return subscriptionSyncService.fetch(view)
   })
 
-  const scrollViewRef = useRegisterNavigationScrollView<FlashList<any>>()
+  const scrollViewRef = useRegisterNavigationScrollView<FlashList<any>>(active)
 
   return (
     <TimelineSelectorList
