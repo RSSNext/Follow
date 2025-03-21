@@ -9,6 +9,8 @@ import {
   GROUPED_ICON_TEXT_GAP,
   GROUPED_LIST_ITEM_PADDING,
   GROUPED_LIST_MARGIN,
+  GROUPED_SECTION_BOTTOM_MARGIN,
+  GROUPED_SECTION_TOP_MARGIN,
 } from "@/src/components/ui/grouped/constants"
 import { GroupedInsetListCard } from "@/src/components/ui/grouped/GroupedList"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
@@ -198,13 +200,14 @@ const ItemRender = ({
 const SectionTitle = ({ title }: { title: string }) => {
   return (
     <View
-      className="mb-1 mt-5 h-[23px]"
       style={{
         marginHorizontal: GROUPED_LIST_MARGIN,
+        marginTop: GROUPED_SECTION_TOP_MARGIN,
+        marginBottom: GROUPED_SECTION_BOTTOM_MARGIN,
         paddingHorizontal: GROUPED_LIST_ITEM_PADDING,
       }}
     >
-      <Text className="text-secondary-label uppercase" ellipsizeMode="tail" numberOfLines={1}>
+      <Text className="text-secondary-label" ellipsizeMode="tail" numberOfLines={1}>
         {title}
       </Text>
     </View>
