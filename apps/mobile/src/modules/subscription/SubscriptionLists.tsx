@@ -181,15 +181,16 @@ const ItemRender = ({
   const { category, subscriptionIds } = item
 
   if (!extraData) return null
-  const { groupedIndexRange, feedsIndexRange } = extraData
-  const hasFeedAfterGrouped = groupedIndexRange[1] < feedsIndexRange[1]
+  const { feedsIndexRange } = extraData
+  const isFirst = index === feedsIndexRange[0]
+  const isLast = index === feedsIndexRange[1]
 
   return (
     <CategoryGrouped
       category={category}
       subscriptionIds={subscriptionIds}
-      isFirst={index === groupedIndexRange[0]}
-      isLast={!hasFeedAfterGrouped}
+      isFirst={isFirst}
+      isLast={isLast}
     />
   )
 }
