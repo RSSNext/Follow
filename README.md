@@ -87,46 +87,7 @@ This isn’t just another app. Follow is a community — introducing a new era o
 
 ## 🤝 Contributing
 
-If you are eligible to use Follow, you are welcome to join the open source community to build together.
-
-Before you start, make sure you have enabled [Corepack](https://nodejs.org/api/corepack.html). Corepack makes sure you are using the correct version (`packageManager` field in `package.json`) for package manager when you run corresponding commands.
-
-```sh
-corepack enable
-```
-
-Install dependencies.
-
-```sh
-pnpm install
-```
-
-### Develop in the browser
-
-```sh
-pnpm run dev
-```
-
-Then the browser opens `https://app.follow.is/__debug_proxy`，you can access the online API environment to development and debugging.
-
-### Develop in the electron
-
-You need to fill in the required environment variables first.
-
-```sh
-cp .env.example .env
-```
-
-Then set `VITE_API_URL` to `https://api.follow.is` and run:
-
-```sh
-pnpm run dev:electron
-```
-
-Since it is not very convenient to develop in Electron, the first way to develop and contribute is recommended at this stage.
-
-> [!TIP]
-> If you can't log in to the app, copy the `__Secure-better-auth.session_token` in the cookie from your browser into the app.
+You are welcome to join the open source community to build together, please check our [Contributing Guide](./CONTRIBUTING.md) for more details.
 
 ## 📝 License
 
