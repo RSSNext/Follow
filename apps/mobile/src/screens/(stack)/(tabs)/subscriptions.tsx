@@ -43,8 +43,8 @@ SubscriptionsTabScreen.tabBarIcon = ({ focused, color }) => {
 
 SubscriptionsTabScreen.title = "Subscriptions"
 
-const renderItem = (view: FeedViewType) => (
+const renderItem = (view: FeedViewType, active: boolean) => (
   <View key={view}>
-    <SubscriptionList view={view} />
+    <SubscriptionList view={view} active={active} />
   </View>
 )
