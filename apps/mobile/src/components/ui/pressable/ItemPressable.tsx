@@ -62,7 +62,7 @@ export const ItemPressable: FC<ItemPressableProps> = memo(
         // https://github.com/nandorojo/zeego/issues/61
         onLongPress={composeEventHandlers(props.onLongPress, () => {})}
         delayLongPress={props.delayLongPress ?? 100}
-        className={cn(props.className, "relative")}
+        className={cn("relative overflow-hidden", props.className)}
         style={StyleSheet.flatten([props.style, { backgroundColor: itemNormalColor }])}
       >
         {useTypeScriptHappyCallback(
