@@ -24,8 +24,6 @@
   </p>
 </div>
 
-![](https://github.com/RSSNext/assets/blob/main/poster.png?raw=true)
-
 As they say, your thoughts are what you read—and we’ve been consuming noisy feeds for too long! Folo organizes content into one timeline, keeping you updated on what matters, noise-free. Share lists, explore collections, and enjoy distraction-free browsing.
 
 ## 👋🏻 Getting Started & Join Our Community
