@@ -21,6 +21,7 @@ import {
   useEntryInReadabilityStatus,
   useEntryReadabilityContent,
 } from "~/atoms/readability"
+import { useActionLanguage } from "~/atoms/settings/general"
 import { enableShowSourceContent } from "~/atoms/source-content"
 import { CopyButton } from "~/components/ui/button/CopyButton"
 import { Toc } from "~/components/ui/markdown/components/Toc"
@@ -319,10 +320,11 @@ export function AISummary({ entryId }: { entryId: string }) {
   const { t } = useTranslation()
   const entry = useEntry(entryId)
   const showAISummary = useShowAISummary() || !!entry?.settings?.summary
+  const actionLanguage = useActionLanguage()
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
-      language: entry?.settings?.translation,
+      language: actionLanguage,
     }),
     {
       enabled: showAISummary,

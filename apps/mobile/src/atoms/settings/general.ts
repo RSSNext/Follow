@@ -6,7 +6,7 @@ const createDefaultSettings = (): GeneralSettings => ({
   // App
 
   language: "en",
-  translationLanguage: "zh-CN",
+  actionLanguage: "zh-CN",
 
   // Data control
 

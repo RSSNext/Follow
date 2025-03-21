@@ -125,7 +125,7 @@ export type ActionModel = {
   }[][]
   result: {
     disabled?: boolean
-    translation?: string
+    translation?: boolean
     summary?: boolean
     readability?: boolean
     silence?: boolean

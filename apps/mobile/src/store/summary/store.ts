@@ -1,3 +1,4 @@
+import { getGeneralSettings } from "@/src/atoms/settings/general"
 import type { SummarySchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
 import { summaryService } from "@/src/services/summary"
@@ -103,14 +104,14 @@ class SummarySyncService {
       state.generatingStatus[entryId] = SummaryGeneratingStatus.Pending
     })
 
-    const language = entry.settings?.translation
+    const { actionLanguage } = getGeneralSettings()
+
     // Use Our AI to generate summary
     const summary = await apiClient.ai.summary
       .$get({
         query: {
           id: entryId,
-
-          language,
+          language: actionLanguage as any,
         },
       })
       .then((summary) => {
@@ -121,7 +122,7 @@ class SummarySyncService {
           }
 
           state.data[entryId] = {
-            lang: language,
+            lang: actionLanguage,
             summary: summary.data,
             lastAccessed: Date.now(),
           }
@@ -142,7 +143,7 @@ class SummarySyncService {
         {
           entryId,
           summary,
-          language: language ?? null,
+          language: actionLanguage ?? null,
         },
       ])
     }

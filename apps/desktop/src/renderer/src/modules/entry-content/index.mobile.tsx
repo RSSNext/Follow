@@ -1,7 +1,7 @@
 import { MemoedDangerousHTMLStyle } from "@follow/components/common/MemoedDangerousHTMLStyle.js"
 import { ScrollElementContext } from "@follow/components/ui/scroll-area/ctx.js"
 import { useTitle } from "@follow/hooks"
-import type { FeedModel, InboxModel, SupportedLanguages } from "@follow/models/types"
+import type { FeedModel, InboxModel } from "@follow/models/types"
 import { nextFrame, stopPropagation } from "@follow/utils/dom"
 import { cn } from "@follow/utils/utils"
 import { ErrorBoundary } from "@sentry/react"
@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { useShowAITranslation } from "~/atoms/ai-translation"
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
-import { useGeneralSettingSelector } from "~/atoms/settings/general"
+import { useActionLanguage } from "~/atoms/settings/general"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -104,9 +104,7 @@ export const EntryContent: Component<{
 
   const customCSS = useUISettingKey("customCSS")
   const showAITranslation = useShowAITranslation()
-  const translationLanguage = useGeneralSettingSelector(
-    (s) => s.translationLanguage,
-  ) as SupportedLanguages
+  const actionLanguage = useActionLanguage()
 
   const contentLineHeight = useUISettingKey("contentLineHeight")
   const contentFontSize = useUISettingKey("contentFontSize")
@@ -134,8 +132,7 @@ export const EntryContent: Component<{
     const fullText = html.textContent ?? ""
     if (!fullText) return
 
-    const translation =
-      entry.settings?.translation ?? (showAITranslation ? translationLanguage : undefined)
+    const translation = showAITranslation ? actionLanguage : undefined
 
     if (translation) {
       const isLanguageMatch = checkLanguage({
@@ -151,7 +148,7 @@ export const EntryContent: Component<{
     immersiveTranslate({
       html,
       entry,
-      targetLanguage: translation as SupportedLanguages,
+      targetLanguage: translation,
       cache: {
         get: (key: string) => getTranslationCache()[key],
         set: (key: string, value: string) =>

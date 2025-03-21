@@ -1,41 +1,12 @@
 import { parseHtml } from "@follow/components/ui/markdown/parse-html.js"
 import { views } from "@follow/constants"
 import type { SupportedLanguages } from "@follow/models/types"
+import { LANGUAGE_MAP } from "@follow/shared"
 import { franc } from "franc-min"
 
 import type { FlatEntryModel } from "~/store/entry"
 
 import { apiClient } from "./api-fetch"
-
-export const LanguageMap: Record<
-  SupportedLanguages,
-  {
-    label: string
-    value: string
-    code: string
-  }
-> = {
-  en: {
-    value: "en",
-    label: "English",
-    code: "eng",
-  },
-  ja: {
-    value: "ja",
-    label: "Japanese",
-    code: "jpn",
-  },
-  "zh-CN": {
-    value: "zh-CN",
-    label: "Simplified Chinese",
-    code: "cmn",
-  },
-  "zh-TW": {
-    value: "zh-TW",
-    label: "Traditional Chinese (Taiwan)",
-    code: "cmn",
-  },
-}
 
 export const checkLanguage = ({
   content,
@@ -48,10 +19,12 @@ export const checkLanguage = ({
   const pureContent = parseHtml(content)
     .toText()
     .replaceAll(/https?:\/\/\S+|www\.\S+/g, " ")
+  const { code } = LANGUAGE_MAP[language]
+  if (!code) return false
   const sourceLanguage = franc(pureContent, {
-    only: [LanguageMap[language].code],
+    only: [code],
   })
-  if (sourceLanguage === LanguageMap[language].code) {
+  if (sourceLanguage === code) {
     return true
   } else {
     return false

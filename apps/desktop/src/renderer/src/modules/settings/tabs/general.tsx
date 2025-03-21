@@ -1,6 +1,7 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { ResponsiveSelect } from "@follow/components/ui/select/responsive.js"
 import { useTypeScriptHappyCallback } from "@follow/hooks"
+import { LANGUAGE_MAP } from "@follow/shared"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { cn } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -13,6 +14,7 @@ import { currentSupportedLanguages } from "~/@types/constants"
 import { defaultResources } from "~/@types/default-resource"
 import { langLoadingLockMapAtom } from "~/atoms/lang"
 import {
+  DEFAULT_ACTION_LANGUAGE,
   setGeneralSetting,
   useGeneralSettingKey,
   useGeneralSettingSelector,
@@ -22,7 +24,6 @@ import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { useMinimizeToTrayValue, useSetMinimizeToTray } from "~/hooks/biz/useTraySetting"
 import { fallbackLanguage } from "~/i18n"
 import { tipcClient } from "~/lib/client"
-import { LanguageMap } from "~/lib/translate"
 import { setTranslationCache } from "~/modules/entry-content/atoms"
 
 import { SettingDescription, SettingInput, SettingSwitch } from "../control"
@@ -68,7 +69,7 @@ export const SettingGeneral = () => {
           IN_ELECTRON && MinimizeToTraySetting,
           isMobile && StartupScreenSelector,
           LanguageSelector,
-          TranslateLanguageSelector,
+          ActionLanguageSelector,
 
           {
             type: "title",
@@ -243,23 +244,31 @@ export const LanguageSelector = ({
   )
 }
 
-const TranslateLanguageSelector = () => {
+const ActionLanguageSelector = () => {
   const { t } = useTranslation("settings")
-  const translationLanguage = useGeneralSettingKey("translationLanguage")
+  const actionLanguage = useGeneralSettingKey("actionLanguage")
 
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("general.translation_language")}</span>
+      <div>
+        <span className="shrink-0 text-sm font-medium">{t("general.action_language.label")}</span>
+        <SettingDescription className="w-auto">
+          {t("general.action_language.description")}
+        </SettingDescription>
+      </div>
       <ResponsiveSelect
         size="sm"
         triggerClassName="w-48"
-        defaultValue={translationLanguage}
-        value={translationLanguage}
+        defaultValue={actionLanguage}
+        value={actionLanguage}
         onValueChange={(value) => {
-          setGeneralSetting("translationLanguage", value)
+          setGeneralSetting("actionLanguage", value)
           setTranslationCache({})
         }}
-        items={Object.values(LanguageMap)}
+        items={[
+          { label: t("general.action_language.default"), value: DEFAULT_ACTION_LANGUAGE },
+          ...Object.values(LANGUAGE_MAP),
+        ]}
       />
     </div>
   )

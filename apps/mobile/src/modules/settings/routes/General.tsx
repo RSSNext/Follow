@@ -1,3 +1,4 @@
+import { LANGUAGE_MAP } from "@follow/shared"
 import { useLocales } from "expo-localization"
 import { Text, View } from "react-native"
 
@@ -14,12 +15,11 @@ import {
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
 import { Switch } from "@/src/components/ui/switch/Switch"
-import { LanguageMap } from "@/src/lib/language"
 import type { NavigationControllerView } from "@/src/lib/navigation/types"
 
 export const GeneralScreen: NavigationControllerView = () => {
   const locales = useLocales()
-  const translationLanguage = useGeneralSettingKey("translationLanguage")
+  const actionLanguage = useGeneralSettingKey("actionLanguage")
   const autoGroup = useGeneralSettingKey("autoGroup")
   const showUnreadOnLaunch = useGeneralSettingKey("unreadOnly")
   // const groupByDate = useGeneralSettingKey("groupByDate")
@@ -42,15 +42,15 @@ export const GeneralScreen: NavigationControllerView = () => {
           </GroupedInsetListBaseCell>
 
           <GroupedInsetListBaseCell>
-            <Text className="text-label">Translation Language</Text>
+            <Text className="text-label">Action Language</Text>
 
             <View className="w-[150px]">
               <Select
-                value={translationLanguage}
+                value={actionLanguage}
                 onValueChange={(value) => {
-                  setGeneralSetting("translationLanguage", value)
+                  setGeneralSetting("actionLanguage", value)
                 }}
-                options={Object.values(LanguageMap)}
+                options={Object.values(LANGUAGE_MAP)}
               />
             </View>
           </GroupedInsetListBaseCell>

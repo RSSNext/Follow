@@ -5,7 +5,6 @@ import type { ActionId, ActionRule } from "@/src/store/action/types"
 
 import { EditRewriteRulesScreen } from "../routes/EditRewriteRules"
 import { EditWebhooksScreen } from "../routes/EditWebhooks"
-import { ActionFormTranslation } from "./components"
 
 export const filterFieldOptions = [
   {
@@ -104,10 +103,6 @@ export const availableActionList: Array<{
   {
     value: "translation",
     label: "Translate into",
-    onEnable: (index) => {
-      actionActions.patchRule(index, { result: { translation: "zh-CN" } })
-    },
-    component: ActionFormTranslation,
   },
   {
     value: "readability",

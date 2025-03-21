@@ -359,7 +359,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     tx: string | null;
 }>;
 
-declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
+declare const languageSchema: z.ZodEnum<["ar-DZ", "ar-IQ", "ar-KW", "ar-MA", "ar-SA", "ar-TN", "de", "en", "es", "fi", "fr", "it", "ja", "ko", "pt", "ru", "tr", "zh-CN", "zh-HK", "zh-TW"]>;
 declare const ruleFieldSchema: z.ZodEnum<["all", "title", "content", "author", "url", "order"]>;
 declare const ruleOperatorSchema: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
 declare const conditionItemSchema: z.ZodObject<{
@@ -407,7 +407,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                 condition: ConditionItem[] | ConditionItem[][];
                 result: {
                     disabled?: boolean;
-                    translation?: z.infer<typeof languageSchema>;
+                    translation?: z.infer<typeof languageSchema> | boolean;
                     summary?: boolean;
                     readability?: boolean;
                     sourceContent?: boolean;
@@ -442,7 +442,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                 condition: ConditionItem[] | ConditionItem[][];
                 result: {
                     disabled?: boolean;
-                    translation?: z.infer<typeof languageSchema>;
+                    translation?: z.infer<typeof languageSchema> | boolean;
                     summary?: boolean;
                     readability?: boolean;
                     sourceContent?: boolean;
@@ -494,7 +494,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     }>, "many">, "many">]>;
     result: z.ZodObject<{
         disabled: z.ZodOptional<z.ZodBoolean>;
-        translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
+        translation: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["ar-DZ", "ar-IQ", "ar-KW", "ar-MA", "ar-SA", "ar-TN", "de", "en", "es", "fi", "fr", "it", "ja", "ko", "pt", "ru", "tr", "zh-CN", "zh-HK", "zh-TW"]>, z.ZodBoolean]>>;
         summary: z.ZodOptional<z.ZodBoolean>;
         readability: z.ZodOptional<z.ZodBoolean>;
         sourceContent: z.ZodOptional<z.ZodBoolean>;
@@ -527,7 +527,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         disabled?: boolean | undefined;
-        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -546,7 +546,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         webhooks?: string[] | undefined;
     }, {
         disabled?: boolean | undefined;
-        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -577,7 +577,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     }[][];
     result: {
         disabled?: boolean | undefined;
-        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -608,7 +608,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     }[][];
     result: {
         disabled?: boolean | undefined;
-        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
         summary?: boolean | undefined;
         readability?: boolean | undefined;
         sourceContent?: boolean | undefined;
@@ -708,7 +708,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }>, "many">, "many">]>;
         result: z.ZodObject<{
             disabled: z.ZodOptional<z.ZodBoolean>;
-            translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
+            translation: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["ar-DZ", "ar-IQ", "ar-KW", "ar-MA", "ar-SA", "ar-TN", "de", "en", "es", "fi", "fr", "it", "ja", "ko", "pt", "ru", "tr", "zh-CN", "zh-HK", "zh-TW"]>, z.ZodBoolean]>>;
             summary: z.ZodOptional<z.ZodBoolean>;
             readability: z.ZodOptional<z.ZodBoolean>;
             sourceContent: z.ZodOptional<z.ZodBoolean>;
@@ -741,7 +741,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             disabled?: boolean | undefined;
-            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -760,7 +760,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             webhooks?: string[] | undefined;
         }, {
             disabled?: boolean | undefined;
-            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -791,7 +791,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -822,7 +822,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -856,7 +856,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -890,7 +890,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         }[][];
         result: {
             disabled?: boolean | undefined;
-            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
             summary?: boolean | undefined;
             readability?: boolean | undefined;
             sourceContent?: boolean | undefined;
@@ -7233,7 +7233,7 @@ declare const auth: {
         signInSocial: {
             <C extends [{
                 body: {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick";
                     scopes?: string[] | undefined;
                     idToken?: {
                         token: string;
@@ -7303,7 +7303,7 @@ declare const auth: {
                     callbackURL: zod.ZodOptional<zod.ZodString>;
                     newUserCallbackURL: zod.ZodOptional<zod.ZodString>;
                     errorCallbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk")[]]>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick")[]]>;
                     disableRedirect: zod.ZodOptional<zod.ZodBoolean>;
                     idToken: zod.ZodOptional<zod.ZodObject<{
                         token: zod.ZodString;
@@ -7327,7 +7327,7 @@ declare const auth: {
                     scopes: zod.ZodOptional<zod.ZodArray<zod.ZodString, "many">>;
                     requestSignUp: zod.ZodOptional<zod.ZodBoolean>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick";
                     scopes?: string[] | undefined;
                     idToken?: {
                         token: string;
@@ -7342,7 +7342,7 @@ declare const auth: {
                     newUserCallbackURL?: string | undefined;
                     disableRedirect?: boolean | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick";
                     scopes?: string[] | undefined;
                     idToken?: {
                         token: string;
@@ -9244,7 +9244,7 @@ declare const auth: {
         linkSocialAccount: {
             <C extends [{
                 body: {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick";
                     callbackURL?: string | undefined;
                 };
                 headers: HeadersInit;
@@ -9275,12 +9275,12 @@ declare const auth: {
                 requireHeaders: true;
                 body: zod.ZodObject<{
                     callbackURL: zod.ZodOptional<zod.ZodString>;
-                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk")[]]>;
+                    provider: zod.ZodEnum<["github", ...("apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick")[]]>;
                 }, "strip", zod.ZodTypeAny, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick";
                     callbackURL?: string | undefined;
                 }, {
-                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk";
+                    provider: "apple" | "discord" | "facebook" | "github" | "google" | "microsoft" | "spotify" | "twitch" | "twitter" | "dropbox" | "linkedin" | "gitlab" | "tiktok" | "reddit" | "roblox" | "vk" | "kick";
                     callbackURL?: string | undefined;
                 }>;
                 use: ((inputContext: {
@@ -9431,6 +9431,21 @@ declare const auth: {
                                                     provider: {
                                                         type: string;
                                                     };
+                                                    createdAt: {
+                                                        type: string;
+                                                    };
+                                                    updatedAt: {
+                                                        type: string;
+                                                    };
+                                                    accountId: {
+                                                        type: string;
+                                                    };
+                                                    scopes: {
+                                                        type: string;
+                                                        items: {
+                                                            type: string;
+                                                        };
+                                                    };
                                                 };
                                             };
                                         };
@@ -9504,6 +9519,7 @@ declare const auth: {
             <C extends [{
                 body: {
                     providerId: string;
+                    accountId: string;
                 };
                 method?: "POST" | undefined;
                 query?: Record<string, any> | undefined;
@@ -9530,10 +9546,13 @@ declare const auth: {
                 method: "POST";
                 body: zod.ZodObject<{
                     providerId: zod.ZodString;
+                    accountId: zod.ZodString;
                 }, "strip", zod.ZodTypeAny, {
                     providerId: string;
+                    accountId: string;
                 }, {
                     providerId: string;
+                    accountId: string;
                 }>;
                 use: ((inputContext: {
                     body?: any;
@@ -12918,7 +12937,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         }[][];
                         result: {
                             disabled?: boolean | undefined;
-                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             readability?: boolean | undefined;
                             sourceContent?: boolean | undefined;
@@ -12961,7 +12980,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                         }[][];
                         result: {
                             disabled?: boolean | undefined;
-                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             readability?: boolean | undefined;
                             sourceContent?: boolean | undefined;
@@ -12995,7 +13014,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     id: string;
-                    language: "en" | "ja" | "zh-CN" | "zh-TW";
+                    language: "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW";
                     fields: string;
                     part?: string | undefined;
                 };
@@ -13018,7 +13037,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
             input: {
                 query: {
                     id: string;
-                    language?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                    language?: "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                 };
             };
             output: {
@@ -13424,7 +13443,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                     settings?: {
                         disabled?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                         summary?: boolean | undefined;
                         readability?: boolean | undefined;
                         sourceContent?: boolean | undefined;
@@ -13691,7 +13710,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, ({
                     } | undefined;
                     settings?: {
                         disabled?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        translation?: boolean | "ar-DZ" | "ar-IQ" | "ar-KW" | "ar-MA" | "ar-SA" | "ar-TN" | "de" | "en" | "es" | "fi" | "fr" | "it" | "ja" | "ko" | "pt" | "ru" | "tr" | "zh-CN" | "zh-HK" | "zh-TW" | undefined;
                         summary?: boolean | undefined;
                         readability?: boolean | undefined;
                         sourceContent?: boolean | undefined;

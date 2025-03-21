@@ -5,6 +5,7 @@ import { cn } from "@follow/utils/utils"
 import type { FC } from "react"
 import { memo } from "react"
 
+import { useActionLanguage } from "~/atoms/settings/general"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"
@@ -20,11 +21,12 @@ interface EntryItemProps {
   view?: number
 }
 function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }) {
+  const actionLanguage = useActionLanguage()
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry,
       view,
-      language: entry.settings?.translation,
+      language: actionLanguage,
     }),
     {
       enabled: !!entry.settings?.translation,
