@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["${{ needs.check-runner.outputs.runner-label }}", ubuntu-latest, windows-latest]
+        os: [hyoban, ubuntu-latest, windows-latest]
         exclude:
           - os: ${{ github.event.inputs.mas == 'true' && 'ubuntu-latest' }}
           - os: ${{ github.event.inputs.mas == 'true' && 'windows-latest' }}
