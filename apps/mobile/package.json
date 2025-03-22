@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@better-auth/expo": "1.2.4",
+    "@expo/metro-runtime": "4.0.1",
     "@expo/react-native-action-sheet": "4.1.1",
     "@expo/vector-icons": "14.0.4",
     "@follow/components": "workspace:*",
