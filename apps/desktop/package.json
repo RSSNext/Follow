@@ -33,8 +33,7 @@
   },
   "dependencies": {
     "react-google-recaptcha": "3.1.0",
-    "react-google-recaptcha-v3": "1.10.1",
-    "use-sync-external-store": "1.4.0"
+    "react-google-recaptcha-v3": "1.10.1"
   },
   "devDependencies": {
     "@clack/prompts": "0.10.0",
