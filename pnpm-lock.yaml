@@ -1022,6 +1022,9 @@ importers:
       tailwindcss:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2))
+      use-sync-external-store:
+        specifier: 1.4.0
+        version: 1.4.0(react@18.3.1)
       usehooks-ts:
         specifier: 3.1.1
         version: 3.1.1(react@18.3.1)
