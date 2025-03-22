@@ -1,6 +1,6 @@
 import { FeedViewType } from "@follow/constants"
-import { formatEstimatedMins } from "@follow/utils"
-import { useCallback, useEffect } from "react"
+import { cn, formatEstimatedMins } from "@follow/utils"
+import { useCallback, useEffect, useState } from "react"
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
@@ -132,18 +132,7 @@ export function EntryNormalItem({ entryId, extraData }: { entryId: string; extra
           <View className="relative ml-2">
             {image &&
               (thumbnailRatio === "square" ? (
-                <Image
-                  proxy={{
-                    width: 96,
-                    height: 96,
-                  }}
-                  source={{
-                    uri: image,
-                  }}
-                  blurhash={blurhash}
-                  className="border-secondary-system-background size-24 overflow-hidden rounded-lg border"
-                  contentFit="cover"
-                />
+                <SquareImage image={image} blurhash={blurhash} />
               ) : (
                 <AspectRatioImage
                   blurhash={blurhash}
@@ -200,6 +189,10 @@ const AspectRatioImage = ({
   height?: number
   width?: number
 }) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+  if (height === width || !height || !width) {
+    return <SquareImage image={image} blurhash={blurhash} />
+  }
   // Calculate aspect ratio and determine dimensions
   // Ensure the larger dimension is capped at 96px while maintaining aspect ratio
 
@@ -226,6 +219,9 @@ const AspectRatioImage = ({
         className="overflow-hidden rounded-md"
       >
         <Image
+          onLoad={() => {
+            setIsLoaded(true)
+          }}
           proxy={{
             width: 96,
           }}
@@ -236,11 +232,40 @@ const AspectRatioImage = ({
             width: scaledWidth,
             height: scaledHeight,
           }}
+          transition={100}
           blurhash={blurhash}
-          className="border-secondary-system-background rounded-md border"
+          className={cn(
+            "rounded-md",
+            isLoaded ? "bg-transparent" : "bg-secondary-system-background",
+          )}
           contentFit="cover"
         />
       </View>
     </View>
+  )
+}
+
+const SquareImage = ({ image, blurhash }: { image: string; blurhash?: string }) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+  return (
+    <Image
+      proxy={{
+        width: 96,
+        height: 96,
+      }}
+      transition={100}
+      source={{
+        uri: image,
+      }}
+      onLoad={() => {
+        setIsLoaded(true)
+      }}
+      blurhash={blurhash}
+      className={cn(
+        "size-24 overflow-hidden rounded-lg",
+        isLoaded ? "bg-transparent" : "bg-secondary-system-background",
+      )}
+      contentFit="cover"
+    />
   )
 }
