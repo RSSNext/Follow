@@ -35,7 +35,11 @@ jobs:
       - name: Set runner
         id: set-runner
         run: |
-          curl -s -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.RUNNER_GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners"
+          curl -L \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.RUNNER_GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "https://api.github.com/repos/${{ github.repository }}/actions/runners" \
           runners=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.RUNNER_GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners")
           available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .busy == false and .labels[] .name == "self-hosted")')
           if [ -n "$available" ]; then
