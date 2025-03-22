@@ -108,6 +108,7 @@
     "react-native-webview": "13.13.4",
     "shiki": "3.2.1",
     "tailwindcss": "3.4.17",
+    "use-sync-external-store": "1.4.0",
     "usehooks-ts": "3.1.1",
     "zeego": "3.0.5",
     "zod": "3.24.2",
