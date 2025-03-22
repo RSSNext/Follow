@@ -10,11 +10,18 @@ import { CheckFilledIcon } from "@/src/icons/check_filled"
 import { MingcuteRightLine } from "@/src/icons/mingcute_right_line"
 import { accentColor, useColor } from "@/src/theme/colors"
 
-export enum GroupedInsetListCardItemStyle {
-  NavigationLink = "NavigationLink",
-}
+import {
+  GROUPED_ICON_TEXT_GAP,
+  GROUPED_LIST_ITEM_PADDING,
+  GROUPED_LIST_MARGIN,
+  GROUPED_SECTION_BOTTOM_MARGIN,
+  GROUPED_SECTION_TOP_MARGIN,
+} from "./constants"
+import { GroupedInsetListCardItemStyle } from "./GroupedInsetListCardItemStyle"
+
 type GroupedInsetListCardProps = {
   showSeparator?: boolean
+  SeparatorComponent?: FC
 }
 
 interface BaseCellClassNames {
@@ -30,12 +37,13 @@ export const GroupedOutlineDescription: FC<{
 
 export const GroupedInsetListCard: FC<
   PropsWithChildren & ViewProps & GroupedInsetListCardProps
-> = ({ children, className, showSeparator = true, ...props }) => {
+> = ({ children, className, showSeparator = true, SeparatorComponent, ...props }) => {
   return (
     <View
       {...props}
+      style={[{ marginHorizontal: GROUPED_LIST_MARGIN }, props.style]}
       className={cn(
-        "bg-secondary-system-grouped-background mx-4 flex-1 overflow-hidden rounded-[10px]",
+        "bg-secondary-system-grouped-background flex-1 overflow-hidden rounded-[10px]",
         className,
       )}
     >
@@ -53,12 +61,15 @@ export const GroupedInsetListCard: FC<
             return (
               <Fragment key={index}>
                 {child}
-                {!isLast && (
-                  <View
-                    className={cn("bg-opaque-separator", isNavigationLink ? "ml-16" : "mx-4")}
-                    style={{ height: StyleSheet.hairlineWidth }}
-                  />
-                )}
+                {!isLast &&
+                  (SeparatorComponent ? (
+                    <SeparatorComponent />
+                  ) : (
+                    <View
+                      className={cn("bg-opaque-separator", isNavigationLink ? "ml-16" : "ml-4")}
+                      style={{ height: StyleSheet.hairlineWidth }}
+                    />
+                  ))}
               </Fragment>
             )
           })
@@ -69,9 +80,18 @@ export const GroupedInsetListCard: FC<
 
 export const GroupedInsetListSectionHeader: FC<{
   label: string
-}> = ({ label }) => {
+  marginSize?: "normal" | "small"
+}> = ({ label, marginSize = "normal" }) => {
   return (
-    <View className="mx-4 h-[23px] px-5">
+    <View
+      style={{
+        paddingHorizontal: GROUPED_LIST_ITEM_PADDING,
+        marginHorizontal: GROUPED_LIST_MARGIN,
+        marginTop:
+          marginSize === "normal" ? GROUPED_SECTION_TOP_MARGIN : GROUPED_SECTION_TOP_MARGIN / 2,
+        marginBottom: GROUPED_SECTION_BOTTOM_MARGIN,
+      }}
+    >
       <Text className="text-secondary-label" ellipsizeMode="tail" numberOfLines={1}>
         {label}
       </Text>
@@ -79,17 +99,21 @@ export const GroupedInsetListSectionHeader: FC<{
   )
 }
 
-export const GroupedInsetListBaseCell: FC<PropsWithChildren & ViewProps> = ({
-  children,
-  ...props
-}) => {
+export const GroupedInsetListBaseCell: FC<
+  PropsWithChildren &
+    ViewProps & {
+      as?: FC<any>
+    }
+> = ({ children, as, ...props }) => {
+  const Component = as ?? View
   return (
-    <View
+    <Component
       {...props}
-      className={cn("flex-row items-center justify-between px-5 py-4", props.className)}
+      className={cn("flex-row items-center justify-between py-4", props.className)}
+      style={[{ paddingHorizontal: GROUPED_LIST_ITEM_PADDING }, props.style]}
     >
       {children}
-    </View>
+    </Component>
   )
 }
 
@@ -133,8 +157,9 @@ export const GroupedInsetListNavigationLinkIcon: FC<
 > = ({ backgroundColor, children }) => {
   return (
     <View
-      className="mr-4 items-center justify-center rounded-[5px] p-1"
+      className="items-center justify-center rounded-[5px] p-1"
       style={{
+        marginRight: GROUPED_ICON_TEXT_GAP,
         backgroundColor,
       }}
     >
@@ -189,6 +214,32 @@ export const GroupedInsetListActionCellRadio: FC<{
           </View>
         </GroupedInsetListBaseCell>
       )}
+    </Pressable>
+  )
+}
+
+const OverlayInterectionPressable = ({
+  children,
+  ...props
+}: PropsWithChildren & PressableProps) => {
+  return (
+    <Pressable {...props} className={cn("flex-1", props.className)}>
+      {({ pressed }) => {
+        return (
+          <>
+            {/* Pressed Overlay Effect */}
+            {pressed && (
+              <Animated.View
+                className="bg-system-fill absolute inset-0"
+                entering={FadeIn.duration(100)}
+                exiting={FadeOut.duration(100)}
+              />
+            )}
+
+            {children}
+          </>
+        )
+      }}
     </Pressable>
   )
 }
@@ -282,24 +333,8 @@ export const GroupedPlainButtonCell: FC<
   } & PressableProps
 > = ({ label, textClassName, ...props }) => {
   return (
-    <GroupedInsetListBaseCell className="p-0">
-      <Pressable {...props} className="flex-1">
-        {({ pressed }) => {
-          return (
-            <View className="flex-1 px-5 py-4">
-              {/* Pressed Overlay Effect */}
-              {pressed && (
-                <Animated.View
-                  className="bg-system-fill absolute inset-0"
-                  entering={FadeIn.duration(100)}
-                  exiting={FadeOut.duration(100)}
-                />
-              )}
-              <Text className={cn("text-accent text-center", textClassName)}>{label}</Text>
-            </View>
-          )
-        }}
-      </Pressable>
+    <GroupedInsetListBaseCell as={OverlayInterectionPressable} {...(props as any)}>
+      <Text className={cn("text-accent text-center", textClassName)}>{label}</Text>
     </GroupedInsetListBaseCell>
   )
 }

@@ -1,5 +1,5 @@
 import { cn } from "@follow/utils"
-import { router } from "expo-router"
+import * as Haptics from "expo-haptics"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
 import { TouchableOpacity, View } from "react-native"
@@ -12,27 +12,31 @@ import { CheckCircleCuteReIcon } from "@/src/icons/check_circle_cute_re"
 import { RoundCuteFiIcon } from "@/src/icons/round_cute_fi"
 import { RoundCuteReIcon } from "@/src/icons/round_cute_re"
 import { Dialog } from "@/src/lib/dialog"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
+import { LoginScreen } from "@/src/screens/(modal)/login"
+import { ProfileScreen } from "@/src/screens/(modal)/profile"
 import { useWhoami } from "@/src/store/user/hooks"
 import { accentColor, useColor } from "@/src/theme/colors"
 
 import { AddFeedDialog } from "../dialogs/AddFeedDialog"
 import { MarkAllAsReadDialog } from "../dialogs/MarkAllAsReadDialog"
 
-const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+export const ActionGroup = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
   return <View className={cn("flex flex-row items-center gap-2", className)}>{children}</View>
 }
 
 export function HomeLeftAction() {
   const user = useWhoami()
 
+  const navigation = useNavigation()
   const handlePress = useCallback(() => {
     if (user) {
-      router.push("/profile")
+      navigation.presentControllerView(ProfileScreen, { userId: user.id })
     } else {
-      router.push("/login")
+      navigation.presentControllerView(LoginScreen)
     }
-  }, [user])
+  }, [navigation, user])
 
   return (
     <ActionGroup className="ml-2">
@@ -42,7 +46,7 @@ export function HomeLeftAction() {
           name={user?.name}
           className="rounded-full"
           color={accentColor}
-          noPreview
+          preview={false}
         />
       </TouchableOpacity>
     </ActionGroup>
@@ -84,8 +88,9 @@ export const UnreadOnlyActionButton = ({ variant = "primary" }: HeaderActionButt
       normalIcon={<RoundCuteReIcon height={size} width={size} color={color} />}
       selectedIcon={<RoundCuteFiIcon height={size} width={size} color={color} />}
       onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         setGeneralSetting("unreadOnly", !unreadOnly)
-        toast.info(`Showing ${unreadOnly ? "all" : "unread"} entries`, { position: "bottom" })
+        toast.success(`Showing ${unreadOnly ? "all" : "unread"} entries`, { position: "bottom" })
       }}
       selected={unreadOnly}
       overlay={false}
@@ -95,14 +100,12 @@ export const UnreadOnlyActionButton = ({ variant = "primary" }: HeaderActionButt
 
 export const AddFeedButton = () => {
   return (
-    <>
-      <UIBarButton
-        label="Add Feed"
-        normalIcon={<AddCuteReIcon color={accentColor} />}
-        onPress={() => {
-          Dialog.show(AddFeedDialog)
-        }}
-      />
-    </>
+    <UIBarButton
+      label="Add Feed"
+      normalIcon={<AddCuteReIcon color={accentColor} />}
+      onPress={() => {
+        Dialog.show(AddFeedDialog)
+      }}
+    />
   )
 }

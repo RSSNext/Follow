@@ -1,19 +1,22 @@
-import { router } from "expo-router"
 import { useEffect } from "react"
 import { Text, TouchableOpacity } from "react-native"
 
+import { HeaderCloseOnly } from "@/src/components/layouts/header/HeaderElements"
+import { Navigation } from "@/src/lib/navigation/Navigation"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { Login } from "@/src/modules/login"
 import { useWhoami } from "@/src/store/user/hooks"
 
 function exit() {
+  const router = Navigation.rootNavigation
   if (router.canGoBack()) {
     router.back()
   } else {
-    router.replace("/")
+    router.popToRoot()
   }
 }
 
-export default function LoginPage() {
+export const LoginScreen: NavigationControllerView = () => {
   const whoami = useWhoami()
 
   useEffect(() => {
@@ -26,6 +29,7 @@ export default function LoginPage() {
   return (
     <>
       <Login />
+      <HeaderCloseOnly />
       {!!whoami?.id && __DEV__ && (
         <TouchableOpacity
           className="bg-system-fill absolute bottom-8 left-1/2 -translate-x-1/2 flex-row items-center justify-center rounded-xl p-2 px-4"

@@ -26,7 +26,7 @@ import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./UnreadNumber"
 
 export const ListHeader = ({ view }: { view: number }) => {
-  useAuthQuery(Queries.subscription.byView())
+  useAuthQuery(Queries.subscription.all())
   useAuthQuery(Queries.subscription.unreadAll(), {
     refetchInterval: false,
   })

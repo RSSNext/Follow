@@ -1,6 +1,6 @@
 import { useMobile } from "@follow/components/hooks/useMobile.js"
 import { EllipsisHorizontalTextWithTooltip } from "@follow/components/ui/typography/index.js"
-import { clsx, cn, formatEstimatedMins, isSafari } from "@follow/utils/utils"
+import { clsx, cn, formatEstimatedMins, formatTimeToSeconds, isSafari } from "@follow/utils/utils"
 import { useMemo } from "react"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
@@ -79,6 +79,10 @@ export function ListItem({
     }
   }, [settingWideMode])
 
+  const audioAttachment = useMemo(() => {
+    return entry?.entries?.attachments?.find((a) => a.mime_type?.startsWith("audio") && a.url)
+  }, [entry?.entries?.attachments])
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !(feed || inbox)) return null
 
@@ -86,10 +90,7 @@ export function ListItem({
 
   const related = feed || inbox
 
-  const hasAudio = simple
-    ? false
-    : !!entry.entries?.attachments?.[0]?.url &&
-      entry.entries?.attachments?.[0]?.mime_type?.startsWith("audio")
+  const hasAudio = simple ? false : !!audioAttachment
   const hasMedia = simple ? false : !!entry.entries?.media?.[0]?.url
 
   const marginWidth = 8 * (isMobile ? 1.125 : 1)
@@ -175,7 +176,7 @@ export function ListItem({
             )}
           >
             <EntryTranslation
-              className={cn("break-all", lineClamp.description)}
+              className={cn("hyphens-auto", lineClamp.description)}
               source={entry.entries.description}
               target={translation?.description}
             />
@@ -186,11 +187,8 @@ export function ListItem({
       {hasAudio && (
         <AudioCover
           entryId={entryId}
-          src={entry.entries!.attachments![0]!.url}
-          durationInSeconds={Number.parseInt(
-            String(entry.entries!.attachments![0]!.duration_in_seconds ?? 0),
-            10,
-          )}
+          src={audioAttachment!.url}
+          durationInSeconds={audioAttachment?.duration_in_seconds}
           feedIcon={
             <FeedIcon
               fallback={true}
@@ -256,7 +254,13 @@ function AudioCover({
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
 
-  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
+  // durationInSeconds's format like 00:00:00 or 4000
+  if (durationInSeconds && Number.isNaN(+durationInSeconds)) {
+    // @ts-expect-error durationInSeconds is string
+    durationInSeconds = formatTimeToSeconds(durationInSeconds)
+  }
+
+  const estimatedMins = durationInSeconds && Math.floor(durationInSeconds / 60)
 
   const handleClickPlay = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile) e.stopPropagation()

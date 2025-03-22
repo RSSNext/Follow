@@ -1,9 +1,11 @@
+import { useTypeScriptHappyCallback } from "@follow/hooks"
 import type {
   FlashListProps,
   MasonryFlashListProps,
   MasonryFlashListRef,
 } from "@shopify/flash-list"
 import { FlashList, MasonryFlashList } from "@shopify/flash-list"
+import * as Haptics from "expo-haptics"
 import type { ElementRef, RefObject } from "react"
 import { forwardRef, useCallback, useContext } from "react"
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
@@ -12,7 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
 import { useBottomTabBarHeight } from "@/src/components/layouts/tabbar/hooks"
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
+import { ScreenItemContext } from "@/src/lib/navigation/ScreenItemContext"
 import { useHeaderHeight } from "@/src/modules/screen/hooks/useHeaderHeight"
 import { usePrefetchSubscription } from "@/src/store/subscription/hooks"
 import { usePrefetchUnread } from "@/src/store/unread/hooks"
@@ -30,30 +32,39 @@ export const TimelineSelectorList = forwardRef<
   const { refetch: subscriptionRefetch } = usePrefetchSubscription()
 
   const headerHeight = useHeaderHeight()
-  const { scrollY } = useContext(NavigationContext)!
+  const { reAnimatedScrollY, scrollViewHeight, scrollViewContentHeight } =
+    useContext(ScreenItemContext)!
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       props.onScroll?.(e)
 
-      scrollY?.setValue(e.nativeEvent.contentOffset.y)
+      reAnimatedScrollY.value = e.nativeEvent.contentOffset.y
     },
-    [scrollY, props.onScroll],
+    [props, reAnimatedScrollY],
   )
 
   const tabBarHeight = useBottomTabBarHeight()
 
   const systemFill = useColor("secondaryLabel")
 
-  // const listRef = useRef<FlashList<any>>(null)
-
-  // useImperativeHandle(ref, () => listRef.current!)
-
   return (
     <FlashList
       automaticallyAdjustsScrollIndicatorInsets={false}
       automaticallyAdjustContentInsets={false}
       ref={ref}
+      onLayout={useTypeScriptHappyCallback(
+        (e) => {
+          scrollViewHeight.value = e.nativeEvent.layout.height - headerHeight - tabBarHeight
+        },
+        [scrollViewHeight],
+      )}
+      onContentSizeChange={useTypeScriptHappyCallback(
+        (w, h) => {
+          scrollViewContentHeight.value = h
+        },
+        [scrollViewContentHeight],
+      )}
       refreshControl={
         <RefreshControl
           progressViewOffset={headerHeight}
@@ -62,6 +73,7 @@ export const TimelineSelectorList = forwardRef<
           onRefresh={() => {
             unreadRefetch()
             subscriptionRefetch()
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             onRefresh()
           }}
           refreshing={isRefetching}
@@ -91,14 +103,15 @@ export const TimelineSelectorMasonryList = forwardRef<
   const insets = useSafeAreaInsets()
 
   const headerHeight = useHeaderHeight()
-  const scrollY = useContext(NavigationContext)?.scrollY
+
+  const { reAnimatedScrollY } = useContext(ScreenItemContext)!
 
   const onScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       props.onScroll?.(e)
-      scrollY?.setValue(e.nativeEvent.contentOffset.y)
+      reAnimatedScrollY.value = e.nativeEvent.contentOffset.y
     },
-    [scrollY, props.onScroll],
+    [props, reAnimatedScrollY],
   )
 
   const tabBarHeight = useBottomTabBarHeight()

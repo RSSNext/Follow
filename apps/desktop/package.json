@@ -1,10 +1,10 @@
 {
-  "name": "Follow",
+  "name": "Folo",
   "type": "module",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "private": true,
   "description": "Follow everything in one place",
-  "author": "Follow Team",
+  "author": "Folo Team",
   "homepage": "https://github.com/RSSNext",
   "repository": {
     "url": "https://github.com/RSSNext/follow",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "@clack/prompts": "0.10.0",
     "@electron-forge/cli": "7.7.0",
+    "@electron-forge/maker-appx": "7.7.0",
     "@electron-forge/maker-dmg": "7.7.0",
     "@electron-forge/maker-pkg": "7.7.0",
     "@electron-forge/maker-squirrel": "7.7.0",
@@ -63,7 +64,7 @@
     "cssnano": "7.0.6",
     "dotenv": "16.4.7",
     "drizzle-orm": "0.40.0",
-    "electron": "35.0.1",
+    "electron": "34.2.0",
     "electron-devtools-installer": "4.0.0",
     "electron-packager-languages": "0.6.0",
     "electron-vite": "3.0.0",
@@ -80,8 +81,8 @@
     "unplugin-ast": "0.14.3",
     "utf-8-validate": "6.0.5"
   },
-  "productName": "Follow",
-  "mainHash": "03d744e78f7b1eedc24f83c05939b1faaa07b3b5ff15cfc6242594c74c726637",
+  "productName": "Folo",
+  "mainHash": "569e7dd06fa94fcc22fc451346fbf1c9e8203d364cb84d49a7a08bf7dff39630",
   "bump": {
     "before": [
       "git pull --rebase",

@@ -54,7 +54,7 @@ export const apiClient = hc<AppType>(proxyEnv.VITE_API_URL, {
     }),
   headers() {
     return {
-      "X-App-Name": "Follow Mobile",
+      "X-App-Name": "Folo Mobile",
       cookie: getCookie(),
     }
   },

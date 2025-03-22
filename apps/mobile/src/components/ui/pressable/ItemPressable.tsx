@@ -20,10 +20,11 @@ import { ItemPressableStyle } from "./enum"
 
 interface ItemPressableProps extends PressableProps {
   itemStyle?: ItemPressableStyle
+  touchHighlight?: boolean
 }
 
 export const ItemPressable: FC<ItemPressableProps> = memo(
-  ({ children, itemStyle = ItemPressableStyle.Grouped, ...props }) => {
+  ({ children, itemStyle = ItemPressableStyle.Grouped, touchHighlight = true, ...props }) => {
     const [isPressing, setIsPressing] = useState(false)
 
     const secondarySystemGroupedBackground = useColor("secondarySystemGroupedBackground")
@@ -36,13 +37,14 @@ export const ItemPressable: FC<ItemPressableProps> = memo(
     const pressed = useSharedValue(0)
 
     useEffect(() => {
+      if (!touchHighlight) return
       cancelAnimation(pressed)
       if (isPressing) {
         pressed.value = withSpring(1, { duration: 0.2 })
       } else {
         pressed.value = withSpring(0, gentleSpringPreset)
       }
-    }, [isPressing, pressed])
+    }, [isPressing, pressed, touchHighlight])
 
     const colorStyle = useAnimatedStyle(() => {
       return {
@@ -60,14 +62,16 @@ export const ItemPressable: FC<ItemPressableProps> = memo(
         // https://github.com/nandorojo/zeego/issues/61
         onLongPress={composeEventHandlers(props.onLongPress, () => {})}
         delayLongPress={props.delayLongPress ?? 100}
-        className={cn(props.className, "relative")}
+        className={cn("relative overflow-hidden", props.className)}
         style={StyleSheet.flatten([props.style, { backgroundColor: itemNormalColor }])}
       >
         {useTypeScriptHappyCallback(
           (props) => {
             return (
               <Fragment>
-                <Animated.View className="absolute inset-0" style={colorStyle} />
+                {touchHighlight && (
+                  <Animated.View className="absolute inset-0" style={colorStyle} />
+                )}
                 {typeof children === "function" ? children(props) : children}
               </Fragment>
             )

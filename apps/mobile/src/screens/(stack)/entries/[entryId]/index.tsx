@@ -1,5 +1,5 @@
 import { FeedViewType } from "@follow/constants"
-import { useLocalSearchParams } from "expo-router"
+import { PortalProvider } from "@gorhom/portal"
 import { atom, useAtomValue } from "jotai"
 import { useEffect, useMemo } from "react"
 import { Pressable, Text, View } from "react-native"
@@ -9,8 +9,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BottomTabBarHeightContext } from "@/src/components/layouts/tabbar/contexts/BottomTabBarHeightContext"
 import { SafeNavigationScrollView } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { EntryContentWebView } from "@/src/components/native/webview/EntryContentWebView"
-import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { EntryContentContext, useEntryContentContext } from "@/src/modules/entry-content/ctx"
 import { EntryAISummary } from "@/src/modules/entry-content/EntryAISummary"
 import { useEntry, usePrefetchEntryContent } from "@/src/store/entry/hooks"
@@ -22,13 +22,10 @@ import { useAutoMarkAsRead } from "@/src/store/unread/hooks"
 
 import { EntrySocialTitle, EntryTitle } from "../../../../modules/entry-content/EntryTitle"
 
-export default function EntryDetailPage() {
-  const { entryId, view } = useLocalSearchParams<{
-    entryId: string
-    view: string
-  }>()
-
-  const viewType = Number.parseInt(view) as FeedViewType
+export const EntryDetailScreen: NavigationControllerView<{
+  entryId: string
+  view: FeedViewType
+}> = ({ entryId, view: viewType }) => {
   usePrefetchEntryContent(entryId as string)
   useAutoMarkAsRead(entryId as string)
   const entry = useEntry(entryId as string)
@@ -56,7 +53,7 @@ export default function EntryDetailPage() {
 
   return (
     <EntryContentContext.Provider value={ctxValue}>
-      <PortalHost>
+      <PortalProvider>
         <BottomTabBarHeightContext.Provider value={insets.bottom}>
           <SafeNavigationScrollView
             automaticallyAdjustContentInsets={false}
@@ -96,7 +93,7 @@ export default function EntryDetailPage() {
             )}
           </SafeNavigationScrollView>
         </BottomTabBarHeightContext.Provider>
-      </PortalHost>
+      </PortalProvider>
     </EntryContentContext.Provider>
   )
 }

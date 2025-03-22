@@ -18,6 +18,8 @@ updates:
         versions: [">=19.0.0"]
       - dependency-name: "@types/react-dom"
         versions: [">=19.0.0"]
+      - dependency-name: "@shopify/flash-list"
+        versions: [">1.7.3"]
 
       # Stuck by tailwindcss 4
       - dependency-name: tailwindcss
@@ -36,6 +38,11 @@ updates:
       # It's using export map and metro doesn't support it well
       - dependency-name: unist-util-visit-parents
         versions: [">=6.0.0"]
+      # electron 35
+      - dependency-name: electron
+        versions: [">=35.0.0"]
+      - dependency-name: react-native-sheet-transitions
+        versions: [">0.1.2"]
     open-pull-requests-limit: 100
     groups:
       minor:
@@ -46,6 +53,21 @@ updates:
         applies-to: version-updates
         update-types:
           - "patch"
+      pathed:
+        patterns:
+          - immer
+          - re-resizable
+          - hono
+          - electron-context-menu
+          - "@mozilla/readability"
+          - daisyui
+          - jsonpointer
+          - workbox-precaching
+          - "@pengx17/electron-forge-maker-appimage"
+          - devlop
+          - "@microflash/remark-callout-directives"
+          - react-native-track-player
+          - react-native-sheet-transitions
 
   - package-ecosystem: github-actions
     directory: /

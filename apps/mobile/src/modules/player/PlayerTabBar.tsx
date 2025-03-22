@@ -1,5 +1,4 @@
 import { cn } from "@follow/utils"
-import { router, usePathname } from "expo-router"
 import { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
 import Animated, {
@@ -10,21 +9,25 @@ import Animated, {
 } from "react-native-reanimated"
 
 import { Image } from "@/src/components/ui/image/Image"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { useScreenName } from "@/src/lib/navigation/ScreenNameContext"
 import { useActiveTrack } from "@/src/lib/player"
+import { PlayerScreen } from "@/src/screens/player"
 import { usePrefetchImageColors } from "@/src/store/image/hooks"
 
 import { PlayPauseButton, SeekButton } from "./control"
 
-const allowedRoutes = new Set(["/", "/subscriptions", "/player"])
+const allowedScreenNames = new Set(["Home", "Subscriptions", "Player"])
 
 export function PlayerTabBar({ className }: { className?: string }) {
   const activeTrack = useActiveTrack()
-  const pathname = usePathname()
-  const isVisible = !!activeTrack && allowedRoutes.has(pathname)
+  const screenName = useScreenName()
+
+  const isVisible = !!activeTrack && allowedScreenNames.has(screenName)
   const isVisibleSV = useSharedValue(isVisible ? 1 : 0)
   useEffect(() => {
     isVisibleSV.value = withTiming(isVisible ? 1 : 0)
-  }, [pathname, isVisible])
+  }, [isVisible, isVisibleSV])
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: isVisibleSV.value,
@@ -34,6 +37,7 @@ export function PlayerTabBar({ className }: { className?: string }) {
   })
 
   usePrefetchImageColors(activeTrack?.artwork)
+  const navigation = useNavigation()
 
   return (
     <Animated.View
@@ -42,7 +46,8 @@ export function PlayerTabBar({ className }: { className?: string }) {
     >
       <Pressable
         onPress={() => {
-          router.push("/player")
+          navigation.presentControllerView(PlayerScreen, void 0, "transparentModal")
+          // TODO
         }}
       >
         <View className="flex flex-row items-center gap-4 overflow-hidden rounded-2xl p-2">

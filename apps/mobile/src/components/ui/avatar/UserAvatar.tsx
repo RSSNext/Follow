@@ -12,7 +12,8 @@ interface UserAvatarProps {
   name?: string | null
   className?: string
   color?: string
-  noPreview?: boolean
+
+  preview?: boolean
 }
 
 export const UserAvatar = ({
@@ -21,7 +22,7 @@ export const UserAvatar = ({
   name,
   className,
   color,
-  noPreview,
+  preview = true,
 }: UserAvatarProps) => {
   if (!image) {
     return (
@@ -60,11 +61,11 @@ export const UserAvatar = ({
     />
   )
 
-  return noPreview ? (
-    imageContent
-  ) : (
+  return preview ? (
     <Galeria urls={[image]}>
       <Galeria.Image index={0}>{imageContent}</Galeria.Image>
     </Galeria>
+  ) : (
+    imageContent
   )
 }

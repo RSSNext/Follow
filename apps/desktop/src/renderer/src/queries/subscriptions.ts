@@ -1,13 +1,11 @@
-import type { FeedViewType } from "@follow/constants"
-
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { subscriptionActions } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
 export const subscription = {
-  byView: (view?: FeedViewType) =>
-    defineQuery(["subscriptions", view], async () => subscriptionActions.fetchByView(view), {
+  all: () =>
+    defineQuery(["subscriptions"], async () => subscriptionActions.fetchByView(), {
       rootKey: ["subscriptions"],
     }),
   categories: (view?: number) =>

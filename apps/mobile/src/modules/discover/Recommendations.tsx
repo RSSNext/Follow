@@ -17,7 +17,6 @@ import {
 } from "react-native"
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler"
 import { PanGestureHandler } from "react-native-gesture-handler"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
 import {
@@ -192,8 +191,6 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
   const { headerHeightAtom } = useContext(DiscoverContext)
   const headerHeight = useAtomValue(headerHeightAtom)
 
-  const insets = useSafeAreaInsets()
-
   const scrollOffsetRef = useRef(0)
   const { animatedY } = useContext(DiscoverContext)
 
@@ -202,6 +199,7 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
       animatedY.value = scrollOffsetRef.current
     }
   }, [animatedY, isSelected])
+
   if (isLoading) {
     return <ActivityIndicator className="flex-1 items-center justify-center" />
   }
@@ -220,10 +218,11 @@ const Tab: TabComponent = ({ tab, isSelected, ...rest }) => {
         keyExtractor={keyExtractor}
         getItemType={getItemType}
         renderItem={ItemRenderer}
+        automaticallyAdjustsScrollIndicatorInsets={false}
         scrollIndicatorInsets={{
           right: -2,
-          top: headerHeight - insets.top,
-          bottom: tabHeight - insets.bottom,
+          top: headerHeight,
+          bottom: tabHeight,
         }}
         contentContainerStyle={{ paddingBottom: tabHeight, paddingTop: headerHeight }}
         removeClippedSubviews

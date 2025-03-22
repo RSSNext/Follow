@@ -1,16 +1,15 @@
 import { env } from "@follow/shared/src/env"
-import { useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
-import { Share, useAnimatedValue, View } from "react-native"
+import { Share, View } from "react-native"
 import { useColor } from "react-native-uikit-colors"
 
 import { DefaultHeaderBackButton } from "@/src/components/layouts/header/NavigationHeader"
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { UIBarButton } from "@/src/components/ui/button/UIBarButton"
 import { TIMELINE_VIEW_SELECTOR_HEIGHT } from "@/src/constants/ui"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import {
+  ActionGroup,
   HomeLeftAction,
   HomeSharedRightAction,
   UnreadOnlyActionButton,
@@ -20,24 +19,29 @@ import { getFeed } from "@/src/store/feed/getter"
 
 import { useEntryListContext, useSelectedFeedTitle } from "./atoms"
 
-export function TimelineSelectorProvider({ children }: { children: React.ReactNode }) {
-  const scrollY = useAnimatedValue(0)
+export function TimelineSelectorProvider({
+  children,
+  feedId,
+}: {
+  children: React.ReactNode
+  feedId?: string
+}) {
   const viewTitle = useSelectedFeedTitle()
   const screenType = useEntryListContext().type
-  const params = useLocalSearchParams()
+
   const isFeed = screenType === "feed"
   const isTimeline = screenType === "timeline"
   const isSubscriptions = screenType === "subscriptions"
+
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
+    <>
       <NavigationBlurEffectHeader
-        headerShown
         title={viewTitle}
         headerLeft={useMemo(
           () =>
             isTimeline || isSubscriptions
               ? () => <HomeLeftAction />
-              : () => <DefaultHeaderBackButton canGoBack={true} />,
+              : () => <DefaultHeaderBackButton canDismiss={false} canGoBack={true} />,
           [isTimeline, isSubscriptions],
         )}
         headerRight={useMemo(() => {
@@ -52,28 +56,27 @@ export function TimelineSelectorProvider({ children }: { children: React.ReactNo
             if (isSubscriptions) return () => <HomeSharedRightAction />
             if (isFeed)
               return () => (
-                <View className="-mr-2 flex-row gap-2">
+                <ActionGroup>
                   <UnreadOnlyActionButton variant={buttonVariant} />
-                  <FeedShareAction params={params} />
-                </View>
+                  <FeedShareAction feedId={feedId} />
+                </ActionGroup>
               )
           })()
 
           if (Component)
             return () => <View className="flex-row items-center justify-end">{Component()}</View>
           return
-        }, [isFeed, isTimeline, isSubscriptions, params])}
+        }, [isFeed, isTimeline, isSubscriptions, feedId])}
         headerHideableBottom={isTimeline || isSubscriptions ? TimelineViewSelector : undefined}
         headerHideableBottomHeight={TIMELINE_VIEW_SELECTOR_HEIGHT}
       />
       {children}
-    </NavigationContext.Provider>
+    </>
   )
 }
 
-function FeedShareAction({ params }: { params: any }) {
+function FeedShareAction({ feedId }: { feedId?: string }) {
   const label = useColor("label")
-  const { feedId } = params
 
   if (!feedId) return null
   return (
@@ -85,7 +88,7 @@ function FeedShareAction({ params }: { params: any }) {
         if (!feed) return
         const url = `${env.VITE_WEB_URL}/share/feeds/${feedId}`
         Share.share({
-          message: `Check out ${feed.title} on Follow: ${url}`,
+          message: `Check out ${feed.title} on Folo: ${url}`,
           title: feed.title!,
           url,
         })

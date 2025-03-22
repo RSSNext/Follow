@@ -36,7 +36,7 @@ export const createApiFetch = () => {
     onRequest(context) {
       if (isDev) console.info(`request: ${context.request}`)
 
-      context.options.headers.set("User-Agent", `Follow External Server Api Client/${PKG.version}`)
+      context.options.headers.set("User-Agent", `Folo External Server Api Client/${PKG.version}`)
     },
     onRequestError(context) {
       if (context.error.name === "AbortError") {
@@ -58,7 +58,7 @@ export const createApiClient = () => {
       return {
         "X-App-Version": PKG.version,
         "X-App-Dev": isDev ? "1" : "0",
-        "User-Agent": `Follow External Server Api Client/${PKG.version}`,
+        "User-Agent": `Folo External Server Api Client/${PKG.version}`,
         Cookie: authSessionToken ? `__Secure-better-auth.session_token=${authSessionToken}` : "",
       }
     },

@@ -1,6 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
-import { Stack } from "expo-router"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
 import {
   ActivityIndicator,
@@ -23,6 +22,7 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { MingcuteLeftLineIcon } from "@/src/icons/mingcute_left_line"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import type { apiClient } from "@/src/lib/api-fetch"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
 import type { FeedModel } from "@/src/store/feed/types"
 import type { ListModel } from "@/src/store/list/store"
@@ -30,7 +30,6 @@ import { useWhoami } from "@/src/store/user/hooks"
 import { useColor } from "@/src/theme/colors"
 
 import { ItemSeparator } from "../../subscription/ItemSeparator"
-import { useSettingsNavigation } from "../hooks"
 import { useShareSubscription } from "../hooks/useShareSubscription"
 import { UserHeaderBanner } from "../UserHeaderBanner"
 
@@ -62,17 +61,17 @@ export const ProfileScreen = () => {
   }, [isError])
 
   const insets = useSafeAreaInsets()
-  const settingNavigation = useSettingsNavigation()
 
   const textLabelColor = useColor("label")
   const openShareUrl = useCallback(() => {
     if (!whoami?.id) return
     Share.share({
       url: `https://app.follow.is/share/users/${whoami.id}`,
-      title: `Follow | ${whoami.name}'s Profile`,
+      title: `Folo | ${whoami.name}'s Profile`,
     })
   }, [whoami?.id, whoami?.name])
 
+  const navigation = useNavigation()
   return (
     <View className="bg-system-grouped-background flex-1">
       <ReAnimatedScrollView
@@ -82,14 +81,12 @@ export const ProfileScreen = () => {
       >
         {!!whoami?.id && <UserHeaderBanner scrollY={scrollY} userId={whoami.id} />}
 
-        <Stack.Screen options={{ headerShown: false, animation: "fade" }} />
-
         {isLoading && <ActivityIndicator className="mt-24" size={28} />}
         {!isLoading && subscriptions && <SubscriptionList subscriptions={subscriptions.data} />}
       </ReAnimatedScrollView>
       {/* Top transparent header buttons */}
       <TouchableOpacity
-        onPress={() => settingNavigation.goBack()}
+        onPress={() => navigation.back()}
         className="absolute left-4"
         style={{ top: insets.top }}
       >
@@ -110,7 +107,7 @@ export const ProfileScreen = () => {
         style={{ opacity: headerOpacity }}
       >
         <BlurEffect />
-        <TouchableOpacity onPress={() => settingNavigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.back()}>
           <MingcuteLeftLineIcon color={textLabelColor} />
         </TouchableOpacity>
 

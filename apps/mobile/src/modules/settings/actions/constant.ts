@@ -1,8 +1,10 @@
 import type { SupportedLanguages } from "@/src/lib/language"
+import type { Navigation } from "@/src/lib/navigation/Navigation"
 import { actionActions } from "@/src/store/action/store"
 import type { ActionId, ActionRule } from "@/src/store/action/types"
 
-import type { SettingsNavigation } from "../hooks"
+import { EditRewriteRulesScreen } from "../routes/EditRewriteRules"
+import { EditWebhooksScreen } from "../routes/EditWebhooks"
 import { ActionFormTranslation } from "./components"
 
 export const filterFieldOptions = [
@@ -92,7 +94,7 @@ export const availableActionList: Array<{
   value: ActionId
   label: string
   onEnable?: (index: number) => void
-  onNavigate?: (router: SettingsNavigation, index: number) => void
+  onNavigate?: (router: Navigation, index: number) => void
   component?: React.FC<{ rule: ActionRule }>
 }> = [
   {
@@ -143,7 +145,7 @@ export const availableActionList: Array<{
       })
     },
     onNavigate: (router, index) => {
-      router.navigate("EditRewriteRules", { index })
+      router.pushControllerView(EditRewriteRulesScreen, { index })
     },
   },
   {
@@ -153,7 +155,7 @@ export const availableActionList: Array<{
       actionActions.patchRule(index, { result: { webhooks: [""] } })
     },
     onNavigate: (router, index) => {
-      router.navigate("EditWebhooks", { index })
+      router.pushControllerView(EditWebhooksScreen, { index })
     },
   },
 ]

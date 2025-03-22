@@ -126,6 +126,7 @@ export function useSelectedView() {
 
 function getFetchEntryPayload(
   selectedFeed: SelectedTimeline | SelectedFeed,
+  view: FeedViewType = FeedViewType.Articles,
 ): FetchEntriesProps | null {
   if (!selectedFeed) {
     return null
@@ -158,6 +159,7 @@ function getFetchEntryPayload(
   const isCollection =
     selectedFeed && selectedFeed.type === "feed" && selectedFeed?.feedId === FEED_COLLECTION_LIST
   if (isCollection) {
+    payload.view = view
     payload.isCollection = true
   }
 
@@ -174,8 +176,9 @@ export function useSelectedFeed() {
 
 export function useFetchEntriesControls() {
   const selectedFeed = useSelectedFeed()
+  const view = useSelectedView()
 
-  const payload = getFetchEntryPayload(selectedFeed)
+  const payload = getFetchEntryPayload(selectedFeed, view)
   return usePrefetchEntries(payload)
 }
 
@@ -224,3 +227,12 @@ export const useViewDefinition = (view?: FeedViewType) => {
   const viewDef = useMemo(() => views.find((v) => v.view === view), [view])
   return viewDef
 }
+
+// horizontal scrolling state
+
+const horizontalScrollingAtom = atom<boolean>(false)
+
+export const setHorizontalScrolling = (value: boolean) =>
+  jotaiStore.set(horizontalScrollingAtom, value)
+
+export const getHorizontalScrolling = () => jotaiStore.get(horizontalScrollingAtom)

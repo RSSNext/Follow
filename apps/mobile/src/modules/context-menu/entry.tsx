@@ -1,4 +1,4 @@
-import { router } from "expo-router"
+import { PortalProvider } from "@gorhom/portal"
 import type { PropsWithChildren } from "react"
 import { useCallback } from "react"
 import { Share, Text, View } from "react-native"
@@ -8,10 +8,11 @@ import {
   preloadWebViewEntry,
 } from "@/src/components/native/webview/EntryContentWebView"
 import { ContextMenu } from "@/src/components/ui/context-menu"
-import { PortalHost } from "@/src/components/ui/portal"
 import { openLink } from "@/src/lib/native"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
-import { useSelectedView } from "@/src/modules/screen/atoms"
+import { getHorizontalScrolling, useSelectedView } from "@/src/modules/screen/atoms"
+import { EntryDetailScreen } from "@/src/screens/(stack)/entries/[entryId]"
 import { useIsEntryStarred } from "@/src/store/collection/hooks"
 import { collectionSyncService } from "@/src/store/collection/store"
 import { useEntry } from "@/src/store/entry/hooks"
@@ -23,11 +24,17 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
   const view = useSelectedView()
   const isEntryStarred = useIsEntryStarred(id)
 
+  const navigation = useNavigation()
   const handlePressPreview = useCallback(() => {
-    if (!entry) return
-    preloadWebViewEntry(entry)
-    router.push(`/entries/${id}`)
-  }, [entry, id])
+    const isHorizontalScrolling = getHorizontalScrolling()
+    if (entry && !isHorizontalScrolling) {
+      preloadWebViewEntry(entry)
+      navigation.pushControllerView(EntryDetailScreen, {
+        entryId: id,
+        view: view!,
+      })
+    }
+  }, [entry, id, navigation, view])
 
   if (!entry) return null
 
@@ -38,14 +45,14 @@ export const EntryItemContextMenu = ({ id, children }: PropsWithChildren<{ id: s
       <ContextMenu.Content>
         <ContextMenu.Preview size="STRETCH" onPress={handlePressPreview}>
           {() => (
-            <PortalHost>
+            <PortalProvider>
               <View className="bg-system-background flex-1">
                 <Text className="text-label mt-5 p-4 text-2xl font-semibold" numberOfLines={2}>
                   {entry.title?.trim()}
                 </Text>
                 <EntryContentWebView entry={entry} />
               </View>
-            </PortalHost>
+            </PortalProvider>
           )}
         </ContextMenu.Preview>
 

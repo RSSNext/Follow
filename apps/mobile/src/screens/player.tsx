@@ -1,8 +1,7 @@
 import { cn } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
-import { router } from "expo-router"
 import { useEffect, useMemo } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { SafeAreaView, StyleSheet, Text, View } from "react-native"
 import Reanimated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -12,8 +11,10 @@ import Reanimated, {
 import { SheetScreen } from "react-native-sheet-transitions"
 
 import { Image } from "@/src/components/ui/image/Image"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 
 import { gentleSpringPreset } from "../constants/spring"
+import type { NavigationControllerView } from "../lib/navigation/types"
 import { useActiveTrack, useIsPlaying } from "../lib/player"
 import { PlayerScreenContext, usePlayerScreenContext } from "../modules/player/context"
 import { ControlGroup, ProgressBar, VolumeBar } from "../modules/player/control"
@@ -42,7 +43,7 @@ function CoverArt({ cover }: { cover?: string }) {
   )
 }
 
-export default function PlaterScreen() {
+export const PlayerScreen: NavigationControllerView = () => {
   const activeTrack = useActiveTrack()
   usePrefetchImageColors(activeTrack?.artwork)
 
@@ -53,56 +54,60 @@ export default function PlaterScreen() {
     [isGradientLight],
   )
 
+  const navigation = useNavigation()
   if (!activeTrack) {
     return null
   }
 
   return (
-    <SheetScreen onClose={() => router.back()}>
+    <SheetScreen onClose={() => navigation.dismiss()}>
       <PlayerScreenContext.Provider value={playerScreenContextValue}>
-        <View className="p-safe flex-1 px-[1000]">
-          <LinearGradient
-            style={StyleSheet.absoluteFill}
-            colors={gradientColors}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          />
-          <DismissIndicator />
-          <CoverArt cover={activeTrack.artwork} />
-          <View className="mx-10 flex-1">
-            <Text
-              className={cn(
-                "text-xl font-bold opacity-90",
-                isGradientLight ? "text-black" : "text-white",
-              )}
-              numberOfLines={1}
-            >
-              {activeTrack.title}
-            </Text>
-            <Text
-              className={cn(
-                "mt-2 text-xl font-semibold opacity-60",
-                isGradientLight ? "text-black" : "text-white",
-              )}
-              numberOfLines={1}
-            >
-              {activeTrack.artist}
-            </Text>
-            <ProgressBar />
-            <ControlGroup />
-            <View className="flex-1" />
-            <VolumeBar />
+        <LinearGradient
+          style={StyleSheet.absoluteFill}
+          colors={gradientColors}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        />
+        <SafeAreaView className="flex-1">
+          <View className="flex-1">
+            <DismissIndicator />
+            <CoverArt cover={activeTrack.artwork} />
+            <View className="mx-10 flex-1">
+              <Text
+                className={cn(
+                  "text-xl font-bold opacity-90",
+                  isGradientLight ? "text-black" : "text-white",
+                )}
+                numberOfLines={1}
+              >
+                {activeTrack.title}
+              </Text>
+              <Text
+                className={cn(
+                  "mt-2 text-xl font-semibold opacity-60",
+                  isGradientLight ? "text-black" : "text-white",
+                )}
+                numberOfLines={1}
+              >
+                {activeTrack.artist}
+              </Text>
+              <ProgressBar />
+              <ControlGroup />
+              <View className="flex-1" />
+              <VolumeBar />
+            </View>
           </View>
-        </View>
+        </SafeAreaView>
       </PlayerScreenContext.Provider>
     </SheetScreen>
   )
 }
 
+PlayerScreen.transparent = true
 function DismissIndicator() {
   const { isBackgroundLight } = usePlayerScreenContext()
   return (
-    <View className="top-safe-offset-2 absolute inset-x-0 flex items-center justify-center">
+    <View className="absolute inset-x-0 top-2 flex items-center justify-center">
       <View
         className={cn(
           "h-[5] w-[40] rounded-full",

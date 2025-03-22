@@ -1,11 +1,9 @@
-import type { RouteProp } from "@react-navigation/native"
 import { useMutation } from "@tanstack/react-query"
-import { router } from "expo-router"
 import type { MutableRefObject } from "react"
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { Text, View } from "react-native"
+import { PixelRatio, StyleSheet, Text, View } from "react-native"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import { UINavigationHeaderActionButton } from "@/src/components/layouts/header/NavigationHeader"
 import {
   NavigationBlurEffectHeader,
@@ -20,6 +18,8 @@ import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { getBizFetchErrorMessage } from "@/src/lib/api-fetch"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { useFeed } from "@/src/store/feed/hooks"
 import { useList, usePrefetchOwnedLists } from "@/src/store/list/hooks"
@@ -31,19 +31,11 @@ import {
 } from "@/src/store/subscription/hooks"
 import { accentColor } from "@/src/theme/colors"
 
-import type { SettingsStackParamList } from "../types"
-
 const ManageListContext = createContext<{
   nextSelectedFeedIdRef: MutableRefObject<Set<string>>
 }>(null!)
 
-export const ManageListScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "ManageList">
-}) => {
-  const { id } = route.params
-
+export const ManageListScreen: NavigationControllerView<{ id: string }> = ({ id }) => {
   usePrefetchOwnedLists()
   const list = useList(id)
 
@@ -52,8 +44,6 @@ export const ManageListScreen = ({
       className="bg-system-grouped-background"
       contentContainerClassName="mt-6"
     >
-      <NavigationBlurEffectHeader title={`Manage List - ${list?.title}`} />
-
       {!!list && <ListImpl id={list.id} />}
     </SafeNavigationScrollView>
   )
@@ -86,19 +76,21 @@ const ListImpl: React.FC<{ id: string }> = ({ id }) => {
         feedIds: Array.from(nextSelectedFeedIdRef.current),
       }),
   })
+  const navigation = useNavigation()
   return (
     <ManageListContext.Provider value={ctxValue}>
       <NavigationBlurEffectHeader
+        title={`Manage List - ${list?.title}`}
         headerRight={() => (
           <UINavigationHeaderActionButton>
-            <ModalHeaderSubmitButton
+            <HeaderSubmitButton
               isLoading={addFeedsToFeedListMutation.isPending}
               isValid
               onPress={() => {
                 addFeedsToFeedListMutation
                   .mutateAsync()
                   .then(() => {
-                    router.back()
+                    navigation.back()
                   })
                   .catch((error) => {
                     toast.error(getBizFetchErrorMessage(error))
@@ -110,12 +102,22 @@ const ListImpl: React.FC<{ id: string }> = ({ id }) => {
         )}
       />
       <GroupedInsetListSectionHeader label="Select feeds to add to the current list" />
-      <GroupedInsetListCard>
+      <GroupedInsetListCard SeparatorComponent={SeparatorComponent}>
         {sortedSubscriptionIds.map((id) => (
           <FeedCell key={id} feedId={id} isSelected={list.feedIds.includes(id)} />
         ))}
       </GroupedInsetListCard>
     </ManageListContext.Provider>
+  )
+}
+
+const SeparatorComponent = () => {
+  return (
+    <View
+      className="bg-opaque-separator ml-16"
+      style={{ height: StyleSheet.hairlineWidth }}
+      collapsable={false}
+    />
   )
 }
 
@@ -125,6 +127,8 @@ const FeedCell = (props: { feedId: string; isSelected: boolean }) => {
   const { nextSelectedFeedIdRef } = useContext(ManageListContext)
 
   const [currentSelected, setCurrentSelected] = useState(props.isSelected)
+
+  const iconMariginRight = 36 / PixelRatio.get()
   if (!feed) return null
   return (
     <ItemPressable
@@ -141,12 +145,15 @@ const FeedCell = (props: { feedId: string; isSelected: boolean }) => {
     >
       <GroupedInsetListBaseCell>
         <View className="flex-1 flex-row items-center gap-4">
-          <View className="size-4 items-center justify-center">
+          <View
+            className="size-4 items-center justify-center"
+            style={{ marginRight: iconMariginRight }}
+          >
             <View className="overflow-hidden rounded-lg">
               <FeedIcon feed={feed} size={24} />
             </View>
           </View>
-          <Text className="text-label ml-2 flex-1" ellipsizeMode="middle" numberOfLines={1}>
+          <Text className="text-label flex-1" ellipsizeMode="middle" numberOfLines={1}>
             {feed?.title || "Untitled Feed"}
           </Text>
         </View>

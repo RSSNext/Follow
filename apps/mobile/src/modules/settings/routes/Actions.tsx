@@ -3,7 +3,7 @@ import { useCallback } from "react"
 import type { ListRenderItem } from "react-native"
 import { ActivityIndicator, Text, View } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
-import { useColor } from "react-native-uikit-colors"
+import { useColor, useColors } from "react-native-uikit-colors"
 
 import { RotateableLoading } from "@/src/components/common/RotateableLoading"
 import { SwipeableGroupProvider, SwipeableItem } from "@/src/components/common/SwipeableItem"
@@ -21,6 +21,7 @@ import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { Switch } from "@/src/components/ui/switch/Switch"
 import { CheckLineIcon } from "@/src/icons/check_line"
 import { Magic2CuteFiIcon } from "@/src/icons/magic_2_cute_fi"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import {
   useActionRules,
   useIsActionDataDirty,
@@ -30,7 +31,7 @@ import {
 import { actionActions } from "@/src/store/action/store"
 import type { ActionRule } from "@/src/store/action/types"
 
-import { useSettingsNavigation } from "../hooks"
+import { EditRuleScreen } from "./EditRule"
 
 export const ActionsScreen = () => {
   const { isLoading } = usePrefetchActions()
@@ -115,7 +116,7 @@ const SaveRuleButton = ({ disabled }: { disabled?: boolean }) => {
 const ItemSeparatorComponent = () => {
   return (
     <View
-      className="bg-opaque-separator ml-24 h-px flex-1"
+      className="bg-opaque-separator/50 ml-24 h-px flex-1"
       collapsable={false}
       style={{ transform: [{ scaleY: 0.5 }] }}
     />
@@ -127,7 +128,9 @@ const ListItemCell: ListRenderItem<ActionRule> = (props) => {
   return <ListItemCellImpl {...props} />
 }
 const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
-  const navigation = useSettingsNavigation()
+  const navigation = useNavigation()
+  const colors = useColors()
+
   return (
     <SwipeableItem
       swipeRightToCallAction
@@ -137,20 +140,22 @@ const ListItemCellImpl: ListRenderItem<ActionRule> = ({ item: rule }) => {
           onPress: () => {
             actionActions.deleteRule(rule.index)
           },
-          backgroundColor: "red",
+          backgroundColor: colors.red,
         },
         {
           label: "Edit",
           onPress: () => {
-            navigation.navigate("EditRule", { index: rule.index })
+            navigation.pushControllerView(EditRuleScreen, {
+              index: rule.index,
+            })
           },
-          backgroundColor: "#0ea5e9",
+          backgroundColor: colors.blue,
         },
       ]}
     >
       <ItemPressable
         className="flex-row justify-between p-4"
-        onPress={() => navigation.navigate("EditRule", { index: rule.index })}
+        onPress={() => navigation.presentControllerView(EditRuleScreen, { index: rule.index })}
       >
         <Text className="text-label text-base">{rule.name}</Text>
         <Switch

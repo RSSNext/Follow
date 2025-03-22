@@ -1,8 +1,7 @@
-import type { RouteProp } from "@react-navigation/native"
 import { Text } from "react-native"
 
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
   GroupedInsetButtonCell,
@@ -10,23 +9,17 @@ import {
   GroupedInsetListCard,
   GroupedInsetListSectionHeader,
 } from "@/src/components/ui/grouped/GroupedList"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 
-import type { SettingsStackParamList } from "../types"
-
-export const EditWebhooksScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "EditWebhooks">
-}) => {
-  const { index } = route.params
+export const EditWebhooksScreen: NavigationControllerView<{ index: number }> = ({ index }) => {
   const rule = useActionRule(index)
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader headerTitle="Edit Webhooks" />
-      <GroupedInsetListSectionHeader label="Webhooks" />
+      <NavigationBlurEffectHeader title="Edit Webhooks" />
+      <GroupedInsetListSectionHeader label="Webhooks" marginSize="small" />
       <GroupedInsetListCard>
         {rule?.result.webhooks?.map((webhook, webhookIndex) => (
           <GroupedInsetListBaseCell className="flex-row" key={webhookIndex}>

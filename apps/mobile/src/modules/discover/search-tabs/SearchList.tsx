@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
-import { router } from "expo-router"
 import { useAtomValue } from "jotai"
 import { memo } from "react"
 import { Text, View } from "react-native"
 
 import { FallbackIcon } from "@/src/components/ui/icon/fallback-icon"
 import { Image } from "@/src/components/ui/image/Image"
+import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { apiClient } from "@/src/lib/api-fetch"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { FollowScreen } from "@/src/screens/(modal)/follow"
 import { useSubscriptionByListId } from "@/src/store/subscription/hooks"
 
 import { useSearchPageContext } from "../ctx"
@@ -58,12 +60,17 @@ const renderItem = ({ item }: { item: SearchResultItem }) => (
 
 const SearchListCard = memo(({ item }: { item: SearchResultItem }) => {
   const isSubscribed = useSubscriptionByListId(item.list?.id ?? "")
+  const navigation = useNavigation()
   return (
     <ItemPressable
+      itemStyle={ItemPressableStyle.Plain}
       className="py-2"
       onPress={() => {
         if (item.list?.id) {
-          router.push(`/follow?id=${item.list.id}&type=list`)
+          navigation.presentControllerView(FollowScreen, {
+            id: item.list.id,
+            type: "list",
+          })
         }
       }}
     >

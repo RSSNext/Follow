@@ -1,5 +1,4 @@
 import { FeedViewType } from "@follow/constants"
-import { router } from "expo-router"
 import { useCallback, useEffect, useMemo } from "react"
 import { Pressable, Text, View } from "react-native"
 import ReAnimated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
@@ -13,6 +12,10 @@ import { Image } from "@/src/components/ui/image/Image"
 import { ItemPressableStyle } from "@/src/components/ui/pressable/enum"
 import { ItemPressable } from "@/src/components/ui/pressable/ItemPressable"
 import { gentleSpringPreset } from "@/src/constants/spring"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { getHorizontalScrolling } from "@/src/modules/screen/atoms"
+import { EntryDetailScreen } from "@/src/screens/(stack)/entries/[entryId]"
+import { FeedScreen } from "@/src/screens/(stack)/feeds/[feedId]"
 import { useEntry } from "@/src/store/entry/hooks"
 import { useFeed } from "@/src/store/feed/hooks"
 import { unreadSyncService } from "@/src/store/unread/store"
@@ -25,10 +28,17 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
 
   const feed = useFeed(entry?.feedId || "")
 
+  const navigation = useNavigation()
   const handlePress = useCallback(() => {
-    unreadSyncService.markEntryAsRead(entryId)
-    router.push(`/entries/${entryId}?view=${FeedViewType.SocialMedia}`)
-  }, [entryId])
+    const isHorizontalScrolling = getHorizontalScrolling()
+    if (!isHorizontalScrolling) {
+      unreadSyncService.markEntryAsRead(entryId)
+      navigation.pushControllerView(EntryDetailScreen, {
+        entryId,
+        view: FeedViewType.SocialMedia,
+      })
+    }
+  }, [entryId, navigation])
 
   const unreadZoomSharedValue = useSharedValue(entry?.read ? 0 : 1)
 
@@ -57,6 +67,7 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
   const memoedMediaUrlList = useMemo(() => {
     return entry?.media?.map((i) => i.url) ?? []
   }, [entry])
+
   if (!entry) return <EntryItemSkeleton />
 
   const { description, publishedAt, media } = entry
@@ -64,6 +75,7 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
   return (
     <EntryItemContextMenu id={entryId}>
       <ItemPressable
+        touchHighlight={false}
         itemStyle={ItemPressableStyle.Plain}
         className="flex flex-col gap-2 p-4 pl-6"
         onPress={handlePress}
@@ -77,7 +89,10 @@ export function EntrySocialItem({ entryId }: { entryId: string }) {
           <Pressable
             hitSlop={10}
             onPress={() => {
-              router.push(`/feeds/${entry.feedId}`)
+              if (!entry.feedId) return
+              navigation.pushControllerView(FeedScreen, {
+                feedId: entry.feedId,
+              })
             }}
           >
             {entry.authorAvatar ? (

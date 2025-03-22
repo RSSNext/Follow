@@ -1,11 +1,10 @@
 import { useMutation } from "@tanstack/react-query"
-import { useRouter } from "expo-router"
 import { useMemo, useState } from "react"
 import { View } from "react-native"
 
-import { ModalHeaderSubmitButton } from "@/src/components/common/ModalSharedComponents"
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
+import { HeaderSubmitButton } from "@/src/components/layouts/header/HeaderElements"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
   GroupedInsetListCard,
@@ -14,11 +13,13 @@ import {
   GroupedOutlineDescription,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 import { userSyncService } from "@/src/store/user/store"
 
-const EditEmailScreen = () => {
+export const EditEmailScreen: NavigationControllerView = () => {
   const whoami = useWhoami()
 
   const [email, setEmail] = useState(whoami?.email ?? "")
@@ -30,7 +31,7 @@ const EditEmailScreen = () => {
     return email.match(/^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/)
   }, [email])
 
-  const navigation = useRouter()
+  const navigation = useNavigation()
   const { mutate: updateEmail, isPending } = useMutation({
     mutationFn: async () => {
       await userSyncService.updateEmail(email)
@@ -43,10 +44,10 @@ const EditEmailScreen = () => {
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader
-        headerTitle="Edit Email"
+      <NavigationBlurEffectHeader
+        title="Edit Email"
         headerRight={
-          <ModalHeaderSubmitButton
+          <HeaderSubmitButton
             isLoading={isPending}
             isValid={!!(email && newEmailIsValid && isDirty)}
             onPress={() => {
@@ -87,4 +88,3 @@ const EditEmailScreen = () => {
     </SafeModalScrollView>
   )
 }
-export default EditEmailScreen

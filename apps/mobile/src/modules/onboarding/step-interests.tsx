@@ -5,35 +5,12 @@ import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 
 import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
 import { Shuffle2CuteReIcon } from "@/src/icons/shuffle_2_cute_re"
-import { toast } from "@/src/lib/toast"
 import { useSubscription } from "@/src/store/subscription/hooks"
 import { subscriptionSyncService } from "@/src/store/subscription/store"
 import { accentColor } from "@/src/theme/colors"
 
 import type { PresetFeedConfig } from "./preset"
 import { presetFeeds } from "./preset"
-
-const subscribeFeed = async (config: PresetFeedConfig) => {
-  await subscriptionSyncService.subscribe({
-    feedId: config.feedId,
-    title: config.title,
-    url: config.url,
-    view: config.view,
-    category: "",
-    isPrivate: false,
-  })
-
-  toast.success(`Subscribed to ${config.title}`, {
-    position: "bottom",
-  })
-}
-
-const unsubscribeFeed = async (feedId: string) => {
-  await subscriptionSyncService.unsubscribe(feedId)
-  toast.success(`Unsubscribed from feed`, {
-    position: "bottom",
-  })
-}
 
 export const StepInterests = () => {
   const [displayFeeds, setDisplayFeeds] = useState<PresetFeedConfig[]>(presetFeeds.slice(0, 7))
@@ -66,7 +43,7 @@ export const StepInterests = () => {
 
         <View className="flex-row flex-wrap justify-center gap-2 px-4">
           {displayFeeds.map((feed) => (
-            <FeedChip key={feed.feedId} {...feed} />
+            <FeedChip key={feed.feedId} feed={feed} />
           ))}
         </View>
       </View>
@@ -74,18 +51,43 @@ export const StepInterests = () => {
   )
 }
 
-const FeedChip = (feed: PresetFeedConfig) => {
-  const isSubscribed = useSubscription(feed.feedId)
+const FeedChip = ({ feed }: { feed: PresetFeedConfig }) => {
+  const subscription = useSubscription(feed.feedId)
+  const [loading, setLoading] = useState(false)
+  const [isSubscribed, setIsSubscribed] = useState(!!subscription)
 
   const handleSubscribe = useCallback(
     async (feed: PresetFeedConfig) => {
+      if (loading) return
+      setLoading(true)
       if (isSubscribed) {
-        await unsubscribeFeed(feed.feedId)
+        try {
+          setIsSubscribed(false)
+          await subscriptionSyncService.unsubscribe(feed.feedId)
+        } catch {
+          setIsSubscribed(true)
+        } finally {
+          setLoading(false)
+        }
         return
       }
-      await subscribeFeed(feed)
+      try {
+        setIsSubscribed(true)
+        await subscriptionSyncService.subscribe({
+          feedId: feed.feedId,
+          title: feed.title,
+          url: feed.url,
+          view: feed.view,
+          category: "",
+          isPrivate: false,
+        })
+      } catch {
+        setIsSubscribed(false)
+      } finally {
+        setLoading(false)
+      }
     },
-    [isSubscribed],
+    [isSubscribed, loading],
   )
 
   return (

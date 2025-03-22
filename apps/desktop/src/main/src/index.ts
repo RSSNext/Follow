@@ -150,7 +150,7 @@ function bootstrap() {
         if (responseHeaders?.["set-cookie"]) {
           const cookies = responseHeaders["set-cookie"] as string[]
           cookies.forEach((cookie) => {
-            const cookieObj = parse(cookie)
+            const cookieObj = parse(cookie, { decode: (value) => value })
             Object.keys(cookieObj).forEach((name) => {
               const value = cookieObj[name]
               mainWindow.webContents.session.cookies.set({
@@ -232,7 +232,7 @@ function bootstrap() {
 
       if (ck && apiURL) {
         setBetterAuthSessionCookie(ck)
-        const cookie = parse(atob(ck))
+        const cookie = parse(atob(ck), { decode: (value) => value })
         Object.keys(cookie).forEach((name) => {
           const value = cookie[name]
           mainWindow.webContents.session.cookies.set({

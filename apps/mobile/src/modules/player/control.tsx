@@ -1,5 +1,4 @@
 import { cn } from "@follow/utils"
-import { router } from "expo-router"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { Slider } from "react-native-awesome-slider"
 import { FadeOut, useDerivedValue, useSharedValue, ZoomIn } from "react-native-reanimated"
@@ -15,6 +14,7 @@ import { RewindForward30CuteReIcon } from "@/src/icons/rewind_forward_30_cute_re
 import { StopCircleCuteFiIcon } from "@/src/icons/stop_circle_cute_fi"
 import { VolumeCuteReIcon } from "@/src/icons/volume_cute_re"
 import { VolumeOffCuteReIcon } from "@/src/icons/volume_off_cute_re"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { allowedRate, player, useIsPlaying, useProgress, useRate } from "@/src/lib/player"
 import { useVolume } from "@/src/lib/volume"
 import { useColor } from "@/src/theme/colors"
@@ -113,12 +113,13 @@ export function RateSelector() {
 
 export function StopButton({ size = 24, className, color }: ControlButtonProps) {
   const label = useColor("label")
+  const navigation = useNavigation()
   return (
     <TouchableOpacity
       className={className}
       onPress={() => {
         player.reset()
-        router.back()
+        navigation.back()
       }}
     >
       <StopCircleCuteFiIcon color={color ?? label} width={size} height={size} />

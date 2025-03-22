@@ -1,8 +1,7 @@
-import type { RouteProp } from "@react-navigation/native"
 import { Text } from "react-native"
 
-import { ModalHeader } from "@/src/components/layouts/header/ModalHeader"
 import { SafeModalScrollView } from "@/src/components/layouts/views/SafeModalScrollView"
+import { NavigationBlurEffectHeader } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { PlainTextField } from "@/src/components/ui/form/TextField"
 import {
   GroupedInsetListBaseCell,
@@ -10,23 +9,17 @@ import {
   GroupedInsetListSectionHeader,
   GroupedPlainButtonCell,
 } from "@/src/components/ui/grouped/GroupedList"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { useActionRule } from "@/src/store/action/hooks"
 import { actionActions } from "@/src/store/action/store"
 
-import type { SettingsStackParamList } from "../types"
-
-export const EditRewriteRulesScreen = ({
-  route,
-}: {
-  route: RouteProp<SettingsStackParamList, "EditRewriteRules">
-}) => {
-  const { index } = route.params
+export const EditRewriteRulesScreen: NavigationControllerView<{ index: number }> = ({ index }) => {
   const rule = useActionRule(index)
 
   return (
     <SafeModalScrollView className="bg-system-grouped-background">
-      <ModalHeader headerTitle="Edit Rewrite Rules" />
-      <GroupedInsetListSectionHeader label="Rewrite Rules" />
+      <NavigationBlurEffectHeader title="Edit Rewrite Rules" />
+      <GroupedInsetListSectionHeader label="Rewrite Rules" marginSize="small" />
       {rule?.result.rewriteRules?.map((rewriteRule, rewriteRuleIndex) => (
         <GroupedInsetListCard key={rewriteRuleIndex} className="mb-4">
           <GroupedInsetListBaseCell className="flex-row">

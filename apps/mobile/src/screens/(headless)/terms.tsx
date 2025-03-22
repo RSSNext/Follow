@@ -1,50 +1,47 @@
-import { useMemo } from "react"
-import { useAnimatedValue } from "react-native"
-
-import { NavigationContext } from "@/src/components/layouts/views/NavigationContext"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
 import { Markdown } from "@/src/components/ui/typography/Markdown"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 
 const txt = `# Terms of Service
 
 **Effective Date:** 2025-01-17
 
-Welcome to Follow, your personalized RSS reader and content hub. By using our application, you agree to these Terms of Service ("Terms"). Please read them carefully as they govern your use of the Service and the rights and obligations that come with it.
+Welcome to Folo, your personalized RSS reader and content hub. By using our application, you agree to these Terms of Service ("Terms"). Please read them carefully as they govern your use of the Service and the rights and obligations that come with it.
 
-Follow is designed to give you an intuitive, efficient, and user-friendly experience in managing your RSS feeds. We aim to provide a seamless and secure environment, but it’s important for you to understand how your rights are protected and the scope of your responsibilities while using the Service.
+Folo is designed to give you an intuitive, efficient, and user-friendly experience in managing your RSS feeds. We aim to provide a seamless and secure environment, but it’s important for you to understand how your rights are protected and the scope of your responsibilities while using the Service.
 
 ## 1. Acceptance of Terms
-By accessing or using Follow ("the Service"), you agree to comply with and be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you may not use the Service. These Terms are a legally binding contract between you and Natural Selection Limited, which owns and operates Follow. By using the Service, you acknowledge that you are responsible for your actions and for ensuring that your usage of Follow is consistent with these Terms.
+By accessing or using Folo ("the Service"), you agree to comply with and be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you may not use the Service. These Terms are a legally binding contract between you and Natural Selection Limited, which owns and operates Folo. By using the Service, you acknowledge that you are responsible for your actions and for ensuring that your usage of Folo is consistent with these Terms.
 
 ## 2. Eligibility
-You must be at least 13 years old to use Follow. By using the Service, you represent and warrant that you meet this eligibility requirement. If you are under the age of 13, you are prohibited from using the Service. Natural Selection Limited reserves the right to suspend or terminate the access of any user who violates these eligibility requirements. Additionally, if you are using Follow on behalf of a company, you confirm that you have the authority to bind the company to these Terms.
+You must be at least 13 years old to use Folo. By using the Service, you represent and warrant that you meet this eligibility requirement. If you are under the age of 13, you are prohibited from using the Service. Natural Selection Limited reserves the right to suspend or terminate the access of any user who violates these eligibility requirements. Additionally, if you are using Folo on behalf of a company, you confirm that you have the authority to bind the company to these Terms.
 
 ## 3. User Account
 To access certain features of the Service, you may be required to create an account. You are responsible for maintaining the confidentiality of your account credentials, such as your username and password, and for all activities that occur under your account. If you suspect any unauthorized access or use of your account, you must notify us immediately to avoid any potential security breaches. You agree to provide accurate, up-to-date information when creating or maintaining your account and understand that failure to do so may result in limitations to your access or functionality of the Service.
 
 ## 4. Permitted Use
-You agree to use Follow solely for lawful purposes and in a manner that does not violate the rights of others. You shall not use the Service for any unlawful, harmful, or malicious activities. You are prohibited from transmitting harmful content such as malware, viruses, or phishing attempts, and from interfering with the operation or security features of the Service. Unauthorized attempts to gain access to the Service through hacking, password mining, or any other unlawful means are strictly prohibited and may result in immediate termination of your account.
+You agree to use Folo solely for lawful purposes and in a manner that does not violate the rights of others. You shall not use the Service for any unlawful, harmful, or malicious activities. You are prohibited from transmitting harmful content such as malware, viruses, or phishing attempts, and from interfering with the operation or security features of the Service. Unauthorized attempts to gain access to the Service through hacking, password mining, or any other unlawful means are strictly prohibited and may result in immediate termination of your account.
 
 You also agree not to exploit any part of the Service, including features, tools, or content, for commercial purposes unless explicitly authorized by Natural Selection Limited.
 
 ## 5. Content and Intellectual Property
 
 ### 5.1 User Content
-Follow enables you to import, subscribe to, and read content via RSS feeds. You retain full ownership of any content you post, upload, or submit to the Service. By submitting or sharing content, you grant us a worldwide, royalty-free, and non-exclusive license to host, display, modify, and distribute your content as necessary to operate, improve, and provide the Service. You are solely responsible for ensuring that the content you share does not infringe on the intellectual property rights of any third party. You also agree to respect the rights of content creators and copyright holders.
+Folo enables you to import, subscribe to, and read content via RSS feeds. You retain full ownership of any content you post, upload, or submit to the Service. By submitting or sharing content, you grant us a worldwide, royalty-free, and non-exclusive license to host, display, modify, and distribute your content as necessary to operate, improve, and provide the Service. You are solely responsible for ensuring that the content you share does not infringe on the intellectual property rights of any third party. You also agree to respect the rights of content creators and copyright holders.
 
 ### 5.2 Intellectual Property Rights
 The Service and its underlying technology, including software, designs, and content, are owned by Natural Selection Limited or its licensors. You are granted a limited, non-exclusive, non-transferable right to access and use the Service solely for personal, non-commercial purposes. You may not copy, modify, reverse-engineer, distribute, or otherwise exploit any part of the Service without explicit permission from us. All trademarks, logos, and service marks displayed on the Service are the property of Natural Selection Limited or their respective owners. Unauthorized use of any intellectual property displayed on the Service is strictly prohibited.
 
 ### 5.3 AI Features and Usage
-Follow incorporates AI-powered features that assist in content translation, summarization, intelligent recommendations, and more. While these features are designed to enhance your user experience, you acknowledge that the accuracy and usefulness of AI-generated content may vary. We do not guarantee the correctness, completeness, or reliability of AI outputs and disclaim all responsibility for any adverse effects resulting from their use. Use of these features is entirely at your own risk, and you agree to hold Natural Selection Limited harmless for any errors, misunderstandings, or unintended outcomes arising from the use of AI functionality.
+Folo incorporates AI-powered features that assist in content translation, summarization, intelligent recommendations, and more. While these features are designed to enhance your user experience, you acknowledge that the accuracy and usefulness of AI-generated content may vary. We do not guarantee the correctness, completeness, or reliability of AI outputs and disclaim all responsibility for any adverse effects resulting from their use. Use of these features is entirely at your own risk, and you agree to hold Natural Selection Limited harmless for any errors, misunderstandings, or unintended outcomes arising from the use of AI functionality.
 
 ### 5.4 $POWER Economy
-Follow introduces the $POWER system, a way for users to support content creators and contributors by tipping or rewarding them with $POWER. You can acquire $POWER by participating in the community, completing designated tasks, or purchasing it through the app. You agree to abide by the rules governing the $POWER system, including: (i) not engaging in fraudulent activities or exploiting the system for illegal or malicious purposes; (ii) acknowledging that $POWER cannot be exchanged for real-world currency or transferred outside of the Service; (iii) accepting that $POWER transactions are final and non-refundable.
+Folo introduces the $POWER system, a way for users to support content creators and contributors by tipping or rewarding them with $POWER. You can acquire $POWER by participating in the community, completing designated tasks, or purchasing it through the app. You agree to abide by the rules governing the $POWER system, including: (i) not engaging in fraudulent activities or exploiting the system for illegal or malicious purposes; (ii) acknowledging that $POWER cannot be exchanged for real-world currency or transferred outside of the Service; (iii) accepting that $POWER transactions are final and non-refundable.
 
-Follow reserves the right to modify, suspend, or terminate the $POWER system at any time without prior notice.
+Folo reserves the right to modify, suspend, or terminate the $POWER system at any time without prior notice.
 
 ## 6. Prohibited Activities
 You agree not to engage in any of the following activities while using the Service:
@@ -74,15 +71,15 @@ These Terms are governed by and construed in accordance with the laws of [Insert
 If you have any questions, concerns, or inquiries about these Terms, please contact us at:
 - Email: follow@rss3.io
 
-By using Follow, you acknowledge that you have read, understood, and agree to these Terms of Service, as well as our Privacy Policy.
+By using Folo, you acknowledge that you have read, understood, and agree to these Terms of Service, as well as our Privacy Policy.
 
 ## 13. Community Participation and Contribution
-Follow is an open-source project, and we welcome contributions from users and developers. If you are eligible to use Follow, you may participate in the development of the Service by submitting bug reports, feature requests, and improvements. All contributions must adhere to our [code of conduct](https://github.com/RSSNext/Follow/blob/main/CODE_OF_CONDUCT.md).
+Folo is an open-source project, and we welcome contributions from users and developers. If you are eligible to use Folo, you may participate in the development of the Service by submitting bug reports, feature requests, and improvements. All contributions must adhere to our [code of conduct](https://github.com/RSSNext/Folo/blob/main/CODE_OF_CONDUCT.md).
 
 Before contributing, ensure that you have read and understood our contributing guidelines and the [Corepack](https://nodejs.org/api/corepack.html) setup instructions. By contributing, you agree that your submissions will be licensed under the terms of the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html) version 3.
 
 ## 14. Privacy and Data Use
-Follow takes your privacy seriously. As a user, you acknowledge that we may collect, store, and process your personal information, including your usage patterns and interactions with content. We are committed to ensuring that your data is handled securely and transparently. Please refer to our [Privacy Policy](#) for more information on how we collect, process, and protect your data.
+Folo takes your privacy seriously. As a user, you acknowledge that we may collect, store, and process your personal information, including your usage patterns and interactions with content. We are committed to ensuring that your data is handled securely and transparently. Please refer to our [Privacy Policy](#) for more information on how we collect, process, and protect your data.
 `
 
 export const TermsMarkdown = () => {
@@ -95,16 +92,15 @@ export const TermsMarkdown = () => {
   )
 }
 
-export default function Teams() {
-  const scrollY = useAnimatedValue(100)
-
+export const TermsScreen: NavigationControllerView = () => {
   return (
-    <NavigationContext.Provider value={useMemo(() => ({ scrollY }), [scrollY])}>
-      <SafeNavigationScrollView>
-        <NavigationBlurEffectHeader headerShown title="Terms of Service" />
+    <SafeNavigationScrollView
+      className="bg-system-background"
+      contentInsetAdjustmentBehavior="never"
+    >
+      <NavigationBlurEffectHeader title="Terms of Service" />
 
-        <TermsMarkdown />
-      </SafeNavigationScrollView>
-    </NavigationContext.Provider>
+      <TermsMarkdown />
+    </SafeNavigationScrollView>
   )
 }

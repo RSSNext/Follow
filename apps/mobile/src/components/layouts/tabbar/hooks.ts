@@ -1,15 +1,15 @@
-import { useNavigation } from "expo-router"
 import type { RefObject } from "react"
 import { useCallback, useContext, useEffect, useRef } from "react"
 import type { FlatList, ScrollView } from "react-native"
 import { findNodeHandle, Platform } from "react-native"
 
 import { performNativeScrollToTop } from "@/src/lib/native"
-
 import {
   SetAttachNavigationScrollViewContext,
   useAttachNavigationScrollView,
-} from "./contexts/AttachNavigationScrollViewContext"
+} from "@/src/lib/navigation/AttachNavigationScrollViewContext"
+import { useScreenIsAppeared } from "@/src/lib/navigation/bottom-tab/hooks"
+
 import { BottomTabBarHeightContext } from "./contexts/BottomTabBarHeightContext"
 
 export const useBottomTabBarHeight = () => {
@@ -55,17 +55,15 @@ export const useNavigationScrollToTop = (
 
 export const useRegisterNavigationScrollView = <T = unknown>(active = true) => {
   const scrollViewRef = useRef<T>(null)
-  const navigation = useNavigation()
+  const tabScreenIsFocused = useScreenIsAppeared()
   const setAttachNavigationScrollViewRef = useContext(SetAttachNavigationScrollViewContext)
+
   useEffect(() => {
     if (!active) return
     if (!setAttachNavigationScrollViewRef) return
+    if (!tabScreenIsFocused) return
 
     setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
-    const unsubscribe = navigation.addListener("focus", () => {
-      setAttachNavigationScrollViewRef(scrollViewRef as unknown as RefObject<ScrollView>)
-    })
-    return unsubscribe
-  }, [setAttachNavigationScrollViewRef, scrollViewRef, active, navigation])
+  }, [setAttachNavigationScrollViewRef, scrollViewRef, active, tabScreenIsFocused])
   return scrollViewRef
 }

@@ -12,6 +12,8 @@ import { isDev } from "~/constants"
 import { NeedActivationToast } from "~/modules/activation/NeedActivationToast"
 import { DebugRegistry } from "~/modules/debug/registry"
 
+import { isInMAS } from "./utils"
+
 export const apiFetch = ofetch.create({
   baseURL: env.VITE_API_URL,
   credentials: "include",
@@ -23,7 +25,10 @@ export const apiFetch = ofetch.create({
     if (isDev) {
       header.set("X-App-Dev", "1")
     }
-    header.set("X-App-Name", "Follow Web")
+    header.set("X-App-Name", "Folo Web")
+    if (isInMAS()) {
+      header.set("X-MAS", "1")
+    }
     options.headers = header
   },
   onResponse() {
@@ -85,7 +90,7 @@ export const apiClient = hc<AppType>(env.VITE_API_URL, {
   headers() {
     return {
       "X-App-Version": PKG.version,
-      "X-App-Name": "Follow Web",
+      "X-App-Name": "Folo Web",
     }
   },
 })

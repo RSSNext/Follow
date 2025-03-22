@@ -1,9 +1,12 @@
-import { Stack } from "expo-router"
 import { atom } from "jotai"
 import { useMemo, useState } from "react"
 import { useAnimatedValue } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 
+import { Search3CuteFiIcon } from "@/src/icons/search_3_cute_fi"
+import { Search3CuteReIcon } from "@/src/icons/search_3_cute_re"
+import type { TabScreenComponent } from "@/src/lib/navigation/bottom-tab/types"
+import { StackScreenHeaderPortal } from "@/src/lib/navigation/StackScreenHeaderPortal"
 import { DiscoverContext } from "@/src/modules/discover/DiscoverContext"
 import { Recommendations } from "@/src/modules/discover/Recommendations"
 import { DiscoverHeader } from "@/src/modules/discover/search"
@@ -19,22 +22,22 @@ export default function Discover() {
   )
   return (
     <DiscoverContext.Provider value={ctxValue}>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerTransparent: true,
-
-          header: () => {
-            return (
-              <DiscoverContext.Provider value={ctxValue}>
-                <DiscoverHeader />
-              </DiscoverContext.Provider>
-            )
-          },
-        }}
-      />
+      <StackScreenHeaderPortal>
+        <DiscoverContext.Provider value={ctxValue}>
+          <DiscoverHeader />
+        </DiscoverContext.Provider>
+      </StackScreenHeaderPortal>
 
       <Recommendations />
     </DiscoverContext.Provider>
   )
 }
+
+export const DiscoverTabScreen: TabScreenComponent = Discover
+DiscoverTabScreen.tabBarIcon = ({ focused, color }) => {
+  const Icon = !focused ? Search3CuteReIcon : Search3CuteFiIcon
+  return <Icon color={color} width={24} height={24} />
+}
+
+DiscoverTabScreen.title = "Discover"
+DiscoverTabScreen.lazy = true

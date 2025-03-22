@@ -85,7 +85,7 @@ export const renderFeedOG = async (apiClient: ApiClient, feedId: string) => {
             }}
           >
             {numberFormatter.format(feed.data.subscriptionCount)} followers with{" "}
-            {numberFormatter.format(feed.data.readCount)} recent reads on Follow
+            {numberFormatter.format(feed.data.readCount)} recent reads on Folo
           </p>
         </div>
       </OGCanvas>,

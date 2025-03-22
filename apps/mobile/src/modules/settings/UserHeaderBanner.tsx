@@ -1,6 +1,5 @@
 import { cn, getLuminance } from "@follow/utils"
 import { LinearGradient } from "expo-linear-gradient"
-import { router } from "expo-router"
 import { useMemo } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import type { SharedValue } from "react-native-reanimated"
@@ -9,6 +8,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useColor } from "react-native-uikit-colors"
 
 import { UserAvatar } from "@/src/components/ui/avatar/UserAvatar"
+import { useNavigation } from "@/src/lib/navigation/hooks"
+import { LoginScreen } from "@/src/screens/(modal)/login"
 import { useImageColors, usePrefetchImageColors } from "@/src/store/image/hooks"
 import { useUser } from "@/src/store/user/hooks"
 
@@ -87,6 +88,8 @@ export const UserHeaderBanner = ({
     }
   })
 
+  const navigation = useNavigation()
+
   return (
     <View
       className="relative h-[200px] items-center justify-center"
@@ -139,7 +142,7 @@ export const UserHeaderBanner = ({
             {user.name}
           </Text>
         ) : (
-          <Text className="text-text text-2xl font-bold">Follow Account</Text>
+          <Text className="text-text text-2xl font-bold">Folo Account</Text>
         )}
 
         {user?.handle ? (
@@ -147,7 +150,10 @@ export const UserHeaderBanner = ({
             @{user.handle}
           </Text>
         ) : !user ? (
-          <TouchableOpacity className="mx-auto" onPress={() => router.push("/login")}>
+          <TouchableOpacity
+            className="mx-auto"
+            onPress={() => navigation.presentControllerView(LoginScreen)}
+          >
             <Text className="text-accent m-[6] text-[16px]">Sign in to your account</Text>
           </TouchableOpacity>
         ) : null}

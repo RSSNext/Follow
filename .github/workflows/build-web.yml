@@ -42,4 +42,4 @@ jobs:
         run: pnpm install
       - name: Build web and SSR server
         run: |
-          npm exec turbo run Follow#build:web @follow/ssr#build
+          npm exec turbo run Folo#build:web @follow/ssr#build

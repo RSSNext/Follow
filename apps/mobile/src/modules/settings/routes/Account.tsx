@@ -8,9 +8,9 @@ import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
 } from "@/src/components/layouts/views/SafeNavigationScrollView"
+import { GroupedInsetListCardItemStyle } from "@/src/components/ui/grouped/GroupedInsetListCardItemStyle"
 import {
   GroupedInsetListCard,
-  GroupedInsetListCardItemStyle,
   GroupedInsetListNavigationLink,
   GroupedInsetListNavigationLinkIcon,
   GroupedInsetListSectionHeader,
@@ -33,12 +33,14 @@ import {
 import { Dialog } from "@/src/lib/dialog"
 import { loading } from "@/src/lib/loading"
 import { openLink } from "@/src/lib/native"
+import { useNavigation } from "@/src/lib/navigation/hooks"
 import { toast } from "@/src/lib/toast"
 import { useWhoami } from "@/src/store/user/hooks"
 import { userSyncService } from "@/src/store/user/store"
 
 import { ConfirmPasswordDialog } from "../../dialogs/ConfirmPasswordDialog"
-import { useSettingsNavigation } from "../hooks"
+import { TwoFASetting } from "./2FASetting"
+import { ResetPassword } from "./ResetPassword"
 
 type Account = {
   id: string
@@ -65,37 +67,34 @@ export const AccountScreen = () => {
     <SafeNavigationScrollView className="bg-system-grouped-background">
       <NavigationBlurEffectHeader title="Account" />
 
-      <View className="mt-6">
-        <AuthenticationSection />
-      </View>
+      <AuthenticationSection />
 
       <SecuritySection />
 
       {/* Danger Zone */}
-      <View className="mt-6">
-        <GroupedInsetListSectionHeader label="Danger Zone" />
-        <GroupedInsetListCard>
-          <GroupedPlainButtonCell
-            label="Delete account"
-            textClassName="text-red text-left"
-            onPress={async () => {
-              Alert.alert("Delete account", "Are you sure you want to delete your account?", [
-                { text: "Cancel", style: "cancel" },
-                {
-                  text: "Delete",
-                  style: "destructive",
-                  onPress: async () => {
-                    await signOut()
-                    const dbPath = getDbPath()
-                    await FileSystem.deleteAsync(dbPath)
-                    await expo.reloadAppAsync("User sign out")
-                  },
+
+      <GroupedInsetListSectionHeader label="Danger Zone" />
+      <GroupedInsetListCard>
+        <GroupedPlainButtonCell
+          label="Delete account"
+          textClassName="text-red text-left"
+          onPress={async () => {
+            Alert.alert("Delete account", "Are you sure you want to delete your account?", [
+              { text: "Cancel", style: "cancel" },
+              {
+                text: "Delete",
+                style: "destructive",
+                onPress: async () => {
+                  await signOut()
+                  const dbPath = getDbPath()
+                  await FileSystem.deleteAsync(dbPath)
+                  await expo.reloadAppAsync("User sign out")
                 },
-              ])
-            }}
-          />
-        </GroupedInsetListCard>
-      </View>
+              },
+            ])
+          }}
+        />
+      </GroupedInsetListCard>
     </SafeNavigationScrollView>
   )
 }
@@ -232,13 +231,13 @@ const AuthenticationSection = () => {
 const SecuritySection = () => {
   const { data: account } = useAccount()
   const hasPassword = account?.data?.find((account) => account.provider === "credential")
-  const router = useSettingsNavigation()
   const whoAmI = useWhoami()
 
   const twoFactorEnabled = whoAmI?.twoFactorEnabled
 
+  const navigation = useNavigation()
   return (
-    <View className="mt-6">
+    <>
       <GroupedInsetListSectionHeader label="Security" />
       <GroupedInsetListCard>
         <GroupedPlainButtonCell
@@ -254,7 +253,7 @@ const SecuritySection = () => {
               forgetPassword({ email })
               toast.success("We have sent you an email with instructions to reset your password.")
             } else {
-              router.navigate("ResetPassword")
+              navigation.pushControllerView(ResetPassword)
             }
           }}
         />
@@ -292,7 +291,7 @@ const SecuritySection = () => {
                     return
                   }
                   if (res.data && "totpURI" in res.data) {
-                    router.navigate("TwoFASetting", {
+                    navigation.pushControllerView(TwoFASetting, {
                       totpURI: res.data.totpURI,
                     })
                   } else {
@@ -304,6 +303,6 @@ const SecuritySection = () => {
           }}
         />
       </GroupedInsetListCard>
-    </View>
+    </>
   )
 }

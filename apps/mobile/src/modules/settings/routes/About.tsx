@@ -1,7 +1,7 @@
 import Constants from "expo-constants"
-import { Link } from "expo-router"
 import { Linking, Text, View } from "react-native"
 
+import { Link } from "@/src/components/common/Link"
 import {
   NavigationBlurEffectHeader,
   SafeNavigationScrollView,
@@ -47,21 +47,21 @@ export const AboutScreen = () => {
   const appVersion = Constants.expoConfig?.version || "0.0.0"
 
   return (
-    <SafeNavigationScrollView className="bg-system-grouped-background mt-6">
+    <SafeNavigationScrollView className="bg-system-grouped-background" contentViewClassName="pt-6">
       <NavigationBlurEffectHeader title="About" />
 
       <GroupedInsetListCard>
         <GroupedInsetListBaseCell className="flex-col py-6">
           <View className="flex-1 items-center justify-center">
             <Logo height={80} width={80} />
-            <Text className="text-label mt-4 text-2xl font-semibold">Follow</Text>
+            <Text className="text-label mt-4 text-2xl font-semibold">Folo</Text>
             <Text className="text-tertiary-label font-mono text-sm">
               {appVersion} ({buildId})
             </Text>
           </View>
           <View className="mt-6 flex-1">
             <Text className="text-label text-[15px]">
-              Follow is in the early stages of development. If you have any feedback or suggestions,
+              Folo is in the early stages of development. If you have any feedback or suggestions,
               please feel free to open an issue on the{" "}
               <Link className="text-accent" href="https://github.com/RSSNext/follow">
                 GitHub repository
@@ -77,28 +77,27 @@ export const AboutScreen = () => {
             </Text>
 
             <Text className="text-label mt-4 text-[15px]">
-              Copyright © 2025 Follow. All rights reserved.
+              Copyright © 2025 Folo. All rights reserved.
             </Text>
           </View>
         </GroupedInsetListBaseCell>
       </GroupedInsetListCard>
-      <View className="mt-10">
-        <GroupedInsetListSectionHeader label="Social Links" />
-        <GroupedInsetListCard>
-          {links.map((link) => (
-            <GroupedInsetListNavigationLink
-              key={link.title}
-              label={link.title}
-              icon={
-                <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
-                  <link.icon color={link.iconColor} height={18} width={18} />
-                </GroupedInsetListNavigationLinkIcon>
-              }
-              onPress={() => Linking.openURL(link.url)}
-            />
-          ))}
-        </GroupedInsetListCard>
-      </View>
+
+      <GroupedInsetListSectionHeader label="Social Links" />
+      <GroupedInsetListCard>
+        {links.map((link) => (
+          <GroupedInsetListNavigationLink
+            key={link.title}
+            label={link.title}
+            icon={
+              <GroupedInsetListNavigationLinkIcon backgroundColor={link.iconBackgroundColor}>
+                <link.icon color={link.iconColor} height={18} width={18} />
+              </GroupedInsetListNavigationLinkIcon>
+            }
+            onPress={() => Linking.openURL(link.url)}
+          />
+        ))}
+      </GroupedInsetListCard>
     </SafeNavigationScrollView>
   )
 }

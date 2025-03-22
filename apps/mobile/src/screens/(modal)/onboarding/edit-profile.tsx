@@ -1,1 +1,1 @@
-export { EditProfileModal as default } from "@/src/modules/settings/routes/EditProfile"
+export { EditProfileScreen as default } from "@/src/modules/settings/routes/EditProfile"

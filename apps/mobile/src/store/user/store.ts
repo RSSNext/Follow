@@ -1,4 +1,4 @@
-import analytics from "@react-native-firebase/analytics"
+import { getAnalytics } from "@react-native-firebase/analytics"
 
 import type { UserSchema } from "@/src/database/schemas/types"
 import { apiClient } from "@/src/lib/api-fetch"
@@ -41,8 +41,8 @@ class UserSyncService {
 
       try {
         await Promise.all([
-          analytics().setUserId(res.user.id),
-          analytics().setUserProperties({
+          getAnalytics().setUserId(res.user.id),
+          getAnalytics().setUserProperties({
             userId: res.user.id,
             email: res.user.email,
             name: res.user.name,

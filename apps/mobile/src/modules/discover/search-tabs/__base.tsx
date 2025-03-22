@@ -59,24 +59,22 @@ export function BaseSearchPageFlatList<T>({
   const windowWidth = useWindowDimensions().width
 
   return (
-    <>
-      <ReAnimated.FlatList
-        itemLayoutAnimation={LinearTransition}
-        className="flex-1"
-        style={{ width: windowWidth }}
-        contentContainerStyle={{ paddingTop: offsetTop + 8 }}
-        scrollIndicatorInsets={{ bottom: insets.bottom, top: offsetTop }}
-        automaticallyAdjustContentInsets
-        contentInsetAdjustmentBehavior="always"
-        scrollEventThrottle={16}
-        {...props}
-      />
-    </>
+    <ReAnimated.FlatList
+      itemLayoutAnimation={LinearTransition}
+      className="flex-1"
+      style={{ width: windowWidth }}
+      contentContainerStyle={{ paddingTop: offsetTop + 8 }}
+      scrollIndicatorInsets={{ bottom: insets.bottom, top: offsetTop }}
+      automaticallyAdjustContentInsets
+      contentInsetAdjustmentBehavior="always"
+      scrollEventThrottle={16}
+      {...props}
+    />
   )
 }
 
 const itemSeparator = (
-  <View className="bg-opaque-separator ml-16 h-px" style={{ transform: [{ scaleY: 0.5 }] }} />
+  <View className="bg-opaque-separator/50 ml-16 h-px" style={{ transform: [{ scaleY: 0.5 }] }} />
 )
 export const ItemSeparator = () => itemSeparator
 

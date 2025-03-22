@@ -1,4 +1,3 @@
-import { Stack } from "expo-router"
 import { useAtomValue } from "jotai"
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"
@@ -6,6 +5,8 @@ import type { ScrollView } from "react-native"
 import { Animated, Dimensions, View } from "react-native"
 
 import { AnimatedScrollView } from "@/src/components/common/AnimatedComponents"
+import { StackScreenHeaderPortal } from "@/src/lib/navigation/StackScreenHeaderPortal"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { SearchTabs, SearchType } from "@/src/modules/discover/constants"
 import {
   SearchBarHeightProvider,
@@ -20,9 +21,9 @@ import { SearchHeader } from "@/src/modules/discover/search"
 import { SearchFeed } from "@/src/modules/discover/search-tabs/SearchFeed"
 import { SearchList } from "@/src/modules/discover/search-tabs/SearchList"
 
-const Search = () => {
+const SearchScreen: NavigationControllerView = () => {
   return (
-    <View className="flex-1">
+    <View className="bg-system-background flex-1">
       <SearchPageScrollContainerAnimatedXProvider>
         <SearchPageProvider>
           <SearchBarHeightProvider>
@@ -105,24 +106,15 @@ const SearchbarMount = () => {
   const setSearchBarHeight = useSetSearchBarHeight()
 
   return (
-    <Stack.Screen
-      options={{
-        headerShown: true,
-        headerTransparent: true,
-
-        header: () => {
-          return (
-            <SearchPageContext.Provider value={ctx}>
-              <SearchHeader
-                animatedX={scrollContainerAnimatedX}
-                onLayout={(e) => setSearchBarHeight(e.nativeEvent.layout.height)}
-              />
-            </SearchPageContext.Provider>
-          )
-        },
-      }}
-    />
+    <StackScreenHeaderPortal>
+      <SearchPageContext.Provider value={ctx}>
+        <SearchHeader
+          animatedX={scrollContainerAnimatedX}
+          onLayout={(e) => setSearchBarHeight(e.nativeEvent.layout.height)}
+        />
+      </SearchPageContext.Provider>
+    </StackScreenHeaderPortal>
   )
 }
 
-export default Search
+export default SearchScreen

@@ -1,6 +1,5 @@
 import type { FeedViewType } from "@follow/constants"
 import { cn } from "@follow/utils"
-import { useGlobalSearchParams } from "expo-router"
 import { Fragment, useCallback, useEffect, useMemo } from "react"
 import {
   ActivityIndicator,
@@ -23,6 +22,7 @@ import type { FeedIconRequiredFeed } from "@/src/components/ui/icon/feed-icon"
 import { FeedIcon } from "@/src/components/ui/icon/feed-icon"
 import { Share3CuteReIcon } from "@/src/icons/share_3_cute_re"
 import type { apiClient } from "@/src/lib/api-fetch"
+import type { NavigationControllerView } from "@/src/lib/navigation/types"
 import { toast } from "@/src/lib/toast"
 import { useShareSubscription } from "@/src/modules/settings/hooks/useShareSubscription"
 import { UserHeaderBanner } from "@/src/modules/settings/UserHeaderBanner"
@@ -34,12 +34,10 @@ import { useColor } from "@/src/theme/colors"
 
 type Subscription = Awaited<ReturnType<typeof apiClient.subscriptions.$get>>["data"][number]
 
-export default function ProfileScreen() {
+export const ProfileScreen: NavigationControllerView<{
+  userId: string
+}> = ({ userId }) => {
   const whoami = useWhoami()
-  const globalSearchParams = useGlobalSearchParams<{
-    userId: string
-  }>()
-  const { userId } = globalSearchParams
 
   if (!whoami) {
     return null
@@ -77,7 +75,7 @@ function ProfileScreenImpl(props: { userId: string }) {
     if (!user?.id) return
     Share.share({
       url: `https://app.follow.is/share/users/${user.id}`,
-      title: `Follow | ${user.name}'s Profile`,
+      title: `Folo | ${user.name}'s Profile`,
     })
   }, [user?.id, user?.name])
 
